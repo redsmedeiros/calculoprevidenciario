@@ -13,7 +13,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "2",
@@ -29,7 +30,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "3",
@@ -45,7 +47,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "4",
@@ -61,7 +64,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "5",
@@ -77,7 +81,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "6",
@@ -93,7 +98,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "7",
@@ -109,7 +115,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "8",
@@ -125,7 +132,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "9",
@@ -141,7 +149,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "10",
@@ -157,7 +166,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "11",
@@ -173,7 +183,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "12",
@@ -189,7 +200,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "13",
@@ -205,7 +217,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "14",
@@ -221,7 +234,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "15",
@@ -237,7 +251,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "16",
@@ -253,7 +268,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -269,7 +285,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "18",
@@ -285,7 +302,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "19",
@@ -301,7 +319,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "20",
@@ -317,7 +336,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "21",
@@ -333,7 +353,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "22",
@@ -349,7 +370,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "23",
@@ -365,7 +387,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "24",
@@ -381,7 +404,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "25",
@@ -397,7 +421,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "26",
@@ -413,7 +438,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "27",
@@ -429,7 +455,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "28",
@@ -445,7 +472,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "29",
@@ -461,7 +489,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "30",
@@ -477,7 +506,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -493,7 +523,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -509,7 +540,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -525,7 +557,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -541,7 +574,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -557,7 +591,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -573,7 +608,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -589,7 +625,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -605,7 +642,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -621,7 +659,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -637,7 +676,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -653,7 +693,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -669,7 +710,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -685,7 +727,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -701,7 +744,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -717,7 +761,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -733,7 +778,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -749,7 +795,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -765,7 +812,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -781,7 +829,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -797,7 +846,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     },
     {
       "id": "17",
@@ -813,7 +863,8 @@
       "data_nascimento": "01/06/1970",
       "data_filiacao": "13/06/1988",
       "data_cadasctro": " - ",
-      "actions": "<div class='align-center'> <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a></div>"
+      "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>"
     }
   ]
 }

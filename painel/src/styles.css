@@ -31,3 +31,11 @@ a[class*="action-"]:hover {
 .action-calc {
     font-size: 14px;
 }
+
+.action-import {
+    font-size: 16px;
+}
+
+.action-contribut {
+    font-size: 17px;
+}
