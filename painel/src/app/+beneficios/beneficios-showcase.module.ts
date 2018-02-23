@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 
-import {routing} from "./rgps-showcase.routing";
+import {routing} from "./beneficios-showcase.routing";
 
 
 @NgModule({
@@ -12,5 +12,5 @@ import {routing} from "./rgps-showcase.routing";
   providers: [],
   entryComponents: []
 })
-export class RgpsShowcaseModule {}
+export class BeneficiosShowcaseModule {}
 

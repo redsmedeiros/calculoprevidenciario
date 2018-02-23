@@ -1,12 +1,12 @@
 
 import {ModuleWithProviders} from "@angular/core"
 import { Routes, RouterModule } from '@angular/router';
-import {RgpsCalculosComponent} from "./rgps-calculos.component";
+import {BeneficiosCalculosComponent} from "./beneficios-calculos.component";
 
-export const rgpsCalculosRoutes: Routes = [{
+export const beneficiosCalculosRoutes: Routes = [{
   path: '',
-  component: RgpsCalculosComponent
+  component: BeneficiosCalculosComponent
 }];
 
-export const rgpsCalculosRouting = RouterModule.forChild(rgpsCalculosRoutes);
+export const beneficiosCalculosRouting = RouterModule.forChild(beneficiosCalculosRoutes);
 

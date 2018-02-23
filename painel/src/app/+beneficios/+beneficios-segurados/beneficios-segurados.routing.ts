@@ -1,12 +1,12 @@
 
 import {ModuleWithProviders} from "@angular/core"
 import { Routes, RouterModule } from '@angular/router';
-import {RgpsElementsComponent} from "./rgps-elements.component";
+import {BeneficiosSeguradosComponent} from "./beneficios-segurados.component";
 
-export const rgpsElementsRoutes: Routes = [{
+export const beneficiosSeguradosRoutes: Routes = [{
   path: '',
-  component: RgpsElementsComponent
+  component: BeneficiosSeguradosComponent
 }];
 
-export const rgpsElementsRouting = RouterModule.forChild(rgpsElementsRoutes);
+export const beneficiosSeguradosRouting = RouterModule.forChild(beneficiosSeguradosRoutes);
 

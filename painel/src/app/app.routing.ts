@@ -52,6 +52,11 @@ export const routes: Routes = [
         data: {pageTitle: 'RGPS'}
       },
       {
+        path: 'beneficios',
+        loadChildren: 'app/+beneficios/beneficios-showcase.module#BeneficiosShowcaseModule',
+        data: {pageTitle: 'Beneficios'}
+      },
+      {
         path: 'graphs',
         loadChildren: 'app/+graphs/graphs-showcase.module#GraphsShowcaseModule',
         data: {pageTitle: 'Graphs'}

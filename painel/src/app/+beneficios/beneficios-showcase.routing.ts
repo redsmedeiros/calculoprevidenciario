@@ -5,14 +5,14 @@ import {RouterModule, Routes} from "@angular/router";
 
 export const routes:Routes = [
   { 
-    path: 'rgps-elements',
-    loadChildren: 'app/+rgps/+rgps-elements/rgps-elements.module#RgpsElementsModule',
-    data: {pageTitle: 'RGPS'}
+    path: 'beneficios-segurados',
+    loadChildren: 'app/+beneficios/+beneficios-segurados/beneficios-segurados.module#BeneficiosSeguradosModule',
+    data: {pageTitle: 'Beneficios'}
   },
   { 
-    path: 'rgps-calculos',
-    loadChildren: 'app/+rgps/+rgps-calculos/rgps-calculos.module#RgpsCalculosModule',
-    data: {pageTitle: 'RGPS Calculo'}
+    path: 'beneficios-calculos',
+    loadChildren: 'app/+beneficios/+beneficios-calculos/beneficios-calculos.module#BeneficiosCalculosModule',
+    data: {pageTitle: 'Beneficios Calculo'}
   },
 ];
 

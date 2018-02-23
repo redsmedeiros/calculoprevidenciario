@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { rgpsElementsRouting } from './rgps-elements.routing';
-import {RgpsElementsComponent} from "./rgps-elements.component";
+import { beneficiosSeguradosRouting } from './beneficios-segurados.routing';
+import {BeneficiosSeguradosComponent} from "./beneficios-segurados.component";
 import {SmartadminModule} from "../../shared/smartadmin.module";
 import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-datatable.module";
 
@@ -9,10 +9,10 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
 @NgModule({
   imports: [
     CommonModule,
-    rgpsElementsRouting,
+    beneficiosSeguradosRouting,
     SmartadminModule,
     SmartadminDatatableModule
   ],
-  declarations: [RgpsElementsComponent]
+  declarations: [BeneficiosSeguradosComponent]
 })
-export class RgpsElementsModule { }
+export class BeneficiosSeguradosModule { }

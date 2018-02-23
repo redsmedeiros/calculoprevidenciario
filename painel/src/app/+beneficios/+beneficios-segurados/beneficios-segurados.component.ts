@@ -4,9 +4,9 @@ import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
-  templateUrl: './rgps-elements.component.html',
+  templateUrl: './beneficios-segurados.component.html',
 })
-export class RgpsElementsComponent implements OnInit {
+export class BeneficiosSeguradosComponent implements OnInit {
 
   public styleTheme: string = 'style-0';
 
