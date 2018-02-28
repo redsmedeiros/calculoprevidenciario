@@ -57,6 +57,11 @@ export const routes: Routes = [
         data: {pageTitle: 'Beneficios'}
       },
       {
+        path: 'contribuicoes',
+        loadChildren: 'app/+contribuicoes/contribuicoes-showcase.module#ContribuicoesShowcaseModule',
+        data: {pageTitle: 'Contribuicoes'}
+      },
+      {
         path: 'graphs',
         loadChildren: 'app/+graphs/graphs-showcase.module#GraphsShowcaseModule',
         data: {pageTitle: 'Graphs'}

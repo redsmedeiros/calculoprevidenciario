@@ -15,7 +15,6 @@
       "data_cadasctro": " - ",
       "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
       "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
-
       "actions-beneficios-calculos": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-result'> <i class='fa fa-search'></i> </a>"
 
     },
@@ -35,7 +34,6 @@
       "data_cadasctro": " - ",
       "actions": "<a href='#' id='testee' class ='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
       "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
-
       "actions-beneficios-calculos": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-result'> <i class='fa fa-search'></i> </a>"
     },
     {
@@ -54,7 +52,6 @@
       "data_cadasctro": " - ",
       "actions": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
       "actions-calc": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
-
       "actions-beneficios-calculos": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-result'> <i class='fa fa-search'></i> </a>"
     },
     {
