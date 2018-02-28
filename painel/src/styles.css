@@ -39,3 +39,7 @@ a[class*="action-"]:hover {
 .action-contribut {
     font-size: 17px;
 }
+
+.action-result {
+    font-size: 16px;
+}
