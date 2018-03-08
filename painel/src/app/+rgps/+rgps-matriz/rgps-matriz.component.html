@@ -1,0 +1,341 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- widget options:
+              usage: <sa-widget [editbutton]="false">
+    
+              [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [collapsed]="true"
+              [sortable]="false"
+    
+              -->
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li>
+                  <b>Nome:</b> FARLEY FABIANO DE SOUZA FERRAZ</li>
+                <li>
+                  <b>CPF:</b> 811526716-34</li>
+                <li>
+                  <b>Data de nascimento:</b> 01/06/1970 - 47 anos</li>
+                <li>
+                  <b>Sexo:</b> Masculino</li>
+              </ul>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil"></i>
+                      </span> Editar
+                    </button>
+
+                    <button type="submit" class="btn btn-labeled btn-primary">
+                      <span class="btn-label">
+                        <i class="fa fa-percent"></i>
+                      </span> Realizar cálculos
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Grupo de Cálculos para os valores de contribuição</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable [options]="{
+                    colReorder: true,
+                  ajax: 'assets/api/tables/datatables.standard.json',
+                  columns: [ {data: 'especie'}, {data: 'inicio_beneficio'}, {data: 'contribuicao_primaria'}, {data: 'contribuicao_secundaria'}, {data: 'dib'}, {data: 'data_criacao'} ] }"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Espécie</th>
+                    <th>Período para início de benefício</th>
+                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
+                    <th>DIB</th>
+                    <th>Data de Criação</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-percent"></i>
+            </span>
+            <h2>Informar valor contribuido</h2>
+
+          </header>
+
+          <div>
+
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+
+                  <h3>Tempo de contribuição</h3>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">DE:</label>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="Mês" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="Ano" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">ATÉ:</label>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="Mês" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="Ano" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Valor:</label>
+                    <div class="col-md-6">
+                      <input class="form-control" type="text">
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Tipo de Contribuição:</label>
+                    <div class="col-md-3">
+                      <label class="radio radio-inline">
+                        <input type="radio" name="sexo" value="Masculino"> Primária </label>
+                      <label class="radio radio-inline">
+                        <input type="radio" name="sexo" value="Feminino"> Secundária </label>
+                    </div>
+                  </div>
+
+
+
+                </fieldset>
+
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calendar"></i>
+                        </span> Inserir período
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Listagem de segurados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable [options]="{
+                    colReorder: true,
+                  ajax: 'assets/api/tables/datatables.standard.json',
+                  columns: [ {data: 'actions-calc'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Ações</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Documento</th>
+                    <th>Data de nascimento</th>
+                    <th>Data de filiação</th>
+                    <th>Data de cadastro</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Listagem de segurados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+
+              <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+
+                <div class="form-group">
+                  <label class="col-md-2 control-label" for="select-1">CONFIGURAÇÔES:</label>
+                  <div class="col-md-2">
+                    <input class="form-control" name="colunas" ngModel placeholder="COLUNAS" type="text">
+                  </div>
+                  <div class="col-md-2">
+                    <input class="form-control" name="linhas" ngModel placeholder="LINHAS" type="text">
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="submit" class="btn btn-labeled btn-primary">
+                      <span class="btn-label">
+                        <i class="fa fa-send"></i>
+                      </span> Enviar
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <sa-datatable paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Ano</th>
+                    <th>Janeiro</th>
+                    <th>Fevereiro</th>
+                    <th>Março</th>
+                    <th>Abril</th>
+                    <th>Maio</th>
+                    <th>Junho</th>
+                    <th>Julho</th>
+                    <th>Agosto</th>
+                    <th>Setembro</th>
+                    <th>Outubro</th>
+                    <th>Novembro</th>
+                    <th>Dezembro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of matriz">
+                    <td>{{data.ano}}</td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[0] }}" (keyup)="onKey(data.ano, 0, $event.target.value)" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[1] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[2] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[3] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[4] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[5] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[6] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[7] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[8] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[9] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[10] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[11] }}" class="matriz-input" />
+                    </td>
+                  </tr>
+                </tbody>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>

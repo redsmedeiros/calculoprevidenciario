@@ -40,3 +40,19 @@ a[class*="action-"]:hover {
 .action-result {
     font-size: 16px;
 }
+
+.matriz-line {
+    text-align: right;
+}
+
+.matriz-input {
+    width: 100%;
+    text-align: right;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.matriz-input:focus {
+    background-color: #FFF;
+    border: 1px solid #CCC;
+}

@@ -14,6 +14,11 @@ export const routes:Routes = [
     loadChildren: 'app/+rgps/+rgps-calculos/rgps-calculos.module#RgpsCalculosModule',
     data: {pageTitle: 'RGPS Calculo'}
   },
+  { 
+    path: 'rgps-matriz',
+    loadChildren: 'app/+rgps/+rgps-matriz/rgps-matriz.module#RgpsMatrizModule',
+    data: {pageTitle: 'RGPS Matriz'}
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);
