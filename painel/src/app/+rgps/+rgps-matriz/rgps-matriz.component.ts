@@ -65,16 +65,16 @@ export class RgpsMatrizComponent implements OnInit {
         "valores": [
           this.randomInt(500, 20180),
           this.randomInt(500, 20180),
-          1549.12,
-          1654.58,
-          2487.23,
-          1982.63,
-          1754.85,
-          3546.85,
-          2459.45,
-          1468.91,
-          2146.85,
-          1793.25
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
+          this.randomInt(500, 20180),
         ]
       }
     );
