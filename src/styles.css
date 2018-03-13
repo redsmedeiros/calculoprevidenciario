@@ -56,3 +56,7 @@ a[class*="action-"]:hover {
     background-color: #FFF;
     border: 1px solid #CCC;
 }
+
+.font-bold{
+    font-weight: bolder;
+}
