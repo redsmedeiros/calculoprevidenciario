@@ -160,7 +160,7 @@
           <thead>
             <tr>
               <th>
-                Descrição
+                Cálculo nº: 345
               </th>
               <th>
                 Ação
@@ -218,7 +218,7 @@
             </tr>
             <tr>
               <td>
-                <p>Mostrar Reajustes Administrativos</p>
+                <p>Imprimir o cálculo</p>
               </td>
               <td>
                 <button type="submit" class="btn btn-labeled btn-primary pull-right">
@@ -261,166 +261,216 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><span class="pull-right font-bold">Espécie:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
                     <td>Aposentadoria por tempo de contribuição</td>
                   </tr>
                   <tr>
-                    <td><span class="pull-right font-bold">Período para o início do benefício:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
                     <td>Entre 05/04/1991 e 15/12/1998</td>
                   </tr>
                   <tr>
-                    <td><span class="pull-right font-bold">Data de Início do Benefício:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
                     <td>01/01/2018</td>
                   </tr>
                   <tr>
-                    <td><span class="pull-right font-bold">Contribuição primária:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
                     <td>14 ano(s), 9 mês(es) e 22 dia(s)</td>
                   </tr>
                   <tr>
-                    <td><span class="pull-right font-bold">Contribuição secundária:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
                     <td>0 ano(s), 0 mês(es) e 0 dia(s)</td>
                   </tr>
                   <tr>
-                    <td><span class="pull-right font-bold">Data de Criação:</span></td>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
                     <td>12/03/2018 20:34:42</td>
                   </tr>
                 </tbody>
 
               </table>
 
-              <div class="form-actions">
-                <div class="row">
-                  <div class="col-md-12">
-                    <button type="submit" class="btn btn-labeled btn-primary">
-                      <span class="btn-label">
-                        <i class="fa fa-pencil"></i>
-                      </span> Editar
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>NÃO POSSUI</strong> direito ao benefício
+                <strong>Falta(m) 20 ano(s) e 2 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
+                <strong>INTEGRAL</strong>.</div>
+
             </div>
           </div>
         </sa-widget>
       </article>
 
 
+      <!-- CALCULO 2 -->
+
+
+      <article class="container-fluid">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: 346
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Calcular com base na tabela do INPC vigente na data da DIB</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-calculator"></i>
+                  </span> CÁLCULAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Mostrar Reajustes Administrativos</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-eye"></i>
+                  </span> MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
 
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
         <sa-widget [colorbutton]="false" [editbutton]="false">
-
           <header>
             <span class="widget-icon">
-              <i class="fa fa-percent"></i>
+              <i class="fa fa-edit"></i>
             </span>
-            <h2>Adicionar informações para cálculos</h2>
-
+            <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
           </header>
-
+          <!-- widget div-->
           <div>
-
+            <!-- widget content -->
             <div class="widget-body">
 
-              <form class="form-horizontal">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
+                    <td>Aposentadoria por tempo de contribuição</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
+                    <td>Entre 05/04/1991 e 15/12/1998</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
+                    <td>01/01/2018</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
+                    <td>14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
+                    <td>0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
+                    <td>12/03/2018 20:34:42</td>
+                  </tr>
+                </tbody>
 
-                <fieldset>
+              </table>
 
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Data do Início do Benefício:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>NÃO POSSUI</strong> direito ao benefício
+                <strong>INTEGRAL</strong>.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 16 ano(s)</strong> para atingir a idade mínima.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 18 ano(s) e 10 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
+                <strong>INTEGRAL</strong>.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 19 ano(s) e 11 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
+                <strong>PROPORCIONAL</strong>.</div>
 
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Período do início do benefício:</label>
-                    <div class="col-md-8">
-                      <select class="form-control" id="select-1">
-                        <option>-- Selecione --</option>
-                        <option>Anterior a 05/10/1988</option>
-                        <option>Entre 05/10/1988 e 04/04/1991</option>
-                        <option>Entre 05/04/1991 e 15/12/1998</option>
-                        <option>Entre 16/12/1998 e 28/11/1999</option>
-                        <option>A partir de 29/11/1999</option>
-                        <option>Período PBC Completo</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Espécie:</label>
-                    <div class="col-md-8">
-                      <select class="form-control" id="select-1">
-                        <option>-- Selecione --</option>
-                        <option>Aposentadoria especial</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Grave</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option>Aposentadoria especial por Idade da Pessoa com Deficiência</option>
-                        <option>Aposentadoria por idade - Trabalhador Rural</option>
-                        <option>Aposentadoria por idade - Trabalhador Urbano</option>
-                        <option>Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
-                        <option>Aposentadoria por tempo de contribuição</option>
-                        <option>Aposentadoria por tempo de serviço de professor</option>
-                        <option>Auxílio Acidente - 30%</option>
-                        <option>Auxílio Acidente - 40%</option>
-                        <option>Auxílio Acidente - 60%</option>
-                        <option>Auxílio Acidente previdenciário - 50%</option>
-                        <option>Auxílio Doença </option>
-                        <option>LOAS</option>
-                        <option>LOAS - Benefício no valor de um salário mínimo</option>
-
-                      </select>
-                    </div>
-                  </div>
-
-                  <h3>Tempo de contribuição</h3>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Contribuição Primária:</label>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Anos" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Meses" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Dias" type="text">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Anos" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Meses" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Dias" type="text">
-                    </div>
-                  </div>
-
-                </fieldset>
-
-
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-save"></i>
-                        </span> Inserir
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
             </div>
           </div>
         </sa-widget>
@@ -429,36 +479,259 @@
 
 
 
+
+      <!-- CALCULO 03 -->
+
+
+      <article class="container-fluid">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: 347
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Mostrar Reajustes Administrativos</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-eye"></i>
+                  </span> MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+
+
+
       <article class="col-sm-12 col-md-12 col-lg-12">
-
-
-        <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-table"></i>
+              <i class="fa fa-edit"></i>
             </span>
-            <h2>Listagem de segurados</h2>
+            <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
           </header>
+          <!-- widget div-->
           <div>
-            <div class="widget-body no-padding">
-              <sa-datatable [options]="{
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
+                    <td>Aposentadoria por tempo de contribuição</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
+                    <td>Entre 05/04/1991 e 15/12/1998</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
+                    <td>01/01/2018</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
+                    <td>14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
+                    <td>0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
+                    <td>12/03/2018 20:34:42</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+
+
+              <!-- Widget ID (each widget will need unique ID)-->
+              <sa-widget [colorbutton]="false" [editbutton]="false">
+                <div>
+                  <div class="widget-body no-padding">
+                    <sa-datatable [options]="{
                     colReorder: true,
                   ajax: 'assets/api/tables/datatables.standard.json',
                   columns: [ {data: 'actions-calc'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                      paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                      <thead>
+                        <tr>
+                          <th>Ações</th>
+                          <th>Nome</th>
+                          <th>Tipo</th>
+                          <th>Documento</th>
+                          <th>Data de nascimento</th>
+                          <th>Data de filiação</th>
+                          <th>Data de cadastro</th>
+                        </tr>
+                      </thead>
+                    </sa-datatable>
+                  </div>
+                </div>
+              </sa-widget>
+
+              <table class="table table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
                   </tr>
                 </thead>
-              </sa-datatable>
+                <tbody>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Coeficiente do Cálculo:</span>
+                    </td>
+                    <td>100%</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Soma das contribuições primárias:</span>
+                    </td>
+                    <td>R$ 790.293,52</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Divisor do cálculo da média primária:</span>
+                    </td>
+                    <td>197</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                    </td>
+                    <td>R$ 4.011,64</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Idade em anos:</span>
+                    </td>
+                    <td>55(55,52)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Média das contribuições:</span>
+                    </td>
+                    <td>R$ 4.011,64</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">CT - Número de competências transcorridas desde 29/11/1999: </span>
+                    </td>
+                    <td>60</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Fórmula Fator:</span>
+                    </td>
+                    <td>((38,6493 * 0,31) / 26,2) * (1 + (55,52 + (38,6493 * 0,31)) / 100)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Fp - Fator Previdenciario:</span>
+                    </td>
+                    <td>0,766 - <strong>Não tem direito a Regra 85/95</strong></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                    </td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Expectativa de Sobrevida:</span>
+                    </td>
+                    <td>26,2</td>
+                  </tr>
+                  <tr class="success">
+                    <td>
+                      <span class="pull-right font-bold">Renda Mensal Inicial com Fator Previdenciario:</span>
+                    </td>
+                    <td><strong class="text-success">R$ 3.072,86</strong></td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+
             </div>
           </div>
         </sa-widget>
