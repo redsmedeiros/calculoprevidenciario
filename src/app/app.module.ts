@@ -17,6 +17,8 @@ import { AppState, InternalStateType } from './app.service';
 // Core providers
 import {CoreModule} from "./core/core.module";
 import {SmartadminLayoutModule} from "./shared/layout/layout.module";
+import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
+import { StoreService } from './services/store.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -55,7 +57,9 @@ type StoreType = {
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    StoreService,
+    SeguradoService,
   ]
 })
 export class AppModule {

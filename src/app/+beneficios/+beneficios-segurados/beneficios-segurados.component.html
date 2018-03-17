@@ -61,12 +61,13 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Nome</label>
                     <div class="col-md-3">
-                      <input class="form-control" type="text">
+                      <input [(ngModel)]="form.nome" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <small *ngIf="Errors.has('nome')" class="text-danger">{{ Errors.get('nome') }}</small>
                     </div>
                     <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
                     <div class="col-md-3">
 
-                      <select class="form-control" id="select-1">
+                      <select class="form-control" id="select-1" [(ngModel)]="form.funcao" [ngModelOptions]="{standalone: true}">
                         <option>PIS</option>
                         <option>PASEP</option>
                         <option>CPF</option>
@@ -74,31 +75,41 @@
                         <option>RG</option>
                       </select>
 
+                      <small *ngIf="Errors.has('funcao')" class="text-danger">{{ Errors.get('funcao') }}</small>
+
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Número do documento</label>
                     <div class="col-md-3">
-                      <input class="form-control" type="text">
+                      <input [(ngModel)]="form.numero_documento" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <small *ngIf="Errors.has('numero_documento')" class="text-danger">{{ Errors.get('numero_documento') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Data de nascimento</label>
                     <div class="col-md-3">
-                      <input class="form-control" type="text">
+                      <input [(ngModel)]="form.data_nascimento" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <small *ngIf="Errors.has('data_nascimento')" class="text-danger">{{ Errors.get('data_nascimento') }}</small>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data de filiação</label>
                     <div class="col-md-3">
-                      <input class="form-control" type="text">
+                      <input [(ngModel)]="form.data_filiacao" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <small *ngIf="Errors.has('data_filiacao')" class="text-danger">{{ Errors.get('data_filiacao') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Sexo</label>
                     <div class="col-md-3">
                       <label class="radio radio-inline">
-                        <input type="radio" name="sexo" value="Masculino"> Masculino </label>
+                        <input [(ngModel)]="form.sexo" [ngModelOptions]="{standalone: true}" type="radio" name="sexo" value="Masculino"> Masculino </label>
                       <label class="radio radio-inline">
-                        <input type="radio" name="sexo" value="Feminino"> Feminino </label>
+                        <input [(ngModel)]="form.sexo" [ngModelOptions]="{standalone: true}" type="radio" name="sexo" value="Feminino"> Feminino </label>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <small *ngIf="Errors.has('sexo')" class="text-danger">{{ Errors.get('sexo') }}</small>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -108,7 +119,7 @@
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-success">
+                      <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
                         </span> Salvar
@@ -218,8 +229,16 @@
             <div class="widget-body no-padding">
               <sa-datatable [options]="{
                     colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
+                    data: list,
+                    columns: [
+                      {data: 'actions'},
+                      {data: 'nome'},
+                      {data: 'tipo'},
+                      {data: 'documento'},
+                      {data: 'data_nascimento'},
+                      {data: 'data_filiacao'},
+                      {data: 'data_cadastro'}
+                    ] }"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
