@@ -1,0 +1,40 @@
+{
+  "aaData": [{
+      "selic": "Mai/12",
+      "mensal": "0,74",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+    {
+      "selic": "Jun/12",
+      "mensal": "0,64",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+    {
+      "selic": "Jul/12",
+      "mensal": "0,50",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+    {
+      "selic": "Ago/12",
+      "mensal": "0,66",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+    {
+      "selic": "Set/12",
+      "mensal": "0,79",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+    {
+      "selic": "Out/12",
+      "mensal": "0,84",
+      "taxa_selic": " - ",
+      "taxa_juros": "0,50%",
+    },
+
+  ]
+}

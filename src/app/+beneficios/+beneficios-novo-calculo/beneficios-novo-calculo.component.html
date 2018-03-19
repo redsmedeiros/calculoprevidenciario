@@ -1,0 +1,530 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li>
+                  <b>Nome:</b> FARLEY FABIANO DE SOUZA FERRAZ</li>
+                <li>
+                  <b>CPF:</b> 811526716-34</li>
+                <li>
+                  <b>Data de nascimento:</b> 01/06/1970 - 47 anos</li>
+                <li>
+                  <b>Sexo:</b> Masculino</li>
+              </ul>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </span> Editar
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <div class="container-fluid">
+        <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
+        <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
+        <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
+        <p>
+          <a href="#">Esclarecimento Tetos Judiciais </a>
+        </p>
+        <p>Ou confira o manual deste aplicativo no link a seguir. </p>
+        <p>
+          <a href="#">VEJA MANUAL DO SIMULADOR DE TETOS JUDICIAIS REFERENTE ÀS EMENDAS CONSTITUCIONAIS N.20/98 E 41/03</a>
+        </p>
+      </div>
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Opções do cálculo</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <div class="col-md-8 col-sm-offset-2">
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}" checked="checked">
+                    <span>Para usar tetos judiciais em 12/1998 e em 12/2003 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- widget options:
+                usage: <sa-widget [editbutton]="false">
+
+                [colorbutton]="false"
+                [editbutton]="false"
+                [togglebutton]="false"
+                [deletebutton]="false"
+                [fullscreenbutton]="false"
+                [custombutton]="false"
+                [collapsed]="true"
+                [sortable]="false"
+
+                -->
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Datas do cálculo</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data do cálculo:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Data da citação do réu:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-labeled btn-success">
+                        <span class="btn-label">
+                          <i class="fa fa-save"></i>
+                        </span> Salvar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Valores Recebidos</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+
+                  <div class="form-group">
+                    <div class="col-md-8 col-sm-offset-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="checkbox {{styleTheme}}" checked="checked">
+                          <span>Caso queira calcular revisão de RMI com mesma DIB selecione a caixa ao lado:</span>
+                        </label>
+                      </div>
+
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="checkbox {{styleTheme}}">
+                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data inicial do benefício DIB de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
+                    <div class="col-md-3">
+
+                      <select class="form-control" id="select-1">
+                        <option>Opção 1</option>
+                        <option>Opção 2</option>
+                        <option>Opção 3</option>
+                        <option>Opção 4</option>
+                        <option>Opção 5</option>
+                      </select>
+
+                    </div>
+                    <label class="col-md-2 control-label">RMI de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Valores Devidos</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group">
+                    <div class="col-md-8 col-sm-offset-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="checkbox {{styleTheme}}" checked="checked">
+                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado:</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                    <label class="col-md-2 control-label" for="select-1">Espécie valores devidos:</label>
+                    <div class="col-md-3">
+
+                      <select class="form-control" id="select-1">
+                        <option>Opção 1</option>
+                        <option>Opção 2</option>
+                        <option>Opção 3</option>
+                        <option>Opção 4</option>
+                        <option>Opção 5</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Nova RMI de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Honorários</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Intervalo de Honorários:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="De" type="text">
+                    </div>
+                    <div class="col-md-5">
+                      <input class="form-control" placeholder="Até" type="text">
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Percentual dos honorários:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Calcular mais:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Correção Monetária</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <div class="col-md-8 col-sm-offset-2">
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}" checked>
+                    <span>Tabela da IPCA-e</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Tabela da Justiça Federal</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Tabela da TR</span>
+                  </label>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Juros</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="0,5%" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="1.0%" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="0,5%" type="text">
+                    </div>
+                    <div class="col-md-5">
+                      <div class="checkbox">
+                        <label>
+                        <input type="checkbox" class="checkbox {{styleTheme}}" checked>
+                        <span>Desmarque para não aplicar os juros da poupança</span>
+                      </label>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Juros Taxa Selic</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <sa-datatable [options]="{
+                          colReorder: true,
+                        ajax: 'assets/api/tables/datatables.juros-selic.json',
+                        columns: [ {data: 'selic'}, {data: 'mensal'}, {data: 'taxa_selic'}, {data: 'taxa_juros'} ] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Ações</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Documento</th>
+                    <th>Data de nascimento</th>
+                    <th>Data de filiação</th>
+                    <th>Data de cadastro</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>
