@@ -1,0 +1,84 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- widget options:
+              usage: <sa-widget [editbutton]="false">
+
+              [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [collapsed]="true"
+              [sortable]="false"
+
+              -->
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Cálculo de Contribuições</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <p>
+                Contribuições utilizadas na base do cálculo
+              </p>
+
+              <form class="form-horizontal">
+
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Contribuição de</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="(mm/aaaa)" type="text">
+                    </div>
+                    <label class="col-md-2 control-label">Contribuição até</label>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="(mm/aaaa)" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calculator"></i>
+                        </span> Calcular
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>
