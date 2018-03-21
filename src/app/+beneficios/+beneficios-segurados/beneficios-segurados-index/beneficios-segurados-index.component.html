@@ -1,0 +1,27 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget [colorbutton]="false" [editbutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Listagem de segurados</h2>
+  </header> 
+  <div>
+    <div class="widget-body no-padding">
+      <sa-datatable [options]="datatableOptions"
+        paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+        <thead>
+          <tr>
+            <th>Ações</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Documento</th>
+            <th>Data de nascimento</th>
+            <th>Data de filiação</th>
+            <th>Data de cadastro</th>
+          </tr>
+        </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>

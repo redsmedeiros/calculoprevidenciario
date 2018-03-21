@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import axios from 'axios';
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 @Injectable()
@@ -17,11 +18,7 @@ export abstract class Model {
   public id;
   protected _data: {};
 
-  public actions = `
-    <a href="#" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-    <a href="#" class="action-delete"> <i class="fa fa-times"></i> </a>
-    <a href="#" class="action-calc"> <i class="fa fa-calculator"></i> </a>
-  `;
+  public actions;
 
   public static all() {
     return axios.get(`${this.url}`);

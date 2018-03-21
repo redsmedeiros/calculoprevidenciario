@@ -30,9 +30,13 @@ export class Segurado extends Model {
   public data_segurado;
   public funcao;
   public data_entrada_servico_publico;
+  public actions = `
+    <a href="#/beneficios/beneficios-segurados/${this.id}/editar" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
+    <a href="#/beneficios/beneficios-segurados/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
+  `;
 
   // Definir e padronizar front e back-end Models
   public tipo = this['funcao'];
   public documento = this['numero_documento'];
-  public data_cadastro = this['data_entrada_servico_publico'];
+  public data_cadastro = this['created_at'];
 }

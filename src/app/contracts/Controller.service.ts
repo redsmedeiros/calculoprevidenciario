@@ -14,15 +14,19 @@ export abstract class ControllerService {
   ) {}
 
   get() {
-    this.model.all()
+    return new Promise((resolve, reject) => {
+      this.model.all()
         .then(models => {
           this.store.push(this.name, models.data.map( model => {
             return new this.model(model);
           }));
+          resolve(models);
         })
         .catch(error => {
           console.error(error);
+          reject(error);
         });
+    });
   }
 
   find(id) {
@@ -49,8 +53,9 @@ export abstract class ControllerService {
     return new Promise((resolve, reject) => {
       this.model.store(data)
         .then(model => {
-          this.store.push(this.name, new this.model(model.data));
-          resolve(model.data);
+          const newModel = new this.model(model.data);
+          this.store.push(this.name, newModel);
+          resolve(newModel);
         })
         .catch(error => reject(error.response.data));
     });
