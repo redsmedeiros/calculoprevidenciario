@@ -7,6 +7,22 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well">
+          <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
+          <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
+          <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
+          <p>
+            <a href="#">Esclarecimento Tetos Judiciais </a>
+          </p>
+          <p>Ou confira o manual deste aplicativo no link a seguir. </p>
+          <p>
+            <a href="#">VEJA MANUAL DO SIMULADOR DE TETOS JUDICIAIS REFERENTE ÀS EMENDAS CONSTITUCIONAIS N.20/98 E 41/03</a>
+          </p>
+
+        </div>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -51,20 +67,6 @@
           </div>
         </sa-widget>
       </article>
-
-      <div class="container-fluid">
-        <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
-        <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
-        <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
-        <p>
-          <a href="#">Esclarecimento Tetos Judiciais </a>
-        </p>
-        <p>Ou confira o manual deste aplicativo no link a seguir. </p>
-        <p>
-          <a href="#">VEJA MANUAL DO SIMULADOR DE TETOS JUDICIAIS REFERENTE ÀS EMENDAS CONSTITUCIONAIS N.20/98 E 41/03</a>
-        </p>
-      </div>
-
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
@@ -234,13 +236,17 @@
                     <div class="col-md-3">
                       <input class="form-control" type="text">
                     </div>
-                    <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
+                    <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
                     <div class="col-md-3">
                       <input class="form-control" type="text">
                     </div>
                   </div>
 
                   <div class="form-group">
+                    <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
                     <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
                     <div class="col-md-3">
 
@@ -253,6 +259,9 @@
                       </select>
 
                     </div>
+                  </div>
+
+                  <div class="form-group">
                     <label class="col-md-2 control-label">RMI de valores recebidos:</label>
                     <div class="col-md-3">
                       <input class="form-control" type="text">
@@ -310,11 +319,18 @@
 
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
                     <div class="col-md-3">
                       <input class="form-control" type="text">
                     </div>
                     <label class="col-md-2 control-label">Nova RMI de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
                     <div class="col-md-3">
                       <input class="form-control" type="text">
                     </div>
@@ -402,27 +418,28 @@
 
               <div class="col-md-8 col-sm-offset-2">
 
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}" checked>
-                    <span>Tabela da IPCA-e</span>
-                  </label>
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="correcao">
+                        Tabela da IPCA-e
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="correcao">
+                        Tabela da Justiça Federal
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="correcao">
+                        Tabela da TR
+                      </label>
+                    </div>
+                  </div>
                 </div>
-
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
-                    <span>Tabela da Justiça Federal</span>
-                  </label>
-                </div>
-
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
-                    <span>Tabela da TR</span>
-                  </label>
-                </div>
-
               </div>
 
             </div>
@@ -495,22 +512,75 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
-              <sa-datatable [options]="{
-                          colReorder: true,
-                        ajax: 'assets/api/tables/datatables.juros-selic.json',
-                        columns: [ {data: 'selic'}, {data: 'mensal'}, {data: 'taxa_selic'}, {data: 'taxa_juros'} ] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+              <p>
+                Se meta da taxa Selic for menor que 8,5% ao ano os juros aplicados será de 70% da meta da selic, mensalizada.
+              </p>
+              <p>
+                A tabela abaixo apresenta o período de Maio 2012 a Novembro de 2013.
+              </p>
+
+              <table class="table table-hover table-bordered">
                 <thead>
                   <tr>
-                    <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>
+                      SELIC
+                    </th>
+                    <th>
+                      MENSAL
+                    </th>
+                    <th>
+                      70% TAXA SELIC
+                    </th>
+                    <th>
+                      TAXA JUROS A CONSIDERAR
+                    </th>
                   </tr>
                 </thead>
-              </sa-datatable>
+                <tbody>
+                  <tr>
+                    <td>Mai/12</td>
+                    <td>0,74</td>
+                    <td>-</td>
+                    <td>0,50%</td>
+                  </tr>
+                  <tr>
+                    <td>Jun/12</td>
+                    <td>0,64</td>
+                    <td>0,448</td>
+                    <td>0,45%</td>
+                  </tr>
+                  <tr>
+                    <td>Jun/12</td>
+                    <td>0,64</td>
+                    <td>0,448</td>
+                    <td>0,45%</td>
+                  </tr>
+                  <tr>
+                    <td>Jul/12</td>
+                    <td>0,68</td>
+                    <td>0,476</td>
+                    <td>0,48%</td>
+                  </tr>
+                  <tr>
+                    <td>Ago/12</td>
+                    <td>0,69</td>
+                    <td></td>
+                    <td>0,50%</td>
+                  </tr>
+                  <tr>
+                    <td>Set/12</td>
+                    <td>0,54</td>
+                    <td>0,378</td>
+                    <td>0,38%</td>
+                  </tr>
+                  <tr>
+                    <td>Out/12</td>
+                    <td>0,61</td>
+                    <td>0,427</td>
+                    <td>0,43%</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </sa-widget>

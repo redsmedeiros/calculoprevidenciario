@@ -1,21 +1,42 @@
 /*
  * It is advised not to edit the smartadmin_production.css
- * as this will override any changes you make in the 
- * later versions of this theme. 
- * 
- * We advise that you use use this CSS to override 
- * SmartAdmin styles. 
- * 
+ * as this will override any changes you make in the
+ * later versions of this theme.
+ *
+ * We advise that you use use this CSS to override
+ * SmartAdmin styles.
+ *
  * Rename the stylesheet to whatever your liking so it will stay
  * unique to you with each update of SmartAdmin.
  */
 
 /*
  * INDEX
- * 
+ *
  * - HTML
  * - BODY
  * - CUSTOM STYLES
  */
+ body,
+ html {
+   height: 100%;
+ }
 
+ app-root {
+   height: 100%;
+ }
 
+ .splash-loading {
+   height: 100%;
+   min-height: 100%;
+   display: -webkit-flex;
+   display: flex;
+   -webkit-align-items: center;
+   align-items: center;
+   -webkit-justify-content: center;
+   justify-content: center;
+ }
+
+ .splash-loading img {
+   width: 40%;
+ }
