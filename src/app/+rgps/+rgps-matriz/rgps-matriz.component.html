@@ -245,26 +245,6 @@
           <div>
             <div class="widget-body no-padding">
 
-              <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
-
-                <div class="form-group">
-                  <label class="col-md-2 control-label" for="select-1">CONFIGURAÇÔES:</label>
-                  <div class="col-md-2">
-                    <input class="form-control" name="colunas" ngModel placeholder="COLUNAS" type="text">
-                  </div>
-                  <div class="col-md-2">
-                    <input class="form-control" name="linhas" ngModel placeholder="LINHAS" type="text">
-                  </div>
-                  <div class="col-sm-2">
-                    <button type="submit" class="btn btn-labeled btn-primary">
-                      <span class="btn-label">
-                        <i class="fa fa-send"></i>
-                      </span> Enviar
-                    </button>
-                  </div>
-                </div>
-              </form>
-
               <sa-datatable paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>

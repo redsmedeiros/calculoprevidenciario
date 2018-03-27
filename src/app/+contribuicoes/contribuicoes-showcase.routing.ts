@@ -19,6 +19,16 @@ export const routes:Routes = [
     loadChildren: 'app/+contribuicoes/+contribuicoes-jurisprudencial/contribuicoes-jurisprudencial.module#ContribuicoesJurisprudencialModule',
     data: {pageTitle: 'Contribuicoes Jurisprudencial'}
   },
+  {
+    path: 'contribuicoes-complementar',
+    loadChildren: 'app/+contribuicoes/+contribuicoes-complementar/contribuicoes-complementar.module#ContribuicoesComplementarModule',
+    data: {pageTitle: 'Contribuicoes Complementar'}
+  },
+  {
+    path: 'contribuicoes-resultados',
+    loadChildren: 'app/+contribuicoes/+contribuicoes-resultados/contribuicoes-resultados.module#ContribuicoesResultadosModule',
+    data: {pageTitle: 'Contribuicoes Resultados'}
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);

@@ -19,6 +19,11 @@ export const routes:Routes = [
     loadChildren: 'app/+beneficios/+beneficios-novo-calculo/beneficios-novo-calculo.module#BeneficiosNovoCalculoModule',
     data: {pageTitle: 'Beneficios Calculo'}
   },
+  { 
+    path: 'beneficios-resultados',
+    loadChildren: 'app/+beneficios/+beneficios-resultados/beneficios-resultados.module#BeneficiosResultadosModule',
+    data: {pageTitle: 'Beneficios Resultados'}
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);

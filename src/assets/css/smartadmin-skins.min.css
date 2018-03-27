@@ -4027,7 +4027,7 @@ body.smart-style-6.menu-on-top aside#left-panel nav>ul>li:hover>a, body.smart-st
 
 .smart-style-7 .login-info span {
   padding: 5px 10px 7px;
-  background: #FFF;
+  background: none;
   border-radius: 4px
 }
 
