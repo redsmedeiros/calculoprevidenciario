@@ -19,6 +19,7 @@ export class BeneficiosSeguradosComponent implements OnInit {
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
+  public isUpdating = false;
   public form = {...SeguradoModel.form};
   public list = this.Segurado.list;
   public datatableOptions = {
@@ -41,8 +42,12 @@ export class BeneficiosSeguradosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isUpdating = true;
     this.Segurado.get()
-          .then(() => this.updateDatatable());
+        .then(() => {
+           this.updateDatatable();
+           this.isUpdating = false;
+        })
   }
 
   updateDatatable() {
@@ -52,5 +57,13 @@ export class BeneficiosSeguradosComponent implements OnInit {
     }
   }
 
+  onCreate(e) {
+    this.isUpdating = true;
+    this.Segurado.get()
+        .then(() => {
+           this.updateDatatable();
+           this.isUpdating = false;
+        })
+  }
 
 }

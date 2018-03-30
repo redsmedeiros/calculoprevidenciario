@@ -90,15 +90,12 @@
       </article> -->
 
 
+      <app-beneficios-segurados-create (onSubmit)="onCreate($event)"></app-beneficios-segurados-create>
 
-
-      <article class="col-sm-12 col-md-12 col-lg-12 pull-right text-right">
-        <a routerLink="/beneficios/beneficios-segurados/novo" class="btn btn-primary">Novo</a>
-      </article>
     </div>
     <br>
     <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-beneficios-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-beneficios-segurados-index>
       </article>
 

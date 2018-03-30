@@ -13,10 +13,6 @@ export const beneficiosSeguradosRoutes: Routes = [
     component: BeneficiosSeguradosComponent,
   },
   {
-    path: 'novo',
-    component: BeneficiosSeguradosCreateComponent
-  },
-  {
     path: ':id/editar',
     component: BeneficiosSeguradosEditComponent
   },

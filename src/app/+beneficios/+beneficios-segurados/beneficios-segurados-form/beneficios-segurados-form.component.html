@@ -3,13 +3,13 @@
   <fieldset>
     <div class="form-group">
 
-      <label class="col-md-2 control-label">Nome</label>
+      <label class="col-md-2 control-label">Nome*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome')" class="form-control" type="text">
         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') }}</small>
       </div>
 
-      <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
+      <label class="col-md-2 control-label" for="select-1">Tipo de documento*</label>
       <div class="col-md-3">
         <select class="form-control" id="select-1" [(ngModel)]="formData.funcao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('funcao')">
           <option>PIS</option>
@@ -24,13 +24,13 @@
 
     <div class="form-group">
 
-      <label class="col-md-2 control-label">Número do documento</label>
+      <label class="col-md-2 control-label">Número do documento*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento')" class="form-control" type="text">
         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento') }}</small>
       </div>
 
-      <label class="col-md-2 control-label">Data de nascimento</label>
+      <label class="col-md-2 control-label">Data de nascimento*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.data_nascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_nascimento')" class="form-control" type="text">
         <small *ngIf="errors.has('data_nascimento')" class="text-danger">{{ errors.get('data_nascimento') }}</small>
@@ -39,13 +39,13 @@
 
     <div class="form-group">
 
-      <label class="col-md-2 control-label">Data de filiação</label>
+      <label class="col-md-2 control-label">Data de filiação*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.data_filiacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_filiacao')" class="form-control" type="text">
         <small *ngIf="errors.has('data_filiacao')" class="text-danger">{{ errors.get('data_filiacao') }}</small>
       </div>
 
-      <label class="col-md-2 control-label">Sexo</label>
+      <label class="col-md-2 control-label">Sexo*</label>
       <div class="col-md-3">
         <label class="radio radio-inline">
           <input [(ngModel)]="formData.sexo" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexo')" type="radio" name="sexo" value="m"> Masculino </label>

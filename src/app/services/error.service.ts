@@ -23,6 +23,10 @@ export class ErrorService {
                            : this.errors;
   }
 
+  public all () {
+    return this.errors;
+  }
+
   public push (field: string, value: string) {
     (this.has(field)) ? this.errors[field].push(value)
                       : this.errors[field]  =  [value];

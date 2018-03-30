@@ -47,6 +47,12 @@ export class BeneficiosSeguradosEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.resetForm();
+    if (!this.Errors.empty()) {
+      Object.keys(this.Errors.all()).forEach(field => {
+        this.segurado[field] = this.segurado['_data'][field];
+      });
+      this.Errors.clear();
+    }
   }
 
   resetForm() {
