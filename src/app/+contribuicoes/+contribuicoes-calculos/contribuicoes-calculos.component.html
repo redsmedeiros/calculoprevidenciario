@@ -95,17 +95,22 @@
 
                       <div class="widget-body no-padding">
                         <sa-datatable [options]="{
-                                colReorder: true,
-                              ajax: 'assets/api/tables/datatables.jurisprudencia.json',
-                              columns: [ {data: 'opcoes'}, {data: 'numero'}, {data: 'data_calculo'}, {data: 'contribuicao_inicial'}, {data: 'contribuicao_final'}] }"
-                          paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                          colReorder: true,
+                        ajax: 'assets/api/tables/datatables.cont_calculos.json',
+columns: [ {data: 'acoes'}, {data: 'numero'}, {data: 'data_calculo'}, {data: 'competencia_inicial'}, {data: 'competencia_final'}, {data: 'cont_inicial'},
+{data: 'cont_final'}, {data: 'salario_contribuicao'}, {data: 'valor_final_corrigido'}] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover"
+                          width="100%">
                           <thead>
                             <tr>
-                              <th>Opções</th>
+                              <th>Ações</th>
                               <th>Número</th>
-                              <th>Data cálculo</th>
+                              <th>Data do cálculo</th>
+                              <th>Competência inicial</th>
+                              <th>Competência final</th>
                               <th>Contribuição inicial</th>
                               <th>Contribuição final</th>
+                              <th>Salário de contribuição</th>
+                              <th>Valor final corrigido</th>
                             </tr>
                           </thead>
                         </sa-datatable>
@@ -121,18 +126,19 @@
                       <div class="widget-body no-padding">
                         <sa-datatable [options]="{
                                     colReorder: true,
-                                  ajax: 'assets/api/tables/datatables.lei_complementar.json',
-                                  columns: [ {data: 'opcoes'}, {data: 'numero'}, {data: 'data_calculo'}, {data: 'contribuicao_inicial'}, {data: 'contribuicao_final'}, {data: 'competencia_inicial'}, {data: 'competencia_final'}, {data: 'salario_contribuicao'}, {data: 'valor_final'}] }"
-                          paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                                  ajax: 'assets/api/tables/datatables.cont_calculos.json',
+ columns: [ {data: 'acoes'}, {data: 'numero'}, {data: 'data_calculo'}, {data: 'competencia_inicial'}, {data: 'competencia_final'}, {data: 'cont_inicial'},
+{data: 'cont_final'}, {data: 'salario_contribuicao'}, {data: 'valor_final_corrigido'}] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover"
+                          width="100%">
                           <thead>
                             <tr>
-                              <th>Opções</th>
+                              <th>Ações</th>
                               <th>Número</th>
-                              <th>Data cálculo</th>
-                              <th>Contribuição inicial</th>
-                              <th>Contribuição final</th>
+                              <th>Data do cálculo</th>
                               <th>Competência inicial</th>
                               <th>Competência final</th>
+                              <th>Contribuição inicial</th>
+                              <th>Contribuição final</th>
                               <th>Salário de contribuição</th>
                               <th>Valor final corrigido</th>
                             </tr>
@@ -154,6 +160,37 @@
             <!-- end widget -->
 
           </article>
+
+          <div class="col-sm-4 col-sm-offset-4">
+            <table class="table table-bordered table-hover table-condensed">
+              <thead>
+                <tr>
+                  <th colspan="2" class="text-align-center">LEGENDA</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>Símbolo</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <i class="fa fa-search"></i>
+                  </td>
+                  <td>Ver resultados</td>
+                </tr>
+                <tr>
+                  <td>
+                    <i class="fa fa-times"></i>
+                  </td>
+                  <td>Remover</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>

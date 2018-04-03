@@ -101,84 +101,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-      <!-- 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-         
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-search"></i>
-            </span>
-            <h2>Buscar segurado</h2>
-
-          </header>
-
-          <div>
-
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Buscar por:</label>
-                    <div class="col-md-2">
-                      <select class="form-control" id="select-1">
-                        <option>Nome</option>
-                        <option>Documento</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
-                </fieldset>
-
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-danger pull-left margin-right-13">
-                        <span class="btn-label">
-                          <i class="fa fa-trash-o"></i>
-                        </span> Exclusão de Cálculos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-info pull-left">
-                        <span class="btn-label">
-                          <i class="fa fa-link"></i>
-                        </span> Acessar Cálculos Antigos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-search"></i>
-                        </span> Buscar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article> -->
-
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
 
 
@@ -193,19 +115,19 @@
           <div>
             <div class="widget-body no-padding">
               <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
+                colReorder: true,
+              ajax: 'assets/api/tables/datatables.cont_segurados.json',
+              columns: [ {data: 'acoes'}, {data: 'id'}, {data: 'nome'}, {data: 'num_documento'}, {data: 'tipo'}, {data: 'sexo'}, {data: 'nascimento'} ] }"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
                     <th>Ações</th>
+                    <th>ID</th>
                     <th>Nome</th>
+                    <th>Nº Documento</th>
                     <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Sexo</th>
+                    <th>Nascimento</th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -213,6 +135,39 @@
           </div>
         </sa-widget>
       </article>
+    </div>
+
+
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+            <tr>
+              <th colspan="2" class="text-align-center">LEGENDA</th>
+            </tr>
+          </thead>
+          <thead>
+            <tr>
+              <th>Símbolo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <i class="fa fa-edit"></i>
+              </td>
+              <td>Editar</td>
+            </tr>
+            <tr>
+              <td>
+                <i class="fa fa-times"></i>
+              </td>
+              <td>Remover</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- end row -->

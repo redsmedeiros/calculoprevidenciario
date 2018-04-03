@@ -1,0 +1,67 @@
+{
+  "data": [
+    {
+      "data": "01/01/1995",
+      "salario_minimo": "R$ 70.00",
+      "aliquota": "R$ 7.00",
+      "correcao": "6,43040801",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/02/1995",
+      "salario_minimo": "R$ 70.00",
+      "aliquota": "R$ 7.00",
+      "correcao": "6,78572785",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/03/1995",
+      "salario_minimo": "R$ 70.00",
+      "aliquota": "R$ 7.00",
+      "correcao": "6,5782767872",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/04/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,78578876",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/05/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,453787378",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/06/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,27864537",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/07/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,78966778",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/08/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,57567860",
+      "valor_corrigido": "R$ 45.01"
+    },
+    {
+      "data": "01/09/1995",
+      "salario_minimo": "R$ 100.00",
+      "aliquota": "R$ 10.00",
+      "correcao": "6,078567535",
+      "valor_corrigido": "R$ 45.01"
+    }
+  ]
+}

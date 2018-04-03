@@ -77,24 +77,25 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Listagem de segurados</h2>
+            <h2>Listagem de calculos</h2>
           </header>
           <div>
             <div class="widget-body no-padding">
               <sa-datatable [options]="{
                     colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions-beneficios-calculos'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover"
+                  ajax: 'assets/api/tables/datatables.bene_calculos.json',
+                  columns: [ {data: 'acoes'}, {data: 'data_calculo'}, {data: 'data_citacao'}, {data: 'acao_judicial'}, {data: 'dib_recebido'}, {data: 'rmi_recebido'}, {data: 'dib_devido'}, {data: 'rmi_devido'} ] }" paginationLength="true" tableClass="table table-striped table-bordered table-hover"
                 width="100%">
                 <thead>
                   <tr>
                     <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Data do Cálculo</th>
+                    <th>Data de Citação</th>
+                    <th>Data da Ação Judicial</th>
+                    <th>DIB de recebidos</th>
+                    <th>RMI Recebida</th>
+                    <th>DIB de devidos</th>
+                    <th>Nova RMI devida</th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -102,6 +103,42 @@
           </div>
         </sa-widget>
       </article>
+
+
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <table class="table table-bordered table-hover table-condensed">
+            <thead>
+              <tr>
+                <th colspan="2" class="text-align-center">LEGENDA</th>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                <th>Símbolo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <i class="fa fa-edit"></i>
+                </td>
+                <td>Editar o item relacionado.</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-times"></i></td>
+                <td>Remove definitivamente do sistema o item relacionado.</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-search"></i></td>
+                <td>Mostra o resultado do cálculo do item relacionado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
 
 
 

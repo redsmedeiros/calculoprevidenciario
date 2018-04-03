@@ -15,12 +15,17 @@ export const routes: Routes = [
     data: {pageTitle: 'Home'},
     children: [
       {
-        path: '', redirectTo: 'dashboard/analytics', pathMatch: 'full'
+        path: '', redirectTo: 'home/home', pathMatch: 'full'
       },
       {
         path: 'dashboard',
         loadChildren: 'app/+dashboard/dashboard.module#DashboardModule',
         data: {pageTitle: 'Dashboard'}
+      },
+      {
+        path: 'home',
+        loadChildren: 'app/+home/home-showcase.module#HomeModule',
+        data: {pageTitle: 'Home'}
       },
       {
         path: 'smartadmin',
