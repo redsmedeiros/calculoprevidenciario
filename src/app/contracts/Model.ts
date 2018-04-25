@@ -24,6 +24,10 @@ export abstract class Model {
     return axios.get(`${this.url}`);
   }
 
+  public static allFromUser(userId) {
+    return axios.get(`${this.url}/${userId}`);
+  }
+
   public static store(data) {
     return axios.post(`${this.url}`, data);
   }

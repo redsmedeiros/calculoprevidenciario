@@ -29,6 +29,22 @@ export abstract class ControllerService {
     });
   }
 
+  getFromUser(userId) {
+    return new Promise((resolve, reject) => {
+      this.model.allFromUser(userId)
+        .then(models => {
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
+
   find(id) {
     return new Promise((resolve, reject) => {
       const data = this.list.find( model => {

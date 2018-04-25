@@ -39,11 +39,11 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Nome:</b> Lucia Albert</li>
+                  <b>Nome:</b> {{segurado.nome}}</li>
                 <li>
-                  <b>CPF:</b> 02687009903</li>
+                  <b>CPF:</b> {{segurado.numero_documento}}</li>
                 <li>
-                  <b>Data de nascimento:</b> 14/07/1969</li>
+                  <b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
               </ul>
 
               <div class="form-actions">
@@ -55,12 +55,12 @@
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
                     </button>
-
+<!-- 
                     <button type="submit" class="btn btn-labeled btn-primary">
                       <span class="btn-label">
                         <i class="fa fa-percent"></i>
                       </span> Novo cálculo
-                    </button>
+                    </button> -->
 
                   </div>
                 </div>
@@ -113,7 +113,6 @@
         </div>
       </div>
 
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
@@ -121,24 +120,49 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Listagem de segurados</h2>
+            <h2>Jurisprudencial</h2>
           </header>
           <div>
             <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions-beneficios-calculos'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+              <sa-datatable paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
                     <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Número</th>
+                    <th>Data do Cálculo</th>
+                    <th>Contribuição Inicial</th>
+                    <th>Contribuição Final</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+            <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Lei Complementar nº 128/08</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable paginationLength="false" pagination="false" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Ações</th>
+                    <th>Número</th>
+                    <th>Data do Cálculo</th>
+                    <th>Contribuição Inicial</th>
+                    <th>Contribuição Final</th>
+                    <th>Contribuição Inicial</th>
+                    <th>Contribuição Final</th>
+                    <th>Salário de Contribuição</th>
+                    <th>Valor Final Corrigido</th>
                   </tr>
                 </thead>
               </sa-datatable>

@@ -14,14 +14,20 @@ import { BusinessUnit } from '../../models/BusinessUnit.model';
 import { Session } from '../../models/Session.model';
 import { Partner } from '../../models/Partner.model';
 import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
+import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
+import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 
 @Injectable()
 export class StoreService {
 
   public data: {
     segurados: Segurado[],
+    seguradosContribuicao: SeguradoContribuicao[],
+    contribuicaoJurisprudencial: ContribuicaoJurisprudencial[],
   } = {
     segurados: [],
+    seguradosContribuicao: [],
+    contribuicaoJurisprudencial: []
   };
 
   public push(name: string, data) {

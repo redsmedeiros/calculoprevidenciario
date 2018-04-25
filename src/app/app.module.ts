@@ -18,6 +18,8 @@ import { AppState, InternalStateType } from './app.service';
 import {CoreModule} from "./core/core.module";
 import {SmartadminLayoutModule} from "./shared/layout/layout.module";
 import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
+import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
+import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { StoreService } from './services/store.service';
 
 // Application wide providers
@@ -60,6 +62,8 @@ type StoreType = {
     APP_PROVIDERS,
     StoreService,
     SeguradoService,
+    ContribuicoesSeguradoService,
+    ContribuicaoJurisprudencialService,
   ]
 })
 export class AppModule {
