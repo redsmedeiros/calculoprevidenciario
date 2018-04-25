@@ -1,0 +1,102 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Resultados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable [options]="{
+                    colReorder: true,
+                  ajax: 'assets/api/tables/datatables.cont_resultados.json',
+                  columns: [ {data: 'data'}, {data: 'salario_minimo'}, {data: 'aliquota'}, {data: 'correcao'}, {data: 'valor_corrigido'} ] }"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Valor salário mínimo</th>
+                    <th>Valor da alíquota</th>
+                    <th>Índice de correção (%)</th>
+                    <th>Valor corrigido</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+
+            </div>
+            
+          </div>
+          <div class="col-sm-12">
+            <div class="well">
+              <p>
+                O recolhimento em atraso somente é possível caso haja a efetiva comprovação do exercício da atividade remunerada. No caso
+                do autônomo (atualmente contribuinte individual) é preciso que haja a prova do exercício dessa atividade,
+                exigindo-se ao menos início de prova documental contemporânea ao exercício da atividade remunerada.
+              </p>
+
+              <p>
+                O cálculo realizado pelo sistema refere-se ao entendimento jurisprudencial segundo o qual a legislação a ser aplicada é sempre
+                aquela que estava em vigor na época em que a atividade foi efetivamente exercida. A esse respeito menciona-se
+                o julgado do STJ no AgRg no REsp 760592 / RS. Assim sendo, ressalte-se este sistema somente é aplicável
+                caso seja proposta uma ação perante o Poder Judiciário e obtido êxito no sentido de autorizar o recolhimento
+                de acordo com a legislação da época.
+              </p>
+
+              <p>
+                Como o segurado autônomo deveria recolher inicialmente sobre a classe 1 (um salário mínimo) o sistema elaborado pelo IEPREV
+                adotou essa classe inicial para fins de apuração do valor devido, aplicando-se também as alíquotas vigente
+                nos respectivos períodos. O sistema também não aplica juros moratórios ou multa já que o STJ tem entendido
+                que tais encargos são devidos somente a partir da edição da Medida Provisória nº. 1.523, de 11/10/1996
+                (RESP nº. 697.234).
+              </p>
+            </div>
+          </div>
+          <div class="form-actions">
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-labeled btn-default margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-arrow-circle-left"></i>
+                  </span> Voltar
+                </button>
+
+                <button type="submit" class="btn btn-labeled btn-primary margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-list"></i>
+                  </span> Listagem de segurados 
+                </button>
+
+                <button type="submit" class="btn btn-labeled btn-success margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> Imprimir
+                </button>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>
