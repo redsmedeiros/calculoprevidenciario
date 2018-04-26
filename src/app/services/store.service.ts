@@ -16,6 +16,7 @@ import { Partner } from '../../models/Partner.model';
 import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
 import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
+import { Moeda } from './Moeda.model';
 
 @Injectable()
 export class StoreService {
@@ -24,10 +25,12 @@ export class StoreService {
     segurados: Segurado[],
     seguradosContribuicao: SeguradoContribuicao[],
     contribuicaoJurisprudencial: ContribuicaoJurisprudencial[],
+    moeda: Moeda[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
-    contribuicaoJurisprudencial: []
+    contribuicaoJurisprudencial: [],
+    moeda: []
   };
 
   public push(name: string, data) {

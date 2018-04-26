@@ -84,7 +84,7 @@
               <tbody>
                 <tr>
                   <td>
-                    <button type="submit" class="btn btn-labeled btn-default pull-left">
+                    <button type="submit" (click)="createNewJurisprudencial()" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
                         <i class="fa fa-arrow-right"></i>
                       </span> Jurisprudencial
@@ -96,7 +96,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <button type="submit" class="btn btn-labeled btn-default pull-left">
+                    <button type="submit" onclick="window.location.href='/#/contribuicoes/novo-complementar'" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
                         <i class="fa fa-arrow-right"></i>
                       </span> Lei complementar n. 128/08
@@ -113,65 +113,84 @@
         </div>
       </div>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Jurisprudencial</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding">
-              <sa-datatable paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Ações</th>
-                    <th>Número</th>
-                    <th>Data do Cálculo</th>
-                    <th>Contribuição Inicial</th>
-                    <th>Contribuição Final</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
+      <div class="container-fluid">
+        <div class="row">
+          <article class="col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <sa-widget [editbutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false">
 
-            <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Lei Complementar nº 128/08</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding">
-              <sa-datatable paginationLength="false" pagination="false" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Ações</th>
-                    <th>Número</th>
-                    <th>Data do Cálculo</th>
-                    <th>Contribuição Inicial</th>
-                    <th>Contribuição Final</th>
-                    <th>Contribuição Inicial</th>
-                    <th>Contribuição Final</th>
-                    <th>Salário de Contribuição</th>
-                    <th>Valor Final Corrigido</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
+              <header>
+                <ul class="nav nav-tabs pull-left in">
+                  <li [class.active]="state.tabs.selectedTab=='hr1'">
+                    <a (click)="state.tabs.selectedTab = 'hr1'">
+                      <span class="hidden-mobile hidden-tablet"> Jurisprudencial </span>
+                    </a>
+                  </li>
 
+                  <li [class.active]="state.tabs.selectedTab=='hr2'">
+                    <a (click)="state.tabs.selectedTab = 'hr2'">
+                      <span class="hidden-mobile hidden-tablet"> Lei complementar n. 128/08 </span>
+                    </a>
+                  </li>
+                </ul>
+              </header>
 
+              <!-- widget div-->
+              <div>
+
+                <!-- widget content -->
+                <div class="widget-body">
+
+                  <tabset>
+                    <tab [active]="state.tabs.selectedTab == 'hr1'">
+
+                      <div class="alert alert-info" role="alert">Cálculo de contribuições em atraso conforme entendimento jurisprudencial</div>
+                      <div class="widget-body no-padding">
+                        <sa-datatable paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
+                          <thead>
+                            <tr>
+                              <th>Ações</th>
+                              <th>Número</th>
+                              <th>Data do Cálculo</th>
+                              <th>Contribuição Inicial</th>
+                              <th>Contribuição Final</th>
+                            </tr>
+                          </thead>
+                        </sa-datatable>
+                      </div>
+
+                    </tab>
+                    <tab [active]="state.tabs.selectedTab == 'hr2'">
+                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº.
+                        128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.</div>
+                      <div class="widget-body no-padding">
+                        <sa-datatable paginationLength="false" pagination="false" tableClass="table table-striped table-bordered table-hover" width="100%">
+                          <thead>
+                            <tr>
+                              <th>Ações</th>
+                              <th>Número</th>
+                              <th>Data do Cálculo</th>
+                              <th>Contribuição Inicial</th>
+                              <th>Contribuição Final</th>
+                              <th>Contribuição Inicial</th>
+                              <th>Contribuição Final</th>
+                              <th>Salário de Contribuição</th>
+                              <th>Valor Final Corrigido</th>
+                            </tr>
+                          </thead>
+                        </sa-datatable>
+                      </div>
+                    </tab>
+                  </tabset>
+                </div>
+                <!-- end widget content -->
+              </div>
+              <!-- end widget div -->
+            </sa-widget>
+            <!-- end widget -->
+          </article>
+        </div>
+      </div>
 
     </div>
 

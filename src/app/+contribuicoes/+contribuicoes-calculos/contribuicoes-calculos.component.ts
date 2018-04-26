@@ -29,8 +29,16 @@ export class ContribuicoesCalculosComponent implements OnInit {
       {data: 'id'},
       {data: 'data_calculo'},
       {data: 'inicio_atraso'},
-      {data: 'fim_atraso'}
+      {data: 'final_atraso'}
     ] };
+  
+
+
+  public state: any = {
+    tabs: {
+      selectedTab: 'hr1',
+    }
+  };
 
 
   constructor(protected Segurado: SeguradoService,
@@ -54,6 +62,11 @@ export class ContribuicoesCalculosComponent implements OnInit {
            this.updateDatatable();
            this.isUpdating = false;
     })
+  }
+
+
+  createNewJurisprudencial() {
+    window.location.href='/#/contribuicoes/'+this.segurado.id+'/novo-jurisprudencial';
   }
 
   updateDatatable() {

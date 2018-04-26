@@ -21,6 +21,7 @@ import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.se
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { StoreService } from './services/store.service';
+import { MoedaService } from './services/Moeda.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -64,6 +65,7 @@ type StoreType = {
     SeguradoService,
     ContribuicoesSeguradoService,
     ContribuicaoJurisprudencialService,
+    MoedaService,
   ]
 })
 export class AppModule {

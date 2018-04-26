@@ -29,6 +29,30 @@ export abstract class ControllerService {
     });
   }
 
+  public getByDateRange(from, to) {
+
+    return new Promise((resolve, reject) => {
+
+      if (this.list.length === 0 || this.list == []) {
+        this.get().then(() => {
+          
+          let list = this.list.filter((moeda) => {
+            return from > moeda.data_moeda && to < moeda.data_moeda;
+          });
+          resolve(list);
+        }).catch(error => {
+            console.error(error);
+            reject(error);          
+        })
+      } else {
+      let list =  this.list.filter((moeda) => {
+          return from > moeda.data_moeda && to < moeda.data_moeda;
+        })
+        resolve(list);
+      }
+    });
+  }
+
   getFromUser(userId) {
     return new Promise((resolve, reject) => {
       this.model.allFromUser(userId)

@@ -41,17 +41,17 @@
                 Contribuições utilizadas na base do cálculo
               </p>
 
-              <form class="form-horizontal">
+              <!-- <form class="form-horizontal"> -->
 
                 <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Contribuição de</label>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="(mm/aaaa)" type="text">
+                      <input class="form-control" [(ngModel)]="contribuicaoDe" placeholder="(mm/aaaa)" type="text">
                     </div>
                     <label class="col-md-2 control-label">Contribuição até</label>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="(mm/aaaa)" type="text">
+                      <input class="form-control" [(ngModel)]="contribuicaoAte" placeholder="(mm/aaaa)" type="text">
                     </div>
                   </div>
                 </fieldset>
@@ -59,7 +59,7 @@
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-primary">
+                      <button type="submit" (click)="createNewCalculation()" class="btn btn-labeled btn-primary">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Calcular
@@ -68,7 +68,7 @@
                   </div>
                 </div>
 
-              </form>
+              <!-- </form> -->
             </div>
           </div>
         </sa-widget>
