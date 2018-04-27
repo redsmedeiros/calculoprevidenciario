@@ -1,18 +1,18 @@
 export const config: any = {
 
-  defaultLocale: "us",
+  defaultLocale: "pt-BR",
 
   API_URL: "assets/api",
 
   menu_speed: 200,
 
-  smartSkin: "smart-style-0",
+  smartSkin: "smart-style-7",
 
 
   skins: [
     {
       name: "smart-style-0",
-      logo: "assets/img/logo.png",
+      logo: "assets/img/logo2.png",
       skinBtnClass: "btn btn-block btn-xs txt-color-white margin-right-5",
       style: {
         backgroundColor: '#4E463F'
@@ -72,6 +72,15 @@ export const config: any = {
         color: '#17273D !important'
       },
       label: "Glass"
+    },
+    {
+      name: "smart-style-7",
+      logo: "assets/img/logo2.png",
+      skinBtnClass: "btn btn-xs btn-block txt-color-white margin-top-5",
+      style: {
+        background: '#3A4558'
+      },
+      label: "IEPREV"
     },
 
 

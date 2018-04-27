@@ -13,6 +13,13 @@
     <ul saSmartMenu>
 
       <li>
+        <a routerLink="/dashboard/analytics">
+          <i class="fa fa-lg fa-fw fa-pencil-square-o"></i>
+          <span class="menu-item-parent">Inicio</span>
+        </a>
+      </li>
+
+<!--       <li>
         <a href="#">
           <i class="fa fa-lg fa-fw fa-pencil-square-o"></i>
           <span class="menu-item-parent">RGPS</span>
@@ -32,7 +39,7 @@
           </li>
         </ul>
       </li>
-
+ -->
       <li>
         <a href="#">
           <i class="fa fa-lg fa-fw fa-pencil-square-o"></i>
@@ -42,28 +49,43 @@
           <li routerLinkActive="active">
             <a routerLink="/beneficios/beneficios-segurados">Segurados</a>
           </li>
-          <li routerLinkActive="active">
+<!--           <li routerLinkActive="active">
             <a routerLink="/beneficios/beneficios-calculos">Cálculos</a>
           </li>
+          <li routerLinkActive="active">
+            <a routerLink="/beneficios/beneficios-novo-calculo">Novo Cálculo</a> 
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/beneficios/beneficios-resultados">Resultados</a>
+          </li> -->
         </ul>
       </li>
 
       <li>
         <a href="#">
           <i class="fa fa-lg fa-fw fa-pencil-square-o"></i>
-          <span class="menu-item-parent">Contribuições</span>
+          <span class="menu-item-parent">Contribuições</span> 
         </a>
         <ul>
           <li routerLinkActive="active">
             <a routerLink="/contribuicoes/contribuicoes-segurados">Segurados</a>
           </li>
-          <li routerLinkActive="active">
+<!--           <li routerLinkActive="active">
             <a routerLink="/contribuicoes/contribuicoes-calculos">Cálculos</a>
           </li>
+          <li routerLinkActive="active">
+            <a routerLink="/contribuicoes/contribuicoes-jurisprudencial">Jurisprudencial</a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/contribuicoes/contribuicoes-complementar">Complementar</a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/contribuicoes/contribuicoes-resultados">Resultados</a>
+          </li> -->
         </ul>
       </li>
 
-      <li>
+      <!-- <li>
         <a title="Dashboard">
           <i class="fa fa-lg fa-fw fa-home"></i>
           <span class="menu-item-parent">{{'Dashboard' | i18n}}</span>
@@ -449,7 +471,7 @@
           </li>
           <li routerLinkActive="active">
             <a routerLink="/miscellaneous/email-template">{{'Email Template' | i18n}}</a>
-          </li>
+          </li> 
           <li routerLinkActive="active">
             <a routerLink="/miscellaneous/search">{{'Search Page' | i18n}}</a>
           </li>
@@ -457,10 +479,10 @@
             <a routerLink="/miscellaneous/ckeditor">{{'CK Editor' | i18n}}</a>
           </li>
         </ul>
-      </li>
+      </li> -->
 
     </ul>
-    <aside-chat></aside-chat>
+    <!-- <aside-chat></aside-chat> -->
   </nav>
 
   <sa-minify-menu></sa-minify-menu>
