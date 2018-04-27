@@ -38,10 +38,12 @@
             <div class="widget-body">
 
               <ul class="list-unstyled">
-                <li><b>Nome:</b>  FARLEY FABIANO DE SOUZA FERRAZ</li>
-                <li><b>CPF:</b>   811526716-34</li>
-                <li><b>Data de nascimento:</b>  01/06/1970 - 47 anos</li>
-                <li><b>Sexo:</b>  Masculino</li>
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
 
               <div class="form-actions">
@@ -69,6 +71,58 @@
         </sa-widget>
       </article>
 
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Sistema</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <button type="submit" (click)="createNewCalculo()" class="btn btn-labeled btn-default pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-arrow-right"></i>
+                      </span> Beneficios Atrasados
+                    </button>
+                  </td>
+                  <td>
+                    <p>Diferenças entre valores de rendas mensais de benefícios devidos e recebidos bem como correção monetária, juros de mora e honorários.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button type="submit" (click)="createNewCalculo()" class="btn btn-labeled btn-default pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-arrow-right"></i>
+                      </span> Benefícios Atrasados - Teto 12/1998 e 12/2003
+                    </button>
+                  </td>
+                  <td>
+                    <p>Simula diferenças devidas para a demanda judicial referente aos tetos legais de R$1200,00 para 12/1998 e R$2400,00 para 12/2003 </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button type="submit" (click)="createNewCalculo()" class="btn btn-labeled btn-default pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-arrow-right"></i>
+                      </span> Benefícios Atrasados - Índices 06/1999 e 05/2004
+                    </button>
+                  </td>
+                  <td>
+                    <p>Simula diferenças devidas para a demanda judicial referente aos tetos legais de R$1200,00 para 12/1998 e R$2400,00 para 12/2003 </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
@@ -77,24 +131,22 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Listagem de segurados</h2>
+            <h2>Listagem de Cálculos</h2>
           </header>
           <div>
             <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions-beneficios-calculos'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+              <sa-datatable paginationLength="true"
+                tableClass="table table-striped table-bordered table-hover" [options]="calculoTableOptions" width="100%">
                 <thead>
                   <tr>
                     <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Data do Cálculo</th>
+                    <th>Data de Citação</th>
+                    <th>Data da Ação Judicial</th>
+                    <th>DIB de Recibos</th>
+                    <th>RMI Recebida</th>
+                    <th>DIB de Devidos</th>
+                    <th>Nova RMI Devida</th>
                   </tr>
                 </thead>
               </sa-datatable>
