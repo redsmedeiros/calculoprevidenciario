@@ -6,7 +6,7 @@ After cloning this project, delete the `./node_modules` folder and run `npm inst
 
 ## Running the project
 
-On the root folder, run `npm run start` to initialize the server on the port `http://localhost:4200`.
+On the root folder, run `npm run server` to initialize the server on the port `http://localhost:4200`.
 
 > If you run into any trouble related to jQuery, remove the `node_modules` folder and run `npm install`.
 
