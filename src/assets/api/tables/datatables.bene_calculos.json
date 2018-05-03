@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-search '></i> </a>",
+      "data_calculo": "22/03/2018",
+      "data_citacao": "17/06/2011",
+      "acao_judicial": "23/05/2011",
+      "dib_recebido": "09/01/2006",
+      "rmi_recebido":"0,00",
+      "dib_devido":"09/01/2006",
+      "rmi_devido":"R$ 1.732,95"
+    }
+  ]
+}

@@ -1,15 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* #GOOGLE FONT */
+
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700");
-
-
 a[class*="action-"] {
     color: #333;
     margin-right: 5px;
     transition: all .3s ease-in-out;
 }
-
 
 a[class*="action-"]:hover {
     color: #666;
@@ -57,6 +55,57 @@ a[class*="action-"]:hover {
     border: 1px solid #CCC;
 }
 
-.font-bold{
+.font-bold {
     font-weight: bolder;
+}
+
+.home-box {
+    position: relative;
+    margin: 10px 0;
+}
+
+.home-box img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.home-box .home-title {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 25px;
+    padding: 0 15px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.home-box .home-desc {
+    position: absolute;
+    bottom: -10px;
+    opacity: 0;
+    width: 100%;
+    text-align: justify;
+    color: #fff;
+    padding: 0 15px;
+    font-weight: 400;
+    font-size: 15px;
+    transition: all .3s ease-in-out;
+}
+
+.home-box>img:hover~.home-desc,
+.home-box>.home-desc:hover,
+.home-box>.home-title:hover {
+    opacity: 1;
+    bottom: 10px;
+    transition: all .3s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    .home-box .home-title {
+        font-size: 18px;
+    }
 }

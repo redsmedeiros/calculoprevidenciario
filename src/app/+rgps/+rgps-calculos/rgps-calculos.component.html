@@ -215,25 +215,26 @@
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
-            </span>
-            <h2>Listagem de segurados</h2>
+            </span> 
+            <h2>Cálculos Cadastrados</h2>
           </header>
           <div>
             <div class="widget-body no-padding">
               <sa-datatable [options]="{
                     colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions-calc'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
+                  ajax: 'assets/api/tables/datatables.rgps_calculos.json',
+                  columns: [ {data: 'acoes'}, {data: 'especie'}, {data: 'inicio_beneficio'}, {data: 'cont_primaria'}, {data: 'dib'}, {data: 'beneficio'}, {data: 'data_criacao'}, {data: 'selecionar'} ] }"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
                     <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Espécie</th>
+                    <th>Período para início de benefício</th>
+                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                    <th>DIB</th>
+                    <th>Benefício</th>
+                    <th>Data de Criação</th>
+                    <th>Selecionar</th> 
                   </tr>
                 </thead>
               </sa-datatable>
@@ -241,6 +242,48 @@
           </div>
         </sa-widget>
       </article>
+
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <table class="table table-bordered table-hover table-condensed">
+            <thead>
+              <tr>
+                <th colspan="2" class="text-align-center">LEGENDA</th>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                <th>Símbolo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <i class="fa fa-edit"></i>
+                </td>
+                <td>Editar</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-times"></i></td>
+                <td>Remover</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-money"></i></td>
+                <td>Inserir valores de contribuição</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-arrow-down"></i></td>
+                <td>Importar dados do CNIS</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-calculator"></i></td>
+                <td>Ver resultados</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
     </div>
 

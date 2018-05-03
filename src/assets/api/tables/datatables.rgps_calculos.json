@@ -1,0 +1,84 @@
+{
+  "data": [
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    },
+    {
+      "acoes": "<a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> <a href='#' class='action-delete'> <i class='fa fa-times'></i> </a> <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>",
+      "especie": "Aposentadoria por idade - Trabalhador Urbano",
+      "inicio_beneficio": "A partir de <br /> 29/11/1999",
+      "cont_primaria": "0 / 0 / 0 <br /> 0 / 0 / 0 <br /> 27 / 0 / 1",
+      "dib": "01/02/2018",
+      "beneficio":"R$ 2.633,39",
+      "data_criacao":"27/03/2018",
+      "selecionar":"<label class='checkbox'> <input name='checkbox-inline' type='checkbox'> <i></i> </label>"
+    }
+  ]
+}
