@@ -65,7 +65,15 @@ export class BeneficiosCalculosComponent implements OnInit {
 
 
   createNewCalculo() {
-  	window.location.href='/#/beneficios/novo-calculo/'+this.route.snapshot.params['id'];
+  	window.location.href='/#/beneficios/novo-calculo/A/'+ + this.route.snapshot.params['id'];
+  }
+
+  createNewCalculoJudicial() {
+    window.location.href='/#/beneficios/novo-calculo/AJ/'+this.route.snapshot.params['id'];
+  }
+
+  createNewCalculoIndices() {
+    window.location.href='/#/beneficios/novo-calculo/AI/'+this.route.snapshot.params['id'];
   }
 
 }

@@ -22,6 +22,8 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public isUpdating = false;
 
+  public type = 'A';
+
   public chkNotGranted = false;
   public chkUseSameDib = false;
   public chkJurosMora = false;
@@ -143,6 +145,16 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
         .then(segurado => {
             this.segurado = segurado;
     });
+
+    if (this.route.snapshot.params['type'] !== undefined) {
+      
+      this.type = this.route.snapshot.params['type'];
+      
+      if (this.type == 'AJ') {
+        this.chkAjusteMaximo = true;
+      }
+
+    }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
@@ -412,6 +424,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     // Espécie valores devidos
     this.especieValoresDevidos = calculoAtrasado.tipo_aposentadoria;
     // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
+    if (calculoAtrasado.aplicar_ajuste_maximo_98_2003) {
+      this.type = 'AJ';
+    }
     this.chkAjusteMaximo = calculoAtrasado.aplicar_ajuste_maximo_98_2003;
     // Percentual do Acordo Judicial
     this.acordoJudicial = calculoAtrasado.acordo_pedido;
@@ -575,7 +590,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
         }
 
         if (this.isValidDate(this.dataHonorariosDe)) {
-          if(this.compareDates(this.dataHonorariosDe,this.dataHonorariosAte)) {
+          if(this.compareDates(this.dataHonorariosAte,this.dataHonorariosDe)) {
             this.errors.add({"dataHonorariosAte":["A data deve ser maior que a data de inicio"]});
             valid = false;
           }

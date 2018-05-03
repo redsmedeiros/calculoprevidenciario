@@ -7,7 +7,7 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <div class="well">
+        <div class="well" *ngIf="type=='AJ'">
           <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
           <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
           <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
@@ -20,6 +20,31 @@
           </p>
 
         </div>
+
+        <div class="well" *ngIf="type=='A'">
+
+          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados </p>
+
+          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados - PDF </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Buraco Negro</p>
+           
+          <p>Simula em qualquer data, diferenças entre valores de rendas mensais de benefícios devidos e recebidos, bem como calcula a correção monetária, os juros de mora e os honorários advocatícios. </p>
+        
+        </div>
+
+        <div class="well" *ngIf="type=='AI'">
+
+          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004. </p>
+
+          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 - PDF </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 </p>
+
+        </div>
+
       </article>
 
       <article class="col-sm-12 col-md-12 col-lg-12">
@@ -79,10 +104,10 @@
 
           <!-- Beneficios Atrasados - Tetos Judiciais -->
           <!-- widget div-->
-          <!-- <div> -->
+          <div *ngIf="type=='AJ'">
 
             <!-- widget content -->
-<!--             <div class="widget-body">
+            <div class="widget-body">
 
               <div class="col-md-8 col-sm-offset-2">
 
@@ -95,7 +120,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}" checked="checked">
+                    <input type="checkbox" [(ngModel)]="chkAjusteMaximo" name="chkAjusteMaximo" disabled class="checkbox {{styleTheme}}" checked="checked">
                     <span>Para usar tetos judiciais em 12/1998 e em 12/2003 marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -110,10 +135,10 @@
               </div>
 
             </div>
-          </div> -->
+          </div>
 
           <!-- Beneficios Atrasados -->
-          <div>
+          <div *ngIf="type=='A'||type=='AI'">
 
             <!-- widget content -->
             <div class="widget-body">

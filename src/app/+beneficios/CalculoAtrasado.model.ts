@@ -76,9 +76,9 @@ export class CalculoAtrasado extends Model {
   public esperado_anterior;
 
   public actions = `
-    <a href="#/beneficios/novo-calculo/${this.id_segurado}/${this.id}" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
+    <a href="#/beneficios/novo-calculo/A/${this.id_segurado}/${this.id}" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
     <a href="#/beneficios/beneficios-calculos/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
-    <a href="#/beneficios/novo-calculo/${this.id_segurado}/${this.id}" class="action-edit"> <i class="fa fa-calculator"></i> </a>
+    <a href="#/beneficios/novo-calculo/A/${this.id_segurado}/${this.id}" class="action-edit"> <i class="fa fa-calculator"></i> </a>
   `;
 
 }

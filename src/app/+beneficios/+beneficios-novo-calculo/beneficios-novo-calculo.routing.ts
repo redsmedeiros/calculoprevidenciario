@@ -8,10 +8,10 @@ export const beneficiosNovoCalculoRoutes: Routes = [{
   component: BeneficiosNovoCalculoComponent
 },
 {
-  path: ':id',
+  path: ':type/:id',
   component: BeneficiosNovoCalculoComponent
 },{
-  path: ':id/:id_calculo',
+  path: ':type/:id/:id_calculo',
   component: BeneficiosNovoCalculoComponent
 }];
 
