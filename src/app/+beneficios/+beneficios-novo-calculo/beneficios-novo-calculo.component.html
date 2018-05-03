@@ -203,7 +203,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data do cálculo:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataCalculo" name="dataCalculo" class="form-control" type="text">
+                      <input [(ngModel)]="dataCalculo" [mask]="'00/00/0000'" name="dataCalculo" class="form-control" type="text">
                     </div>
                     <label class="col-md-2 control-label">Data da citação do réu:</label>
                     <div class="col-md-3">
@@ -284,9 +284,13 @@
                     <div class="col-md-3">
                       <input class="form-control" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
                     </div>
-                    <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
+                    <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" type="text">
+
+                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="select-1">
+                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
+                      </select>
+
                     </div>
                   </div>
 
@@ -295,13 +299,12 @@
                     <div class="col-md-3">
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" class="form-control" type="text">
                     </div>
-                    <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
-                    <div class="col-md-3">
 
-                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="select-1">
-                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
-                      </select>
-
+                    <div *ngIf="chkPrecedidoRecebidos">
+                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
+                      <div class="col-md-3">
+                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" type="text">
+                      </div>
                     </div>
                   </div>
 
@@ -322,7 +325,7 @@
                     <div *ngIf="recebidosPosBuracoNegro">
                       <label class="col-md-2 control-label">Índice de reajuste no teto da RMI de valores recebidos:</label>
                       <div class="col-md-3">
-                        <input class="form-control" type="text">
+                        <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
                       </div>
                     </div>
 
@@ -381,26 +384,40 @@
 
 
                   <div class="form-group">
-
-                    <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
-                    <div class="col-md-3">
-                      <input name='dibAnteriorValoresDevidos' [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
-                    </div>
-
-                    <label *ngIf="!chkNotGranted" class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
-                    <label *ngIf="chkNotGranted" class="col-md-2 control-label">RMI não concedida:</label>
+                    
+                    <label  class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
                     <div class="col-md-3">
                       <input name="cessacaoValoresDevidos" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
                     </div>
+                    
+                    <div *ngIf="chkDibAnterior">
+                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
+                      <div class="col-md-3">
+                        <input name='dibAnteriorValoresDevidos' [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
+                      </div>
+                    </div>
 
+                  <div class="form-group">
+
+                    <div *ngIf="chkNotGranted">
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida:
+                      </label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">(*) RMI não concedida antes da revisão (Buraco Negro):
+                      </label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                      </div>
+                    </div>
                   </div>
 
                   <div class="form-group">
 
-                    <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
-                    <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
-                    <div class="col-md-3">
-                      <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                    <div *ngIf="!chkNotGranted">
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                      </div>
                     </div>
 
                     <div *ngIf="devidosBuracoNegro">
@@ -412,8 +429,9 @@
 
                     <div *ngIf="devidosPosBuracoNegro">
                       <label class="col-md-2 control-label">Índice de reajuste no teto da Nova RMI de valores devidos:</label>
-                      <div class="col-md-3">
-                        <input class="form-control" type="text">
+                        <div class="col-md-3">
+                          <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
+                        </div>
                       </div>
                     </div>
 

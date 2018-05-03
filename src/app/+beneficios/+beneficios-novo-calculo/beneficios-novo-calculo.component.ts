@@ -12,7 +12,7 @@ import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
   templateUrl: './beneficios-novo-calculo.component.html',
   providers: [
     ErrorService
-  ]
+  ],
 })
 export class BeneficiosNovoCalculoComponent implements OnInit {
 
@@ -54,6 +54,11 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public cessacaoValoresRecebidos;
   public cessacaoValoresDevidos;
+
+  public taxaAjusteMaximaEsperada;
+  public taxaAjusteMaximaConcedida;
+
+  public dateMask = [/[0-9]/, /\d/,'/',/\d/,/\d/,'/', /\d/, /\d/, /\d/, /\d/];
 
   public dataHonorariosDe;
   public dataHonorariosAte;
@@ -321,6 +326,10 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['concedido_anterior_dib'] = this.chkPrecedidoRecebidos;
     // CheckBox Beneficio Precedido com DIB Anterior (devidos)
     calculoAtrasado.form['esperado_anterior'] = this.chkDibAnterior;
+    // Índice de reajuste no teto da Nova RMI de valores devidos:
+    calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = this.taxaAjusteMaximaEsperada;
+    // Índice de reajuste no teto da Nova RMI de valores devidos:
+    calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = this.taxaAjusteMaximaConcedida;
 
     if (this.route.snapshot.params['id_calculo'] === undefined) {
 
