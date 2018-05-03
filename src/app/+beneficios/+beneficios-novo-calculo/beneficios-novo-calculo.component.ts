@@ -41,9 +41,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
   public dibAnteriorValoresDevidos;
   public dibAnteriorValoresRecebidos;
 
-  public dataCalculo = this.getFormatedDate(new Date());
-  public dataAcaoJudicial = this.getFormatedDate(new Date());
-  public dataCitacaoReu = this.getFormatedDate(new Date());
+  public dataCalculo;
+  public dataAcaoJudicial;
+  public dataCitacaoReu;
 
   public rmiValoresRecebidos;
   public rmiValoresRecebidosBuracoNegro;
@@ -57,8 +57,6 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public taxaAjusteMaximaEsperada;
   public taxaAjusteMaximaConcedida;
-
-  public dateMask = [/[0-9]/, /\d/,'/',/\d/,/\d/,'/', /\d/, /\d/, /\d/, /\d/];
 
   public dataHonorariosDe;
   public dataHonorariosAte;
@@ -76,6 +74,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public inicioBuracoNegro = new Date('05/10/1988');
   public finalBuracoNegro = new Date('04/04/1991');
+  public dataMinima = '01/01/1970';
 
   public especieValoresOptions = [{
   	name: "Auxílio Doença",
@@ -132,8 +131,8 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 ]
 
   constructor(protected Segurado: SeguradoService,
-	          protected router: Router,
-    		  protected Errors: ErrorService,
+	            protected router: Router,
+    		      protected errors: ErrorService,
               private route: ActivatedRoute,
               private Calculo: CalculoAtrasadoService) {}
 
@@ -146,9 +145,22 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     });
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
+
     	this.Calculo.find(this.route.snapshot.params['id_calculo']).then(calculo => {
     		this.loadCalculo(calculo);
     	})
+    } else {
+      // Initialize variables for a new calculo
+      this.jurosAntes2003 = '0,5';
+      this.jurosDepois2003 = '1';
+      this.jurosDepois2009 = '0,5';
+
+      this.dataCalculo = this.getFormatedDate(new Date());
+      this.dataAcaoJudicial = this.getFormatedDate(new Date());
+      this.dataCitacaoReu = this.getFormatedDate(new Date());
+
+      this.especieValoresDevidos = 3;
+      this.especieValoresRecebidos = 3;
     }
 
   }
@@ -243,6 +255,11 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
   }
 
   saveCalculation() {
+
+    if (!this.validateInputs()) {
+      return;
+    }
+
   	let calculoAtrasado = new CalculoAtrasado();
 
   	// Data inicial do benefício DIB de valores devidos
@@ -299,11 +316,11 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     // Calcular Mais (Vincendos)
     calculoAtrasado.form['maturidade'] = this.maturidade;
     // Juros anterior a janeiro 2003
-    calculoAtrasado.form['previo_interesse_2003'] = this.jurosAntes2003;
+    calculoAtrasado.form['previo_interesse_2003'] = this.jurosAntes2003.replace(',','.');
     // Juros posterior a janeiro 2003
-    calculoAtrasado.form['pos_interesse_2003'] = this.jurosDepois2003;
+    calculoAtrasado.form['pos_interesse_2003'] = this.jurosDepois2003.replace(',','.');
     // Juros posterior a julho 2009
-    calculoAtrasado.form['pos_interesse_2009'] = this.jurosDepois2009;
+    calculoAtrasado.form['pos_interesse_2009'] = this.jurosDepois2009.replace(',','.');
     // Espécie valores devidos
     calculoAtrasado.form['tipo_aposentadoria'] = this.especieValoresDevidos;
     // Agora
@@ -340,14 +357,14 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 	  			window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
 
 	          })
-	          .catch(errors => this.Errors.add(errors));
+	          .catch(errors => this.errors.add(errors));
     } else {
     	this.Calculo
     		.update(calculoAtrasado.form)
     		.then(model => {
 	          	console.log(model);
 	  			window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
-		}).catch(errors => this.Errors.add(errors));
+		}).catch(errors => this.errors.add(errors));
     }
 
   	console.log(calculoAtrasado);
@@ -424,24 +441,200 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
   	}
   }
 
+  validateInputs() {
+
+    this.errors.clear();
+
+    let valid = true;
+
+    if (this.isEmptyInput(this.dataCalculo)) {
+      this.errors.add({"dataCalculo":["A data do Cálculo é Necessária."]});
+      valid = false;
+    } else if (!this.isValidDate(this.dataCalculo)) {
+      this.errors.add({"dataCalculo":["Insira uma data Válida."]});
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.dataAcaoJudicial)) {
+     this.errors.add({"dataAcaoJudicial":["A data da Ação Jucidical é Necessária."]});
+     valid = false; 
+    } else if (!this.isValidDate(this.dataAcaoJudicial)) {
+      this.errors.add({"dataAcaoJudicial":["Insira uma data Válida."]});
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.dataCitacaoReu)) {
+     this.errors.add({"dataCitacaoReu":["A data da Citação do Réu é Necessária."]});
+     valid = false; 
+    } else if (!this.isValidDate(this.dataCitacaoReu)) {
+      this.errors.add({"dataCitacaoReu":["Insira uma data Válida."]});
+      valid = false;
+    } else if (this.compareDates(this.dataCitacaoReu,this.dataMinima)) {
+      this.errors.add({"dataCitacaoReu":["A data deve ser maior que 01/1970"]});
+      valid = false;
+    }
+
+    // Check if its necessary to validate the box of 'Valores Recebidos'
+    if (!this.chkNotGranted) {
+
+      if (this.isEmptyInput(this.dibValoresRecebidos)) {
+       this.errors.add({"dibValoresRecebidos":["A DIB de Valores Recebidos é Necessária."]});
+       valid = false;
+      } else {
+
+        if (!this.isValidDate(this.dibValoresRecebidos)) {
+          this.errors.add({"dibValoresRecebidos":["Insira uma data Válida."]});
+          valid = false;
+        } else if (this.compareDates(this.dibValoresRecebidos,this.dataMinima)) {
+          this.errors.add({"dibValoresRecebidos":["A data deve ser maior que 01/1970"]});
+          valid = false;
+        }
+
+      }
+
+      if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
+          !this.isValidDate(this.cessacaoValoresRecebidos) &&
+          !this.isEmptyInput(this.dibValoresDevidos) &&
+          !this.isValidDate(this.dibValoresDevidos) &&
+          !this.compareDates(this.dibValoresDevidos,this.cessacaoValoresRecebidos)) {
+
+        this.errors.add({"cessacaoValoresRecebidos":["A Cessação de valores recebidos deve ser maior que a DIB de valores devidos."]});
+        valid = false; 
+      }
+
+      if (this.isEmptyInput(this.rmiValoresRecebidos)) {        
+       this.errors.add({"rmiValoresRecebidos":["A RMI de Valores Recebidos é Necessária."]});
+       valid = false;
+      } else if (this.rmiValoresRecebidos == 0) {
+        this.errors.add({"rmiValoresRecebidos":["A RMI de Valores Recebidos deve ser maior que zero."]});
+        valid = false;
+      }
+
+      if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos) &&
+        !this.isValidDate(this.dibAnteriorValoresRecebidos)) {
+        this.errors.add({"dibAnteriorValoresRecebidos":["Insira uma data válida."]});
+        valid = false; 
+      }
+
+
+      if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
+          !this.isValidDate(this.cessacaoValoresRecebidos)) {
+        this.errors.add({"cessacaoValoresRecebidos":["Insira uma data válida."]});
+        valid = false; 
+      }
+    }
+
+    if (this.isEmptyInput(this.dibValoresDevidos)) {
+     this.errors.add({"dibValoresDevidos":["A DIB de Valores Devidos é Necessária."]});
+     valid = false;
+    } else if (!this.isValidDate(this.dibValoresDevidos)) {
+      this.errors.add({"dibValoresDevidos":["Insira uma data Válida."]});
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.rmiValoresDevidos)) {        
+     this.errors.add({"rmiValoresDevidos":["A RMI de Valores Devidos é Necessária."]});
+     valid = false;
+    } else if (this.rmiValoresDevidos == 0) {
+      this.errors.add({"rmiValoresDevidos":["A RMI de Valores Devidos deve ser maior que zero."]});
+      valid = false;
+    }
+
+    if (!this.isEmptyInput(this.dibAnteriorValoresDevidos) &&
+        !this.isValidDate(this.dibAnteriorValoresDevidos)) {
+      this.errors.add({"dibAnteriorValoresDevidos":["Insira uma data válida."]});
+      valid = false; 
+    }
+
+    if (!this.isEmptyInput(this.cessacaoValoresDevidos) &&
+        !this.isValidDate(this.cessacaoValoresDevidos)) {
+      this.errors.add({"cessacaoValoresDevidos":["Insira uma data válida."]});
+      valid = false; 
+    }
+
+
+    if (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte)){
+      if (!this.isValidDate(this.dataHonorariosDe)) {
+        this.errors.add({"dataHonorariosDe":["Insira uma data válida."]});
+        valid = false; 
+      } else {
+        if (this.compareDates(this.dataHonorariosDe,this.dataMinima)) {
+          this.errors.add({"dataHonorariosAte":["A data deve ser maior que 01/1970"]});
+          valid = false;
+        }
+      }
+
+      if (!this.isValidDate(this.dataHonorariosAte)) {
+        this.errors.add({"dataHonorariosAte":["Insira uma data válida."]});
+        valid = false;
+      } else {
+        
+        if (this.compareDates(this.dataHonorariosAte,this.dataMinima)) {
+          this.errors.add({"dataHonorariosAte":["A data deve ser maior que 01/1970"]});
+          valid = false;
+        }
+
+        if (this.isValidDate(this.dataHonorariosDe)) {
+          if(this.compareDates(this.dataHonorariosDe,this.dataHonorariosAte)) {
+            this.errors.add({"dataHonorariosAte":["A data deve ser maior que a data de inicio"]});
+            valid = false;
+          }
+        }
+      }
+
+      if (this.isEmptyInput(this.percentualHonorarios)) {
+        this.errors.add({"percentualHonorarios":["Insira o percentual dos Honorários."]});
+        valid = false; 
+      } else if (this.percentualHonorarios == 0) {
+        this.errors.add({"percentualHonorarios":["O percentual dos Honorários deve ser maior que zero."]});
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
+
   getFormatedDate(date: Date) {
 
-	var dd:any = date.getDate();
-	var mm:any = date.getMonth()+1; //January is 0!
+  	var dd:any = date.getDate();
+  	var mm:any = date.getMonth()+1; //January is 0!
 
-	var yyyy = date.getFullYear();
+  	var yyyy = date.getFullYear();
 
-	var today = dd+'/'+mm+'/'+yyyy;
-	return today;
+  	var today = dd+'/'+mm+'/'+yyyy;
+  	return today;
   }
 
 	formatReceivedDate(inputDate) {
     	var date = new Date(inputDate);
     	if (!isNaN(date.getTime())) {
         	// Months use 0 index.
-        	return  date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear();
+        	return  (date.getDate() + 1 )+ '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
     	}
     	return '';
 	}
+
+  isEmptyInput(input) {
+    if (input == '' || input === undefined)
+      return true;
+
+    return false;
+  }
+
+  isValidDate(date) {
+    var bits = date.split('/');
+    var d = new Date(bits[2], bits[1] - 1, bits[0]);
+    return d && (d.getMonth() + 1) == bits[1];
+  }
+
+  // return true if date1 is before or igual date2
+  compareDates(date1, date2) {
+    var bits1 = date1.split('/');
+    var d1 = new Date(bits1[2], bits1[1] - 1, bits1[0]);
+    var bits2 = date2.split('/');
+    var d2 = new Date(bits2[2], bits2[1] - 1, bits2[0]);
+    return d1 <= d2;
+  }
+
 
 }

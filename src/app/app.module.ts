@@ -54,7 +54,6 @@ type StoreType = {
     SmartadminLayoutModule,
 
 
-
     routing
   ],
   exports: [
