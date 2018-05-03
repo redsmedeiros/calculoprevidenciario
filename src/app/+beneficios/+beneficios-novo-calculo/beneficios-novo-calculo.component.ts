@@ -16,6 +16,8 @@ import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 })
 export class BeneficiosNovoCalculoComponent implements OnInit {
 
+  public dateMask = [/[0-3]/, /\d/,'/',/[0-3]/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -616,7 +618,8 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   	var yyyy = date.getFullYear();
 
-  	var today = dd+'/'+mm+'/'+yyyy;
+  	var today = ('0'+dd).slice(-2)+'/' +
+                ('0'+mm).slice(-2)+'/'+yyyy;
   	return today;
   }
 
@@ -624,7 +627,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     	var date = new Date(inputDate);
     	if (!isNaN(date.getTime())) {
         	// Months use 0 index.
-        	return  (date.getDate() + 1 )+ '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        	return  ('0' + date.getDate() +1).slice(-2)+'/'+
+                  ('0' + date.getMonth()+1).slice(-2)+'/'+
+                         date.getFullYear();
     	}
     	return '';
 	}

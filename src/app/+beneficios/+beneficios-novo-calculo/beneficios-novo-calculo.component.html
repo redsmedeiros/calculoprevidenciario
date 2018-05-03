@@ -228,12 +228,12 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data do cálculo:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataCalculo"  name="dataCalculo" class="form-control" type="text">
+                      <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMask}" name="dataCalculo" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Data da citação do réu:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataAcaoJudicial" name="dataAcaoJudicial" class="form-control" type="text">
+                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
                       <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
                     </div>
                   </div>
@@ -241,7 +241,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataCitacaoReu" name="dataCitacaoReu" class="form-control" type="text">
+                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
@@ -310,7 +310,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data inicial do benefício DIB de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input class="form-control" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
+                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
                       <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
                     </div>
                     <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
@@ -326,14 +326,14 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" class="form-control" type="text">
+                      <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control" type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
 
                     <div *ngIf="chkPrecedidoRecebidos">
                       <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
                       <div class="col-md-3">
-                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" type="text">
+                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
                       </div>
                     </div>
@@ -343,7 +343,7 @@
                     <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
                     <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
+                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" [textMask]="{mask: moneyMask}" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
 
@@ -403,7 +403,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">(*) Data inicial do benefício DIB de valores devidos:</label>
                     <div class="col-md-3">
-                      <input name='dibValoresDevidos' [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control" [disabled]="chkUseSameDib" type="text">
+                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control" [disabled]="chkUseSameDib" type="text">
                       <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
                     </div>
                     <label class="col-md-2 control-label" for="select-1">Espécie valores devidos:</label>
@@ -420,14 +420,14 @@
                     
                     <label  class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
                     <div class="col-md-3">
-                      <input name="cessacaoValoresDevidos" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
+                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
                     </div>
                     
                     <div *ngIf="chkDibAnterior">
                       <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
                       <div class="col-md-3">
-                        <input name='dibAnteriorValoresDevidos' [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
+                        <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
                       </div>
                     </div>
@@ -461,7 +461,7 @@
                     <div *ngIf="devidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" class="form-control" type="text">
+                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" [textMask]="{mask: moneyMask}"  class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
@@ -507,11 +507,11 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Intervalo de Honorários:</label>
                     <div class="col-md-3">
-                      <input name="dataHonorariosDe" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="De" type="text">
+                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="De" type="text">
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
                     <div class="col-md-5">
-                      <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" class="form-control" placeholder="Até" type="text">
+                      <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
                       <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
                     </div>
                   </div>
@@ -520,12 +520,12 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-3">
-                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
+                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
                       <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-3">
-                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial" class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
                     </div>
                   </div>
 
@@ -614,18 +614,18 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
+                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="0,5%" type="text">
                     </div>
                     <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003" class="form-control" placeholder="1.0%" type="text">
+                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="1.0%" type="text">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
                     <div class="col-md-3">
-                      <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
+                      <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="0,5%" type="text">
                     </div>
                     <div class="col-md-5">
                       <div class="checkbox">
