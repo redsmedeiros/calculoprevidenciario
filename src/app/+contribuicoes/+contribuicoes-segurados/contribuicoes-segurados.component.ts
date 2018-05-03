@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
+import { SeguradoContribuicao as SeguradoModel } from '../SeguradoContribuicao.model';
+import { SeguradoService } from '../Segurado.service';
+import { ErrorService } from '../../services/error.service';
 
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './contribuicoes-segurados.component.html',
+  providers: [
+    ErrorService,
+  ],
 })
 export class ContribuicoesSeguradosComponent implements OnInit {
 
@@ -12,9 +19,51 @@ export class ContribuicoesSeguradosComponent implements OnInit {
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
-  constructor() {}
+  public isUpdating = false;
+  public form = {...SeguradoModel.form};
+  public list = this.Segurado.list;
+  public datatableOptions = {
+    colReorder: true,
+    data: this.list,
+    columns: [
+      {data: 'actions'},
+      {data: 'nome'},
+      {data: 'tipo'},
+      {data: 'documento'},
+      {data: 'data_nascimento'},
+      {data: 'data_filiacao'},
+      {data: 'data_cadastro'}
+    ] };
+
+  constructor(
+    protected Segurado: SeguradoService,
+    protected Errors: ErrorService,
+    protected router: Router,
+  ) {}
 
   ngOnInit() {
+    this.isUpdating = true;
+    this.Segurado.get()
+        .then(() => {
+           this.updateDatatable();
+           this.isUpdating = false;
+        })
+  }
+
+  updateDatatable() {
+    this.datatableOptions = {
+      ...this.datatableOptions,
+      data: [...this.list],
+    }
+  }
+
+  onCreate(e) {
+    this.isUpdating = true;
+    this.Segurado.get()
+        .then(() => {
+           this.updateDatatable();
+           this.isUpdating = false;
+        })
   }
 
 }

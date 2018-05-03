@@ -1,6 +1,6 @@
-import {NgModule} from "@angular/core";
+import {NgModule} from '@angular/core';
 
-import {routing} from "./beneficios-showcase.routing";
+import {routing} from './beneficios-showcase.routing';
 
 
 @NgModule({

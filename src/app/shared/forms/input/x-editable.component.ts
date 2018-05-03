@@ -36,7 +36,7 @@ export class XEditableComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-    System.import('X-editable/dist/bootstrap3-editable/js/bootstrap-editable.js').then(()=> {
+    System.import('x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js').then(()=> {
       this.render()
     })
   }

@@ -17,6 +17,14 @@ import { AppState, InternalStateType } from './app.service';
 // Core providers
 import {CoreModule} from "./core/core.module";
 import {SmartadminLayoutModule} from "./shared/layout/layout.module";
+import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
+import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
+import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
+import { CalculoAtrasadoService } from './+beneficios/CalculoAtrasado.service';
+import { StoreService } from './services/store.service';
+import { MoedaService } from './services/Moeda.service';
+
+import { TextMaskModule } from 'angular2-text-mask';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -43,10 +51,10 @@ type StoreType = {
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    TextMaskModule,
 
     CoreModule,
     SmartadminLayoutModule,
-
 
 
     routing
@@ -55,7 +63,13 @@ type StoreType = {
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    StoreService,
+    SeguradoService,
+    ContribuicoesSeguradoService,
+    ContribuicaoJurisprudencialService,
+    CalculoAtrasadoService,
+    MoedaService,
   ]
 })
 export class AppModule {

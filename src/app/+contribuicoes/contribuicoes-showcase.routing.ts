@@ -14,20 +14,15 @@ export const routes:Routes = [
     loadChildren: 'app/+contribuicoes/+contribuicoes-calculos/contribuicoes-calculos.module#ContribuicoesCalculosModule',
     data: {pageTitle: 'Contribuicoes Calculo'}
   },
-  {
-    path: 'contribuicoes-jurisprudencial',
+  { 
+    path: ':id/novo-jurisprudencial',
     loadChildren: 'app/+contribuicoes/+contribuicoes-jurisprudencial/contribuicoes-jurisprudencial.module#ContribuicoesJurisprudencialModule',
-    data: {pageTitle: 'Contribuicoes Jurisprudencial'}
+    data: {pageTitle: 'Novo Calculo'}
   },
-  {
-    path: 'contribuicoes-complementar',
+  { 
+    path: ':id/novo-complementar',
     loadChildren: 'app/+contribuicoes/+contribuicoes-complementar/contribuicoes-complementar.module#ContribuicoesComplementarModule',
-    data: {pageTitle: 'Contribuicoes Complementar'}
-  },
-  {
-    path: 'contribuicoes-resultados',
-    loadChildren: 'app/+contribuicoes/+contribuicoes-resultados/contribuicoes-resultados.module#ContribuicoesResultadosModule',
-    data: {pageTitle: 'Contribuicoes Resultados'}
+    data: {pageTitle: 'Novo Calculo'}
   },
 ];
 

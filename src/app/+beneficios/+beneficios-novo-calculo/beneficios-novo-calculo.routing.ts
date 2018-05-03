@@ -6,6 +6,13 @@ import {BeneficiosNovoCalculoComponent} from "./beneficios-novo-calculo.componen
 export const beneficiosNovoCalculoRoutes: Routes = [{
   path: '',
   component: BeneficiosNovoCalculoComponent
+},
+{
+  path: ':type/:id',
+  component: BeneficiosNovoCalculoComponent
+},{
+  path: ':type/:id/:id_calculo',
+  component: BeneficiosNovoCalculoComponent
 }];
 
 export const beneficiosNovoCalculoRouting = RouterModule.forChild(beneficiosNovoCalculoRoutes);

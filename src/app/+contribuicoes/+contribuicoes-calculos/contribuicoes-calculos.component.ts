@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SeguradoService } from '../Segurado.service';
+import { ContribuicaoJurisprudencialService } from './ContribuicaoJurisprudencial.service';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 
 @FadeInTop()
@@ -8,76 +11,65 @@ import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 })
 export class ContribuicoesCalculosComponent implements OnInit {
 
+  public isUpdating = false;
 
+  public segurado;
+
+  public list = this.Jurisprudencial.list;
+
+  public jurisprudencialTableOptions = {
+    colReorder: true,
+    data: this.list,
+    columns: [
+      {data: 'actions'},
+      {data: 'id'},
+      {data: 'data_calculo'},
+      {data: 'inicio_atraso'},
+      {data: 'final_atraso'}
+    ] };
+  
 
 
   public state: any = {
     tabs: {
-      demo1: 0,
-      demo2: 'tab-r1',
-      demo3: 'hr1',
-      demo4: 'AA',
-      demo5: 'iss1',
-      demo6: 'l1',
-      demo7: 'tab1',
-      demo8: 'hb1',
-      demo9: 'A1',
-      demo10: 'is1'
-    },
-
-    carousel: {
-      demo1: {
-        interval: 2000,
-        noWrap: false,
-        slides: [
-          {
-            title: 'Title 1',
-            text: 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m3.jpg',
-          },
-          {
-            title: 'Title 2',
-            text: 'Dolores justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m2.jpg',
-          },
-          {
-            title: 'Title 3',
-            text: 'Lorem justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m1.jpg',
-          },
-        ]
-      },
-      demo2: {
-        interval: 3000,
-        noWrap: false,
-        slides: [
-          {
-            title: 'Title 2',
-            text: 'Dolores justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m2.jpg',
-          },
-          {
-            title: 'Title 1',
-            text: 'Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m3.jpg',
-          },
-          {
-            title: 'Title 3',
-            text: 'Lorem justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.',
-            src: 'assets/img/demo/m1.jpg',
-          },
-        ]
-      }
+      selectedTab: 'hr1',
     }
   };
 
 
-  
-
-
-  constructor() {}
+  constructor(protected Segurado: SeguradoService,
+              protected router: Router,
+              private route: ActivatedRoute,
+              protected Jurisprudencial: ContribuicaoJurisprudencialService
+          ) {
+  }
 
   ngOnInit() {
+    this.isUpdating = true;
+    // retrive user info
+    this.Segurado.find(this.route.snapshot.params['id'])
+        .then(segurado => {
+            this.segurado = segurado;
+    });
+
+
+    this.Jurisprudencial.get()
+        .then(() => {
+           this.updateDatatable();
+           this.isUpdating = false;
+    })
+  }
+
+
+  createNewJurisprudencial() {
+    window.location.href='/#/contribuicoes/'+this.segurado.id+'/novo-jurisprudencial';
+  }
+
+  updateDatatable() {
+    this.jurisprudencialTableOptions = {
+      ...this.jurisprudencialTableOptions,
+      data: [...this.list],
+    }
   }
 
 }
