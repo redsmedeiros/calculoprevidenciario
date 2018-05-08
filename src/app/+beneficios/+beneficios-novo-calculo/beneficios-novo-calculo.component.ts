@@ -470,6 +470,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     } else if (!this.isValidDate(this.dataCalculo)) {
       this.errors.add({"dataCalculo":["Insira uma data Válida."]});
       valid = false;
+    } else if (this.compareDates(this.dataCalculo,this.dataMinima)) {
+      this.errors.add({"dataCalculo":["A data do Cálculo deve ser posterior a 01/01/1970."]})
+      valid = false;
     }
 
     if (this.isEmptyInput(this.dataAcaoJudicial)) {
@@ -477,6 +480,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
      valid = false; 
     } else if (!this.isValidDate(this.dataAcaoJudicial)) {
       this.errors.add({"dataAcaoJudicial":["Insira uma data Válida."]});
+      valid = false;
+    } else if (this.compareDates(this.dataAcaoJudicial,this.dataMinima)) {
+      this.errors.add({"dataAcaoJudicial":["A data deve ser posterior a 01/01/1970."]})
       valid = false;
     }
 
@@ -487,7 +493,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
       this.errors.add({"dataCitacaoReu":["Insira uma data Válida."]});
       valid = false;
     } else if (this.compareDates(this.dataCitacaoReu,this.dataMinima)) {
-      this.errors.add({"dataCitacaoReu":["A data deve ser maior que 01/1970"]});
+      this.errors.add({"dataCitacaoReu":["A data deve ser maior que 01/01/1970"]});
       valid = false;
     }
 

@@ -233,16 +233,16 @@
                     </div>
                     <label class="col-md-2 control-label">Data da citação do réu:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
+                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
+                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
                     </div>
                   </div>
                 </fieldset>
