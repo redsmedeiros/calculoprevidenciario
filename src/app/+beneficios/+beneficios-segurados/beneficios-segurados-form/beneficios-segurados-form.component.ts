@@ -22,8 +22,12 @@ export class BeneficiosSeguradosFormComponent {
     this.validate();
 
     if (this.errors.empty()) {
+      swal('Sucesso', 'Segurado salvo com sucesso','success');
       this.formData.funcao = "beneficios";
       this.onSubmit.emit( this.formData );
+    }
+    else {
+      swal('Erro', 'Confira os dados digitados','error');
     }
   }
 
