@@ -5,6 +5,7 @@ import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
@@ -28,7 +29,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public chkNotGranted = false;
   public chkUseSameDib = false;
-  public chkJurosMora = false;
+  public chkJurosMora = true;
   public chkDibAnterior = false;
   public chkAjusteMaximo = false;
   public chkDemandasJudiciais = false;
@@ -64,7 +65,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 
   public dataHonorariosDe;
   public dataHonorariosAte;
-  public maturidade;
+  public maturidade = 0;
   public jurosAntes2003;
   public jurosDepois2003;
   public jurosDepois2009;
@@ -271,6 +272,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
   saveCalculation() {
 
     if (!this.validateInputs()) {
+      swal('Erro', 'Confira os dados digitados','error');
       return;
     }
 
@@ -412,6 +414,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
 	  			window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
 		  }).catch(errors => console.log(errors));
     }
+    swal('Sucesso', 'Cálculo salvo com sucesso','success');
   }
 
   loadCalculo(calculoAtrasado) {
