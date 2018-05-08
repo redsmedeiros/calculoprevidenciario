@@ -343,7 +343,7 @@
                     <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
                     <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" [textMask]="{mask: moneyMask}" class="form-control" type="text">
+                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
 
@@ -461,7 +461,7 @@
                     <div *ngIf="devidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" [textMask]="{mask: moneyMask}"  class="form-control" type="text">
+                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro"  class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
@@ -520,12 +520,12 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-3">
-                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
+                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
                       <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-3">
-                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
                     </div>
                   </div>
 
@@ -614,18 +614,18 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="0,5%" type="text">
+                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
                     </div>
                     <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="1.0%" type="text">
+                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
                     <div class="col-md-3">
-                      <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" [textMask]="{mask: moneyMask}"  class="form-control" placeholder="0,5%" type="text">
+                      <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
                     </div>
                     <div class="col-md-5">
                       <div class="checkbox">

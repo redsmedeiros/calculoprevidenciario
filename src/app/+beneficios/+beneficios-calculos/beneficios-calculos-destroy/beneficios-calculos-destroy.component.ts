@@ -19,10 +19,12 @@ export class BeneficiosCalculosDestroyComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.CalculosAtrasado.find(this.route.snapshot.params['id'])
+    let calculo = this.route.snapshot.params['id_calculo'];
+    let user = this.route.snapshot.params['id'];
+    this.CalculosAtrasado.find(calculo)
         .then(CalculoAtrasado => {
           this.CalculosAtrasado.destroy(CalculoAtrasado)
-              .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
+              .then(() => this.router.navigate(['/beneficios/beneficios-calculos/'+user]));
         })
   }
 
