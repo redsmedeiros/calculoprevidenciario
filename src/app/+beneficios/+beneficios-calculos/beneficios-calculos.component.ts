@@ -27,13 +27,34 @@ export class BeneficiosCalculosComponent implements OnInit {
     data: this.calculosList,
     columns: [
       {data: 'actions'},
-      {data: 'data_calculo'},
-      {data: 'data_citacao_reu'},
-      {data: 'data_acao_judicial'},
-      {data: 'data_pedido_beneficio'},
-      {data: 'valor_beneficio_concedido'},
-      {data: 'data_pedido_beneficio_esperado'},
-      {data: 'valor_beneficio_esperado'},
+      {data: 'data_calculo',
+       render: (data) => {
+          return this.formatReceivedDateTime(data);
+       }},
+      {data: 'data_citacao_reu',
+       render: (data) => {
+          return this.formatReceivedDate(data);
+       }},
+      {data: 'data_acao_judicial',
+             render: (data) => {
+          return this.formatReceivedDate(data);
+       }},
+      {data: 'data_pedido_beneficio',
+             render: (data) => {
+          return this.formatReceivedDate(data);
+       }},
+      {data: 'valor_beneficio_concedido',
+       render: (data) => {
+          return this.formatMoneyValue(data);
+       }},
+      {data: 'data_pedido_beneficio_esperado',
+             render: (data) => {
+          return this.formatReceivedDate(data);
+       }},
+      {data: 'valor_beneficio_esperado',
+        render: (data) => {
+          return this.formatMoneyValue(data);
+       }},
     ] };
 
   constructor(protected Segurado: SeguradoService,
@@ -63,9 +84,33 @@ export class BeneficiosCalculosComponent implements OnInit {
     }
   }
 
+  formatReceivedDate(inputDate) {
+      var date = new Date(inputDate);
+      if (!isNaN(date.getTime())) {
+          // Months use 0 index.
+          return  ('0' + (date.getDate() +1)).slice(-2)+'/'+
+                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
+                         date.getFullYear();
+      }
+      return '';
+  }
+
+  formatReceivedDateTime(inputDateTime) {
+    return inputDateTime.substring(11, 19) + ' ' + 
+           this.formatReceivedDate(inputDateTime.substring(0, 10));
+  }
+
+  formatMoneyValue(inputValue) {
+    return inputValue.toFixed(2).replace('.',',');
+  }
+
+  editSegurado() {
+    window.location.href='/#/beneficios/beneficios-segurados/'+ 
+                            this.route.snapshot.params['id']+'/editar';
+  }
 
   createNewCalculo() {
-  	window.location.href='/#/beneficios/novo-calculo/A/'+ + this.route.snapshot.params['id'];
+  	window.location.href='/#/beneficios/novo-calculo/A/'+ this.route.snapshot.params['id'];
   }
 
   createNewCalculoJudicial() {

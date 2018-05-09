@@ -7,11 +7,11 @@ import {BeneficiosCalculosDestroyComponent} from './beneficios-calculos-destroy/
 export const beneficiosCalculosRoutes: Routes = [{
   path: '',
   component: BeneficiosCalculosComponent
-}, {
+},{
   path: ':id',
   component: BeneficiosCalculosComponent
 },{
-    path: ':id/destroy',
+    path: ':id/:id_calculo/destroy',
     component: BeneficiosCalculosDestroyComponent
 }
 ];

@@ -39,7 +39,11 @@
 
               <ul class="list-unstyled">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
                 <li><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
@@ -50,17 +54,17 @@
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
                     </button>
 
-                    <button type="submit" class="btn btn-labeled btn-primary">
+<!--                     <button type="submit" class="btn btn-labeled btn-primary">
                       <span class="btn-label">
                         <i class="fa fa-percent"></i>
                       </span> Novo cálculo
-                    </button>
+                    </button> -->
 
                   </div>
                 </div>

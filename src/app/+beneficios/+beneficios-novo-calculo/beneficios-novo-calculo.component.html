@@ -65,7 +65,11 @@
 
               <ul class="list-unstyled">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
                 <li><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
@@ -76,7 +80,7 @@
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)='editSegurado()' class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
@@ -233,16 +237,16 @@
                     </div>
                     <label class="col-md-2 control-label">Data da citação do réu:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
+                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
                     <div class="col-md-3">
-                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
+                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
                     </div>
                   </div>
                 </fieldset>
@@ -342,14 +346,14 @@
                     <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
                     <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
+                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
 
                     <div *ngIf="recebidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores recebidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" class="form-control" type="text">
+                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                       </div>
                     </div>
 
@@ -441,7 +445,7 @@
                       <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">(*) RMI não concedida antes da revisão (Buraco Negro):
                       </label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
@@ -453,7 +457,7 @@
                       <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
                       <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
@@ -461,7 +465,7 @@
                     <div *ngIf="devidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" class="form-control" type="text">
+                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
@@ -525,7 +529,7 @@
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-3">
-                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial" class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
                     </div>
                   </div>
 
@@ -614,11 +618,11 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003"  class="form-control" placeholder="0,5%" type="text">
+                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
                     </div>
                     <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
                     <div class="col-md-3">
-                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003" class="form-control" placeholder="1.0%" type="text">
+                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
                     </div>
                   </div>
 

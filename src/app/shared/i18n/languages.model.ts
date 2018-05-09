@@ -42,6 +42,11 @@ export const languages: any = [
     "title": "Portugal"
   },
   {
+    "key": "pt-BR",
+    "alt": "Brasil",
+    "title": "Portugues-Brasil"
+  },
+  {
     "key": "ru",
     "alt": "Russia",
     "title": "Русский язык"

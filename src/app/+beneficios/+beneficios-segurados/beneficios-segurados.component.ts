@@ -28,7 +28,10 @@ export class BeneficiosSeguradosComponent implements OnInit {
     columns: [
       {data: 'actions'},
       {data: 'nome'},
-      {data: 'tipo'},
+      {data: 'id_documento',
+        render: (data) => {
+          return this.getDocumentType(data);
+        }},
       {data: 'documento'},
       {data: 'data_nascimento'},
       {data: 'data_filiacao'},
@@ -50,10 +53,27 @@ export class BeneficiosSeguradosComponent implements OnInit {
         })
   }
 
+  getDocumentType(id_documento) {
+    switch (id_documento) {
+      case 1:
+        return 'PIS';
+      case 2:
+        return 'PASEP';
+      case 3:
+        return 'CPF';
+      case 4:
+        return 'NIT';
+      case 5:
+        return 'RG';
+      default:
+        return ''
+    }
+  }
+
   updateDatatable() {
     this.datatableOptions = {
       ...this.datatableOptions,
-      data: [...this.list],
+      data: this.list,
     }
   }
 
@@ -62,6 +82,7 @@ export class BeneficiosSeguradosComponent implements OnInit {
     this.Segurado.get()
         .then(() => {
            this.updateDatatable();
+           this.list = this.Segurado.list;
            this.isUpdating = false;
         })
   }
