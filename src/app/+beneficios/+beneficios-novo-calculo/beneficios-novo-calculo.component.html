@@ -80,7 +80,7 @@
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)='editSegurado()' class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
@@ -347,14 +347,14 @@
                     <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
                     <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos:</label>
                     <div class="col-md-3">
-                      <input name="rmiValoresRecebidos" [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
+                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
 
                     <div *ngIf="recebidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores recebidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" class="form-control" type="text">
+                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                       </div>
                     </div>
 
@@ -445,7 +445,7 @@
                       <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">(*) RMI não concedida antes da revisão (Buraco Negro):
                       </label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
@@ -457,7 +457,7 @@
                       <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
                       <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidos" [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
@@ -465,7 +465,7 @@
                     <div *ngIf="devidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
-                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro"  class="form-control" type="text">
+                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>

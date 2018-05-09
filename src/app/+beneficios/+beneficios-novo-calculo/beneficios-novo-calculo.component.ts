@@ -336,8 +336,13 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['data_anterior_pedido_beneficio'] = data_anterior_pedido_beneficio;
     calculoAtrasado.data_anterior_pedido_beneficio = data_anterior_pedido_beneficio;
     // Percentual dos Honorarios
-    calculoAtrasado.form['percentual_taxa_advogado'] = this.percentualHonorarios || 0;
-    calculoAtrasado.percentual_taxa_advogado = this.percentualHonorarios || 0;
+    if (this.percentualHonorarios != undefined) {
+      calculoAtrasado.form['percentual_taxa_advogado'] = this.percentualHonorarios.replace(',','.');
+      calculoAtrasado.percentual_taxa_advogado = this.percentualHonorarios.replace(',','.');
+    } else {
+      calculoAtrasado.form['percentual_taxa_advogado'] = 0;
+      calculoAtrasado.percentual_taxa_advogado = 0;
+    }
     // Intervalo de Honorarios DE
     calculoAtrasado.form['taxa_advogado_inicio'] = this.dataHonorariosDe;
     calculoAtrasado.taxa_advogado_inicio = this.dataHonorariosDe;
@@ -348,14 +353,29 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['maturidade'] = this.maturidade;
     calculoAtrasado.maturidade = this.maturidade;
     // Juros anterior a janeiro 2003
-    calculoAtrasado.form['previo_interesse_2003'] = this.jurosAntes2003.replace(',','.');
-    calculoAtrasado.previo_interesse_2003 = this.jurosAntes2003.replace(',','.');
+    if (this.jurosAntes2003 != undefined) {
+      calculoAtrasado.form['previo_interesse_2003'] = this.jurosAntes2003.replace(',','.');
+      calculoAtrasado.previo_interesse_2003 = this.jurosAntes2003.replace(',','.');
+    } else {
+      calculoAtrasado.form['previo_interesse_2003'] = 0;
+      calculoAtrasado.previo_interesse_2003 = 0;
+    }
     // Juros posterior a janeiro 2003
-    calculoAtrasado.form['pos_interesse_2003'] = this.jurosDepois2003.replace(',','.');
-    calculoAtrasado.pos_interesse_2003 = this.jurosDepois2003.replace(',','.');
+    if (this.jurosDepois2003 != undefined) {
+      calculoAtrasado.form['pos_interesse_2003'] = this.jurosDepois2003.replace(',','.');
+      calculoAtrasado.pos_interesse_2003 = this.jurosDepois2003.replace(',','.');
+    } else {
+      calculoAtrasado.form['pos_interesse_2003'] = 0;
+      calculoAtrasado.pos_interesse_2003 = 0;
+    }
     // Juros posterior a julho 2009
-    calculoAtrasado.form['pos_interesse_2009'] = this.jurosDepois2009.replace(',','.');
-    calculoAtrasado.pos_interesse_2009 = this.jurosDepois2009.replace(',','.');
+    if (this.jurosDepois2009 != undefined) {
+      calculoAtrasado.form['pos_interesse_2009'] = this.jurosDepois2009.replace(',','.');
+      calculoAtrasado.pos_interesse_2009 = this.jurosDepois2009.replace(',','.');
+    } else {
+      calculoAtrasado.form['pos_interesse_2009'] = 0;
+      calculoAtrasado.pos_interesse_2009 = 0;
+    }
     // Espécie valores devidos
     calculoAtrasado.form['tipo_aposentadoria'] = this.especieValoresDevidos;
     calculoAtrasado.tipo_aposentadoria = this.especieValoresDevidos;
@@ -366,8 +386,13 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['aplicar_ajuste_maximo_98_2003'] = this.chkAjusteMaximo;
     calculoAtrasado.aplicar_ajuste_maximo_98_2003 = this.chkAjusteMaximo;
     // Percentual do Acordo Judicial
-    calculoAtrasado.form['acordo_pedido'] = this.acordoJudicial;
-    calculoAtrasado.acordo_pedido= this.acordoJudicial;
+    if (this.acordoJudicial != undefined) {
+      calculoAtrasado.form['acordo_pedido'] = this.acordoJudicial.replace(',','.');
+      calculoAtrasado.acordo_pedido= this.acordoJudicial.replace(',','.');
+    } else {
+      calculoAtrasado.form['acordo_pedido'] = 0;
+      calculoAtrasado.acordo_pedido= 0;
+    }
     // checkBox Não Limitar Teto para demandas Judiciais
     calculoAtrasado.form['nao_aplicar_ajuste_maximo_98_2003'] = this.chkDemandasJudiciais;
     calculoAtrasado.nao_aplicar_ajuste_maximo_98_2003 = this.chkDemandasJudiciais;
@@ -390,11 +415,21 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['esperado_anterior'] = this.chkDibAnterior;
     calculoAtrasado.esperado_anterior = this.chkDibAnterior;
     // Índice de reajuste no teto da Nova RMI de valores devidos:
-    calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = this.taxaAjusteMaximaEsperada;
-    calculoAtrasado.taxa_ajuste_maxima_esperada = this.taxaAjusteMaximaEsperada;
-    // Índice de reajuste no teto da Nova RMI de valores devidos:
-    calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = this.taxaAjusteMaximaConcedida;
-    calculoAtrasado.taxa_ajuste_maxima_concedida = this.taxaAjusteMaximaConcedida;
+    if (this.taxaAjusteMaximaEsperada != undefined) {
+      calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = this.taxaAjusteMaximaEsperada.replace(',','.');
+      calculoAtrasado.taxa_ajuste_maxima_esperada = this.taxaAjusteMaximaEsperada.replace(',','.');
+    } else {
+      calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = 0;
+      calculoAtrasado.taxa_ajuste_maxima_esperada = 0;
+    }
+    // Índice de reajuste no teto da Nova RMI de valores recebidos:
+    if (this.taxaAjusteMaximaConcedida != undefined) {
+      calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = this.taxaAjusteMaximaConcedida.replace(',','.');
+      calculoAtrasado.taxa_ajuste_maxima_concedida = this.taxaAjusteMaximaConcedida.replace(',','.');
+    } else {
+      calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = 0;
+      calculoAtrasado.taxa_ajuste_maxima_concedida = 0;
+    }
 
     if (this.route.snapshot.params['id_calculo'] === undefined) {
 
@@ -443,7 +478,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     // CONDICIONAL
     let data_anterior_pedido_beneficio = calculoAtrasado.data_anterior_pedido_beneficio;
     // Percentual dos Honorarios
-    this.percentualHonorarios = calculoAtrasado.percentual_taxa_advogado;
+    this.percentualHonorarios = calculoAtrasado.percentual_taxa_advogado.toString().replace('.',',');
     // Intervalo de Honorarios DE
     this.dataHonorariosDe = this.formatReceivedDate(calculoAtrasado.taxa_advogado_inicio);
     // Intervalo de Honorarios ATE 
@@ -451,11 +486,14 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     // Calcular Mais (Vincendos)
     this.maturidade = calculoAtrasado.maturidade;
     // Juros anterior a janeiro 2003
+    if (calculoAtrasado.previo_interesse_2003 != null)
     this.jurosAntes2003 = calculoAtrasado.previo_interesse_2003.toString().replace('.',',');
     // Juros posterior a janeiro 2003
-    this.jurosDepois2003 = calculoAtrasado.pos_interesse_2003.toString().replace('.',',');;
+    if (calculoAtrasado.pos_interesse_2003 != null)
+    this.jurosDepois2003 = calculoAtrasado.pos_interesse_2003.toString().replace('.',',');
     // Juros posterior a julho 2009
-    this.jurosDepois2009 = calculoAtrasado.pos_interesse_2009.toString().replace('.',',');;
+    if (calculoAtrasado.pos_interesse_2009 != null)
+      this.jurosDepois2009 = calculoAtrasado.pos_interesse_2009.toString().replace('.',',');
     // Espécie valores devidos
     this.especieValoresDevidos = calculoAtrasado.tipo_aposentadoria;
     // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
@@ -464,7 +502,8 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     }
     this.chkAjusteMaximo = calculoAtrasado.aplicar_ajuste_maximo_98_2003;
     // Percentual do Acordo Judicial
-    this.acordoJudicial = calculoAtrasado.acordo_pedido;
+    if (calculoAtrasado.acordo_pedido != null)
+      this.acordoJudicial = calculoAtrasado.acordo_pedido.toString().replace('.',',');
     // checkBox Não Limitar Teto para demandas Judiciais
     this.chkDemandasJudiciais = calculoAtrasado.nao_aplicar_ajuste_maximo_98_2003;
     // Data inicial do benefício DIB de valores devidos
@@ -480,6 +519,12 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     // CheckBox Beneficio Precedido com DIB Anterior (devidos)
     this.chkDibAnterior = calculoAtrasado.esperado_anterior;
 
+    if (calculoAtrasado.taxa_ajuste_maxima_concedida != null)
+      this.taxaAjusteMaximaConcedida = calculoAtrasado.taxa_ajuste_maxima_concedida.toString().replace('.',',');
+    if (calculoAtrasado.taxa_ajuste_maxima_esperada != null)
+      this.taxaAjusteMaximaEsperada = calculoAtrasado.taxa_ajuste_maxima_esperada.toString().replace('.',',');
+
+
   	if (this.chkNotGranted || this.chkUseSameDib) {
   		// Valores Devidos
   		this.dibValoresDevidos = this.formatReceivedDate(dataPedidoBeneficio);
@@ -489,6 +534,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
   		this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
   		this.dibAnteriorValoresRecebidos = this.formatReceivedDate(data_anterior_pedido_beneficio);
   	}
+
+    this.dibValoresDevidosChanged();
+    this.dibValoresRecebidosChanged();
   }
 
   validateInputs() {
@@ -684,6 +732,11 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     var bits = date.split('/');
     var d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
+  }
+
+  editSegurado() {
+    window.location.href='/#/beneficios/beneficios-segurados/'+ 
+                            this.route.snapshot.params['id']+'/editar';
   }
 
   // return true if date1 is before or igual date2
