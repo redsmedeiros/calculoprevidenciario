@@ -615,17 +615,27 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
         valid = false;
       }
 
-      if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos) &&
-        !this.isValidDate(this.dibAnteriorValoresRecebidos)) {
-        this.errors.add({"dibAnteriorValoresRecebidos":["Insira uma data válida."]});
-        valid = false; 
+      if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+        if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
+          this.errors.add({"dibAnteriorValoresRecebidos":["Insira uma data válida."]});
+          valid = false; 
+        } else if (this.compareDates(this.dibAnteriorValoresRecebidos,this.dataMinima)){
+          this.errors.add({"dibAnteriorValoresRecebidos":["A data deve ser maior que 01/1970"]});
+          valid = false; 
+        }
       }
 
 
-      if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
-          !this.isValidDate(this.cessacaoValoresRecebidos)) {
-        this.errors.add({"cessacaoValoresRecebidos":["Insira uma data válida."]});
-        valid = false; 
+      if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+        
+        if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
+          this.errors.add({"cessacaoValoresRecebidos":["Insira uma data válida."]});
+          valid = false; 
+        } else if(this.compareDates(this.cessacaoValoresRecebidos,this.dataMinima)) {
+          this.errors.add({"cessacaoValoresRecebidos":["A data deve ser maior que 01/1970"]});
+          valid = false; 
+        }
       }
     }
 
@@ -633,6 +643,9 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
      this.errors.add({"dibValoresDevidos":["A DIB de Valores Devidos é Necessária."]});
      valid = false;
     } else if (!this.isValidDate(this.dibValoresDevidos)) {
+      this.errors.add({"dibValoresDevidos":["Insira uma data Válida."]});
+      valid = false;
+    } else if (this.compareDates(this.dibValoresDevidos,this.dataMinima)) {
       this.errors.add({"dibValoresDevidos":["Insira uma data Válida."]});
       valid = false;
     }
@@ -645,16 +658,27 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
       valid = false;
     }
 
-    if (!this.isEmptyInput(this.dibAnteriorValoresDevidos) &&
-        !this.isValidDate(this.dibAnteriorValoresDevidos)) {
-      this.errors.add({"dibAnteriorValoresDevidos":["Insira uma data válida."]});
-      valid = false; 
-    }
+    if (!this.isEmptyInput(this.dibAnteriorValoresDevidos)) {
 
-    if (!this.isEmptyInput(this.cessacaoValoresDevidos) &&
-        !this.isValidDate(this.cessacaoValoresDevidos)) {
-      this.errors.add({"cessacaoValoresDevidos":["Insira uma data válida."]});
-      valid = false; 
+      if (!this.isValidDate(this.dibAnteriorValoresDevidos)) {
+        this.errors.add({"dibAnteriorValoresDevidos":["Insira uma data válida."]});
+        valid = false; 
+      } else if (this.compareDates(this.dibAnteriorValoresDevidos,this.dataMinima)) {
+        this.errors.add({"dibAnteriorValoresDevidos":["A data deve ser maior que 01/1970."]});
+        valid = false; 
+      }
+    }
+    
+
+    if (!this.isEmptyInput(this.cessacaoValoresDevidos)) {
+
+      if (!this.isValidDate(this.cessacaoValoresDevidos)) {
+        this.errors.add({"cessacaoValoresDevidos":["Insira uma data válida."]});
+        valid = false; 
+      } else if (this.compareDates(this.cessacaoValoresDevidos,this.dataMinima)){
+        this.errors.add({"cessacaoValoresDevidos":["A data deve ser maior que 01/1970."]});
+        valid = false;
+      }
     }
 
 
@@ -690,9 +714,54 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
       if (this.isEmptyInput(this.percentualHonorarios)) {
         this.errors.add({"percentualHonorarios":["Insira o percentual dos Honorários."]});
         valid = false; 
-      } else if (this.percentualHonorarios == 0) {
+      } else if (!this.isValidFloat(this.percentualHonorarios)) {
+        this.errors.add({"percentualHonorarios":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false;
+      } else if (parseFloat(this.percentualHonorarios.replace(',','.')) == 0) {
         this.errors.add({"percentualHonorarios":["O percentual dos Honorários deve ser maior que zero."]});
         valid = false;
+      }
+
+      if (!this.isEmptyInput(this.acordoJudicial)) {
+        if (!this.isValidFloat(this.acordoJudicial)) {          
+          this.errors.add({"acordoJudicial":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+          valid = false; 
+        }
+      }
+    }
+
+    if (!this.isEmptyInput(this.jurosAntes2003)) {
+      if (!this.isValidFloat(this.jurosAntes2003)) {          
+        this.errors.add({"jurosAntes2003":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false; 
+      }
+    }
+
+    if (!this.isEmptyInput(this.jurosDepois2003)) {
+      if (!this.isValidFloat(this.jurosDepois2003)) {          
+        this.errors.add({"jurosDepois2003":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false; 
+      }
+    }
+
+    if (!this.isEmptyInput(this.jurosDepois2009)) {
+      if (!this.isValidFloat(this.jurosDepois2009)) {          
+        this.errors.add({"jurosDepois2009":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false; 
+      }
+    }
+
+    if (!this.isEmptyInput(this.taxaAjusteMaximaConcedida)) {
+      if (!this.isValidFloat(this.taxaAjusteMaximaConcedida)) {          
+        this.errors.add({"taxaAjusteMaximaConcedida":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false; 
+      }
+    }
+
+    if (!this.isEmptyInput(this.taxaAjusteMaximaEsperada)) {
+      if (!this.isValidFloat(this.taxaAjusteMaximaEsperada)) {          
+        this.errors.add({"taxaAjusteMaximaEsperada":["O valor deve ser um número com casas decimais separadas por vírgula."]});
+        valid = false; 
       }
     }
 
@@ -727,6 +796,12 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
       return true;
 
     return false;
+  }
+
+  isValidFloat(input) {
+    if(isNaN(input.replace(',','.')))
+      return false;
+    return true;    
   }
 
   isValidDate(date) {
