@@ -362,6 +362,7 @@
                       <label class="col-md-2 control-label">Índice de reajuste no teto da RMI de valores recebidos:</label>
                       <div class="col-md-3">
                         <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
+                        <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
                       </div>
                     </div>
 
@@ -530,6 +531,7 @@
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-3">
                       <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
 
@@ -619,10 +621,12 @@
                     <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
                     <div class="col-md-3">
                       <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
+                      <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
                     <div class="col-md-3">
                       <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
+                      <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
                     </div>
                   </div>
 
@@ -630,6 +634,7 @@
                     <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
                     <div class="col-md-3">
                       <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
+                      <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
                     </div>
                     <div class="col-md-5">
                       <div class="checkbox">
