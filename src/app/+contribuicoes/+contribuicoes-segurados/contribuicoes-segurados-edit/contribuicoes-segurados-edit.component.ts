@@ -40,7 +40,7 @@ export class ContribuicoesSeguradosEditComponent implements OnInit, OnDestroy {
           .update(this.segurado)
           .then(model => {
             this.Segurado.get()
-                .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
+                .then(() => this.router.navigate(['/contribuicoes/contribuicoes-segurados']));
           })
           .catch(errors => this.Errors.add(errors));
   }
