@@ -19,6 +19,8 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   public segurado;
 
+  public idSegurado = '';
+
   public list = this.Jurisprudencial.list;
 
   public jurisprudencialTableOptions = {
@@ -49,13 +51,15 @@ export class ContribuicoesCalculosComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.idSegurado = this.route.snapshot.params['id'];
+
     this.isUpdating = true;
     // retrive user info
     this.Segurado.find(this.route.snapshot.params['id'])
         .then(segurado => {
             this.segurado = segurado;
     });
-
 
     this.Jurisprudencial.get()
         .then(() => {
@@ -70,10 +74,16 @@ export class ContribuicoesCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
+    this.list = this.list.filter(this.isSegurado, this);
+
     this.jurisprudencialTableOptions = {
       ...this.jurisprudencialTableOptions,
       data: [...this.list],
     }
+  }
+
+  isSegurado(element, index, array){
+    return element['id_segurado'] == this.idSegurado;
   }
 
 }
