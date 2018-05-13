@@ -45,7 +45,6 @@ export class ContribuicoesSeguradosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
-    console.log(this.Segurado);
     this.Segurado.get()
         .then(() => {
            this.updateDatatable();
@@ -73,7 +72,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
   updateDatatable() {
     this.datatableOptions = {
       ...this.datatableOptions,
-      data: [...this.list],
+      data: this.list,
     }
   }
 
