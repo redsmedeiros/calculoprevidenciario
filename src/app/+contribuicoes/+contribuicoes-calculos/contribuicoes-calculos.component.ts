@@ -73,9 +73,12 @@ export class ContribuicoesCalculosComponent implements OnInit {
     window.location.href='/#/contribuicoes/'+this.segurado.id+'/novo-jurisprudencial';
   }
 
+  createNewComplementar(){
+    window.location.href='/#/contribuicoes/'+this.segurado.id+'/novo-complementar';
+  }
+
   updateDatatable() {
     this.list = this.list.filter(this.isSegurado, this);
-
     this.jurisprudencialTableOptions = {
       ...this.jurisprudencialTableOptions,
       data: [...this.list],
