@@ -24,7 +24,7 @@ export class ContribuicoesSeguradosFormComponent {
     
     if (this.errors.empty()) {
       swal('Sucesso', 'Segurado salvo com sucesso','success');
-      this.formData.funcao = "contribuicoes";
+      this.formData.funcao = "contribuicao";
       this.onSubmit.emit( this.formData );
     }
     else {
