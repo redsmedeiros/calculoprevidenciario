@@ -17,7 +17,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   public isUpdating = false;
 
-  public segurado;
+  public segurado:any = {};
 
   public idSegurado = '';
 
