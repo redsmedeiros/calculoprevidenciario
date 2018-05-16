@@ -42,7 +42,7 @@
 
                   <b>Nome:</b> {{segurado.nome}}</li>
                 <li>
-                  <b>CPF:</b> {{segurado.numero_documento}}</li>
+                  <b>{{getDocumentType(segurado.id_documento)}}</b> {{segurado.numero_documento}}</li>
                 <li>
                   <b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
               </ul>
@@ -52,7 +52,7 @@
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
@@ -101,7 +101,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <button type="submit" onclick="window.location.href='/#/contribuicoes/novo-complementar'" class="btn btn-labeled btn-default pull-left">
+                    <button type="submit" (click)="createNewComplementar()" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
                         <i class="fa fa-arrow-right"></i>
                       </span> Lei complementar n. 128/08

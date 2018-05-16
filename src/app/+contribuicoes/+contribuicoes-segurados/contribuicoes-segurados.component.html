@@ -5,14 +5,13 @@
 
     <!-- row -->
     <div class="row">
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <app-contribuicoes-segurados-create (onSubmit)="onCreate($event)"></app-contribuicoes-segurados-create>
-      </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <app-contribuicoes-segurados-create (onSubmit)="onCreate($event)"></app-contribuicoes-segurados-create>
+    </div>
+    <br> 
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-contribuicoes-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-contribuicoes-segurados-index>
-      </article>
+      </article>      
     </div>
 
 

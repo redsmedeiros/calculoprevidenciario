@@ -22,6 +22,9 @@ export class BeneficiosCalculosComponent implements OnInit {
   public segurado:any = {};
 
   public calculosList = this.CalculoAtrasado.list;
+
+  public idSegurado = '';
+
   public calculoTableOptions = {
     colReorder: true,
     data: this.calculosList,
@@ -63,6 +66,8 @@ export class BeneficiosCalculosComponent implements OnInit {
               private CalculoAtrasado: CalculoAtrasadoService) {}
 
   ngOnInit() {
+    this.idSegurado = this.route.snapshot.params['id'];
+
     this.isUpdating = true;
     // retrive user info
     this.Segurado.find(this.route.snapshot.params['id'])
@@ -78,6 +83,7 @@ export class BeneficiosCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
+    this.calculosList = this.calculosList.filter(this.isSegurado, this);
     this.calculoTableOptions = {
       ...this.calculoTableOptions,
       data: [...this.calculosList],
@@ -121,4 +127,7 @@ export class BeneficiosCalculosComponent implements OnInit {
     window.location.href='/#/beneficios/novo-calculo/AI/'+this.route.snapshot.params['id'];
   }
 
+  isSegurado(element, index, array){
+    return element['id_segurado'] == this.idSegurado;
+  }
 }

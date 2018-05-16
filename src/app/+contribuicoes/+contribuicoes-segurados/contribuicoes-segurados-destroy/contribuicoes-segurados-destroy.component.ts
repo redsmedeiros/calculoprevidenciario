@@ -2,6 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../../Segurado.service';
+import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
@@ -21,8 +22,14 @@ export class ContribuicoesSeguradosDestroyComponent implements OnInit {
   ) {
     this.Segurado.find(this.route.snapshot.params['id'])
         .then(segurado => {
-          this.Segurado.destroy(segurado)
-              .then(() => this.router.navigate(['/contribuicoes/contribuicoes-segurados']));
+          this.Segurado.destroy(segurado).then(() => {
+          
+            this.router.navigate(['/contribuicoes/contribuicoes-segurados']);
+            
+            swal('Sucesso', 'Segurado excluído', 'success');
+          }).catch((err) => {
+            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+          });
         })
   }
 

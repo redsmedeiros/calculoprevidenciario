@@ -15,7 +15,7 @@ import { ErrorService } from '../../services/error.service';
 })
 export class ContribuicoesSeguradosComponent implements OnInit {
 
-  public styleTheme: string = 'style-0';
+  public styleTheme = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
@@ -28,10 +28,12 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     columns: [
       {data: 'actions'},
       {data: 'nome'},
-      {data: 'tipo'},
+      {data: 'id_documento',
+        render: (data) => {
+          return this.getDocumentType(data);
+        }},
       {data: 'documento'},
       {data: 'data_nascimento'},
-      {data: 'data_filiacao'},
       {data: 'data_cadastro'}
     ] };
 
@@ -49,11 +51,28 @@ export class ContribuicoesSeguradosComponent implements OnInit {
            this.isUpdating = false;
         })
   }
+  
+  getDocumentType(id_documento) {
+    switch (id_documento) {
+      case 1:
+        return 'PIS';
+      case 2:
+        return 'PASEP';
+      case 3:
+        return 'CPF';
+      case 4:
+        return 'NIT';
+      case 5:
+        return 'RG';
+      default:
+        return ''
+    }
+  }
 
   updateDatatable() {
     this.datatableOptions = {
       ...this.datatableOptions,
-      data: [...this.list],
+      data: this.list,
     }
   }
 
@@ -62,6 +81,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     this.Segurado.get()
         .then(() => {
            this.updateDatatable();
+           this.list = this.Segurado.list;
            this.isUpdating = false;
         })
   }

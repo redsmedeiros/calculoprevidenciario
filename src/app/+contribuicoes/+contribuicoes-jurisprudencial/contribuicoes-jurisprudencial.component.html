@@ -48,11 +48,14 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Contribuição de</label>
                     <div class="col-md-3">
-                      <input class="form-control" [(ngModel)]="contribuicaoDe" placeholder="(mm/aaaa)" type="text">
+                      <input class="form-control" [textMask]="{mask: dateMask}" [(ngModel)]="contribuicaoDe" placeholder="(mm/aaaa)" type="text">
+                      <small *ngIf="errors.has('contribuicaoDe')" class="text-danger">{{ errors.get('contribuicaoDe') }}</small>
+
                     </div>
                     <label class="col-md-2 control-label">Contribuição até</label>
                     <div class="col-md-3">
-                      <input class="form-control" [(ngModel)]="contribuicaoAte" placeholder="(mm/aaaa)" type="text">
+                      <input class="form-control" [textMask]="{mask: dateMask}" [(ngModel)]="contribuicaoAte" placeholder="(mm/aaaa)" type="text">
+                      <small *ngIf="errors.has('contribuicaoAte')" class="text-danger">{{ errors.get('contribuicaoAte') }}</small>
                     </div>
                   </div>
                 </fieldset>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { contribuicoesJurisprudencialRouting } from './contribuicoes-jurisprudencial.routing';
 import {ContribuicoesJurisprudencialComponent} from "./contribuicoes-jurisprudencial.component";
 import {SmartadminModule} from "../../shared/smartadmin.module";
+import { TextMaskModule } from 'angular2-text-mask';
 import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-datatable.module";
 
 
@@ -11,6 +12,7 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
     CommonModule,
     contribuicoesJurisprudencialRouting,
     SmartadminModule,
+    TextMaskModule,
     SmartadminDatatableModule
   ],
   declarations: [ContribuicoesJurisprudencialComponent]
