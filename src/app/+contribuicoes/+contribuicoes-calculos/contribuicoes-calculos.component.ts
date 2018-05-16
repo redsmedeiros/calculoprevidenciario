@@ -68,8 +68,8 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
     this.Jurisprudencial.get()
         .then(() => {
-           this.updateDatatable();
            this.list = this.Jurisprudencial.list;
+           this.updateDatatable();
            this.isUpdating = false;
     })
   }

@@ -72,8 +72,11 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
      if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
         this.Jurisprudencial.update(novoCalculo).then((data) => {
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success');
-          window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+          this.Jurisprudencial.get().then(() =>{
+            swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
+              window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+            });
+          });
         }).catch(error => {
           console.log(error);
         });
@@ -81,8 +84,12 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
      } else {
 
         this.Jurisprudencial.save(novoCalculo).then((data) => {
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success');
-          window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+          this.Jurisprudencial.get().then(() =>{
+          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+
+              window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+            });
+          });
         }).catch(error => {
           console.log(error);
         });

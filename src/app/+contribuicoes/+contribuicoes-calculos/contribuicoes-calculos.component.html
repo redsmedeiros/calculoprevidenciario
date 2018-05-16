@@ -72,7 +72,7 @@
           </div>
         </sa-widget>
       </article>
-
+    </div>
 
 
 
@@ -151,7 +151,7 @@
 
                       <div class="alert alert-info" role="alert">Cálculo de contribuições em atraso conforme entendimento jurisprudencial</div>
                       <div class="widget-body no-padding">
-                        <sa-datatable paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
+                        <sa-datatable  *ngIf="!isUpdating" paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
                           <thead>
                             <tr>
                               <th>Ações</th>
@@ -226,6 +226,7 @@
           </div>
 
         </div>
+      </div>
 
     <!-- end row -->
 
