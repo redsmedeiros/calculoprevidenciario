@@ -41,7 +41,7 @@
                 <li>
                   <b>Nome:</b> {{segurado.nome}}</li>
                 <li>
-                  <b>CPF:</b> {{segurado.numero_documento}}</li>
+                  <b>{{getDocumentType(segurado.id_documento)}}</b> {{segurado.numero_documento}}</li>
                 <li>
                   <b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
               </ul>
@@ -50,7 +50,7 @@
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar

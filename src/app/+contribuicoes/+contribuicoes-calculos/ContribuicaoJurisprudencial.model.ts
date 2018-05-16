@@ -18,8 +18,8 @@ export class ContribuicaoJurisprudencial extends Model {
   public final_atraso;
   public valor_acumulado;
   public actions = `
-    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/editar" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
+    <a href="#/contribuicoes/${this.id_segurado}/novo-jurisprudencial/${this.id}" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
     <a href="#/contribuicoes/contribuicoes-calculos/${this.id}" class="action-edit"> <i class="fa fa-calculator"></i> </a>
   `;
 
