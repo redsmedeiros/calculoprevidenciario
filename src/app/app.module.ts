@@ -26,7 +26,7 @@ import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
 
 import { TextMaskModule } from 'angular2-text-mask';
-
+import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -72,6 +72,7 @@ type StoreType = {
     ContribuicaoJurisprudencialService,
     CalculoAtrasadoService,
     MoedaService,
+    CalculoRgpsService,
   ]
 })
 export class AppModule {

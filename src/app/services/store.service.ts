@@ -19,6 +19,7 @@ import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.mod
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import { Moeda } from './Moeda.model';
 import { SeguradoRgps } from '../+rgps/+rgps-segurados/SeguradoRgps.model';
+import { CalculoRgps } from '../+rgps/+rgps-calculos/CalculoRgps.model';
 
 @Injectable()
 export class StoreService {
@@ -29,14 +30,16 @@ export class StoreService {
     contribuicaoJurisprudencial: ContribuicaoJurisprudencial[],
     moeda: Moeda[],
     calculoAtrasado: CalculoAtrasado[],
-    seguradosRgps: SeguradoRgps[]
+    seguradosRgps: SeguradoRgps[],
+    calculoRgps: CalculoRgps[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
     contribuicaoJurisprudencial: [],
     moeda: [],
     calculoAtrasado:[],
-    seguradosRgps: []
+    seguradosRgps: [],
+    calculoRgps: []
   };
 
   public push(name: string, data) {
