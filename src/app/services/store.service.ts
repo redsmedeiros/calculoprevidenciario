@@ -14,7 +14,7 @@ import { BusinessUnit } from '../../models/BusinessUnit.model';
 import { Session } from '../../models/Session.model';
 import { Partner } from '../../models/Partner.model';
 import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
-import { CalculoAtrasado } from '../+beneficios/CalculoAtrasado.model';
+import { CalculoAtrasado } from '../+beneficios/+beneficios-calculos/CalculoAtrasado.model';
 import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import { Moeda } from './Moeda.model';

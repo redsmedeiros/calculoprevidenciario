@@ -3,8 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
-import { CalculoAtrasado } from '../CalculoAtrasado.model';
-import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import { CalculoAtrasado } from '../+beneficios-calculos/CalculoAtrasado.model';
+import { CalculoAtrasadoService } from '../+beneficios-calculos/CalculoAtrasado.service';
 import swal from 'sweetalert';
 
 
