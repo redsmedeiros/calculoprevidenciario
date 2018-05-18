@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { Segurado as SeguradoModel } from '../+beneficios-segurados/Segurado.model';
-import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import { CalculoAtrasadoService } from './CalculoAtrasado.service';
 
 
 @FadeInTop()

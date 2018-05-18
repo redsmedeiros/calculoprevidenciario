@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import {FadeInTop} from '../../../shared/animations/fade-in-top.decorator';
-import { CalculoAtrasado as CalculoAtrasadoModel } from '../../CalculoAtrasado.model';
-import { CalculoAtrasadoService } from '../../CalculoAtrasado.service';
+import { CalculoAtrasado as CalculoAtrasadoModel } from '../CalculoAtrasado.model';
+import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 import { ErrorService } from '../../../services/error.service';
 
 @Component({

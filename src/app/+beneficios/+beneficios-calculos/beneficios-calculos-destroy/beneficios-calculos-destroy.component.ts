@@ -1,7 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
-import { CalculoAtrasadoService } from '../../CalculoAtrasado.service';
+import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 import swal from 'sweetalert';
 
 @FadeInTop()
