@@ -22,6 +22,6 @@ import { TextMaskModule } from 'angular2-text-mask';
     I18nModule,
     SmartadminDatatableModule
   ],
-  declarations: [RgpsSeguradosIndexComponent, RgpsSeguradosCreateComponent, RgpsSeguradosDestroyComponent, RgpsSeguradosFormComponent, RgpsSeguradosEditComponent]
+  declarations: [RgpsSeguradosComponent, RgpsSeguradosIndexComponent, RgpsSeguradosCreateComponent, RgpsSeguradosDestroyComponent, RgpsSeguradosFormComponent, RgpsSeguradosEditComponent]
 })
 export class RgpsSeguradosModule { }
