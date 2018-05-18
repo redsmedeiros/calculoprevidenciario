@@ -129,35 +129,7 @@
       </div>
 
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Listagem de Cálculos</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding">
-              <sa-datatable paginationLength="true"
-                tableClass="table table-striped table-bordered table-hover" [options]="calculoTableOptions" width="100%">
-                <thead>
-                  <tr>
-                    <th>Ações</th>
-                    <th>Data do Cálculo</th>
-                    <th>Data de Citação</th>
-                    <th>Data da Ação Judicial</th>
-
-                    <th>DIB de recebidos</th>
-                    <th>RMI Recebida</th>
-                    <th>DIB de Devidos</th>
-                    <th>Nova RMI Devida</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-            </div>
-          </div>
-        </sa-widget>
+        <app-beneficios-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-beneficios-calculos-index>
       </article>
 
 
