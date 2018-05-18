@@ -24,7 +24,7 @@ export class RgpsSeguradosFormComponent {
 
     if (this.errors.empty()) {
       swal('Sucesso', 'Segurado salvo com sucesso','success');
-      this.formData.funcao = "beneficios";
+      this.formData.funcao = "rgps";
       this.onSubmit.emit( this.formData );
     }
     else {
