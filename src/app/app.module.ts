@@ -19,6 +19,7 @@ import {CoreModule} from "./core/core.module";
 import {SmartadminLayoutModule} from "./shared/layout/layout.module";
 import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
+import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { CalculoAtrasadoService } from './+beneficios/CalculoAtrasado.service';
 import { StoreService } from './services/store.service';
@@ -67,6 +68,7 @@ type StoreType = {
     StoreService,
     SeguradoService,
     ContribuicoesSeguradoService,
+    RgpsSeguradoService,
     ContribuicaoJurisprudencialService,
     CalculoAtrasadoService,
     MoedaService,
