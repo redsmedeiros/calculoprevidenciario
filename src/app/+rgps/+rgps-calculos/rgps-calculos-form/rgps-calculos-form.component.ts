@@ -52,11 +52,17 @@ export class RgpsCalculosFormComponent {
 
   public dateMask = [/\d/, /\d/,'/',/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  @Input() formData;
-  @Input() errors: ErrorService;
+  //@Input() formData;
+  //@Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
 
-  constructor() { }
+  constructor(
+    protected errors: ErrorService,
+  ) {}
+  public submit(e){
+  	this.validate();
+  	console.log(this.errors);
+  }
 
   validate(){
   	if(this.dataInicioBeneficio == undefined || this.dataInicioBeneficio == ''){
@@ -217,6 +223,7 @@ export class RgpsCalculosFormComponent {
   }
 
   changePeriodoOptions(){
+  	this.errors.clear('dataInicioBeneficio');
   	this.periodoOptions = [];
   	var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
@@ -248,6 +255,7 @@ export class RgpsCalculosFormComponent {
   }
 
   changeGrupoDos12(){
+  	this.errors.clear('periodoInicioBeneficio');
   	if(this.periodoInicioBeneficio == 'Anterior a 05/10/1998' || this.periodoInicioBeneficio == 'Entre 05/10/1998 e 04/04/1991'){
   		this.hasGrupoDos12 = true;
   	}else{
@@ -257,6 +265,7 @@ export class RgpsCalculosFormComponent {
   }
 
   changeEspecieBeneficio(){
+  	this.errors.clear('especieBeneficio');
   	if(this.especieBeneficio=='Aposentadoria por idade - Trabalhador Rural' || this.especieBeneficio=='Aposentadoria por idade - Trabalhador Urbano'){
   		this.hasCarencia = true;
   	}else{
