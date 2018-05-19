@@ -1,22 +1,5 @@
-<article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-         
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-percent"></i>
-            </span>
-            <h2>Adicionar informações para cálculos</h2>
-
-          </header>
-
-          <div>
-
-            <div class="widget-body">
-
               <form class="form-horizontal">
-
                 <fieldset>
-
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Data do Início do Benefício:*</label>
                     <div class="col-md-8">
@@ -24,7 +7,6 @@
                       <small *ngIf="errors.has('dataInicioBeneficio')" class="text-danger">{{ errors.get('dataInicioBeneficio') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-2">Período do início do benefício:*</label>
                     <div class="col-md-8">
@@ -34,7 +16,6 @@
                       <small *ngIf="errors.has('periodoInicioBeneficio')" class="text-danger">{{ errors.get('periodoInicioBeneficio') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-2">Espécie:</label>
                     <div class="col-md-8">
@@ -60,7 +41,6 @@
                       <small *ngIf="errors.has('especieBeneficio')" class="text-danger">{{ errors.get('especieBeneficio') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group" *ngIf="hasCarencia">
                     <label class="col-md-2 control-label" for="select-1">Carência:*</label>
                     <div class="col-md-8">
@@ -68,7 +48,6 @@
                       <small *ngIf="errors.has('carencia')" class="text-danger">{{ errors.get('carencia') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group" *ngIf="hasGrupoDos12">
                     <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
                     <div class="col-md-8">
@@ -76,9 +55,7 @@
                       <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
                     </div>
                   </div>
-
                   <h3 *ngIf="has98">Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
-
                   <div class="form-group" *ngIf="has98">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
@@ -94,7 +71,6 @@
                       <small *ngIf="errors.has('primaria98dias')" class="text-danger">{{ errors.get('primaria98dias') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group" *ngIf="has98">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
                     <div class="col-md-2">
@@ -110,9 +86,7 @@
                       <small *ngIf="errors.has('secundaria98dias')" class="text-danger">{{ errors.get('secundaria98dias') | i18n}}</small>
                     </div>
                   </div>
-
                   <h3 *ngIf="has99">Tempo de contribuição até a Lei nº 9.876/99 (29/11/1999)</h3>
-
                   <div class="form-group" *ngIf="has99">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
@@ -128,7 +102,6 @@
                       <small *ngIf="errors.has('primaria99dias')" class="text-danger">{{ errors.get('primaria99dias') | i18n}}</small>
                     </div>
                   </div>
-
                   <div class="form-group" *ngIf="has99">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
                     <div class="col-md-2">
@@ -144,10 +117,7 @@
                       <small *ngIf="errors.has('secundaria99dias')" class="text-danger">{{ errors.get('secundaria99dias') | i18n}}</small>
                     </div>
                   </div>
-
                 </fieldset>
-
-
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
@@ -159,9 +129,4 @@
                     </div>
                   </div>
                 </div>
-
               </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article>

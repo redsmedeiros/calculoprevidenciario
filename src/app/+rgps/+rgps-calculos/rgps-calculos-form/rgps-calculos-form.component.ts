@@ -52,16 +52,20 @@ export class RgpsCalculosFormComponent {
 
   public dateMask = [/\d/, /\d/,'/',/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  //@Input() formData;
-  //@Input() errors: ErrorService;
+  @Input() formData;
+  @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
 
-  constructor(
-    protected errors: ErrorService,
-  ) {}
+  constructor() {}
   public submit(e){
-  	this.validate();
-  	console.log(this.errors);
+	  e.preventDefault();
+    this.validate();
+    if (this.errors.empty()) {
+      swal('Sucesso', 'Segurado salvo com sucesso','success');
+    }
+    else {
+      swal('Erro', 'Confira os dados digitados','error');
+    }
   }
 
   validate(){
