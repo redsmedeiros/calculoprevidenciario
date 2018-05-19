@@ -1,4 +1,4 @@
-import { ControllerService } from '../contracts/Controller.service';
+import { ControllerService } from '../../contracts/Controller.service';
 
 import { CalculoRgps } from './CalculoRgps.model';
 
