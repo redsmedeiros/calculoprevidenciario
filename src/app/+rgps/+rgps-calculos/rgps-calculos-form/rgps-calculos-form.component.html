@@ -1,3 +1,143 @@
-<p>
-  rgps-calculos-form works!
-</p>
+<article class="col-sm-12 col-md-12 col-lg-12">
+
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+         
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-percent"></i>
+            </span>
+            <h2>Adicionar informações para cálculos</h2>
+
+          </header>
+
+          <div>
+
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Data do Início do Benefício:*</label>
+                    <div class="col-md-8">
+                      <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions()" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-2">Período do início do benefício:*</label>
+                    <div class="col-md-8">
+                      <select [(ngModel)]="periodoInicioBeneficio" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                        <option [value]="periodo" *ngFor="let periodo of periodoOptions">{{periodo}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-2">Espécie:</label>
+                    <div class="col-md-8">
+                      <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                        <option>Aposentadoria especial</option>
+                        <option>Aposentadoria especial da Pessoa com Deficiência Grave</option>
+                        <option>Aposentadoria especial da Pessoa com Deficiência Leve</option>
+                        <option>Aposentadoria especial da Pessoa com Deficiência Moderada</option>
+                        <option>Aposentadoria especial por Idade da Pessoa com Deficiência</option>
+                        <option>Aposentadoria por idade - Trabalhador Rural</option>
+                        <option>Aposentadoria por idade - Trabalhador Urbano</option>
+                        <option>Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
+                        <option>Aposentadoria por tempo de contribuição</option>
+                        <option>Aposentadoria por tempo de serviço de professor</option>
+                        <option>Auxílio Acidente - 30%</option>
+                        <option>Auxílio Acidente - 40%</option>
+                        <option>Auxílio Acidente - 60%</option>
+                        <option>Auxílio Acidente previdenciário - 50%</option>
+                        <option>Auxílio Doença </option>
+                        <option>LOAS</option>
+                        <option>LOAS - Benefício no valor de um salário mínimo</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group" *ngIf="hasCarencia">
+                    <label class="col-md-2 control-label" for="select-1">Carência:*</label>
+                    <div class="col-md-8">
+                      <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                    </div>
+                  </div>
+                  <h3>Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria98anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria98meses" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria98dias" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria98anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria98meses" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria98dias" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    </div>
+                  </div>
+
+                  <h3>Tempo de contribuição até a Lei nº 9.876/99 (29/11/1999)</h3>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria99anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria99meses" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="primaria99dias" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria99anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria99meses" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    </div>
+                    <div class="col-md-2">
+                      <input [(ngModel)]="secundaria99dias" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    </div>
+                  </div>
+
+                </fieldset>
+
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-save"></i>
+                        </span> Inserir
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
