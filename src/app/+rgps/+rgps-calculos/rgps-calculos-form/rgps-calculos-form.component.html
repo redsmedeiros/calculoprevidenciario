@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-2">Período do início do benefício:*</label>
                     <div class="col-md-8">
-                      <select [(ngModel)]="periodoInicioBeneficio" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                      <select [(ngModel)]="periodoInicioBeneficio" (change) = "changeGrupoDos12()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
                         <option [value]="periodo" *ngFor="let periodo of periodoOptions">{{periodo}}</option>
                       </select>
                     </div>
@@ -65,9 +65,17 @@
                       <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
                     </div>
                   </div>
-                  <h3>Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
 
-                  <div class="form-group">
+                  <div class="form-group" *ngIf="hasGrupoDos12">
+                    <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
+                    <div class="col-md-8">
+                      <input [(ngModel)]="grupoDos12" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                    </div>
+                  </div>
+
+                  <h3 *ngIf="has98">Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
+
+                  <div class="form-group" *ngIf="has98">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="primaria98anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -80,7 +88,7 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" *ngIf="has98">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="secundaria98anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -93,9 +101,9 @@
                     </div>
                   </div>
 
-                  <h3>Tempo de contribuição até a Lei nº 9.876/99 (29/11/1999)</h3>
+                  <h3 *ngIf="has99">Tempo de contribuição até a Lei nº 9.876/99 (29/11/1999)</h3>
 
-                  <div class="form-group">
+                  <div class="form-group" *ngIf="has99">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="primaria99anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -108,7 +116,7 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" *ngIf="has99">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="secundaria99anos" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
