@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-rgps-calculos-form',
@@ -56,14 +58,32 @@ export class RgpsCalculosFormComponent {
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {}
   public submit(e){
 	  e.preventDefault();
     this.validate();
     if (this.errors.empty()) {
+      
+      this.formData.id_segurado = this.route.snapshot.params['id'];
+      this.formData.tipo_seguro = this.especieBeneficio; 
+      this.formData.tipo_aposentadoria = this.periodoInicioBeneficio;
+      this.formData.data_pedido_beneficio = this.dataInicioBeneficio;
+      this.formData.contribuicao_primaria_98 = this.formatDate('98', 0);
+      this.formData.contribuicao_primaria_99 = this.formatDate('99', 0);
+      this.formData.contribuicao_primaria_atual = this.formatDate('atual', 0);
+      this.formData.contribuicao_secundaria_98 = this.formatDate('98', 1);
+      this.formData.contribuicao_secundaria_99 = this.formatDate('99', 1);
+      this.formData.contribuicao_secundaria_atual = this.formatDate('atual', 1);
+      this.formData.valor_beneficio = ''; //TODO: deixar em branco por enquanto
+      this.formData.soma_contribuicao = '';//TODO: deixar em branco por enquanto
+      this.formData.carencia = this.carencia;
+      this.formData.grupo_dos_12 = this.grupoDos12;
+      this.onSubmit.emit( this.formData );
+
       swal('Sucesso', 'Segurado salvo com sucesso','success');
     }
     else {
+      console.log(this.errors.all())
       swal('Erro', 'Confira os dados digitados','error');
     }
   }
@@ -247,7 +267,7 @@ export class RgpsCalculosFormComponent {
   		this.periodoOptions.push('A partir de 29/11/1999');
   	}
 
-  	if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('12/16/1998')){
+  	if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('11/29/1998')){
   		this.has98 = true;
   		this.has99 = true;
   		this.hasAtual = false;
@@ -272,6 +292,25 @@ export class RgpsCalculosFormComponent {
 
   }
 
+  formatDate(ano, prim_or_sec){
+    //prim_or_sec = 0 para primaria
+    //            = 1 para secundaria
+    if(ano == '98' && prim_or_sec == 0){
+      return this.primaria98anos + '-' + this.primaria98meses + '-' + this.primaria98dias;
+    }else if(ano == '98' && prim_or_sec == 1){
+      return this.secundaria98anos + '-' + this.secundaria98meses + '-' + this.secundaria98dias;
+    }else if(ano == '99' && prim_or_sec == 0){
+      return this.primaria99anos + '-' + this.primaria99meses + '-' + this.primaria99dias;
+    }else if(ano == '99' && prim_or_sec == 1){
+      return this.secundaria99anos + '-' + this.secundaria99meses + '-' + this.secundaria99dias;
+    } else if(ano == 'atual' && prim_or_sec == 0){
+      return this.primariaAtualanos + '-' + this.primariaAtualmeses + '-' + this.primariaAtualdias;
+    } else if(ano == 'atual' && prim_or_sec == 1){
+      return this.secundariaAtualanos + '-' + this.secundariaAtualmeses + '-' + this.secundariaAtualdias;
+    }else{
+      return 'erro nos parametros';
+    }
+  }
   changeEspecieBeneficio(){
   	this.errors.clear('especieBeneficio');
   	if(this.especieBeneficio=='Aposentadoria por idade - Trabalhador Rural' || this.especieBeneficio=='Aposentadoria por idade - Trabalhador Urbano'){
@@ -283,7 +322,6 @@ export class RgpsCalculosFormComponent {
 
   isNumber(value){
   	if(!isNaN(value) && Number.isInteger(+value)){
-  		console.log("True");
   		return true;
   	}
   	return false;

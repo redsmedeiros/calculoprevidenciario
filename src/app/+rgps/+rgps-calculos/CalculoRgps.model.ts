@@ -6,20 +6,20 @@ export class CalculoRgps extends Model {
   static form = {
   	id : '',
     id_segurado: '',
-	tipo_seguro: '',
-	tipo_aposentadoria: '',
-	data_pedido_beneficio: '',
-	contribuicao_primaria_98: '',
-	contribuicao_primaria_99: '',
-	contribuicao_primaria_atual: '',
-	contribuicao_secundaria_98: '',
-	contribuicao_secundaria_99: '',
-	contribuicao_secundaria_atual: '',
-	data_calculo: '',
-	valor_beneficio: '',
-	soma_contribuicao: '',
-	carencia: '',
-	grupo_dos_12: ''
+	  tipo_seguro: '',
+	  tipo_aposentadoria: '',
+	  data_pedido_beneficio: '',
+	  contribuicao_primaria_98: '',
+	  contribuicao_primaria_99: '',
+	  contribuicao_primaria_atual: '',
+	  contribuicao_secundaria_98: '',
+	  contribuicao_secundaria_99: '',
+	  contribuicao_secundaria_atual: '',
+	  data_calculo: '',
+	  valor_beneficio: '',
+	  soma_contribuicao: '',
+	  carencia: '',
+	  grupo_dos_12: ''
   };
    public id ;
    public id_segurado;
