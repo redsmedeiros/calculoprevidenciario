@@ -255,7 +255,11 @@ export class RgpsCalculosFormComponent {
   		this.has98 = true;
   		this.has99 = true;
   		this.hasAtual = true;
-  	}
+  	}else{
+      this.has98 = false;
+      this.has99 = false;
+      this.hasAtual = false;
+    }
   }
 
   changeGrupoDos12(){
