@@ -32,6 +32,19 @@ export class RgpsCalculosComponent implements OnInit {
 
   public segurado:any = {};
 
+  public calculoTableOptions = {
+    colReorder: true,
+    data: this.calculosList,
+    columns: [
+      {data: 'actions'},
+      {data: 'tipo_seguro'},
+      {data: 'tipo_aposentadoria'},
+      {data: 'contribuicao_primaria_atual'},
+      {data: 'data_pedido_beneficio'},
+      {data: 'valor_beneficio'},
+      {data: 'data_calculo'},
+    ] };
+
   constructor(
     protected Segurado: SeguradoService,    
   	protected CalculoRgps: CalculoRgpsService,
@@ -42,17 +55,34 @@ export class RgpsCalculosComponent implements OnInit {
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id'];
-
+    this.isUpdating = true;
     this.Segurado.find(this.route.snapshot.params['id'])
         .then(segurado => {
             this.segurado = segurado;
     });
+
+    this.CalculoRgps.get()
+        .then(() => {
+        this.updateDatatable();
+        this.isUpdating = false;
+        })
   }
 
+  updateDatatable() {
+    this.calculosList = this.calculosList.filter(this.isSegurado, this);
+    this.calculoTableOptions = {
+      ...this.calculoTableOptions,
+      data: this.calculosList,
+    }
+  }
 
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
   }
 
+
+  isSegurado(element, index, array){
+    return element['id_segurado'] == this.idSegurado;
+  }
 }
