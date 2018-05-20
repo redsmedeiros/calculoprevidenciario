@@ -6,6 +6,9 @@ import {RgpsCalculosComponent} from "./rgps-calculos.component";
 export const rgpsCalculosRoutes: Routes = [{
   path: '',
   component: RgpsCalculosComponent
+},{
+  path: ':id',
+  component: RgpsCalculosComponent
 }];
 
 export const rgpsCalculosRouting = RouterModule.forChild(rgpsCalculosRoutes);
