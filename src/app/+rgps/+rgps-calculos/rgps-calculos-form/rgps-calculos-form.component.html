@@ -56,7 +56,8 @@
                     </div>
                   </div>
                   <h3 *ngIf="has98">Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
-                  <div class="form-group" *ngIf="has98">
+                  <h3 *ngIf="hasAnterior">Tempo de contribuição</h3>
+                  <div class="form-group" *ngIf="has98 || hasAnterior">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="primaria98anos" (change)="errors.clear('primaria98anos')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -71,7 +72,7 @@
                       <small *ngIf="errors.has('primaria98dias')" class="text-danger">{{ errors.get('primaria98dias') | i18n}}</small>
                     </div>
                   </div>
-                  <div class="form-group" *ngIf="has98">
+                  <div class="form-group" *ngIf="has98 || hasAnterior">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="secundaria98anos" (change)="errors.clear('secundaria98anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">

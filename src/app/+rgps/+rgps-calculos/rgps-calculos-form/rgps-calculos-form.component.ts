@@ -44,6 +44,7 @@ export class RgpsCalculosFormComponent implements OnInit{
   public grupoDos12;
   public carencia;
 
+  public hasAnterior = false;
   public has98 = false;
   public has99 = false;
   public hasAtual = false;
@@ -146,7 +147,7 @@ export class RgpsCalculosFormComponent implements OnInit{
   		this.errors.add({"especieBeneficio":["A espécie do benefício é obrigatória."]});
   	}
   	
-  	if(this.has98)
+  	if(this.has98 || this.hasAnterior)
   	{
   	  	if(this.primaria98anos == undefined || this.primaria98anos == ''){
   	  		this.errors.add({"primaria98anos":["Campo obrigatório."]});
@@ -307,15 +308,23 @@ export class RgpsCalculosFormComponent implements OnInit{
   		this.periodoOptions.push('A partir de 29/11/1999');
   	}
 
-  	if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('11/29/1999')){
+  	if(dateBeneficio < new Date('12/16/1998')){
+      this.hasAnterior = true;
+      this.has98 = false
+      this.has99 = false;
+      this.hasAtual = false;
+    }else if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('11/29/1999')){
+      this.hasAnterior = false;
   		this.has98 = true;
   		this.has99 = true;
   		this.hasAtual = false;
   	}else if(dateBeneficio > new Date('11/29/1999')){
+      this.hasAnterior = false;
   		this.has98 = true;
   		this.has99 = true;
   		this.hasAtual = true;
   	}else{
+      this.hasAnterior = false;
       this.has98 = false;
       this.has99 = false;
       this.hasAtual = false;
