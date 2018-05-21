@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
@@ -11,7 +11,7 @@ import swal from 'sweetalert';
     ErrorService
   ],
 })
-export class RgpsCalculosFormComponent {
+export class RgpsCalculosFormComponent implements OnInit{
 
   public dataInicioBeneficio;
   public periodoInicioBeneficio;
@@ -60,6 +60,45 @@ export class RgpsCalculosFormComponent {
   @Output() onSubmit = new EventEmitter;
 
   constructor(private route: ActivatedRoute) {}
+  ngOnInit(){
+    if(this.isEdit){
+      this.dataInicioBeneficio = this.formData.data_pedido_beneficio;
+      this.changePeriodoOptions();
+      this.especieBeneficio = this.formData.tipo_seguro;
+      this.changeEspecieBeneficio(); 
+      this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
+      this.changeGrupoDos12();
+      if(this.formData.contibuicao_primaria_98 != ''){
+            this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];
+            this.primaria98meses = this.formData.contribuicao_primaria_98.split('-')[1];
+            this.primaria98dias  = this.formData.contribuicao_primaria_98.split('-')[2];
+            this.secundaria98anos = this.formData.contribuicao_secundaria_98.split('-')[0];
+            this.secundaria98meses = this.formData.contribuicao_secundaria_98.split('-')[1];
+            this.secundaria98dias = this.formData.contribuicao_secundaria_98.split('-')[2];
+      }
+
+      if(this.formData.contibuicao_primaria_99 != ''){
+            this.primaria99anos = this.formData.contribuicao_primaria_99.split('-')[0];
+            this.primaria99meses = this.formData.contribuicao_primaria_99.split('-')[1];
+            this.primaria99dias = this.formData.contribuicao_primaria_99.split('-')[2];
+            this.secundaria99anos = this.formData.contribuicao_secundaria_99.split('-')[0];
+            this.secundaria99meses = this.formData.contribuicao_secundaria_99.split('-')[1];
+            this.secundaria99dias = this.formData.contribuicao_secundaria_99.split('-')[2];
+      }
+      if(this.formData.contibuicao_primaria_atual != ''){
+            this.primariaAtualanos = this.formData.contribuicao_primaria_atual.split('-')[0];
+            this.primariaAtualmeses = this.formData.contribuicao_primaria_atual.split('-')[1];
+            this.primariaAtualdias = this.formData.contribuicao_primaria_atual.split('-')[2];
+            this.secundariaAtualanos = this.formData.contribuicao_secundaria_atual.split('-')[0];
+            this.secundariaAtualmeses = this.formData.contribuicao_secundaria_atual.split('-')[1];
+            this.secundariaAtualdias = this.formData.contribuicao_secundaria_atual.split('-')[2];
+      }
+      this.carencia = this.formData.carencia; 
+      this.grupoDos12 = this.formData.grupo_dos_12;
+
+    }
+
+  }
   public submit(e){
 	  e.preventDefault();
     this.validate();

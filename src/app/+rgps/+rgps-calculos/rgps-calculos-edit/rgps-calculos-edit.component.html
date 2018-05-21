@@ -16,9 +16,9 @@
         <div>
 
           <!-- widget content -->
-          <div class="widget-body">
+          <div *ngIf = "!isUpdating" class="widget-body">
 
-            <app-rgps-calculos-form [errors]="Errors" [formData]="form" (onSubmit)="submit($event)"></app-rgps-calculos-form>
+            <app-rgps-calculos-form [errors]="Errors" [formData]="form" [isEdit]="edit_mode" (onSubmit)="submit($event)"></app-rgps-calculos-form>
 
           </div>
         </div>

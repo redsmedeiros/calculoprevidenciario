@@ -37,7 +37,7 @@ export class CalculoRgps extends Model {
    public carencia;
    public grupo_dos_12;
    public actions = `
-    <a href='#' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> 
+    <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i class='fa fa-edit'></i> </a> 
     <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/destroy' class='action-delete'> <i class='fa fa-times'></i> </a> 
     <a href='#' class='action-contribut'> <i class='fa fa-money '></i> </a> 
     <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> 
