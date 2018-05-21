@@ -332,6 +332,7 @@ export class BeneficiosNovoCalculoComponent implements OnInit {
     calculoAtrasado.form['data_cessacao'] = this.cessacaoValoresRecebidos;
     calculoAtrasado.data_cessacao = this.cessacaoValoresRecebidos;
     // CheckBoc Juros de Mora
+    calculoAtrasado.form['previo_interesse'] = this.chkJurosMora;
     calculoAtrasado.previo_interesse = this.chkJurosMora;
     // CONDICIONAL
     calculoAtrasado.form['data_anterior_pedido_beneficio'] = data_anterior_pedido_beneficio;

@@ -144,17 +144,17 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.secundaria98meses = undefined;
     this.secundaria98dias = undefined;
 
-    this.primaria99anos = '';
-    this.primaria99meses = '';
-    this.primaria99dias = '';
+    this.primaria99anos = undefined;
+    this.primaria99meses = undefined;
+    this.primaria99dias = undefined;
 
     this.secundaria99anos = undefined;
     this.secundaria99meses = undefined;
     this.secundaria99dias = undefined;
 
-    this.primariaAtualanos = '';
-    this.primariaAtualmeses = '';
-    this.primariaAtualdias = '';
+    this.primariaAtualanos = undefined;
+    this.primariaAtualmeses = undefined;
+    this.primariaAtualdias = undefined;
 
     this.secundariaAtualanos = undefined;
     this.secundariaAtualmeses = undefined;
