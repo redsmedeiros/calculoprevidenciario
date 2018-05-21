@@ -185,7 +185,7 @@ export class RgpsCalculosFormComponent implements OnInit{
   	  		}
   	  	}
   	  	
-  	  	if(this.secundaria98dias == undefined || this.secundaria98dias == ''){
+  	  	if(!(this.secundaria98dias == undefined || this.secundaria98dias == '')){
   	  		if(this.secundaria98dias > 30 || !this.isNumber(this.secundaria98dias)){
   		  		this.errors.add({"secundaria98dias":["Insira um valor entre 0 e 30"]});
   	  		}
@@ -218,19 +218,19 @@ export class RgpsCalculosFormComponent implements OnInit{
   	  		}
   	  	}
   	  	
-  	  	if(this.secundaria99anos == undefined || this.secundaria99anos == ''){
+  	  	if(!(this.secundaria99anos == undefined || this.secundaria99anos == '')){
   	  		if(!this.isNumber(this.secundaria99anos)){
   		  		this.errors.add({"secundaria99anos":["Valor inválido."]});
   	  		}
   	  	}
   	  	
-  	  	if(this.secundaria99meses == undefined || this.secundaria99meses == ''){
+  	  	if(!(this.secundaria99meses == undefined || this.secundaria99meses == '')){
   	  		if(this.secundaria99meses > 12 || !this.isNumber(this.secundaria99meses)){
   		  		this.errors.add({"secundaria99meses":["Insira um valor entre 1 e 12"]});
   	  		}
   	  	}
   	  	
-  	  	if(this.secundaria99dias == undefined || this.secundaria99dias == ''){
+  	  	if(!(this.secundaria99dias == undefined || this.secundaria99dias == '')){
   	  		if(this.secundaria99dias > 30 || !this.isNumber(this.secundaria99dias)){
   		  		this.errors.add({"secundaria99dias":["Insira um valor entre 0 e 30"]});
   	  		}
@@ -263,19 +263,19 @@ export class RgpsCalculosFormComponent implements OnInit{
   	  	}
   	  	
   	  	//Secundaria
-  	  	if(this.secundariaAtualanos == undefined || this.secundariaAtualanos == ''){
+  	  	if(!(this.secundariaAtualanos == undefined || this.secundariaAtualanos == '')){
   	  		if(!this.isNumber(this.secundariaAtualanos)){
   		  		this.errors.add({"secundariaAtualanos":["Valor inválido."]});
   	  		}
   	  	}
   	  	
-  	  	if(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses == ''){
+  	  	if(!(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses == '')){
   	  		if(this.secundariaAtualmeses > 12 || !this.isNumber(this.secundariaAtualmeses)){
   		  		this.errors.add({"secundariaAtualmeses":["Insira um valor entre 1 e 12"]});
   	  		}
   	  	}
   	  	
-  	  	if(this.secundariaAtualdias == undefined || this.secundariaAtualdias == ''){
+  	  	if(!(this.secundariaAtualdias == undefined || this.secundariaAtualdias == '')){
   	  		if(this.secundariaAtualdias > 30 || !this.isNumber(this.secundariaAtualdias)){
   		  		this.errors.add({"secundariaAtualdias":["Insira um valor entre 0 e 30"]});
   	  		}
