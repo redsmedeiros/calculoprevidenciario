@@ -347,15 +347,33 @@ export class RgpsCalculosFormComponent implements OnInit{
     if(ano == '98' && prim_or_sec == 0){
       return this.primaria98anos + '-' + this.primaria98meses + '-' + this.primaria98dias;
     }else if(ano == '98' && prim_or_sec == 1){
-      return this.secundaria98anos + '-' + this.secundaria98meses + '-' + this.secundaria98dias;
+      if(!(this.secundariaAtualdias == undefined || this.secundariaAtualdias == '')&&
+         !(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses == '')&&
+         !(this.secundariaAtualanos == undefined || this.secundariaAtualanos== '')){
+            return this.secundaria98anos + '-' + this.secundaria98meses + '-' + this.secundaria98dias;
+      }else{
+        return '';
+      }
     }else if(ano == '99' && prim_or_sec == 0){
       return this.primaria99anos + '-' + this.primaria99meses + '-' + this.primaria99dias;
     }else if(ano == '99' && prim_or_sec == 1){
-      return this.secundaria99anos + '-' + this.secundaria99meses + '-' + this.secundaria99dias;
+      if(!(this.secundaria99dias == undefined || this.secundaria99dias == '')&&
+         !(this.secundaria99meses == undefined || this.secundaria99meses == '')&&
+         !(this.secundaria99anos == undefined || this.secundaria99anos== '')){
+            return this.secundaria99anos + '-' + this.secundaria99meses + '-' + this.secundaria99dias;
+      }else{
+         return '';
+      }
     } else if(ano == 'atual' && prim_or_sec == 0){
       return this.primariaAtualanos + '-' + this.primariaAtualmeses + '-' + this.primariaAtualdias;
     } else if(ano == 'atual' && prim_or_sec == 1){
-      return this.secundariaAtualanos + '-' + this.secundariaAtualmeses + '-' + this.secundariaAtualdias;
+      if(!(this.secundariaAtualdias == undefined || this.secundariaAtualdias == '')&&
+         !(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses == '')&&
+         !(this.secundariaAtualanos == undefined || this.secundariaAtualanos== '')){
+        return this.secundariaAtualanos + '-' + this.secundariaAtualmeses + '-' + this.secundariaAtualdias;
+      }else{
+        return '';
+      }
     }else{
       return 'erro nos parametros';
     }
