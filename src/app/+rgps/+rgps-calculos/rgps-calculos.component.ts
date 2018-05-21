@@ -97,7 +97,6 @@ export class RgpsCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
-    this.calculosList = this.calculosList.filter(this.isSegurado, this);
     this.calculoTableOptions = {
       ...this.calculoTableOptions,
       data: this.calculosList,
@@ -108,8 +107,9 @@ export class RgpsCalculosComponent implements OnInit {
       this.isUpdating = true;
       this.CalculoRgps.get()
         .then(() => {
-           this.updateDatatable();
+          console.log(this.CalculoRgps.list);
            this.calculosList = this.CalculoRgps.list;
+           this.updateDatatable();
            this.isUpdating = false;
         })
   }

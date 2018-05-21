@@ -3,6 +3,7 @@ import { CalculoRgpsService } from '../CalculoRgps.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-rgps-calculos-create',
@@ -31,7 +32,9 @@ export class RgpsCalculosCreateComponent implements OnDestroy {
           .save(data)
           .then(model => {
             this.resetForm();
-            this.onSubmit.emit();
+            swal('Sucesso', 'Cálculo salvo com sucesso', 'success').then(()=> {
+              this.onSubmit.emit();
+            });
           })
           .catch(errors => this.Errors.add(errors));
   }
