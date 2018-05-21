@@ -104,6 +104,17 @@ export class RgpsCalculosComponent implements OnInit {
     }
   }
 
+  onCreate(e) {
+      this.isUpdating = true;
+      this.CalculoRgps.get()
+        .then(() => {
+           this.updateDatatable();
+           this.calculosList = this.CalculoRgps.list;
+           this.isUpdating = false;
+        })
+  }
+
+
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
