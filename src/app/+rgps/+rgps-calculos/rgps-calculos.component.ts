@@ -39,10 +39,18 @@ export class RgpsCalculosComponent implements OnInit {
       {data: 'actions'},
       {data: 'tipo_seguro'},
       {data: 'tipo_aposentadoria'},
-      {data: 'contribuicao_primaria_atual'},
+      {data: (data, type, dataToSet) => {
+        return this.getTempoDeContribuicao(data,type, dataToSet);
+      }},
       {data: 'data_pedido_beneficio'},
       {data: 'valor_beneficio'},
-      {data: 'data_calculo'},
+      {data: 'data_calculo',
+       render: (data) => {
+          return this.formatReceivedDate(data);
+       }},
+      {data: () => {
+        return this.getCheckbox();
+      }},
     ] };
 
   constructor(
@@ -52,6 +60,26 @@ export class RgpsCalculosComponent implements OnInit {
     protected router: Router,
     private route: ActivatedRoute,
   ) {}
+
+  getTempoDeContribuicao(data, type, dataToSet) {
+    let str = '';
+    if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined') {
+      str = str + data.contribuicao_primaria_98.replace(/-/g,'/') +'<br>';
+    }
+    if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined') {
+      str = str + data.contribuicao_primaria_99.replace(/-/g,'/') +'<br>';
+    }
+    if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
+      str = str + data.contribuicao_primaria_atual.replace(/-/g,'/') +'<br>';
+    }
+
+    return str;
+
+  }
+
+  getCheckbox() {
+    return   '<div class="checkbox"><label><input type="checkbox"  class="checkbox {{styleTheme}}"><span> </span></label></div>';
+  }
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id'];
@@ -79,6 +107,17 @@ export class RgpsCalculosComponent implements OnInit {
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
+  }
+
+  formatReceivedDate(inputDate) {
+      var date = new Date(inputDate);
+      if (!isNaN(date.getTime())) {
+          // Months use 0 index.
+          return  ('0' + (date.getDate() +1)).slice(-2)+'/'+
+                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
+                         date.getFullYear();
+      }
+      return '';
   }
 
 
