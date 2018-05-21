@@ -121,7 +121,7 @@ export class RgpsCalculosFormComponent implements OnInit{
       this.formData.grupo_dos_12 = this.grupoDos12;
       this.onSubmit.emit( this.formData );
 
-      swal('Sucesso', 'Segurado salvo com sucesso','success');
+      swal('Sucesso', 'Cálculo salvo com sucesso','success');
     }
     else {
       console.log(this.errors.all())

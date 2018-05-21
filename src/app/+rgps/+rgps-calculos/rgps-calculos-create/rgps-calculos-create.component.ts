@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/cor
 import { CalculoRgpsService } from '../CalculoRgps.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-rgps-calculos-create',
@@ -22,7 +22,8 @@ export class RgpsCalculosCreateComponent implements OnDestroy {
   constructor(    
   	protected Calculo: CalculoRgpsService,
     protected Errors: ErrorService,
-    protected router: Router
+    protected router: Router,
+    private route: ActivatedRoute,
     ) { }
 
   submit(data) {
