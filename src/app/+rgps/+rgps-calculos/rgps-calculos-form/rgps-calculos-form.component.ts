@@ -56,6 +56,7 @@ export class RgpsCalculosFormComponent {
 
   @Input() formData;
   @Input() errors: ErrorService;
+  @Input() isEdit: boolean;
   @Output() onSubmit = new EventEmitter;
 
   constructor(private route: ActivatedRoute) {}
@@ -267,7 +268,7 @@ export class RgpsCalculosFormComponent {
   		this.periodoOptions.push('A partir de 29/11/1999');
   	}
 
-  	if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('11/29/1998')){
+  	if(dateBeneficio >= new Date('12/16/1998') && dateBeneficio < new Date('11/29/1999')){
   		this.has98 = true;
   		this.has99 = true;
   		this.hasAtual = false;
