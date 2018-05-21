@@ -2,7 +2,7 @@ import { Model } from '../../contracts/Model';
 
 export class SeguradoRgps extends Model {
 
-  static url = 'http://localhost:8000/segurados';
+  static url = 'http://localhost:8000/rgps/segurados';
   static form = {
     id: '',
     nome: '',
