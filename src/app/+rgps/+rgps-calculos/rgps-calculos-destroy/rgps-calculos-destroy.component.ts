@@ -4,7 +4,6 @@ import { CalculoRgpsService } from '../CalculoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
 
-
 @FadeInTop()
 @Component({
   selector: 'app-rgps-calculos-destroy',
@@ -13,22 +12,28 @@ import swal from 'sweetalert';
 })
 export class RgpsCalculosDestroyComponent {
 
+  public styleTheme = 'style-0';
+  public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
+
   constructor(
-    protected Calculo: CalculoRgpsService,
+    protected CalculosRgps: CalculoRgpsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.Calculo.find(this.route.snapshot.params['id_calculo'])
-        .then(calculo => {
-          this.Calculo.destroy(calculo)
-              .then(() => this.router.navigate(['/rgps/rgps-segurados']));
-        })
-    swal(
-      'Sucesso',
-      'Calculo excluído',
-      'success'
-    )
+    let calculo = this.route.snapshot.params['id_calculo'];
+    let user = this.route.snapshot.params['id'];
 
+    this.CalculosRgps.find(calculo)
+        .then(calculorgps => {
+          console.log(calculorgps);
+          this.CalculosRgps.destroy(calculorgps)
+              .then(() => {
+                this.router.navigate(['/rgps/rgps-calculos/'+user]);
+                swal('Sucesso', 'Cálculo excluído com sucesso','success');
+              }).catch((err) => {
+            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+          });
+        })
   }
 
 
