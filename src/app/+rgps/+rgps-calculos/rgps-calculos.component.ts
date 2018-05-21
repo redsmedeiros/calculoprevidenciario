@@ -122,9 +122,10 @@ export class RgpsCalculosComponent implements OnInit {
 
   formatReceivedDate(inputDate) {
       var date = new Date(inputDate);
+      date.setTime(date.getTime() + (5*60*60*1000))
       if (!isNaN(date.getTime())) {
           // Months use 0 index.
-          return  ('0' + (date.getDate() +1)).slice(-2)+'/'+
+          return  ('0' + (date.getDate())).slice(-2)+'/'+
                   ('0' + (date.getMonth()+1)).slice(-2)+'/'+
                          date.getFullYear();
       }
