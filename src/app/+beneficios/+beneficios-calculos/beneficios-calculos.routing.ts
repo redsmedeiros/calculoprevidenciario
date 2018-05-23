@@ -1,4 +1,3 @@
-
 import {ModuleWithProviders} from '@angular/core'
 import { Routes, RouterModule } from '@angular/router';
 import {BeneficiosCalculosComponent} from './beneficios-calculos.component';
@@ -20,7 +19,7 @@ export const beneficiosCalculosRoutes: Routes = [
     component: BeneficiosCalculosDestroyComponent
 },
 {
-    path: ':id/:id_calculo/edit',
+    path: ':type/:id/:id_calculo/edit',
     component: BeneficiosCalculosEditComponent
 },
 {
