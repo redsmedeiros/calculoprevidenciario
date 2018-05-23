@@ -9,13 +9,15 @@ import { BeneficiosCalculosCreateComponent } from './beneficios-calculos-create/
 import { BeneficiosCalculosEditComponent } from './beneficios-calculos-edit/beneficios-calculos-edit.component';
 import { BeneficiosCalculosFormComponent } from './beneficios-calculos-form/beneficios-calculos-form.component';
 import { BeneficiosCalculosIndexComponent } from './beneficios-calculos-index/beneficios-calculos-index.component';
-
+import {I18nModule} from "../../shared/i18n/i18n.module";
+import { TextMaskModule } from 'angular2-text-mask';
 
 @NgModule({
   imports: [
     CommonModule,
     beneficiosCalculosRouting,
     SmartadminModule,
+    TextMaskModule,
     SmartadminDatatableModule
   ],
   declarations: [BeneficiosCalculosComponent,BeneficiosCalculosDestroyComponent, BeneficiosCalculosCreateComponent, BeneficiosCalculosEditComponent, BeneficiosCalculosFormComponent, BeneficiosCalculosIndexComponent]

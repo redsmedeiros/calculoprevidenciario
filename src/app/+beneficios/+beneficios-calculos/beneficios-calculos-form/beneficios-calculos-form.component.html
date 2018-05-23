@@ -1,3 +1,523 @@
-<p>
-  beneficios-calculos-form works!
-</p>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Opções do cálculo</h2>
+
+          </header>
+
+          <!-- Beneficios Atrasados - Tetos Judiciais -->
+          <!-- widget div-->
+          <div *ngIf="type=='AJ'">
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <div class="col-md-8 col-sm-offset-2">
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="chkAjusteMaximo" name="chkAjusteMaximo" disabled class="checkbox {{styleTheme}}" checked="checked">
+                    <span>Para usar tetos judiciais em 12/1998 e em 12/2003 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Beneficios Atrasados -->
+          <div *ngIf="type=='A'||type=='AI'">
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <div class="col-md-8 col-sm-offset-2">
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="chkNotGranted" (change)="notGrantedChanged()" class="checkbox {{styleTheme}}">
+                    <span>Se este for um cálculo de atualização de benefício não concedido selecione a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="chkJurosMora" class="checkbox {{styleTheme}}">
+                    <span>Caso não pretenda calcular juros de mora antes da citação do réu desmarque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="chkDemandasJudiciais" class="checkbox {{styleTheme}}">
+                    <span>Para não limitar ao teto para demandas judiciais marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"  class="checkbox {{styleTheme}}">
+                    <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- widget options:
+                usage: <sa-widget [editbutton]="false">
+
+                [colorbutton]="false"
+                [editbutton]="false"
+                [togglebutton]="false"
+                [deletebutton]="false"
+                [fullscreenbutton]="false"
+                [custombutton]="false"
+                [collapsed]="true"
+                [sortable]="false"
+
+                -->
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Datas do cálculo</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data do cálculo:</label>
+                    <div class="col-md-3">
+                      <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMask}" name="dataCalculo" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
+                    </div>
+                    <label class="col-md-2 control-label">Data da citação do réu:</label>
+                    <div class="col-md-3">
+                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
+                    <div class="col-md-3">
+                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
+                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button (click)="saveCalculation()" type="submit" class="btn btn-labeled btn-success">
+                        <span class="btn-label">
+                          <i class="fa fa-save"></i>
+                        </span> Salvar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+      <article *ngIf="!chkNotGranted" class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Valores Recebidos</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+
+                  <div class="form-group">
+                    <div class="col-md-8 col-sm-offset-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="useSameDib" [(ngModel)]="chkUseSameDib" (change)="useSameDIBChanged()" class="checkbox {{styleTheme}}" checked="checked">
+                          <span>Caso queira calcular revisão de RMI com mesma DIB selecione a caixa ao lado:</span>
+                        </label>
+                      </div>
+
+                      <div class="checkbox">
+                        <label>
+                          <input name="chkPrecedidoRecebidos" [(ngModel)]='chkPrecedidoRecebidos' type="checkbox"  class="checkbox {{styleTheme}}">
+                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data inicial do benefício DIB de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
+                      <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
+                    </div>
+                    <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
+                    <div class="col-md-3">
+
+                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="select-1">
+                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
+                      </select>
+
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control" type="text">
+                      <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
+                    </div>
+
+                    <div *ngIf="chkPrecedidoRecebidos">
+                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
+                      <div class="col-md-3">
+                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
+                        <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
+                    <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos:</label>
+                    <div class="col-md-3">
+                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
+                      <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
+                    </div>
+
+                    <div *ngIf="recebidosBuracoNegro">
+                      <label class="col-md-2 control-label">RMI de valores recebidos depois da revisão (Buraco Negro):</label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
+                      </div>
+                    </div>
+
+                    <div *ngIf="recebidosPosBuracoNegro">
+                      <label class="col-md-2 control-label">Índice de reajuste no teto da RMI de valores recebidos:</label>
+                      <div class="col-md-3">
+                        <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
+                        <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Valores Devidos</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <p *ngIf="chkDibAnterior && chkUseSameDib">
+                * Para habilitar o campo DIB Anterior, deve-se desmarcar a revisão RMI com a mesma DIB.
+              </p>
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group">
+                    <div class="col-md-8 col-sm-offset-2">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="chkDibAnterior" [(ngModel)]="chkDibAnterior" class="checkbox {{styleTheme}}" checked="checked">
+                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado:</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">(*) Data inicial do benefício DIB de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control" [disabled]="chkUseSameDib" type="text">
+                      <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
+                    </div>
+                    <label class="col-md-2 control-label" for="select-1">Espécie valores devidos:</label>
+                    <div class="col-md-3">
+                      <select name="especieValoresDevidos" [(ngModel)]="especieValoresDevidos" class="form-control" id="select-1">
+                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
+                      <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
+                    </div>
+                    <div *ngIf="chkDibAnterior">
+                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
+                      <div class="col-md-3">
+                        <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
+                        <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
+                      </div>
+                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" type="text">
+                    </div>
+                  </div>
+                    <div *ngIf="chkNotGranted">
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida:
+                      </label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">(*) RMI não concedida antes da revisão (Buraco Negro):
+                      </label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div *ngIf="!chkNotGranted">
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                        <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
+                      </div>
+                    </div>
+                    <div *ngIf="devidosBuracoNegro">
+                      <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
+                        <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
+                      </div>
+                    </div>
+                    <div *ngIf="devidosPosBuracoNegro">
+                      <label class="col-md-2 control-label">Índice de reajuste no teto da Nova RMI de valores devidos:</label>
+                        <div class="col-md-3">
+                          <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
+                          <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
+                        </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Honorários</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Intervalo de Honorários:</label>
+                    <div class="col-md-3">
+                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="De" type="text">
+                      <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
+                    </div>
+                    <div class="col-md-5">
+                      <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
+                      <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Percentual dos honorários:</label>
+                    <div class="col-md-3">
+                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
+                      <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
+                    </div>
+                    <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
+                    <div class="col-md-3">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Calcular mais:</label>
+                    <div class="col-md-3">
+                      <input name="maturidade" [(ngModel)]="maturidade" class="form-control" placeholder="Vincendos" type="text">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <sa-widget [colorbutton]="false" [editbutton]="false">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-edit"></i>
+      </span>
+      <h2>Correção Monetária</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <div class="col-md-8 col-sm-offset-2">
+          <div class="form-group">
+            <div class="col-md-10">
+              <div class="radio">
+                <label>
+                  <input type="radio" checked="checked" name="correcao">
+                  Tabela da IPCA-e
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="correcao">
+                  Tabela da Justiça Federal
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="correcao">
+                  Tabela da TR
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sa-widget>
+</article>
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget [colorbutton]="false" [editbutton]="false">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <h2>Juros</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
+              <div class="col-md-3">
+                <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
+                <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
+              </div>
+              <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
+                <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
+                <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
+              </div>
+              <div class="col-md-5">
+                <div class="checkbox">
+                  <label>
+                  <input type="checkbox" class="checkbox {{styleTheme}}" checked>
+                  <span>Desmarque para não aplicar os juros da poupança</span>
+                </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </sa-widget>
+</article>

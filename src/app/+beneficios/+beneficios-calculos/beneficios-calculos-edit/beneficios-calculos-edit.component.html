@@ -18,7 +18,8 @@
           <!-- widget content -->
           <div *ngIf = "!isUpdating" class="widget-body">
 
-            <app-beneficios-calculos-form [errors]="Errors" [formData]="form" [isEdit]="edit_mode" (onSubmit)="submit($event)"></app-beneficios-calculos-form>
+<!--             <app-beneficios-calculos-form [errors]="Errors" [formData]="form" [isEdit]="edit_mode" (onSubmit)="submit($event)"></app-beneficios-calculos-form>
+ -->            <app-beneficios-calculos-form [isEdit]="edit_mode" ></app-beneficios-calculos-form>
 
           </div>
         </div>
