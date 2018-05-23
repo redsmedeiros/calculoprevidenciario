@@ -7,7 +7,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-beneficios-calculos-edit',
   templateUrl: './beneficios-calculos-edit.component.html',
-  styleUrls: ['./beneficios-calculos-edit.component.css']
+  styleUrls: ['./beneficios-calculos-edit.component.css'],
+  providers: [
+    ErrorService
+  ]
 })
 export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
   public edit_mode = true;

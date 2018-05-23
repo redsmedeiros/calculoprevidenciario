@@ -140,6 +140,34 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     private Calculo: CalculoAtrasadoService) { }
 
   ngOnInit() {
+    if (this.route.snapshot.params['type'] !== undefined) {
+      
+      this.type = this.route.snapshot.params['type'];
+      
+      if (this.type == 'AJ') {
+        this.chkAjusteMaximo = true;
+      }
+
+    }
+
+    if (this.route.snapshot.params['id_calculo'] !== undefined) {
+
+      this.Calculo.find(this.route.snapshot.params['id_calculo']).then(calculo => {
+        this.loadCalculo(calculo);
+      })
+    } else {
+      // Initialize variables for a new calculo
+      this.jurosAntes2003 = '0,5';
+      this.jurosDepois2003 = '1';
+      this.jurosDepois2009 = '0,5';
+
+      this.dataCalculo = this.getFormatedDate(new Date());
+      this.dataAcaoJudicial = this.getFormatedDate(new Date());
+      this.dataCitacaoReu = this.getFormatedDate(new Date());
+
+      this.especieValoresDevidos = 3;
+      this.especieValoresRecebidos = 3;
+    }
   }
 
   validateInputs() {
