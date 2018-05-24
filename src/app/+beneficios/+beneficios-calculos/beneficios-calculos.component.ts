@@ -107,7 +107,9 @@ export class BeneficiosCalculosComponent implements OnInit {
   }
 
   formatMoneyValue(inputValue) {
-    return inputValue.toFixed(2).replace('.',',');
+    if (inputValue !== null)
+      return inputValue.toFixed(2).replace('.',',');
+    return '-';
   }
 
   editSegurado() {

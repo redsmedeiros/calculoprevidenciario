@@ -791,7 +791,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 	}
 
   isEmptyInput(input) {
-    if (input == '' || input === undefined)
+    if (input == '' || input === undefined || input === null)
       return true;
 
     return false;
