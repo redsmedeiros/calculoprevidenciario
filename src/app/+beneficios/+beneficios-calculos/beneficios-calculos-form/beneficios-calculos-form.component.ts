@@ -129,13 +129,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 ]
 
   @Input() formData;
-  //@Input() errors: ErrorService;
+  @Input() errors: ErrorService;
   @Input() isEdit: boolean;
   @Input() type;
   @Output() onSubmit = new EventEmitter;
   constructor(	            
   	protected router: Router,
-    protected errors: ErrorService,
+    //protected errors: ErrorService,
     private route: ActivatedRoute,
     private Calculo: CalculoAtrasadoService) { }
 

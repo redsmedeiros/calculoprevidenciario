@@ -1,14 +1,18 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../../+beneficios-segurados/Segurado.service';
 import { CalculoAtrasado as CalculoModel } from '../CalculoAtrasado.model';
+import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 
 @Component({
   selector: 'app-beneficios-calculos-create',
   templateUrl: './beneficios-calculos-create.component.html',
-  styleUrls: ['./beneficios-calculos-create.component.css']
+  styleUrls: ['./beneficios-calculos-create.component.css'],
+  providers: [
+    ErrorService
+  ]
 })
-export class BeneficiosCalculosCreateComponent implements OnInit {
+export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   
   public segurado:any ={};
   public calculoType;
@@ -17,9 +21,11 @@ export class BeneficiosCalculosCreateComponent implements OnInit {
   @Output() onSubmit = new EventEmitter();
 
   constructor(
+    protected Calculo: CalculoAtrasadoService,
+    protected Errors: ErrorService,
   	protected router: Router,
-	private route: ActivatedRoute,
-	protected Segurado: SeguradoService
+	  private route: ActivatedRoute,
+	  protected Segurado: SeguradoService
 	) { }
 
   ngOnInit() {
@@ -31,9 +37,28 @@ export class BeneficiosCalculosCreateComponent implements OnInit {
     });
   }
 
+  submit(data) {
+    this.Calculo
+          .save(data)
+          .then(model => {
+            this.resetForm();
+            this.onSubmit.emit();
+          })
+          .catch(errors => this.Errors.add(errors));
+  }
+
   editSegurado() {
     window.location.href='/#/beneficios/beneficios-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
   }
+
+  ngOnDestroy() {
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.form = {...CalculoModel.form};
+  }
+
 
 }
