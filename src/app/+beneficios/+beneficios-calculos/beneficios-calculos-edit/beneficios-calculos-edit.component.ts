@@ -12,9 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     ErrorService
   ]
 })
-export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
-  public edit_mode = true;
-  
+export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy { 
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 

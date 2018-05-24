@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ErrorService } from '../../../services/error.service';
 import { SeguradoService } from '../../+beneficios-segurados/Segurado.service';
 import { CalculoAtrasado as CalculoModel } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
@@ -43,6 +44,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
           .then(model => {
             this.resetForm();
             this.onSubmit.emit();
+            window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
           })
           .catch(errors => this.Errors.add(errors));
   }

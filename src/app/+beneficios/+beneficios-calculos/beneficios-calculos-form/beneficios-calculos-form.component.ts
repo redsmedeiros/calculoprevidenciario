@@ -130,12 +130,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   @Input() formData;
   @Input() errors: ErrorService;
-  @Input() isEdit: boolean;
   @Input() type;
   @Output() onSubmit = new EventEmitter;
   constructor(	            
   	protected router: Router,
-    //protected errors: ErrorService,
     private route: ActivatedRoute,
     private Calculo: CalculoAtrasadoService) { }
 
@@ -151,10 +149,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
-
-      this.Calculo.find(this.route.snapshot.params['id_calculo']).then(calculo => {
-        this.loadCalculo(calculo);
-      })
+      this.loadCalculo();        
     } else {
       // Initialize variables for a new calculo
       this.jurosAntes2003 = '0,5';
@@ -398,260 +393,200 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return valid;
   }
 
-  saveCalculation() {
-
-    if (!this.validateInputs()) {
+  submit(e) {
+    e.preventDefault();
+    this.validateInputs();
+    if(this.errors.empty()){
+        // Data inicial do benefício DIB de valores devidos
+        // OU
+        // Data inicial do benefício DIB de valores recebidos
+        let dataPedidoBeneficio;
+        // Data inicial do benefício anterior de valores devidos
+        // OU
+        // Data inicial do benefício anterior de valores recebidos
+        let data_anterior_pedido_beneficio;
+        if (this.chkNotGranted || this.chkUseSameDib) {
+          // Valores Devidos
+          dataPedidoBeneficio = this.dibValoresDevidos;
+          data_anterior_pedido_beneficio = this.dibAnteriorValoresDevidos;
+        } else {
+          // Valores Recebidos
+          dataPedidoBeneficio = this.dibValoresRecebidos;
+          data_anterior_pedido_beneficio = this.dibAnteriorValoresRecebidos;
+        }
+        // Id Segurado
+        this.formData.id_segurado  = this.route.snapshot.params['id'];
+        // Data do cálculo:
+        this.formData.data_calculo_pedido  = this.dataCalculo;
+        // Data da citação do réu
+        this.formData.data_acao_judicial  = this.dataAcaoJudicial;
+        // Data da ajuizamento da ação:
+        this.formData.data_citacao_reu  = this.dataCitacaoReu
+        // CONDICIONAL
+        this.formData.data_pedido_beneficio = dataPedidoBeneficio;
+        // RMI de valores Recebidos
+        this.formData.valor_beneficio_concedido  = this.rmiValoresRecebidos;
+        // RMI de valores recebidos depois da revisão (Buraco Negro)
+        this.formData.valor_beneficio_concedido_revisao  = this.rmiValoresRecebidosBuracoNegro;
+        // Nova RMI de valores devidos
+        this.formData.valor_beneficio_esperado  = this.rmiValoresDevidos;
+        // RMI de valores devidos depois da revisão (Buraco Negro)
+        this.formData.valor_beneficio_esperado_revisao  = this.rmiValoresDevidosBuracoNegro;
+        // CheckBox Beneficio Não Concedido
+        this.formData.beneficio_nao_concedido  = this.chkNotGranted;
+        // Data de Cessação dos Valores Recebidos
+        this.formData.data_cessacao = this.cessacaoValoresRecebidos;
+        // CheckBoc Juros de Mora
+        this.formData.previo_interesse = this.chkJurosMora;
+        // CONDICIONAL
+        this.formData.data_anterior_pedido_beneficio  = data_anterior_pedido_beneficio;
+        // Percentual dos Honorarios
+        if (this.percentualHonorarios != undefined) {
+          this.formData.percentual_taxa_advogado  = this.percentualHonorarios.replace(',','.');
+        } else {
+          this.formData.percentual_taxa_advogado = 0;
+        }
+        // Intervalo de Honorarios DE
+        this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
+        // Intervalo de Honorarios ATE 
+        this.formData.taxa_advogado_final = this.dataHonorariosAte;
+        // Calcular Mais (Vincendos)
+        this.formData.maturidade = this.maturidade;
+        // Juros anterior a janeiro 2003
+        if (this.jurosAntes2003 != undefined) {
+          this.formData.previo_interesse_2003 = this.jurosAntes2003.replace(',','.');
+        } else {
+          this.formData.previo_interesse_2003 = 0;
+        }
+        // Juros posterior a janeiro 2003
+        if (this.jurosDepois2003 != undefined) {
+          this.formData.pos_interesse_2003 = this.jurosDepois2003.replace(',','.');
+        } else {
+          this.formData.pos_interesse_2003 = 0;
+        }
+        // Juros posterior a julho 2009
+        if (this.jurosDepois2009 != undefined) {
+          this.formData.pos_interesse_2009 = this.jurosDepois2009.replace(',','.');
+        } else {
+          this.formData.pos_interesse_2009 = 0;
+        }
+        // Espécie valores devidos
+        this.formData.tipo_aposentadoria = this.especieValoresDevidos;
+        // Agora
+        this.formData.data_calculo = this.getFormatedDate(new Date());
+        // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
+        this.formData.aplicar_ajuste_maximo_98_2003 = this.chkAjusteMaximo;
+        // Percentual do Acordo Judicial
+        if (this.acordoJudicial != undefined) {
+          this.formData.acordo_pedido = this.acordoJudicial.replace(',','.');
+        } else {
+          this.formData.acordo_pedido = 0;
+        }
+        // checkBox Não Limitar Teto para demandas Judiciais
+        this.formData.nao_aplicar_ajuste_maximo_98_2003 = this.chkDemandasJudiciais;
+        // Data inicial do benefício DIB de valores devidos
+        this.formData.data_pedido_beneficio_esperado = this.dibValoresDevidos;
+        // Data inicial do benefício anterior de valores devidos
+        this.formData.previa_data_pedido_beneficio_esperado = this.dibAnteriorValoresDevidos;
+        // Data de Cessação de valores devidos
+        this.formData.data_prevista_cessacao = this.cessacaoValoresDevidos;
+        // Espécie valores recebidos
+        this.formData.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
+        // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
+        this.formData.concedido_anterior_dib = this.chkPrecedidoRecebidos;
+        // CheckBox Beneficio Precedido com DIB Anterior (devidos)
+        this.formData.esperado_anterior = this.chkDibAnterior;
+        // Índice de reajuste no teto da Nova RMI de valores devidos:
+        if (this.taxaAjusteMaximaEsperada != undefined) {
+          this.formData.taxa_ajuste_maxima_esperada = this.taxaAjusteMaximaEsperada.replace(',','.');
+        } else {
+          this.formData.taxa_ajuste_maxima_esperada = 0;
+        }
+        // Índice de reajuste no teto da Nova RMI de valores recebidos:
+        if (this.taxaAjusteMaximaConcedida != undefined) {
+          this.formData.taxa_ajuste_maxima_concedida = this.taxaAjusteMaximaConcedida.replace(',','.');
+        } else {
+          this.formData.taxa_ajuste_maxima_concedida = 0;
+        }
+        this.onSubmit.emit(this.formData);
+        swal('Sucesso', 'Cálculo salvo com sucesso','success');
+    }else{
+      console.log(this.errors.all())
       swal('Erro', 'Confira os dados digitados','error');
-      return;
     }
-
-  	let calculoAtrasado = new CalculoAtrasado();
-
-  	// Data inicial do benefício DIB de valores devidos
-  	// OU
-  	// Data inicial do benefício DIB de valores recebidos
-  	let dataPedidoBeneficio;
-
-  	// Data inicial do benefício anterior de valores devidos
-  	// OU
-  	// Data inicial do benefício anterior de valores recebidos
-  	let data_anterior_pedido_beneficio;
-  	if (this.chkNotGranted || this.chkUseSameDib) {
-  		// Valores Devidos
-  		dataPedidoBeneficio = this.dibValoresDevidos;
-  		data_anterior_pedido_beneficio = this.dibAnteriorValoresDevidos;
-  	} else {
-  		// Valores Recebidos
-  		dataPedidoBeneficio = this.dibValoresRecebidos;
-  		data_anterior_pedido_beneficio = this.dibAnteriorValoresRecebidos;
-  	}
-
-  	// Id Segurado
-    calculoAtrasado.form['id_segurado'] = this.route.snapshot.params['id'];
-  	calculoAtrasado.id_segurado = this.route.snapshot.params['id'];
-  	// Data do cálculo:
-    calculoAtrasado.form['data_calculo_pedido'] = this.dataCalculo;
-    calculoAtrasado.data_calculo_pedido = this.dataCalculo;
-    // Data da citação do réu
-    calculoAtrasado.form['data_acao_judicial'] = this.dataAcaoJudicial;
-    calculoAtrasado.data_acao_judicial = this.dataAcaoJudicial;
-    // Data da ajuizamento da ação:
-    calculoAtrasado.form['data_citacao_reu'] = this.dataCitacaoReu
-    calculoAtrasado.data_citacao_reu = this.dataCitacaoReu
-    // CONDICIONAL
-    calculoAtrasado.form['data_pedido_beneficio'] = dataPedidoBeneficio;
-    calculoAtrasado.data_pedido_beneficio = dataPedidoBeneficio;
-    // RMI de valores Recebidos
-    calculoAtrasado.form['valor_beneficio_concedido'] = this.rmiValoresRecebidos;
-    calculoAtrasado.valor_beneficio_concedido = this.rmiValoresRecebidos;
-    // RMI de valores recebidos depois da revisão (Buraco Negro)
-    calculoAtrasado.form['valor_beneficio_concedido_revisao'] = this.rmiValoresRecebidosBuracoNegro;
-    calculoAtrasado.valor_beneficio_concedido_revisao = this.rmiValoresRecebidosBuracoNegro;
-    // Nova RMI de valores devidos
-    calculoAtrasado.form['valor_beneficio_esperado'] = this.rmiValoresDevidos;
-    calculoAtrasado.valor_beneficio_esperado = this.rmiValoresDevidos;
-    // RMI de valores devidos depois da revisão (Buraco Negro)
-    calculoAtrasado.form['valor_beneficio_esperado_revisao'] = this.rmiValoresDevidosBuracoNegro;
-    calculoAtrasado.valor_beneficio_esperado_revisao = this.rmiValoresDevidosBuracoNegro;
-    // CheckBox Beneficio Não Concedido
-    calculoAtrasado.form['beneficio_nao_concedido'] = this.chkNotGranted;
-    calculoAtrasado.beneficio_nao_concedido = this.chkNotGranted;
-    // Data de Cessação dos Valores Recebidos
-    calculoAtrasado.form['data_cessacao'] = this.cessacaoValoresRecebidos;
-    calculoAtrasado.data_cessacao = this.cessacaoValoresRecebidos;
-    // CheckBoc Juros de Mora
-    calculoAtrasado.previo_interesse = this.chkJurosMora;
-    // CONDICIONAL
-    calculoAtrasado.form['data_anterior_pedido_beneficio'] = data_anterior_pedido_beneficio;
-    calculoAtrasado.data_anterior_pedido_beneficio = data_anterior_pedido_beneficio;
-    // Percentual dos Honorarios
-    if (this.percentualHonorarios != undefined) {
-      calculoAtrasado.form['percentual_taxa_advogado'] = this.percentualHonorarios.replace(',','.');
-      calculoAtrasado.percentual_taxa_advogado = this.percentualHonorarios.replace(',','.');
-    } else {
-      calculoAtrasado.form['percentual_taxa_advogado'] = 0;
-      calculoAtrasado.percentual_taxa_advogado = 0;
-    }
-    // Intervalo de Honorarios DE
-    calculoAtrasado.form['taxa_advogado_inicio'] = this.dataHonorariosDe;
-    calculoAtrasado.taxa_advogado_inicio = this.dataHonorariosDe;
-    // Intervalo de Honorarios ATE 
-    calculoAtrasado.form['taxa_advogado_final'] = this.dataHonorariosAte;
-    calculoAtrasado.taxa_advogado_final = this.dataHonorariosAte;
-    // Calcular Mais (Vincendos)
-    calculoAtrasado.form['maturidade'] = this.maturidade;
-    calculoAtrasado.maturidade = this.maturidade;
-    // Juros anterior a janeiro 2003
-    if (this.jurosAntes2003 != undefined) {
-      calculoAtrasado.form['previo_interesse_2003'] = this.jurosAntes2003.replace(',','.');
-      calculoAtrasado.previo_interesse_2003 = this.jurosAntes2003.replace(',','.');
-    } else {
-      calculoAtrasado.form['previo_interesse_2003'] = 0;
-      calculoAtrasado.previo_interesse_2003 = 0;
-    }
-    // Juros posterior a janeiro 2003
-    if (this.jurosDepois2003 != undefined) {
-      calculoAtrasado.form['pos_interesse_2003'] = this.jurosDepois2003.replace(',','.');
-      calculoAtrasado.pos_interesse_2003 = this.jurosDepois2003.replace(',','.');
-    } else {
-      calculoAtrasado.form['pos_interesse_2003'] = 0;
-      calculoAtrasado.pos_interesse_2003 = 0;
-    }
-    // Juros posterior a julho 2009
-    if (this.jurosDepois2009 != undefined) {
-      calculoAtrasado.form['pos_interesse_2009'] = this.jurosDepois2009.replace(',','.');
-      calculoAtrasado.pos_interesse_2009 = this.jurosDepois2009.replace(',','.');
-    } else {
-      calculoAtrasado.form['pos_interesse_2009'] = 0;
-      calculoAtrasado.pos_interesse_2009 = 0;
-    }
-    // Espécie valores devidos
-    calculoAtrasado.form['tipo_aposentadoria'] = this.especieValoresDevidos;
-    calculoAtrasado.tipo_aposentadoria = this.especieValoresDevidos;
-    // Agora
-    calculoAtrasado.form['data_calculo'] = this.getFormatedDate(new Date());
-    calculoAtrasado.data_calculo = this.getFormatedDate(new Date());
-    // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
-    calculoAtrasado.form['aplicar_ajuste_maximo_98_2003'] = this.chkAjusteMaximo;
-    calculoAtrasado.aplicar_ajuste_maximo_98_2003 = this.chkAjusteMaximo;
-    // Percentual do Acordo Judicial
-    if (this.acordoJudicial != undefined) {
-      calculoAtrasado.form['acordo_pedido'] = this.acordoJudicial.replace(',','.');
-      calculoAtrasado.acordo_pedido= this.acordoJudicial.replace(',','.');
-    } else {
-      calculoAtrasado.form['acordo_pedido'] = 0;
-      calculoAtrasado.acordo_pedido= 0;
-    }
-    // checkBox Não Limitar Teto para demandas Judiciais
-    calculoAtrasado.form['nao_aplicar_ajuste_maximo_98_2003'] = this.chkDemandasJudiciais;
-    calculoAtrasado.nao_aplicar_ajuste_maximo_98_2003 = this.chkDemandasJudiciais;
-    // Data inicial do benefício DIB de valores devidos
-    calculoAtrasado.form['data_pedido_beneficio_esperado'] = this.dibValoresDevidos;
-    calculoAtrasado.data_pedido_beneficio_esperado = this.dibValoresDevidos;
-    // Data inicial do benefício anterior de valores devidos
-    calculoAtrasado.form['previa_data_pedido_beneficio_esperado'] = this.dibAnteriorValoresDevidos;
-    calculoAtrasado.previa_data_pedido_beneficio_esperado = this.dibAnteriorValoresDevidos;
-    // Data de Cessação de valores devidos
-    calculoAtrasado.form['data_prevista_cessacao'] = this.cessacaoValoresDevidos;
-    calculoAtrasado.data_prevista_cessacao = this.cessacaoValoresDevidos;
-    // Espécie valores recebidos
-    calculoAtrasado.form['tipo_aposentadoria_recebida'] = this.especieValoresRecebidos;
-    calculoAtrasado.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
-    // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
-    calculoAtrasado.form['concedido_anterior_dib'] = this.chkPrecedidoRecebidos;
-    calculoAtrasado.concedido_anterior_dib = this.chkPrecedidoRecebidos;
-    // CheckBox Beneficio Precedido com DIB Anterior (devidos)
-    calculoAtrasado.form['esperado_anterior'] = this.chkDibAnterior;
-    calculoAtrasado.esperado_anterior = this.chkDibAnterior;
-    // Índice de reajuste no teto da Nova RMI de valores devidos:
-    if (this.taxaAjusteMaximaEsperada != undefined) {
-      calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = this.taxaAjusteMaximaEsperada.replace(',','.');
-      calculoAtrasado.taxa_ajuste_maxima_esperada = this.taxaAjusteMaximaEsperada.replace(',','.');
-    } else {
-      calculoAtrasado.form['taxa_ajuste_maxima_esperada'] = 0;
-      calculoAtrasado.taxa_ajuste_maxima_esperada = 0;
-    }
-    // Índice de reajuste no teto da Nova RMI de valores recebidos:
-    if (this.taxaAjusteMaximaConcedida != undefined) {
-      calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = this.taxaAjusteMaximaConcedida.replace(',','.');
-      calculoAtrasado.taxa_ajuste_maxima_concedida = this.taxaAjusteMaximaConcedida.replace(',','.');
-    } else {
-      calculoAtrasado.form['taxa_ajuste_maxima_concedida'] = 0;
-      calculoAtrasado.taxa_ajuste_maxima_concedida = 0;
-    }
-
-    if (this.route.snapshot.params['id_calculo'] === undefined) {
-
-	    this.Calculo
-	          .save(calculoAtrasado.form)
-	          .then(model => {
-	          	console.log(model);
-	  			window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
-
-	          })
-	          .catch(errors => this.errors.add(errors));
-    } else {
-      calculoAtrasado.id = this.route.snapshot.params['id_calculo'];
-    	this.Calculo
-    		.update(calculoAtrasado)
-    		.then(model => {
-	  			window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
-		  }).catch(errors => console.log(errors));
-    }
-    swal('Sucesso', 'Cálculo salvo com sucesso','success');
   }
 
-  loadCalculo(calculoAtrasado) {
+  loadCalculo() {
   	// Data do cálculo:
-    this.dataCalculo = this.formatReceivedDate(calculoAtrasado.data_calculo_pedido);
+    this.dataCalculo = this.formatReceivedDate(this.formData.data_calculo_pedido);
     // Data da citação do réu
-    this.dataAcaoJudicial = this.formatReceivedDate(calculoAtrasado.data_acao_judicial);
+    this.dataAcaoJudicial = this.formatReceivedDate(this.formData.data_acao_judicial);
     // Data da ajuizamento da ação:
-    this.dataCitacaoReu = this.formatReceivedDate(calculoAtrasado.data_citacao_reu);
+    this.dataCitacaoReu = this.formatReceivedDate(this.formData.data_citacao_reu);
     // CONDICIONAL
-    let dataPedidoBeneficio = calculoAtrasado.data_pedido_beneficio;
+    let dataPedidoBeneficio = this.formData.data_pedido_beneficio;
     // RMI de valores Recebidos
-    this.rmiValoresRecebidos = calculoAtrasado.valor_beneficio_concedido;
+    this.rmiValoresRecebidos = this.formData.valor_beneficio_concedido;
     // RMI de valores recebidos depois da revisão (Buraco Negro)
-    this.rmiValoresRecebidosBuracoNegro = calculoAtrasado.valor_beneficio_concedido_revisao;
+    this.rmiValoresRecebidosBuracoNegro = this.formData.valor_beneficio_concedido_revisao;
     // Nova RMI de valores devidos
-    this.rmiValoresDevidos = calculoAtrasado.valor_beneficio_esperado;
+    this.rmiValoresDevidos = this.formData.valor_beneficio_esperado;
     // RMI de valores devidos depois da revisão (Buraco Negro)
-    this.rmiValoresDevidosBuracoNegro = calculoAtrasado.valor_beneficio_esperado_revisao;
+    this.rmiValoresDevidosBuracoNegro = this.formData.valor_beneficio_esperado_revisao;
     // CheckBox Beneficio Não Concedido
-    this.chkNotGranted = calculoAtrasado.beneficio_nao_concedido;
+    this.chkNotGranted = this.formData.beneficio_nao_concedido;
     // Data de Cessação dos Valores Recebidos
-    this.cessacaoValoresRecebidos = this.formatReceivedDate(calculoAtrasado.data_cessacao);
+    this.cessacaoValoresRecebidos = this.formatReceivedDate(this.formData.data_cessacao);
     // CheckBoc Juros de Mora
-    this.chkJurosMora = calculoAtrasado.previo_interesse;
+    this.chkJurosMora = this.formData.previo_interesse;
     // CONDICIONAL
-    let data_anterior_pedido_beneficio = calculoAtrasado.data_anterior_pedido_beneficio;
+    let data_anterior_pedido_beneficio = this.formData.data_anterior_pedido_beneficio;
     // Percentual dos Honorarios
-    this.percentualHonorarios = calculoAtrasado.percentual_taxa_advogado.toString().replace('.',',');
+    this.percentualHonorarios = this.formData.percentual_taxa_advogado.toString().replace('.',',');
     // Intervalo de Honorarios DE
-    this.dataHonorariosDe = this.formatReceivedDate(calculoAtrasado.taxa_advogado_inicio);
+    this.dataHonorariosDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio);
     // Intervalo de Honorarios ATE 
-    this.dataHonorariosAte = this.formatReceivedDate(calculoAtrasado.taxa_advogado_final);
+    this.dataHonorariosAte = this.formatReceivedDate(this.formData.taxa_advogado_final);
     // Calcular Mais (Vincendos)
-    this.maturidade = calculoAtrasado.maturidade;
+    this.maturidade = this.formData.maturidade;
     // Juros anterior a janeiro 2003
-    if (calculoAtrasado.previo_interesse_2003 != null)
-    this.jurosAntes2003 = calculoAtrasado.previo_interesse_2003.toString().replace('.',',');
+    if (this.formData.previo_interesse_2003 != null)
+    this.jurosAntes2003 = this.formData.previo_interesse_2003.toString().replace('.',',');
     // Juros posterior a janeiro 2003
-    if (calculoAtrasado.pos_interesse_2003 != null)
-    this.jurosDepois2003 = calculoAtrasado.pos_interesse_2003.toString().replace('.',',');
+    if (this.formData.pos_interesse_2003 != null)
+    this.jurosDepois2003 = this.formData.pos_interesse_2003.toString().replace('.',',');
     // Juros posterior a julho 2009
-    if (calculoAtrasado.pos_interesse_2009 != null)
-      this.jurosDepois2009 = calculoAtrasado.pos_interesse_2009.toString().replace('.',',');
+    if (this.formData.pos_interesse_2009 != null)
+      this.jurosDepois2009 = this.formData.pos_interesse_2009.toString().replace('.',',');
     // Espécie valores devidos
-    this.especieValoresDevidos = calculoAtrasado.tipo_aposentadoria;
+    this.especieValoresDevidos = this.formData.tipo_aposentadoria;
     // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
-    if (calculoAtrasado.aplicar_ajuste_maximo_98_2003) {
+    if (this.formData.aplicar_ajuste_maximo_98_2003) {
       this.type = 'AJ';
     }
-    this.chkAjusteMaximo = calculoAtrasado.aplicar_ajuste_maximo_98_2003;
+    this.chkAjusteMaximo = this.formData.aplicar_ajuste_maximo_98_2003;
     // Percentual do Acordo Judicial
-    if (calculoAtrasado.acordo_pedido != null)
-      this.acordoJudicial = calculoAtrasado.acordo_pedido.toString().replace('.',',');
+    if (this.formData.acordo_pedido != null)
+      this.acordoJudicial = this.formData.acordo_pedido.toString().replace('.',',');
     // checkBox Não Limitar Teto para demandas Judiciais
-    this.chkDemandasJudiciais = calculoAtrasado.nao_aplicar_ajuste_maximo_98_2003;
+    this.chkDemandasJudiciais = this.formData.nao_aplicar_ajuste_maximo_98_2003;
     // Data inicial do benefício DIB de valores devidos
-    this.dibValoresDevidos = this.formatReceivedDate(calculoAtrasado.data_pedido_beneficio_esperado);
+    this.dibValoresDevidos = this.formatReceivedDate(this.formData.data_pedido_beneficio_esperado);
     // Data inicial do benefício anterior de valores devidos
-    this.dibAnteriorValoresDevidos = this.formatReceivedDate(calculoAtrasado.previa_data_pedido_beneficio_esperado);
+    this.dibAnteriorValoresDevidos = this.formatReceivedDate(this.formData.previa_data_pedido_beneficio_esperado);
     // Data de Cessação de valores devidos
-    this.cessacaoValoresDevidos = this.formatReceivedDate(calculoAtrasado.data_prevista_cessacao);
+    this.cessacaoValoresDevidos = this.formatReceivedDate(this.formData.data_prevista_cessacao);
     // Espécie valores recebidos
-    this.especieValoresRecebidos = calculoAtrasado.tipo_aposentadoria_recebida;
+    this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
     // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
-    this.chkPrecedidoRecebidos = calculoAtrasado.concedido_anterior_dib;
+    this.chkPrecedidoRecebidos = this.formData.concedido_anterior_dib;
     // CheckBox Beneficio Precedido com DIB Anterior (devidos)
-    this.chkDibAnterior = calculoAtrasado.esperado_anterior;
+    this.chkDibAnterior = this.formData.esperado_anterior;
 
-    if (calculoAtrasado.taxa_ajuste_maxima_concedida != null)
-      this.taxaAjusteMaximaConcedida = calculoAtrasado.taxa_ajuste_maxima_concedida.toString().replace('.',',');
-    if (calculoAtrasado.taxa_ajuste_maxima_esperada != null)
-      this.taxaAjusteMaximaEsperada = calculoAtrasado.taxa_ajuste_maxima_esperada.toString().replace('.',',');
+    if (this.formData.taxa_ajuste_maxima_concedida != null)
+      this.taxaAjusteMaximaConcedida = this.formData.taxa_ajuste_maxima_concedida.toString().replace('.',',');
+    if (this.formData.taxa_ajuste_maxima_esperada != null)
+      this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.',',');
 
 
   	if (this.chkNotGranted || this.chkUseSameDib) {
