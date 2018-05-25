@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import { ErrorService } from '../../../services/error.service';
 import { ContribuicaoComplementar as ContribuicaoModel } from '../ContribuicaoComplementar.model';
@@ -28,7 +28,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   constructor(
   	protected Calculo: ContribuicaoComplementarService,
     protected Errors: ErrorService,
-    protected router: Router,) { }
+    protected router: Router,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit() {
   }
@@ -54,7 +56,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   confirm(e){
-    
+
   }
 
   updateMatrix(ano, valores){
@@ -88,6 +90,10 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
    		dateStart.add(1,'month');
 	}
 	return timeValues;
+  }
+
+  voltar(){
+    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
   }
 
 }
