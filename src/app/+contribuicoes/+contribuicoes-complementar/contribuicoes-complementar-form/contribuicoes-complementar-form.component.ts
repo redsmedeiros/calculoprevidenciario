@@ -45,7 +45,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   	if(!this.errors.empty()){
   		swal('Erro', 'Confira os dados digitados','error');
   	}else{
-  		this.formData.id_segurado = this.route.snapshot.params['id']
+  		this.formData.id_segurado = this.route.snapshot.params['id'];
   		this.formData.inicio_atraso = this.competenciaInicial;
   		this.formData.final_atraso = this.competenciaFinal;
   		this.formData.contribuicao_basica_inicial = this.contribuicaoDe;
@@ -124,6 +124,10 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   	if(this.isEmpty(this.salarioContribuicao)){
   		this.errors.add({"salarioContribuicao":["Insira o salário"]});
   	}
+  }
+
+  voltar(){
+    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
   }
 
   isEmpty(data){
