@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../../services/error.service';
+import swal from 'sweetalert';
+
 
 @Component({
   selector: 'app-contribuicoes-complementar-form',
@@ -26,7 +29,10 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   @Input() formData;
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
-  constructor() { }
+  constructor(
+  	protected router: Router,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit(){
   	let today = new Date();
@@ -34,7 +40,19 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   }
   submit(e){
   	e.preventDefault();
+  	this.errors.clear();
   	this.validateInputs();
+  	if(!this.errors.empty()){
+  		swal('Erro', 'Confira os dados digitados','error');
+  	}else{
+  		this.formData.id_segurado = this.route.snapshot.params['id']
+  		this.formData.inicio_atraso = this.competenciaInicial;
+  		this.formData.final_atraso = this.competenciaFinal;
+  		this.formData.contribuicao_basica_inicial = this.contribuicaoDe;
+		this.formData.contribuicao_basica_final = this.contribuicaoAte;
+		this.formData.salario = this.salarioContribuicao;
+		this.onSubmit.emit(this.formData);
+  	}
   }
 
   validateInputs(){

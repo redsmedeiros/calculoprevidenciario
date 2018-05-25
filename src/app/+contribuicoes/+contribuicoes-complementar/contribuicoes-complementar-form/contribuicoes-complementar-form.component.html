@@ -1,14 +1,29 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget [colorbutton]="false" [editbutton]="false">
+	<header>
+	  <span class="widget-icon">
+	    <i class="fa fa-eye"></i>
+	  </span>
+	  <h2>Contribuição anterior a {{dataDecadente.getMonth()+1}}/{{dataDecadente.getFullYear()}}</h2>
+	</header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <p>
+          Favor preencher a data inicial e a data final das contribuições atrasadas que pretende recolher
+        </p>
 <form class="form-horizontal">
 	<fieldset>
 		<div class="form-group">
 		  <label class="col-md-2 control-label">Competência inicial</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="competenciaInicial" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="competenciaInicial" (change)="errors.clear('competenciaInicial')" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
 		    <small *ngIf="errors.has('competenciaInicial')" class="text-danger">{{ errors.get('competenciaInicial') }}</small>
 		  </div>
 		  <label class="col-md-2 control-label">Competência final</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="competenciaFinal" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="competenciaFinal" [ngModelOptions]="{standalone: true}" (change)="errors.clear('competenciaFinal')" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
 		    <small *ngIf="errors.has('competenciaFinal')" class="text-danger">{{ errors.get('competenciaFinal') }}</small>
 		  </div>
 		</div>
@@ -25,19 +40,19 @@
 		<div class="form-group">
 		  <label class="col-md-2 control-label">Contribuição de</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoDe')" placeholder="(mm/aaaa)" type="text">
 		    <small *ngIf="errors.has('contribuicaoDe')" class="text-danger">{{ errors.get('contribuicaoDe') }}</small>
 		  </div>
 		  <label class="col-md-2 control-label">Contribuição até</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="contribuicaoAte" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="contribuicaoAte" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoAte')" placeholder="(mm/aaaa)" type="text">
 		    <small *ngIf="errors.has('contribuicaoAte')" class="text-danger">{{ errors.get('contribuicaoAte') }}</small>
 		  </div>
 		</div>
 		<div class="form-group">
 		  <label class="col-md-2 control-label">Salário de contribuição</label>
 		  <div class="col-md-3">
-		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" maxlength="12" placeholder="R$" type="text">
+		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" (change)="errors.clear('salarioContribuicao')"  maxlength="12" placeholder="R$" type="text">
 		    <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
 		  </div>
 		</div>
@@ -54,3 +69,6 @@
 		</div>
 	</div>
 </form>
+</div>
+</div>
+</sa-widget>
