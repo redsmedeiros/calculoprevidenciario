@@ -37,5 +37,5 @@ export class ContribuicaoComplementar extends Model {
   `;
 
   // Definir e padronizar front e back-end Models
-  public data_calculo = this['created_at'];
+  //public data_calculo = this['created_at'];
 }
