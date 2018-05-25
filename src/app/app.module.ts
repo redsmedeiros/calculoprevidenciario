@@ -21,6 +21,7 @@ import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.se
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
 import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
+import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.service';
 import { CalculoAtrasadoService } from './+beneficios/CalculoAtrasado.service';
 import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
@@ -53,11 +54,8 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
-
     CoreModule,
     SmartadminLayoutModule,
-
-
     routing
   ],
   exports: [
@@ -73,6 +71,7 @@ type StoreType = {
     CalculoAtrasadoService,
     MoedaService,
     CalculoRgpsService,
+    ContribuicaoComplementarService,
   ]
 })
 export class AppModule {
