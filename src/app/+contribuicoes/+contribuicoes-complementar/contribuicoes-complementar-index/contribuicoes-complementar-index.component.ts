@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ContribuicaoComplementar as CalculoModel } from '../ContribuicaoComplementar.model';
+import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
+import { ErrorService } from '../../../services/error.service';
 
 @Component({
   selector: 'app-contribuicoes-complementar-index',
   templateUrl: './contribuicoes-complementar-index.component.html',
-  styleUrls: ['./contribuicoes-complementar-index.component.css']
+  styleUrls: ['./contribuicoes-complementar-index.component.css'],
+  providers: [
+    ErrorService,
+  ],
 })
-export class ContribuicoesComplementarIndexComponent implements OnInit {
+export class ContribuicoesComplementarIndexComponent {
+  @Input() list;
+  @Input() datatableOptions;
 
-  constructor() { }
+  public styleTheme = 'style-0';
+  public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
-  ngOnInit() {
-  }
+  public form = {...CalculoModel.form};
+
+
 
 }
