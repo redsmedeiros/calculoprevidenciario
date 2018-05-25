@@ -53,6 +53,10 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   	this.updateMatrix(+ano, valores);
   }
 
+  confirm(e){
+    
+  }
+
   updateMatrix(ano, valores){
     if(!this.matrizHasValues){
       this.matriz.splice(0,1);

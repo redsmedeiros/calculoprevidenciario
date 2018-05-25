@@ -76,6 +76,22 @@
             </tr>
           </tbody>
         </sa-datatable>
+        <div class="form-actions">
+          <div class="row">
+            <div class="col-md-12">
+                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-primary">
+                  <span class="btn-label">
+                    <i class="fa fa-backward"></i>
+                  </span> Voltar
+                </button>
+                <button (click)="confirm($event)" type="submit" class="btn btn-labeled btn-success">
+                  <span class="btn-label">
+                    <i class="fa fa-save"></i>
+                  </span> Enviar
+                </button>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </sa-widget>
