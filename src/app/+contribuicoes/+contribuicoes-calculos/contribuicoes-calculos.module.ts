@@ -6,6 +6,8 @@ import { ContribuicoesCalculosDestroyComponent } from "./contribuicoes-calculos-
 import {SmartadminModule} from "../../shared/smartadmin.module";
 import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-datatable.module";
 
+import { ContribuicoesComplementarIndexComponent } from '../+contribuicoes-complementar/contribuicoes-complementar-index/contribuicoes-complementar-index.component';
+
 
 @NgModule({
   imports: [
@@ -14,6 +16,6 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
     SmartadminModule,
     SmartadminDatatableModule
   ],
-  declarations: [ContribuicoesCalculosComponent, ContribuicoesCalculosDestroyComponent]
+  declarations: [ContribuicoesCalculosComponent, ContribuicoesCalculosDestroyComponent, ContribuicoesComplementarIndexComponent]
 })
 export class ContribuicoesCalculosModule { }
