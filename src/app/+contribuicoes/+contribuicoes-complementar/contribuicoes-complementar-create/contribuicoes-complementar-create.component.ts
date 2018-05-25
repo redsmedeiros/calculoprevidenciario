@@ -20,41 +20,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   public form = {...ContribuicaoModel.form};
 
   matriz = [{
-      "ano": 1995,
-      "valores": [
-        1230.23,
-        1523.85,
-        1549.12,
-        1654.58,
-        2487.23,
-        1982.63,
-        1754.85,
-        3546.85,
-        2459.45,
-        1468.91,
-        2146.85,
-        1793.25
-      ]
-    },
-    {
-      "ano": 1996,
-      "valores": [
-        1230.23,
-        1523.85,
-        1549.12,
-        1654.58,
-        2487.23,
-        1982.63,
-        1754.85,
-        3546.85,
-        2459.45,
-        1468.91,
-        2146.85,
-        1793.25
-      ]
+      "ano": 0,
+      "valores": []
     }
   ];
-
+  public matrizHasValues = false;
   constructor(
   	protected Calculo: ContribuicaoComplementarService,
     protected Errors: ErrorService,
@@ -84,6 +54,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   updateMatrix(ano, valores){
+    if(!this.matrizHasValues){
+      this.matriz.splice(0,1);
+    }
   	for(let entry of this.matriz){
   		if(entry.ano == ano){
   			entry.valores = valores;
@@ -91,6 +64,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   		}
   	}
   	this.matriz.push({ "ano": ano, "valores": valores });
+    this.matrizHasValues = true;
   }
   
   //Retorna uma lista com os meses entre dateStart e dateEnd

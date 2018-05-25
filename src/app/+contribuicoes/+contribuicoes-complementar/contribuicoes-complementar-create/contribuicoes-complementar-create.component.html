@@ -15,7 +15,7 @@
       <h2>Valores de contribuição</h2>
     </header>
     <div>
-      <div class="widget-body no-padding">
+      <div class="widget-body no-padding" *ngIf="matrizHasValues">
         <sa-datatable paginationLength="true" ordering="false" tableClass="table table-striped table-bordered table-hover" width="100%">
           <thead>
             <tr>
@@ -35,7 +35,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of matriz">
+            <tr *ngFor="let data of matriz" >
               <td>{{data.ano}}</td>
               <td class="matriz-line">
                 <input maxlength="12" currencyMask type="text" value="{{ data.valores[0] }}" class="matriz-input" />
