@@ -17,6 +17,7 @@ import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
 import { CalculoAtrasado } from '../+beneficios/CalculoAtrasado.model';
 import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
+import { ContribuicaoComplementar } from '../+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.model';
 import { Moeda } from './Moeda.model';
 import { SeguradoRgps } from '../+rgps/+rgps-segurados/SeguradoRgps.model';
 import { CalculoRgps } from '../+rgps/+rgps-calculos/CalculoRgps.model';
@@ -31,7 +32,8 @@ export class StoreService {
     moeda: Moeda[],
     calculoAtrasado: CalculoAtrasado[],
     seguradosRgps: SeguradoRgps[],
-    calculoRgps: CalculoRgps[]
+    calculoRgps: CalculoRgps[],
+    contribuicaoComplementar: ContribuicaoComplementar[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -39,7 +41,8 @@ export class StoreService {
     moeda: [],
     calculoAtrasado:[],
     seguradosRgps: [],
-    calculoRgps: []
+    calculoRgps: [],
+    contribuicaoComplementar: []
   };
 
   public push(name: string, data) {
