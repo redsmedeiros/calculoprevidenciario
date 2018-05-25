@@ -1,3 +1,56 @@
-<p>
-  contribuicoes-complementar-form works!
-</p>
+<form class="form-horizontal">
+	<fieldset>
+		<div class="form-group">
+		  <label class="col-md-2 control-label">Competência inicial</label>
+		  <div class="col-md-3">
+		    <input class="form-control" [(ngModel)]="competenciaInicial" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <small *ngIf="errors.has('competenciaInicial')" class="text-danger">{{ errors.get('competenciaInicial') }}</small>
+		  </div>
+		  <label class="col-md-2 control-label">Competência final</label>
+		  <div class="col-md-3">
+		    <input class="form-control" [(ngModel)]="competenciaFinal" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <small *ngIf="errors.has('competenciaFinal')" class="text-danger">{{ errors.get('competenciaFinal') }}</small>
+		  </div>
+		</div>
+		<div class="alert alert-info">
+		  <p>
+		    Para fins de cálculo do valor a ser recolhido a título de atrasados a LC nº. 128/08 determina a realização de uma média dos
+		    salários-de-contribuição posteriores a Julho de 1994. Favor preencher abaixo os salários-de-contribuição
+		    do segurado existentes a partir desta data para apuração da base de cálculo das contribuições em atraso.
+		    <a href="#">
+		      <strong>Veja o que dispõe o § 1º do art. 45 da Lei nº. 8212.</strong>
+		    </a>
+		  </p>
+		</div>
+		<div class="form-group">
+		  <label class="col-md-2 control-label">Contribuição de</label>
+		  <div class="col-md-3">
+		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <small *ngIf="errors.has('contribuicaoDe')" class="text-danger">{{ errors.get('contribuicaoDe') }}</small>
+		  </div>
+		  <label class="col-md-2 control-label">Contribuição até</label>
+		  <div class="col-md-3">
+		    <input class="form-control" [(ngModel)]="contribuicaoAte" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" placeholder="(mm/aaaa)" type="text">
+		    <small *ngIf="errors.has('contribuicaoAte')" class="text-danger">{{ errors.get('contribuicaoAte') }}</small>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label class="col-md-2 control-label">Salário de contribuição</label>
+		  <div class="col-md-3">
+		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" maxlength="12" placeholder="R$" type="text">
+		    <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
+		  </div>
+		</div>
+	</fieldset>
+	<div class="form-actions">
+		<div class="row">
+		  <div class="col-md-12">
+		    <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-primary">
+		      <span class="btn-label">
+		        <i class="fa fa-pencil"></i>
+		      </span> Preencher
+		    </button>
+		  </div>
+		</div>
+	</div>
+</form>
