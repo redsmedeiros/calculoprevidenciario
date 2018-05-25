@@ -4,6 +4,11 @@ import { contribuicoesComplementarRouting } from './contribuicoes-complementar.r
 import {ContribuicoesComplementarComponent} from "./contribuicoes-complementar.component";
 import {SmartadminModule} from "../../shared/smartadmin.module";
 import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-datatable.module";
+import { ContribuicoesComplementarCreateComponent } from './contribuicoes-complementar-create/contribuicoes-complementar-create.component';
+import { ContribuicoesComplementarDestroyComponent } from './contribuicoes-complementar-destroy/contribuicoes-complementar-destroy.component';
+import { ContribuicoesComplementarEditComponent } from './contribuicoes-complementar-edit/contribuicoes-complementar-edit.component';
+import { ContribuicoesComplementarFormComponent } from './contribuicoes-complementar-form/contribuicoes-complementar-form.component';
+import { ContribuicoesComplementarIndexComponent } from './contribuicoes-complementar-index/contribuicoes-complementar-index.component';
 
 
 @NgModule({
@@ -13,6 +18,6 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
     SmartadminModule,
     SmartadminDatatableModule
   ],
-  declarations: [ContribuicoesComplementarComponent]
+  declarations: [ContribuicoesComplementarComponent, ContribuicoesComplementarCreateComponent, ContribuicoesComplementarDestroyComponent, ContribuicoesComplementarEditComponent, ContribuicoesComplementarFormComponent, ContribuicoesComplementarIndexComponent]
 })
 export class ContribuicoesComplementarModule { }
