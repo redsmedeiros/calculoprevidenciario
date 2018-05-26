@@ -25,7 +25,7 @@ export const routes:Routes = [
     data: {pageTitle: 'Novo Calculo'}
   },
   { 
-    path: 'contribuicoes-resultados',
+    path: ':id/contribuicoes-resultados',
     loadChildren: 'app/+contribuicoes/+contribuicoes-resultados/contribuicoes-resultados.module#ContribuicoesResultadosModule',
     data: {pageTitle: 'Resultados'}
   },

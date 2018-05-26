@@ -94,7 +94,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   voltar(){
-    //window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
+    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
   }
 
 }
