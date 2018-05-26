@@ -6,7 +6,7 @@
     <!-- row -->
     <div class="row">
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
 
 
         <!-- Widget ID (each widget will need unique ID)-->
@@ -18,7 +18,7 @@
             <h2>Resultados</h2>
           </header>
           <div>
-            <div class="widget-body no-padding" *ngIf="!isUpdating">
+            <div class="widget-body no-padding" >
               <sa-datatable [options]="tableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
@@ -31,7 +31,18 @@
                   </tr>
                 </thead>
               </sa-datatable>
-
+                  <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Total</th>
+                  <th>R$ {{calculoJurisprudencial.valor_acumulado}}</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
             </div>
             
           </div>

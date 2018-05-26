@@ -29,22 +29,26 @@ export class ContribuicoesResultadosComponent implements OnInit {
 
   public tableOptions = {
     colReorder: true,
+    paging: false,
+    ordering: false,
+    info: false,
+    searching: false,
     data: this.moeda,
     columns: [
       {data: 'data_moeda',
        render: (data) => {
           return this.formatDate(data);
        }},
-      {data: 'salario_minimo',
-       render: (data) => {
-          return this.formatMoney(data);
+      {data: (data) => {
+          return this.getSalarioMinimo(data);
        }},
-      {data: 'aliquota',
-       render: (data) => {
-          return this.formatMoney(data);
+      {data: (data) => {
+          return this.getAliquota(data);
        }},
       {data: 'correcao'},
-      {data: 'valor_corrigido'}
+      {data: (data) => {
+        return this.getValorCorrigido(data);
+      }}
     ] };
   constructor(
   	protected Jurisprudencial: ContribuicaoJurisprudencialService,
@@ -72,6 +76,19 @@ export class ContribuicoesResultadosComponent implements OnInit {
           })
       })
     }   
+  }
+
+  getSalarioMinimo(data){
+    return data.sigla + ' ' +data.salario_minimo;
+  }
+
+  getAliquota(data){
+    return data.sigla + ' ' +data.aliquota;
+  }
+
+  getValorCorrigido(data){
+    let aliquota = data.salario_minimo * data.aliquota;
+    return 'R$ ' + data.salario_minimo * aliquota * data.correcao;
   }
 
   updateDatatable() {
