@@ -10,7 +10,6 @@ import { ContribuicaoComplementar } from '../+contribuicoes-complementar/Contrib
 @Component({
   selector: 'app-contribuicoes-resultados-complementar',
   templateUrl: './contribuicoes-resultados-complementar.component.html',
-  styleUrls: ['./contribuicoes-resultados-complementar.component.css']
 })
 export class ContribuicoesResultadosComplementarComponent implements OnInit {
   public numAnos;
