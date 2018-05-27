@@ -37,7 +37,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   submit(data){
   	let monthList = this.monthandYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
-  	console.log(monthList);
+    this.form.numero_contribuicoes = String(monthList.length*0.8);
 
   	let ano = monthList[0].split('-')[0];
   	let valores = [0,0,0,0,0,0,0,0,0,0,0];
