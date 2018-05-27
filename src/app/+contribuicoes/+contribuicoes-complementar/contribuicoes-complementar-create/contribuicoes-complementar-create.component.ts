@@ -37,7 +37,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   submit(data){
   	let monthList = this.monthandYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
-    this.form.numero_contribuicoes = String(monthList.length*0.8);
+    this.form.numero_contribuicoes = String(Math.floor(monthList.length*0.8));
 
   	let ano = monthList[0].split('-')[0];
   	let valores = [0,0,0,0,0,0,0,0,0,0,0];
@@ -82,14 +82,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   	let endSplit = dateEnd.split('/');
 
   	dateStart = moment(startSplit[2]+'-'+startSplit[1]+'-'+startSplit[0]);
-	dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
-	let timeValues = [];
+	  dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
+	  let timeValues = [];
 
-	while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
-   		timeValues.push(dateStart.format('YYYY-MM'));
+	  while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
+   	  timeValues.push(dateStart.format('YYYY-MM'));
    		dateStart.add(1,'month');
-	}
-	return timeValues;
+	  }
+	  return timeValues;
   }
 
   voltar(){
