@@ -8,10 +8,10 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
 @NgModule({
   imports: [
     CommonModule,
-    contribuicoesResultadosRouting,
+    contribuicoesResultadosComplementarRouting,
     SmartadminModule,
     SmartadminDatatableModule
   ],
   declarations: [ContribuicoesResultadosComplementarComponent]
 })
-export class contribuicoesResultadosComplementarModule { }
+export class ContribuicoesResultadosComplementarModule { }
