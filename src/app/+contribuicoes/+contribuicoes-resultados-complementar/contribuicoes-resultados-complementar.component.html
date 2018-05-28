@@ -14,10 +14,10 @@
           <div>
             <div class="widget-body">
               <ul class="list-unstyled">
-                <li><b>Número de contribuições consideradas:</b>{{calculoComplementar.numero_contribuicoes}} </li>
-                <li><b>Valor total das 80% maiores contribuições corrigidas:</b>R$ {{calculoComplementar.total_contribuicao}}</li>
-                <li><b>Valor médio final:</b>  R$ {{calculoComplementar.media_salarial}}</li>
-                <li><b>Valor base para recolhimento de aliquota:</b></li>
+                <li><b>Número de contribuições consideradas:</b> {{calculoComplementar.numero_contribuicoes}} </li>
+                <li><b>Valor total das 80% maiores contribuições corrigidas:</b> R${{formatTotalContrib()}}</li>
+                <li><b>Valor médio final:</b>  R${{formatValorMedioFinal()}}</li>
+                <li><b>Valor base para recolhimento de aliquota:</b> R${{getValorBaseRecolhimentoAliquota()}}</li>
               </ul>
             </div>
           </div>
@@ -33,7 +33,7 @@
           </header>
           <div>
             <div class="widget-body no-padding" >
-              <sa-datatable [options]="tableOptions"
+              <sa-datatable [options]="resultadosTableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
@@ -50,7 +50,7 @@
           <div class="col-sm-12">
             <div class="well">
               <p>
-                O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº. 128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91. Competências posteriores ao período já decadente devem ser calculados de acordo com o sistema disponibilizado no site da Previdência Social. http://www.dataprev.gov.br/sal/ciant2.htm.
+                O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº. 128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91. Competências posteriores ao período já decadente devem ser calculados de acordo com o sistema disponibilizado no site da Previdência Social. <a href="http://www.dataprev.gov.br/sal/ciant2.htm">http://www.dataprev.gov.br/sal/ciant2.htm</a>.
               </p>
             </div>
           </div>
