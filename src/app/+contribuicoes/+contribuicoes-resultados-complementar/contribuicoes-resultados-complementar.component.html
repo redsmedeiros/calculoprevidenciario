@@ -23,6 +23,39 @@
           </div>
         </sa-widget>
       </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Detalhamento</h2>
+          </header>
+          <div>
+            <div class="col-sm-12" *ngIf="!hasDetalhe">
+              <div class="well">
+                <p><b>Detalhamento do cálculo disponível apenas no ato de geração do valor.</b></p>
+              </div>
+            </div>
+            <div class="widget-body no-padding" >
+              <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Mês de contribuição</th>
+                    <th>Contribuição Base</th>
+                    <th>Índices</th>
+                    <th>Valor corrigido</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div> 
+          </div>
+        </sa-widget>
+      </article>
+
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
