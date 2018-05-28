@@ -25,6 +25,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     }
   ];
   public matrizHasValues = false;
+  public matrixTableOptions = {
+      paging: false, 
+      ordering: false, 
+      info: false, 
+      searching: false
+  }
+  
   constructor(
   	protected Calculo: ContribuicaoComplementarService,
     protected Errors: ErrorService,
