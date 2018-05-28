@@ -3,6 +3,7 @@ import { Router, ActivatedRoute  } from '@angular/router';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import { ErrorService } from '../../../services/error.service';
 import { ContribuicaoComplementar as ContribuicaoModel } from '../ContribuicaoComplementar.model';
+import { MatrixService } from '../../MatrixService.service'
 import * as moment from 'moment';
 
 @Component({
@@ -24,6 +25,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       "valores": []
     }
   ];
+
+  public anosConsiderados = [];
+
   public matrizHasValues = false;
   public matrixTableOptions = {
       paging: false, 
@@ -34,6 +38,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   
   constructor(
   	protected Calculo: ContribuicaoComplementarService,
+    protected MatrixStore: MatrixService,
     protected Errors: ErrorService,
     protected router: Router,
     private route: ActivatedRoute,
@@ -48,7 +53,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   	let ano = monthList[0].split('-')[0];
   	let valores = [0,0,0,0,0,0,0,0,0,0,0];
-
+    this.anosConsiderados.push(ano);
   	for (let entry of monthList){
   		if(ano == entry.split('-')[0]){
   			valores[+entry.split('-')[1]-1] = data.salario;
@@ -57,13 +62,50 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     		ano = entry.split('-')[0];
     		valores = [0,0,0,0,0,0,0,0,0,0,0];
     		valores[+entry.split('-')[1]-1] = data.salario;
+        this.anosConsiderados.push(ano);
   		}
   	}
   	this.updateMatrix(+ano, valores);
   }
 
   confirm(e){
+    console.log(this.matriz);
+    let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
+    let temp_matrix = this.matriz;
 
+    console.log(temp_matrix);
+    temp_matrix = [];
+    console.log(temp_matrix);
+    for(let ano of unique_anos){
+      let valores = [];
+      let valor_jan = (<HTMLInputElement>document.getElementById("01-"+ano)).value;
+      valores.push(valor_jan);
+      let valor_fev = (<HTMLInputElement>document.getElementById("02-"+ano)).value;
+      valores.push(valor_fev);
+      let valor_mar = (<HTMLInputElement>document.getElementById("03-"+ano)).value;
+      valores.push(valor_mar);
+      let valor_abr = (<HTMLInputElement>document.getElementById("04-"+ano)).value;
+      valores.push(valor_abr);
+      let valor_mai = (<HTMLInputElement>document.getElementById("05-"+ano)).value;
+      valores.push(valor_mai);
+      let valor_jun = (<HTMLInputElement>document.getElementById("06-"+ano)).value;
+      valores.push(valor_jun);
+      let valor_jul = (<HTMLInputElement>document.getElementById("07-"+ano)).value;
+      valores.push(valor_jul);
+      let valor_ago = (<HTMLInputElement>document.getElementById("08-"+ano)).value;
+      valores.push(valor_ago);
+      let valor_set = (<HTMLInputElement>document.getElementById("09-"+ano)).value;
+      valores.push(valor_set);
+      let valor_out = (<HTMLInputElement>document.getElementById("10-"+ano)).value;
+      valores.push(valor_out);
+      let valor_nov = (<HTMLInputElement>document.getElementById("11-"+ano)).value;
+      valores.push(valor_nov);
+      let valor_dez = (<HTMLInputElement>document.getElementById("12-"+ano)).value;
+      valores.push(valor_dez);
+      temp_matrix.push({"ano": ano, "valores": valores});
+    }
+    this.MatrixStore.setMatrix(temp_matrix);
+    window.location.href='/#/contribuicoes/'+this.route.snapshot.params['id']+'/contribuicoes-resultados-complementar/1'
   }
 
   updateMatrix(ano, valores){
@@ -101,6 +143,10 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   voltar(){
     window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
+  }
+
+  onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
   }
 
 }

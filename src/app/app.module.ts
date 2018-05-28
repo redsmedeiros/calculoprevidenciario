@@ -25,6 +25,7 @@ import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes
 import { CalculoAtrasadoService } from './+beneficios/CalculoAtrasado.service';
 import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
+import { MatrixService } from './+contribuicoes/MatrixService.service'
 
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
@@ -72,6 +73,7 @@ type StoreType = {
     MoedaService,
     CalculoRgpsService,
     ContribuicaoComplementarService,
+    MatrixService
   ]
 })
 export class AppModule {

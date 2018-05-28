@@ -5,6 +5,7 @@ import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
 import { ContribuicaoComplementar } from '../+contribuicoes-complementar/ContribuicaoComplementar.model';
+import { MatrixService } from '../MatrixService.service'
 
 @FadeInTop()
 @Component({
@@ -14,8 +15,8 @@ import { ContribuicaoComplementar } from '../+contribuicoes-complementar/Contrib
 export class ContribuicoesResultadosComplementarComponent implements OnInit {
   public numAnos;
   public numMeses;
-  public jurosMensais = 0,005;
-  public jurosAnuais = 1,06;
+  public jurosMensais = 0.005;
+  public jurosAnuais = 1.06;
   public baseAliquota;
 
   public calculoComplementar: any = {};
@@ -24,11 +25,19 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   public competenciaInicial;
   public competenciaFinal;
+
+  public resultadosTableOptions = {
+    paging: false, 
+    ordering: false, 
+    info: false, 
+    searching: false
+  }
   constructor(
   	protected Complementar: ContribuicaoComplementarService,
   	protected router: Router,
     private route: ActivatedRoute,
     private Moeda: MoedaService,
+    protected MatrixStore: MatrixService,
   ) { }
 
   ngOnInit() {
@@ -48,13 +57,23 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.isUpdating = false;
         })
     })
+    console.log(this.MatrixStore.getMatrix());
   }
 
+  updateDatatable(){
+
+  }
 
   getTaxaJuros(){
   	let taxaJuros = ((this.jurosAnuais ** this.numAnos) * (this.jurosMensais * this.numMeses) + 1) - 1;
   	return Math.min(this.baseAliquota * taxaJuros, 0.005);
   }
+
+  getValorBaseRecolhimentoAliquota(){return (this.calculoComplementar.media_salarial*0.2).toFixed(2).replace('.',',');}
+
+  formatTotalContrib(){return (this.calculoComplementar.total_contribuicao).toFixed(2).replace('.',',');}
+
+  formatValorMedioFinal(){return (this.calculoComplementar.media_salarial).toFixed(2).replace('.',',');}
 
   listaSegurados(){
     window.location.href='/#/contribuicoes/contribuicoes-segurados/';
