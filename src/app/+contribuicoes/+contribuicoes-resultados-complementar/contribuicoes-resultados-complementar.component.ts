@@ -26,12 +26,22 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   public competenciaInicial;
   public competenciaFinal;
 
+  public hasDetalhe = false;
+
   public resultadosTableOptions = {
     paging: false, 
     ordering: false, 
     info: false, 
     searching: false
   }
+
+  public detalhesTableOptions = {
+    paging: false, 
+    ordering: false, 
+    info: false, 
+    searching: false
+  }
+
   constructor(
   	protected Complementar: ContribuicaoComplementarService,
   	protected router: Router,
@@ -49,7 +59,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.competenciaInicial = splited[1]+'/'+splited[0];
       splited = this.calculoComplementar.final_atraso.split('-');
       this.competenciaFinal = splited[1]+'/'+splited[0];
-
+      this.baseAliquota = (this.calculoComplementar.media_salarial*0.2).toFixed(2);
+      
       this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
@@ -57,7 +68,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.isUpdating = false;
         })
     })
-    console.log(this.MatrixStore.getMatrix());
+   this.hasDetalhe = !((this.MatrixStore.getMatrix()).length === 0);
+
   }
 
   updateDatatable(){
@@ -69,7 +81,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   	return Math.min(this.baseAliquota * taxaJuros, 0.005);
   }
 
-  getValorBaseRecolhimentoAliquota(){return (this.calculoComplementar.media_salarial*0.2).toFixed(2).replace('.',',');}
+  getValorBaseRecolhimentoAliquota(){return this.baseAliquota.replace('.',',');}
 
   formatTotalContrib(){return (this.calculoComplementar.total_contribuicao).toFixed(2).replace('.',',');}
 
