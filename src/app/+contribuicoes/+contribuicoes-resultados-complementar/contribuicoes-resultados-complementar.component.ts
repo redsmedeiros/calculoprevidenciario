@@ -86,15 +86,14 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.resultadosList = this.getTabelaResultados();
       this.updateResultadosDatatable();
 
-      if(this.hasDetalhe){
-        this.detalhesList = this.getTabelaDetalhes();
-        this.updateDetalhesDatatable();
-      }
-
       this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
           this.updateDatatable();
+          if(this.hasDetalhe){
+            this.detalhesList = this.getTabelaDetalhes();
+            this.updateDetalhesDatatable();
+          }
           this.isUpdating = false;
         })
     })
@@ -102,7 +101,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   }
 
   updateDatatable(){
-    console.log(this.moeda);
+    //console.log(this.moeda);
   }
 
   updateDetalhesDatatable(){
@@ -192,6 +191,30 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
       let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
       dataTabelaDetalhes.push(line);
+    }
+
+    //Ordenação dos dados pelo valor corrigido
+    dataTabelaDetalhes.sort((entry1, entry2) => {
+      if(entry1.valor_corrigido > entry2.valor_corrigido){
+        return 1;
+      }
+      if(entry1.valor_corrigido < entry2.valor_corrigido){
+        return -1;
+      }
+      return 0;
+    });
+
+    //Colore de vermelho os 20% menores valores. 
+    //calculoComplementar.numero_contribuicoes contem o numero equivalente as 80% maiores contribuicoes, 
+    //dividindo por 4 obtem-se os 20% restante
+    let index = 0;
+    let numero_contrib_desconsideradas = Math.floor(this.calculoComplementar.numero_contribuicoes/4);
+    console.log(numero_contrib_desconsideradas);
+    for(index = 0; index < numero_contrib_desconsideradas ; index++){
+      dataTabelaDetalhes[index].mes ='<div style="color:red;">' + dataTabelaDetalhes[index].mes + '</div>'
+      dataTabelaDetalhes[index].contrib_base ='<div style="color:red;">' + dataTabelaDetalhes[index].contrib_base + '</div>'
+      dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
+      dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
     }
     return dataTabelaDetalhes;
   }
