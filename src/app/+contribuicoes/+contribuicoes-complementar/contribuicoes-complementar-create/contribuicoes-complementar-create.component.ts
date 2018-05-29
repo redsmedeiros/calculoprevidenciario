@@ -108,6 +108,40 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     window.location.href='/#/contribuicoes/'+this.route.snapshot.params['id']+'/contribuicoes-resultados-complementar/1'
   }
 
+  generateList(e){
+    let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
+    let data_dict = [];
+    for(let ano of unique_anos){
+      let valor_jan = (<HTMLInputElement>document.getElementById("01-"+ano)).value;
+      data_dict.push("01/"+ano+'-'+valor_jan);
+      let valor_fev = (<HTMLInputElement>document.getElementById("02-"+ano)).value;
+      data_dict.push("02/"+ano+'-'+valor_fev);
+      let valor_mar = (<HTMLInputElement>document.getElementById("03-"+ano)).value;
+      data_dict.push("03/"+ano+'-'+valor_mar);
+      let valor_abr = (<HTMLInputElement>document.getElementById("04-"+ano)).value;
+      data_dict.push("04/"+ano+'-'+valor_abr);
+      let valor_mai = (<HTMLInputElement>document.getElementById("05-"+ano)).value;
+      data_dict.push("05/"+ano+'-'+valor_mai);
+      let valor_jun = (<HTMLInputElement>document.getElementById("06-"+ano)).value;
+      data_dict.push("06/"+ano+'-'+valor_jun);
+      let valor_jul = (<HTMLInputElement>document.getElementById("07-"+ano)).value;
+      data_dict.push("07/"+ano+'-'+valor_jul);
+      let valor_ago = (<HTMLInputElement>document.getElementById("08-"+ano)).value;
+      data_dict.push("08/"+ano+'-'+valor_ago);
+      let valor_set = (<HTMLInputElement>document.getElementById("09-"+ano)).value;
+      data_dict.push("09/"+ano+'-'+valor_set);
+      let valor_out = (<HTMLInputElement>document.getElementById("10-"+ano)).value;
+      data_dict.push("10/"+ano+'-'+valor_out);
+      let valor_nov = (<HTMLInputElement>document.getElementById("11-"+ano)).value;
+      data_dict.push("11/"+ano+'-'+valor_nov);
+      let valor_dez = (<HTMLInputElement>document.getElementById("12-"+ano)).value;
+      data_dict.push("12/"+ano+'-'+valor_dez);
+    }
+
+    this.MatrixStore.setDict(data_dict);
+    window.location.href='/#/contribuicoes/'+this.route.snapshot.params['id']+'/contribuicoes-resultados-complementar/1'
+  }
+
   updateMatrix(ano, valores){
     if(!this.matrizHasValues){
       this.matriz.splice(0,1);

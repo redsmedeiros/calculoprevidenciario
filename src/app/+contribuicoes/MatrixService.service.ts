@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class MatrixService {
   public sharedData;
+  public sharedDict;
 
   constructor(){
     this.sharedData = [];
+    this.sharedDict = [];
   }
 
   setMatrix(data) {
@@ -14,5 +16,13 @@ export class MatrixService {
   
   getMatrix() {
     return this.sharedData;
+  }
+
+  setDict(data) {
+    this.sharedDict = data;
+  }
+  
+  getDict() {
+    return this.sharedDict;
   }
 }

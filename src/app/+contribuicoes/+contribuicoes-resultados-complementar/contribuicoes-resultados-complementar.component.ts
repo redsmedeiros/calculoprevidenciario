@@ -46,11 +46,20 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     ]
   }
 
+  public detalhesList;
   public detalhesTableOptions = {
     paging: false, 
     ordering: false, 
     info: false, 
-    searching: false
+    searching: false,
+    data: this.detalhesList,
+    columns: [
+      {data: 'indice_num'},
+      {data: 'mes'},
+      {data: 'contrib_base'},
+      {data: 'indice'},
+      {data: 'valor_corrigido'},
+    ]
   }
 
   constructor(
@@ -62,6 +71,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.hasDetalhe = !((this.MatrixStore.getDict()).length === 0);
   	this.isUpdating = true;
     this.Complementar.find(this.route.snapshot.params['id_calculo']).then(calculo => {
       this.calculoComplementar = calculo;
@@ -70,10 +80,16 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.competenciaInicial = splited[1]+'/'+splited[0];
       splited = this.calculoComplementar.final_atraso.split('-');
       this.competenciaFinal = splited[1]+'/'+splited[0];
+
       this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
       this.multa = (this.baseAliquota*0.1);
       this.resultadosList = this.getTabelaResultados();
       this.updateResultadosDatatable();
+
+      if(this.hasDetalhe){
+        this.detalhesList = this.getTabelaDetalhes();
+        this.updateDetalhesDatatable();
+      }
 
       this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
         .then((moeda: Moeda[]) => {
@@ -82,11 +98,18 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.isUpdating = false;
         })
     })
-   this.hasDetalhe = !((this.MatrixStore.getMatrix()).length === 0);
+   
   }
 
   updateDatatable(){
+    console.log(this.moeda);
+  }
 
+  updateDetalhesDatatable(){
+    this.detalhesTableOptions = {
+      ...this.detalhesTableOptions,
+      data: this.detalhesList,
+    }
   }
 
   updateResultadosDatatable(){
@@ -121,6 +144,24 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     return (this.calculoComplementar.media_salarial).toFixed(2).replace('.',',');
   }
 
+  getContribBase(dataMes, contrib){
+    let teto = 0;
+    let salario_minimo = 0;
+
+    if(contrib > teto){
+      return teto;
+    }else if(contrib < salario_minimo){
+      return salario_minimo;
+    }else if(salario_minimo < contrib && contrib < teto){
+      return contrib;
+    }
+
+  }
+
+  getIndice(dataMes){
+    let indice = 1;
+    return indice;
+  }
 
   //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
   getDifferenceInYears(dateString){
@@ -129,6 +170,30 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let duration = moment.duration(today.diff(pastDate));
     let years = duration.asYears();
     return Math.floor(years);
+  }
+
+  getTabelaDetalhes(){
+    let data_array = this.MatrixStore.getDict();
+    let indice_num = 0;
+    let dataTabelaDetalhes = []
+    for(let data of data_array){
+      let splitted = data.split('-');
+      let mes = splitted[0];
+      let contrib = splitted[1];
+      
+      if(contrib == 0 || contrib == ''){
+        continue;
+      }
+
+      indice_num++;
+      let indice = this.getIndice(mes);
+      let contrib_base = this.getContribBase(mes, contrib);
+      let valor_corrigido = contrib_base * indice;
+
+      let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
+      dataTabelaDetalhes.push(line);
+    }
+    return dataTabelaDetalhes;
   }
 
   getTabelaResultados(){
