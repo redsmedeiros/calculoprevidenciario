@@ -2,20 +2,14 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class MatrixService {
-  public sharedData;
+
   public sharedDict;
+  public sharedTabelaDetalhes;
+  public sharedTabelaResultados;
 
   constructor(){
-    this.sharedData = [];
     this.sharedDict = [];
-  }
-
-  setMatrix(data) {
-    this.sharedData = data;
-  }
-  
-  getMatrix() {
-    return this.sharedData;
+    this.sharedTabelaDetalhes = [];
   }
 
   setDict(data) {
@@ -24,5 +18,21 @@ export class MatrixService {
   
   getDict() {
     return this.sharedDict;
+  }
+
+  setTabelaDetalhes(data) {
+    this.sharedTabelaDetalhes = data;
+  }
+  
+  getTabelaDetalhes() {
+    return this.sharedTabelaDetalhes;
+  }
+
+  setTabelaResultados(data) {
+    this.sharedTabelaResultados = data;
+  }
+  
+  getTabelaResultados() {
+    return this.sharedTabelaResultados;
   }
 }
