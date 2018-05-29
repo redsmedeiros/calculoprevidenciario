@@ -83,7 +83,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
       this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
       this.multa = (this.baseAliquota*0.1);
-      this.resultadosList = this.getTabelaResultados();
+      this.resultadosList = this.MatrixStore.getTabelaResultados();
       this.updateResultadosDatatable();
 
       this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
@@ -91,7 +91,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.moeda = moeda;
           this.updateDatatable();
           if(this.hasDetalhe){
-            this.detalhesList = this.getTabelaDetalhes();
+            this.detalhesList = this.MatrixStore.getTabelaDetalhes();
             this.updateDetalhesDatatable();
           }
           this.isUpdating = false;

@@ -2,7 +2,7 @@
         <app-contribuicoes-complementar-form
             [formData] = "form"
             [errors]="Errors"
-            (onSubmit)="submit($event)"
+            (onSubmit)="preencher($event)"
           ></app-contribuicoes-complementar-form>
 </article>
 <article class="col-sm-12 col-md-12 col-lg-12">
@@ -86,7 +86,7 @@
                     <i class="fa fa-backward"></i>
                   </span> Voltar
                 </button>
-                <button (click)="generateList($event)" type="submit" class="btn btn-labeled btn-success">
+                <button (click)="createCalculo($event)" type="submit" class="btn btn-labeled btn-success">
                   <span class="btn-label">
                     <i class="fa fa-save"></i>
                   </span> Enviar
