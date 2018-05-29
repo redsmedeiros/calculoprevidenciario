@@ -38,7 +38,7 @@
                 <p><b>Detalhamento do cálculo disponível apenas no ato de geração do valor.</b></p>
               </div>
             </div>
-            <div class="widget-body no-padding" >
+            <div class="widget-body no-padding" *ngIf="hasDetalhe" >
               <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
@@ -51,6 +51,7 @@
                   </tr>
                 </thead>
               </sa-datatable>
+              <small class="text-danger"><b>Valores em vermelho correspondem a contribuições descartadas.</b></small>
             </div> 
           </div>
         </sa-widget>
