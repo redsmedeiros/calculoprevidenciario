@@ -83,7 +83,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   			this.errors.add({"competenciaFinal":["Insira uma data após 01/1970"]});
   		}
   		if(dateCompetenciaFinal >= this.dataDecadente){
-  			this.errors.add({"competenciaFinal":["Insira uma data posterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
+  			this.errors.add({"competenciaFinal":["Insira uma data anterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
   		}
   		if(dateCompetenciaFinal <= dateCompetenciaInicial){
   			this.errors.add({"competenciaFinal":["Insira uma data posterior a data inicial"]});
