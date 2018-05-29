@@ -11,10 +11,10 @@ export class ContribuicaoComplementar extends Model {
 	contribuicao_basica_inicial: '',
 	contribuicao_basica_final: '',
 	salario: '',
-	total_contribuicao: '',
-	numero_contribuicoes: '',
-	media_salarial: '',
-	contribuicao_calculada: '',
+	total_contribuicao: 0,
+	numero_contribuicoes: 0,
+	media_salarial: 0,
+	contribuicao_calculada: 0,
 	data_calculo: ''
   };
 
@@ -25,10 +25,10 @@ export class ContribuicaoComplementar extends Model {
   public contribuicao_basica_inicial;
   public contribuicao_basica_final;
   public salario;
-  public total_contribuicao;
-  public numero_contribuicoes;
-  public media_salarial;
-  public contribuicao_calculada;
+  public total_contribuicao: number;
+  public numero_contribuicoes: number;
+  public media_salarial: number;
+  public contribuicao_calculada: number;
   public data_calculo;
   public actions = `
     <a href="#/contribuicoes/${this.id_segurado}/novo-jurisprudencial/${this.id}" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
