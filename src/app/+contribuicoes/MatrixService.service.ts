@@ -1,23 +1,13 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
+//Serviço que armazena a Tabela de Detalhamento do calculo da Lei complementar.
 export class MatrixService {
 
-  public sharedDict;
   public sharedTabelaDetalhes;
-  public sharedTabelaResultados;
 
   constructor(){
-    this.sharedDict = [];
     this.sharedTabelaDetalhes = [];
-  }
-
-  setDict(data) {
-    this.sharedDict = data;
-  }
-  
-  getDict() {
-    return this.sharedDict;
   }
 
   setTabelaDetalhes(data) {
@@ -28,11 +18,4 @@ export class MatrixService {
     return this.sharedTabelaDetalhes;
   }
 
-  setTabelaResultados(data) {
-    this.sharedTabelaResultados = data;
-  }
-  
-  getTabelaResultados() {
-    return this.sharedTabelaResultados;
-  }
 }
