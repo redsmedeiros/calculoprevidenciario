@@ -12,6 +12,11 @@ export const contribuicoesComplementarRoutes: Routes = [
 {
     path: ':id/:id_calculo/destroy',
     component: ContribuicoesComplementarDestroyComponent
-}];
+},
+{
+    path: ':id/:id_calculo/edit',
+    component: ContribuicoesComplementarEditComponent
+}
+];
 
 export const contribuicoesComplementarRouting = RouterModule.forChild(contribuicoesComplementarRoutes);

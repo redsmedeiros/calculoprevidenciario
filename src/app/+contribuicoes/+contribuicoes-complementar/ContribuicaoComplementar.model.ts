@@ -31,7 +31,7 @@ export class ContribuicaoComplementar extends Model {
   public contribuicao_calculada: number;
   public data_calculo;
   public actions = `
-    <a href="#/contribuicoes/${this.id_segurado}/novo-jurisprudencial/${this.id}" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
     <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
     <a href="#/contribuicoes/${this.id_segurado}/contribuicoes-resultados-complementar/${this.id}" class="action-edit"> <i class="fa fa-search"></i> </a>
   `;
