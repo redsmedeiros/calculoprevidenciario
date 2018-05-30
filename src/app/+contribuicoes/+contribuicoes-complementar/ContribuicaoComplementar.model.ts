@@ -5,7 +5,7 @@ export class ContribuicaoComplementar extends Model {
   static url = 'http://localhost:8000/contribuicoes/calculos/complementar';
   static form = {
   	id: '',
-  	id_segurado: '',
+  	id_segurado: 0,
 	inicio_atraso: '',
 	final_atraso: '',
 	contribuicao_basica_inicial: '',
