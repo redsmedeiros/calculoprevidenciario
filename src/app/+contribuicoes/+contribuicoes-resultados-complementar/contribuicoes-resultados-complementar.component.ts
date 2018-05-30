@@ -14,12 +14,8 @@ import * as moment from 'moment'
   templateUrl: './contribuicoes-resultados-complementar.component.html',
 })
 export class ContribuicoesResultadosComplementarComponent implements OnInit {
-  public numAnos;
-  public numMeses;
-  public jurosMensais = 0.005;
-  public jurosAnuais = 1.06;
   public baseAliquota = 0;
-  public multa = 0;
+
 
   public calculoComplementar: any = {};
   public moeda: Moeda[];
@@ -71,7 +67,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.hasDetalhe = !((this.MatrixStore.getDict()).length === 0);
+    this.hasDetalhe = !((this.MatrixStore.getTabelaDetalhes()).length === 0);
   	this.isUpdating = true;
     this.Complementar.find(this.route.snapshot.params['id_calculo']).then(calculo => {
       this.calculoComplementar = calculo;
@@ -82,146 +78,29 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.competenciaFinal = splited[1]+'/'+splited[0];
 
       this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
-      this.multa = (this.baseAliquota*0.1);
-      this.resultadosList = this.MatrixStore.getTabelaResultados();
+
+      this.resultadosList = this.generateTabelaResultados();
       this.updateResultadosDatatable();
+
+      if(this.hasDetalhe){
+            this.detalhesList = this.MatrixStore.getTabelaDetalhes();
+            this.updateDetalhesDatatable();
+      }
 
       this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
-          this.updateDatatable();
-          if(this.hasDetalhe){
-            this.detalhesList = this.MatrixStore.getTabelaDetalhes();
-            this.updateDetalhesDatatable();
-          }
           this.isUpdating = false;
         })
     })
    
   }
 
-  updateDatatable(){
-    //console.log(this.moeda);
-  }
-
-  updateDetalhesDatatable(){
-    this.detalhesTableOptions = {
-      ...this.detalhesTableOptions,
-      data: this.detalhesList,
-    }
-  }
-
-  updateResultadosDatatable(){
-    this.resultadosTableOptions = {
-      ...this.resultadosTableOptions,
-      data: this.resultadosList,
-    }
-  }
-
-  getTaxaJuros(){
-  	let taxaJuros = ((this.jurosAnuais ** this.numAnos) * (this.jurosMensais * this.numMeses) + 1) - 1;
-  	return Math.min(this.baseAliquota * taxaJuros, 0.005);
-  }
-
-  getValorContribuicao(){
-    return 'R$ ' + this.getBaseAliquota();
-  }
-
-  getMulta(){
-    return 'R$ ' + ((this.multa.toFixed(2)).replace('.',','));
-  }
-
-  getBaseAliquota(){
-    return (this.baseAliquota.toFixed(2)).replace('.',',');
-  }
-
-  formatTotalContrib(){
-    return (this.calculoComplementar.total_contribuicao).toFixed(2).replace('.',',');
-  }
-
-  formatValorMedioFinal(){
-    return (this.calculoComplementar.media_salarial).toFixed(2).replace('.',',');
-  }
-
-  getContribBase(dataMes, contrib){
-    let teto = 0;
-    let salario_minimo = 0;
-
-    if(contrib > teto){
-      return teto;
-    }else if(contrib < salario_minimo){
-      return salario_minimo;
-    }else if(salario_minimo < contrib && contrib < teto){
-      return contrib;
-    }
-
-  }
-
-  getIndice(dataMes){
-    let indice = 1;
-    return indice;
-  }
-
-  //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
-  getDifferenceInYears(dateString){
-    let today = moment();
-    let pastDate = moment(dateString);
-    let duration = moment.duration(today.diff(pastDate));
-    let years = duration.asYears();
-    return Math.floor(years);
-  }
-
-  getTabelaDetalhes(){
-    let data_array = this.MatrixStore.getDict();
-    let indice_num = 0;
-    let dataTabelaDetalhes = []
-    for(let data of data_array){
-      let splitted = data.split('-');
-      let mes = splitted[0];
-      let contrib = splitted[1];
-      
-      if(contrib == 0 || contrib == ''){
-        continue;
-      }
-
-      indice_num++;
-      let indice = this.getIndice(mes);
-      let contrib_base = this.getContribBase(mes, contrib);
-      let valor_corrigido = contrib_base * indice;
-
-      let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
-      dataTabelaDetalhes.push(line);
-    }
-
-    //Ordenação dos dados pelo valor corrigido
-    dataTabelaDetalhes.sort((entry1, entry2) => {
-      if(entry1.valor_corrigido > entry2.valor_corrigido){
-        return 1;
-      }
-      if(entry1.valor_corrigido < entry2.valor_corrigido){
-        return -1;
-      }
-      return 0;
-    });
-
-    //Colore de vermelho os 20% menores valores. 
-    //calculoComplementar.numero_contribuicoes contem o numero equivalente as 80% maiores contribuicoes, 
-    //dividindo por 4 obtem-se os 20% restante
-    let index = 0;
-    let numero_contrib_desconsideradas = Math.floor(this.calculoComplementar.numero_contribuicoes/4);
-    console.log(numero_contrib_desconsideradas);
-    for(index = 0; index < numero_contrib_desconsideradas ; index++){
-      dataTabelaDetalhes[index].mes ='<div style="color:red;">' + dataTabelaDetalhes[index].mes + '</div>'
-      dataTabelaDetalhes[index].contrib_base ='<div style="color:red;">' + dataTabelaDetalhes[index].contrib_base + '</div>'
-      dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
-      dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
-    }
-    return dataTabelaDetalhes;
-  }
-
-  getTabelaResultados(){
-    let competencias = this.monthAndYear(this.competenciaInicial, this.competenciaFinal);
+  generateTabelaResultados(){
+    let competencias = this.monthAndYear( this.competenciaInicial,  this.competenciaFinal);
     let dataTabelaResultados = [];
+    
+    //Variaveis para a linha de total
     let total_contrib = 0.0;
     let total_juros = 0.0;
     let total_multa = 0.0;
@@ -229,25 +108,32 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     for(let competencia of competencias){
       let splited = competencia.split('-');
+
       competencia = splited[1] + '/' + splited[0];
       let valor_contribuicao = this.getValorContribuicao();
-      let juros = 'R$ 0,00';
+      let juros = this.getTaxaJuros(competencia);
       let multa = this.getMulta();
-      let total = 'R$ 0,00';
-      let line = {competencia: competencia, valor_contribuicao: valor_contribuicao, juros: juros, multa: multa, total: total};
+      let total = (this.getBaseAliquota()*1.1) + juros;
+
+      let line = {competencia: competencia, 
+                  valor_contribuicao: this.formatMoney(valor_contribuicao), 
+                  juros: this.formatMoney(juros), 
+                  multa: this.formatMoney(multa), 
+                  total: this.formatMoney(total)};
+
       dataTabelaResultados.push(line);
 
       //calculos dos totais
-      total_contrib += parseFloat((valor_contribuicao.split(' ')[1]).replace(',','.'));
-      total_juros += parseFloat((juros.split(' ')[1]).replace(',','.'));
-      total_multa += parseFloat((multa.split(' ')[1]).replace(',','.'));
-      total_total += parseFloat((total.split(' ')[1]).replace(',','.'));
+      total_contrib += valor_contribuicao;
+      total_juros += juros;
+      total_multa += multa;
+      total_total += total;
     }
     let last_line = {competencia: '<b>Total</b>', 
-                     valor_contribuicao: '<b>R$ '+ (total_contrib).toFixed(2).replace('.',',') + '</b>', 
-                     juros: '<b>R$ ' + (total_juros).toFixed(2).replace('.',',') + '</b>', 
-                     multa: '<b>R$ ' + (total_multa).toFixed(2).replace('.',',') + '</b>', 
-                     total: '<b>R$ ' + (total_total).toFixed(2).replace('.',',') + '</b>'
+                     valor_contribuicao: '<b>'+ this.formatMoney(total_contrib) + '</b>', 
+                     juros: '<b>' + this.formatMoney(total_juros) + '</b>', 
+                     multa: '<b>' + this.formatMoney(total_multa) + '</b>', 
+                     total: '<b>' + this.formatMoney(total_total) + '</b>'
                     };
     dataTabelaResultados.push(last_line);
     return dataTabelaResultados;
@@ -270,6 +156,75 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
        dateStart.add(1,'month');
     }
     return timeValues;
+  }
+
+  getTaxaJuros(dataReferencia){
+    let jurosMensais = 0.005;
+    let jurosAnuais = 1.06;
+    let numAnos = this.getDifferenceInYears(dataReferencia);
+    let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
+    let taxaJuros = ((jurosAnuais ** numAnos) * (jurosMensais * numMeses) + 1) - 1;
+    taxaJuros = Math.min(taxaJuros, 0.005)
+    let totalJuros = this.getBaseAliquota() * taxaJuros;
+
+    return totalJuros;
+  }
+
+  getValorContribuicao(){
+    return this.getBaseAliquota();
+  }
+
+  getMulta(){
+    return this.getBaseAliquota()*0.1;
+  }
+
+  getBaseAliquota(){
+    return this.baseAliquota;
+  }
+
+  updateDetalhesDatatable(){
+    this.detalhesTableOptions = {
+      ...this.detalhesTableOptions,
+      data: this.detalhesList,
+    }
+  }
+
+  updateResultadosDatatable(){
+    this.resultadosTableOptions = {
+      ...this.resultadosTableOptions,
+      data: this.resultadosList,
+    }
+  }
+
+  //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
+  getDifferenceInYears(dateString){
+    let splitted = dateString.split('/');
+    let today = moment();
+    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let duration = moment.duration(today.diff(pastDate));
+    let years = duration.asYears();
+    return Math.floor(years);
+  }
+
+  //Retorna a diferença em meses completos entre as datas passadas como parametro.
+  //Caso só uma data seja passada, retorna a diferença entre ela e a data atual
+  getDifferenceInMonths(dateString, dateString2=''){
+    let splitted = dateString.split('/');
+    let recent;
+    if(dateString2 == ''){
+      recent = moment();
+    }else{
+      let splitted = dateString2.split('/');
+      recent = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    }
+    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let duration = moment.duration(recent.diff(pastDate));
+    let months = duration.asMonths();
+    return Math.floor(months);
+  }
+
+  formatMoney(data){
+    return 'R$ ' + (data.toFixed(2)).replace('.',',');
   }
 
   listaSegurados(){

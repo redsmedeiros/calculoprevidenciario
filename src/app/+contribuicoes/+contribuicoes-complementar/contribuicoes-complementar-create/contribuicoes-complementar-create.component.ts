@@ -20,12 +20,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
-  public numAnos;
-  public numMeses;
-  public jurosMensais = 0.005;
-  public jurosAnuais = 1.06;
+  public idSegurado;
+
   public baseAliquota = 0;
-  public multa = 0;
 
   public form = {...ContribuicaoModel.form};
 
@@ -55,11 +52,18 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    let today = moment();
+    this.Moeda.getByDateRange('01/' + '07/1994', '01/' + (today.month()+1) + '/'+ today.year())
+        .then((moeda: Moeda[]) => {
+          this.moeda = moeda;
+          console.log(moeda);
+        })
   }
 
   preencher(data){
+    this.idSegurado = this.route.snapshot.params['id'];
   	let monthList = this.monthAndYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
-    this.form.numero_contribuicoes = Math.floor(monthList.length*0.8);
+    this.form.numero_contribuicoes = monthList.length*0.8;
 
   	let ano = monthList[0].split('-')[0];
   	let valores = [0,0,0,0,0,0,0,0,0,0,0];
@@ -78,7 +82,35 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   	this.updateMatrix(+ano, valores);
   }
 
-  generateList(e){
+  createCalculo(e){
+    e.preventDefault();
+    this.generateTabelaDetalhes();
+    this.form.contribuicao_calculada = this.calculateContribuicao();
+
+    let novoCalculo = new ContribuicaoModel();
+    novoCalculo.id_segurado = this.form.id_segurado;
+    novoCalculo.inicio_atraso = "01/" + this.form.inicio_atraso;
+    novoCalculo.final_atraso = "01/"+ this.form.final_atraso
+    novoCalculo.contribuicao_basica_inicial = "01/" + this.form.contribuicao_basica_inicial
+    novoCalculo.contribuicao_basica_final = "01/" + this.form.contribuicao_basica_final
+    novoCalculo.salario = 0;
+    novoCalculo.total_contribuicao = this.form.total_contribuicao;
+    novoCalculo.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
+    novoCalculo.media_salarial = this.form.media_salarial;
+    novoCalculo.contribuicao_calculada = this.form.contribuicao_calculada;
+
+    this.Calculo.save(novoCalculo).then((data:ContribuicaoModel) => {
+          this.Calculo.get().then(() =>{
+          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+              window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
+            });
+          });
+        }).catch(error => {
+          console.log(error);
+        });
+  }
+
+  getMatrixData(){
     let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
     let data_dict = [];
     for(let ano of unique_anos){
@@ -107,27 +139,21 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       let valor_dez = (<HTMLInputElement>document.getElementById("12-"+ano)).value;
       data_dict.push("12/"+ano+'-'+valor_dez);
     }
-    this.MatrixStore.setDict(data_dict);
-    //window.location.href='/#/contribuicoes/'+this.route.snapshot.params['id']+'/contribuicoes-resultados-complementar/1'
+    return data_dict;
   }
 
-  createCalculo(e){
-    this.generateList(e);
-    this.generateTabelaDetalhes();
-    this.generateTabelaResultados();
-    console.log(this.form);
-  }
-  
+
   //Tabela de detalhes gerada no momento no calculo
   generateTabelaDetalhes(){
-    let data_array = this.MatrixStore.getDict();
+    let data_array = this.getMatrixData();
+    console.log(data_array);
     let indice_num = 0;
     let dataTabelaDetalhes = []
     for(let data of data_array){
       let splitted = data.split('-');
       let mes = splitted[0];
       let contrib = splitted[1];
-      
+  
       if(contrib == 0 || contrib == ''){
         continue;
       }
@@ -140,7 +166,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
       dataTabelaDetalhes.push(line);
     }
-
+    console.log(dataTabelaDetalhes)
     //Ordenação dos dados pelo valor corrigido
     dataTabelaDetalhes.sort((entry1, entry2) => {
       if(entry1.valor_corrigido > entry2.valor_corrigido){
@@ -164,49 +190,72 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
       dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
     }
-    
-    for(index = index; index < Math.floor((this.form.numero_contribuicoes)/0.8); index++){
+    for(index = index; index < (this.form.numero_contribuicoes/0.8); index++){
       this.form.total_contribuicao += dataTabelaDetalhes[index].valor_corrigido;
     }
-    this.form.media_salarial = this.form.total_contribuicao/this.form.numero_contribuicoes;
+    this.form.media_salarial = this.form.total_contribuicao/Math.floor(this.form.numero_contribuicoes);
+    this.baseAliquota = this.form.media_salarial*0.2;
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
   }
 
-  generateTabelaResultados(){
+  //Valor da contribuição base para cada mês
+  getContribBase(dataMes, contrib){
+    let teto = this.getTeto(dataMes);
+    let salario_minimo = this.getSalarioMinimo(dataMes);
+    if(contrib > teto){
+      return teto;
+    }else if(contrib < salario_minimo){
+      return salario_minimo;
+    }else if(salario_minimo < contrib && contrib < teto){
+      return contrib;
+    }
+  }
+
+  getSalarioMinimo(dataString){
+    let diff = this.getDifferenceInMonths('07/1994', dataString);
+    return this.moeda[diff+5].salario_minimo;
+  }
+
+  getTeto(dataString){
+    let diff = this.getDifferenceInMonths('07/1994', dataString);
+    return this.moeda[diff+5].teto;
+  }
+  //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
+  getIndice(dataString){
+    let diff = this.getDifferenceInMonths('07/1994', dataString);
+    return this.moeda[diff+5].fator;
+  }
+
+  calculateContribuicao(){
     let competencias = this.monthAndYear(this.form.inicio_atraso, this.form.final_atraso);
-    let dataTabelaResultados = [];
-    
-    //Variaveis para a linha de total
-    let total_contrib = 0.0;
-    let total_juros = 0.0;
-    let total_multa = 0.0;
-    let total_total = 0.0;
+    let contrib_calculada = 0.0;
 
     for(let competencia of competencias){
       let splited = competencia.split('-');
-      competencia = splited[1] + '/' + splited[0];
-      let valor_contribuicao = this.getValorContribuicao();
-      let juros = 'R$ 0,00';
-      let multa = this.getMulta();
-      let total = 'R$ 0,00';
-      let line = {competencia: competencia, valor_contribuicao: valor_contribuicao, juros: juros, multa: multa, total: total};
-      dataTabelaResultados.push(line);
 
-      //calculos dos totais
-      total_contrib += parseFloat((valor_contribuicao.split(' ')[1]).replace(',','.'));
-      total_juros += parseFloat((juros.split(' ')[1]).replace(',','.'));
-      total_multa += parseFloat((multa.split(' ')[1]).replace(',','.'));
-      total_total += parseFloat((total.split(' ')[1]).replace(',','.'));
+      competencia = splited[1] + '/' + splited[0];
+      let juros = this.getTaxaJuros(competencia);
+      let total = (this.getBaseAliquota()*1.1) + juros;
+
+      contrib_calculada += total;
     }
-    let last_line = {competencia: '<b>Total</b>', 
-                     valor_contribuicao: '<b>R$ '+ (total_contrib).toFixed(2).replace('.',',') + '</b>', 
-                     juros: '<b>R$ ' + (total_juros).toFixed(2).replace('.',',') + '</b>', 
-                     multa: '<b>R$ ' + (total_multa).toFixed(2).replace('.',',') + '</b>', 
-                     total: '<b>R$ ' + (total_total).toFixed(2).replace('.',',') + '</b>'
-                    };
-    dataTabelaResultados.push(last_line);
-    this.form.contribuicao_calculada = total_total;
-    this.MatrixStore.setTabelaResultados(dataTabelaResultados);
+    return contrib_calculada;
+  }
+
+  getBaseAliquota(){
+    return this.baseAliquota;
+  }
+
+  getTaxaJuros(dataReferencia){
+    let jurosMensais = 0.005;
+    let jurosAnuais = 1.06;
+    let numAnos = this.getDifferenceInYears(dataReferencia);
+    let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
+    let taxaJuros = ((jurosAnuais ** numAnos) * (jurosMensais * numMeses) + 1) - 1;
+    taxaJuros = Math.min(taxaJuros, 0.005)
+    let totalJuros = this.getBaseAliquota() * taxaJuros;
+
+    return totalJuros;
   }
 
   updateMatrix(ano, valores){
@@ -242,41 +291,39 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 	  return timeValues;
   }
 
-  //Valor da contribuição base para cada mês
-  getContribBase(dataMes, contrib){
-    let teto = 0;
-    let salario_minimo = 0;
+  //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
+  getDifferenceInYears(dateString){
+    let splitted = dateString.split('/');
+    let today = moment();
+    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let duration = moment.duration(today.diff(pastDate));
+    let years = duration.asYears();
+    return Math.floor(years);
+  }
 
-    if(contrib > teto){
-      return teto;
-    }else if(contrib < salario_minimo){
-      return salario_minimo;
-    }else if(salario_minimo < contrib && contrib < teto){
-      return contrib;
+  //Retorna a diferença em meses completos entre a data passada como parametro e a data atual
+  getDifferenceInMonths(dateString, dateString2=''){
+    let splitted = dateString.split('/');
+    let recent;
+    if(dateString2 == ''){
+      recent = moment();
+    }else{
+      let splitted = dateString2.split('/');
+      recent = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
     }
-
+    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let duration = moment.duration(recent.diff(pastDate));
+    let months = duration.asMonths();
+    return Math.floor(months);
   }
 
-  //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
-  getIndice(dataMes){
-    let indice = 1;
-    return indice;
-  }
-
-  getValorContribuicao(){
-    return 'R$ ' + this.getBaseAliquota();
-  }
-
-  getMulta(){
-    return 'R$ ' + ((this.multa.toFixed(2)).replace('.',','));
-  }
-
-  getBaseAliquota(){
-    return (this.baseAliquota.toFixed(2)).replace('.',',');
+  //Recebe um valor float e retorna com duas casas decimais, virgula como separador e prefixo R$
+  formatMoney(data){
+    return 'R$ ' + (data.toFixed(2)).replace('.',',');
   }
 
   voltar(){
-    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
+    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.idSegurado;
   }
 
   onlyUnique(value, index, self) { 
