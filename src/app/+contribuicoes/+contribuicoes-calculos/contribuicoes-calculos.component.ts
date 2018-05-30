@@ -43,8 +43,9 @@ export class ContribuicoesCalculosComponent implements OnInit {
     ] };
 
   public complementarTableOptions = {
-    colReorder: true,
+    colReorder: false,
     data: this.complementarList,
+    ordering: false,
     columns: [
       {data: 'actions'},
       {data: 'id'},
@@ -68,8 +69,14 @@ export class ContribuicoesCalculosComponent implements OnInit {
        render: (data) => {
           return this.formatReceivedMonthAndYear(data);
        }},
-      {data: 'media_salarial'},
-      {data: 'contribuicao_calculada'},
+      {data: 'media_salarial',
+       render: (data) => {
+          return this.formatMoney(data);
+       }},
+      {data: 'contribuicao_calculada',
+       render: (data) => {
+          return this.formatMoney(data);
+       }},
     ] };
   
 
@@ -151,6 +158,9 @@ export class ContribuicoesCalculosComponent implements OnInit {
            this.formatReceivedDate(inputDateTime.substring(0, 10));
   }
 
+  formatMoney(data){
+    return 'R$'+(data.toFixed(2)).replace('.',',');
+  }
 
   getDocumentType(id_documento) {
     switch (id_documento) {

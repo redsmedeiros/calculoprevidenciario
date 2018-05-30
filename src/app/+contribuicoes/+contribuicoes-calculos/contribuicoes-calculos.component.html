@@ -166,26 +166,9 @@
 
                     </tab>
                     <tab [active]="state.tabs.selectedTab == 'hr2'">
-                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº.
+                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados abaixo foram realizados com base na recente Lei Complementar nº.
                         128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.</div>
-                        <div class="widget-body no-padding">
-                        <sa-datatable *ngIf="!isUpdating" [options]="complementarTableOptions" paginationLength="false" pagination="false" tableClass="table table-striped table-bordered table-hover" width="100%">
-                          <thead>
-                            <tr>
-                              <th>Ações</th>
-                              <th>Número</th>
-                              <th>Data do Cálculo</th>
-                              <th>Contribuição Inicial</th>
-                              <th>Contribuição Final</th>
-                              <th>Contribuição Inicial</th>
-                              <th>Contribuição Final</th>
-                              <th>Salário de Contribuição</th>
-                              <th>Valor Final Corrigido</th>
-                            </tr>
-                          </thead>
-                        </sa-datatable>
-                      </div>
-                      <!-- <app-contribuicoes-complementar-index *ngIf="!isUpdating"  [list]="complementarList" [datatableOptions]="complementarTableOptions"></app-contribuicoes-complementar-index> -->
+                      <app-contribuicoes-complementar-index *ngIf="!isUpdating"  [datatableOptions]="complementarTableOptions"></app-contribuicoes-complementar-index>
                     </tab>
                   </tabset>
                 </div>

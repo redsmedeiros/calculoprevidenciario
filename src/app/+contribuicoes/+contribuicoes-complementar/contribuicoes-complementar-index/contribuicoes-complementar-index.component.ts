@@ -12,7 +12,6 @@ import { ErrorService } from '../../../services/error.service';
   ],
 })
 export class ContribuicoesComplementarIndexComponent {
-  @Input() list;
   @Input() datatableOptions;
 
   public styleTheme = 'style-0';

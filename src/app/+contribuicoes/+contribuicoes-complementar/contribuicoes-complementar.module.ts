@@ -32,6 +32,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TextMaskModule,
     CurrencyMaskModule,
   ],
+  exports: [ContribuicoesComplementarIndexComponent],
   declarations: [ContribuicoesComplementarComponent, ContribuicoesComplementarCreateComponent, ContribuicoesComplementarDestroyComponent, ContribuicoesComplementarEditComponent, ContribuicoesComplementarFormComponent, ContribuicoesComplementarIndexComponent],
   providers: [
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
