@@ -18,7 +18,7 @@ export class ContribuicaoComplementar extends Model {
 	data_calculo: ''
   };
 
-  public id: number;
+  public id;
   public id_segurado: number;
   public inicio_atraso;
   public final_atraso;

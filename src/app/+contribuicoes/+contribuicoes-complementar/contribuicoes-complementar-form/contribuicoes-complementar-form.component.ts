@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../../services/error.service';
+import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import swal from 'sweetalert';
 
 
@@ -26,10 +27,14 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public dataMinima = new Date(1970,0,1);
   public data94 = new Date(1994, 6, 31);
 
+  public idCalculo='';
+  public calculo;
+
   @Input() formData;
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
   constructor(
+    protected Calculo: ContribuicaoComplementarService,
   	protected router: Router,
     private route: ActivatedRoute,
     ) { }
@@ -37,21 +42,42 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   ngOnInit(){
   	let today = new Date();
   	this.dataDecadente = new Date(today.getFullYear()-5, today.getMonth(), 1); 	
+
+      this.idCalculo = this.route.snapshot.params['id_calculo'];
+      if(this.idCalculo != undefined){
+        this.Calculo.find(this.idCalculo)
+                  .then(calculo => {
+                        this.calculo = calculo;
+                        
+                        let splited = this.calculo.contribuicao_basica_inicial.split('-');
+                        this.contribuicaoDe = splited[1] + '/' + splited[0];
+                        splited = this.calculo.contribuicao_basica_final.split('-');
+                        this.contribuicaoAte = splited[1] + '/' + splited[0];
+                        splited = this.calculo.inicio_atraso.split('-');
+                        this.competenciaInicial = splited[1] + '/' + splited[0];
+                        splited = this.calculo.final_atraso.split('-');
+                        this.competenciaFinal = splited[1] + '/' + splited[0];
+                        this.salarioContribuicao = this.calculo.salario;
+                        this.submit();
+                     });
+    }
   }
-  submit(e){
-  	e.preventDefault();
+  submit(){
   	this.errors.clear();
   	this.validateInputs();
   	if(!this.errors.empty()){
   		swal('Erro', 'Confira os dados digitados','error');
   	}else{
+      if(this.idCalculo != ''){
+        this.formData.id = this.idCalculo;
+      }
   		this.formData.id_segurado = this.route.snapshot.params['id'];
   		this.formData.inicio_atraso = this.competenciaInicial;
   		this.formData.final_atraso = this.competenciaFinal;
   		this.formData.contribuicao_basica_inicial = this.contribuicaoDe;
-		this.formData.contribuicao_basica_final = this.contribuicaoAte;
-		this.formData.salario = this.salarioContribuicao;
-		this.onSubmit.emit(this.formData);
+		  this.formData.contribuicao_basica_final = this.contribuicaoAte;
+		  this.formData.salario = this.salarioContribuicao;
+		  this.onSubmit.emit(this.formData);
   	}
   }
 

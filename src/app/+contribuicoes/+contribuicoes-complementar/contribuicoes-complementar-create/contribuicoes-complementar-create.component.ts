@@ -26,6 +26,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   public form = {...ContribuicaoModel.form};
 
+
   matriz = [{
       "ano": 0,
       "valores": []
@@ -52,11 +53,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+
     let today = moment();
     this.Moeda.getByDateRange('01/' + '07/1994', '01/' + (today.month()+1) + '/'+ today.year())
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
-          console.log(moeda);
         })
   }
 
@@ -93,21 +94,34 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.final_atraso = "01/"+ this.form.final_atraso
     novoCalculo.contribuicao_basica_inicial = "01/" + this.form.contribuicao_basica_inicial
     novoCalculo.contribuicao_basica_final = "01/" + this.form.contribuicao_basica_final
-    novoCalculo.salario = 0;
+    novoCalculo.salario = this.form.salario;
     novoCalculo.total_contribuicao = this.form.total_contribuicao;
     novoCalculo.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
     novoCalculo.media_salarial = this.form.media_salarial;
     novoCalculo.contribuicao_calculada = this.form.contribuicao_calculada;
 
-    this.Calculo.save(novoCalculo).then((data:ContribuicaoModel) => {
-          this.Calculo.get().then(() =>{
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
-              window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
-            });
-          });
-        }).catch(error => {
-          console.log(error);
-        });
+    if(this.form.id == undefined){
+        this.Calculo.save(novoCalculo).then((data:ContribuicaoModel) => {
+                  this.Calculo.get().then(() =>{
+                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                      window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
+                    });
+                  });
+                }).catch(error => {
+                  console.log(error);
+                });
+    }else{
+      novoCalculo.id = this.form.id;
+      this.Calculo.update(novoCalculo).then((data:ContribuicaoModel) => {
+                  this.Calculo.get().then(() =>{
+                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                      window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
+                    });
+                  });
+                }).catch(error => {
+                  console.log(error);
+                });
+    }
   }
 
   getMatrixData(){
@@ -146,7 +160,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   //Tabela de detalhes gerada no momento no calculo
   generateTabelaDetalhes(){
     let data_array = this.getMatrixData();
-    console.log(data_array);
     let indice_num = 0;
     let dataTabelaDetalhes = []
     for(let data of data_array){
@@ -166,7 +179,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
       dataTabelaDetalhes.push(line);
     }
-    console.log(dataTabelaDetalhes)
     //Ordenação dos dados pelo valor corrigido
     dataTabelaDetalhes.sort((entry1, entry2) => {
       if(entry1.valor_corrigido > entry2.valor_corrigido){

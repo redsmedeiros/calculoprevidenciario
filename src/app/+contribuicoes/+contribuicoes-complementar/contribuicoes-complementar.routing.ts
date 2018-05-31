@@ -3,6 +3,7 @@ import {ModuleWithProviders} from "@angular/core"
 import { Routes, RouterModule } from '@angular/router';
 import {ContribuicoesComplementarComponent} from "./contribuicoes-complementar.component";
 import { ContribuicoesComplementarDestroyComponent } from './contribuicoes-complementar-destroy/contribuicoes-complementar-destroy.component';
+import { ContribuicoesComplementarEditComponent } from './contribuicoes-complementar-edit/contribuicoes-complementar-edit.component';
 
 export const contribuicoesComplementarRoutes: Routes = [
 {
