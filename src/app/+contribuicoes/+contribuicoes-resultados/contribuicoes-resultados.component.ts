@@ -79,16 +79,15 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   getSalarioMinimo(data){
-    return data.sigla + ' ' +data.salario_minimo;
+    return data.sigla + ' ' +this.formatMoney(data.salario_minimo);
   }
 
   getAliquota(data){
-    return data.sigla + ' ' +data.aliquota;
+    return data.sigla + ' ' + this.formatMoney(data.aliquota * data.salario_minimo);
   }
 
   getValorCorrigido(data){
-    let aliquota = data.salario_minimo * data.aliquota;
-    return 'R$ ' + data.salario_minimo * aliquota * data.cam;
+    return 'R$ ' + this.formatMoney(data.salario_minimo * data.aliquota * data.cam);
   }
 
   updateDatatable() {
@@ -97,8 +96,10 @@ export class ContribuicoesResultadosComponent implements OnInit {
       data: this.moeda,
     }
   }
+
   formatMoney(data){
-    return 'R$ ' + data;
+    data = parseFloat(data);
+    return data.toFixed(2).replace('.',',');
   }
 
   formatDate(data){

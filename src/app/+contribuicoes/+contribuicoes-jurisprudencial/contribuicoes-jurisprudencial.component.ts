@@ -59,7 +59,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       let valorTotal = 0;
       for(let moeda of this.moeda) {
         let aliquota = moeda.salario_minimo * moeda.aliquota;
-        let valorCorrigido = moeda.salario_minimo * aliquota * moeda.cam;
+        let valorCorrigido =  aliquota * moeda.cam;
         valorTotal = valorTotal + valorCorrigido;
       }
 
@@ -71,10 +71,10 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
      if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
-        this.Jurisprudencial.update(novoCalculo).then((data) => {
+        this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
           this.Jurisprudencial.get().then(() =>{
             swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
-              window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
             });
           });
         }).catch(error => {
@@ -83,11 +83,11 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
      } else {
 
-        this.Jurisprudencial.save(novoCalculo).then((data) => {
+        this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
           this.Jurisprudencial.get().then(() =>{
           swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
 
-              window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
             });
           });
         }).catch(error => {
