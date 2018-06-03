@@ -55,8 +55,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   ngOnInit() {
 
     let today = moment();
-    this.Moeda.getByDateRange('01/' + '07/1994', '01/' + (today.month()+1) + '/'+ today.year())
+    this.Moeda.getByDateRange('06/' + '01/1994', (today.month()+1) + '/01/' + today.year())
         .then((moeda: Moeda[]) => {
+          console.log(moeda);
           this.moeda = moeda;
         })
   }
@@ -176,7 +177,12 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       let contrib_base = this.getContribBase(mes, contrib);
       let valor_corrigido = contrib_base * indice;
 
-      let line = {indice_num: indice_num, mes: mes, contrib_base: contrib_base, indice: indice, valor_corrigido: valor_corrigido};
+      let line = {indice_num: indice_num, 
+                  mes: mes, 
+                  contrib_base: this.formatMoney(contrib_base), 
+                  indice: indice, 
+                  valor_corrigido: this.formatMoney(valor_corrigido)
+                 };
       dataTabelaDetalhes.push(line);
     }
     //Ordenação dos dados pelo valor corrigido
@@ -197,13 +203,15 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let numero_contrib_desconsideradas = Math.floor((this.form.numero_contribuicoes)/4);
 
     for(index = 0; index < numero_contrib_desconsideradas ; index++){
+      dataTabelaDetalhes[index].indice_num = index+1;
       dataTabelaDetalhes[index].mes ='<div style="color:red;">' + dataTabelaDetalhes[index].mes + '</div>'
       dataTabelaDetalhes[index].contrib_base ='<div style="color:red;">' + dataTabelaDetalhes[index].contrib_base + '</div>'
       dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
       dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
     }
     for(index = index; index < (this.form.numero_contribuicoes/0.8); index++){
-      this.form.total_contribuicao += dataTabelaDetalhes[index].valor_corrigido;
+      dataTabelaDetalhes[index].indice_num = index+1;
+      this.form.total_contribuicao += parseFloat((dataTabelaDetalhes[index].valor_corrigido).split(' ')[1].replace(',','.'));
     }
     this.form.media_salarial = this.form.total_contribuicao/Math.floor(this.form.numero_contribuicoes);
     this.baseAliquota = this.form.media_salarial*0.2;
@@ -214,28 +222,28 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   getContribBase(dataMes, contrib){
     let teto = this.getTeto(dataMes);
     let salario_minimo = this.getSalarioMinimo(dataMes);
-    if(contrib > teto){
+    if(salario_minimo <= contrib && contrib <= teto){
+      return contrib;
+    }else if(contrib > teto){
       return teto;
     }else if(contrib < salario_minimo){
       return salario_minimo;
-    }else if(salario_minimo < contrib && contrib < teto){
-      return contrib;
     }
   }
 
   getSalarioMinimo(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff+5].salario_minimo;
+    return this.moeda[diff].salario_minimo;
   }
 
   getTeto(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff+5].teto;
+    return this.moeda[diff].teto;
   }
   //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
   getIndice(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff+5].fator;
+    return this.moeda[diff].fator;
   }
 
   calculateContribuicao(){
@@ -331,6 +339,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Recebe um valor float e retorna com duas casas decimais, virgula como separador e prefixo R$
   formatMoney(data){
+    data = parseFloat(data);
     return 'R$ ' + (data.toFixed(2)).replace('.',',');
   }
 
