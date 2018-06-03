@@ -22,9 +22,14 @@ export class ContribuicoesComplementarDestroyComponent {
     this.ContribuicaoComplementar.find(calculo)
         .then(contribuicaoComplementar => {
           this.ContribuicaoComplementar.destroy(contribuicaoComplementar)
-              .then(() => this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]));
+              .then(() => {
+                this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]);
+                swal('Sucesso', 'Cálculo excluído com sucesso','success');
+              }).catch((err) => {
+            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+          });
         })
-    swal('Sucesso', 'Cálculo excluído com sucesso','success');
+    
 
   }
 }
