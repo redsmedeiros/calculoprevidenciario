@@ -15,11 +15,10 @@ export class MoedaService extends ControllerService {
 
     	let fromDate = Date.parse(from);
     	let toDate = Date.parse(to);
-
 	  	if (this.list.length == 0) {
 	  		this.get().then(() => {
 			  	let list = this.list.filter((moeda) => {
-			  		let moedaDate = Date.parse(moeda.data_moeda);
+			  		let moedaDate = Date.parse(moeda.data_moeda+'T02:00:00.000Z');
 			  		return fromDate <= moedaDate && moedaDate <= toDate;
 			  	});
 			  	resolve(list);
@@ -29,7 +28,7 @@ export class MoedaService extends ControllerService {
 	  		})
 	  	} else {
 			let list =  this.list.filter((moeda) => {
-		  		let moedaDate = Date.parse(moeda.data_moeda);
+		  		let moedaDate = Date.parse(moeda.data_moeda+'T02:00:00.000Z');
 		  		return fromDate <= moedaDate && moedaDate <= toDate;
 	  		})
 	  		resolve(list);
