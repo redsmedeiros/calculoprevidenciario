@@ -45,7 +45,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
       {data: (data) => {
           return this.getAliquota(data);
        }},
-      {data: 'correcao'},
+      {data: 'cam'},
       {data: (data) => {
         return this.getValorCorrigido(data);
       }}
@@ -88,7 +88,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
 
   getValorCorrigido(data){
     let aliquota = data.salario_minimo * data.aliquota;
-    return 'R$ ' + data.salario_minimo * aliquota * data.correcao;
+    return 'R$ ' + data.salario_minimo * aliquota * data.cam;
   }
 
   updateDatatable() {

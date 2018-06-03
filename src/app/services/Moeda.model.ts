@@ -7,20 +7,24 @@ export class Moeda extends Model {
     data_moeda: '',
     salario_minimo: '',
     aliquota: '',
-    correcao: '',
+    cam: '',
     teto: '',
     fator: '',
     sigla: '',
     nome: '',
+    tr: '',
+    ipca: ''
   };
 
   public data_moeda;
   public salario_minimo;
   public aliquota;
-  public correcao;
+  public cam;
   public teto;
   public fator;
   public sigla;
   public nome;
+  public tr;
+  public ipca;
 
 }
