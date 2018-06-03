@@ -53,11 +53,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-
     let today = moment();
     this.Moeda.getByDateRange('06/' + '01/1994', (today.month()+1) + '/01/' + today.year())
         .then((moeda: Moeda[]) => {
-          console.log(moeda);
           this.moeda = moeda;
         })
   }
@@ -222,6 +220,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   getContribBase(dataMes, contrib){
     let teto = this.getTeto(dataMes);
     let salario_minimo = this.getSalarioMinimo(dataMes);
+    contrib = parseFloat(contrib);
     if(salario_minimo <= contrib && contrib <= teto){
       return contrib;
     }else if(contrib > teto){
@@ -233,17 +232,17 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   getSalarioMinimo(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff].salario_minimo;
+    return parseFloat(this.moeda[diff].salario_minimo);
   }
 
   getTeto(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff].teto;
+    return parseFloat(this.moeda[diff].teto);
   }
   //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
   getIndice(dataString){
     let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return this.moeda[diff].fator;
+    return parseFloat(this.moeda[diff].fator);
   }
 
   calculateContribuicao(){
@@ -267,11 +266,12 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   getTaxaJuros(dataReferencia){
+    let taxaJuros = 0.0;
     let jurosMensais = 0.005;
     let jurosAnuais = 1.06;
     let numAnos = this.getDifferenceInYears(dataReferencia);
     let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
-    let taxaJuros = ((jurosAnuais ** numAnos) * (jurosMensais * numMeses) + 1) - 1;
+    taxaJuros = ((jurosAnuais ** numAnos) * (jurosMensais * numMeses) + 1) - 1;
     taxaJuros = Math.min(taxaJuros, 0.005)
     let totalJuros = this.getBaseAliquota() * taxaJuros;
 
