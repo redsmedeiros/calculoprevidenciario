@@ -22,12 +22,20 @@ export class ContribuicoesCalculosDestroyComponent implements OnInit {
   ) {
     let calculo = this.route.snapshot.params['id_calculo'];
     let user = this.route.snapshot.params['id'];
-    this.ContribuicaoJurisprudencial.find(calculo)
+    this.ContribuicaoJurisprudencial.find(this.route.snapshot.params['id_calculo'])
         .then(contribuicaoJurisprudencial => {
           this.ContribuicaoJurisprudencial.destroy(contribuicaoJurisprudencial)
-              .then(() => this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]));
+              .then(() => {
+
+                this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]);
+                swal('Sucesso', 'Cálculo excluído com sucesso','success');
+                
+              }).catch((err) => {
+            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+          });
+              
         })
-    swal('Sucesso', 'Cálculo excluído com sucesso','success');
+    
   }
 
   ngOnInit() {

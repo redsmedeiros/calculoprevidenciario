@@ -13,7 +13,7 @@ export const contribuicoesCalculosRoutes: Routes = [{
   component: ContribuicoesCalculosComponent
 },
 {
-    path: ':id/:id_calculo/destroy',
+    path: 'jurisprudencial/:id/:id_calculo/destroy',
     component: ContribuicoesCalculosDestroyComponent
 }];
 
