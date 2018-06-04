@@ -282,13 +282,18 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     if(!this.matrizHasValues){
       this.matriz.splice(0,1);
     }
-  	for(let entry of this.matriz){
-  		if(entry.ano == ano){
-  			entry.valores = valores;
-  			return;
-  		}
-  	}
-  	this.matriz.push({ "ano": ano, "valores": valores });
+    for(let entry of this.matriz){
+      if(entry.ano == ano){
+        let index = 0;
+        for (index = 0; index < 12; ++index) {
+          if(entry.valores[index] != valores[index] && valores[index] != 0){
+            entry.valores[index] = valores[index];
+          }
+        }
+        return;
+      }
+    }
+    this.matriz.push({ "ano": ano, "valores": valores });
     this.matrizHasValues = true;
   }
   
