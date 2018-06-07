@@ -7,42 +7,41 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+                <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [sortable]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
 
-          <!-- widget div-->
           <div>
-
-            <!-- widget content -->
             <div class="widget-body">
 
               <ul class="list-unstyled">
-                <li>
-                  <b>Nome:</b> FARLEY FABIANO DE SOUZA FERRAZ</li>
-                <li>
-                  <b>CPF:</b> 811526716-34</li>
-                <li>
-                  <b>Data de nascimento:</b> 01/06/1970 - 47 anos</li>
-                <li>
-                  <b>Sexo:</b> Masculino</li>
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
-
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
                     </button>
-
                   </div>
                 </div>
               </div>
