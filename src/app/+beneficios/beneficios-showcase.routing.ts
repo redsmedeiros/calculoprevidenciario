@@ -15,7 +15,7 @@ export const routes: Routes = [
     data: {pageTitle: 'Beneficios Calculo'}
   },
   {
-    path: ':id/beneficios-resultados',
+    path: 'beneficios-resultados',
     loadChildren: 'app/+beneficios/+beneficios-resultados/beneficios-resultados.module#BeneficiosResultadosModule',
     data: {pageTitle: 'Beneficios Resultados'}
   },

@@ -8,7 +8,7 @@ export const beneficiosResultadosRoutes: Routes = [{
   component: BeneficiosResultadosComponent
 },
 {
-  path: 'id_calculo',
+  path: ':id/:id_calculo',
   component: BeneficiosResultadosComponent
 }];
 
