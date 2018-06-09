@@ -4,7 +4,7 @@
   <sa-widgets-grid>
 
     <!-- row -->
-    <div class="row">
+    <div class="row" *ngIf="!isUpdating">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
                 <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
@@ -72,13 +72,13 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Data do cálculo:</b> 18/08/2017</li>
+                  <b>Data do cálculo:</b> {{formatDate(calculo.data_calculo_pedido)}}</li>
                 <li>
-                  <b>Data da citação do requerido:</b> 24/02/2010</li>
+                  <b>Data da citação do requerido:</b> {{formatDate(calculo.data_citacao_reu)}}</li>
                 <li>
-                  <b>Data da distribuição da ação:</b> 12/02/2010</li>
+                  <b>Data da distribuição da ação:</b> {{formatDate(calculo.data_acao_judicial)}}</li>
                 <li>
-                  <b>Tabela Correção Monetária Justiça Federal:</b> 08/2017</li>
+                  <b>Tabela Correção Monetária Justiça Federal:</b> TODO</li>
               </ul>
             </div>
           </div>
@@ -106,15 +106,15 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Espécie dos valores devidos:</b> Auxílio Doença </li>
+                  <b>Espécie dos valores devidos:</b> {{getTipoAposentadoria(calculo.tipo_aposentadoria)}} </li>
                 <li>
-                  <b>DIB de valores devidos:</b> 26/07/2007</li>
+                  <b>DIB de valores devidos:</b> {{formatDate(calculo.data_pedido_beneficio_esperado)}}</li>
                 <li>
-                  <b>DIB anterior de valores devidos:</b> --</li>
+                  <b>DIB anterior de valores devidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
-                  <b>Data de cessação de valores devidos:</b> 07/05/2008</li>
+                  <b>Data de cessação de valores devidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
                 <li>
-                  <b>Nova RMI de valores devidos:</b> R$ 2.225,86</li>
+                  <b>Nova RMI de valores devidos:</b> {{formatMoney(calculo.valor_beneficio_esperado)}}</li>
               </ul>
             </div>
           </div>
@@ -142,13 +142,13 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Intervalo de Honorários:</b> 26/07/2007 a 07/05/2008</li>
+                  <b>Intervalo de Honorários:</b> {{formatDate(calculo.taxa_advogado_inicio)}} a {{formatDatetimeToDate(calculo.taxa_advogado_final)}}</li>
                 <li>
-                  <b>Percentual dos honorários:</b> 10%</li>
+                  <b>Percentual dos honorários:</b> {{formatPercent(calculo.percentual_taxa_advogado)}}</li>
                 <li>
-                  <b>Percentual do Acordo Judicial:</b> 0%</li>
+                  <b>Percentual do Acordo Judicial:</b> {{formatPercent(calculo.acordo_pedido)}}</li>
                 <li>
-                  <b>Vicendos:</b> 0</li>
+                  <b>Vicendos:</b> {{calculo.maturidade}}</li>
               </ul>
             </div>
           </div>
@@ -175,18 +175,62 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Juros anterior a janeiro de 2003:</b> 0.5%</li>
+                  <b>Juros anterior a janeiro de 2003:</b> {{calculo.previo_interesse_2003}}%</li>
                 <li>
-                  <b>Juros posterior a janeiro de 2003:</b> 1%</li>
+                  <b>Juros posterior a janeiro de 2003:</b> {{calculo.pos_interesse_2003}}%</li>
                 <li>
-                  <b>Juros posterior a julho de 2009:</b> 0.5%</li>
+                  <b>Juros posterior a julho de 2009:</b> {{calculo.pos_interesse_2009}}%</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
 
+       <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Conclusões</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
 
+              <ul class="list-unstyled">
+                <li>
+                  <b>Soma dos vincendos Tetos:</b> R$ 2.555,64</li>
+                <li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b> R$ 3.906,48</li>
+                <li>
+                  <b>Soma devida Judicialmente Tetos:</b> R$ 54.921,56</li>
+                <li>
+                  <b>Soma dos honorários a receber Tetos:</b> R$ 3.868,17</li>
+                <li>
+                  <b>Soma total Tetos:</b> R$ 57.477,20</li>
+                <li>
+                  <b>Última Renda Mensal Judicialmente:</b> R$ 0,00</li>
+                <li>
+                  <b>Soma Total da Diferença Mensal:</b> R$ 29.572,57</li>
+                <li>
+                  <b>Soma Total da Correção Monetária:</b> R$ 11.785,35</li>
+                <li>
+                  <b>Soma Total da Diferença Corrigida:</b> R$ 41.357,92</li>
+                <li>
+                  <b>Soma Total do Valor dos Juros:</b> R$ 13.563,61</li>
+                <li>
+                  <b>Soma devida Judicialmente:</b> R$ 54.921,53</li>
+                <li>
+                  <b>Soma das vincendas:</b> R$ 0,00</li>
+                <li>
+                  <b>Soma total devida ao segurado:</b> R$ 54.921,53</li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
