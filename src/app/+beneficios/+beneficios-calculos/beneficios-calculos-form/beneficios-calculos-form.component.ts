@@ -29,6 +29,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public chkAjusteMaximo = false;
   public chkDemandasJudiciais = false;
   public chkPrecedidoRecebidos = false;
+  public chkNaoUsarDeflacao = false;
+  public chkIndice = false;
 
   public recebidosBuracoNegro = false;
   public recebidosPosBuracoNegro = false;
@@ -73,6 +75,22 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public inicioBuracoNegro = new Date('05/10/1988');
   public finalBuracoNegro = new Date('04/04/1991');
   public dataMinima = '01/01/1970';
+
+  private tipoCorrecaoMonetaria = 'ipca';
+  public correcaoOptions = [
+    {
+      text: 'Tabela da IPCA-e',
+      value: 'ipca'
+    },
+    {
+      text: 'Tabela da Justiça Federal',
+      value: 'cam'
+    },  
+    {
+      text: 'Tabela da TR',
+      value: 'tr'
+    }  
+  ]
 
   public especieValoresOptions = [{
   	name: "Auxílio Doença",
@@ -422,6 +440,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.data_acao_judicial  = this.dataAcaoJudicial;
         // Data da ajuizamento da ação:
         this.formData.data_citacao_reu  = this.dataCitacaoReu
+        //Tipo de Correçao monetária que será usada no calculo
+        this.formData.tipo_correcao = this.tipoCorrecaoMonetaria;
         // CONDICIONAL
         this.formData.data_pedido_beneficio = dataPedidoBeneficio;
         // RMI de valores Recebidos
@@ -438,6 +458,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.data_cessacao = this.cessacaoValoresRecebidos;
         // CheckBoc Juros de Mora
         this.formData.previo_interesse = this.chkJurosMora;
+        //CheckBox Não Usar Deflação
+        this.formData.nao_usar_deflacao = this.chkNaoUsarDeflacao;
+        //CheckBox calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004
+        this.formData.usar_indice_99_04 = this.chkIndice;
         // CONDICIONAL
         this.formData.data_anterior_pedido_beneficio  = data_anterior_pedido_beneficio;
         // Percentual dos Honorarios
@@ -743,5 +767,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     var bits = date.split('/');
     var d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
+  }
+
+  onCorrecaoChange(newCorrecao){
+    this.tipoCorrecaoMonetaria = newCorrecao.value;
+    console.log(this.tipoCorrecaoMonetaria);
   }
 }

@@ -29,6 +29,7 @@ export class CalculoAtrasado extends Model {
     pos_interesse_2009: '',
     tipo_aposentadoria: '',
     data_calculo: '',
+    tipo_correcao: '',
     aplicar_ajuste_maximo_98_2003: '',
     acordo_pedido: '',
     nao_aplicar_ajuste_maximo_98_2003: '',
@@ -37,7 +38,9 @@ export class CalculoAtrasado extends Model {
     data_prevista_cessacao: '',
     tipo_aposentadoria_recebida: '',
     concedido_anterior_dib: '',
-    esperado_anterior: ''
+    esperado_anterior: '',
+    nao_usar_deflacao:'',
+    usar_indice_99_04:''
   };
 
   public id: number;
@@ -65,6 +68,7 @@ export class CalculoAtrasado extends Model {
   public pos_interesse_2009;
   public tipo_aposentadoria;
   public data_calculo;
+  public tipo_correcao;
   public aplicar_ajuste_maximo_98_2003;
   public acordo_pedido;
   public nao_aplicar_ajuste_maximo_98_2003;
@@ -74,6 +78,8 @@ export class CalculoAtrasado extends Model {
   public tipo_aposentadoria_recebida;
   public concedido_anterior_dib;
   public esperado_anterior;
+  public nao_usar_deflacao;
+  public usar_indice_99_04;
 
   public actions = `
     <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>

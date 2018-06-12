@@ -19,7 +19,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
                     <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -33,7 +33,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
                     <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -53,7 +53,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
                     <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -81,7 +81,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox"  class="checkbox {{styleTheme}}">
+                    <input type="checkbox"  [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
                     <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -447,24 +447,33 @@
         <div class="col-md-8 col-sm-offset-2">
           <div class="form-group">
             <div class="col-md-10">
-              <div class="radio">
+              <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                 <label>
-                  <input type="radio" checked="checked" name="correcao">
+                  <input type="radio" name="correcao" 
+                         [checked]="idx === 0" 
+                         [value]="correcao.value"
+                         (change)="onCorrecaoChange(correcao)">
+                  {{correcao.text}}
+                </label>
+              </div>
+              <!-- <div class="radio">
+                <label>
+                  <input type="radio" checked="checked" id= "correcao" name="correcao" value="ipca">
                   Tabela da IPCA-e
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="correcao">
+                  <input type="radio" name="correcao" id="correca o" value ="cam">
                   Tabela da Justiça Federal
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="correcao">
+                  <input type="radio" name="correcao" id="correcao" value="tr">
                   Tabela da TR
                 </label>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
