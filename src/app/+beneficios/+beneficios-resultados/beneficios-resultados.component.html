@@ -246,6 +246,25 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
+              <sa-datatable [options]="resultadosDatatableOptions"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Competência</th>
+                    <th>Indice de Reajuste de valores devidos</th>
+                    <th>Benefício Devido Tetos</th>
+                    <th>Indice de Reajuste de valores recebidos</th>
+                    <th>Benefício Recebido Tetos</th>
+                    <th>Diferença Mensal Tetos</th>
+                    <th>Correção Monetária</th>
+                    <th>Diferença Corrigida Tetos</th>
+                    <th>Juros</th>
+                    <th>Valor dos Juros Tetos</th>
+                    <th>Diferença Corrigida + Juros Tetos</th>
+                    <th>Honorários Tetos</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
               <table class="table table-hover table-bordered">
                 <thead>
                   <tr>
