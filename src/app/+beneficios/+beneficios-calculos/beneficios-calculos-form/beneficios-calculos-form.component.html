@@ -376,11 +376,6 @@
         </sa-widget>
       </article>
 
-
-
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
@@ -432,55 +427,37 @@
         </sa-widget>
       </article>
 
-<article class="col-sm-12 col-md-12 col-lg-12">
-  <sa-widget [colorbutton]="false" [editbutton]="false">
-    <header>
-      <span class="widget-icon">
-        <i class="fa fa-edit"></i>
-      </span>
-      <h2>Correção Monetária</h2>
-    </header>
-    <!-- widget div-->
-    <div>
-      <!-- widget content -->
-      <div class="widget-body">
-        <div class="col-md-8 col-sm-offset-2">
-          <div class="form-group">
-            <div class="col-md-10">
-              <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
-                <label>
-                  <input type="radio" name="correcao" 
-                         [checked]="idx === 0" 
-                         [value]="correcao.value"
-                         (change)="onCorrecaoChange(correcao)">
-                  {{correcao.text}}
-                </label>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Correção Monetária</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <div class="col-md-8 col-sm-offset-2">
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
+                      <label>
+                        <input type="radio" name="correcao" 
+                               [checked]="idx === 0" 
+                               [value]="correcao.value"
+                               (change)="onCorrecaoChange(correcao)">
+                        {{correcao.text}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <!-- <div class="radio">
-                <label>
-                  <input type="radio" checked="checked" id= "correcao" name="correcao" value="ipca">
-                  Tabela da IPCA-e
-                </label>
-              </div>
-              <div class="radio">
-                <label>
-                  <input type="radio" name="correcao" id="correca o" value ="cam">
-                  Tabela da Justiça Federal
-                </label>
-              </div>
-              <div class="radio">
-                <label>
-                  <input type="radio" name="correcao" id="correcao" value="tr">
-                  Tabela da TR
-                </label>
-              </div> -->
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </sa-widget>
-</article>
+        </sa-widget>
+      </article>
 
 <article class="col-sm-12 col-md-12 col-lg-12">
   <!-- Widget ID (each widget will need unique ID)-->
@@ -518,7 +495,7 @@
               <div class="col-md-5">
                 <div class="checkbox">
                   <label>
-                  <input type="checkbox" class="checkbox {{styleTheme}}" checked>
+                  <input type="checkbox" [(ngModel)]="chkBoxTaxaSelic" class="checkbox {{styleTheme}}" checked>
                   <span>Desmarque para não aplicar os juros da poupança</span>
                 </label>
                 </div>

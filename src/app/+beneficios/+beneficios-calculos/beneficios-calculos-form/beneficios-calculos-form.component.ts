@@ -31,6 +31,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public chkPrecedidoRecebidos = false;
   public chkNaoUsarDeflacao = false;
   public chkIndice = false;
+  public chkBoxTaxaSelic = true;
 
   public recebidosBuracoNegro = false;
   public recebidosPosBuracoNegro = false;
@@ -506,6 +507,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         } else {
           this.formData.acordo_pedido = 0;
         }
+
+        //CheckBox 'Desmarque para não aplicar os juros da poupança'
+        this.formData.aplicar_juros_poupanca = this.chkBoxTaxaSelic;
         // checkBox Não Limitar Teto para demandas Judiciais
         this.formData.nao_aplicar_ajuste_maximo_98_2003 = this.chkDemandasJudiciais;
         // Data inicial do benefício DIB de valores devidos
