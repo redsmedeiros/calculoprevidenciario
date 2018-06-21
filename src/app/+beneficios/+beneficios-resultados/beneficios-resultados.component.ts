@@ -74,6 +74,14 @@ export class BeneficiosResultadosComponent implements OnInit {
   private ultimoSalarioMinimoRecebido = 0.0;
   private beneficioRecebidoAnterior = 0.0;
 
+  //Variaveis para aplicação do reajuste tetos
+  private aplicarReajusteUltimoDevidoTeto = false;
+  private ultimoSalarioMinimoDevidoTeto = 0.0;
+  private beneficioDevidoAnteriorTeto = 0.0;
+  private aplicarReajusteUltimoRecebidoTeto = false;
+  private ultimoSalarioMinimoRecebidoTeto = 0.0;
+  private beneficioRecebidoAnteriorTeto = 0.0;
+
   //Variaveis para condicionais de primeiro reajuste
   private primeiroReajusteRecebidos = -1;
   private primeiroReajusteDevidos = -1;
@@ -100,6 +108,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
+
+  //Variaveis para tabela de conclusões tetos
+  public diferencaMensalTetos = 0.0;
   constructor(protected router: Router,
               private route: ActivatedRoute,
               protected Segurado: SeguradoService,
@@ -213,7 +224,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.1
   getIndiceReajusteValoresDevidos(dataCorrente){
-    //TODO: recuperar o indice tabelado na variavel 'reajuste'.
+    //DOINDICE: recuperar o indice tabelado na variavel 'reajuste'.
     //let reajuste = indiceTabelado; //Recuperado da tabela IntervaloReajustes, coluna índice
     let reajuste = 0;
     if (dataCorrente <= this.dataSimplificada  &&
@@ -243,7 +254,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let reajusteOS = 0.0;
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-    //TODO: pegar reajusteOs do bd
+    //DOINDICE: pegar reajusteOs do bd
     // if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
     //   if(dataCorrente < moment('1991-09-01')){
     //     //reajusteOS = indiceOsTabelado;
@@ -260,7 +271,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.2
   getIndiceReajusteValoresRecebidos(dataCorrente){
-    //TODO: pegar reajuste do BD
+    //DOINDICE: pegar reajuste do BD
     //let reajuste = indiceTabelado;
     let reajuste = 0.0;
     // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
@@ -299,7 +310,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let reajusteOS = 0.0;
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    //TODO: pegar reajusteOs do bd
+    //DOINDICE: pegar reajusteOs do bd
     // if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
     //   if(dataCorrente < moment('1991-09-01')){
     //     //reajusteOS = indiceOsTabelado;
@@ -650,12 +661,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     let rmiRecebidosTetos = parseFloat(this.calculo.valor_beneficio_concedido);
     let beneficioRecebidoTetos = rmiRecebidosTetos;
     let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    //TODO:
-    //QUESTION: no mes anterior da dataCorrente? SIM
     // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
-    // if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) && aplicarReajusteUltimo) {
-    //   beneficioRecebidoTetos = beneficioRecebidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-    // }
+    if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) 
+        && this.aplicarReajusteUltimoRecebidoTeto) {
+      beneficioRecebidoTetos = this.beneficioRecebidoAnteriorTeto; // = beneficioDevido do mes anterior antes do ajuste;
+    }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
     if (dataCorrente.isSame('2006-08-01')) {// 08/2006
@@ -745,16 +755,28 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(indiceSuperior){
       beneficioRecebidoTetosString += '*'
     }
-
-    if(beneficioRecebidoTetosAjustado < beneficioRecebidoTetos){
+    let minimoAplicado = false;
+    if(beneficioRecebidoTetosAjustado <= beneficioRecebidoTetos){
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioRecebidoTetosString += ' -<br> T';
-    }else if(beneficioRecebidoTetosAjustado > beneficioRecebidoTetos){
+    }else if(beneficioRecebidoTetosAjustado >= beneficioRecebidoTetos){
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioRecebidoTetosString += ' -<br> M';
+      minimoAplicado = true;
+    }
+
+    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
+    if(minimoAplicado){
+      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      //esse valor sera usado na proxima chamada da função
+      if(this.ultimoSalarioMinimoRecebidoTeto != beneficioRecebidoTetosAjustado){
+        this.ultimoSalarioMinimoRecebidoTeto = beneficioRecebidoTetosAjustado;
+        this.aplicarReajusteUltimoRecebidoTeto = true;
+      }
     }
 
     resultsObj.resultString = beneficioRecebidoTetosString;
+    this.beneficioRecebidoAnteriorTeto = beneficioRecebidoTetosAjustado;
     return beneficioRecebidoTetosAjustado;
   }
 
