@@ -59,7 +59,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       let valorTotal = 0;
       for(let moeda of this.moeda) {
         let aliquota = moeda.salario_minimo * moeda.aliquota;
-        let valorCorrigido = moeda.salario_minimo * aliquota * moeda.correcao;
+        let valorCorrigido = moeda.salario_minimo * aliquota * moeda.cam;
         valorTotal = valorTotal + valorCorrigido;
       }
 
