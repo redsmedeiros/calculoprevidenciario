@@ -98,21 +98,23 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.isUpdating = true;
 
     this.Segurado.find(this.route.snapshot.params['id'])
-        .then(segurado => {
-            this.segurado = segurado;
-    });
+      .then(segurado => {
+        this.segurado = segurado;
+      });
 
     this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
-    	.then(calculo => {
-    		this.calculo = calculo;
+      .then(calculo => {
+        this.calculo = calculo;
         this.setInicioRecebidosEDevidos();
 
         this.Moeda.getByDateRange(this.dataInicioCalculo, this.dataFinal)
-        .then((moeda: Moeda[]) => {
-          this.moeda = moeda;
-          this.isUpdating = false;
-        })
-    });
+          .then((moeda: Moeda[]) => {
+            this.moeda = moeda;
+            this.resultadosList = this.generateTabelaResultados();
+            this.updateResultadosDatatable();
+            this.isUpdating = false;
+          })
+      });
 
   }
 
@@ -761,8 +763,26 @@ export class BeneficiosResultadosComponent implements OnInit {
   	value = parseFloat(value);
   	return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
   }
+
+  formatIndicesReajustes(reajusteObj){
+    let stringIndice = '';
+    if(reajusteObj.reajusteOs == 0.0){
+      //Não tem reajuste OS
+      stringIndice = reajusteObj.reajuste;
+    }else{
+      stringIndice = '' + reajusteObj.reajuste + '<br>' + reajusteObj.reajusteOs + 'OS'
+    }
+    return stringIndice;
+  }
+
+  updateResultadosDatatable(){
+    this.resultadosDatatableOptions = {
+      ...this.resultadosDatatableOptions,
+      data: this.resultadosList,
+   }
+  }
+
   getTipoAposentadoria(value){
-  	console.log(value);
   	let tipos_aposentadoria = [{
   	            name: "Auxílio Doença",
   				value: 0
