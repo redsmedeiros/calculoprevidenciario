@@ -186,7 +186,7 @@
         </sa-widget>
       </article>
 
-       <article class="col-sm-12 col-md-12 col-lg-12">
+       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -200,7 +200,7 @@
             <div class="widget-body">
 
               <ul class="list-unstyled">
-                <li>
+<!--                 <li>
                   <b>Soma dos vincendos Tetos:</b> R$ 2.555,64</li>
                 <li>
                   <b>Última Renda Mensal Judicialmente Tetos:</b> R$ 3.906,48</li>
@@ -209,28 +209,29 @@
                 <li>
                   <b>Soma dos honorários a receber Tetos:</b> R$ 3.868,17</li>
                 <li>
-                  <b>Soma total Tetos:</b> R$ 57.477,20</li>
+                  <b>Soma total Tetos:</b> R$ 57.477,20</li> -->
                 <li>
-                  <b>Última Renda Mensal Judicialmente:</b> R$ 0,00</li>
+                  <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
-                  <b>Soma Total da Diferença Mensal:</b> R$ 29.572,57</li>
+                  <b>Soma Total da Diferença Mensal:</b> {{formatMoney(somaDiferencaMensal)}}</li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b> R$ 11.785,35</li>
+                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaCorrecaoMonetaria)}}</li>
                 <li>
-                  <b>Soma Total da Diferença Corrigida:</b> R$ 41.357,92</li>
+                  <b>Soma Total da Diferença Corrigida:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
                 <li>
-                  <b>Soma Total do Valor dos Juros:</b> R$ 13.563,61</li>
+                  <b>Soma Total do Valor dos Juros:</b> {{formatMoney(somaJuros)}}</li>
                 <li>
-                  <b>Soma devida Judicialmente:</b> R$ 54.921,53</li>
+                  <b>Soma devida Judicialmente:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
                 <li>
-                  <b>Soma das vincendas:</b> R$ 0,00</li>
+                  <b>Soma das vincendas:</b> {{formatMoney(somaVincendas)}}</li>
                 <li>
-                  <b>Soma total devida ao segurado:</b> R$ 54.921,53</li>
+                  <b>Soma total devida ao segurado:</b> {{formatMoney(SomaTotalSegurado)}}</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
+
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
@@ -247,21 +248,27 @@
             <!-- widget content -->
             <div class="widget-body">
               <sa-datatable [options]="resultadosDatatableOptions"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
                 <thead>
                   <tr>
                     <th>Competência</th>
-                    <th>Indice de Reajuste de valores devidos</th>
-                    <th>Benefício Devido Tetos</th>
-                    <th>Indice de Reajuste de valores recebidos</th>
-                    <th>Benefício Recebido Tetos</th>
-                    <th>Diferença Mensal Tetos</th>
+                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <!-- <th>Benefício Devido Tetos</th> -->
+                    <th>Benefício Devido</th>
+                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <!-- <th>Benefício Recebido Tetos</th> -->
+                    <th>Benefício Recebido</th>
+                    <!-- <th>Diferença Mensal Tetos</th> -->
+                    <th>Diferença Mensal</th>
                     <th>Correção Monetária</th>
-                    <th>Diferença Corrigida Tetos</th>
+                    <th>Diferença Corrigida</th>
+                    <!-- <th>Diferença Corrigida Tetos</th> -->
                     <th>Juros</th>
-                    <th>Valor dos Juros Tetos</th>
-                    <th>Diferença Corrigida + Juros Tetos</th>
-                    <th>Honorários Tetos</th>
+                    <th>Valor dos Juros</th>
+                    <!-- <th>Valor dos Juros Tetos</th> -->
+                    <th>Diferença Corrigida + Juros</th>
+                    <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
+                    <!-- <th>Honorários Tetos</th> -->
                   </tr>
                 </thead>
               </sa-datatable>
