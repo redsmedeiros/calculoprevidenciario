@@ -84,9 +84,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataFinal;
 
   //Taxas de Juros
-  private jurosAntes2003 = 0.5;
-  private jurosDepois2003 = 1.0;
-  private jurosDepois2009 = 1.5;
+  private jurosAntes2003 = 0.005;
+  private jurosDepois2003 = 0.01;
+  private jurosDepois2009 = 0.015;
   constructor(protected router: Router,
               private route: ActivatedRoute,
               protected Segurado: SeguradoService,
