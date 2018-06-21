@@ -910,7 +910,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 4.2
-  calculoVincendas(){
+  calcularVincendas(){
     let somaVincendos = this.somaDiferencaMensal;
     let data = moment(this.calculo.data_citacao_reu);
     let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
@@ -996,6 +996,87 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     return somaVincendos;
+  }
+
+  //Seção 4.6
+  calcularVincendosTetos() {
+    let somaVincendosTetos = this.diferencaMensalTetos;
+    let data = moment(this.calculo.data_citacao_reu);
+    let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
+    let maturidade = this.calculo.maturidade;
+    let jurosVincendos = 0.0;
+
+    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
+
+    if (this.dataInicioCalculo > data) {
+        data = this.dataInicioCalculo;
+    }
+
+    if (data < this.dataJuros2003) {
+      //jurosVincendos = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
+      jurosVincendos = this.jurosAntes2003 * this.getDifferenceInMonths(data, this.dataJuros2003);
+      //jurosVincendos += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
+      jurosVincendos += this.jurosDepois2003 * this.getDifferenceInMonths(this.dataJuros2003, this.dataJuros2009);
+      if (!chkBoxTaxaSelic) {
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
+      }else{
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
+        //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+        }
+      }
+    }else if(data < this.dataJuros2009){
+      //jurosVincendos = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
+      jurosVincendos = this.jurosDepois2003 * this.getDifferenceInMonths(data, this.dataJuros2009);
+      if(!chkBoxTaxaSelic){
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
+      }else{
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
+        //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+        }
+      }
+    }else{
+      if(!chkBoxTaxaSelic){
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo); 
+      }else{
+        //jurosVincendos += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
+        //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
+        }
+      }
+    }
+
+    if(chkboxBenefitNotGranted){
+      somaVincendosTetos = (somaVincendosTetos * this.ultimaCorrecaoMonetaria) + (jurosVincendos * somaVincendosTetos);
+    }
+
+    if (maturidade != 0) {
+      somaVincendosTetos = somaVincendosTetos * maturidade;
+    }else{
+      somaVincendosTetos = 0;
+    }
+
+    return somaVincendosTetos;
   }
   
   //Seção 1
