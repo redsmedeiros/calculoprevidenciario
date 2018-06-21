@@ -714,8 +714,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     return juros;
   }
 
-  //Retorna a diferença em meses completos entre a data passada como parametro e a data atual
-  getDifferenceInMonths(date1, date2=moment()){
+  //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
+  getDifferenceInMonths(date1, date2 = moment()) {
     // let splitted = dateString.split('/');
     // let recent;
     // if(dateString2 == ''){
@@ -728,9 +728,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     // let duration = moment.duration(recent.diff(pastDate));
     // let months = duration.asMonths();
     // return Math.floor(months);
-    let difference = (moment.duration(date2.diff(date1))).asMonths();
+    //let difference = (moment.duration(date2.diff(date1))).asMonths();
+    let difference = date2.diff(date1, 'months', true);
+    difference = Math.abs(difference);
     return Math.floor(difference);
-
   }
 
   formatDatetimeToDate(dataString){
