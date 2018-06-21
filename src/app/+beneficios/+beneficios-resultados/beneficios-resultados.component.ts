@@ -211,20 +211,107 @@ export class BeneficiosResultadosComponent implements OnInit {
     return tableData;
   }
 
-  //Seção 3.9
-  getDiferencaCorrigidaJuros(dataCorrente, juros, diferenca_corrigida) {
-    //Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros. 
-    //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.  
-    //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
-
-    let dataAcaoJudicial = moment(this.calculo.data_acao_judicial);
-    let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years'));
-    let diferencaCorrigidaJuros = this.formatMoney(juros + diferenca_corrigida);
-
-    if(diferencaEmAnos >= 5){
-      diferencaCorrigidaJuros += '<br>(prescrita)';
+  //Seção 3.1
+  getIndiceReajusteValoresDevidos(dataCorrente){
+    //TODO: recuperar o indice tabelado na variavel 'reajuste'.
+    //let reajuste = indiceTabelado; //Recuperado da tabela IntervaloReajustes, coluna índice
+    let reajuste = 0;
+    if (dataCorrente <= this.dataSimplificada  &&
+      moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
+      reajuste = 1;
     }
-    return diferencaCorrigidaJuros;
+    else if (moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataInicioBuracoNegro &&
+      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+      reajuste = 2.198234;
+
+    }
+
+    if (this.primeiroReajusteDevidos == -1 && reajuste == 1) {
+       this.primeiroReajusteDevidos = 1;
+    }
+
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado) &&
+      moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) {
+      reajuste = 1;
+    }
+    if (dataCorrente == moment('1994-03-01')) {
+      reajuste = 1 / 661.0052;
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)){
+        reajuste = 1;
+      }
+    }
+
+    let reajusteOS = 0.0;
+    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+    //TODO: pegar reajusteOs do bd
+    // if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
+    //   if(dataCorrente < moment('1991-09-01')){
+    //     //reajusteOS = indiceOsTabelado;
+    //   }
+    //   else if(indiceTabelado){
+    //     //reajusteOS = indiceTabelado;
+    //   }
+    //   else{
+    //     reajusteOS = 1;
+    //   }
+    // }
+    return  {reajuste: reajuste, reajusteOs: reajusteOS};
+  }
+
+  //Seção 3.2
+  getIndiceReajusteValoresRecebidos(dataCorrente){
+    //TODO: pegar reajuste do BD
+    //let reajuste = indiceTabelado;
+    let reajuste = 0.0;
+    // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
+    let chkIndice = this.calculo.usar_indice_99_04;
+    if (chkIndice) {
+      if (dataCorrente == moment("1999-06-01")) {
+        reajuste = reajuste * 1.0228;
+      }
+      if (dataCorrente == moment("2004-05-01")) {
+        reajuste = reajuste * 1.0175;
+      }
+    }
+
+    if (dataCorrente <= this.dataSimplificada &&
+      moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) {
+      reajuste = 1;
+    }
+    else if (moment(this.calculo.data_pedido_beneficio) <= this.dataInicioBuracoNegro &&
+      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+      reajuste = 2.198234;
+    }
+
+    if (this.primeiroReajusteRecebidos == -1 && reajuste == 1) {
+       this.primeiroReajusteRecebidos = 1;
+    }
+
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio) && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
+      reajuste = 1;
+    }
+    if (dataCorrente == '03/1994') {
+      reajuste = 1 / 661.0052;
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
+        reajuste = 1;
+      }
+    }
+
+    let reajusteOS = 0.0;
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    //TODO: pegar reajusteOs do bd
+    // if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
+    //   if(dataCorrente < moment('1991-09-01')){
+    //     //reajusteOS = indiceOsTabelado;
+    //   }
+    //   else if(indiceTabelado){
+    //     //reajusteOS = indiceTabelado;
+    //   }
+    //   else{
+    //     reajusteOS = 1.0;
+    //   }
+    // }
+    return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.3
@@ -446,109 +533,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     return beneficioRecebidoFinal;
   }
 
-  //Seção 3.1
-  getIndiceReajusteValoresDevidos(dataCorrente){
-    //TODO: recuperar o indice tabelado na variavel 'reajuste'.
-    //let reajuste = indiceTabelado; //Recuperado da tabela IntervaloReajustes, coluna índice
-    let reajuste = 0;
-    if (dataCorrente <= this.dataSimplificada  &&
-      moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
-      reajuste = 1;
-    }
-    else if (moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataInicioBuracoNegro &&
-      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
-      reajuste = 2.198234;
-
-    }
-
-    if (this.primeiroReajusteDevidos == -1 && reajuste == 1) {
-       this.primeiroReajusteDevidos = 1;
-    }
-
-    if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado) &&
-      moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) {
-      reajuste = 1;
-    }
-    if (dataCorrente == moment('1994-03-01')) {
-      reajuste = 1 / 661.0052;
-      if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)){
-        reajuste = 1;
-      }
-    }
-
-    let reajusteOS = 0.0;
-    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-    //TODO: pegar reajusteOs do bd
-    // if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
-    //   if(dataCorrente < moment('1991-09-01')){
-    //     //reajusteOS = indiceOsTabelado;
-    //   }
-    //   else if(indiceTabelado){
-    //     //reajusteOS = indiceTabelado;
-    //   }
-    //   else{
-    //     reajusteOS = 1;
-    //   }
-    // }
-    return  {reajuste: reajuste, reajusteOs: reajusteOS};
-  }
-
-  //Seção 3.2
-  getIndiceReajusteValoresRecebidos(dataCorrente){
-    //TODO: pegar reajuste do BD
-    //let reajuste = indiceTabelado;
-    let reajuste = 0.0;
-    // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
-    let chkIndice = this.calculo.usar_indice_99_04;
-    if (chkIndice) {
-      if (dataCorrente == moment("1999-06-01")) {
-        reajuste = reajuste * 1.0228;
-      }
-      if (dataCorrente == moment("2004-05-01")) {
-        reajuste = reajuste * 1.0175;
-      }
-    }
-
-    if (dataCorrente <= this.dataSimplificada &&
-      moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) {
-      reajuste = 1;
-    }
-    else if (moment(this.calculo.data_pedido_beneficio) <= this.dataInicioBuracoNegro &&
-      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
-      reajuste = 2.198234;
-    }
-
-    if (this.primeiroReajusteRecebidos == -1 && reajuste == 1) {
-       this.primeiroReajusteRecebidos = 1;
-    }
-
-    if (dataCorrente == moment(this.calculo.data_pedido_beneficio) && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
-      reajuste = 1;
-    }
-    if (dataCorrente == '03/1994') {
-      reajuste = 1 / 661.0052;
-      if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
-        reajuste = 1;
-      }
-    }
-
-    let reajusteOS = 0.0;
-    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    //TODO: pegar reajusteOs do bd
-    // if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
-    //   if(dataCorrente < moment('1991-09-01')){
-    //     //reajusteOS = indiceOsTabelado;
-    //   }
-    //   else if(indiceTabelado){
-    //     //reajusteOS = indiceTabelado;
-    //   }
-    //   else{
-    //     reajusteOS = 1.0;
-    //   }
-    // }
-    return  {reajuste: reajuste, reajusteOs: reajusteOS};
-  }
-
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
     let tipo_correcao = this.calculo.tipo_correcao;
@@ -575,42 +559,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
     return correcaoMonetaria;
-  }
-  
-  //Seção 1
-  setInicioRecebidosEDevidos() {
-    this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
-    this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
-
-    if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
-      this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
-    }
-
-    if (this.dataInicioDevidos < this.dataInicioBuracoNegro) {
-      this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
-    }
-    //dataInicioCalculo é o menor valor entre dataInicioDevidos e dataInicioRecebidos
-    this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
-    //dataFinal é a data_calculo_pedido acrescido de um mês
-    this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
-  }
-
-  isBuracoNegro(date){
-    if(date >= this.dataInicioBuracoNegro && date <= this.dataFimBuracoNegro){
-      return true;
-    }
-    return false;
-  }
-
-  //Retorna uma lista com os meses em formato string YYYY-MM-DD  entre dateStart e dateEnd
-  monthsBetween(dateStart, dateEnd) {
-    let timeValues = [];
-
-    while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
-      timeValues.push(dateStart.format('YYYY-MM-DD'));
-      dateStart.add(1, 'month');
-    }
-    return timeValues;
   }
 
   //Seção 3.8
@@ -718,6 +666,59 @@ export class BeneficiosResultadosComponent implements OnInit {
       juros = 0;
     }
     return juros;
+  }
+
+  //Seção 3.9
+  getDiferencaCorrigidaJuros(dataCorrente, juros, diferenca_corrigida) {
+    //Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros. 
+    //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.  
+    //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
+
+    let dataAcaoJudicial = moment(this.calculo.data_acao_judicial);
+    let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years'));
+    let diferencaCorrigidaJuros = this.formatMoney(juros + diferenca_corrigida);
+
+    if(diferencaEmAnos >= 5){
+      diferencaCorrigidaJuros += '<br>(prescrita)';
+    }
+    return diferencaCorrigidaJuros;
+  }
+  
+  //Seção 1
+  setInicioRecebidosEDevidos() {
+    this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
+    this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
+
+    if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
+      this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
+    }
+
+    if (this.dataInicioDevidos < this.dataInicioBuracoNegro) {
+      this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
+    }
+    //dataInicioCalculo é o menor valor entre dataInicioDevidos e dataInicioRecebidos
+    this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+    //dataFinal é a data_calculo_pedido acrescido de um mês
+    this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
+  }
+
+  //Verifica se uma data esta no periodo do buraco negro
+  isBuracoNegro(date){
+    if(date >= this.dataInicioBuracoNegro && date <= this.dataFimBuracoNegro){
+      return true;
+    }
+    return false;
+  }
+
+  //Retorna uma lista com os meses em formato string YYYY-MM-DD  entre dateStart e dateEnd
+  monthsBetween(dateStart, dateEnd) {
+    let timeValues = [];
+
+    while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
+      timeValues.push(dateStart.format('YYYY-MM-DD'));
+      dateStart.add(1, 'month');
+    }
+    return timeValues;
   }
 
   //Seção 5.1
