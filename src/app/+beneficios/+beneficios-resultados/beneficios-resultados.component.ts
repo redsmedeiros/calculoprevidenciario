@@ -607,76 +607,111 @@ export class BeneficiosResultadosComponent implements OnInit {
     return timeValues;
   }
 
-
   //Seção 3.8
-  getJuros(dataCorrente){
-  //   let data_citacao_reu = moment(this.calculo.data_citacao_reu);
-  //   let data = data_citacao_reu;
-  //   let juros = 0.0;
+  getJuros(dataCorrente) {
+    let data_citacao_reu = moment(this.calculo.data_citacao_reu);
+    let data = data_citacao_reu;
+    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    let juros = 0.0;
+    let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
 
-  //   if (this.dataInicioCalculo > data) {
-  //     data = this.dataInicioCalculo;
-  //   }
+    if (this.dataInicioCalculo > data) {
+      data = this.dataInicioCalculo;
+    }
 
-  //   if (data < moment('2003-01-15')){
-  //     //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
-  //     //juros += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
-    //QUESTION: chkBoxTaxaSelic é 'Desmarque para não aplicar os juros da poupança'??
-  //     if (!chkBoxTaxaSelic) {
-    //QUESTION: o que é dataDoCalculo
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-  //     }else {
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-  //       //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
-  //     }
+    if (data < moment('2003-01-15')) {
+      //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
+      juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, moment('2003-01-15'));
+      //juros += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
+      juros += this.jurosDepois2003 * this.getDifferenceInMonths(moment('2009-07-01'), moment('2003-01-15'));
+      if (!chkBoxTaxaSelic) {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e this.calculo.data_calculo_pedido (dataDoCalculo)
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+      } else {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
 
-  //   }else if(data < moment('2009-07-01')){
-  //     //juros = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
-  //     if (!chkBoxTaxaSelic) {
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-  //     }else{
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-  //       //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
-  //     }
-  //   }else{
-  //     if (!chkBoxTaxaSelic){
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-  //     }else{
-  //       //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-  //       //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
-  //     }
-  //   }
-        //QUESTION: é pra passar a data_citacao_reu para o primeiro dia do mes correspondente?
-  //   let dataCitacao = data_citacao_reu;//dataCitacaoReu no dia 1
-  //   if (dataCorrente > dataCitacao){
+        //juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+        }
+      }
 
-  //     if (dataCorrente < this.dataJuros2003) {
-  //       juros -= this.jurosAntes2003;
-  //     }
+    }else if (data < moment('2009-07-01')) {
+      //juros = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
+      juros = this.jurosDepois2003 * this.getDifferenceInMonths(moment('2009-07-01'), data);
 
-  //     if(this.dataJuros2003 < dataCorrente && dataCorrente < this.dataJuros2009){
-  //       juros -= this.jurosDepois2003;
-  //     }
+      if (!chkBoxTaxaSelic) {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+      } else {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
 
-  //     if (dataCorrente > this.dataJuros2009) {
-  //       if (!chkBoxTaxaSelic) {
-  //         juros -= this.jurosDepois2009;
-  //       }else{
-  //         if (dataCorrente < this.dataSelic70){
-  //           juros -= this.jurosDepois2009;
-  //         }else{
-    //QUESTION: o que é jurosSelic70?
-  //           juros -= jurosSelic70/100; //Carregado do BD na coluna da data corrente;
-  //         }
-  //       }
-  //     }
-  //   }
+        //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+        }
+      }
+    }else {
+      if (!chkBoxTaxaSelic) {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+      } else {
+        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
 
-  //   if (juros < 0) {
-  //     juros = 0;
-  //   }
-  //   return juros;
-    return 0.0;
+        //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
+        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for(let mes in mesesEntreSelicDataCalculo){
+          let dateMes = moment(mes);
+          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70)/100;
+        }
+      }
+    }
+    let stringDataMesCitacaoReu = '';
+    if(data_citacao_reu.month() <= 8){
+      stringDataMesCitacaoReu = data_citacao_reu.year() + '-0' +(data_citacao_reu.month() + 1) + '-01';
+    }else{
+      stringDataMesCitacaoReu = data_citacao_reu.year() + '-' + (data_citacao_reu.month() + 1) + '-01';
+    }
+
+    let dataMesCitacaoReu = moment(stringDataMesCitacaoReu);//dataCitacaoReu no dia 1
+    if (dataCorrente > dataMesCitacaoReu) {
+
+      if (dataCorrente < this.dataJuros2003) {
+        juros -= this.jurosAntes2003;
+      }
+
+      if (this.dataJuros2003 < dataCorrente && dataCorrente < this.dataJuros2009) {
+        juros -= this.jurosDepois2003;
+      }
+
+      if (dataCorrente > this.dataJuros2009) {
+        if (!chkBoxTaxaSelic) {
+          juros -= this.jurosDepois2009;
+        } else {
+          if (dataCorrente < this.dataSelic70) {
+            juros -= this.jurosDepois2009;
+          } else {
+            let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+            juros -= parseFloat(this.moeda[moedaIndexDataCorrente].juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+          }
+        }
+      }
+    }
+
+    if (juros < 0) {
+      juros = 0;
+    }
+    return juros;
   }
 
   //Retorna a diferença em meses completos entre a data passada como parametro e a data atual
