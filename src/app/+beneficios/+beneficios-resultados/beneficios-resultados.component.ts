@@ -27,9 +27,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public resultadosList;
   public resultadosDatatableOptions = {
-    paging: false, 
-    ordering: false, 
-    info: false, 
+    paging: false,
+    ordering: false,
+    info: false,
     searching: false,
     data: this.resultadosList,
     columns: [
@@ -37,6 +37,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       {data: 'indice_devidos'},
       {data: 'beneficio_devido'},
       {data: 'indice_recebidos'},
+      {data: 'beneficio_recebido'},
       {data: 'diferenca_mensal'},
       {data: 'correcao_monetaria'},
       {data: 'diferenca_corrigida'},
@@ -46,20 +47,21 @@ export class BeneficiosResultadosComponent implements OnInit {
     ]
   }
 
-  private dateFormat = "DD/MM/YYYY"
   //Datas Importantes
-  private dataSimplificada = moment('01/12/1991', this.dateFormat);
-  private dataInicioBuracoNegro = moment('05/10/1998', this.dateFormat);
-  private dataFimBuracoNegro = moment('05/04/1991', this.dateFormat);
-  private dataEfeitoFinanceiro = moment('01/06/1992', this.dateFormat);
-  private dataComecoLei8870 = moment('05/04/1991', this.dateFormat);
-  private dataFimLei8870 = moment('31/12/1993', this.dateFormat);
-  private dataAplicacao8870 = moment('01/04/1994', this.dateFormat);
-  private dataLei8880 = moment('01/01/1994', this.dateFormat);
-  private dataSelic70 = moment('01/05/2012', this.dateFormat);
-  private dataJuros2003 = moment('15/01/2003', this.dateFormat);
-  private dataJuros2009 = moment('01/07/2009', this.dateFormat);
-  private dataEquivalenciaMinimo89 = moment('01/04/1989', this.dateFormat);
+  private dataSimplificada = moment('1991-12-01');
+  private dataInicioBuracoNegro = moment('1998-10-05');
+  private dataFimBuracoNegro = moment('1991-04-05');
+  private dataEfeitoFinanceiro = moment('1992-06-01');
+  private dataComecoLei8870 = moment('1991-04-05');
+  private dataFimLei8870 = moment('1993-12-31');
+  private dataAplicacao8870 = moment('1994-04-01');
+  private dataLei8880 = moment('1994-01-01');
+  private dataSelic70 = moment('2012-05-01');
+  private dataJuros2003 = moment('2003-01-15');
+  private dataJuros2009 = moment('2009-07-01');
+  private dataEquivalenciaMinimo89 = moment('1989-04-01');
+  private dataPrimeiroTetoJudicial = moment('1998-12-01');
+  private dataSegundoTetoJudicial = moment('2003-12-01');
 
   private dataInicioRecebidos;
   private dataInicioDevidos;
