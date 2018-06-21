@@ -551,9 +551,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     let beneficioDevidoTetosSemLimite = rmiDevidosTetos;
     let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
     // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-    // if !(dataCorrente <= dataSimplificada && CALCULO.data_pedido_beneficio_esperado < dataInicioBuracoNegro) && aplicarReajusteUltimo {
-    //   beneficioDevidoTetos = beneficioDevidoTetosAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-    // }
+    if(!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro)
+       && this.aplicarReajusteUltimoDevidoTeto ){
+      beneficioDevidoTetos = this.beneficioDevidoAnteriorTeto; // = beneficioDevido do mes anterior antes do ajuste;
+    }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
     if (dataCorrente.isSame('2006-08-01')) {// 08/2006
@@ -644,15 +645,29 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoTetosString += '*'
     }
 
+    let minimoAplicado = false;
     if(beneficioDevidoTetosAjustado < beneficioDevidoTetos){
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioDevidoTetosString += ' -<br> T';
     }else if(beneficioDevidoTetosAjustado > beneficioDevidoTetos){
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioDevidoTetosString += ' -<br> M';
+      minimoAplicado = true;
+    }
+
+    this.aplicarReajusteUltimoDevidoTeto = false;
+    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
+    if(minimoAplicado){
+      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      //esse valor sera usado na proxima chamada da função
+      if(this.ultimoSalarioMinimoDevidoTeto != beneficioDevidoTetosAjustado){
+        this.ultimoSalarioMinimoDevidoTeto = beneficioDevidoTetosAjustado;
+        this.aplicarReajusteUltimoDevidoTeto = true;
+      }
     }
 
     resultsObj.resultString = beneficioDevidoTetosString;
+    this.beneficioDevidoAnteriorTeto = beneficioDevidoTetosAjustado;
     return beneficioDevidoTetosAjustado;
   }
 
@@ -765,6 +780,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
     }
 
+    this.aplicarReajusteUltimoRecebidoTeto = false;
     //a condição abaixo só é executada quando o valor aplicado é o salario minimo
     if(minimoAplicado){
       //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
