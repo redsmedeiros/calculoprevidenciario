@@ -321,73 +321,114 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 3.4
-  getBeneficioRecebido(dataCorrente){
-    //QUESTION: o que é rmiRecebidos?
-    // let beneficioRecebido = rmiRecebidos;
-    //QUESTION: no mes anterior da dataCorrente?
-    // // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
-    // if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) && aplicarReajusteUltimo) {
-    //   beneficioRecebido = beneficioRecebidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-    // }
+  getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj){
+    let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
+    let beneficioRecebido = rmiRecebidos;
+ 
+    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
+    if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) 
+        && this.aplicarReajusteUltimoRecebido) {
+      beneficioRecebido = this.beneficioRecebidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
+    }
 
-    // if (dataCorrente == 08/2006) {
-    //   beneficioRecebido = beneficioRecebido[04/2006];
-    // }
-    // if (dataCorrente == 06/2000) {
-    //   beneficioRecebido = beneficioRecebido[04/2000];
-    // }
-    // if (dataCorrente == 06/2001) {
-    //   beneficioRecebido = beneficioRecebido[04/2001];
-    // }
-    // if (dataCorrente == 06/2002) {
-    //   beneficioRecebido = beneficioRecebido[04/2002];
-    // }
-    // if (dataCorrente == 06/2003) {
-    //   beneficioRecebido = beneficioRecebido[04/2003];
-    // }
+    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
+    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
+      //beneficioRecebido = beneficioRecebido[04/2006];
+      return this.getBeneficioRecebido('2006-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2000-06-01')) {//06/2000
+      //beneficioRecebido = beneficioRecebido[04/2000];
+      return this.getBeneficioRecebido('2000-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2001-06-01')) {//06/2001
+      //beneficioRecebido = beneficioRecebido[04/2001];
+      return this.getBeneficioRecebido('2001-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2002-06-01')) {//06/2002
+      //beneficioRecebido = beneficioRecebido[04/2002];
+      return this.getBeneficioRecebido('2002-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2003-06-01')) {//06/2003
+      //beneficioRecebido = beneficioRecebido[04/2003];
+      return this.getBeneficioRecebido('2003-04-01', reajusteObj, resultsObj);
+    }
 
-    // if (this.calculo.tipo_aposentadoria_recebida == 'LOAS = beneficio salario minimo') {
-      //QUESTION: minimoSalarial é o salario minimo da dataCorrente?
-    //    beneficioRecebido = minimoSalarial;
-    // }else{
-      //QUESTION: reajuste é o indice de reajuste?
-    //  beneficioRecebido *= reajuste;
-    // }
+    if (this.calculo.tipo_aposentadoria_recebida == 11) { //11: LOAS - beneficio salario minimo'
+      let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+      beneficioRecebido = this.moeda[moedaIndexDataCorrente].salario_minimo;
+    } else {
+      beneficioRecebido *= reajusteObj.reajuste;
+    }
 
-    // if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
-      //QUESTION: o que é efeitoFInanceiro?
-    //   if(dataCorrente == efeitoFinanceiro) {
-    //     beneficio = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteOS
-    //   }else if(dataCorrente < efeitoFinanceiro){
-    //        beneficioRecebido = rmiRecebidos * reajuste;
-    //   }
-    // }
+    let indiceSuperior = false;
+    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
+      if (dataCorrente == this.dataEfeitoFinanceiro) {
+        // INSERIR ÍNDICE SUPERIOR ‘*’
+        indiceSuperior = true;
+        beneficioRecebido = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteObj.reajusteOs;
+      } else if (dataCorrente < this.dataEfeitoFinanceiro) {
+        beneficioRecebido = rmiRecebidos * reajusteObj.reajuste;
+      }
+    }
 
-    // if (this.calculo.taxa_ajuste_maxima_esperada != 0 && 
-    //     this.calculo.taxa_ajuste_maxima_esperada != undefined) 
-    // {
-    //   if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
-    //      moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
-    //      dataCorrente == this.dataAplicacao8870) {
-    //     beneficioRecebido *= this.calculo.taxa_ajuste_maxima_concedida;
-    //   }
-    //   if(moment(this.calculo.data_pedido_beneficio_esperado) >= this.dataLei8880 && primeiroReajuste) {
-    //     beneficioRecebido *= this.calculo.taxa_ajuste_maxima_concedida;
-    //   }
-    // }
-    //QUESTION: qual checkbox é chkBeneficioNaoConcedido??
-    // if (chkBeneficioNaoConcedido == 0) {
-    //   beneficioRecebido = 0;
-    // }
+    if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
+      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
+         moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
+         dataCorrente == this.dataAplicacao8870) {
+        beneficioRecebido *= this.calculo.taxa_ajuste_maxima_concedida;
+      }
 
-    // beneficioRecebido = aplicarTetosEMinimos(beneficioRecebido);
+      if(this.calculo.data_pedido_beneficio_esperado >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
+        beneficioRecebido *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
+        this.primeiroReajusteRecebidos = 0;
+      }
+    }
 
-    // // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
-    // let diasProporcionais = calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio))
-    // beneficioRecebido = beneficioRecebido * diasProporcionais
 
-    // return beneficioRecebido;
-    return 0.0;
+    let chkBeneficioNaoConcedido = this.calculo.beneficio_nao_concedido;
+    if (!chkBeneficioNaoConcedido) {
+      beneficioRecebido = 0;
+    }
+
+    // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
+    let beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, moment(this.calculo.data_pedido_beneficio),'Recebido');
+    // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
+    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio));
+    let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
+
+    let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal);
+
+    if(indiceSuperior){
+      beneficioRecebidoString += '*'
+    }
+
+    let minimoAplicado = false;
+    if(beneficioRecebidoAjustado < beneficioRecebido){
+      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
+      beneficioRecebidoString += ' -<br> T';
+    }else if(beneficioRecebidoAjustado > beneficioRecebido){
+      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
+      beneficioRecebidoString += ' -<br> M';
+      minimoAplicado = true;
+    } 
+
+    if(diasProporcionais != 1){
+      beneficioRecebidoString += ' <br>p';
+    }
+
+    this.aplicarReajusteUltimoRecebido = false;
+    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
+    if(minimoAplicado){
+      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      //esse valor sera usado na proxima chamada da função
+      if(this.ultimoSalarioMinimoRecebido != beneficioRecebidoAjustado){
+        this.ultimoSalarioMinimoRecebido = beneficioRecebidoAjustado;
+        this.aplicarReajusteUltimoRecebido = true;
+      }
+    }
+    resultsObj.resultString = beneficioRecebidoString;
+    this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
+    return beneficioRecebidoFinal;
   }
 
   //Seção 3.1
@@ -421,29 +462,31 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.2
   getIndiceReajusteValoresRecebidos(dataCorrente){
+    //TODO: pegar reajuste do BD
     //let reajuste = indiceTabelado;
     let reajuste = 0.0;
     // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
     let chkIndice = this.calculo.usar_indice_99_04;
-    //QUESTION: o que é 'recebido'?
-    // if (chkIndice && recebido) {
-    //   if (dataCorrente == moment("1999-06-01")){
-    //     reajuste = reajuste * 1.0228;
-    //   }
-    //   if (dataCorrente == moment("2004-05-01")){
-    //     reajuste = reajuste * 1.0175;
-    //   }
-    // }
+    if (chkIndice) {
+      if (dataCorrente == moment("1999-06-01")) {
+        reajuste = reajuste * 1.0228;
+      }
+      if (dataCorrente == moment("2004-05-01")) {
+        reajuste = reajuste * 1.0175;
+      }
+    }
 
-    if (dataCorrente <= this.dataSimplificada && 
-        moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) 
-    {
+    if (dataCorrente <= this.dataSimplificada &&
+      moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) {
       reajuste = 1;
     }
-    else if(moment(this.calculo.data_pedido_beneficio) <= this.dataInicioBuracoNegro && 
-            dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado))
-    {
+    else if (moment(this.calculo.data_pedido_beneficio) <= this.dataInicioBuracoNegro &&
+      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
       reajuste = 2.198234;
+    }
+
+    if (this.primeiroReajusteRecebidos == -1 && reajuste == 1) {
+       this.primeiroReajusteRecebidos = 1;
     }
 
     if (dataCorrente == moment(this.calculo.data_pedido_beneficio) && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
@@ -451,12 +494,26 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     if (dataCorrente == '03/1994') {
       reajuste = 1 / 661.0052;
-      if (dataCorrente == moment(this.calculo.data_pedido_beneficio)){
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
         reajuste = 1;
       }
     }
 
-    return reajuste;
+    let reajusteOS = 0.0;
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    //TODO: pegar reajusteOs do bd
+    // if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
+    //   if(dataCorrente < moment('1991-09-01')){
+    //     //reajusteOS = indiceOsTabelado;
+    //   }
+    //   else if(indiceTabelado){
+    //     //reajusteOS = indiceTabelado;
+    //   }
+    //   else{
+    //     reajusteOS = 1.0;
+    //   }
+    // }
+    return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.7
