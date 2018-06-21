@@ -544,48 +544,49 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 3.7
-  getCorrecaoMonetaria(dataCorrente){
+  getCorrecaoMonetaria(dataCorrente) {
     let tipo_correcao = this.calculo.tipo_correcao;
     let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
     let moedaIndexDataAtual = this.getDifferenceInMonths(this.dataInicioCalculo);
     let moedaIndexDataCalculo = this.getDifferenceInMonths(this.dataInicioCalculo, moment(this.calculo.data_calculo));
 
     let desindexador = 0.0;
-    let correcaoMonetaria = 0.0
-    if(tipo_correcao == 'ipca'){
-      desindexador = this.moeda[moedaIndexDataAtual].ipca / this.moeda[moedaIndexDataCalculo].ipca
+    let correcaoMonetaria = 0.0;
+    if (tipo_correcao == 'ipca') {
+      desindexador = this.moeda[moedaIndexDataAtual].ipca / this.moeda[moedaIndexDataCalculo].ipca;
       correcaoMonetaria = this.moeda[moedaIndexDataCorrente].ipca * desindexador;
-    }else if(tipo_correcao == 'cam'){
-      desindexador = this.moeda[moedaIndexDataAtual].cam / this.moeda[moedaIndexDataCalculo].cam
+    } else if (tipo_correcao == 'cam') {
+      desindexador = this.moeda[moedaIndexDataAtual].cam / this.moeda[moedaIndexDataCalculo].cam;
       correcaoMonetaria = this.moeda[moedaIndexDataCorrente].cam * desindexador;
-    }else if(tipo_correcao == 'tr'){
-      desindexador = this.moeda[moedaIndexDataAtual].tr / this.moeda[moedaIndexDataCalculo].tr
+    } else if (tipo_correcao == 'tr') {
+      desindexador = this.moeda[moedaIndexDataAtual].tr / this.moeda[moedaIndexDataCalculo].tr;
       correcaoMonetaria = this.moeda[moedaIndexDataCorrente].tr * desindexador;
     }
     let usar_deflacao = !this.calculo.nao_usar_deflacao;
     if (!usar_deflacao) {
-     if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
-          correcaoMonetaria = 1;
+      if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
+        correcaoMonetaria = 1;
       }
     }
     return correcaoMonetaria;
   }
-
-  setInicioRecebidosEDevidos(){
+  
+  //Seção 1
+  setInicioRecebidosEDevidos() {
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
 
-    if(this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
-                this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
+    if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
+      this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
     }
 
-    if(this.dataInicioDevidos < this.dataInicioBuracoNegro) {
-                this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
+    if (this.dataInicioDevidos < this.dataInicioBuracoNegro) {
+      this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
     }
     //dataInicioCalculo é o menor valor entre dataInicioDevidos e dataInicioRecebidos
-    this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos:this.dataInicioRecebidos;
+    this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
     //dataFinal é a data_calculo_pedido acrescido de um mês
-    this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1,'month');
+    this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
   }
 
   isBuracoNegro(date){
@@ -595,21 +596,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     return false;
   }
 
-  //Retorna uma lista com os meses entre dateStart e dateEnd
-  monthsBetween(dateStart, dateEnd){
-    // dateStart = '01/'+dateStart;
-    // dateEnd = '01/'+dateEnd;
-
-    // let startSplit = dateStart.split('/');
-    // let endSplit = dateEnd.split('/');
-
-    // dateStart = moment(startSplit[2]+'-'+startSplit[1]+'-'+startSplit[0]);
-    // dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
+  //Retorna uma lista com os meses em formato string YYYY-MM-DD  entre dateStart e dateEnd
+  monthsBetween(dateStart, dateEnd) {
     let timeValues = [];
 
     while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
-       timeValues.push(dateStart.format('YYYY-MM'));
-       dateStart.add(1,'month');
+      timeValues.push(dateStart.format('YYYY-MM-DD'));
+      dateStart.add(1, 'month');
     }
     return timeValues;
   }
