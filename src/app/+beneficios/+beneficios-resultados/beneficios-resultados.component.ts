@@ -87,6 +87,19 @@ export class BeneficiosResultadosComponent implements OnInit {
   private jurosAntes2003 = 0.005;
   private jurosDepois2003 = 0.01;
   private jurosDepois2009 = 0.015;
+
+  //Variaveis para tabela de conclusões
+  public ultimaRenda = 0.0;
+  public somaDiferencaMensal = 0.0;
+  public somaCorrecaoMonetaria = 0.0;
+  public somaDiferencaCorrigida = 0.0;
+  public somaJuros = 0.0;
+  public somaDevidaJudicialmente = 0.0;
+  public somaVincendas = 0.0;
+  public SomaTotalSegurado = 0.0;
+
+  private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
+  private ultimaCorrecaoMonetaria = 0.0;
   constructor(protected router: Router,
               private route: ActivatedRoute,
               protected Segurado: SeguradoService,
@@ -121,89 +134,80 @@ export class BeneficiosResultadosComponent implements OnInit {
   generateTabelaResultados(){
     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
     let tableData = [];
-    for (let dataCorrente of competencias){
-      let stringCompetencia = (dataCorrente.month()+1) + '/' + dataCorrente.year();
+    for (let dataCorrenteString of competencias) {
+      let dataCorrente = moment(dataCorrenteString);
+      let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
+      
+      let indiceReajusteValoresDevidos = {reajuste:0.0, reajusteOs:0.0};
+      let beneficioDevido = 0;
+      let indiceReajusteValoresRecebidos = {reajuste:0.0, reajusteOs:0.0};
+      let beneficioRecebido = 0;
+      let diferencaMensal = 0;
+      let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
+      let diferencaCorrigida = 0;
+      let juros = this.getJuros(dataCorrente);
+      let valorJuros = 0; //diferencaCorrigida * juros;
+      let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+
+      let beneficioDevidoString = {resultString:this.formatMoney(beneficioDevido)};
+      let beneficioRecebidoString = {resultString:this.formatMoney(beneficioRecebido)};
+
+      let isPrescricao = false;
       //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
-      if(dataCorrente < this.dataInicioRecebidos){
-        let indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-        let beneficioDevido = this.getBeneficioDevido(dataCorrente);
-        let indiceReajuseValoresRecebidos = 0;
-        let beneficioRecebido = 0;
-        let diferencaMensal = beneficioDevido;
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-        let diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        let juros = this.getJuros(dataCorrente);
-        let valorJuros = diferencaCorrigida * juros;
-        let diferencaCorrigidaJuros = diferencaCorrigida + valorJuros;
+      if (dataCorrente < this.dataInicioRecebidos) {
+        indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+        beneficioDevido = this.getBeneficioDevido(dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
+        diferencaMensal = beneficioDevido;
 
-        let line = {competencia: stringCompetencia,
-                    indice_devidos: indiceReajusteValoresDevidos,
-                    beneficio_devido: this.formatMoney(beneficioDevido),
-                    indice_recebidos: indiceReajuseValoresRecebidos,
-                    diferenca_mensal: this.formatMoney(diferencaMensal),
-                    correcao_monetaria: correcaoMonetaria,
-                    diferenca_corrigida: this.formatMoney(diferencaCorrigida),
-                    juros: this.formatPercent(juros),
-                    valor_juros: this.formatMoney(valorJuros),
-                    diferenca_juros: this.formatMoney(diferencaCorrigidaJuros)}
-        tableData.push(line);
-        continue;
+      }else if (dataCorrente < this.dataInicioDevidos) {
+        //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
+        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+        beneficioRecebido = this.getBeneficioRecebido(dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
+        diferencaMensal = beneficioDevido - beneficioRecebido;
+
+      }else if (dataCorrente >= this.dataInicioRecebidos && dataCorrente >= this.dataInicioDevidos) {
+        //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
+        indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+        beneficioDevido = this.getBeneficioDevido(dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
+        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+        beneficioRecebido = this.getBeneficioRecebido(dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
+        diferencaMensal = beneficioDevido - beneficioRecebido;
       }
 
-      //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
-      if(dataCorrente < this.dataInicioDevidos){
-        let indiceReajusteValoresDevidos = 0;
-        let beneficioDevido = 0;
-        let indiceReajuseValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-        let beneficioRecebido = this.getBeneficioRecebido(dataCorrente);
-        let diferencaMensal = beneficioDevido - beneficioRecebido;
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-        let diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        let juros = this.getJuros(dataCorrente);
-        let valorJuros = diferencaCorrigida * juros;
-        let diferencaCorrigidaJuros = diferencaCorrigida + valorJuros;
+      diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+      valorJuros = diferencaCorrigida * juros;
+      diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
 
-        let line = {competencia: stringCompetencia,
-                    indice_devidos: indiceReajusteValoresDevidos,
-                    beneficio_devido: this.formatMoney(beneficioDevido),
-                    indice_recebidos: indiceReajuseValoresRecebidos,
-                    diferenca_mensal: this.formatMoney(diferencaMensal),
-                    correcao_monetaria: correcaoMonetaria,
-                    diferenca_corrigida: this.formatMoney(diferencaCorrigida),
-                    juros: this.formatPercent(juros),
-                    valor_juros: this.formatMoney(valorJuros),
-                    diferenca_juros: this.formatMoney(diferencaCorrigidaJuros)}
-        tableData.push(line);
-        continue;
+      if (diferencaCorrigidaJuros.indexOf('prescrita') != -1){
+        //Se houver o marcador p, a data é prescrita
+        isPrescricao = true;
       }
 
-      //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
-      if(dataCorrente >= this.dataInicioRecebidos && dataCorrente >= this.dataInicioDevidos){
-        let indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-        let beneficioDevido = this.getBeneficioDevido(dataCorrente);
-        let indiceReajuseValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-        let beneficioRecebido = this.getBeneficioRecebido(dataCorrente);
-        let diferencaMensal = beneficioDevido - beneficioRecebido;
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-        let diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        let juros = this.getJuros(dataCorrente);
-        let valorJuros = diferencaCorrigida * juros;
-        let diferencaCorrigidaJuros =  this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
-
-        let line = {competencia: stringCompetencia,
-                    indice_devidos: indiceReajusteValoresDevidos,
-                    beneficio_devido: this.formatMoney(beneficioDevido),
-                    indice_recebidos: indiceReajuseValoresRecebidos,
-                    diferenca_mensal: this.formatMoney(diferencaMensal),
-                    correcao_monetaria: correcaoMonetaria,
-                    diferenca_corrigida: this.formatMoney(diferencaCorrigida),
-                    juros: this.formatPercent(juros),
-                    valor_juros: this.formatMoney(valorJuros),
-                    diferenca_juros: this.formatMoney(diferencaCorrigidaJuros)}
-        tableData.push(line);
-        continue;
+      let line = {
+        competencia: stringCompetencia,
+        indice_devidos: this.formatIndicesReajustes(indiceReajusteValoresDevidos),
+        beneficio_devido: beneficioDevidoString.resultString,
+        indice_recebidos: this.formatIndicesReajustes(indiceReajusteValoresRecebidos),
+        beneficio_recebido: beneficioRecebidoString.resultString,
+        diferenca_mensal: this.formatMoney(diferencaMensal),
+        correcao_monetaria: correcaoMonetaria,
+        diferenca_corrigida: this.formatMoney(diferencaCorrigida),
+        juros: this.formatPercent(juros),
+        valor_juros: this.formatMoney(valorJuros),
+        diferenca_juros: diferencaCorrigidaJuros
       }
+      tableData.push(line);
+
+      if(!isPrescricao){
+        //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+        this.somaDiferencaMensal += diferencaMensal;
+        this.somaCorrecaoMonetaria += correcaoMonetaria;
+        this.somaDiferencaCorrigida += diferencaCorrigida;
+      }
+      this.somaJuros += valorJuros;
+
     }
+    this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
     return tableData;
   }
 
@@ -714,6 +718,48 @@ export class BeneficiosResultadosComponent implements OnInit {
       juros = 0;
     }
     return juros;
+  }
+
+  //Seção 5.1
+  calcularDiasProporcionais(dataCorrente, dib) {
+    if (dataCorrente.isSame(dib, 'month')) //comparação de mês e ano
+      //dib.date() é o dia do mês da dib
+      return (30 - dib.date())/30;
+    return 1;
+  }
+
+  //Seção 5.3
+  aplicarTetosEMinimos(valorBeneficio, dib, tipo) {
+    let dibMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo,dib);
+    let salMinimo = this.moeda[dibMoedaIndex].salario_minimo;
+    let tetoSalarial = this.moeda[dibMoedaIndex].teto;
+    let tipoAposentadoria = '';
+
+    if (tipo == 'Recebido') {
+      tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
+    }else{
+      tipoAposentadoria = this.calculo.tipo_aposentadoria;
+    }
+
+    if (tipoAposentadoria == '7'){ //’Auxilio Acidente - 30%’
+      salMinimo *= 0.3;
+    }else if (tipoAposentadoria == '8') {//‘Auxilio Acidente - 40%’
+      salMinimo *= 0.4;
+    }else if (tipoAposentadoria == '5'){ //‘Auxilio Acidente Previdenciario- 50%’
+      salMinimo *= 0.5;
+    }else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 60%’
+      salMinimo *= 0.6;
+    }
+
+    if (valorBeneficio <= salMinimo ){
+      // Adicionar subindice ‘M’ no valor do beneficio
+      return salMinimo;
+    }
+    if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+      // Adicionar subindice ‘T’ no valor do beneficio.
+      return tetoSalarial;
+    }
+    return valorBeneficio;
   }
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
