@@ -533,6 +533,231 @@ export class BeneficiosResultadosComponent implements OnInit {
     return beneficioRecebidoFinal;
   }
 
+  //Seção 3.5
+  getBeneficioDevidoTetos(dataCorrente, reajusteObj, resultsObj){
+    let rmiDevidosTetos = parseFloat(this.calculo.valor_beneficio_esperado);
+    let beneficioDevidoTetos = rmiDevidosTetos;
+    let beneficioDevidoTetosSemLimite = rmiDevidosTetos;
+    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+    // if !(dataCorrente <= dataSimplificada && CALCULO.data_pedido_beneficio_esperado < dataInicioBuracoNegro) && aplicarReajusteUltimo {
+    //   beneficioDevidoTetos = beneficioDevidoTetosAnterior; // = beneficioDevido do mes anterior antes do ajuste;
+    // }
+
+    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
+    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
+      //beneficioDevidoTetos = beneficioDevidoTeto[04/2006];
+      return this.getBeneficioDevidoTetos('2006-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2000-06-01')) {//06/2000
+      //beneficioDevidoTetos = beneficioDevidoTeto[04/2000];
+      return this.getBeneficioDevidoTetos('2000-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2001-06-01')) {//06/2001
+      //beneficioDevidoTetos = beneficioDevidoTeto[04/2001];
+      return this.getBeneficioDevidoTetos('2001-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2002-06-01')) {//06/2002
+      //beneficioDevidoTetos = beneficioDevidoTeto[04/2002];
+      return this.getBeneficioDevidoTetos('2002-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2003-06-01')) {//06/2003
+      //beneficioDevidoTetos = beneficioDevidoTeto[04/2003];
+      return this.getBeneficioDevidoTetos('2003-04-01', reajusteObj, resultsObj);
+    }
+
+    // algortimo buracoNegro definida na seção de algortimos úteis.
+    let indiceSuperior = false;
+    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+      if (dataCorrente == this.dataEfeitoFinanceiro) {
+        // INSERIR ÍNDICE SUPERIOR ‘*’
+        indiceSuperior = true;
+        beneficioDevidoTetos = parseFloat(this.calculo.valor_beneficio_esperado_apos_revisao) *  reajusteObj.reajusteOs;
+      }else if (dataCorrente < this.dataEfeitoFinanceiro) {
+        beneficioDevidoTetos = rmiDevidosTetos * reajusteObj.reajuste;
+      }
+    }
+    // taxa_ajuste_maxima_esperada definida no CRUD         
+    if (this.calculo.taxa_ajuste_maxima_esperada > 1) {
+      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio_esperado) && 
+         moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataFimLei8870 && 
+         dataCorrente == this.dataAplicacao8870) {
+        beneficioDevidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
+      }
+      if(moment(this.calculo.data_pedido_beneficio_esperado) >= this.dataLei8880 && this.primeiroReajusteDevidos == 1) {
+        beneficioDevidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
+        this.primeiroReajusteDevidos = 0;
+      }
+    }
+
+    let tetoDevidos = parseFloat(this.moeda[moedaIndexDataCorrente].teto);
+
+    if (dataCorrente == this.dataPrimeiroTetoJudicial) { // Comparação de mês e ano, ignorar dia
+      tetoDevidos = 1200.0;
+      if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+        let beneficioDevidoPosRevisao = 0;
+        if (this.calculo.valor_beneficio_esperado_revisao){
+          beneficioDevidoPosRevisao = parseFloat(this.calculo.valor_beneficio_esperado_revisao);
+        }
+        if (dataCorrente < this.dataEfeitoFinanceiro) {
+          beneficioDevidoPosRevisao *= reajusteObj.reajusteOs;
+        } else {
+          beneficioDevidoPosRevisao *= reajusteObj.reajuste;
+        }
+          beneficioDevidoTetos = beneficioDevidoPosRevisao;
+        }
+    }
+
+    if (dataCorrente == this.dataSegundoTetoJudicial) { // Comparação de mês e ano, ignorar dia
+      tetoDevidos = 2400.0;
+      if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+        let beneficioDevidoPosRevisao = 0;
+        if(this.calculo.valor_beneficio_concedido_revisao){
+          beneficioDevidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
+        }
+        if (dataCorrente < this.dataEfeitoFinanceiro) {
+          beneficioDevidoPosRevisao *= reajusteObj.reajusteOs;
+        } else {
+          beneficioDevidoPosRevisao *= reajusteObj.reajuste;
+        }
+        beneficioDevidoTetos = beneficioDevidoPosRevisao;
+      }else{
+        beneficioDevidoTetos = beneficioDevidoTetosSemLimite;
+      }
+    }
+
+    let beneficioDevidoTetosAjustado = this.aplicarTetosEMinimosTetos(beneficioDevidoTetos, moment(this.calculo.data_pedido_beneficio_esperado), 'Devido', tetoDevidos);
+    let beneficioDevidoTetosString = this.formatMoney(beneficioDevidoTetosAjustado);
+
+    if(indiceSuperior){
+      beneficioDevidoTetosString += '*'
+    }
+
+    if(beneficioDevidoTetosAjustado < beneficioDevidoTetos){
+      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
+      beneficioDevidoTetosString += ' -<br> T';
+    }else if(beneficioDevidoTetosAjustado > beneficioDevidoTetos){
+      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
+      beneficioDevidoTetosString += ' -<br> M';
+    }
+
+    resultsObj.resultString = beneficioDevidoTetosString;
+    return beneficioDevidoTetosAjustado;
+  }
+
+  //Seção 3.6
+  getBeneficioRecebidoTetos(dataCorrente, reajusteObj, resultsObj){
+    let rmiRecebidosTetos = parseFloat(this.calculo.valor_beneficio_concedido);
+    let beneficioRecebidoTetos = rmiRecebidosTetos;
+    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+    //TODO:
+    //QUESTION: no mes anterior da dataCorrente? SIM
+    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
+    // if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) && aplicarReajusteUltimo) {
+    //   beneficioRecebidoTetos = beneficioRecebidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
+    // }
+
+    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
+    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
+      //beneficioRecebidoTetos = beneficioRecebido[04/2006];
+      return this.getBeneficioRecebidoTetos('2006-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2000-06-01')) {//06/2000
+      //beneficioRecebidoTetos = beneficioRecebido[04/2000];
+      return this.getBeneficioRecebidoTetos('2000-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2001-06-01')) {//06/2001
+      //beneficioRecebidoTetos = beneficioRecebido[04/2001];
+      return this.getBeneficioRecebidoTetos('2001-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2002-06-01')) {//06/2002
+      //beneficioRecebidoTetos = beneficioRecebido[04/2002];
+      return this.getBeneficioRecebidoTetos('2002-04-01', reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2003-06-01')) {//06/2003
+      //beneficioRecebidoTetos = beneficioRecebido[04/2003];
+      return this.getBeneficioRecebidoTetos('2003-04-01', reajusteObj, resultsObj);
+    }
+
+    if (this.calculo.tipo_aposentadoria_recebida != 11) { //11: LOAS - beneficio salario minimo'
+      beneficioRecebidoTetos *= reajusteObj.reajuste;
+    }
+
+    let indiceSuperior = false;
+    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
+      if (dataCorrente == this.dataEfeitoFinanceiro) {
+        // INSERIR ÍNDICE SUPERIOR ‘*’
+        indiceSuperior = true;
+        beneficioRecebidoTetos = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteObj.reajusteOs;
+      } else if (dataCorrente < this.dataEfeitoFinanceiro) {
+        beneficioRecebidoTetos = rmiRecebidosTetos * reajusteObj.reajuste;
+      }
+    }
+
+    if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
+      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
+         moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
+         dataCorrente == this.dataAplicacao8870) {
+        beneficioRecebidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
+      }
+
+      if(this.calculo.data_pedido_beneficio_esperado >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
+        beneficioRecebidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
+        this.primeiroReajusteRecebidos = 0;
+      }
+    }
+ 
+    let tetoRecebidos = this.moeda[moedaIndexDataCorrente].teto;
+
+    if (dataCorrente == this.dataPrimeiroTetoJudicial) { // Comparação de mês e ano, ignorar dia
+      tetoRecebidos = 1081.50;
+      if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+        let beneficioRecebidoPosRevisao = 0;
+        if (this.calculo.valor_beneficio_concedido_revisao){
+          beneficioRecebidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
+        }
+        if (dataCorrente < this.dataEfeitoFinanceiro) {
+          beneficioRecebidoPosRevisao *= reajusteObj.reajusteOs;
+        } else {
+          beneficioRecebidoPosRevisao *= reajusteObj.reajuste;
+        }
+          beneficioRecebidoTetos = beneficioRecebidoPosRevisao;
+        }
+    }
+
+    if (dataCorrente == this.dataSegundoTetoJudicial) { // Comparação de mês e ano, ignorar dia
+      if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+        let beneficioRecebidoPosRevisao = 0;
+        if(this.calculo.valor_beneficio_concedido_revisao){
+          beneficioRecebidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
+        }
+        if (dataCorrente < this.dataEfeitoFinanceiro) {
+          beneficioRecebidoPosRevisao *= reajusteObj.reajusteOs;
+        } else {
+          beneficioRecebidoPosRevisao *= reajusteObj.reajuste;
+        }
+          beneficioRecebidoTetos = beneficioRecebidoPosRevisao;
+      }
+    }
+    let beneficioRecebidoTetosAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebidoTetos, moment(this.calculo.data_pedido_beneficio), 'Recebido', tetoRecebidos);
+    let beneficioRecebidoTetosString = this.formatMoney(beneficioRecebidoTetosAjustado);
+
+    if(indiceSuperior){
+      beneficioRecebidoTetosString += '*'
+    }
+
+    if(beneficioRecebidoTetosAjustado < beneficioRecebidoTetos){
+      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
+      beneficioRecebidoTetosString += ' -<br> T';
+    }else if(beneficioRecebidoTetosAjustado > beneficioRecebidoTetos){
+      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
+      beneficioRecebidoTetosString += ' -<br> M';
+    }
+
+    resultsObj.resultString = beneficioRecebidoTetosString;
+    return beneficioRecebidoTetosAjustado;
+  }
+
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
     let tipo_correcao = this.calculo.tipo_correcao;
@@ -736,6 +961,38 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tetoSalarial = this.moeda[dibMoedaIndex].teto;
     let tipoAposentadoria = '';
 
+    if (tipo == 'Recebido') {
+      tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
+    }else{
+      tipoAposentadoria = this.calculo.tipo_aposentadoria;
+    }
+
+    if (tipoAposentadoria == '7'){ //’Auxilio Acidente - 30%’
+      salMinimo *= 0.3;
+    }else if (tipoAposentadoria == '8') {//‘Auxilio Acidente - 40%’
+      salMinimo *= 0.4;
+    }else if (tipoAposentadoria == '5'){ //‘Auxilio Acidente Previdenciario- 50%’
+      salMinimo *= 0.5;
+    }else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 60%’
+      salMinimo *= 0.6;
+    }
+
+    if (valorBeneficio <= salMinimo ){
+      // Adicionar subindice ‘M’ no valor do beneficio
+      return salMinimo;
+    }
+    if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+      // Adicionar subindice ‘T’ no valor do beneficio.
+      return tetoSalarial;
+    }
+    return valorBeneficio;
+  }
+
+  //Seção 5.4
+  aplicarTetosEMinimosTetos(valorBeneficio, dib, tipo, tetoSalarial) {
+    let dibMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo,dib);
+    let salMinimo = this.moeda[dibMoedaIndex].salario_minimo;
+    let tipoAposentadoria = '';
     if (tipo == 'Recebido') {
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
     }else{
