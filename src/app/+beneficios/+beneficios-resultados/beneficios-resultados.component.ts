@@ -66,6 +66,18 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataInicioRecebidos;
   private dataInicioDevidos;
 
+  //Variaveis para aplicação do reajuste
+  private aplicarReajusteUltimoDevido = false;
+  private ultimoSalarioMinimoDevido = 0.0;
+  private beneficioDevidoAnterior = 0.0;
+  private aplicarReajusteUltimoRecebido = false;
+  private ultimoSalarioMinimoRecebido = 0.0;
+  private beneficioRecebidoAnterior = 0.0;
+
+  //Variaveis para condicionais de primeiro reajuste
+  private primeiroReajusteRecebidos = -1;
+  private primeiroReajusteDevidos = -1;
+
   //Data da primeira linha da tabela
   private dataInicioCalculo;
   //Data da ultima linha da tabela
@@ -201,69 +213,111 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 3.3
-  getBeneficioDevido(dataCorrente){
-    //QUESTION: o que é rmiDevidos?
-   //  let beneficioDevido = rmiDevidos;
-   //  //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-   //  if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) && aplicarReajusteUltimo ){
-   //    beneficioDevido = beneficioDevidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-   //  }
-   // // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
-   //  if (dataCorrente == 08/2006) {
-   //    beneficioDevido = beneficioDevido[04/2006];
-   //  }
-   //  if (dataCorrente == 06/2000) {
-   //     beneficioDevido = beneficioDevido[04/2000];
-   //  }
-   //  if (dataCorrente == 06/2001) {
-   //     beneficioDevido = beneficioDevido[04/2001];
-   //  }
-   //  if (dataCorrente == 06/2002) {
-   //     beneficioDevido = beneficioDevido[04/2002];
-   //  }
-   //  if (dataCorrente == 06/2003) {
-   //    beneficioDevido = beneficioDevido[04/2003];
-   //  }
+  getBeneficioDevido(dataCorrente, reajusteObj, resultsObj){
+    let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
+    let beneficioDevido = rmiDevidos;
+    
+    //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+    if(!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro)
+       && this.aplicarReajusteUltimoDevido ){
+      beneficioDevido = this.beneficioDevidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
+    }
+    
+    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
+    if (dataCorrente.isSame('2006-08-01')) { //08/2006
+      //beneficioDevido = beneficioDevido[04/2006];
+      return this.getBeneficioDevido(moment('2006-04-01'), reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2000-06-01')) { //06/2000
+      //beneficioDevido = beneficioDevido[04/2000];
+      return this.getBeneficioDevido(moment('2000-04-01'), reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2001-06-01')) { //06/2001
+      //beneficioDevido = beneficioDevido[04/2001];
+      return this.getBeneficioDevido(moment('2001-04-01'), reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2002-06-01')) { //06/2002
+      //beneficioDevido = beneficioDevido[04/2002];
+      return this.getBeneficioDevido(moment('2002-04-01'), reajusteObj, resultsObj);
+    }
+    if (dataCorrente.isSame('2003-06-01')) { //06/2003
+      //beneficioDevido = beneficioDevido[04/2003];
+      return this.getBeneficioDevido(moment('2003-04-01'), reajusteObj, resultsObj);
+    }
 
-   //  if (this.calculo.tipo_aposentadoria == 'LOAS - beneficio salario minimo') {
-   //    beneficioDevido = minimoSalarial; //salário mínimo tabelado.
-   //  }else{
-   //     beneficioDevido *= reajuste; //Reajuse de devidos, calculado na seção 2.1
-   //  }
+    if (this.calculo.tipo_aposentadoria == '11') { //11 = 'LOAS - beneficio salario minimo'
+      let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+      beneficioDevido = this.moeda[moedaIndexDataCorrente].salario_minimo;
+    } else {
+      beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
+    }
 
-   //  // algortimo buracoNegro definida na seção de algortimos úteis.
-   //  if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))){
-   //    if (dataCorrente == efeitoFinanceiro) {
-   //      beneficioDevido = this.calculo.valor_beneficio_esperado_apos_revisao *  reajusteOS;
-   //    }else if(dataCorrente < efeitoFinanceiro){
-     //QUESTION: é rmiDevidos * reajuste?
-   //      beneficioDevido = rmiDevidos & reajuste;
-   //    }
-   //  }
+    let indiceSuperior = false;
+    // algortimo buracoNegro definida na seção de algortimos úteis.
+    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+      if (dataCorrente == this.dataEfeitoFinanceiro) {
+        //Inserir indice superior *
+        indiceSuperior = true;
+        beneficioDevido = this.calculo.valor_beneficio_esperado_apos_revisao * reajusteObj.reajusteOs;
+      } else if (dataCorrente < this.dataEfeitoFinanceiro) {
+        beneficioDevido = rmiDevidos * reajusteObj.reajuste;
+      }
+    }
 
-   //  // taxa_ajuste_maxima_esperada definida no CRUD         
-   //  if (this.calculo.taxa_ajuste_maxima_esperada != 0 && 
-   //      this.calculo.taxa_ajuste_maxima_esperada != undefined) 
-   //  {
-   //    if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio_esperado) && 
-   //      moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataFimLei8870 && 
-   //      dataCorrente == this.dataAplicacao8870) 
-   //    {
-   //      beneficioDevido *= this.calculo.taxa_ajuste_maxima_esperada;
-   //    }
-   //    if(moment(this.calculo.data_pedido_beneficio_esperado) >= this.dataLei8880 && primeiroReajuste) {
-   //      beneficioDevido *= this.calculo.taxa_ajuste_maxima_esperada;
-   //    }
-   //  }
+    // taxa_ajuste_maxima_esperada definida no CRUD         
+    if (this.calculo.taxa_ajuste_maxima_esperada != 0 &&
+      this.calculo.taxa_ajuste_maxima_esperada != undefined) {
+      if (this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio_esperado) &&
+        moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataFimLei8870 &&
+        dataCorrente == this.dataAplicacao8870) {
+        beneficioDevido *= this.calculo.taxa_ajuste_maxima_esperada;
+      }
 
-   //  // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
-   //  beneficioDevido = aplicarTetosEMinimos(beneficioDevido);
-   //  // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
-   //  let diasProporcionais = calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
-   //  beneficioDevido = beneficioDevido * diasProporcionais;
+      if (moment(this.calculo.data_pedido_beneficio_esperado) >= this.dataLei8880 && this.primeiroReajusteDevidos == 1) {
+        beneficioDevido *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
+        this.primeiroReajusteDevidos = 0;
+      }
+    }
 
-   //  return beneficioDevido;
-   return 0.0;
+    // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
+    let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, moment(this.calculo.data_pedido_beneficio_esperado), 'Devido');
+    // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
+    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
+    let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
+
+    let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal);
+    if(indiceSuperior){
+      beneficioDevidoString += '*'
+    }
+
+    let minimoAplicado = false;
+    if(beneficioDevidoAjustado <= beneficioDevido){
+      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
+      beneficioDevidoString += ' -<br>  T';
+    }else if(beneficioDevidoAjustado >= beneficioDevido){
+      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
+      beneficioDevidoString += ' -<br> M';
+      minimoAplicado = true;
+    } 
+
+    if(diasProporcionais != 1){
+      beneficioDevidoString += ' <br>p';
+    }
+
+    this.aplicarReajusteUltimoDevido = false;
+    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
+    if(minimoAplicado){
+      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      //esse valor sera usado na proxima chamada da função
+      if(this.ultimoSalarioMinimoDevido != beneficioDevidoAjustado){
+        this.ultimoSalarioMinimoDevido = beneficioDevidoAjustado;
+        this.aplicarReajusteUltimoDevido = true;
+      }
+    }
+
+    resultsObj.resultString = beneficioDevidoString;
+    this.beneficioDevidoAnterior = beneficioDevidoFinal;
+    return beneficioDevidoFinal;
   }
 
   //Seção 3.4
