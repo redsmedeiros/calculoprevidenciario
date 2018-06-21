@@ -434,30 +434,48 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Seção 3.1
   getIndiceReajusteValoresDevidos(dataCorrente){
     //TODO: recuperar o indice tabelado na variavel 'reajuste'.
-
     //let reajuste = indiceTabelado; //Recuperado da tabela IntervaloReajustes, coluna índice
-    // if (dataCorrente <= this.dataSimplificada && 
-    //     moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) 
-    // {
-    //     reajuste = 1;
+    let reajuste = 0;
+    if (dataCorrente <= this.dataSimplificada  &&
+      moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
+      reajuste = 1;
+    }
+    else if (moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataInicioBuracoNegro &&
+      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+      reajuste = 2.198234;
+
+    }
+
+    if (this.primeiroReajusteDevidos == -1 && reajuste == 1) {
+       this.primeiroReajusteDevidos = 1;
+    }
+
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado) &&
+      moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) {
+      reajuste = 1;
+    }
+    if (dataCorrente == moment('1994-03-01')) {
+      reajuste = 1 / 661.0052;
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)){
+        reajuste = 1;
+      }
+    }
+
+    let reajusteOS = 0.0;
+    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+    //TODO: pegar reajusteOs do bd
+    // if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
+    //   if(dataCorrente < moment('1991-09-01')){
+    //     //reajusteOS = indiceOsTabelado;
+    //   }
+    //   else if(indiceTabelado){
+    //     //reajusteOS = indiceTabelado;
+    //   }
+    //   else{
+    //     reajusteOS = 1;
+    //   }
     // }
-    // else if(moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataInicioBuracoNegro && 
-    //         dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado))
-    // {
-    //     reajuste = 2.198234;
-    // }
-    // if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado) && 
-    //     moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) 
-    // {
-    //     reajuste = 1;
-    // }
-    // if (dataCorrente == moment('1994-03-01')) {
-    //         reajuste = 1 / 661.0052;
-    //         if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado))
-    //                 reajuste = 1;
-    // }
-    // return reajuste;
-    return 0.0;
+    return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.2
