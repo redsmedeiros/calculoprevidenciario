@@ -7,6 +7,8 @@ import { CalculoAtrasado as CalculoModel } from "../+beneficios-calculos/Calculo
 import { CalculoAtrasadoService as CalculoService } from "../+beneficios-calculos/CalculoAtrasado.service";
 import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
+import { IntervaloReajusteService } from '../../services/IntervaloReajuste.service';
+import { IntervaloReajuste } from '../../services/IntervaloReajuste.model';
 import * as moment from 'moment';
 
 @FadeInTop()
@@ -23,6 +25,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public segurado:any = {};
   public calculo:any = {};
   public moeda;
+  public reajustes;
   public isUpdating = false;
 
   public resultadosList;
@@ -116,6 +119,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               protected Segurado: SeguradoService,
               protected CalculoAtrasado: CalculoService,
               private Moeda: MoedaService,
+              private IntervaloReajuste: IntervaloReajusteService,
               ) {}
 
   ngOnInit() {
@@ -134,9 +138,17 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.Moeda.getByDateRange(this.dataInicioCalculo, this.dataFinal)
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
+            // this.resultadosList = this.generateTabelaResultados();
+            // this.updateResultadosDatatable();
+            // this.isUpdating = false;
+            this.IntervaloReajuste.getByDateRange(this.dataInicioCalculo, this.dataFinal)
+          .then((reajustes: IntervaloReajuste[]) => {
+            this.reajustes = reajustes;
+            console.log(reajustes)
             this.resultadosList = this.generateTabelaResultados();
             this.updateResultadosDatatable();
             this.isUpdating = false;
+          })
           })
       });
 
@@ -155,6 +167,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       let beneficioRecebido = 0;
       let diferencaMensal = 0;
       let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
+      this.ultimaCorrecaoMonetaria = correcaoMonetaria;
       let diferencaCorrigida = 0;
       let juros = this.getJuros(dataCorrente);
       let valorJuros = 0; //diferencaCorrigida * juros;
