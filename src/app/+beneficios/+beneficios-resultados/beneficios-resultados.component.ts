@@ -114,6 +114,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   public valorAcordo = 0.0;
 
   //Variaveis para tabela de conclusões
+  public somaHonorarios = 0.0;
+  public descontoAcordo = 0.0;
+  public valorAcordo = 0.0;
+
   public ultimaRenda = 0.0;
   public somaDiferencaMensal = 0.0;
   public somaCorrecaoMonetaria = 0.0;
@@ -246,8 +250,13 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaHonorarios += honorarios;
       }
       this.somaJuros += valorJuros;
+      this.ultimaDiferencaMensal = diferencaMensal;
+      this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
     }
+    this.somaVincendas = this.calcularVincendas();
+    this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
+
     this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
     return tableData;
   }
@@ -1057,7 +1066,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 4.2
   calcularVincendas(){
-    let somaVincendos = this.somaDiferencaMensal;
+    let somaVincendos = this.ultimaDiferencaMensal;
     let data = moment(this.calculo.data_citacao_reu);
     let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
     let maturidade = this.calculo.maturidade;
@@ -1170,6 +1179,19 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Somar o valor dos honorários de cada linha da tabela, menos da ultima linha.
     return honorarios;
   }
+
+  //Seção 4.4
+  calcularAcordoJudicial() {
+    let totalDevido = this.somaDiferencaCorrigida;
+    let percentualAcordo = parseFloat(this.calculo.acordo_pedido);
+    // Acordo percentual máximo 0.9;
+    if (percentualAcordo > 0.9){
+      percentualAcordo = 0.9;
+    }
+    this.valorAcordo = totalDevido * percentualAcordo;
+    this.descontoAcordo = totalDevido -  this.valorAcordo;
+  }
+
 
   //Seção 4.6
   calcularVincendosTetos() {
