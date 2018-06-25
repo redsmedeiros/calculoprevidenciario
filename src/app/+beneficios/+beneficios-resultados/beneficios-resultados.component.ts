@@ -151,6 +151,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
       .then(calculo => {
         this.calculo = calculo;
+        if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
+          this.isTetos = true;
+        }
         this.setInicioRecebidosEDevidos();
 
         this.Moeda.getByDateRange(this.dataInicioCalculo, this.dataFinal)
@@ -175,22 +178,27 @@ export class BeneficiosResultadosComponent implements OnInit {
   generateTabelaResultados(){
     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
     let tableData = [];
+
+    //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
+    let func_beneficioDevido = (this.isTetos) ? this.getBeneficioDevidoTetos : this.getBeneficioDevido;
+    let func_beneficioRecebido = (this.isTetos) ? this.getBeneficioRecebidoTetos :  this.getBeneficioRecebido;
+    
     for (let dataCorrenteString of competencias) {
       let dataCorrente = moment(dataCorrenteString);
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
       
       let indiceReajusteValoresDevidos = {reajuste:0.0, reajusteOs:0.0};
-      let beneficioDevido = 0;
+      let beneficioDevido = 0.0;
       let indiceReajusteValoresRecebidos = {reajuste:0.0, reajusteOs:0.0};
-      let beneficioRecebido = 0;
-      let diferencaMensal = 0;
+      let beneficioRecebido = 0.0;
+      let diferencaMensal = 0.0;
       let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-      this.ultimaCorrecaoMonetaria = correcaoMonetaria;
-      let diferencaCorrigida = 0;
+      let diferencaCorrigida = 0.0;
       let juros = this.getJuros(dataCorrente);
       let valorJuros = 0.0; //diferencaCorrigida * juros;
       let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       let honorarios = 0.0;
+
       let beneficioDevidoString = {resultString:this.formatMoney(beneficioDevido)};
       let beneficioRecebidoString = {resultString:this.formatMoney(beneficioRecebido)};
 
@@ -198,21 +206,21 @@ export class BeneficiosResultadosComponent implements OnInit {
       //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
       if (dataCorrente < this.dataInicioRecebidos) {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-        beneficioDevido = this.getBeneficioDevido(dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
+        beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
         diferencaMensal = beneficioDevido;
 
       }else if (dataCorrente < this.dataInicioDevidos) {
         //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-        beneficioRecebido = this.getBeneficioRecebido(dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
+        beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
         diferencaMensal = beneficioDevido - beneficioRecebido;
 
       }else if (dataCorrente >= this.dataInicioRecebidos && dataCorrente >= this.dataInicioDevidos) {
         //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-        beneficioDevido = this.getBeneficioDevido(dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
+        beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-        beneficioRecebido = this.getBeneficioRecebido(dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
+        beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
         diferencaMensal = beneficioDevido - beneficioRecebido;
       }
 
@@ -222,7 +230,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1){
-        //Se houver o marcador p, a data é prescrita
+        //Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
 
@@ -249,15 +257,35 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaDiferencaCorrigida += diferencaCorrigida;
         this.somaHonorarios += honorarios;
       }
+
       this.somaJuros += valorJuros;
       this.ultimaDiferencaMensal = diferencaMensal;
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
+      if(dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11){
+        //Adicionar linha de abono
+        line = {
+              ...line,
+              competencia: 'abono - ' + stringCompetencia,
+        }
+        tableData.push(line);
+        if(!isPrescricao){
+          //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+          this.somaDiferencaMensal += diferencaMensal;
+          this.somaCorrecaoMonetaria += correcaoMonetaria;
+          this.somaDiferencaCorrigida += diferencaCorrigida;
+          this.somaHonorarios += honorarios;
+        }
+        
+        this.somaJuros += valorJuros;
+      }
     }
+
     this.somaVincendas = this.calcularVincendas();
     this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
-
     this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
+    this.calcularAcordoJudicial();
+
     return tableData;
   }
 
