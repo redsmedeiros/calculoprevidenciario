@@ -24,6 +24,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public segurado:any = {};
   public calculo:any = {};
+  public isTetos = false;
   public moeda;
   public reajustes;
   public isUpdating = false;
@@ -46,7 +47,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       {data: 'diferenca_corrigida'},
       {data: 'juros'},
       {data: 'valor_juros'},
-      {data: 'diferenca_juros'}
+      {data: 'diferenca_juros'},
+      {data: 'honorarios'}
     ]
   }
 
@@ -98,6 +100,11 @@ export class BeneficiosResultadosComponent implements OnInit {
   private jurosAntes2003 = 0.005;
   private jurosDepois2003 = 0.01;
   private jurosDepois2009 = 0.015;
+
+  //Variaveis para tabela de conclusões
+  public somaHonorarios = 0.0;
+  public descontoAcordo = 0.0;
+  public valorAcordo = 0.0;
 
   //Variaveis para tabela de conclusões
   public ultimaRenda = 0.0;
@@ -170,9 +177,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
       let diferencaCorrigida = 0;
       let juros = this.getJuros(dataCorrente);
-      let valorJuros = 0; //diferencaCorrigida * juros;
+      let valorJuros = 0.0; //diferencaCorrigida * juros;
       let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
-
+      let honorarios = 0.0;
       let beneficioDevidoString = {resultString:this.formatMoney(beneficioDevido)};
       let beneficioRecebidoString = {resultString:this.formatMoney(beneficioRecebido)};
 
@@ -201,6 +208,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       diferencaCorrigida = diferencaMensal * correcaoMonetaria;
       valorJuros = diferencaCorrigida * juros;
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+      honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1){
         //Se houver o marcador p, a data é prescrita
@@ -218,7 +226,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         diferenca_corrigida: this.formatMoney(diferencaCorrigida),
         juros: this.formatPercent(juros),
         valor_juros: this.formatMoney(valorJuros),
-        diferenca_juros: diferencaCorrigidaJuros
+        diferenca_juros: diferencaCorrigidaJuros,
+        honorarios: this.formatMoney(honorarios)
       }
       tableData.push(line);
 
@@ -227,6 +236,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaDiferencaMensal += diferencaMensal;
         this.somaCorrecaoMonetaria += correcaoMonetaria;
         this.somaDiferencaCorrigida += diferencaCorrigida;
+        this.somaHonorarios += honorarios;
       }
       this.somaJuros += valorJuros;
 
@@ -1047,6 +1057,33 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     return somaVincendos;
+  }
+
+  //Seção 4.3
+  calculoHonorarios(dataCorrente, juros, diferencaCorrigida){
+    //Calcular Honorários para cada linha da tabela
+    let honorarios = 0.0;
+    let taxaAdvogadoInicio = null;
+    let taxaAdvogadoFinal = null;
+    let diferecaCorrigidaJuros = juros + diferencaCorrigida;
+    if(this.calculo.taxa_advogado_inicio != ''){
+      taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
+    }
+    if(this.calculo.taxa_advogado_final != ''){
+      taxaAdvogadoFinal = moment(this.calculo.taxa_advogado_final);
+    }
+
+    if (this.calculo.percentual_taxa_advogado == '') {// Verificar se há valor para o percentual do advogado.
+      honorarios = 0;
+      // Aplicar a porcentagem quando a data corrente estiver no intervalo definido ou quando nenhuma data for definida
+    }else if((taxaAdvogadoInicio >= dataCorrente && dataCorrente >= taxaAdvogadoFinal) || 
+            (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)){
+      honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
+    }else{
+      honorarios = 0;
+    }
+    // Somar o valor dos honorários de cada linha da tabela, menos da ultima linha.
+    return honorarios;
   }
 
   //Seção 4.6
