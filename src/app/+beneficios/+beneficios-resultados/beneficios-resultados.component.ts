@@ -1457,8 +1457,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   	return this.formatDecimal(value, 0) + '%';
   }
 
-  formatMoney(value){
-  	return 'R$' + this.formatDecimal(value, 2);
+  formatMoney(value, sigla='R$'){
+    return sigla + this.formatDecimal(value, 2);
   }
 
   formatDecimal(value, n_of_decimal_digits){
