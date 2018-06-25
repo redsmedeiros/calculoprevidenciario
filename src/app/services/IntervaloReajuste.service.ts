@@ -12,7 +12,6 @@ export class IntervaloReajusteService extends ControllerService {
   public getByDateRange(from, to) {
 
     return new Promise((resolve, reject) => {
-
     	let fromDate = Date.parse(from);
     	let toDate = Date.parse(to);
 
@@ -21,8 +20,8 @@ export class IntervaloReajusteService extends ControllerService {
 			  	let list = this.list.filter((intervaloReajuste) => {
 			  		let inicioIntervalo = Date.parse(intervaloReajuste.dib_ini);
 			  		let fimIntervalo = Date.parse(intervaloReajuste.dib_fim);
-			  		console.log(inicioIntervalo)
-			  		return inicioIntervalo <= fromDate && toDate <= fimIntervalo;
+			  		return true;
+			  		//return fromDate <= inicioIntervalo && fimIntervalo <= toDate;
 			  	});
 			  	resolve(list);
 	  		}).catch(error => {
@@ -33,7 +32,8 @@ export class IntervaloReajusteService extends ControllerService {
 			let list =  this.list.filter((intervaloReajuste) => {
 		  		let inicioIntervalo = Date.parse(intervaloReajuste.dib_ini);
 			  	let fimIntervalo = Date.parse(intervaloReajuste.dib_fim);
-			  	return inicioIntervalo <= fromDate && toDate <= fimIntervalo;
+			  	return true;
+			  	//return fromDate <= inicioIntervalo && fimIntervalo <= toDate;
 	  		})
 	  		resolve(list);
   		}

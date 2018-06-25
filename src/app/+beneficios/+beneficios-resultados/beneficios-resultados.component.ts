@@ -100,6 +100,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Data da ultima linha da tabela
   private dataFinal;
 
+  private dataCessacaoDevido = null;
+  private dataCessacaoRecebido = null;
+
   //Taxas de Juros
   private jurosAntes2003 = 0.005;
   private jurosDepois2003 = 0.01;
@@ -251,9 +254,23 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.1
   getIndiceReajusteValoresDevidos(dataCorrente){
-    //DOINDICE: recuperar o indice tabelado na variavel 'reajuste'.
-    //let reajuste = indiceTabelado; //Recuperado da tabela IntervaloReajustes, coluna índice
-    let reajuste = 0;
+    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido)
+      return {reajuste: 1.0, reajusteOs: 0.0};
+
+    let reajuste = 0.0;
+    let index = 0;
+
+    while (this.reajustes[index] != undefined && 
+         !(moment(this.reajustes[index].dib_ini) <= dataCorrente &&  dataCorrente <= moment(this.reajustes[index].dib_fim))){
+      index += 1;
+    }
+    
+    if(this.reajustes[index] == undefined){
+      reajuste = 0;
+    }else{
+      reajuste = this.reajustes[index].indice;
+    }
+    
     if (dataCorrente <= this.dataSimplificada  &&
       moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
       reajuste = 1;
@@ -281,26 +298,46 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let reajusteOS = 0.0;
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-    //DOINDICE: pegar reajusteOs do bd
-    // if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
-    //   if(dataCorrente < moment('1991-09-01')){
-    //     //reajusteOS = indiceOsTabelado;
-    //   }
-    //   else if(indiceTabelado){
-    //     //reajusteOS = indiceTabelado;
-    //   }
-    //   else{
-    //     reajusteOS = 1;
-    //   }
-    // }
+    if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
+      if(dataCorrente < moment('1991-09-01')){
+        if(this.reajustes[index] == undefined){
+          reajusteOS = 0;
+        }else{
+          reajusteOS = this.reajustes[index].indice_os;
+        }
+      }
+      else if(this.reajustes[index].indice){
+        if(this.reajustes[index] == undefined){
+          reajusteOS = 0;
+        }else{
+          reajusteOS = this.reajustes[index].indice;
+        }
+      }
+      else{
+        reajusteOS = 1;
+      }
+    }
+
     return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.2
   getIndiceReajusteValoresRecebidos(dataCorrente){
-    //DOINDICE: pegar reajuste do BD
-    //let reajuste = indiceTabelado;
+    if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)
+      return {reajuste: 1.0, reajusteOs: 0.0};
     let reajuste = 0.0;
+    let index = 0;
+    
+    while (this.reajustes[index] != undefined && 
+          !(moment(this.reajustes[index].dib_ini) <= dataCorrente &&  dataCorrente <= moment(this.reajustes[index].dib_fim))){
+      index += 1;
+    }
+    if(this.reajustes[index] == undefined){
+      reajuste = 0;
+    }else{
+      reajuste = this.reajustes[index].indice;
+    }
+
     // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
     let chkIndice = this.calculo.usar_indice_99_04;
     if (chkIndice) {
@@ -337,23 +374,35 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let reajusteOS = 0.0;
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    //DOINDICE: pegar reajusteOs do bd
-    // if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
-    //   if(dataCorrente < moment('1991-09-01')){
-    //     //reajusteOS = indiceOsTabelado;
-    //   }
-    //   else if(indiceTabelado){
-    //     //reajusteOS = indiceTabelado;
-    //   }
-    //   else{
-    //     reajusteOS = 1.0;
-    //   }
-    // }
+    if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
+      if(dataCorrente < moment('1991-09-01')){
+        if(this.reajustes[index] == undefined){
+          reajusteOS = 0;
+        }else{
+          reajusteOS = this.reajustes[index].indice_os;
+        }
+      }
+      else if(this.reajustes[index].indice){
+        if(this.reajustes[index] == undefined){
+          reajusteOS = 0;
+        }else{
+          reajusteOS = this.reajustes[index].indice;
+        }
+      }
+      else{
+        reajusteOS = 1;
+      }
+    }
     return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.3
   getBeneficioDevido(dataCorrente, reajusteObj, resultsObj){
+    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido){
+      resultsObj.resultString = this.formatMoney(0.0);
+      return 0.0;
+    }
+
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = rmiDevidos;
     
@@ -466,6 +515,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj){
+    if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
+      resultsObj.resultString = this.formatMoney(0.0);
+      return 0.0;
+    }
+
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
     let beneficioRecebido = rmiRecebidos;
  
@@ -581,6 +635,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.5
   getBeneficioDevidoTetos(dataCorrente, reajusteObj, resultsObj){
+    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido){
+      resultsObj.resultString = this.formatMoney(0.0);
+      return 0.0;
+    }
+
     let rmiDevidosTetos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevidoTetos = rmiDevidosTetos;
     let beneficioDevidoTetosSemLimite = rmiDevidosTetos;
@@ -713,6 +772,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.6
   getBeneficioRecebidoTetos(dataCorrente, reajusteObj, resultsObj){
+    if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
+      resultsObj.resultString = this.formatMoney(0.0);
+      return 0.0;
+    }
+
     let rmiRecebidosTetos = parseFloat(this.calculo.valor_beneficio_concedido);
     let beneficioRecebidoTetos = rmiRecebidosTetos;
     let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
@@ -1204,6 +1268,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
     //dataFinal é a data_calculo_pedido acrescido de um mês
     this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
+
+    if(this.calculo.data_prevista_cessacao != '')
+      this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
+    if(this.calculo.data_cessacao != '')
+      this.dataCessacaoRecebido = moment(this.calculo.data_cessacao);
   }
 
   //Verifica se uma data esta no periodo do buraco negro
