@@ -441,7 +441,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       resultsObj.resultString = this.formatMoney(0.0);
       return 0.0;
     }
-
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = rmiDevidos;
     
@@ -513,6 +512,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, moment(this.calculo.data_pedido_beneficio_esperado), 'Devido');
+    this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
+
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
