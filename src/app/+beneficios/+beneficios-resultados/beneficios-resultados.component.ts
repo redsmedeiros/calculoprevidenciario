@@ -71,7 +71,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataCorteCruzadoNovo = moment('1988-12-31');
   private dataCorteCruzeiroReal = moment('1993-08-01');
 
-
   private dataInicioRecebidos;
   private dataInicioDevidos;
 
@@ -99,7 +98,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataInicioCalculo;
   //Data da ultima linha da tabela
   private dataFinal;
-
+  //
   private dataCessacaoDevido = null;
   private dataCessacaoRecebido = null;
 
@@ -107,11 +106,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   private jurosAntes2003 = 0.005;
   private jurosDepois2003 = 0.01;
   private jurosDepois2009 = 0.015;
-
-  //Variaveis para tabela de conclusões
-  public somaHonorarios = 0.0;
-  public descontoAcordo = 0.0;
-  public valorAcordo = 0.0;
 
   //Variaveis para tabela de conclusões
   public somaHonorarios = 0.0;
@@ -127,9 +121,19 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaVincendas = 0.0;
   public somaTotalSegurado = 0.0;
 
+  //Variaveis para tabela de conclusões tetos
+  public somaVincendosTetos = 0.0;
+  public ultimaRendaTetos = 0.0;
+  public somaDevidaTetos = 0.0;
+  public honorariosTetos = 0.0;
+  public subtotalTetos = 0.0;
+  public acordoJudicialTetos = 0.0;
+  public devidosComDescontoTetos = 0.0;
+  public somaTotalTetos = 0.0;
+
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
-
+  private ultimaDiferencaMensal = 0.0;
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
   constructor(protected router: Router,
@@ -151,28 +155,26 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
       .then(calculo => {
         this.calculo = calculo;
+        this.setInicioRecebidosEDevidos();
+
         if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
           this.isTetos = true;
         }
-        this.setInicioRecebidosEDevidos();
 
         this.Moeda.getByDateRange(this.dataInicioCalculo, this.dataFinal)
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
-            // this.resultadosList = this.generateTabelaResultados();
-            // this.updateResultadosDatatable();
-            // this.isUpdating = false;
+
             this.IntervaloReajuste.getByDateRange(this.dataInicioCalculo, this.dataFinal)
           .then((reajustes: IntervaloReajuste[]) => {
             this.reajustes = reajustes;
-            console.log(reajustes)
+
             this.resultadosList = this.generateTabelaResultados();
             this.updateResultadosDatatable();
             this.isUpdating = false;
           })
           })
       });
-
   }
 
   generateTabelaResultados(){
