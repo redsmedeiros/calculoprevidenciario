@@ -121,7 +121,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaJuros = 0.0;
   public somaDevidaJudicialmente = 0.0;
   public somaVincendas = 0.0;
-  public SomaTotalSegurado = 0.0;
+  public somaTotalSegurado = 0.0;
 
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
