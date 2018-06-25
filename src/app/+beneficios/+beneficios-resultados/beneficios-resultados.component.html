@@ -199,17 +199,13 @@
             <!-- widget content -->
             <div class="widget-body">
 
-              <ul class="list-unstyled">
-<!--                 <li>
-                  <b>Soma dos vincendos Tetos:</b> R$ 2.555,64</li>
+              <ul class="list-unstyled" *ngIf="!isTetos">
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b> R$ 3.906,48</li>
+                  <b>Soma dos honorários a receber:</b> {{formatMoney(somaHonorarios)}}</li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b> R$ 54.921,56</li>
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
                 <li>
-                  <b>Soma dos honorários a receber Tetos:</b> R$ 3.868,17</li>
-                <li>
-                  <b>Soma total Tetos:</b> R$ 57.477,20</li> -->
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(valorAcordo)}}</li>
                 <li>
                   <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
@@ -225,7 +221,27 @@
                 <li>
                   <b>Soma das vincendas:</b> {{formatMoney(somaVincendas)}}</li>
                 <li>
-                  <b>Soma total devida ao segurado:</b> {{formatMoney(SomaTotalSegurado)}}</li>
+                  <b>Soma total devida ao segurado:</b> {{formatMoney(somaTotalSegurado)}}</li>
+              </ul>
+              <ul class="list-unstyled" *ngIf="isTetos">
+                  <li>
+                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendasTetos)}}</li>
+                <li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRendaTetos)}}</li>
+                <li>
+                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaTetos)}}</li>
+                <li>
+                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(honorariosTetos)}}</li>
+                <li>
+                  <b>Subtotal:</b> {{formatMoney(subtotalTetos)}}</li>
+                <li>
+                  <b>Soma dos honorários a receber:</b> {{formatMoney(honorariosTetos)}}</li>
+                <li>
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(acordoJudicialTetos)}}</li>
+                <li>
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(devidosComDescontoTetos)}}</li>
+                <li>
+                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalTetos)}}</li>
               </ul>
             </div>
           </div>
@@ -249,7 +265,7 @@
             <div class="widget-body">
               <sa-datatable [options]="resultadosDatatableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
-                <thead>
+                <thead *ngIf="!isTetos">
                   <tr>
                     <th>Competência</th>
                     <th>Indice de Reajuste de Valores Devidos</th>
@@ -268,153 +284,33 @@
                     <!-- <th>Valor dos Juros Tetos</th> -->
                     <th>Diferença Corrigida + Juros</th>
                     <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
-                    <!-- <th>Honorários Tetos</th> -->
+                    <th>Honorários</th>
+                  </tr>
+                </thead>
+                <thead *ngIf="isTetos">
+                  <tr>
+                    <th>Competência</th>
+                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <th>Benefício Devido Tetos</th>
+                    <!-- <th>Benefício Devido</th> -->
+                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <th>Benefício Recebido Tetos</th>
+                    <!-- <th>Benefício Recebido</th> -->
+                    <th>Diferença Mensal Tetos</th>
+                    <!-- <th>Diferença Mensal</th> -->
+                    <th>Correção Monetária</th>
+                    <!-- <th>Diferença Corrigida</th> -->
+                    <th>Diferença Corrigida Tetos</th>
+                    <th>Juros</th>
+                    <!-- <th>Valor dos Juros</th> -->
+                    <th>Valor dos Juros Tetos</th>
+                    <!-- <th>Diferença Corrigida + Juros</th> -->
+                    <th>Diferença Corrigida + Juros Tetos</th>
+                    <th>Honorários Tetos</th>
                   </tr>
                 </thead>
               </sa-datatable>
-              <table class="table table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th>
-                      Competência
-                    </th>
-                    <th>
-                      Indice de Reajuste de valores devidos
-                    </th>
-                    <th>
-                      Benefício Devido Tetos
-                    </th>
-                    <th>
-                      Indice de Reajuste de valores recebidos
-                    </th>
-                    <th>
-                      Benefício Recebido Tetos
-                    </th>
-                    <th>
-                      Diferença Mensal Tetos
-                    </th>
-                    <th>
-                      Correção Monetária
-                    </th>
-                    <th>
-                      Diferença Corrigida Tetos
-                    </th>
-                    <th>
-                      Juros
-                    </th>
-                    <th>
-                      Valor dos Juros Tetos
-                    </th>
-                    <th>
-                      Diferença Corrigida + Juros Tetos
-                    </th>
-                    <th>
-                      Honorários Tetos
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>7/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>8/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>9/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>10/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>11/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>12/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>13/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                </tbody>
-              </table>
-
+              
               <div class="well margin-top-10 margin-bottom-10">
                 <p>
                   <strong>Observações:</strong>
