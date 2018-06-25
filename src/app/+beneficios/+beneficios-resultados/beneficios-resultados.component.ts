@@ -1077,19 +1077,26 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 3.9
-  getDiferencaCorrigidaJuros(dataCorrente, juros, diferenca_corrigida) {
+  getDiferencaCorrigidaJuros(dataCorrente, juros, diferencaCorrigida) {
     //Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros. 
     //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.  
     //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
 
     let dataAcaoJudicial = moment(this.calculo.data_acao_judicial);
     let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years'));
-    let diferencaCorrigidaJuros = this.formatMoney(juros + diferenca_corrigida);
+    let diferencaCorrigidaJuros = juros + diferencaCorrigida;
+
+    //Seção 3.10
+    if(this.isTetos){
+      diferencaCorrigidaJuros *= this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
+    }
+
+    let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
 
     if(diferencaEmAnos >= 5){
-      diferencaCorrigidaJuros += '<br>(prescrita)';
+      diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
-    return diferencaCorrigidaJuros;
+    return diferencaCorrigidaJurosString;
   }
 
   //Seção 4.2
