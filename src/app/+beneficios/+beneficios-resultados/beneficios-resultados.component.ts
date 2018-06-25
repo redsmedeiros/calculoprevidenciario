@@ -67,6 +67,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataEquivalenciaMinimo89 = moment('1989-04-01');
   private dataPrimeiroTetoJudicial = moment('1998-12-01');
   private dataSegundoTetoJudicial = moment('2003-12-01');
+  private dataCorteCruzado = moment('1988-01-01');
+  private dataCorteCruzadoNovo = moment('1988-12-31');
+  private dataCorteCruzeiroReal = moment('1993-08-01');
+
 
   private dataInicioRecebidos;
   private dataInicioDevidos;
@@ -400,6 +404,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+      beneficioDevido /= 1000;
+    }
+
     // taxa_ajuste_maxima_esperada definida no CRUD         
     if (this.calculo.taxa_ajuste_maxima_esperada != 0 &&
       this.calculo.taxa_ajuste_maxima_esperada != undefined) {
@@ -507,6 +515,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+      beneficioRecebido /= 1000;
+    }
+
     if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
       if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
          moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
@@ -612,6 +624,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevidoTetos = rmiDevidosTetos * reajusteObj.reajuste;
       }
     }
+
+    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+      beneficioDevidoTetos /= 1000;
+    }
+
     // taxa_ajuste_maxima_esperada definida no CRUD         
     if (this.calculo.taxa_ajuste_maxima_esperada > 1) {
       if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio_esperado) && 
@@ -740,6 +757,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       } else if (dataCorrente < this.dataEfeitoFinanceiro) {
         beneficioRecebidoTetos = rmiRecebidosTetos * reajusteObj.reajuste;
       }
+    }
+
+    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+      beneficioRecebidoTetos /= 1000;
     }
 
     if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
