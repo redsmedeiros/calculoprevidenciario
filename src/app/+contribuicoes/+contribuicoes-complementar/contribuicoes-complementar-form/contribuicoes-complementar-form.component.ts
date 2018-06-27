@@ -26,7 +26,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
 
   public dataMinima = new Date(1970,0,1);
-  public data94 = new Date(1994, 6, 31);
+  public data94 = new Date(1994, 5, 31);
 
   public idCalculo='';
   public calculo;
@@ -125,8 +125,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		let pieces = this.contribuicaoDe.split('/');
   		let dateContribuicaoDe = new Date(pieces[1], pieces[0]-1, 1);
 
-  		if(dateContribuicaoDe <= this.data94){
-  			this.errors.add({"contribuicaoDe":["Insira uma data posterior a 07/1994"]});
+  		if(dateContribuicaoDe < this.data94){
+  			this.errors.add({"contribuicaoDe":["Insira uma data posterior a 06/1994"]});
   		}
   	}
 
@@ -140,8 +140,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		pieces = this.contribuicaoDe.split('/');
   		let dateContribuicaoDe = new Date(pieces[1], pieces[0]-1, 1);
 
-  		if(dateContribuicaoAte <= this.data94){
-  			this.errors.add({"contribuicaoAte":["Insira uma data posterior a 07/1994"]});
+  		if(dateContribuicaoAte < this.data94){
+  			this.errors.add({"contribuicaoAte":["Insira uma data posterior a 06/1994"]});
   		}
   		if(dateContribuicaoAte <= dateContribuicaoDe){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a data inicial"]});
