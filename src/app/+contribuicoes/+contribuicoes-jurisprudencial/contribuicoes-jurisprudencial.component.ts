@@ -20,8 +20,6 @@ import swal from 'sweetalert';
 })
 export class ContribuicoesJurisprudencialComponent implements OnInit {
 
-  public dateMask = [/[0-1]/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-
   public contribuicaoDe;
   public contribuicaoAte;
 
@@ -201,6 +199,32 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       console.log(current);
 
     }
+  }
+
+  dateMask(rawValue){
+    if(rawValue == ''){
+      return [/[0-1]/, /\d/, '/', /[1-2]/, /[0|9]/, /\d/, /\d/];
+    }
+    let mask = [];
+    mask.push(/[0-1]/);
+
+    if (rawValue[0] == 1){
+      mask.push(/[0-2]/);
+    }else if(rawValue[0] == 0){
+      mask.push(/[1-9]/);
+    }
+
+    mask.push('/');
+    mask.push( /[1-2]/);
+    
+    if (rawValue[3] == 1){
+      mask.push(/[9]/);
+    }else if(rawValue[3] == 2){
+      mask.push(/[0]/);
+    }
+    mask.push(/\d/);
+    mask.push( /\d/);
+    return mask;
   }
 
 }

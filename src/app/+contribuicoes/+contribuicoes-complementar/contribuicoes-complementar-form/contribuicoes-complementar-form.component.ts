@@ -12,9 +12,6 @@ import swal from 'sweetalert';
 })
 export class ContribuicoesComplementarFormComponent implements OnInit {
 
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-
-
   public competenciaInicial;
   public competenciaFinal;
   public contribuicaoDe;
@@ -169,5 +166,31 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     var bits = date.split('/');
     var d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
+  }
+
+  dateMask(rawValue){
+    if(rawValue == ''){
+      return [/[0-1]/, /\d/, '/', /[1-2]/, /[0|9]/, /\d/, /\d/];
+    }
+    let mask = [];
+    mask.push(/[0-1]/);
+
+    if (rawValue[0] == 1){
+      mask.push(/[0-2]/);
+    }else if(rawValue[0] == 0){
+      mask.push(/[1-9]/);
+    }
+
+    mask.push('/');
+    mask.push( /[1-2]/);
+    
+    if (rawValue[3] == 1){
+      mask.push(/[9]/);
+    }else if(rawValue[3] == 2){
+      mask.push(/[0]/);
+    }
+    mask.push(/\d/);
+    mask.push( /\d/);
+    return mask;
   }
 }
