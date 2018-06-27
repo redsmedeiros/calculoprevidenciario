@@ -20,6 +20,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public contribuicaoDe;
   public contribuicaoAte;
   public salarioContribuicao;
+  public chkJuros = false;
 
   public dataDecadente;
 
@@ -77,6 +78,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		this.formData.contribuicao_basica_inicial = this.contribuicaoDe;
 		  this.formData.contribuicao_basica_final = this.contribuicaoAte;
 		  this.formData.salario = this.salarioContribuicao;
+      this.formData.chk_juros = this.chkJuros;
 		  this.onSubmit.emit(this.formData);
   	}
   }

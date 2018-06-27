@@ -54,6 +54,12 @@
 		  <div class="col-md-3">
 		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" (change)="errors.clear('salarioContribuicao')"  maxlength="12" placeholder="R$" type="text">
 		    <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
+		  	<div class="checkbox">
+          		<label>
+            		<input type="checkbox" name = "jurosCheckbox" [(ngModel)]="chkJuros" class="checkbox">
+                	<span>Marque para mostrar a coluna dos juros nos resultados</span>
+            	</label>
+          	</div>
 		  </div>
 		</div>
 	</fieldset>

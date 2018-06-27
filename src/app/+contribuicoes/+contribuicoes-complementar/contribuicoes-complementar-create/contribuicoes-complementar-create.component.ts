@@ -98,6 +98,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
     novoCalculo.media_salarial = this.form.media_salarial;
     novoCalculo.contribuicao_calculada = this.form.contribuicao_calculada;
+    novoCalculo.chk_juros = this.form.chk_juros;
 
     if(this.form.id == undefined){
         this.Calculo.save(novoCalculo).then((data:ContribuicaoModel) => {
@@ -152,7 +153,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       let valor_dez = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("12-"+ano)).value);
       data_dict.push("12/"+ano+'-'+valor_dez);
     }
-    console.log(data_dict)
     return data_dict;
   }
 

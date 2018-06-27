@@ -25,7 +25,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   public competenciaFinal;
 
   public hasDetalhe = false;
-
+  public mostrarJuros;
   public resultadosList;
   public resultadosTableOptions = {
     paging: false, 
@@ -71,6 +71,19 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   	this.isUpdating = true;
     this.Complementar.find(this.route.snapshot.params['id_calculo']).then(calculo => {
       this.calculoComplementar = calculo;
+      this.mostrarJuros = this.calculoComplementar.chk_juros;
+
+      if(!this.mostrarJuros){
+        this.resultadosTableOptions = {
+          ...this.resultadosTableOptions,
+          columns: [
+                    {data: 'competencia'},
+                    {data: 'valor_contribuicao'},
+                    {data: 'multa'},
+                    {data: 'total'},
+          ],
+        }
+      }
 
       let splited = this.calculoComplementar.inicio_atraso.split('-');
       this.competenciaInicial = splited[1]+'/'+splited[0];
