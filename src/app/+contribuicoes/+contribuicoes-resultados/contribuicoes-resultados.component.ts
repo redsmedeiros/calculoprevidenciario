@@ -5,7 +5,7 @@ import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { ContribuicaoJurisprudencialService } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
-
+import * as moment from 'moment';
 
 @FadeInTop()
 @Component({
@@ -63,12 +63,9 @@ export class ContribuicoesResultadosComponent implements OnInit {
       this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
         this.calculoJurisprudencial = calculo;
 
-        let splited = this.calculoJurisprudencial.inicio_atraso.split('-');
-        this.contribuicaoDe = splited[1]+'/'+splited[0];
-        splited = this.calculoJurisprudencial.final_atraso.split('-');
-        this.contribuicaoAte = splited[1]+'/'+splited[0];
-
-        this.Moeda.getByDateRange('01/' + this.contribuicaoDe, '01/' + this.contribuicaoAte)
+        this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
+        this.contribuicaoAte = moment(this.calculoJurisprudencial.final_atraso);
+        this.Moeda.getByDateRange(this.contribuicaoDe, this.contribuicaoAte)
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
             this.updateDatatable();
