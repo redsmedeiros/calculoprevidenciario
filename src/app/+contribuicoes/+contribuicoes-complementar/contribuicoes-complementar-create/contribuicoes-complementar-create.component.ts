@@ -208,7 +208,21 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
       dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
     }
-    for(index = index; index < (this.form.numero_contribuicoes/0.8); index++){
+
+    //Ordena as contribuiçoes consideradas pela data e concatena com as desconsideradas
+    dataTabelaDetalhes = dataTabelaDetalhes.slice(0, index).concat(dataTabelaDetalhes.slice(index, dataTabelaDetalhes.length).sort((entry1, entry2) => {
+          let dataMesEntry1 = moment(entry1.mes.split('/')[1]+'-'+entry1.mes.split('/')[0] + '-01');
+          let dataMesEntry2 = moment(entry2.mes.split('/')[1]+'-'+entry2.mes.split('/')[0] + '-01');
+          if(dataMesEntry1 > dataMesEntry2){
+            return 1;
+          }
+          if(dataMesEntry1 < dataMesEntry2){
+            return -1;
+          }
+          return 0;
+        }));
+
+    for(index = index; index < dataTabelaDetalhes.length; index++){
       dataTabelaDetalhes[index].indice_num = index+1;
       this.form.total_contribuicao += parseFloat((dataTabelaDetalhes[index].valor_corrigido).split(' ')[1].replace(',','.'));
     }
