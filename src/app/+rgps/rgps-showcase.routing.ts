@@ -25,6 +25,11 @@ export const routes:Routes = [
     data: {pageTitle: 'RGPS Matriz'}
   },
   { 
+    path: 'rgps-valores-contribuidos',
+    loadChildren: 'app/+rgps/+rgps-valores-contribuidos/rgps-valores-contribuidos.module#RgpsValoresContribuidosModule',
+    data: {pageTitle: 'RGPS Valores Contribuidos'}
+  },
+  { 
     path: 'rgps-resultados',
     loadChildren: 'app/+rgps/+rgps-resultados/rgps-resultados.module#RgpsResultadosModule',
     data: {pageTitle: 'RGPS Resultados'}
