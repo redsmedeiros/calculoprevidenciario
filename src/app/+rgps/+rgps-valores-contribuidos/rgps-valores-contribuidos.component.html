@@ -1,0 +1,252 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+              </ul>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil"></i>
+                      </span> Editar
+                    </button>
+
+                    <button type="submit" class="btn btn-labeled btn-primary">
+                      <span class="btn-label">
+                        <i class="fa fa-percent"></i>
+                      </span> Realizar cálculos
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Grupo de Cálculos para os valores de contribuição</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Espécie</th>
+                    <th>Período para início de benefício</th>
+                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
+                    <th>DIB</th>
+                    <th>Data de Criação</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-percent"></i>
+            </span>
+            <h2>Informar valor contribuido</h2>
+          </header>
+
+          <div>
+
+            <div class="widget-body">
+
+              <form class="form-horizontal">
+
+                <fieldset>
+
+                  <h3>Tempo de contribuição</h3>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">De:</label>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo"  [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
+                      <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Até:</label>
+                    <div class="col-md-2">
+                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
+                      <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="select-1">Valor:</label>
+                    <div class="col-md-2">
+                      <input class="form-control" currencyMask maxlength="12" [(ngModel)]="salarioContribuicao" placeholder="R$" name="salarioContribuicao" (change)="errors.clear('salarioContribuicao')" type="text">
+                      <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Tipo de Contribuição:</label>
+                    <div class="col-md-3">
+                      <label class="radio radio-inline">
+                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária </label>
+                      <label class="radio radio-inline">
+                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária </label>
+                    </div>
+                  </div>
+
+
+
+                </fieldset>
+
+
+                <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="submit" (click)="submit()" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calendar"></i>
+                        </span> Inserir período
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2> Contribuições Primárias</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+
+              <sa-datatable paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Ano</th>
+                    <th>Janeiro</th>
+                    <th>Fevereiro</th>
+                    <th>Março</th>
+                    <th>Abril</th>
+                    <th>Maio</th>
+                    <th>Junho</th>
+                    <th>Julho</th>
+                    <th>Agosto</th>
+                    <th>Setembro</th>
+                    <th>Outubro</th>
+                    <th>Novembro</th>
+                    <th>Dezembro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of matriz">
+                    <td>{{data.ano}}</td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[0] }}" (keyup)="onKey(data.ano, 0, $event.target.value)" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[1] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[2] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[3] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[4] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[5] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[6] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[7] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[8] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[9] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[10] }}" class="matriz-input" />
+                    </td>
+                    <td class="matriz-line">
+                      <input type="text" value="{{ data.valores[11] }}" class="matriz-input" />
+                    </td>
+                  </tr>
+                </tbody>
+              </sa-datatable>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>
