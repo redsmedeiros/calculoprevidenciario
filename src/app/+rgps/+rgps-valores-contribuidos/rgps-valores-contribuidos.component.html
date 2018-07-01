@@ -44,7 +44,7 @@
                       </span> Editar
                     </button>
 
-                    <button type="submit" class="btn btn-labeled btn-primary">
+                    <button type="submit" (click)="realizarCalculo()" class="btn btn-labeled btn-primary">
                       <span class="btn-label">
                         <i class="fa fa-percent"></i>
                       </span> Realizar cálculos
@@ -164,7 +164,6 @@
           </div>
         </sa-widget>
       </article>
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -174,69 +173,21 @@
             <h2> Contribuições Primárias</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
+            <app-rgps-valores-contribuidos-matriz #contribuicoesPrimarias></app-rgps-valores-contribuidos-matriz>
+          </div>
+        </sa-widget>
+      </article>
 
-              <sa-datatable paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Ano</th>
-                    <th>Janeiro</th>
-                    <th>Fevereiro</th>
-                    <th>Março</th>
-                    <th>Abril</th>
-                    <th>Maio</th>
-                    <th>Junho</th>
-                    <th>Julho</th>
-                    <th>Agosto</th>
-                    <th>Setembro</th>
-                    <th>Outubro</th>
-                    <th>Novembro</th>
-                    <th>Dezembro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let data of matriz">
-                    <td>{{data.ano}}</td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[0] }}" (keyup)="onKey(data.ano, 0, $event.target.value)" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[1] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[2] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[3] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[4] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[5] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[6] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[7] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[8] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[9] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[10] }}" class="matriz-input" />
-                    </td>
-                    <td class="matriz-line">
-                      <input type="text" value="{{ data.valores[11] }}" class="matriz-input" />
-                    </td>
-                  </tr>
-                </tbody>
-              </sa-datatable>
-            </div>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2> Contribuições Secundárias</h2>
+          </header>
+          <div>
+            <app-rgps-valores-contribuidos-matriz #contribuicoesSecundarias></app-rgps-valores-contribuidos-matriz>
           </div>
         </sa-widget>
       </article>

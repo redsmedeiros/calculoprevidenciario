@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { rgpsValoresContribuidosRouting } from './rgps-valores-contribuidos.routing';
 import {RgpsValoresContribuidosComponent} from "./rgps-valores-contribuidos.component";
+import {RgpsMatrizComponent} from './rgps-valores-contribuidos-matriz/rgps-valores-contribuidos-matriz.component'
 import {SmartadminModule} from "../../shared/smartadmin.module";
 import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-datatable.module";
 import { FormsModule } from '@angular/forms';
@@ -29,7 +30,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TextMaskModule,
     CurrencyMaskModule
   ],
-  declarations: [RgpsValoresContribuidosComponent],
+  declarations: [RgpsValoresContribuidosComponent, RgpsMatrizComponent],
   providers: [
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],

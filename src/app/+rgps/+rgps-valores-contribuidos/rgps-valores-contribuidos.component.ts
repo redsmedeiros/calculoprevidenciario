@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import {NgForm} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.m
 import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ErrorService } from '../../services/error.service';
+import { RgpsMatrizComponent } from './rgps-valores-contribuidos-matriz/rgps-valores-contribuidos-matriz.component'
 import * as moment from 'moment';
 import swal from 'sweetalert';
 
@@ -21,7 +22,8 @@ import swal from 'sweetalert';
 
 
 export class RgpsValoresContribuidosComponent implements OnInit {
-
+  @ViewChild('contribuicoesPrimarias') matrizContribuicoesPrimarias: RgpsMatrizComponent;
+  @ViewChild('contribuicoesSecundarias') matrizContribuicoesSecundarias: RgpsMatrizComponent;
   public isUpdating = false;
 
   public idSegurado = '';
@@ -29,8 +31,6 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public segurado:any = {};
   public calculo:any = {};
   public calculoList = [];
-
-  input = [];
 
   public grupoCalculosTableOptions = {
     colReorder: false,
@@ -50,49 +50,6 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public salarioContribuicao = undefined;
   public tipoContribuicao = 'Primaria';
 
-  matriz = [
-    {
-      "ano": 1995,
-      "valores": [
-        1230.23,
-        1523.85,
-        1549.12,
-        1654.58,
-        2487.23,
-        1982.63,
-        1754.85,
-        3546.85,
-        2459.45,
-        1468.91,
-        2146.85,
-        1793.25
-      ]
-    },
-    {
-      "ano": 1996,
-      "valores": [
-        1230.23,
-        1523.85,
-        1549.12,
-        1654.58,
-        2487.23,
-        1982.63,
-        1754.85,
-        3546.85,
-        2459.45,
-        1468.91,
-        2146.85,
-        1793.25
-      ]
-    }
-  ];
-
-  onKey(ano, mes, valor) { // without type info
-    console.log(ano + "," + mes + "," +  valor);
-  }
-  randomInt(min, max){
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,    
@@ -113,6 +70,10 @@ export class RgpsValoresContribuidosComponent implements OnInit {
                 this.isUpdating = false;
             });
     });
+  }
+  realizarCalculo(){
+    let contribPrimaria = this.matrizContribuicoesPrimarias.getMatrixData();
+    let contribSecundaria = this.matrizContribuicoesSecundarias.getMatrixData();
   }
 
   updateDatatable() {
@@ -141,10 +102,20 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.inicioPeriodo,this.finalPeriodo, this.salarioContribuicao)
 
     if(this.isValid()){
-      console.log('valid')
+      let periodoObj = {
+            inicioPeriodo: this.inicioPeriodo,
+            finalPeriodo: this.finalPeriodo,
+            salarioContribuicao:this.salarioContribuicao
+      };
+
+      if(this.tipoContribuicao === 'Primaria'){
+        this.matrizContribuicoesPrimarias.preencher(periodoObj);
+      }else if(this.tipoContribuicao === 'Secundaria'){
+        this.matrizContribuicoesSecundarias.preencher(periodoObj);
+      }
+
     }else{
       swal('Erro', 'Confira os dados digitados','error');
     }
