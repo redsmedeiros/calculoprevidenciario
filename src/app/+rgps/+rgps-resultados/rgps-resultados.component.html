@@ -19,19 +19,16 @@
             <!-- widget content -->
             <div class="widget-body">
               <ul class="list-unstyled">
-                <li>
-                  <b>Nome:</b> FARLEY FABIANO DE SOUZA FERRAZ</li>
-                <li>
-                  <b>CPF:</b> 811526716-34</li>
-                <li>
-                  <b>Data de nascimento:</b> 01/06/1970 - 47 anos</li>
-                <li>
-                  <b>Sexo:</b> Masculino</li>
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" class="btn btn-labeled btn-primary">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil"></i>
                       </span> Editar
@@ -85,13 +82,13 @@
 
               <div class="row">
                 <div class="col-md-12">
-                  <button type="submit" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-user"></i>
                     </span> Selecionar segurado
                   </button>
 
-                  <button type="submit" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-calculator"></i>
                     </span> Informações de cálculos
@@ -103,7 +100,7 @@
                     </span> Valores de contribuição
                   </button>
 
-                  <button type="submit" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-print"></i>
                     </span> Imprimir tudo
@@ -120,20 +117,16 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Grupos de Cálculos</h2>
+            <h2>Grupo de Cálculos para os valores de contribuição</h2>
           </header>
           <div>
             <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'especie'}, {data: 'inicio_beneficio'}, {data: 'contribuicao_primaria'}, {data: 'contribuicao_secundaria'}, {data: 'dib'}, {data: 'data_criacao'} ] }"
+              <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
@@ -150,11 +143,7 @@
           </div>
         </sa-widget>
       </article>
-
-
-
-
-
+<!-- CALCULO 1 -->
       <article class="container-fluid">
         <table class="table table-hover table-bordered">
           <thead>
@@ -231,21 +220,15 @@
           </tbody>
         </table>
       </article>
-
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
+            <h2>{{calculo.tipo_seguro}} Anterior a 05/10/1988</h2>
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body">
 
               <table class="table table-bordered table-hover">
@@ -264,37 +247,37 @@
                     <td>
                       <span class="pull-right font-bold">Espécie:</span>
                     </td>
-                    <td>Aposentadoria por tempo de contribuição</td>
+                    <td>{{calculo.tipo_seguro}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Período para o início do benefício:</span>
                     </td>
-                    <td>Entre 05/04/1991 e 15/12/1998</td>
+                    <td>{{calculo.tipo_aposentadoria}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Início do Benefício:</span>
                     </td>
-                    <td>01/01/2018</td>
+                    <td>{{calculo.data_pedido_beneficio}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição primária:</span>
                     </td>
-                    <td>14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                    <td>TODO: 14 ano(s), 9 mês(es) e 22 dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição secundária:</span>
                     </td>
-                    <td>0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                    <td>TODO: 0 ano(s), 0 mês(es) e 0 dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
                     </td>
-                    <td>12/03/2018 20:34:42</td>
+                    <td>{{calculo.data_calculo}}</td>
                   </tr>
                 </tbody>
 
@@ -309,12 +292,8 @@
           </div>
         </sa-widget>
       </article>
-
-
       <!-- CALCULO 2 -->
-
-
-      <article class="container-fluid">
+<!--       <article class="container-fluid">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -390,10 +369,6 @@
           </tbody>
         </table>
       </article>
-
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -402,9 +377,7 @@
             </span>
             <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body">
 
               <table class="table table-bordered table-hover">
@@ -474,16 +447,10 @@
             </div>
           </div>
         </sa-widget>
-      </article>
-
-
-
-
+      </article> -->
 
       <!-- CALCULO 03 -->
-
-
-      <article class="container-fluid">
+<!--       <article class="container-fluid">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -546,12 +513,9 @@
             </tr>
           </tbody>
         </table>
-      </article>
+      </article> -->
 
-
-
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -559,9 +523,7 @@
             </span>
             <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body">
 
               <table class="table table-bordered table-hover">
@@ -580,45 +542,42 @@
                     <td width="50%">
                       <span class="pull-right font-bold">Espécie:</span>
                     </td>
-                    <td>Aposentadoria por tempo de contribuição</td>
+                    <td>{{calculo.tipo_seguro}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Período para o início do benefício:</span>
                     </td>
-                    <td>Entre 05/04/1991 e 15/12/1998</td>
+                    <td>{{calculo.tipo_aposentadoria}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Início do Benefício:</span>
                     </td>
-                    <td>01/01/2018</td>
+                    <td>{{calculo.data_pedido_beneficio}}</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição primária:</span>
                     </td>
-                    <td>14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                    <td>TODO: 14 ano(s), 9 mês(es) e 22 dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição secundária:</span>
                     </td>
-                    <td>0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                    <td>TODO: 0 ano(s), 0 mês(es) e 0 dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
                     </td>
-                    <td>12/03/2018 20:34:42</td>
+                    <td>{{calculo.data_calculo}}</td>
                   </tr>
                 </tbody>
 
               </table>
 
-
-
-              <!-- Widget ID (each widget will need unique ID)-->
               <sa-widget [colorbutton]="false" [editbutton]="false">
                 <div>
                   <div class="widget-body no-padding">
@@ -735,7 +694,7 @@
             </div>
           </div>
         </sa-widget>
-      </article>
+      </article> -->
 
     </div>
 
