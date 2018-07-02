@@ -27,29 +27,6 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public results = [];
   public isUpdating = false;
 
-  // public tableOptions = {
-  //   colReorder: true,
-  //   paging: false,
-  //   ordering: false,
-  //   info: false,
-  //   searching: false,
-  //   data: this.moeda,
-  //   columns: [
-  //     {data: 'data_moeda',
-  //      render: (data) => {
-  //         return this.formatDate(data);
-  //      }},
-  //     {data: (data) => {
-  //         return this.getSalarioMinimo(data);
-  //      }},
-  //     {data: (data) => {
-  //         return this.getAliquota(data);
-  //      }},
-  //     {data: 'cam'},
-  //     {data: (data) => {
-  //       return this.getValorCorrigido(data);
-  //     }}
-  //   ] };
   public tableOptions = {
     colReorder: true,
     paging: false,
