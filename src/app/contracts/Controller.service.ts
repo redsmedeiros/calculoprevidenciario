@@ -29,6 +29,22 @@ export abstract class ControllerService {
     });
   }
 
+  getWithParameters(params) {
+    return new Promise((resolve, reject) => {
+      this.model.getWithParameters(params)
+        .then(models => {
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
+
   public getByDateRange(from, to) {
 
     return new Promise((resolve, reject) => {

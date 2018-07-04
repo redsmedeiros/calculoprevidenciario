@@ -24,7 +24,7 @@ import { CalculoAtrasadoService } from './+beneficios/+beneficios-calculos/Calcu
 import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
 import { IntervaloReajusteService } from './services/IntervaloReajuste.service';
-
+import { IndicesService } from './services/Indices.service';
 import { TextMaskModule } from 'angular2-text-mask';
 
 // Application wide providers
@@ -72,6 +72,7 @@ type StoreType = {
     CalculoAtrasadoService,
     MoedaService,
     IntervaloReajusteService,
+    IndicesService
   ]
 })
 export class AppModule {
