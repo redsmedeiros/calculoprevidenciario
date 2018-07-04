@@ -41,10 +41,15 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   submit(data) {
     this.Calculo
           .save(data)
-          .then(model => {
+          .then((data:CalculoModel) => {
             this.resetForm();
             this.onSubmit.emit();
-            window.location.href='#/beneficios/beneficios-calculos/'+this.route.snapshot.params['id'];
+            swal('Sucesso', 'Cálculo salvo com sucesso','success').then((result) => {
+              if(result){
+                window.location.href='#/beneficios/beneficios-resultados/'+ data.id_segurado + '/' + data.id;
+              }
+            });
+            
           })
           .catch(errors => this.Errors.add(errors));
   }

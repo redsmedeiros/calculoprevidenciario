@@ -537,7 +537,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
           this.formData.taxa_ajuste_maxima_concedida = 0;
         }
         this.onSubmit.emit(this.formData);
-        swal('Sucesso', 'Cálculo salvo com sucesso','success');
     }else{
       console.log(this.errors.all())
       swal('Erro', 'Confira os dados digitados','error');
