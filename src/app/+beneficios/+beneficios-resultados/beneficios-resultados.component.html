@@ -114,7 +114,7 @@
                 <li>
                   <b>Data de cessação de valores devidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
                 <li>
-                  <b>Nova RMI de valores devidos:</b> {{formatMoney(calculo.valor_beneficio_esperado)}}</li>
+                  <b>Nova RMI de valores devidos:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
               </ul>
             </div>
           </div>
@@ -148,7 +148,7 @@
                 <li>
                   <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
                 <li>
-                  <b>Nova RMI de valores recebidos:</b> {{formatMoney(calculo.valor_beneficio_concedido)}}</li>
+                  <b>Nova RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
               </ul>
             </div>
           </div>
