@@ -11,6 +11,18 @@ import { BeneficiosCalculosFormComponent } from './beneficios-calculos-form/bene
 import { BeneficiosCalculosIndexComponent } from './beneficios-calculos-index/beneficios-calculos-index.component';
 import {I18nModule} from "../../shared/i18n/i18n.module";
 import { TextMaskModule } from 'angular2-text-mask';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
+ 
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+    align: "left",
+    allowNegative: false,
+    decimal: ",",
+    precision: 2,
+    prefix: "",
+    suffix: "",
+    thousands: "."
+};
 
 @NgModule({
   imports: [
@@ -18,8 +30,11 @@ import { TextMaskModule } from 'angular2-text-mask';
     beneficiosCalculosRouting,
     SmartadminModule,
     TextMaskModule,
-    SmartadminDatatableModule
+    SmartadminDatatableModule,
+    CurrencyMaskModule
   ],
-  declarations: [BeneficiosCalculosComponent,BeneficiosCalculosDestroyComponent, BeneficiosCalculosCreateComponent, BeneficiosCalculosEditComponent, BeneficiosCalculosFormComponent, BeneficiosCalculosIndexComponent]
+  declarations: [BeneficiosCalculosComponent,BeneficiosCalculosDestroyComponent, BeneficiosCalculosCreateComponent, BeneficiosCalculosEditComponent, BeneficiosCalculosFormComponent, BeneficiosCalculosIndexComponent],
+  providers: [
+  { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 export class BeneficiosCalculosModule { }
