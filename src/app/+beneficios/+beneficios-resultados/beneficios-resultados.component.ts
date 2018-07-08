@@ -31,6 +31,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public moeda;
   public indices;
   public isUpdating = false;
+  public soma = 0 ;
 
   public resultadosList;
   public resultadosDatatableOptions = {
@@ -108,7 +109,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Taxas de Juros
   private jurosAntes2003 = 0.005;
   private jurosDepois2003 = 0.01;
-  private jurosDepois2009 = 0.015;
+  private jurosDepois2009 = 0.005;
+
+  private jurosCorrente = 0.0;
 
   //Variaveis para tabela de conclusões
   public somaHonorarios = 0.0;
@@ -165,14 +168,13 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.isTetos = true;
         }
 
-        this.Moeda.getByDateRange(this.dataInicioCalculo.clone().subtract(1, 'months'), this.dataFinal)
+        this.Moeda.getByDateRange(this.dataInicioCalculo.clone().subtract(1, 'months'), moment())
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
-            console.log(moeda)
             this.Indice.getByDateRange(this.dataInicioCalculo.format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
               .then(indices => {
                 this.indices = indices;
-
+                this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
                 this.updateResultadosDatatable();
                 this.isUpdating = false;
@@ -254,7 +256,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente),
         correcao_monetaria: correcaoMonetaria,
         diferenca_corrigida: this.formatMoney(diferencaCorrigida),
-        juros: this.formatPercent(juros),
+        juros: this.formatPercent(juros, 4),
         valor_juros: this.formatMoney(valorJuros),
         diferenca_juros: diferencaCorrigidaJuros,
         honorarios: this.formatMoney(honorarios)
@@ -307,12 +309,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let reajuste = 0.0;
     let index = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    // let index = 0;
-
-    // while (this.reajustes[index] != undefined && 
-    //      !(moment(this.reajustes[index].dib_ini) <= dataCorrente &&  dataCorrente <= moment(this.reajustes[index].dib_fim))){
-    //   index += 1;
-    // }
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
@@ -381,12 +377,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)
       return {reajuste: 1.0, reajusteOs: 0.0};
     let reajuste = 0.0;
-    //let index = 0;
     let index = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    // while (this.reajustes[index] != undefined && 
-    //       !(moment(this.reajustes[index].dib_ini) <= dataCorrente &&  dataCorrente <= moment(this.reajustes[index].dib_fim))){
-    //   index += 1;
-    // }
+
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
@@ -427,7 +419,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       reajuste = 1;
     }
     if (dataCorrente.isSame('1994-03-01', 'month')) {
-      console.log('entrou')
       reajuste = 1 / 661.0052;
       if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
         reajuste = 1;
@@ -543,7 +534,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.primeiroReajusteDevidos = 0;
       }
     }
-    console.log(beneficioDevido)
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado), 'Devido');
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
@@ -1013,107 +1003,125 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.8
   getJuros(dataCorrente) {
-    let data_citacao_reu = moment(this.calculo.data_citacao_reu);
-    let data = data_citacao_reu;
+    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
     let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
-    let juros = 0.0;
-    let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
+    let chkJurosMora = this.calculo.previo_interesse;
+    let jurosAplicado = 0.0;
+    let dataMesCitacaoReu = dataCitacaoReu.startOf('month').subtract(1, 'days');;//dataCitacaoReu no dia 1
+    if (dataCorrente > dataMesCitacaoReu) {
 
-    if (this.dataInicioCalculo > data) {
-      data = this.dataInicioCalculo;
+      if (dataCorrente < this.dataJuros2003) {
+        this.jurosCorrente -= this.jurosAntes2003;
+      }
+
+      if (this.dataJuros2003 <= dataCorrente && dataCorrente < this.dataJuros2009) {
+        this.jurosCorrente -= this.jurosDepois2003;
+      }
+
+      if (dataCorrente >= this.dataJuros2009) {
+        if (!chkBoxTaxaSelic) {
+          if(this.soma == 1){
+            this.jurosCorrente -= this.jurosDepois2009;
+          }else{
+            this.soma = 1;
+          }
+          
+        } else {
+          if (dataCorrente < this.dataSelic70) {
+            this.jurosCorrente -= this.jurosDepois2009;
+          } else {
+            if(this.soma == 1){
+              let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+              this.jurosCorrente -= parseFloat(this.moeda[moedaIndexDataCorrente].juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+            }
+          }
+        }
+      }
+      jurosAplicado = this.jurosCorrente;
+    }else{
+      if(!chkJurosMora){
+        if(dataCorrente != dataMesCitacaoReu){
+          jurosAplicado = 0;
+        }else{
+          jurosAplicado = this.jurosCorrente;
+        }
+      }else{
+        jurosAplicado = this.jurosCorrente;
+      }
     }
 
-    if (data < moment('2003-01-15')) {
+    if (jurosAplicado < 0) {
+      jurosAplicado = 0;
+    }
+    return jurosAplicado;
+  }
+
+  calcularJurosCorrente(){
+    let dataDoCalculo = moment(this.calculo.data_calculo_pedido).startOf('month');
+    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+    let data = (this.dataInicioCalculo > dataCitacaoReu) ? this.dataInicioCalculo : dataCitacaoReu;
+    data = data.startOf('month');
+    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    let juros = 0.0;
+    if (data < this.dataJuros2003) {
       //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
-      juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, moment('2003-01-15'));
+      juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, this.dataJuros2003.clone().subtract(1, 'days'));
       //juros += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
-      juros += this.jurosDepois2003 * this.getDifferenceInMonths(moment('2009-07-01'), moment('2003-01-15'));
+      juros += this.jurosDepois2003 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataJuros2003);
       if (!chkBoxTaxaSelic) {
         //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e this.calculo.data_calculo_pedido (dataDoCalculo)
-        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
       } else {
         //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
-
+        juros+= this.jurosDepois2009 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataSelic70.clone().subtract(1, 'days'));
         //juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
           let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
         }
       }
 
-    }else if (data < moment('2009-07-01')) {
+    }else if (data < this.dataJuros2009) {
       //juros = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
-      juros = this.jurosDepois2003 * this.getDifferenceInMonths(moment('2009-07-01'), data);
+      juros = this.jurosDepois2003 * this.getDifferenceInMonths(this.dataJuros2009, data);
 
       if (!chkBoxTaxaSelic) {
         //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
       } else {
         //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
+        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
 
         //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
           let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
         }
       }
     }else {
+
       if (!chkBoxTaxaSelic) {
         //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-        juros += this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), dataDoCalculo);
+        juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
       } else {
-        //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-        juros+= this.jurosDepois2009 * this.getDifferenceInMonths(moment('2009-07-01'), this.dataSelic70);
-
-        //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
-        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
-          let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70)/100;
-        }
-      }
-    }
-    let stringDataMesCitacaoReu = '';
-    if(data_citacao_reu.month() <= 8){
-      stringDataMesCitacaoReu = data_citacao_reu.year() + '-0' +(data_citacao_reu.month() + 1) + '-01';
-    }else{
-      stringDataMesCitacaoReu = data_citacao_reu.year() + '-' + (data_citacao_reu.month() + 1) + '-01';
-    }
-
-    let dataMesCitacaoReu = moment(stringDataMesCitacaoReu);//dataCitacaoReu no dia 1
-    if (dataCorrente > dataMesCitacaoReu) {
-
-      if (dataCorrente < this.dataJuros2003) {
-        juros -= this.jurosAntes2003;
-      }
-
-      if (this.dataJuros2003 < dataCorrente && dataCorrente < this.dataJuros2009) {
-        juros -= this.jurosDepois2003;
-      }
-
-      if (dataCorrente > this.dataJuros2009) {
-        if (!chkBoxTaxaSelic) {
-          juros -= this.jurosDepois2009;
-        } else {
-          if (dataCorrente < this.dataSelic70) {
-            juros -= this.jurosDepois2009;
-          } else {
-            let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-            juros -= parseFloat(this.moeda[moedaIndexDataCorrente].juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+        if(data >= this.dataSelic70){
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+          juros+= this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
+        }else{
+          juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, this.dataSelic70);
+          //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
+          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+          for(let mes in mesesEntreSelicDataCalculo){
+            let dateMes = moment(mes);
+            let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
+            juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70)/100;
           }
         }
       }
-    }
-
-    if (juros < 0) {
-      juros = 0;
     }
     return juros;
   }
@@ -1374,6 +1382,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
     if(this.calculo.data_cessacao != '')
       this.dataCessacaoRecebido = moment(this.calculo.data_cessacao);
+
+    this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
+    this.jurosDepois2003 = this.calculo.pos_interesse_2003 / 100;
+    this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
   }
 
   //Verifica se uma data esta no periodo do buraco negro
@@ -1476,10 +1488,21 @@ export class BeneficiosResultadosComponent implements OnInit {
     return Math.floor(difference);
   }
 
+  //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
+  getDifferenceInMonthsRounded(date1, date2 = moment()) {
+    let difference = date1.diff(date2, 'months', true);
+    difference = Math.abs(difference);
+    return Math.round(difference);
+  }
+
   formatDatetimeToDate(dataString){
     let date = dataString.split(' ')[0];
     let splited_date = date.split('-');
-    return splited_date[2] + '/' +splited_date[1] + '/' + splited_date[0];
+    let ret = splited_date[2] + '/' +splited_date[1] + '/' + splited_date[0];
+    if(ret == '00/00/0000'){
+      return '--';
+    }
+    return ret;
   }
 
   formatDate(dataString){
@@ -1490,9 +1513,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     return '--'
   }
 
-  formatPercent(value){
+  formatPercent(value, n_of_decimal = 0){
     value = parseFloat(value) * 100;
-    return this.formatDecimal(value, 0) + '%';
+    return this.formatDecimal(value, n_of_decimal) + '%';
   }
 
   formatMoney(value, sigla='R$'){

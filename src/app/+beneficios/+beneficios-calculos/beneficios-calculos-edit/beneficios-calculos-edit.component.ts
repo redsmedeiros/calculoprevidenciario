@@ -35,7 +35,6 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
             this.form = this.calculo;
             this.isUpdating = false;
           });
-  	console.log(this.form);
   }
 
 

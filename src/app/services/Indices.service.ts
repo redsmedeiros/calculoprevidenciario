@@ -13,7 +13,6 @@ export class IndicesService extends ControllerService {
 
     return new Promise((resolve, reject) => {
     	let parameters = ['inicio_intervalo', from, 'final_intervalo', to];
-    	console.log(parameters)
 	  	if (this.list.length == 0) {
 	  		this.getWithParameters(parameters).then(() => {
 			  	let list = this.list.filter((indices) => {
