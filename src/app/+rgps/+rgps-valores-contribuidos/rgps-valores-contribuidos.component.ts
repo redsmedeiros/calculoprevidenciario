@@ -24,9 +24,11 @@ import swal from 'sweetalert';
 export class RgpsValoresContribuidosComponent implements OnInit {
   @ViewChild('contribuicoesPrimarias') matrizContribuicoesPrimarias: RgpsMatrizComponent;
   @ViewChild('contribuicoesSecundarias') matrizContribuicoesSecundarias: RgpsMatrizComponent;
+
   public isUpdating = false;
 
   public idSegurado = '';
+  public idCalculo = '';
 
   public segurado:any = {};
   public calculo:any = {};
@@ -59,11 +61,12 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
+    this.idCalculo = this.route.snapshot.params['id'];
     this.isUpdating = true;
     this.Segurado.find(this.idSegurado)
         .then(segurado => {
             this.segurado = segurado;
-            this.CalculoRgps.find(this.route.snapshot.params['id'])
+            this.CalculoRgps.find(this.idCalculo)
               .then(calculo => {
                 this.calculo = calculo;
                 this.updateDatatable();
@@ -72,8 +75,10 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     });
   }
   realizarCalculo(){
-    let contribPrimaria = this.matrizContribuicoesPrimarias.getMatrixData();
-    let contribSecundaria = this.matrizContribuicoesSecundarias.getMatrixData();
+    let contribuicoesPrimarias = this.matrizContribuicoesPrimarias.getMatrixData();
+    let contribuicoesSecundarias = this.matrizContribuicoesSecundarias.getMatrixData();
+
+    window.location.href='/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo; 
   }
 
   updateDatatable() {
