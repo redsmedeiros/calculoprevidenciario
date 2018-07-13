@@ -329,6 +329,11 @@ export class RgpsResultadosComponent implements OnInit {
   	window.location.href='/#/rgps/rgps-calculos/' + this.idSegurado;
   }
 
+  valoresContribuidos(){
+    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
+    + '/' + this.idCalculo; 
+  }
+
   imprimirPagina(){
     let printContents = document.getElementById('content').innerHTML;
     let popupWin = window.open('', '_blank', 'width=300,height=300');
