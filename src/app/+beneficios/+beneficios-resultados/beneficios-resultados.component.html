@@ -4,45 +4,44 @@
   <sa-widgets-grid>
 
     <!-- row -->
-    <div class="row">
+    <div class="row" *ngIf="!isUpdating">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+                <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [sortable]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
 
-          <!-- widget div-->
           <div>
-
-            <!-- widget content -->
             <div class="widget-body">
 
               <ul class="list-unstyled">
-                <li>
-                  <b>Nome:</b> FARLEY FABIANO DE SOUZA FERRAZ</li>
-                <li>
-                  <b>CPF:</b> 811526716-34</li>
-                <li>
-                  <b>Data de nascimento:</b> 01/06/1970 - 47 anos</li>
-                <li>
-                  <b>Sexo:</b> Masculino</li>
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
-
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
                     </button>
-
                   </div>
                 </div>
               </div>
@@ -73,13 +72,13 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Data do cálculo:</b> 18/08/2017</li>
+                  <b>Data do cálculo:</b> {{formatDate(calculo.data_calculo_pedido)}}</li>
                 <li>
-                  <b>Data da citação do requerido:</b> 24/02/2010</li>
+                  <b>Data da citação do requerido:</b> {{formatDate(calculo.data_citacao_reu)}}</li>
                 <li>
-                  <b>Data da distribuição da ação:</b> 12/02/2010</li>
+                  <b>Data da distribuição da ação:</b> {{formatDate(calculo.data_acao_judicial)}}</li>
                 <li>
-                  <b>Tabela Correção Monetária Justiça Federal:</b> 08/2017</li>
+                  <b>Tabela Correção Monetária Justiça Federal:</b> {{formatDate(calculo.data_calculo_pedido).substring(3, 10)}}</li>
               </ul>
             </div>
           </div>
@@ -107,15 +106,49 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Espécie dos valores devidos:</b> Auxílio Doença </li>
+                  <b>Espécie dos valores devidos:</b> {{getTipoAposentadoria(calculo.tipo_aposentadoria)}} </li>
                 <li>
-                  <b>DIB de valores devidos:</b> 26/07/2007</li>
+                  <b>DIB de valores devidos:</b> {{formatDate(calculo.data_pedido_beneficio_esperado)}}</li>
                 <li>
-                  <b>DIB anterior de valores devidos:</b> --</li>
+                  <b>DIB anterior de valores devidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
-                  <b>Data de cessação de valores devidos:</b> 07/05/2008</li>
+                  <b>Data de cessação de valores devidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
                 <li>
-                  <b>Nova RMI de valores devidos:</b> R$ 2.225,86</li>
+                  <b>Nova RMI de valores devidos:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Valores Recebidos</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li>
+                  <b>Espécie dos valores recebidos:</b> {{getTipoAposentadoria(calculo.tipo_aposentadoria)}} </li>
+                <li>
+                  <b>DIB de valores recebidos:</b> {{formatDate(calculo.data_pedido_beneficio)}}</li>
+                <li>
+                  <b>DIB anterior de valores recebidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
+                <li>
+                  <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
+                <li>
+                  <b>Nova RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
               </ul>
             </div>
           </div>
@@ -143,13 +176,13 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Intervalo de Honorários:</b> 26/07/2007 a 07/05/2008</li>
+                  <b>Intervalo de Honorários:</b> {{formatDate(calculo.taxa_advogado_inicio)}} a {{formatDatetimeToDate(calculo.taxa_advogado_final)}}</li>
                 <li>
-                  <b>Percentual dos honorários:</b> 10%</li>
+                  <b>Percentual dos honorários:</b> {{formatPercent(calculo.percentual_taxa_advogado)}}</li>
                 <li>
-                  <b>Percentual do Acordo Judicial:</b> 0%</li>
+                  <b>Percentual do Acordo Judicial:</b> {{formatPercent(calculo.acordo_pedido)}}</li>
                 <li>
-                  <b>Vicendos:</b> 0</li>
+                  <b>Vicendos:</b> {{calculo.maturidade}}</li>
               </ul>
             </div>
           </div>
@@ -176,17 +209,78 @@
 
               <ul class="list-unstyled">
                 <li>
-                  <b>Juros anterior a janeiro de 2003:</b> 0.5%</li>
+                  <b>Juros anterior a janeiro de 2003:</b> {{calculo.previo_interesse_2003}}%</li>
                 <li>
-                  <b>Juros posterior a janeiro de 2003:</b> 1%</li>
+                  <b>Juros posterior a janeiro de 2003:</b> {{calculo.pos_interesse_2003}}%</li>
                 <li>
-                  <b>Juros posterior a julho de 2009:</b> 0.5%</li>
+                  <b>Juros posterior a julho de 2009:</b> {{calculo.pos_interesse_2009}}%</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
 
+       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Conclusões</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled" *ngIf="!isTetos">
+                <li>
+                  <b>Soma dos honorários a receber:</b> {{formatMoney(somaHonorarios)}}</li>
+                <li>
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
+                <li>
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(valorAcordo)}}</li>
+                <li>
+                  <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
+                <li>
+                  <b>Soma Total da Diferença Mensal:</b> {{formatMoney(somaDiferencaMensal)}}</li>
+                <li>
+                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaCorrecaoMonetaria)}}</li>
+                <li>
+                  <b>Soma Total da Diferença Corrigida:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
+                <li>
+                  <b>Soma Total do Valor dos Juros:</b> {{formatMoney(somaJuros)}}</li>
+                <li>
+                  <b>Soma devida Judicialmente:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
+                <li>
+                  <b>Soma das vincendas:</b> {{formatMoney(somaVincendas)}}</li>
+                <li>
+                  <b>Soma total devida ao segurado:</b> {{formatMoney(somaTotalSegurado)}}</li>
+              </ul>
+              <ul class="list-unstyled" *ngIf="isTetos">
+                  <li>
+                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendasTetos)}}</li>
+                <li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRendaTetos)}}</li>
+                <li>
+                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaTetos)}}</li>
+                <li>
+                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(honorariosTetos)}}</li>
+                <li>
+                  <b>Subtotal:</b> {{formatMoney(subtotalTetos)}}</li>
+                <li>
+                  <b>Soma dos honorários a receber:</b> {{formatMoney(honorariosTetos)}}</li>
+                <li>
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(acordoJudicialTetos)}}</li>
+                <li>
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(devidosComDescontoTetos)}}</li>
+                <li>
+                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalTetos)}}</li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
 
 
 
@@ -203,149 +297,54 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
-              <table class="table table-hover table-bordered">
-                <thead>
+              <sa-datatable [options]="resultadosDatatableOptions"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
+                <thead *ngIf="!isTetos">
                   <tr>
-                    <th>
-                      Competência
-                    </th>
-                    <th>
-                      Indice de Reajuste de valores devidos
-                    </th>
-                    <th>
-                      Benefício Devido Tetos
-                    </th>
-                    <th>
-                      Indice de Reajuste de valores recebidos
-                    </th>
-                    <th>
-                      Benefício Recebido Tetos
-                    </th>
-                    <th>
-                      Diferença Mensal Tetos
-                    </th>
-                    <th>
-                      Correção Monetária
-                    </th>
-                    <th>
-                      Diferença Corrigida Tetos
-                    </th>
-                    <th>
-                      Juros
-                    </th>
-                    <th>
-                      Valor dos Juros Tetos
-                    </th>
-                    <th>
-                      Diferença Corrigida + Juros Tetos
-                    </th>
-                    <th>
-                      Honorários Tetos
-                    </th>
+                    <th>Competência</th>
+                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <!-- <th>Benefício Devido Tetos</th> -->
+                    <th>Benefício Devido</th>
+                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <!-- <th>Benefício Recebido Tetos</th> -->
+                    <th>Benefício Recebido</th>
+                    <!-- <th>Diferença Mensal Tetos</th> -->
+                    <th>Diferença Mensal</th>
+                    <th>Correção Monetária</th>
+                    <th>Diferença Corrigida</th>
+                    <!-- <th>Diferença Corrigida Tetos</th> -->
+                    <th>Juros</th>
+                    <th>Valor dos Juros</th>
+                    <!-- <th>Valor dos Juros Tetos</th> -->
+                    <th>Diferença Corrigida + Juros</th>
+                    <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
+                    <th>Honorários</th>
                   </tr>
                 </thead>
-                <tbody>
+                <thead *ngIf="isTetos">
                   <tr>
-                    <td>7/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
+                    <th>Competência</th>
+                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <th>Benefício Devido Tetos</th>
+                    <!-- <th>Benefício Devido</th> -->
+                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <th>Benefício Recebido Tetos</th>
+                    <!-- <th>Benefício Recebido</th> -->
+                    <th>Diferença Mensal Tetos</th>
+                    <!-- <th>Diferença Mensal</th> -->
+                    <th>Correção Monetária</th>
+                    <!-- <th>Diferença Corrigida</th> -->
+                    <th>Diferença Corrigida Tetos</th>
+                    <th>Juros</th>
+                    <!-- <th>Valor dos Juros</th> -->
+                    <th>Valor dos Juros Tetos</th>
+                    <!-- <th>Diferença Corrigida + Juros</th> -->
+                    <th>Diferença Corrigida + Juros Tetos</th>
+                    <th>Honorários Tetos</th>
                   </tr>
-                  <tr>
-                    <td>8/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>9/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>10/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>11/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>12/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                  <tr>
-                    <td>13/2007</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>1.000000</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00</td>
-                    <td>1.843061</td>
-                    <td>R$ 0,00</td>
-                    <td>45.0000%</td>
-                    <td>R$ 0,00</td>
-                    <td>R$ 0,00 p</td>
-                    <td>R$ 0,00</td>
-                  </tr>
-                </tbody>
-              </table>
-
+                </thead>
+              </sa-datatable>
+              
               <div class="well margin-top-10 margin-bottom-10">
                 <p>
                   <strong>Observações:</strong>

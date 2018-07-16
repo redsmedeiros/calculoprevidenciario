@@ -1,0 +1,208 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well" *ngIf="type=='AJ'">
+          <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
+          <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
+          <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
+          <p>
+            <a href="#">Esclarecimento Tetos Judiciais </a>
+          </p>
+          <p>Ou confira o manual deste aplicativo no link a seguir. </p>
+          <p>
+            <a href="#">VEJA MANUAL DO SIMULADOR DE TETOS JUDICIAIS REFERENTE ÀS EMENDAS CONSTITUCIONAIS N.20/98 E 41/03</a>
+          </p>
+
+        </div>
+
+        <div class="well" *ngIf="type=='A'">
+
+          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados </p>
+
+          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados - PDF </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Buraco Negro</p>
+           
+          <p>Simula em qualquer data, diferenças entre valores de rendas mensais de benefícios devidos e recebidos, bem como calcula a correção monetária, os juros de mora e os honorários advocatícios. </p>
+        
+        </div>
+
+        <div class="well" *ngIf="type=='AI'">
+
+          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004. </p>
+
+          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 - PDF </p>
+
+          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 </p>
+
+        </div>
+
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+              </ul>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <button type="submit" (click)='editSegurado()' class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </span> Editar
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+	  <app-beneficios-calculos-form 
+	  [errors]="Errors" 
+	  [formData]="form" 
+	  [type] = "calculoType"
+	  (onSubmit)="submit($event)">
+	  </app-beneficios-calculos-form>
+
+<!--  		<app-beneficios-calculos-form 
+	  [type] = "calculoType">
+	  </app-beneficios-calculos-form> -->
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-eye"></i>
+            </span>
+            <h2>Juros Taxa Selic</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <p>
+                Se meta da taxa Selic for menor que 8,5% ao ano os juros aplicados será de 70% da meta da selic, mensalizada.
+              </p>
+              <p>
+                A tabela abaixo apresenta o período de Maio 2012 a Novembro de 2013.
+              </p>
+
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr>
+                    <th>
+                      SELIC
+                    </th>
+                    <th>
+                      MENSAL
+                    </th>
+                    <th>
+                      70% TAXA SELIC
+                    </th>
+                    <th>
+                      TAXA JUROS A CONSIDERAR
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Mai/12</td>
+                    <td>0,74</td>
+                    <td>-</td>
+                    <td>0,50%</td>
+                  </tr>
+                  <tr>
+                    <td>Jun/12</td>
+                    <td>0,64</td>
+                    <td>0,448</td>
+                    <td>0,45%</td>
+                  </tr>
+                  <tr>
+                    <td>Jun/12</td>
+                    <td>0,64</td>
+                    <td>0,448</td>
+                    <td>0,45%</td>
+                  </tr>
+                  <tr>
+                    <td>Jul/12</td>
+                    <td>0,68</td>
+                    <td>0,476</td>
+                    <td>0,48%</td>
+                  </tr>
+                  <tr>
+                    <td>Ago/12</td>
+                    <td>0,69</td>
+                    <td></td>
+                    <td>0,50%</td>
+                  </tr>
+                  <tr>
+                    <td>Set/12</td>
+                    <td>0,54</td>
+                    <td>0,378</td>
+                    <td>0,38%</td>
+                  </tr>
+                  <tr>
+                    <td>Out/12</td>
+                    <td>0,61</td>
+                    <td>0,427</td>
+                    <td>0,43%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+
+
+
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>

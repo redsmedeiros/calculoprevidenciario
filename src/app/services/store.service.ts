@@ -14,13 +14,15 @@ import { BusinessUnit } from '../../models/BusinessUnit.model';
 import { Session } from '../../models/Session.model';
 import { Partner } from '../../models/Partner.model';
 import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
-import { CalculoAtrasado } from '../+beneficios/CalculoAtrasado.model';
+import { CalculoAtrasado } from '../+beneficios/+beneficios-calculos/CalculoAtrasado.model';
 import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import { ContribuicaoComplementar } from '../+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.model';
 import { Moeda } from './Moeda.model';
 import { SeguradoRgps } from '../+rgps/+rgps-segurados/SeguradoRgps.model';
 import { CalculoRgps } from '../+rgps/+rgps-calculos/CalculoRgps.model';
+import { IntervaloReajuste } from './IntervaloReajuste.model';
+import { Indices } from './Indices.model';
 
 @Injectable()
 export class StoreService {
@@ -33,7 +35,9 @@ export class StoreService {
     calculoAtrasado: CalculoAtrasado[],
     seguradosRgps: SeguradoRgps[],
     calculoRgps: CalculoRgps[],
-    contribuicaoComplementar: ContribuicaoComplementar[]
+    contribuicaoComplementar: ContribuicaoComplementar[],
+    intervaloReajuste: IntervaloReajuste[],
+    indices: Indices[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -42,7 +46,9 @@ export class StoreService {
     calculoAtrasado:[],
     seguradosRgps: [],
     calculoRgps: [],
-    contribuicaoComplementar: []
+    contribuicaoComplementar: [],
+    intervaloReajuste: [],
+    indices: []
   };
 
   public push(name: string, data) {

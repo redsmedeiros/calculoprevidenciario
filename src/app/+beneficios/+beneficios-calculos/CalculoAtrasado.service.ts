@@ -1,4 +1,4 @@
-import { ControllerService } from '../contracts/Controller.service';
+import { ControllerService } from '../../contracts/Controller.service';
 
 import { CalculoAtrasado } from './CalculoAtrasado.model';
 

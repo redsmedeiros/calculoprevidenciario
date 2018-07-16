@@ -22,11 +22,12 @@ import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoe
 import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.service';
-import { CalculoAtrasadoService } from './+beneficios/CalculoAtrasado.service';
+import { CalculoAtrasadoService } from './+beneficios/+beneficios-calculos/CalculoAtrasado.service';
 import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
 import { MatrixService } from './+contribuicoes/MatrixService.service'
-
+import { IntervaloReajusteService } from './services/IntervaloReajuste.service';
+import { IndicesService } from './services/Indices.service';
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 // Application wide providers
@@ -55,8 +56,11 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
+
     CoreModule,
     SmartadminLayoutModule,
+
+
     routing
   ],
   exports: [
@@ -71,6 +75,8 @@ type StoreType = {
     ContribuicaoJurisprudencialService,
     CalculoAtrasadoService,
     MoedaService,
+    IntervaloReajusteService,
+    IndicesService,
     CalculoRgpsService,
     ContribuicaoComplementarService,
     MatrixService

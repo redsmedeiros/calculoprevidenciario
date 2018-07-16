@@ -36,6 +36,10 @@ export abstract class Model {
     return axios.get(`${this.url}/${id}`);
   }
 
+  public static getWithParameters(params) {
+    return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]+'&'+params[2]+'='+params[3]);
+  }
+
   public update() {
     const data = {};
     for (const field in this.form) {

@@ -15,9 +15,9 @@ export const routes: Routes = [
     data: {pageTitle: 'Beneficios Calculo'}
   },
   {
-    path: 'novo-calculo',
-    loadChildren: 'app/+beneficios/+beneficios-novo-calculo/beneficios-novo-calculo.module#BeneficiosNovoCalculoModule',
-    data: {pageTitle: 'Novo Calculo'}
+    path: 'beneficios-resultados',
+    loadChildren: 'app/+beneficios/+beneficios-resultados/beneficios-resultados.module#BeneficiosResultadosModule',
+    data: {pageTitle: 'Beneficios Resultados'}
   },
 ];
 

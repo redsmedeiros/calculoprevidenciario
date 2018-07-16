@@ -1,101 +1,3 @@
-<div id="content">
-
-  <!-- widget grid -->
-  <sa-widgets-grid>
-
-    <!-- row -->
-    <div class="row">
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <div class="well" *ngIf="type=='AJ'">
-          <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>
-          <p>A digitação deve ser cuidadosa e atender aos preceitos para a vantagem concedida aos autores. </p>
-          <p>Veja os esclarecimentos de situações particulares observados na utilização deste aplicativo no link a seguir. </p>
-          <p>
-            <a href="#">Esclarecimento Tetos Judiciais </a>
-          </p>
-          <p>Ou confira o manual deste aplicativo no link a seguir. </p>
-          <p>
-            <a href="#">VEJA MANUAL DO SIMULADOR DE TETOS JUDICIAIS REFERENTE ÀS EMENDAS CONSTITUCIONAIS N.20/98 E 41/03</a>
-          </p>
-
-        </div>
-
-        <div class="well" *ngIf="type=='A'">
-
-          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados </p>
-
-          <p> <a href="#">Veja aqui </a> Manual do Simulador de Benefícios Atrasados - PDF </p>
-
-          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados </p>
-
-          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Buraco Negro</p>
-           
-          <p>Simula em qualquer data, diferenças entre valores de rendas mensais de benefícios devidos e recebidos, bem como calcula a correção monetária, os juros de mora e os honorários advocatícios. </p>
-        
-        </div>
-
-        <div class="well" *ngIf="type=='AI'">
-
-          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004. </p>
-
-          <p> <a href="#">Veja aqui </a> o Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 - PDF </p>
-
-          <p> <a href="#">Veja aqui </a> Videoaula de utilização do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 </p>
-
-        </div>
-
-      </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-edit"></i>
-            </span>
-            <h2>Dados do segurado</h2>
-
-          </header>
-
-          <!-- widget div-->
-          <div>
-
-            <!-- widget content -->
-            <div class="widget-body">
-
-              <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
-              </ul>
-
-              <div class="form-actions">
-                <div class="row">
-                  <div class="col-md-12">
-
-                    <button type="submit" (click)='editSegurado()' class="btn btn-labeled btn-info pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
-                    </button>
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </sa-widget>
-      </article>
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -117,7 +19,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
                     <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -131,7 +33,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
                     <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -151,7 +53,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
                     <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -179,7 +81,7 @@
 
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox"  class="checkbox {{styleTheme}}">
+                    <input type="checkbox"  [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
                     <span>Para não utilizar deflação na correção monetária marque a caixa ao lado:</span>
                   </label>
                 </div>
@@ -254,7 +156,7 @@
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
-                      <button (click)="saveCalculation()" type="submit" class="btn btn-labeled btn-success">
+                      <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
                         </span> Salvar
@@ -387,11 +289,9 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
-              
               <p *ngIf="chkDibAnterior && chkUseSameDib">
                 * Para habilitar o campo DIB Anterior, deve-se desmarcar a revisão RMI com a mesma DIB.
               </p>
-
               <form class="form-horizontal">
                 <fieldset>
                   <div class="form-group">
@@ -412,22 +312,17 @@
                     </div>
                     <label class="col-md-2 control-label" for="select-1">Espécie valores devidos:</label>
                     <div class="col-md-3">
-
                       <select name="especieValoresDevidos" [(ngModel)]="especieValoresDevidos" class="form-control" id="select-1">
                         <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
                       </select>
                     </div>
                   </div>
-
-
                   <div class="form-group">
-                    
                     <label  class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
                     <div class="col-md-3">
                       <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
                     </div>
-                    
                     <div *ngIf="chkDibAnterior">
                       <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
                       <div class="col-md-3">
@@ -439,7 +334,6 @@
                       <input class="form-control" type="text">
                     </div>
                   </div>
-
                     <div *ngIf="chkNotGranted">
                       <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida:
                       </label>
@@ -451,9 +345,7 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="form-group">
-
                     <div *ngIf="!chkNotGranted">
                       <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos:</label>
                       <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
@@ -462,7 +354,6 @@
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
-
                     <div *ngIf="devidosBuracoNegro">
                       <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
@@ -470,7 +361,6 @@
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
-
                     <div *ngIf="devidosPosBuracoNegro">
                       <label class="col-md-2 control-label">Índice de reajuste no teto da Nova RMI de valores devidos:</label>
                         <div class="col-md-3">
@@ -478,21 +368,13 @@
                           <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
                         </div>
                     </div>
-
                   </div>
-
-
                 </fieldset>
               </form>
             </div>
           </div>
         </sa-widget>
       </article>
-
-
-
-
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
@@ -520,8 +402,6 @@
                       <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
                     </div>
                   </div>
-
-
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-3">
@@ -534,7 +414,6 @@
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
-
                   <div class="form-group">
                     <label class="col-md-2 control-label">Calcular mais:</label>
                     <div class="col-md-3">
@@ -548,9 +427,6 @@
         </sa-widget>
       </article>
 
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -558,197 +434,76 @@
               <i class="fa fa-edit"></i>
             </span>
             <h2>Correção Monetária</h2>
-
           </header>
-
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
             <div class="widget-body">
-
               <div class="col-md-8 col-sm-offset-2">
-
                 <div class="form-group">
                   <div class="col-md-10">
-                    <div class="radio">
+                    <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
-                        <input type="radio" checked="checked" name="correcao">
-                        Tabela da IPCA-e
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="correcao">
-                        Tabela da Justiça Federal
-                      </label>
-                    </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="correcao">
-                        Tabela da TR
+                        <input type="radio" name="correcao" 
+                               [checked]="idx === 0" 
+                               [value]="correcao.value"
+                               (change)="onCorrecaoChange(correcao)">
+                        {{correcao.text}}
                       </label>
                     </div>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>
       </article>
 
-
-
-
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-eye"></i>
-            </span>
-            <h2>Juros</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body">
-              <form class="form-horizontal">
-                <fieldset>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
-                    <div class="col-md-3">
-                      <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
-                      <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
-                    </div>
-                    <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
-                    <div class="col-md-3">
-                      <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
-                      <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
-                    <div class="col-md-3">
-                      <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
-                      <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="checkbox">
-                        <label>
-                        <input type="checkbox" class="checkbox {{styleTheme}}" checked>
-                        <span>Desmarque para não aplicar os juros da poupança</span>
-                      </label>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget [colorbutton]="false" [editbutton]="false">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <h2>Juros</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-2 control-label">Juros anterior a janeiro 2003</label>
+              <div class="col-md-3">
+                <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
+                <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
+              </div>
+              <label class="col-md-2 control-label">Juros posterior a janeiro 2003</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
+                <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
+              </div>
             </div>
-          </div>
-        </sa-widget>
-      </article>
-
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-eye"></i>
-            </span>
-            <h2>Juros Taxa Selic</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body">
-              <p>
-                Se meta da taxa Selic for menor que 8,5% ao ano os juros aplicados será de 70% da meta da selic, mensalizada.
-              </p>
-              <p>
-                A tabela abaixo apresenta o período de Maio 2012 a Novembro de 2013.
-              </p>
-
-              <table class="table table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th>
-                      SELIC
-                    </th>
-                    <th>
-                      MENSAL
-                    </th>
-                    <th>
-                      70% TAXA SELIC
-                    </th>
-                    <th>
-                      TAXA JUROS A CONSIDERAR
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Mai/12</td>
-                    <td>0,74</td>
-                    <td>-</td>
-                    <td>0,50%</td>
-                  </tr>
-                  <tr>
-                    <td>Jun/12</td>
-                    <td>0,64</td>
-                    <td>0,448</td>
-                    <td>0,45%</td>
-                  </tr>
-                  <tr>
-                    <td>Jun/12</td>
-                    <td>0,64</td>
-                    <td>0,448</td>
-                    <td>0,45%</td>
-                  </tr>
-                  <tr>
-                    <td>Jul/12</td>
-                    <td>0,68</td>
-                    <td>0,476</td>
-                    <td>0,48%</td>
-                  </tr>
-                  <tr>
-                    <td>Ago/12</td>
-                    <td>0,69</td>
-                    <td></td>
-                    <td>0,50%</td>
-                  </tr>
-                  <tr>
-                    <td>Set/12</td>
-                    <td>0,54</td>
-                    <td>0,378</td>
-                    <td>0,38%</td>
-                  </tr>
-                  <tr>
-                    <td>Out/12</td>
-                    <td>0,61</td>
-                    <td>0,427</td>
-                    <td>0,43%</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="form-group">
+              <label class="col-md-2 control-label">Juros posterior a julho 2009:</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
+                <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
+              </div>
+              <div class="col-md-5">
+                <div class="checkbox">
+                  <label>
+                  <input type="checkbox" name="chkBoxTaxaSelic" [(ngModel)]="chkBoxTaxaSelic" class="checkbox {{styleTheme}}" checked>
+                  <span>Desmarque para não aplicar os juros da poupança</span>
+                </label>
+                </div>
+              </div>
             </div>
-          </div>
-        </sa-widget>
-      </article>
-
-
-
-
+          </fieldset>
+        </form>
+      </div>
     </div>
-
-    <!-- end row -->
-
-  </sa-widgets-grid>
-
-  <!-- end widget grid -->
-
-</div>
+  </sa-widget>
+</article>

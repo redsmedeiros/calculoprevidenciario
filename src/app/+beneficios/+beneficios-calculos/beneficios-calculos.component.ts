@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { Segurado as SeguradoModel } from '../+beneficios-segurados/Segurado.model';
-import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import { CalculoAtrasadoService } from './CalculoAtrasado.service';
 
 
 @FadeInTop()
@@ -119,15 +119,15 @@ export class BeneficiosCalculosComponent implements OnInit {
   }
 
   createNewCalculo() {
-  	window.location.href='/#/beneficios/novo-calculo/A/'+ this.route.snapshot.params['id'];
+  	window.location.href='/#/beneficios/beneficios-calculos/A/'+ this.route.snapshot.params['id'];
   }
 
   createNewCalculoJudicial() {
-    window.location.href='/#/beneficios/novo-calculo/AJ/'+this.route.snapshot.params['id'];
+    window.location.href='/#/beneficios/beneficios-calculos/AJ/'+this.route.snapshot.params['id'];
   }
 
   createNewCalculoIndices() {
-    window.location.href='/#/beneficios/novo-calculo/AI/'+this.route.snapshot.params['id'];
+    window.location.href='/#/beneficios/beneficios-calculos/AI/'+this.route.snapshot.params['id'];
   }
 
   isSegurado(element, index, array){

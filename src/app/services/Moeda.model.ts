@@ -13,7 +13,8 @@ export class Moeda extends Model {
     sigla: '',
     nome: '',
     tr: '',
-    ipca: ''
+    ipca: '',
+    juros_selic_70: ''
   };
 
   public data_moeda;
@@ -26,5 +27,5 @@ export class Moeda extends Model {
   public nome;
   public tr;
   public ipca;
-
+  public juros_selic_70;
 }
