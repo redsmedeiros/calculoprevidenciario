@@ -55,7 +55,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       {data: 'honorarios'}
     ]
   }
-
+  private aplicaProporcionalDevidos = false;
   //Datas Importantes
   private dataSimplificada = moment('1991-12-01');
   private dataInicioBuracoNegro = moment('1988-10-05');
@@ -191,10 +191,21 @@ export class BeneficiosResultadosComponent implements OnInit {
   generateTabelaResultados(){
     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
     let tableData = [];
-
+    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
     let func_beneficioDevido = (this.isTetos) ? this.getBeneficioDevidoTetos : this.getBeneficioDevido;
     let func_beneficioRecebido = (this.isTetos) ? this.getBeneficioRecebidoTetos :  this.getBeneficioRecebido;
+    let abonoProporcionalDevidos =  0;
+    if(this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00'){
+      let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+      if(previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')){
+        abonoProporcionalDevidos = this.verificaAbonoProporcional(previaDataPedidoBeneficioEsperado);
+      }else{
+        abonoProporcionalDevidos = 1;
+      }
+    }else{
+      abonoProporcionalDevidos = this.verificaAbonoProporcional(dataPedidoBeneficioEsperado);
+    }
     
     for (let dataCorrenteString of competencias) {
       let dataCorrente = moment(dataCorrenteString);
@@ -284,8 +295,13 @@ export class BeneficiosResultadosComponent implements OnInit {
         line = {
               ...line,
               competencia: 'abono - ' + stringCompetencia,
+              beneficio_devido: this.formatMoney(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos),
         }
         tableData.push(line);
+        if(this.aplicaProporcionalDevidos){
+          this.aplicaProporcionalDevidos = false;
+          abonoProporcionalDevidos = 1;
+        }
         if(!isPrescricao){
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
           this.somaDiferencaMensal += diferencaMensal;
@@ -487,12 +503,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    // if(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro
-    //    && this.aplicarReajusteUltimoDevido ){
-    //   beneficioDevido = irtDevidoSimplificado89 * this.moeda[moedaIndexDataCorrente].salario_minimo;
-    //   //beneficioDevido = this.beneficioDevidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-    // }
-
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
     if ((dataCorrente.isSame('2006-08-01')||
         dataCorrente.isSame('2000-06-01')||
@@ -507,7 +517,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else {
       beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
     }
-
     let indiceSuperior = false;
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
@@ -550,7 +559,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
-
     this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
 
@@ -566,6 +574,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
       if(parseFloat(beneficioDevidoFinal.toFixed(3)) ===  parseFloat(this.moeda[moedaIndexDataCorrente].salario_minimo) + 0.904){
         beneficioDevidoFinal = parseFloat(this.moeda[moedaIndexDataCorrente].salario_minimo);
+        this.ultimoBeneficioDevidoAntesProporcionalidade = parseFloat(this.moeda[moedaIndexDataCorrente].salario_minimo);
       }
     }
 
@@ -575,10 +584,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let minimoAplicado = false;
-    if(beneficioDevidoAjustado < beneficioDevido){
+    if(beneficioDevidoAjustado == this.moeda[moedaIndexDataCorrente].teto){
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioDevidoString += ' -<br>  T';
-    }else if(beneficioDevidoAjustado >= beneficioDevido){
+    }else if(beneficioDevidoAjustado ==  this.moeda[moedaIndexDataCorrente].salario_minimo){
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioDevidoString += ' -<br> M';
       minimoAplicado = true;
@@ -1515,6 +1524,20 @@ export class BeneficiosResultadosComponent implements OnInit {
       return tetoSalarial;
     }
     return valorBeneficio;
+  }
+
+  verificaAbonoProporcional(dib){
+    let dibMonth = dib.month() + 1;
+    if(dib.date() <= 16){
+      dibMonth -= 1;
+    }
+    let proporcional = 1 - dibMonth/12;
+    if(proporcional < 1){
+      this.aplicaProporcionalDevidos = true;
+    }else{
+      this.aplicaProporcionalDevidos = false;
+    }
+    return proporcional;
   }
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
