@@ -180,7 +180,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
                   mes: mes, 
                   contrib_base: this.formatMoney(contrib_base), 
                   indice: indice, 
-                  valor_corrigido: this.formatMoney(valor_corrigido)
+                  valor_corrigido: valor_corrigido
                  };
       dataTabelaDetalhes.push(line);
     }
@@ -206,7 +206,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       dataTabelaDetalhes[index].mes ='<div style="color:red;">' + dataTabelaDetalhes[index].mes + '</div>'
       dataTabelaDetalhes[index].contrib_base ='<div style="color:red;">' + dataTabelaDetalhes[index].contrib_base + '</div>'
       dataTabelaDetalhes[index].indice ='<div style="color:red;">' + dataTabelaDetalhes[index].indice + '</div>'
-      dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + dataTabelaDetalhes[index].valor_corrigido + '</div>'
+      dataTabelaDetalhes[index].valor_corrigido ='<div style="color:red;">' + this.formatMoney(dataTabelaDetalhes[index].valor_corrigido) + '</div>'
     }
 
     //Ordena as contribuiçoes consideradas pela data e concatena com as desconsideradas
@@ -223,6 +223,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         }));
 
     for(index = index; index < dataTabelaDetalhes.length; index++){
+      dataTabelaDetalhes[index].valor_corrigido = this.formatMoney(dataTabelaDetalhes[index].valor_corrigido);
       dataTabelaDetalhes[index].indice_num = index+1;
       this.form.total_contribuicao += parseFloat((dataTabelaDetalhes[index].valor_corrigido).split(' ')[1].replace(',','.'));
     }
