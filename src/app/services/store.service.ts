@@ -21,6 +21,7 @@ import { ContribuicaoComplementar } from '../+contribuicoes/+contribuicoes-compl
 import { Moeda } from './Moeda.model';
 import { SeguradoRgps } from '../+rgps/+rgps-segurados/SeguradoRgps.model';
 import { CalculoRgps } from '../+rgps/+rgps-calculos/CalculoRgps.model';
+import { ValorContribuido } from '../+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
 import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
 
@@ -37,7 +38,8 @@ export class StoreService {
     calculoRgps: CalculoRgps[],
     contribuicaoComplementar: ContribuicaoComplementar[],
     intervaloReajuste: IntervaloReajuste[],
-    indices: Indices[]
+    indices: Indices[],
+    valorContribuido: ValorContribuido[],
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -48,7 +50,8 @@ export class StoreService {
     calculoRgps: [],
     contribuicaoComplementar: [],
     intervaloReajuste: [],
-    indices: []
+    indices: [],
+    valorContribuido: [],
   };
 
   public push(name: string, data) {

@@ -8,6 +8,8 @@ import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ErrorService } from '../../services/error.service';
 import { RgpsMatrizComponent } from './rgps-valores-contribuidos-matriz/rgps-valores-contribuidos-matriz.component'
+import { ValorContribuido } from './ValorContribuido.model'
+import { ValorContribuidoService } from './ValorContribuido.service'
 import * as moment from 'moment';
 import swal from 'sweetalert';
 
@@ -56,7 +58,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,    
     protected CalculoRgps: CalculoRgpsService,
-    protected errors: ErrorService,) {
+    protected errors: ErrorService,
+    protected ValorContribuidoService: ValorContribuidoService) {
   }
 
   ngOnInit() {
@@ -78,7 +81,36 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     let contribuicoesPrimarias = this.matrizContribuicoesPrimarias.getMatrixData();
     let contribuicoesSecundarias = this.matrizContribuicoesSecundarias.getMatrixData();
 
-    window.location.href='/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo; 
+    let primarias = [];
+    let secundarias = [];
+    for(let contribuicao of contribuicoesPrimarias){
+      let dateMonth = contribuicao.split('-')[0];
+      let valor = contribuicao.split('-')[1];
+      if(valor == 0)
+        continue;
+      let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
+      let valorContribuido = new ValorContribuido({id_calculo: this.idCalculo,
+                                                   data: date,
+                                                   tipo: 0,
+                                                   valor: valor,});
+      primarias.push(valorContribuido);
+    }
+    for(let contribuicao of contribuicoesSecundarias){
+      let dateMonth = contribuicao.split('-')[0];
+      let valor = contribuicao.split('-')[1];
+      if(valor == 0)
+        continue;
+      let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
+      let valorContribuido = new ValorContribuido({id_calculo: this.idCalculo,
+                                                   data: date,
+                                                   tipo: 1,
+                                                   valor: valor,});
+      secundarias.push(valorContribuido);
+    }
+    let todasContribuicoes = primarias.concat(secundarias);
+    this.ValorContribuidoService.save(todasContribuicoes).then(() => {
+      window.location.href='/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo;
+    }); 
   }
 
   updateDatatable() {
