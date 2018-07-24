@@ -236,13 +236,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let teto = this.getTeto(dataMes);
     let salario_minimo = this.getSalarioMinimo(dataMes);
     contrib = parseFloat(contrib);
-    if(salario_minimo <= contrib && contrib <= teto){
-      return contrib;
-    }else if(contrib > teto){
-      return teto;
-    }else if(contrib < salario_minimo){
+    if(contrib < salario_minimo){
       return salario_minimo;
     }
+    if(contrib > teto){
+      return teto;
+    }
+    return contrib;
   }
 
   getSalarioMinimo(dataString){
