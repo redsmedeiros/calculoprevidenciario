@@ -14,7 +14,7 @@ export class RgpsMatrizComponent implements OnInit {
 
   public anosConsiderados = [];
   public matrizHasValues = false;
-
+  private hashKey;
   public matrixTableOptions = {
       paging: false, 
       ordering: false, 
@@ -30,7 +30,12 @@ export class RgpsMatrizComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    //O campo hashKey é necessario pois a funçao getMatrixData recolhe os dados dos inputs do html.
+    //No caso de mais de uma instancia do componente, poderá haver casos de campos com o mesmo id.
+    this.hashKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    console.log(this.hashKey);
+  }
 
   preencher(periodo){
     let monthList = this.monthAndYear(periodo.inicioPeriodo, periodo.finalPeriodo);
@@ -56,29 +61,29 @@ export class RgpsMatrizComponent implements OnInit {
     let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
     let data_dict = [];
     for(let ano of unique_anos){
-      let valor_jan = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("01-"+ano)).value);
+      let valor_jan = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("01-"+ano+'-'+this.hashKey)).value);
       data_dict.push("01/"+ano+'-'+valor_jan);
-      let valor_fev = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("02-"+ano)).value);
+      let valor_fev = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("02-"+ano+'-'+this.hashKey)).value);
       data_dict.push("02/"+ano+'-'+valor_fev);
-      let valor_mar = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("03-"+ano)).value);
+      let valor_mar = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("03-"+ano+'-'+this.hashKey)).value);
       data_dict.push("03/"+ano+'-'+valor_mar);
-      let valor_abr = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("04-"+ano)).value);
+      let valor_abr = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("04-"+ano+'-'+this.hashKey)).value);
       data_dict.push("04/"+ano+'-'+valor_abr);
-      let valor_mai = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("05-"+ano)).value);
+      let valor_mai = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("05-"+ano+'-'+this.hashKey)).value);
       data_dict.push("05/"+ano+'-'+valor_mai);
-      let valor_jun = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("06-"+ano)).value);
+      let valor_jun = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("06-"+ano+'-'+this.hashKey)).value);
       data_dict.push("06/"+ano+'-'+valor_jun);
-      let valor_jul = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("07-"+ano)).value);
+      let valor_jul = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("07-"+ano+'-'+this.hashKey)).value);
       data_dict.push("07/"+ano+'-'+valor_jul);
-      let valor_ago = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("08-"+ano)).value);
+      let valor_ago = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("08-"+ano+'-'+this.hashKey)).value);
       data_dict.push("08/"+ano+'-'+valor_ago);
-      let valor_set = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("09-"+ano)).value);
+      let valor_set = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("09-"+ano+'-'+this.hashKey)).value);
       data_dict.push("09/"+ano+'-'+valor_set);
-      let valor_out = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("10-"+ano)).value);
+      let valor_out = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("10-"+ano+'-'+this.hashKey)).value);
       data_dict.push("10/"+ano+'-'+valor_out);
-      let valor_nov = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("11-"+ano)).value);
+      let valor_nov = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("11-"+ano+'-'+this.hashKey)).value);
       data_dict.push("11/"+ano+'-'+valor_nov);
-      let valor_dez = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("12-"+ano)).value);
+      let valor_dez = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("12-"+ano+'-'+this.hashKey)).value);
       data_dict.push("12/"+ano+'-'+valor_dez);
     }
     return data_dict;
