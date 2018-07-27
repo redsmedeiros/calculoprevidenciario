@@ -41,6 +41,6 @@ export class CalculoRgps extends Model {
     <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/destroy' class='action-delete'> <i class='fa fa-times'></i> </a> 
     <a href='#/rgps/rgps-valores-contribuidos/${this.id_segurado}/${this.id}/' class='action-contribut'> <i class='fa fa-money '></i> </a> 
     <a href='#' class='action-import'> <i class='fa fa-arrow-down '></i> </a> 
-    <a href='#' class='action-calc'> <i class='fa fa-calculator'></i> </a>
+    <a href='#/rgps/rgps-resultados/${this.id_segurado}/${this.id}/' class='action-calc'> <i class='fa fa-calculator'></i> </a>
   `;
 }
