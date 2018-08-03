@@ -5,7 +5,7 @@
 
     <!-- row -->
     <div class="row">
-
+      <!-- informações do segurado -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -41,42 +41,23 @@
         </sa-widget>
       </article>
 
-
-
-
-
-
-
-
-
+      <!-- opções do calculo -->
       <article class="col-sm-12 col-md-12 col-lg-12">
-
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-    
-              [colorbutton]="false"
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
               [deletebutton]="false"
               [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-    
-              -->
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-gear"></i>
             </span>
             <h2>Opções</h2>
-
           </header>
-
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
             <div class="widget-body" style="min-height: auto;">
 
@@ -113,9 +94,7 @@
         </sa-widget>
       </article>
 
-
-
-
+      <!-- tabela com o grupo de cálculos -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -143,7 +122,8 @@
           </div>
         </sa-widget>
       </article>
-<!-- CALCULO 1 -->
+
+      <!-- Opções do Cálculo Anterior a 05/10/1988 -->
       <article class="container-fluid">
         <table class="table table-hover table-bordered">
           <thead>
@@ -181,7 +161,8 @@
                 </button>
               </td>
             </tr>
-            <tr>
+            <!--Não disponivel para cálculo  Anterior a 05/10/1988   
+              <tr>
               <td>
                 <p>Calcular com base na tabela do INPC vigente na data da DIB</p>
               </td>
@@ -192,7 +173,7 @@
                   </span> CÁLCULAR
                 </button>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td>
                 <p>Mostrar Reajustes Administrativos</p>
@@ -220,6 +201,8 @@
           </tbody>
         </table>
       </article>
+
+      <!-- Tabela e Informações do Cálculo Anterior a 05/10/1988 -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -230,7 +213,6 @@
           </header>
           <div>
             <div class="widget-body">
-
               <table class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -277,21 +259,104 @@
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
                     </td>
-                    <td>{{calculo.data_calculo}}</td>
+                    <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
                   </tr>
                 </tbody>
-
               </table>
 
-              <div class="alert alert-warning margin-top-10" role="alert">
-                <strong>NÃO POSSUI</strong> direito ao benefício
+              <div class="alert alert-warning margin-top-10" role="alert" *ngIf="erro">
+            <!--<strong>NÃO POSSUI</strong> direito ao benefício
                 <strong>Falta(m) 20 ano(s) e 2 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
-                <strong>INTEGRAL</strong>.</div>
-
+                <strong>INTEGRAL</strong>. -->
+                <p>{{erro}}</p>
+              </div>
+            </div>
+            <div>
+              <sa-datatable [options]="calculo98TableOptions" *ngIf="!isUpdating && !erro"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Competência</th>
+                    <th>Contribuição Primária</th>
+                    <th>Contribuição Secundária</th>
+                    <th>Índice Anual INPS</th>
+                    <th>Contribuição Primária Corrigida</th>
+                    <th>Contribuição Secundária Corrigida</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+          </div>
+          <div class="widget-body">
+              <table class="table table-bordered table-hover">
+                <tbody>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Total das contribuições primárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.total_contribuicoes_primarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.media_contribuicoes_primarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Divisor do cálculo da média:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.divisor_calculo_media}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Média das contribuições:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.media_contribuicoes}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Maior valor teto (MVT):</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.maior_valor_teto}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Menor valor teto (mvt):</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.menor_valor_teto}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">% de Cálculo do Benefício:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.porcentagem_calculo_beneficio}}%</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Benefício mínimo com índice (Min para a RMI):</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.beneficio_minimo_com_indice}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">95% do valor da média (Max para a RMI):</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.noventaecinco_porcento_valor_da_media}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Renda Mensal Inicial:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98.renda_mensal_inicial}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </sa-widget>
       </article>
+
+
       <!-- CALCULO 2 -->
 <!--       <article class="container-fluid">
         <table class="table table-hover table-bordered">
@@ -321,7 +386,7 @@
             <tr>
               <td>
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
-              </td>
+              </td>Dutchmaster
               <td>
                 <button type="submit" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
