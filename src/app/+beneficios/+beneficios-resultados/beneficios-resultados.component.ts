@@ -89,7 +89,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private beneficioRecebidoAnterior = 0.0;
 
   private beneficioDevidoSalvo = undefined;
-
+  private beneficioDevidoOs = 0;
   //Variaveis para aplicação do reajuste tetos
   private aplicarReajusteUltimoDevidoTeto = false;
   private ultimoSalarioMinimoDevidoTeto = 0.0;
@@ -493,6 +493,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
     }else{
       beneficioDevido = rmiDevidos;
+      this.beneficioDevidoOs = beneficioDevido;
     }
 
     //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
@@ -517,6 +518,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else {
       beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
     }
+
+    this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
@@ -526,7 +529,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
         beneficioDevido = this.beneficioDevidoAposRevisao;
       } else if (dataCorrente < this.dataEfeitoFinanceiro) {
-        beneficioDevido = rmiDevidos * reajusteObj.reajuste;
+        beneficioDevido = this.beneficioDevidoOs;
         this.beneficioDevidoAposRevisao *= reajusteObj.reajusteOs;
       }else{
         this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
@@ -535,8 +538,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente.isSame(this.dataCorteCruzado) || dataCorrente.isSame(this.dataCorteCruzadoNovo) || dataCorrente.isSame(this.dataCorteCruzeiroReal)){
+    if (dataCorrente.isSame(this.dataCorteCruzado, "month") || dataCorrente.isSame(this.dataCorteCruzadoNovo, "month") || dataCorrente.isSame(this.dataCorteCruzeiroReal, "month")){
       beneficioDevido /= 1000;
+      this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
     }
 
@@ -558,6 +562,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
+    console.log(dataCorrente.format('YYYY-MM'), beneficioDevido)
     let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
