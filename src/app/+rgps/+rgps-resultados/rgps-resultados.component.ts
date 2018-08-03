@@ -7,6 +7,8 @@ import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model
 import { MoedaService } from '../../services/Moeda.service';
 import { IndiceInps } from './IndiceInps.model';
 import { IndiceInpsService } from './IndiceInps.service';
+import { SalarioMinimoMaximo } from './SalarioMinimoMaximo.model';
+import { SalarioMinimoMaximoService } from './SalarioMinimoMaximo.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service'
@@ -105,6 +107,7 @@ export class RgpsResultadosComponent implements OnInit {
   public segurado:any = {};
   public calculo:any = {};
   public moeda;
+  public salarioMinimoMaximo;
   public primeiraDataTabela;
   public dataInicioBeneficio;
   public contribuicaoPrimariaTotal;
@@ -130,6 +133,8 @@ export class RgpsResultadosComponent implements OnInit {
   };
   public conclusoes98 = {};
   public calculo98TableData;
+  public contribuicaoPrimaria98 = {anos:0,meses:0,dias:0};
+  public contribuicaoSecundaria98 = {anos:0,meses:0,dias:0};
   public calculo98TableOptions = {
     colReorder: false,
     paging: false,
@@ -153,7 +158,8 @@ export class RgpsResultadosComponent implements OnInit {
     protected CalculoRgps: CalculoRgpsService,
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
-    private IndiceInps: IndiceInpsService,) {}
+    private IndiceInps: IndiceInpsService,
+    private SalarioMinimoMaximo: SalarioMinimoMaximoService) {}
 
   ngOnInit() {
   	this.idSegurado = this.route.snapshot.params['id_segurado'];
@@ -172,28 +178,37 @@ export class RgpsResultadosComponent implements OnInit {
                 this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
                 let dataLimite = this.getDataLimite();
                 this.preencheGrupoDeCalculos();
-                
-                this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite)
-                  .then(valorescontribuidos => {
-                    this.listaValoresContribuidos = valorescontribuidos;
-                    this.erro = this.verificaErrosAnterior98();
-                    if(!this.erro){
-                      this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-                      this.Moeda.getByDateRange((this.primeiraDataTabela.clone()).add(-1, 'month'), moment())
-                        .then((moeda: Moeda[]) => {
-                          this.moeda = moeda;
-                          this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
-                            .then(indices => {
-                              this.inpsList = indices;
-                              this.generateTabela98(this.conclusoes98);
-                              console.log(this.conclusoes98);
-                              this.isUpdating = false;    
-                          });
-                      });
-                  }else{
-                    this.isUpdating = false;
-                  }
-                });
+                if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'){
+                  this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite)
+                    .then(valorescontribuidos => {
+                      this.listaValoresContribuidos = valorescontribuidos;
+                      this.erro = this.verificaErrosAnterior98();
+                      if(!this.erro){
+                        this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+                        this.Moeda.getByDateRange((this.primeiraDataTabela.clone()).add(-1, 'month'), moment())
+                          .then((moeda: Moeda[]) => {
+                            this.moeda = moeda;
+                            this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
+                              .then(indices => {
+                                this.inpsList = indices;
+                                this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
+                                  .then(salario => {
+                                    this.salarioMinimoMaximo = salario[0];
+                                    this.contribuicaoPrimaria98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+                                    this.contribuicaoSecundaria98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+                                    this.generateTabela98(this.conclusoes98);
+                                    console.log(this.conclusoes98);
+                                    this.isUpdating = false;  
+                                  });  
+                            });
+                        });
+                    }else{
+                      this.isUpdating = false;
+                    }
+                  });
+                }else{
+                  this.isUpdating = false;
+                }
             });
     });
   }
@@ -217,6 +232,17 @@ export class RgpsResultadosComponent implements OnInit {
       erro = "Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href='http://www.ieprev.com.br/legislacao/4506/decreto-no-83.080,-de-24-1-1979' target='_blank'>Art. 37 da Decreto nº 83.080, de 24/01/1979</a>"
     }
     return erro;
+  }
+
+  getContribuicaoObj(stringContrib){
+    let returnObj = {anos:0, meses:0, dias:0};
+    if(stringContrib){
+      let anos = (stringContrib.split('-')[0] != 'undefined') ? stringContrib.split('-')[0] : 0;
+      let meses = (stringContrib.split('-')[1] != 'undefined') ? stringContrib.split('-')[1] : 0;
+      let dias = (stringContrib.split('-')[2] != 'undefined') ? stringContrib.split('-')[2] : 0;
+      returnObj = {anos: anos, meses:meses, dias:dias};
+    }
+    return returnObj;
   }
 
   getDataLimite(){
@@ -415,9 +441,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   getLimitesSalariais(data){
-    let dataIndex = this.getIndex(data);
-    let ret = {minimo: this.moeda[dataIndex].salario_minimo, maximo: this.moeda[dataIndex].teto};
-    console.log(ret);
+    let ret = {minimo: this.salarioMinimoMaximo.minimum_salary_ammount, maximo: this.salarioMinimoMaximo.maximum_salary_ammount};
     return ret;
   }
 

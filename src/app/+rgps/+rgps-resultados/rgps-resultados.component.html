@@ -122,9 +122,13 @@
           </div>
         </sa-widget>
       </article>
-
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria != 'Anterior a 05/10/1998'">
+        <div class="alert alert-warning margin-top-10" role="alert" >
+            <strong>VERSÃO EM DESENVOLVIMENTO</strong>. Apenas disponivel para calculos com DIB Anterior a 05/10/1988
+        </div>
+      </article>
       <!-- Opções do Cálculo Anterior a 05/10/1988 -->
-      <article class="container-fluid">
+      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -203,7 +207,7 @@
       </article>
 
       <!-- Tabela e Informações do Cálculo Anterior a 05/10/1988 -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -247,13 +251,13 @@
                     <td>
                       <span class="pull-right font-bold">Contribuição primária:</span>
                     </td>
-                    <td>TODO: 14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                    <td>{{contribuicaoPrimaria98.anos}} ano(s), {{contribuicaoPrimaria98.meses}} mês(es) e {{contribuicaoPrimaria98.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição secundária:</span>
                     </td>
-                    <td>TODO: 0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                    <td>{{contribuicaoSecundaria98.anos}} ano(s), {{contribuicaoSecundaria98.meses}} mês(es) e {{contribuicaoSecundaria98.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
@@ -286,7 +290,7 @@
                 </thead>
               </sa-datatable>
           </div>
-          <div class="widget-body">
+          <div class="widget-body" >
               <table class="table table-bordered table-hover">
                 <tbody>
                   <tr>

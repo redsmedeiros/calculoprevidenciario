@@ -30,6 +30,7 @@ import { IntervaloReajusteService } from './services/IntervaloReajuste.service';
 import { IndicesService } from './services/Indices.service';
 import { ValorContribuidoService } from './+rgps/+rgps-valores-contribuidos/ValorContribuido.service.ts'
 import { IndiceInpsService } from './+rgps/+rgps-resultados/IndiceInps.service.ts'
+import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMinimoMaximo.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 // Application wide providers
@@ -84,6 +85,7 @@ type StoreType = {
     MatrixService,
     ValorContribuidoService,
     IndiceInpsService,
+    SalarioMinimoMaximoService,
   ]
 })
 export class AppModule {
