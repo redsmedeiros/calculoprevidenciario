@@ -290,7 +290,7 @@
                 </thead>
               </sa-datatable>
           </div>
-          <div class="widget-body" >
+          <div class="widget-body" *ngIf="!isUpdating && !erro">
               <table class="table table-bordered table-hover">
                 <tbody>
                   <tr>
