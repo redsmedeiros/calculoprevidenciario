@@ -25,6 +25,7 @@ import { ValorContribuido } from '../+rgps/+rgps-valores-contribuidos/ValorContr
 import { IndiceInps } from '../+rgps/+rgps-resultados/IndiceInps.model';
 import { SalarioMinimoMaximo } from '../+rgps/+rgps-resultados/SalarioMinimoMaximo.model';
 import { CarenciaProgressiva } from '../+rgps/+rgps-resultados/CarenciaProgressiva.model';
+import { ReajusteAutomatico } from '../+rgps/+rgps-resultados/ReajusteAutomatico.model';
 import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
 
@@ -46,6 +47,7 @@ export class StoreService {
     indiceInps: IndiceInps[],
     salarioMinimoMaximo: SalarioMinimoMaximo[],
     carenciaProgressiva: CarenciaProgressiva[],
+    reajusteAutomatico: ReajusteAutomatico[],
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -61,6 +63,7 @@ export class StoreService {
     indiceInps: [],
     salarioMinimoMaximo: [],
     carenciaProgressiva: [],
+    reajusteAutomatico: [],
   };
 
   public push(name: string, data) {
