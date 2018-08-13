@@ -345,7 +345,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     if (dateBeneficio > new Date('12/15/1998')) {
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
     }
-    if (dateBeneficio < new Date('11/29/1999')) {
+    if (dateBeneficio > new Date('11/29/1999')) {
       this.periodoOptions.push('A partir de 29/11/1999');
     }
 
