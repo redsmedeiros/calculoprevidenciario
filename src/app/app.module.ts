@@ -29,6 +29,7 @@ import { MatrixService } from './+contribuicoes/MatrixService.service'
 import { IntervaloReajusteService } from './services/IntervaloReajuste.service';
 import { IndicesService } from './services/Indices.service';
 import { CarenciaProgressivaService } from './+rgps/+rgps-resultados/CarenciaProgressiva.service';
+import { ExpectativaVidaService } from './+rgps/+rgps-resultados/ExpectativaVida.service';
 import { ValorContribuidoService } from './+rgps/+rgps-valores-contribuidos/ValorContribuido.service.ts'
 import { IndiceInpsService } from './+rgps/+rgps-resultados/IndiceInps.service.ts'
 import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMinimoMaximo.service.ts'
@@ -90,6 +91,7 @@ type StoreType = {
     SalarioMinimoMaximoService,
     CarenciaProgressivaService,
     ReajusteAutomaticoService,
+    ExpectativaVidaService,
   ]
 })
 export class AppModule {
