@@ -122,11 +122,7 @@
           </div>
         </sa-widget>
       </article>
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria != 'Anterior a 05/10/1998'">
-        <div class="alert alert-warning margin-top-10" role="alert" >
-            <strong>VERSÃO EM DESENVOLVIMENTO</strong>. Apenas disponivel para calculos com DIB Anterior a 05/10/1988
-        </div>
-      </article>
+
       <!-- Opções do Cálculo Anterior a 05/10/1988 -->
       <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'">
         <table class="table table-hover table-bordered">
@@ -251,13 +247,13 @@
                     <td>
                       <span class="pull-right font-bold">Contribuição primária:</span>
                     </td>
-                    <td>{{contribuicaoPrimaria98.anos}} ano(s), {{contribuicaoPrimaria98.meses}} mês(es) e {{contribuicaoPrimaria98.dias}} dia(s)</td>
+                    <td>{{contribuicaoPrimariaAnterior88.anos}} ano(s), {{contribuicaoPrimariaAnterior88.meses}} mês(es) e {{contribuicaoPrimariaAnterior88.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição secundária:</span>
                     </td>
-                    <td>{{contribuicaoSecundaria98.anos}} ano(s), {{contribuicaoSecundaria98.meses}} mês(es) e {{contribuicaoSecundaria98.dias}} dia(s)</td>
+                    <td>{{contribuicaoSecundariaAnterior88.anos}} ano(s), {{contribuicaoSecundariaAnterior88.meses}} mês(es) e {{contribuicaoSecundariaAnterior88.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
@@ -362,7 +358,7 @@
 
 
       <!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'">
+      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -390,7 +386,7 @@
             <tr>
               <td>
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
-              </td>Dutchmaster
+              </td>
               <td>
                 <button type="submit" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
@@ -439,8 +435,8 @@
         </table>
       </article>
 
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -624,8 +620,8 @@
         </sa-widget>
       </article>
 
-      <!-- CALCULO 03 -->
-<!--       <article class="container-fluid">
+      <!-- Opções do Cálculo A partir de 29/11/1999-->
+      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'A partir de 29/11/1999'">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -688,15 +684,16 @@
             </tr>
           </tbody>
         </table>
-      </article> -->
+      </article>
 
-      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Tabela e Informações do Cálculo A partir de 29/11/1999 -->
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'A partir de 29/11/1999'">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Aposentadoria por tempo de contribuição Entre 05/04/1991 e 15/12/1998</h2>
+            <h2>{{calculo.tipo_seguro}} A partir de 29/11/1999</h2>
           </header>
           <div>
             <div class="widget-body">
@@ -735,19 +732,19 @@
                     <td>
                       <span class="pull-right font-bold">Contribuição primária:</span>
                     </td>
-                    <td>TODO: 14 ano(s), 9 mês(es) e 22 dia(s)</td>
+                    <td>{{contribuicaoPrimaria99.anos}} ano(s), {{contribuicaoPrimaria99.meses}} mês(es) e {{contribuicaoPrimaria99.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Contribuição secundária:</span>
                     </td>
-                    <td>TODO: 0 ano(s), 0 mês(es) e 0 dia(s)</td>
+                    <td>{{contribuicaoSecundaria99.anos}} ano(s), {{contribuicaoSecundaria99.meses}} mês(es) e {{contribuicaoSecundaria99.dias}} dia(s)</td>
                   </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
                     </td>
-                    <td>{{calculo.data_calculo}}</td>
+                    <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
                   </tr>
                 </tbody>
 
@@ -756,20 +753,19 @@
               <sa-widget [colorbutton]="false" [editbutton]="false">
                 <div>
                   <div class="widget-body no-padding">
-                    <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions-calc'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
-                      paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                    <sa-datatable [options]="calculoApos99TableOptions"
+                      paginationLength="true" *ngIf="!isUpdating" tableClass="table table-striped table-bordered table-hover" width="100%">
                       <thead>
                         <tr>
-                          <th>Ações</th>
-                          <th>Nome</th>
-                          <th>Tipo</th>
-                          <th>Documento</th>
-                          <th>Data de nascimento</th>
-                          <th>Data de filiação</th>
-                          <th>Data de cadastro</th>
+                          <th>#</th>
+                          <th>Competência</th>
+                          <!-- <th>Índice</th> TODO -->
+                          <th>Índice</th>
+                          <th>Contribuição Primária</th>
+                          <th>Contribuição Secundária</th>
+                          <th>Contribuição Primária Corrigida</th>
+                          <th>Contribuição Secundária Corrigida</th>
+                          <th>Observação</th>
                         </tr>
                       </thead>
                     </sa-datatable>
@@ -789,13 +785,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr *ngFor="let conclusao of conclusoesApos99">
                     <td width="50%">
-                      <span class="pull-right font-bold">Coeficiente do Cálculo:</span>
+                      <span class="pull-right font-bold">{{conclusao.string}}</span>
                     </td>
-                    <td>100%</td>
+                    <td>{{conclusao.value}}</td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td>
                       <span class="pull-right font-bold">Soma das contribuições primárias:</span>
                     </td>
@@ -860,7 +856,7 @@
                       <span class="pull-right font-bold">Renda Mensal Inicial com Fator Previdenciario:</span>
                     </td>
                     <td><strong class="text-success">R$ 3.072,86</strong></td>
-                  </tr>
+                  </tr> -->
                 </tbody>
 
               </table>
@@ -869,7 +865,7 @@
             </div>
           </div>
         </sa-widget>
-      </article> -->
+      </article>
 
     </div>
 
