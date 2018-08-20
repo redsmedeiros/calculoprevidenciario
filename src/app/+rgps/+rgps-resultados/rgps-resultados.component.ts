@@ -113,7 +113,7 @@ export class RgpsResultadosComponent implements OnInit {
   public segurado:any = {};
   public calculo:any = {};
   public moeda:any = {};
-
+  public isBlackHole = false;
   public salarioMinimoMaximo;
   public primeiraDataTabela;
   public dataInicioBeneficio;
@@ -228,6 +228,11 @@ export class RgpsResultadosComponent implements OnInit {
   public dataMP664 = moment('2015-03-01');
   public dataDecreto6939_2009 = moment('2009-08-18');
 
+  //Variaveis de controle do template
+  public mostrarCalculoAnterior88 = false;
+  public mostrarCalculo91_98 = false;
+  public mostrarCalculoApos99 = false;
+
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,    
@@ -268,7 +273,7 @@ export class RgpsResultadosComponent implements OnInit {
                   .then((moeda: Moeda[]) => {
                     this.moeda = moeda;
 
-                    if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'){
+                    if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
                       this.erroAnterior88 = this.verificaErrosAnterior88();
                       if(!this.erroAnterior88){
                         this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
@@ -351,7 +356,6 @@ export class RgpsResultadosComponent implements OnInit {
     let mesPrimario = 0;
     let mesSecundario = 0;
     let tableData = [];
-    let isBlackHole = false;
     let currencyDataInicioBeneficio = this.loadCurrency(this.dataInicioBeneficio);
     let totalPrimario = 0;
     let totalSecundario = 0;
@@ -371,7 +375,7 @@ export class RgpsResultadosComponent implements OnInit {
       }
       
       let contribuicaoPrimariaString = this.formatMoney(valorPrimario, currency.acronimo);
-      let contribuicaoSecundariaString = (!isBlackHole) ? this.formatMoney(valorSecundario, currency.acronimo) : "";
+      let contribuicaoSecundariaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currency.acronimo) : "";
       let inps = this.getInps(dataContribuicao.year());
 
       let valorAjustadoObj = this.limitarTetosEMinimos(valorPrimario, dataContribuicao);
@@ -382,7 +386,7 @@ export class RgpsResultadosComponent implements OnInit {
         valorPrimario *= inps;
       }
       valorPrimario = this.convertCurrency(valorPrimario, dataContribuicao, this.dataInicioBeneficio);
-      if (valorSecundario > 0){
+        if (valorSecundario > 0){
         valorSecundario = (this.limitarTetosEMinimos(valorSecundario, dataContribuicao)).valor;
       }
 
@@ -399,7 +403,7 @@ export class RgpsResultadosComponent implements OnInit {
         inpsString  = '1.00';
       }
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimario, currencyDataInicioBeneficio.acronimo);
-      let contribuicaoSecundariaRevisadaString = (!isBlackHole) ? this.formatMoney(valorSecundario, currencyDataInicioBeneficio.acronimo) : '';
+      let contribuicaoSecundariaRevisadaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currencyDataInicioBeneficio.acronimo) : '';
       let line = {competencia: dataContribuicao.format('MM/YYYY'),
               contribuicao_primaria: contribuicaoPrimariaString,
               contribuicao_secundaria: contribuicaoSecundariaString,
@@ -551,7 +555,6 @@ export class RgpsResultadosComponent implements OnInit {
   calculo91_98(conclusoes){
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
-    let isBlackHole = false;
 
     if (this.calculo.tipoAposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
         this.dataInicioBeneficio > this.dataDib99) {
@@ -613,7 +616,7 @@ export class RgpsResultadosComponent implements OnInit {
       let contribuicaoPrimariaString = this.formatMoney(valorPrimario, currency.acronimo);
       let contribuicaoSecundariaString = '';
 
-      if (!isBlackHole){
+      if (!this.isBlackHole){
         contribuicaoSecundariaString = this.formatMoney(valorSecundario, currency.acronimo);
       }
 
@@ -650,7 +653,7 @@ export class RgpsResultadosComponent implements OnInit {
 
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimarioRevisado, dibCurrency.acronimo);
       let contribuicaoSecundariaRevisadaString = "";
-      if (!isBlackHole){
+      if (!this.isBlackHole){
         contribuicaoSecundariaRevisadaString = this.formatMoney(valorSecundarioRevisado, dibCurrency.acronimo); // Acronimo da moeda após a conversão.
       }
       let line = {competencia: dataContribuicaoString,
@@ -809,20 +812,20 @@ export class RgpsResultadosComponent implements OnInit {
         let contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
         let tempoFracionado = this.tratarTempoFracionado(contribuicao); //Separar o tempo de contribuicao em anos, meses e dias
         if (direito) {
-          errorArray.push(""); 
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           //"POSSUI direito ao benefício proporcional."
           //"Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
+          errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL."); 
         }else{
-          errorArray.push("")
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
+          errorArray.push("Falta(m) "+ tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
           if (totalContribuicao98 > 0) {
-          let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
-          let tempoProporcional = this.tratarTempoFracionado(tempo);
-          errorArray.push("")
-          // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
-          // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
+            let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
+            let tempoProporcional = this.tratarTempoFracionado(tempo);
+            // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
+            // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
+             errorArray.push("Falta(m) "+ tempoProporcional + " para completar o tempo de serviço necessário para o benefício PROPORCIONAL.");
           }
         }    
       }
@@ -837,9 +840,7 @@ export class RgpsResultadosComponent implements OnInit {
     }else if(this.tipoBeneficio == 5){
       direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
       if(!direito) {
-        errorArray.push("");
-        // Exibir Mensagem de Erro:
-        // "Não possui direito ao benefício de aposentadoria especial."
+        errorArray.push("Não possui direito ao benefício de aposentadoria especial.");
       }
     }else if(this.tipoBeneficio == 16){
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado);
@@ -1702,7 +1703,6 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
-    console.log(idadeFracionada, ano, dataInicio, dataFim)
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     let dataAgora = moment();
     let expectativaVida;
@@ -1935,13 +1935,13 @@ export class RgpsResultadosComponent implements OnInit {
   getEspecieBeneficio(){
     let numeroEspecie = 0;
     switch (this.calculo.tipo_seguro) {
-      case "Auxílio Doença Previdenciário":
+      case "Auxílio Doença":
         numeroEspecie = 1;
         break;
-      case "Aposentadoria por invalidez previdênciária":
+      case "Aposentadoria por invalidez Previdenciária ou Pensão por Morte":
         numeroEspecie = 2;
         break;
-      case "Aponsentadoria por idade trabalhador Urbano":
+      case "Aposentadoria por idade - Trabalhador Urbano":
         numeroEspecie = 3;
         break;
       case "Aposentadoria por tempo de contribuição":
@@ -1950,13 +1950,13 @@ export class RgpsResultadosComponent implements OnInit {
       case "Aposentadoria especial":
         numeroEspecie = 5;
         break;
-      case "Aposentadoria por tempo de  serviço de professor":
+      case "Aposentadoria por tempo de serviço de professor":
         numeroEspecie = 6;
         break;
-      case "Auxílio Acidente - 50%":
+      case "Auxílio Acidente previdenciário - 50%":
         numeroEspecie = 7;
         break;
-      case "Aponsentadoria por idade trabalhador Rural":
+      case "Aposentadoria por idade - Trabalhador Rural":
         numeroEspecie = 16;
         break;
       case "Auxílio Acidente - 30%":
@@ -1968,20 +1968,19 @@ export class RgpsResultadosComponent implements OnInit {
       case "Auxílio Acidente - 60%":
         numeroEspecie = 19;
         break;
-      case "Pessoa com deficiencia Grave - 100%":
+      case "Aposentadoria especial da Pessoa com Deficiência Grave":
         numeroEspecie = 25;
         break;
-      case "Pessoa com deficiencia Moderada - 100%":
+      case "Aposentadoria especial da Pessoa com Deficiência Moderada":
         numeroEspecie = 26;
         break;
-      case "Pessoa com deficiencia Leve 100%":
+      case "Aposentadoria especial da Pessoa com Deficiência Leve":
         numeroEspecie = 27;
         break;
-      case "Pessoa com deficiencia por Idade 70%":
+      case "Aposentadoria especial por Idade da Pessoa com Deficiência":
         numeroEspecie = 28;
         break;
       default:
-        // code...
         break;
     }
     return numeroEspecie;
@@ -2100,15 +2099,15 @@ export class RgpsResultadosComponent implements OnInit {
 
   getDataInicio(){
     let dataInicio;
-    if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1998'){
+    if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
       dataInicio = this.dataInicioBeneficio;
     }else{
       let dib = this.dataInicioBeneficio;
-      if (this.calculo.tipoAposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
+      if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
         this.dataInicioBeneficio > this.dataDib99) {
         dib = this.dataDib99;
       }
-      if (this.calculo.tipoAposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
+      if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
         this.dataInicioBeneficio > this.dataDib98) {
         dib = this.dataDib98;
       }
@@ -2117,6 +2116,8 @@ export class RgpsResultadosComponent implements OnInit {
     }
     return dataInicio;
   }
+
+  
 
   getDataLimite(dataInicio){
     let mesesLimite = 0;
