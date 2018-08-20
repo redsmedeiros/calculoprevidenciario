@@ -334,10 +334,10 @@ export class RgpsCalculosFormComponent implements OnInit {
     var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
     if (dateBeneficio < new Date('04/05/1991')) {
-      this.periodoOptions.push('Anterior a 05/10/1998');
+      this.periodoOptions.push('Anterior a 05/10/1988');
     }
     if (dateBeneficio > new Date('10/04/1988')) {
-      this.periodoOptions.push('Entre 05/10/1998 e 04/04/1991 ');
+      this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
     }
     if (dateBeneficio > new Date('04/04/1991')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
