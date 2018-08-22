@@ -124,7 +124,7 @@
       </article>
 
       <!-- Opções do Cálculo Anterior a 05/10/1988 -->
-      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'">
+      <article class="container-fluid" *ngIf="mostrarCalculoAnterior88">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -203,7 +203,7 @@
       </article>
 
       <!-- Tabela e Informações do Cálculo Anterior a 05/10/1988 -->
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="mostrarCalculoAnterior88">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -357,7 +357,7 @@
       </article>
 
       <!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'">
+      <article class="container-fluid" *ngIf="mostrarCalculo91_98">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -435,7 +435,7 @@
       </article>
 
       <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="mostrarCalculo91_98">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -620,7 +620,7 @@
       </article>
 
       <!-- Opções do Cálculo A partir de 29/11/1999-->
-      <article class="container-fluid" *ngIf="calculo.tipo_aposentadoria == 'A partir de 29/11/1999'">
+      <article class="container-fluid" *ngIf="mostrarCalculoApos99">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -686,7 +686,7 @@
       </article>
 
       <!-- Tabela e Informações do Cálculo A partir de 29/11/1999 -->
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="calculo.tipo_aposentadoria == 'A partir de 29/11/1999'">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="mostrarCalculoApos99">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
