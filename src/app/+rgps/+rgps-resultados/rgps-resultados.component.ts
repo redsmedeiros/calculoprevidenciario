@@ -188,6 +188,28 @@ export class RgpsResultadosComponent implements OnInit {
     ] 
   };
 
+  public conclusoes98_99 = [];
+  public calculo98_99TableData = [];
+  public errosCalculo98_99 = [];
+  public calculo98_99TableOptions = {
+    colReorder: false,
+    paging: false,
+    searching: false,
+    ordering:  false,
+    bInfo : false,
+    data: this.calculo98_99TableData,
+    columns: [
+      {data: 'competencia'},
+      {data: 'fator'},
+      {data: 'contribuicao_primaria'},
+      {data: 'contribuicao_secundaria'},
+      {data: 'contribuicao_primaria_revisada'},
+      {data: 'contribuicao_secundaria_revisada'},
+      {data: 'limite'},
+    ] 
+  };
+
+
   public contribuicaoTotal;
   public conclusoesApos99 = [];
   public limited;
@@ -234,6 +256,7 @@ export class RgpsResultadosComponent implements OnInit {
   //Variaveis de controle do template
   public mostrarCalculoAnterior88 = false;
   public mostrarCalculo91_98 = false;
+  public mostrarCalculo98_99 = false;
   public mostrarCalculoApos99 = false;
 
   constructor(protected router: Router,
@@ -258,6 +281,7 @@ export class RgpsResultadosComponent implements OnInit {
         this.segurado = segurado;
         this.idadeSegurado = this.getIdadeSegurado();
         this.dataFiliacao = this.getDataFiliacao();
+
         this.CalculoRgps.find(this.idCalculo)
           .then(calculo => {
             this.calculo = calculo;
@@ -267,65 +291,81 @@ export class RgpsResultadosComponent implements OnInit {
             let dataInicio = this.getDataInicio();
             let dataLimite = this.getDataLimite(dataInicio);
             this.preencheGrupoDeCalculos();
-            this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
-              .then(valorescontribuidos => {
-                this.listaValoresContribuidos = valorescontribuidos;
-                this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-                this.Moeda.getByDateRange(this.primeiraDataTabela, moment())
-                  .then((moeda: Moeda[]) => {
-                    this.moeda = moeda;
-
-                    if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
-                      this.erroAnterior88 = this.verificaErrosAnterior88();
-                      if(!this.erroAnterior88){
-                        this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
-                          .then(indices => {ExpectativaVida
-                            this.inpsList = indices;
-                            this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
-                              .then(salario => {
-                                this.salarioMinimoMaximo = salario[0];
-                                this.contribuicaoPrimariaAnterior88 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-                                this.contribuicaoSecundariaAnterior88 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
-                                this.calculoAnterior88(this.conclusoesAnterior88);
-
-                                this.isUpdating = false;  
-                              });
-                          });
-                      }else{//há erro no calculo anterior a 88
-                        this.isUpdating = false;  
-                      }
-                    }else if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-                      this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-                      this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
-                      this.CarenciaProgressiva.getCarencias()
-                        .then(carencias => {
-                          this.carenciasProgressivas = carencias;
-                          //TODO REAJUSTES CALCULO entr 98 e 99
-                          // if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999') {
-                          //   dataInicio = this.dataDib99;
-                          // }
-                          this.ReajusteAutomatico.getByDate(this.dataDib98, this.dataInicioBeneficio)
+            this.controleExibicao()
+            this.CarenciaProgressiva.getCarencias()
+              .then(carencias => {
+                this.carenciasProgressivas = carencias;
+              
+                this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
+                  .then(valorescontribuidos => {
+                    this.listaValoresContribuidos = valorescontribuidos;
+                    this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+                    this.Moeda.getByDateRange(this.primeiraDataTabela, moment())
+                      .then((moeda: Moeda[]) => {
+                        this.moeda = moeda;
+    
+                        if(this.dataInicioBeneficio < moment('1991-04-04')){
+                          this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
+                            .then(indices => {
+                              this.inpsList = indices;
+                              this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
+                                .then(salario => {
+                                  this.salarioMinimoMaximo = salario[0];
+                                  this.contribuicaoPrimariaAnterior88 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+                                  this.contribuicaoSecundariaAnterior88 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+                                  this.calculoAnterior88(this.conclusoesAnterior88);
+                                  
+                                  if(this.calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
+                                    this.ReajusteAutomatico.getByDate(this.dataDib98, this.dataInicioBeneficio)
+                                      .then(reajustes => {
+                                        this.reajustesAutomaticos = reajustes;
+                                        this.calculo91_98(this.errosCalculo91_98, this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98, '91_98');
+                                        this.isUpdating = false;
+                                    });
+                                  }
+                                  this.isUpdating = false;
+                                });
+                            });
+                        }
+                        let dataReajustesAutomaticos = this.dataInicioBeneficio;
+                        if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+                          dataReajustesAutomaticos = this.dataDib98;
+                        }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+                          dataReajustesAutomaticos = this.dataDib99;
+                        }
+                        if(this.dataInicioBeneficio >= moment('1991-04-04') && this.dataInicioBeneficio < moment('1999-11-29')){
+                          this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                             .then(reajustes => {
                               this.reajustesAutomaticos = reajustes;
-                              this.calculo91_98(this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98);
-                              this.isUpdating = false;  
+                              if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+                                this.calculo91_98(this.errosCalculo91_98, this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98, '91_98');
+                                this.isUpdating = false;
+                              }
+                              if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+                                //entre 98 e 99 ( = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
+                                this.calculo91_98(this.errosCalculo91_98, this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98, '91_98');
+                                this.calculo91_98(this.errosCalculo98_99, this.conclusoes98_99, this.contribuicaoPrimaria99, this.contribuicaoSecundaria99, '98_99');
+                                this.isUpdating = false;
+                              }
+                          });
+                        }
+    
+                        if(this.dataInicioBeneficio >= moment('1999-11-29')){
+                          this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+                            .then(reajustes => {
+                              this.reajustesAutomaticos = reajustes;
+                              
+                            this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                              .then(expectativas => {
+                                this.expectativasVida = expectativas;
+                                this.calculo91_98(this.errosCalculo91_98, this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98, '91_98');
+                                this.calculo91_98(this.errosCalculo98_99, this.conclusoes98_99, this.contribuicaoPrimaria99, this.contribuicaoSecundaria99, '98_99');
+                                this.calculo_apos_99(this.errosCalculoApos99, this.conclusoesApos99, this.contribuicaoPrimaria99, this.contribuicaoSecundaria99);
+                                this.isUpdating = false; 
                             });
-                        });
-                    }else if(this.calculo.tipo_aposentadoria == 'A partir de 29/11/1999'){
-                      this.contribuicaoPrimaria99 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
-                      this.contribuicaoSecundaria99 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
-                      this.CarenciaProgressiva.getCarencias()
-                        .then(carencias => {
-                          this.carenciasProgressivas = carencias;
-                          this.idadeFracionada = this.getIdadeFracionada();
-                          this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
-                            .then(expectativas => {
-                              this.expectativasVida = expectativas;
-                              this.calculo_apos_99(this.conclusoesApos99, this.contribuicaoPrimaria99, this.contribuicaoSecundaria99);
-                              this.isUpdating = false; 
-                            });
-                        });
-                    }
+                          });
+                        }
+                      });
                   });
               });
           });
@@ -554,7 +594,7 @@ export class RgpsResultadosComponent implements OnInit {
     }
   }
 
-  calculo91_98(conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
+  calculo91_98(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria, periodo){
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
 
@@ -580,11 +620,11 @@ export class RgpsResultadosComponent implements OnInit {
 
     if(this.listaValoresContribuidos.length == 0) {
       // Exibir MSG de erro e encerrar Cálculo.
-      this.errosCalculo91_98.push("Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme" + "http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29' target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991");
+      errorArray.push("Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme" + "http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29' target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991");
       return;
     }
 
-    if (!this.direitoAposentadoria(dib, this.errosCalculo91_98, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
+    if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;
     }
     let totalPrimaria = 0;
@@ -768,12 +808,23 @@ export class RgpsResultadosComponent implements OnInit {
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currency.acronimo);
     conclusoes.renda_mensal_inicial_data_dib = this.formatMoney(rmiValoresAdministrativos, currency.acronimo);
     
-    this.calculo91_98TableData = tableData;
-    this.calculo91_98TableOptions = {
-      ...this.calculo91_98TableOptions,
-      data: this.calculo91_98TableData,
+    if(periodo == '91_98'){
+      this.calculo91_98TableData = tableData;
+      this.calculo91_98TableOptions = {
+        ...this.calculo91_98TableOptions,
+        data: this.calculo91_98TableData,
+      }
+    }else if(periodo == '98_99'){
+      this.calculo98_99TableData = tableData;
+      this.calculo98_99TableOptions = {
+        ...this.calculo98_99TableOptions,
+        data: this.calculo98_99TableData,
+      }
     }
+
   }
+
+  calculo98_99
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
     let idadeDoSegurado = this.idadeSegurado;
@@ -1140,7 +1191,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   //INICIO Cálculo após 99
 
-  calculo_apos_99(conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
+  calculo_apos_99(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
     let moedaDib = this.Moeda.getByDate(dib);
@@ -1149,11 +1200,11 @@ export class RgpsResultadosComponent implements OnInit {
 
     if(this.listaValoresContribuidos.length == 0) {
       // Exibir MSG de erro e encerrar Cálculo.
-      this.errosCalculoApos99.push("Nenhuma contribuição encontrada posterior a 07/1994 conforme " + "http://www.ieprev.com.br//legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999");
+      errorArray.push("Nenhuma contribuição encontrada posterior a 07/1994 conforme " + "http://www.ieprev.com.br//legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999");
       return;
     }
 
-    if (!this.direitoAposentadoria(dib, this.errosCalculoApos99, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
+    if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;
     }
 
@@ -2136,6 +2187,8 @@ export class RgpsResultadosComponent implements OnInit {
         this.mostrarCalculoAnterior88 = true;
       }else if(this.calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
         //Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
+        this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+        this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
         this.mostrarCalculoAnterior88 = true;
         this.mostrarCalculo91_98 = true;
         this.isBlackHole = true;
@@ -2162,6 +2215,7 @@ export class RgpsResultadosComponent implements OnInit {
                 após 99     (tempo de contribuicao após a lei 99)
       (cálculos em box separados)*/
       this.mostrarCalculo91_98 = true;
+      this.mostrarCalculo98_99 = true;
       this.mostrarCalculoApos99 = true;
       this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
       this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);

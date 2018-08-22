@@ -619,6 +619,269 @@
         </sa-widget>
       </article>
 
+      <!-- Opções do Cálculo Entre 16/12/1998 e 28/11/1999 -->
+      <article class="container-fluid" *ngIf="mostrarCalculo91_98">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: 346
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Calcular com base na tabela do INPC vigente na data da DIB</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-calculator"></i>
+                  </span> CÁLCULAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Mostrar Reajustes Administrativos</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-eye"></i>
+                  </span> MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+     <!-- Tabela e Informações do Cálculo Entre 16/12/1998 e 28/11/1999 -->
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="mostrarCalculo98_99">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>{{calculo.tipo_seguro}} Entre 16/12/1998 e 28/11/1999</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
+                    <td>{{calculo.tipo_seguro}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
+                    <td>{{calculo.tipo_aposentadoria}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
+                    <td>{{calculo.data_pedido_beneficio}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
+                    <td>{{contribuicaoPrimaria99.anos}} ano(s), {{contribuicaoPrimaria99.meses}} mês(es) e {{contribuicaoPrimaria99.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
+                    <td>{{contribuicaoSecundaria99.anos}} ano(s), {{contribuicaoSecundaria99.meses}} mês(es) e {{contribuicaoSecundaria99.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
+                    <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+              <div class="alert alert-warning margin-top-10" *ngFor="let erro of errosCalculo98_99" role="alert">
+                <p>{{erro}}</p>
+              </div>
+
+              <!-- <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>NÃO POSSUI</strong> direito ao benefício
+                <strong>INTEGRAL</strong>.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 16 ano(s)</strong> para atingir a idade mínima.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 18 ano(s) e 10 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
+                <strong>INTEGRAL</strong>.</div>
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <strong>Falta(m) 19 ano(s) e 11 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
+                <strong>PROPORCIONAL</strong>.</div> -->
+
+            </div>
+            <div>
+              <sa-datatable [options]="calculo98_99TableOptions" *ngIf="!isUpdating && errosCalculo98_99.length == 0"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Competência</th>
+                    <th>Fator</th>
+                    <th>Contribuição Primaria</th>
+                    <th>Contribuição Secundária</th>
+                    <th>Contribuição Primária Corrigida</th>
+                    <th>Contribuição Secundária Corrigida</th>
+                    <th>Limite</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div>
+            <div class="widget-body" *ngIf="!isUpdating && errosCalculo98_99.length == 0">
+              <table class="table table-bordered table-hover">
+                <tbody>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.indice_reajuste_teto}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Total das contribuições primárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.total_contribuicoes_primarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.media_contribuicoes_primarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Divisor do cálculo da média:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.divisor_calculo_media}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Total das contribuições secundárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.total_contribuicoes_secundarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Média das contribuições secundárias:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.media_contribuicoes_secundarias}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Divisor do cálculo da média secundária:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.divisor_calculo_media_secundaria}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Coeficiente:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.coeficiente}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Média das contribuições:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.media_contribuicoes}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Salário Mínimo:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.salario_minimo}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Teto:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.teto}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Renda Mensal Inicial:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.renda_mensal_inicial}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Renda Mensal Inicial na DIB:</span>
+                    </td>
+                    <td width="50%">{{conclusoes98_99.renda_mensal_inicial_data_dib}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
       <!-- Opções do Cálculo A partir de 29/11/1999-->
       <article class="container-fluid" *ngIf="mostrarCalculoApos99">
         <table class="table table-hover table-bordered">
@@ -748,7 +1011,9 @@
                 </tbody>
 
               </table>
-
+              <div class="alert alert-warning margin-top-10" *ngFor="let erro of errosCalculoApos99" role="alert">
+                <p>{{erro}}</p>
+              </div>
               <sa-widget [colorbutton]="false" [editbutton]="false">
                 <div>
                   <div class="widget-body no-padding">
