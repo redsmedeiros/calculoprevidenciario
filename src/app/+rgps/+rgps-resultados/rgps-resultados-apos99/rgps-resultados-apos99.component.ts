@@ -6,8 +6,12 @@ import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
 import { ValorContribuidoService } from '../../+rgps-valores-contribuidos/ValorContribuido.service'
 import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
+import { SeguradoService } from '../../+rgps-segurados/SeguradoRgps.service';
 import { Moeda } from '../../../services/Moeda.model';
 import { MoedaService } from '../../../services/Moeda.service';
+import { RgpsResultadosComponent } from '../rgps-resultados.component'
 import * as moment from 'moment';
 
 @Component({
@@ -15,9 +19,10 @@ import * as moment from 'moment';
   templateUrl: './rgps-resultados-apos99.component.html',
   styleUrls: ['./rgps-resultados-apos99.component.css']
 })
-export class RgpsResultadosApos99Component implements OnInit {
+export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
 	@Input() calculo;
 	@Input() segurado;
+
 	public dataFiliacao;
 	public idadeSegurado;
 	public idCalculo;
@@ -64,7 +69,8 @@ export class RgpsResultadosApos99Component implements OnInit {
   	private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private CarenciaProgressiva:CarenciaProgressivaService,
-    private Moeda: MoedaService,) { }
+    private Moeda: MoedaService){
+    super(null, null, null, null); }
 
   ngOnInit() {
   	this.isUpdating = true;
@@ -938,6 +944,45 @@ export class RgpsResultadosApos99Component implements OnInit {
     if(this.tipoBeneficio == 25 || this.tipoBeneficio == 26 || this.tipoBeneficio == 27 || this.tipoBeneficio == 28){
       this.withIN45 = false;
     }
+  }
+
+  limitarTetosEMinimos(valor, data){
+    let moeda = this.Moeda.getByDate(data);
+    let salarioMinimo = moeda.salario_minimo;
+    let tetoSalarial = moeda.teto;
+    let avisoString = '';
+    let valorRetorno = valor;
+
+    if(valor < salarioMinimo){
+      valorRetorno = salarioMinimo;
+      avisoString = 'LIMITADO AO MÍNIMO'
+    }else if(valor > tetoSalarial){
+      valorRetorno = tetoSalarial;
+      avisoString = 'LIMITADO AO TETO'
+    }
+    return {valor:valorRetorno, aviso:avisoString};
+  }
+
+  verificarCarencia(redutorIdade, redutorProfessor, redutorSexo, errorArray) {
+    if (this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
+      let mesesCarencia = 180;
+      if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY') < this.dataLei8213) { // Verificar se a data de filiação existe
+        let anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
+        let carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
+        if (carenciaProgressiva != 0) {
+            mesesCarencia = carenciaProgressiva;
+        } else if (anoNecessario < 1991) {
+            mesesCarencia = 60;
+        }
+      }
+
+      if (this.calculo.carencia < mesesCarencia) {
+        let erroCarencia = "Falta(m) " + (mesesCarencia - this.calculo.carencia) + " mês(es) para a carência necessária.";
+        errorArray.push(erroCarencia);
+        return false;
+      }
+    }
+    return true;
   }
 
   getIdadeFracionada(){

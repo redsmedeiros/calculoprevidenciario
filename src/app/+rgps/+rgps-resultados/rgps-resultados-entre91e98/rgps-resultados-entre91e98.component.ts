@@ -14,7 +14,7 @@ import * as moment from 'moment';
   templateUrl: './rgps-resultados-entre91e98.component.html',
   styleUrls: ['./rgps-resultados-entre91e98.component.css']
 })
-export class RgpsResultadosEntre91e98Component implements OnInit {
+export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent implements OnInit {
 	@Input() calculo;
 	@Input() segurado;
 	@Input() tipoCalculo;
@@ -55,7 +55,7 @@ export class RgpsResultadosEntre91e98Component implements OnInit {
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
-    private Moeda: MoedaService,) { }
+    private Moeda: MoedaService,) { super(null, null, null, null);}
 
   ngOnInit() {
   	this.isUpdating = true;
@@ -712,6 +712,23 @@ export class RgpsResultadosEntre91e98Component implements OnInit {
     }
     bonus = bonus * tempoServico;
     return bonus;
+  }
+
+  limitarTetosEMinimos(valor, data){
+    let moeda = this.Moeda.getByDate(data);
+    let salarioMinimo = moeda.salario_minimo;
+    let tetoSalarial = moeda.teto;
+    let avisoString = '';
+    let valorRetorno = valor;
+
+    if(valor < salarioMinimo){
+      valorRetorno = salarioMinimo;
+      avisoString = 'LIMITADO AO MÍNIMO'
+    }else if(valor > tetoSalarial){
+      valorRetorno = tetoSalarial;
+      avisoString = 'LIMITADO AO TETO'
+    }
+    return {valor:valorRetorno, aviso:avisoString};
   }
 
 }
