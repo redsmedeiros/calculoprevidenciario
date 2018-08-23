@@ -824,8 +824,6 @@ export class RgpsResultadosComponent implements OnInit {
 
   }
 
-  calculo98_99
-
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
     let idadeDoSegurado = this.idadeSegurado;
     //let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
@@ -1882,7 +1880,7 @@ export class RgpsResultadosComponent implements OnInit {
     }
     return mesesCarencia;
   }
-
+  
   getTempoServico(redutorProfessor, redutorSexo, secundario) {
     let tempo;
 
