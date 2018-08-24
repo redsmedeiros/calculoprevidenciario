@@ -63,7 +63,39 @@
       </article>
 
       <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>Opções</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
 
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Realizar cálculos
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
       </article>

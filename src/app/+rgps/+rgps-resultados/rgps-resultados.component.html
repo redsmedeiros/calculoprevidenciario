@@ -115,32 +115,41 @@
                     <th>Contribuição Secundária (Ano/Mês/Dia)</th>
                     <th>DIB</th>
                     <th>Data de Criação</th>
+                    <th>Comparar</th>
                   </tr>
                 </thead>
               </sa-datatable>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calculator"></i>
+                        </span> Comparar
+                    </button>
+                  </div>
+                </div>
             </div>
           </div>
         </sa-widget>
       </article>
 
-      <app-rgps-resultados-anterior88 [calculo]="calculo"
-      [segurado]="segurado"
-      [isBlackHole]="isBlackHole" *ngIf="mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
-
-      <app-rgps-resultados-entre91e98 [calculo]="calculo"
-      [segurado]="segurado"
-      [tipoCalculo]="'91_98'"
-      *ngIf="mostrarCalculo91_98"></app-rgps-resultados-entre91e98>
-
-      <app-rgps-resultados-entre91e98 [calculo]="calculo"
-      [segurado]="segurado"
-      [tipoCalculo]="'98_99'"
-      *ngIf="mostrarCalculo98_99"></app-rgps-resultados-entre91e98>
-
-      <app-rgps-resultados-apos99 [calculo]="calculo"
-      [segurado]="segurado"
-      *ngIf="mostrarCalculoApos99"></app-rgps-resultados-apos99>
-
+      <div *ngFor="let calculo of calculosList">
+        <app-rgps-resultados-anterior88 [calculo]="calculo"
+        [segurado]="segurado"
+        [isBlackHole]="calculo.isBlackHole" 
+        *ngIf="calculo.mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
+        <app-rgps-resultados-entre91e98 [calculo]="calculo"
+        [segurado]="segurado"
+        [tipoCalculo]="'91_98'"
+        *ngIf="calculo.mostrarCalculo91_98"></app-rgps-resultados-entre91e98>
+        <app-rgps-resultados-entre91e98 [calculo]="calculo"
+        [segurado]="segurado"
+        [tipoCalculo]="'98_99'"
+        *ngIf="calculo.mostrarCalculo98_99"></app-rgps-resultados-entre91e98>
+        <app-rgps-resultados-apos99 [calculo]="calculo"
+        [segurado]="segurado"
+        *ngIf="calculo.mostrarCalculoApos99"></app-rgps-resultados-apos99>
+      </div>
     </div>
 
     <!-- end row -->

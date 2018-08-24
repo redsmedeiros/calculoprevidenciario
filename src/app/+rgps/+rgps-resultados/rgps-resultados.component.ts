@@ -19,6 +19,7 @@ import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service'
 import * as moment from 'moment';
+import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
@@ -32,10 +33,11 @@ export class RgpsResultadosComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public isUpdating = false;
-
+  public checkboxIdList = [];
   public idSegurado = '';
   public idadeSegurado = 0;
-  public idCalculo = '';
+  public idsCalculo;
+  public calculosList = [];
   public erroAnterior88;
   public currencyList = [
 	{
@@ -137,6 +139,7 @@ export class RgpsResultadosComponent implements OnInit {
       {data: 'contribuicaoSecundaria'},
       {data: 'dib'},
       {data: 'dataCriacao'},
+      {data: 'checkbox'},
     ] 
   };
 
@@ -260,14 +263,15 @@ export class RgpsResultadosComponent implements OnInit {
   public mostrarCalculoApos99 = false;
 
   constructor(protected router: Router,
-    private route: ActivatedRoute,
+    protected route: ActivatedRoute,
     protected Segurado: SeguradoService,    
     protected CalculoRgps: CalculoRgpsService,
   ) {}
 
   ngOnInit() {
   	this.idSegurado = this.route.snapshot.params['id_segurado'];
-  	this.idCalculo = this.route.snapshot.params['id'];
+  	//this.idCalculo = this.route.snapshot.params['id'];
+    this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.isUpdating = true;
 
     this.Segurado.find(this.idSegurado)
@@ -275,17 +279,33 @@ export class RgpsResultadosComponent implements OnInit {
         this.segurado = segurado;
         this.idadeSegurado = this.getIdadeSegurado();
         this.dataFiliacao = this.getDataFiliacao();
-
-        this.CalculoRgps.find(this.idCalculo)
-          .then(calculo => {
-            this.calculo = calculo;
-
-            this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-            this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-            this.preencheGrupoDeCalculos();
-            this.controleExibicao()
-            this.isUpdating = false;
-        });
+        let counter = 0;
+        for(let idCalculo of this.idsCalculo){
+          this.CalculoRgps.find(idCalculo)
+            .then((calculo:CalculoModel) => {
+              this.controleExibicao(calculo);
+              this.calculosList.push(calculo);
+              let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+              this.checkboxIdList.push(`${calculo.id}-checkbox`);
+              let line = {
+                especie: calculo.tipo_seguro,
+                periodoInicioBeneficio:calculo.tipo_aposentadoria,
+                contribuicaoPrimaria:this.getTempoDeContribuicaoPrimaria(calculo),
+                contribuicaoSecundaria:this.getTempoDeContribuicaoSecundaria(calculo),
+                dib:calculo.data_pedido_beneficio,
+                dataCriacao:this.formatReceivedDate(calculo.data_calculo),
+                checkbox:checkBox
+              }
+              this.calculoList.push(line);
+              this.grupoCalculosTableOptions = {
+                ...this.grupoCalculosTableOptions,
+                data: this.calculoList,
+              }
+              if((counter+1) == this.idsCalculo.length)
+                this.isUpdating = false;
+              counter++;
+          });
+        }
     });
   }
 
@@ -2085,59 +2105,60 @@ export class RgpsResultadosComponent implements OnInit {
   //   return dataInicio;
   // }
 
-  controleExibicao(){
+  controleExibicao(calculo){
     let data88 = moment('1988-10-05');
     let data91 = moment('1991-04-04');
     let data91_98 = moment('1991-04-05');
     let data98_99 = moment('1998-12-15');
     let data99 = moment('1999-11-29');
-
-    if(this.dataInicioBeneficio < data88){
+    let dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    calculo.isBlackHole = false;
+    if(dataInicioBeneficio < data88){
       //* Periodo = Anterior a 05/10/88
       // Cálculos realizados: anterior a 88
-      this.mostrarCalculoAnterior88 = true;
-    }else if(this.dataInicioBeneficio >= data88 && this.dataInicioBeneficio <= data91){
-      if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
+      calculo.mostrarCalculoAnterior88 = true;
+    }else if(dataInicioBeneficio >= data88 && dataInicioBeneficio <= data91){
+      if(calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
         //Cálculos: Anterior a 88
-        this.mostrarCalculoAnterior88 = true;
-      }else if(this.calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
+        calculo.mostrarCalculoAnterior88 = true;
+      }else if(calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
         //Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
-        this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-        this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
-        this.mostrarCalculoAnterior88 = true;
-        this.mostrarCalculo91_98 = true;
-        this.isBlackHole = true;
+        //this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+        //this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+        calculo.mostrarCalculoAnterior88 = true;
+        calculo.mostrarCalculo91_98 = true;
+        calculo.isBlackHole = true;
       }
-    }else if(this.dataInicioBeneficio > data91_98 && this.dataInicioBeneficio <= data98_99){
+    }else if(dataInicioBeneficio > data91_98 && dataInicioBeneficio <= data98_99){
       //Cálculos: entre 91 e 98
-      this.mostrarCalculo91_98 = true;
-    }else if(this.dataInicioBeneficio > data98_99 && this.dataInicioBeneficio <= data99){
-      if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+      calculo.mostrarCalculo91_98 = true;
+    }else if(dataInicioBeneficio > data98_99 && dataInicioBeneficio <= data99){
+      if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
         //Cálculos: entre 91 e 98 (tempo de contribuicao até a ementa (98)
-        this.mostrarCalculo91_98 = true;
-        this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-        this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
-      }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+        calculo.mostrarCalculo91_98 = true;
+        //this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+        //this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+      }else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
         //Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
-        this.mostrarCalculo91_98 = true;
-        this.contribuicaoPrimaria99 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
-        this.contribuicaoSecundaria99 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
+        calculo.mostrarCalculo91_98 = true;
+        //this.contribuicaoPrimaria99 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
+        //this.contribuicaoSecundthisaria99 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
       }
-    }else if(this.dataInicioBeneficio > data99){
+    }else if(dataInicioBeneficio > data99){
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 após 99     (tempo de contribuicao após a lei 99)
       (cálculos em box separados)*/
-      this.mostrarCalculo91_98 = true;
-      this.mostrarCalculo98_99 = true;
-      this.mostrarCalculoApos99 = true;
-      this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-      this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
-      this.contribuicaoPrimaria99 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
-      this.contribuicaoSecundaria99 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
-      this.contribuicaoPrimariaAtual = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
-      this.contribuicaoSecundariaAtual = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
+      calculo.mostrarCalculo91_98 = true;
+      calculo.mostrarCalculo98_99 = true;
+      calculo.mostrarCalculoApos99 = true;
+      // this.contribuicaoPrimaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+      // this.contribuicaoSecundaria91_98 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+      // this.contribuicaoPrimaria99 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
+      // this.contribuicaoSecundaria99 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
+      // this.contribuicaoPrimariaAtual = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
+      // this.contribuicaoSecundariaAtual = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
     }
   }
 
@@ -2190,27 +2211,32 @@ export class RgpsResultadosComponent implements OnInit {
   // }
 
   preencheGrupoDeCalculos(){
-    let especie = this.calculo.tipo_seguro;
-    let periodoInicioBeneficio = this.calculo.tipo_aposentadoria;
-    let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(this.calculo);
-    let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(this.calculo);
-    let dib = this.calculo.data_pedido_beneficio;
-    let dataCriacao = this.formatReceivedDate(this.calculo.data_calculo);
-
-    let line = {
-      especie: especie,
-      periodoInicioBeneficio:periodoInicioBeneficio,
-      contribuicaoPrimaria:contribuicaoPrimaria,
-      contribuicaoSecundaria:contribuicaoSecundaria,
-      dib:dib,
-      dataCriacao:dataCriacao
+    for(let calculo of this.calculosList){
+      let especie = calculo.tipo_seguro;
+      let periodoInicioBeneficio = calculo.tipo_aposentadoria;
+      let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
+      let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
+      let dib = calculo.data_pedido_beneficio;
+      let dataCriacao = this.formatReceivedDate(calculo.data_calculo);
+      let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+      this.checkboxIdList.push(`${calculo.id}-checkbox`);
+      let line = {
+        especie: especie,
+        periodoInicioBeneficio:periodoInicioBeneficio,
+        contribuicaoPrimaria:contribuicaoPrimaria,
+        contribuicaoSecundaria:contribuicaoSecundaria,
+        dib:dib,
+        dataCriacao:dataCriacao,
+        checkbox:checkBox,
+      }
+      this.calculoList.push(line);
     }
-
-    this.calculoList.push(line);
+    
     this.grupoCalculosTableOptions = {
       ...this.grupoCalculosTableOptions,
       data: this.calculoList,
     }
+    console.log(this.calculoList)
   }
 
   getIdadeSegurado(){
@@ -2239,8 +2265,8 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   valoresContribuidos(){
-    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
-    + '/' + this.idCalculo; 
+    // window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
+    // + '/' + this.idCalculo; 
   }
 
   imprimirPagina(){
@@ -2256,5 +2282,23 @@ export class RgpsResultadosComponent implements OnInit {
       return moment(this.segurado.data_filiacao);
     }
     return null;
+  }
+
+  compararCalculos(){
+    let idList = [];
+    console.log(this.checkboxIdList)
+    for(let checkboxId of this.checkboxIdList){
+      if((<HTMLInputElement>document.getElementById(checkboxId)).checked){
+        idList.push(checkboxId.split('-')[0]);
+      }
+    }
+
+    if(idList.length != 2){
+      swal('Erro', 'Só é possível comparar 2 cálculos', 'error');
+    }else{
+      window.location.href='/#/rgps/rgps-elements/'+ 
+                            this.route.snapshot.params['id_segurado']+'/'+idList[0]+'/'+idList[1];
+      
+    }
   }
 }

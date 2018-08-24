@@ -32,6 +32,7 @@ export class CalculoRgps extends Model {
    public contribuicao_secundaria_98;
    public contribuicao_secundaria_99;
    public contribuicao_secundaria_atual;
+   public data_calculo;
    public valor_beneficio;
    public soma_contribuicao;
    public carencia;

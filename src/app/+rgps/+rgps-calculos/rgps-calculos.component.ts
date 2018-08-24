@@ -4,9 +4,9 @@ import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { CalculoRgps as CalculoModel } from './CalculoRgps.model';
 import { CalculoRgpsService } from './CalculoRgps.service';
 import { ErrorService } from '../../services/error.service';
-
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
+import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
@@ -32,6 +32,8 @@ export class RgpsCalculosComponent implements OnInit {
 
   public segurado:any = {};
 
+  public checkboxIdList = [];
+
   public calculoTableOptions = {
     colReorder: true,
     data: this.calculosList,
@@ -48,8 +50,8 @@ export class RgpsCalculosComponent implements OnInit {
        render: (data) => {
           return this.formatReceivedDate(data);
        }},
-      {data: () => {
-        return this.getCheckbox();
+      {data: (data) => {
+        return this.getCheckbox(data);
       }},
     ] };
 
@@ -77,8 +79,11 @@ export class RgpsCalculosComponent implements OnInit {
 
   }
 
-  getCheckbox() {
-    return   '<div class="checkbox"><label><input type="checkbox"  class="checkbox {{styleTheme}}"><span> </span></label></div>';
+  getCheckbox(data) {
+    if(!this.checkboxIdList.includes(`${data.id}-checkbox`)){
+      this.checkboxIdList.push(`${data.id}-checkbox`);
+    }
+    return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
   }
 
   ngOnInit() {
@@ -97,6 +102,7 @@ export class RgpsCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
+    this.calculosList = this.calculosList.filter(this.isSegurado, this);
     this.calculoTableOptions = {
       ...this.calculoTableOptions,
       data: this.calculosList,
@@ -132,6 +138,26 @@ export class RgpsCalculosComponent implements OnInit {
       return '';
   }
 
+  realizarCalculos(){
+    let idList = [];
+    for(let checkboxId of this.checkboxIdList){
+      if((<HTMLInputElement>document.getElementById(checkboxId)).checked){
+        idList.push(checkboxId.split('-')[0]);
+      }
+    }
+
+    if(idList.length > 3){
+      swal('Erro', 'Selecione até 3 cálculos', 'error');
+    }else if(idList.length == 0){
+      swal('Erro', 'Selecione pelo menos 1 cálculo', 'error');
+    }else{
+      let stringArr = idList.join(',');
+      console.log(stringArr)
+      window.location.href='/#/rgps/rgps-resultados/'+ 
+                            this.route.snapshot.params['id']+'/'+stringArr;
+      
+    }
+  }
 
   isSegurado(element, index, array){
     return element['id_segurado'] == this.idSegurado;

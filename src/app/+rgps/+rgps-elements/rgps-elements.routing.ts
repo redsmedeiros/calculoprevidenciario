@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {RgpsElementsComponent} from "./rgps-elements.component";
 
 export const rgpsElementsRoutes: Routes = [{
-  path: '',
+  path: ':id_segurado/:id_calculo1/:id_calculo2',
   component: RgpsElementsComponent
 }];
 
