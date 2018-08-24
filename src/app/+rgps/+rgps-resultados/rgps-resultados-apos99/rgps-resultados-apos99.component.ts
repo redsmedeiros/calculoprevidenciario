@@ -33,6 +33,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 	public dataInicioBeneficio;
 	public tipoBeneficio;
 	public listaValoresContribuidos;
+  public valorExportacao;
 	public moeda;
 	public coeficiente;
 	public idadeFracionada;
@@ -625,6 +626,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }else{
           conclusoes.push({string:"Renda Mensal Inicial:",value:this.formatMoney(rmi, currency.acronimo)});//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
         }
+        this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
         this.tableData = tableData;
         this.tableOptions = {
             ...this.tableOptions,

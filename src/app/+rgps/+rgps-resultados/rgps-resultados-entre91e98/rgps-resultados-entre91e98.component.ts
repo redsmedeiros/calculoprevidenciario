@@ -30,6 +30,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   public listaValoresContribuidos;
   public carenciasProgressivas;
   public reajustesAutomaticos;
+  public valorExportacao;
   public contribuicaoPrimaria = {anos:0,meses:0,dias:0};
   public contribuicaoSecundaria = {anos:0,meses:0,dias:0};
   public coeficiente;
@@ -345,7 +346,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     conclusoes.teto = this.formatMoney(moedaComparacao.teto, currency.acronimo);
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currency.acronimo);
     conclusoes.renda_mensal_inicial_data_dib = this.formatMoney(rmiValoresAdministrativos, currency.acronimo);
-    
+    this.valorExportacao = this.formatDecimal(rmiValoresAdministrativos, 2).replace(',', '.');
     this.tableData = tableData;
     this.tableOptions = {
       ...this.tableOptions,

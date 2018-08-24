@@ -17,7 +17,7 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -29,7 +29,7 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR

@@ -33,6 +33,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
 	public conclusoes = {};
   public tableData = [];
   public erro;
+  public valorExportacao;
   public idadeSegurado;
   public contribuicaoPrimaria = {anos:0,meses:0,dias:0};
   public contribuicaoSecundaria = {anos:0,meses:0,dias:0};
@@ -225,7 +226,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     conclusoes.divisor_calculo_media = index;
     conclusoes.media_contribuicoes = this.formatMoney(mediaTotal,currencyDataInicioBeneficio.acronimo);
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currencyDataInicioBeneficio.acronimo);
-
+    this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
     this.tableOptions = {
       ...this.tableOptions,

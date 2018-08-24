@@ -2218,6 +2218,14 @@ export class RgpsResultadosComponent implements OnInit {
     return moment().diff(dataNascimento, 'years');
   }
 
+  exportarParaBeneficios(data, valor, tipoCalculo){
+    window.location.href='/#/beneficios/beneficios-calculos/'+ 
+                          tipoCalculo + '/' +
+                          this.segurado.id+
+                          '?dib='+data+'&'+
+                          'valor='+valor;
+  }
+
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ this.idSegurado+'/editar';
   }
