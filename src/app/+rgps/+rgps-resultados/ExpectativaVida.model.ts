@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class ExpectativaVida extends Model {
 
-  static url = 'http://localhost:8000/exp_vida';
+  static url = environment.apiUrl + 'exp_vida';
   static form = {
     data_inicial : '',
     data_final: '',

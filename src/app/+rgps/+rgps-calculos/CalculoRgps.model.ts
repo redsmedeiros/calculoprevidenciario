@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class CalculoRgps extends Model {
 
-  static url = 'http://localhost:8000/rgps/calculos';
+  static url = environment.apiUrl + 'rgps/calculos';
   static form = {
   	id : '',
     id_segurado: '',

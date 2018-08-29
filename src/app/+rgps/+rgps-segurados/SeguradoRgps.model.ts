@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class SeguradoRgps extends Model {
 
-  static url = 'http://localhost:8000/rgps/segurados';
+  static url = environment.apiUrl + 'rgps/segurados';
   static form = {
     id: '',
     nome: '',

@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class ContribuicaoComplementar extends Model {
 
-  static url = 'http://localhost:8000/contribuicoes/calculos/complementar';
+  static url = environment.apiUrl + 'contribuicoes/calculos/complementar';
   static form = {
   	id: '',
   	id_segurado: 0,

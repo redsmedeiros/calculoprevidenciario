@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class Segurado extends Model {
 
-  static url = 'http://localhost:8000/segurados';
+  static url = environment.apiUrl + 'segurados';
   static form = {
     id: '',
     nome: '',

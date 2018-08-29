@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class ReajusteAutomatico extends Model {
 
-  static url = 'http://localhost:8000/indicesrgps';
+  static url = environment.apiUrl + 'indicesrgps';
   static form = {
     data_reajuste : '',
     teto: '',

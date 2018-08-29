@@ -1,8 +1,9 @@
 import { Model } from '../contracts/Model';
+import { environment } from '../../environments/environment';
 
 export class IntervaloReajuste extends Model {
 
-  static url = 'http://localhost:8000/intervaloreajuste';
+  static url = environment.apiUrl + 'intervaloreajuste';
   static form = {
     id: '',
     n_reajuste: '',

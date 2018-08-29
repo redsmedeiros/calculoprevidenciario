@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class CalculoAtrasado extends Model {
 
-  static url = 'http://localhost:8000/beneficios/calculos/atrasados';
+  static url = environment.apiUrl + 'beneficios/calculos/atrasados';
   static form = {
     id: '',
     id_segurado: '',

@@ -1,8 +1,9 @@
 import { Model } from '../contracts/Model';
+import { environment } from '../../environments/environment';
 
 export class Indices extends Model {
 
-  static url = 'http://localhost:8000/indices';
+  static url = environment.apiUrl + 'indices';
   static form = {
     data_moeda: '',
     indice: '',

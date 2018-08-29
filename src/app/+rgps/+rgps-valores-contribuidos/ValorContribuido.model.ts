@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class ValorContribuido extends Model {
 
-  static url = 'http://localhost:8000/rgps/calculos/valorescontribuidos';
+  static url = environment.apiUrl + 'rgps/calculos/valorescontribuidos';
   static form = {
   	id : '',
     id_calculo: '',

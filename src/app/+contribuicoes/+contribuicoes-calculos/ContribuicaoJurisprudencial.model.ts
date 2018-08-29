@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class ContribuicaoJurisprudencial extends Model {
 
-  static url = 'http://localhost:8000/contribuicoes/calculos/jurisprudencial';
+  static url = environment.apiUrl + 'contribuicoes/calculos/jurisprudencial';
   static form = {
     id: '',
     id_segurado: '',

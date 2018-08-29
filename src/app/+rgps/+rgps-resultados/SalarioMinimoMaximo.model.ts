@@ -1,8 +1,9 @@
 import { Model } from '../../contracts/Model';
+import { environment } from '../../../environments/environment';
 
 export class SalarioMinimoMaximo extends Model {
 
-  static url = 'http://localhost:8000/salariominimomaximo';
+  static url = environment.apiUrl + 'salariominimomaximo';
   static form = {
   	data_salario: '',
     minimum_salary_ammount : '',
