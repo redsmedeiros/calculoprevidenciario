@@ -17,8 +17,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public contribuicaoDe;
   public contribuicaoAte;
   public salarioContribuicao;
-  public chkJuros = false;
-
+  public chkJuros = true;
+  public showMessage = false;
   public dataDecadente;
 
 

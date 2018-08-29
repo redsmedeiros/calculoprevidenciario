@@ -124,7 +124,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
       competencia = splited[1] + '/' + splited[0];
       let valor_contribuicao = this.getValorContribuicao();
-      let juros = this.getTaxaJuros(competencia);
+      let juros = (this.mostrarJuros) ? this.getTaxaJuros(competencia) : 0;
       let multa = this.getMulta();
       let total = (this.getBaseAliquota()*1.1) + juros;
 

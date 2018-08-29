@@ -24,7 +24,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public contribuicaoAte;
 
   public moeda: Moeda[];
-
+  public results = [];
   public isUpdating = false;
 
   public tableOptions = {
@@ -33,23 +33,15 @@ export class ContribuicoesResultadosComponent implements OnInit {
     ordering: false,
     info: false,
     searching: false,
-    data: this.moeda,
+    data: this.results,
     columns: [
-      {data: 'data_moeda',
-       render: (data) => {
-          return this.formatDate(data);
-       }},
-      {data: (data) => {
-          return this.getSalarioMinimo(data);
-       }},
-      {data: (data) => {
-          return this.getAliquota(data);
-       }},
-      {data: 'cam'},
-      {data: (data) => {
-        return this.getValorCorrigido(data);
-      }}
-    ] };
+      {data: 'data'},
+      {data: 'salario_minimo'},
+      {data: 'aliquota'},
+      {data: 'indice'},
+      {data: 'valor_corrigido'},
+    ] 
+  };
   constructor(
   	protected Jurisprudencial: ContribuicaoJurisprudencialService,
   	protected router: Router,
@@ -88,9 +80,27 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   updateDatatable() {
+    for(let moedaAtual of this.moeda){
+      let line = {
+        data: this.formatDate(moedaAtual.data_moeda),
+        salario_minimo: this.getSalarioMinimo(moedaAtual),
+        aliquota: this.getAliquota(moedaAtual),
+        indice: moedaAtual.cam,
+        valor_corrigido: this.getValorCorrigido(moedaAtual)
+      }
+      this.results.push(line)
+    }
+    let lastLine = {
+        data: '<b>Total</b>',
+        salario_minimo: '',
+        aliquota: '',
+        indice: '',
+        valor_corrigido: '<b>R$' + this.formatMoney(this.calculoJurisprudencial.valor_acumulado)+'</b>'
+    }
+    this.results.push(lastLine);
     this.tableOptions = {
       ...this.tableOptions,
-      data: this.moeda,
+      data: this.results,
     }
   }
 
