@@ -28,7 +28,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   @ViewChild('contribuicoesSecundarias') matrizContribuicoesSecundarias: RgpsMatrizComponent;
 
   public isUpdating = false;
-
+  public mostrarBotaoRealizarCalculos = true;
   public idSegurado = '';
   public idCalculo = '';
 
@@ -108,9 +108,14 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       secundarias.push(valorContribuido);
     }
     let todasContribuicoes = primarias.concat(secundarias);
-    this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-      window.location.href='/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo;
-    }); 
+    if (todasContribuicoes.length != 0) {
+      this.mostrarBotaoRealizarCalculos = false;
+      this.ValorContribuidoService.save(todasContribuicoes).then(() => {
+        window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo;
+      });
+    }else{
+      swal('Erro', 'Nenhum valor inserido', 'error');
+    } 
   }
 
   updateDatatable() {

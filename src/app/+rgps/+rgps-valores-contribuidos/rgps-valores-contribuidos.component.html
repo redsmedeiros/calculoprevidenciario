@@ -44,11 +44,12 @@
                       </span> Editar
                     </button>
 
-                    <button type="submit" (click)="realizarCalculo()" class="btn btn-labeled btn-primary">
+                    <button type="submit" (click)="realizarCalculo()" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled btn-primary">
                       <span class="btn-label">
                         <i class="fa fa-percent"></i>
                       </span> Realizar cálculos
                     </button>
+                    <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i>
                   </div>
                 </div>
               </div>
