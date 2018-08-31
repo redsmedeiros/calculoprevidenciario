@@ -133,6 +133,7 @@
               <sa-widget [colorbutton]="false" [editbutton]="false">
                 <div>
                   <div class="widget-body no-padding">
+                    <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                     <sa-datatable [options]="tableOptions"
                       paginationLength="true" *ngIf="!isUpdating" tableClass="table table-striped table-bordered table-hover" width="100%">
                       <thead>

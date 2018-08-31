@@ -134,6 +134,7 @@
               </div>
             </div>
             <div>
+              <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
               <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && !erro"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
