@@ -120,6 +120,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.soma_contribuicao = '';//TODO: deixar em branco por enquanto
       this.formData.carencia = this.carencia;
       this.formData.grupo_dos_12 = this.grupoDos12;
+      swal('Sucesso', 'Cálculo salvo com sucesso', 'success')
       this.onSubmit.emit(this.formData);
       this.resetForm();
     }
