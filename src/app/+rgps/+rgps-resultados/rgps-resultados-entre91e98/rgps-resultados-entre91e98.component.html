@@ -65,7 +65,7 @@
                 <p>Imprimir o cálculo</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-print"></i>
                   </span> IMPRIMIR
@@ -77,6 +77,7 @@
 </article>
 
 <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+<div id="{{boxId}}">
 <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -245,3 +246,4 @@
           </div>
         </sa-widget>
 </article>
+</div>

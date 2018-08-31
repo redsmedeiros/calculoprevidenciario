@@ -18,6 +18,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 	@Input() calculo;
 	@Input() segurado;
 	@Input() tipoCalculo;
+
+  public boxId;
 	public isUpdating = false;
 	public idCalculo;
 	public tipoBeneficio;
@@ -59,6 +61,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     private Moeda: MoedaService,) { super(null, null, null, null);}
 
   ngOnInit() {
+    this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
   	this.idadeSegurado = this.getIdadeSegurado();

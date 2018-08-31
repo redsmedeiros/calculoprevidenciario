@@ -23,6 +23,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
 	@Input() segurado;
 	@Input() isBlackHole;
 
+  public boxId;
 	public inpsList;
 	public salarioMinimoMaximo;
 	public idCalculo;
@@ -62,6 +63,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     ) {super(null, null, null, null);}
 
   ngOnInit(){
+    this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
   	this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);

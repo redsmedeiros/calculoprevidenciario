@@ -23,6 +23,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 	@Input() calculo;
 	@Input() segurado;
 
+  public boxId;
 	public dataFiliacao;
 	public idadeSegurado;
 	public idCalculo;
@@ -74,6 +75,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     super(null, null, null, null); }
 
   ngOnInit() {
+    this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.idadeSegurado = this.getIdadeSegurado();
   	this.dataFiliacao = this.getDataFiliacao();
