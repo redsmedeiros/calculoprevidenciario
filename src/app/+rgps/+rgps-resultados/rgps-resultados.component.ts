@@ -270,7 +270,6 @@ export class RgpsResultadosComponent implements OnInit {
 
   ngOnInit() {
   	this.idSegurado = this.route.snapshot.params['id_segurado'];
-  	//this.idCalculo = this.route.snapshot.params['id'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.isUpdating = true;
 
@@ -996,8 +995,17 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   valoresContribuidos(){
-    // window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
-    // + '/' + this.idCalculo; 
+    let idList = [];
+    console.log(this.checkboxIdList)
+    for(let checkboxId of this.checkboxIdList){
+      if((<HTMLInputElement>document.getElementById(checkboxId)).checked){
+        idList.push(checkboxId.split('-')[0]);
+      }
+    }
+
+    let stringArr = idList.join(',');
+    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
+    + '/' + stringArr; 
   }
 
   imprimirPagina(){

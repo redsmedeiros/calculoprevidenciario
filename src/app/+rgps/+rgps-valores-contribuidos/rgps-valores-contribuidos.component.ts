@@ -30,7 +30,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public isUpdating = false;
   public mostrarBotaoRealizarCalculos = true;
   public idSegurado = '';
-  public idCalculo = '';
+  public idsCalculos = '';
 
   public segurado: any = {};
   public calculo: any = {};
@@ -64,21 +64,35 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.idCalculo = this.route.snapshot.params['id'];
+    //this.idCalculo = this.route.snapshot.params['id'];
+    this.idsCalculos = this.route.snapshot.params['id'].split(',');
     this.isUpdating = true;
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-        this.CalculoRgps.find(this.idCalculo)
-          .then(calculo => {
-            this.calculo = calculo;
-            this.updateDatatable();
-            this.ValorContribuidoService.getByCalculoId(this.idCalculo, null, null)
-              .then((valorescontribuidos: ValorContribuido[]) => {
-                this.initializeMatrix(valorescontribuidos);
-                this.isUpdating = false;
-              });
-          });
+        if(this.idsCalculos.length == 1){
+          this.CalculoRgps.find(this.idsCalculos[0])
+            .then(calculo => {
+              this.calculo = calculo;
+              this.updateDatatable(calculo);
+              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null)
+                .then((valorescontribuidos: ValorContribuido[]) => {
+                  this.initializeMatrix(valorescontribuidos);
+                  this.isUpdating = false;
+                });
+            });
+        }else{
+          let counter = 0;
+          for(let idCalculo of this.idsCalculos){
+            this.CalculoRgps.find(idCalculo)
+              .then((calculo:CalculoModel) => {
+                this.updateDatatable(calculo)
+                if((counter+1) == this.idsCalculos.length)
+                  this.isUpdating = false;
+                counter++;
+            });
+          }
+        }
       });
   }
   realizarCalculo() {
@@ -94,7 +108,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
       let valorContribuido = new ValorContribuido({
-        id_calculo: this.idCalculo,
+        id_calculo: this.idsCalculos,
         data: date,
         tipo: 0,
         valor: valor,
@@ -108,7 +122,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
       let valorContribuido = new ValorContribuido({
-        id_calculo: this.idCalculo,
+        id_calculo: this.idsCalculos,
         data: date,
         tipo: 1,
         valor: valor,
@@ -119,7 +133,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (todasContribuicoes.length != 0) {
       this.mostrarBotaoRealizarCalculos = false;
       this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-        window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo;
+        window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
       });
     } else {
       swal('Erro', 'Nenhum valor inserido', 'error');
@@ -155,13 +169,13 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   }
 
-  updateDatatable() {
-    let especie = this.calculo.tipo_seguro;
-    let periodoInicioBeneficio = this.calculo.tipo_aposentadoria;
-    let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(this.calculo);
-    let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(this.calculo);
-    let dib = this.calculo.data_pedido_beneficio;
-    let dataCriacao = this.formatReceivedDate(this.calculo.data_calculo);
+  updateDatatable(calculo) {
+    let especie = calculo.tipo_seguro;
+    let periodoInicioBeneficio = calculo.tipo_aposentadoria;
+    let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
+    let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
+    let dib = calculo.data_pedido_beneficio;
+    let dataCriacao = this.formatReceivedDate(calculo.data_calculo);
 
     let line = {
       especie: especie,
