@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
-import {NgForm} from '@angular/forms';
+import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
@@ -32,21 +32,21 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public idSegurado = '';
   public idCalculo = '';
 
-  public segurado:any = {};
-  public calculo:any = {};
+  public segurado: any = {};
+  public calculo: any = {};
   public calculoList = [];
 
   public grupoCalculosTableOptions = {
     colReorder: false,
     data: this.calculoList,
     columns: [
-      {data: 'especie'},
-      {data: 'periodoInicioBeneficio'},
-      {data: 'contribuicaoPrimaria'},
-      {data: 'contribuicaoSecundaria'},
-      {data: 'dib'},
-      {data: 'dataCriacao'},
-    ] 
+      { data: 'especie' },
+      { data: 'periodoInicioBeneficio' },
+      { data: 'contribuicaoPrimaria' },
+      { data: 'contribuicaoSecundaria' },
+      { data: 'dib' },
+      { data: 'dataCriacao' },
+    ]
   };
 
   public inicioPeriodo = '';
@@ -56,7 +56,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
-    protected Segurado: SeguradoService,    
+    protected Segurado: SeguradoService,
     protected CalculoRgps: CalculoRgpsService,
     protected errors: ErrorService,
     protected ValorContribuidoService: ValorContribuidoService) {
@@ -67,44 +67,52 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     this.idCalculo = this.route.snapshot.params['id'];
     this.isUpdating = true;
     this.Segurado.find(this.idSegurado)
-        .then(segurado => {
-            this.segurado = segurado;
-            this.CalculoRgps.find(this.idCalculo)
-              .then(calculo => {
-                this.calculo = calculo;
-                this.updateDatatable();
+      .then(segurado => {
+        this.segurado = segurado;
+        this.CalculoRgps.find(this.idCalculo)
+          .then(calculo => {
+            this.calculo = calculo;
+            this.updateDatatable();
+            this.ValorContribuidoService.getByCalculoId(this.idCalculo, null, null)
+              .then((valorescontribuidos: ValorContribuido[]) => {
+                this.initializeMatrix(valorescontribuidos);
                 this.isUpdating = false;
-            });
-    });
+              });
+          });
+      });
   }
-  realizarCalculo(){
+  realizarCalculo() {
     let contribuicoesPrimarias = this.matrizContribuicoesPrimarias.getMatrixData();
     let contribuicoesSecundarias = this.matrizContribuicoesSecundarias.getMatrixData();
 
     let primarias = [];
     let secundarias = [];
-    for(let contribuicao of contribuicoesPrimarias){
+    for (let contribuicao of contribuicoesPrimarias) {
       let dateMonth = contribuicao.split('-')[0];
       let valor = contribuicao.split('-')[1];
-      if(valor == 0)
+      if (valor == 0)
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-      let valorContribuido = new ValorContribuido({id_calculo: this.idCalculo,
-                                                   data: date,
-                                                   tipo: 0,
-                                                   valor: valor,});
+      let valorContribuido = new ValorContribuido({
+        id_calculo: this.idCalculo,
+        data: date,
+        tipo: 0,
+        valor: valor,
+      });
       primarias.push(valorContribuido);
     }
-    for(let contribuicao of contribuicoesSecundarias){
+    for (let contribuicao of contribuicoesSecundarias) {
       let dateMonth = contribuicao.split('-')[0];
       let valor = contribuicao.split('-')[1];
-      if(valor == 0)
+      if (valor == 0)
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-      let valorContribuido = new ValorContribuido({id_calculo: this.idCalculo,
-                                                   data: date,
-                                                   tipo: 1,
-                                                   valor: valor,});
+      let valorContribuido = new ValorContribuido({
+        id_calculo: this.idCalculo,
+        data: date,
+        tipo: 1,
+        valor: valor,
+      });
       secundarias.push(valorContribuido);
     }
     let todasContribuicoes = primarias.concat(secundarias);
@@ -113,9 +121,38 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       this.ValorContribuidoService.save(todasContribuicoes).then(() => {
         window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo;
       });
-    }else{
+    } else {
       swal('Erro', 'Nenhum valor inserido', 'error');
-    } 
+    }
+  }
+
+  initializeMatrix(valorescontribuidos) {
+    console.log(valorescontribuidos);
+    if (valorescontribuidos.length != 0) {
+      let matrizPrimarias = [];
+      let matrizSecundarias = [];
+      let ano = 0
+      let valuesPrimaria = [];
+      let valuesSecundaria = [];
+      for(let contribuicao of valorescontribuidos){
+        let contribAno = parseInt((contribuicao.data).split('-')[0]);
+        let contribMes = parseInt((contribuicao.data).split('-')[1]);
+        if (contribAno != ano){
+          this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
+          this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
+          ano = contribAno;
+          valuesPrimaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+          valuesSecundaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+        }
+        this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
+        this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
+        valuesPrimaria[contribMes - 1] = this.formatMoney(contribuicao.valor_primaria);
+        valuesSecundaria[contribMes - 1] = this.formatMoney(contribuicao.valor_secundaria);
+      }
+    this.matrizContribuicoesPrimarias.matriz.splice(0, 1);
+    this.matrizContribuicoesSecundarias.matriz.splice(0, 1);
+    }
+
   }
 
   updateDatatable() {
@@ -128,11 +165,11 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
     let line = {
       especie: especie,
-      periodoInicioBeneficio:periodoInicioBeneficio,
-      contribuicaoPrimaria:contribuicaoPrimaria,
-      contribuicaoSecundaria:contribuicaoSecundaria,
-      dib:dib,
-      dataCriacao:dataCriacao
+      periodoInicioBeneficio: periodoInicioBeneficio,
+      contribuicaoPrimaria: contribuicaoPrimaria,
+      contribuicaoSecundaria: contribuicaoSecundaria,
+      dib: dib,
+      dataCriacao: dataCriacao
     }
 
     this.calculoList.push(line);
@@ -145,82 +182,82 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   submit() {
 
-    if(this.isValid()){
+    if (this.isValid()) {
       let periodoObj = {
-            inicioPeriodo: this.inicioPeriodo,
-            finalPeriodo: this.finalPeriodo,
-            salarioContribuicao:this.salarioContribuicao
+        inicioPeriodo: this.inicioPeriodo,
+        finalPeriodo: this.finalPeriodo,
+        salarioContribuicao: this.salarioContribuicao
       };
 
-      if(this.tipoContribuicao === 'Primaria'){
+      if (this.tipoContribuicao === 'Primaria') {
         this.matrizContribuicoesPrimarias.preencher(periodoObj);
-      }else if(this.tipoContribuicao === 'Secundaria'){
+      } else if (this.tipoContribuicao === 'Secundaria') {
         this.matrizContribuicoesSecundarias.preencher(periodoObj);
       }
 
-    }else{
-      swal('Erro', 'Confira os dados digitados','error');
+    } else {
+      swal('Erro', 'Confira os dados digitados', 'error');
     }
-    
+
   }
 
-  isValid(){
-    let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0]  + '-01');
-    let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0]  + '-01');
+  isValid() {
+    let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
+    let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
 
     //inicioPeriodo
-    if(this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()){
-      this.errors.add({"inicioPeriodo":["Insira uma data válida"]});
+    if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
+      this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
     }
 
     //finalPeriodo
-    if(this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()){
-      this.errors.add({"finalPeriodo":["Insira uma data válida"]});
-    }else{
-      if(dateFinalPeriodo <= dateInicioPeriodo){
-        this.errors.add({"finalPeriodo":["Insira uma data posterior a data inicial"]});
+    if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
+      this.errors.add({ "finalPeriodo": ["Insira uma data válida"] });
+    } else {
+      if (dateFinalPeriodo <= dateInicioPeriodo) {
+        this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
       }
     }
 
     //salarioContribuicao
-    if(this.isEmpty(this.salarioContribuicao)){
-      this.errors.add({"salarioContribuicao":["Insira o salário"]});
-    }else{
+    if (this.isEmpty(this.salarioContribuicao)) {
+      this.errors.add({ "salarioContribuicao": ["Insira o salário"] });
+    } else {
       this.errors.clear('salarioContribuicao');
     }
 
     return this.errors.empty();
   }
 
-  isEmpty(data){
-    if(data == undefined || data == '') {
+  isEmpty(data) {
+    if (data == undefined || data == '') {
       return true;
     }
     return false;
   }
 
   formatReceivedDate(inputDate) {
-      var date = new Date(inputDate);
-      date.setTime(date.getTime() + (5*60*60*1000))
-      if (!isNaN(date.getTime())) {
-          // Months use 0 index.
-          return  ('0' + (date.getDate())).slice(-2)+'/'+
-                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                         date.getFullYear();
-      }
-      return '';
+    var date = new Date(inputDate);
+    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
+    if (!isNaN(date.getTime())) {
+      // Months use 0 index.
+      return ('0' + (date.getDate())).slice(-2) + '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+        date.getFullYear();
+    }
+    return '';
   }
 
   getTempoDeContribuicaoPrimaria(data) {
     let str = '';
     if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_98.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_primaria_98.replace(/-/g, '/') + '<br>';
     }
     if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_99.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_primaria_99.replace(/-/g, '/') + '<br>';
     }
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_atual.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
     }
 
     return str;
@@ -230,48 +267,53 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   getTempoDeContribuicaoSecundaria(data) {
     let str = '';
     if (data.contribuicao_secundaria_98 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_secundaria_98.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_secundaria_98.replace(/-/g, '/') + '<br>';
     }
     if (data.contribuicao_secundaria_99 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_secundaria_99.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_secundaria_99.replace(/-/g, '/') + '<br>';
     }
     if (data.contribuicao_secundaria_atual !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_secundaria_atual.replace(/-/g,'/') +'<br>';
+      str = str + data.contribuicao_secundaria_atual.replace(/-/g, '/') + '<br>';
     }
 
     return str;
 
   }
 
-  dateMask(rawValue){
-    if(rawValue == ''){
+  formatMoney(data) {
+    data = parseFloat(data);
+    return 'R$ ' + (data.toFixed(2)).replace('.', ',');
+  }
+
+  dateMask(rawValue) {
+    if (rawValue == '') {
       return [/[0-1]/, /\d/, '/', /[1-2]/, /[0|9]/, /\d/, /\d/];
     }
     let mask = [];
     mask.push(/[0-1]/);
 
-    if (rawValue[0] == 1){
+    if (rawValue[0] == 1) {
       mask.push(/[0-2]/);
-    }else if(rawValue[0] == 0){
+    } else if (rawValue[0] == 0) {
       mask.push(/[1-9]/);
     }
 
     mask.push('/');
-    mask.push( /[1-2]/);
-    
-    if (rawValue[3] == 1){
+    mask.push(/[1-2]/);
+
+    if (rawValue[3] == 1) {
       mask.push(/[9]/);
-    }else if(rawValue[3] == 2){
+    } else if (rawValue[3] == 2) {
       mask.push(/[0]/);
     }
     mask.push(/\d/);
-    mask.push( /\d/);
+    mask.push(/\d/);
     return mask;
   }
 
   editSegurado() {
-    window.location.href='/#/rgps/rgps-segurados/'+ 
-                            this.route.snapshot.params['id_segurado']+'/editar';
+    window.location.href = '/#/rgps/rgps-segurados/' +
+      this.route.snapshot.params['id_segurado'] + '/editar';
   }
 
 }

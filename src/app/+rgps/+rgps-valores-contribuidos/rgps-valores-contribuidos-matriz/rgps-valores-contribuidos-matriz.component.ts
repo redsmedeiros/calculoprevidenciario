@@ -34,14 +34,13 @@ export class RgpsMatrizComponent implements OnInit {
     //O campo hashKey é necessario pois a funçao getMatrixData recolhe os dados dos inputs do html.
     //No caso de mais de uma instancia do componente, poderá haver casos de campos com o mesmo id.
     this.hashKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    console.log(this.hashKey);
   }
 
   preencher(periodo){
     let monthList = this.monthAndYear(periodo.inicioPeriodo, periodo.finalPeriodo);
 
     let ano = monthList[0].split('-')[0];
-    let valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
+    let valores = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
     this.anosConsiderados.push(ano);
     for (let entry of monthList){
       if(ano == entry.split('-')[0]){
@@ -49,7 +48,7 @@ export class RgpsMatrizComponent implements OnInit {
       }else{
         this.updateMatrix(+ano, valores);
         ano = entry.split('-')[0];
-        valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
+        valores = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
         valores[+entry.split('-')[1]-1] = this.formatMoney(periodo.salarioContribuicao);
         this.anosConsiderados.push(ano);
       }

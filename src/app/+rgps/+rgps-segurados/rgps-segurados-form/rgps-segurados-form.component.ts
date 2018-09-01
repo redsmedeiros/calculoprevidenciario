@@ -111,7 +111,6 @@ export class RgpsSeguradosFormComponent {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
     let id = this.formData.id_documento.toString();
-    console.log(id);
     switch (id) {
       case '1': // PIS
         this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
