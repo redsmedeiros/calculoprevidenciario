@@ -12,24 +12,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr *ngIf='!isUpdating'>
               <td>
                 <p>Exportar para o cálculo de Benefícios Atrasados</p>
               </td>
               <td>
-                <button type="submit" (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='!erros' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='erros' class="btn btn-labeled btn-primary pull-right" disabled>
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
                 </button>
               </td>
             </tr>
-            <tr>
+            <tr *ngIf='!isUpdating'>
               <td>
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
               </td>
               <td>
-                <button type="submit" (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='!erros' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='erros' class="btn btn-labeled btn-primary pull-right" disabled>
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -132,11 +142,11 @@
                 <p>{{erro}}</p>
               </div>
               <sa-widget [colorbutton]="false" [editbutton]="false">
-                <div>
+                <div *ngIf="!isUpdating && !erros">
                   <div class="widget-body no-padding">
                     <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                     <sa-datatable [options]="tableOptions"
-                      paginationLength="true" *ngIf="!isUpdating" tableClass="table table-striped table-bordered table-hover" width="100%">
+                      paginationLength="true" *ngIf="!isUpdating && !erros" tableClass="table table-striped table-bordered table-hover" width="100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -155,7 +165,7 @@
                 </div>
               </sa-widget>
 
-              <table class="table table-bordered table-hover">
+              <table class="table table-bordered table-hover" *ngIf="!isUpdating && !erros">
                 <thead>
                   <tr>
                     <th>
