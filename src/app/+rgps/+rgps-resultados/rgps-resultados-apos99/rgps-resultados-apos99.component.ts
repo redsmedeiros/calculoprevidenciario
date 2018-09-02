@@ -91,26 +91,32 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
-        let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-        this.Moeda.getByDateRange(primeiraDataTabela, moment())
-          .then((moeda: Moeda[]) => {
-        	  this.moeda = moeda;
-        	  let dataReajustesAutomaticos = this.dataInicioBeneficio;
-        		this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-          		.then(reajustes => {
-            		this.reajustesAutomaticos = reajustes;
-        				this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
-        		  		.then(expectativas => {
-        		    		this.expectativasVida = expectativas;
-        		    		this.CarenciaProgressiva.getCarencias()
-              				.then(carencias => {
-                				this.carenciasProgressivas = carencias;
-        		    				this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-        		    				this.isUpdating = false; 
-        		    		});
-        				});
-        		});
-        });
+        if(this.listaValoresContribuidos.length == 0) {
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.erros.push("Nenhuma contribuição encontrada posterior a 07/1994 conforme " + "http://www.ieprev.com.br//legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999");
+          this.isUpdating = false;
+        }else{
+          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          this.Moeda.getByDateRange(primeiraDataTabela, moment())
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              let dataReajustesAutomaticos = this.dataInicioBeneficio;
+              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+                .then(reajustes => {
+                  this.reajustesAutomaticos = reajustes;
+                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                    .then(expectativas => {
+                      this.expectativasVida = expectativas;
+                      this.CarenciaProgressiva.getCarencias()
+                        .then(carencias => {
+                          this.carenciasProgressivas = carencias;
+                          this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                          this.isUpdating = false; 
+                      });
+                  });
+              });
+          });
+      }
     });
   }
 
@@ -120,12 +126,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let moedaDib = this.Moeda.getByDate(dib);
     let dataComparacao = (dib.clone()).startOf('month');
     let moedaComparacao = this.Moeda.getByDate(dataComparacao);
-
-    if(this.listaValoresContribuidos.length == 0) {
-      // Exibir MSG de erro e encerrar Cálculo.
-      errorArray.push("Nenhuma contribuição encontrada posterior a 07/1994 conforme " + "http://www.ieprev.com.br//legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999");
-      return;
-    }
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;

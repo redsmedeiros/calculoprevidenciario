@@ -112,27 +112,34 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
-      	let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-        this.Moeda.getByDateRange(primeiraDataTabela, moment())
-          .then((moeda: Moeda[]) => {
-        	  this.moeda = moeda;
-        	  let dataReajustesAutomaticos = this.dataInicioBeneficio;
-        		if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-        		  dataReajustesAutomaticos = this.dataDib98;
-        		}else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
-        		  dataReajustesAutomaticos = this.dataDib99;
-        		}
-      			this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-        		  .then(reajustes => {
-        		    this.reajustesAutomaticos = reajustes;
-        		    this.CarenciaProgressiva.getCarencias()
-        		      .then(carencias => {
-        		        this.carenciasProgressivas = carencias;
-        		        this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-        		    		this.isUpdating = false;
-        		    });
-        		});
-       	});    	
+        if(this.listaValoresContribuidos.length == 0) {
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.erros.push("Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme " + "<a href=\"http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29\" target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991</a>");
+          this.isUpdating = false;
+        }else{
+          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          this.Moeda.getByDateRange(primeiraDataTabela, moment())
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              let dataReajustesAutomaticos = this.dataInicioBeneficio;
+              if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+                dataReajustesAutomaticos = this.dataDib98;
+              }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+                dataReajustesAutomaticos = this.dataDib99;
+              }
+              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+                .then(reajustes => {
+                  this.reajustesAutomaticos = reajustes;
+                  this.CarenciaProgressiva.getCarencias()
+                    .then(carencias => {
+                      this.carenciasProgressivas = carencias;
+                      this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                      this.isUpdating = false;
+                  });
+              });
+          });
+        }
+      	    	
   	});
   }
 
@@ -159,12 +166,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let moedaComparacao = this.Moeda.getByDate(dataComparacao);
     let moedaDIB = this.Moeda.getByDate(dib);
-
-    if(this.listaValoresContribuidos.length == 0) {
-      // Exibir MSG de erro e encerrar Cálculo.
-      errorArray.push("Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme" + "http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29' target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991");
-      return;
-    }
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;

@@ -33,7 +33,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
 	public isUpdating = false;
 	public conclusoes = {};
   public tableData = [];
-  public erro;
+  public erro = '';
   public valorExportacao;
   public idadeSegurado;
   public contribuicaoPrimaria = {anos:0,meses:0,dias:0};
@@ -92,24 +92,30 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
-      	let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-        this.Moeda.getByDateRange(primeiraDataTabela, moment())
-          .then((moeda: Moeda[]) => {
-        	  this.moeda = moeda;
-        	  this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
-    					.then(indices => {
-    	  				this.inpsList = indices;
-    	  				this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
-    	    				.then(salario => {
-    	    		  		this.salarioMinimoMaximo = salario[0];
-    	    		  		this.erro = this.verificaErros();
-    	    		  		if(!this.erro){
-    	    		  			this.calculoAnterior88(this.conclusoes);
-    	    		  		}
-    	    		  		this.isUpdating = false;
-    	  				});
-    				});
-        });
+        if(this.listaValoresContribuidos.length == 0) {
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.erro = "Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href='http://www.ieprev.com.br/legislacao/4506/decreto-no-83.080,-de-24-1-1979' target='_blank'>Art. 37 da Decreto nº 83.080, de 24/01/1979</a>";
+          this.isUpdating = false;
+        }else{
+          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          this.Moeda.getByDateRange(primeiraDataTabela, moment())
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
+                .then(indices => {
+                  this.inpsList = indices;
+                  this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
+                    .then(salario => {
+                      this.salarioMinimoMaximo = salario[0];
+                      this.erro = this.verificaErros();
+                      if(!this.erro){
+                        this.calculoAnterior88(this.conclusoes);
+                      }
+                      this.isUpdating = false;
+                  });
+              });
+          });
+        }
   	});
   }
 
