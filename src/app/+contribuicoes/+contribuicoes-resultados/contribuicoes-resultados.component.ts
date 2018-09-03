@@ -23,7 +23,11 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public contribuicaoDe;
   public contribuicaoAte;
 
+  public contribuicaoDe2;
+  public contribuicaoAte2;
+
   public moeda: Moeda[];
+  public moeda2: Moeda[];
   public results = [];
   public isUpdating = false;
 
@@ -57,13 +61,25 @@ export class ContribuicoesResultadosComponent implements OnInit {
 
         this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
         this.contribuicaoAte = moment(this.calculoJurisprudencial.final_atraso);
+        this.contribuicaoDe2 = (this.calculoJurisprudencial.inicio_atraso2) ? moment(this.calculoJurisprudencial.inicio_atraso2) : '';
+        this.contribuicaoAte2 = (this.calculoJurisprudencial.final_atraso2) ? moment(this.calculoJurisprudencial.final_atraso2) : '';
+                
         this.Moeda.getByDateRange(this.contribuicaoDe, this.contribuicaoAte)
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
-            this.updateDatatable();
-            this.isUpdating = false;
-          })
-      })
+            if(this.contribuicaoDe2 && this.contribuicaoAte2){
+              this.Moeda.getByDateRange(this.contribuicaoDe2, this.contribuicaoAte2)
+                .then((moeda: Moeda[]) => {
+                  this.moeda2 = moeda;
+                  this.updateDatatable();
+                  this.isUpdating = false;
+              });
+            }else{
+              this.updateDatatable();
+              this.isUpdating = false;
+            }
+        });
+      });
     }   
   }
 
@@ -90,6 +106,19 @@ export class ContribuicoesResultadosComponent implements OnInit {
       }
       this.results.push(line)
     }
+    if(this.contribuicaoDe2 && this.contribuicaoAte2){
+      for(let moedaAtual of this.moeda2){
+        let line = {
+          data: this.formatDate(moedaAtual.data_moeda),
+          salario_minimo: this.getSalarioMinimo(moedaAtual),
+          aliquota: this.getAliquota(moedaAtual),
+          indice: moedaAtual.cam,
+          valor_corrigido: this.getValorCorrigido(moedaAtual)
+        }
+        this.results.push(line)
+      }
+    }
+    
     let lastLine = {
         data: '<b>Total</b>',
         salario_minimo: '',
