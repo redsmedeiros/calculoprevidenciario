@@ -3,6 +3,8 @@ import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
 import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
+import { CalculoRgps as CalculoModel } from '../../+rgps-calculos/CalculoRgps.model';
+import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../../+rgps-valores-contribuidos/ValorContribuido.service'
 import { RgpsResultadosComponent } from '../rgps-resultados.component'
 import { MoedaService } from '../../../services/Moeda.service';
@@ -58,7 +60,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
-    private Moeda: MoedaService,) { super(null, null, null, null);}
+    private Moeda: MoedaService,
+    private CalculoRgpsService:CalculoRgpsService,) { super(null, null, null, null);}
 
   ngOnInit() {
     this.boxId = this.generateBoxId();
@@ -327,6 +330,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     if (reajustesAdministrativos) {
        //TODO: salvarBeneficiosNoBD;
+      this.calculo.soma_contribuicao = somaContribuicoes;
+      this.calculo.valor_beneficio = rmi;
+      this.CalculoRgpsService.update(this.calculo)
     }
 
     let currency = this.loadCurrency(dib);

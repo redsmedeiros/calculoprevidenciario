@@ -71,6 +71,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   	private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private CarenciaProgressiva:CarenciaProgressivaService,
+    private CalculoRgpsService:CalculoRgpsService,
     private Moeda: MoedaService){
     super(null, null, null, null); }
 
@@ -634,7 +635,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             ...this.tableOptions,
             data: this.tableData,
         }
-        // TODO: Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+        //Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+        this.calculo.soma_contribuicao = somaContribuicoes;
+        this.calculo.valor_beneficio = rmi;
+        this.CalculoRgpsService.update(this.calculo);
   }
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {

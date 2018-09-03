@@ -60,6 +60,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     private Moeda: MoedaService,
     private IndiceInps: IndiceInpsService,
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,
+    private CalculoRgpsService:CalculoRgpsService,
     ) {super(null, null, null, null);}
 
   ngOnInit(){
@@ -296,7 +297,11 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     conclusoes.noventaecinco_porcento_valor_da_media = this.formatMoney((0.95*mediaTotal), currencyDataInicioBeneficio.acronimo);
 
     // TODO: Nesse momento Salvar o valor da RMI e da somaContribuições no BD do calculo.
-    return rmi;
+    this.calculo.soma_contribuicao = somaContribuicoes;
+    this.calculo.valor_beneficio = rmi;
+    this.CalculoRgpsService.update(this.calculo).then(model =>{
+      return rmi;
+    })
   }
 
   getInps(year){
