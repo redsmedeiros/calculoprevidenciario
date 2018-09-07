@@ -141,7 +141,15 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   initializeMatrix(valorescontribuidos) {
-    console.log(valorescontribuidos);
+    valorescontribuidos.sort((entry1, entry2) => {
+      if(moment(entry1.data) > moment(entry2.data)){
+        return 1;
+      }
+      if(moment(entry1.data) < moment(entry2.data)){
+        return -1;
+      }
+      return 0;
+    });
     if (valorescontribuidos.length != 0) {
       let matrizPrimarias = [];
       let matrizSecundarias = [];
