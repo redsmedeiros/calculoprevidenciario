@@ -73,6 +73,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public acordoJudicial;
 
+  public segurado:any ={};
+
   public inicioBuracoNegro = new Date('05/10/1988');
   public finalBuracoNegro = new Date('04/04/1991');
   public dataMinima = '01/01/1970';
@@ -165,6 +167,19 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.chkAjusteMaximo = true;
       }
 
+    }
+
+    let dataRgps = this.route.snapshot.queryParams['dib'] || 0;
+    let valorRgps = parseFloat(this.route.snapshot.queryParams['valor']) || 0;
+    if(dataRgps && valorRgps){
+      if(this.type == 'AJ'){
+        this.rmiValoresRecebidos = valorRgps;
+      }else{
+        this.rmiValoresDevidos = valorRgps;
+      }
+    this.dibValoresDevidos = dataRgps.split('-')[2] + '/' + 
+                             dataRgps.split('-')[1] + '/' +
+                             dataRgps.split('-')[0];
     }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
@@ -742,16 +757,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-    var date = new Date(inputDate);
-    date.setTime(date.getTime() + (5*60*60*1000))
-    if (!isNaN(date.getTime())) {
-        // Months use 0 index.
-        return  ('0' + (date.getDate())).slice(-2)+'/'+
-                ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                        date.getFullYear();
-    }
-    return '';
-	}
+      var date = new Date(inputDate);
+      date.setTime(date.getTime() + (5*60*60*1000))
+      if (!isNaN(date.getTime())) {
+          // Months use 0 index.
+          return  ('0' + (date.getDate())).slice(-2)+'/'+
+                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
+                         date.getFullYear();
+      }
+      return '';
+  }
 
   isEmptyInput(input) {
     if (input == '' || input === undefined || input === null)

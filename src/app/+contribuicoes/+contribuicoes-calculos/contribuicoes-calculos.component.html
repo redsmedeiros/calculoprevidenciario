@@ -72,7 +72,7 @@
           </div>
         </sa-widget>
       </article>
-
+    </div>
 
 
 
@@ -151,7 +151,7 @@
 
                       <div class="alert alert-info" role="alert">Cálculo de contribuições em atraso conforme entendimento jurisprudencial</div>
                       <div class="widget-body no-padding">
-                        <sa-datatable paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
+                        <sa-datatable  *ngIf="!isUpdating" paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
                           <thead>
                             <tr>
                               <th>Ações</th>
@@ -166,25 +166,9 @@
 
                     </tab>
                     <tab [active]="state.tabs.selectedTab == 'hr2'">
-                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº.
+                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados abaixo foram realizados com base na recente Lei Complementar nº.
                         128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.</div>
-                      <div class="widget-body no-padding">
-                        <sa-datatable paginationLength="false" pagination="false" tableClass="table table-striped table-bordered table-hover" width="100%">
-                          <thead>
-                            <tr>
-                              <th>Ações</th>
-                              <th>Número</th>
-                              <th>Data do Cálculo</th>
-                              <th>Contribuição Inicial</th>
-                              <th>Contribuição Final</th>
-                              <th>Contribuição Inicial</th>
-                              <th>Contribuição Final</th>
-                              <th>Salário de Contribuição</th>
-                              <th>Valor Final Corrigido</th>
-                            </tr>
-                          </thead>
-                        </sa-datatable>
-                      </div>
+                      <app-contribuicoes-complementar-index *ngIf="!isUpdating"  [datatableOptions]="complementarTableOptions"></app-contribuicoes-complementar-index>
                     </tab>
                   </tabset>
                 </div>
@@ -211,9 +195,9 @@
               <tbody>
                 <tr>
                   <td>
-                    <i class="fa fa-search"></i>
+                    <i class="fa fa-edit"></i>
                   </td>
-                  <td>Ver resultados</td>
+                  <td>Editar Cálculo</td>
                 </tr>
                 <tr>
                   <td>
@@ -221,11 +205,19 @@
                   </td>
                   <td>Remover</td>
                 </tr>
+                <tr>
+                  <td>
+                    <i class="fa fa-search"></i>
+                  </td>
+                  <td>Ver resultados</td>
+                </tr>
+                
               </tbody>
             </table>
           </div>
 
         </div>
+      </div>
 
     <!-- end row -->
 

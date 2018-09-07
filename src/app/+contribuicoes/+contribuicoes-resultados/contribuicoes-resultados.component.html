@@ -6,7 +6,7 @@
     <!-- row -->
     <div class="row">
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
 
 
         <!-- Widget ID (each widget will need unique ID)-->
@@ -18,11 +18,8 @@
             <h2>Resultados</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.cont_resultados.json',
-                  columns: [ {data: 'data'}, {data: 'salario_minimo'}, {data: 'aliquota'}, {data: 'correcao'}, {data: 'valor_corrigido'} ] }"
+            <div class="widget-body no-padding" >
+              <sa-datatable [options]="tableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
@@ -34,7 +31,6 @@
                   </tr>
                 </thead>
               </sa-datatable>
-
             </div>
             
           </div>
@@ -66,19 +62,19 @@
           <div class="form-actions">
             <div class="row">
               <div class="col-md-12">
-                <button type="submit" class="btn btn-labeled btn-default margin-bottom-10">
+                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-arrow-circle-left"></i>
                   </span> Voltar
                 </button>
 
-                <button type="submit" class="btn btn-labeled btn-primary margin-bottom-10">
+                <button (click)="listaSegurados()" type="submit" class="btn btn-labeled btn-primary margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-list"></i>
                   </span> Listagem de segurados 
                 </button>
 
-                <button type="submit" class="btn btn-labeled btn-success margin-bottom-10">
+                <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-success margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-print"></i>
                   </span> Imprimir

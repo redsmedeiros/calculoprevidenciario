@@ -19,14 +19,23 @@ import {CoreModule} from "./core/core.module";
 import {SmartadminLayoutModule} from "./shared/layout/layout.module";
 import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
+import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
+import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.service';
 import { CalculoAtrasadoService } from './+beneficios/+beneficios-calculos/CalculoAtrasado.service';
 import { StoreService } from './services/store.service';
 import { MoedaService } from './services/Moeda.service';
+import { MatrixService } from './+contribuicoes/MatrixService.service'
 import { IntervaloReajusteService } from './services/IntervaloReajuste.service';
 import { IndicesService } from './services/Indices.service';
+import { CarenciaProgressivaService } from './+rgps/+rgps-resultados/CarenciaProgressiva.service';
+import { ExpectativaVidaService } from './+rgps/+rgps-resultados/ExpectativaVida.service';
+import { ValorContribuidoService } from './+rgps/+rgps-valores-contribuidos/ValorContribuido.service.ts'
+import { IndiceInpsService } from './+rgps/+rgps-resultados/IndiceInps.service.ts'
+import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMinimoMaximo.service.ts'
+import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAutomatico.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
-
+import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -68,11 +77,21 @@ type StoreType = {
     StoreService,
     SeguradoService,
     ContribuicoesSeguradoService,
+    RgpsSeguradoService,
     ContribuicaoJurisprudencialService,
     CalculoAtrasadoService,
     MoedaService,
     IntervaloReajusteService,
-    IndicesService
+    IndicesService,
+    CalculoRgpsService,
+    ContribuicaoComplementarService,
+    MatrixService,
+    ValorContribuidoService,
+    IndiceInpsService,
+    SalarioMinimoMaximoService,
+    CarenciaProgressivaService,
+    ReajusteAutomaticoService,
+    ExpectativaVidaService,
   ]
 })
 export class AppModule {

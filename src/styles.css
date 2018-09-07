@@ -96,9 +96,12 @@ a[class*="action-"]:hover {
     transition: all .3s ease-in-out;
 }
 
-.home-box>img:hover~.home-desc,
-.home-box>.home-desc:hover,
-.home-box>.home-title:hover {
+.home-box:hover > .home-title {
+    opacity: 0;
+    transition: all .3s ease-in-out;
+}
+
+.home-box:hover > .home-desc{
     opacity: 1;
     bottom: 10px;
     transition: all .3s ease-in-out;

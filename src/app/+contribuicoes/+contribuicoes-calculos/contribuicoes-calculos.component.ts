@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../Segurado.service';
 import { ContribuicaoJurisprudencialService } from './ContribuicaoJurisprudencial.service';
+import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 
 @FadeInTop()
@@ -17,11 +18,13 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   public idSegurado = '';
 
-  public list = this.Jurisprudencial.list;
+  public jurisprudencialList = this.Jurisprudencial.list;
+
+  public complementarList = this.Complementar.list;
 
   public jurisprudencialTableOptions = {
     colReorder: true,
-    data: this.list,
+    data: this.jurisprudencialList,
     columns: [
       {data: 'actions'},
       {data: 'id'},
@@ -38,6 +41,43 @@ export class ContribuicoesCalculosComponent implements OnInit {
           return this.formatReceivedMonthAndYear(data);
        }},
     ] };
+
+  public complementarTableOptions = {
+    colReorder: false,
+    data: this.complementarList,
+    ordering: false,
+    columns: [
+      {data: 'actions'},
+      {data: 'id'},
+      {data: 'data_calculo',
+       render: (data) => {
+          return this.formatReceivedDateTime(data);
+       }},
+      {data: 'inicio_atraso',
+        render: (data) => {
+          return this.formatReceivedMonthAndYear(data);
+       }},
+      {data: 'final_atraso',
+       render: (data) => {
+          return this.formatReceivedMonthAndYear(data);
+       }},
+      {data: 'contribuicao_basica_inicial',
+       render: (data) => {
+          return this.formatReceivedMonthAndYear(data);
+       }},
+      {data: 'contribuicao_basica_final',
+       render: (data) => {
+          return this.formatReceivedMonthAndYear(data);
+       }},
+      {data: 'media_salarial',
+       render: (data) => {
+          return this.formatMoney(data);
+       }},
+      {data: 'contribuicao_calculada',
+       render: (data) => {
+          return this.formatMoney(data);
+       }},
+    ] };
   
 
 
@@ -51,7 +91,8 @@ export class ContribuicoesCalculosComponent implements OnInit {
   constructor(protected Segurado: SeguradoService,
               protected router: Router,
               private route: ActivatedRoute,
-              protected Jurisprudencial: ContribuicaoJurisprudencialService
+              protected Jurisprudencial: ContribuicaoJurisprudencialService,
+              protected Complementar: ContribuicaoComplementarService
           ) {
   }
 
@@ -68,8 +109,14 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
     this.Jurisprudencial.get()
         .then(() => {
+           this.jurisprudencialList = this.Jurisprudencial.list;
            this.updateDatatable();
-           this.list = this.Jurisprudencial.list;
+    })
+
+    this.Complementar.get()
+        .then(() => {
+           this.complementarList = this.Complementar.list;
+           this.updateDatatable();
            this.isUpdating = false;
     })
   }
@@ -84,10 +131,16 @@ export class ContribuicoesCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
-    this.list = this.list.filter(this.isSegurado, this);
+    this.jurisprudencialList = this.jurisprudencialList.filter(this.isSegurado, this);
     this.jurisprudencialTableOptions = {
       ...this.jurisprudencialTableOptions,
-      data: this.list,
+      data: this.jurisprudencialList,
+    }
+
+    this.complementarList = this.complementarList.filter(this.isSegurado, this);
+    this.complementarTableOptions = {
+      ...this.complementarTableOptions,
+      data: this.complementarList,
     }
   }
 
@@ -105,6 +158,9 @@ export class ContribuicoesCalculosComponent implements OnInit {
            this.formatReceivedDate(inputDateTime.substring(0, 10));
   }
 
+  formatMoney(data){
+    return 'R$'+(data.toFixed(2)).replace('.',',');
+  }
 
   getDocumentType(id_documento) {
     switch (id_documento) {

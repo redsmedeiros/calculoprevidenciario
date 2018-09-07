@@ -1,28 +1,39 @@
 <div id="content">
 
+  <!-- informações do segurado -->
   <article class="col-sm-12 col-md-12 col-lg-12">
-    <div class="well">
-      <h2 class="margin-top-0">
-        <span class="semi-bold">Instrução do cálculo</span>
-      </h2>
-      <ul class="list-unstyled">
-        <li>
-          <a href="#"> Veja aqui </a>Manual do Simulador de RMI do RGPS</li>
-        <li>
-          <a href="#"> Veja aqui </a>Videoaula de utilização do Simulador de RMI do RGPS</li>
-        <li>
-          <a href="#"> Veja aqui </a>Videoaula de utilização do Simulador de RMI do RGPS - Buraco Negro</li>
-        <li>
-          <a href="#"> Veja aqui </a>Orientações básicas sobre aposentadoria especial dos deficientes e fatores multiplicadores</li>
-        <li>
-          <a href="#"> Veja aqui </a>Manual para revisão de aposentadoria com retroação da DIB (data de Início do Benefício)</li>
-      </ul>
-
-      <p class="margin-lg-top">Calcula a Renda Mensal Inicial de benefícios com datas de início a partir de Janeiro de 1970, com aplicação da legislação
-        histórica vigente. Efetua inclusive a revisão do Buraco Negro, para os benefícios com datas de início no período
-        entre 05/10/1988 e 05/04/1991.</p>
-
-    </div>
+    <sa-widget [colorbutton]="false" [editbutton]="false">
+      <header>
+        <span class="widget-icon">
+          <i class="fa fa-edit"></i>
+        </span>
+        <h2>Dados do segurado</h2>
+      </header>
+      <!-- widget div-->
+      <div>
+        <!-- widget content -->
+        <div class="widget-body">
+          <ul class="list-unstyled">
+            <li><b>Nome:</b>  {{segurado.nome}} </li>
+            <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
+            <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+            <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+            <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+          </ul>
+          <div class="form-actions">
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                  <span class="btn-label">
+                    <i class="fa fa-pencil"></i>
+                  </span> Editar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sa-widget>
   </article>
 
 
@@ -33,98 +44,45 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-    
-              [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-    
-              -->
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+            <i class="fa fa-calculator"></i>
             </span>
-            <h2>Novo segurado</h2>
-
+            <h2>Informações para comparação</h2>
           </header>
-
-          <!-- widget div-->
           <div>
-
-            <!-- widget content -->
             <div class="widget-body">
-
               <form class="form-horizontal">
-
                 <fieldset>
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Nome</label>
-                    <div class="col-md-3">
-                      <input class="form-control" type="text">
-                    </div>
-                    <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
-                    <div class="col-md-3">
-
-                      <select class="form-control" id="select-1">
-                        <option>PIS</option>
-                        <option>PASEP</option>
-                        <option>CPF</option>
-                        <option>NIT</option>
-                        <option>RG</option>
+                    <label class="col-md-2 control-label" for="select-2">Alíquota:</label>
+                    <div class="col-md-8">
+                      <select [(ngModel)]="aliquota" (change)="changeAliquota()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                        <option value="11">11% (Simples/Nacional)</option>
+                        <option value="20">20%</option>
+                        <option value="31">31% (20% da Empresa e 11% do Segurado)</option>
                       </select>
-
                     </div>
                   </div>
-
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Número do documento</label>
-                    <div class="col-md-3">
-                      <input class="form-control" type="text">
-                    </div>
-                    <label class="col-md-2 control-label">Data de nascimento</label>
-                    <div class="col-md-3">
-                      <input class="form-control" type="text">
+                    <label class="col-md-2 control-label" for="select-1">Valor da contribuição em atraso:</label>
+                    <div class="col-md-8">
+                      <input [(ngModel)]="contribEmAtraso" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
                     </div>
                   </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Data de filiação</label>
-                    <div class="col-md-3">
-                      <input class="form-control" type="text">
-                    </div>
-                    <label class="col-md-2 control-label">Sexo</label>
-                    <div class="col-md-3">
-                      <label class="radio radio-inline">
-                        <input type="radio" name="sexo" value="Masculino"> Masculino </label>
-                      <label class="radio radio-inline">
-                        <input type="radio" name="sexo" value="Feminino"> Feminino </label>
-                    </div>
-                  </div>
-
-                  <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
                 </fieldset>
-
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-success">
+                      <button (click)="recalcular()" type="submit" class="btn btn-labeled btn-primary">
                         <span class="btn-label">
-                          <i class="fa fa-save"></i>
-                        </span> Salvar
+                          <i class="fa fa-calculator"></i>
+                        </span> Recalcular
                       </button>
                     </div>
                   </div>
                 </div>
-
               </form>
             </div>
           </div>
@@ -132,154 +90,94 @@
       </article>
 
 
-
-
-
-
-
-
-
-
-
-
-
-      <!-- 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-         
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-search"></i>
-            </span>
-            <h2>Buscar segurado</h2>
-
-          </header>
-
-          <div>
-
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Buscar por:</label>
-                    <div class="col-md-2">
-                      <select class="form-control" id="select-1">
-                        <option>Nome</option>
-                        <option>Documento</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
-                </fieldset>
-
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-danger pull-left margin-right-13">
-                        <span class="btn-label">
-                          <i class="fa fa-trash-o"></i>
-                        </span> Exclusão de Cálculos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-info pull-left">
-                        <span class="btn-label">
-                          <i class="fa fa-link"></i>
-                        </span> Acessar Cálculos Antigos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-search"></i>
-                        </span> Buscar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article> -->
-
-
-
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-
-
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Listagem de segurados</h2>
+            <h2>Cálculos a serem comparados</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.standard.json',
-                  columns: [ {data: 'actions'}, {data: 'nome'}, {data: 'tipo'}, {data: 'documento'}, {data: 'data_nascimento'}, {data: 'data_filiacao'}, {data: 'data_cadasctro'} ] }"
+            <div class="widget-body no-padding" *ngIf="!isUpdating">
+              <sa-datatable [options]="tableOptions" 
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
-                    <th>Ações</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Documento</th>
-                    <th>Data de nascimento</th>
-                    <th>Data de filiação</th>
-                    <th>Data de cadastro</th>
+                    <th>Nº do Cálculo</th>
+                    <th>Espécie</th>
+                    <th>DIB</th>
+                    <th>Benefício</th>
                   </tr>
                 </thead>
               </sa-datatable>
+              <table class="table table-bordered table-hover">
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Idade na última DIB:</span>
+                  </td>
+                  <td>
+                    {{idadeUltimaDib}} anos
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </sa-widget>
       </article>
 
-      <div class="row">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-times"></i></td>
-                <td>Remover</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-calculator"></i></td>
-                <td>Ver resultados</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <!-- Resultados hipotese seguro facultativa -->
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Hipótese em que o segurado contribuía como segurado facultativo ou contribuinte individual cuja alíquota é de {{aliquota}}%</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <table class="table table-bordered table-hover">
+                <tr *ngFor="let resultado of resultadosFacultativo">
+                  <td width="50%">
+                    <span class="pull-right font-bold">{{resultado.string}}</span>
+                  </td>
+                  <td>
+                    {{resultado.value}}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
 
+      <!-- Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário -->
+      <article class="col-sm-12 col-md-12 col-lg-12"> 
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <table class="table table-bordered table-hover">
+                <tr *ngFor="let resultado of resultadosDescontadoSlario">
+                  <td width="50%">
+                    <span class="pull-right font-bold">{{resultado.string}}</span>
+                  </td>
+                  <td>
+                    {{resultado.value}}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
 
     </div>
 

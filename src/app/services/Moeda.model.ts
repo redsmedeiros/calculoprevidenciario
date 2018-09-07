@@ -1,8 +1,9 @@
 import { Model } from '../contracts/Model';
+import { environment } from '../../environments/environment';
 
 export class Moeda extends Model {
 
-  static url = 'http://localhost:8000/moeda';
+  static url = environment.apiUrl + 'moeda';
   static form = {
     data_moeda: '',
     salario_minimo: '',

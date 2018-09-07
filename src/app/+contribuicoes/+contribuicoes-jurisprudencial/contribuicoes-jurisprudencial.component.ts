@@ -20,12 +20,13 @@ import swal from 'sweetalert';
 })
 export class ContribuicoesJurisprudencialComponent implements OnInit {
 
-  public dateMask = [/[0-1]/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-
   public contribuicaoDe;
   public contribuicaoAte;
+  public contribuicaoDe2;
+  public contribuicaoAte2;
 
   public moeda: Moeda[];
+  public moeda2: Moeda[];
 
   constructor(private Moeda: MoedaService,
               protected Jurisprudencial: ContribuicaoJurisprudencialService,
@@ -59,34 +60,90 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       let valorTotal = 0;
       for(let moeda of this.moeda) {
         let aliquota = moeda.salario_minimo * moeda.aliquota;
-        let valorCorrigido = moeda.salario_minimo * aliquota * moeda.cam;
+        let valorCorrigido =  aliquota * moeda.cam;
         valorTotal = valorTotal + valorCorrigido;
       }
 
-      let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
+
+      let inicio2 = (this.contribuicaoDe2) ? '01/' + this.contribuicaoDe2 : '';
+      let fim2 = (this.contribuicaoAte2) ? '01/' + this.contribuicaoAte2 : '';
+      if(inicio2 && fim2){
+        this.Moeda.getByDateRange(inicio2, fim2).then((moeda: Moeda[]) => {
+          this.moeda2 = moeda;
+          for(let moeda of this.moeda2) {
+            let aliquota = moeda.salario_minimo * moeda.aliquota;
+            let valorCorrigido =  aliquota * moeda.cam;
+            valorTotal = valorTotal + valorCorrigido;
+          }
+          let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
                                                          id_segurado: this.route.snapshot.params['id'],
                                                          inicio_atraso: '01/' + this.contribuicaoDe,
                                                          final_atraso: '01/' + this.contribuicaoAte,
+                                                         inicio_atraso2: inicio2,
+                                                         final_atraso2: fim2,
                                                          valor_acumulado: valorTotal,});
 
      if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
-        this.Jurisprudencial.update(novoCalculo).then((data) => {
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success');
-          window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+        this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+          this.Jurisprudencial.get().then(() =>{
+            swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
+              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+            });
+          });
         }).catch(error => {
           console.log(error);
         });
 
      } else {
 
-        this.Jurisprudencial.save(novoCalculo).then((data) => {
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success');
-          window.location.href= '/#/contribuicoes/contribuicoes-calculos/'+this.route.snapshot.params['id'];
+        this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+          this.Jurisprudencial.get().then(() =>{
+          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+
+              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+            });
+          });
         }).catch(error => {
           console.log(error);
         });
      }
+        });
+      }else{
+            let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
+                                                               id_segurado: this.route.snapshot.params['id'],
+                                                               inicio_atraso: '01/' + this.contribuicaoDe,
+                                                               final_atraso: '01/' + this.contribuicaoAte,
+                                                               inicio_atraso2: inicio2,
+                                                               final_atraso2: fim2,
+                                                               valor_acumulado: valorTotal,});
+      
+           if (this.route.snapshot.params['id_calculo'] !== undefined) {
+      
+              this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+                this.Jurisprudencial.get().then(() =>{
+                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
+                    window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+                  });
+                });
+              }).catch(error => {
+                console.log(error);
+              });
+      
+           } else {
+      
+              this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+                this.Jurisprudencial.get().then(() =>{
+                swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+      
+                    window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+                  });
+                });
+              }).catch(error => {
+                console.log(error);
+              });
+           }
+         }
 
     })
 
@@ -96,6 +153,8 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
     this.contribuicaoDe = this.formatReceivedDate(calculo.inicio_atraso);
     this.contribuicaoAte = this.formatReceivedDate(calculo.final_atraso);
+    this.contribuicaoDe2 = this.formatReceivedDate(calculo.inicio_atraso2);
+    this.contribuicaoAte2 = this.formatReceivedDate(calculo.final_atraso2);
   }
 
   validateInputs() {
@@ -134,10 +193,41 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       
     }
 
-    if (this.errors.empty() && !this.compareDates(this.contribuicaoDe, this.contribuicaoAte)) {
-      this.errors.add({"contribuicaoAte":["A contribuicao De deve ser de antes da contribuicao Ate."]});
+    if (!this.isEmptyInput(this.contribuicaoDe2)) {
+      if (!this.isValidDate(this.contribuicaoDe2)) {
+        this.errors.add({"contribuicaoDe2":["Insira uma data válida (mm/aaaa)."]});
+      }
+      if (!this.compareDates(this.contribuicaoDe2, '10/1996')) {
+        this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições até outubro/1996."]});
+      }
+      if (this.compareDates(this.contribuicaoDe2, '01/1970')) {
+        this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições a partir de janeiro/1970."]});
+      }
     }
 
+    if (!this.isEmptyInput(this.contribuicaoAte2)) {
+      if (!this.isValidDate(this.contribuicaoAte2)) {
+        this.errors.add({"contribuicaoAte2":["Insira uma data válida (mm/aaaa)."]});
+      }
+      if (!this.compareDates(this.contribuicaoAte2, '10/1996')) {
+        this.errors.add({"contribuicaoAte2":["O sistema calcula contribuições até outubro/1996."]});
+      }
+      if (this.compareDates(this.contribuicaoDe2, '01/1970')) {
+        this.errors.add({"contribuicaoAte2":["O sistema calcula contribuições a partir de janeiro/1970."]});
+      }
+    }
+
+    if (this.errors.empty() && !this.compareDates(this.contribuicaoDe, this.contribuicaoAte)) {
+      this.errors.add({"contribuicaoAte":["O final do periodo deve ser de antes do início."]});
+    }
+
+    if (this.errors.empty() && !this.compareDates(this.contribuicaoDe2, this.contribuicaoAte2)) {
+      this.errors.add({"contribuicaoAte2":["O final do periodo deve ser de antes do início."]});
+    }
+
+    if (this.errors.empty() && !this.compareDates(this.contribuicaoAte, this.contribuicaoDe2)) {
+      this.errors.add({"contribuicaoDe2":["O segundo periodo deve ser depois do primeiro."]});
+    }
   }
 
   isEmptyInput(input) {
@@ -194,6 +284,32 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       console.log(current);
 
     }
+  }
+
+  dateMask(rawValue){
+    if(rawValue == ''){
+      return [/[0-1]/, /\d/, '/', /[1-2]/, /[0|9]/, /\d/, /\d/];
+    }
+    let mask = [];
+    mask.push(/[0-1]/);
+
+    if (rawValue[0] == 1){
+      mask.push(/[0-2]/);
+    }else if(rawValue[0] == 0){
+      mask.push(/[1-9]/);
+    }
+
+    mask.push('/');
+    mask.push( /[1-2]/);
+    
+    if (rawValue[3] == 1){
+      mask.push(/[9]/);
+    }else if(rawValue[3] == 2){
+      mask.push(/[0]/);
+    }
+    mask.push(/\d/);
+    mask.push( /\d/);
+    return mask;
   }
 
 }

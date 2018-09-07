@@ -4,6 +4,11 @@ import {RouterModule, Routes} from "@angular/router";
 
 
 export const routes:Routes = [
+  {
+    path: 'rgps-segurados',
+    loadChildren: 'app/+rgps/+rgps-segurados/rgps-segurados.module#RgpsSeguradosModule',
+    data: {pageTitle: 'RGPS Segurados'}
+  },
   { 
     path: 'rgps-elements',
     loadChildren: 'app/+rgps/+rgps-elements/rgps-elements.module#RgpsElementsModule',
@@ -15,9 +20,9 @@ export const routes:Routes = [
     data: {pageTitle: 'RGPS Calculo'}
   },
   { 
-    path: 'rgps-matriz',
-    loadChildren: 'app/+rgps/+rgps-matriz/rgps-matriz.module#RgpsMatrizModule',
-    data: {pageTitle: 'RGPS Matriz'}
+    path: 'rgps-valores-contribuidos',
+    loadChildren: 'app/+rgps/+rgps-valores-contribuidos/rgps-valores-contribuidos.module#RgpsValoresContribuidosModule',
+    data: {pageTitle: 'RGPS Valores Contribuidos'}
   },
   { 
     path: 'rgps-resultados',

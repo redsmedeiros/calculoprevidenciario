@@ -17,7 +17,16 @@ import { Segurado } from '../+beneficios/+beneficios-segurados/Segurado.model';
 import { CalculoAtrasado } from '../+beneficios/+beneficios-calculos/CalculoAtrasado.model';
 import { SeguradoContribuicao } from '../+contribuicoes/SeguradoContribuicao.model';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
+import { ContribuicaoComplementar } from '../+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.model';
 import { Moeda } from './Moeda.model';
+import { SeguradoRgps } from '../+rgps/+rgps-segurados/SeguradoRgps.model';
+import { CalculoRgps } from '../+rgps/+rgps-calculos/CalculoRgps.model';
+import { ValorContribuido } from '../+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
+import { IndiceInps } from '../+rgps/+rgps-resultados/IndiceInps.model';
+import { SalarioMinimoMaximo } from '../+rgps/+rgps-resultados/SalarioMinimoMaximo.model';
+import { CarenciaProgressiva } from '../+rgps/+rgps-resultados/CarenciaProgressiva.model';
+import { ExpectativaVida } from '../+rgps/+rgps-resultados/ExpectativaVida.model';
+import { ReajusteAutomatico } from '../+rgps/+rgps-resultados/ReajusteAutomatico.model';
 import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
 
@@ -30,16 +39,34 @@ export class StoreService {
     contribuicaoJurisprudencial: ContribuicaoJurisprudencial[],
     moeda: Moeda[],
     calculoAtrasado: CalculoAtrasado[],
+    seguradosRgps: SeguradoRgps[],
+    calculoRgps: CalculoRgps[],
+    contribuicaoComplementar: ContribuicaoComplementar[],
     intervaloReajuste: IntervaloReajuste[],
-    indices: Indices[]
+    indices: Indices[],
+    valorContribuido: ValorContribuido[],
+    indiceInps: IndiceInps[],
+    salarioMinimoMaximo: SalarioMinimoMaximo[],
+    carenciaProgressiva: CarenciaProgressiva[],
+    reajusteAutomatico: ReajusteAutomatico[],
+    expectativaVida: ExpectativaVida[],
   } = {
     segurados: [],
     seguradosContribuicao: [],
     contribuicaoJurisprudencial: [],
     moeda: [],
     calculoAtrasado:[],
+    seguradosRgps: [],
+    calculoRgps: [],
+    contribuicaoComplementar: [],
     intervaloReajuste: [],
-    indices: []
+    indices: [],
+    valorContribuido: [],
+    indiceInps: [],
+    salarioMinimoMaximo: [],
+    carenciaProgressiva: [],
+    reajusteAutomatico: [],
+    expectativaVida: [],
   };
 
   public push(name: string, data) {

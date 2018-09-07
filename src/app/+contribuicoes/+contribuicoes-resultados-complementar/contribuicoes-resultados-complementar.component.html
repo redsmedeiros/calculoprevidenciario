@@ -1,0 +1,116 @@
+<div id="content">
+  <sa-widgets-grid>
+    <div class="row">
+    	<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-calculator"></i>
+            </span>
+            <h2>Dados do cálculo</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <ul class="list-unstyled">
+                <li><b>Número de contribuições consideradas:</b> {{calculoComplementar.numero_contribuicoes}} </li>
+                <li><b>Valor total das 80% maiores contribuições corrigidas:</b> {{formatMoney(calculoComplementar.total_contribuicao)}}</li>
+                <li><b>Valor médio final:</b> {{formatMoney(calculoComplementar.media_salarial)}}</li>
+                <li><b>Valor base para recolhimento de aliquota:</b> {{formatMoney(baseAliquota)}}</li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Detalhamento</h2>
+          </header>
+          <div>
+            <div class="col-sm-12" *ngIf="!hasDetalhe">
+              <div class="well">
+                <p><b>Detalhamento do cálculo disponível apenas no ato de geração do valor.</b></p>
+              </div>
+            </div>
+            <div class="widget-body no-padding" *ngIf="hasDetalhe" >
+              <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Mês de contribuição</th>
+                    <th>Contribuição Base</th>
+                    <th>Índices</th>
+                    <th>Valor corrigido</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+              <small style="padding-left: 10px " class="text-danger"><b>Valores em vermelho correspondem a contribuições descartadas.</b></small>
+            </div> 
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Resultados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding" >
+              <sa-datatable [options]="resultadosTableOptions"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Competência</th>
+                    <th>Valor contribuição</th>
+                    <th *ngIf="mostrarJuros">Juros</th>
+                    <th>Multa</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+            </div> 
+          </div>
+          <div class="col-sm-12">
+            <div class="well">
+              <p>
+                O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº. 128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91. Competências posteriores ao período já decadente devem ser calculados de acordo com o sistema disponibilizado no site da Previdência Social. <a href="http://www.dataprev.gov.br/sal/ciant2.htm">http://www.dataprev.gov.br/sal/ciant2.htm</a>.
+              </p>
+            </div>
+          </div>
+          <div class="form-actions">
+            <div class="row">
+              <div class="col-md-12">
+                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-arrow-circle-left"></i>
+                  </span> Voltar
+                </button>
+                <button (click)="listaSegurados()" type="submit" class="btn btn-labeled btn-primary margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-list"></i>
+                  </span> Listagem de segurados 
+                </button>
+                <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-success margin-bottom-10">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> Imprimir
+                </button>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+  </sa-widgets-grid>
+</div>

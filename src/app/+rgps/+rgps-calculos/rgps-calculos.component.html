@@ -38,31 +38,20 @@
             <div class="widget-body">
 
               <ul class="list-unstyled">
-                <li><b>Nome:</b>  FARLEY FABIANO DE SOUZA FERRAZ</li>
-                <li><b>CPF:</b>   811526716-34</li>
-                <li><b>Data de nascimento:</b>  01/06/1970 - 47 anos</li>
-                <li><b>Sexo:</b>  Masculino</li>
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
 
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" class="btn btn-labeled btn-default pull-left margin-right-13">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
                       <span class="btn-label">
-                        <i class="fa fa-arrow-left"></i>
-                      </span> Voltar
-                    </button>
-
-                    <button type="submit" class="btn btn-labeled btn-info pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-dollar"></i>
-                      </span> Valores de contribuição
-                    </button>
-
-                    <button type="submit" class="btn btn-labeled btn-primary">
-                      <span class="btn-label">
-                        <i class="fa fa-percent"></i>
-                      </span> Realizar calculos
+                        <i class="fa fa-pencil-square-o"></i>
+                      </span> Editar
                     </button>
                   </div>
                 </div>
@@ -73,174 +62,47 @@
         </sa-widget>
       </article>
 
-
-
-
-
-
-
-
-
-
-
-
-
-      
+      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-         
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-percent"></i>
+              <i class="fa fa-gear"></i>
             </span>
-            <h2>Adicionar informações para cálculos</h2>
-
+            <h2>Opções</h2>
           </header>
-
+          <!-- widget div-->
           <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
 
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Data do Início do Benefício:</label>
-                    <div class="col-md-8">
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Período do início do benefício:</label>
-                    <div class="col-md-8">
-                      <select class="form-control" id="select-1">
-                        <option>-- Selecione --</option>
-                        <option>Anterior a 05/10/1988</option>
-                        <option>Entre 05/10/1988 e 04/04/1991</option>
-                        <option>Entre 05/04/1991 e 15/12/1998</option>
-                        <option>Entre 16/12/1998 e 28/11/1999</option>
-                        <option>A partir de 29/11/1999</option>
-                        <option>Período PBC Completo</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Espécie:</label>
-                    <div class="col-md-8">
-                      <select class="form-control" id="select-1">
-                        <option>-- Selecione --</option>
-                        <option>Aposentadoria especial</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Grave</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option>Aposentadoria especial por Idade da Pessoa com Deficiência</option>
-                        <option>Aposentadoria por idade - Trabalhador Rural</option>
-                        <option>Aposentadoria por idade - Trabalhador Urbano</option>
-                        <option>Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
-                        <option>Aposentadoria por tempo de contribuição</option>
-                        <option>Aposentadoria por tempo de serviço de professor</option>
-                        <option>Auxílio Acidente - 30%</option>
-                        <option>Auxílio Acidente - 40%</option>
-                        <option>Auxílio Acidente - 60%</option>
-                        <option>Auxílio Acidente previdenciário - 50%</option>
-                        <option>Auxílio Doença </option>
-                        <option>LOAS</option>
-                        <option>LOAS - Benefício no valor de um salário mínimo</option>
-
-                      </select>
-                    </div>
-                  </div>
-
-                  <h3>Tempo de contribuição</h3>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Contribuição Primária:</label>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Anos" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Meses" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Dias" type="text">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Anos" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Meses" type="text">
-                    </div>
-                    <div class="col-md-2">
-                      <input class="form-control" placeholder="Dias" type="text">
-                    </div>
-                  </div>
-
-                </fieldset>
-
-
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-save"></i>
-                        </span> Inserir
-                      </button>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class='fa fa-money '></i>
+                    </span> Valores de contribuição
+                  </button>
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Realizar cálculos
+                  </button>
                 </div>
+              </div>
 
-              </form>
             </div>
           </div>
         </sa-widget>
       </article>
-
-
-
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-
-
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span> 
-            <h2>Cálculos Cadastrados</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding">
-              <sa-datatable [options]="{
-                    colReorder: true,
-                  ajax: 'assets/api/tables/datatables.rgps_calculos.json',
-                  columns: [ {data: 'acoes'}, {data: 'especie'}, {data: 'inicio_beneficio'}, {data: 'cont_primaria'}, {data: 'dib'}, {data: 'beneficio'}, {data: 'data_criacao'}, {data: 'selecionar'} ] }"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Ações</th>
-                    <th>Espécie</th>
-                    <th>Período para início de benefício</th>
-                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
-                    <th>DIB</th>
-                    <th>Benefício</th>
-                    <th>Data de Criação</th>
-                    <th>Selecionar</th> 
-                  </tr>
-                </thead>
-              </sa-datatable>
-            </div>
-          </div>
-        </sa-widget>
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
       </article>
 
       <div class="row">

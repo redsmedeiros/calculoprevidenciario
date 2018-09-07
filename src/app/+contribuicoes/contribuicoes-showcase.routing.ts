@@ -24,6 +24,16 @@ export const routes:Routes = [
     loadChildren: 'app/+contribuicoes/+contribuicoes-complementar/contribuicoes-complementar.module#ContribuicoesComplementarModule',
     data: {pageTitle: 'Novo Calculo'}
   },
+  { 
+    path: ':id/contribuicoes-resultados',
+    loadChildren: 'app/+contribuicoes/+contribuicoes-resultados/contribuicoes-resultados.module#ContribuicoesResultadosModule',
+    data: {pageTitle: 'Resultados'}
+  },
+  { 
+    path: ':id/contribuicoes-resultados-complementar',
+    loadChildren: 'app/+contribuicoes/+contribuicoes-resultados-complementar/contribuicoes-resultados-complementar.module#ContribuicoesResultadosComplementarModule',
+    data: {pageTitle: 'Resultados'}
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);
