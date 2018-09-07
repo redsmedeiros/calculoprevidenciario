@@ -328,16 +328,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       return {reajuste: 1.0, reajusteOs: 0.0};
 
     let reajuste = 0.0;
-    let index = this.getIndice(dataCorrente);
+    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
 
-    if(this.indices[index] == undefined){
+    if(indiceObjCorrente == undefined){
       reajuste = 0;
     }else{
-      indiceReajuste = this.indices[index].indice == null  ? 1 : this.indices[index].indice;
-      indiceReajusteOs = this.indices[index].indice_os == null ? 1 : this.indices[index].indice_os;
+      indiceReajuste = indiceObjCorrente.indice == null  ? 1 : indiceObjCorrente.indice;
+      indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
       reajuste = indiceReajuste;
     }
@@ -371,14 +371,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
       if(dataCorrente < moment('1991-09-01')){
-        if(this.indices[index] == undefined){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajusteOs;
         }
       }
-      else if(this.indices[index].indice){
-        if(this.indices[index] == undefined){
+      else if(indiceObjCorrente.indice){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajuste;
@@ -396,16 +396,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)
       return {reajuste: 1.0, reajusteOs: 0.0};
     let reajuste = 0.0;
-    let index = this.getIndice(dataCorrente);
+    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
-    if(this.indices[index] == undefined){
+    if(indiceObjCorrente == undefined){
       reajuste = 0;
     }else{
-      indiceReajuste = this.indices[index].indice == null  ? 1 : this.indices[index].indice;
-      indiceReajusteOs = this.indices[index].indice_os == null ? 1 : this.indices[index].indice_os;
+      indiceReajuste = indiceObjCorrente.indice == null  ? 1 : indiceObjCorrente.indice;
+      indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
       reajuste = indiceReajuste;
     }
@@ -448,14 +448,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
     if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
       if(dataCorrente < moment('1991-09-01')){
-        if(this.indices[index] == undefined){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajusteOs;
         }
       }
-      else if(this.indices[index].indice){
-        if(this.indices[index] == undefined){
+      else if(indiceObjCorrente.indice){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajuste;
