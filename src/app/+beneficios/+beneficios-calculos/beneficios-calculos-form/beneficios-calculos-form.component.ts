@@ -5,6 +5,7 @@ import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 import swal from 'sweetalert';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-beneficios-calculos-form',
@@ -75,8 +76,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public segurado:any ={};
 
-  public inicioBuracoNegro = new Date('05/10/1988');
-  public finalBuracoNegro = new Date('04/04/1991');
+  public inicioBuracoNegro = moment('1988-10-05');
+  public finalBuracoNegro = moment('1991-04-04');
   public dataMinima = '01/01/1970';
 
   private tipoCorrecaoMonetaria = 'ipca';
@@ -678,43 +679,43 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
 
   checkRecebidosBuracoNegro() {
-  	let dibDate = new Date(this.dibValoresRecebidos);
-	if (isNaN( dibDate.getTime())) {
-		this.recebidosBuracoNegro = false;
-		this.recebidosPosBuracoNegro = false;
-		return;
-	} 
-
-	if (this.checkDateBuracoNegro(dibDate)) {
-		this.recebidosBuracoNegro = true;
-		this.recebidosPosBuracoNegro = false;
-	} else if (this.checkDateAfterBuracoNegro(dibDate)) {
-		this.recebidosBuracoNegro = false;
-		this.recebidosPosBuracoNegro = true;
-	} else {
-		this.recebidosBuracoNegro = false;
-		this.recebidosPosBuracoNegro = false;
-	}
+    let dibDate = moment(this.dibValoresRecebidos, 'DD/MM/YYYY');
+	  if (isNaN(dibDate.valueOf())) {
+	  	this.recebidosBuracoNegro = false;
+	  	this.recebidosPosBuracoNegro = false;
+	  	return;
+	  } 
+  
+	  if (this.checkDateBuracoNegro(dibDate)) {
+	  	this.recebidosBuracoNegro = true;
+	  	this.recebidosPosBuracoNegro = false;
+	  } else if (this.checkDateAfterBuracoNegro(dibDate)) {
+	  	this.recebidosBuracoNegro = false;
+	  	this.recebidosPosBuracoNegro = true;
+	  } else {
+	  	this.recebidosBuracoNegro = false;
+	  	this.recebidosPosBuracoNegro = false;
+	  }
   }
 
   checkDevidosBuracoNegro() {
-  	let dibDate = new Date(this.dibValoresDevidos);
-	if (isNaN( dibDate.getTime())) {
-		this.devidosBuracoNegro = false;
-		this.devidosPosBuracoNegro = false;
-		return;
-	} 
-
-	if (this.checkDateBuracoNegro(dibDate)) {
-		this.devidosBuracoNegro = true;
-		this.devidosPosBuracoNegro = false;
-	} else if (this.checkDateAfterBuracoNegro(dibDate)) {
-		this.devidosBuracoNegro = false;
-		this.devidosPosBuracoNegro = true;
-	} else {
-		this.devidosBuracoNegro = false;
-		this.devidosPosBuracoNegro = false;
-	}
+  	let dibDate = moment(this.dibValoresDevidos, 'DD/MM/YYYY');
+	  if (isNaN(dibDate.valueOf())) {
+	  	this.devidosBuracoNegro = false;
+	  	this.devidosPosBuracoNegro = false;
+	  	return;
+	  } 
+  
+	  if (this.checkDateBuracoNegro(dibDate)) {
+	  	this.devidosBuracoNegro = true;
+	  	this.devidosPosBuracoNegro = false;
+	  } else if (this.checkDateAfterBuracoNegro(dibDate)) {
+	  	this.devidosBuracoNegro = false;
+	  	this.devidosPosBuracoNegro = true;
+	  } else {
+	  	this.devidosBuracoNegro = false;
+	  	this.devidosPosBuracoNegro = false;
+	  }
   }
 
   checkDateBuracoNegro(dibDate) {
