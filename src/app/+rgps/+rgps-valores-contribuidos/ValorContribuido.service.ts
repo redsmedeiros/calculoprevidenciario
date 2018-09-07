@@ -20,6 +20,7 @@ export class ValorContribuidoService extends ControllerService {
 						let list = this.list;
 						resolve(list);
 					}else{
+						dataInicio = moment(dataInicio);
 						let list = this.list.filter((valor: ValorContribuido) => {
 							let dataContribuicao = moment(valor.data);
 							return dataContribuicao < dataInicio && dataContribuicao >= dataLimite;
@@ -35,6 +36,7 @@ export class ValorContribuidoService extends ControllerService {
 					let list = this.list;
 					resolve(list);
 				} else {
+					dataInicio = moment(dataInicio);
 					let list = this.list.filter((valor: ValorContribuido) => {
 						let dataContribuicao = moment(valor.data);
 						return dataContribuicao < dataInicio && dataContribuicao >= dataLimite;
