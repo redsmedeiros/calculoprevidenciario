@@ -1003,9 +1003,13 @@ export class RgpsResultadosComponent implements OnInit {
       }
     }
 
-    let stringArr = idList.join(',');
-    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
-    + '/' + stringArr; 
+    if(idList.length === 0){
+      swal('Erro', 'Selecione pelo menos um cálculo', 'error');
+    }else{
+      let stringArr = idList.join(',');
+      window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
+      + '/' + stringArr; 
+    }
   }
 
   imprimirPagina(){
