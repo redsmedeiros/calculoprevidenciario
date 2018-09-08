@@ -64,11 +64,11 @@ export class ContribuicoesResultadosComponent implements OnInit {
         this.contribuicaoDe2 = (this.calculoJurisprudencial.inicio_atraso2) ? moment(this.calculoJurisprudencial.inicio_atraso2) : '';
         this.contribuicaoAte2 = (this.calculoJurisprudencial.final_atraso2) ? moment(this.calculoJurisprudencial.final_atraso2) : '';
                 
-        this.Moeda.getByDateRange(this.contribuicaoDe, this.contribuicaoAte)
+        this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe), moment(this.contribuicaoAte))
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
             if(this.contribuicaoDe2 && this.contribuicaoAte2){
-              this.Moeda.getByDateRange(this.contribuicaoDe2, this.contribuicaoAte2)
+              this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe2), moment(this.contribuicaoAte2))
                 .then((moeda: Moeda[]) => {
                   this.moeda2 = moeda;
                   this.updateDatatable();

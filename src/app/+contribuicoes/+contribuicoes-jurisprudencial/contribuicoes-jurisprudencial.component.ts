@@ -7,7 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import { ContribuicaoJurisprudencialService } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import swal from 'sweetalert';
-
+import * as moment from 'moment'
 
 
 @FadeInTop()
@@ -27,6 +27,9 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
   public moeda: Moeda[];
   public moeda2: Moeda[];
+
+  private dataMinima = moment('01-1970', 'MM-YYYY');
+  private dataMaxima = moment('10-1996', 'MM-YYYY');
 
   constructor(private Moeda: MoedaService,
               protected Jurisprudencial: ContribuicaoJurisprudencialService,
@@ -55,7 +58,8 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       return;
     }
 
-    this.Moeda.getByDateRange('01/' + this.contribuicaoDe, '01/' + this.contribuicaoAte).then((moeda: Moeda[]) => {
+    //this.Moeda.getByDateRange('01/' + this.contribuicaoDe, '01/' + this.contribuicaoAte).then((moeda: Moeda[]) => {
+    this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe,'MM/YYYY'), moment(this.contribuicaoAte, 'MM/YYYY')).then((moeda: Moeda[]) => {
       this.moeda = moeda;
       let valorTotal = 0;
       for(let moeda of this.moeda) {
@@ -68,85 +72,76 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       let inicio2 = (this.contribuicaoDe2) ? '01/' + this.contribuicaoDe2 : '';
       let fim2 = (this.contribuicaoAte2) ? '01/' + this.contribuicaoAte2 : '';
       if(inicio2 && fim2){
-        this.Moeda.getByDateRange(inicio2, fim2).then((moeda: Moeda[]) => {
+        console.log(inicio2, fim2)
+        this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe2,'DD/MM/YYYY'), moment(this.contribuicaoAte2, 'DD/MM/YYYY')).then((moeda: Moeda[]) => {
           this.moeda2 = moeda;
           for(let moeda of this.moeda2) {
             let aliquota = moeda.salario_minimo * moeda.aliquota;
             let valorCorrigido =  aliquota * moeda.cam;
             valorTotal = valorTotal + valorCorrigido;
           }
+
           let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
-                                                         id_segurado: this.route.snapshot.params['id'],
-                                                         inicio_atraso: '01/' + this.contribuicaoDe,
-                                                         final_atraso: '01/' + this.contribuicaoAte,
-                                                         inicio_atraso2: inicio2,
-                                                         final_atraso2: fim2,
-                                                         valor_acumulado: valorTotal,});
-
-     if (this.route.snapshot.params['id_calculo'] !== undefined) {
-
-        this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
-          this.Jurisprudencial.get().then(() =>{
-            swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
-              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+            id_segurado: this.route.snapshot.params['id'],
+            inicio_atraso: '01/' + this.contribuicaoDe,
+            final_atraso: '01/' + this.contribuicaoAte,
+            inicio_atraso2: inicio2,
+            final_atraso2: fim2,
+            valor_acumulado: valorTotal,});
+          if (this.route.snapshot.params['id_calculo'] !== undefined) {
+            this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+              this.Jurisprudencial.get().then(() =>{
+                swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
+                  window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+                });
+              });
+            }).catch(error => {
+              console.log(error);
             });
-          });
-        }).catch(error => {
-          console.log(error);
-        });
-
-     } else {
-
-        this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
-          this.Jurisprudencial.get().then(() =>{
-          swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
-
-              window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+          } else {
+            this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+              this.Jurisprudencial.get().then(() =>{
+                swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                  window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+                });
+              });
+            }).catch(error => {
+               console.log(error);
             });
-          });
-        }).catch(error => {
-          console.log(error);
-        });
-     }
+          }
         });
       }else{
-            let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
-                                                               id_segurado: this.route.snapshot.params['id'],
-                                                               inicio_atraso: '01/' + this.contribuicaoDe,
-                                                               final_atraso: '01/' + this.contribuicaoAte,
-                                                               inicio_atraso2: inicio2,
-                                                               final_atraso2: fim2,
-                                                               valor_acumulado: valorTotal,});
-      
-           if (this.route.snapshot.params['id_calculo'] !== undefined) {
-      
-              this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
-                this.Jurisprudencial.get().then(() =>{
-                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
-                    window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
-                  });
-                });
-              }).catch(error => {
-                console.log(error);
-              });
-      
-           } else {
-      
-              this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
-                this.Jurisprudencial.get().then(() =>{
-                swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
-      
-                    window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
-                  });
-                });
-              }).catch(error => {
-                console.log(error);
-              });
-           }
-         }
+        let novoCalculo = new ContribuicaoJurisprudencial({id: this.route.snapshot.params['id_calculo'],
+        id_segurado: this.route.snapshot.params['id'],
+        inicio_atraso: '01/' + this.contribuicaoDe,
+        final_atraso: '01/' + this.contribuicaoAte,
+        inicio_atraso2: inicio2,
+        final_atraso2: fim2,
+        valor_acumulado: valorTotal,});
 
-    })
-
+        if (this.route.snapshot.params['id_calculo'] !== undefined) {
+          this.Jurisprudencial.update(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+            this.Jurisprudencial.get().then(() =>{
+              swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() =>{
+                window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+              });
+            });
+          }).catch(error => {
+            console.log(error);
+          });
+        }else{
+          this.Jurisprudencial.save(novoCalculo).then((data:ContribuicaoJurisprudencial) => {
+            this.Jurisprudencial.get().then(() =>{
+              swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                window.location.href='/#/contribuicoes/'+data.id_segurado+'/contribuicoes-resultados/'+data.id;
+              });
+            });
+          }).catch(error => {
+            console.log(error);
+          });
+        }
+      }
+    });
   }
 
   loadCalculo(calculo) {
@@ -160,74 +155,90 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
   validateInputs() {
 
     this.errors.clear();
-
+    let temSegundoPeriodo = false;
     if (this.isEmptyInput(this.contribuicaoDe)) {
       this.errors.add({"contribuicaoDe":["O campo Contribuição De é obrigatório."]});
     } else if (!this.isValidDate(this.contribuicaoDe)) {
       this.errors.add({"contribuicaoDe":["Insira uma data válida (mm/aaaa)."]});
+    }else{
+      let inicioDate = moment(this.contribuicaoDe, 'MM/YYYY');
+      if (inicioDate > this.dataMaxima) {
+        this.errors.add({"contribuicaoDe":["O sistema calcula contribuições até outubro/1996."]});
+      }
+      if (inicioDate < this.dataMinima) {
+        this.errors.add({"contribuicaoDe":["O sistema calcula contribuições a partir de janeiro/1970."]});
+      }
     }
 
     if (this.isEmptyInput(this.contribuicaoAte)) {
       this.errors.add({"contribuicaoAte":["O campo Contribuição Até é obrigatório."]});
     } else if (!this.isValidDate(this.contribuicaoAte)) {
       this.errors.add({"contribuicaoAte":["Insira uma data válida (mm/aaaa)."]});
-    }
-
-    if (this.isValidDate(this.contribuicaoDe) && this.isValidDate(this.contribuicaoAte)) {
-
-      if (!this.compareDates(this.contribuicaoDe, '10/1996')) {
-        this.errors.add({"contribuicaoDe":["O sistema calcula contribuições até outubro/1996."]});
-      }
-
-      if (!this.compareDates(this.contribuicaoAte, '10/1996')) {
+    }else{
+      let finalDate = moment(this.contribuicaoAte, 'MM/YYYY'); 
+      if (finalDate > this.dataMaxima) {
         this.errors.add({"contribuicaoAte":["O sistema calcula contribuições até outubro/1996."]});
       }
-
-      if (this.compareDates(this.contribuicaoDe, '01/1970')) {
-        this.errors.add({"contribuicaoDe":["O sistema calcula contribuições a partir de janeiro/1970."]});
-      }
-
-      if (this.compareDates(this.contribuicaoAte, '01/1970')) {
+      if (finalDate < this.dataMinima) {
         this.errors.add({"contribuicaoAte":["O sistema calcula contribuicoes a partir de janeiro/1970."]});
       }
-      
     }
 
-    if (!this.isEmptyInput(this.contribuicaoDe2)) {
-      if (!this.isValidDate(this.contribuicaoDe2)) {
+    if (!this.isEmptyInput(this.contribuicaoDe2) || !this.isEmptyInput(this.contribuicaoAte2)) {
+      if (this.isEmptyInput(this.contribuicaoDe2)) {
+        this.errors.add({"contribuicaoDe2":["Preencha ambos ou nenhum campo do segundo período"]});
+      } else if (!this.isValidDate(this.contribuicaoDe2)) {
         this.errors.add({"contribuicaoDe2":["Insira uma data válida (mm/aaaa)."]});
+      }else{
+        let inicioDate = moment(this.contribuicaoDe2, 'MM/YYYY');
+        if (inicioDate > this.dataMaxima) {
+          this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições até outubro/1996."]});
+        }
+        if (inicioDate < this.dataMinima) {
+          this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições a partir de janeiro/1970."]});
+        }
       }
-      if (!this.compareDates(this.contribuicaoDe2, '10/1996')) {
-        this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições até outubro/1996."]});
-      }
-      if (this.compareDates(this.contribuicaoDe2, '01/1970')) {
-        this.errors.add({"contribuicaoDe2":["O sistema calcula contribuições a partir de janeiro/1970."]});
-      }
-    }
 
-    if (!this.isEmptyInput(this.contribuicaoAte2)) {
-      if (!this.isValidDate(this.contribuicaoAte2)) {
+      if (this.isEmptyInput(this.contribuicaoAte2)) {
+        this.errors.add({"contribuicaoAte2":["Preencha ambos ou nenhum campo do segundo período"]});
+      }else if(!this.isValidDate(this.contribuicaoAte2)) {
         this.errors.add({"contribuicaoAte2":["Insira uma data válida (mm/aaaa)."]});
+      }else{
+        let finalDate = moment(this.contribuicaoAte2, 'MM/YYYY'); 
+        if (finalDate > this.dataMaxima) {
+          this.errors.add({"contribuicaoAte2":["O sistema calcula contribuições até outubro/1996."]});
+        }
+        if (finalDate < this.dataMinima) {
+          this.errors.add({"contribuicaoAte2":["O sistema calcula contribuicoes a partir de janeiro/1970."]});
+        }
       }
-      if (!this.compareDates(this.contribuicaoAte2, '10/1996')) {
-        this.errors.add({"contribuicaoAte2":["O sistema calcula contribuições até outubro/1996."]});
-      }
-      if (this.compareDates(this.contribuicaoDe2, '01/1970')) {
-        this.errors.add({"contribuicaoAte2":["O sistema calcula contribuições a partir de janeiro/1970."]});
+      if (this.errors.empty()) {
+        temSegundoPeriodo = true;
       }
     }
 
-    if (this.errors.empty() && !this.compareDates(this.contribuicaoDe, this.contribuicaoAte)) {
-      this.errors.add({"contribuicaoAte":["O final do periodo deve ser de antes do início."]});
+    if (this.errors.empty()) {
+      let inicioPeriodo1 = moment(this.contribuicaoDe, 'MM/YYYY');
+      let finalPeriodo1 = moment(this.contribuicaoAte, 'MM/YYYY');
+      if(inicioPeriodo1 >= finalPeriodo1){
+        this.errors.add({"contribuicaoAte":["O final do periodo deve ser de antes do início."]});
+      }
+
+      if(temSegundoPeriodo){
+        let inicioPeriodo2 = moment(this.contribuicaoDe2, 'MM/YYYY');
+        let finalPeriodo2 = moment(this.contribuicaoAte2, 'MM/YYYY');
+        if(inicioPeriodo2 >= finalPeriodo2){
+          this.errors.add({"contribuicaoAte2":["O final do periodo deve ser de antes do início."]});
+        }
+        if(inicioPeriodo2 <= finalPeriodo1 || inicioPeriodo2 <= inicioPeriodo1){
+          this.errors.add({"contribuicaoDe2":["O segundo periodo deve ser posterior ao primeiro."]});
+        }
+        if(finalPeriodo2 <= finalPeriodo1 || finalPeriodo2 <= inicioPeriodo1){
+          this.errors.add({"contribuicaoAte2":["O segundo periodo deve ser posterior ao primeiro."]});
+        }
+      }
     }
 
-    if (this.errors.empty() && !this.compareDates(this.contribuicaoDe2, this.contribuicaoAte2)) {
-      this.errors.add({"contribuicaoAte2":["O final do periodo deve ser de antes do início."]});
-    }
-
-    if (this.errors.empty() && !this.compareDates(this.contribuicaoAte, this.contribuicaoDe2)) {
-      this.errors.add({"contribuicaoDe2":["O segundo periodo deve ser depois do primeiro."]});
-    }
   }
 
   isEmptyInput(input) {
@@ -242,17 +253,6 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
     var bits = date.split('/');
     var d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
-  }
-
-  // return true if date1 is before or igual date2
-  compareDates(date1, date2) {
-    console.log('comparting:', date1, date2);
-    var bits1 = date1.split('/');
-    var d1 = new Date(bits1[1], bits1[0] - 1, 1);
-    var bits2 = date2.split('/');
-    var d2 = new Date(bits2[1], bits2[0] - 1, 1);
-    console.log('result: ', d1 <= d2);
-    return d1 <= d2;
   }
 
   formatReceivedDate(inputDate) {

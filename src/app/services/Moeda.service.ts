@@ -38,6 +38,32 @@ export class MoedaService extends ControllerService {
     });
   }
 
+  public getByDateRangeMoment(from, to) {
+  	console.log(from.format('DD-MM-YYYY'), to.format('DD-MM-YYYY'))
+    return new Promise((resolve, reject) => {
+	  	if (this.list.length == 0) {
+	  		this.get().then(() => {
+			  	let list = this.list.filter((moeda) => {
+			  		let moedaDate = moment(moeda.data_moeda);
+			  		return from <= moedaDate && moedaDate <= to;
+			  	});
+			  	this.firstMonth = moment(this.list[0].data_moeda);
+			  	resolve(list);
+	  		}).catch(error => {
+	          console.error(error);
+	          reject(error);	  			
+	  		})
+	  	} else {
+			let list =  this.list.filter((moeda) => {
+		  		let moedaDate = moment(moeda.data_moeda);
+		  		return from <= moedaDate && moedaDate <= to;
+	  		})
+	  		this.firstMonth = moment(this.list[0].data_moeda);
+	  		resolve(list);
+  		}
+    });
+  }
+
   public getByDate(date){
   	date = date.startOf('month');
   	let difference = date.diff(this.firstMonth, 'months', true);
