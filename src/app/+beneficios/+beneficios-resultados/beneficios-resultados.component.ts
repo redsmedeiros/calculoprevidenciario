@@ -216,6 +216,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     
     for (let dataCorrenteString of competencias) {
       let dataCorrente = moment(dataCorrenteString);
+      if(this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido){
+        break;
+      }
       let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
 
       let siglaDataCorrente = moedaDataCorrente.sigla;
@@ -484,11 +487,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     let siglaDataCorrente = moedaDataCorrente.sigla;
     let irtDevidoSimplificado89 = 1;
 
-    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido){
-      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
-      return 0.0;
-    }
-
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio_esperado);
@@ -580,12 +578,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
 
-    if(dataCorrente.isSame(this.dataFinal, 'month')){
-      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
-      beneficioDevidoFinal *= proporcionalidade;
-      this.proporcionalidadeUltimaLinha = true;
-    }
-
     if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
       if(parseFloat(beneficioDevidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
         beneficioDevidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
@@ -598,6 +590,16 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
         this.ultimoBeneficioDevidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
       }
+    }
+
+    if(dataCorrente.isSame(this.dataFinal, 'month')){
+      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      beneficioDevidoFinal *= proporcionalidade;
+      this.proporcionalidadeUltimaLinha = true;
+    }else if(this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')){
+      let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      beneficioDevidoFinal *= proporcionalidade;
+      this.proporcionalidadeUltimaLinha = true;
     }
 
     let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
@@ -753,6 +755,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
+    }else if(this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')){
+      let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
+      beneficioRecebidoFinal *= proporcionalidade;
+      //this.proporcionalidadeUltimaLinha = true;
     }
 
     // if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
@@ -1483,9 +1489,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
 
-    if(this.calculo.data_prevista_cessacao != '')
+    if(this.calculo.data_prevista_cessacao != '0000-00-00')
       this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
-    if(this.calculo.data_cessacao != '')
+    if(this.calculo.data_cessacao != '0000-00-00')
       this.dataCessacaoRecebido = moment(this.calculo.data_cessacao);
 
     this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
