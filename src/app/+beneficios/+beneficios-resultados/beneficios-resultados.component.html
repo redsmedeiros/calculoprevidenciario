@@ -259,23 +259,21 @@
               </ul>
               <ul class="list-unstyled" *ngIf="isTetos">
                   <li>
-                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendasTetos)}}</li>
+                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendas)}}</li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRendaTetos)}}</li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaTetos)}}</li>
+                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
                 <li>
-                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(honorariosTetos)}}</li>
+                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(somaHonorarios)}}</li>
                 <li>
                   <b>Subtotal:</b> {{formatMoney(subtotalTetos)}}</li>
                 <li>
-                  <b>Soma dos honorários a receber:</b> {{formatMoney(honorariosTetos)}}</li>
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(valorAcordo)}}</li>
                 <li>
-                  <b>Desconto do acordo judicial:</b> {{formatMoney(acordoJudicialTetos)}}</li>
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</li>
                 <li>
-                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(devidosComDescontoTetos)}}</li>
-                <li>
-                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalTetos)}}</li>
+                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalSegurado)}}</li>
               </ul>
             </div>
           </div>
