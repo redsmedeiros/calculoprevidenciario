@@ -234,18 +234,18 @@
             <div class="widget-body">
 
               <ul class="list-unstyled" *ngIf="!isTetos">
-                <li>
+                <li *ngIf="somaHonorarios != 0">
                   <b>Soma dos honorários a receber:</b> {{formatMoney(somaHonorarios)}}</li>
-                <li>
+                <li *ngIf="descontoAcordo != 0">
                   <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
-                <li>
+                <li *ngIf="valorAcordo != 0">
                   <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(valorAcordo)}}</li>
                 <li>
                   <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
                   <b>Soma Total da Diferença Mensal:</b> {{formatMoney(somaDiferencaMensal)}}</li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaCorrecaoMonetaria)}}</li>
+                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</li>
                 <li>
                   <b>Soma Total da Diferença Corrigida:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
                 <li>
@@ -282,15 +282,10 @@
         </sa-widget>
       </article>
 
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
-            <div class="alert alert-warning margin-top-10" role="alert">
-              <p>Sistem em desenvolvimento. Os resultados do cálculo podem apresentar divergências.</p>
-            </div>
             <span class="widget-icon">
               <i class="fa fa-eye"></i>
             </span>
@@ -300,6 +295,9 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
+              <div class="alert alert-warning margin-top-10" role="alert">
+              <p>Sistem em desenvolvimento. Os resultados do cálculo podem apresentar divergências.</p>
+              </div>
               <sa-datatable [options]="resultadosDatatableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
                 <thead *ngIf="!isTetos">
@@ -321,7 +319,7 @@
                     <!-- <th>Valor dos Juros Tetos</th> -->
                     <th>Diferença Corrigida + Juros</th>
                     <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
-                    <th>Honorários</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários</th>
                   </tr>
                 </thead>
                 <thead *ngIf="isTetos">
@@ -343,7 +341,7 @@
                     <th>Valor dos Juros Tetos</th>
                     <!-- <th>Diferença Corrigida + Juros</th> -->
                     <th>Diferença Corrigida + Juros Tetos</th>
-                    <th>Honorários Tetos</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários Tetos</th>
                   </tr>
                 </thead>
               </sa-datatable>
