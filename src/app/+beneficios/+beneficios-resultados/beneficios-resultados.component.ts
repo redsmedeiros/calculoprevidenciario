@@ -196,7 +196,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     
     for (let dataCorrenteString of competencias) {
       let dataCorrente = moment(dataCorrenteString);
-      let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+      if(this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido){
+        break;
+      }
+      let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+
 
       let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
 
