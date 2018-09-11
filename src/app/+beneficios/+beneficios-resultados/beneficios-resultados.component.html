@@ -146,7 +146,7 @@
                 <li>
                   <b>DIB anterior de valores recebidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
-                  <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
+                  <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_cessacao)}}</li>
                 <li>
                   <b>Nova RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
               </ul>
@@ -234,18 +234,18 @@
             <div class="widget-body">
 
               <ul class="list-unstyled" *ngIf="!isTetos">
-                <li>
+                <li *ngIf="somaHonorarios != 0">
                   <b>Soma dos honorários a receber:</b> {{formatMoney(somaHonorarios)}}</li>
-                <li>
+                <li *ngIf="descontoAcordo != 0">
                   <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
-                <li>
+                <li *ngIf="valorAcordo != 0">
                   <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(valorAcordo)}}</li>
                 <li>
                   <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
                   <b>Soma Total da Diferença Mensal:</b> {{formatMoney(somaDiferencaMensal)}}</li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaCorrecaoMonetaria)}}</li>
+                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</li>
                 <li>
                   <b>Soma Total da Diferença Corrigida:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
                 <li>
@@ -259,38 +259,31 @@
               </ul>
               <ul class="list-unstyled" *ngIf="isTetos">
                   <li>
-                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendasTetos)}}</li>
+                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendas)}}</li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRendaTetos)}}</li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaTetos)}}</li>
+                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
+                <li *ngIf="somaHonorarios != 0">
+                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(somaHonorarios)}}</li>
                 <li>
-                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(honorariosTetos)}}</li>
+                  <b>Subtotal:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
+                <li *ngIf="descontoAcordo != 0">
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
                 <li>
-                  <b>Subtotal:</b> {{formatMoney(subtotalTetos)}}</li>
+                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</li>
                 <li>
-                  <b>Soma dos honorários a receber:</b> {{formatMoney(honorariosTetos)}}</li>
-                <li>
-                  <b>Desconto do acordo judicial:</b> {{formatMoney(acordoJudicialTetos)}}</li>
-                <li>
-                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(devidosComDescontoTetos)}}</li>
-                <li>
-                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalTetos)}}</li>
+                  <b>Soma total Tetos:</b> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
 
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
-            <div class="alert alert-warning margin-top-10" role="alert">
-              <p>Sistem em desenvolvimento. Os resultados do cálculo podem apresentar divergências.</p>
-            </div>
             <span class="widget-icon">
               <i class="fa fa-eye"></i>
             </span>
@@ -321,7 +314,7 @@
                     <!-- <th>Valor dos Juros Tetos</th> -->
                     <th>Diferença Corrigida + Juros</th>
                     <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
-                    <th>Honorários</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários</th>
                   </tr>
                 </thead>
                 <thead *ngIf="isTetos">
@@ -343,7 +336,7 @@
                     <th>Valor dos Juros Tetos</th>
                     <!-- <th>Diferença Corrigida + Juros</th> -->
                     <th>Diferença Corrigida + Juros Tetos</th>
-                    <th>Honorários Tetos</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários Tetos</th>
                   </tr>
                 </thead>
               </sa-datatable>

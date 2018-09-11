@@ -13,6 +13,7 @@ import { IntervaloReajuste } from '../../services/IntervaloReajuste.model';
 import { IndicesService } from '../../services/Indices.service';
 import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
+//import * as $ from 'jquery';
 
 @FadeInTop()
 @Component({
@@ -55,7 +56,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       {data: 'honorarios'}
     ]
   }
-
+  private aplicaProporcionalDevidos = false;
+  private aplicaProporcionalRecebidos = false;
   //Datas Importantes
   private dataSimplificada = moment('1991-12-01');
   private dataInicioBuracoNegro = moment('1988-10-05');
@@ -72,11 +74,21 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataPrimeiroTetoJudicial = moment('1998-12-01');
   private dataSegundoTetoJudicial = moment('2003-12-01');
   private dataCorteCruzado = moment('1988-01-01');
-  private dataCorteCruzadoNovo = moment('1988-12-31');
+  private dataCorteCruzadoNovo = moment('1989-01-01');
   private dataCorteCruzeiroReal = moment('1993-08-01');
+
+  private proporcionalidadeUltimaLinha = false;
 
   private dataInicioRecebidos;
   private dataInicioDevidos;
+  private primeiraDataArrayMoeda;
+  private beneficioDevidoAposRevisao;
+  private beneficioRecebidoAposRevisao;
+
+  private beneficioDevidoAposRevisaoTetos;
+  private beneficioRecebidoAposRevisaoTetos;
+  private beneficioDevidoTetosSemLimite;
+  private beneficioDevidoTetosSemLimiteSalvo;
 
   //Variaveis para aplicação do reajuste
   private aplicarReajusteUltimoDevido = false;
@@ -87,7 +99,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   private beneficioRecebidoAnterior = 0.0;
 
   private beneficioDevidoSalvo = undefined;
+  private beneficioDevidoOs = 0;
 
+  private beneficioRecebidoSalvo = undefined;
+  private beneficioRecebidoOs = 0;
   //Variaveis para aplicação do reajuste tetos
   private aplicarReajusteUltimoDevidoTeto = false;
   private ultimoSalarioMinimoDevidoTeto = 0.0;
@@ -140,6 +155,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaTotalTetos = 0.0;
 
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
+  private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
   private ultimaDiferencaMensal = 0.0;
   //Variaveis para tabela de conclusões tetos
@@ -170,10 +186,10 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.isTetos = true;
         }
 
-        this.Moeda.getByDateRange(this.dataInicioCalculo.clone().subtract(1, 'months'), moment())
+        this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
-            this.Indice.getByDateRange(this.dataInicioCalculo.format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
+            this.Indice.getByDateRange(this.primeiraDataArrayMoeda.format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
               .then(indices => {
                 this.indices = indices;
                 this.jurosCorrente = this.calcularJurosCorrente();
@@ -189,20 +205,43 @@ export class BeneficiosResultadosComponent implements OnInit {
   generateTabelaResultados(){
     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
     let tableData = [];
-
+    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
     //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
-    let func_beneficioDevido = (this.isTetos) ? this.getBeneficioDevidoTetos : this.getBeneficioDevido;
-    let func_beneficioRecebido = (this.isTetos) ? this.getBeneficioRecebidoTetos :  this.getBeneficioRecebido;
+    let func_beneficioDevido = this.getBeneficioDevido;
+    let func_beneficioRecebido = this.getBeneficioRecebido;
+    let abonoProporcionalDevidos =  0;
+    let abonoProporcionalRecebidos =  0;
+
+    if(this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00'){
+      let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+      if(previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')){
+        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
+      }else{
+        abonoProporcionalDevidos = 1;
+      }
+    }else{
+      abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
+    }
     
+    if(this.calculo.data_anterior_pedido_beneficio != '0000-00-00'){
+      let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
+      if(previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')){
+        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
+      }else{
+        abonoProporcionalRecebidos = 1;
+      }
+    }else{
+      abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
+    }
+
     for (let dataCorrenteString of competencias) {
       let dataCorrente = moment(dataCorrenteString);
       if(this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido){
         break;
       }
       let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-
-
-      let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
+      let siglaDataCorrente = moedaDataCorrente.sigla;
 
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
       
@@ -278,16 +317,40 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
 
       this.somaJuros += valorJuros;
-      this.ultimaDiferencaMensal = diferencaMensal;
+      if(!this.proporcionalidadeUltimaLinha){
+        this.ultimaDiferencaMensal = diferencaMensal;
+      }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
       if(dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11){
         //Adicionar linha de abono
+
+        let beneficioRecebidoAbono;
+        if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
+          beneficioRecebidoAbono = this.formatMoney(0.0);
+        }else{
+          beneficioRecebidoAbono = this.formatMoney(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
+        }
+
         line = {
               ...line,
               competencia: 'abono - ' + stringCompetencia,
+              beneficio_devido: this.formatMoney(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos),
+              beneficio_recebido: beneficioRecebidoAbono,
         }
+
         tableData.push(line);
+        
+        if(this.aplicaProporcionalDevidos){
+          this.aplicaProporcionalDevidos = false;
+          abonoProporcionalDevidos = 1;
+        }
+
+        if(this.aplicaProporcionalRecebidos){
+          this.aplicaProporcionalRecebidos = false;
+          abonoProporcionalRecebidos = 1;
+        }
+
         if(!isPrescricao){
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
           this.somaDiferencaMensal += diferencaMensal;
@@ -300,10 +363,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+    this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade;
     this.somaVincendas = this.calcularVincendas();
-    this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
     this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
-    this.calcularAcordoJudicial();
+    this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
+    if(this.calculo.acordo_pedido != 0){
+      this.calcularAcordoJudicial();
+    }
 
     return tableData;
   }
@@ -314,16 +380,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       return {reajuste: 1.0, reajusteOs: 0.0};
 
     let reajuste = 0.0;
-    let index = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
 
-    if(this.indices[index] == undefined){
+    if(indiceObjCorrente == undefined){
       reajuste = 0;
     }else{
-      indiceReajuste = this.indices[index].indice == null  ? 1 : this.indices[index].indice;
-      indiceReajusteOs = this.indices[index].indice_os == null ? 1 : this.indices[index].indice_os;
+      indiceReajuste = indiceObjCorrente.indice == null  ? 1 : indiceObjCorrente.indice;
+      indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
       reajuste = indiceReajuste;
     }
@@ -357,14 +423,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     if(this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro){
       if(dataCorrente < moment('1991-09-01')){
-        if(this.indices[index] == undefined){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajusteOs;
         }
       }
-      else if(this.indices[index].indice){
-        if(this.indices[index] == undefined){
+      else if(indiceObjCorrente.indice){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajuste;
@@ -374,7 +440,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         reajusteOS = 1;
       }
     }
-
+    if(reajusteOS == 0){
+      reajusteOS = 1;
+    }
     return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
@@ -383,16 +451,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)
       return {reajuste: 1.0, reajusteOs: 0.0};
     let reajuste = 0.0;
-    let index = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
+    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
-    if(this.indices[index] == undefined){
+    if(indiceObjCorrente == undefined){
       reajuste = 0;
     }else{
-      indiceReajuste = this.indices[index].indice == null  ? 1 : this.indices[index].indice;
-      indiceReajusteOs = this.indices[index].indice_os == null ? 1 : this.indices[index].indice_os;
+      indiceReajuste = indiceObjCorrente.indice == null  ? 1 : indiceObjCorrente.indice;
+      indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
       reajuste = indiceReajuste;
     }
@@ -435,14 +503,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
     if(this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro){
       if(dataCorrente < moment('1991-09-01')){
-        if(this.indices[index] == undefined){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajusteOs;
         }
       }
-      else if(this.indices[index].indice){
-        if(this.indices[index] == undefined){
+      else if(indiceObjCorrente.indice){
+        if(indiceObjCorrente == undefined){
           reajusteOS = 0;
         }else{
           reajusteOS = indiceReajuste;
@@ -452,110 +520,167 @@ export class BeneficiosResultadosComponent implements OnInit {
         reajusteOS = 1;
       }
     }
+    if(reajusteOS == 0){
+      reajusteOS = 1;
+    }
     return  {reajuste: reajuste, reajusteOs: reajusteOS};
   }
 
   //Seção 3.3
   getBeneficioDevido(dataCorrente, reajusteObj, resultsObj){
-    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
+    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    let siglaDataCorrente = moedaDataCorrente.sigla;
     let irtDevidoSimplificado89 = 1;
-    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido){
-      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
-      return 0.0;
-    }
 
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = 0.0;
-    let dib = moment(this.calculo.data_pedido_beneficio);
-    let dibMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dib);
-    let equivalencia89MoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, this.dataEquivalenciaMinimo89);
+    let dib = moment(this.calculo.data_pedido_beneficio_esperado);
+    let dibMoeda = this.Moeda.getByDate(dib);
+    let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
     if(dib < this.dataInicioBuracoNegro){
-      irtDevidoSimplificado89 =  rmiDevidos / this.moeda[dibMoedaIndex].salario_minimo;
-      rmiDevidos = irtDevidoSimplificado89 * this.moeda[equivalencia89MoedaIndex].salario_minimo;
+      irtDevidoSimplificado89 =  rmiDevidos / dibMoeda.salario_minimo;
+      rmiDevidos = irtDevidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    if(dataCorrente > this.dataInicioCalculo){
+    if(dataCorrente > this.dataInicioDevidos){
       beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
     }else{
       beneficioDevido = rmiDevidos;
+      this.beneficioDevidoOs = beneficioDevido;
     }
 
     //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-    if(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro){
-      beneficioDevido = irtDevidoSimplificado89 * this.moeda[moedaIndexDataCorrente].salario_minimo;
+    if(dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro){
+      beneficioDevido = irtDevidoSimplificado89 * moedaDataCorrente.salario_minimo;
       if(this.aplicarReajusteUltimoDevido){
         beneficioDevido = this.beneficioDevidoAnterior;
       }
     }
 
-    // if(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro
-    //    && this.aplicarReajusteUltimoDevido ){
-    //   beneficioDevido = irtDevidoSimplificado89 * this.moeda[moedaIndexDataCorrente].salario_minimo;
-    //   //beneficioDevido = this.beneficioDevidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
-    // }
-    
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
-    if ((dataCorrente.isSame('2006-08-01')||
-        dataCorrente.isSame('2000-06-01')||
-        dataCorrente.isSame('2001-06-01')||
-        dataCorrente.isSame('2002-06-01')||
-        dataCorrente.isSame('2003-06-01')) && this.beneficioDevidoSalvo != undefined) {
+    if ((dataCorrente.isSame('2006-08-01', 'month')||
+        dataCorrente.isSame('2000-06-01', 'month')||
+        dataCorrente.isSame('2001-06-01', 'month')||
+        dataCorrente.isSame('2002-06-01', 'month')||
+        dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioDevidoSalvo != undefined) {
       beneficioDevido = this.beneficioDevidoSalvo;
+      this.beneficioDevidoTetosSemLimite = this.beneficioDevidoTetosSemLimiteSalvo;
     }
 
-    if (this.calculo.tipo_aposentadoria == '11') { //11 = 'LOAS - beneficio salario minimo'
-      beneficioDevido = this.moeda[moedaIndexDataCorrente].salario_minimo;
-    } else {
+    if (this.calculo.tipo_aposentadoria == '11' && !this.isTetos) { //11 = 'LOAS - beneficio salario minimo'
+      beneficioDevido = moedaDataCorrente.salario_minimo;
+    } else if(this.calculo.tipo_aposentadoria_recebida != '11'){
       beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
+      this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
     }
 
+    this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
       if (dataCorrente.isSame(this.dataEfeitoFinanceiro, 'month')) {
         //Inserir indice superior *
         indiceSuperior = true;
-        beneficioDevido = parseFloat(this.calculo.valor_beneficio_esperado_revisao) * reajusteObj.reajuste;
+        this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
+        this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
+        beneficioDevido = this.beneficioDevidoAposRevisao;
       } else if (dataCorrente < this.dataEfeitoFinanceiro) {
-        // beneficioDevido = rmiDevidos * reajusteObj.reajuste;
-        beneficioDevido = rmiDevidos * reajusteObj.reajuste;
+        beneficioDevido = this.beneficioDevidoOs;
+        this.beneficioDevidoAposRevisao *= reajusteObj.reajusteOs;
+        this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajusteOs;
+      }else{
+        this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
+        this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
       }
+    }else{
+      this.beneficioDevidoAposRevisao *= reajusteObj.reajuste;
+      this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+    if (dataCorrente.isSame(this.dataCorteCruzado, "month") || dataCorrente.isSame(this.dataCorteCruzadoNovo, "month") || dataCorrente.isSame(this.dataCorteCruzeiroReal, "month")){
       beneficioDevido /= 1000;
+      this.beneficioDevidoOs /= 1000;
+      this.beneficioDevidoAposRevisao /= 1000;
+      this.beneficioDevidoAposRevisaoTetos /= 1000;
+      this.beneficioDevidoTetosSemLimite /= 1000;
     }
 
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     // taxa_ajuste_maxima_esperada definida no CRUD         
-    if (this.calculo.taxa_ajuste_maxima_esperada != 0 &&
-      this.calculo.taxa_ajuste_maxima_esperada != undefined) {
+    if (this.calculo.taxa_ajuste_maxima_esperada != undefined &&
+      this.calculo.taxa_ajuste_maxima_esperada > 1) {
       if (this.dataComecoLei8870 <= dataPedidoBeneficioEsperado &&
         dataPedidoBeneficioEsperado <= this.dataFimLei8870 &&
-        dataCorrente == this.dataAplicacao8870) {
-        beneficioDevido *= this.calculo.taxa_ajuste_maxima_esperada;
+        dataCorrente.isSame(this.dataAplicacao8870,'month')) {
+        beneficioDevido *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
+        this.beneficioDevidoTetosSemLimite *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
       }
 
-      if (dataPedidoBeneficioEsperado>= this.dataLei8880 && this.primeiroReajusteDevidos == 1) {
+      if (dataPedidoBeneficioEsperado >= this.dataLei8880 && this.primeiroReajusteDevidos == 1) {
         beneficioDevido *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
-
+        this.beneficioDevidoTetosSemLimite *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
         this.primeiroReajusteDevidos = 0;
       }
     }
 
+    let tetoDevidos = parseFloat(moedaDataCorrente.teto);
+    if(this.isTetos){
+      if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+        tetoDevidos = 1200.0;
+        if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+          beneficioDevido = this.beneficioDevidoAposRevisaoTetos;
+        }else{
+          beneficioDevido = this.beneficioDevidoTetosSemLimite;
+        }
+      }
+      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+        tetoDevidos = 2400.0;
+        if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+          beneficioDevido = this.beneficioDevidoAposRevisaoTetos;
+        }else{
+          beneficioDevido = this.beneficioDevidoTetosSemLimite;
+        }
+      }
+    }
+
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
-    let beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
+    let beneficioDevidoAjustado = 0;
+    if(this.isTetos){
+      beneficioDevidoAjustado = this.aplicarTetosEMinimosTetos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido', tetoDevidos);
+    }else{
+      beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
+    }
+
+    this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
 
+    if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
+      if(parseFloat(beneficioDevidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
+        beneficioDevidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+        this.ultimoBeneficioDevidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+      }
+    }
+
+    if(dataCorrente.isSame(moment('2018-01-01'), 'year') && !this.isTetos){
+      if(parseFloat(beneficioDevidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 2.396){
+        beneficioDevidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+        this.ultimoBeneficioDevidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+      }
+    }
+
     if(dataCorrente.isSame(this.dataFinal, 'month')){
       let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
+      this.proporcionalidadeUltimaLinha = true;
+    }else if(this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')){
+      let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      beneficioDevidoFinal *= proporcionalidade;
+      this.proporcionalidadeUltimaLinha = true;
     }
 
     let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
@@ -564,10 +689,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let minimoAplicado = false;
-    if(beneficioDevidoAjustado < beneficioDevido){
+    if(beneficioDevidoAjustado == moedaDataCorrente.teto){
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioDevidoString += ' -<br>  T';
-    }else if(beneficioDevidoAjustado > beneficioDevido){
+    }else if(beneficioDevidoAjustado ==  moedaDataCorrente.salario_minimo){
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioDevidoString += ' -<br> M';
       minimoAplicado = true;
@@ -588,12 +713,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.ultimoSalarioMinimoDevido = beneficioDevidoAjustado;
     }
 
-    if (dataCorrente.isSame('2006-03-01') ||
-        dataCorrente.isSame('2000-04-01') ||
-        dataCorrente.isSame('2001-04-01') ||
-        dataCorrente.isSame('2002-04-01') ||
-        dataCorrente.isSame('2003-04-01')) {
+    if (dataCorrente.isSame('2006-03-01', 'month') ||
+        dataCorrente.isSame('2000-03-01', 'month') ||
+        dataCorrente.isSame('2001-03-01', 'month') ||
+        dataCorrente.isSame('2002-03-01', 'month') ||
+        dataCorrente.isSame('2003-03-01', 'month')) {
       this.beneficioDevidoSalvo = beneficioDevidoFinal;
+      this.beneficioDevidoTetosSemLimiteSalvo = this.beneficioDevidoTetosSemLimite;
     }
 
     resultsObj.resultString = beneficioDevidoString;
@@ -603,8 +729,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj){
-    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
+    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    let siglaDataCorrente = moedaDataCorrente.sigla;
+    let irtRecebidoSimplificado89 = 1;
 
     if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
@@ -612,97 +739,156 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
-    let beneficioRecebido = rmiRecebidos;
- 
-    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
-    if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) 
-        && this.aplicarReajusteUltimoRecebido) {
-      beneficioRecebido = this.beneficioRecebidoAnterior; // = beneficioDevido do mes anterior antes do ajuste;
+    let beneficioRecebido = 0.0;
+    let dib = moment(this.calculo.data_pedido_beneficio);
+    let dibMoeda = this.Moeda.getByDate(dib);
+    let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
+
+    if(dib < this.dataInicioBuracoNegro){
+      irtRecebidoSimplificado89 =  rmiRecebidos / dibMoeda.salario_minimo;
+      rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
+    }
+
+    if(dataCorrente > this.dataInicioRecebidos){
+      beneficioRecebido = this.ultimoBeneficioRecebidoAntesProporcionalidade;
+    }else{
+      beneficioRecebido = rmiRecebidos;
+      this.beneficioRecebidoOs = beneficioRecebido;
+    }
+
+    if(dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro && !this.isTetos){
+      beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
+      if(this.aplicarReajusteUltimoRecebido){
+        beneficioRecebido = this.beneficioRecebidoAnterior;
+      }
     }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
-    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
-      //beneficioRecebido = beneficioRecebido[04/2006];
-      return this.getBeneficioRecebido(moment('2006-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2000-06-01')) {//06/2000
-      //beneficioRecebido = beneficioRecebido[04/2000];
-      return this.getBeneficioRecebido(moment('2000-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2001-06-01')) {//06/2001
-      //beneficioRecebido = beneficioRecebido[04/2001];
-      return this.getBeneficioRecebido(moment('2001-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2002-06-01')) {//06/2002
-      //beneficioRecebido = beneficioRecebido[04/2002];
-      return this.getBeneficioRecebido(moment('2002-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2003-06-01')) {//06/2003
-      //beneficioRecebido = beneficioRecebido[04/2003];
-      return this.getBeneficioRecebido(moment('2003-04-01'), reajusteObj, resultsObj);
+    if ((dataCorrente.isSame('2006-08-01', 'month')||
+        dataCorrente.isSame('2000-06-01', 'month')||
+        dataCorrente.isSame('2001-06-01', 'month')||
+        dataCorrente.isSame('2002-06-01', 'month')||
+        dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
+      beneficioRecebido = this.beneficioRecebidoSalvo;
     }
 
-    if (this.calculo.tipo_aposentadoria_recebida == 11) { //11: LOAS - beneficio salario minimo'
-      beneficioRecebido = this.moeda[moedaIndexDataCorrente].salario_minimo;
-    } else {
+    if (this.calculo.tipo_aposentadoria_recebida == '11' && !this.isTetos) { //11: LOAS - beneficio salario minimo'
+      beneficioRecebido = moedaDataCorrente.salario_minimo;
+    } else if(this.calculo.tipo_aposentadoria_recebida != '11'){
       beneficioRecebido *= reajusteObj.reajuste;
     }
 
+    this.beneficioRecebidoOs = this.beneficioRecebidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
       if (dataCorrente.isSame(this.dataEfeitoFinanceiro, 'month')) {
         // INSERIR ÍNDICE SUPERIOR ‘*’
         indiceSuperior = true;
-        beneficioRecebido = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteObj.reajuste;
+        this.beneficioRecebidoAposRevisao *= reajusteObj.reajuste;
+        this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajuste;
+        beneficioRecebido = this.beneficioRecebidoAposRevisao;
+        //beneficioRecebido = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteObj.reajuste;
       } else if (dataCorrente < this.dataEfeitoFinanceiro) {
-        beneficioRecebido = rmiRecebidos * reajusteObj.reajuste;
+        beneficioRecebido = this.beneficioRecebidoOs;
+        this.beneficioRecebidoAposRevisao *= reajusteObj.reajusteOs;
+        this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajusteOs;
+        //beneficioRecebido = rmiRecebidos * reajusteObj.reajuste;
+      }else{
+        this.beneficioRecebidoAposRevisao *= reajusteObj.reajuste;
+        this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajuste;
       }
+    }else{
+      this.beneficioRecebidoAposRevisao *= reajusteObj.reajuste;
+      this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
+    if (dataCorrente.isSame(this.dataCorteCruzado, "month") || dataCorrente.isSame(this.dataCorteCruzadoNovo, "month") || dataCorrente.isSame(this.dataCorteCruzeiroReal, "month")){
       beneficioRecebido /= 1000;
+      this.beneficioRecebidoOs /= 1000;
+      this.beneficioRecebidoAposRevisao /= 1000;
+      this.beneficioRecebidoAposRevisaoTetos /= 1000;
     }
 
-    if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
-      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
-         moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
-         dataCorrente == this.dataAplicacao8870) {
-        beneficioRecebido *= this.calculo.taxa_ajuste_maxima_concedida;
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+
+    if (this.calculo.taxa_ajuste_maxima_concedida != undefined && this.calculo.taxa_ajuste_maxima_concedida > 1) {
+      if(this.dataComecoLei8870 <= dataPedidoBeneficio && 
+         dataPedidoBeneficio <= this.dataFimLei8870 && 
+         dataCorrente.isSame(this.dataAplicacao8870, 'month')) {
+        beneficioRecebido *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
       }
 
-      if(this.calculo.data_pedido_beneficio_esperado >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
+      if(dataPedidoBeneficio >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
         beneficioRecebido *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
         this.primeiroReajusteRecebidos = 0;
       }
     }
 
-
     let chkBeneficioNaoConcedido = this.calculo.beneficio_nao_concedido;
-    if (!chkBeneficioNaoConcedido) {
+    if (chkBeneficioNaoConcedido) {
       beneficioRecebido = 0;
     }
 
+    let tetoRecebidos = moedaDataCorrente.teto;
+    if(this.isTetos){    
+      if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial,'month')) { // Comparação de mês e ano, ignorar dia
+        tetoRecebidos = 1081.50;
+        if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+          beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
+        }
+      }
+      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+        if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+          beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
+        }
+      }
+    }  
+
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
-    let beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, dataCorrente, moment(this.calculo.data_pedido_beneficio),'Recebido');
+    let beneficioRecebidoAjustado = 0;
+    if(this.isTetos){
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido', tetoRecebidos);
+    }else{
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido');
+    }
+    this.beneficioRecebidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioRecebidoAposRevisao, dataCorrente, dataPedidoBeneficio, 'Recebido');
+    this.ultimoBeneficioRecebidoAntesProporcionalidade = beneficioRecebidoAjustado;
+
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
-    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio));
+    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficio);
     let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
 
-    let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
+    if(dataCorrente.isSame(this.dataFinal, 'month')){
+      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      beneficioRecebidoFinal *= proporcionalidade;
+      this.proporcionalidadeUltimaLinha = true;
+    }else if(this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')){
+      let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
+      beneficioRecebidoFinal *= proporcionalidade;
+      //this.proporcionalidadeUltimaLinha = true;
+    }
 
+    if(dataCorrente.isSame(moment('2017-01-01'), 'year') && this.isTetos){
+      if(parseFloat(beneficioRecebidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
+        beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+        this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+      }
+    }
+
+    let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
     if(indiceSuperior){
       beneficioRecebidoString += '*'
     }
 
     let minimoAplicado = false;
-    if(beneficioRecebidoAjustado < beneficioRecebido){
+    if(beneficioRecebidoAjustado == moedaDataCorrente.teto){
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
-      beneficioRecebidoString += ' -<br> T';
-    }else if(beneficioRecebidoAjustado > beneficioRecebido){
+      beneficioRecebidoString += ' -<br>  T';
+    }else if(beneficioRecebidoAjustado ==  moedaDataCorrente.salario_minimo){
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioRecebidoString += ' -<br> M';
       minimoAplicado = true;
-    } 
+    }  
 
     if(diasProporcionais != 1){
       beneficioRecebidoString += ' <br>p';
@@ -711,310 +897,45 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.aplicarReajusteUltimoRecebido = false;
     //a condição abaixo só é executada quando o valor aplicado é o salario minimo
     if(minimoAplicado){
-      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      //aplicarReajusteUltimoRecebido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
       //esse valor sera usado na proxima chamada da função
       if(this.ultimoSalarioMinimoRecebido != beneficioRecebidoAjustado){
-        this.ultimoSalarioMinimoRecebido = beneficioRecebidoAjustado;
         this.aplicarReajusteUltimoRecebido = true;
       }
+      this.ultimoSalarioMinimoRecebido = beneficioRecebidoAjustado;
     }
+
+    if (dataCorrente.isSame('2006-03-01', 'month') ||
+        dataCorrente.isSame('2000-03-01', 'month') ||
+        dataCorrente.isSame('2001-03-01', 'month') ||
+        dataCorrente.isSame('2002-03-01', 'month') ||
+        dataCorrente.isSame('2003-03-01', 'month')) {
+      this.beneficioRecebidoSalvo = beneficioRecebidoFinal;
+    }
+
     resultsObj.resultString = beneficioRecebidoString;
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
     return beneficioRecebidoFinal;
   }
 
-  //Seção 3.5
-  getBeneficioDevidoTetos(dataCorrente, reajusteObj, resultsObj){
-    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
-    if(this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido){
-      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
-      return 0.0;
-    }
-
-    let rmiDevidosTetos = parseFloat(this.calculo.valor_beneficio_esperado);
-    let beneficioDevidoTetos = rmiDevidosTetos;
-    let beneficioDevidoTetosSemLimite = rmiDevidosTetos;
-    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-    if(!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro)
-       && this.aplicarReajusteUltimoDevidoTeto ){
-      beneficioDevidoTetos = this.beneficioDevidoAnteriorTeto; // = beneficioDevido do mes anterior antes do ajuste;
-    }
-
-    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
-    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
-      //beneficioDevidoTetos = beneficioDevidoTeto[04/2006];
-      return this.getBeneficioDevidoTetos(moment('2006-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2000-06-01')) {//06/2000
-      //beneficioDevidoTetos = beneficioDevidoTeto[04/2000];
-      return this.getBeneficioDevidoTetos(moment('2000-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2001-06-01')) {//06/2001
-      //beneficioDevidoTetos = beneficioDevidoTeto[04/2001];
-      return this.getBeneficioDevidoTetos(moment('2001-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2002-06-01')) {//06/2002
-      //beneficioDevidoTetos = beneficioDevidoTeto[04/2002];
-      return this.getBeneficioDevidoTetos(moment('2002-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2003-06-01')) {//06/2003
-      //beneficioDevidoTetos = beneficioDevidoTeto[04/2003];
-      return this.getBeneficioDevidoTetos(moment('2003-04-01'), reajusteObj, resultsObj);
-    }
-
-    // algortimo buracoNegro definida na seção de algortimos úteis.
-    let indiceSuperior = false;
-    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-      if (dataCorrente == this.dataEfeitoFinanceiro) {
-        // INSERIR ÍNDICE SUPERIOR ‘*’
-        indiceSuperior = true;
-        beneficioDevidoTetos = parseFloat(this.calculo.valor_beneficio_esperado_apos_revisao) *  reajusteObj.reajusteOs;
-      }else if (dataCorrente < this.dataEfeitoFinanceiro) {
-        beneficioDevidoTetos = rmiDevidosTetos * reajusteObj.reajuste;
-      }
-    }
-
-    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
-      beneficioDevidoTetos /= 1000;
-    }
-
-    // taxa_ajuste_maxima_esperada definida no CRUD         
-    if (this.calculo.taxa_ajuste_maxima_esperada > 1) {
-      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio_esperado) && 
-         moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataFimLei8870 && 
-         dataCorrente == this.dataAplicacao8870) {
-        beneficioDevidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
-      }
-      if(moment(this.calculo.data_pedido_beneficio_esperado) >= this.dataLei8880 && this.primeiroReajusteDevidos == 1) {
-        beneficioDevidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_esperada);
-        this.primeiroReajusteDevidos = 0;
-      }
-    }
-
-    let tetoDevidos = parseFloat(this.moeda[moedaIndexDataCorrente].teto);
-
-    if (dataCorrente == this.dataPrimeiroTetoJudicial) { // Comparação de mês e ano, ignorar dia
-      tetoDevidos = 1200.0;
-      if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-        let beneficioDevidoPosRevisao = 0;
-        if (this.calculo.valor_beneficio_esperado_revisao){
-          beneficioDevidoPosRevisao = parseFloat(this.calculo.valor_beneficio_esperado_revisao);
-        }
-        if (dataCorrente < this.dataEfeitoFinanceiro) {
-          beneficioDevidoPosRevisao *= reajusteObj.reajusteOs;
-        } else {
-          beneficioDevidoPosRevisao *= reajusteObj.reajuste;
-        }
-          beneficioDevidoTetos = beneficioDevidoPosRevisao;
-        }
-    }
-
-    if (dataCorrente == this.dataSegundoTetoJudicial) { // Comparação de mês e ano, ignorar dia
-      tetoDevidos = 2400.0;
-      if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-        let beneficioDevidoPosRevisao = 0;
-        if(this.calculo.valor_beneficio_concedido_revisao){
-          beneficioDevidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
-        }
-        if (dataCorrente < this.dataEfeitoFinanceiro) {
-          beneficioDevidoPosRevisao *= reajusteObj.reajusteOs;
-        } else {
-          beneficioDevidoPosRevisao *= reajusteObj.reajuste;
-        }
-        beneficioDevidoTetos = beneficioDevidoPosRevisao;
-      }else{
-        beneficioDevidoTetos = beneficioDevidoTetosSemLimite;
-      }
-    }
-
-    let beneficioDevidoTetosAjustado = this.aplicarTetosEMinimosTetos(beneficioDevidoTetos, dataCorrente,moment(this.calculo.data_pedido_beneficio_esperado), 'Devido', tetoDevidos);
-    let beneficioDevidoTetosString = this.formatMoney(beneficioDevidoTetosAjustado, siglaDataCorrente);
-
-    if(indiceSuperior){
-      beneficioDevidoTetosString += '*'
-    }
-
-    let minimoAplicado = false;
-    if(beneficioDevidoTetosAjustado < beneficioDevidoTetos){
-      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
-      beneficioDevidoTetosString += ' -<br> T';
-    }else if(beneficioDevidoTetosAjustado > beneficioDevidoTetos){
-      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
-      beneficioDevidoTetosString += ' -<br> M';
-      minimoAplicado = true;
-    }
-
-    this.aplicarReajusteUltimoDevidoTeto = false;
-    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
-    if(minimoAplicado){
-      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-      //esse valor sera usado na proxima chamada da função
-      if(this.ultimoSalarioMinimoDevidoTeto != beneficioDevidoTetosAjustado){
-        this.ultimoSalarioMinimoDevidoTeto = beneficioDevidoTetosAjustado;
-        this.aplicarReajusteUltimoDevidoTeto = true;
-      }
-    }
-
-    resultsObj.resultString = beneficioDevidoTetosString;
-    this.beneficioDevidoAnteriorTeto = beneficioDevidoTetosAjustado;
-    return beneficioDevidoTetosAjustado;
-  }
-
-  //Seção 3.6
-  getBeneficioRecebidoTetos(dataCorrente, reajusteObj, resultsObj){
-    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let siglaDataCorrente = this.moeda[moedaIndexDataCorrente].sigla;
-    if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
-      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
-      return 0.0;
-    }
-
-    let rmiRecebidosTetos = parseFloat(this.calculo.valor_beneficio_concedido);
-    let beneficioRecebidoTetos = rmiRecebidosTetos;
-
-    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor recebido
-    if (!(dataCorrente <= this.dataSimplificada && moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) 
-        && this.aplicarReajusteUltimoRecebidoTeto) {
-      beneficioRecebidoTetos = this.beneficioRecebidoAnteriorTeto; // = beneficioDevido do mes anterior antes do ajuste;
-    }
-
-    // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
-    if (dataCorrente.isSame('2006-08-01')) {// 08/2006
-      //beneficioRecebidoTetos = beneficioRecebido[04/2006];
-      return this.getBeneficioRecebidoTetos(moment('2006-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2000-06-01')) {//06/2000
-      //beneficioRecebidoTetos = beneficioRecebido[04/2000];
-      return this.getBeneficioRecebidoTetos(moment('2000-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2001-06-01')) {//06/2001
-      //beneficioRecebidoTetos = beneficioRecebido[04/2001];
-      return this.getBeneficioRecebidoTetos(moment('2001-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2002-06-01')) {//06/2002
-      //beneficioRecebidoTetos = beneficioRecebido[04/2002];
-      return this.getBeneficioRecebidoTetos(moment('2002-04-01'), reajusteObj, resultsObj);
-    }
-    if (dataCorrente.isSame('2003-06-01')) {//06/2003
-      //beneficioRecebidoTetos = beneficioRecebido[04/2003];
-      return this.getBeneficioRecebidoTetos(moment('2003-04-01'), reajusteObj, resultsObj);
-    }
-
-    if (this.calculo.tipo_aposentadoria_recebida != 11) { //11: LOAS - beneficio salario minimo'
-      beneficioRecebidoTetos *= reajusteObj.reajuste;
-    }
-
-    let indiceSuperior = false;
-    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
-      if (dataCorrente == this.dataEfeitoFinanceiro) {
-        // INSERIR ÍNDICE SUPERIOR ‘*’
-        indiceSuperior = true;
-        beneficioRecebidoTetos = parseFloat(this.calculo.valor_beneficio_concedido_apos_revisao) * reajusteObj.reajusteOs;
-      } else if (dataCorrente < this.dataEfeitoFinanceiro) {
-        beneficioRecebidoTetos = rmiRecebidosTetos * reajusteObj.reajuste;
-      }
-    }
-
-    if (dataCorrente == this.dataCorteCruzado || dataCorrente == this.dataCorteCruzadoNovo || dataCorrente == this.dataCorteCruzeiroReal){
-      beneficioRecebidoTetos /= 1000;
-    }
-
-    if (this.calculo.taxa_ajuste_maxima_concedida > 1) {
-      if(this.dataComecoLei8870 <= moment(this.calculo.data_pedido_beneficio) && 
-         moment(this.calculo.data_pedido_beneficio) <= this.dataFimLei8870 && 
-         dataCorrente == this.dataAplicacao8870) {
-        beneficioRecebidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
-      }
-
-      if(this.calculo.data_pedido_beneficio_esperado >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
-        beneficioRecebidoTetos *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
-        this.primeiroReajusteRecebidos = 0;
-      }
-    }
- 
-    let tetoRecebidos = this.moeda[moedaIndexDataCorrente].teto;
-
-    if (dataCorrente == this.dataPrimeiroTetoJudicial) { // Comparação de mês e ano, ignorar dia
-      tetoRecebidos = 1081.50;
-      if(this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-        let beneficioRecebidoPosRevisao = 0;
-        if (this.calculo.valor_beneficio_concedido_revisao){
-          beneficioRecebidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
-        }
-        if (dataCorrente < this.dataEfeitoFinanceiro) {
-          beneficioRecebidoPosRevisao *= reajusteObj.reajusteOs;
-        } else {
-          beneficioRecebidoPosRevisao *= reajusteObj.reajuste;
-        }
-          beneficioRecebidoTetos = beneficioRecebidoPosRevisao;
-        }
-    }
-
-    if (dataCorrente == this.dataSegundoTetoJudicial) { // Comparação de mês e ano, ignorar dia
-      if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-        let beneficioRecebidoPosRevisao = 0;
-        if(this.calculo.valor_beneficio_concedido_revisao){
-          beneficioRecebidoPosRevisao = parseFloat(this.calculo.valor_beneficio_concedido_revisao);
-        }
-        if (dataCorrente < this.dataEfeitoFinanceiro) {
-          beneficioRecebidoPosRevisao *= reajusteObj.reajusteOs;
-        } else {
-          beneficioRecebidoPosRevisao *= reajusteObj.reajuste;
-        }
-          beneficioRecebidoTetos = beneficioRecebidoPosRevisao;
-      }
-    }
-    let beneficioRecebidoTetosAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebidoTetos, dataCorrente, moment(this.calculo.data_pedido_beneficio), 'Recebido', tetoRecebidos);
-    let beneficioRecebidoTetosString = this.formatMoney(beneficioRecebidoTetosAjustado, siglaDataCorrente);
-
-    if(indiceSuperior){
-      beneficioRecebidoTetosString += '*'
-    }
-    let minimoAplicado = false;
-    if(beneficioRecebidoTetosAjustado <= beneficioRecebidoTetos){
-      // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
-      beneficioRecebidoTetosString += ' -<br> T';
-    }else if(beneficioRecebidoTetosAjustado >= beneficioRecebidoTetos){
-      // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
-      beneficioRecebidoTetosString += ' -<br> M';
-      minimoAplicado = true;
-    }
-
-    this.aplicarReajusteUltimoRecebidoTeto = false;
-    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
-    if(minimoAplicado){
-      //aplicarReajusteUltimoDevido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-      //esse valor sera usado na proxima chamada da função
-      if(this.ultimoSalarioMinimoRecebidoTeto != beneficioRecebidoTetosAjustado){
-        this.ultimoSalarioMinimoRecebidoTeto = beneficioRecebidoTetosAjustado;
-        this.aplicarReajusteUltimoRecebidoTeto = true;
-      }
-    }
-
-    resultsObj.resultString = beneficioRecebidoTetosString;
-    this.beneficioRecebidoAnteriorTeto = beneficioRecebidoTetosAjustado;
-    return beneficioRecebidoTetosAjustado;
-  }
-
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
     let tipo_correcao = this.calculo.tipo_correcao;
-    let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let moedaIndexDataAtual = this.getDifferenceInMonths(this.dataInicioCalculo);
-    let moedaIndexDataCalculo = this.getDifferenceInMonths(this.dataInicioCalculo, moment(this.calculo.data_calculo));
-    //TODO: indice de datacalculo errado
+    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    let moedaDataAtual = this.Moeda.getByDate(moment());
+    let moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo));
+
     let desindexador = 0.0;
     let correcaoMonetaria = 0.0;
     if (tipo_correcao == 'ipca') {
-      desindexador = this.moeda[moedaIndexDataAtual].ipca / this.moeda[moedaIndexDataCalculo].ipca;
-      correcaoMonetaria = this.moeda[moedaIndexDataCorrente].ipca * desindexador;
+      desindexador = moedaDataAtual.ipca / moedaDataCalculo.ipca;
+      correcaoMonetaria = moedaDataCorrente.ipca * desindexador;
     } else if (tipo_correcao == 'cam') {
-      desindexador = this.moeda[moedaIndexDataAtual].cam / this.moeda[moedaIndexDataCalculo].cam;
-      correcaoMonetaria = this.moeda[moedaIndexDataCorrente].cam * desindexador;
+      desindexador = moedaDataAtual.cam / moedaDataCalculo.cam;
+      correcaoMonetaria = moedaDataCorrente.cam * desindexador;
     } else if (tipo_correcao == 'tr') {
-      desindexador = this.moeda[moedaIndexDataAtual].tr / this.moeda[moedaIndexDataCalculo].tr;
-      correcaoMonetaria = this.moeda[moedaIndexDataCorrente].tr * desindexador;
+      desindexador = moedaDataAtual.tr / moedaDataCalculo.tr;
+      correcaoMonetaria = moedaDataCorrente.tr * desindexador;
     }
     let usar_deflacao = !this.calculo.nao_usar_deflacao;
     if (!usar_deflacao) {
@@ -1055,8 +976,8 @@ export class BeneficiosResultadosComponent implements OnInit {
             this.jurosCorrente -= this.jurosDepois2009;
           } else {
             if(this.soma == 1){
-              let moedaIndexDataCorrente = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-              this.jurosCorrente -= parseFloat(this.moeda[moedaIndexDataCorrente].juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+              let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+              this.jurosCorrente -= parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
             }
           }
         }
@@ -1102,8 +1023,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
+          let mesMoeda = this.Moeda.getByDate(dateMes);
+          juros += parseFloat(mesMoeda.juros_selic_70) / 100;
         }
       }
 
@@ -1122,8 +1043,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
+          let mesMoeda = this.Moeda.getByDate(dateMes);
+          juros += parseFloat(mesMoeda.juros_selic_70) / 100;
         }
       }
     }else {
@@ -1141,8 +1062,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
           for(let mes in mesesEntreSelicDataCalculo){
             let dateMes = moment(mes);
-            let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-            juros += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70)/100;
+            let mesMoeda = this.Moeda.getByDate(dateMes);
+            juros += parseFloat(mesMoeda.juros_selic_70)/100;
           }
         }
       }
@@ -1185,7 +1106,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
 
     if (this.dataInicioCalculo > data) {
-        data = this.dataInicioCalculo;
+      data = this.dataInicioCalculo;
     }
 
     if (data < this.dataJuros2003) {
@@ -1201,10 +1122,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70);
         }
       }
     }else if(data < this.dataJuros2009){
@@ -1218,10 +1138,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70);
         }
       }
     }else{
@@ -1233,10 +1152,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70) / 100;
         }
       }
     }
@@ -1246,11 +1164,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (maturidade != 0) {
-      if (this.calculo.data_cessacao != '') { // verifica se o calculo possui data de cessacao
+      if (this.calculo.data_cessacao != '0000-00-00') { // verifica se o calculo possui data de cessacao
         somaVincendos = this.ultimoBeneficioDevidoAntesProporcionalidade * maturidade; //Beneficio Devido da ultima linha antes da aplicação da proporcionalidade.
       }else{
         if (somaVincendos < 0) {
-          somaVincendos = this.somaDiferencaMensal * maturidade;
+          somaVincendos = this.ultimaDiferencaMensal * maturidade;
         }else{
           somaVincendos = somaVincendos * maturidade;
         }
@@ -1279,7 +1197,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.calculo.percentual_taxa_advogado == '') {// Verificar se há valor para o percentual do advogado.
       honorarios = 0;
       // Aplicar a porcentagem quando a data corrente estiver no intervalo definido ou quando nenhuma data for definida
-    }else if((taxaAdvogadoInicio >= dataCorrente && dataCorrente >= taxaAdvogadoFinal) || 
+    }else if((taxaAdvogadoInicio <= dataCorrente && dataCorrente <= taxaAdvogadoFinal) || 
             (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)){
       honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
     }else{
@@ -1297,10 +1215,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (percentualAcordo > 0.9){
       percentualAcordo = 0.9;
     }
+
     this.valorAcordo = totalDevido * percentualAcordo;
     this.descontoAcordo = totalDevido -  this.valorAcordo;
   }
-
 
   //Seção 4.6
   calcularVincendosTetos() {
@@ -1332,8 +1250,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          let mesMoeda = this.Moeda.getByDate(dateMes);
+          jurosVincendos += parseFloat(mesMoeda.juros_selic_70);
         }
       }
     }else if(data < this.dataJuros2009){
@@ -1349,8 +1267,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70);
+          let mesMoeda = this.Moeda.getByDate(dateMes);
+          jurosVincendos += parseFloat(mesMoeda.juros_selic_70);
         }
       }
     }else{
@@ -1364,8 +1282,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
         for(let mes in mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dateMes);
-          jurosVincendos += parseFloat(this.moeda[mesMoedaIndex].juros_selic_70) / 100;
+          let mesMoeda = this.Moeda.getByDate(dateMes);
+          jurosVincendos += parseFloat(mesMoeda.juros_selic_70) / 100;
         }
       }
     }
@@ -1387,7 +1305,13 @@ export class BeneficiosResultadosComponent implements OnInit {
   setInicioRecebidosEDevidos() {
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
+    this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+    this.beneficioDevidoAposRevisao = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
+    this.beneficioRecebidoAposRevisao = (this.calculo.valor_beneficio_concedido_revisao) ? this.calculo.valor_beneficio_concedido_revisao : 0;
 
+    this.beneficioDevidoAposRevisaoTetos = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
+    this.beneficioRecebidoAposRevisaoTetos = (this.calculo.valor_beneficio_concedido_revisao) ? this.calculo.valor_beneficio_concedido_revisao : 0;
+    this.beneficioDevidoTetosSemLimite = parseFloat(this.calculo.valor_beneficio_esperado);
     if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
       this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
     }
@@ -1402,9 +1326,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
 
-    if(this.calculo.data_prevista_cessacao != '')
+    if(this.calculo.data_prevista_cessacao != '0000-00-00')
       this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
-    if(this.calculo.data_cessacao != '')
+    if(this.calculo.data_cessacao != '0000-00-00')
       this.dataCessacaoRecebido = moment(this.calculo.data_cessacao);
 
     this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
@@ -1441,9 +1365,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 5.3
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo) {
-    let dataCorrenteMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let salMinimo = this.moeda[dataCorrenteMoedaIndex].salario_minimo;
-    let tetoSalarial = this.moeda[dataCorrenteMoedaIndex].teto;
+    let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
+    let salMinimo = dataCorrenteMoeda.salario_minimo;
+    let tetoSalarial = dataCorrenteMoeda.teto;
     let tipoAposentadoria = '';
     if (tipo == 'Recebido') {
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
@@ -1474,8 +1398,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 5.4
   aplicarTetosEMinimosTetos(valorBeneficio, dataCorrente, dib, tipo, tetoSalarial) {
-    let dataCorrenteMoedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, dataCorrente);
-    let salMinimo = this.moeda[dataCorrenteMoedaIndex].salario_minimo;
+    let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
+    let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
     if (tipo == 'Recebido') {
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
@@ -1502,6 +1426,34 @@ export class BeneficiosResultadosComponent implements OnInit {
       return tetoSalarial;
     }
     return valorBeneficio;
+  }
+
+  verificaAbonoProporcionalDevidos(dib){
+    let dibMonth = dib.month() + 1;
+    if(dib.date() <= 16){
+      dibMonth -= 1;
+    }
+    let proporcional = 1 - dibMonth/12;
+    if(proporcional < 1){
+      this.aplicaProporcionalDevidos = true;
+    }else{
+      this.aplicaProporcionalDevidos = false;
+    }
+    return proporcional;
+  }
+
+  verificaAbonoProporcionalRecebidos(dib){
+    let dibMonth = dib.month() + 1;
+    if(dib.date() <= 16){
+      dibMonth -= 1;
+    }
+    let proporcional = 1 - dibMonth/12;
+    if(proporcional < 1){
+      this.aplicaProporcionalRecebidos = true;
+    }else{
+      this.aplicaProporcionalRecebidos = false;
+    }
+    return proporcional;
   }
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
@@ -1547,13 +1499,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   formatRMI(value, type){
     let sigla = '';
-    let moedaIndex = 0;
+    let moeda;
     if(type == 'Devidos'){
-      moedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, moment(this.calculo.data_pedido_beneficio_esperado));
+      moeda = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio_esperado));
     }else if(type == 'Recebidos'){
-      moedaIndex = this.getDifferenceInMonths(this.dataInicioCalculo, moment(this.calculo.data_pedido_beneficio));
+      moeda = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio));
     }
-    sigla = this.moeda[moedaIndex].sigla;
+    sigla = moeda.sigla;
     return this.formatMoney(value, sigla);
   }
 
@@ -1576,7 +1528,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     
 
-    if(reajusteObj.reajusteOs == 0.0){
+    if(reajusteObj.reajusteOs == 0.0 || dataCorrente >= this.dataEfeitoFinanceiro){
       //Não tem reajuste OS
       stringIndice = this.formatDecimal(reajusteObj.reajuste, 6);
     }else{
@@ -1586,10 +1538,48 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   updateResultadosDatatable(){
-    this.resultadosDatatableOptions = {
-      ...this.resultadosDatatableOptions,
-      data: this.resultadosList,
-   }
+    if(this.calculo.percentual_taxa_advogado != 0){
+      this.resultadosDatatableOptions = {
+        ...this.resultadosDatatableOptions,
+        data: this.resultadosList,
+        columns: [
+          {data: 'competencia'},
+          {data: 'indice_devidos'},
+          {data: 'beneficio_devido'},
+          {data: 'indice_recebidos'},
+          {data: 'beneficio_recebido'},
+          {data: 'diferenca_mensal'},
+          {data: 'correcao_monetaria'},
+          {data: 'diferenca_corrigida'},
+          {data: 'juros'},
+          {data: 'valor_juros'},
+          {data: 'diferenca_juros'},
+          {data: 'honorarios'}
+        ]
+      }
+    }else{
+      this.resultadosDatatableOptions = {
+        ...this.resultadosDatatableOptions,
+        data: this.resultadosList,
+        columns: [
+          {data: 'competencia'},
+          {data: 'indice_devidos'},
+          {data: 'beneficio_devido'},
+          {data: 'indice_recebidos'},
+          {data: 'beneficio_recebido'},
+          {data: 'diferenca_mensal'},
+          {data: 'correcao_monetaria'},
+          {data: 'diferenca_corrigida'},
+          {data: 'juros'},
+          {data: 'valor_juros'},
+          {data: 'diferenca_juros'},
+        ]
+      }
+    }
+  }
+
+  getIndice(data){
+    return this.getDifferenceInMonths(this.primeiraDataArrayMoeda, data);
   }
 
   getTipoAposentadoria(value){
