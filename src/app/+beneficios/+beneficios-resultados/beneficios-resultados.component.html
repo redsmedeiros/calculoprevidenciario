@@ -264,16 +264,16 @@
                   <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRenda)}}</li>
                 <li>
                   <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
-                <li>
+                <li *ngIf="somaHonorarios != 0">
                   <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(somaHonorarios)}}</li>
                 <li>
-                  <b>Subtotal:</b> {{formatMoney(subtotalTetos)}}</li>
-                <li>
-                  <b>Desconto do acordo judicial:</b> {{formatMoney(valorAcordo)}}</li>
+                  <b>Subtotal:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
+                <li *ngIf="descontoAcordo != 0">
+                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
                 <li>
                   <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</li>
                 <li>
-                  <b>Soma total Tetos:</b> {{formatMoney(somaTotalSegurado)}}</li>
+                  <b>Soma total Tetos:</b> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</li>
               </ul>
             </div>
           </div>
@@ -293,9 +293,6 @@
           <div>
             <!-- widget content -->
             <div class="widget-body">
-              <div class="alert alert-warning margin-top-10" role="alert">
-              <p>Sistem em desenvolvimento. Os resultados do cálculo podem apresentar divergências.</p>
-              </div>
               <sa-datatable [options]="resultadosDatatableOptions"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
                 <thead *ngIf="!isTetos">
