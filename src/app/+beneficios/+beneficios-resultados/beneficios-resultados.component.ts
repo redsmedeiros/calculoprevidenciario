@@ -325,13 +325,23 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if(dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11){
         //Adicionar linha de abono
+
+        let beneficioRecebidoAbono;
+        if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
+          beneficioRecebidoAbono = this.formatMoney(0.0);
+        }else{
+          beneficioRecebidoAbono = this.formatMoney(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
+        }
+
         line = {
               ...line,
               competencia: 'abono - ' + stringCompetencia,
               beneficio_devido: this.formatMoney(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos),
-              beneficio_recebido: this.formatMoney(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos),
+              beneficio_recebido: beneficioRecebidoAbono,
         }
+
         tableData.push(line);
+        
         if(this.aplicaProporcionalDevidos){
           this.aplicaProporcionalDevidos = false;
           abonoProporcionalDevidos = 1;
