@@ -223,7 +223,6 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
 
     let mediaTotal = mediaContribuicoesPrimaria + mediaContribuicoesSecundaria;
     let rmi = this.calculateRMI(mediaTotal,somaContribuicoes, conclusoes);
-
     // Exibir as conclusões:
     conclusoes.total_contribuicoes_primarias = this.formatMoney(totalPrimario, currencyDataInicioBeneficio.acronimo);
     conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimaria, currencyDataInicioBeneficio.acronimo);
@@ -235,6 +234,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     conclusoes.divisor_calculo_media = index;
     conclusoes.media_contribuicoes = this.formatMoney(mediaTotal,currencyDataInicioBeneficio.acronimo);
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currencyDataInicioBeneficio.acronimo);
+
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
     this.tableOptions = {
@@ -296,12 +296,11 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     conclusoes.beneficio_minimo_com_indice =  this.formatMoney(valorSalarioMinimo, currencyDataInicioBeneficio.acronimo);
     conclusoes.noventaecinco_porcento_valor_da_media = this.formatMoney((0.95*mediaTotal), currencyDataInicioBeneficio.acronimo);
 
-    // TODO: Nesse momento Salvar o valor da RMI e da somaContribuições no BD do calculo.
+    // Nesse momento Salva o valor da RMI e da somaContribuições no BD do calculo.
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = rmi;
-    this.CalculoRgpsService.update(this.calculo).then(model =>{
-      return rmi;
-    })
+    this.CalculoRgpsService.update(this.calculo);
+    return rmi;
   }
 
   getInps(year){
