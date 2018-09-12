@@ -196,19 +196,19 @@
                     </td>
                     <td width="50%">{{conclusoes.divisor_calculo_media}}</td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="conclusoes.total_contribuicoes_secundarias">
                     <td width="50%">
                       <span class="pull-right font-bold">Total das contribuições secundárias:</span>
                     </td>
                     <td width="50%">{{conclusoes.total_contribuicoes_secundarias}}</td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="conclusoes.media_contribuicoes_secundarias">
                     <td width="50%">
                       <span class="pull-right font-bold">Média das contribuições secundárias:</span>
                     </td>
                     <td width="50%">{{conclusoes.media_contribuicoes_secundarias}}</td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="conclusoes.divisor_calculo_media_secundaria">
                     <td width="50%">
                       <span class="pull-right font-bold">Divisor do cálculo da média secundária:</span>
                     </td>
