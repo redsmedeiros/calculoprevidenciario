@@ -68,7 +68,7 @@
           <div>
 
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body" >
 
               <ul class="list-unstyled">
                 <li>
@@ -78,7 +78,7 @@
                 <li>
                   <b>Data da distribuição da ação:</b> {{formatDate(calculo.data_acao_judicial)}}</li>
                 <li>
-                  <b>Tabela Correção Monetária Justiça Federal:</b> {{formatDate(calculo.data_calculo_pedido).substring(3, 10)}}</li>
+                  <b>Tabela Correção Monetária {{stringTabelaCorrecaoMonetaria}}:</b> {{formatDate(calculo.data_calculo_pedido).substring(3, 10)}}</li>
               </ul>
             </div>
           </div>
@@ -172,7 +172,7 @@
           <div>
 
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body" *ngIf="!isUpdating">
 
               <ul class="list-unstyled">
                 <li>

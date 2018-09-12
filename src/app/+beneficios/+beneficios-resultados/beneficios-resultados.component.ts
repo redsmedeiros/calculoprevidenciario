@@ -25,7 +25,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
-
+  public stringTabelaCorrecaoMonetaria = '';
   public segurado:any = {};
   public calculo:any = {};
   public isTetos = false;
@@ -181,7 +181,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       .then(calculo => {
         this.calculo = calculo;
         this.setInicioRecebidosEDevidos();
-
+        this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
         if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
           this.isTetos = true;
         }
@@ -1639,6 +1639,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     return tipos_aposentadoria[value].name;
   }
 
+  getStringTabelaCorrecaoMonetaria(){
+    if(this.calculo.tipo_correcao=='ipca')
+      return 'IPCA-e';
+    if(this.calculo.tipo_correcao=='tr')
+      return 'da TR';
+    if(this.calculo.tipo_correcao=='cam')
+      return 'da Justiça Federal';
+  }
+  
   editSegurado() {
     window.location.href='/#/beneficios/beneficios-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
