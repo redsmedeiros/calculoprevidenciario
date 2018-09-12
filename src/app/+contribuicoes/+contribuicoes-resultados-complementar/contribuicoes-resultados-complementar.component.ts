@@ -238,6 +238,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   }
 
   formatMoney(data){
+    data = parseFloat(data);
     return 'R$ ' + (data.toFixed(2)).replace('.',',');
   }
 
