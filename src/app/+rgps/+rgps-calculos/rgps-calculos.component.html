@@ -63,6 +63,11 @@
       </article>
 
       <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
+      </article>
+      
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
@@ -101,10 +106,7 @@
           </div>
         </sa-widget>
       </article>
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
-      </article>
-
+      
       <div class="row">
         <div class="col-sm-4 col-sm-offset-4">
           <table class="table table-bordered table-hover table-condensed">
