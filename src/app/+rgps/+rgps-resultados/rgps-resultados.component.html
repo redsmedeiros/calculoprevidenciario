@@ -42,6 +42,45 @@
         </sa-widget>
       </article>
     </div>
+
+      <!-- tabela com o grupo de cálculos -->
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Grupo de Cálculos para os valores de contribuição</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
+                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                  <tr>
+                    <th>Espécie</th>
+                    <th>Período para início de benefício</th>
+                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
+                    <th>DIB</th>
+                    <th>Data de Criação</th>
+                    <th>Comparar</th>
+                  </tr>
+                </thead>
+              </sa-datatable>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calculator"></i>
+                        </span> Comparar
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
       <!-- opções do calculo -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
@@ -90,45 +129,6 @@
                 </div>
               </div>
 
-            </div>
-          </div>
-        </sa-widget>
-      </article>
-
-      <!-- tabela com o grupo de cálculos -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Grupo de Cálculos para os valores de contribuição</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding">
-              <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Espécie</th>
-                    <th>Período para início de benefício</th>
-                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
-                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
-                    <th>DIB</th>
-                    <th>Data de Criação</th>
-                    <th>Comparar</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-                <div class="row">
-                  <div class="col-md-12">
-                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-calculator"></i>
-                        </span> Comparar
-                    </button>
-                  </div>
-                </div>
             </div>
           </div>
         </sa-widget>
