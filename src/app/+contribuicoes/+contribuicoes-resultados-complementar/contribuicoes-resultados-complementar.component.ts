@@ -110,7 +110,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   }
 
   generateTabelaResultados(){
-    let competencias = this.monthAndYear( this.competenciaInicial,  this.competenciaFinal);
+    let competencias = this.monthAndYear(this.competenciaInicial,  this.competenciaFinal);
     let dataTabelaResultados = [];
     
     //Variaveis para a linha de total
@@ -154,16 +154,9 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   //Retorna uma lista com os meses entre dateStart e dateEnd
   monthAndYear(dateStart, dateEnd){
-    dateStart = '01/'+dateStart;
-    dateEnd = '01/'+dateEnd;
-
-    let startSplit = dateStart.split('/');
-    let endSplit = dateEnd.split('/');
-
-    dateStart = moment(startSplit[2]+'-'+startSplit[1]+'-'+startSplit[0]);
-    dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
+    dateStart = moment(dateStart, 'MM/YYYY');
+    dateEnd = moment(dateEnd, 'MM/YYYY');
     let timeValues = [];
-
     while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
        timeValues.push(dateStart.format('YYYY-MM'));
        dateStart.add(1,'month');

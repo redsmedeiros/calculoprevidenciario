@@ -211,8 +211,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     //Ordena as contribuiçoes consideradas pela data e concatena com as desconsideradas
     dataTabelaDetalhes = dataTabelaDetalhes.slice(0, index).concat(dataTabelaDetalhes.slice(index, dataTabelaDetalhes.length).sort((entry1, entry2) => {
-          let dataMesEntry1 = moment(entry1.mes.split('/')[1]+'-'+entry1.mes.split('/')[0] + '-01');
-          let dataMesEntry2 = moment(entry2.mes.split('/')[1]+'-'+entry2.mes.split('/')[0] + '-01');
+          let dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
+          let dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
           if(dataMesEntry1 > dataMesEntry2){
             return 1;
           }
@@ -322,14 +322,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   
   //Retorna uma lista com os meses entre dateStart e dateEnd
   monthAndYear(dateStart, dateEnd){
-  	dateStart = '01/'+dateStart;
-  	dateEnd = '01/'+dateEnd;
-
-  	let startSplit = dateStart.split('/');
-  	let endSplit = dateEnd.split('/');
-
-  	dateStart = moment(startSplit[2]+'-'+startSplit[1]+'-'+startSplit[0]);
-	  dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
+  	dateStart = moment(dateStart, 'MM/YYYY');
+    dateEnd = moment(dateEnd, 'MM/YYYY');
 	  let timeValues = [];
 
 	  while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
@@ -341,9 +335,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
   getDifferenceInYears(dateString){
-    let splitted = dateString.split('/');
     let today = moment();
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let pastDate = moment(dateString, "MM/YYYY");
     let duration = moment.duration(today.diff(pastDate));
     let years = duration.asYears();
     return Math.floor(years);
@@ -351,15 +344,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Retorna a diferença em meses completos entre a data passada como parametro e a data atual
   getDifferenceInMonths(dateString, dateString2=''){
-    let splitted = dateString.split('/');
     let recent;
     if(dateString2 == ''){
       recent = moment();
     }else{
-      let splitted = dateString2.split('/');
-      recent = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+      recent = moment(dateString2, "MM/YYYY");
     }
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+    let pastDate = moment(dateString, "MM/YYYY");
     let duration = moment.duration(recent.diff(pastDate));
     let months = duration.asMonths();
     return Math.floor(months);
