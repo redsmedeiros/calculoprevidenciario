@@ -51,7 +51,7 @@
                 <p>Mostrar Reajustes Administrativos</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-eye"></i>
                   </span> MOSTRAR
@@ -225,7 +225,22 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+          </div>
+          
+          </div>
+          <div id="raTable-{{boxId}}" *ngIf="!isUpdating" class="widget-body" >
+              <h2  *ngIf="!isUpdating && showReajustesAdministrativos">Reajustes Administrativos</h2>
+              <hr>
+              <sa-datatable [options]="reajustesAdministrativosTableOptions" *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Competência</th>
+                      <th>Reajuste</th>
+                      <th>Benefício</th>
+                      <th>Limite</th>
+                    </tr>
+                  </thead>
+              </sa-datatable>
           </div>
         </sa-widget>
       </article>
