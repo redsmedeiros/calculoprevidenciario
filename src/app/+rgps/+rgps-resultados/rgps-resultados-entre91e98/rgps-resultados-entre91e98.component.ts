@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
+import { ActivatedRoute } from '@angular/router';
 import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
 import { CalculoRgps as CalculoModel } from '../../+rgps-calculos/CalculoRgps.model';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
@@ -56,6 +57,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       {data: 'limite'},
     ] 
   };
+
+  public reajustesAdministrativos = true;
   public showReajustesAdministrativos = false;
   public reajustesAdministrativosTableData = [];
   public reajustesAdministrativosTableOptions = {
@@ -77,13 +80,19 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
-    private CalculoRgpsService:CalculoRgpsService,) { super(null, null, null, null);}
+    private CalculoRgpsService:CalculoRgpsService,
+    protected rt: ActivatedRoute,) { super(null, null, null, null);}
 
   ngOnInit() {
+    if(this.rt.snapshot.queryParams['withINPC'] == 'true'){
+      this.reajustesAdministrativos = false;
+    }else{
+      this.reajustesAdministrativos = true;
+    }
+
     this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-    console.log(this.tipoCalculo)
   	this.idadeSegurado = this.getIdadeSegurado();
   	if(this.tipoCalculo == '91_98'){
   		this.stringCabecalho = 'Entre 05/04/1991 e 15/12/1998'
@@ -177,8 +186,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
     let dataComparacao = (dib.clone()).startOf('month');
-    let reajustesAdministrativos = true;
-    if (reajustesAdministrativos) { // Definir tal booleano, a principio sempre true
+    if (this.reajustesAdministrativos) {
       dataComparacao = (this.dataInicioBeneficio.clone()).startOf('month');
     }
 
@@ -302,7 +310,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let rmiValoresAdministrativos = rmi;
 
-    if(reajustesAdministrativos && 
+    if(this.reajustesAdministrativos && 
       ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
        (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
            rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
@@ -345,8 +353,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let somaContribuicoes = totalPrimaria + totalSecundaria;
 
-    if (reajustesAdministrativos) {
-       //TODO: salvarBeneficiosNoBD;
+    if (this.reajustesAdministrativos) {
       this.calculo.soma_contribuicao = somaContribuicoes;
       this.calculo.valor_beneficio = rmi;
       this.CalculoRgpsService.update(this.calculo)
@@ -638,8 +645,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     return anoNecessario.year();
   }
 
-  getValoresAdministrativos(rmi) {
-    let reajustesAdministrativos = true;   
+  getValoresAdministrativos(rmi) { 
     let valorBeneficio = rmi;
     let dataAnterior = null;
     let dataCorrente = null;
@@ -652,7 +658,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       dataCorrente = reajusteAutomatico.data_reajuste;
       let reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
       valorBeneficio = this.convertCurrency(valorBeneficio, dataAnterior, dataCorrente);
-      if (reajustesAdministrativos) {
+      if (this.reajustesAdministrativos) {
         valorBeneficio = valorBeneficio * reajuste;
       }
       valorBeneficio = (valorBeneficio < reajusteAutomatico.salario_minimo) ? reajusteAutomatico.salario_minimo : valorBeneficio;
@@ -740,6 +746,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
     bonus = bonus * tempoServico;
     return bonus;
+  }
+
+  calcularComINPC(){
+    window.location.href = (this.reajustesAdministrativos) ? window.location.href.split('?')[0] + '?withINPC=true' : window.location.href.split('?')[0];
+    window.location.reload();
   }
 
   limitarTetosEMinimos(valor, data){

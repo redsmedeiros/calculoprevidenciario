@@ -48,10 +48,11 @@
             </tr>
             <tr>
               <td>
-                <p>Calcular com base na tabela do INPC vigente na data da DIB</p>
+                <p  *ngIf='reajustesAdministrativos'>Calcular com base na tabela do INPC vigente na data da DIB</p>
+                <p  *ngIf='!reajustesAdministrativos'>Calcular Administrativamente</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="calcularComINPC()" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-calculator"></i>
                   </span> CÁLCULAR
