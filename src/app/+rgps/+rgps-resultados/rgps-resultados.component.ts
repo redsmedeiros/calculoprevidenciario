@@ -672,6 +672,9 @@ export class RgpsResultadosComponent implements OnInit {
       case "Aposentadoria por tempo de contribuição":
         numeroEspecie = 4;
         break;
+      case "Aposentadoria por tempo de serviço":
+        numeroEspecie = 4;
+        break;
       case "Aposentadoria especial":
         numeroEspecie = 5;
         break;
@@ -692,6 +695,9 @@ export class RgpsResultadosComponent implements OnInit {
         break;
       case "Auxílio Acidente - 60%":
         numeroEspecie = 19;
+        break;
+      case "Abono de Permanência em Serviço":
+        numeroEspecie = 20;
         break;
       case "Aposentadoria especial da Pessoa com Deficiência Grave":
         numeroEspecie = 25;
@@ -731,23 +737,6 @@ export class RgpsResultadosComponent implements OnInit {
       }
       return '';
   }
-
-  // limitarTetosEMinimos(valor, data){
-  //   let moeda = this.Moeda.getByDate(data);
-  //   let salarioMinimo = moeda.salario_minimo;
-  //   let tetoSalarial = moeda.teto;
-  //   let avisoString = '';
-  //   let valorRetorno = valor;
-
-  //   if(valor < salarioMinimo){
-  //     valorRetorno = salarioMinimo;
-  //     avisoString = 'LIMITADO AO MÍNIMO'
-  //   }else if(valor > tetoSalarial){
-  //     valorRetorno = tetoSalarial;
-  //     avisoString = 'LIMITADO AO TETO'
-  //   }
-  //   return {valor:valorRetorno, aviso:avisoString};
-  // }
 
   getIndex(data){
     return this.getDifferenceInMonths(this.primeiraDataTabela,data);
@@ -822,26 +811,6 @@ export class RgpsResultadosComponent implements OnInit {
     return returnObj;
   }
 
-  // getDataInicio(){
-  //   let dataInicio;
-  //   if(this.calculo.tipo_aposentadoria == 'Anterior a 05/10/1988'){
-  //     dataInicio = this.dataInicioBeneficio;
-  //   }else{
-  //     let dib = this.dataInicioBeneficio;
-  //     if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
-  //       this.dataInicioBeneficio > this.dataDib99) {
-  //       dib = this.dataDib99;
-  //     }
-  //     if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
-  //       this.dataInicioBeneficio > this.dataDib98) {
-  //       dib = this.dataDib98;
-  //     }
-
-  //     dataInicio = (dib.clone()).startOf('month');
-  //   }
-  //   return dataInicio;
-  // }
-
   controleExibicao(calculo){
     let data88 = moment('1988-10-05');
     let data91 = moment('1991-04-04');
@@ -887,54 +856,6 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculoApos99 = true;
     }
   }
-
-  // getDataLimite(dataInicio){
-  //   let mesesLimite = 0;
-  //   let mesesLimiteTotal = 0;
-  //   if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
-  //     mesesLimite = 18;
-  //     mesesLimiteTotal = 12;
-  //   } else {
-  //     mesesLimite = 48;
-  //     mesesLimiteTotal = 36;
-  //   }
-
-  //   if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-  //     mesesLimite = 36;
-  //     mesesLimiteTotal = 48;
-  //   }
-
-  //   if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-  //     mesesLimite = 36;
-  //     mesesLimiteTotal = 48;
-  //   }
-
-  //   if(this.calculo.tipo_aposentadoria == 'A partir de 29/11/1999'){
-  //     mesesLimite = 0;
-  //     mesesLimiteTotal = 0;
-  //   }
-
-  //   let dataLimite;
-  //   if(mesesLimite > 0){
-  //     dataLimite = (dataInicio.clone()).add(-mesesLimite,'months');
-  //   }else{
-  //     dataLimite = moment('1994-07-01');
-  //   }
-  //   return dataLimite;
-  // }
-
-  // getIdadeFracionada(){
-  //   let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-  //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
-  //   return idadeEmDias/365.25;
-  // }
-
-  // getIN45(){
-  //   this.withIN45 = true;
-  //   if(this.tipoBeneficio == 25 || this.tipoBeneficio == 26 || this.tipoBeneficio == 27 || this.tipoBeneficio == 28){
-  //     this.withIN45 = false;
-  //   }
-  // }
 
   preencheGrupoDeCalculos(){
     for(let calculo of this.calculosList){
