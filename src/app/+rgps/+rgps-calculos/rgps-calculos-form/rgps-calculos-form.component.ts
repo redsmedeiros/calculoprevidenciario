@@ -375,7 +375,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   changeGrupoDos12() {
     this.errors.clear('periodoInicioBeneficio');
-    if (this.periodoInicioBeneficio == 'Anterior a 05/10/1998' || this.periodoInicioBeneficio == 'Entre 05/10/1998 e 04/04/1991') {
+    if (this.periodoInicioBeneficio == 'Anterior a 05/10/1988' || this.periodoInicioBeneficio == 'Entre 05/10/1988 e 04/04/1991') {
       this.hasGrupoDos12 = true;
     } else {
       this.hasGrupoDos12 = false;
