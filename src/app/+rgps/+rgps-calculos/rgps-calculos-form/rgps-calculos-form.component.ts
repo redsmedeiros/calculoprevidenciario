@@ -54,8 +54,6 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   public periodoOptions: string[] = [];
 
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-
   @Input() formData;
   @Input() errors: ErrorService;
   @Input() isEdit: boolean;
@@ -436,4 +434,43 @@ export class RgpsCalculosFormComponent implements OnInit {
     return false;
   }
 
+  dateMask(rawValue){
+    if(rawValue == ''){
+      return [/[0-3]/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
+    }
+    let mask = [];
+    mask.push(/[0-3]/);
+
+    if (rawValue[0] == 0){
+      mask.push(/[1-9]/);
+    }else if(rawValue[0] == 1){
+      mask.push(/[0-9]/);
+    }else if(rawValue[0] == 2){
+      mask.push(/[0-9]/);
+    }else if(rawValue[0] == 3){
+      mask.push(/[0-1]/);
+    }
+
+    mask.push('/');
+    mask.push( /[0-1]/);
+    
+    if (rawValue[3] == 0){
+      mask.push(/[1-9]/);
+    }else if(rawValue[3] == 1){
+      mask.push(/[1-2]/);
+    }
+
+    mask.push('/');
+    mask.push( /[1-2]/);
+    
+    if (rawValue[6] == 1){
+      mask.push(/[9]/);
+    }else if(rawValue[6] == 2){
+      mask.push(/[0]/);
+    }
+    mask.push(/\d/);
+    mask.push( /\d/);
+    return mask;
+  }
 }
