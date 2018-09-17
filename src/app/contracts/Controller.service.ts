@@ -29,6 +29,25 @@ export abstract class ControllerService {
     });
   }
 
+  getWithPair(key, value) {
+    return new Promise((resolve, reject) => {
+      this.model.all()
+        .then(models => {
+          models.data = models.data.filter((element) => {
+            return element[key] == value;
+          });
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
+
   getWithParameters(params) {
     return new Promise((resolve, reject) => {
       this.model.getWithParameters(params)
