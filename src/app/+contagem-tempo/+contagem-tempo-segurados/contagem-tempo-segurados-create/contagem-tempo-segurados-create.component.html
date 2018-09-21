@@ -1,0 +1,32 @@
+<div id="content">
+  <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+          <!-- Widget ID (each widget will need unique ID)-->
+          <sa-widget [colorbutton]="false" [editbutton]="false">
+            <header>
+              <span class="widget-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <h2>Novo segurado</h2>
+
+            </header>
+
+            <!-- widget div-->
+            <div>
+
+              <!-- widget content -->
+              <div class="widget-body">
+
+                <app-contagem-tempo-segurados-form
+                  [errors]="Errors"
+                  [formData]="form"
+                  (onSubmit)="submit($event)"
+                ></app-contagem-tempo-segurados-form>
+
+              </div>
+            </div>
+          </sa-widget>
+        </article>
+  </div>
+</div>

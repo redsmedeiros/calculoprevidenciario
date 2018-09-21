@@ -29,6 +29,7 @@ import { ExpectativaVida } from '../+rgps/+rgps-resultados/ExpectativaVida.model
 import { ReajusteAutomatico } from '../+rgps/+rgps-resultados/ReajusteAutomatico.model';
 import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
+import { SeguradoContagemTempo } from '../+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
 
 @Injectable()
 export class StoreService {
@@ -50,6 +51,7 @@ export class StoreService {
     carenciaProgressiva: CarenciaProgressiva[],
     reajusteAutomatico: ReajusteAutomatico[],
     expectativaVida: ExpectativaVida[],
+    seguradoContagemTempo: SeguradoContagemTempo[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -67,6 +69,7 @@ export class StoreService {
     carenciaProgressiva: [],
     reajusteAutomatico: [],
     expectativaVida: [],
+    seguradoContagemTempo: [],
   };
 
   public push(name: string, data) {

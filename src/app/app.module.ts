@@ -1,3 +1,4 @@
+
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,11 +16,12 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Core providers
-import {CoreModule} from "./core/core.module";
-import {SmartadminLayoutModule} from "./shared/layout/layout.module";
+import { CoreModule } from "./core/core.module";
+import { SmartadminLayoutModule } from "./shared/layout/layout.module";
 import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
 import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
+import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.service';
 import { CalculoAtrasadoService } from './+beneficios/+beneficios-calculos/CalculoAtrasado.service';
@@ -36,6 +38,7 @@ import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMini
 import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAutomatico.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -52,7 +55,7 @@ type StoreType = {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
   ],
@@ -62,11 +65,8 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
-
     CoreModule,
     SmartadminLayoutModule,
-
-
     routing
   ],
   exports: [
@@ -92,10 +92,11 @@ type StoreType = {
     CarenciaProgressivaService,
     ReajusteAutomaticoService,
     ExpectativaVidaService,
+    SeguradoContagemTempoService
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState) { }
 
 
 }

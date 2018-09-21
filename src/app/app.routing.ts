@@ -101,6 +101,11 @@ export const routes: Routes = [
         loadChildren: 'app/+widgets/widgets-showcase.module#WidgetsShowcaseModule',
         data: {pageTitle: 'Widgets'}
       },
+      {
+        path: 'contagem-tempo',
+        loadChildren: 'app/+contagem-tempo/contagem-tempo-showcase.module#ContagemTempoShowcaseModule',
+        data: {pageTitle: 'Contagem Tempo'}
+      },
     ]
   },
 
