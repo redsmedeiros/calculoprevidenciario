@@ -36,6 +36,8 @@ import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMini
 import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAutomatico.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
+import { FileDropModule } from 'ngx-file-drop';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -65,6 +67,7 @@ type StoreType = {
 
     CoreModule,
     SmartadminLayoutModule,
+    FileDropModule,
 
 
     routing
