@@ -40,29 +40,50 @@
       </article>
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Importação CNIS</h2>
+            <h2>Opção 1</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
+            <div class="widget-body">
              <file-drop (click)="clickedDropzone()" (onFileDrop)="dropped($event)">
               <span>Clique aqui e selecione o CNIS.pdf ou arraste para este local.</span>
             </file-drop>
             <input type="file" (change)="onFileInputChange($event)" accept="application/pdf" #cnisFileInput style="display:none"/>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
 
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Opção 2</h2>
+          </header>
+          <div>
+            <div class="widget-body">
             <div>
             <span>Copie todos os dados do CNIS ou Carta de Concessão e cole no espaço reservado os dados copiados:</span>
             <textarea rows="5" cols="50" [(ngModel)]="cnisTextArea"></textarea>
-            <button type="submit" (click)="importFromTextArea()" class="btn btn-labeled btn-primary">
-               <span class="btn-label">
-                <i class="fa fa-upload"></i>
-               </span> Iniciar importação
-            </button>
+           
             </div>
+            <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                       <button type="submit" (click)="importFromTextArea()" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-upload"></i>
+                        </span> Iniciar importação
+                        </button>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </sa-widget>

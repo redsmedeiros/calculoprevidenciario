@@ -8,7 +8,12 @@ import { ErrorService } from '../../../services/error.service';
 import { ValorContribuido } from '../ValorContribuido.model'
 import { ValorContribuidoService } from '../ValorContribuido.service'
 import * as moment from 'moment';
-import swal from 'sweetalert';
+//import swal from 'sweetalert';
+import swal from 'sweetalert2'
+import { PDFJSStatic, PDFPageProxy } from "pdfjs-dist";
+
+//import * as PDFJS from "pdfjs-dist";
+//import {PDFJS} from 'pdfjs-dist';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
 @FadeInTop()
@@ -34,7 +39,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   private files: UploadFile[] = [];
   private cnisTextArea;
   private regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
-  private regexpFacultativo = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
+  private regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
+  private regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -82,14 +88,6 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     }
   }
 
-  public fileOver(event){
-    console.log(event);
-  }
-
-  public fileLeave(event){
-    console.log(event);
-  }
-
   clickedDropzone(){
     let event = new MouseEvent('click', {bubbles: false});
     this.fileInput.nativeElement.dispatchEvent(event);
@@ -107,17 +105,53 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   processPdfFile(file){
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      console.log(reader.result)
-    }
-    reader.readAsText(file)
+    let PDFJS = require("pdfjs-dist");
+    PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
+    PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
+      let pdfDocument = pdf;
+      // Create an array that will contain our promises 
+      let pagesPromises = [];
+      for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
+        // Required to prevent that i is always the total of pages
+        (pageNumber => {
+            // Store the promise of getPageText that returns the text of a page
+            pagesPromises.push(this.getPageText(pageNumber, pdfDocument));
+        })(i + 1);
+      }
+      // Execute all the promises
+      Promise.all(pagesPromises).then(pagesText => {
+        this.processText(pagesText.join(' '), false);
+      });
+    });
+  }
+
+  getPageText(pageNum, PDFDocumentInstance) {
+    // Return a Promise that is solved once the text of the page is retrieven
+    return new Promise((resolve, reject) => {
+      PDFDocumentInstance.getPage(pageNum).then(pdfPage => {
+        // The main trick to obtain the text of the PDF page, use the getTextContent method
+        pdfPage.getTextContent().then(textContent => {
+          let textItems = textContent.items;
+          let finalString = "";
+          // Concatenate the string of the item to the final string
+          for (let i = 0; i < textItems.length; i++) {
+            let item = textItems[i];
+            finalString += item.str + " ";
+          }
+          // Solve promise with the text retrieven from the page
+          resolve(finalString);
+        });
+      });
+    });
   }
 
   importFromTextArea(){
-    let tipoImportacao = true;
-    let text = this.cnisTextArea.trim();
-    text = text.replace('\n', '\t');
+    let text = this.cnisTextArea;
+    this.processText(text, true);
+  }
+
+  processText(text, tipoImportacao){
+    text = text.trim().replace('\n', '\t');
 
     let empregado = null;
     let facultativoOuIndividual = null;
@@ -128,7 +162,11 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     let regras_aplicadas_array = [];
 
     empregado = text.match(this.regexpEmpregado)
-    facultativoOuIndividual = text.match(this.regexpFacultativo);
+    if(tipoImportacao){
+      facultativoOuIndividual = text.match(this.regexpFacultativoTextArea);
+    }else{
+      facultativoOuIndividual = text.match(this.regexpFacultativoPdf);
+    }
 
     if (empregado) {
       empregado_array = this.getArrayFromText(empregado, 1);
@@ -151,6 +189,11 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     }
     
     regras_aplicadas_array = this.aplicarRegras(todas_os_periodos_array);
+    if(regras_aplicadas_array){
+      this.salvarContribuicoes(regras_aplicadas_array);
+    }else{
+      swal('Erro', 'Nenhuma contribuição encontrada no PDF', 'error');
+    }
     console.log(regras_aplicadas_array);
   }
 
@@ -179,11 +222,6 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     let somaContrib = function (valor1, valor2) {
       return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
-
-    // function dateFormat(date) {
-    //   let parts = date.split("/");
-    //   return new Date(parts[1], parts[0], '01');
-    // }
 
     arrayOrganizado.sort(function (a, b) {
       let dateA = moment(a.data, 'MM/YYYY');
@@ -225,6 +263,32 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     }, {});
 
     return result;
+  }
+
+  salvarContribuicoes(array){
+    let contribuicoes = [];
+
+    for(let element of array){
+      let contribuicao = new ValorContribuido({
+        id_calculo: [this.idCalculo],
+        data: moment(element.data,'MM/YYYY').format('YYYY-MM-DD'),
+        tipo: element.contributionType,
+        valor: parseFloat(element.contrib.replace('.', '').replace(',','.'))
+      });
+      contribuicoes.push(contribuicao);
+    }
+
+    swal({
+      type: 'info',
+      title: 'Aguarde por favor...',
+    })
+    
+    swal.showLoading();
+
+    this.ValorContribuidoService.save(contribuicoes).then(() => {
+      swal.close();
+      window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + this.idCalculo;
+    });
   }
 
 }
