@@ -31,11 +31,22 @@ export class SeguradoContagemTempo extends Model {
   public data_segurado;
   public funcao;
   public data_entrada_servico_publico;
+  // public actions = `
+  //     <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar" id="testee" class="action-edit"  title="Editar o Segurado"> <i class="fa fa-edit"></i> </a>
+  //     <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/destroy" class="action-edit" title="Deletar o Segurado"> <i class="fa fa-times"></i> </a>
+  //     <a href="#/contagem-tempo/contagem-tempo-calculos/${this.id}" class="action-edit" title="Visualizar as simulações do segurado"> <i class="fa fa-calculator"></i> </a>
+  // `;
+
   public actions = `
-      <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-      <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
-      <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}" class="action-edit"> <i class="fa fa-calculator"></i> </a>
-  `;
+  <div class="btn-group">
+  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar o Segurado"> <i class="fa fa-edit"></i> </a>
+  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar o Segurado"> <i class="fa fa-times"></i> </a>
+  <a href="#/contagem-tempo/contagem-tempo-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar as simulações do segurado"> <i class="fa fa-calculator"></i> </a>
+  </div>
+`;
+
+
+
 
   // Definir e padronizar front e back-end Models
   public tipo = this['funcao'];

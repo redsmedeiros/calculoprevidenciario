@@ -1,4 +1,3 @@
-
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,6 +21,7 @@ import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.se
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
 import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
 import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
+import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.service';
 import { ContribuicaoJurisprudencialService } from './+contribuicoes/+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoComplementarService } from './+contribuicoes/+contribuicoes-complementar/ContribuicaoComplementar.service';
 import { CalculoAtrasadoService } from './+beneficios/+beneficios-calculos/CalculoAtrasado.service';
@@ -38,6 +38,8 @@ import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMini
 import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAutomatico.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
+import { PeriodoContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodo/PeriodoContagemTempo.service';
+
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -92,7 +94,9 @@ type StoreType = {
     CarenciaProgressivaService,
     ReajusteAutomaticoService,
     ExpectativaVidaService,
-    SeguradoContagemTempoService
+    SeguradoContagemTempoService,
+    CalculoContagemTempoService,
+    PeriodoContagemTempoService
   ]
 })
 export class AppModule {

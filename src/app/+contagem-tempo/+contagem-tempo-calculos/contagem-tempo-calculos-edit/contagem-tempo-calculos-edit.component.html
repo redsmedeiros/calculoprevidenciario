@@ -1,0 +1,28 @@
+<div id="content">
+  <div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12">
+
+      <!-- Widget ID (each widget will need unique ID)-->
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-eye"></i>
+          </span>
+          <h2>Editar Cálculo</h2>
+
+        </header>
+
+        <!-- widget div-->
+        <div>
+
+          <!-- widget content -->
+          <div *ngIf = "!isUpdating" class="widget-body">
+
+            <app-contagem-tempo-calculos-form [errors]="Errors" [formData]="form" [isEdit]="edit_mode" (onSubmit)="submit($event)"></app-contagem-tempo-calculos-form>
+
+          </div>
+        </div>
+      </sa-widget>
+    </article>
+  </div>
+</div>

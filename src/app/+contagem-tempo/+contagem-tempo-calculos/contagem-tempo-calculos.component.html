@@ -1,0 +1,160 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- widget options:
+              usage: <sa-widget [editbutton]="false">
+    
+              [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [collapsed]="true"
+              [sortable]="false"
+    
+              -->
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+
+          </header>
+
+          <!-- widget div-->
+          <div>
+
+            <!-- widget content -->
+            <div class="widget-body">
+
+              <ul class="list-unstyled">
+                <li><b>Nome:</b>  {{segurado.nome}} </li>
+                <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+              </ul>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </span> Editar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <app-contagem-tempo-calculos-create (onSubmit)="onCreate($event)"></app-contagem-tempo-calculos-create> 
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-contagem-tempo-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-contagem-tempo-calculos-index> 
+      </article>
+      
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>Opções</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class='fa fa-money '></i>
+                    </span> Valores de contribuição
+                  </button>
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Realizar cálculos
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <table class="table table-bordered table-hover table-condensed">
+            <thead>
+              <tr>
+                <th colspan="2" class="text-align-center">LEGENDA</th>
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                <th>Símbolo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <i class="fa fa-edit"></i>
+                </td>
+                <td>Editar</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-times"></i></td>
+                <td>Remover</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-money"></i></td>
+                <td>Inserir valores de contribuição</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-arrow-down"></i></td>
+                <td>Importar dados do CNIS</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-calculator"></i></td>
+                <td>Ver resultados</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RgpsSeguradosEditComponent } from './rgps-segurados-edit.component';
+import { ContagemTempoSeguradosEditComponent } from './contagem-tempo-segurados-edit.component';
 
-describe('RgpsSeguradosEditComponent', () => {
-  let component: RgpsSeguradosEditComponent;
-  let fixture: ComponentFixture<RgpsSeguradosEditComponent>;
+describe('ContagemTempoSeguradosEditComponent', () => {
+  let component: ContagemTempoSeguradosEditComponent;
+  let fixture: ComponentFixture<ContagemTempoSeguradosEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RgpsSeguradosEditComponent ]
+      declarations: [ContagemTempoSeguradosEditComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RgpsSeguradosEditComponent);
+    fixture = TestBed.createComponent(ContagemTempoSeguradosEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

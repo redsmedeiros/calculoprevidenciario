@@ -1,0 +1,19 @@
+<article class="col-sm-12 col-md-12 col-lg-12">
+<sa-widget [colorbutton]="false" [editbutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-calendar"></i>
+    </span>
+    <h2>Adicionar uma nova simulação de contagem de tempo</h2>
+  </header>
+  <div>
+    <div class="widget-body">
+    	<app-contagem-tempo-calculos-form
+    		    [errors]="Errors"
+            [formData]="form"
+            (onSubmit)="submit($event)"
+    	></app-contagem-tempo-calculos-form> 
+    </div>
+  </div>
+</sa-widget>
+</article>

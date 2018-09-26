@@ -10,14 +10,14 @@ export const routes: Routes = [
     data: {pageTitle: 'Contagem Tempo Segurados'}
   },
   {
+    path: 'contagem-tempo-calculos',
+    loadChildren: 'app/+contagem-tempo/+contagem-tempo-calculos/contagem-tempo-calculos.module#ContagemTempoCalculosModule',
+    data: {pageTitle: 'Contagem Tempo  Calculo'}
+  },
+  {
     path: 'contagem-tempo-elements',
   //  loadChildren: 'app/+contagem-tempo/+contagem-tempo-elements/contagem-tempo-elements.module#ContagemTempoElementsModule',
     data: {pageTitle: 'Contagem Tempo '}
-  },
-  {
-    path: 'contagem-tempo-calculos',
-   // loadChildren: 'app/+contagem-tempo/+contagem-tempo-calculos/contagem-tempo-calculos.module#ContagemTempoCalculosModule',
-    data: {pageTitle: 'Contagem Tempo  Calculo'}
   },
   {
     path: 'contagem-tempo-matriz',
