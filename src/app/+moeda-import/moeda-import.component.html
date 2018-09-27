@@ -1,0 +1,28 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <!-- row -->
+    <div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Importação</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+             <file-drop (click)="clickedDropzone()" (onFileDrop)="dropped($event)">
+              <span>Clique aqui e selecione o arquvio CSV ou arraste para este local.</span>
+            </file-drop>
+            <input type="file" (change)="onFileInputChange($event)" accept="text/csv" #csvFileInput style="display:none"/>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+    <!-- end row -->
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>

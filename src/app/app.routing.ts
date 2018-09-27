@@ -101,6 +101,11 @@ export const routes: Routes = [
         loadChildren: 'app/+widgets/widgets-showcase.module#WidgetsShowcaseModule',
         data: {pageTitle: 'Widgets'}
       },
+      {
+        path: 'moeda-import',
+        loadChildren: 'app/+moeda-import/moeda-import.module#MoedaImportModule',
+        data: {pageTitle: 'Importação dos dados para tabela de Moeda'}
+      },
     ]
   },
 
