@@ -51,14 +51,13 @@ export abstract class ControllerService {
 
       if (this.list.length === 0 || this.list == []) {
         this.get().then(() => {
-          
           let list = this.list.filter((moeda) => {
             return from > moeda.data_moeda && to < moeda.data_moeda;
           });
           resolve(list);
         }).catch(error => {
             console.error(error);
-            reject(error);          
+            reject(error);
         })
       } else {
       let list =  this.list.filter((moeda) => {

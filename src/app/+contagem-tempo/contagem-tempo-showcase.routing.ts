@@ -20,9 +20,9 @@ export const routes: Routes = [
     data: {pageTitle: 'Contagem Tempo '}
   },
   {
-    path: 'contagem-tempo-matriz',
-    // loadChildren: 'app/+contagem-tempo/+contagem-tempo-matriz/contagem-tempo-matriz.module#ContagemTempoMatrizModule',
-    data: {pageTitle: 'Contagem Tempo  Matriz'}
+    path: 'contagem-tempo-periodos',
+    loadChildren: 'app/+contagem-tempo/+contagem-tempo-periodos/contagem-tempo-Periodos.module#ContagemTempoPeriodosModule',
+    data: {pageTitle: 'Contagem Tempo Períodos de Contribuíção'}
   },
   {
     path: 'contagem-tempo-resultados',

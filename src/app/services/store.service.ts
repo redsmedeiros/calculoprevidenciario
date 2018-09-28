@@ -31,6 +31,7 @@ import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
 import { SeguradoContagemTempo } from '../+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo } from '../+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.model';
+import { PeriodosContagemTempo } from '../+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 
 @Injectable()
 export class StoreService {
@@ -53,7 +54,8 @@ export class StoreService {
     reajusteAutomatico: ReajusteAutomatico[],
     expectativaVida: ExpectativaVida[],
     seguradoContagemTempo: SeguradoContagemTempo[]
-    calculoContagemTempo: CalculoContagemTempo[]
+    calculoContagemTempo: CalculoContagemTempo[],
+    periodosContagemTempo: PeriodosContagemTempo[]
   } = {
     segurados: [],
     seguradosContribuicao: [],
@@ -73,6 +75,7 @@ export class StoreService {
     expectativaVida: [],
     seguradoContagemTempo: [],
     calculoContagemTempo: [],
+    periodosContagemTempo: []
   };
 
   public push(name: string, data) {

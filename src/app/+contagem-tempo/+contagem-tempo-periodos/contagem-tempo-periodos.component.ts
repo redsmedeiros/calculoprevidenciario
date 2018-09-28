@@ -8,10 +8,10 @@ import swal from 'sweetalert';
 import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { SeguradoContagemTempo as SeguradoModel } from '../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo  as CalculoModel } from '../+contagem-tempo-calculos/CalculoContagemTempo.model';
-import { ContagemTempoPeriodoListaComponent } from './contagem-tempo-periodo-lista/contagem-tempo-periodo-lista.component';
 import { CalculoContagemTempoService } from '../+contagem-tempo-calculos/CalculoContagemTempo.service';
-import { PeriodoContagemTempoService } from './PeriodoContagemTempo.service';
-import { PeriodoContagemTempo } from './PeriodoContagemTempo.model';
+import { PeriodosContagemTempo } from './PeriodosContagemTempo.model';
+import { ContagemTempoPeriodosListaComponent } from './contagem-tempo-periodos-lista/contagem-tempo-periodos-lista.component';
+import { PeriodosContagemTempoService } from './PeriodosContagemTempo.service';
 
 @FadeInTop()
 @Component({
@@ -23,9 +23,9 @@ import { PeriodoContagemTempo } from './PeriodoContagemTempo.model';
 })
 
 
-export class ContagemTempoPeriodoComponent implements OnInit {
-  @ViewChild('contribuicoesPrimarias') matrizContribuicoesPrimarias: ContagemTempoPeriodoListaComponent;
-  @ViewChild('contribuicoesSecundarias') matrizContribuicoesSecundarias: ContagemTempoPeriodoListaComponent;
+export class ContagemTempoPeriodosComponent implements OnInit {
+  @ViewChild('contribuicoesPrimarias') matrizContribuicoesPrimarias: ContagemTempoPeriodosListaComponent;
+  @ViewChild('contribuicoesSecundarias') matrizContribuicoesSecundarias: ContagemTempoPeriodosListaComponent;
 
   public isUpdating = false;
   public mostrarBotaoRealizarCalculos = true;
@@ -38,14 +38,21 @@ export class ContagemTempoPeriodoComponent implements OnInit {
 
   public grupoCalculosTableOptions = {
     colReorder: false,
+    paging: false,
+    ordering: false,
+    info: false,
+    searching: false,
     data: this.calculoList,
     columns: [
-      { data: 'especie' },
-      { data: 'periodoInicioBeneficio' },
-      { data: 'contribuicaoPrimaria' },
-      { data: 'contribuicaoSecundaria' },
-      { data: 'dib' },
-      { data: 'dataCriacao' },
+      { data: 'referencia_calculo' },
+      { data: 'total_dias' },
+      { data: 'total_carencia' },
+      {
+        data: 'created_at',
+        render: (data) => {
+          return this.formatReceivedDate(data);
+        }
+      }
     ]
   };
 
@@ -54,17 +61,18 @@ export class ContagemTempoPeriodoComponent implements OnInit {
   public salarioContribuicao = undefined;
   public tipoContribuicao = 'Primaria';
 
-  constructor(protected router: Router,
-    private route: ActivatedRoute,
-    protected Segurado: SeguradoService,
-    protected CalculoContagemTempoService: CalculoContagemTempoService,
-    protected errors: ErrorService,
-    protected PeriodoContagemTempoService: PeriodoContagemTempoService) {
-  }
+  constructor(
+                protected router: Router,
+                private route: ActivatedRoute,
+                protected Segurado: SeguradoService,
+                protected CalculoContagemTempoService: CalculoContagemTempoService,
+                protected PeriodosContagemTempoService: PeriodosContagemTempoService,
+                protected errors: ErrorService
+                ) {
+              }
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
-    //this.idCalculo = this.route.snapshot.params['id'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
     this.isUpdating = true;
     this.Segurado.find(this.idSegurado)
@@ -75,9 +83,9 @@ export class ContagemTempoPeriodoComponent implements OnInit {
             .then(calculo => {
               this.calculo = calculo;
               this.updateDatatable(calculo);
-              this.PeriodoContagemTempoService.getByCalculoId(this.idsCalculos[0], null, null)
-                .then((valorescontribuidos: PeriodoContagemTempo[]) => {
-                  this.initializeMatrix(valorescontribuidos);
+              this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos[0])
+                .then((periodosContribuicao: PeriodosContagemTempo[]) => {
+               //   this.initializeMatrix(periodosContribuicao);
                   this.isUpdating = false;
                 });
             });
@@ -107,13 +115,13 @@ export class ContagemTempoPeriodoComponent implements OnInit {
       if (valor == 0)
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-      let periodoContagemTempo = new PeriodoContagemTempo({
+      let periodosContagemTempo = new PeriodosContagemTempo({
         id_calculo: this.idsCalculos,
         data: date,
         tipo: 0,
         valor: valor,
       });
-      primarias.push(periodoContagemTempo);
+      primarias.push(periodosContagemTempo);
     }
     for (let contribuicao of contribuicoesSecundarias) {
       let dateMonth = contribuicao.split('-')[0];
@@ -121,18 +129,18 @@ export class ContagemTempoPeriodoComponent implements OnInit {
       if (valor == 0)
         continue;
       let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-      let periodoContagemTempo = new PeriodoContagemTempo({
+      let periodosContagemTempo = new PeriodosContagemTempo({
         id_calculo: this.idsCalculos,
         data: date,
         tipo: 1,
         valor: valor,
       });
-      secundarias.push(periodoContagemTempo);
+      secundarias.push(periodosContagemTempo);
     }
     let todasContribuicoes = primarias.concat(secundarias);
     if (todasContribuicoes.length != 0) {
       this.mostrarBotaoRealizarCalculos = false;
-      this.PeriodoContagemTempoService.save(todasContribuicoes).then(() => {
+      this.PeriodosContagemTempoService.save(todasContribuicoes).then(() => {
         window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
       });
     } else {
@@ -140,8 +148,8 @@ export class ContagemTempoPeriodoComponent implements OnInit {
     }
   }
 
-  initializeMatrix(valorescontribuidos) {
-    valorescontribuidos.sort((entry1, entry2) => {
+  initializeMatrix(periodosContribuicao) {
+    periodosContribuicao.sort((entry1, entry2) => {
       if (moment(entry1.data) > moment(entry2.data)) {
         return 1;
       }
@@ -150,13 +158,13 @@ export class ContagemTempoPeriodoComponent implements OnInit {
       }
       return 0;
     });
-    if (valorescontribuidos.length != 0) {
+    if (periodosContribuicao.length != 0) {
       let matrizPrimarias = [];
       let matrizSecundarias = [];
       let ano = 0
       let valuesPrimaria = [];
       let valuesSecundaria = [];
-      for (let contribuicao of valorescontribuidos) {
+      for (let contribuicao of periodosContribuicao) {
         let contribAno = parseInt((contribuicao.data).split('-')[0]);
         let contribMes = parseInt((contribuicao.data).split('-')[1]);
         if (contribAno != ano) {
@@ -177,30 +185,50 @@ export class ContagemTempoPeriodoComponent implements OnInit {
 
   }
 
-  updateDatatable(calculo) {
-    let especie = calculo.tipo_seguro;
-    let periodoInicioBeneficio = calculo.tipo_aposentadoria;
-    let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
-    let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
-    let dib = calculo.data_pedido_beneficio;
-    let dataCriacao = this.formatReceivedDate(calculo.data_calculo);
+//   updateDatatable(calculo) {
+//     let line = {
+//       referencia_calculo: calculo.referencia_calculo,
+//       total_dias: calculo.total_dias,
+//       total_carencia: calculo.total_carencia,
+//       created_at: calculo.created_at,
+//     }
 
-    let line = {
-      especie: especie,
-      periodoInicioBeneficio: periodoInicioBeneficio,
-      contribuicaoPrimaria: contribuicaoPrimaria,
-      contribuicaoSecundaria: contribuicaoSecundaria,
-      dib: dib,
-      dataCriacao: dataCriacao
-    }
 
-    this.calculoList.push(line);
+//     this.calculoList.push(line);
 
-    this.grupoCalculosTableOptions = {
-      ...this.grupoCalculosTableOptions,
-      data: this.calculoList,
-    }
+//    this.grupoCalculosTableOptions = {
+//      ...this.grupoCalculosTableOptions,
+//      data: this.calculoList,
+//    }
+// console.log(this.grupoCalculosTableOptions);
+
+//   }
+
+
+
+updateDatatable(calculo) {
+
+  let referencia_calculo = calculo.referencia_calculo;
+  let total_dias = calculo.total_dias;
+  let total_carencia = calculo.total_carencia;
+  let created_at = calculo.created_at;
+
+  let line = {
+    referencia_calculo: referencia_calculo,
+    total_dias: total_dias,
+    total_carencia: total_carencia,
+    created_at: created_at,
   }
+
+  this.calculoList.push(line);
+
+  this.grupoCalculosTableOptions = {
+    ...this.grupoCalculosTableOptions,
+    data: this.calculoList,
+  }
+
+  console.log(this.grupoCalculosTableOptions);
+}
 
   submit() {
 
