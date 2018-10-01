@@ -6,7 +6,7 @@ import {SmartadminModule} from "../shared/smartadmin.module";
 import {SmartadminDatatableModule} from "../shared/ui/datatable/smartadmin-datatable.module";
 import { FormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
-
+import { PapaParseModule } from 'ngx-papaparse';
 
 @NgModule({
   imports: [
@@ -16,6 +16,7 @@ import { FileDropModule } from 'ngx-file-drop';
     SmartadminDatatableModule,
     FormsModule,
     FileDropModule,
+    PapaParseModule,
   ],
   declarations: [MoedaImportComponent],
   providers: [],

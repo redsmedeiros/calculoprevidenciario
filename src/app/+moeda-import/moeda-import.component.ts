@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FadeInTop } from "../shared/animations/fade-in-top.decorator";
+import { PapaParseService } from 'ngx-papaparse';
+import { MoedaService } from '../services/Moeda.service';
+import { Moeda } from '../services/Moeda.model';
 import * as moment from 'moment';
 //import swal from 'sweetalert';
 import swal from 'sweetalert2'
@@ -19,9 +22,42 @@ export class MoedaImportComponent implements OnInit {
   private files: UploadFile[] = [];
   private cnisTextArea;
   
-  constructor() {}
+  constructor(private csvParse: PapaParseService,
+  	          private MoedaService: MoedaService) {}
 
   ngOnInit() {}
+
+  parseCsv(file){
+  	let options = {
+  		header: true, 
+  		complete: (results) => { this.saveValues(results) },
+			dynamicTyping:true,
+		};
+		this.csvParse.parse(file, options);
+  }
+
+  saveValues(data){
+  	let values = data.data;
+  	if(values.length < this.getDifferenceInMonths(moment('1970-01-01'))){
+  		swal('Erro', 'Há datas faltando!', 'error');
+  	}else if(data.meta.fields.length != 11){
+  		swal('Erro', 'Número incorreto de colunas. O correto são 11 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
+  	}else{
+  	  console.log(data)
+  	  swal({
+  	    type: 'info',
+  	    title: 'Aguarde por favor...',
+  	   });
+  	  swal.showLoading();
+  	  this.MoedaService.save(values).then(() => {
+  	    swal.close();
+  	  }).catch(err =>{
+  	    swal.close();
+  	    console.log(err);
+  	    swal('Erro', 'Um erro ocorreu. Tente novamente mais tarde!', 'error');
+  	  });
+  	}
+  }
 
   dropped(event: UploadEvent) {
     let files = event.files;
@@ -37,7 +73,7 @@ export class MoedaImportComponent implements OnInit {
         if(file.type != 'text/csv'){
           swal('Erro', 'Formato de arquivo inválido', 'error');
         }else{
-          console.log(file)
+          this.parseCsv(file);
         }       
       });
     } else {
@@ -55,11 +91,17 @@ export class MoedaImportComponent implements OnInit {
     let files = event.srcElement.files;
     if(files.length > 1){
       swal('Erro', 'Selecione apenas um arquivo', 'error');
-    }else if(files[0].type != 'application/pdf'){
+    }else if(files[0].type != 'text/csv'){
       swal('Erro', 'Formato de arquivo inválido', 'error');
     }else{
-      console.log(files[0]); 
+      this.parseCsv(files[0]); 
     }
+  }
+
+  getDifferenceInMonths(date1, date2 = moment()) {
+    let difference = date1.diff(date2, 'months', true);
+    difference = Math.abs(difference);
+    return Math.floor(difference);
   }
 
 }
