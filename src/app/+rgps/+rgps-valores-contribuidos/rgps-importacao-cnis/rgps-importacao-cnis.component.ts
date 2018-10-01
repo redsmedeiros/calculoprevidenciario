@@ -189,7 +189,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     }
     
     regras_aplicadas_array = this.aplicarRegras(todas_os_periodos_array);
-    if(regras_aplicadas_array){
+    if(regras_aplicadas_array.length != 0){
       this.salvarContribuicoes(regras_aplicadas_array);
     }else{
       swal('Erro', 'Nenhuma contribuição encontrada no PDF', 'error');
