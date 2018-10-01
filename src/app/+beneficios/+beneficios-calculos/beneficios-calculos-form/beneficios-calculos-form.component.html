@@ -132,12 +132,12 @@
 
                 <fieldset>
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Data do cálculo:</label>
+                    <label class="col-md-2 control-label">Data do cálculo*:</label>
                     <div class="col-md-3">
                       <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMask}" name="dataCalculo" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
                     </div>
-                    <label class="col-md-2 control-label">Data da citação do réu:</label>
+                    <label class="col-md-2 control-label">Data da citação do réu*:</label>
                     <div class="col-md-3">
                       <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
@@ -145,7 +145,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Data da ajuizamento da ação:</label>
+                    <label class="col-md-2 control-label">Data da ajuizamento da ação*:</label>
                     <div class="col-md-3">
                       <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
                       <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
@@ -305,7 +305,7 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-md-2 control-label">(*) Data inicial do benefício DIB de valores devidos:</label>
+                    <label class="col-md-2 control-label">Data inicial do benefício DIB de valores devidos*:</label>
                     <div class="col-md-3">
                       <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control" [disabled]="chkUseSameDib" type="text">
                       <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
@@ -335,9 +335,9 @@
                     </div>
                   </div>
                     <div *ngIf="chkNotGranted">
-                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida:
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida*:
                       </label>
-                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">(*) RMI não concedida antes da revisão (Buraco Negro):
+                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida antes da revisão (Buraco Negro)*:
                       </label>
                       <div class="col-md-3">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
