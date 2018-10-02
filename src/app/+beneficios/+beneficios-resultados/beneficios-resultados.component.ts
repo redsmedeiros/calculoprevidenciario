@@ -299,7 +299,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         indice_recebidos: this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido'),
         beneficio_recebido: beneficioRecebidoString.resultString,
         diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente),
-        correcao_monetaria: correcaoMonetaria,
+        correcao_monetaria: this.formatDecimal(correcaoMonetaria,8),
         diferenca_corrigida: this.formatMoney(diferencaCorrigida),
         juros: this.formatPercent(juros, 4),
         valor_juros: this.formatMoney(valorJuros),
