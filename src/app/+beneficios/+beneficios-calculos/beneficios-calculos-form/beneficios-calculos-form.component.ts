@@ -78,7 +78,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public inicioBuracoNegro = moment('1988-10-05');
   public finalBuracoNegro = moment('1991-04-04');
-  public dataMinima = '01/01/1970';
+  public dataMinima = moment('1970-01-01');
 
   private tipoCorrecaoMonetaria = 'ipca';
   public correcaoOptions = [
@@ -212,7 +212,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!this.isValidDate(this.dataCalculo)) {
       this.errors.add({"dataCalculo":["Insira uma data Válida."]});
       valid = false;
-    } else if (this.compareDates(this.dataCalculo,this.dataMinima)) {
+    } else if (moment(this.dataCalculo, 'DD/MM/YYYY') < this.dataMinima) {
       this.errors.add({"dataCalculo":["A data do Cálculo deve ser posterior a 01/01/1970."]})
       valid = false;
     }
@@ -223,7 +223,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!this.isValidDate(this.dataAcaoJudicial)) {
       this.errors.add({"dataAcaoJudicial":["Insira uma data Válida."]});
       valid = false;
-    } else if (this.compareDates(this.dataAcaoJudicial,this.dataMinima)) {
+    } else if (moment(this.dataAcaoJudicial,'DD/MM/YYYY') < this.dataMinima) {
       this.errors.add({"dataAcaoJudicial":["A data deve ser posterior a 01/01/1970."]})
       valid = false;
     }
@@ -234,7 +234,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!this.isValidDate(this.dataCitacaoReu)) {
       this.errors.add({"dataCitacaoReu":["Insira uma data Válida."]});
       valid = false;
-    } else if (this.compareDates(this.dataCitacaoReu,this.dataMinima)) {
+    } else if (moment(this.dataCitacaoReu,'DD/MM/YYYY') < this.dataMinima) {
       this.errors.add({"dataCitacaoReu":["A data deve ser maior que 01/01/1970"]});
       valid = false;
     }
@@ -250,7 +250,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         if (!this.isValidDate(this.dibValoresRecebidos)) {
           this.errors.add({"dibValoresRecebidos":["Insira uma data Válida."]});
           valid = false;
-        } else if (this.compareDates(this.dibValoresRecebidos,this.dataMinima)) {
+        } else if (moment(this.dibValoresRecebidos,'DD/MM/YYYY') < this.dataMinima) {
           this.errors.add({"dibValoresRecebidos":["A data deve ser maior que 01/1970"]});
           valid = false;
         }
@@ -280,7 +280,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
           this.errors.add({"dibAnteriorValoresRecebidos":["Insira uma data válida."]});
           valid = false; 
-        } else if (this.compareDates(this.dibAnteriorValoresRecebidos,this.dataMinima)){
+        } else if (moment(this.dibAnteriorValoresRecebidos,'DD/MM/YYYY') < this.dataMinima){
           this.errors.add({"dibAnteriorValoresRecebidos":["A data deve ser maior que 01/1970"]});
           valid = false; 
         }
@@ -292,7 +292,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
           this.errors.add({"cessacaoValoresRecebidos":["Insira uma data válida."]});
           valid = false; 
-        } else if(this.compareDates(this.cessacaoValoresRecebidos,this.dataMinima)) {
+        } else if (moment(this.cessacaoValoresRecebidos,'DD/MM/YYYY') < this.dataMinima) {
           this.errors.add({"cessacaoValoresRecebidos":["A data deve ser maior que 01/1970"]});
           valid = false; 
         }
@@ -305,8 +305,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!this.isValidDate(this.dibValoresDevidos)) {
       this.errors.add({"dibValoresDevidos":["Insira uma data Válida."]});
       valid = false;
-    } else if (this.compareDates(this.dibValoresDevidos,this.dataMinima)) {
-      this.errors.add({"dibValoresDevidos":["Insira uma data Válida."]});
+    } else if (moment(this.dibValoresDevidos,'DD/MM/YYYY') < this.dataMinima) {
+      this.errors.add({"dibValoresDevidos":["A data deve ser maior que 01/1970"]});
       valid = false;
     }
 
@@ -323,7 +323,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (!this.isValidDate(this.dibAnteriorValoresDevidos)) {
         this.errors.add({"dibAnteriorValoresDevidos":["Insira uma data válida."]});
         valid = false; 
-      } else if (this.compareDates(this.dibAnteriorValoresDevidos,this.dataMinima)) {
+      } else if (moment(this.dibAnteriorValoresDevidos,'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({"dibAnteriorValoresDevidos":["A data deve ser maior que 01/1970."]});
         valid = false; 
       }
@@ -335,7 +335,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (!this.isValidDate(this.cessacaoValoresDevidos)) {
         this.errors.add({"cessacaoValoresDevidos":["Insira uma data válida."]});
         valid = false; 
-      } else if (this.compareDates(this.cessacaoValoresDevidos,this.dataMinima)){
+      } else if (moment(this.cessacaoValoresDevidos,'DD/MM/YYYY') < this.dataMinima){
         this.errors.add({"cessacaoValoresDevidos":["A data deve ser maior que 01/1970."]});
         valid = false;
       }
@@ -347,7 +347,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.errors.add({"dataHonorariosDe":["Insira uma data válida."]});
         valid = false; 
       } else {
-        if (this.compareDates(this.dataHonorariosDe,this.dataMinima)) {
+        if (moment(this.dataHonorariosDe,'DD/MM/YYYY') < this.dataMinima) {
           this.errors.add({"dataHonorariosAte":["A data deve ser maior que 01/1970"]});
           valid = false;
         }
@@ -358,13 +358,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         valid = false;
       } else {
         
-        if (this.compareDates(this.dataHonorariosAte,this.dataMinima)) {
+        if (moment(this.dataHonorariosAte,'DD/MM/YYYY') < this.dataMinima) {
           this.errors.add({"dataHonorariosAte":["A data deve ser maior que 01/1970"]});
           valid = false;
         }
 
         if (this.isValidDate(this.dataHonorariosDe)) {
-          if(this.compareDates(this.dataHonorariosAte,this.dataHonorariosDe)) {
+          if(moment(this.dataHonorariosAte,'DD/MM/YYYY') < this.dataMinima) {
             this.errors.add({"dataHonorariosAte":["A data deve ser maior que a data de inicio"]});
             valid = false;
           }
