@@ -317,10 +317,6 @@
                         <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
                       </div>
-                    <label class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
-                    <div class="col-md-3">
-                      <input class="form-control" type="text">
-                    </div>
                   </div>
                     <div *ngIf="chkNotGranted">
                       <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida*:
