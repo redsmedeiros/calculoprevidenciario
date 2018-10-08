@@ -109,7 +109,13 @@
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" [(ngModel)]="mostrarTabelaTaxaSelic" class="checkbox {{styleTheme}}">
+            <span>Clique aqui para ver a tabela de juros conforme a regra da poupança.</span>
+          </label>
+        </div>
+        <sa-widget *ngIf="mostrarTabelaTaxaSelic" [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-eye"></i>
@@ -128,66 +134,126 @@
               </p>
 
               <table class="table table-hover table-bordered">
-                <thead>
-                  <tr>
-                    <th>
-                      SELIC
-                    </th>
-                    <th>
-                      MENSAL
-                    </th>
-                    <th>
-                      70% TAXA SELIC
-                    </th>
-                    <th>
-                      TAXA JUROS A CONSIDERAR
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Mai/12</td>
-                    <td>0,74</td>
-                    <td>-</td>
-                    <td>0,50%</td>
-                  </tr>
-                  <tr>
-                    <td>Jun/12</td>
-                    <td>0,64</td>
-                    <td>0,448</td>
-                    <td>0,45%</td>
-                  </tr>
-                  <tr>
-                    <td>Jun/12</td>
-                    <td>0,64</td>
-                    <td>0,448</td>
-                    <td>0,45%</td>
-                  </tr>
-                  <tr>
-                    <td>Jul/12</td>
-                    <td>0,68</td>
-                    <td>0,476</td>
-                    <td>0,48%</td>
-                  </tr>
-                  <tr>
-                    <td>Ago/12</td>
-                    <td>0,69</td>
-                    <td></td>
-                    <td>0,50%</td>
-                  </tr>
-                  <tr>
-                    <td>Set/12</td>
-                    <td>0,54</td>
-                    <td>0,378</td>
-                    <td>0,38%</td>
-                  </tr>
-                  <tr>
-                    <td>Out/12</td>
-                    <td>0,61</td>
-                    <td>0,427</td>
-                    <td>0,43%</td>
-                  </tr>
-                </tbody>
+                
+                                    <tbody><tr>
+                                        <td align="center"><strong>SELIC</strong></td>
+                                        <td align="center"><strong>MENSAL</strong></td>
+                                        <td align="center"><strong>70% TAXA SELIC</strong></td>
+                                        <td align="center"><strong>TAXA JUROS A CONSIDERAR</strong></td>
+                                    </tr>
+                                        <tr><td align="center">Mai/12</td>
+                                        <td align="center">0,74</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr><tr>
+                                        <td align="center">Jun/12</td>
+                                        <td align="center">0,64</td>
+                                        <td align="center">0,448</td>
+                                        <td align="center">0,45%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Jul/12</td>
+                                        <td align="center">0,68</td>
+                                        <td align="center">0,476</td>
+                                        <td align="center">0,48%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Ago/12</td>
+                                        <td align="center">0,69</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Set/12</td>
+                                        <td align="center">0,54</td>
+                                        <td align="center">0,378</td>
+                                        <td align="center">0,38%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Out/12</td>
+                                        <td align="center">0,61</td>
+                                        <td align="center">0,427</td>
+                                        <td align="center">0,43%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Nov/12</td>
+                                        <td align="center">0,55</td>
+                                        <td align="center">0,385</td>
+                                        <td align="center">0,39%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Dez/12</td>
+                                        <td align="center">0,55</td>
+                                        <td align="center">0,385</td>
+                                        <td align="center">0,39%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Jan/13</td>
+                                        <td align="center">0,60</td>
+                                        <td align="center">0,42</td>
+                                        <td align="center">0,42%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Fev/13</td>
+                                        <td align="center">0,49</td>
+                                        <td align="center">0,343</td>
+                                        <td align="center">0,34%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Mar/13</td>
+                                        <td align="center">0,55</td>
+                                        <td align="center">0,385</td>
+                                        <td align="center">0,39%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Abr/13</td>
+                                        <td align="center">0,61</td>
+                                        <td align="center">0,427</td>
+                                        <td align="center">0,43%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Mai/13</td>
+                                        <td align="center">0,60</td>
+                                        <td align="center">0,42</td>
+                                        <td align="center">0,42%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Jun/13</td>
+                                        <td align="center">0,61</td>
+                                        <td align="center">0,427</td>
+                                        <td align="center">0,43%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Jul/13</td>
+                                        <td align="center">0,72</td>
+                                       <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Ago/13</td>
+                                        <td align="center">0,71</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Set/13</td>
+                                        <td align="center">0,71</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Out/13</td>
+                                        <td align="center">0,81</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">Nov/13</td>
+                                        <td align="center">0,72</td>
+                                        <td align="center"></td>
+                                        <td align="center">0,50%</td>
+                                    </tr>
+                                </tbody>
               </table>
             </div>
           </div>

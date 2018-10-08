@@ -18,6 +18,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   public segurado:any ={};
   public calculoType;
   public form = {...CalculoModel.form};
+  private mostrarTabelaTaxaSelic = false;
 
   @Output() onSubmit = new EventEmitter();
 
