@@ -234,7 +234,7 @@
 
                   <div class="form-group">
                     <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
-                    <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label"><i title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i> RMI de valores recebidos:</label>
+                    <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label"><i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i> RMI de valores recebidos:</label>
                     <div class="col-md-3">
                       <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
@@ -248,7 +248,7 @@
                     </div>
 
                     <div *ngIf="recebidosPosBuracoNegro">
-                      <label class="col-md-2 control-label">Índice de reajuste no teto da RMI de valores recebidos:</label>
+                      <label class="col-md-2 control-label"><i title="Índices de Reajustes de Teto (IRT) só existem para DIB's posteriores a 05/04/1991 conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg"></i> Índice de reajuste no teto da RMI de valores recebidos:</label>
                       <div class="col-md-3">
                         <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
                         <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
@@ -346,7 +346,7 @@
                       </div>
                     </div>
                     <div *ngIf="devidosPosBuracoNegro">
-                      <label class="col-md-2 control-label">Índice de reajuste no teto da Nova RMI de valores devidos:</label>
+                      <label class="col-md-2 control-label"><i title="Índices de Reajustes de Teto (IRT) só existem para DIB's posteriores a 05/04/1991 conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg"></i> Índice de reajuste no teto da Nova RMI de valores devidos:</label>
                         <div class="col-md-3">
                           <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
                           <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
