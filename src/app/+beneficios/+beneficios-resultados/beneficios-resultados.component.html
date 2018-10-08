@@ -55,7 +55,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -89,7 +94,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -123,7 +133,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -159,7 +174,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -192,7 +212,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -221,7 +246,12 @@
       </article>
 
        <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -280,9 +310,51 @@
         </sa-widget>
       </article>
 
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>Opções do Cálculo</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
+              <div class="row">
+                <div class="col-md-12">
+                  <button *ngIf="considerarPrescricao" type="submit" (click)="calcularSemPrescricao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-gear"></i>
+                    </span>Calcular sem prescricao
+                  </button>
+                  <button *ngIf="!considerarPrescricao" type="submit" (click)="calcularSemPrescricao()" class="btn btn-labeled btn-default margin-right-13">
+                      <span class="btn-label">
+                      <i class="fa fa-gear"></i>
+                    </span>Calcular com prescricao
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-eye"></i>

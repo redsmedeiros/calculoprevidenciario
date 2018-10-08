@@ -9,11 +9,9 @@ import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { IntervaloReajusteService } from '../../services/IntervaloReajuste.service';
 import { IntervaloReajuste } from '../../services/IntervaloReajuste.model';
-
 import { IndicesService } from '../../services/Indices.service';
 import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
-//import * as $ from 'jquery';
 
 @FadeInTop()
 @Component({
@@ -156,6 +154,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaTotalTetos = 0.0;
 
   private ultimaCompretencia = '';
+  private considerarPrescricao = true;
 
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
@@ -174,6 +173,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
+    if(this.route.snapshot.queryParams['considerarPrescricao'] == 'false'){
+      this.considerarPrescricao = false;
+    }
 
     this.Segurado.find(this.route.snapshot.params['id'])
       .then(segurado => {
@@ -290,7 +292,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
-      if (diferencaCorrigidaJuros.indexOf('prescrita') != -1){
+      if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao){
         //Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
@@ -1091,7 +1093,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
 
-    if(diferencaEmAnos >= 5){
+    if(diferencaEmAnos >= 5 && this.considerarPrescricao){
       diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
@@ -1583,6 +1585,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getIndice(data){
     return this.getDifferenceInMonths(this.primeiraDataArrayMoeda, data);
+  }
+
+  calcularSemPrescricao(){
+    window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
+    window.location.reload();
   }
 
   getTipoAposentadoria(value){
