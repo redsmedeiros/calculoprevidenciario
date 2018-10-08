@@ -155,6 +155,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   public devidosComDescontoTetos = 0.0;
   public somaTotalTetos = 0.0;
 
+  private ultimaCompretencia = '';
+
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
@@ -245,7 +247,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       let siglaDataCorrente = moedaDataCorrente.sigla;
 
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
-      
+      this.ultimaCompretencia = stringCompetencia;
       let indiceReajusteValoresDevidos = {reajuste:0.0, reajusteOs:0.0};
       let beneficioDevido = 0.0;
       let indiceReajusteValoresRecebidos = {reajuste:0.0, reajusteOs:0.0};
