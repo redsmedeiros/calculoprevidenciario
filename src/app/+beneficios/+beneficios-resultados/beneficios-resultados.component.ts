@@ -18,6 +18,7 @@ import * as moment from 'moment';
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
+  styleUrls: ['./beneficios-resultados.component.css'],
   templateUrl: './beneficios-resultados.component.html',
 })
 export class BeneficiosResultadosComponent implements OnInit {
