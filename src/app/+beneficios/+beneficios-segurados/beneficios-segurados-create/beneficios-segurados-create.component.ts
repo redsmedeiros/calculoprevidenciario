@@ -36,6 +36,7 @@ export class BeneficiosSeguradosCreateComponent implements OnInit, OnDestroy {
           .then(model => {
             this.resetForm();
             this.onSubmit.emit();
+            console.log(model)
           })
           .catch(errors => this.Errors.add(errors));
   }
