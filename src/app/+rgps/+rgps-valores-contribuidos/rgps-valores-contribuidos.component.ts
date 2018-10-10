@@ -133,7 +133,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (todasContribuicoes.length != 0) {
       this.mostrarBotaoRealizarCalculos = false;
       this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-        window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+        swal('Sucesso', 'Valores inseridos com sucesso!','success').then(() =>{
+          window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+        })
       });
     } else {
       swal('Erro', 'Nenhum valor inserido', 'error');
