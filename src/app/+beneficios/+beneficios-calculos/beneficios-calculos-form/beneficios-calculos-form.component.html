@@ -51,9 +51,16 @@
 
               <div class="col-md-8 col-sm-offset-2">
 
-                <div class="checkbox">
+                <div class="checkbox" *ngIf="type=='AI'">
                   <label>
-                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}" disabled>
+                    <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
+                  </label>
+                </div>
+
+                <div class="checkbox" *ngIf="type=='A'">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}" >
                     <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa ao lado:</span>
                   </label>
                 </div>

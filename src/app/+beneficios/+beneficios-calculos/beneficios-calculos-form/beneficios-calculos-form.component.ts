@@ -166,6 +166,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       
       if (this.type == 'AJ') {
         this.chkAjusteMaximo = true;
+      }else if (this.type == 'AI') {
+        this.chkIndice = true;
       }
 
     }
