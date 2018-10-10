@@ -50,13 +50,6 @@
                       <small *ngIf="errors.has('carencia')" class="text-danger">{{ errors.get('carencia') | i18n}}</small>
                     </div>
                   </div>
-                  <div class="form-group" *ngIf="hasGrupoDos12">
-                    <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
-                    <div class="col-md-8">
-                      <input [(ngModel)]="grupoDos12" (change)="errors.clear('grupoDos12')"  [ngModelOptions]="{standalone: true}" class="form-control" type="text">
-                      <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
-                    </div>
-                  </div>
                   <h3 *ngIf="has98">Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
                   <h3 *ngIf="hasAnterior">Tempo de contribuição</h3>
                   <div class="form-group" *ngIf="has98 || hasAnterior">
@@ -150,6 +143,13 @@
                     <div class="col-md-2">
                       <input [(ngModel)]="secundariaAtualdias" (change)="errors.clear('secundariaAtualdias')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="hasGrupoDos12">
+                    <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
+                    <div class="col-md-1">
+                      <input [(ngModel)]="grupoDos12" (change)="errors.clear('grupoDos12')" placeholder="Anos" [ngModelOptions]="{standalone: true}" class="form-control" type="text"> 
+                      <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
                     </div>
                   </div>
                 </fieldset>
