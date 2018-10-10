@@ -25,8 +25,13 @@
     <div class="form-group">
 
       <label class="col-md-2 control-label">Número do documento*</label>
-      <div class="col-md-3">
+      <!-- <div class="col-md-3"> Com mascara
         <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento')" [textMask]="{mask: docMask}" class="form-control" type="text">
+        <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
+      </div> -->
+
+      <div class="col-md-3">
+        <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento')" class="form-control" type="text">
         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
       </div>
 
