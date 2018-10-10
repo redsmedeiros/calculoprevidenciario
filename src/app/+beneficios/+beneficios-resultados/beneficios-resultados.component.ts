@@ -1583,6 +1583,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
   }
 
+  tratarConclusao(text){
+    if(text.indexOf('-') != -1){
+      return '<div style="color:red;">' + text + '</div>';
+    }else{
+      return text;
+    }
+  }
+
   getIndice(data){
     return this.getDifferenceInMonths(this.primeiraDataArrayMoeda, data);
   }
