@@ -33,10 +33,10 @@ export class BeneficiosSeguradosCreateComponent implements OnInit, OnDestroy {
   submit(data) {
     this.Segurado
           .save(data)
-          .then(model => {
+          .then((model:SeguradoModel) => {
             this.resetForm();
             this.onSubmit.emit();
-            console.log(model)
+            window.location.href='#/beneficios/beneficios-calculos/'+ model.id;
           })
           .catch(errors => this.Errors.add(errors));
   }
