@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { ContribuicaoJurisprudencialService } from '../ContribuicaoJurisprudencial.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -22,7 +22,18 @@ export class ContribuicoesCalculosDestroyComponent implements OnInit {
   ) {
     let calculo = this.route.snapshot.params['id_calculo'];
     let user = this.route.snapshot.params['id'];
-    this.ContribuicaoJurisprudencial.find(this.route.snapshot.params['id_calculo'])
+    swal({
+      title: 'Tem certeza?',
+      text: "Essa ação é irreversível!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Deletar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.ContribuicaoJurisprudencial.find(this.route.snapshot.params['id_calculo'])
         .then(contribuicaoJurisprudencial => {
           this.ContribuicaoJurisprudencial.destroy(contribuicaoJurisprudencial)
               .then(() => {
@@ -35,7 +46,10 @@ export class ContribuicoesCalculosDestroyComponent implements OnInit {
           });
               
         })
-    
+      }else if (result.dismiss === swal.DismissReason.cancel){
+        this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]);
+      }
+    });   
   }
 
   ngOnInit() {

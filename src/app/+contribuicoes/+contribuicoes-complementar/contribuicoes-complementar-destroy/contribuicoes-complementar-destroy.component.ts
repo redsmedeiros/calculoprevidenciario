@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -19,7 +19,18 @@ export class ContribuicoesComplementarDestroyComponent {
   	) { 
   	let calculo = this.route.snapshot.params['id_calculo'];
     let user = this.route.snapshot.params['id'];
-    this.ContribuicaoComplementar.find(calculo)
+    swal({
+      title: 'Tem certeza?',
+      text: "Essa ação é irreversível!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Deletar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.ContribuicaoComplementar.find(calculo)
         .then(contribuicaoComplementar => {
           this.ContribuicaoComplementar.destroy(contribuicaoComplementar)
               .then(() => {
@@ -29,6 +40,11 @@ export class ContribuicoesComplementarDestroyComponent {
             swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
           });
         })
+      }else if (result.dismiss === swal.DismissReason.cancel){
+        this.router.navigate(['/contribuicoes/contribuicoes-calculos/'+user]);
+      }
+    });
+    
     
 
   }
