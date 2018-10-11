@@ -176,7 +176,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fator = moeda.fator;
       let fatorLimite = moedaComparacao.fator;
       let fatorCorrigido = fator / fatorLimite;
-      let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 4); // tabela['fatorCorrigido'] = fator/fatorLimite;
+      let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
        
       let contribuicaoPrimariaRevisada = 0;
       let contribuicaoSecundariaRevisada = 0;
