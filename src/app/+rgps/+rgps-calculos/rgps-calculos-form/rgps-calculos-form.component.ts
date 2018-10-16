@@ -3,6 +3,7 @@ import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
 import swal from 'sweetalert';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-rgps-calculos-form',
@@ -51,6 +52,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasAtual = false;
   public hasCarencia = false;
   public hasGrupoDos12 = false;
+  public posteriorMaio2013 = false;
 
   public periodoOptions: string[] = [];
 
@@ -330,6 +332,13 @@ export class RgpsCalculosFormComponent implements OnInit {
   changePeriodoOptions() {
     this.errors.clear('dataInicioBeneficio');
     this.periodoOptions = [];
+
+    if(moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')){
+      this.posteriorMaio2013 = true;
+    }else{
+      this.posteriorMaio2013 = false;
+    }
+
     var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
     if (dateBeneficio < new Date('04/05/1991')) {

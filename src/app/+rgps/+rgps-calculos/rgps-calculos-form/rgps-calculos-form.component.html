@@ -22,10 +22,10 @@
                       <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
                         <option  *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
                         <option>Aposentadoria especial</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Grave</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option>Aposentadoria especial por Idade da Pessoa com Deficiência</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Grave</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Leve</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial por Idade da Pessoa com Deficiência</option>
                         <option>Aposentadoria por idade - Trabalhador Rural</option>
                         <option>Aposentadoria por idade - Trabalhador Urbano</option>
                         <option>Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
