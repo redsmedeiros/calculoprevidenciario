@@ -238,7 +238,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
       this.errors.add({ "finalPeriodo": ["Insira uma data válida"] });
     } else {
-      if (dateFinalPeriodo <= dateInicioPeriodo) {
+      if (dateFinalPeriodo < dateInicioPeriodo) {
         this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
       }
     }
