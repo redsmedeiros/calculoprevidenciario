@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-beneficios-segurados-form',
