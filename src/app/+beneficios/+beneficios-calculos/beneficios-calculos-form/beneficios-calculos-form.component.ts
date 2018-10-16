@@ -22,7 +22,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
-
+  public isEdit = false;
+  
   public chkNotGranted = false;
   public chkUseSameDib = false;
   public chkJurosMora = true;
@@ -186,7 +187,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
-      this.loadCalculo();        
+      this.loadCalculo();
+      this.isEdit = true;        
     } else {
       // Initialize variables for a new calculo
       this.jurosAntes2003 = '0,5';
