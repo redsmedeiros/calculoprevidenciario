@@ -38,10 +38,9 @@ export class MoedaImportComponent implements OnInit {
 
   saveValues(data){
   	let values = data.data;
-  	if(values.length < this.getDifferenceInMonths(moment('1970-01-01'))){
-  		swal('Erro', 'Há datas faltando!', 'error');
-  	}else if(data.meta.fields.length != 11){
-  		swal('Erro', 'Número incorreto de colunas. O correto são 11 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
+  	if(data.meta.fields.length != 12){
+      console.log(data.meta.fields)
+  		swal('Erro', 'Número incorreto de colunas. O correto são 12 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
   	}else{
   	  console.log(data)
   	  swal({
