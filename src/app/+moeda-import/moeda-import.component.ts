@@ -50,6 +50,10 @@ export class MoedaImportComponent implements OnInit {
   	  swal.showLoading();
   	  this.MoedaService.save(values).then(() => {
   	    swal.close();
+        swal({
+          type: 'success',
+          title: 'Importação concluída com sucesso!',
+        });
   	  }).catch(err =>{
   	    swal.close();
   	    console.log(err);
@@ -70,6 +74,7 @@ export class MoedaImportComponent implements OnInit {
       fileEntry.file((file: File) => {
       	console.log(file)
         if(file.type != 'text/csv'){
+          console.log('Tipo do arquivo recusado: ' + file.type);
           swal('Erro', 'Formato de arquivo inválido', 'error');
         }else{
           this.parseCsv(file);
@@ -91,6 +96,7 @@ export class MoedaImportComponent implements OnInit {
     if(files.length > 1){
       swal('Erro', 'Selecione apenas um arquivo', 'error');
     }else if(files[0].type != 'text/csv'){
+      console.log('Tipo do arquivo recusado: ' + files[0].type);
       swal('Erro', 'Formato de arquivo inválido', 'error');
     }else{
       this.parseCsv(files[0]); 
