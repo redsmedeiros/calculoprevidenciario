@@ -952,7 +952,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   getDataFiliacao(){
     if(this.segurado.data_filiacao){
-      return moment(this.segurado.data_filiacao);
+      return moment(this.segurado.data_filiacao, "DD/MM/YYYY");
     }
     return null;
   }
