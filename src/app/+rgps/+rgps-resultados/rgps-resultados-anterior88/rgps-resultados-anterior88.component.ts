@@ -41,6 +41,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   public contribuicaoPrimaria = {anos:0,meses:0,dias:0};
   public contribuicaoSecundaria = {anos:0,meses:0,dias:0};
   public listaValoresContribuidos;
+  public nenhumaContrib = false;
   public tableOptions = {
     colReorder: false,
     paging: false,
@@ -115,7 +116,8 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
           // Exibir MSG de erro e encerrar Cálculo.
-          this.erro = "Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href='http://www.ieprev.com.br/legislacao/4506/decreto-no-83.080,-de-24-1-1979' target='_blank'>Art. 37 da Decreto nº 83.080, de 24/01/1979</a>";
+          this.erro = 'Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href="#" target="_blank">Art. 37 da Decreto nº 83.080, de 24/01/1979</a>';
+          this.nenhumaContrib = true;
           this.isUpdating = false;
         }else{
           let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
@@ -155,8 +157,6 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       //TODO: Colocar mensagem completa :
       //Falta(m) "quantidade de anos que faltam" ano(s), "Quantidade de meses que faltam" mês(es) e quantidade de dia(s) para completar o tempo de serviço necessário.
       erro = "Erro no tempo de contibuição";
-    }else if (this.listaValoresContribuidos.length == 0){
-      erro = "Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href='http://www.ieprev.com.br/legislacao/4506/decreto-no-83.080,-de-24-1-1979' target='_blank'>Art. 37 da Decreto nº 83.080, de 24/01/1979</a>"
     }
     return erro;
   }
