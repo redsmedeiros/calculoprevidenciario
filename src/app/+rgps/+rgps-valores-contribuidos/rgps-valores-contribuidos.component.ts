@@ -165,8 +165,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
           this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
           this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
           ano = contribAno;
-          valuesPrimaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
-          valuesSecundaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+          valuesPrimaria = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+          valuesSecundaria = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
         }
         this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
         this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
@@ -307,7 +307,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   formatMoney(data) {
     data = parseFloat(data);
-    return 'R$ ' + (data.toFixed(2)).replace('.', ',');
+    return (data.toFixed(2)).replace('.', ',');
+    // return 'R$ ' + (data.toFixed(2)).replace('.', ',');
   }
 
   dateMask(rawValue) {
