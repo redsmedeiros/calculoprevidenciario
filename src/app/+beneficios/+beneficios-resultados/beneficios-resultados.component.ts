@@ -1583,11 +1583,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
   }
 
-  tratarConclusao(text){
-    if(text.indexOf('-') != -1){
-      return '<div style="color:red;">' + text + '</div>';
+  tratarConclusao(value){
+    if(value < 0){
+      return "negativeValue";
     }else{
-      return text;
+      return '';
     }
   }
 
