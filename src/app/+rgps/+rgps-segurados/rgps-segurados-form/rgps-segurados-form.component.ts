@@ -93,12 +93,12 @@ export class RgpsSeguradosFormComponent {
     }
 
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == "") {
-      this.errors.add({"data_filiacao":["A data de filiação é obrigatória."]});
+      //this.errors.add({"data_filiacao":["A data de filiação é obrigatória."]});
     } else {
       var dateParts = this.formData.data_filiacao.split("/");
       let date = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({"data_filiacao":["Insira uma data válida."]});
+        this.errors.add({"data_filiacao":["Insira uma data válida ou deixe em branco."]});
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
