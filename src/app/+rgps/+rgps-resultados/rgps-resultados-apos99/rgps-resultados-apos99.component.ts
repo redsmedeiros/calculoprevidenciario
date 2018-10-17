@@ -413,7 +413,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = ((tempoTotalContribuicao * aliquota) / expectativa) * (1 + this.idadeFracionada + (tempoTotalContribuicao * aliquota) / 100);
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+this.idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)"});
+        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +'*'+ aliquota+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,4)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+aliquota+")) / "+"100)"});
         break;
     }
 
