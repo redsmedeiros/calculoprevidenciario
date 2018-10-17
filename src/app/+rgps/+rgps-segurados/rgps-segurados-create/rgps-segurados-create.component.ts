@@ -32,9 +32,10 @@ export class RgpsSeguradosCreateComponent implements OnInit, OnDestroy {
   submit(data) {
     this.Segurado
           .save(data)
-          .then(model => {
+          .then((model:SeguradoModel) => {
             this.resetForm();
             this.onSubmit.emit();
+            window.location.href='#/rgps/rgps-calculos/'+ model.id;
           })
           .catch(errors => this.Errors.add(errors));
   }

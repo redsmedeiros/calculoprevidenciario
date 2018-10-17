@@ -33,9 +33,10 @@ export class ContribuicoesSeguradosCreateComponent implements OnInit, OnDestroy 
   submit(data) {
     this.Segurado
           .save(data)
-          .then(model => {
+          .then((model:SeguradoModel) => {
             this.resetForm();
             this.onSubmit.emit();
+            window.location.href='#/contribuicoes/contribuicoes-calculos/'+ model.id;
           })
           .catch(errors => this.Errors.add(errors));
   }
