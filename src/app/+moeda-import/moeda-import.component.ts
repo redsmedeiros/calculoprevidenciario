@@ -62,6 +62,7 @@ export class MoedaImportComponent implements OnInit {
   	}
   }
 
+  //Arquivo é solto na área de transferência
   dropped(event: UploadEvent) {
     let files = event.files;
     if(files.length > 1){
@@ -86,11 +87,13 @@ export class MoedaImportComponent implements OnInit {
     }
   }
 
+  //Zona de arquivo clicada
   clickedDropzone(){
     let event = new MouseEvent('click', {bubbles: false});
     this.fileInput.nativeElement.dispatchEvent(event);
   }
 
+  //Arquivo selecionado atraves do file dialog
   onFileInputChange(event){
     let files = event.srcElement.files;
     if(files.length > 1){
