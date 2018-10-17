@@ -40,7 +40,7 @@ export class RgpsMatrizComponent implements OnInit {
     let monthList = this.monthAndYear(periodo.inicioPeriodo, periodo.finalPeriodo);
 
     let ano = monthList[0].split('-')[0];
-    let valores = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+    let valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
     this.anosConsiderados.push(ano);
     for (let entry of monthList){
       if(ano == entry.split('-')[0]){
@@ -48,7 +48,7 @@ export class RgpsMatrizComponent implements OnInit {
       }else{
         this.updateMatrix(+ano, valores);
         ano = entry.split('-')[0];
-        valores = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+        valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
         valores[+entry.split('-')[1]-1] = this.formatMoney(periodo.salarioContribuicao);
         this.anosConsiderados.push(ano);
       }
@@ -96,7 +96,7 @@ export class RgpsMatrizComponent implements OnInit {
       if(entry.ano == ano){
         let index = 0;
         for (index = 0; index < 12; ++index) {
-          if(entry.valores[index] != valores[index] && valores[index] != 'R$ 0,00'){
+          if(entry.valores[index] != valores[index] && valores[index] != '0,00'){
             entry.valores[index] = valores[index];
           }
         }
@@ -137,9 +137,10 @@ export class RgpsMatrizComponent implements OnInit {
     return timeValues;
   }
 
-  //Recebe um valor float e retorna com duas casas decimais, virgula como separador e prefixo R$
+  //Recebe um valor float e retorna com duas casas decimais, virgula como separador
   formatMoney(data){
     data = parseFloat(data);
-    return 'R$ ' + (data.toFixed(2)).replace('.',',');
+    //return 'R$ ' + (data.toFixed(2)).replace('.',',');
+    return (data.toFixed(2)).replace('.',',');
   }
 }
