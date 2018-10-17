@@ -140,7 +140,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Data da ajuizamento da ação*:</label>
+                    <label class="col-md-2 control-label">Data de ajuizamento da ação*:</label>
                     <div class="col-md-3">
                       <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
                       <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
