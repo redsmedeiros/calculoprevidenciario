@@ -31,13 +31,19 @@ export class MoedaImportComponent implements OnInit {
   	let options = {
   		header: true, 
   		complete: (results) => { this.saveValues(results) },
+      error: (error) => { this.processoAbortado(error) },
 			dynamicTyping:true,
+      skipEmptyLines: true,
 		};
 		this.csvParse.parse(file, options);
   }
 
   saveValues(data){
   	let values = data.data;
+    if(values.length == 0){
+      swal('Erro', 'Verifique o arquivo', 'error');
+      return;
+    }
   	if(data.meta.fields.length != 12){
       console.log(data.meta.fields)
   		swal('Erro', 'Número incorreto de colunas. O correto são 12 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
@@ -62,6 +68,11 @@ export class MoedaImportComponent implements OnInit {
   	}
   }
 
+  processoAbortado(error){
+    swal('Um erro ocorreu', error, 'error');
+    console.log(error)
+  }
+
   //Arquivo é solto na área de transferência
   dropped(event: UploadEvent) {
     let files = event.files;
@@ -74,12 +85,7 @@ export class MoedaImportComponent implements OnInit {
       const fileEntry = file.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
       	console.log(file)
-        if(file.type != 'text/csv'){
-          console.log('Tipo do arquivo recusado: ' + file.type);
-          swal('Erro', 'Formato de arquivo inválido', 'error');
-        }else{
-          this.parseCsv(file);
-        }       
+        this.parseCsv(file);
       });
     } else {
       //É um diretório
@@ -87,21 +93,13 @@ export class MoedaImportComponent implements OnInit {
     }
   }
 
-  //Zona de arquivo clicada
-  clickedDropzone(){
-    let event = new MouseEvent('click', {bubbles: false});
-    this.fileInput.nativeElement.dispatchEvent(event);
-  }
-
   //Arquivo selecionado atraves do file dialog
   onFileInputChange(event){
     let files = event.srcElement.files;
     if(files.length > 1){
       swal('Erro', 'Selecione apenas um arquivo', 'error');
-    }else if(files[0].type != 'text/csv'){
-      console.log('Tipo do arquivo recusado: ' + files[0].type);
-      swal('Erro', 'Formato de arquivo inválido', 'error');
     }else{
+      console.log(files[0]);
       this.parseCsv(files[0]); 
     }
   }
@@ -110,6 +108,12 @@ export class MoedaImportComponent implements OnInit {
     let difference = date1.diff(date2, 'months', true);
     difference = Math.abs(difference);
     return Math.floor(difference);
+  }
+
+  //Zona de arquivo clicada
+  clickedDropzone(){
+    let event = new MouseEvent('click', {bubbles: false});
+    this.fileInput.nativeElement.dispatchEvent(event);
   }
 
 }
