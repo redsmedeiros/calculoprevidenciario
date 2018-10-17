@@ -178,7 +178,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     } else {
       var dateParts = this.dataInicioBeneficio.split("/");
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()) || date <= new Date('01/01/1970'))
+      if (isNaN(date.getTime()) || date < new Date('01/01/1970'))
         this.errors.add({ "dataInicioBeneficio": ["Insira uma data válida."] });
     }
 
