@@ -55,35 +55,35 @@ export class ContribuicoesSeguradosFormComponent {
     } else {
       let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi,'');
       let id = this.formData.id_documento.toString();
-      switch (id) {
-        case '1': //PIS
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["PIS inválido."]});
-          break;
+      // switch (id) {
+      //   case '1': //PIS
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["PIS inválido."]});
+      //     break;
 
-        case '2': //PASEP
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["PASEP inválido."]});
-          break;
+      //   case '2': //PASEP
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["PASEP inválido."]});
+      //     break;
 
-        case '3': //CPF
-          if (!this.validateCPF(documentNumber))
-            this.errors.add({"numero_documento":["CPF inválido."]});
-          break;
+      //   case '3': //CPF
+      //     if (!this.validateCPF(documentNumber))
+      //       this.errors.add({"numero_documento":["CPF inválido."]});
+      //     break;
 
-        case '4': //NIT
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["NIT inválido."]});
-          break;
+      //   case '4': //NIT
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["NIT inválido."]});
+      //     break;
 
-        case '5': //RG
-          if (!this.validateRG(documentNumber))
-            this.errors.add({"numero_documento":["RG inválido."]});
-          break;
+      //   case '5': //RG
+      //     if (!this.validateRG(documentNumber))
+      //       this.errors.add({"numero_documento":["RG inválido."]});
+      //     break;
 
-        default:
-          break;
-      }
+      //   default:
+      //     break;
+      // }
     }
 
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
@@ -105,31 +105,31 @@ export class ContribuicoesSeguradosFormComponent {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
     let id = this.formData.id_documento.toString();
-    switch (id) {
-      case '1': // PIS
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    // switch (id) {
+    //   case '1': // PIS
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '2': // PASEP
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '2': // PASEP
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '3': // CPF
-        this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
-        break;
+    //   case '3': // CPF
+    //     this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+    //     break;
 
-      case '4': // NIT
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '4': // NIT
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '5': // RG
-        this.docMask = [/\d/, /\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '5': // RG
+    //     this.docMask = [/\d/, /\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      default:
-        this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
-        break;
-    }
+    //   default:
+    //     this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+    //     break;
+    // }
   }
 
   validatePIS(pis: number) {
