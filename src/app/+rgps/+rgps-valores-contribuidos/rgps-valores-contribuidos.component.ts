@@ -133,7 +133,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (todasContribuicoes.length != 0) {
       this.mostrarBotaoRealizarCalculos = false;
       this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-        swal('Sucesso', 'Valores inseridos com sucesso!','success').then(() =>{
+        swal('Sucesso', 'Valores salvos com sucesso!','success').then(() =>{
           window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
         })
       });
@@ -218,6 +218,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       } else if (this.tipoContribuicao === 'Secundaria') {
         this.matrizContribuicoesSecundarias.preencher(periodoObj);
       }
+      swal('Valores inseridos com sucesso!', '','success')
 
     } else {
       swal('Erro', 'Confira os dados digitados', 'error');
