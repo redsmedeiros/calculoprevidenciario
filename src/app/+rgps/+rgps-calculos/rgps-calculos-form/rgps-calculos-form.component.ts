@@ -338,24 +338,39 @@ export class RgpsCalculosFormComponent implements OnInit {
     }else{
       this.posteriorMaio2013 = false;
     }
-
-    var dateParts = this.dataInicioBeneficio.split("/");
-    let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-    if (dateBeneficio < new Date('04/05/1991')) {
+    let dib = moment(this.dataInicioBeneficio, 'DD/MM/YYYY');
+    if(dib < moment('1988-10-05')){
       this.periodoOptions.push('Anterior a 05/10/1988');
-    }
-    if (dateBeneficio > new Date('10/04/1988')) {
+    }else if(dib >= moment('1988-10-05') && dib < moment('1991-04-05')){
+      this.periodoOptions.push('Anterior a 05/10/1988');
       this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
-    }
-    if (dateBeneficio > new Date('04/04/1991')) {
+    }else if(dib >= moment('1991-04-05') && dib <= moment('1998-12-15')){
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
-    }
-    if (dateBeneficio > new Date('12/15/1998')) {
+    }else if(dib > moment('1998-12-15') && dib <= moment('1999-11-29')){
+      this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
-    }
-    if (dateBeneficio > new Date('11/29/1999')) {
+    }else if(dib > moment('1999-11-29')){
+      this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+      this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoOptions.push('A partir de 29/11/1999');
     }
+    var dateParts = this.dataInicioBeneficio.split("/");
+    let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+    // if (dateBeneficio < new Date('04/05/1991')) {
+    //   this.periodoOptions.push('Anterior a 05/10/1988');
+    // }
+    // if (dateBeneficio > new Date('10/04/1988')) {
+    //   this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
+    // }
+    // if (dateBeneficio > new Date('04/04/1991')) {
+    //   this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+    // }
+    // if (dateBeneficio > new Date('12/15/1998')) {
+    //   this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
+    // }
+    // if (dateBeneficio > new Date('11/29/1999')) {
+    //   this.periodoOptions.push('A partir de 29/11/1999');
+    // }
 
     if (dateBeneficio < new Date('12/16/1998')) {
       this.hasAnterior = true;
