@@ -110,7 +110,7 @@
                   <h3>Tempo de contribuição</h3>
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">De:</label>
+                    <label class="col-md-2 control-label" for="select-1">De*:</label>
                     <div class="col-md-2">
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo"  [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
                       <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
@@ -118,7 +118,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Até:</label>
+                    <label class="col-md-2 control-label" for="select-1">Até*:</label>
                     <div class="col-md-2">
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
                       <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
@@ -126,7 +126,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Valor:</label>
+                    <label class="col-md-2 control-label" for="select-1">Valor*:</label>
                     <div class="col-md-2">
                       <input class="form-control" currencyMask maxlength="12" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" (change)="errors.clear('salarioContribuicao')" type="text">
                       <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
@@ -143,12 +143,8 @@
                         <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária </label>
                     </div>
                   </div>
-
-
-
+                  <p>* Campo obrigatório</p>
                 </fieldset>
-
-
                 <div class="form-actions">
                   <div class="row">
                     <div class="col-md-12">
