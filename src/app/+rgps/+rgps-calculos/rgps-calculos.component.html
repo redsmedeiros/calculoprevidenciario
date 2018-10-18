@@ -1,5 +1,4 @@
 <div id="content">
-
   <!-- widget grid -->
   <sa-widgets-grid>
 
@@ -62,12 +61,6 @@
         </sa-widget>
       </article>
 
-      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
-
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
-      </article>
-      
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
@@ -80,15 +73,20 @@
             <span class="widget-icon">
               <i class="fa fa-gear"></i>
             </span>
-            <h2>Opções</h2>
+            <h2>Próximas etapas</h2>
           </header>
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body" style="min-height: auto;">
+            <div class="widget-body float-panel" style="min-height: auto;">
 
               <div class="row">
                 <div class="col-md-12">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar
+                  </button>
                   <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class='fa fa-money '></i>
@@ -105,6 +103,12 @@
             </div>
           </div>
         </sa-widget>
+      </article>
+
+      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
       </article>
       
       <div class="row">

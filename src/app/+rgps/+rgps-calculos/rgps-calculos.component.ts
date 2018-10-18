@@ -12,6 +12,7 @@ import swal from 'sweetalert';
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './rgps-calculos.component.html',
+  styleUrls: ['./rgps-calculos-component.css'],
   providers: [
     ErrorService,
   ],
@@ -33,6 +34,8 @@ export class RgpsCalculosComponent implements OnInit {
   public segurado:any = {};
 
   public checkboxIdList = [];
+
+  public firstCalc = true;
 
   public calculoTableOptions = {
     colReorder: true,
@@ -83,6 +86,11 @@ export class RgpsCalculosComponent implements OnInit {
     if(!this.checkboxIdList.includes(`${data.id}-checkbox`)){
       this.checkboxIdList.push(`${data.id}-checkbox`);
     }
+
+    if(this.firstCalc){
+      this.firstCalc = false;
+      return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}" checked><span> </span></label></div>`;
+    }
     return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
   }
 
@@ -120,6 +128,9 @@ export class RgpsCalculosComponent implements OnInit {
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
+  }
+  voltar(){
+    window.location.href='/#/rgps/rgps-segurados/'
   }
 
   formatReceivedDate(inputDate) {
