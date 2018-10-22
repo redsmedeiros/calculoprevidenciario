@@ -115,7 +115,7 @@ export class RgpsMatrizComponent implements OnInit {
     if(tableEntry == ''){
       return 0.0;
     }
-    return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+    return parseFloat((tableEntry).replace(',','.'));
   }
 
   //Retorna uma lista com os meses entre dateStart e dateEnd
