@@ -941,6 +941,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else if (tipo_correcao == 'tr') {
       desindexador = moedaDataAtual.tr / moedaDataCalculo.tr;
       correcaoMonetaria = moedaDataCorrente.tr * desindexador;
+    }else if (tipo_correcao == 'tr032015_ipcae') {
+      desindexador = moedaDataAtual.tr032015_ipcae / moedaDataCalculo.tr032015_ipcae;
+      correcaoMonetaria = moedaDataCorrente.tr032015_ipcae * desindexador;
     }
     let usar_deflacao = !this.calculo.nao_usar_deflacao;
     if (!usar_deflacao) {
@@ -1672,6 +1675,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       return 'da TR';
     if(this.calculo.tipo_correcao=='cam')
       return 'da Justiça Federal';
+    if(this.calculo.tipo_correcao=='tr032015_ipcae')
+      return 'TR até 03/2015 e IPCA-e';
   }
   
   editSegurado() {

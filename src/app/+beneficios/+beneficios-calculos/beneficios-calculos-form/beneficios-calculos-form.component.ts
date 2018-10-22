@@ -94,6 +94,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     {
       text: 'Tabela da TR',
       value: 'tr'
+    },
+    {
+      text: 'Tabela da TR até 03/2015 e IPCA-e',
+      value: 'tr032015_ipcae'
     }  
   ]
 
