@@ -12,18 +12,13 @@ export class SalarioMinimoMaximoService extends ControllerService {
   public getByDate(dataSalario) {
     return new Promise((resolve, reject) => {
     	let parameters = ['data_salario', dataSalario.format('YYYY-MM-DD'), '', ''];
-	  	if (this.list.length == 0) {
-	  		this.getWithParameters(parameters).then(() => {
-			  	let list = this.list;
-			  	resolve(list);
-	  		}).catch(error => {
-	          console.error(error);
-	          reject(error);	  			
-	  		})
-	  	} else {
-			let list = this.list;
-			resolve(list);
-  		}
+	  	this.getWithParameters(parameters).then(() => {
+		  	let list = this.list;
+		  	resolve(list);
+	  	}).catch(error => {
+	        console.error(error);
+	        reject(error);	  			
+	  	})
     });
   }
 
