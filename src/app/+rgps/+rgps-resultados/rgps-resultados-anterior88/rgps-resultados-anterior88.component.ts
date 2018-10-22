@@ -145,12 +145,12 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   verificaErros(){
     let erro = "";
     let anoContribuicaoPrimariaAnterior88 = this.contribuicaoPrimaria.anos;
-    if ((this.calculo.tipo_seguro == "Aposentadoria por Idade (Rural)" ||
-         this.calculo.tipo_seguro == "Aposentadoria por idade (Urbano)") && this.calculo.carencia < 60){
+    if ((this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
+         this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Urbano") && this.calculo.carencia < 60){
       erro = "Falta(m) "+ (60 - this.calculo.carencia) + " mês(es) para a carencia necessária.";
-    }else if(this.segurado.sexo == 'h' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
+    }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) " + (65 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
+    }else if(this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
     }else if(this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" && 
              anoContribuicaoPrimariaAnterior88 < 30){
