@@ -3,6 +3,7 @@ import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
 import swal from 'sweetalert';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-rgps-calculos-form',
@@ -51,10 +52,9 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasAtual = false;
   public hasCarencia = false;
   public hasGrupoDos12 = false;
+  public posteriorMaio2013 = false;
 
   public periodoOptions: string[] = [];
-
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -178,7 +178,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     } else {
       var dateParts = this.dataInicioBeneficio.split("/");
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()) || date <= new Date('01/01/1970'))
+      if (isNaN(date.getTime()) || date < new Date('01/01/1970'))
         this.errors.add({ "dataInicioBeneficio": ["Insira uma data válida."] });
     }
 
@@ -332,23 +332,45 @@ export class RgpsCalculosFormComponent implements OnInit {
   changePeriodoOptions() {
     this.errors.clear('dataInicioBeneficio');
     this.periodoOptions = [];
-    var dateParts = this.dataInicioBeneficio.split("/");
-    let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-    if (dateBeneficio < new Date('04/05/1991')) {
+
+    if(moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')){
+      this.posteriorMaio2013 = true;
+    }else{
+      this.posteriorMaio2013 = false;
+    }
+    let dib = moment(this.dataInicioBeneficio, 'DD/MM/YYYY');
+    if(dib < moment('1988-10-05')){
       this.periodoOptions.push('Anterior a 05/10/1988');
-    }
-    if (dateBeneficio > new Date('10/04/1988')) {
+    }else if(dib >= moment('1988-10-05') && dib < moment('1991-04-05')){
+      this.periodoOptions.push('Anterior a 05/10/1988');
       this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
-    }
-    if (dateBeneficio > new Date('04/04/1991')) {
+    }else if(dib >= moment('1991-04-05') && dib <= moment('1998-12-15')){
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
-    }
-    if (dateBeneficio > new Date('12/15/1998')) {
+    }else if(dib > moment('1998-12-15') && dib <= moment('1999-11-29')){
+      this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
-    }
-    if (dateBeneficio > new Date('11/29/1999')) {
+    }else if(dib > moment('1999-11-29')){
+      this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+      this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoOptions.push('A partir de 29/11/1999');
     }
+    var dateParts = this.dataInicioBeneficio.split("/");
+    let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+    // if (dateBeneficio < new Date('04/05/1991')) {
+    //   this.periodoOptions.push('Anterior a 05/10/1988');
+    // }
+    // if (dateBeneficio > new Date('10/04/1988')) {
+    //   this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
+    // }
+    // if (dateBeneficio > new Date('04/04/1991')) {
+    //   this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+    // }
+    // if (dateBeneficio > new Date('12/15/1998')) {
+    //   this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
+    // }
+    // if (dateBeneficio > new Date('11/29/1999')) {
+    //   this.periodoOptions.push('A partir de 29/11/1999');
+    // }
 
     if (dateBeneficio < new Date('12/16/1998')) {
       this.hasAnterior = true;
@@ -375,7 +397,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   changeGrupoDos12() {
     this.errors.clear('periodoInicioBeneficio');
-    if (this.periodoInicioBeneficio == 'Anterior a 05/10/1998' || this.periodoInicioBeneficio == 'Entre 05/10/1998 e 04/04/1991') {
+    if (this.periodoInicioBeneficio == 'Anterior a 05/10/1988' || this.periodoInicioBeneficio == 'Entre 05/10/1988 e 04/04/1991') {
       this.hasGrupoDos12 = true;
     } else {
       this.hasGrupoDos12 = false;
@@ -436,4 +458,43 @@ export class RgpsCalculosFormComponent implements OnInit {
     return false;
   }
 
+  dateMask(rawValue){
+    if(rawValue == ''){
+      return [/[0-3]/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
+    }
+    let mask = [];
+    mask.push(/[0-3]/);
+
+    if (rawValue[0] == 0){
+      mask.push(/[1-9]/);
+    }else if(rawValue[0] == 1){
+      mask.push(/[0-9]/);
+    }else if(rawValue[0] == 2){
+      mask.push(/[0-9]/);
+    }else if(rawValue[0] == 3){
+      mask.push(/[0-1]/);
+    }
+
+    mask.push('/');
+    mask.push( /[0-1]/);
+    
+    if (rawValue[3] == 0){
+      mask.push(/[1-9]/);
+    }else if(rawValue[3] == 1){
+      mask.push(/[1-2]/);
+    }
+
+    mask.push('/');
+    mask.push( /[1-2]/);
+    
+    if (rawValue[6] == 1){
+      mask.push(/[9]/);
+    }else if(rawValue[6] == 2){
+      mask.push(/[0]/);
+    }
+    mask.push(/\d/);
+    mask.push( /\d/);
+    return mask;
+  }
 }

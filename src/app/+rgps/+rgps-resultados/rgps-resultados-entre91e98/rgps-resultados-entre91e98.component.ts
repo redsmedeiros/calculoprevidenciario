@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
+import { ActivatedRoute } from '@angular/router';
 import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
 import { CalculoRgps as CalculoModel } from '../../+rgps-calculos/CalculoRgps.model';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
@@ -57,13 +58,38 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     ] 
   };
 
+  public reajustesAdministrativos = true;
+  public showReajustesAdministrativos = false;
+  public reajustesAdministrativosTableData = [];
+  public reajustesAdministrativosTableOptions = {
+    colReorder: false,
+    paging: false,
+    searching: false,
+    ordering:  false,
+    bInfo : false,
+    data: this.reajustesAdministrativosTableData,
+    columns: [
+      {data: 'competencia'},
+      {data: 'reajuste'},
+      {data: 'beneficio'},
+      {data: 'limite'},
+    ] 
+  };
+
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
-    private CalculoRgpsService:CalculoRgpsService,) { super(null, null, null, null);}
+    private CalculoRgpsService:CalculoRgpsService,
+    protected rt: ActivatedRoute,) { super(null, null, null, null);}
 
   ngOnInit() {
+    if(this.rt.snapshot.queryParams['withINPC'] == 'true'){
+      this.reajustesAdministrativos = false;
+    }else{
+      this.reajustesAdministrativos = true;
+    }
+
     this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
@@ -160,8 +186,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
     let dataComparacao = (dib.clone()).startOf('month');
-    let reajustesAdministrativos = true;
-    if (reajustesAdministrativos) { // Definir tal booleano, a principio sempre true
+    if (this.reajustesAdministrativos) {
       dataComparacao = (this.dataInicioBeneficio.clone()).startOf('month');
     }
 
@@ -285,7 +310,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let rmiValoresAdministrativos = rmi;
 
-    if(reajustesAdministrativos && 
+    if(this.reajustesAdministrativos && 
       ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
        (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
            rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
@@ -328,8 +353,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let somaContribuicoes = totalPrimaria + totalSecundaria;
 
-    if (reajustesAdministrativos) {
-       //TODO: salvarBeneficiosNoBD;
+    if (this.reajustesAdministrativos) {
       this.calculo.soma_contribuicao = somaContribuicoes;
       this.calculo.valor_beneficio = rmi;
       this.CalculoRgpsService.update(this.calculo)
@@ -621,8 +645,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     return anoNecessario.year();
   }
 
-  getValoresAdministrativos(rmi) {
-    let reajustesAdministrativos = true;   
+  getValoresAdministrativos(rmi) { 
     let valorBeneficio = rmi;
     let dataAnterior = null;
     let dataCorrente = null;
@@ -635,7 +658,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       dataCorrente = reajusteAutomatico.data_reajuste;
       let reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
       valorBeneficio = this.convertCurrency(valorBeneficio, dataAnterior, dataCorrente);
-      if (reajustesAdministrativos) {
+      if (this.reajustesAdministrativos) {
         valorBeneficio = valorBeneficio * reajuste;
       }
       valorBeneficio = (valorBeneficio < reajusteAutomatico.salario_minimo) ? reajusteAutomatico.salario_minimo : valorBeneficio;
@@ -725,6 +748,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     return bonus;
   }
 
+  calcularComINPC(){
+    window.location.href = (this.reajustesAdministrativos) ? window.location.href.split('?')[0] + '?withINPC=true' : window.location.href.split('?')[0];
+    window.location.reload();
+  }
+
   limitarTetosEMinimos(valor, data){
     let moeda = this.Moeda.getByDate(data);
     let salarioMinimo = moeda.salario_minimo;
@@ -740,6 +768,65 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       avisoString = 'LIMITADO AO TETO'
     }
     return {valor:valorRetorno, aviso:avisoString};
+  }
+
+  mostrarReajustesAdministrativos(tableId){
+    if(this.showReajustesAdministrativos){
+      document.getElementById(tableId).scrollIntoView();
+      return;
+    }
+
+    let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+    this.ReajusteAutomatico.getByDate(dataInicio, moment())
+      .then((reajustes:ReajusteAutomatico[]) => {
+        let reajustesAutomaticos = reajustes;
+        let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
+        let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
+        let dataCorrente = dataInicio;
+        for (let reajusteAutomatico of reajustesAutomaticos) {
+          dataCorrente = moment(reajusteAutomatico.data_reajuste);
+          let siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
+          let teto = parseFloat(reajusteAutomatico.teto);
+          let minimo = parseFloat(reajusteAutomatico.salario_minimo); 
+          if (this.tipoBeneficio == 17) {
+            minimo *= 0.3;
+          } else if (this.tipoBeneficio == 18) {
+            minimo *= 0.4;
+          } else if (this.tipoBeneficio == 7) {
+            minimo *= 0.5;
+          } else if (this.tipoBeneficio == 19) {
+            minimo *= 0,6;
+          }    
+          let reajuste = reajusteAutomatico.indice != null ? reajusteAutomatico.indice : 1;
+          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
+          
+          if (dataCorrente.year() == 2006 && dataCorrente.month() == 7) {
+            reajuste = 1.000096;
+          }
+          
+          let limit = '-';    
+          if (valorBeneficio < minimo) {
+            valorBeneficio = minimo;
+            limit = 'M'
+          } 
+          if (valorBeneficio > teto) {
+            valorBeneficio = teto;
+            limit = 'T'
+          }
+          let line = {competencia: dataCorrente.format('MM/YYYY'),
+                      reajuste: reajuste,
+                      beneficio: this.formatMoney(valorBeneficio, siglaMoedaDataCorrente),
+                      limite: limit};
+          this.reajustesAdministrativosTableData.push(line);
+          dataPrevia = dataCorrente;
+        }
+        this.reajustesAdministrativosTableOptions = {
+          ...this.reajustesAdministrativosTableOptions,
+          data: this.reajustesAdministrativosTableData,
+        }
+        this.showReajustesAdministrativos = true;
+        document.getElementById(tableId).scrollIntoView();
+      });    
   }
 
 }

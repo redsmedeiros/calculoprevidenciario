@@ -34,9 +34,9 @@ export class ContribuicaoComplementar extends Model {
   public data_calculo;
   public chk_juros;
   public actions = `
-    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
-    <a href="#/contribuicoes/${this.id_segurado}/contribuicoes-resultados-complementar/${this.id}" class="action-edit"> <i class="fa fa-search"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i title="Editar" class='fa fa-edit'></i> </a>
+    <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
+    <a href="#/contribuicoes/${this.id_segurado}/contribuicoes-resultados-complementar/${this.id}" class="action-edit"> <i title="Ver Cálculo" class="fa fa-search"></i> </a>
   `;
 
   // Definir e padronizar front e back-end Models

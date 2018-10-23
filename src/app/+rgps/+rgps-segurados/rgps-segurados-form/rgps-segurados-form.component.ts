@@ -52,35 +52,35 @@ export class RgpsSeguradosFormComponent {
     } else {
       let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi,'');
       let id = this.formData.id_documento.toString();
-      switch (id) {
-        case '1': //PIS
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["PIS inválido."]});
-          break;
+      // switch (id) {
+      //   case '1': //PIS
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["PIS inválido."]});
+      //     break;
 
-        case '2': //PASEP
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["PASEP inválido."]});
-          break;
+      //   case '2': //PASEP
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["PASEP inválido."]});
+      //     break;
 
-        case '3': //CPF
-          if (!this.validateCPF(documentNumber))
-            this.errors.add({"numero_documento":["CPF inválido."]});
-          break;
+      //   case '3': //CPF
+      //     if (!this.validateCPF(documentNumber))
+      //       this.errors.add({"numero_documento":["CPF inválido."]});
+      //     break;
 
-        case '4': //NIT
-          if (!this.validatePIS(parseInt(documentNumber)))
-            this.errors.add({"numero_documento":["NIT inválido."]});
-          break;
+      //   case '4': //NIT
+      //     if (!this.validatePIS(parseInt(documentNumber)))
+      //       this.errors.add({"numero_documento":["NIT inválido."]});
+      //     break;
 
-        case '5': //RG
-          if (!this.validateRG(documentNumber))
-            this.errors.add({"numero_documento":["RG inválido."]});
-          break;
+      //   case '5': //RG
+      //     if (!this.validateRG(documentNumber))
+      //       this.errors.add({"numero_documento":["RG inválido."]});
+      //     break;
 
-        default:
-          break;
-      }
+      //   default:
+      //     break;
+      // }
     }
 
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
@@ -93,12 +93,12 @@ export class RgpsSeguradosFormComponent {
     }
 
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == "") {
-      this.errors.add({"data_filiacao":["A data de filiação é obrigatória."]});
+      //this.errors.add({"data_filiacao":["A data de filiação é obrigatória."]});
     } else {
       var dateParts = this.formData.data_filiacao.split("/");
       let date = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({"data_filiacao":["Insira uma data válida."]});
+        this.errors.add({"data_filiacao":["Insira uma data válida ou deixe em branco."]});
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
@@ -111,31 +111,31 @@ export class RgpsSeguradosFormComponent {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
     let id = this.formData.id_documento.toString();
-    switch (id) {
-      case '1': // PIS
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    // switch (id) {
+    //   case '1': // PIS
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '2': // PASEP
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '2': // PASEP
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '3': // CPF
-        this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
-        break;
+    //   case '3': // CPF
+    //     this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+    //     break;
 
-      case '4': // NIT
-        this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '4': // NIT
+    //     this.docMask = [/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,/\d/,/\d/,'.',/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      case '5': // RG
-        this.docMask = [/\d/, /\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/];
-        break;
+    //   case '5': // RG
+    //     this.docMask = [/\d/, /\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/];
+    //     break;
 
-      default:
-        this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
-        break;
-    }
+    //   default:
+    //     this.docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+    //     break;
+    // }
   }
 
   validatePIS(pis: number) {

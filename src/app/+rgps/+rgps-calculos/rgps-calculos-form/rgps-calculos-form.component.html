@@ -20,39 +20,27 @@
                     <label class="col-md-2 control-label" for="select-2">Espécie:</label>
                     <div class="col-md-8">
                       <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                        <option  *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
                         <option>Aposentadoria especial</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Grave</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option>Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option>Aposentadoria especial por Idade da Pessoa com Deficiência</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Grave</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Leve</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
+                        <option *ngIf="posteriorMaio2013">Aposentadoria especial por Idade da Pessoa com Deficiência</option>
                         <option>Aposentadoria por idade - Trabalhador Rural</option>
                         <option>Aposentadoria por idade - Trabalhador Urbano</option>
                         <option>Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
-                        <option>Aposentadoria por tempo de contribuição</option>
-                        <option>Aposentadoria por tempo de serviço de professor</option>
-                        <option>Auxílio Acidente - 30%</option>
-                        <option>Auxílio Acidente - 40%</option>
-                        <option>Auxílio Acidente - 60%</option>
-                        <option>Auxílio Acidente previdenciário - 50%</option>
+                        <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de contribuição</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço de professor</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 30%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 40%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 60%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente previdenciário - 50%</option>
                         <option>Auxílio Doença</option>
                         <option>LOAS</option>
                         <option>LOAS - Benefício no valor de um salário mínimo</option>
                       </select>
                       <small *ngIf="errors.has('especieBeneficio')" class="text-danger">{{ errors.get('especieBeneficio') | i18n}}</small>
-                    </div>
-                  </div>
-                  <div class="form-group" *ngIf="hasCarencia">
-                    <label class="col-md-2 control-label" for="select-1">Carência:*</label>
-                    <div class="col-md-8">
-                      <input [(ngModel)]="carencia" (change)="errors.clear('carencia')" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
-                      <small *ngIf="errors.has('carencia')" class="text-danger">{{ errors.get('carencia') | i18n}}</small>
-                    </div>
-                  </div>
-                  <div class="form-group" *ngIf="hasGrupoDos12">
-                    <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
-                    <div class="col-md-8">
-                      <input [(ngModel)]="grupoDos12" (change)="errors.clear('grupoDos12')"  [ngModelOptions]="{standalone: true}" class="form-control" type="text">
-                      <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
                     </div>
                   </div>
                   <h3 *ngIf="has98">Tempo de contribuição até a Emenda nº 20/98 (16/12/1998)</h3>
@@ -150,6 +138,21 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
+                  <div class="form-group" *ngIf="hasCarencia">
+                    <label class="col-md-2 control-label" for="select-1">Carência:*</label>
+                    <div class="col-md-1">
+                      <input [(ngModel)]="carencia" placeholder="Meses" (change)="errors.clear('carencia')" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <small *ngIf="errors.has('carencia')" class="text-danger">{{ errors.get('carencia') | i18n}}</small>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="hasGrupoDos12">
+                    <label class="col-md-2 control-label" for="select-1">Grupo dos 12:</label>
+                    <div class="col-md-1">
+                      <input [(ngModel)]="grupoDos12" (change)="errors.clear('grupoDos12')" placeholder="Anos" [ngModelOptions]="{standalone: true}" class="form-control" type="text"> 
+                      <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
+                    </div>
+                  </div>
+                  <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
                 </fieldset>
                 <div class="form-actions">
                   <div class="row">

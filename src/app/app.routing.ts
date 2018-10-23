@@ -106,6 +106,11 @@ export const routes: Routes = [
         loadChildren: 'app/+contagem-tempo/contagem-tempo-showcase.module#ContagemTempoShowcaseModule',
         data: {pageTitle: 'Contagem Tempo'}
       },
+      {
+        path: 'moeda-import',
+        loadChildren: 'app/+moeda-import/moeda-import.module#MoedaImportModule',
+        data: {pageTitle: 'Importação dos dados para tabela de Moeda'}
+      }
     ]
   },
 

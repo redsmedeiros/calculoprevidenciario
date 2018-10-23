@@ -85,9 +85,9 @@ export class CalculoAtrasado extends Model {
   public aplicar_juros_poupanca;
 
   public actions = `
-    <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-    <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
-    <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i class="fa fa-search"></i> </a>
+    <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
+    <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
+    <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
   `;
 
 }

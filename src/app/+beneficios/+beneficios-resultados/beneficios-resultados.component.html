@@ -55,7 +55,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -89,7 +94,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -123,7 +133,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -159,7 +174,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -182,7 +202,7 @@
                 <li>
                   <b>Percentual do Acordo Judicial:</b> {{formatPercent(calculo.acordo_pedido)}}</li>
                 <li>
-                  <b>Vicendos:</b> {{calculo.maturidade}}</li>
+                  <b>Vincendas:</b> {{calculo.maturidade}}</li>
               </ul>
             </div>
           </div>
@@ -192,7 +212,12 @@
 
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -221,7 +246,12 @@
       </article>
 
        <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -235,46 +265,88 @@
 
               <ul class="list-unstyled" *ngIf="!isTetos">
                 <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber:</b> {{formatMoney(somaHonorarios)}}</li>
+                  <b>Soma dos honorários a receber:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
                 <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
+                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span></li>
                 <li *ngIf="valorAcordo != 0">
-                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(valorAcordo)}}</li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(valorAcordo)}}"> {{formatMoney(valorAcordo)}}</span></li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente:</b> {{formatMoney(ultimaRenda)}}</li>
+                  <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span></li>
                 <li>
-                  <b>Soma Total da Diferença Mensal:</b> {{formatMoney(somaDiferencaMensal)}}</li>
+                  <b>Soma Total da Diferença Mensal:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span></li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</li>
+                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span></li>
                 <li>
-                  <b>Soma Total da Diferença Corrigida:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
+                  <b>Soma Total da Diferença Corrigida:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
                 <li>
-                  <b>Soma Total do Valor dos Juros:</b> {{formatMoney(somaJuros)}}</li>
+                  <b>Soma Total do Valor dos Juros:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span></li>
                 <li>
-                  <b>Soma devida Judicialmente:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
+                  <b>Soma devida Judicialmente:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
                 <li>
-                  <b>Soma das vincendas:</b> {{formatMoney(somaVincendas)}}</li>
+                  <b>Soma das vincendas:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span></li>
                 <li>
-                  <b>Soma total devida ao segurado:</b> {{formatMoney(somaTotalSegurado)}}</li>
+                  <b>Soma total devida ao segurado:</b><span class="{{tratarConclusao(somaTotalSegurado)}}"> {{formatMoney(somaTotalSegurado)}}</span></li>
               </ul>
               <ul class="list-unstyled" *ngIf="isTetos">
                   <li>
-                  <b>Soma dos vincendos Tetos:</b> {{formatMoney(somaVincendas)}}</li>
+                  <b>Soma das vincendas Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas)}}</span></li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b> {{formatMoney(ultimaRenda)}}</li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(ultimaRenda)}}</span></li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b> {{formatMoney(somaDevidaJudicialmente)}}</li>
+                  <b>Soma devida Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
                 <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber Tetos:</b> {{formatMoney(somaHonorarios)}}</li>
+                  <b>Soma dos honorários a receber Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
                 <li>
-                  <b>Subtotal:</b> {{formatMoney(somaDiferencaCorrigida)}}</li>
+                  <b>Subtotal:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
                 <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b> {{formatMoney(descontoAcordo)}}</li>
+                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(descontoAcordo)}}</span></li>
                 <li>
-                  <b>Soma dos devidos com desconto judicial:</b> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</span></li>
                 <li>
-                  <b>Soma total Tetos:</b> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</li>
+                  <b>Soma total Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</span></li>
               </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>Opções do Cálculo</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
+              <div class="row">
+                <div class="col-md-12">
+                  <button *ngIf="considerarPrescricao" type="submit" (click)="calcularSemPrescricao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-gear"></i>
+                    </span>Calcular sem prescrição
+                  </button>
+                  <button *ngIf="!considerarPrescricao" type="submit" (click)="calcularSemPrescricao()" class="btn btn-labeled btn-default margin-right-13">
+                      <span class="btn-label">
+                      <i class="fa fa-gear"></i>
+                    </span>Calcular com prescrição
+                  </button>
+                  <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-default margin-right-13">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> Imprimir
+                </button>
+                </div>
+              </div>
             </div>
           </div>
         </sa-widget>
@@ -282,7 +354,12 @@
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-eye"></i>
@@ -341,21 +418,21 @@
                 </thead>
               </sa-datatable>
               
-              <div class="well margin-top-10 margin-bottom-10">
+              <div class="well margin-top-10 margin-bottom-10" *ngIf="!isUpdating">
                 <p>
                   <strong>Observações:</strong>
                 </p>
                 <p>
-                  <strong>a) </strong> Cálculos atualizados até 08/2017;</p>
+                  <strong>a) </strong> Cálculos atualizados até {{ultimaCompretencia}};</p>
                 <p>
                   <strong>b) </strong> Correção monetária conforme Sistema de Correção Monetária do CJF;</p>
-                <p>Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989,
-                  BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a
-                  02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC
-                  de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 18/08/2017;</p>
+                <p *ngIf="calculo.tipo_correcao == 'ipca'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, IPCA-e até 26/09/2018;</p>
+                <p *ngIf="calculo.tipo_correcao == 'tr'">Indexadores:- ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 08/10/2018;</p>
+                <p *ngIf="calculo.tipo_correcao == 'cam'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 08/10/2018;</p>
+                <p *ngIf="calculo.tipo_correcao == 'tr_ipca'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, ;</p>
                 <p>
                   <strong>c) </strong> Juros de mora:</p>
-                <p>- Taxa de 0.5% até 12/2002 , taxa de 1%de 01/2003 até 06/2009 , taxa de 0.5% de 07/2009 até 18/08/2017 Quando
+                <p>- Taxa de {{calculo.previo_interesse_2003}}% até 12/2002 , taxa de {{calculo.pos_interesse_2003}}% de 01/2003 até 06/2009 , taxa de {{calculo.pos_interesse_2009}}% de 07/2009 até 18/08/2017 Quando
                   a sentença determinar a utilização de juros pelo critério da poupança será adotado o conteúdo ditado pela
                   Lei 12703/2012 a partir de 07/2012. </p>
 
@@ -378,11 +455,11 @@
                     <tbody>
                       <tr>
                         <td>*</td>
-                        <td>Efeito financeiro da Revisão do Buraco Negro</td>
+                        <td><a class="dcontexto">Efeito financeiro da Revisão do Buraco Negro<span>Conforme o art 144 da Lei 8.213/1991 os benefícios concedidos entre 05/10/1988 e 05/04/1991 tiveram suas rendas mensais iniciais revisadas, porém o efeito financeiro desta revisão não abrange o período entre a DIB e 05/1992 e se dá somente a partir de 06/1992.</span></a></td>
                       </tr>
                       <tr>
                         <td>p</td>
-                        <td>Benefício Proporcional</td>
+                        <td><a class="dcontexto">Benefício Proporcional<span>Valores proporcionais aos dias com base na DIB (data do inicio do benefício) de valores devidos ou recebidos ou ainda na data de cessação de valores devidos ou recebidos . Para apresentação de valores inteiros a DIB de valores devidos e recebidos deve sempre ser o primeiro dia do mês e a data de cessação deve estar zerada ou que seja o ultimo dia do mês de referência.</span></a></td>
                       </tr>
                       <tr>
                         <td>a</td>
@@ -390,7 +467,7 @@
                       </tr>
                       <tr>
                         <td>(os)</td>
-                        <td>Índice de reajuste pela OS 121</td>
+                        <td><a class="dcontexto">Índice de reajuste pela OS 121<span>Os valores dos indices de reajustes entre a DIB de benefícios concedidos entre 05/10/1988 e 05/04/1991 (buraco negro), e 05/1992,  foram alterados por esta OS 121/1992 e a aplicação destes indices sobre a renda mensal inicial revisada teve efeito financeiro a partir de 06/1992, não sendo devidas diferenças para o período entre a DIB e 05/1992.</span></a></td>
                       </tr>
                       <tr>
                         <td>M</td>

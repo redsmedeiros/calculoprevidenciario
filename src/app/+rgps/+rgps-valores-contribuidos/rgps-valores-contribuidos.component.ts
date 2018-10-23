@@ -133,7 +133,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (todasContribuicoes.length != 0) {
       this.mostrarBotaoRealizarCalculos = false;
       this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-        window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+        swal('Sucesso', 'Valores salvos com sucesso!','success').then(() =>{
+          window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+        })
       });
     } else {
       swal('Erro', 'Nenhum valor inserido', 'error');
@@ -163,8 +165,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
           this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
           this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
           ano = contribAno;
-          valuesPrimaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
-          valuesSecundaria = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+          valuesPrimaria = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+          valuesSecundaria = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
         }
         this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
         this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
@@ -218,6 +220,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       } else if (this.tipoContribuicao === 'Secundaria') {
         this.matrizContribuicoesSecundarias.preencher(periodoObj);
       }
+      swal('Valores inseridos com sucesso!', '','success')
 
     } else {
       swal('Erro', 'Confira os dados digitados', 'error');
@@ -238,7 +241,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
       this.errors.add({ "finalPeriodo": ["Insira uma data válida"] });
     } else {
-      if (dateFinalPeriodo <= dateInicioPeriodo) {
+      if (dateFinalPeriodo < dateInicioPeriodo) {
         this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
       }
     }
@@ -306,7 +309,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   formatMoney(data) {
     data = parseFloat(data);
-    return 'R$ ' + (data.toFixed(2)).replace('.', ',');
+    return (data.toFixed(2)).replace('.', ',');
+    // return 'R$ ' + (data.toFixed(2)).replace('.', ',');
   }
 
   dateMask(rawValue) {

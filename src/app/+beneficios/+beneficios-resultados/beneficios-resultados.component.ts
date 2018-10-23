@@ -9,15 +9,14 @@ import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { IntervaloReajusteService } from '../../services/IntervaloReajuste.service';
 import { IntervaloReajuste } from '../../services/IntervaloReajuste.model';
-
 import { IndicesService } from '../../services/Indices.service';
 import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
-//import * as $ from 'jquery';
 
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
+  styleUrls: ['./beneficios-resultados.component.css'],
   templateUrl: './beneficios-resultados.component.html',
 })
 export class BeneficiosResultadosComponent implements OnInit {
@@ -154,6 +153,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   public devidosComDescontoTetos = 0.0;
   public somaTotalTetos = 0.0;
 
+  private ultimaCompretencia = '';
+  private considerarPrescricao = true;
+
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
@@ -171,6 +173,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
+    if(this.route.snapshot.queryParams['considerarPrescricao'] == 'false'){
+      this.considerarPrescricao = false;
+    }
 
     this.Segurado.find(this.route.snapshot.params['id'])
       .then(segurado => {
@@ -244,7 +249,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       let siglaDataCorrente = moedaDataCorrente.sigla;
 
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
-      
+      this.ultimaCompretencia = stringCompetencia;
       let indiceReajusteValoresDevidos = {reajuste:0.0, reajusteOs:0.0};
       let beneficioDevido = 0.0;
       let indiceReajusteValoresRecebidos = {reajuste:0.0, reajusteOs:0.0};
@@ -287,7 +292,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
-      if (diferencaCorrigidaJuros.indexOf('prescrita') != -1){
+      if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao){
         //Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
@@ -299,7 +304,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         indice_recebidos: this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido'),
         beneficio_recebido: beneficioRecebidoString.resultString,
         diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente),
-        correcao_monetaria: correcaoMonetaria,
+        correcao_monetaria: this.formatDecimal(correcaoMonetaria,8),
         diferenca_corrigida: this.formatMoney(diferencaCorrigida),
         juros: this.formatPercent(juros, 4),
         valor_juros: this.formatMoney(valorJuros),
@@ -1088,7 +1093,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
 
-    if(diferencaEmAnos >= 5){
+    if(diferencaEmAnos >= 5 && this.considerarPrescricao){
       diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
@@ -1578,8 +1583,21 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
   }
 
+  tratarConclusao(value){
+    if(value < 0){
+      return "negativeValue";
+    }else{
+      return '';
+    }
+  }
+
   getIndice(data){
     return this.getDifferenceInMonths(this.primeiraDataArrayMoeda, data);
+  }
+
+  calcularSemPrescricao(){
+    window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
+    window.location.reload();
   }
 
   getTipoAposentadoria(value){
@@ -1637,6 +1655,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
     ]
     return tipos_aposentadoria[value].name;
+  }
+  
+  imprimirPagina(){
+    let printContents = document.getElementById('content').innerHTML;
+    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    popupWin.document.open();
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+    popupWin.document.close();
   }
 
   getStringTabelaCorrecaoMonetaria(){

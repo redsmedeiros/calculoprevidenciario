@@ -32,9 +32,9 @@ export class SeguradoContribuicao extends Model {
   public funcao;
   public data_entrada_servico_publico;
   public actions = `
-    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/editar" id="testee" class="action-edit"> <i class="fa fa-edit"></i> </a>
-    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/destroy" class="action-edit"> <i class="fa fa-times"></i> </a>
-    <a href="#/contribuicoes/contribuicoes-calculos/${this.id}" class="action-edit"> <i class="fa fa-calculator"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/editar" id="testee" class="action-edit"> <i title="Editar" class="fa fa-edit"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-segurados/${this.id}/destroy" class="action-edit"> <i title="Remover" class="fa fa-times"></i> </a>
+    <a href="#/contribuicoes/contribuicoes-calculos/${this.id}" class="action-edit"> <i title="Ver cálculos" class="fa fa-calculator"></i> </a>
   `;
 
   // Definir e padronizar front e back-end Models

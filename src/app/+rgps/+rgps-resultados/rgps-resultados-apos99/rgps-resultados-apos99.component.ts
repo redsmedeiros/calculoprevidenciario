@@ -67,6 +67,23 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     ] 
   };
 
+  public showReajustesAdministrativos = false;
+  public reajustesAdministrativosTableData = [];
+  public reajustesAdministrativosTableOptions = {
+    colReorder: false,
+    paging: false,
+    searching: false,
+    ordering:  false,
+    bInfo : false,
+    data: this.reajustesAdministrativosTableData,
+    columns: [
+      {data: 'competencia'},
+      {data: 'reajuste'},
+      {data: 'beneficio'},
+      {data: 'limite'},
+    ] 
+  };
+
   constructor(private ExpectativaVida: ExpectativaVidaService,
   	private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
@@ -159,7 +176,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fator = moeda.fator;
       let fatorLimite = moedaComparacao.fator;
       let fatorCorrigido = fator / fatorLimite;
-      let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 4); // tabela['fatorCorrigido'] = fator/fatorLimite;
+      let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
        
       let contribuicaoPrimariaRevisada = 0;
       let contribuicaoSecundariaRevisada = 0;
@@ -396,7 +413,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = ((tempoTotalContribuicao * aliquota) / expectativa) * (1 + this.idadeFracionada + (tempoTotalContribuicao * aliquota) / 100);
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+this.idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)"});
+        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +'*'+ aliquota+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,4)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+aliquota+")) / "+"100)"});
         break;
     }
 
@@ -997,5 +1014,63 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
     return idadeEmDias/365.25;
+  }
+
+  mostrarReajustesAdministrativos(tableId){
+    if(this.showReajustesAdministrativos){
+      document.getElementById(tableId).scrollIntoView();
+      return;
+    }
+    let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+    this.ReajusteAutomatico.getByDate(dataInicio, moment())
+      .then((reajustes:ReajusteAutomatico[]) => {
+        let reajustesAutomaticos = reajustes;
+        let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
+        let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
+        let dataCorrente = dataInicio;
+        for (let reajusteAutomatico of reajustesAutomaticos) {
+          dataCorrente = moment(reajusteAutomatico.data_reajuste);
+          let siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
+          let teto = parseFloat(reajusteAutomatico.teto);
+          let minimo = parseFloat(reajusteAutomatico.salario_minimo); 
+          if (this.tipoBeneficio == 17) {
+            minimo *= 0.3;
+          } else if (this.tipoBeneficio == 18) {
+            minimo *= 0.4;
+          } else if (this.tipoBeneficio == 7) {
+            minimo *= 0.5;
+          } else if (this.tipoBeneficio == 19) {
+            minimo *= 0,6;
+          }    
+          let reajuste = reajusteAutomatico.indice != null ? reajusteAutomatico.indice : 1;
+          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
+          
+          if (dataCorrente.year() == 2006 && dataCorrente.month() == 7) {
+            reajuste = 1.000096;
+          }
+          
+          let limit = '-';    
+          if (valorBeneficio < minimo) {
+            valorBeneficio = minimo;
+            limit = 'M'
+          } 
+          if (valorBeneficio > teto) {
+            valorBeneficio = teto;
+            limit = 'T'
+          }
+          let line = {competencia: dataCorrente.format('MM/YYYY'),
+                      reajuste: reajuste,
+                      beneficio: this.formatMoney(valorBeneficio, siglaMoedaDataCorrente),
+                      limite: limit};
+          this.reajustesAdministrativosTableData.push(line);
+          dataPrevia = dataCorrente;
+        }
+        this.reajustesAdministrativosTableOptions = {
+          ...this.reajustesAdministrativosTableOptions,
+          data: this.reajustesAdministrativosTableData,
+        }
+        this.showReajustesAdministrativos = true;
+        document.getElementById(tableId).scrollIntoView();
+      });    
   }
 }

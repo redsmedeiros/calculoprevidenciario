@@ -51,7 +51,7 @@
                 <p>Mostrar Reajustes Administrativos</p>
               </td>
               <td>
-                <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-eye"></i>
                   </span> MOSTRAR
@@ -137,11 +137,12 @@
                 </tbody>
               </table>
 
-              <div class="alert alert-warning margin-top-10" role="alert" *ngIf="erro">
+              <div class="alert alert-warning margin-top-10" role="alert" *ngIf="erro || nenhumaContrib">
             <!--<strong>NÃO POSSUI</strong> direito ao benefício
                 <strong>Falta(m) 20 ano(s) e 2 mes(es)</strong> para completar o tempo de serviço necessário para o benefício
                 <strong>INTEGRAL</strong>. -->
-                <p>{{erro}}</p>
+                <p *ngIf="!nenhumaContrib">{{erro}}</p>
+                <p *ngIf="nenhumaContrib">Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href='http://www.ieprev.com.br/legislacao/4506/decreto-no-83.080,-de-24-1-1979' target='_blank'>Art. 37 da Decreto nº 83.080, de 24/01/1979</a></p>
               </div>
             </div>
             <div>
@@ -225,7 +226,22 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
+          </div>
+          
+          </div>
+          <div id="raTable-{{boxId}}" *ngIf="!isUpdating" class="widget-body" >
+              <h2  *ngIf="!isUpdating && showReajustesAdministrativos">Reajustes Administrativos</h2>
+              <hr>
+              <sa-datatable [options]="reajustesAdministrativosTableOptions" *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Competência</th>
+                      <th>Reajuste</th>
+                      <th>Benefício</th>
+                      <th>Limite</th>
+                    </tr>
+                  </thead>
+              </sa-datatable>
           </div>
         </sa-widget>
       </article>

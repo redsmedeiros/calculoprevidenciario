@@ -39,6 +39,7 @@ import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.service';
 import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { FileDropModule } from 'ngx-file-drop';
 
 
 // Application wide providers
@@ -69,6 +70,7 @@ type StoreType = {
     TextMaskModule,
     CoreModule,
     SmartadminLayoutModule,
+    FileDropModule,
     routing
   ],
   exports: [

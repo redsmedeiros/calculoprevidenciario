@@ -25,6 +25,11 @@ export const routes:Routes = [
     data: {pageTitle: 'RGPS Valores Contribuidos'}
   },
   { 
+    path: 'rgps-importacao-cnis',
+    loadChildren: 'app/+rgps/+rgps-valores-contribuidos/rgps-importacao-cnis/rgps-importacao-cnis.module#RgpsImportacaoCnisModule',
+    data: {pageTitle: 'RGPS Importar Valores do CNIS'}
+  },
+  { 
     path: 'rgps-resultados',
     loadChildren: 'app/+rgps/+rgps-resultados/rgps-resultados.module#RgpsResultadosModule',
     data: {pageTitle: 'RGPS Resultados'}
