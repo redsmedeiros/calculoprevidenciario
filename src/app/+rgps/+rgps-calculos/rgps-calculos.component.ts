@@ -102,8 +102,8 @@ export class RgpsCalculosComponent implements OnInit {
             this.segurado = segurado;
     });
 
-    this.CalculoRgps.getWithPair('id_segurado', this.idSegurado)
-        .then(() => {
+    this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
+        .then((calculos) => {
         this.updateDatatable();
         this.isUpdating = false;
         })
@@ -118,7 +118,7 @@ export class RgpsCalculosComponent implements OnInit {
 
   onCreate(e) {
       this.isUpdating = true;
-      this.CalculoRgps.getWithPair('id_segurado', this.idSegurado)
+      this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
         .then(() => {
            this.isUpdating = false;
         })
