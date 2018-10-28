@@ -399,6 +399,17 @@ export class BeneficiosResultadosComponent implements OnInit {
       reajuste = indiceReajuste;
     }
     
+    // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
+    let chkIndice = this.calculo.usar_indice_99_04;
+    if (chkIndice) {
+      if (dataCorrente.isSame(moment("1999-06-01"))) {
+        reajuste = reajuste * 1.0228;
+      }
+      if (dataCorrente.isSame(moment("2004-05-01"))) {
+        reajuste = reajuste * 1.0175;
+      }
+    }
+    
     if (dataCorrente <= this.dataSimplificada  &&
       moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
       reajuste = 1;
@@ -468,17 +479,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
       reajuste = indiceReajuste;
-    }
-
-    // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
-    let chkIndice = this.calculo.usar_indice_99_04;
-    if (chkIndice) {
-      if (dataCorrente == moment("1999-06-01")) {
-        reajuste = reajuste * 1.0228;
-      }
-      if (dataCorrente == moment("2004-05-01")) {
-        reajuste = reajuste * 1.0175;
-      }
     }
 
     if (dataCorrente <= this.dataSimplificada &&
