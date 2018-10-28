@@ -207,6 +207,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   }
 
+  esmaecerLinhas(dataCorrente, line){
+    for(var index in line) { 
+      if(dataCorrente <= moment('1998-11-01')){
+        line[index] = '<div style="opacity:0.4;">' + line[index] + '</div>';
+      }
+    }
+  }
+
   generateTabelaResultados(){
     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
     let tableData = [];
@@ -311,6 +319,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         diferenca_juros: diferencaCorrigidaJuros,
         honorarios: this.formatMoney(honorarios)
       }
+
+      if(this.isTetos){
+        this.esmaecerLinhas(dataCorrente, line);
+      }
       tableData.push(line);
 
       if(!isPrescricao){
@@ -343,7 +355,11 @@ export class BeneficiosResultadosComponent implements OnInit {
               beneficio_devido: this.formatMoney(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos),
               beneficio_recebido: beneficioRecebidoAbono,
         }
-
+        
+        if(this.isTetos){
+          this.esmaecerLinhas(dataCorrente, line);
+        }
+        
         tableData.push(line);
         
         if(this.aplicaProporcionalDevidos){
@@ -409,7 +425,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         reajuste = reajuste * 1.0175;
       }
     }
-    
+
     if (dataCorrente <= this.dataSimplificada  &&
       moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
       reajuste = 1;
