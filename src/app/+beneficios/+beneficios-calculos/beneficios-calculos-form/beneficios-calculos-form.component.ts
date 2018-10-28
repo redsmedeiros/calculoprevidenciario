@@ -457,6 +457,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
           dataPedidoBeneficio = this.dibValoresRecebidos;
           data_anterior_pedido_beneficio = this.dibAnteriorValoresRecebidos;
         }
+
+        this.formData.usar_mesma_dib = this.chkUseSameDib;
         // Id Segurado
         this.formData.id_segurado  = this.route.snapshot.params['id'];
         // Data do cálculo:
@@ -639,6 +641,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.taxa_ajuste_maxima_esperada != null)
       this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.',',');
 
+    this.chkUseSameDib = this.formData.usar_mesma_dib;
 
   	if (this.chkNotGranted || this.chkUseSameDib) {
   		// Valores Devidos
