@@ -128,6 +128,18 @@
                     </td>
                     <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                   </tr>
+                  <tr *ngIf="calculo.carencia != null">
+                    <td>
+                      <span class="pull-right font-bold">Carência:</span>
+                    </td>
+                    <td>{{calculo.carencia}} mês(es)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Grupos de 12:</span>
+                    </td>
+                    <td>{{(calculo.grupo_dos_12) ? calculo.grupo_dos_12 : 0}} ano(s)</td>
+                  </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
