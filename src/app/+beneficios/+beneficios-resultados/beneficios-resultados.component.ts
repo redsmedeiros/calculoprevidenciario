@@ -976,9 +976,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
     let chkJurosMora = this.calculo.previo_interesse;
     let jurosAplicado = 0.0;
-    let dataMesCitacaoReu = dataCitacaoReu.startOf('month').subtract(1, 'days');;//dataCitacaoReu no dia 1
+    let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
     if (dataCorrente > dataMesCitacaoReu) {
-
       if (dataCorrente < this.dataJuros2003) {
         this.jurosCorrente -= this.jurosAntes2003;
       }
@@ -999,10 +998,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           if (dataCorrente < this.dataSelic70) {
             this.jurosCorrente -= this.jurosDepois2009;
           } else {
-            if(this.soma == 1){
-              let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-              this.jurosCorrente -= parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
-            }
+            let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+            this.jurosCorrente -= parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
           }
         }
       }
