@@ -7,6 +7,7 @@ export class SeguradoRgps extends Model {
   static form = {
     id: '',
     nome: '',
+    user_id: '',
     id_documento: '',
     numero_documento: '',
     data_nascimento: '',
@@ -23,6 +24,7 @@ export class SeguradoRgps extends Model {
   public id: number;
   public nome;
   public id_documento;
+  public user_id;
   public numero_documento;
   public data_nascimento;
   public sexo;

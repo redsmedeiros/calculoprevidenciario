@@ -8,6 +8,7 @@ export class Segurado extends Model {
     id: '',
     nome: '',
     id_documento: '',
+    user_id: '',
     numero_documento: '',
     data_nascimento: '',
     documento: '',
@@ -23,6 +24,7 @@ export class Segurado extends Model {
   public id: number;
   public nome;
   public id_documento;
+  public user_id;
   public numero_documento;
   public data_nascimento;
   public sexo;
