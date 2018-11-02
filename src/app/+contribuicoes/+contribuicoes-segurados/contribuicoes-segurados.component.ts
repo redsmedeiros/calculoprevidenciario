@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoContribuicao as SeguradoModel } from '../SeguradoContribuicao.model';
 import { SeguradoService } from '../Segurado.service';
 import { ErrorService } from '../../services/error.service';
+import { environment } from '../../../environments/environment';
 
 @FadeInTop()
 @Component({
@@ -20,6 +21,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public isUpdating = false;
+  public userId;
   public form = {...SeguradoModel.form};
   public list = this.Segurado.list;
   public datatableOptions = {
@@ -41,12 +43,17 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
     protected router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.isUpdating = true;
-    this.Segurado.get()
+    this.userId = this.route.snapshot.queryParams['user_id'];
+    if(!this.userId)
+      window.location.href = environment.loginPageUrl;
+    this.Segurado.getByUserId(this.userId)
         .then(() => {
+           localStorage.setItem('user_id', this.userId);
            this.updateDatatable();
            this.isUpdating = false;
         })
@@ -78,7 +85,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
 
   onCreate(e) {
     this.isUpdating = true;
-    this.Segurado.get()
+    this.Segurado.getByUserId(this.userId)
         .then(() => {
            this.updateDatatable();
            this.list = this.Segurado.list;
