@@ -64,6 +64,22 @@ export abstract class ControllerService {
     });
   }
 
+  getWithParameter(params) {
+    return new Promise((resolve, reject) => {
+      this.model.getWithParameter(params)
+        .then(models => {
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
+
   public getByDateRange(from, to) {
 
     return new Promise((resolve, reject) => {
