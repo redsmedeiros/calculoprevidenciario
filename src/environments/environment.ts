@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8000/',
-  loginPageUrl: '',
+  loginPageUrl: 'https://codificar.ieprev.com.br/auth/loginPanel',
 };
