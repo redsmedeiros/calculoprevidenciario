@@ -49,7 +49,7 @@ export class RgpsSeguradosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
-    this.userId = this.route.snapshot.queryParams['user_id'];
+    this.userId = (localStorage.getItem('user_id')) ? localStorage.getItem('user_id') : this.route.snapshot.queryParams['user_id'];
     if(!this.userId)
       window.location.href = environment.loginPageUrl;
     this.Segurado.getByUserId(this.userId)
