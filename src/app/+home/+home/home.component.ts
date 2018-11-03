@@ -11,6 +11,9 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+  	if(!localStorage.getItem('user_id')){
+      swal('Erro', 'Falha de login!','error').then(() => {window.location.href = environment.loginPageUrl;});
+    }
   }
 
 }
