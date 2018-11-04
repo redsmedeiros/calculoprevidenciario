@@ -49,7 +49,7 @@ export class BeneficiosSeguradosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
-    this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
+    this.userId = this.route.snapshot.queryParams['user_id'];
     console.log(this.userId)
     if(!this.userId){
       console.log('entrou if: ', this.userId)

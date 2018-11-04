@@ -48,7 +48,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
-    this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
+    this.userId = this.route.snapshot.queryParams['user_id'];
     if(!this.userId)
       window.location.href = environment.loginPageUrl;
     this.Segurado.getByUserId(this.userId)
