@@ -52,15 +52,18 @@ export class BeneficiosSeguradosComponent implements OnInit {
     this.userId = this.route.snapshot.queryParams['user_id'];
     console.log(this.userId)
     if(!this.userId){
-      this.userId = localStorage.getItem('item_id');
+      this.userId = localStorage.getItem('user_id');
       console.log('entrou if: ', this.userId)
       if(!this.userId){
         window.location.href = environment.loginPageUrl;
+      }else{
+        localStorage.setItem('user_id', this.userId);
       }
+    }else{
+      localStorage.setItem('user_id', this.userId);
     }
     this.Segurado.getByUserId(this.userId)
         .then(() => {
-           localStorage.setItem('user_id', this.userId);
            this.updateDatatable();
            this.isUpdating = false;
         })
