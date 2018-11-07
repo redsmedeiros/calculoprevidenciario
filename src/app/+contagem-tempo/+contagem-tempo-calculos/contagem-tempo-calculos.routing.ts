@@ -20,7 +20,7 @@ export const contagemTempoCalculosRoutes: Routes = [
 		component: ContagemTempoCalculosDestroyComponent
 	},
 	{
-		path: ':id/:id_calculo/edit',
+		path: ':id/:id_calculo/editar',
 		component: ContagemTempoCalculosEditComponent
 	}
 ];

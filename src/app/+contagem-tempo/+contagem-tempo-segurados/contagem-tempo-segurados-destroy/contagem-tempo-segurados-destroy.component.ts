@@ -23,7 +23,7 @@ export class ContagemTempoSeguradosDestroyComponent implements OnInit {
     this.Segurado.find(this.route.snapshot.params['id'])
       .then(segurado => {
         this.Segurado.destroy(segurado).then(() => {
-          this.router.navigate(['/rgps/rgps-segurados']);
+          this.router.navigate(['/contagem-tempo/contagem-tempo-segurados']);
           swal('Sucesso', 'Segurado excluído', 'success');
         }).catch((err) => {
           swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');

@@ -125,7 +125,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
 
   editSegurado() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar' + this.route.snapshot.params['id'] + '/editar';
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' + this.route.snapshot.params['id'] + '/editar';
   }
 
   formatReceivedDate(inputDate) {

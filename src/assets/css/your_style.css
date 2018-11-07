@@ -31,3 +31,95 @@
  .splash-loading img {
    width: 40%;
  }
+
+ .heigth-auto{
+   min-height: auto !important;
+ }
+
+ .fa-0-1x {
+  font-size: 0.1rem !important;
+}
+.fa-0-2x {
+  font-size: 0.2rem !important;
+}
+.fa-0-3x {
+  font-size: 0.3rem !important;
+}
+.fa-0-4x {
+  font-size: 0.4rem !important;
+}
+.fa-0-5x {
+  font-size: 0.5rem !important;
+}
+.fa-0-6x {
+  font-size: 0.6rem !important;
+}
+.fa-0-7x {
+  font-size: 0.7rem !important;
+}
+.fa-0-8x {
+  font-size: 0.8rem !important;
+}
+.fa-0-9x {
+  font-size: 0.9rem !important;
+}
+
+
+
+.fa-1-1x {
+  font-size: 1.1rem !important;
+}
+.fa-1-2x {
+  font-size: 1.2rem !important;
+}
+.fa-1-3x {
+  font-size: 1.3rem !important;
+}
+.fa-1-4x {
+  font-size: 1.4rem !important;
+}
+.fa-1-5x {
+  font-size: 1.5rem !important;
+}
+.fa-1-6x {
+  font-size: 1.6rem !important;
+}
+.fa-1-7x {
+  font-size: 1.7rem !important;
+}
+.fa-1-8x {
+  font-size: 1.8rem !important;
+}
+.fa-1-9x {
+  font-size: 1.9rem !important;
+}
+
+
+.fa-2-1x {
+  font-size: 2.1rem !important;
+}
+.fa-2-2x {
+  font-size: 2.2rem !important;
+}
+.fa-2-3x {
+  font-size: 2.3rem !important;
+}
+.fa-2-4x {
+  font-size: 2.4rem !important;
+}
+.fa-2-5x {
+  font-size: 2.5rem !important;
+}
+.fa-2-6x {
+  font-size: 2.6rem !important;
+}
+.fa-2-7x {
+  font-size: 2.7rem !important;
+}
+.fa-2-8x {
+  font-size: 2.8rem !important;
+}
+.fa-2-9x {
+  font-size: 2.9rem !important;
+}
+

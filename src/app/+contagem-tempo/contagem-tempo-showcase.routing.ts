@@ -15,18 +15,13 @@ export const routes: Routes = [
     data: {pageTitle: 'Contagem Tempo  Calculo'}
   },
   {
-    path: 'contagem-tempo-elements',
-  //  loadChildren: 'app/+contagem-tempo/+contagem-tempo-elements/contagem-tempo-elements.module#ContagemTempoElementsModule',
-    data: {pageTitle: 'Contagem Tempo '}
-  },
-  {
     path: 'contagem-tempo-periodos',
     loadChildren: 'app/+contagem-tempo/+contagem-tempo-periodos/contagem-tempo-Periodos.module#ContagemTempoPeriodosModule',
     data: {pageTitle: 'Contagem Tempo Períodos de Contribuíção'}
   },
   {
     path: 'contagem-tempo-resultados',
-   // loadChildren: 'app/+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-resultados.module#ContagemTempoResultadosModule',
+    loadChildren: 'app/+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-resultados.module#ContagemTempoResultadosModule',
     data: {pageTitle: 'Contagem Tempo  Resultados'}
   },
 ];

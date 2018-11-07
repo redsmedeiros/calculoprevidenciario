@@ -28,4 +28,16 @@ export class PeriodosContagemTempo extends Model {
   public licenca_premio_nao_usufruida;
   public created_at;
   public updated_at;
+
+  // public actions = `
+  //   <div class="btn-group">
+  //     <button type="button" class="btn btn-xs btn-warning" (click)='updatePeriodo(${this.id})' title='Editar Referência'>
+  //       <i class='fa fa-edit fa-1-7x'></i>
+  //     </button>
+  //     <button type="button" class="btn btn-xs btn-danger" (click)='deletarPeriodo(${this.id})' title='Excluir'>
+  //       <i class='fa fa-times fa-1-7x'></i>
+  //     </button>
+  //   </div>
+  //     `;
+
 }

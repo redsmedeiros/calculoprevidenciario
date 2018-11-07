@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {SmartadminModule} from '../../shared/smartadmin.module';
@@ -7,19 +8,18 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { ContagemTempoPeriodosComponent } from './contagem-tempo-periodos.component';
-import { ContagemTempoPeriodosListaComponent } from './contagem-tempo-periodos-lista/contagem-tempo-periodos-lista.component';
 import { contagemTempoPeriodosRouting } from './contagem-tempo-periodos.routing';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     align: 'left',
     allowNegative: false,
     decimal: ',',
     precision: 2,
-    prefix: 'R$ ',
+    prefix: '',
     suffix: '',
     thousands: '.'
 };
- 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -30,9 +30,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TextMaskModule,
     CurrencyMaskModule
   ],
-  declarations: [ContagemTempoPeriodosComponent, ContagemTempoPeriodosListaComponent],
+  declarations: [ContagemTempoPeriodosComponent],
   providers: [
-        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+        { provide: CURRENCY_MASK_CONFIG, useValue: CustomPeriodosCurrencyMaskConfig }
   ],
 })
 export class ContagemTempoPeriodosModule { }

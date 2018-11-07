@@ -38,10 +38,10 @@ export class SeguradoContagemTempo extends Model {
   // `;
 
   public actions = `
-  <div class="btn-group">
-  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar o Segurado"> <i class="fa fa-edit"></i> </a>
-  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar o Segurado"> <i class="fa fa-times"></i> </a>
-  <a href="#/contagem-tempo/contagem-tempo-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar as simulações do segurado"> <i class="fa fa-calculator"></i> </a>
+  <div class="btn-group btn-group-justified">
+  <a href="#/contagem-tempo/contagem-tempo-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar as simulações do segurado"> <i class="fa fa-calculator fa-1-7x"></i> </a>
+  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar o Segurado"> <i class="fa fa-edit fa-1-7x"></i> </a>
+  <a href="#/contagem-tempo/contagem-tempo-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar o Segurado"> <i class="fa fa-times fa-1-7x"></i> </a>
   </div>
 `;
 
