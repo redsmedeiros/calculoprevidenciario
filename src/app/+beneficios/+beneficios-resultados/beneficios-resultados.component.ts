@@ -418,10 +418,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
     let chkIndice = this.calculo.usar_indice_99_04;
     if (chkIndice) {
-      if (dataCorrente.isSame(moment("1999-06-01"))) {
+      if (dataCorrente.isSame(moment("1999-06-01"), 'month')) {
         reajuste = reajuste * 1.0228;
       }
-      if (dataCorrente.isSame(moment("2004-05-01"))) {
+      if (dataCorrente.isSame(moment("2004-05-01"), 'month')) {
         reajuste = reajuste * 1.0175;
       }
     }
