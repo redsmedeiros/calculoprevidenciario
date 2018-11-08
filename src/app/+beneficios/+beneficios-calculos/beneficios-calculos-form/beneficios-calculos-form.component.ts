@@ -562,6 +562,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         } else {
           this.formData.taxa_ajuste_maxima_concedida = 0;
         }
+        swal('Sucesso', 'Cálculo salvo com sucesso','success');
         this.onSubmit.emit(this.formData);
     }else{
       console.log(this.errors.all())
@@ -646,6 +647,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   	if (this.chkNotGranted || this.chkUseSameDib) {
   		// Valores Devidos
   		this.dibValoresDevidos = this.formatReceivedDate(dataPedidoBeneficio);
+      this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
   		this.dibAnteriorValoresDevidos = this.formatReceivedDate(data_anterior_pedido_beneficio);
   	} else {
   		// Valores Recebidos
