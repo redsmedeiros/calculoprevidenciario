@@ -154,9 +154,16 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
     }else if(this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" && 
              anoContribuicaoPrimariaAnterior88 < 30){
-      //TODO: Colocar mensagem completa :
-      //Falta(m) "quantidade de anos que faltam" ano(s), "Quantidade de meses que faltam" mês(es) e quantidade de dia(s) para completar o tempo de serviço necessário.
-      erro = "Erro no tempo de contibuição";
+      let qtde_anos = 30 - this.contribuicaoPrimaria.anos;
+      let qtde_meses = 12 - this.contribuicaoPrimaria.meses;
+      let qtde_dias = 31 - this.contribuicaoPrimaria.dias;
+      if(this.contribuicaoPrimaria.meses == 0)
+        qtde_meses --;
+      if(this.contribuicaoPrimaria.dias == 0)
+        qtde_dias --;
+      if(qtde_meses != 0)
+        qtde_anos--;
+      erro = "Falta(m) " + qtde_anos +" ano(s), "+ qtde_meses + " mês(es) e " + qtde_dias + " dia(s) para completar o tempo de serviço necessário.";
     }
     return erro;
   }
