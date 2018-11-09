@@ -92,7 +92,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
   	this.idCalculo = this.calculo.id;
   	this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-  	this.idadeSegurado = this.getIdadeSegurado();
+  	this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
   	let mesesLimite = 0;
     let mesesLimiteTotal = 0;
     if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {

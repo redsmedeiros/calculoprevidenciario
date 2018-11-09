@@ -891,6 +891,11 @@ export class RgpsResultadosComponent implements OnInit {
     return moment().diff(dataNascimento, 'years');
   }
 
+  getIdadeNaDIB(dib){
+    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    return dib.diff(dataNascimento, 'years');
+  }
+
   exportarParaBeneficios(data, valor, tipoCalculo){
     window.location.href='/#/beneficios/beneficios-calculos/'+ 
                           tipoCalculo + '/' +

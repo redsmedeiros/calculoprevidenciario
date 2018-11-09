@@ -93,7 +93,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.boxId = this.generateBoxId();
   	this.isUpdating = true;
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-  	this.idadeSegurado = this.getIdadeSegurado();
+    this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
   	if(this.tipoCalculo == '91_98'){
   		this.stringCabecalho = 'Entre 05/04/1991 e 15/12/1998'
   		this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);

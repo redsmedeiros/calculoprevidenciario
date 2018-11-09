@@ -95,9 +95,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   ngOnInit() {
     this.boxId = this.generateBoxId();
   	this.isUpdating = true;
-  	this.idadeSegurado = this.getIdadeSegurado();
   	this.dataFiliacao = this.getDataFiliacao();
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
   	this.idadeFracionada = this.getIdadeFracionada();
   	this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
   	this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
