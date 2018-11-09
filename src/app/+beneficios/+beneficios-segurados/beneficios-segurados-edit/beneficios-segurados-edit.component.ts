@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { SeguradoService } from '../Segurado.service';
 import { ErrorService } from '../../../services/error.service';
 import { Segurado as SeguradoModel } from '../Segurado.model';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'sa-datatables-showcase',
+  selector: 'app-beneficios-segurados-edit',
   templateUrl: './beneficios-segurados-edit.component.html',
   styleUrls: ['./beneficios-segurados-edit.component.css'],
   providers: [
@@ -19,6 +19,7 @@ export class BeneficiosSeguradosEditComponent implements OnInit, OnDestroy {
 
   public form = {...SeguradoModel.form};
   public segurado;
+  @Output() onSubmit = new EventEmitter();
 
   constructor(
     protected Segurado: SeguradoService,
@@ -39,8 +40,10 @@ export class BeneficiosSeguradosEditComponent implements OnInit, OnDestroy {
     this.Segurado
           .update(this.segurado)
           .then(model => {
-            this.Segurado.get()
-                .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
+            this.onSubmit.emit();
+            window.location.href='#/beneficios/beneficios-segurados/';
+            // this.Segurado.get()
+            //     .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
           })
           .catch(errors => this.Errors.add(errors));
   }

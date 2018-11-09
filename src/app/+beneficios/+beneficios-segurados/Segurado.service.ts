@@ -12,7 +12,7 @@ export class SeguradoService extends ControllerService {
 
     return new Promise((resolve, reject) => {
     	let parameters = ['user_id', userId];
-	  	if (this.list.length == 0) {
+	  	// if (this.list.length == 0) {
 	  		this.getWithParameter(parameters).then(() => {
 			  	let list = this.list;
 			  	resolve(list);
@@ -21,10 +21,10 @@ export class SeguradoService extends ControllerService {
 	          console.error(error);
 	          reject(error);	  			
 	  		})
-	  	} else {
-					let list = this.list;
-			  	resolve(list);
-  		}
+	  	// } else {
+				// 	let list = this.list;
+			 //  	resolve(list);
+  		// }
     });
   }
 

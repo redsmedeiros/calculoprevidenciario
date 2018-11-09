@@ -14,7 +14,8 @@ export const rgpsSeguradosRoutes: Routes = [
   },
   {
     path: ':id/editar',
-    component: RgpsSeguradosEditComponent
+    //component: RgpsSeguradosEditComponent
+    component: RgpsSeguradosComponent
   },
   {
     path: ':id/destroy',

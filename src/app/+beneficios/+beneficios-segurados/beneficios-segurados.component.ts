@@ -22,6 +22,7 @@ export class BeneficiosSeguradosComponent implements OnInit {
 
   public isUpdating = false;
   public userId;
+  public isEdit = false;
   public form = {...SeguradoModel.form};
   public list = this.Segurado.list;
   public datatableOptions = {
@@ -49,8 +50,10 @@ export class BeneficiosSeguradosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
+    if(this.route.snapshot.params['id'] !== undefined){
+      this.isEdit = true;
+    }
     this.userId = this.route.snapshot.queryParams['user_id'];
-    console.log(this.userId)
     if(!this.userId){
       this.userId = localStorage.getItem('user_id');
       console.log('entrou if: ', this.userId)
