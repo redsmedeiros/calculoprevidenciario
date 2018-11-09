@@ -10,7 +10,7 @@
 
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false" >
+          [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -20,28 +20,49 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <ul class="list-unstyled">
-                <li><b>Nome:</b> {{segurado.nome}} </li>
-                <li><b>PIS:</b> {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b> Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b> Feminino</li>
-              </ul>
-              <div class="form-actions no-padding">
-                <div class="row">
-                  <div class="col-md-12">
-                    <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left" data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-left"></i>
-                      </span> Retornar para Segurados
-                    </button>
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
-                      <span class="btn-label">
-                        <i class="fa fa-pencil"></i>
-                      </span> Editar
-                    </button>
-                  </div>
+            <div class="widget-body no-padding">
+              <table class="table table-condensed  table-responsive">
+                <tbody>
+                  <tr>
+                    <td><strong class="pull-right">Nome:</strong></td>
+                    <td>{{segurado.nome}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
+                    <td>{{segurado.documento}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Data de nascimento:</strong></td>
+                    <td>{{segurado.data_nascimento}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Idade:</strong></td>
+                    <td>{{segurado.idade}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Sexo:</strong></td>
+                    <td>
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span>
+                      <span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions no-padding no-margin">
+              <div class="row">
+                <div class="">
+                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left"
+                    data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-left"></i>
+                    </span> Retornar para Segurados
+                  </button>
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil"></i>
+                    </span> Editar
+                  </button>
                 </div>
               </div>
             </div>
@@ -50,8 +71,8 @@
       </article>
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget  [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-        [fullscreenbutton]="false" [custombutton]="false">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-list"></i>
@@ -59,48 +80,49 @@
             <h2>Cálculo contagem de tempo selecionado</h2>
           </header>
           <div>
-              <div class="widget-body heigth-auto">
-                  <table class="table  table-hover table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Referência</th>
-                        <th class="text-center">Total (Ano/Mês/Dia)</th>
-                        <th class="text-center">Total Carência</th>
-                        <th class="text-center">Data Criação</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{{calculo.referencia_calculo}}</td>
-                        <td class="text-center">{{calculo.total_dias}}</td>
-                        <td class="text-center">{{calculo.total_carencia}}</td>
-                        <td class="text-center">{{calculo.created_at}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="form-actions no-padding">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button type="submit" (click)="returnListaCalculos()" class="btn btn-labeled btn-info pull-left" data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
-                          <span class="btn-label">
-                            <i class="fa fa-arrow-left"></i>
-                          </span> Retornar para Simulações
-                        </button>
-                        <button type="submit" (click)="editCalculo()" class="btn btn-labeled btn-info pull-right">
-                            <span class="btn-label">
-                              <i class="fa fa-pencil"></i>
-                            </span> Editar
-                          </button>
-                      </div>
-                    </div>
-                  </div>
+            <div class="widget-body no-padding heigth-auto">
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Referência</th>
+                    <th class="text-center">Total (Ano/Mês/Dia)</th>
+                    <th class="text-center">Total Carência</th>
+                    <th class="text-center">Data Criação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{calculo.referencia_calculo}}</td>
+                    <td class="text-center">{{calculo.total_dias}}</td>
+                    <td class="text-center">{{calculo.total_carencia}}</td>
+                    <td class="text-center">{{calculo.created_at}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions no-padding no-margin">
+              <div class="row">
+                <div>
+                  <button type="submit" (click)="returnListaCalculos()" class="btn btn-labeled btn-info pull-left"
+                    data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-left"></i>
+                    </span> Retornar para cálculos
+                  </button>
+                  <button type="submit" (click)="editCalculo()" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil"></i>
+                    </span> Editar
+                  </button>
+                </div>
               </div>
+            </div>
           </div>
         </sa-widget>
       </article>
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget  [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-        [fullscreenbutton]="false" [custombutton]="false">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-calendar-check-o"></i>
@@ -108,8 +130,8 @@
             <h2>Períodos de Contribuíção</h2>
           </header>
           <div>
-            <div class="widget-body"  #periodoFormheader>
-              <form #periodoForm="ngForm" class="form-horizontal"  >
+            <div class="widget-body" #periodoFormheader>
+              <form #periodoForm="ngForm" class="form-horizontal">
                 <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Nome Empresa</label>
@@ -195,17 +217,17 @@
                           <i class="fa fa-calendar"></i>
                         </span> Inserir período
                       </button>
-                      <button *ngIf="(atualizarPeriodo != 0)"  type="button" (click)="setupdatePeriodo()" class="btn btn-labeled btn-warning">
+                      <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()" class="btn btn-labeled btn-warning">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
                         </span> Editar período
                       </button>
-                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculo()"  class="btn btn-labeled btn-success">
+                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()"
+                        class="btn btn-labeled btn-success">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Realizar cálculos
                       </button>
-                      <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="!mostrarBotaoRealizarCalculos"></i>
                     </div>
                   </div>
                 </div>
@@ -222,57 +244,46 @@
             </span>
             <h2> Períodos de contribuição</h2>
           </header>
-
-          <div class="widget-body">
-            <table class="table table-striped table-bordered table-hover table-responsive">
-              <thead>
-                <tr>
-                  <th>Empresa</th>
-                  <th>Data Início</th>
-                  <th>Data Final</th>
-                  <th class="text-center">Condição Especial</th>
-                  <th class="text-center">Fator Condição</th>
-                  <th class="text-center">Carência</th>
-                  <th class="text-center">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let periodo of periodosList">
-                  <td>{{periodo.empresa}}</td>
-                  <td>{{periodo.data_inicio}}</td>
-                  <td>{{periodo.data_termino}}</td>
-                  <td class="text-center">{{periodo.condicao_especial}}</td>
-                  <td class="text-center">{{periodo.fator_condicao_especial}}</td>
-                  <td class="text-center">{{periodo.carencia}}</td>
-                  <td class="text-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-xs btn-warning" (click)='getupdatePeriodo(periodo.id)' title='Editar' data-placement="bottom" tooltip="Editar">
-                        <i class='fa fa-edit fa-1-7x'></i>
-                      </button>
-                      <button type="button" class="btn btn-xs btn-danger" (click)='deletarPeriodo(periodo.id)' title='Excluir' data-placement="bottom" tooltip="Excluir">
-                        <i class='fa fa-times fa-1-7x'></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <br><br>
-            <!-- <sa-datatable *ngIf = "!isUpdating" [options]="grupoPeriodosTableOptions" paginationLength="true"   tableClass="table table-striped table-bordered table-hover" width="100%">
-            <thead>
-              <tr>
-                <th>Empresa</th>
-                <th>Data Início</th>
-                <th>Data Final</th>
-                <th>Condição Especial</th>
-                <th>Fator Condição</th> 
-                <th>Carência</th> 
-                <th>Ações</th> 
-              </tr>
-            </thead>
-          </sa-datatable>  -->
-            <div *ngIf="isUpdating" class="alert alert-info text-align-center">
-              <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-striped table-bordered table-hover table-responsive" *ngIf="!isUpdating">
+                <thead>
+                  <tr>
+                    <th>Empresa</th>
+                    <th>Data Início</th>
+                    <th>Data Final</th>
+                    <th class="text-center">Condição Especial</th>
+                    <th class="text-center">Fator Condição</th>
+                    <th class="text-center">Carência</th>
+                    <th class="text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let periodo of periodosList">
+                    <td>{{periodo.empresa}}</td>
+                    <td>{{periodo.data_inicio}}</td>
+                    <td>{{periodo.data_termino}}</td>
+                    <td class="text-center">{{periodo.condicao_especial}}</td>
+                    <td class="text-center">{{periodo.fator_condicao_especial}}</td>
+                    <td class="text-center">{{periodo.carencia}}</td>
+                    <td class="text-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-xs btn-warning" (click)='getupdatePeriodo(periodo.id)'
+                          title='Editar' data-placement="bottom" tooltip="Editar">
+                          <i class='fa fa-edit fa-1-7x'></i>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-danger" (click)='deletarPeriodo(periodo.id)' title='Excluir'
+                          data-placement="bottom" tooltip="Excluir">
+                          <i class='fa fa-times fa-1-7x'></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="isUpdating" class="alert alert-info text-align-center">
+                <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+              </div>
             </div>
           </div>
         </sa-widget>

@@ -109,22 +109,22 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   updateTabelasView() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
+
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
-        this.segurado = segurado;
-        this.CalculoContagemTempoService.find(this.idsCalculos[0])
-          .then(calculo => {
-            this.calculo = this.calculoSetView(calculo);
-          });
+        this.seguradoView(segurado);
       });
 
+      this.CalculoContagemTempoService.find(this.idsCalculos[0])
+      .then(calculo => {
+        this.calculoSetView(calculo);
+      });
   }
 
 
   updateTabelaPeriodosView() {
 
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
-
 
     this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos[0])
       .then((periodosContribuicao: PeriodosContagemTempo[]) => {
@@ -135,22 +135,18 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
         this.isUpdating = false;
       });
-
-    // let parameters = ['id_contagem_tempo', this.idsCalculos[0]];
-    // this.PeriodosContagemTempoService.getByPeriodosId(parameters)
-    //   .then(periodosContribuicao => {
-    //     this.periodosList = [];
-    //     // for (let objPeriodo of Object.getOwnPropertyDescriptor(periodosContribuicao, 'data').value) {
-    //     //   console.log(objPeriodo);
-    //     //   this.updateDatatablePeriodos(objPeriodo);
-    //     // }
-    //     this.isUpdating = false;
-    //   });
   }
 
   calculoSetView(calculo) {
     calculo.created_at = this.formatReceivedDate(calculo.created_at);
-    return calculo;
+    this.calculo = calculo;
+  }
+
+ 
+  seguradoView(segurado) {
+    segurado.id_documento = segurado.getDocumentType(segurado.id_documento);
+    segurado.idade = segurado.getIdadeAtual(segurado.data_nascimento, 1);
+    this.segurado = segurado;
   }
 
 
@@ -234,6 +230,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
           .then(model => {
             this.updateTabelaPeriodosView();
             this.toastAlert('success', 'Período adicionado com sucesso.', null);
+            this.atualizarPeriodo = 0;
             this.resetForm();
         }).catch((err) => {
                 console.log(err);
@@ -434,7 +431,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   formatPostDataDate(inputDate) {
 
-    var date = new Date(inputDate);
+    let date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
     if (!isNaN(date.getTime())) {
       // Months use 0 index.
@@ -451,19 +448,18 @@ export class ContagemTempoPeriodosComponent implements OnInit {
      document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
  }
 
-  editSegurado() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-      this.route.snapshot.params['id_segurado'] + '/editar';
-  }
+ editSegurado() {
+  window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
+    this.route.snapshot.params['id_segurado'] + '/editar?last=periodos&calc=' + this.idsCalculos[0];
+}
 
   returnListaSegurados() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
   }
 
-
   editCalculo() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar';
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar?last=periodos' ;
   }
 
   returnListaCalculos() {
@@ -472,9 +468,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       this.route.snapshot.params['id_segurado'];
   }
 
-
   realizarCalculoContagemTempo(){
-    window.location.href = '/#/contagem-tempo/contagem-tempo-resultado/' +
-    this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar';
+    window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
+    this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
   }
 }

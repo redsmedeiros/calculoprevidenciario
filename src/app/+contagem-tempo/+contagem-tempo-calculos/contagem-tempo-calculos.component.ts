@@ -94,7 +94,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
     this.isUpdating = true;
     this.Segurado.find(this.route.snapshot.params['id'])
       .then(segurado => {
-        this.segurado = segurado;
+        this.seguradoView(segurado);
       });
 
     this.CalculoContagemTempo.get()
@@ -127,6 +127,17 @@ export class ContagemTempoCalculosComponent implements OnInit {
   editSegurado() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' + this.route.snapshot.params['id'] + '/editar';
   }
+
+  returnListaSegurados() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
+  }
+
+  seguradoView(segurado) {
+    segurado.id_documento = segurado.getDocumentType(segurado.id_documento);
+    segurado.idade = segurado.getIdadeAtual(segurado.data_nascimento, 1);
+    this.segurado = segurado;
+  }
+
 
   formatReceivedDate(inputDate) {
     var date = new Date(inputDate);

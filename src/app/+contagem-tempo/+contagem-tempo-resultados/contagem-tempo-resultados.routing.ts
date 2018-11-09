@@ -1,11 +1,10 @@
-
-import {ModuleWithProviders} from "@angular/core"
+import {ModuleWithProviders} from '@angular/core'
 import { Routes, RouterModule } from '@angular/router';
-import { ContagemTempoResultadosComponent } from './+contagem-tempo-resultados.component';
+import { ContagemTempoResultadosComponent } from './contagem-tempo-resultados.component';
 
-export const ContagemTempoResultadosRoutes: Routes = [{
+export const contagemTempoResultadosRoutes: Routes = [{
   path: ':id_segurado/:id',
   component: ContagemTempoResultadosComponent
 }];
 
-export const ContagemTempoResultadosRouting = RouterModule.forChild(ContagemTempoResultadosRoutes);
+export const contagemTempoResultadosRouting = RouterModule.forChild(contagemTempoResultadosRoutes);

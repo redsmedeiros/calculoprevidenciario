@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
   {
     path: 'contagem-tempo-periodos',
-    loadChildren: 'app/+contagem-tempo/+contagem-tempo-periodos/contagem-tempo-Periodos.module#ContagemTempoPeriodosModule',
+    loadChildren: 'app/+contagem-tempo/+contagem-tempo-periodos/contagem-tempo-periodos.module#ContagemTempoPeriodosModule',
     data: {pageTitle: 'Contagem Tempo Períodos de Contribuíção'}
   },
   {

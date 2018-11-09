@@ -21,6 +21,8 @@ export class ContagemTempoCalculosEditComponent implements OnInit, OnDestroy {
   public form = { ...CalculoModel.form };
   public calculo;
 
+  private rotaRetorno = '/contagem-tempo/contagem-tempo-calculos/' + this.route.snapshot.params['id'];
+
   public isUpdating = false;
   constructor(
     protected CalculoContagemTempo: CalculoContagemTempoService,
@@ -37,7 +39,19 @@ export class ContagemTempoCalculosEditComponent implements OnInit, OnDestroy {
         this.form = this.calculo;
         this.isUpdating = false;
       });
-    console.log(this.form);
+
+      this.setQueryParamsRota();
+  }
+
+
+  setQueryParamsRota() {
+    let queryParamsLastURL = this.route.snapshot.queryParams;
+
+    if ( typeof queryParamsLastURL.last !== 'undefined' && queryParamsLastURL.last != '' ) {
+      this.rotaRetorno = '/contagem-tempo/contagem-tempo-' + queryParamsLastURL.last + '/'
+      + this.route.snapshot.params['id'] + '/' + this.route.snapshot.params['id_calculo'];
+    }
+
   }
 
 
@@ -47,11 +61,15 @@ export class ContagemTempoCalculosEditComponent implements OnInit, OnDestroy {
       .then(model => {
         swal('Sucesso', 'Cálculo salvo com sucesso', 'success').then(() => {
           this.CalculoContagemTempo.get()
-            .then(() => this.router.navigate(['/contagem-tempo/contagem-tempo-calculos/' + this.route.snapshot.params['id']]));
+            .then(() => this.router.navigate([this.rotaRetorno]));
         });
       })
       .catch(errors => this.Errors.add(errors));
   }
+
+
+
+
 
   ngOnDestroy() {
     this.resetForm();

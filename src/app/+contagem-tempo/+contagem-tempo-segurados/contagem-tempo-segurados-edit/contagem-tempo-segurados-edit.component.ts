@@ -20,6 +20,10 @@ export class ContagemTempoSeguradosEditComponent implements OnInit, OnDestroy {
   public form = {...SeguradoModel.form};
   public segurado;
 
+
+  private rotaRetorno = '/contagem-tempo/contagem-tempo-segurados';
+  private isUpdating = false;
+
   constructor(
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
@@ -28,11 +32,29 @@ export class ContagemTempoSeguradosEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.isUpdating = true;
     this.Segurado.find(this.route.snapshot.params['id'])
           .then(segurado => {
             this.segurado = segurado;
             this.form = this.segurado;
+            this.isUpdating = false;
+            this.setQueryParamsRota();
           });
+  }
+
+
+  setQueryParamsRota() {
+    let queryParamsLastURL = this.route.snapshot.queryParams;
+
+    if ( typeof queryParamsLastURL.last !== 'undefined' && queryParamsLastURL.last != '' ) {
+      this.rotaRetorno = '/contagem-tempo/contagem-tempo-' + queryParamsLastURL.last + '/'
+      + this.route.snapshot.params['id'] ;
+    }
+
+    if (queryParamsLastURL.calc != '' &&  typeof queryParamsLastURL.calc !== 'undefined') {
+      this.rotaRetorno += '/' + queryParamsLastURL.calc;
+    }
+
   }
 
   submit(data) {
@@ -40,7 +62,7 @@ export class ContagemTempoSeguradosEditComponent implements OnInit, OnDestroy {
           .update(this.segurado)
           .then(model => {
             this.Segurado.get()
-                .then(() => this.router.navigate(['/contagem-tempo/contagem-tempo-segurados']));
+                .then(() => this.router.navigate([this.rotaRetorno]));
           })
           .catch(errors => this.Errors.add(errors));
   }

@@ -35,47 +35,68 @@
           <div>
 
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body no-padding">
+              <table class="table table-condensed  table-responsive">
+                <tbody>
+                  <tr>
+                    <td><strong class="pull-right">Nome:</strong></td>
+                    <td>{{segurado.nome}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
+                    <td>{{segurado.documento}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Data de nascimento:</strong></td>
+                    <td>{{segurado.data_nascimento}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Idade:</strong></td>
+                    <td>{{segurado.idade}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Sexo:</strong></td>
+                    <td>
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span>
+                      <span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions no-margin  no-padding ">
+              <div class="row">
+                <div class="">
 
-              <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
-              </ul>
+                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left"
+                    data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-left"></i>
+                    </span> Retornar para Segurados
+                  </button>
 
-              <div class="form-actions">
-                <div class="row">
-                  <div class="col-md-12">
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
-                    </button>
-                  </div>
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </span> Editar
+                  </button>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>
       </article>
 
-      <app-contagem-tempo-calculos-create (onSubmit)="onCreate($event)"></app-contagem-tempo-calculos-create> 
+      <app-contagem-tempo-calculos-create (onSubmit)="onCreate($event)"></app-contagem-tempo-calculos-create>
 
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-contagem-tempo-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-contagem-tempo-calculos-index> 
+        <app-contagem-tempo-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-contagem-tempo-calculos-index>
       </article>
-      
+
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
+          [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-gear"></i>
@@ -106,7 +127,7 @@
           </div>
         </sa-widget>
       </article>
-      
+
       <div class="row">
         <div class="col-sm-4 col-sm-offset-4">
           <table class="table table-bordered table-hover table-condensed">
