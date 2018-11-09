@@ -50,6 +50,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     bInfo : false,
     data: this.tableData,
     columns: [
+      {data: 'indice_competencia'},
       {data: 'competencia'},
       {data: 'contribuicao_primaria'},
       {data: 'contribuicao_secundaria'},
@@ -221,7 +222,8 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       }
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimario, currencyDataInicioBeneficio.acronimo);
       let contribuicaoSecundariaRevisadaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currencyDataInicioBeneficio.acronimo) : '';
-      let line = {competencia: dataContribuicao.format('MM/YYYY'),
+      let line = {indice_competencia: index +1,
+              competencia: dataContribuicao.format('MM/YYYY'),
               contribuicao_primaria: contribuicaoPrimariaString,
               contribuicao_secundaria: contribuicaoSecundariaString,
               inps: this.formatDecimal(inpsString,2),
