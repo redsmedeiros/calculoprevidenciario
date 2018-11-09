@@ -45,7 +45,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
           .then((data:CalculoModel) => {
             this.resetForm();
             this.onSubmit.emit();
-            swal('Sucesso', 'Cálculo salvo com sucesso','success').then((result) => {
+            swal('Sucesso', 'Cálculo realizado com sucesso','success').then((result) => {
               if(result){
                 window.location.href='#/beneficios/beneficios-resultados/'+ data.id_segurado + '/' + data.id;
               }

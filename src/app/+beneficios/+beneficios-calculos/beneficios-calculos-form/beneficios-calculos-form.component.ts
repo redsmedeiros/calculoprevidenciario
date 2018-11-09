@@ -191,8 +191,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
-      this.loadCalculo();
-      this.isEdit = true;        
+      this.isEdit = true;
+      this.loadCalculo();        
     } else {
       // Initialize variables for a new calculo
       this.jurosAntes2003 = '0,5';
@@ -562,7 +562,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         } else {
           this.formData.taxa_ajuste_maxima_concedida = 0;
         }
-        swal('Sucesso', 'Cálculo salvo com sucesso','success');
+
+        if(this.isEdit){
+          swal('Sucesso', 'Cálculo salvo com sucesso','success');
+        }
+
         this.onSubmit.emit(this.formData);
     }else{
       console.log(this.errors.all())
