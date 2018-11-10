@@ -681,8 +681,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     tempo = this.contribuicaoPrimaria;
+    console.log(tempo)
     let contagemPrimaria = (tempo.anos * 365.25) + (tempo.meses * 30) + (tempo.dias);
+    console.log(contagemPrimaria)
     let contagemPrimariaAnos = contagemPrimaria / 365.25;
+    console.log(contagemPrimariaAnos)
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
@@ -694,6 +697,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         contagemPrimariaAnos += redutorSexo;
       }
     }
+    console.log(contagemPrimariaAnos)
     return contagemPrimariaAnos;
   }
 
