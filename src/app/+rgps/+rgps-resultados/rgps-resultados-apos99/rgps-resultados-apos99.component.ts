@@ -682,7 +682,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     tempo = this.contribuicaoPrimaria;
     let contagemPrimaria = (tempo.anos * 365.25) + (tempo.meses * 30) + (tempo.dias);
-    let contagemPrimariaAnos = contagemPrimaria / 365;
+    let contagemPrimariaAnos = contagemPrimaria / 365.25;
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
