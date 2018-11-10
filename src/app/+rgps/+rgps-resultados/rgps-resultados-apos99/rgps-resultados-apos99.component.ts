@@ -414,7 +414,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +'*'+ this.formatDecimal(aliquota,2)+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
+        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
 
@@ -682,7 +682,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     tempo = this.contribuicaoPrimaria;
     console.log(tempo)
-    let contagemPrimaria = (tempo.anos * 365.25) + (tempo.meses * 30) + (tempo.dias);
+    let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
     console.log(contagemPrimaria)
     let contagemPrimariaAnos = contagemPrimaria / 365.25;
     console.log(contagemPrimariaAnos)
