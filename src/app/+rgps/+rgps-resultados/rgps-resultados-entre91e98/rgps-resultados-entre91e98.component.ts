@@ -128,8 +128,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       mesesLimiteTotal = 36;
     }
     if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-      mesesLimite = 36;
-      mesesLimiteTotal = 48;
+      mesesLimite = 48;
+      mesesLimiteTotal = 36;
     }
     let dataLimite;
     if(mesesLimite > 0){
@@ -138,7 +138,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       dataLimite = moment('1994-07-01');
     }
 
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {

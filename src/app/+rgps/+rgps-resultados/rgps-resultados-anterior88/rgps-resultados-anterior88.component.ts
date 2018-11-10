@@ -112,7 +112,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     }
 
 
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite)
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
