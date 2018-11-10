@@ -259,7 +259,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
       case 2: // Aposentadoria Por Invalidez previdenciaria
         if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
-          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+          //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           if (this.withMemo) {
             // Exibir Label contendo o texto
             label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.";
@@ -267,7 +268,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
         break;
       case 7: // Auxilio Doença Previdenciario 50%
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
         break;
     }
 
@@ -276,7 +278,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         case 1: //Auxilio Doença Previdenciario
         case 2: //Aposentadoria por invalidez previdenciaria
           if (numeroContribuicoes >= 144 || this.withMemo) {
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }else{
             divisorMediaPrimaria = numeroContribuicoes;
           }
@@ -286,7 +289,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           if (numeroContribuicoes < 144 || this.withMemo) {
             divisorMediaPrimaria = numeroContribuicoes;
           }else{                
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
           break;
         case 3 ://Aposentadoria Idade Trabalhador Urbano
@@ -296,7 +300,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         case 27://Deficiencia Leva
         case 26://Deficiencia Moderado
         case 28://Deficiencia PorSalvar Idade
-          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+          //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           break;
       }
     }else if(this.dataFiliacao < this.dataDib99){
@@ -305,7 +310,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       this.tipoBeneficio == 28){
            // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
            // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
         if (numeroContribuicoes < mesesContribuicao60) {
           divisorMediaPrimaria = mesesContribuicao60
         }
@@ -313,7 +319,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           if (this.withIN45) {
             divisorMediaPrimaria = numeroContribuicoes;
           }else{
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
         }
         if(divisorMediaPrimaria < divisorMinimo){
@@ -385,10 +392,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
       return 0;
     });
-    let numeroCompetencias = this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio); // Calcular a quantidade de meses contida entre as duas datas.
-
+    let numeroCompetencias = this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true); // Calcular a quantidade de meses contida entre as duas datas.
+    console.log(numeroCompetencias)
     if (numeroCompetencias > 60) {
         numeroCompetencias = 60;
+    }else if(numeroCompetencias > 0 && numeroCompetencias < 1){
+      numeroCompetencias = 1;
     }
 
     let expectativa = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio,conclusoes);

@@ -738,13 +738,12 @@ export class RgpsResultadosComponent implements OnInit {
       return '';
   }
 
-  getIndex(data){
-    return this.getDifferenceInMonths(this.primeiraDataTabela,data);
-  }
-
-  getDifferenceInMonths(date1, date2 = moment()) {
+  getDifferenceInMonths(date1, date2 = moment(), floatRet = false) {
     let difference = date1.diff(date2, 'months', true);
     difference = Math.abs(difference);
+    if(floatRet){
+      return difference;
+    }
     return Math.floor(difference);
   }
 
