@@ -393,7 +393,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return 0;
     });
     let numeroCompetencias = this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true); // Calcular a quantidade de meses contida entre as duas datas.
-    console.log(numeroCompetencias)
     if (numeroCompetencias > 60) {
         numeroCompetencias = 60;
     }else if(numeroCompetencias > 0 && numeroCompetencias < 1){
@@ -690,11 +689,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     tempo = this.contribuicaoPrimaria;
-    console.log(tempo)
     let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
-    console.log(contagemPrimaria)
     let contagemPrimariaAnos = contagemPrimaria / 365.25;
-    console.log(contagemPrimariaAnos)
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
@@ -706,7 +702,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         contagemPrimariaAnos += redutorSexo;
       }
     }
-    console.log(contagemPrimariaAnos)
     return contagemPrimariaAnos;
   }
 

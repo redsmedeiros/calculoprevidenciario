@@ -40,6 +40,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   public contribuicaoSecundaria = {anos:0,meses:0,dias:0};
   public coeficiente;
   public erros = [];
+  public direito = false;
   public tableOptions = {
     colReorder: false,
     paging: false,
@@ -215,7 +216,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let moedaComparacao = this.Moeda.getByDate(dataComparacao);
     let moedaDIB = this.Moeda.getByDate(dib);
 
-    if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
+    this.direito = this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria);
+    if (!this.direito){
       return;
     }
     let totalPrimaria = 0;
@@ -413,8 +415,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let idadeDoSegurado = this.idadeSegurado;
     let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
-    let anosSecundaria = tempoContribuicaoSecundaria.anos;
-    let anosPrimaria = ((tempoContribuicaoPrimaria.anos * 365) + (tempoContribuicaoPrimaria.meses * 30) + tempoContribuicaoPrimaria.dias)/365;
+    let anosSecundaria = parseFloat(tempoContribuicaoSecundaria.anos);
+    let anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365) + (parseFloat(tempoContribuicaoPrimaria.meses) * 30) + parseFloat(tempoContribuicaoPrimaria.dias))/365;
 
     let anosContribuicao = anosPrimaria;
     this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, false, dib); 
@@ -525,6 +527,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     if(dib > this.dataDib98){
       porcentagem = 0.05;
     }
+
     if(proporcional) {
       let extra = this.tempoExtra(anosContribuicao, redutorProfessor, redutorSexo, 5);
       coeficienteAux2 = 100 * this.coeficienteProporcional(extra, porcentagem, toll);
@@ -728,7 +731,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
     let direito = idade > idadeNecessaria;
     if(!direito){
-      errorArray.push("Falta(m) "+ (idadeNecessaria - idade) + "ano(s)");
+      errorArray.push("Falta(m) "+ (idadeNecessaria - idade) + " ano(s) para atingir a idade mínima.");
     }
     return direito;
   }

@@ -161,7 +161,7 @@
             </div>
             <div>
               <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
-              <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && erros.length == 0"
+              <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && direito"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
@@ -177,7 +177,7 @@
                 </thead>
               </sa-datatable>
             </div>
-            <div class="widget-body" *ngIf="!isUpdating && erros.length == 0">
+            <div class="widget-body" *ngIf="!isUpdating && direito">
               <table class="table table-bordered table-hover">
                 <tbody>
                   <tr>
