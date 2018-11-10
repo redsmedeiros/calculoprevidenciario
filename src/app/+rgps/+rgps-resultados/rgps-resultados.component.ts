@@ -843,7 +843,7 @@ export class RgpsResultadosComponent implements OnInit {
       }else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
         //Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
         calculo.mostrarCalculo91_98 = true;
-
+        calculo.mostrarCalculo98_99 = true;
       }
     }else if(dataInicioBeneficio > data99){
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)

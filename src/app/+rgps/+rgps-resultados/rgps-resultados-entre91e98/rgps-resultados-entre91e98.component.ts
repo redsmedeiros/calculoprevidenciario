@@ -48,6 +48,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     bInfo : false,
     data: this.tableData,
     columns: [
+      {data: 'id'},
       {data: 'competencia'},
       {data: 'fator'},
       {data: 'contribuicao_primaria'},
@@ -107,17 +108,26 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   	this.idCalculo = this.calculo.id;
   	this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
 		let dataInicio = this.dataInicioBeneficio;
-    if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
-      this.dataInicioBeneficio > this.dataDib99) {
-      dataInicio = this.dataDib99;
-    }
-    if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
-      this.dataInicioBeneficio > this.dataDib98) {
-      dataInicio = this.dataDib98;
+    // if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
+    //   this.dataInicioBeneficio > this.dataDib99) {
+    //   dataInicio = this.dataDib99;
+    // }
+    // if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
+    //   this.dataInicioBeneficio > this.dataDib98) {
+    //   dataInicio = this.dataDib98;
+    // }
+
+    if(this.tipoCalculo == '91_98'){
+      if(this.dataInicioBeneficio > this.dataDib98){
+        dataInicio = this.dataDib98;
+      }
+    }else if(this.tipoCalculo == '98_99'){
+      if(this.dataInicioBeneficio > this.dataDib99){
+        dataInicio = this.dataDib99;
+      }
     }
 
     dataInicio = (dataInicio.clone()).startOf('month');
-
     let mesesLimite = 0;
     let mesesLimiteTotal = 0;
     if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
@@ -176,17 +186,27 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
 
-    if (this.calculo.tipoAposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
-        this.dataInicioBeneficio > this.dataDib99) {
-        dib = this.dataDib99;
-    }
-    if (this.calculo.tipoAposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
-        this.dataInicioBeneficio > this.dataDib98) {
+    // if (this.calculo.tipoAposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
+    //     this.dataInicioBeneficio > this.dataDib99) {
+    //     dib = this.dataDib99;
+    // }
+    // if (this.calculo.tipoAposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
+    //     this.dataInicioBeneficio > this.dataDib98) {
+    //     dib = this.dataDib98;
+    // }
+
+    if(this.tipoCalculo == '91_98'){
+      if(this.dataInicioBeneficio > this.dataDib98){
         dib = this.dataDib98;
+      }
+    }else if(this.tipoCalculo == '98_99'){
+      if(this.dataInicioBeneficio > this.dataDib99){
+        dib = this.dataDib99;
+      }
     }
 
     let dataComparacao = (dib.clone()).startOf('month');
-    if (this.reajustesAdministrativos) {
+    if (!this.reajustesAdministrativos) {
       dataComparacao = (this.dataInicioBeneficio.clone()).startOf('month');
     }
 
@@ -204,7 +224,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let contagemSecundaria = 0;
     let contagemPrimaria = 0;
     let tableData = [];
-
+    let index = 0;
     for(let contribuicao of this.listaValoresContribuidos) {
       contagemPrimaria++;
       
@@ -269,7 +289,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       if (!this.isBlackHole){
         contribuicaoSecundariaRevisadaString = this.formatMoney(valorSecundarioRevisado, dibCurrency.acronimo); // Acronimo da moeda após a conversão.
       }
-      let line = {competencia: dataContribuicaoString,
+      let line = {id:index+1,
+                  competencia: dataContribuicaoString,
                   contribuicao_primaria: contribuicaoPrimariaString,
                   contribuicao_secundaria: contribuicaoSecundariaString,
                   fator: fatorCorrigidoString,
@@ -277,7 +298,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
                   contribuicao_secundaria_revisada: contribuicaoSecundariaRevisadaString,
                   limite: limiteString};
       tableData.push(line);
-
+      index++;
     }
 
 
@@ -390,10 +411,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
     let idadeDoSegurado = this.idadeSegurado;
-    //let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
     let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
-    //let anosSecundaria = (this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98)).anos;
     let anosSecundaria = tempoContribuicaoSecundaria.anos;
     let anosPrimaria = ((tempoContribuicaoPrimaria.anos * 365) + (tempoContribuicaoPrimaria.meses * 30) + tempoContribuicaoPrimaria.dias)/365;
 
