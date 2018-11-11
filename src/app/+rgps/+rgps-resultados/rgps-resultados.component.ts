@@ -950,7 +950,7 @@ export class RgpsResultadosComponent implements OnInit {
     let seguradoBox = document.getElementById('box-dados-segurado').innerHTML
     let boxContent = document.getElementById(boxId).innerHTML;
     let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + '</body></html>'
-    printableString.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
+    printableString = printableString.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write(printableString);
