@@ -939,6 +939,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   imprimirPagina(){
     let printContents = document.getElementById('content').innerHTML;
+    printContents = printContents.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
@@ -948,9 +949,11 @@ export class RgpsResultadosComponent implements OnInit {
   imprimirBox(boxId){
     let seguradoBox = document.getElementById('box-dados-segurado').innerHTML
     let boxContent = document.getElementById(boxId).innerHTML;
+    let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + '</body></html>'
+    printableString.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + '</body></html>');
+    popupWin.document.write(printableString);
     popupWin.document.close();
   }
 
