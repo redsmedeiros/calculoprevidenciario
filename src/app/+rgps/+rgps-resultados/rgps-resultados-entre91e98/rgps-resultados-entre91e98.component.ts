@@ -817,7 +817,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           } else if (this.tipoBeneficio == 7) {
             minimo *= 0.5;
           } else if (this.tipoBeneficio == 19) {
-            minimo *= 0,6;
+            minimo *= 0.6;
           }    
           let reajuste = reajusteAutomatico.indice != null ? reajusteAutomatico.indice : 1;
           valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
