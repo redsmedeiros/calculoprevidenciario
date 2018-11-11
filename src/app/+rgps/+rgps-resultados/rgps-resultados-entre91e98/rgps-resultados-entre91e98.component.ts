@@ -174,6 +174,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
                     .then(carencias => {
                       this.carenciasProgressivas = carencias;
                       this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                      this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
                       this.isUpdating = false;
                   });
               });
