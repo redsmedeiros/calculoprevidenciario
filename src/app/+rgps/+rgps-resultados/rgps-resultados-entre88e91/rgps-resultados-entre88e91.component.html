@@ -71,7 +71,7 @@
             </span>
             <h2>{{calculo.tipo_seguro}} Entre 05/10/1988 e 04/04/1991</h2>
           </header>
-          <div>
+          <div class="container">
             <div class="widget-body">
               <table class="table table-bordered table-hover">
                 <thead>
@@ -127,9 +127,9 @@
                 <p>{{erro}}</p>
               </div>
             </div>
-            <div class="container">
+            <!-- <div class="container"> -->
             <div class="row">
-              <div id="tabela_concl_88" class="col-sm">
+              <div id="tabela_concl_88" class="col">
                 <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                 <div>
                   <div class="well"><p>Cálculo conforme Dec 83080/79 (Efeito financeiro entre a DIB e maio de 1992)</p></div>
@@ -249,7 +249,7 @@
                   </table>
                 </div>
               </div>
-              <div id="tabela_concl_91_98" class="col-sm">
+              <div id="tabela_concl_91_98" class="col">
                 <div>
                   <div class="well"><p>Cálculo conforme Lei 8213/91 (Efeito financeiro a partir de junho de 1992)</p></div>
                   <sa-datatable [options]="tableOptions91_98" *ngIf="!isUpdating && direito"
@@ -351,7 +351,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          <!-- </div> -->
           </div>
         </sa-widget>
 </article>
