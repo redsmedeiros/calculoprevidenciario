@@ -333,7 +333,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     rmi = (this.limitarTetosEMinimos(rmi, dataComparacao)).valor;
 
     let rmiValoresAdministrativos = rmi;
-
     if(this.reajustesAdministrativos && 
       ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
        (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
@@ -424,9 +423,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let totalContribuicao98 = 0;
     let tempoContribuicaoPrimaria98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-    if(tempoContribuicaoPrimaria98 != {anos:0, meses:0, dias:0}) {
-      totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365) + (tempoContribuicaoPrimaria98.meses * 30) + tempoContribuicaoPrimaria98.dias) /365;
-    }
+
+    totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365) + (tempoContribuicaoPrimaria98.meses * 30) + (tempoContribuicaoPrimaria98.dias * 1));
+    totalContribuicao98 /= 365;
 
     let direito = true;
     let idadeMinima = true;
@@ -627,7 +626,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   }
 
   coeficienteProporcional(extra, porcentagem, toll) {
-    let coeficienteProporcional = 0.7 * Math.trunc(extra - toll) * porcentagem;
+    let coeficienteProporcional = 0.7 + (Math.trunc(extra - toll) * porcentagem);
     coeficienteProporcional = (coeficienteProporcional > 1) ? 1 : coeficienteProporcional;
     coeficienteProporcional = (coeficienteProporcional < 0.7) ? 0.7 : coeficienteProporcional;
     return coeficienteProporcional;
