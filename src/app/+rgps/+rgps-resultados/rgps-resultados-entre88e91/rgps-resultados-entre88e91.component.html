@@ -1,0 +1,358 @@
+<!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+<article class="container-fluid">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: 346
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!isUpdating">
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!isUpdating">
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+</article>
+
+    <div id="{{boxId}}">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>{{calculo.tipo_seguro}} Entre 05/10/1988 e 04/04/1991</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
+                    <td>{{calculo.tipo_seguro}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
+                    <td>Entre 05/10/1988 e 04/04/1991</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
+                    <td>{{calculo.data_pedido_beneficio}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
+                    <td>{{contribuicaoPrimaria88.anos}} ano(s), {{contribuicaoPrimaria88.meses}} mês(es) e {{contribuicaoPrimaria88.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
+                    <td>{{contribuicaoSecundaria88.anos}} ano(s), {{contribuicaoSecundaria88.meses}} mês(es) e {{contribuicaoSecundaria88.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
+                    <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
+                <p>{{erro}}</p>
+              </div>
+            </div>
+            <div class="container">
+            <div class="row">
+              <div id="tabela_concl_88" class="col-sm">
+                <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
+                <div>
+                  <div class="well"><p>Cálculo conforme Dec 83080/79 (Efeito financeiro entre a DIB e maio de 1992)</p></div>
+                  <sa-datatable [options]="tableOptions88" *ngIf="!isUpdating && !erro"
+                    paginationLength="true" tableClass="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Competência</th>
+                        <th>Contribuição</th>
+                        <th>Índice INPS</th>
+                        <th>Contribuição Corrigida</th>
+                      </tr>
+                    </thead>
+                  </sa-datatable>
+                </div>
+                <div class="widget-body" *ngIf="!isUpdating && !erro">
+                  <table class="table table-bordered table-hover">
+                    <tbody>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Total das contribuições primárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.total_contribuicoes_primarias}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.media_contribuicoes_primarias}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Divisor do cálculo da média:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.divisor_calculo_media}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Média das contribuições:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.media_contribuicoes}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Maior valor teto (MVT):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.maior_valor_teto}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Menor valor teto (mvt):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.menor_valor_teto}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">% de Cálculo do Benefício:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.porcentagem_calculo_beneficio}}%</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">1ª parcela da RMI:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.primeira_parcela_rmi}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Qtde Grupos de 12:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.grupo_dos_12}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Valor excedente:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.valor_excedente}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">2ª parcela da RMI:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.segunda_parcela_rmi}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">80% do valor excedente (Max para 2ª parcela):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.oitenta_porcento_valor_excedente}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">90% do Maior valor de teto (Max para a RMI):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.noventa_porcento_maior_valor_teto}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Benefício mínimo com índice (Min para a RMI):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.beneficio_minimo_com_indice}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">95% do valor da média (Max para a RMI):</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.noventaecinco_porcento_valor_da_media}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Renda Mensal Inicial:</span>
+                        </td>
+                        <td width="50%">{{conclusoes88.renda_mensal_inicial}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div id="tabela_concl_91_98" class="col-sm">
+                <div>
+                  <div class="well"><p>Cálculo conforme Lei 8213/91 (Efeito financeiro a partir de junho de 1992)</p></div>
+                  <sa-datatable [options]="tableOptions91_98" *ngIf="!isUpdating && direito"
+                  paginationLength="true" tableClass="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Competência</th>
+                        <th>Contribuição</th>
+                        <th>Fator</th>
+                        <th>Contribuição Corrigida</th>
+                      </tr>
+                    </thead>
+                  </sa-datatable>
+                </div>
+                <div class="widget-body" *ngIf="!isUpdating && direito">
+                  <table class="table table-bordered table-hover">
+                    <tbody>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.indice_reajuste_teto}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Total das contribuições primárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.total_contribuicoes_primarias}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.media_contribuicoes_primarias}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Divisor do cálculo da média:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.divisor_calculo_media}}</td>
+                      </tr>
+                      <tr *ngIf="conclusoes91_98.total_contribuicoes_secundarias">
+                        <td width="50%">
+                          <span class="pull-right font-bold">Total das contribuições secundárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.total_contribuicoes_secundarias}}</td>
+                      </tr>
+                      <tr *ngIf="conclusoes91_98.media_contribuicoes_secundarias">
+                        <td width="50%">
+                          <span class="pull-right font-bold">Média das contribuições secundárias:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.media_contribuicoes_secundarias}}</td>
+                      </tr>
+                      <tr *ngIf="conclusoes91_98.divisor_calculo_media_secundaria">
+                        <td width="50%">
+                          <span class="pull-right font-bold">Divisor do cálculo da média secundária:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.divisor_calculo_media_secundaria}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Coeficiente:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.coeficiente}}%</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Média das contribuições:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.media_contribuicoes}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Salário Mínimo:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.salario_minimo}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Teto:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.teto}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Renda Mensal Inicial:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.renda_mensal_inicial}}</td>
+                      </tr>
+                      <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Renda Mensal Inicial na DIB:</span>
+                        </td>
+                        <td width="50%">{{conclusoes91_98.renda_mensal_inicial_data_dib}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </sa-widget>
+</article>
+</div>

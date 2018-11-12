@@ -828,8 +828,9 @@ export class RgpsResultadosComponent implements OnInit {
         calculo.mostrarCalculoAnterior88 = true;
       }else if(calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
         //Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
-        calculo.mostrarCalculoAnterior88 = true;
-        calculo.mostrarCalculo91_98 = true;
+        // calculo.mostrarCalculoAnterior88 = true;
+        // calculo.mostrarCalculo91_98 = true;
+        calculo.mostrarCalculo88_91 = true;
         calculo.isBlackHole = true;
       }
     }else if(dataInicioBeneficio > data91_98 && dataInicioBeneficio <= data98_99){

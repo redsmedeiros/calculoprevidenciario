@@ -153,7 +153,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       erro = "O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) " + (65 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
     }else if(this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    }else if(this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" && 
+    }else if((this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" || this.calculo.tipo_seguro == "Aposentadoria por tempo de contribuição") && 
              anoContribuicaoPrimariaAnterior88 < 30){
       let qtde_anos = 30 - this.contribuicaoPrimaria.anos;
       let qtde_meses = 12 - this.contribuicaoPrimaria.meses;

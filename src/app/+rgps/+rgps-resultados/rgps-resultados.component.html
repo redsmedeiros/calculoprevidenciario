@@ -139,6 +139,11 @@
         [segurado]="segurado"
         [isBlackHole]="calculo.isBlackHole" 
         *ngIf="calculo.mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
+        <app-rgps-resultados-entre88e91 [calculo]="calculo"
+        [segurado]="segurado"
+        [isBlackHole]="calculo.isBlackHole" 
+        [tipoCalculo]="'91_98'"
+        *ngIf="calculo.mostrarCalculo88_91"></app-rgps-resultados-entre88e91>
         <app-rgps-resultados-entre91e98 [calculo]="calculo"
         [segurado]="segurado"
         [tipoCalculo]="'91_98'"
