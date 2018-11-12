@@ -181,6 +181,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     let valorRgps = parseFloat(this.route.snapshot.queryParams['valor']) || 0;
     if(dataRgps && valorRgps){
       if(this.type == 'AJ'){
+        this.chkUseSameDib = true;
         this.rmiValoresRecebidos = valorRgps;
       }else{
         this.rmiValoresDevidos = valorRgps;

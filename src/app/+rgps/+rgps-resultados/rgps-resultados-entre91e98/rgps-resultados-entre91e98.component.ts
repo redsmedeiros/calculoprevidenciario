@@ -820,12 +820,14 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           } else if (this.tipoBeneficio == 19) {
             minimo *= 0.6;
           }    
-          let reajuste = reajusteAutomatico.indice != null ? reajusteAutomatico.indice : 1;
-          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
-          
+          let reajuste = reajusteAutomatico.indice != null ? parseFloat(reajusteAutomatico.indice) : 1;
+                    
           if (dataCorrente.year() == 2006 && dataCorrente.month() == 7) {
             reajuste = 1.000096;
           }
+
+          valorBeneficio *= reajuste;
+          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
           
           let limit = '-';    
           if (valorBeneficio < minimo) {
