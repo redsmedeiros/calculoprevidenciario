@@ -1,7 +1,8 @@
 <div id="content">
   <div class="row">
     <article class="col-sm-12 col-md-12 col-lg-12">
-
+      <h1 *ngIf="type!='AJ'">Cálculo: Benefícios Atrasados</h1>
+      <h1 *ngIf="type=='AJ'">Cálculo: Benefícios Atrasados - Tetos Judiciais</h1>
       <!-- Widget ID (each widget will need unique ID)-->
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>

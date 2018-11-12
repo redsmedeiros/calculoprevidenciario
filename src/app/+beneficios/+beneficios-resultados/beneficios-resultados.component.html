@@ -5,8 +5,9 @@
 
     <!-- row -->
     <div class="row" *ngIf="!isUpdating">
-
       <article class="col-sm-12 col-md-12 col-lg-12">
+        <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
+        <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
                 <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
               [togglebutton]="false"
               [deletebutton]="false"
