@@ -275,18 +275,18 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       let isPrescricao = false;
       //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
-      if (dataCorrente < this.dataInicioRecebidos) {
+      if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
         diferencaMensal = beneficioDevido;
 
-      }else if (dataCorrente < this.dataInicioDevidos) {
+      }else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
         //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
         beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString);
         diferencaMensal = beneficioDevido - beneficioRecebido;
 
-      }else if (dataCorrente >= this.dataInicioRecebidos && dataCorrente >= this.dataInicioDevidos) {
+      }else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
         //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString);
@@ -792,13 +792,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
     }
-
     if (this.calculo.tipo_aposentadoria_recebida == '11' && !this.isTetos) { //11: LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
     } else if(this.calculo.tipo_aposentadoria_recebida != '11'){
       beneficioRecebido *= reajusteObj.reajuste;
     }
-
     this.beneficioRecebidoOs = this.beneficioRecebidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
