@@ -727,14 +727,14 @@ export class RgpsResultadosComponent implements OnInit {
       //Cálculos: entre 91 e 98
       calculo.mostrarCalculo91_98 = true;
     }else if(dataInicioBeneficio > data98_99 && dataInicioBeneficio <= data99){
-      if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+      //if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
         //Cálculos: entre 91 e 98 (tempo de contribuicao até a ementa (98)
-        calculo.mostrarCalculo91_98 = true;
-      }else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+        //calculo.mostrarCalculo91_98 = true;
+      //}else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
         //Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
-      }
+      //}
     }else if(dataInicioBeneficio > data99){
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
