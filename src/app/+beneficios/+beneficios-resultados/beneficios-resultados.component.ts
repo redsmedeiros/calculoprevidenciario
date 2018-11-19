@@ -311,13 +311,13 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficio_devido: beneficioDevidoString.resultString,
         indice_recebidos: this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido'),
         beneficio_recebido: beneficioRecebidoString.resultString,
-        diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente),
+        diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
         correcao_monetaria: this.formatDecimal(correcaoMonetaria,8),
-        diferenca_corrigida: this.formatMoney(diferencaCorrigida),
+        diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$',true),
         juros: this.formatPercent(juros, 4),
-        valor_juros: this.formatMoney(valorJuros),
+        valor_juros: this.formatMoney(valorJuros, 'R$', true),
         diferenca_juros: diferencaCorrigidaJuros,
-        honorarios: this.formatMoney(honorarios)
+        honorarios: this.formatMoney(honorarios, 'R$', true)
       }
 
       if(this.isTetos){
@@ -1511,8 +1511,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     return this.formatDecimal(value, n_of_decimal) + '%';
   }
 
-  formatMoney(value, sigla='R$'){
-    return sigla + this.formatDecimal(value, 2);
+  formatMoney(value, sigla='R$', aplicarCor=false){
+    let string = sigla + this.formatDecimal(value, 2);
+    if(aplicarCor && string.indexOf('-') != -1){
+      string = '<span style="color:red">' +string + '</span>';
+    }
+    return string;
   }
 
   formatRMI(value, type){
