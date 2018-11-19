@@ -1096,8 +1096,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.  
     //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
 
-    let dataAcaoJudicial = moment(this.calculo.data_acao_judicial);
-    let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years'));
+    let dataAcaoJudicial = (moment(this.calculo.data_acao_judicial)).startOf('month');
+    let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years', true));
     let diferencaCorrigidaJuros = juros + diferencaCorrigida;
 
     //Seção 3.10
@@ -1106,8 +1106,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
-
-    if(diferencaEmAnos >= 5 && this.considerarPrescricao){
+    if(diferencaEmAnos > 5 && this.considerarPrescricao){
       diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
