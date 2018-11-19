@@ -49,6 +49,7 @@ export abstract class ControllerService {
   }
 
   getWithParameters(params) {
+    this.store.data[this.name].length = 0;
     return new Promise((resolve, reject) => {
       this.model.getWithParameters(params)
         .then(models => {
