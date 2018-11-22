@@ -814,18 +814,10 @@ export class RgpsResultadosComponent implements OnInit {
     let idList = [];
     console.log(this.checkboxIdList)
     for(let checkboxId of this.checkboxIdList){
-      if((<HTMLInputElement>document.getElementById(checkboxId)).checked){
-        idList.push(checkboxId.split('-')[0]);
-      }
+      idList.push(checkboxId.split('-')[0]);
     }
-
-    if(idList.length === 0){
-      swal('Erro', 'Selecione pelo menos um cálculo', 'error');
-    }else{
-      let stringArr = idList.join(',');
-      window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
-      + '/' + stringArr; 
-    }
+    let stringArr = idList.join(',');
+    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + stringArr; 
   }
 
   imprimirPagina(){
