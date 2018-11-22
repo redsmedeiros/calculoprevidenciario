@@ -139,7 +139,7 @@ export class RgpsResultadosComponent implements OnInit {
       {data: 'contribuicaoSecundaria'},
       {data: 'dib'},
       {data: 'dataCriacao'},
-      {data: 'checkbox'},
+      //{data: 'checkbox'},
     ] 
   };
 
