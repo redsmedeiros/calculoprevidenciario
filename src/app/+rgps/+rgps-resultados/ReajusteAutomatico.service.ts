@@ -12,9 +12,9 @@ export class ReajusteAutomaticoService extends ControllerService {
 
     return new Promise((resolve, reject) => {
 	  	let parameters = ['inicio_intervalo', inicio.format('YYYY-MM-DD'), 'final_intervalo', fim.format('YYYY-MM-DD')];
-      this.getWithParameters(parameters).then(() => {
+      this.getWithParameters(parameters).then((models:any) => {
         let list = this.list;
-        resolve(list);
+        resolve(models.data);
       }).catch(error => {
         console.error(error);
         reject(error);          

@@ -162,9 +162,14 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
               let dataReajustesAutomaticos = this.dataInicioBeneficio;
-              if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+              // if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+              //   dataReajustesAutomaticos = this.dataDib98;
+              // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+              //   dataReajustesAutomaticos = this.dataDib99;
+              // }
+              if(this.tipoCalculo == '91_98'){
                 dataReajustesAutomaticos = this.dataDib98;
-              }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+              }else if(this.tipoCalculo == '98_99'){
                 dataReajustesAutomaticos = this.dataDib99;
               }
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
@@ -333,9 +338,15 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     rmi = (this.limitarTetosEMinimos(rmi, dataComparacao)).valor;
 
     let rmiValoresAdministrativos = rmi;
+    // if(this.reajustesAdministrativos && 
+    //   ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
+    //    (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
+    //        rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
+    // }
+
     if(this.reajustesAdministrativos && 
-      ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
-       (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
+      ((this.tipoCalculo == '91_98' && this.dataInicioBeneficio >= this.dataDib99) ||
+       (this.tipoCalculo == '98_99' && this.dataInicioBeneficio >= this.dataDib98))){
            rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
     }
 
@@ -673,11 +684,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let dataCorrente = null;
     for(let reajusteAutomatico of this.reajustesAutomaticos) {
       if (dataAnterior == null){
-        dataAnterior = reajusteAutomatico.data_reajuste;
+        dataAnterior = moment(reajusteAutomatico.data_reajuste);
       }else{
         dataAnterior = dataCorrente;
       }
-      dataCorrente = reajusteAutomatico.data_reajuste;
+      dataCorrente = moment(reajusteAutomatico.data_reajuste);
       let reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
       valorBeneficio = this.convertCurrency(valorBeneficio, dataAnterior, dataCorrente);
       if (this.reajustesAdministrativos) {
