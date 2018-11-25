@@ -25,6 +25,7 @@ import swal from 'sweetalert';
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './rgps-resultados.component.html',
+  styleUrls: ['./rgps-resultados.component.css']
 })
 export class RgpsResultadosComponent implements OnInit {
 
@@ -821,21 +822,30 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   imprimirPagina(){
-    let printContents = document.getElementById('content').innerHTML;
-    printContents = printContents.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
+    let grupoCalculos = document.getElementById('boxGrupoCalculos').innerHTML + '<br>';
+    let allCalcBoxHtml = document.getElementsByClassName('boxCalculo');
+    let allCalcBoxText = '';
+    for(let index = 0; index < allCalcBoxHtml.length; index++){
+      allCalcBoxText += allCalcBoxHtml[index].innerHTML + '<br><br>';
+    }
+    
+    //let printContents = document.getElementById('content').innerHTML;
+    let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
+    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 
   imprimirBox(boxId){
-    let seguradoBox = document.getElementById('box-dados-segurado').innerHTML
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
     let boxContent = document.getElementById(boxId).innerHTML;
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
-    let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + rodape + '</body></html>';
-    printableString = printableString.replace(/<table/g, '<table border=\"1\" cellpadding=\"3\"');
+    let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + rodape + '</body></html>';
+    printableString = printableString.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write(printableString);

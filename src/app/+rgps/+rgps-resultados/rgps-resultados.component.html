@@ -27,6 +27,43 @@
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
+              <div id="printableSegurado" hidden>
+                <table class="table table-bordered table-hover">
+                  <caption><h2>Dados do Segurado</h2></caption>
+                  <tr>
+                    <td width="50%">
+                      <b>Nome:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.nome}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>PIS:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.numero_documento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Data de nascimento:</b>
+                    </td>
+                    <td width="50%">
+                       {{segurado.data_nascimento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Sexo:</b>
+                    </td>
+                    <td width="50%">
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
@@ -45,7 +82,7 @@
     </div>
 
       <!-- tabela com o grupo de cálculos -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" id='boxGrupoCalculos'>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
