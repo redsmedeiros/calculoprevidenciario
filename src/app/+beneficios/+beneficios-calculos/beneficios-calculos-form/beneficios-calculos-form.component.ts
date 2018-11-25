@@ -181,15 +181,19 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     let valorRgps = parseFloat(this.route.snapshot.queryParams['valor']) || 0;
     if(dataRgps && valorRgps){
       if(this.type == 'AJ'){
-        this.chkUseSameDib = true;
         this.rmiValoresRecebidos = valorRgps;
       }else{
         this.rmiValoresDevidos = valorRgps;
       }
+    this.chkUseSameDib = true;
     this.dibValoresDevidos = dataRgps.split('-')[2] + '/' + 
                              dataRgps.split('-')[1] + '/' +
                              dataRgps.split('-')[0];
+    this.dibValoresRecebidos = dataRgps.split('-')[2] + '/' + 
+                             dataRgps.split('-')[1] + '/' +
+                             dataRgps.split('-')[0];
     }
+
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
       this.isEdit = true;
