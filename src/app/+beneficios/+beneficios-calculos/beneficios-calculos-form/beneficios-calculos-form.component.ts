@@ -82,6 +82,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataMinima = moment('1970-01-01');
 
   private tipoCorrecaoMonetaria = 'ipca';
+  private indiceCorrecao = 0;
   public correcaoOptions = [
     {
       text: 'Tabela da IPCA-e',
@@ -579,7 +580,19 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
   }
 
+  preencherCorrecaoMonetaria(){
+    let tipoCorrecao = this.formData.tipo_correcao;
+    this.tipoCorrecaoMonetaria = tipoCorrecao;
+    for(let index = 0; index < this.correcaoOptions.length; index++){
+      if(this.correcaoOptions[index].value == tipoCorrecao){
+        this.indiceCorrecao = index;
+        console.log(this.indiceCorrecao)
+      }
+    }
+  }
+
   loadCalculo() {
+    this.preencherCorrecaoMonetaria();
   	// Data do cálculo:
     this.dataCalculo = this.formatReceivedDate(this.formData.data_calculo_pedido);
     // Data da citação do réu
