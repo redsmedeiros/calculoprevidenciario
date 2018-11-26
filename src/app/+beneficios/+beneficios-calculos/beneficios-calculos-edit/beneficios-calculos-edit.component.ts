@@ -18,7 +18,7 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
 
   public form = {...CalculoModel.form};
   public calculo;
-
+  private seguradoId = '';
   public isUpdating = false;
   constructor(
   	protected CalculoAtrasado: CalculoAtrasadoService,
@@ -28,6 +28,7 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
+    this.seguradoId = this.route.snapshot.params['id']
   		this.isUpdating = true;
   	    this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
           .then(calculo => {

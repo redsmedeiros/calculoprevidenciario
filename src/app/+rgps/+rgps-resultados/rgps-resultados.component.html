@@ -9,6 +9,13 @@
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <h1>Cálculo de Regime Geral da Previdência Social</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculo[0]}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-valores-contribuidos/{{idSegurado}}/{{idsCalculo[0]}}"> Valores de Contribuição</a></li>
+          <li class="breadcrumb-item active">Resultados dos Cálculos</li>
+        </ol>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">

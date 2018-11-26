@@ -26,7 +26,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
   public stringTabelaCorrecaoMonetaria = '';
   public segurado:any = {};
+  private seguradoId = '';
   public calculo:any = {};
+  private calculoId = '';
+  private calculoType = 'A';
   public isTetos = false;
   public moeda;
   public indices;
@@ -176,19 +179,21 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(this.route.snapshot.queryParams['considerarPrescricao'] == 'false'){
       this.considerarPrescricao = false;
     }
-
-    this.Segurado.find(this.route.snapshot.params['id'])
+    this.seguradoId = this.route.snapshot.params['id'];
+    this.Segurado.find(this.seguradoId)
       .then(segurado => {
         this.segurado = segurado;
       });
 
-    this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
+    this.calculoId = this.route.snapshot.params['id_calculo'];
+    this.CalculoAtrasado.find(this.calculoId)
       .then(calculo => {
         this.calculo = calculo;
         this.setInicioRecebidosEDevidos();
         this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
         if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
           this.isTetos = true;
+          this.calculoType = 'AJ'
         }
 
         this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())

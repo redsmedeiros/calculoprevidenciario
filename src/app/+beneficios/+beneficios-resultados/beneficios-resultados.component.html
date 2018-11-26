@@ -8,6 +8,12 @@
       <article class="col-sm-12 col-md-12 col-lg-12">
         <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
         <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{seguradoId}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{calculoType}}/{{seguradoId}}/{{calculoId}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item active">Resultados</li>
+        </ol>
                 <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
               [togglebutton]="false"
               [deletebutton]="false"

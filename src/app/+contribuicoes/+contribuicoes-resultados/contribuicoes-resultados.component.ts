@@ -30,7 +30,8 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public moeda2: Moeda[];
   public results = [];
   public isUpdating = false;
-
+  private idCalculo = '';
+  private idSegurado = '';
   public tableOptions = {
     colReorder: true,
     paging: false,
@@ -54,6 +55,8 @@ export class ContribuicoesResultadosComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.idCalculo = this.route.snapshot.params['id_calculo'];
+    this.idSegurado = this.route.snapshot.params['id'];
   	if (this.route.snapshot.params['id_calculo'] !== undefined) {
       this.isUpdating = true;
       this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {

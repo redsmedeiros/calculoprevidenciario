@@ -30,6 +30,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
   private dataMinima = moment('01-1970', 'MM-YYYY');
   private dataMaxima = moment('10-1996', 'MM-YYYY');
+  private idSegurado = '';
 
   constructor(private Moeda: MoedaService,
               protected Jurisprudencial: ContribuicaoJurisprudencialService,
@@ -39,7 +40,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
     ) {}
 
   ngOnInit() {
-
+    this.idSegurado = this.route.snapshot.params['id'];
    if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
       this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {

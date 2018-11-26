@@ -53,6 +53,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.idSegurado = this.route.snapshot.params['id'];
     let today = moment();
     this.Moeda.getByDateRange('06/' + '01/1994', (today.month()+1) + '/01/' + today.year())
         .then((moeda: Moeda[]) => {

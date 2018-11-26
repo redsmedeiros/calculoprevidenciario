@@ -58,6 +58,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     ]
   }
 
+  private idCalculo = '';
+  private idSegurado = '';
   constructor(
   	protected Complementar: ContribuicaoComplementarService,
   	protected router: Router,
@@ -67,9 +69,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.idCalculo = this.route.snapshot.params['id_calculo'];
+    this.idSegurado = this.route.snapshot.params['id']
     this.hasDetalhe = !((this.MatrixStore.getTabelaDetalhes()).length === 0);
   	this.isUpdating = true;
-    this.Complementar.find(this.route.snapshot.params['id_calculo']).then(calculo => {
+    this.Complementar.find(this.idCalculo).then(calculo => {
       this.calculoComplementar = calculo;
       this.mostrarJuros = this.calculoComplementar.chk_juros;
 

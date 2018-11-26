@@ -8,7 +8,12 @@
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <h1>Cálculo de Regime Geral da Previdência Social</h1>
-
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculos[0]}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item active">Valores de Contribuição</li>
+        </ol>
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
               [deletebutton]="false"

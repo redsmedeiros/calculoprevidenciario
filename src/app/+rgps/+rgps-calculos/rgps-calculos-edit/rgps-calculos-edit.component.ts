@@ -20,7 +20,8 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
 
   public form = {...CalculoModel.form};
   public calculo;
-
+  private idCalculo = '';
+  private idSegurado = '';
   public isUpdating = false;
   constructor(
     protected CalculoRgps: CalculoRgpsService,
@@ -30,8 +31,10 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.idCalculo = this.route.snapshot.params['id_calculo'];
+    this.idSegurado = this.route.snapshot.params['id'];
   		this.isUpdating = true;
-  	    this.CalculoRgps.find(this.route.snapshot.params['id_calculo'])
+  	    this.CalculoRgps.find(this.idCalculo)
           .then(calculo => {
             this.calculo = calculo;
             this.form = this.calculo;
