@@ -808,7 +808,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   infoCalculos(){
-  	window.location.href='/#/rgps/rgps-calculos/' + this.idSegurado;
+  	window.location.href='/#/rgps/rgps-calculos/' + this.idSegurado + '/' + this.idsCalculo[0] + '/edit';
   }
 
   valoresContribuidos(){
