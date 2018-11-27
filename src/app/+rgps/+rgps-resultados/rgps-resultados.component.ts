@@ -17,7 +17,7 @@ import { ExpectativaVida } from './ExpectativaVida.model';
 import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
-import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service'
+import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import * as moment from 'moment';
 import swal from 'sweetalert';
 
@@ -876,4 +876,5 @@ export class RgpsResultadosComponent implements OnInit {
       
     }
   }
+
 }

@@ -11,6 +11,7 @@ import { RgpsCalculosDestroyComponent } from './rgps-calculos-destroy/rgps-calcu
 import { RgpsCalculosCreateComponent } from './rgps-calculos-create/rgps-calculos-create.component';
 import {I18nModule} from "../../shared/i18n/i18n.module";
 import { TextMaskModule } from 'angular2-text-mask';
+import { WINDOW_PROVIDERS } from "./window.service";
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { TextMaskModule } from 'angular2-text-mask';
     I18nModule,
     SmartadminDatatableModule
   ],
+  providers: [ WINDOW_PROVIDERS ],
   declarations: [RgpsCalculosComponent, RgpsCalculosEditComponent, RgpsCalculosFormComponent, RgpsCalculosIndexComponent, RgpsCalculosDestroyComponent, RgpsCalculosCreateComponent]
 })
 export class RgpsCalculosModule { }

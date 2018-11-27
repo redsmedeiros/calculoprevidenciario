@@ -1,10 +1,28 @@
-<div id="content">
+<div id="content" class="pgContent">
   <!-- widget grid -->
   <sa-widgets-grid>
 
     <!-- row -->
     <div class="row">
-
+      <div id="navbar" class="nav-container" *ngIf="navIsFixed">
+        <div class="col-md-12">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar
+                  </button>
+                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class='fa fa-money '></i>
+                    </span> Valores de contribuição
+                  </button>
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Realizar cálculos
+                  </button>
+                </div>
+      </div> 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <h1>Cálculo de Regime Geral da Previdência Social</h1>
         <!-- Widget ID (each widget will need unique ID)-->
@@ -84,7 +102,7 @@
             <!-- widget content -->
             <div class="widget-body float-panel" style="min-height: auto;">
 
-              <div class="row">
+              <div class="row" id='containerOpcoes'>
                 <div class="col-md-12">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
