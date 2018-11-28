@@ -91,7 +91,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   			this.errors.add({"competenciaInicial":["Insira uma data após 01/1970"]});
   		}
   		if(dateCompetenciaInicial >= this.dataDecadente){
-  			this.errors.add({"competenciaInicial":["Insira uma data posterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
+  			this.errors.add({"competenciaInicial":["Insira uma data anterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
   		}
   	}
 
