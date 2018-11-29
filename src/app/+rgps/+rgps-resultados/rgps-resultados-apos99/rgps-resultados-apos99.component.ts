@@ -671,7 +671,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
 
         if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
-          console.log(this.fatorPrevidenciario)
           conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
         }else{
           conclusoes.push({string:"Renda Mensal Inicial:",value:this.formatMoney(rmi, currency.acronimo)});//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
@@ -714,7 +713,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     if(secundario){
       tempo = this.contribuicaoSecundaria;
-      let contagemSecundaria = (tempo.anos * 365.25) + (tempo.meses * 30) + (tempo.dias);
+      let contagemSecundaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
       return contagemSecundaria;
     }
 
@@ -770,7 +769,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tempoServico = 0;
     switch(specieKind){
       case 1:
-        tempoServico = tempoServicoSecundario / 365;   
+        tempoServico = tempoServicoSecundario / 365.25;   
         let redutorProporcional = 0;
         if(this.isProportional){
             redutorProporcional = 5;
