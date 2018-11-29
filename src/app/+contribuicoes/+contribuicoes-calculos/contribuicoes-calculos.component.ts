@@ -4,6 +4,7 @@ import { SeguradoService } from '../Segurado.service';
 import { ContribuicaoJurisprudencialService } from './ContribuicaoJurisprudencial.service';
 import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
+import * as moment from 'moment';
 
 @FadeInTop()
 @Component({
@@ -180,14 +181,12 @@ export class ContribuicoesCalculosComponent implements OnInit {
   }
 
   formatReceivedMonthAndYear(inputDate) {
-      var date = new Date(inputDate);
-      if (!isNaN(date.getTime())) {
-          date.setMonth(date.getMonth()+1);
-          // Months use 0 index.
-          return ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                         date.getFullYear();
-      }
+      if(!inputDate){
       return '';
+    }else{
+      let date = moment(inputDate);
+      return date.format('MM/YYYY');
+    }
   }
 
   formatReceivedDate(inputDate) {

@@ -7,7 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import { ContribuicaoJurisprudencialService } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import swal from 'sweetalert';
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 
 @FadeInTop()
