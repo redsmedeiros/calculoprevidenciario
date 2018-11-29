@@ -130,8 +130,12 @@
                   <b>DIB anterior de valores devidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
                   <b>Data de cessação de valores devidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
-                <li>
+                <li *ngIf="!calculo.valor_beneficio_esperado_revisao">
                   <b>Nova RMI de valores devidos:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_esperado_revisao">
+                  <b>Nova RMI de valores devidos antes da revisão:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_esperado_revisao">
+                  <b>Nova RMI de valores devidos depois da revisão:</b> {{formatRMI(calculo.valor_beneficio_esperado_revisao, 'Devidos')}}</li>
               </ul>
             </div>
           </div>
@@ -169,8 +173,12 @@
                   <b>DIB anterior de valores recebidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
                   <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_cessacao)}}</li>
-                <li>
-                  <b>Nova RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="!calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos antes da revisão:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos depois da revisão:</b> {{formatRMI(calculo.valor_beneficio_concedido_revisao, 'Recebidos')}}</li>
               </ul>
             </div>
           </div>
