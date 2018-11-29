@@ -214,10 +214,10 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     dataTabelaDetalhes = dataTabelaDetalhes.slice(0, index).concat(dataTabelaDetalhes.slice(index, dataTabelaDetalhes.length).sort((entry1, entry2) => {
           let dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
           let dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
-          if(dataMesEntry1 > dataMesEntry2){
+          if(dataMesEntry1 < dataMesEntry2){
             return 1;
           }
-          if(dataMesEntry1 < dataMesEntry2){
+          if(dataMesEntry1 > dataMesEntry2){
             return -1;
           }
           return 0;
