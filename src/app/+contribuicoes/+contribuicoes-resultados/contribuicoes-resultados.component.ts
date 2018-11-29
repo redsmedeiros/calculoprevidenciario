@@ -95,7 +95,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   getValorCorrigido(data){
-    return 'R$ ' + this.formatMoney(data.salario_minimo * data.aliquota * data.cam);
+    return 'R$ ' + this.formatMoney(data.salario_minimo * data.aliquota * data.ipca);
   }
 
   updateDatatable() {
@@ -104,7 +104,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
         data: this.formatDate(moedaAtual.data_moeda),
         salario_minimo: this.getSalarioMinimo(moedaAtual),
         aliquota: this.getAliquota(moedaAtual),
-        indice: moedaAtual.cam,
+        indice: moedaAtual.ipca,
         valor_corrigido: this.getValorCorrigido(moedaAtual)
       }
       this.results.push(line)
@@ -115,7 +115,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
           data: this.formatDate(moedaAtual.data_moeda),
           salario_minimo: this.getSalarioMinimo(moedaAtual),
           aliquota: this.getAliquota(moedaAtual),
-          indice: moedaAtual.cam,
+          indice: moedaAtual.ipca,
           valor_corrigido: this.getValorCorrigido(moedaAtual)
         }
         this.results.push(line)

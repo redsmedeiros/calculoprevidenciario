@@ -65,7 +65,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
       let valorTotal = 0;
       for(let moeda of this.moeda) {
         let aliquota = moeda.salario_minimo * moeda.aliquota;
-        let valorCorrigido =  aliquota * moeda.cam;
+        let valorCorrigido =  aliquota * moeda.ipca;
         valorTotal = valorTotal + valorCorrigido;
       }
 
@@ -78,7 +78,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
           this.moeda2 = moeda;
           for(let moeda of this.moeda2) {
             let aliquota = moeda.salario_minimo * moeda.aliquota;
-            let valorCorrigido =  aliquota * moeda.cam;
+            let valorCorrigido =  aliquota * moeda.ipca;
             valorTotal = valorTotal + valorCorrigido;
           }
 
@@ -257,14 +257,12 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-      var date = new Date(inputDate);
-      if (!isNaN(date.getTime())) {
-          // Months use 0 index.
-          date.setMonth(date.getMonth()+1);
-          return  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                         date.getFullYear();
-      }
+    if(!inputDate){
       return '';
+    }else{
+      let date = moment(inputDate);
+      return date.format('MM/YYYY');
+    }
   }
 
   calculateMonth() {
