@@ -5,7 +5,7 @@
 
       <label class="col-md-2 control-label">Nome*</label>
       <div class="col-md-3">
-        <input [(ngModel)]="formData.nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome')" class="form-control" type="text">
+        <input [(ngModel)]="formData.nome" [ngModelOptions]="{standalone: true}" name='seguradoName' (change)="errors.clear('nome')" class="form-control" type="text">
         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
       </div>
 
