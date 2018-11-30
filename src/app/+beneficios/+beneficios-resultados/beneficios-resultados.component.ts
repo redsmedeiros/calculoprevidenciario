@@ -199,7 +199,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
           .then((moeda: Moeda[]) => {
             this.moeda = moeda;
-            this.Indice.getByDateRange(this.primeiraDataArrayMoeda.format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
+            this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
               .then(indices => {
                 this.indices = indices;
                 this.jurosCorrente = this.calcularJurosCorrente();
@@ -1329,6 +1329,18 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+
+    let dibAnteriorRecebidos = null;
+    let dibAnteriorDevidos = null;
+    if(this.calculo.data_anterior_pedido_beneficio != '0000-00-00'){
+      dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorRecebidos) ? this.primeiraDataArrayMoeda : dibAnteriorRecebidos;
+    }
+    if(this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00'){
+      dibAnteriorDevidos = moment(this.calculo.previa_data_pedido_beneficio_esperado); //devidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorDevidos) ? this.primeiraDataArrayMoeda : dibAnteriorDevidos;
+    }
+    
     this.beneficioDevidoAposRevisao = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
     this.beneficioRecebidoAposRevisao = (this.calculo.valor_beneficio_concedido_revisao) ? this.calculo.valor_beneficio_concedido_revisao : 0;
 
