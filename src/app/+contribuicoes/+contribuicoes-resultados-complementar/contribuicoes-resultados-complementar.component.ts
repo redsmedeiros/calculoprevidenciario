@@ -175,7 +175,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let numAnos = this.getDifferenceInYears(dataReferencia);
     let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
     taxaJuros = ((jurosAnuais ** numAnos) * ((jurosMensais * numMeses) + 1)) - 1;
-    taxaJuros = Math.min(taxaJuros, 0.5)
+    taxaJuros = Math.min(taxaJuros, 0.5);
+    console.log(dataReferencia, numAnos, numMeses, taxaJuros);
     let totalJuros = this.getBaseAliquota() * taxaJuros;
 
     return totalJuros;
@@ -209,12 +210,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
   getDifferenceInYears(dateString){
-    let splitted = dateString.split('/');
     let today = moment();
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
-    let duration = moment.duration(today.diff(pastDate));
-    let years = duration.asYears();
-    return Math.floor(years);
+    let pastDate = moment(dateString, 'MM/YYYY');
+    let differenceInYears = Math.abs(today.diff(pastDate, 'years'));
+    return differenceInYears;
   }
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro.
@@ -225,13 +224,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     if(dateString2 == ''){
       recent = moment();
     }else{
-      let splitted = dateString2.split('/');
-      recent = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+      recent = moment(dateString2, 'MM/YYYY');
     }
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
-    let duration = moment.duration(recent.diff(pastDate));
-    let months = duration.asMonths();
-    return Math.floor(months);
+    let pastDate = moment(dateString, 'MM/YYYY');
+    let differenceInMonths = Math.abs(recent.diff(pastDate, 'months'));
+    return differenceInMonths;
   }
 
   formatMoney(data){

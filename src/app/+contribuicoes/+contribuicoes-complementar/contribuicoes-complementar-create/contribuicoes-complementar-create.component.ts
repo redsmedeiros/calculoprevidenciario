@@ -55,7 +55,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id'];
     let today = moment();
-    this.Moeda.getByDateRange('06/' + '01/1994', (today.month()+1) + '/01/' + today.year())
+    this.Moeda.getByDateRangeMoment(moment('1990-01-01'), moment())
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
         })
@@ -228,7 +228,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       dataTabelaDetalhes[index].indice_num = index+1;
       this.form.total_contribuicao += parseFloat((dataTabelaDetalhes[index].valor_corrigido).split(' ')[1].replace(',','.'));
     }
-    this.form.media_salarial = this.form.total_contribuicao/Math.floor(this.form.numero_contribuicoes);
+    this.form.media_salarial = this.form.total_contribuicao/Math.ceil(this.form.numero_contribuicoes);
     this.baseAliquota = this.form.media_salarial*0.2;
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
   }
@@ -248,18 +248,30 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   getSalarioMinimo(dataString){
-    let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return parseFloat(this.moeda[diff].salario_minimo);
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].salario_minimo);
+    let data = moment(dataString, 'MM/YYYY');
+    if(data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda)
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+    return parseFloat(this.Moeda.getByDate(data).salario_minimo);
   }
 
   getTeto(dataString){
-    let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return parseFloat(this.moeda[diff].teto);
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].teto);
+    let data = moment(dataString, 'MM/YYYY');
+    if(data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda)
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+    return parseFloat(this.Moeda.getByDate(data).teto);
   }
   //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
   getIndice(dataString){
-    let diff = this.getDifferenceInMonths('07/1994', dataString);
-    return parseFloat(this.moeda[diff].fator);
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].fator);
+    let data = moment(dataString, 'MM/YYYY');
+    if(data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda)
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+    return parseFloat(this.Moeda.getByDate(data).fator);
   }
 
   calculateContribuicao(){
