@@ -892,7 +892,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       //this.proporcionalidadeUltimaLinha = true;
     }
 
-    if(dataCorrente.isSame(moment('2017-01-01'), 'year') && this.isTetos){
+    if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
       if(parseFloat(beneficioRecebidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
         beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
         this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
