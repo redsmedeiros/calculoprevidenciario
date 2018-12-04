@@ -10,6 +10,7 @@
     <div>
       <!-- widget content -->
       <div class="widget-body">
+      	<h5  class="section-title">Contribuições atrasadas</h5>
         <p>
           Favor preencher a data inicial e a data final das contribuições atrasadas que pretende recolher
         </p>
@@ -42,6 +43,7 @@
 §4º Sobre os valores apurados na forma dos §§ 2o e 3o deste artigo incidirão juros moratórios de 0,5% (zero vírgula cinco por cento) ao mês, capitalizados anualmente, limitados ao percentual máximo de 50% (cinqüenta por cento), e multa de 10% (dez por cento).</p>
 		</div>
 		<div class="form-group">
+			<h5 class="section-title">Contribuições utilizadas na base do cálculo</h5>
 		  <label class="col-md-2 control-label">Contribuição de</label>
 		  <div class="col-md-3">
 		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoDe')" placeholder="(mm/aaaa)" type="text">
