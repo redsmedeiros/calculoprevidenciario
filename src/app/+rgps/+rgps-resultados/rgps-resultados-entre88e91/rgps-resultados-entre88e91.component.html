@@ -191,42 +191,42 @@
                         </td>
                         <td width="50%">{{conclusoes88.porcentagem_calculo_beneficio}}%</td>
                       </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">1ª parcela da RMI:</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.primeira_parcela_rmi}}</td>
-                      </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">Qtde Grupos de 12:</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.grupo_dos_12}}</td>
-                      </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">Valor excedente:</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.valor_excedente}}</td>
-                      </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">2ª parcela da RMI:</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.segunda_parcela_rmi}}</td>
-                      </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">80% do valor excedente (Max para 2ª parcela):</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.oitenta_porcento_valor_excedente}}</td>
-                      </tr>
-                      <tr>
-                        <td width="50%">
-                          <span class="pull-right font-bold">90% do Maior valor de teto (Max para a RMI):</span>
-                        </td>
-                        <td width="50%">{{conclusoes88.noventa_porcento_maior_valor_teto}}</td>
-                      </tr>
+                      <tr *ngIf="conclusoes.primeira_parcela_rmi">
+                    <td width="50%">
+                      <span class="pull-right font-bold">1ª parcela da RMI:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.primeira_parcela_rmi}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.grupo_dos_12">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Qtde Grupos de 12:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.grupo_dos_12}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.valor_excedente">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor excedente:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.valor_excedente}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.segunda_parcela_rmi">
+                    <td width="50%">
+                      <span class="pull-right font-bold">2ª parcela da RMI:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.segunda_parcela_rmi}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.oitenta_porcento_valor_excedente">
+                    <td width="50%">
+                      <span class="pull-right font-bold">80% do valor excedente (Max para 2ª parcela):</span>
+                    </td>
+                    <td width="50%">{{conclusoes.oitenta_porcento_valor_excedente}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.noventa_porcento_maior_valor_teto">
+                    <td width="50%">
+                      <span class="pull-right font-bold">90% do Maior valor de teto (Max para a RMI):</span>
+                    </td>
+                    <td width="50%">{{conclusoes.noventa_porcento_maior_valor_teto}}</td>
+                  </tr>
                       <tr>
                         <td width="50%">
                           <span class="pull-right font-bold">Benefício mínimo com índice (Min para a RMI):</span>
