@@ -300,6 +300,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
         id_contagem_tempo: this.idsCalculos[0]
       };
 
+      console.log(periodoObj);
+      
       this.insertPeriodo(periodoObj);
 
     } else {
@@ -325,7 +327,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
         + '-' + this.data_inicio.split('/')[0]);
       let dateFinalPeriodo = moment(this.data_termino.split('/')[2]
         + '-' + this.data_termino.split('/')[1]
-        + '-' + this.data_termino.split('/')[1]);
+        + '-' + this.data_termino.split('/')[0]);
 
       // inicioPeriodo
       if (this.isEmpty(this.data_inicio) || !dateInicioPeriodo.isValid()) {
@@ -336,7 +338,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       if (this.isEmpty(this.data_termino) || !dateFinalPeriodo.isValid()) {
         this.errors.add({ 'data_termino': ['Insira uma data válida'] });
       } else {
-        if (dateFinalPeriodo <= dateInicioPeriodo) {
+         if (dateFinalPeriodo <= dateInicioPeriodo) {
           this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
         }
       }
@@ -416,30 +418,14 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-
-    var date = new Date(inputDate);
-    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
-    if (!isNaN(date.getTime())) {
-      // Months use 0 index.
-      return ('0' + (date.getDate())).slice(-2) + '/' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-        date.getFullYear();
-    }
-    return '';
-
+    let date = moment(inputDate, 'YYYY-MM-DD' );
+    return date.format('DD/MM/YYYY');
   }
 
   formatPostDataDate(inputDate) {
 
-    let date = new Date(inputDate);
-    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
-    if (!isNaN(date.getTime())) {
-      // Months use 0 index.
-      return date.getFullYear() + '-' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-        ('0' + (date.getDate())).slice(-2);
-    }
-    return '';
+    let date = moment(inputDate, 'DD/MM/YYYY');
+    return date.format('YYYY-MM-DD');
 
   }
 

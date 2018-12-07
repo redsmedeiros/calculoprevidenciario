@@ -37,7 +37,7 @@ export class ContagemTempoSeguradosEditComponent implements OnInit, OnDestroy {
           .then(segurado => {
             this.segurado = segurado;
             this.form = this.segurado;
-            this.isUpdating = false;
+
             this.setQueryParamsRota();
           });
   }
@@ -54,7 +54,7 @@ export class ContagemTempoSeguradosEditComponent implements OnInit, OnDestroy {
     if (queryParamsLastURL.calc != '' &&  typeof queryParamsLastURL.calc !== 'undefined') {
       this.rotaRetorno += '/' + queryParamsLastURL.calc;
     }
-
+    this.isUpdating = false;
   }
 
   submit(data) {

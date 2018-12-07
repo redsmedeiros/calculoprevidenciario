@@ -7,164 +7,12 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-edit"></i>
-            </span>
-            <h2>Dados do segurado</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body no-padding" *ngIf="!isUpdating">
-              <table class="table table-condensed  table-responsive">
-                <tbody>
-                  <tr>
-                    <td><strong class="pull-right">Nome:</strong></td>
-                    <td>{{segurado.nome}} </td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
-                    <td>{{segurado.documento}} </td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Data de nascimento:</strong></td>
-                    <td>{{segurado.data_nascimento}}</td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Idade:</strong></td>
-                    <td>{{segurado.idade}}</td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Sexo:</strong></td>
-                    <td>
-                      <span *ngIf="segurado.sexo=='m'">Masculino</span>
-                      <span *ngIf="segurado.sexo=='f'">Feminino</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Referência:</strong></td>
-                    <td>{{calculo.referencia_calculo}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="form-actions no-padding no-margin">
-              <div class="row">
-                <div class="pull-left">
-                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info "
-                    data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-left"></i>
-                    </span> Retornar para Segurados
-                  </button>
-                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info">
-                    <span class="btn-label">
-                      <i class="fa fa-pencil"></i>
-                    </span> Editar para Segurado
-                  </button>
-                </div>
-                <div class="pull-right">
-                    <button type="submit" (click)="returnListaCalculos()" class="btn btn-labeled btn-info"
-                    data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-left"></i>
-                    </span> Retornar para cálculos
-                  </button>
-                  <button type="submit" (click)="editCalculo()" class="btn btn-labeled btn-info">
-                    <span class="btn-label">
-                      <i class="fa fa-pencil"></i>
-                    </span> Editar referência
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sa-widget>
+        <app-contagem-tempo-conclusao-segurado [calculo]="calculo" [segurado]="segurado" [isUpdating]=isUpdating
+          [lastdateNascimento]=lastdateNascimento></app-contagem-tempo-conclusao-segurado>
       </article>
-<!-- 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-     
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-list"></i>
-            </span>
-            <h2>Cálculo contagem de tempo selecionado</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding heigth-auto" *ngIf="!isUpdating">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Referência</th>
-                    <th class="text-center">Total (Ano/Mês/Dia)</th>
-                    <th class="text-center">Total Carência</th>
-                    <th class="text-center">Data Criação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{{calculo.referencia_calculo}}</td>
-                    <td class="text-center">{{calculo.total_dias}}</td>
-                    <td class="text-center">{{calculo.total_carencia}}</td>
-                    <td class="text-center">{{calculo.created_at}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="form-actions no-padding no-margin">
-              <div class="row">
-                <div>
-                  <button type="submit" (click)="returnListaCalculos()" class="btn btn-labeled btn-info pull-left"
-                    data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-left"></i>
-                    </span> Retornar para Simulações
-                  </button>
-                  <button type="submit" (click)="editCalculo()" class="btn btn-labeled btn-info pull-right">
-                    <span class="btn-label">
-                      <i class="fa fa-pencil"></i>
-                    </span> Editar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sa-widget>
-      </article> -->
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" [togglebutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2> Períodos de contribuição</h2>
-          </header>
-          <div>
-            <div class="widget-body heigth-auto no-padding" >
-              <app-contagem-tempo-conclusao-periodos></app-contagem-tempo-conclusao-periodos>
-            </div>          
-            <div class="form-actions no-padding no-margin">
-              <div class="row">
-                <div>
-                  <button type="submit" (click)="returnListaPeriodos()" class="btn btn-labeled btn-info pull-left"
-                    data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-left"></i>
-                    </span> Retornar para Períodos
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sa-widget>
+        <app-contagem-tempo-conclusao-periodos (periodosListRst)="reciverFeedback($event)"></app-contagem-tempo-conclusao-periodos>
         <div class="well">
           <p>
             <strong>*</strong> A coluna "Tempo Contribuição Convertido" visualiza período por período, sem a supressão
@@ -187,9 +35,12 @@
             </span>
             <h2>Gráfico</h2>
           </header>
-          <div>
-            <app-contagem-tempo-conclusao-graph></app-contagem-tempo-conclusao-graph>
+          <div *ngIf="!getPeriodosList">
+            <app-contagem-tempo-conclusao-graph [periodosList]="periodosList"></app-contagem-tempo-conclusao-graph>
           </div>
+          <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
+              <i class="fa fa-gear fa-3x fa-spin"></i>
+            </div>
         </sa-widget>
       </article>
 
@@ -203,11 +54,15 @@
             </span>
             <h2>Conclusões</h2>
           </header>
-          <div>
+          <div *ngIf="!getPeriodosList">
             <div class="widget-body no-padding heigth-auto">
-              <app-contagem-tempo-conclusao></app-contagem-tempo-conclusao>
+              <app-contagem-tempo-conclusao [calculo]="calculo" [segurado]="segurado" [periodosList]="periodosList"
+                (limitesTempoTotal)="reciverFeedbackLastdate($event)" ></app-contagem-tempo-conclusao>
             </div>
           </div>
+          <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
+            <i class="fa fa-gear fa-3x fa-spin"></i>
+          </div> 
         </sa-widget>
       </article>
     </div>

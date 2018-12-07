@@ -103,13 +103,13 @@
             <div class="form-actions no-padding no-margin">
               <div class="row">
                 <div>
-                  <button type="submit" (click)="returnListaCalculos()" class="btn btn-labeled btn-info pull-left"
+                  <button type="submit" (click)="returnListaCalculos()" id="retornar_calculos" class="btn btn-labeled btn-info pull-left"
                     data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
                     <span class="btn-label">
                       <i class="fa fa-arrow-left"></i>
                     </span> Retornar para cálculos
                   </button>
-                  <button type="submit" (click)="editCalculo()" class="btn btn-labeled btn-info pull-right">
+                  <button type="submit" (click)="editCalculo()" id="editar_calculos" class="btn btn-labeled btn-info pull-right">
                     <span class="btn-label">
                       <i class="fa fa-pencil"></i>
                     </span> Editar
@@ -212,18 +212,17 @@
                 <div class="form-actions no-padding">
                   <div class="row">
                     <div class="col-md-12">
-                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="submit()" class="btn btn-labeled btn-primary">
+                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="submit()" id="inserir_periodos" class="btn btn-labeled btn-primary">
                         <span class="btn-label">
                           <i class="fa fa-calendar"></i>
                         </span> Inserir período
                       </button>
-                      <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()" class="btn btn-labeled btn-warning">
+                      <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()"  id="editar_periodos" class="btn btn-labeled btn-warning">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
                         </span> Editar período
                       </button>
-                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()"
-                        class="btn btn-labeled btn-success">
+                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()" id="realizar_periodos" class="btn btn-labeled btn-success">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Realizar cálculos

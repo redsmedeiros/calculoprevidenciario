@@ -1,18 +1,36 @@
-<table class="table table-striped table-hover table-responsive" *ngIf="!isUpdating">
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" [togglebutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2> Períodos de contribuição</h2>
+  </header>
+  <div>
+    <div class="widget-body heigth-auto no-padding">
+
+<table class="table table-striped table-hover table-responsive table-bordered no-margin" *ngIf="!isUpdating">
   <thead>
     <tr>
-      <th></th>
-      <th>Empresa</th>
-      <th>Data Início</th>
-      <th>Data Final</th>
-      <th class="text-center">Fator Condição</th>
-      <th class="text-center">Carência</th>
-      <th class="text-center"><span data-placement="top" tooltip="Se exite um ou mais vínculos de trabalho no mesmo período ">Concomitante</span></th>
-      <th class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (Somente a diferença entre datas)">Tempo
+      <th rowspan="2"></th>
+      <th rowspan="2">Empresa</th>
+      <th rowspan="2">Data Início</th>
+      <th rowspan="2">Data Final</th>
+      <th rowspan="2" class="text-center">Fator Condição</th>
+      <th rowspan="2" class="text-center">Carência</th>
+      <th rowspan="2" class="text-center"><span data-placement="top" tooltip="Se exite um ou mais vínculos de trabalho no mesmo período ">Concomitante</span></th>
+      <th colspan="3" class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (Somente a diferença entre datas)">Tempo
           de Constribuição</span></th>
-      <th class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (com fator multiplicador)">Tempo
+      <th colspan="3" class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (com fator multiplicador)">Tempo
           de Constribuição Convertido <strong>*</strong></span></th>
-      <th class="text-center"><span data-placement="top" tooltip="Identifica os vínculos em conflito">Concomitâncias</span></th>
+      <th rowspan="2" class="text-center"><span data-placement="top" tooltip="Identifica os vínculos em conflito">Concomitâncias</span></th>
+    </tr>
+    <tr>
+      <th class="text-center">Anos</th>
+      <th class="text-center">Meses</th>
+      <th class="text-center">dias</th>
+      <th class="text-center">Anos</th>
+      <th class="text-center">Meses</th>
+      <th class="text-center">dias</th>
     </tr>
   </thead>
   <tbody>
@@ -23,10 +41,43 @@
       <td>{{periodo.data_termino}}</td>
       <td class="text-center">{{periodo.fator_condicao_especial}}</td>
       <td class="text-center">{{periodo.carencia}}</td>
+      <td class="text-center">{{ periodo.concomitantes.text }}</td>
+      <!--       
+      <td class="text-center">{{ periodo.totalSemFator.years()  }} </td>
+      <td class="text-center"> {{ periodo.totalSemFator.months()  }}</td>
+      <td class="text-center"> {{ this.Math.ceil(periodo.totalSemFator.days())  | number : '1.0-0' }}</td>
+      <td class="text-center">{{ periodo.totalComFator.years()  }} </td>
+      <td class="text-center"> {{ periodo.totalComFator.months()  }}</td>
+      <td class="text-center"> {{ this.Math.ceil(periodo.totalComFator.days())  | number : '1.0-0' }}</td> -->
+
+      <td class="text-center">{{ periodo.totalSemFator.years }} </td>
+      <td class="text-center"> {{ periodo.totalSemFator.months }}</td>
+      <td class="text-center"> {{ periodo.totalSemFator.days }}</td>
+      <td class="text-center">{{ periodo.totalComFator.years }} </td>
+      <td class="text-center"> {{ periodo.totalComFator.months }}</td>
+      <td class="text-center"> {{ periodo.totalComFator.days}}</td>
+
+      <td class="text-center">{{ periodo.concomitantes.vinculosList }}</td>
     </tr>
   </tbody>
 </table>
 
-<div *ngIf="isUpdating" class="alert alert-info text-align-center no-padding">
-  <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+<div *ngIf="isUpdating" class="alert text-align-center no-padding no-margin">
+  <i class="fa fa-gear fa-3x fa-spin text-info"></i>
 </div>
+    
+    </div>
+    <div class="form-actions no-padding no-margin">
+      <div class="row">
+        <div>
+          <button type="submit" (click)="returnListaPeriodos()" class="btn btn-labeled btn-info pull-left" id="retornarPeriodos"
+            data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
+            <span class="btn-label">
+              <i class="fa fa-arrow-left"></i>
+            </span> Retornar para Períodos
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</sa-widget>

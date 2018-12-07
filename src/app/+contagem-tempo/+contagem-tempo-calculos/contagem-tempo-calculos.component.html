@@ -68,14 +68,14 @@
               <div class="row">
                 <div class="">
 
-                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left"
+                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left" id="retornarSegurados"
                     data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
                     <span class="btn-label">
                       <i class="fa fa-arrow-left"></i>
                     </span> Retornar para Segurados
                   </button>
 
-                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right" id="editarSegurado">
                     <span class="btn-label">
                       <i class="fa fa-pencil-square-o"></i>
                     </span> Editar
@@ -93,8 +93,7 @@
         <app-contagem-tempo-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-contagem-tempo-calculos-index>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
+      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
           [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false">
           <header>
@@ -103,11 +102,8 @@
             </span>
             <h2>Opções</h2>
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body" style="min-height: auto;">
-
               <div class="row">
                 <div class="col-md-12">
                   <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
@@ -122,11 +118,10 @@
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>
-      </article>
+      </article> -->
 
       <div class="row">
         <div class="col-sm-4 col-sm-offset-4">
@@ -144,6 +139,14 @@
             </thead>
             <tbody>
               <tr>
+                <td><i class="fa fa-calendar"></i></td>
+                <td>Inserir/Editar períodos</td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-calculator"></i></td>
+                <td>Ver resultados</td>
+              </tr>
+              <tr>
                 <td>
                   <i class="fa fa-edit"></i>
                 </td>
@@ -152,18 +155,6 @@
               <tr>
                 <td><i class="fa fa-times"></i></td>
                 <td>Remover</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-money"></i></td>
-                <td>Inserir valores de contribuição</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-arrow-down"></i></td>
-                <td>Importar dados do CNIS</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-calculator"></i></td>
-                <td>Ver resultados</td>
               </tr>
             </tbody>
           </table>

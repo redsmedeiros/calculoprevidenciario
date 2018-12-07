@@ -6,6 +6,7 @@ import { CalculoContagemTempoService } from './CalculoContagemTempo.service';
 import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { SeguradoContagemTempo as SeguradoModel } from '../+contagem-tempo-segurados/SeguradoContagemTempo.model';
+import * as moment from 'moment';
 import swal from 'sweetalert';
 
 @FadeInTop()
@@ -34,6 +35,8 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
   public checkboxIdList = [];
 
+  public Math = Math;
+
   public calculoTableOptions = {
     autoWidth: true,
     colReorder: true,
@@ -41,18 +44,23 @@ export class ContagemTempoCalculosComponent implements OnInit {
     columns: [
       { data: 'actions', width: '10%' },
       { data: 'referencia_calculo' },
-      { data: 'total_dias' },
+      {
+        data: 'total_dias',
+        render: (data) => {
+          return this.formatAnosMesesDias(data)
+        }
+      },
       {
         data: 'created_at',
         render: (data) => {
           return this.formatReceivedDate(data);
         }
-      },
-      {
-        data: (data) => {
-          return this.getCheckbox(data);
-        }
-      },
+      }
+      // {
+      //   data: (data) => {
+      //     return this.getCheckbox(data);
+      //   }
+      // },
     ]
   };
 
@@ -139,6 +147,30 @@ export class ContagemTempoCalculosComponent implements OnInit {
   }
 
 
+  formatAnosMesesDias(dias) {
+    console.log(dias);
+    
+
+    let totalFator = { years: 0, months: 0, days: 0 };
+
+    let xValor = (this.Math.floor(dias)  / 365);
+    // console.log(totalGeralEmDias * fator);
+    // console.log(xValor);
+
+
+    totalFator.years = this.Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = this.Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.5;
+    totalFator.days = this.Math.floor(dttDias);
+
+    return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
+
+    // const tempoTotal = moment.duration(dias, 'days');
+    // return tempoTotal.years() + ' anos ' + tempoTotal.months() + ' meses ' + tempoTotal.days() + ' dias';
+  }
+
+
   formatReceivedDate(inputDate) {
     var date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
@@ -152,29 +184,11 @@ export class ContagemTempoCalculosComponent implements OnInit {
   }
 
   valoresContribuicao() {
-    let idList = this.getSelectedCalcs();
-    if (idList.length > 3) {
-      swal('Erro', 'Selecione até 3 cálculos', 'error');
-    } else if (idList.length == 0) {
-      swal('Erro', 'Selecione pelo menos 1 cálculo', 'error');
-    } else {
-      let stringArr = idList.join(',');
-      window.location.href = '/#/contagem-tempo/contagem-tempo-periodos/' +
-        this.route.snapshot.params['id'] + '/' + stringArr;
-    }
+  
   }
 
   realizarCalculos() {
-    let idList = this.getSelectedCalcs();
-    if (idList.length > 3) {
-      swal('Erro', 'Selecione até 3 cálculos', 'error');
-    } else if (idList.length == 0) {
-      swal('Erro', 'Selecione pelo menos 1 cálculo', 'error');
-    } else {
-      let stringArr = idList.join(',');
-      window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-        this.route.snapshot.params['id'] + '/' + stringArr;
-    }
+ 
   }
 
   getSelectedCalcs() {

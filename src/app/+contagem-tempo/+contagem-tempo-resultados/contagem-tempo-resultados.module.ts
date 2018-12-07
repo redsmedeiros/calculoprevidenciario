@@ -12,6 +12,8 @@ import { ContagemTempoResultadosComponent } from './contagem-tempo-resultados.co
 import { ContagemTempoConclusaoComponent } from './contagem-tempo-conclusao/contagem-tempo-conclusao.component';
 import { ContagemTempoConclusaoPeriodosComponent } from './contagem-tempo-conclusao-periodos/contagem-tempo-conclusao-periodos.component';
 import { ContagemTempoConclusaoGraphComponent } from './contagem-tempo-conclusao-graph/contagem-tempo-conclusao-graph.component';
+import { ContagemTempoConclusaoSeguradoComponent } from './contagem-tempo-conclusao-segurado/contagem-tempo-conclusao-segurado.component';
+import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-conclusao-exportar-rgps/contagem-tempo-conclusao-exportar-rgps.component';
 
 
 
@@ -24,6 +26,6 @@ import { ContagemTempoConclusaoGraphComponent } from './contagem-tempo-conclusao
     SmartadminDatatableModule,
     contagemTempoResultadosRouting
   ],
-  declarations: [ContagemTempoResultadosComponent, ContagemTempoConclusaoComponent, ContagemTempoConclusaoPeriodosComponent, ContagemTempoConclusaoGraphComponent]
+  declarations: [ContagemTempoResultadosComponent, ContagemTempoConclusaoComponent, ContagemTempoConclusaoPeriodosComponent, ContagemTempoConclusaoGraphComponent, ContagemTempoConclusaoSeguradoComponent, ContagemTempoConclusaoExportarRgpsComponent]
 })
 export class ContagemTempoResultadosModule { }

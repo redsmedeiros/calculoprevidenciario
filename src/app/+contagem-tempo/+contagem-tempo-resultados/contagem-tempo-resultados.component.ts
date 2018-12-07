@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -10,9 +10,10 @@ import swal from 'sweetalert2';
 import { SeguradoContagemTempo as SeguradoModel } from './../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo as CalculoModel } from './../+contagem-tempo-calculos/CalculoContagemTempo.model';
 import { PeriodosContagemTempo } from './../+contagem-tempo-periodos/PeriodosContagemTempo.model';
+import { PeriodosContagemTempoService } from './../+contagem-tempo-periodos/PeriodosContagemTempo.service';
+
 import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { CalculoContagemTempoService } from '../+contagem-tempo-calculos/CalculoContagemTempo.service';
-import { PeriodosContagemTempoService } from './../+contagem-tempo-periodos/PeriodosContagemTempo.service';
 
 @FadeInTop()
 @Component({
@@ -25,6 +26,7 @@ import { PeriodosContagemTempoService } from './../+contagem-tempo-periodos/Peri
 })
 export class ContagemTempoResultadosComponent implements OnInit {
 
+
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public isUpdating = false;
   public mostrarBotaoRealizarCalculos = true;
@@ -36,6 +38,9 @@ export class ContagemTempoResultadosComponent implements OnInit {
   public periodo: any = {};
   public periodosList = [];
 
+  public lastdateNascimento = moment.duration();
+
+  public getPeriodosList = false;
 
   public data_inicio = '';
   public data_termino = '';
@@ -51,7 +56,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoContagemTempoService: CalculoContagemTempoService,
-    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
+  //  protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected errors: ErrorService
   ) {
   }
@@ -59,8 +64,9 @@ export class ContagemTempoResultadosComponent implements OnInit {
   ngOnInit() {
     this.periodosList = [];
     this.isUpdating = true;
+    this.getPeriodosList = true;
     this.updateTabelasView();
-   // this.updateTabelaPeriodosView();
+    // this.updateTabelaPeriodosView();
   }
 
   updateTabelasView() {
@@ -72,11 +78,12 @@ export class ContagemTempoResultadosComponent implements OnInit {
         this.seguradoView(segurado);
       });
 
-      this.CalculoContagemTempoService.find(this.idsCalculos[0])
+    this.CalculoContagemTempoService.find(this.idsCalculos[0])
       .then(calculo => {
         this.calculoSetView(calculo);
         this.isUpdating = false;
       });
+
   }
 
   // updateTabelaPeriodosView() {
@@ -85,14 +92,19 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
   //   this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos[0])
   //     .then((periodosContribuicao: PeriodosContagemTempo[]) => {
-  //       this.periodosList = [];
-  //       for (const periodo of periodosContribuicao) {
-  //         this.updateDatatablePeriodos(periodo);
-  //       }
-
-  //       this.isUpdating = false;
+  //       this.periodosList = periodosContribuicao;
   //     });
   // }
+
+  reciverFeedback(rstPeriodos) {
+    this.periodosList = rstPeriodos;
+    this.getPeriodosList = false;
+  }
+
+
+  reciverFeedbackLastdate(lastdate) {
+    this.lastdateNascimento.add( lastdate.asDays() , 'days');
+  }
 
   calculoSetView(calculo) {
     calculo.created_at = this.formatReceivedDate(calculo.created_at);
@@ -172,54 +184,15 @@ export class ContagemTempoResultadosComponent implements OnInit {
     this.fator_condicao_especial = this.formatFatorPost(this.fator_condicao_especial);
   }
 
+
   formatReceivedDate(inputDate) {
-
-    let date = new Date(inputDate);
-    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
-    if (!isNaN(date.getTime())) {
-      // Months use 0 index.
-      return ('0' + (date.getDate())).slice(-2) + '/' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-        date.getFullYear();
-    }
-    return '';
-
+    let date = moment(inputDate, 'YYYY-MM-DD');
+    return date.format('DD/MM/YYYY');
   }
 
   formatPostDataDate(inputDate) {
-
-    let date = new Date(inputDate);
-    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
-    if (!isNaN(date.getTime())) {
-      // Months use 0 index.
-      return date.getFullYear() + '-' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-        ('0' + (date.getDate())).slice(-2);
-    }
-    return '';
-
-  }
-
-
-  editSegurado() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-      this.route.snapshot.params['id_segurado'] + '/editar?last=resultados&calc=' + this.idsCalculos[0];
-  }
-
-  returnListaSegurados() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
-  }
-
-
-  editCalculo() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar?last=resultados';
-  }
-
-  returnListaCalculos() {
-
-    window.location.href = '#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'];
+    let date = moment(inputDate, 'DD/MM/YYYY');
+    return date.format('YYYY-MM-DD');
   }
 
   returnListaPeriodos() {
