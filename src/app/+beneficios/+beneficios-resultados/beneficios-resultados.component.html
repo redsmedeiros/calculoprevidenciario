@@ -414,9 +414,15 @@
                     <th>Competência</th>
                     <th>Indice de Reajuste de Valores Devidos</th>
                     <th>Benefício Devido Tetos</th>
+                    <th *ngIf="debugMode">Benefício Devido Tetos Sem Limites</th>
+                    <th *ngIf="debugMode">Benefício Devido Tetos Após Revisao  Sem limites</th>
+                    <th *ngIf="debugMode">Benefício Devido Tetos Após Revisao</th>
                     <!-- <th>Benefício Devido</th> -->
                     <th>Indice de Reajuste de Valores Recebidos</th>
                     <th>Benefício Recebido Tetos</th>
+                    <th *ngIf="debugMode">Benefício Recebido Tetos Sem Limites</th>
+                    <th *ngIf="debugMode">Benefício Recebido Tetos Após Revisao  Sem limites</th>
+                    <th *ngIf="debugMode">Benefício Recebido Tetos Após Revisao</th>
                     <!-- <th>Benefício Recebido</th> -->
                     <th>Diferença Mensal Tetos</th>
                     <!-- <th>Diferença Mensal</th> -->
@@ -429,6 +435,7 @@
                     <!-- <th>Diferença Corrigida + Juros</th> -->
                     <th>Diferença Corrigida + Juros Tetos</th>
                     <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários Tetos</th>
+                    <th *ngIf="debugMode">Dias proporcionais</th>
                   </tr>
                 </thead>
               </sa-datatable>
