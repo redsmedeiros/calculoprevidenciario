@@ -891,7 +891,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido');
     }
     this.beneficioRecebidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioRecebidoAposRevisao, dataCorrente, dataPedidoBeneficio, 'Recebido');
-    line.beneficio_recebido_apos_revisao = this.beneficioRecebidoAposRevisao;
+    line.beneficio_recebido_apos_revisao = this.formatMoney(this.beneficioRecebidoAposRevisao);
     this.ultimoBeneficioRecebidoAntesProporcionalidade = beneficioRecebidoAjustado;
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
