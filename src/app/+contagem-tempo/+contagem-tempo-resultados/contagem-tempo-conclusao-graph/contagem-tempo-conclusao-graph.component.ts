@@ -16,61 +16,64 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
   public objYkeys = [];
   public objLabels = [];
 
-  @Input() public periodosList: any;
+  @Input() public periodosList = [];
 
   constructor() { }
 
   ngOnInit() {
+
+
     this.getGraphPeriodos();
+
+
   }
 
   private getGraphPeriodos() {
 
-    // this.createGrafData();
-    this.defineInicioFim();
+    if (this.periodosList.length > 0) {
 
-    // console.log(this.limitGraph);
+      this.defineInicioFim();
 
-    this.createGrafData();
+      this.createGrafData();
 
-    this.createLabel();
-
-
-    this.optionsGraph = {
-      xkey: 'period',
-      ykeys: this.objYkeys,
-      labels: this.objLabels,
-      smooth: false,
-      ymin: 1,
-      xLabelFormat: function (d) { return  d.getFullYear(); },
-      yLabelFormat: function (d) { return ' '; }, // (d > 0) ? 'Vinculo: ' + d : ''
-     // xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
-      // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
-    };
+      this.createLabel();
 
 
-    // this.dataGraph = [
-    //   { 'period': '2012-10-01', 'licensed': 10 },
-    //   { 'period': '2012-09-30', 'sorned': null },
-    //   { 'period': '2012-09-29', 'sorned': 5 },
-    //   { 'period': '2012-09-20', 'licensed': 10, 'sorned': 5 },
-    //   { 'period': '2012-09-19', 'licensed': null, 'sorned': null },
-    //   { 'period': '2012-09-18', 'licensed': null, 'other': 5 },
-    //   { 'period': '2012-09-17', 'sorned': 5 },
-    //   { 'period': '2012-09-16', 'sorned': 5 },
-    //   { 'period': '2012-09-15', 'licensed': 10, 'sorned': 5 },
-    //   { 'period': '2012-09-10', 'licensed': 10 }
-    // ];
-
-    // this.optionsGraph = {
-    //   xkey: 'period',
-    //   ykeys: ['licensed', 'sorned', 'other'],
-    //   labels: ['Licensed', 'SORN', 'Other'],
-    //   xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
-    //   // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
-    // };
+      this.optionsGraph = {
+        xkey: 'period',
+        ykeys: this.objYkeys,
+        labels: this.objLabels,
+        smooth: false,
+        ymin: 1,
+        xLabelFormat: function (d) { return d.getFullYear(); },
+        yLabelFormat: function (d) { return ' '; }, // (d > 0) ? 'Vinculo: ' + d : ''
+        // xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
+        // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
+      };
 
 
+      // this.dataGraph = [
+      //   { 'period': '2012-10-01', 'licensed': 10 },
+      //   { 'period': '2012-09-30', 'sorned': null },
+      //   { 'period': '2012-09-29', 'sorned': 5 },
+      //   { 'period': '2012-09-20', 'licensed': 10, 'sorned': 5 },
+      //   { 'period': '2012-09-19', 'licensed': null, 'sorned': null },
+      //   { 'period': '2012-09-18', 'licensed': null, 'other': 5 },
+      //   { 'period': '2012-09-17', 'sorned': 5 },
+      //   { 'period': '2012-09-16', 'sorned': 5 },
+      //   { 'period': '2012-09-15', 'licensed': 10, 'sorned': 5 },
+      //   { 'period': '2012-09-10', 'licensed': 10 }
+      // ];
+
+      // this.optionsGraph = {
+      //   xkey: 'period',
+      //   ykeys: ['licensed', 'sorned', 'other'],
+      //   labels: ['Licensed', 'SORN', 'Other'],
+      //   xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
+      //   // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
+      // };
+
+    }
     this.isUpdateGraph = false;
   }
 
@@ -116,13 +119,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       inicioVinculo = this.toMoment(vinculo.data_inicio);
       fimVinculo = this.toMoment(vinculo.data_termino);
 
-      // console.log(inicioVinculo);
-      // console.log(fimVinculo);
-      // console.log((auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo));
-
-
       if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-        //  fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
         obj[vinculo.empresa] = vinculo.vinculo;
       }
 
@@ -154,71 +151,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
     } while (auxiliarDate <= fimContador);
 
-
-
-    // console.log(this.dataGraph);
-    // console.log(this.objYkeys);
-    // console.log(this.objLabels);
-
   }
-
-
-  // private defineObjLineGraph(){
-
-  // }
-
-
-  // private createDataGraph(graphArea) {
-
-  //   let auxiliarDate = graphArea.inicio;
-  //   let count = moment.duration();
-
-  //   console.log(graphArea);
-  //   console.log(count);
-
-
-  //   let vinculos = [];
-  //   do {
-
-  //     // console.log(auxiliarDate)
-
-  //     // console.log(moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY' ).add(1, 'M'));
-
-  //     auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY' ).add(1, 'd');
-
-  //     // console.log(moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY' ).add(1, 'y'));
-
-  //    // console.log(auxiliarDate.add(1, 'days'));
-  //    // auxiliarDate =  auxiliarDate.add(1, 'days');
-  //     // console.log(moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY' ).add(1, 'M'));
-  //     // period = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY' ).add(1, 'M');
-
-  //     count.add(moment.duration(1, 'd')).days();
-
-  //     vinculos.push(auxiliarDate);
-
-  //   } while (auxiliarDate <= graphArea.fim);
-
-  //   // console.log(vinculos);
-  //   // console.log(count);
-
-  // }
-
-
-
-  // private createGrafData() {
-
-  //   // let graphData = [];
-
-  //   let graphArea = this.defineInicioFim();
-
-  //   this.dataGraph = this.createDataGraph(graphArea);
-  //   this.isUpdateGraph = false;
-  //   // console.log(graphArea);
-
-
-
-  // }
 
 
 

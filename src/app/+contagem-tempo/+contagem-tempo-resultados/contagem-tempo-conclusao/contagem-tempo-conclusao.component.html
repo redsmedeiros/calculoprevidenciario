@@ -1,10 +1,10 @@
 <table *ngIf="!isUpdateTotal" class="table table-striped table-bordered no-margin">
   <thead>
     <tr>
-      <th rowspan="2" class="text-center"><span data-placement="bottom" tooltip="CONSIDERANDO FATORES MULTIPLICADORES">Conclusões</span></th>
+      <th rowspan="2" class="text-center">Conclusões <i class="fa fa-question-circle fa-lg text-info" data-placement="bottom" tooltip="CONSIDERANDO FATORES MULTIPLICADORES"></i></th>
       <th colspan="3" class="text-center">Tempo de Contribuíção</th>
       <th rowspan="2" class="text-center">Carência </th>
-      <th rowspan="2" class="text-center">Exportar </th>
+      <th rowspan="2" class="text-center not-print" >Exportar para RMI do RGPS <i class="fa fa-question-circle fa-lg text-info" data-placement="bottom" tooltip="Ao clicar no botão exportar você será direcionado para calculo de RMI do RGPS."></i></th>
     </tr>
     <tr>
       <th class="text-center">Anos</th>
@@ -19,16 +19,11 @@
       <td class="text-center">{{ tempoTotalConFator88.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoTotalConFator88.days()) | number : '1.0-0' }}</td>
       <td class="text-center">{{ carencia88 }}</td>
-      <td class="text-center no-padding">
-         <app-contagem-tempo-conclusao-exportar-rgps  
-                    [calculo]="calculo" 
-                    [segurado]="segurado"
-                    [dataExportacao]="05/10/1988"
-                    [carencia]="carencia88"
-                    [totalAnos]="tempoTotalConFator88.years()"
-                    [totalMeses]="tempoTotalConFator88.months()"
-                    [totalDias]=" this.Math.ceil(tempoTotalConFator88.days())"
-        ></app-contagem-tempo-conclusao-exportar-rgps>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator88.asDays() > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'05/10/1988'"
+            [dadosParaExportar]="this.dadosParaExportar" [label]="'88'"></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
       </td>
     </tr>
     <tr>
@@ -37,35 +32,24 @@
       <td class="text-center">{{ tempoTotalConFator91.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoTotalConFator91.days()) | number : '1.0-0' }}</td>
       <td class="text-center">{{ carencia91 }}</td>
-      <td class="text-center no-padding">
-          <app-contagem-tempo-conclusao-exportar-rgps  
-                    [calculo]="calculo" 
-                    [segurado]="segurado"
-                    [dataExportacao]="04/04/1991"
-                    [carencia]="carencia91"
-                    [totalAnos]="tempoTotalConFator91.years()"
-                    [totalMeses]="tempoTotalConFator91.months()"
-                    [totalDias]=" this.Math.ceil(tempoTotalConFator91.days())"
-        ></app-contagem-tempo-conclusao-exportar-rgps>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator91.asDays() > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'04/04/1991'"
+            [dadosParaExportar]="this.dadosParaExportar" [label]="'91'"></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
       </td>
     </tr>
-
     <tr>
       <td>Tempo de contribuição até a Emenda nº 20/98 - (16/12/1998)</td>
       <td class="text-center">{{ tempoTotalConFator98.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator98.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoTotalConFator98.days()) | number : '1.0-0' }}</td>
       <td class="text-center">{{ carencia98 }}</td>
-      <td class="text-center no-padding">
-          <app-contagem-tempo-conclusao-exportar-rgps  
-                [calculo]="calculo" 
-                [segurado]="segurado"
-                [dataExportacao]="16/12/1998"
-                [carencia]="carencia98"
-                [totalAnos]="tempoTotalConFator98.years()"
-                [totalMeses]="tempoTotalConFator98.months()"
-                [totalDias]=" this.Math.ceil(tempoTotalConFator98.days())"
-          ></app-contagem-tempo-conclusao-exportar-rgps>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator98.asDays() > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'16/12/1998'"
+            [dadosParaExportar]="this.dadosParaExportar" [label]="'98'"></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
       </td>
     </tr>
     <tr>
@@ -74,16 +58,11 @@
       <td class="text-center">{{ tempoTotalConFator99.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoTotalConFator99.days()) | number : '1.0-0' }}</td>
       <td class="text-center">{{ carencia99 }}</td>
-      <td class="text-center no-padding">
-          <app-contagem-tempo-conclusao-exportar-rgps  
-              [calculo]="calculo" 
-              [segurado]="segurado"
-              [dataExportacao]="29/11/1999"
-              [carencia]="carencia99"
-              [totalAnos]="tempoTotalConFator99.years()"
-              [totalMeses]="tempoTotalConFator99.months()"
-              [totalDias]=" this.Math.ceil(tempoTotalConFator99.days())"
-          ></app-contagem-tempo-conclusao-exportar-rgps>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator99.asDays() > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'29/11/1999'"
+            [dadosParaExportar]="this.dadosParaExportar" [label]="'99'"></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
       </td>
     </tr>
     <tr>
@@ -91,17 +70,12 @@
       <td class="text-center">{{ tempoTotalConFator.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoTotalConFator.days()) | number : '1.0-0' }}</td>
-        <td class="text-center">{{ carencia }}</td>
-      <td class="text-center no-padding">
-          <app-contagem-tempo-conclusao-exportar-rgps  
-          [calculo]="calculo" 
-          [segurado]="segurado"
-          [dataExportacao]="limitesDoVinculo.fim"
-          [carencia]="carencia"
-          [totalAnos]="tempoTotalConFator.years()"
-          [totalMeses]="tempoTotalConFator.months()"
-          [totalDias]=" this.Math.ceil(tempoTotalConFator.days())"
-      ></app-contagem-tempo-conclusao-exportar-rgps>
+      <td class="text-center">{{ carencia }}</td>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator.asDays() > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="limitesDoVinculo.fim.format('DD/MM/YYYY')"
+            [dadosParaExportar]="this.dadosParaExportar" [label]="''"></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
       </td>
     </tr>
     <tr>
@@ -110,7 +84,6 @@
       <td class="text-center">{{ tempoDePedApProp.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(tempoDePedApProp.days()) | number : '1.0-0' }}</td>
       <td rowspan="6" colspan="2"></td>
-      <!-- <td rowspan="6"></td> -->
     </tr>
     <tr>
       <td>Tempo Mínimo para Aposentadoria Proporcional com Pedágio</td>

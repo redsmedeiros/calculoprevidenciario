@@ -17,7 +17,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
   @Input() segurado;
   @Input() calculo;
-  @Input() public periodosList: any;
+  @Input() public periodosList = [];
 
   @Output() limitesTempoTotal = new EventEmitter();
 
@@ -75,9 +75,12 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
   ngOnInit() {
     this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
-    this.createConclusaoFinal();
-  }
 
+    if (this.periodosList.length > 0) {
+      this.createConclusaoFinal();
+    }
+
+  }
 
 
   private defineInicioFim() {
@@ -495,7 +498,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   }
 
   public setExportRGPSobj(tempo, carencia) {
-    return { years: tempo.years(), months: tempo.months(), days: tempo.days(), carencia: carencia }
+    return { years: tempo.years(), months: tempo.months(), days: tempo.days(), carencia: carencia, totalDias: tempo.asDays()}
   }
 
 
@@ -508,7 +511,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       this.dadosParaExportar['total' + label] = objExport;
     });
 
-    console.log(this.dadosParaExportar);
+    // console.log(this.dadosParaExportar);
 
     // this.dadosParaExportar = {
     //   total_dias: this.Math.round(this.tempoTotalConFator.asDays());

@@ -38,7 +38,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     this.updateTabelaPeriodosView();
   }
 
-
   updateTabelaPeriodosView() {
 
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
@@ -46,17 +45,19 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos[0])
       .then((periodosContribuicao: PeriodosContagemTempo[]) => {
         this.periodosListInicial = [];
+        if (periodosContribuicao.length > 0) {
 
-        for (const periodo of periodosContribuicao) {
-          this.updateDatatablePeriodos(periodo);
+          for (const periodo of periodosContribuicao) {
+            this.updateDatatablePeriodos(periodo);
+          }
+
+          for (const periodo of this.periodosListInicial) {
+            this.periodosConcomitantes(periodo);
+          }
+
+          this.periodosList = this.periodosListInicial;
+          this.periodosListRst.emit(this.periodosList);
         }
-
-        for (const periodo of this.periodosListInicial) {
-          this.periodosConcomitantes(periodo);
-        }
-
-        this.periodosList = this.periodosListInicial;
-        this.periodosListRst.emit(this.periodosList);
         this.isUpdating = false;
       });
   }
@@ -315,7 +316,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   public dateDiffPeriodos(inicio, fim, fator) {
 
-   // const tempoTotal = this.dataDiff(inicio, fim, Number(fator));
+    // const tempoTotal = this.dataDiff(inicio, fim, Number(fator));
 
     const tempoTotal = this.dataDiffDateToDate(inicio, fim, Number(fator));
 

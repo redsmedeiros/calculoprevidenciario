@@ -5,7 +5,7 @@
     <span class="widget-icon">
       <i class="fa fa-edit"></i>
     </span>
-    <h2>Dados do segurado</h2>
+    <h2><strong>Dados do segurado</strong></h2>
   </header>
   <!-- widget div-->
   <div *ngIf="!isUpdating">
@@ -50,7 +50,7 @@
         </tbody>
       </table>
     </div>
-    <div class="form-actions no-padding no-margin">
+    <div class="form-actions no-padding no-margin not-print">
       <div class="row">
         <div class="pull-left">
           <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info " data-placement="bottom"

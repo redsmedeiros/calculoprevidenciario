@@ -1,17 +1,22 @@
 <div id="content">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-
+      <div class="row">
+          <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="well">
+              <h3 class="no-margin">
+                <span class="semi-bold">Cálculo de contagem de Tempo</span>
+              </h3>
+            </div>
+          </article>
+        </div>
     <!-- row -->
     <div class="row">
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article id='article-segurado' class="col-sm-12 col-md-12 col-lg-12" >
         <app-contagem-tempo-conclusao-segurado [calculo]="calculo" [segurado]="segurado" [isUpdating]=isUpdating
           [lastdateNascimento]=lastdateNascimento></app-contagem-tempo-conclusao-segurado>
       </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article  id='article-periodos' class="col-sm-12 col-md-12 col-lg-12">
         <app-contagem-tempo-conclusao-periodos (periodosListRst)="reciverFeedback($event)"></app-contagem-tempo-conclusao-periodos>
         <div class="well">
           <p>
@@ -25,44 +30,70 @@
         </div>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
+      <article id='article-grafico' class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
           [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-bar-chart-o"></i>
             </span>
-            <h2>Gráfico</h2>
+            <h2><strong>Gráfico</strong></h2>
           </header>
           <div *ngIf="!getPeriodosList">
             <app-contagem-tempo-conclusao-graph [periodosList]="periodosList"></app-contagem-tempo-conclusao-graph>
           </div>
           <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
-              <i class="fa fa-gear fa-3x fa-spin"></i>
-            </div>
+            <i class="fa fa-gear fa-3x fa-spin"></i>
+          </div>
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
+      <article id='article-conclusao' class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
           [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-clock-o"></i>
             </span>
-            <h2>Conclusões</h2>
+            <h2><strong>Conclusões</strong></h2>
           </header>
           <div *ngIf="!getPeriodosList">
             <div class="widget-body no-padding heigth-auto">
               <app-contagem-tempo-conclusao [calculo]="calculo" [segurado]="segurado" [periodosList]="periodosList"
-                (limitesTempoTotal)="reciverFeedbackLastdate($event)" ></app-contagem-tempo-conclusao>
+                (limitesTempoTotal)="reciverFeedbackLastdate($event)"></app-contagem-tempo-conclusao>
             </div>
           </div>
           <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
             <i class="fa fa-gear fa-3x fa-spin"></i>
-          </div> 
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-list-ul"></i>
+            </span>
+            <h2><strong>Opções</strong></h2>
+          </header>
+          <div *ngIf="!getPeriodosList">
+            <div class="widget-body no-padding heigth-auto">
+              <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info no-margin btn-block" id="btn-imprimir-pagina"
+                data-placement="top" tooltip="Clique aqui para imprimir">
+                <span class="btn-label">
+                  <i class="fa fa-print"></i>
+                </span> Imprimir
+              </button>
+               <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"
+                data-placement="top" tooltip="Clique para exportar PDF">
+                <span class="btn-label">
+                  <i class="fa fa-file-pdf-o"></i>
+                </span> Exportar
+              </button> -->
+            </div>
+          </div>
         </sa-widget>
       </article>
     </div>

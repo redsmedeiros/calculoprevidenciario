@@ -7,6 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 
+
 import { SeguradoContagemTempo as SeguradoModel } from './../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo as CalculoModel } from './../+contagem-tempo-calculos/CalculoContagemTempo.model';
 import { PeriodosContagemTempo } from './../+contagem-tempo-periodos/PeriodosContagemTempo.model';
@@ -56,7 +57,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoContagemTempoService: CalculoContagemTempoService,
-  //  protected PeriodosContagemTempoService: PeriodosContagemTempoService,
+    //  protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected errors: ErrorService
   ) {
   }
@@ -103,7 +104,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
 
   reciverFeedbackLastdate(lastdate) {
-    this.lastdateNascimento.add( lastdate.asDays() , 'days');
+    this.lastdateNascimento.add(lastdate.asDays(), 'days');
   }
 
   calculoSetView(calculo) {
@@ -138,6 +139,67 @@ export class ContagemTempoResultadosComponent implements OnInit {
   //   }
 
   // }
+
+
+
+  imprimirPagina() {
+    const segurado = document.getElementById('article-segurado').innerHTML;
+    const periodos = document.getElementById('article-periodos').innerHTML;
+    const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
+    const footerText = `IEPREV - Instituto de Estudos Previdenciários -
+                        Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 
+                        | CEP: 30140-061 Lourdes - Belo Horizonte - MG`;
+
+    const printContents = segurado + periodos + conclusaoFinal;
+
+    const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-skins.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-rtl.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-angular-next.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css">
+                <style>i.fa, .not-print{ display: none; } div,p,td{font-size:12px !important;}</style>`;
+
+    const popupWin = window.open('', '_blank', 'width=640,height=480');
+
+    popupWin.document.open();
+    popupWin.document.write(`<html><head>${css}</head>
+                                  <body onload="window.print()">
+                                   <article>${printContents}</article>
+                                   <footer>${footerText}</footer>
+                            </body></html>`);
+    popupWin.document.close();
+  }
+
+  // savePDF() {
+
+
+  //   const segurado = document.getElementById('article-segurado').innerHTML;
+  //   const periodos = document.getElementById('article-periodos').innerHTML;
+  //   const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
+
+
+  //   const printContents = segurado.trim() + periodos.trim() + conclusaoFinal.trim();
+
+  //   const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/font-awesome.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-skins.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-rtl.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-angular-next.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
+  //               <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css">
+  //               <style>i.fa, .not-print{ display: none; }</style>`;
+
+  //  const page = '<html><head>' + css + '</head><body >' + printContents + '</body></html>';
+  
+  
+
+  // }
+
 
 
 
