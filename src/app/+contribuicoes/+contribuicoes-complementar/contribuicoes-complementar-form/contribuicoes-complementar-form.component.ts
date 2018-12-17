@@ -140,7 +140,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		if(dateContribuicaoAte < this.data94){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a 06/1994"]});
   		}
-  		if(dateContribuicaoAte <= dateContribuicaoDe){
+  		if(dateContribuicaoAte < dateContribuicaoDe){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a data inicial"]});
   		}
   	}
