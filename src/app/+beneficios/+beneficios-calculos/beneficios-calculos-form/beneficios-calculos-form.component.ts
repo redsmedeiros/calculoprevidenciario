@@ -442,6 +442,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     e.preventDefault();
     this.validateInputs();
     if(this.errors.empty()){
+        if(!this.chkPrecedidoRecebidos){
+          this.dibAnteriorValoresRecebidos = "";
+          console.log('entrou')
+        }
+        if(!this.chkDibAnterior){
+          this.dibAnteriorValoresDevidos = "";
+          this.formData.previa_data_pedido_beneficio_esperado = "";
+          console.log('entrou')
+        }
         // Data inicial do benefício DIB de valores devidos
         // OU
         // Data inicial do benefício DIB de valores recebidos
@@ -659,7 +668,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.taxaAjusteMaximaConcedida = this.formData.taxa_ajuste_maxima_concedida.toString().replace('.',',');
     if (this.formData.taxa_ajuste_maxima_esperada != null)
       this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.',',');
-
+    //CheckBox 'Desmarque para não aplicar os juros da poupança'
+    this.chkBoxTaxaSelic = this.formData.aplicar_juros_poupanca;
     this.chkUseSameDib = this.formData.usar_mesma_dib;
 
   	if (this.chkNotGranted || this.chkUseSameDib) {

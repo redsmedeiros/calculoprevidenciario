@@ -340,9 +340,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaCorrecaoMonetaria += correcaoMonetaria;
         this.somaDiferencaCorrigida += diferencaCorrigida;
         this.somaHonorarios += honorarios;
+        this.somaJuros += valorJuros;
       }
-
-      this.somaJuros += valorJuros;
+      
       if(!this.proporcionalidadeUltimaLinha){
         this.ultimaDiferencaMensal = diferencaMensal;
       }
@@ -352,17 +352,38 @@ export class BeneficiosResultadosComponent implements OnInit {
         //Adicionar linha de abono
 
         let beneficioRecebidoAbono;
+        let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
         if(this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido){
-          beneficioRecebidoAbono = this.formatMoney(0.0);
+          beneficioRecebidoAbono = 0.0;
         }else{
-          beneficioRecebidoAbono = this.formatMoney(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
+          beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
         }
+
+        if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+          diferencaMensal = beneficioDevidoAbono;
+        }else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+          diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+        }else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+          diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+        }
+
+        diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+        valorJuros = diferencaCorrigida * juros;
+        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+
 
         line = {
               ...line,
               competencia: 'abono - ' + stringCompetencia,
-              beneficio_devido: this.formatMoney(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos),
-              beneficio_recebido: beneficioRecebidoAbono,
+              beneficio_devido: this.formatMoney(beneficioDevidoAbono),
+              beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
+              diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$',true),
+              diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
+              juros: this.formatPercent(juros, 4),
+              valor_juros: this.formatMoney(valorJuros, 'R$', true),
+              diferenca_juros: diferencaCorrigidaJuros,
+              honorarios: this.formatMoney(honorarios, 'R$', true)
         }
         
         if(this.isTetos){
@@ -387,9 +408,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.somaCorrecaoMonetaria += correcaoMonetaria;
           this.somaDiferencaCorrigida += diferencaCorrigida;
           this.somaHonorarios += honorarios;
+          this.somaJuros += valorJuros;
         }
         
-        this.somaJuros += valorJuros;
       }
     }
 
