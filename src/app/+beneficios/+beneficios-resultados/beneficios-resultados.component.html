@@ -40,6 +40,49 @@
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
+              <div id="printableSegurado" hidden>
+                <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
+                <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
+                <table class="table table-bordered table-hover">
+                  <caption><h2>Dados do Segurado</h2></caption>
+                  <tr>
+                    <td width="50%">
+                      <b>Nome:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.nome}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b *ngIf="segurado.id_documento==1">PIS:</b>  
+                      <b *ngIf="segurado.id_documento==2">PASEP:</b>
+                      <b *ngIf="segurado.id_documento==3">CPF:</b>  
+                      <b *ngIf="segurado.id_documento==4">NIT:</b>  
+                      <b *ngIf="segurado.id_documento==5">RG:</b>   
+                    </td>
+                    <td width="50%">
+                      {{segurado.numero_documento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Data de nascimento:</b>
+                    </td>
+                    <td width="50%">
+                       {{segurado.data_nascimento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Sexo:</b>
+                    </td>
+                    <td width="50%">
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
@@ -60,7 +103,7 @@
 
 
 
-
+      <div id="infoCalculo">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -96,9 +139,6 @@
           </div>
         </sa-widget>
       </article>
-
-
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
@@ -142,7 +182,6 @@
         </sa-widget>
       </article>
 
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -185,9 +224,6 @@
         </sa-widget>
       </article>
 
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -223,8 +259,6 @@
           </div>
         </sa-widget>
       </article>
-
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
@@ -324,7 +358,7 @@
           </div>
         </sa-widget>
       </article>
-
+    </div>
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false"
@@ -367,7 +401,7 @@
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" id="resultadoCalculo">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
