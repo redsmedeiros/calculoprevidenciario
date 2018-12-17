@@ -141,6 +141,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaDiferencaMensal = 0.0;
   public somaCorrecaoMonetaria = 0.0;
   public somaDiferencaCorrigida = 0.0;
+  public somaDiferencaCorrigidaJuros = 0.0;
   public somaJuros = 0.0;
   public somaDevidaJudicialmente = 0.0;
   public somaVincendas = 0.0;
@@ -308,7 +309,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       diferencaCorrigida = diferencaMensal * correcaoMonetaria;
       valorJuros = diferencaCorrigida * juros;
-      diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+      let valorNumericoDiferencaCorrigidaJurosObj:any = {};
+      diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao){
@@ -339,6 +341,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaDiferencaMensal += diferencaMensal;
         this.somaCorrecaoMonetaria += correcaoMonetaria;
         this.somaDiferencaCorrigida += diferencaCorrigida;
+        this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
         this.somaHonorarios += honorarios;
         this.somaJuros += valorJuros;
       }
@@ -369,7 +372,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         diferencaCorrigida = diferencaMensal * correcaoMonetaria;
         valorJuros = diferencaCorrigida * juros;
-        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
 
 
@@ -409,6 +412,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.somaDiferencaCorrigida += diferencaCorrigida;
           this.somaHonorarios += honorarios;
           this.somaJuros += valorJuros;
+          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
         }
         
       }
@@ -932,12 +936,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       //this.proporcionalidadeUltimaLinha = true;
     }
 
-    if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
-      if(parseFloat(beneficioRecebidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
-        beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
-        this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
-      }
-    }
+    // if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
+    //   if(parseFloat(beneficioRecebidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
+    //     beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+    //     this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+    //   }
+    // }
 
     let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
     if(indiceSuperior){
@@ -1136,7 +1140,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   //Seção 3.9
-  getDiferencaCorrigidaJuros(dataCorrente, juros, diferencaCorrigida) {
+  getDiferencaCorrigidaJuros(dataCorrente, juros, diferencaCorrigida, resultObj) {
     //Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros. 
     //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.  
     //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
@@ -1149,9 +1153,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(this.isTetos){
       diferencaCorrigidaJuros *= this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
     }
-
+    resultObj.numeric = diferencaCorrigidaJuros;
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
-    if(diferencaEmAnos > 5 && this.considerarPrescricao){
+    if(diferencaEmAnos >= 5 && this.considerarPrescricao){
       diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
@@ -1273,7 +1277,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 4.4
   calcularAcordoJudicial() {
-    let totalDevido = this.somaDiferencaCorrigida;
+    // let totalDevido = this.somaDiferencaCorrigida;
+    let totalDevido = this.somaDiferencaCorrigidaJuros;
     let percentualAcordo = parseFloat(this.calculo.acordo_pedido);
     // Acordo percentual máximo 0.9;
     if (percentualAcordo > 0.9){
