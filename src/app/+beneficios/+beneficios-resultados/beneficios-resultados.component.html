@@ -314,45 +314,73 @@
 
               <ul class="list-unstyled" *ngIf="!isTetos">
                 <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
+                  <b>Soma dos honorários a receber:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span>
+                </li>
                 <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span></li>
+                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span>
+                </li>
                 <li *ngIf="valorAcordo != 0">
-                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(valorAcordo)}}"> {{formatMoney(valorAcordo)}}</span></li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(valorAcordo)}}"> {{formatMoney(valorAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span></li>
+                  <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Diferença Mensal:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span></li>
+                  <b>Soma Total da Diferença Mensal:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span></li>
+                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Diferença Corrigida:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
+                  <b>Soma Total da Diferença Corrigida:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total do Valor dos Juros:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span></li>
+                  <b>Soma Total do Valor dos Juros:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span>
+                </li>
                 <li>
-                  <b>Soma devida Judicialmente:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
+                  <b>Soma devida Judicialmente:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span>
+                </li>
                 <li>
-                  <b>Soma das vincendas:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span></li>
+                  <b>Soma das vincendas:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span>
+                </li>
                 <li>
-                  <b>Soma total devida ao segurado:</b><span class="{{tratarConclusao(somaTotalSegurado)}}"> {{formatMoney(somaTotalSegurado)}}</span></li>
+                  <b>Soma total devida ao segurado:</b><span class="{{tratarConclusao(somaTotalSegurado)}}"> {{formatMoney(somaTotalSegurado)}}</span>
+                </li>
               </ul>
               <ul class="list-unstyled" *ngIf="isTetos">
-                  <li>
-                  <b>Soma das vincendas Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas)}}</span></li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(ultimaRenda)}}</span></li>
+                  <b>Soma dos honorários a receber Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span>
+                </li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
-                <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
+                  <b>Desconto do Acordo Judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Subtotal:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
-                <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(descontoAcordo)}}</span></li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</span></li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span>
+                </li>
                 <li>
-                  <b>Soma total Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</span></li>
+                  <b>Soma Total da Diferença Mensal Tetos:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total da Diferença Corrigida Tetos:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total do Valor dos Juros Tetos:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span>
+                </li>
+                <li>
+                  <b>Soma devida Judicialmente Tetos:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span>
+                </li>
+                <li>
+                  <b>Soma das vincendas Tetos:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span>
+                </li>
+                <li>
+                  <b>Soma total devida ao segurado Tetos:</b><span class="{{tratarConclusao(somaVincendas+somaDiferencaCorrigida)}}"> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</span>
+                </li>
               </ul>
             </div>
           </div>

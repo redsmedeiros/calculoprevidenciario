@@ -419,7 +419,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade;
-    this.somaVincendas = this.calcularVincendas();
+    this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
     this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
     this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
     if(this.calculo.acordo_pedido != 0){
@@ -1291,7 +1291,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 4.6
   calcularVincendosTetos() {
-    let somaVincendosTetos = this.diferencaMensalTetos;
+    let somaVincendosTetos = this.ultimaRenda;
     let data = moment(this.calculo.data_citacao_reu);
     let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
     let maturidade = this.calculo.maturidade;
@@ -1317,10 +1317,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoeda = this.Moeda.getByDate(dateMes);
-          jurosVincendos += parseFloat(mesMoeda.juros_selic_70);
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70);
         }
       }
     }else if(data < this.dataJuros2009){
@@ -1334,10 +1333,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoeda = this.Moeda.getByDate(dateMes);
-          jurosVincendos += parseFloat(mesMoeda.juros_selic_70);
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70);
         }
       }
     }else{
@@ -1349,10 +1347,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosVincendos += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
         //jurosVincendos += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for(let mes in mesesEntreSelicDataCalculo){
+        for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
-          let mesMoeda = this.Moeda.getByDate(dateMes);
-          jurosVincendos += parseFloat(mesMoeda.juros_selic_70) / 100;
+          jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70) /100;
+          console.log(jurosVincendos)
         }
       }
     }
@@ -1360,7 +1358,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     if(chkboxBenefitNotGranted){
       somaVincendosTetos = (somaVincendosTetos * this.ultimaCorrecaoMonetaria) + (jurosVincendos * somaVincendosTetos);
     }
-
     if (maturidade != 0) {
       somaVincendosTetos = somaVincendosTetos * maturidade;
     }else{
