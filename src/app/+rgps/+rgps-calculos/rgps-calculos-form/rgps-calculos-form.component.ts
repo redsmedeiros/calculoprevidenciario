@@ -100,6 +100,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     }
 
+    this.checkImportContagemTempo();
+
   }
   public submit(e) {
     e.preventDefault();
@@ -132,16 +134,16 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
   resetForm() {
-    this.formData = {...CalculoModel.form};
+    this.formData = { ...CalculoModel.form };
     this.dataInicioBeneficio = '';
-    this.periodoInicioBeneficio  = '';
+    this.periodoInicioBeneficio = '';
     this.especieBeneficio = '';
 
-    this.primaria98anos  = '';
-    this.primaria98meses  = '';
+    this.primaria98anos = '';
+    this.primaria98meses = '';
     this.primaria98dias = '';
 
-    this.secundaria98anos  = undefined;
+    this.secundaria98anos = undefined;
     this.secundaria98meses = undefined;
     this.secundaria98dias = undefined;
 
@@ -333,29 +335,31 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.errors.clear('dataInicioBeneficio');
     this.periodoOptions = [];
 
-    if(moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')){
+    if (moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')) {
       this.posteriorMaio2013 = true;
-    }else{
+    } else {
       this.posteriorMaio2013 = false;
     }
     let dib = moment(this.dataInicioBeneficio, 'DD/MM/YYYY');
-    if(dib < moment('1988-10-05')){
+    if (dib < moment('1988-10-05')) {
       this.periodoOptions.push('Anterior a 05/10/1988');
-    }else if(dib >= moment('1988-10-05') && dib < moment('1991-04-05')){
+    } else if (dib >= moment('1988-10-05') && dib < moment('1991-04-05')) {
       this.periodoOptions.push('Anterior a 05/10/1988');
       this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
-    }else if(dib >= moment('1991-04-05') && dib <= moment('1998-12-15')){
+    } else if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
-    }else if(dib > moment('1998-12-15') && dib <= moment('1999-11-29')){
+    } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
-    }else if(dib > moment('1999-11-29')){
+    } else if (dib > moment('1999-11-29')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoOptions.push('A partir de 29/11/1999');
     }
     var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+
+
     // if (dateBeneficio < new Date('04/05/1991')) {
     //   this.periodoOptions.push('Anterior a 05/10/1988');
     // }
@@ -394,6 +398,80 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = false;
     }
   }
+
+
+
+  importContagemTempo() {
+
+    const exportDados = JSON.parse(sessionStorage.exportContagemTempo);
+
+    const periodos = exportDados.dadosParaExportar;
+
+    this.dataInicioBeneficio = exportDados.dib;
+
+    this.changePeriodoOptions();
+
+    const dib = moment(exportDados.dib, 'DD/MM/YYYY');
+
+    if (dib < moment('1988-10-05')) {
+
+      this.primaria98anos = periodos.total88.years;
+      this.primaria98meses = periodos.total88.months;
+      this.primaria98dias = periodos.total88.days;
+
+      this.periodoInicioBeneficio = 'Anterior a 05/10/1988';
+    
+    } else if (dib < moment('1999-11-29')) {
+
+      this.primaria98anos = periodos.total98.years;
+      this.primaria98meses = periodos.total98.months;
+      this.primaria98dias = periodos.total98.days;
+
+      this.primaria99anos = periodos.total99.years;
+      this.primaria99meses = periodos.total99.months;
+      this.primaria99dias = periodos.total99.days;
+
+      if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
+        this.periodoInicioBeneficio = 'Entre 05/04/1991 e 15/12/1998';
+      } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
+        this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
+      }
+
+    } else if (dib > moment('1999-11-29')) {
+
+      this.primariaAtualanos = periodos.total.years;
+      this.primariaAtualmeses = periodos.total.months;
+      this.primariaAtualdias = periodos.total.days;
+
+      this.primaria98anos = periodos.total91.years;
+      this.primaria98meses = periodos.total91.months;
+      this.primaria98dias = periodos.total91.days;
+
+      this.primaria99anos = periodos.total99.years;
+      this.primaria99meses = periodos.total99.months;
+      this.primaria99dias = periodos.total99.days;
+      this.periodoInicioBeneficio = 'A partir de 29/11/1999';
+      
+    } else {
+
+
+    }
+
+
+
+  }
+
+  checkImportContagemTempo() {
+    let exportContagemTempo = this.route.snapshot.queryParams;
+
+    if (exportContagemTempo.export && exportContagemTempo.export != undefined) {
+      this.resetForm();
+      this.importContagemTempo();
+    }
+
+  }
+
+
 
   changeGrupoDos12() {
     this.errors.clear('periodoInicioBeneficio');
@@ -458,43 +536,43 @@ export class RgpsCalculosFormComponent implements OnInit {
     return false;
   }
 
-  dateMask(rawValue){
-    if(rawValue == ''){
+  dateMask(rawValue) {
+    if (rawValue == '') {
       return [/[0-3]/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
     }
     let mask = [];
     mask.push(/[0-3]/);
 
-    if (rawValue[0] == 0){
+    if (rawValue[0] == 0) {
       mask.push(/[1-9]/);
-    }else if(rawValue[0] == 1){
+    } else if (rawValue[0] == 1) {
       mask.push(/[0-9]/);
-    }else if(rawValue[0] == 2){
+    } else if (rawValue[0] == 2) {
       mask.push(/[0-9]/);
-    }else if(rawValue[0] == 3){
+    } else if (rawValue[0] == 3) {
       mask.push(/[0-1]/);
     }
 
     mask.push('/');
-    mask.push( /[0-1]/);
-    
-    if (rawValue[3] == 0){
+    mask.push(/[0-1]/);
+
+    if (rawValue[3] == 0) {
       mask.push(/[1-9]/);
-    }else if(rawValue[3] == 1){
+    } else if (rawValue[3] == 1) {
       mask.push(/[1-2]/);
     }
 
     mask.push('/');
-    mask.push( /[1-2]/);
-    
-    if (rawValue[6] == 1){
+    mask.push(/[1-2]/);
+
+    if (rawValue[6] == 1) {
       mask.push(/[9]/);
-    }else if(rawValue[6] == 2){
+    } else if (rawValue[6] == 2) {
       mask.push(/[0]/);
     }
     mask.push(/\d/);
-    mask.push( /\d/);
+    mask.push(/\d/);
     return mask;
   }
 }

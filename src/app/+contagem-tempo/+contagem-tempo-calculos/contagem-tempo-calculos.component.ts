@@ -148,26 +148,21 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
 
   formatAnosMesesDias(dias) {
-    console.log(dias);
-    
+    // console.log(dias);
 
     let totalFator = { years: 0, months: 0, days: 0 };
 
-    let xValor = (this.Math.floor(dias)  / 365);
-    // console.log(totalGeralEmDias * fator);
-    // console.log(xValor);
-
+    let xValor = (this.Math.floor(dias)  / 365.25);
 
     totalFator.years = this.Math.floor(xValor);
     let xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.5;
-    totalFator.days = this.Math.floor(dttDias);
+    let dttDias = (xVarMes - totalFator.months) * 30.4375;
+    totalFator.days = this.Math.round(dttDias);
+
+    // console.log(moment.duration(dias, 'days'));
 
     return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
-
-    // const tempoTotal = moment.duration(dias, 'days');
-    // return tempoTotal.years() + ' anos ' + tempoTotal.months() + ' meses ' + tempoTotal.days() + ' dias';
   }
 
 

@@ -65,7 +65,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
 
 
-  public dadosParaExportar = [];
+  public dadosParaExportar:any;
 
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
@@ -464,9 +464,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.isUpdateTotal = false;
 
-    this.setExportRGPSList();
-
     this.updateCalculo();
+
+    this.setExportRGPSList();
   }
 
 
@@ -497,30 +497,28 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     }
   }
 
-  public setExportRGPSobj(tempo, carencia) {
-    return { years: tempo.years(), months: tempo.months(), days: tempo.days(), carencia: carencia, totalDias: tempo.asDays()}
+  public setExportRGPSobj(tempo, carencia, label) {
+    return { 
+      label: label,
+      years: tempo.years(), 
+      months: tempo.months(), 
+      days: this.Math.ceil(tempo.days()), 
+      carencia: carencia, 
+      totalDias: this.Math.round(tempo.asDays())
+    };
   }
 
 
   public setExportRGPSList() {
+    this.dadosParaExportar = {};
 
     const itensExport = ['', '88', '91', '98', '99'];
 
     itensExport.forEach(label => {
-      const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label]);
-      this.dadosParaExportar['total' + label] = objExport;
+      const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label], label);
+       this.dadosParaExportar['total' + label] = objExport;
+     // this.dadosParaExportar.push(objExport);
     });
-
-    // console.log(this.dadosParaExportar);
-
-    // this.dadosParaExportar = {
-    //   total_dias: this.Math.round(this.tempoTotalConFator.asDays());
-    //   total_88: this.Math.round(this.tempoTotalConFator88.asDays());
-    //   total_91: this.Math.round(this.tempoTotalConFator91.asDays());
-    //   total_98: this.Math.round(this.tempoTotalConFator98.asDays());
-    //   total_99: this.Math.round(this.tempoTotalConFator99.asDays());
-    // }
-
   }
 
 

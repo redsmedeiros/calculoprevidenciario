@@ -13,30 +13,47 @@ import { SeguradoRgps as SeguradoModel } from '../../../+rgps/+rgps-segurados/Se
 })
 export class ContagemTempoConclusaoExportarRgpsComponent implements OnInit {
 
-  @Input() calculo;
-  @Input() segurado;
+  @Input() seguradoId;
   @Input() dataExportacao;
   @Input() dadosParaExportar;
   @Input() label;
 
 
   constructor(
-    protected SeguradoRGPS: SeguradoService,
-    protected Errors: ErrorService,
+    protected Errors: ErrorService
   ) { }
 
   ngOnInit() { }
 
 
   public exportRGPS(typeExport) {
+    const objExport = JSON.stringify({
+      seguradoId: this.seguradoId,
+      dib: this.dataExportacao,
+      typeExport: typeExport,
+      dadosParaExportar: this.dadosParaExportar
+    });
 
-    console.log(this.calculo);
-    console.log(this.segurado);
-    console.log(this.dataExportacao);
-    console.log(this.dadosParaExportar);
-    console.log(typeExport);
+    sessionStorage.setItem('exportContagemTempo', objExport);
 
-    console.log(this.SeguradoRGPS);
+    // sessionStorage.label = objExport;
+
+
+    // console.log(localStorage);
+
+    // console.log(sessionStorage.exportContagemTempo);
+
+    // console.log(JSON.parse(sessionStorage.exportContagemTempo));
+    
+
+
+    // console.log('/#/rgps/rgps-calculos/' +
+    //   this.seguradoId + '?export=true');
+
+
+
+   window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId+ '?export=true';
+
 
   }
 

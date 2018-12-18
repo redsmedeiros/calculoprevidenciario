@@ -136,7 +136,7 @@ export abstract class ControllerService {
   }
 
   update(data) {
-    console.log(data);
+   // console.log(data);
     return new Promise((resolve, reject) => {
       data.update()
           .then(model => {

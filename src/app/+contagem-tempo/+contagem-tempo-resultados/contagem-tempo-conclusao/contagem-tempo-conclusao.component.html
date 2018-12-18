@@ -21,7 +21,7 @@
       <td class="text-center">{{ carencia88 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator88.asDays() > 0">
-          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'05/10/1988'"
+          <app-contagem-tempo-conclusao-exportar-rgps [seguradoId]="segurado.id" [dataExportacao]="'04/10/1988'"
             [dadosParaExportar]="this.dadosParaExportar" [label]="'88'"></app-contagem-tempo-conclusao-exportar-rgps>
         </span>
       </td>
@@ -34,7 +34,7 @@
       <td class="text-center">{{ carencia91 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator91.asDays() > 0">
-          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'04/04/1991'"
+          <app-contagem-tempo-conclusao-exportar-rgps  [seguradoId]="segurado.id" [dataExportacao]="'04/04/1991'"
             [dadosParaExportar]="this.dadosParaExportar" [label]="'91'"></app-contagem-tempo-conclusao-exportar-rgps>
         </span>
       </td>
@@ -47,7 +47,7 @@
       <td class="text-center">{{ carencia98 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator98.asDays() > 0">
-          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'16/12/1998'"
+          <app-contagem-tempo-conclusao-exportar-rgps  [seguradoId]="segurado.id" [dataExportacao]="'15/12/1998'"
             [dadosParaExportar]="this.dadosParaExportar" [label]="'98'"></app-contagem-tempo-conclusao-exportar-rgps>
         </span>
       </td>
@@ -60,7 +60,7 @@
       <td class="text-center">{{ carencia99 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator99.asDays() > 0">
-          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="'29/11/1999'"
+          <app-contagem-tempo-conclusao-exportar-rgps  [seguradoId]="segurado.id" [dataExportacao]="'28/11/1999'"
             [dadosParaExportar]="this.dadosParaExportar" [label]="'99'"></app-contagem-tempo-conclusao-exportar-rgps>
         </span>
       </td>
@@ -73,7 +73,7 @@
       <td class="text-center">{{ carencia }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator.asDays() > 0">
-          <app-contagem-tempo-conclusao-exportar-rgps [calculo]="calculo" [segurado]="segurado" [dataExportacao]="limitesDoVinculo.fim.format('DD/MM/YYYY')"
+          <app-contagem-tempo-conclusao-exportar-rgps  [seguradoId]="segurado.id" [dataExportacao]="limitesDoVinculo.fim.format('DD/MM/YYYY')"
             [dadosParaExportar]="this.dadosParaExportar" [label]="''"></app-contagem-tempo-conclusao-exportar-rgps>
         </span>
       </td>
