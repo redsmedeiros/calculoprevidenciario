@@ -83,7 +83,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
     private CalculoRgpsService:CalculoRgpsService,
-    protected rt: ActivatedRoute,) { super(null, null, null, null);}
+    protected rt: ActivatedRoute,) { super(null, null, null, null,null,null);}
 
   ngOnInit() {
     if(this.rt.snapshot.queryParams['withINPC'] == 'true'){

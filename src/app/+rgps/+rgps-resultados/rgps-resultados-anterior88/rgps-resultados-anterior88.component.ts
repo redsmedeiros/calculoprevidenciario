@@ -83,7 +83,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     private ReajusteAutomatico:ReajusteAutomaticoService,
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,
     private CalculoRgpsService:CalculoRgpsService,
-    ) {super(null, null, null, null);}
+    ) {super(null, null, null, null, null, null);}
 
   ngOnInit(){
     this.boxId = this.generateBoxId();

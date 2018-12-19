@@ -93,7 +93,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     private CarenciaProgressiva:CarenciaProgressivaService,
     private CalculoRgpsService:CalculoRgpsService,
     private Moeda: MoedaService){
-    super(null, null, null, null); }
+    super(null, null, null, null,null,null); }
 
   ngOnInit() {
     this.boxId = this.generateBoxId();

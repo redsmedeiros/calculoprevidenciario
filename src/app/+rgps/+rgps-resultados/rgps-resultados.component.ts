@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Inject  } from '@angular/core';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -20,6 +20,8 @@ import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import * as moment from 'moment';
 import swal from 'sweetalert';
+import { DOCUMENT } from '@angular/platform-browser';
+import { WINDOW } from "../+rgps-calculos/window.service";
 
 @FadeInTop()
 @Component({
@@ -32,6 +34,8 @@ export class RgpsResultadosComponent implements OnInit {
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
+  private caixaOpcoes;
+  private navIsFixed = false;
 
   public isUpdating = false;
   public checkboxIdList = [];
@@ -267,6 +271,8 @@ export class RgpsResultadosComponent implements OnInit {
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,    
     protected CalculoRgps: CalculoRgpsService,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(WINDOW) private window: Window
   ) {}
 
   ngOnInit() {
@@ -875,6 +881,29 @@ export class RgpsResultadosComponent implements OnInit {
                             this.route.snapshot.params['id_segurado']+'/'+idList[0]+'/'+idList[1];
       
     }
+  }
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    this.caixaOpcoes = document.getElementById("containerOpcoes");
+    let navbar = document.getElementById("navbar");
+    const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+
+    if(offset > this.offset(this.caixaOpcoes)){
+      this.navIsFixed = true;
+      navbar.classList.add("sticky")
+    }else if (this.navIsFixed){
+      this.navIsFixed = false;
+      navbar.classList.remove("sticky");
+    }
+    
+    console.log(this.navIsFixed)
+  }
+
+  offset(el) {
+      var rect = el.getBoundingClientRect(),
+      scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+      return rect.top + scrollTop;
   }
 
 }
