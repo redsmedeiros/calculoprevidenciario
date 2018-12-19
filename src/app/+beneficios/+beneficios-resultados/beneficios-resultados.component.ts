@@ -219,8 +219,15 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   esmaecerLinhas(dataCorrente, line){
+    let dataComparacao;
+    if (moment(this.calculo.previa_data_pedido_beneficio_esperado).isAfter(moment('1998-12-01'))){
+      dataComparacao = moment('2003-11-01');
+    }else{
+      dataComparacao = moment('1998-11-01');
+    }
+
     for(var index in line) { 
-      if(dataCorrente <= moment('1998-11-01')){
+      if(dataCorrente <= dataComparacao){
         line[index] = '<div style="opacity:0.4;">' + line[index] + '</div>';
       }
     }
@@ -1350,7 +1357,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         for(let mes of mesesEntreSelicDataCalculo){
           let dateMes = moment(mes);
           jurosVincendos += parseFloat(this.Moeda.getByDate(dateMes).juros_selic_70) /100;
-          console.log(jurosVincendos)
         }
       }
     }
@@ -1572,7 +1578,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   formatMoney(value, sigla='R$', aplicarCor=false){
-    let string = sigla + this.formatDecimal(value, 2);
+    let numeroPadronizado = value.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
+    //let string = sigla + this.formatDecimal(value, 2);
+    let string = sigla + numeroPadronizado;
     if(aplicarCor && string.indexOf('-') != -1){
       string = '<span style="color:red">' +string + '</span>';
     }
