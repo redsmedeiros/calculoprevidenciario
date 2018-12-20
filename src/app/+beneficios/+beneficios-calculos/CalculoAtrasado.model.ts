@@ -42,7 +42,8 @@ export class CalculoAtrasado extends Model {
     esperado_anterior: '',
     nao_usar_deflacao:'',
     usar_indice_99_04:'',
-    aplicar_juros_poupanca:''
+    aplicar_juros_poupanca:'',
+    usar_mesma_dib:''
   };
 
   public id: number;
@@ -83,6 +84,7 @@ export class CalculoAtrasado extends Model {
   public nao_usar_deflacao;
   public usar_indice_99_04;
   public aplicar_juros_poupanca;
+  public usar_mesma_dib;
 
   public actions = `
     <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>

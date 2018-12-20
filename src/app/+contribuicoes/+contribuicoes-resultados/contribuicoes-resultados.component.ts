@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SeguradoService } from '../Segurado.service';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
@@ -19,7 +20,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public calculoJurisprudencial: any ={};
-
+  private segurado
   public contribuicaoDe;
   public contribuicaoAte;
 
@@ -30,7 +31,8 @@ export class ContribuicoesResultadosComponent implements OnInit {
   public moeda2: Moeda[];
   public results = [];
   public isUpdating = false;
-
+  private idCalculo = '';
+  private idSegurado = '';
   public tableOptions = {
     colReorder: true,
     paging: false,
@@ -49,14 +51,19 @@ export class ContribuicoesResultadosComponent implements OnInit {
   constructor(
   	protected Jurisprudencial: ContribuicaoJurisprudencialService,
   	protected router: Router,
+    protected Segurado: SeguradoService, 
     private route: ActivatedRoute,
     private Moeda: MoedaService,
   ) {}
 
   ngOnInit() {
+    this.idCalculo = this.route.snapshot.params['id_calculo'];
+    this.idSegurado = this.route.snapshot.params['id'];
   	if (this.route.snapshot.params['id_calculo'] !== undefined) {
       this.isUpdating = true;
-      this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
+      this.Segurado.find(this.route.snapshot.params['id']).then(segurado =>{
+        this.segurado = segurado;
+        this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
         this.calculoJurisprudencial = calculo;
 
         this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
@@ -79,6 +86,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
               this.isUpdating = false;
             }
         });
+      });
       });
     }   
   }
@@ -152,10 +160,14 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   imprimirPagina(){
-    let printContents = document.getElementById('content').innerHTML;
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
+    let printContents = document.getElementById('boxCalculo').innerHTML;
+    printContents = seguradoBox + printContents
+    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 

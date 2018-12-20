@@ -15,7 +15,8 @@ export class Moeda extends Model {
     nome: '',
     tr: '',
     ipca: '',
-    juros_selic_70: ''
+    juros_selic_70: '',
+    tr032015_ipcae: ''
   };
 
   public data_moeda;
@@ -29,4 +30,5 @@ export class Moeda extends Model {
   public tr;
   public ipca;
   public juros_selic_70;
+  public tr032015_ipcae;
 }

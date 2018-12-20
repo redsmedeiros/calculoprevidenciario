@@ -5,8 +5,15 @@
 
     <!-- row -->
     <div class="row" *ngIf="!isUpdating">
-
       <article class="col-sm-12 col-md-12 col-lg-12">
+        <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
+        <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{seguradoId}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{calculoType}}/{{seguradoId}}/{{calculoId}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item active">Resultados</li>
+        </ol>
                 <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
               [togglebutton]="false"
               [deletebutton]="false"
@@ -33,6 +40,49 @@
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
+              <div id="printableSegurado" hidden>
+                <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
+                <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
+                <table class="table table-bordered table-hover">
+                  <caption><h2>Dados do Segurado</h2></caption>
+                  <tr>
+                    <td width="50%">
+                      <b>Nome:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.nome}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b *ngIf="segurado.id_documento==1">PIS:</b>  
+                      <b *ngIf="segurado.id_documento==2">PASEP:</b>
+                      <b *ngIf="segurado.id_documento==3">CPF:</b>  
+                      <b *ngIf="segurado.id_documento==4">NIT:</b>  
+                      <b *ngIf="segurado.id_documento==5">RG:</b>   
+                    </td>
+                    <td width="50%">
+                      {{segurado.numero_documento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Data de nascimento:</b>
+                    </td>
+                    <td width="50%">
+                       {{segurado.data_nascimento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Sexo:</b>
+                    </td>
+                    <td width="50%">
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
@@ -53,7 +103,7 @@
 
 
 
-
+      <div id="infoCalculo">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -90,9 +140,6 @@
         </sa-widget>
       </article>
 
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -123,14 +170,17 @@
                   <b>DIB anterior de valores devidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
                   <b>Data de cessação de valores devidos:</b> {{formatDate(calculo.data_prevista_cessacao)}}</li>
-                <li>
+                <li *ngIf="!calculo.valor_beneficio_esperado_revisao">
                   <b>Nova RMI de valores devidos:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_esperado_revisao">
+                  <b>Nova RMI de valores devidos antes da revisão:</b> {{formatRMI(calculo.valor_beneficio_esperado, 'Devidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_esperado_revisao">
+                  <b>Nova RMI de valores devidos depois da revisão:</b> {{formatRMI(calculo.valor_beneficio_esperado_revisao, 'Devidos')}}</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
@@ -162,16 +212,17 @@
                   <b>DIB anterior de valores recebidos:</b> {{formatDate(calculo.previa_data_pedido_beneficio_esperado)}}</li>
                 <li>
                   <b>Data de cessação de valores recebidos:</b> {{formatDate(calculo.data_cessacao)}}</li>
-                <li>
-                  <b>Nova RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="!calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos antes da revisão:</b> {{formatRMI(calculo.valor_beneficio_concedido, 'Recebidos')}}</li>
+                <li *ngIf="calculo.valor_beneficio_concedido_revisao">
+                  <b>RMI de valores recebidos depois da revisão:</b> {{formatRMI(calculo.valor_beneficio_concedido_revisao, 'Recebidos')}}</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
-
-
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
@@ -208,8 +259,6 @@
           </div>
         </sa-widget>
       </article>
-
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
@@ -265,51 +314,79 @@
 
               <ul class="list-unstyled" *ngIf="!isTetos">
                 <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
+                  <b>Soma dos honorários a receber:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span>
+                </li>
                 <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span></li>
+                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span>
+                </li>
                 <li *ngIf="valorAcordo != 0">
-                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(valorAcordo)}}"> {{formatMoney(valorAcordo)}}</span></li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(valorAcordo)}}"> {{formatMoney(valorAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span></li>
+                  <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Diferença Mensal:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span></li>
+                  <b>Soma Total da Diferença Mensal:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span></li>
+                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total da Diferença Corrigida:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
+                  <b>Soma Total da Diferença Corrigida:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span>
+                </li>
                 <li>
-                  <b>Soma Total do Valor dos Juros:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span></li>
+                  <b>Soma Total do Valor dos Juros:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span>
+                </li>
                 <li>
-                  <b>Soma devida Judicialmente:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
+                  <b>Soma devida Judicialmente:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span>
+                </li>
                 <li>
-                  <b>Soma das vincendas:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span></li>
+                  <b>Soma das vincendas:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span>
+                </li>
                 <li>
-                  <b>Soma total devida ao segurado:</b><span class="{{tratarConclusao(somaTotalSegurado)}}"> {{formatMoney(somaTotalSegurado)}}</span></li>
+                  <b>Soma total devida ao segurado:</b><span class="{{tratarConclusao(somaTotalSegurado)}}"> {{formatMoney(somaTotalSegurado)}}</span>
+                </li>
               </ul>
               <ul class="list-unstyled" *ngIf="isTetos">
-                  <li>
-                  <b>Soma das vincendas Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas)}}</span></li>
                 <li>
-                  <b>Última Renda Mensal Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(ultimaRenda)}}</span></li>
+                  <b>Soma dos honorários a receber Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span>
+                </li>
                 <li>
-                  <b>Soma devida Judicialmente Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span></li>
-                <li *ngIf="somaHonorarios != 0">
-                  <b>Soma dos honorários a receber Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaHonorarios)}}</span></li>
+                  <b>Desconto do Acordo Judicial:</b><span class="{{tratarConclusao(descontoAcordo)}}"> {{formatMoney(descontoAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Subtotal:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span></li>
-                <li *ngIf="descontoAcordo != 0">
-                  <b>Desconto do acordo judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(descontoAcordo)}}</span></li>
+                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</span>
+                </li>
                 <li>
-                  <b>Soma dos devidos com desconto judicial:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaDevidaJudicialmente-valorAcordo)}}</span></li>
+                  <b>Última Renda Mensal Judicialmente Tetos:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span>
+                </li>
                 <li>
-                  <b>Soma total Tetos:</b><span class="{{tratarConclusao(somaHonorarios)}}"> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</span></li>
+                  <b>Soma Total da Diferença Mensal Tetos:</b><span class="{{tratarConclusao(somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaMensal)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total da Correção Monetária:</b><span class="{{tratarConclusao(somaDiferencaCorrigida-somaDiferencaMensal)}}"> {{formatMoney(somaDiferencaCorrigida-somaDiferencaMensal)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total da Diferença Corrigida Tetos:</b><span class="{{tratarConclusao(somaDiferencaCorrigida)}}"> {{formatMoney(somaDiferencaCorrigida)}}</span>
+                </li>
+                <li>
+                  <b>Soma Total do Valor dos Juros Tetos:</b><span class="{{tratarConclusao(somaJuros)}}"> {{formatMoney(somaJuros)}}</span>
+                </li>
+                <li>
+                  <b>Soma devida Judicialmente Tetos:</b><span class="{{tratarConclusao(somaDevidaJudicialmente)}}"> {{formatMoney(somaDevidaJudicialmente)}}</span>
+                </li>
+                <li>
+                  <b>Soma das vincendas Tetos:</b><span class="{{tratarConclusao(somaVincendas)}}"> {{formatMoney(somaVincendas)}}</span>
+                </li>
+                <li>
+                  <b>Soma total devida ao segurado Tetos:</b><span class="{{tratarConclusao(somaVincendas+somaDiferencaCorrigida)}}"> {{formatMoney(somaVincendas+somaDiferencaCorrigida)}}</span>
+                </li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
-
+    </div>
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false"
@@ -352,7 +429,7 @@
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" id="resultadoCalculo">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
@@ -397,11 +474,17 @@
                 <thead *ngIf="isTetos">
                   <tr>
                     <th>Competência</th>
-                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <th style="text-align: center">Indice<br>de<br>Reajuste<br>de<br>Valores Devidos</th>
                     <th>Benefício Devido Tetos</th>
+                    <th *ngIf="debugMode">Benefício<br>Devido<br>Tetos<br>Sem<br>Limites</th>
+                    <th *ngIf="debugMode">Benefício<br>Devido<br>Tetos<br>Após<br>Revisao<br>Sem<br>limites</th>
+                    <th *ngIf="debugMode">Benefício<br>Devido<br>Tetos<br>Após<br>Revisao</th>
                     <!-- <th>Benefício Devido</th> -->
-                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <th style="text-align: center">Indice<br>de<br>Reajuste<br>de<br>Valores Recebidos</th>
                     <th>Benefício Recebido Tetos</th>
+                    <th *ngIf="debugMode">Benefício<br>Recebido<br>Tetos<br>Sem<br>Limites</th>
+                    <th *ngIf="debugMode">Benefício<br>Recebido<br>Tetos<br>Após<br>Revisao<br>Sem<br>limites</th>
+                    <th *ngIf="debugMode">Benefício<br>Recebido<br>Tetos<br>Após<br>Revisao</th>
                     <!-- <th>Benefício Recebido</th> -->
                     <th>Diferença Mensal Tetos</th>
                     <!-- <th>Diferença Mensal</th> -->
@@ -413,7 +496,8 @@
                     <th>Valor dos Juros Tetos</th>
                     <!-- <th>Diferença Corrigida + Juros</th> -->
                     <th>Diferença Corrigida + Juros Tetos</th>
-                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários Tetos</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0">Honorários<br>Tetos</th>
+                    <th *ngIf="debugMode">Dias<br>proporcionais</th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -427,9 +511,11 @@
                 <p>
                   <strong>b) </strong> Correção monetária conforme Sistema de Correção Monetária do CJF;</p>
                 <p *ngIf="calculo.tipo_correcao == 'ipca'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, IPCA-e até 26/09/2018;</p>
-                <p *ngIf="calculo.tipo_correcao == 'tr'">Indexadores:- ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 08/10/2018;</p>
+                <p *ngIf="calculo.tipo_correcao == 'tr'">Indexadores: 
+- ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, TR de 09/2006 a 22/11/2018 ;​</p>
                 <p *ngIf="calculo.tipo_correcao == 'cam'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 08/10/2018;</p>
-                <p *ngIf="calculo.tipo_correcao == 'tr_ipca'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, ;</p>
+                <p *ngIf="calculo.tipo_correcao == 'tr032015_ipcae'">Indexadores: 
+- ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 06/2009, TR de 09/2006 a de 07/2009 a 02/2015 IPCA-e até 22/11/2018;</p>
                 <p>
                   <strong>c) </strong> Juros de mora:</p>
                 <p>- Taxa de {{calculo.previo_interesse_2003}}% até 12/2002 , taxa de {{calculo.pos_interesse_2003}}% de 01/2003 até 06/2009 , taxa de {{calculo.pos_interesse_2009}}% de 07/2009 até 18/08/2017 Quando

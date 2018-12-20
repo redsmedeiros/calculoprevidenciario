@@ -7,7 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import { ContribuicaoJurisprudencialService } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import swal from 'sweetalert';
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 
 @FadeInTop()
@@ -30,6 +30,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
 
   private dataMinima = moment('01-1970', 'MM-YYYY');
   private dataMaxima = moment('10-1996', 'MM-YYYY');
+  private idSegurado = '';
 
   constructor(private Moeda: MoedaService,
               protected Jurisprudencial: ContribuicaoJurisprudencialService,
@@ -39,7 +40,7 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
     ) {}
 
   ngOnInit() {
-
+    this.idSegurado = this.route.snapshot.params['id'];
    if (this.route.snapshot.params['id_calculo'] !== undefined) {
 
       this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
@@ -256,14 +257,12 @@ export class ContribuicoesJurisprudencialComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-      var date = new Date(inputDate);
-      if (!isNaN(date.getTime())) {
-          // Months use 0 index.
-          date.setMonth(date.getMonth()+1);
-          return  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                         date.getFullYear();
-      }
+    if(!inputDate){
       return '';
+    }else{
+      let date = moment(inputDate);
+      return date.format('MM/YYYY');
+    }
   }
 
   calculateMonth() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Inject  } from '@angular/core';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,20 +17,25 @@ import { ExpectativaVida } from './ExpectativaVida.model';
 import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
-import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service'
+import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import * as moment from 'moment';
 import swal from 'sweetalert';
+import { DOCUMENT } from '@angular/platform-browser';
+import { WINDOW } from "../+rgps-calculos/window.service";
 
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './rgps-resultados.component.html',
+  styleUrls: ['./rgps-resultados.component.css']
 })
 export class RgpsResultadosComponent implements OnInit {
 
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
+  private caixaOpcoes;
+  private navIsFixed = false;
 
   public isUpdating = false;
   public checkboxIdList = [];
@@ -139,7 +144,7 @@ export class RgpsResultadosComponent implements OnInit {
       {data: 'contribuicaoSecundaria'},
       {data: 'dib'},
       {data: 'dataCriacao'},
-      {data: 'checkbox'},
+      //{data: 'checkbox'},
     ] 
   };
 
@@ -266,6 +271,8 @@ export class RgpsResultadosComponent implements OnInit {
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,    
     protected CalculoRgps: CalculoRgpsService,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(WINDOW) private window: Window
   ) {}
 
   ngOnInit() {
@@ -317,116 +324,6 @@ export class RgpsResultadosComponent implements OnInit {
       }
     }
   }
-
-  // direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria){
-  //   let idadeDoSegurado = this.idadeSegurado;
-  //   //let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-  //   let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
-  //   let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
-  //   //let anosSecundaria = (this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98)).anos;
-  //   let anosSecundaria = tempoContribuicaoSecundaria.anos;
-  //   let anosPrimaria = ((tempoContribuicaoPrimaria.anos * 365) + (tempoContribuicaoPrimaria.meses * 30) + tempoContribuicaoPrimaria.dias)/365;
-
-  //   let anosContribuicao = anosPrimaria;
-  //   this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, false, dib); 
-
-  //   let totalContribuicao98 = 0;
-  //   let tempoContribuicaoPrimaria98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-  //   if(tempoContribuicaoPrimaria98 != {anos:0, meses:0, dias:0}) {
-  //     totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365) + (tempoContribuicaoPrimaria98.meses * 30) + tempoContribuicaoPrimaria98.dias) /365;
-  //   }
-
-  //   let direito = true;
-  //   let idadeMinima = true;
-  //   let extra;
-  //   let toll;
-
-  //   let erroString = '';
-  //   if(this.tipoBeneficio == 4 || this.tipoBeneficio == 6){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
-  //     if (!direito){
-  //       if (dib <= this.dataDib98) {
-  //         direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
-  //         this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib); 
-  //       }else{
-  //         extra = this.calcularExtra(totalContribuicao98, redutorSexo);
-  //         toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
-  //         this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib); 
-  //         direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);
-  //         direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
-  //       }
-  //       let contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
-  //       let tempoFracionado = this.tratarTempoFracionado(contribuicao); //Separar o tempo de contribuicao em anos, meses e dias
-  //       if (direito) {
-  //         // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
-  //         //"POSSUI direito ao benefício proporcional."
-  //         //"Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
-  //         errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL."); 
-  //       }else{
-  //         // Exibir Mensagem de beneficio nao concedido.
-  //         // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
-  //         errorArray.push("Falta(m) "+ tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
-  //         if (totalContribuicao98 > 0) {
-  //           let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
-  //           let tempoProporcional = this.tratarTempoFracionado(tempo);
-  //           // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
-  //           // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
-  //            errorArray.push("Falta(m) "+ tempoProporcional + " para completar o tempo de serviço necessário para o benefício PROPORCIONAL.");
-  //         }
-  //       }    
-  //     }
-  //   }else if(this.tipoBeneficio == 3){
-  //     idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
-  //     if (!idadeMinima){ 
-  //       return false;
-  //     }
-  //     if(!this.verificarCarencia(-5, redutorProfessor, redutorSexo, errorArray)){
-  //       return false;
-  //     }
-  //   }else if(this.tipoBeneficio == 5){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
-  //     if(!direito) {
-  //       errorArray.push("Não possui direito ao benefício de aposentadoria especial.");
-  //     }
-  //   }else if(this.tipoBeneficio == 16){
-  //     idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
-  //     if (!idadeMinima){
-  //       return false;
-  //     }
-  //     if (!this.verificarCarencia(0, redutorProfessor, redutorSexo, errorArray)){
-  //       return false;
-  //     }
-  //   }else if(this.tipoBeneficio == 25){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 10);
-  //     if (!direito){
-  //       errorArray.push("");
-  //       return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
-  //     }
-  //   }else if (this.tipoBeneficio == 26){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 6);
-  //     if (!direito){
-  //       errorArray.push("");
-  //       return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
-  //     }
-  //   }else if(this.tipoBeneficio == 27){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 2);
-  //     if (!direito){
-  //       errorArray.push("");
-  //       return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.   
-  //     }
-  //   }else if(this.tipoBeneficio == 28){
-  //     direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 20);
-  //     if (!direito){
-  //       errorArray.push("");
-  //       return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.
-  //     }
-  //     if (!this.verificarIdadeMinima(idadeDoSegurado, errorArray)){
-  //       errorArray.push("");
-  //       return false; // Exibir Mensagem de erro com a idade faltando;
-  //     }
-  //   }
-  //   return direito;
-  // }
 
   calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, proporcional, dib) {
     let coeficienteAux = 0;
@@ -738,13 +635,12 @@ export class RgpsResultadosComponent implements OnInit {
       return '';
   }
 
-  getIndex(data){
-    return this.getDifferenceInMonths(this.primeiraDataTabela,data);
-  }
-
-  getDifferenceInMonths(date1, date2 = moment()) {
+  getDifferenceInMonths(date1, date2 = moment(), floatRet = false) {
     let difference = date1.diff(date2, 'months', true);
     difference = Math.abs(difference);
+    if(floatRet){
+      return difference;
+    }
     return Math.floor(difference);
   }
 
@@ -829,22 +725,23 @@ export class RgpsResultadosComponent implements OnInit {
         calculo.mostrarCalculoAnterior88 = true;
       }else if(calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991'){
         //Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
-        calculo.mostrarCalculoAnterior88 = true;
-        calculo.mostrarCalculo91_98 = true;
+        // calculo.mostrarCalculoAnterior88 = true;
+        // calculo.mostrarCalculo91_98 = true;
+        calculo.mostrarCalculo88_91 = true;
         calculo.isBlackHole = true;
       }
     }else if(dataInicioBeneficio > data91_98 && dataInicioBeneficio <= data98_99){
       //Cálculos: entre 91 e 98
       calculo.mostrarCalculo91_98 = true;
     }else if(dataInicioBeneficio > data98_99 && dataInicioBeneficio <= data99){
-      if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+      //if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
         //Cálculos: entre 91 e 98 (tempo de contribuicao até a ementa (98)
-        calculo.mostrarCalculo91_98 = true;
-      }else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+        //calculo.mostrarCalculo91_98 = true;
+      //}else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
         //Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
         calculo.mostrarCalculo91_98 = true;
-
-      }
+        calculo.mostrarCalculo98_99 = true;
+      //}
     }else if(dataInicioBeneficio > data99){
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
@@ -891,6 +788,11 @@ export class RgpsResultadosComponent implements OnInit {
     return moment().diff(dataNascimento, 'years');
   }
 
+  getIdadeNaDIB(dib){
+    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    return dib.diff(dataNascimento, 'years');
+  }
+
   exportarParaBeneficios(data, valor, tipoCalculo){
     window.location.href='/#/beneficios/beneficios-calculos/'+ 
                           tipoCalculo + '/' +
@@ -912,41 +814,47 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   infoCalculos(){
-  	window.location.href='/#/rgps/rgps-calculos/' + this.idSegurado;
+  	window.location.href='/#/rgps/rgps-calculos/' + this.idSegurado + '/' + this.idsCalculo[0] + '/edit';
   }
 
   valoresContribuidos(){
     let idList = [];
     console.log(this.checkboxIdList)
     for(let checkboxId of this.checkboxIdList){
-      if((<HTMLInputElement>document.getElementById(checkboxId)).checked){
-        idList.push(checkboxId.split('-')[0]);
-      }
+      idList.push(checkboxId.split('-')[0]);
     }
-
-    if(idList.length === 0){
-      swal('Erro', 'Selecione pelo menos um cálculo', 'error');
-    }else{
-      let stringArr = idList.join(',');
-      window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado 
-      + '/' + stringArr; 
-    }
+    let stringArr = idList.join(',');
+    window.location.href='/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + stringArr; 
   }
 
   imprimirPagina(){
-    let printContents = document.getElementById('content').innerHTML;
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
+    let grupoCalculos = document.getElementById('boxGrupoCalculos').innerHTML + '<br>';
+    let allCalcBoxHtml = document.getElementsByClassName('boxCalculo');
+    let allCalcBoxText = '';
+    for(let index = 0; index < allCalcBoxHtml.length; index++){
+      allCalcBoxText += allCalcBoxHtml[index].innerHTML + '<br><br>';
+    }
+    
+    //let printContents = document.getElementById('content').innerHTML;
+    let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
+    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 
   imprimirBox(boxId){
-    let seguradoBox = document.getElementById('box-dados-segurado').innerHTML
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
     let boxContent = document.getElementById(boxId).innerHTML;
+    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
+    let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + rodape + '</body></html>';
+    printableString = printableString.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + '</body></html>');
+    popupWin.document.write(printableString);
     popupWin.document.close();
   }
 
@@ -974,4 +882,28 @@ export class RgpsResultadosComponent implements OnInit {
       
     }
   }
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    this.caixaOpcoes = document.getElementById("containerOpcoes");
+    let navbar = document.getElementById("navbar");
+    const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+
+    if(offset > this.offset(this.caixaOpcoes)){
+      this.navIsFixed = true;
+      navbar.classList.add("sticky")
+    }else if (this.navIsFixed){
+      this.navIsFixed = false;
+      navbar.classList.remove("sticky");
+    }
+    
+    console.log(this.navIsFixed)
+  }
+
+  offset(el) {
+      var rect = el.getBoundingClientRect(),
+      scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+      return rect.top + scrollTop;
+  }
+
 }

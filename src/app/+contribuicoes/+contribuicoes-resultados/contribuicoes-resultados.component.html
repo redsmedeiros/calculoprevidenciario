@@ -5,61 +5,148 @@
 
     <!-- row -->
     <div class="row">
-
+      <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-
-
+        <h1>Cálculo: Contribuições Atrasadas - Jurisprudencial</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/contribuicoes/{{idSegurado}}/novo-jurisprudencial/{{idCalculo}}"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item active">Resultados</li>
+        </ol>
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [sortable]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-table"></i>
+              <i class="fa fa-edit"></i>
             </span>
-            <h2>Resultados</h2>
+            <h2>Dados do segurado selecionado</h2>
           </header>
+          <!-- widget div-->
           <div>
-            <div class="widget-body no-padding" >
-              <sa-datatable [options]="tableOptions"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
+            <!-- widget content -->
+            <div class="widget-body">
+              <ul class="list-unstyled">
+                <li><b>Nome:</b> {{segurado.nome}}</li>
+                <li><b>Pis:</b> {{segurado.numero_documento}}</li>
+                <li><b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
+                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
+                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+              </ul>
+              <div id="printableSegurado" hidden>
+                <h1>Cálculo: Contribuições Atrasadas - Jurisprudencial</h1>
+                <table class="table table-bordered table-hover">
+                  <caption><h2>Dados do Segurado</h2></caption>
                   <tr>
-                    <th>Data</th>
-                    <th>Valor salário mínimo</th>
-                    <th>Valor da alíquota</th>
-                    <th>Índice de correção (%)</th>
-                    <th>Valor corrigido</th>
+                    <td width="50%">
+                      <b>Nome:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.nome}}
+                    </td>
                   </tr>
-                </thead>
-              </sa-datatable>
+                  <tr>
+                    <td width="50%">
+                      <b>PIS:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.numero_documento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Data de nascimento:</b>
+                    </td>
+                    <td width="50%">
+                       {{segurado.data_nascimento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Sexo:</b>
+                    </td>
+                    <td width="50%">
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </span> Editar
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-            
           </div>
-          <div class="col-sm-12">
-            <div class="well">
-              <p>
-                O recolhimento em atraso somente é possível caso haja a efetiva comprovação do exercício da atividade remunerada. No caso
-                do autônomo (atualmente contribuinte individual) é preciso que haja a prova do exercício dessa atividade,
-                exigindo-se ao menos início de prova documental contemporânea ao exercício da atividade remunerada.
-              </p>
-
-              <p>
-                O cálculo realizado pelo sistema refere-se ao entendimento jurisprudencial segundo o qual a legislação a ser aplicada é sempre
-                aquela que estava em vigor na época em que a atividade foi efetivamente exercida. A esse respeito menciona-se
-                o julgado do STJ no AgRg no REsp 760592 / RS. Assim sendo, ressalte-se este sistema somente é aplicável
-                caso seja proposta uma ação perante o Poder Judiciário e obtido êxito no sentido de autorizar o recolhimento
-                de acordo com a legislação da época.
-              </p>
-
-              <p>
-                Como o segurado autônomo deveria recolher inicialmente sobre a classe 1 (um salário mínimo) o sistema elaborado pelo IEPREV
-                adotou essa classe inicial para fins de apuração do valor devido, aplicando-se também as alíquotas vigente
-                nos respectivos períodos. O sistema também não aplica juros moratórios ou multa já que o STJ tem entendido
-                que tais encargos são devidos somente a partir da edição da Medida Provisória nº. 1.523, de 11/10/1996
-                (RESP nº. 697.234).
-              </p>
+        </sa-widget>
+      </article>
+    </div>
+    </div>
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div id="boxCalculo">
+          <sa-widget [colorbutton]="false" [editbutton]="false">
+            <header>
+              <span class="widget-icon">
+                <i class="fa fa-table"></i>
+              </span>
+              <h2>Resultados</h2>
+            </header>
+            <div>
+              <div class="widget-body no-padding" >
+                <sa-datatable [options]="tableOptions"
+                  paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Valor salário mínimo</th>
+                      <th>Valor da alíquota</th>
+                      <th>Índice de correção (%)</th>
+                      <th>Valor corrigido</th>
+                    </tr>
+                  </thead>
+                </sa-datatable>
+              </div>
             </div>
-          </div>
-          <div class="form-actions">
+            <div class="col-sm-12">
+              <div class="well">
+                <p>
+                  O recolhimento em atraso somente é possível caso haja a efetiva comprovação do exercício da atividade remunerada. No caso
+                  do autônomo (atualmente contribuinte individual) é preciso que haja a prova do exercício dessa atividade,
+                  exigindo-se ao menos início de prova documental contemporânea ao exercício da atividade remunerada.
+                </p>
+                <p>
+                  O cálculo realizado pelo sistema refere-se ao entendimento jurisprudencial segundo o qual a legislação a ser aplicada é sempre
+                  aquela que estava em vigor na época em que a atividade foi efetivamente exercida. A esse respeito menciona-se
+                  o julgado do STJ no AgRg no REsp 760592 / RS. Assim sendo, ressalte-se este sistema somente é aplicável
+                  caso seja proposta uma ação perante o Poder Judiciário e obtido êxito no sentido de autorizar o recolhimento
+                  de acordo com a legislação da época.
+                </p>
+                <p>
+                  Como o segurado autônomo deveria recolher inicialmente sobre a classe 1 (um salário mínimo) o sistema elaborado pelo IEPREV
+                  adotou essa classe inicial para fins de apuração do valor devido, aplicando-se também as alíquotas vigente
+                  nos respectivos períodos. O sistema também não aplica juros moratórios ou multa já que o STJ tem entendido
+                  que tais encargos são devidos somente a partir da edição da Medida Provisória nº. 1.523, de 11/10/1996
+                  (RESP nº. 697.234).
+                </p>
+              </div>
+            </div>
+          </sa-widget>
+        </div>
+        <div class="form-actions">
             <div class="row">
               <div class="col-md-12">
                 <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
@@ -82,7 +169,6 @@
               </div>
             </div>
           </div>
-        </sa-widget>
       </article>
     </div>
     <!-- end row -->

@@ -49,8 +49,25 @@ export abstract class ControllerService {
   }
 
   getWithParameters(params) {
+    this.store.data[this.name].length = 0;
     return new Promise((resolve, reject) => {
       this.model.getWithParameters(params)
+        .then(models => {
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
+
+  getWithParameter(params) {
+    return new Promise((resolve, reject) => {
+      this.model.getWithParameter(params)
         .then(models => {
           this.store.push(this.name, models.data.map( model => {
             return new this.model(model);

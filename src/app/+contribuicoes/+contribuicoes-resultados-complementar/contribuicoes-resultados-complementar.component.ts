@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
+import { SeguradoService } from '../Segurado.service';
 import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
@@ -20,7 +21,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   public calculoComplementar: any = {};
   public moeda: Moeda[];
   public isUpdating = false;
-
+  private segurado;
   public competenciaInicial;
   public competenciaFinal;
 
@@ -58,54 +59,57 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     ]
   }
 
+  private idCalculo = '';
+  private idSegurado = '';
   constructor(
   	protected Complementar: ContribuicaoComplementarService,
   	protected router: Router,
     private route: ActivatedRoute,
     private Moeda: MoedaService,
+    protected Segurado: SeguradoService, 
     protected MatrixStore: MatrixService,
   ) { }
 
   ngOnInit() {
+    this.idCalculo = this.route.snapshot.params['id_calculo'];
+    this.idSegurado = this.route.snapshot.params['id']
     this.hasDetalhe = !((this.MatrixStore.getTabelaDetalhes()).length === 0);
   	this.isUpdating = true;
-    this.Complementar.find(this.route.snapshot.params['id_calculo']).then(calculo => {
-      this.calculoComplementar = calculo;
-      this.mostrarJuros = this.calculoComplementar.chk_juros;
-
-      if(!this.mostrarJuros){
-        this.resultadosTableOptions = {
-          ...this.resultadosTableOptions,
-          columns: [
-                    {data: 'competencia'},
-                    {data: 'valor_contribuicao'},
-                    {data: 'multa'},
-                    {data: 'total'},
-          ],
+    this.Segurado.find(this.idSegurado).then(segurado => {
+      this.segurado = segurado;
+      this.Complementar.find(this.idCalculo).then(calculo => {
+        this.calculoComplementar = calculo;
+        this.mostrarJuros = this.calculoComplementar.chk_juros;
+        if(!this.mostrarJuros){
+          this.resultadosTableOptions = {
+            ...this.resultadosTableOptions,
+            columns: [
+                      {data: 'competencia'},
+                      {data: 'valor_contribuicao'},
+                      {data: 'multa'},
+                      {data: 'total'},
+            ],
+          }
         }
-      }
-
-      let splited = this.calculoComplementar.inicio_atraso.split('-');
-      this.competenciaInicial = splited[1]+'/'+splited[0];
-      splited = this.calculoComplementar.final_atraso.split('-');
-      this.competenciaFinal = splited[1]+'/'+splited[0];
-
-      this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
-
-      this.resultadosList = this.generateTabelaResultados();
-      this.updateResultadosDatatable();
-
-      if(this.hasDetalhe){
-            this.detalhesList = this.MatrixStore.getTabelaDetalhes();
-            this.updateDetalhesDatatable();
-      }
-
-      this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
-        .then((moeda: Moeda[]) => {
-          this.moeda = moeda;
-          this.isUpdating = false;
-        })
-    })
+        let splited = this.calculoComplementar.inicio_atraso.split('-');
+        this.competenciaInicial = splited[1]+'/'+splited[0];
+        splited = this.calculoComplementar.final_atraso.split('-');
+        this.competenciaFinal = splited[1]+'/'+splited[0];
+        this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
+        this.resultadosList = this.generateTabelaResultados();
+        this.updateResultadosDatatable();
+        if(this.hasDetalhe){
+              this.detalhesList = this.MatrixStore.getTabelaDetalhes();
+              this.updateDetalhesDatatable();
+        }
+        this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
+          .then((moeda: Moeda[]) => {
+            this.moeda = moeda;
+            this.isUpdating = false;
+          });
+      });
+    });
+    
    
   }
 
@@ -171,7 +175,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let numAnos = this.getDifferenceInYears(dataReferencia);
     let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
     taxaJuros = ((jurosAnuais ** numAnos) * ((jurosMensais * numMeses) + 1)) - 1;
-    taxaJuros = Math.min(taxaJuros, 0.5)
+    taxaJuros = Math.min(taxaJuros, 0.5);
+    console.log(dataReferencia, numAnos, numMeses, taxaJuros);
     let totalJuros = this.getBaseAliquota() * taxaJuros;
 
     return totalJuros;
@@ -205,12 +210,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
   getDifferenceInYears(dateString){
-    let splitted = dateString.split('/');
     let today = moment();
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
-    let duration = moment.duration(today.diff(pastDate));
-    let years = duration.asYears();
-    return Math.floor(years);
+    let pastDate = moment(dateString, 'MM/YYYY');
+    let differenceInYears = Math.abs(today.diff(pastDate, 'years'));
+    return differenceInYears;
   }
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro.
@@ -221,13 +224,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     if(dateString2 == ''){
       recent = moment();
     }else{
-      let splitted = dateString2.split('/');
-      recent = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
+      recent = moment(dateString2, 'MM/YYYY');
     }
-    let pastDate = moment(splitted[0]+'-01-'+splitted[1], "MM-DD-YYYY");
-    let duration = moment.duration(recent.diff(pastDate));
-    let months = duration.asMonths();
-    return Math.floor(months);
+    let pastDate = moment(dateString, 'MM/YYYY');
+    let differenceInMonths = Math.abs(recent.diff(pastDate, 'months'));
+    return differenceInMonths;
   }
 
   formatMoney(data){
@@ -244,10 +245,16 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   }
 
   imprimirPagina(){
-    let printContents = document.getElementById('content').innerHTML;
+    let seguradoBox = document.getElementById('printableSegurado').innerHTML
+    let dadosCalculo = document.getElementById('printableDadosCalculo').innerHTML
+    let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML
+    let resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML
+    let printContents = seguradoBox + '<br>' + dadosCalculo + '<br>' + detalhamentoCalculo + '<br>' + resultadosCalculo + '<br>';
+    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</body></html>');
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 }

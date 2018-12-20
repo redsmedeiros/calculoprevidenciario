@@ -91,7 +91,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   			this.errors.add({"competenciaInicial":["Insira uma data após 01/1970"]});
   		}
   		if(dateCompetenciaInicial >= this.dataDecadente){
-  			this.errors.add({"competenciaInicial":["Insira uma data posterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
+  			this.errors.add({"competenciaInicial":["Insira uma data anterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
   		}
   	}
 
@@ -110,7 +110,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		if(dateCompetenciaFinal >= this.dataDecadente){
   			this.errors.add({"competenciaFinal":["Insira uma data anterior a "+(this.dataDecadente.getMonth()+1)+'/'+(this.dataDecadente.getFullYear())]});
   		}
-  		if(dateCompetenciaFinal <= dateCompetenciaInicial){
+  		if(dateCompetenciaFinal < dateCompetenciaInicial){
   			this.errors.add({"competenciaFinal":["Insira uma data posterior a data inicial"]});
   		}
   	}
@@ -140,7 +140,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		if(dateContribuicaoAte < this.data94){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a 06/1994"]});
   		}
-  		if(dateContribuicaoAte <= dateContribuicaoDe){
+  		if(dateContribuicaoAte < dateContribuicaoDe){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a data inicial"]});
   		}
   	}

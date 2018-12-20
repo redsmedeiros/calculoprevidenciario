@@ -7,9 +7,19 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
+        <h1>Cálculo: Contribuições Atrasadas</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item active">Lista dos cálculos de Contribuições Atrasadas realizados </li>
+        </ol>
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [sortable]="false">
           <!-- widget options:
               usage: <sa-widget [editbutton]="false">
     
@@ -122,7 +132,13 @@
         <div class="row">
           <article class="col-sm-12 col-md-12 col-lg-12">
             <!-- Widget ID (each widget will need unique ID)-->
-            <sa-widget [editbutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false">
+            <sa-widget [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false"
+              [sortable]="false">
 
               <header>
                 <ul class="nav nav-tabs pull-left in">

@@ -7,6 +7,7 @@ import * as moment from 'moment';
   //selector: 'sa-datatables-showcase',
   selector: 'app-rgps-valores-contribuidos-matriz',
   templateUrl: './rgps-valores-contribuidos-matriz.component.html',
+  styleUrls: ['./rgps-valores-contribuidos-matriz.component.css'],
 })
 
 
@@ -115,7 +116,7 @@ export class RgpsMatrizComponent implements OnInit {
     if(tableEntry == ''){
       return 0.0;
     }
-    return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+    return parseFloat((tableEntry).replace(',','.'));
   }
 
   //Retorna uma lista com os meses entre dateStart e dateEnd

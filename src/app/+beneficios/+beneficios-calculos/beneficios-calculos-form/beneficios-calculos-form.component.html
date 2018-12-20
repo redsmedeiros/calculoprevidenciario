@@ -426,7 +426,7 @@
                     <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
                         <input type="radio" name="correcao" 
-                               [checked]="idx === 0" 
+                               [checked]="idx === indiceCorrecao" 
                                [value]="correcao.value"
                                (change)="onCorrecaoChange(correcao)">
                         {{correcao.text}}

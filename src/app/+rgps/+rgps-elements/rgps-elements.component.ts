@@ -58,7 +58,7 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
   						protected CalculoRgps:CalculoRgpsService,
   						protected router: Router,
     					protected route: ActivatedRoute,) 
-  {super(null,null,null,null);}
+  {super(null,null,null,null,null,null);}
 
   ngOnInit() {
   	this.isUpdating = true;

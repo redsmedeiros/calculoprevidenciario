@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { SeguradoService } from '../SeguradoRgps.service';
 import { ErrorService } from '../../../services/error.service';
 import { SeguradoRgps as SeguradoModel } from '../SeguradoRgps.model';
@@ -19,7 +19,7 @@ export class RgpsSeguradosEditComponent implements OnInit, OnDestroy {
 
   public form = {...SeguradoModel.form};
   public segurado;
-
+  @Output() onSubmit = new EventEmitter();
   constructor(
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
@@ -39,8 +39,10 @@ export class RgpsSeguradosEditComponent implements OnInit, OnDestroy {
     this.Segurado
           .update(this.segurado)
           .then(model => {
-            this.Segurado.get()
-                .then(() => this.router.navigate(['/rgps/rgps-segurados']));
+            this.onSubmit.emit();
+            window.location.href='#/rgps/rgps-segurados/'
+            // this.Segurado.get()
+            //     .then(() => this.router.navigate(['/rgps/rgps-segurados']));
           })
           .catch(errors => this.Errors.add(errors));
   }

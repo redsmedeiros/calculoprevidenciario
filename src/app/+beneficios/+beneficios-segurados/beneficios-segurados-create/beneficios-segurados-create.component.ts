@@ -5,7 +5,6 @@ import { Segurado as SeguradoModel } from '../Segurado.model';
 import { Router } from '@angular/router';
 
 @Component({
-  // selector: 'sa-datatables-showcase',
   selector: 'app-beneficios-segurados-create',
   templateUrl: './beneficios-segurados-create.component.html',
   styleUrls: ['./beneficios-segurados-create.component.css'],

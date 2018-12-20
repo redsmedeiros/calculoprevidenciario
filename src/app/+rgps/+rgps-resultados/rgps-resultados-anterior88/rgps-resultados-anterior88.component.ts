@@ -50,6 +50,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     bInfo : false,
     data: this.tableData,
     columns: [
+      {data: 'indice_competencia'},
       {data: 'competencia'},
       {data: 'contribuicao_primaria'},
       {data: 'contribuicao_secundaria'},
@@ -82,7 +83,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     private ReajusteAutomatico:ReajusteAutomaticoService,
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,
     private CalculoRgpsService:CalculoRgpsService,
-    ) {super(null, null, null, null);}
+    ) {super(null, null, null, null, null, null);}
 
   ngOnInit(){
     this.boxId = this.generateBoxId();
@@ -92,7 +93,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
   	this.idCalculo = this.calculo.id;
   	this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-  	this.idadeSegurado = this.getIdadeSegurado();
+  	this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
   	let mesesLimite = 0;
     let mesesLimiteTotal = 0;
     if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
@@ -111,7 +112,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     }
 
 
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite)
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
@@ -145,18 +146,25 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   verificaErros(){
     let erro = "";
     let anoContribuicaoPrimariaAnterior88 = this.contribuicaoPrimaria.anos;
-    if ((this.calculo.tipo_seguro == "Aposentadoria por Idade (Rural)" ||
-         this.calculo.tipo_seguro == "Aposentadoria por idade (Urbano)") && this.calculo.carencia < 60){
+    if ((this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
+         this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Urbano") && this.calculo.carencia < 60){
       erro = "Falta(m) "+ (60 - this.calculo.carencia) + " mês(es) para a carencia necessária.";
-    }else if(this.segurado.sexo == 'h' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
+    }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) " + (65 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
+    }else if(this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    }else if(this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" && 
+    }else if((this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" || this.calculo.tipo_seguro == "Aposentadoria por tempo de contribuição") && 
              anoContribuicaoPrimariaAnterior88 < 30){
-      //TODO: Colocar mensagem completa :
-      //Falta(m) "quantidade de anos que faltam" ano(s), "Quantidade de meses que faltam" mês(es) e quantidade de dia(s) para completar o tempo de serviço necessário.
-      erro = "Erro no tempo de contibuição";
+      let qtde_anos = 30 - this.contribuicaoPrimaria.anos;
+      let qtde_meses = 12 - this.contribuicaoPrimaria.meses;
+      let qtde_dias = 31 - this.contribuicaoPrimaria.dias;
+      if(this.contribuicaoPrimaria.meses == 0)
+        qtde_meses --;
+      if(this.contribuicaoPrimaria.dias == 0)
+        qtde_dias --;
+      if(qtde_meses != 0)
+        qtde_anos--;
+      erro = "Falta(m) " + qtde_anos +" ano(s), "+ qtde_meses + " mês(es) e " + qtde_dias + " dia(s) para completar o tempo de serviço necessário.";
     }
     return erro;
   }
@@ -214,7 +222,8 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       }
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimario, currencyDataInicioBeneficio.acronimo);
       let contribuicaoSecundariaRevisadaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currencyDataInicioBeneficio.acronimo) : '';
-      let line = {competencia: dataContribuicao.format('MM/YYYY'),
+      let line = {indice_competencia: index +1,
+              competencia: dataContribuicao.format('MM/YYYY'),
               contribuicao_primaria: contribuicaoPrimariaString,
               contribuicao_secundaria: contribuicaoSecundariaString,
               inps: this.formatDecimal(inpsString,2),
@@ -474,12 +483,14 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
           } else if (this.tipoBeneficio == 19) {
             minimo *= 0,6;
           }    
-          let reajuste = reajusteAutomatico.indice != null ? reajusteAutomatico.indice : 1;
-          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
-          
+          let reajuste = reajusteAutomatico.indice != null ? parseFloat(reajusteAutomatico.indice) : 1;
+                    
           if (dataCorrente.year() == 2006 && dataCorrente.month() == 7) {
             reajuste = 1.000096;
           }
+
+          valorBeneficio *= reajuste;
+          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
           
           let limit = '-';    
           if (valorBeneficio < minimo) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { CalculoRgps as CalculoModel } from './CalculoRgps.model';
@@ -6,12 +6,15 @@ import { CalculoRgpsService } from './CalculoRgps.service';
 import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
+import { DOCUMENT } from '@angular/platform-browser';
+import { WINDOW } from "./window.service";
 import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './rgps-calculos.component.html',
+  styleUrls: ['./rgps-calculos-component.css'],
   providers: [
     ErrorService,
   ],
@@ -32,7 +35,13 @@ export class RgpsCalculosComponent implements OnInit {
 
   public segurado:any = {};
 
+  private navIsFixed = false;
+
   public checkboxIdList = [];
+
+  public firstCalc = true;
+
+  private caixaOpcoes;
 
   public calculoTableOptions = {
     colReorder: true,
@@ -61,6 +70,8 @@ export class RgpsCalculosComponent implements OnInit {
     protected Errors: ErrorService,
     protected router: Router,
     private route: ActivatedRoute,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(WINDOW) private window: Window
   ) {}
 
   getTempoDeContribuicao(data, type, dataToSet) {
@@ -83,6 +94,11 @@ export class RgpsCalculosComponent implements OnInit {
     if(!this.checkboxIdList.includes(`${data.id}-checkbox`)){
       this.checkboxIdList.push(`${data.id}-checkbox`);
     }
+
+    if(this.firstCalc){
+      this.firstCalc = false;
+      return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}" checked><span> </span></label></div>`;
+    }
     return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
   }
 
@@ -94,8 +110,8 @@ export class RgpsCalculosComponent implements OnInit {
             this.segurado = segurado;
     });
 
-    this.CalculoRgps.getWithPair('id_segurado', this.idSegurado)
-        .then(() => {
+    this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
+        .then((calculos) => {
         this.updateDatatable();
         this.isUpdating = false;
         })
@@ -110,7 +126,7 @@ export class RgpsCalculosComponent implements OnInit {
 
   onCreate(e) {
       this.isUpdating = true;
-      this.CalculoRgps.getWithPair('id_segurado', this.idSegurado)
+      this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
         .then(() => {
            this.isUpdating = false;
         })
@@ -120,6 +136,9 @@ export class RgpsCalculosComponent implements OnInit {
   editSegurado() {
     window.location.href='/#/rgps/rgps-segurados/'+ 
                             this.route.snapshot.params['id']+'/editar';
+  }
+  voltar(){
+    window.location.href='/#/rgps/rgps-segurados/'
   }
 
   formatReceivedDate(inputDate) {
@@ -172,5 +191,28 @@ export class RgpsCalculosComponent implements OnInit {
 
   isSegurado(element, index, array){
     return element['id_segurado'] == this.idSegurado;
+  }
+
+  @HostListener("window:scroll", [])
+  onWindowScroll() {
+    this.caixaOpcoes = document.getElementById("containerOpcoes");
+    let navbar = document.getElementById("navbar");
+    const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+
+    if(offset > this.offset(this.caixaOpcoes)){
+      this.navIsFixed = true;
+      navbar.classList.add("sticky")
+    }else if (this.navIsFixed){
+      this.navIsFixed = false;
+      navbar.classList.remove("sticky");
+    }
+    
+    console.log(this.navIsFixed)
+  }
+
+  offset(el) {
+      var rect = el.getBoundingClientRect(),
+      scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+      return rect.top + scrollTop;
   }
 }

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import swal from 'sweetalert';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-beneficios-segurados-form',
@@ -17,14 +18,19 @@ export class BeneficiosSeguradosFormComponent {
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
 
-  public submit(e) {
+  public submit(e) {     
     e.preventDefault();
+
+    if(!localStorage.getItem('user_id')){
+      swal('Erro', 'Falha de login!','error').then(() => {window.location.href = environment.loginPageUrl;});
+    }
 
     this.validate();
 
     if (this.errors.empty()) {
       swal('Sucesso', 'Segurado salvo com sucesso','success');
       this.formData.funcao = "beneficios";
+      this.formData.user_id = localStorage.getItem('user_id'); 
       this.onSubmit.emit( this.formData );
     }
     else {

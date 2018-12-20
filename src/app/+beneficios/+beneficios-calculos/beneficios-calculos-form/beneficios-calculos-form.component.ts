@@ -82,6 +82,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataMinima = moment('1970-01-01');
 
   private tipoCorrecaoMonetaria = 'ipca';
+  private indiceCorrecao = 0;
   public correcaoOptions = [
     {
       text: 'Tabela da IPCA-e',
@@ -94,6 +95,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     {
       text: 'Tabela da TR',
       value: 'tr'
+    },
+    {
+      text: 'Tabela da TR até 03/2015 e IPCA-e',
+      value: 'tr032015_ipcae'
     }  
   ]
 
@@ -177,6 +182,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     let valorRgps = parseFloat(this.route.snapshot.queryParams['valor']) || 0;
     if(dataRgps && valorRgps){
       if(this.type == 'AJ'){
+        this.chkUseSameDib = true;
         this.rmiValoresRecebidos = valorRgps;
       }else{
         this.rmiValoresDevidos = valorRgps;
@@ -187,8 +193,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
-      this.loadCalculo();
-      this.isEdit = true;        
+      this.isEdit = true;
+      this.loadCalculo();        
     } else {
       // Initialize variables for a new calculo
       this.jurosAntes2003 = '0,5';
@@ -436,6 +442,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     e.preventDefault();
     this.validateInputs();
     if(this.errors.empty()){
+        if(!this.chkPrecedidoRecebidos){
+          this.dibAnteriorValoresRecebidos = "";
+          console.log('entrou')
+        }
+        if(!this.chkDibAnterior){
+          this.dibAnteriorValoresDevidos = "";
+          this.formData.previa_data_pedido_beneficio_esperado = "";
+          console.log('entrou')
+        }
         // Data inicial do benefício DIB de valores devidos
         // OU
         // Data inicial do benefício DIB de valores recebidos
@@ -453,6 +468,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
           dataPedidoBeneficio = this.dibValoresRecebidos;
           data_anterior_pedido_beneficio = this.dibAnteriorValoresRecebidos;
         }
+
+        this.formData.usar_mesma_dib = this.chkUseSameDib;
         // Id Segurado
         this.formData.id_segurado  = this.route.snapshot.params['id'];
         // Data do cálculo:
@@ -556,6 +573,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         } else {
           this.formData.taxa_ajuste_maxima_concedida = 0;
         }
+
+        if(this.isEdit){
+          swal('Sucesso', 'Cálculo salvo com sucesso','success');
+        }
+
         this.onSubmit.emit(this.formData);
     }else{
       console.log(this.errors.all())
@@ -563,7 +585,19 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
   }
 
+  preencherCorrecaoMonetaria(){
+    let tipoCorrecao = this.formData.tipo_correcao;
+    this.tipoCorrecaoMonetaria = tipoCorrecao;
+    for(let index = 0; index < this.correcaoOptions.length; index++){
+      if(this.correcaoOptions[index].value == tipoCorrecao){
+        this.indiceCorrecao = index;
+        console.log(this.indiceCorrecao)
+      }
+    }
+  }
+
   loadCalculo() {
+    this.preencherCorrecaoMonetaria();
   	// Data do cálculo:
     this.dataCalculo = this.formatReceivedDate(this.formData.data_calculo_pedido);
     // Data da citação do réu
@@ -634,11 +668,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.taxaAjusteMaximaConcedida = this.formData.taxa_ajuste_maxima_concedida.toString().replace('.',',');
     if (this.formData.taxa_ajuste_maxima_esperada != null)
       this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.',',');
-
+    //CheckBox 'Desmarque para não aplicar os juros da poupança'
+    this.chkBoxTaxaSelic = this.formData.aplicar_juros_poupanca;
+    this.chkUseSameDib = this.formData.usar_mesma_dib;
 
   	if (this.chkNotGranted || this.chkUseSameDib) {
   		// Valores Devidos
   		this.dibValoresDevidos = this.formatReceivedDate(dataPedidoBeneficio);
+      this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
   		this.dibAnteriorValoresDevidos = this.formatReceivedDate(data_anterior_pedido_beneficio);
   	} else {
   		// Valores Recebidos

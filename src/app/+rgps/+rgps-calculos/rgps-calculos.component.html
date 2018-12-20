@@ -1,14 +1,35 @@
-<div id="content">
-
+<div id="content" class="pgContent">
   <!-- widget grid -->
   <sa-widgets-grid>
 
     <!-- row -->
     <div class="row">
-
+      <div id="navbar" class="nav-container" *ngIf="navIsFixed">
+        <div class="col-md-12">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar
+                  </button>
+                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class='fa fa-money '></i>
+                    </span> Valores de contribuição
+                  </button>
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Realizar cálculos
+                  </button>
+                </div>
+      </div> 
       <article class="col-sm-12 col-md-12 col-lg-12">
-
+        <h1>Cálculo de Regime Geral da Previdência Social</h1>
         <!-- Widget ID (each widget will need unique ID)-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item active">Lista dos cálculos de RGPS realizados </li>
+        </ol>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <!-- widget options:
               usage: <sa-widget [editbutton]="false">
@@ -62,12 +83,6 @@
         </sa-widget>
       </article>
 
-      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
-
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
-      </article>
-      
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
@@ -75,20 +90,27 @@
               [togglebutton]="false"
               [deletebutton]="false"
               [fullscreenbutton]="false"
-              [custombutton]="false">
+              [custombutton]="false"
+              [collapsed]="false"
+              [sortable]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-gear"></i>
             </span>
-            <h2>Opções</h2>
+            <h2>Próximas etapas</h2>
           </header>
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body" style="min-height: auto;">
+            <div class="widget-body float-panel" style="min-height: auto;">
 
-              <div class="row">
+              <div class="row" id='containerOpcoes'>
                 <div class="col-md-12">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar
+                  </button>
                   <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class='fa fa-money '></i>
@@ -105,6 +127,12 @@
             </div>
           </div>
         </sa-widget>
+      </article>
+
+      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
       </article>
       
       <div class="row">

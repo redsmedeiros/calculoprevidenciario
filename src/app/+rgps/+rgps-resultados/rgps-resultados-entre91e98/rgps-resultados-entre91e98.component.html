@@ -17,12 +17,12 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados</p>
               </td>
               <td>
-                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
                 </button>
-                <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -34,12 +34,12 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
               </td>
               <td>
-                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
                 </button>
-                <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -88,14 +88,14 @@
 </article>
 
     <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-    <div id="{{boxId}}">
+    <div id="{{boxId}}" class="boxCalculo">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>{{calculo.tipo_seguro}} {{stringCabecalho}}</h2>
+            <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} {{stringCabecalho}}</h2>
           </header>
           <div>
             <div class="widget-body">
@@ -121,7 +121,7 @@
                     <td>
                       <span class="pull-right font-bold">Período para o início do benefício:</span>
                     </td>
-                    <td>{{calculo.tipo_aposentadoria}}</td>
+                    <td>{{stringCabecalho}}</td>
                   </tr>
                   <tr>
                     <td>
@@ -141,6 +141,12 @@
                     </td>
                     <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                   </tr>
+                  <tr *ngIf="calculo.carencia != null">
+                    <td>
+                      <span class="pull-right font-bold">Carência:</span>
+                    </td>
+                    <td>{{calculo.carencia}} mês(es)</td>
+                  </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
@@ -155,10 +161,11 @@
             </div>
             <div>
               <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
-              <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && erros.length == 0"
+              <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && direito"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Competência</th>
                     <th>Fator</th>
                     <th>Contribuição Primaria</th>
@@ -170,7 +177,7 @@
                 </thead>
               </sa-datatable>
             </div>
-            <div class="widget-body" *ngIf="!isUpdating && erros.length == 0">
+            <div class="widget-body" *ngIf="!isUpdating && direito">
               <table class="table table-bordered table-hover">
                 <tbody>
                   <tr>
@@ -219,7 +226,7 @@
                     <td width="50%">
                       <span class="pull-right font-bold">Coeficiente:</span>
                     </td>
-                    <td width="50%">{{conclusoes.coeficiente}}</td>
+                    <td width="50%">{{conclusoes.coeficiente}}%</td>
                   </tr>
                   <tr>
                     <td width="50%">

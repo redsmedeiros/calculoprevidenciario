@@ -7,7 +7,8 @@ import {SmartadminDatatableModule} from "../../shared/ui/datatable/smartadmin-da
 import { RgpsResultadosAnterior88Component } from './rgps-resultados-anterior88/rgps-resultados-anterior88.component';
 import { RgpsResultadosEntre91e98Component } from './rgps-resultados-entre91e98/rgps-resultados-entre91e98.component';
 import { RgpsResultadosApos99Component } from './rgps-resultados-apos99/rgps-resultados-apos99.component';
-
+import { RgpsResultadosEntre88e91Component } from './rgps-resultados-entre88e91/rgps-resultados-entre88e91.component';
+import { WINDOW_PROVIDERS } from "../+rgps-calculos/window.service";
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { RgpsResultadosApos99Component } from './rgps-resultados-apos99/rgps-res
     SmartadminModule,
     SmartadminDatatableModule
   ],
-  declarations: [RgpsResultadosComponent, RgpsResultadosAnterior88Component, RgpsResultadosEntre91e98Component, RgpsResultadosApos99Component]
+  providers: [ WINDOW_PROVIDERS ],
+  declarations: [RgpsResultadosComponent, RgpsResultadosAnterior88Component, RgpsResultadosEntre91e98Component, RgpsResultadosApos99Component, RgpsResultadosEntre88e91Component]
 })
 export class RgpsResultadosModule { }

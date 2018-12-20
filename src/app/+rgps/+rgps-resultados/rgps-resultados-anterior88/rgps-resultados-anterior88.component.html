@@ -75,14 +75,14 @@
       </article>
 
       <!-- Tabela e Informações do Cálculo Anterior a 05/10/1988 -->
-      <div id="{{boxId}}">
+      <div id="{{boxId}}" class="boxCalculo">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>{{calculo.tipo_seguro}} Anterior a 05/10/1988</h2>
+            <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} Anterior a 05/10/1988</h2>
           </header>
           <div>
             <div class="widget-body">
@@ -128,6 +128,18 @@
                     </td>
                     <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                   </tr>
+                  <tr *ngIf="calculo.carencia != null">
+                    <td>
+                      <span class="pull-right font-bold">Carência:</span>
+                    </td>
+                    <td>{{calculo.carencia}} mês(es)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Grupos de 12:</span>
+                    </td>
+                    <td>{{(calculo.grupo_dos_12) ? calculo.grupo_dos_12 : 0}} ano(s)</td>
+                  </tr>
                   <tr>
                     <td>
                       <span class="pull-right font-bold">Data de Criação:</span>
@@ -151,6 +163,7 @@
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Competência</th>
                     <th>Contribuição Primária</th>
                     <th>Contribuição Secundária</th>
@@ -205,6 +218,42 @@
                       <span class="pull-right font-bold">% de Cálculo do Benefício:</span>
                     </td>
                     <td width="50%">{{conclusoes.porcentagem_calculo_beneficio}}%</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.primeira_parcela_rmi">
+                    <td width="50%">
+                      <span class="pull-right font-bold">1ª parcela da RMI:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.primeira_parcela_rmi}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.grupo_dos_12">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Qtde Grupos de 12:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.grupo_dos_12}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.valor_excedente">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor excedente:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.valor_excedente}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.segunda_parcela_rmi">
+                    <td width="50%">
+                      <span class="pull-right font-bold">2ª parcela da RMI:</span>
+                    </td>
+                    <td width="50%">{{conclusoes.segunda_parcela_rmi}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.oitenta_porcento_valor_excedente">
+                    <td width="50%">
+                      <span class="pull-right font-bold">80% do valor excedente (Max para 2ª parcela):</span>
+                    </td>
+                    <td width="50%">{{conclusoes.oitenta_porcento_valor_excedente}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.noventa_porcento_maior_valor_teto">
+                    <td width="50%">
+                      <span class="pull-right font-bold">90% do Maior valor de teto (Max para a RMI):</span>
+                    </td>
+                    <td width="50%">{{conclusoes.noventa_porcento_maior_valor_teto}}</td>
                   </tr>
                   <tr>
                     <td width="50%">

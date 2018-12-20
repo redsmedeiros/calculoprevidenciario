@@ -3,6 +3,10 @@
   <sa-widgets-grid>
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12">
+        <h1>Cálculo de Regime Geral da Previdência Social</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Criar/Buscar Segurado</li>
+        </ol>
         <div class="well">
           <h2 class="margin-top-0">
             <span class="semi-bold">Instrução do cálculo</span>
@@ -21,84 +25,17 @@
 
 
     <!-- row -->
-    <div class="row">
-
-      <!-- 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-         
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-search"></i>
-            </span>
-            <h2>Buscar segurado</h2>
-
-          </header>
-
-          <div>
-
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Buscar por:</label>
-                    <div class="col-md-2">
-                      <select class="form-control" id="select-1">
-                        <option>Nome</option>
-                        <option>Documento</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
-                </fieldset>
-
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-labeled btn-danger pull-left margin-right-13">
-                        <span class="btn-label">
-                          <i class="fa fa-trash-o"></i>
-                        </span> Exclusão de Cálculos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-info pull-left">
-                        <span class="btn-label">
-                          <i class="fa fa-link"></i>
-                        </span> Acessar Cálculos Antigos
-                      </button>
-
-                      <button type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-search"></i>
-                        </span> Buscar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article> -->
-
-
+    <div *ngIf="!isEdit"class="row">
       <app-rgps-segurados-create (onSubmit)="onCreate($event)"></app-rgps-segurados-create>
-
+    </div>
+    <div *ngIf="isEdit"class="row">
+      <app-rgps-segurados-edit (onSubmit)="onCreate($event)"></app-rgps-segurados-edit>
     </div>
     <br>
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-rgps-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-rgps-segurados-index>
       </article>
-
-
       <div class="row">
         <div class="col-sm-4 col-sm-offset-4">
           <table class="table table-bordered table-hover table-condensed">
@@ -136,15 +73,8 @@
           </table>
         </div>
       </div>
-
-
-
     </div>
-
     <!-- end row -->
-
   </sa-widgets-grid>
-
   <!-- end widget grid -->
-
 </div>

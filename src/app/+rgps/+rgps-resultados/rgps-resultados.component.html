@@ -5,9 +5,44 @@
 
     <!-- row -->
     <div class="row">
+      <div id="navbar" class="nav-container" *ngIf="navIsFixed">
+        <div class="col-md-12">
+          <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
+            <span class="btn-label">
+              <i class="fa fa-user"></i>
+            </span> Selecionar segurado
+          </button>
+
+          <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
+            <span class="btn-label">
+              <i class="fa fa-calculator"></i>
+            </span> Informações de cálculos
+          </button>
+
+          <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13">
+            <span class="btn-label">
+              <i class="fa fa-dollar"></i>
+            </span> Valores de contribuição
+          </button>
+
+          <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-default margin-right-13">
+            <span class="btn-label">
+              <i class="fa fa-print"></i>
+            </span> Imprimir tudo
+          </button>
+        </div>
+      </div> 
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
+        <h1>Cálculo de Regime Geral da Previdência Social</h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculo[0]}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-valores-contribuidos/{{idSegurado}}/{{idsCalculo[0]}}"> Valores de Contribuição</a></li>
+          <li class="breadcrumb-item active">Resultados dos Cálculos</li>
+        </ol>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -26,6 +61,43 @@
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
+              <div id="printableSegurado" hidden>
+                <table class="table table-bordered table-hover">
+                  <caption><h2>Dados do Segurado</h2></caption>
+                  <tr>
+                    <td width="50%">
+                      <b>Nome:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.nome}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>PIS:</b>
+                    </td>
+                    <td width="50%">
+                      {{segurado.numero_documento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Data de nascimento:</b>
+                    </td>
+                    <td width="50%">
+                       {{segurado.data_nascimento}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Sexo:</b>
+                    </td>
+                    <td width="50%">
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
               <div class="form-actions">
                 <div class="row">
                   <div class="col-md-12">
@@ -44,7 +116,7 @@
     </div>
 
       <!-- tabela com o grupo de cálculos -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12" id='boxGrupoCalculos'>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -64,19 +136,19 @@
                     <th>Contribuição Secundária (Ano/Mês/Dia)</th>
                     <th>DIB</th>
                     <th>Data de Criação</th>
-                    <th>Comparar</th>
+                    <!-- <th>Comparar</th> -->
                   </tr>
                 </thead>
               </sa-datatable>
-                <div class="row">
-                  <div class="col-md-12">
+                <!--<div class="row">
+                   <div class="col-md-12">
                     <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Comparar
                     </button>
                   </div>
-                </div>
+                </div> -->
             </div>
           </div>
         </sa-widget>
@@ -101,7 +173,7 @@
             <!-- widget content -->
             <div class="widget-body" style="min-height: auto;">
 
-              <div class="row">
+              <div class="row" id='containerOpcoes'>
                 <div class="col-md-12">
                   <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
@@ -139,6 +211,11 @@
         [segurado]="segurado"
         [isBlackHole]="calculo.isBlackHole" 
         *ngIf="calculo.mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
+        <app-rgps-resultados-entre88e91 [calculo]="calculo"
+        [segurado]="segurado"
+        [isBlackHole]="calculo.isBlackHole" 
+        [tipoCalculo]="'91_98'"
+        *ngIf="calculo.mostrarCalculo88_91"></app-rgps-resultados-entre88e91>
         <app-rgps-resultados-entre91e98 [calculo]="calculo"
         [segurado]="segurado"
         [tipoCalculo]="'91_98'"
