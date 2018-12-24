@@ -202,16 +202,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       if (this.primaria98dias == undefined || this.primaria98dias == '') {
         this.errors.add({ "primaria98dias": ["Campo obrigatório."] });
       } else {
-        if (this.primaria98dias > 30 || !this.isNumber(this.primaria98dias)) {
-          this.errors.add({ "primaria98dias": ["Insira um valor entre 0 e 30"] });
+        if (this.primaria98dias > 29 || !this.isNumber(this.primaria98dias)) {
+          this.errors.add({ "primaria98dias": ["Insira um valor entre 0 e 29"] });
         }
       }
 
       if (this.primaria98meses == undefined || this.primaria98meses == '') {
         this.errors.add({ "primaria98meses": ["Campo obrigatório."] });
       } else {
-        if (this.primaria98meses > 12 || !this.isNumber(this.primaria98meses)) {
-          this.errors.add({ "primaria98meses": ["Insira um valor entre 0 e 12"] });
+        if (this.primaria98meses > 11 || !this.isNumber(this.primaria98meses)) {
+          this.errors.add({ "primaria98meses": ["Insira um valor entre 0 e 11"] });
         }
       }
 
@@ -222,14 +222,14 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (!(this.secundaria98meses == undefined || this.secundaria98meses == '')) {
-        if (this.secundaria98meses > 12 || !this.isNumber(this.secundaria98meses)) {
-          this.errors.add({ "secundaria98meses": ["Insira um valor entre 1 e 12"] });
+        if (this.secundaria98meses > 11 || !this.isNumber(this.secundaria98meses)) {
+          this.errors.add({ "secundaria98meses": ["Insira um valor entre 1 e 11"] });
         }
       }
 
       if (!(this.secundaria98dias == undefined || this.secundaria98dias == '')) {
-        if (this.secundaria98dias > 30 || !this.isNumber(this.secundaria98dias)) {
-          this.errors.add({ "secundaria98dias": ["Insira um valor entre 0 e 30"] });
+        if (this.secundaria98dias > 29 || !this.isNumber(this.secundaria98dias)) {
+          this.errors.add({ "secundaria98dias": ["Insira um valor entre 0 e 29"] });
         }
       }
     }
@@ -247,16 +247,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       if (this.primaria99meses == undefined || this.primaria99meses == '') {
         this.errors.add({ "primaria99meses": ["Campo obrigatório."] });
       } else {
-        if (this.primaria99meses > 12 || !this.isNumber(this.primaria99meses)) {
-          this.errors.add({ "primaria99meses": ["Insira um valor entre 1 e 12"] });
+        if (this.primaria99meses > 11 || !this.isNumber(this.primaria99meses)) {
+          this.errors.add({ "primaria99meses": ["Insira um valor entre 1 e 11"] });
         }
       }
 
       if (this.primaria99dias == undefined || this.primaria99dias == '') {
         this.errors.add({ "primaria99dias": ["Campo obrigatório."] });
       } else {
-        if (this.primaria99dias > 30 || !this.isNumber(this.primaria99dias)) {
-          this.errors.add({ "primaria99dias": ["Insira um valor entre 0 e 30"] });
+        if (this.primaria99dias > 29 || !this.isNumber(this.primaria99dias)) {
+          this.errors.add({ "primaria99dias": ["Insira um valor entre 0 e 29"] });
         }
       }
 
@@ -267,14 +267,14 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (!(this.secundaria99meses == undefined || this.secundaria99meses == '')) {
-        if (this.secundaria99meses > 12 || !this.isNumber(this.secundaria99meses)) {
-          this.errors.add({ "secundaria99meses": ["Insira um valor entre 1 e 12"] });
+        if (this.secundaria99meses > 11 || !this.isNumber(this.secundaria99meses)) {
+          this.errors.add({ "secundaria99meses": ["Insira um valor entre 1 e 11"] });
         }
       }
 
       if (!(this.secundaria99dias == undefined || this.secundaria99dias == '')) {
-        if (this.secundaria99dias > 30 || !this.isNumber(this.secundaria99dias)) {
-          this.errors.add({ "secundaria99dias": ["Insira um valor entre 0 e 30"] });
+        if (this.secundaria99dias > 29 || !this.isNumber(this.secundaria99dias)) {
+          this.errors.add({ "secundaria99dias": ["Insira um valor entre 0 e 29"] });
         }
       }
     }
@@ -291,16 +291,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       if (this.primariaAtualmeses == undefined || this.primariaAtualmeses == '') {
         this.errors.add({ "primariaAtualmeses": ["Campo obrigatório."] });
       } else {
-        if (this.primariaAtualmeses > 12 || !this.isNumber(this.primariaAtualmeses)) {
-          this.errors.add({ "primariaAtualmeses": ["Insira um valor entre 1 e 12"] });
+        if (this.primariaAtualmeses > 11 || !this.isNumber(this.primariaAtualmeses)) {
+          this.errors.add({ "primariaAtualmeses": ["Insira um valor entre 1 e 11"] });
         }
       }
 
       if (this.primariaAtualdias == undefined || this.primariaAtualdias == '') {
         this.errors.add({ "primariaAtualdias": ["Campo obrigatório."] });
       } else {
-        if (this.primariaAtualdias > 30 || !this.isNumber(this.primariaAtualdias)) {
-          this.errors.add({ "primariaAtualdias": ["Insira um valor entre 0 e 30"] });
+        if (this.primariaAtualdias > 29 || !this.isNumber(this.primariaAtualdias)) {
+          this.errors.add({ "primariaAtualdias": ["Insira um valor entre 0 e 29"] });
         }
       }
 
@@ -312,14 +312,14 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (!(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses == '')) {
-        if (this.secundariaAtualmeses > 12 || !this.isNumber(this.secundariaAtualmeses)) {
-          this.errors.add({ "secundariaAtualmeses": ["Insira um valor entre 1 e 12"] });
+        if (this.secundariaAtualmeses > 11 || !this.isNumber(this.secundariaAtualmeses)) {
+          this.errors.add({ "secundariaAtualmeses": ["Insira um valor entre 1 e 11"] });
         }
       }
 
       if (!(this.secundariaAtualdias == undefined || this.secundariaAtualdias == '')) {
-        if (this.secundariaAtualdias > 30 || !this.isNumber(this.secundariaAtualdias)) {
-          this.errors.add({ "secundariaAtualdias": ["Insira um valor entre 0 e 30"] });
+        if (this.secundariaAtualdias > 29 || !this.isNumber(this.secundariaAtualdias)) {
+          this.errors.add({ "secundariaAtualdias": ["Insira um valor entre 0 e 29"] });
         }
       }
     }
