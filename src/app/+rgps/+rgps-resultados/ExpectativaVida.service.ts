@@ -13,7 +13,7 @@ export class ExpectativaVidaService extends ControllerService {
 
     return new Promise((resolve, reject) => {
     	let parameters = ['idade', idadeFracionada, '', ''];
-	  	if (this.list.length == 0) {
+	  	// if (this.list.length == 0) {
 	  		this.getWithParameters(parameters).then(() => {
 			  	let list = this.list;
 			  	resolve(list);
@@ -21,23 +21,32 @@ export class ExpectativaVidaService extends ControllerService {
 	          console.error(error);
 	          reject(error);	  			
 	  		})
-	  	} else {
-			let list = this.list;
-	  		resolve(list);
-  		}
+	  // 	} else {
+			// let list = this.list;
+	  // 		resolve(list);
+  	// 	}
     });
   }
 
   public getByDates(dataInicio, dataFim){
+    console.log(dataInicio, dataFim)
   	for(let expectativa of this.list){
   		let startDate = (expectativa.data_inicial) ? moment(expectativa.data_inicial) : null ;
   		let endDate = (expectativa.data_final) ? moment(expectativa.data_final) : null;
-  		if(startDate <= dataInicio && endDate <= dataFim){
-  			return expectativa.valor;
-  		}
+      if(dataFim == null){
+        if(startDate <= dataInicio && endDate >= dataInicio){
+          return expectativa.valor;
+        }
+      }else{
+        if(startDate <= dataInicio && endDate >= dataFim){
+          return expectativa.valor;
+        }
+      }
   	}
   	return -1;
   }
+
+
 
   public getByAno(ano){
   	for(let expectativa of this.list){
