@@ -615,7 +615,8 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   formatMoney(value, sigla='R$'){
-    return sigla + this.formatDecimal(value, 2);
+    let numeroPadronizado = value.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
+    return sigla + numeroPadronizado;
   }
 
   formatDecimal(value, n_of_decimal_digits){

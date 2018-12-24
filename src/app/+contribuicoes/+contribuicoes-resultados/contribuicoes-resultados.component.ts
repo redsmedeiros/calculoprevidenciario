@@ -143,7 +143,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
 
   formatMoney(data){
     data = parseFloat(data);
-    return data.toFixed(2).replace('.',',');
+    return data.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});;
   }
 
   formatDate(data){
