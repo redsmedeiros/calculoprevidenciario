@@ -220,7 +220,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   esmaecerLinhas(dataCorrente, line){
     let dataComparacao;
-    if (moment(this.calculo.previa_data_pedido_beneficio_esperado).isAfter(moment('1998-12-01'))){
+    if (this.primeiraDataArrayMoeda.isAfter(moment('1998-12-01'))){
       dataComparacao = moment('2003-11-01');
     }else{
       dataComparacao = moment('1998-11-01');
