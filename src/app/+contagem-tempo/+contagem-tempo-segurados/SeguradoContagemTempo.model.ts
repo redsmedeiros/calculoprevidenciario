@@ -8,6 +8,7 @@ export class SeguradoContagemTempo extends Model {
   static form = {
     id: '',
     nome: '',
+    user_id: '',
     id_documento: '',
     numero_documento: '',
     data_nascimento: '',
@@ -23,6 +24,7 @@ export class SeguradoContagemTempo extends Model {
 
   public id: number;
   public nome;
+  public user_id;
   public id_documento;
   public numero_documento;
   public data_nascimento;

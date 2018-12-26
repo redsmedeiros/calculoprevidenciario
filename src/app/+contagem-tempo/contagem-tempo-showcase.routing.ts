@@ -12,7 +12,7 @@ export const routes: Routes = [
   {
     path: 'contagem-tempo-calculos',
     loadChildren: 'app/+contagem-tempo/+contagem-tempo-calculos/contagem-tempo-calculos.module#ContagemTempoCalculosModule',
-    data: {pageTitle: 'Contagem Tempo  Calculo'}
+    data: {pageTitle: 'Contagem Tempo Calculo'}
   },
   {
     path: 'contagem-tempo-periodos',
@@ -22,7 +22,7 @@ export const routes: Routes = [
   {
     path: 'contagem-tempo-resultados',
     loadChildren: 'app/+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-resultados.module#ContagemTempoResultadosModule',
-    data: {pageTitle: 'Contagem Tempo  Resultados'}
+    data: {pageTitle: 'Contagem Tempo Resultados'}
   },
 ];
 

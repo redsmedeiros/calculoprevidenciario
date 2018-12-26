@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoContagemTempo as SeguradoModel } from './SeguradoContagemTempo.model';
 import { SeguradoService } from './SeguradoContagemTempo.service';
 import { ErrorService } from '../../services/error.service';
@@ -19,38 +19,60 @@ export class ContagemTempoSeguradosComponent implements OnInit {
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
+  public userId;
   public isUpdating = false;
-  public form = {...SeguradoModel.form};
+  public isEdit = false;
+  public form = { ...SeguradoModel.form };
   public list = this.Segurado.list;
   public datatableOptions = {
     colReorder: true,
     data: this.list,
     columns: [
-      {data: 'actions', width: '7%', className: 'dt-center' },
-      {data: 'nome'},
-      {data: 'id_documento',
+      { data: 'actions', width: '7%', className: 'dt-center' },
+      { data: 'nome' },
+      {
+        data: 'id_documento',
         render: (data) => {
           return this.getDocumentType(data);
-        }},
-      {data: 'documento'},
-      {data: 'data_nascimento'},
-      {data: 'data_filiacao'},
-      {data: 'data_cadastro'}
-    ] };
+        }
+      },
+      { data: 'documento' },
+      { data: 'data_nascimento' },
+      { data: 'data_filiacao' },
+      { data: 'data_cadastro' }
+    ]
+  };
 
   constructor(
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
     protected router: Router,
-  ) {}
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.isUpdating = true;
-    this.Segurado.get()
+
+    this.getListSegurados();
+
+  }
+
+
+  private getListSegurados() {
+
+    this.userId = this.route.snapshot.queryParams['user_id'];
+
+    if (this.userId === undefined) {
+      this.userId = this.route.snapshot.params['id'] || localStorage.getItem('user_id');
+    }
+
+    this.Segurado.getByUserId(this.userId)
         .then(() => {
+           localStorage.setItem('user_id', this.userId);
            this.updateDatatable();
            this.isUpdating = false;
-        })
+        });
+
   }
 
   getDocumentType(id_documento) {
@@ -80,11 +102,11 @@ export class ContagemTempoSeguradosComponent implements OnInit {
   onCreate(e) {
     this.isUpdating = true;
     this.Segurado.get()
-        .then(() => {
-           this.updateDatatable();
-           this.list = this.Segurado.list;
-           this.isUpdating = false;
-        })
+      .then(() => {
+        this.updateDatatable();
+        this.list = this.Segurado.list;
+        this.isUpdating = false;
+      })
   }
 
 }
