@@ -250,7 +250,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML
     let resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML
     let printContents = seguradoBox + '<br>' + dadosCalculo + '<br>' + detalhamentoCalculo + '<br>' + resultadosCalculo + '<br>';
-    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
