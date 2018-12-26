@@ -1771,10 +1771,16 @@ export class BeneficiosResultadosComponent implements OnInit {
   
   imprimirPagina(){
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
-    let infoCalculo = document.getElementById('infoCalculo').innerHTML;
+    let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
+    let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
+    let valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
+    let honorarios = document.getElementById('printableHonorarios').innerHTML;
+    let juros = document.getElementById('printableJuros').innerHTML;
+    let conclusoes = document.getElementById('printableConclusoes').innerHTML;
     let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
-    let printContents = seguradoBox + infoCalculo + resultadoCalculo;
-    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    
+    let printContents = seguradoBox + dadosCalculo + valoresDevidos+ valoresRecebdios + honorarios + juros + conclusoes + resultadoCalculo;
+    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
