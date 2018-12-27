@@ -121,6 +121,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
+              console.log(moeda)
               let dataReajustesAutomaticos = this.dataInicioBeneficio;
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
@@ -146,7 +147,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dibCurrency = this.loadCurrency(dib);
     let moedaDib = this.Moeda.getByDate(dib);
     let dataComparacao = (dib.clone()).startOf('month');
-    let moedaComparacao = this.Moeda.getByDate(dataComparacao);
+    let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;
@@ -175,10 +176,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); //tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
       let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
       
-      let moeda = this.Moeda.getByDate(dataContribuicao);
-      let fator = moeda.fator;
-      let fatorLimite = moedaComparacao.fator;
-      let fatorCorrigido = fator / fatorLimite;
+      let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
+      let fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
+      let fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
+      let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
        
       let contribuicaoPrimariaRevisada = 0;
@@ -456,7 +457,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         mediaContribuicoesSecundarias /= divisorSecundario;    
     }
 
-    if (mediaContribuicoesSecundarias > moedaDib.teto) {
+    if (moedaDib && mediaContribuicoesSecundarias > moedaDib.teto) {
         mediaContribuicoesSecundarias = moedaDib.teto;
     }
 
@@ -497,8 +498,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     //let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
     let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-    let salarioAcidente = objMoeda.salario_minimo;
-    if (mediaContribuicoesPrimarias > salarioAcidente) {
+    //let salarioAcidente = objMoeda.salario_minimo;
+    if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
       switch(this.tipoBeneficio){
         case 17:// Auxilio Acidente 30
           rmi = mediaContribuicoesPrimarias * 0.3;
@@ -567,8 +568,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
 
     let dataBeneficio = this.dataInicioBeneficio;
-    let teto = moedaDib.teto;
-    let minimo = moedaDib.salario_minimo;
+    // let teto = moedaDib.teto;
+    // let minimo = moedaDib.salario_minimo;
 
     let comparacaoContribuicao = 35 - redutorSexo;
     if(naoFocado){
@@ -698,11 +699,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {
     let beneficioCorrigido = beneficio;
-    if (beneficio > moeda.teto){
+    if (moeda && beneficio > moeda.teto){
       beneficioCorrigido = moeda.teto * coeficiente /100;
       this.limited = true;
     }
-    if (beneficio < moeda.salario_minimo && this.tipoBeneficio != 7) {
+    if (moeda && beneficio < moeda.salario_minimo && this.tipoBeneficio != 7) {
       beneficioCorrigido = moeda.salario_minimo
     }
     return beneficioCorrigido;
@@ -1017,16 +1018,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   limitarTetosEMinimos(valor, data){
-    let moeda = this.Moeda.getByDate(data);
-    let salarioMinimo = moeda.salario_minimo;
-    let tetoSalarial = moeda.teto;
+    let moeda = data.isSameOrBefore(moment(),'month') ? this.Moeda.getByDate(data) : undefined;
+    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    let tetoSalarial = (moeda) ? moeda.teto: 0;
     let avisoString = '';
     let valorRetorno = valor;
 
-    if(valor < salarioMinimo){
+    if(moeda && valor < salarioMinimo){
       valorRetorno = salarioMinimo;
       avisoString = 'LIMITADO AO MÍNIMO'
-    }else if(valor > tetoSalarial){
+    }else if(moeda && valor > tetoSalarial){
       valorRetorno = tetoSalarial;
       avisoString = 'LIMITADO AO TETO'
     }

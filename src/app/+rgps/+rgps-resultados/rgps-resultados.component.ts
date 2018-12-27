@@ -897,8 +897,6 @@ export class RgpsResultadosComponent implements OnInit {
       this.navIsFixed = false;
       navbar.classList.remove("sticky");
     }
-    
-    console.log(this.navIsFixed)
   }
 
   offset(el) {
