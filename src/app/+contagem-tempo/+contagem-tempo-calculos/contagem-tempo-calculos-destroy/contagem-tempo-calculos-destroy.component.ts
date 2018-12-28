@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { CalculoContagemTempoService } from '../CalculoContagemTempo.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import swal from 'sweetalert';
+// import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -20,20 +21,53 @@ export class ContagemTempoCalculosDestroyComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    let calculo = this.route.snapshot.params['id_calculo'];
-    let user = this.route.snapshot.params['id'];
 
-    this.CalculosContagemTempo.find(calculo)
-        .then(calculoContagem => {
-          console.log(calculoContagem);
-          this.CalculosContagemTempo.destroy(calculoContagem)
+    swal({
+      title: 'Tem certeza?',
+      text: 'Essa ação é irreversível!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Deletar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      const calculo = this.route.snapshot.params['id_calculo'];
+        const user = this.route.snapshot.params['id'];
+      if (result.value) {
+        this.CalculosContagemTempo.find(calculo)
+          .then(calculoContagem => {
+            this.CalculosContagemTempo.destroy(calculoContagem)
               .then(() => {
                 this.router.navigate(['contagem-tempo/contagem-tempo-calculos/' + user]);
-                swal('Sucesso', 'Cálculo excluído com sucesso','success');
+                swal('Sucesso', 'Cálculo excluído com sucesso', 'success');
               }).catch((err) => {
-            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
-          });
-        })
+                swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+              });
+          })
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        this.router.navigate(['contagem-tempo/contagem-tempo-calculos/' + user]);
+      }
+    })
+
+
+
+
+
+    // let calculo = this.route.snapshot.params['id_calculo'];
+    // let user = this.route.snapshot.params['id'];
+
+    // this.CalculosContagemTempo.find(calculo)
+    //     .then(calculoContagem => {
+    //       console.log(calculoContagem);
+    //       this.CalculosContagemTempo.destroy(calculoContagem)
+    //           .then(() => {
+    //             this.router.navigate(['contagem-tempo/contagem-tempo-calculos/' + user]);
+    //             swal('Sucesso', 'Cálculo excluído com sucesso','success');
+    //           }).catch((err) => {
+    //         swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+    //       });
+    //     })
   }
 
 

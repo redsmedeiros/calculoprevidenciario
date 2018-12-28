@@ -101,12 +101,12 @@ export class ContagemTempoSeguradosComponent implements OnInit {
 
   onCreate(e) {
     this.isUpdating = true;
-    this.Segurado.get()
-      .then(() => {
-        this.updateDatatable();
-        this.list = this.Segurado.list;
-        this.isUpdating = false;
-      })
+    this.Segurado.getByUserId(this.userId)
+        .then(() => {
+           this.updateDatatable();
+           this.list = this.Segurado.list;
+           this.isUpdating = false;
+        })
   }
 
 }

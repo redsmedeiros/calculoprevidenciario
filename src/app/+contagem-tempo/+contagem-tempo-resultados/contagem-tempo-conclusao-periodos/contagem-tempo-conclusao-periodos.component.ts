@@ -382,6 +382,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     return periodo;
   }
 
+  returnListaPeriodos() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-periodos/' +
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+  }
+
 
   toMoment(dateString) {
     return moment(dateString, 'DD/MM/YYYY');

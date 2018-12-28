@@ -165,11 +165,14 @@ export class ContagemTempoResultadosComponent implements OnInit {
     const popupWin = window.open('', '_blank', 'width=640,height=480');
 
     popupWin.document.open();
-    popupWin.document.write(`<html><head>${css}</head>
+    popupWin.document.write(`<!doctype html>
+                                <html>
+                                  <head>${css}</head>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
                                    <footer>${footerText}</footer>
-                            </body></html>`);
+                                  </body>
+                                </html>`);
     popupWin.document.close();
   }
 

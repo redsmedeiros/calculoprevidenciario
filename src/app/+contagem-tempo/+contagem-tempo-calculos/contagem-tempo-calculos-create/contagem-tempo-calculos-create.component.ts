@@ -28,12 +28,12 @@ export class ContagemTempoCalculosCreateComponent implements OnDestroy {
   ) { }
 
   submit(data) {
-    console.log(data);
     this.Calculo
       .save(data)
-      .then(model => {
+      .then((model: CalculoModel) => {
         this.resetForm();
         this.onSubmit.emit();
+        window.location.href = '#/contagem-tempo/contagem-tempo-periodos/' + this.route.snapshot.params['id'] + '/' + model.id;
       })
       .catch(errors => this.Errors.add(errors));
   }
