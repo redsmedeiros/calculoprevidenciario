@@ -1,0 +1,21 @@
+  <!-- row -->
+  <div class="row" >
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget class="jarviswidget-color-blueLight" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-file-pdf-o"></i>
+            </span>
+          </header>
+          <div class="widget-body">
+            <file-drop (click)="clickedDropzone()" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+              <span>Clique aqui e selecione o CNIS.pdf ou arraste para este local.</span>
+            </file-drop>
+            <input id="cnisFileInput" type="file" (change)="onFileInputChange($event)" accept="application/pdf"
+              #cnisFileInput style="display:none" />
+          </div>
+        </sa-widget>
+      </article>
+    </div>  
+    <!-- end row -->

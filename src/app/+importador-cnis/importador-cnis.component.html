@@ -1,0 +1,31 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well">
+          <h2 class="margin-top-0">
+            <span class="semi-bold">Importador CNIS - Cadastro Nacional de Informações Sociais</span>
+          </h2>
+          <h4 class="margin-top-0">
+            <span class="semi-bold">Instruções e observações para CNIS - Cadastro Nacional de Informações Sociais</span>
+          </h4>
+          <ul class="list-unstyled padding-top-10">
+            <li>O arquivo deve ser obtido diretamente do portal meu INSS (<a href="https://meu.inss.gov.br/central/index.html#/"
+                target="_blank">aqui para acessar</a> );</li>
+            <li>Eventualmente alguns dados podem não ser importados, tenha em mãos o arquivo para confrontar os dados e
+              realizar os ajustes caso seja necessário.</li>
+          </ul>
+          <p class="margin-lg-top"></p>
+        </div>
+      </article>
+    </div>
+    <app-importador-cnis-pdf-load (infoSegurado)="reciverInfoSegurado($event)" (infoVinculos)="reciverInfoVinculos($event)"></app-importador-cnis-pdf-load>
+    <div *ngIf="!isUpdating" > teste </div>
+    <app-importador-cnis-segurados [isUpdating]="isUpdating" [segurado]="segurado" ></app-importador-cnis-segurados>
+    <app-importador-cnis-calculos [isUpdating]="isUpdating" [vinculos]="vinculos"></app-importador-cnis-calculos>
+    <app-importador-cnis-periodos [isUpdating]="isUpdating" [vinculos]="vinculos"></app-importador-cnis-periodos>
+
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>
