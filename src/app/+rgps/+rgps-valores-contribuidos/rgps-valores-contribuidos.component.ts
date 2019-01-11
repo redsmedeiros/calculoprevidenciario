@@ -196,8 +196,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       let dateMonth = mes;
       let valor = periodoObj.salarioContribuicao;
       let tipo = (tipoContribuicao === 'Primaria') ? 0 : 1;
-      if (valor == 0)
-        continue;
+      //if (valor == 0)
+      //  continue;
       let date = dateMonth + '-01';
       let valorContribuido = new ValorContribuido({
         id_calculo: this.idsCalculos,
@@ -245,7 +245,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   isEmpty(data) {
-    if (data == undefined || data == '') {
+    console.log(data)
+    if (data == undefined || data === '') {
       return true;
     }
     return false;
