@@ -42,7 +42,8 @@ export class RgpsMatrizComponent implements OnInit {
     let monthList = this.monthAndYear(periodo.inicioPeriodo, periodo.finalPeriodo);
 
     let ano = monthList[0].split('-')[0];
-    let valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+    //let valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+    let valores = ['', '', '', '', '', '', '', '', '', '', '', ''];
     this.anosConsiderados.push(ano);
     for (let entry of monthList){
       if(ano == entry.split('-')[0]){
@@ -50,7 +51,8 @@ export class RgpsMatrizComponent implements OnInit {
       }else{
         this.updateMatrix(+ano, valores);
         ano = entry.split('-')[0];
-        valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+        //valores = ['0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00', '0,00'];
+        valores = ['', '', '', '', '', '', '', '', '', '', '', ''];
         valores[+entry.split('-')[1]-1] = this.formatMoney(periodo.salarioContribuicao);
         this.anosConsiderados.push(ano);
       }
@@ -98,7 +100,8 @@ export class RgpsMatrizComponent implements OnInit {
       if(entry.ano == ano){
         let index = 0;
         for (index = 0; index < 12; ++index) {
-          if(entry.valores[index] != valores[index] && valores[index] != '0,00'){
+           //if(entry.valores[index] != valores[index] && valores[index] != '0,00'){
+          if(entry.valores[index] != valores[index] && valores[index] != ''){
             entry.valores[index] = valores[index];
           }
         }
