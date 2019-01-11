@@ -16,6 +16,7 @@ export class RgpsMatrizComponent implements OnInit {
   public anosConsiderados = [];
   public matrizHasValues = false;
   private hashKey;
+  public changedGrid = false;
   public matrixTableOptions = {
       paging: false, 
       ordering: false, 

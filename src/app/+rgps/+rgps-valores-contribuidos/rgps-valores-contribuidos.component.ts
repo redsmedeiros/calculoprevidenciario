@@ -96,7 +96,54 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       });
   }
   realizarCalculo() {
-    window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+    if(this.matrizContribuicoesPrimarias.changedGrid || this.matrizContribuicoesSecundarias.changedGrid){
+      let contribuicoesPrimarias = this.matrizContribuicoesPrimarias.getMatrixData();
+      let contribuicoesSecundarias = this.matrizContribuicoesSecundarias.getMatrixData();
+  
+      let primarias = [];
+      let secundarias = [];
+      for (let contribuicao of contribuicoesPrimarias) {
+        let dateMonth = contribuicao.split('-')[0];
+        let valor = contribuicao.split('-')[1];
+        // if (valor == 0)
+        //   continue;
+        let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
+        let valorContribuido = new ValorContribuido({
+          id_calculo: this.idsCalculos,
+          data: date,
+          tipo: 0,
+          valor: valor,
+        });
+        primarias.push(valorContribuido);
+      }
+      for (let contribuicao of contribuicoesSecundarias) {
+        let dateMonth = contribuicao.split('-')[0];
+        let valor = contribuicao.split('-')[1];
+        if (valor == 0)
+          continue;
+        let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
+        let valorContribuido = new ValorContribuido({
+          id_calculo: this.idsCalculos,
+          data: date,
+          tipo: 1,
+          valor: valor,
+        });
+        secundarias.push(valorContribuido);
+      }
+      let todasContribuicoes = primarias.concat(secundarias);
+      if (todasContribuicoes.length != 0) {
+        this.mostrarBotaoRealizarCalculos = false;
+        this.ValorContribuidoService.save(todasContribuicoes).then(() => {
+          swal('Sucesso', 'Valores salvos com sucesso!','success').then(() =>{
+            window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+          })
+        });
+      } else {
+        swal('Erro', 'Nenhum valor inserido', 'error');
+      }
+    }else{
+      window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+    }
   }
 
   initializeMatrix(valorescontribuidos) {
@@ -177,8 +224,19 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       }
       //Salva contribuicoes no bd 
       this.salvarContribuicoes(periodoObj, this.tipoContribuicao)
+      this.inicioPeriodo = ((moment(this.finalPeriodo, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+      this.finalPeriodo = this.inicioPeriodo;
     } else {
       swal('Erro', 'Confira os dados digitados', 'error');
+    }
+  }
+
+  moveNext(event, maxLength, nextElementId){
+    let value = event.explicitOriginalTarget.value;
+    if(value.indexOf('_') < 0){
+      let next = <HTMLInputElement>document.getElementById(nextElementId);
+      console.log(next)
+      next.focus();
     }
   }
 
