@@ -164,6 +164,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
   private ultimaDiferencaMensal = 0.0;
+
+  private dibAnteriorRecebidos = null;
+  private dibAnteriorDevidos = null;
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
   constructor(protected router: Router,
@@ -220,7 +223,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   esmaecerLinhas(dataCorrente, line){
     let dataComparacao;
-    if (this.primeiraDataArrayMoeda.isAfter(moment('1998-12-01'))){
+    let data = null;
+    if(this.dibAnteriorRecebidos){
+      data = this.dibAnteriorRecebidos;
+    }
+
+    if(this.dibAnteriorDevidos){
+      data = this.dibAnteriorDevidos;
+    }
+
+    if (data.isAfter(moment('1998-12-01'))){
       dataComparacao = moment('2003-11-01');
     }else{
       dataComparacao = moment('1998-11-01');
@@ -1379,15 +1391,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
 
-    let dibAnteriorRecebidos = null;
-    let dibAnteriorDevidos = null;
     if(this.calculo.data_anterior_pedido_beneficio != '0000-00-00'){
-      dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
-      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorRecebidos) ? this.primeiraDataArrayMoeda : dibAnteriorRecebidos;
+      this.dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < this.dibAnteriorRecebidos) ? this.primeiraDataArrayMoeda : this.dibAnteriorRecebidos;
     }
     if(this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00'){
-      dibAnteriorDevidos = moment(this.calculo.previa_data_pedido_beneficio_esperado); //devidos
-      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorDevidos) ? this.primeiraDataArrayMoeda : dibAnteriorDevidos;
+      this.dibAnteriorDevidos = moment(this.calculo.previa_data_pedido_beneficio_esperado); //devidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < this.dibAnteriorDevidos) ? this.primeiraDataArrayMoeda : this.dibAnteriorDevidos;
     }
     
     this.beneficioDevidoAposRevisao = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
