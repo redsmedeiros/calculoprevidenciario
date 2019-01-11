@@ -232,8 +232,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   moveNext(event, maxLength, nextElementId){
-    let value = event.explicitOriginalTarget.value;
-    if(value.indexOf('_') < 0){
+    let value = event.srcElement.value;
+    if(value.indexOf('_') < 0 && value != ''){
       let next = <HTMLInputElement>document.getElementById(nextElementId);
       console.log(next)
       next.focus();
