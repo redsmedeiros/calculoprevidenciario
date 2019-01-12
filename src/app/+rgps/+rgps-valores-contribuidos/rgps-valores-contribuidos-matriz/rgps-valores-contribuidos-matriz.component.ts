@@ -12,11 +12,10 @@ import * as moment from 'moment';
 
 
 export class RgpsMatrizComponent implements OnInit {
-
+  @Output() valueChanged = new EventEmitter();
   public anosConsiderados = [];
   public matrizHasValues = false;
   private hashKey;
-  public changedGrid = false;
   public matrixTableOptions = {
       paging: false, 
       ordering: false, 
@@ -58,6 +57,10 @@ export class RgpsMatrizComponent implements OnInit {
       }
     }
     this.updateMatrix(+ano, valores);
+  }
+
+  changedGrid(event){
+    this.valueChanged.emit(event);
   }
 
   getMatrixData(){

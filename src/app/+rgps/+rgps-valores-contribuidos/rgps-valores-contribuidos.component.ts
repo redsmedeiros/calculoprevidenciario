@@ -95,55 +95,33 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         }
       });
   }
-  realizarCalculo() {
-    if(this.matrizContribuicoesPrimarias.changedGrid || this.matrizContribuicoesSecundarias.changedGrid){
-      let contribuicoesPrimarias = this.matrizContribuicoesPrimarias.getMatrixData();
-      let contribuicoesSecundarias = this.matrizContribuicoesSecundarias.getMatrixData();
-  
-      let primarias = [];
-      let secundarias = [];
-      for (let contribuicao of contribuicoesPrimarias) {
-        let dateMonth = contribuicao.split('-')[0];
-        let valor = contribuicao.split('-')[1];
-        // if (valor == 0)
-        //   continue;
-        let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-        let valorContribuido = new ValorContribuido({
+
+  contribsChanged(event, tipo_contrib){
+    console.log(event)
+    let valor = parseFloat(event.srcElement.value.replace('.', '').replace(',','.'));
+    let mes = event.srcElement.id.split('-')[0];
+    let ano = event.srcElement.id.split('-')[1];
+    let date = `${ano}-${mes}-01`;
+
+    let valorContribuido = new ValorContribuido({
           id_calculo: this.idsCalculos,
           data: date,
           tipo: 0,
           valor: valor,
         });
-        primarias.push(valorContribuido);
-      }
-      for (let contribuicao of contribuicoesSecundarias) {
-        let dateMonth = contribuicao.split('-')[0];
-        let valor = contribuicao.split('-')[1];
-        if (valor == 0)
-          continue;
-        let date = dateMonth.split('/')[1] + '-' + dateMonth.split('/')[0] + '-01';
-        let valorContribuido = new ValorContribuido({
-          id_calculo: this.idsCalculos,
-          data: date,
-          tipo: 1,
-          valor: valor,
-        });
-        secundarias.push(valorContribuido);
-      }
-      let todasContribuicoes = primarias.concat(secundarias);
-      if (todasContribuicoes.length != 0) {
-        this.mostrarBotaoRealizarCalculos = false;
-        this.ValorContribuidoService.save(todasContribuicoes).then(() => {
-          swal('Sucesso', 'Valores salvos com sucesso!','success').then(() =>{
-            window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
-          })
-        });
-      } else {
-        swal('Erro', 'Nenhum valor inserido', 'error');
-      }
-    }else{
-      window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
-    }
+    swal({
+        type: 'info',
+        title: 'Aguarde por favor...',
+        allowOutsideClick: false
+       });
+      swal.showLoading();
+    this.ValorContribuidoService.save([valorContribuido]).then(() => {
+      swal.close();
+    });
+  }
+
+  realizarCalculo() {
+    window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
   }
 
   initializeMatrix(valorescontribuidos) {

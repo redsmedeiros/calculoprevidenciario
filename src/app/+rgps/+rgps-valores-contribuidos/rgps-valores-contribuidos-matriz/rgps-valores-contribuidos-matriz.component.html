@@ -21,40 +21,40 @@
       <tr *ngFor="let data of matriz" >
         <td>{{data.ano}}</td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="01-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[0] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="01-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[0] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="02-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[1] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="02-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[1] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="03-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[2] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="03-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[2] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="04-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[3] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="04-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[3] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="05-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[4] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="05-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[4] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="06-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[5]}}" (keyup) = "changedGrid = true" class="matriz-input"  />
+          <input maxlength="12" currencyMask id ="06-{{data.ano}}-{{hashKey}}" type="text" value="{{data.valores[5]}}"   (focusout) = "changedGrid($event)" class="matriz-input"  />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="07-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[6] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="07-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[6] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="08-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[7] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="08-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[7] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="09-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[8] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="09-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[8] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id ="10-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[9] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id ="10-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[9] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id="11-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[10] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id="11-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[10] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
         <td class="matriz-line">
-          <input maxlength="12" currencyMask id="12-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[11] }}" (keyup) = "changedGrid = true" class="matriz-input" />
+          <input maxlength="12" currencyMask id="12-{{data.ano}}-{{hashKey}}" type="text" value="{{ data.valores[11] }}" (focusout) = "changedGrid($event)" class="matriz-input" />
         </td>
       </tr>
     </tbody>
