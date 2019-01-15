@@ -226,10 +226,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     let data = null;
     if(this.dibAnteriorRecebidos){
       data = this.dibAnteriorRecebidos;
-    }
-
-    if(this.dibAnteriorDevidos){
+    }else if(this.dibAnteriorDevidos){
       data = this.dibAnteriorDevidos;
+    }else{
+      return;
     }
 
     if (data.isAfter(moment('1998-12-01'))){
