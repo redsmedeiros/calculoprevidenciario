@@ -1,11 +1,11 @@
-<div id="content">
+<div id="content" *ngIf="!isUpdating" style="min-width: 895px">
 
   <!-- widget grid -->
   <sa-widgets-grid>
 
     <!-- row -->
     <div class="row" *ngIf="!isUpdating">
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
         <h1 *ngIf="isTetos">Resultado do Cálculo de Atrasados - Tetos Judiciais</h1>
         <ol class="breadcrumb">
@@ -14,7 +14,7 @@
           <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{calculoType}}/{{seguradoId}}/{{calculoId}}/edit"> Informações para o cálculo</a></li>
           <li class="breadcrumb-item active">Resultados</li>
         </ol>
-                <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
+        <sa-widget [colorbutton]="false" [editbutton]="false" [editbutton]="false"
               [togglebutton]="false"
               [deletebutton]="false"
               [fullscreenbutton]="false"
@@ -98,11 +98,12 @@
           </div>
         </sa-widget>
       </article>
+    </div>
 
 
-
-      <div id="infoCalculo">
-      <article class="col-sm-12 col-md-12 col-lg-12">
+    <div id="infoCalculo">
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -170,8 +171,10 @@
           </div>
         </sa-widget>
       </article>
+      </div>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -273,8 +276,10 @@
           </div>
         </sa-widget>
       </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      </div>
+      
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -376,8 +381,10 @@
           </div>
         </sa-widget>
       </article>
+      </div>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -449,8 +456,10 @@
           </div>
         </sa-widget>
       </article>
+      </div>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -512,14 +521,11 @@
           </div>
         </sa-widget>
       </article>
+      </div>
 
-       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <sa-widget [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false">
+      <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+       <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -789,10 +795,13 @@
               </div>
             </div>
           </div>
-        </sa-widget>
+       </sa-widget>
       </article>
+      </div>
     </div>
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+
+    <div class= "row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false"
               [editbutton]="false"
@@ -833,8 +842,9 @@
           </div>
         </sa-widget>
       </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12" id="resultadoCalculo">
+    </div>
+    <div class="row">
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="resultadoCalculo">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
@@ -851,9 +861,9 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body" >
               <sa-datatable [options]="resultadosDatatableOptions"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%" *ngIf="!isUpdating">
+                paginationLength="false" filter='false' tableClass="table table-striped table-bordered table-hover" [responsive]="false" width="100%" *ngIf="!isUpdating">
                 <thead *ngIf="!isTetos">
                   <tr>
                     <th>Competência</th>
@@ -978,11 +988,11 @@
           </div>
         </sa-widget>
       </article>
-
-
-
-
     </div>
+
+
+
+    
 
     <!-- end row -->
 

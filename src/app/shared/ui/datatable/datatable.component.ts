@@ -22,6 +22,7 @@ export class DatatableComponent implements OnInit {
 
   @Input() public paginationLength: boolean;
   @Input() public columnsHide: boolean;
+  @Input() public responsive: boolean = true;
   @Input() public tableClass: string;
   @Input() public width: string = '100%';
 
@@ -71,12 +72,19 @@ export class DatatableComponent implements OnInit {
       },
       "autoWidth": false,
       retrieve: true,
-      responsive: true,
+      responsive: this.responsive,
       initComplete: (settings, json)=> {
         element.parent().find('.input-sm', ).removeClass("input-sm").addClass('input-md');
       }
     });
 
+    if(!this.responsive){
+      options["createdRow"] =  ( row, data, index ) => {
+            if ( index % 2 != 0 ) {
+                $(row).css('background-color', 'white');
+            }
+        }
+    }
     const _dataTable = element.DataTable(options);
 
     if (this.filter) {
