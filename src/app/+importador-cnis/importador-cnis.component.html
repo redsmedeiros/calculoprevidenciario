@@ -20,11 +20,15 @@
         </div>
       </article>
     </div>
-    <app-importador-cnis-pdf-load (infoSegurado)="reciverInfoSegurado($event)" (infoVinculos)="reciverInfoVinculos($event)"></app-importador-cnis-pdf-load>
-    <div *ngIf="!isUpdating" > teste </div>
-    <app-importador-cnis-segurados [isUpdating]="isUpdating" [segurado]="segurado" ></app-importador-cnis-segurados>
-    <app-importador-cnis-calculos [isUpdating]="isUpdating" [vinculos]="vinculos"></app-importador-cnis-calculos>
-    <app-importador-cnis-periodos [isUpdating]="isUpdating" [vinculos]="vinculos"></app-importador-cnis-periodos>
+    <div *ngIf="!isUploadReaderComplete">
+        <app-importador-cnis-pdf-load (infoSegurado)="reciverInfoSegurado($event)" (infoVinculos)="reciverInfoVinculos($event)"></app-importador-cnis-pdf-load>
+    </div>
+    <div *ngIf="isUploadReaderComplete">
+      <div class="well well-sm">Os dados foram importados</div>
+    </div>
+    
+    <app-importador-cnis-segurados [isUpdating]="isUpdatingSegurado" [segurado]="segurado" ></app-importador-cnis-segurados>
+    <app-importador-cnis-periodos [isUpdating]="isUpdatingVinculos" [vinculos]="vinculos"></app-importador-cnis-periodos>
 
   </sa-widgets-grid>
   <!-- end widget grid -->

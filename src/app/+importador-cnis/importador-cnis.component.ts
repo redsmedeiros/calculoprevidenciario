@@ -18,31 +18,33 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 })
 export class ImportadorCnisComponent implements OnInit {
 
-  public isUpdating = true;
+  public isUpdatingSegurado = true;
+  public isUpdatingVinculos = true;
   public segurado: any;
   public vinculos: any;
+  public isUploadReaderComplete = false;
 
 
   constructor(private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.ref.markForCheck();
+    this.ref.detectChanges();
   }
 
   reciverInfoSegurado(importSegurado) {
     this.segurado = importSegurado;
-    this.isUpdating = false;
+    this.isUpdatingSegurado = false;
     console.log(this.segurado);
-    this.ref.markForCheck();
     this.ref.detectChanges();
   }
 
   reciverInfoVinculos(importVinculos) {
     this.vinculos = importVinculos;
-    this.isUpdating = false;
+    this.isUpdatingVinculos = false;
+    this.isUploadReaderComplete = true;
     console.log(this.vinculos);
-    this.ref.markForCheck();
     this.ref.detectChanges();
-    
   }
 
 

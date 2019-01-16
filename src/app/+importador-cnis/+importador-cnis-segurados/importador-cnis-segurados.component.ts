@@ -54,9 +54,9 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     let changedsegurado = changes['segurado'];
     let changedisUpdating = changes['isUpdating'];
 
-    console.log(changedsegurado);
-    console.log(changedisUpdating);
-    
+    // console.log(changedsegurado);
+    // console.log(changedisUpdating);
+
     if (!changedisUpdating.currentValue) {
       this.setSegurado(this.segurado)
     }
@@ -69,7 +69,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.formData.id_documento = '3';
     this.formData.numero_documento = segurado.cpf;
     this.formData.data_nascimento = segurado.dataNasc;
-
+    this.formData.sexo = 'm';
   }
 
 

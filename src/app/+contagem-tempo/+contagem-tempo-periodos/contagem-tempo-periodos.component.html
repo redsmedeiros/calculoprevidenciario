@@ -140,106 +140,106 @@
           </header>
           <div>
             <div class="widget-body" #periodoFormheader>
-              <form #periodoForm="ngForm" class="form-horizontal">
-                <fieldset>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Nome Empresa</label>
-                    <div class="col-md-6" data-placement="bottom" tooltip="Nome da Empresa em até 255 caracteres.">
-                      <input class="form-control" maxlength="255" [(ngModel)]="empresa" placeholder="Nome da empresa"
-                        name="empresa" (change)="errors.clear('empresa')" type="text">
-                      <small *ngIf="errors.has('empresa')" class="text-danger">{{ errors.get('empresa') }}</small>
+                <form #periodoForm="ngForm" class="form-horizontal">
+                  <fieldset>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Nome Empresa</label>
+                      <div class="col-md-6" data-placement="bottom" tooltip="Nome da Empresa em até 255 caracteres.">
+                        <input class="form-control" maxlength="255" [(ngModel)]="empresa" placeholder="Nome da empresa"
+                          name="empresa" (change)="errors.clear('empresa')" type="text">
+                        <small *ngIf="errors.has('empresa')" class="text-danger">{{ errors.get('empresa') }}</small>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Data Inicial</label>
-                    <div class="col-md-2" data-placement="bottom" tooltip="Data de inicio do vínculo.">
-                      <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_inicio" name="data_inicio"
-                        [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')">
-                      <small *ngIf="errors.has('data_inicio')" class="text-danger">{{ errors.get('data_inicio') }}</small>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Data Inicial</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Data de inicio do vínculo.">
+                        <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_inicio" name="data_inicio"
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')">
+                        <small *ngIf="errors.has('data_inicio')" class="text-danger">{{ errors.get('data_inicio') }}</small>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Data Final</label>
-                    <div class="col-md-2" data-placement="bottom" tooltip="Data de final do vínculo.">
-                      <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_termino" name="data_termino"
-                        [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')">
-                      <small *ngIf="errors.has('data_termino')" class="text-danger">{{ errors.get('data_termino') }}</small>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Data Final</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Data de final do vínculo.">
+                        <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_termino" name="data_termino"
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')">
+                        <small *ngIf="errors.has('data_termino')" class="text-danger">{{ errors.get('data_termino') }}</small>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Laborou em Condições Especiais?</label>
-                    <div class="col-md-3">
-                      <label class="radio radio-inline">
-                        <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
-                          type="radio" name="condicao_especial" [value]="1"> Sim </label>
-                      <label class="radio radio-inline">
-                        <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
-                          type="radio" name="condicao_especial" [value]="0"> Não </label>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <small *ngIf="errors.has('condicao_especial')" class="text-danger">{{
-                            errors.get('condicao_especial')}}</small>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Laborou em Condições Especiais?</label>
+                      <div class="col-md-3">
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                            type="radio" name="condicao_especial" [value]="1"> Sim </label>
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                            type="radio" name="condicao_especial" [value]="0"> Não </label>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <small *ngIf="errors.has('condicao_especial')" class="text-danger">{{
+                              errors.get('condicao_especial')}}</small>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Fator Multiplicador</label>
-                    <div class="col-md-2" data-placement="bottom" tooltip="Fator multiplicador para tempo especial.">
-                      <input class="form-control" placeholder="0,00" maxlength="4" [(ngModel)]="fator_condicao_especial"
-                        name="fator_condicao_especial" currencyMask type="text" (change)="errors.clear('fator_condicao_especial')"
-                        (blur)="checkFator()" (focus)="removeFatorDefault()">
-                      <small *ngIf="errors.has('fator_condicao_especial')" class="text-danger">{{
-                        errors.get('fator_condicao_especial') }}</small>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Fator Multiplicador</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Fator multiplicador para tempo especial.">
+                        <input class="form-control" placeholder="0,00" maxlength="4" [(ngModel)]="fator_condicao_especial"
+                          name="fator_condicao_especial" currencyMask type="text" (change)="errors.clear('fator_condicao_especial')"
+                          (blur)="checkFator()" (focus)="removeFatorDefault()">
+                        <small *ngIf="errors.has('fator_condicao_especial')" class="text-danger">{{
+                          errors.get('fator_condicao_especial') }}</small>
+                      </div>
+                      <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Estudo_contagem_especial_em_comum_matriz.pdf"
+                          target="_blank" class="btn btn-block btn-info"> <sup class="fa fa-asterisk"></sup>Fatores para
+                          conversão do tempo especial em comum.</a></div>
+                      <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Manual_aposentadoria_especial_deficientes_fatores.pdf"
+                          target="_blank" class="btn btn-block btn-info"><sup class="fa fa-asterisk"></sup> Fatores para
+                          aposentadoria especial de deficientes.</a></div>
                     </div>
-                    <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Estudo_contagem_especial_em_comum_matriz.pdf"
-                        target="_blank" class="btn btn-block btn-info"> <sup class="fa fa-asterisk"></sup>Fatores para
-                        conversão do tempo especial em comum.</a></div>
-                    <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Manual_aposentadoria_especial_deficientes_fatores.pdf"
-                        target="_blank" class="btn btn-block btn-info"><sup class="fa fa-asterisk"></sup> Fatores para
-                        aposentadoria especial de deficientes.</a></div>
-                  </div>
 
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Carência:</label>
-                    <div class="col-md-3">
-                      <label class="radio radio-inline">
-                        <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
-                          type="radio" name="carencia" [value]="1"> Sim </label>
-                      <label class="radio radio-inline">
-                        <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
-                          type="radio" name="carencia" [value]="0"> Não </label>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <small *ngIf="errors.has('carencia')" class="text-danger">{{
-                            errors.get('carencia')}}</small>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Carência:</label>
+                      <div class="col-md-3">
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                            type="radio" name="carencia" [value]="1"> Sim </label>
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                            type="radio" name="carencia" [value]="0"> Não </label>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <small *ngIf="errors.has('carencia')" class="text-danger">{{
+                              errors.get('carencia')}}</small>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </fieldset>
-                <div class="form-actions no-padding">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="submit()" id="inserir_periodos" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-calendar"></i>
-                        </span> Inserir período
-                      </button>
-                      <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()"  id="editar_periodos" class="btn btn-labeled btn-warning">
-                        <span class="btn-label">
-                          <i class="fa fa-save"></i>
-                        </span> Editar período
-                      </button>
-                      <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()" id="realizar_periodos" class="btn btn-labeled btn-success">
-                        <span class="btn-label">
-                          <i class="fa fa-calculator"></i>
-                        </span> Realizar cálculos
-                      </button>
+                  </fieldset>
+                  <div class="form-actions no-padding">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="submit()" id="inserir_periodos" class="btn btn-labeled btn-primary">
+                          <span class="btn-label">
+                            <i class="fa fa-calendar"></i>
+                          </span> Inserir período
+                        </button>
+                        <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()"  id="editar_periodos" class="btn btn-labeled btn-warning">
+                          <span class="btn-label">
+                            <i class="fa fa-save"></i>
+                          </span> Editar período
+                        </button>
+                        <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()" id="realizar_periodos" class="btn btn-labeled btn-success">
+                          <span class="btn-label">
+                            <i class="fa fa-calculator"></i>
+                          </span> Realizar cálculos
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </form>
+                </form>
             </div>
           </div>
         </sa-widget>

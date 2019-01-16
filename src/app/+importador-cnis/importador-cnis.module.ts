@@ -5,15 +5,26 @@ import { SmartadminDatatableModule } from '../shared/ui/datatable/smartadmin-dat
 import { FormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
 import { TextMaskModule } from 'angular2-text-mask';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 
 
 import { importadorCnisRouting } from './importador-cnis.routing';
 import { ImportadorCnisComponent } from './importador-cnis.component';
 import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados/importador-cnis-segurados.component';
 import { ImportadorCnisPeriodosComponent } from './+importador-cnis-periodos/importador-cnis-periodos.component';
-import { ImportadorCnisCalculosComponent } from './+importador-cnis-calculos/importador-cnis-calculos.component';
 import { ImportadorCnisPdfLoadComponent } from './+importador-cnis-pdf-load/importador-cnis-pdf-load.component';
 
+
+export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: 'left',
+  allowNegative: false,
+  decimal: ',',
+  precision: 2,
+  prefix: '',
+  suffix: '',
+  thousands: '.'
+};
 
 @NgModule({
   imports: [
@@ -23,15 +34,17 @@ import { ImportadorCnisPdfLoadComponent } from './+importador-cnis-pdf-load/impo
     FormsModule,
     FileDropModule,
     TextMaskModule,
+    CurrencyMaskModule,
     importadorCnisRouting
   ],
   declarations: [
     ImportadorCnisComponent,
     ImportadorCnisSeguradosComponent,
-    ImportadorCnisCalculosComponent,
     ImportadorCnisPeriodosComponent,
     ImportadorCnisPdfLoadComponent
   ],
-  providers: []
+  providers: [
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomPeriodosCurrencyMaskConfig }
+],
 })
 export class ImportadorCnisModule { }
