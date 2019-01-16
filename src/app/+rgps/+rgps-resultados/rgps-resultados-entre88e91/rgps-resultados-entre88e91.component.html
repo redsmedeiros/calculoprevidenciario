@@ -252,7 +252,7 @@
               <div id="tabela_concl_91_98" class="col">
                 <div>
                   <div class="well"><p>Cálculo conforme Lei 8213/91 (Efeito financeiro a partir de junho de 1992)</p></div>
-                  <sa-datatable [options]="tableOptions91_98" *ngIf="!isUpdating && direito"
+                  <sa-datatable [options]="tableOptions91_98" *ngIf="!isUpdating && direito" [responsive] = "false"
                   paginationLength="true" tableClass="table table-striped table-bordered table-hover">
                     <thead>
                       <tr>

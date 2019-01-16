@@ -164,7 +164,7 @@
               </div>
             </div>
             <div class="widget-body no-padding" *ngIf="hasDetalhe" >
-              <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions"
+              <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions" [responsive]="false"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
@@ -192,7 +192,7 @@
           </header>
           <div>
             <div class="widget-body no-padding" >
-              <sa-datatable [options]="resultadosTableOptions"
+              <sa-datatable [options]="resultadosTableOptions" [responsive]="false"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
