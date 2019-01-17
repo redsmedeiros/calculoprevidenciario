@@ -396,7 +396,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
       return 0;
     });
-    let numeroCompetencias = this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true); // Calcular a quantidade de meses contida entre as duas datas.
+    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true)); // Calcular a quantidade de meses contida entre as duas datas.
     if (numeroCompetencias > 60) {
         numeroCompetencias = 60;
     }else if(numeroCompetencias > 0 && numeroCompetencias < 1){
@@ -537,7 +537,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({string:"Média Secundária - Pós Taxa:",value:this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo)});//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     }
 
-    conclusoes.push({string:"Idade em anos:",value:Math.trunc(this.idadeFracionada)});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
+    conclusoes.push({string:"Idade em anos:",value:`${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada,2)}) `});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
     conclusoes.push({string:"Média das contribuições:",value:this.formatMoney(somaMedias, currency.acronimo)});//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({string:"CT - Número de competências transcorridas desde 29/11/1999:",value:numeroCompetencias});//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
@@ -883,7 +883,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
       expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
-      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: "("+anos+ " * (((" + tempo1 + " + " + tempo2 + " + " + tempo3 + ") / 3) - " + tempo1 + "))" + " + " + tempo1});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
     } else if (dib <= dataInicio) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib >= dataFim) {
