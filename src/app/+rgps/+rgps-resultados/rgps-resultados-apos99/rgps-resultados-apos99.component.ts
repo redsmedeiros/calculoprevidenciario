@@ -126,7 +126,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
-                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                  this.ExpectativaVida.getByIdade(Math.ceil(this.idadeFracionada))
                     .then(expectativas => {
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
@@ -426,7 +426,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
+        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
 
@@ -650,7 +650,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           conclusoes.push({string:"Índice de reajuste no teto:",value:this.formatDecimal(irt, 4)});//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
         }
 
-        conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 4)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
+        conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 2)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
 
         if (this.tipoBeneficio == 29) {
           rmi = somaMedias * (coeficiente / 100);
@@ -877,13 +877,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
     if (dib > dataHoje) {
-      let anos = dataHoje.diff(dib, 'years');
+      let anos = Math.abs(dataHoje.diff(dib, 'years'));
 
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
       expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
-      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: "("+anos+ " * (((" + tempo1 + " + " + tempo2 + "+" + tempo3 + ") / 3) " + tempo1 + "))" + "+" + tempo1});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: "("+anos+ " * (((" + tempo1 + " + " + tempo2 + " + " + tempo3 + ") / 3) - " + tempo1 + "))" + " + " + tempo1});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
     } else if (dib <= dataInicio) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib >= dataFim) {
