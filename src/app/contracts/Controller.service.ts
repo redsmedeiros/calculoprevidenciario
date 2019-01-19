@@ -81,6 +81,23 @@ export abstract class ControllerService {
     });
   }
 
+  getWithParametersObj(params) {
+    this.store.data[this.name].length = 0;
+    return new Promise((resolve, reject) => {
+      this.model.getWithParametersObj(params)
+        .then(models => {
+          this.store.push(this.name, models.data.map( model => {
+            return new this.model(model);
+          }));
+          resolve(models);
+        })
+        .catch(error => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }  
+
   public getByDateRange(from, to) {
 
     return new Promise((resolve, reject) => {

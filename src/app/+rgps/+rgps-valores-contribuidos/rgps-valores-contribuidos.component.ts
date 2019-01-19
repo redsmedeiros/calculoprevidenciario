@@ -75,7 +75,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
             .then(calculo => {
               this.calculo = calculo;
               this.updateDatatable(calculo);
-              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null)
+              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null, 0, this.idSegurado)
                 .then((valorescontribuidos: ValorContribuido[]) => {
                   this.initializeMatrix(valorescontribuidos);
                   this.isUpdating = false;
@@ -105,6 +105,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
     let valorContribuido = new ValorContribuido({
           id_calculo: this.idsCalculos,
+          id_segurado: this.idSegurado,
           data: date,
           tipo: 0,
           valor: valor,
@@ -237,6 +238,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       let date = dateMonth + '-01';
       let valorContribuido = new ValorContribuido({
         id_calculo: this.idsCalculos,
+        id_segurado: this.idSegurado,
         data: date,
         tipo: tipo,
         valor: valor,

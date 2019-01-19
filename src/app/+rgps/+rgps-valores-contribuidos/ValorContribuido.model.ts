@@ -10,10 +10,12 @@ export class ValorContribuido extends Model {
     data: '',
     tipo: '',
     valor: '',
+    id_segurado: '',
   };
    public id ;
    public id_calculo;
    public data;
    public tipo;
    public valor;
+   public id_segurado;
 }

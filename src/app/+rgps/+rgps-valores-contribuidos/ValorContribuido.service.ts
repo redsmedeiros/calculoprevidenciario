@@ -9,12 +9,17 @@ export class ValorContribuidoService extends ControllerService {
 	public name = 'valorContribuido';
 	public list: ValorContribuido[] = this.store.data['valorContribuido'];
 
-	public getByCalculoId(calculoId, dataInicio, dataLimite, qtdeMeses=0) {
+	public getByCalculoId(calculoId, dataInicio, dataLimite, qtdeMeses=0, seguradoId=null) {
 		this.store.data['valorContribuido'].length = 0;
 		return new Promise((resolve, reject) => {
 			dataInicio = (dataInicio != null) ? dataInicio.format('YYYY-MM-DD') : null;
-			let parameters = ['id_calculo', calculoId, 'inicio_intervalo', dataInicio];
-			this.getWithParameters(parameters).then(() => {
+			//let parameters = ['id_calculo', calculoId, 'inicio_intervalo', dataInicio];
+			let parameters = {
+				id_calculo: calculoId,
+				inicio_intervalo: dataInicio,
+				id_segurado: seguradoId
+			};
+			this.getWithParametersObj(parameters).then(() => {
 				if(dataInicio == null || dataLimite == null){
 					let list = this.list;
 					resolve(list);
