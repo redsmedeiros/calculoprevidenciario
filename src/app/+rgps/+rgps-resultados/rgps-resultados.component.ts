@@ -431,7 +431,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   coeficienteProporcional(extra, porcentagem, toll) {
-    let coeficienteProporcional = 0.7 * Math.trunc(extra - toll) * porcentagem;
+    let coeficienteProporcional = 0.7 + (Math.trunc(extra - toll) * porcentagem);
     coeficienteProporcional = (coeficienteProporcional > 1) ? 1 : coeficienteProporcional;
     coeficienteProporcional = (coeficienteProporcional < 0.7) ? 0.7 : coeficienteProporcional;
     return coeficienteProporcional;
@@ -703,7 +703,7 @@ export class RgpsResultadosComponent implements OnInit {
       let anos = (stringContrib.split('-')[0] != 'undefined') ? stringContrib.split('-')[0] : 0;
       let meses = (stringContrib.split('-')[1] != 'undefined') ? stringContrib.split('-')[1] : 0;
       let dias = (stringContrib.split('-')[2] != 'undefined') ? stringContrib.split('-')[2] : 0;
-      returnObj = {anos: anos, meses:meses, dias:dias};
+      returnObj = {anos: parseFloat(anos), meses:parseFloat(meses), dias:parseFloat(dias)};
     }
     return returnObj;
   }
