@@ -27,6 +27,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   @Input() segurado;
   @Input() isUpdating;
 
+
   public formData = { ...SeguradoModel.form };
 
 
@@ -67,9 +68,21 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   private setSegurado(segurado) {
     this.formData.nome = segurado.nome;
     this.formData.id_documento = '3';
-    this.formData.numero_documento = segurado.cpf;
-    this.formData.data_nascimento = segurado.dataNasc;
+    this.formData.numero_documento = segurado.numero_documento;
+    this.formData.data_nascimento = segurado.data_nascimento;
     this.formData.sexo = 'm';
+    this.formData.funcao = segurado.funcao;
+    this.formData.user_id = segurado.userId;
+  }
+
+
+  public createSeguradoImportador(userId) {
+    return this.Segurado.save(this.formData)
+      .then((model: SeguradoModel) => {
+        return model.id;
+      })
+      .catch(errors => this.errors.add(errors));
+
   }
 
 

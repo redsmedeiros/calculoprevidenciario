@@ -28,6 +28,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public periodo: any = {};
   public vinculosList = [];
+  public vinculosListPost = [];
   public form = { ...PeriodosContagemTempo.form };
 
 
@@ -73,7 +74,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
 
-
   private setPeriodos(vinculos) {
 
     for (const vinculo of vinculos) {
@@ -101,6 +101,45 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
 
   }
+
+
+
+  private ajusteListVinculos(calculoId) {
+
+    this.vinculosListPost = [];
+    for (const vinculo of this.vinculosList) {
+      this.vinculosListPost.push(
+        {
+          data_inicio: this.formatPostDataDate(vinculo.data_inicio),
+          data_termino: this.formatPostDataDate(vinculo.data_termino),
+          empresa: vinculo.empresa,
+          fator_condicao_especial: this.formatFatorPost(vinculo.fator_condicao_especial),
+          condicao_especial: this.boolToLiteral(vinculo.condicao_especial),
+          carencia: this.boolToLiteral(vinculo.carencia),
+          licenca_premio_nao_usufruida: 0,
+          id_contagem_tempo: calculoId
+        }
+      );
+    }
+  }
+
+
+  public createPeriodosImportador(calculoId) {
+
+    if (calculoId && this.vinculosList.length >= 1) {
+
+      this.ajusteListVinculos(calculoId);
+
+      return this.PeriodosContagemTempoService
+        .save(this.vinculosListPost)
+        .then(model => {
+          return true;
+        })
+        .catch(errors => this.errors.add(errors));
+    }
+
+  }
+
 
 
   public getupdateVinculo(index) {
@@ -135,6 +174,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           vinculo.fator_condicao_especial = this.fator_condicao_especial;
           vinculo.condicao_especial = this.boolToLiteral(this.condicao_especial);
           vinculo.carencia = this.boolToLiteral(this.carencia);
+          vinculo.condicao_especial = this.boolToLiteral(this.condicao_especial);
+          vinculo.carencia = this.boolToLiteral(this.carencia);
         }
       });
 
@@ -158,7 +199,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         empresa: this.empresa,
         fator_condicao_especial: this.fator_condicao_especial,
         condicao_especial: this.boolToLiteral(this.condicao_especial),
-        carencia: this.boolToLiteral(this.condicao_especial),
+        carencia: this.boolToLiteral(this.carencia),
       }
       this.vinculosList.push(line);
 

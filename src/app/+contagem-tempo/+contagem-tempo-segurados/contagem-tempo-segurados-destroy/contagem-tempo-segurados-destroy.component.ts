@@ -32,6 +32,7 @@ export class ContagemTempoSeguradosDestroyComponent implements OnInit {
       confirmButtonText: 'Deletar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
+      console.log(result);
       if (result.value) {
         this.Segurado.find(this.route.snapshot.params['id'])
           .then(segurado => {

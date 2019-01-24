@@ -14,6 +14,8 @@ import { ImportadorCnisComponent } from './importador-cnis.component';
 import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados/importador-cnis-segurados.component';
 import { ImportadorCnisPeriodosComponent } from './+importador-cnis-periodos/importador-cnis-periodos.component';
 import { ImportadorCnisPdfLoadComponent } from './+importador-cnis-pdf-load/importador-cnis-pdf-load.component';
+import { ImportadorCnisContribuicoesComponent } from './+importador-cnis-contribuicoes/importador-cnis-contribuicoes.component';
+import { ImportadorCnisCalculosComponent } from './+importador-cnis-calculos/importador-cnis-calculos.component';
 
 
 export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -41,7 +43,9 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     ImportadorCnisComponent,
     ImportadorCnisSeguradosComponent,
     ImportadorCnisPeriodosComponent,
-    ImportadorCnisPdfLoadComponent
+    ImportadorCnisPdfLoadComponent,
+    ImportadorCnisContribuicoesComponent,
+    ImportadorCnisCalculosComponent
   ],
   providers: [
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomPeriodosCurrencyMaskConfig }

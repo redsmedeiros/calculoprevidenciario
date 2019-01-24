@@ -16,18 +16,24 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 })
 export class ImportadorCnisPdfLoadComponent implements OnInit {
 
-  public segurado = {
-    nome: null,
-    nit: null,
-    dataNasc: null,
-    cpf: null,
-    type: null
-  };
+
+  @Input() userId;
 
   public seq: any;
   public vinculos: any;
 
 
+  public segurado = {
+    nome: null,
+    nit: null,
+    data_nascimento: null,
+    numero_documento: null,
+    type: null,
+    id_documento: 0,
+    funcao: 'contagem',
+    sexo: null,
+    userId: ''
+  };
 
   @Output() infoSegurado = new EventEmitter();
   @Output() infoVinculos = new EventEmitter();
@@ -49,18 +55,19 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
     if (text.search(/(\d{3}.\d{5}.\d{2}-\d{1})/) > 0) {
       this.segurado.nit = text.match(/(\d{3}.\d{5}.\d{2}-\d{1})/)[0].trim();
-      this.segurado.cpf = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-      this.segurado.dataNasc = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+      this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+      this.segurado.data_nascimento = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
       this.segurado.nome = text.substring(text.indexOf('Nome:') + 5, text.indexOf('Data de nascimento:')).trim();
       this.segurado.type = 1;
     } else {
       this.segurado.nit = text.match(/(\d{1}.\d{3}.\d{3}.\d{3}-\d{1})/)[0].trim();
-      this.segurado.cpf = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-      this.segurado.dataNasc = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+      this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+      this.segurado.data_nascimento = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
       this.segurado.nome = text.substring(text.indexOf('Nome da Mãe:') + 12, text.indexOf('CPF:')).match(/([A-Z]|\s)+/)[0].trim();
       this.segurado.type = 2;
     }
 
+    this.segurado.userId = this.userId;
 
     return this.segurado;
   }
@@ -72,17 +79,19 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
       if (text.search(/(\d{3}.\d{5}.\d{2}-\d{1})/) > 0) {
         this.segurado.nit = text.match(/(\d{3}.\d{5}.\d{2}-\d{1})/)[0].trim();
-        this.segurado.cpf = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-        this.segurado.dataNasc = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+        this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+        this.segurado.data_nascimento = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
         this.segurado.nome = text.substring(text.indexOf('Nome:') + 5, text.indexOf('Data de nascimento:')).trim();
         this.segurado.type = 1;
       } else {
         this.segurado.nit = text.match(/(\d{1}.\d{3}.\d{3}.\d{3}-\d{1})/)[0].trim();
-        this.segurado.cpf = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-        this.segurado.dataNasc = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+        this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+        this.segurado.data_nascimento = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
         this.segurado.nome = text.substring(text.indexOf('Nome da Mãe:') + 12, text.indexOf('CPF:')).match(/([A-Z]|\s)+/)[0].trim();
         this.segurado.type = 2;
       }
+
+      this.segurado.userId = this.userId;
 
       if (this.segurado.type > 0) {
         resolve(true);
@@ -157,7 +166,7 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
           textaux = text_full.substring(init, fim_doc);
         }
         textaux = textaux.replace(/(INSS - INSTITUTO NACIONAL DO SEGURO SOCIAL CNIS - Cadastro Nacional de Informações Sociais Extrato Previdenciário)(\s)(\d{2}\/\d{2}\/\d{4})(\s)(\d{2}:\d{2}:\d{2})/i, ' ');
-       
+
         seq.push(textaux);
         init = next;
       }
@@ -224,7 +233,7 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
    * @param text_vinculo vinculo em string
    * @param segurado obj segurado
    */
-  private selecionarDadosDoVinculo(text_vinculo, segurado,index) {
+  private selecionarDadosDoVinculo(text_vinculo, segurado, index) {
 
     const vinculo = {
       cnpj: null,
@@ -331,8 +340,8 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
       vinculos = this.splitContribuicoes(vinculos);
 
       function filterPeriodos(vinculo) {
-          let textOrigem = (/(\/CPF\/NB Origem do Vínculo Data Início Data Fim Ult\. Remun\. Tipo Vínculo Indicadores O INSS poderá rever a qualquer tempo as informações constantes deste extrato, conforme art\. 19, [\W|\w] 3 do Decreto 3\.048\/99\s{1,4}Página\s\d{2}\sde\s\d{2})/gi).test(vinculo.origemVinculo);
-          return ((vinculo.contribuicoes.length > 0 || vinculo.periodo != null || vinculo.tipoVinculo != null) && (!textOrigem));
+        let textOrigem = (/(\/CPF\/NB Origem do Vínculo Data Início Data Fim Ult\. Remun\. Tipo Vínculo Indicadores O INSS poderá rever a qualquer tempo as informações constantes deste extrato, conforme art\. 19, [\W|\w] 3 do Decreto 3\.048\/99\s{1,4}Página\s\d{2}\sde\s\d{2})/gi).test(vinculo.origemVinculo);
+        return ((vinculo.contribuicoes.length > 0 || vinculo.periodo != null || vinculo.tipoVinculo != null) && (!textOrigem));
       }
 
       vinculos = vinculos.filter(filterPeriodos);

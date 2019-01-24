@@ -38,7 +38,6 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
       this.createLabel();
 
-
       this.optionsGraph = {
         xkey: 'period',
         ykeys: this.objYkeys,
@@ -50,6 +49,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
       };
+
 
 
       // this.dataGraph = [
@@ -120,7 +120,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       fimVinculo = this.toMoment(vinculo.data_termino);
 
       if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-        obj[vinculo.empresa] = vinculo.vinculo;
+        obj[vinculo.empresa + '' + vinculo.vinculo] = vinculo.vinculo;
       }
 
     }
@@ -133,8 +133,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
     for (const vinculo of this.periodosList) {
 
-      this.objYkeys.push(vinculo.empresa);
-      this.objLabels.push(vinculo.empresa);
+      this.objYkeys.push(vinculo.empresa + '' + vinculo.vinculo);
+      this.objLabels.push(vinculo.empresa );
     }
   }
 
