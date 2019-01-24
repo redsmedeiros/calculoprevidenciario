@@ -164,6 +164,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
   private ultimaDiferencaMensal = 0.0;
+
+  private dibAnteriorRecebidos = null;
+  private dibAnteriorDevidos = null;
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
   constructor(protected router: Router,
@@ -220,7 +223,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   esmaecerLinhas(dataCorrente, line){
     let dataComparacao;
-    if (moment(this.calculo.previa_data_pedido_beneficio_esperado).isAfter(moment('1998-12-01'))){
+    let data = null;
+    if(this.dibAnteriorRecebidos){
+      data = this.dibAnteriorRecebidos;
+    }else if(this.dibAnteriorDevidos){
+      data = this.dibAnteriorDevidos;
+    }else{
+      return;
+    }
+
+    if (data.isAfter(moment('1998-12-01'))){
       dataComparacao = moment('2003-11-01');
     }else{
       dataComparacao = moment('1998-11-01');
@@ -1379,15 +1391,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
 
-    let dibAnteriorRecebidos = null;
-    let dibAnteriorDevidos = null;
     if(this.calculo.data_anterior_pedido_beneficio != '0000-00-00'){
-      dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
-      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorRecebidos) ? this.primeiraDataArrayMoeda : dibAnteriorRecebidos;
+      this.dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < this.dibAnteriorRecebidos) ? this.primeiraDataArrayMoeda : this.dibAnteriorRecebidos;
     }
     if(this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00'){
-      dibAnteriorDevidos = moment(this.calculo.previa_data_pedido_beneficio_esperado); //devidos
-      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < dibAnteriorDevidos) ? this.primeiraDataArrayMoeda : dibAnteriorDevidos;
+      this.dibAnteriorDevidos = moment(this.calculo.previa_data_pedido_beneficio_esperado); //devidos
+      this.primeiraDataArrayMoeda = (this.primeiraDataArrayMoeda < this.dibAnteriorDevidos) ? this.primeiraDataArrayMoeda : this.dibAnteriorDevidos;
     }
     
     this.beneficioDevidoAposRevisao = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
@@ -1771,10 +1781,16 @@ export class BeneficiosResultadosComponent implements OnInit {
   
   imprimirPagina(){
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
-    let infoCalculo = document.getElementById('infoCalculo').innerHTML;
+    let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
+    let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
+    let valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
+    let honorarios = document.getElementById('printableHonorarios').innerHTML;
+    let juros = document.getElementById('printableJuros').innerHTML;
+    let conclusoes = document.getElementById('printableConclusoes').innerHTML;
     let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
-    let printContents = seguradoBox + infoCalculo + resultadoCalculo;
-    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    
+    let printContents = seguradoBox + dadosCalculo + valoresDevidos+ valoresRecebdios + honorarios + juros + conclusoes + resultadoCalculo;
+    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();

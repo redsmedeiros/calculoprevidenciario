@@ -75,7 +75,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
             .then(calculo => {
               this.calculo = calculo;
               this.updateDatatable(calculo);
-              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null)
+              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null, 0, this.idSegurado)
                 .then((valorescontribuidos: ValorContribuido[]) => {
                   this.initializeMatrix(valorescontribuidos);
                   this.isUpdating = false;
@@ -95,6 +95,32 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         }
       });
   }
+
+  contribsChanged(event, tipo_contrib){
+    console.log(event)
+    let valor = parseFloat(event.srcElement.value.replace('.', '').replace(',','.'));
+    let mes = event.srcElement.id.split('-')[0];
+    let ano = event.srcElement.id.split('-')[1];
+    let date = `${ano}-${mes}-01`;
+
+    let valorContribuido = new ValorContribuido({
+          id_calculo: this.idsCalculos,
+          id_segurado: this.idSegurado,
+          data: date,
+          tipo: 0,
+          valor: valor,
+        });
+    swal({
+        type: 'info',
+        title: 'Aguarde por favor...',
+        allowOutsideClick: false
+       });
+      swal.showLoading();
+    this.ValorContribuidoService.save([valorContribuido]).then(() => {
+      swal.close();
+    });
+  }
+
   realizarCalculo() {
     window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
   }
@@ -179,8 +205,19 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       }
       //Salva contribuicoes no bd 
       this.salvarContribuicoes(periodoObj, this.tipoContribuicao)
+      this.inicioPeriodo = ((moment(this.finalPeriodo, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+      this.finalPeriodo = this.inicioPeriodo;
     } else {
       swal('Erro', 'Confira os dados digitados', 'error');
+    }
+  }
+
+  moveNext(event, maxLength, nextElementId){
+    let value = event.srcElement.value;
+    if(value.indexOf('_') < 0 && value != ''){
+      let next = <HTMLInputElement>document.getElementById(nextElementId);
+      console.log(next)
+      next.focus();
     }
   }
 
@@ -198,11 +235,12 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       let dateMonth = mes;
       let valor = periodoObj.salarioContribuicao;
       let tipo = (tipoContribuicao === 'Primaria') ? 0 : 1;
-      if (valor == 0)
-        continue;
+      //if (valor == 0)
+      //  continue;
       let date = dateMonth + '-01';
       let valorContribuido = new ValorContribuido({
         id_calculo: this.idsCalculos,
+        id_segurado: this.idSegurado,
         data: date,
         tipo: tipo,
         valor: valor,
@@ -247,7 +285,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   isEmpty(data) {
-    if (data == undefined || data == '') {
+    console.log(data)
+    if (data == undefined || data === '') {
       return true;
     }
     return false;

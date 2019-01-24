@@ -121,6 +121,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
+              console.log(moeda)
               let dataReajustesAutomaticos = this.dataInicioBeneficio;
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
@@ -146,7 +147,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dibCurrency = this.loadCurrency(dib);
     let moedaDib = this.Moeda.getByDate(dib);
     let dataComparacao = (dib.clone()).startOf('month');
-    let moedaComparacao = this.Moeda.getByDate(dataComparacao);
+    let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)){
       return;
@@ -175,10 +176,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); //tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
       let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
       
-      let moeda = this.Moeda.getByDate(dataContribuicao);
-      let fator = moeda.fator;
-      let fatorLimite = moedaComparacao.fator;
-      let fatorCorrigido = fator / fatorLimite;
+      let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
+      let fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
+      let fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
+      let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
        
       let contribuicaoPrimariaRevisada = 0;
@@ -395,7 +396,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
       return 0;
     });
-    let numeroCompetencias = this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true); // Calcular a quantidade de meses contida entre as duas datas.
+    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true)); // Calcular a quantidade de meses contida entre as duas datas.
     if (numeroCompetencias > 60) {
         numeroCompetencias = 60;
     }else if(numeroCompetencias > 0 && numeroCompetencias < 1){
@@ -425,7 +426,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+expectativa+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
+        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
 
@@ -456,7 +457,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         mediaContribuicoesSecundarias /= divisorSecundario;    
     }
 
-    if (mediaContribuicoesSecundarias > moedaDib.teto) {
+    if (moedaDib && mediaContribuicoesSecundarias > moedaDib.teto) {
         mediaContribuicoesSecundarias = moedaDib.teto;
     }
 
@@ -497,8 +498,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     //let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
     let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-    let salarioAcidente = objMoeda.salario_minimo;
-    if (mediaContribuicoesPrimarias > salarioAcidente) {
+    //let salarioAcidente = objMoeda.salario_minimo;
+    if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
       switch(this.tipoBeneficio){
         case 17:// Auxilio Acidente 30
           rmi = mediaContribuicoesPrimarias * 0.3;
@@ -536,7 +537,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({string:"Média Secundária - Pós Taxa:",value:this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo)});//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     }
 
-    conclusoes.push({string:"Idade em anos:",value:Math.trunc(this.idadeFracionada)});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
+    conclusoes.push({string:"Idade em anos:",value:`${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada,2)}) `});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
     conclusoes.push({string:"Média das contribuições:",value:this.formatMoney(somaMedias, currency.acronimo)});//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({string:"CT - Número de competências transcorridas desde 29/11/1999:",value:numeroCompetencias});//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
@@ -567,8 +568,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
 
     let dataBeneficio = this.dataInicioBeneficio;
-    let teto = moedaDib.teto;
-    let minimo = moedaDib.salario_minimo;
+    // let teto = moedaDib.teto;
+    // let minimo = moedaDib.salario_minimo;
 
     let comparacaoContribuicao = 35 - redutorSexo;
     if(naoFocado){
@@ -649,7 +650,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           conclusoes.push({string:"Índice de reajuste no teto:",value:this.formatDecimal(irt, 4)});//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
         }
 
-        conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 4)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
+        conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 2)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
 
         if (this.tipoBeneficio == 29) {
           rmi = somaMedias * (coeficiente / 100);
@@ -671,7 +672,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
 
         if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
-          conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
+          //conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
+          conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(rmi, currency.acronimo)});
         }else{
           conclusoes.push({string:"Renda Mensal Inicial:",value:this.formatMoney(rmi, currency.acronimo)});//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
         }
@@ -698,11 +700,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {
     let beneficioCorrigido = beneficio;
-    if (beneficio > moeda.teto){
+    if (moeda && beneficio > moeda.teto){
       beneficioCorrigido = moeda.teto * coeficiente /100;
       this.limited = true;
     }
-    if (beneficio < moeda.salario_minimo && this.tipoBeneficio != 7) {
+    if (moeda && beneficio < moeda.salario_minimo && this.tipoBeneficio != 7) {
       beneficioCorrigido = moeda.salario_minimo
     }
     return beneficioCorrigido;
@@ -875,15 +877,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataInicio = moment('2000-11-30');
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
-
     if (dib > dataHoje) {
-      let anos = dataHoje.diff(dib, 'years');
+      let anos = Math.abs(dataHoje.diff(dib, 'years'));
 
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
       expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
-      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: "("+anos+ " * (((" + tempo1 + " + " + tempo2 + "+" + tempo3 + ") / 3) -" + tempo1 + "))" + "+" + tempo1});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
     } else if (dib <= dataInicio) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib >= dataFim) {
@@ -906,7 +907,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
     //let anosSecundaria = (this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98)).anos;
     let anosSecundaria = tempoContribuicaoSecundaria.anos;
-    let anosPrimaria = ((tempoContribuicaoPrimaria.anos * 365) + (tempoContribuicaoPrimaria.meses * 30) + tempoContribuicaoPrimaria.dias)/365;
+    let anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365) + (parseFloat(tempoContribuicaoPrimaria.meses) * 30) + parseFloat(tempoContribuicaoPrimaria.dias))/365;
 
     let anosContribuicao = anosPrimaria;
     this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, false, dib); 
@@ -1017,16 +1018,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   limitarTetosEMinimos(valor, data){
-    let moeda = this.Moeda.getByDate(data);
-    let salarioMinimo = moeda.salario_minimo;
-    let tetoSalarial = moeda.teto;
+    let moeda = data.isSameOrBefore(moment(),'month') ? this.Moeda.getByDate(data) : undefined;
+    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    let tetoSalarial = (moeda) ? moeda.teto: 0;
     let avisoString = '';
     let valorRetorno = valor;
 
-    if(valor < salarioMinimo){
+    if(moeda && valor < salarioMinimo){
       valorRetorno = salarioMinimo;
       avisoString = 'LIMITADO AO MÍNIMO'
-    }else if(valor > tetoSalarial){
+    }else if(moeda && valor > tetoSalarial){
       valorRetorno = tetoSalarial;
       avisoString = 'LIMITADO AO TETO'
     }

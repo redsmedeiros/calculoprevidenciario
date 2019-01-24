@@ -287,7 +287,9 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
     this.ValorContribuidoService.save(contribuicoes).then(() => {
       swal.close();
-      window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + this.idCalculo;
+      swal('Valores importados com sucesso!', '', 'success').then(() =>{
+        window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + this.idCalculo;
+      });
     });
   }
 

@@ -431,7 +431,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   coeficienteProporcional(extra, porcentagem, toll) {
-    let coeficienteProporcional = 0.7 * Math.trunc(extra - toll) * porcentagem;
+    let coeficienteProporcional = 0.7 + (Math.trunc(extra - toll) * porcentagem);
     coeficienteProporcional = (coeficienteProporcional > 1) ? 1 : coeficienteProporcional;
     coeficienteProporcional = (coeficienteProporcional < 0.7) ? 0.7 : coeficienteProporcional;
     return coeficienteProporcional;
@@ -615,7 +615,8 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   formatMoney(value, sigla='R$'){
-    return sigla + this.formatDecimal(value, 2);
+    let numeroPadronizado = value.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
+    return sigla + numeroPadronizado;
   }
 
   formatDecimal(value, n_of_decimal_digits){
@@ -702,7 +703,7 @@ export class RgpsResultadosComponent implements OnInit {
       let anos = (stringContrib.split('-')[0] != 'undefined') ? stringContrib.split('-')[0] : 0;
       let meses = (stringContrib.split('-')[1] != 'undefined') ? stringContrib.split('-')[1] : 0;
       let dias = (stringContrib.split('-')[2] != 'undefined') ? stringContrib.split('-')[2] : 0;
-      returnObj = {anos: anos, meses:meses, dias:dias};
+      returnObj = {anos: parseFloat(anos), meses:parseFloat(meses), dias:parseFloat(dias)};
     }
     return returnObj;
   }
@@ -838,7 +839,7 @@ export class RgpsResultadosComponent implements OnInit {
     
     //let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
-    printContents = printContents.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
@@ -851,7 +852,7 @@ export class RgpsResultadosComponent implements OnInit {
     let boxContent = document.getElementById(boxId).innerHTML;
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 | CEP: 30140-061 Lourdes - Belo Horizonte - MG</p></footer>';
     let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + seguradoBox +' <br> '+ boxContent + rodape + '</body></html>';
-    printableString = printableString.replace(/<table/g, '<table style="border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    printableString = printableString.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write(printableString);
@@ -896,8 +897,6 @@ export class RgpsResultadosComponent implements OnInit {
       this.navIsFixed = false;
       navbar.classList.remove("sticky");
     }
-    
-    console.log(this.navIsFixed)
   }
 
   offset(el) {

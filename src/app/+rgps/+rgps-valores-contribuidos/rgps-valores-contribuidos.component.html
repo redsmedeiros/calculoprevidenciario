@@ -118,7 +118,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">De*:</label>
                     <div class="col-md-2">
-                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo"  [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
+                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo" (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
                       <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
                     </div>
                   </div>
@@ -126,7 +126,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Até*:</label>
                     <div class="col-md-2">
-                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
+                      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
                       <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
                     </div>
                   </div>
@@ -134,7 +134,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Valor*:</label>
                     <div class="col-md-2">
-                      <input class="form-control" currencyMask maxlength="12" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" (change)="errors.clear('salarioContribuicao')" type="text">
+                      <input class="form-control" currencyMask maxlength="12" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
                       <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
                     </div>
 
@@ -176,7 +176,7 @@
             <h2> Contribuições Primárias</h2>
           </header>
           <div>
-            <app-rgps-valores-contribuidos-matriz #contribuicoesPrimarias></app-rgps-valores-contribuidos-matriz>
+            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, 'primaria')" #contribuicoesPrimarias></app-rgps-valores-contribuidos-matriz>
           </div>
         </sa-widget>
       </article>
@@ -190,7 +190,7 @@
             <h2> Contribuições Secundárias</h2>
           </header>
           <div>
-            <app-rgps-valores-contribuidos-matriz #contribuicoesSecundarias></app-rgps-valores-contribuidos-matriz>
+            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, 'secundaria')" #contribuicoesSecundarias></app-rgps-valores-contribuidos-matriz>
           </div>
         </sa-widget>
       </article>
