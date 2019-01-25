@@ -5,6 +5,8 @@ import { SeguradoContribuicao as SeguradoModel } from '../SeguradoContribuicao.m
 import { SeguradoService } from '../Segurado.service';
 import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
 
 @FadeInTop()
 @Component({
@@ -43,29 +45,56 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
     protected router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private Auth: Auth
   ) {}
 
   ngOnInit() {
     this.isUpdating = true;
-    this.userId = this.route.snapshot.queryParams['user_id'];
-    if(!this.userId){
-      this.userId = localStorage.getItem('user_id');
-      console.log('entrou if: ', this.userId)
-      if(!this.userId){
-        window.location.href = environment.loginPageUrl;
-      }else{
+    this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
+    let token = localStorage.getItem('user_token') || this.route.snapshot.queryParams['user_token'];
+
+    this.Auth.authenticate(this.userId, token).then((response:AuthResponse) => {
+      if(response.status){
         localStorage.setItem('user_id', this.userId);
+        localStorage.setItem('user_token', token);
+        this.Segurado.getByUserId(this.userId)
+          .then(() => {
+             this.updateDatatable();
+             this.isUpdating = false;
+          })
+      }else{
+        //redirecionar para pagina de login
+        swal('Erro', 'Você não esta logado ou não tem permissão para acessar esta pagina', 'error').then(()=> {
+          window.location.href = environment.loginPageUrl;
+        });
       }
-    }else{
-      localStorage.setItem('user_id', this.userId);
-    }
-    this.Segurado.getByUserId(this.userId)
-        .then(() => {
-           localStorage.setItem('user_id', this.userId);
-           this.updateDatatable();
-           this.isUpdating = false;
-        })
+    }).catch(err => {
+      if(err.response.status == 401){
+        //redirecionar para pagina de login
+        swal('Erro', 'É necessário estar logado para acessar esta página.', 'error').then(()=> {
+          window.location.href = environment.loginPageUrl;
+        });
+      }
+    });
+    // this.userId = this.route.snapshot.queryParams['user_id'];
+    // if(!this.userId){
+    //   this.userId = localStorage.getItem('user_id');
+    //   console.log('entrou if: ', this.userId)
+    //   if(!this.userId){
+    //     window.location.href = environment.loginPageUrl;
+    //   }else{
+    //     localStorage.setItem('user_id', this.userId);
+    //   }
+    // }else{
+    //   localStorage.setItem('user_id', this.userId);
+    // }
+    // this.Segurado.getByUserId(this.userId)
+    //     .then(() => {
+    //        localStorage.setItem('user_id', this.userId);
+    //        this.updateDatatable();
+    //        this.isUpdating = false;
+    //     })
   }
   
   getDocumentType(id_documento) {

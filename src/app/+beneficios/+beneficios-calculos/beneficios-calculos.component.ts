@@ -4,7 +4,9 @@ import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { Segurado as SeguradoModel } from '../+beneficios-segurados/Segurado.model';
 import { CalculoAtrasadoService } from './CalculoAtrasado.service';
-
+import { environment } from '../../../environments/environment';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
 
 @FadeInTop()
 @Component({
@@ -63,7 +65,8 @@ export class BeneficiosCalculosComponent implements OnInit {
   constructor(protected Segurado: SeguradoService,
 	          protected router: Router,
               private route: ActivatedRoute,
-              private CalculoAtrasado: CalculoAtrasadoService) {}
+              private CalculoAtrasado: CalculoAtrasadoService,
+              private Auth: Auth) {}
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id'];
@@ -75,11 +78,34 @@ export class BeneficiosCalculosComponent implements OnInit {
             this.segurado = segurado;
     });
 
-    this.CalculoAtrasado.get()
+
+    let userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
+    let token = localStorage.getItem('user_token') || this.route.snapshot.queryParams['user_token'];
+
+    this.Auth.authenticate(userId, token).then((response:AuthResponse) => {
+      if(response.status){
+        localStorage.setItem('user_id', userId);
+        localStorage.setItem('user_token', token);
+
+        this.CalculoAtrasado.get()
         .then(() => {
            this.updateDatatable();
            this.isUpdating = false;
         })
+      }else{
+        //redirecionar para pagina de login
+        swal('Erro', 'Você não esta logado ou não tem permissão para acessar esta pagina', 'error').then(()=> {
+          window.location.href = environment.loginPageUrl;
+        });
+      }
+    }).catch(err => {
+      if(err.response.status == 401){
+        //redirecionar para pagina de login
+        swal('Erro', 'É necessário estar logado para acessar esta página.', 'error').then(()=> {
+          window.location.href = environment.loginPageUrl;
+        });
+      }
+    });
   }
 
   updateDatatable() {
