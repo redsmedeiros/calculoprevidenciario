@@ -15,42 +15,46 @@ export const routes: Routes = [
     data: {pageTitle: 'Home'},
     children: [
       {
-        path: '', redirectTo: 'home/home', pathMatch: 'full'
+        path: '', 
+        // redirectTo: 'home/home', 
+        // pathMatch: 'full'
+        loadChildren: 'app/+home/home-showcase.module#HomeModule',
+        data: {pageTitle: 'Home'}
       },
-      {
-        path: 'dashboard',
-        loadChildren: 'app/+dashboard/dashboard.module#DashboardModule',
-        data: {pageTitle: 'Dashboard'}
-      },
+      // {
+      //   path: 'dashboard',
+      //   loadChildren: 'app/+dashboard/dashboard.module#DashboardModule',
+      //   data: {pageTitle: 'Dashboard'}
+      // },
       {
         path: 'home',
         loadChildren: 'app/+home/home-showcase.module#HomeModule',
         data: {pageTitle: 'Home'}
       },
-      {
-        path: 'smartadmin',
-        loadChildren: 'app/+smartadmin-intel/smartadmin-intel.module#SmartadminIntelModule',
-        data: {pageTitle: 'Smartadmin'}
-      },
-      {
-        path: 'app-views',
-        loadChildren: 'app/+app-views/app-views.module#AppViewsModule',
-        data: {pageTitle: 'App Views'}
-      },
-      {
-        path: 'calendar',
-        loadChildren: 'app/+calendar/calendar.module#CalendarModule'
-      },
-      {
-        path: 'e-commerce',
-        loadChildren: 'app/+e-commerce/e-commerce.module#ECommerceModule',
-        data: {pageTitle: 'E-commerce'}
-      },
-      {
-        path: 'forms',
-        loadChildren: 'app/+forms/forms-showcase.module#FormsShowcaseModule',
-        data: {pageTitle: 'Forms'}
-      },
+      // {
+      //   path: 'smartadmin',
+      //   loadChildren: 'app/+smartadmin-intel/smartadmin-intel.module#SmartadminIntelModule',
+      //   data: {pageTitle: 'Smartadmin'}
+      // },
+      // {
+      //   path: 'app-views',
+      //   loadChildren: 'app/+app-views/app-views.module#AppViewsModule',
+      //   data: {pageTitle: 'App Views'}
+      // },
+      // {
+      //   path: 'calendar',
+      //   loadChildren: 'app/+calendar/calendar.module#CalendarModule'
+      // },
+      // {
+      //   path: 'e-commerce',
+      //   loadChildren: 'app/+e-commerce/e-commerce.module#ECommerceModule',
+      //   data: {pageTitle: 'E-commerce'}
+      // },
+      // {
+      //   path: 'forms',
+      //   loadChildren: 'app/+forms/forms-showcase.module#FormsShowcaseModule',
+      //   data: {pageTitle: 'Forms'}
+      // },
       {
         path: 'rgps',
         loadChildren: 'app/+rgps/rgps-showcase.module#RgpsShowcaseModule',
@@ -66,41 +70,41 @@ export const routes: Routes = [
         loadChildren: 'app/+contribuicoes/contribuicoes-showcase.module#ContribuicoesShowcaseModule',
         data: {pageTitle: 'Contribuicoes'}
       },
-      {
-        path: 'graphs',
-        loadChildren: 'app/+graphs/graphs-showcase.module#GraphsShowcaseModule',
-        data: {pageTitle: 'Graphs'}
-      },
-      {
-        path: 'maps',
-        loadChildren: 'app/+maps/maps.module#MapsModule',
-        data: {pageTitle: 'Maps'}
-      },
-      {
-        path: 'miscellaneous',
-        loadChildren: 'app/+miscellaneous/miscellaneous.module#MiscellaneousModule',
-        data: {pageTitle: 'Miscellaneous'}
-      },
-      {
-        path: 'outlook',
-        loadChildren: 'app/+outlook/outlook.module#OutlookModule',
-        data: {pageTitle: 'Outlook'}
-      },
-      {
-        path: 'tables',
-        loadChildren: 'app/+tables/tables.module#TablesModule',
-        data: {pageTitle: 'Tables'}
-      },
-      {
-        path: 'ui',
-        loadChildren: 'app/+ui-elements/ui-elements.module#UiElementsModule',
-        data: {pageTitle: 'Ui'}
-      },
-      {
-        path: 'widgets',
-        loadChildren: 'app/+widgets/widgets-showcase.module#WidgetsShowcaseModule',
-        data: {pageTitle: 'Widgets'}
-      },
+      // {
+      //   path: 'graphs',
+      //   loadChildren: 'app/+graphs/graphs-showcase.module#GraphsShowcaseModule',
+      //   data: {pageTitle: 'Graphs'}
+      // },
+      // {
+      //   path: 'maps',
+      //   loadChildren: 'app/+maps/maps.module#MapsModule',
+      //   data: {pageTitle: 'Maps'}
+      // },
+      // {
+      //   path: 'miscellaneous',
+      //   loadChildren: 'app/+miscellaneous/miscellaneous.module#MiscellaneousModule',
+      //   data: {pageTitle: 'Miscellaneous'}
+      // },
+      // {
+      //   path: 'outlook',
+      //   loadChildren: 'app/+outlook/outlook.module#OutlookModule',
+      //   data: {pageTitle: 'Outlook'}
+      // },
+      // {
+      //   path: 'tables',
+      //   loadChildren: 'app/+tables/tables.module#TablesModule',
+      //   data: {pageTitle: 'Tables'}
+      // },
+      // {
+      //   path: 'ui',
+      //   loadChildren: 'app/+ui-elements/ui-elements.module#UiElementsModule',
+      //   data: {pageTitle: 'Ui'}
+      // },
+      // {
+      //   path: 'widgets',
+      //   loadChildren: 'app/+widgets/widgets-showcase.module#WidgetsShowcaseModule',
+      //   data: {pageTitle: 'Widgets'}
+      // },
       {
         path: 'moeda-import',
         loadChildren: 'app/+moeda-import/moeda-import.module#MoedaImportModule',
@@ -109,7 +113,7 @@ export const routes: Routes = [
     ]
   },
 
-  {path: 'auth', component: AuthLayoutComponent, loadChildren: 'app/+auth/auth.module#AuthModule'},
+  //{path: 'auth', component: AuthLayoutComponent, loadChildren: 'app/+auth/auth.module#AuthModule'},
 
   {path: '**', redirectTo: 'miscellaneous/error404'}
 

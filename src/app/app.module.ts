@@ -37,6 +37,7 @@ import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAuto
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 import { FileDropModule } from 'ngx-file-drop';
+import { Auth } from './services/Auth/Auth.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -95,6 +96,7 @@ type StoreType = {
     CarenciaProgressivaService,
     ReajusteAutomaticoService,
     ExpectativaVidaService,
+    Auth,
   ]
 })
 export class AppModule {
