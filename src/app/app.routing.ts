@@ -106,10 +106,21 @@ export const routes: Routes = [
       //   data: {pageTitle: 'Widgets'}
       // },
       {
+        path: 'contagem-tempo',
+        loadChildren: 'app/+contagem-tempo/contagem-tempo-showcase.module#ContagemTempoShowcaseModule',
+        data: {pageTitle: 'Contagem Tempo'}
+      },
+      {
         path: 'moeda-import',
         loadChildren: 'app/+moeda-import/moeda-import.module#MoedaImportModule',
         data: {pageTitle: 'Importação dos dados para tabela de Moeda'}
-      },
+      }
+      ,
+      {
+        path: 'importador-cnis',
+        loadChildren: 'app/+importador-cnis/importador-cnis.module#ImportadorCnisModule',
+        data: {pageTitle: 'Importação CNIS'}
+      }
     ]
   },
 

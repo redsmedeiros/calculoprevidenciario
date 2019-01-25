@@ -15,8 +15,8 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Core providers
-import {CoreModule} from "./core/core.module";
-import {SmartadminLayoutModule} from "./shared/layout/layout.module";
+import { CoreModule } from "./core/core.module";
+import { SmartadminLayoutModule } from "./shared/layout/layout.module";
 import { SeguradoService } from './+beneficios/+beneficios-segurados/Segurado.service';
 import { SeguradoService as ContribuicoesSeguradoService } from './+contribuicoes/Segurado.service';
 import { SeguradoService as RgpsSeguradoService } from './+rgps/+rgps-segurados/SeguradoRgps.service';
@@ -36,6 +36,9 @@ import { SalarioMinimoMaximoService } from './+rgps/+rgps-resultados/SalarioMini
 import { ReajusteAutomaticoService } from './+rgps/+rgps-resultados/ReajusteAutomatico.service.ts'
 import { TextMaskModule } from 'angular2-text-mask';
 import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
+import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.service';
+import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
+import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { Auth } from './services/Auth/Auth.service';
 
@@ -96,11 +99,14 @@ type StoreType = {
     CarenciaProgressivaService,
     ReajusteAutomaticoService,
     ExpectativaVidaService,
+    SeguradoContagemTempoService,
+    CalculoContagemTempoService,
+    PeriodosContagemTempoService,
     Auth,
   ]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState) { }
 
 
 }

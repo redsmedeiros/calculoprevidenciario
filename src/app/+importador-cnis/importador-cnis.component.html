@@ -1,0 +1,46 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well">
+          <h2 class="margin-top-0">
+            <span class="semi-bold">Importador CNIS - Cadastro Nacional de Informações Sociais</span>
+          </h2>
+          <h4 class="margin-top-0">
+            <span class="semi-bold">Instruções e observações para CNIS - Cadastro Nacional de Informações Sociais</span>
+          </h4>
+          <ul class="list-unstyled padding-top-10">
+            <li>O arquivo deve ser obtido diretamente do portal meu INSS (<a href="https://meu.inss.gov.br/central/index.html#/"
+                target="_blank">aqui para acessar</a> );</li>
+            <li>Eventualmente alguns dados podem não ser importados, tenha em mãos o arquivo para confrontar os dados e
+              realizar os ajustes caso seja necessário.</li>
+          </ul>
+          <p class="margin-lg-top"></p>
+        </div>
+      </article>
+    </div>
+    <div *ngIf="!isUploadReaderComplete">
+        <app-importador-cnis-pdf-load (infoSegurado)="reciverInfoSegurado($event)" (infoVinculos)="reciverInfoVinculos($event)"  [userId]='userId'></app-importador-cnis-pdf-load>
+    </div>
+    <div *ngIf="isUploadReaderComplete">
+      <div class="well well-sm">Os dados foram importados</div>
+    </div>
+
+    <div *ngIf="isUploadReaderComplete" >
+      <app-importador-cnis-segurados [isUpdating]="isUpdatingSegurado" [segurado]="segurado"></app-importador-cnis-segurados>
+      <app-importador-cnis-calculos [isUpdating]="isUpdatingSegurado"></app-importador-cnis-calculos>
+      <app-importador-cnis-periodos [isUpdating]="isUpdatingVinculos" [vinculos]="vinculos"></app-importador-cnis-periodos>
+      <app-importador-cnis-contribuicoes [isUpdating]="isUpdatingVinculos" [vinculos]="vinculos"></app-importador-cnis-contribuicoes>
+    </div>
+
+
+    <div class="row" *ngIf="isUploadReaderComplete" >
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <button type="button" (click)="gravarImportacaoContagemTempo()"  class="btn btn-large btn-block btn-primary">Importar CNIS - Contagem de tempo</button>
+      </div>
+    </div>
+    
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>

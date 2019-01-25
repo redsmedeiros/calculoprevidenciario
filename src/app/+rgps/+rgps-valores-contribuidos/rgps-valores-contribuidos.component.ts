@@ -186,6 +186,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       ...this.grupoCalculosTableOptions,
       data: this.calculoList,
     }
+
+    console.log(this.grupoCalculosTableOptions);
   }
 
   submit() {

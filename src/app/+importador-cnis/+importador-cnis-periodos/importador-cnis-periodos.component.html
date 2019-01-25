@@ -1,0 +1,141 @@
+<div class="row" *ngIf="!isUpdating">
+  <!--  -->
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Relações Previdenciárias</h3>
+      </div>
+      <div class="panel-body">
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form #periodoForm="ngForm" class="form-horizontal">
+              <fieldset  #periodoFormheader>
+                <div class="form-group">
+                  <label class="col-md-1 control-label" for="select-1">Nome Empresa</label>
+                  <div class="col-md-4" data-placement="bottom" tooltip="Nome da Empresa em até 255 caracteres.">
+                    <input class="form-control" maxlength="255" [(ngModel)]="empresa" placeholder="Nome da empresa"
+                      name="empresa" (change)="errors.clear('empresa')" type="text">
+                    <small *ngIf="errors.has('empresa')" class="text-danger">{{ errors.get('empresa') }}</small>
+                  </div>
+                  <!-- </div>
+                            <div class="form-group"> -->
+                  <label class="col-md-1 control-label" for="select-1">Data Inicial</label>
+                  <div class="col-md-2" data-placement="bottom" tooltip="Data de inicio do vínculo.">
+                    <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_inicio" name="data_inicio"
+                      [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')">
+                    <small *ngIf="errors.has('data_inicio')" class="text-danger">{{ errors.get('data_inicio') }}</small>
+                  </div>
+                  <!-- </div>
+                            <div class="form-group"> -->
+                  <label class="col-md-1 control-label" for="select-1">Data Final</label>
+                  <div class="col-md-2" data-placement="bottom" tooltip="Data de final do vínculo.">
+                    <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_termino" name="data_termino"
+                      [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')">
+                    <small *ngIf="errors.has('data_termino')" class="text-danger">{{ errors.get('data_termino') }}</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-2 control-label">Laborou em Condições Especiais?</label>
+                  <div class="col-md-2">
+                    <label class="radio radio-inline">
+                      <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                        type="radio" name="condicao_especial" [value]="1"> Sim </label>
+                    <label class="radio radio-inline">
+                      <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                        type="radio" name="condicao_especial" [value]="0"> Não </label>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <small *ngIf="errors.has('condicao_especial')" class="text-danger">{{
+                          errors.get('condicao_especial')}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </div>
+                            <div class="form-group"> -->
+                  <label class="col-md-2 control-label" for="select-1">Fator Multiplicador</label>
+                  <div class="col-md-2" data-placement="bottom" tooltip="Fator multiplicador para tempo especial.">
+                    <input class="form-control text-center" placeholder="0,00" maxlength="4" [(ngModel)]="fator_condicao_especial"
+                      name="fator_condicao_especial" currencyMask type="text" (change)="errors.clear('fator_condicao_especial')"
+                      (blur)="checkFator()" (focus)="removeFatorDefault()" >
+                    <small *ngIf="errors.has('fator_condicao_especial')" class="text-danger">{{
+                      errors.get('fator_condicao_especial') }}</small>
+                  </div>
+                  <!-- </div>
+                            <div class="form-group"> -->
+                  <label class="col-md-1 control-label">Carência:</label>
+                  <div class="col-md-1">
+                    <label class="radio radio-inline">
+                      <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                        type="radio" name="carencia" [value]="1"> Sim </label>
+                    <label class="radio radio-inline">
+                      <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                        type="radio" name="carencia" [value]="0"> Não </label>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <small *ngIf="errors.has('carencia')" class="text-danger">{{
+                          errors.get('carencia')}}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </div>
+                    <div class="form-group"> -->
+                  <div class="col-md-2">
+                    <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()" id="editar_periodos" class="btn btn-labeled btn-warning">
+                      <span class="btn-label">
+                        <i class="fa fa-save"></i>
+                      </span>&nbsp;&nbsp;Editar&nbsp;&nbsp;
+                    </button>
+                    <button *ngIf="(atualizarPeriodo === 0)" type="button" (click)="insertPeriodo()" id="inserir_periodos" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-calendar"></i>
+                        </span>&nbsp;&nbsp;Inserir&nbsp;&nbsp;
+                      </button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        <!--panel form-->
+
+        <div class="panel panel-default">
+          <table class="table table-striped table-bordered table-hover table-responsive" *ngIf="!isUpdating">
+            <thead>
+              <tr>
+                <th>Empresa</th>
+                <th>Data Início</th>
+                <th>Data Final</th>
+                <th class="text-center">Condição Especial</th>
+                <th class="text-center">Fator Condição</th>
+                <th class="text-center">Carência</th>
+                <th class="text-center">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let vinculo of vinculosList">
+                <td>{{vinculo.empresa}}</td>
+                <td>{{vinculo.data_inicio}}</td>
+                <td>{{vinculo.data_termino}}</td>
+                <td class="text-center">{{vinculo.condicao_especial}}</td>
+                <td class="text-center">{{vinculo.fator_condicao_especial}}</td>
+                <td class="text-center">{{vinculo.carencia}}</td>
+                <td class="text-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-xs btn-warning" (click)='getupdateVinculo(vinculo.index)'>
+                      <i class='fa fa-edit fa-1-7x' title='Editar' data-placement="left" tooltip="Editar"></i>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-danger" (click)='deletarVinculo(vinculo.index)'>
+                      <i class='fa fa-times fa-1-7x' title='Excluir' data-placement="right" tooltip="Excluir"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

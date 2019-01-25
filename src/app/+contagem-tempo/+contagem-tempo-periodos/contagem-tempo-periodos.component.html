@@ -1,0 +1,307 @@
+<div id="content">
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+      <div class="row">
+          <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="well">
+              <h3 class="no-margin">
+                <span class="semi-bold">Cálculo de contagem de Tempo</span>
+              </h3>
+            </div>
+          </article>
+        </div>
+
+    <!-- row -->
+    <div class="row">
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Dados do segurado</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+              <table class="table table-condensed  table-responsive">
+                <tbody>
+                  <tr>
+                    <td><strong class="pull-right">Nome:</strong></td>
+                    <td>{{segurado.nome}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
+                    <td>{{segurado.documento}} </td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Data de nascimento:</strong></td>
+                    <td>{{segurado.data_nascimento}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Idade:</strong></td>
+                    <td>{{segurado.idade}}</td>
+                  </tr>
+                  <tr>
+                    <td><strong class="pull-right">Sexo:</strong></td>
+                    <td>
+                      <span *ngIf="segurado.sexo=='m'">Masculino</span>
+                      <span *ngIf="segurado.sexo=='f'">Feminino</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions no-padding no-margin">
+              <div class="row">
+                <div class="">
+                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left"
+                    data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-left"></i>
+                    </span> Retornar para Segurados
+                  </button>
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil"></i>
+                    </span> Editar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-list"></i>
+            </span>
+            <h2>Cálculo contagem de tempo selecionado</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding heigth-auto">
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Referência</th>
+                    <th class="text-center">Total (Ano/Mês/Dia)</th>
+                    <th class="text-center">Total Carência</th>
+                    <th class="text-center">Data Criação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{calculo.referencia_calculo}}</td>
+                    <td class="text-center">{{calculo.total_dias}}</td>
+                    <td class="text-center">{{calculo.total_carencia}}</td>
+                    <td class="text-center">{{calculo.created_at}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions no-padding no-margin">
+              <div class="row">
+                <div>
+                  <button type="submit" (click)="returnListaCalculos()" id="retornar_calculos" class="btn btn-labeled btn-info pull-left"
+                    data-placement="bottom" tooltip="Retorna para lista de simulações do segurado selecionado.">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-left"></i>
+                    </span> Retornar para cálculos
+                  </button>
+                  <button type="submit" (click)="editCalculo()" id="editar_calculos" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil"></i>
+                    </span> Editar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-calendar-check-o"></i>
+            </span>
+            <h2>Períodos de Contribuíção</h2>
+          </header>
+          <div>
+            <div class="widget-body" #periodoFormheader>
+                <form #periodoForm="ngForm" class="form-horizontal">
+                  <fieldset>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Nome Empresa</label>
+                      <div class="col-md-6" data-placement="bottom" tooltip="Nome da Empresa em até 255 caracteres.">
+                        <input class="form-control" maxlength="255" [(ngModel)]="empresa" placeholder="Nome da empresa"
+                          name="empresa" (change)="errors.clear('empresa')" type="text">
+                        <small *ngIf="errors.has('empresa')" class="text-danger">{{ errors.get('empresa') }}</small>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Data Inicial</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Data de inicio do vínculo.">
+                        <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_inicio" name="data_inicio"
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')">
+                        <small *ngIf="errors.has('data_inicio')" class="text-danger">{{ errors.get('data_inicio') }}</small>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Data Final</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Data de final do vínculo.">
+                        <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_termino" name="data_termino"
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')">
+                        <small *ngIf="errors.has('data_termino')" class="text-danger">{{ errors.get('data_termino') }}</small>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Laborou em Condições Especiais?</label>
+                      <div class="col-md-3">
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                            type="radio" name="condicao_especial" [value]="1"> Sim </label>
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="condicao_especial" [ngModelOptions]="{standalone: true}" (change)="errors.clear('condicao_especial')"
+                            type="radio" name="condicao_especial" [value]="0"> Não </label>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <small *ngIf="errors.has('condicao_especial')" class="text-danger">{{
+                              errors.get('condicao_especial')}}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Fator Multiplicador</label>
+                      <div class="col-md-2" data-placement="bottom" tooltip="Fator multiplicador para tempo especial.">
+                        <input class="form-control" placeholder="0,00" maxlength="4" [(ngModel)]="fator_condicao_especial"
+                          name="fator_condicao_especial" currencyMask type="text" (change)="errors.clear('fator_condicao_especial')"
+                          (blur)="checkFator()" (focus)="removeFatorDefault()">
+                        <small *ngIf="errors.has('fator_condicao_especial')" class="text-danger">{{
+                          errors.get('fator_condicao_especial') }}</small>
+                      </div>
+                      <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Estudo_contagem_especial_em_comum_matriz.pdf"
+                          target="_blank" class="btn btn-block btn-info"> <sup class="fa fa-asterisk"></sup>Fatores para
+                          conversão do tempo especial em comum.</a></div>
+                      <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Manual_aposentadoria_especial_deficientes_fatores.pdf"
+                          target="_blank" class="btn btn-block btn-info"><sup class="fa fa-asterisk"></sup> Fatores para
+                          aposentadoria especial de deficientes.</a></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Carência:</label>
+                      <div class="col-md-3">
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                            type="radio" name="carencia" [value]="1"> Sim </label>
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="carencia" [ngModelOptions]="{standalone: true}" (change)="errors.clear('carencia')"
+                            type="radio" name="carencia" [value]="0"> Não </label>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <small *ngIf="errors.has('carencia')" class="text-danger">{{
+                              errors.get('carencia')}}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+                  <div class="form-actions no-padding">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="submit()" id="inserir_periodos" class="btn btn-labeled btn-primary">
+                          <span class="btn-label">
+                            <i class="fa fa-calendar"></i>
+                          </span> Inserir período
+                        </button>
+                        <button *ngIf="(atualizarPeriodo != 0)" type="button" (click)="setupdatePeriodo()"  id="editar_periodos" class="btn btn-labeled btn-warning">
+                          <span class="btn-label">
+                            <i class="fa fa-save"></i>
+                          </span> Editar período
+                        </button>
+                        <button *ngIf="(atualizarPeriodo === 0)" type="submit" (click)="realizarCalculoContagemTempo()" id="realizar_periodos" class="btn btn-labeled btn-success">
+                          <span class="btn-label">
+                            <i class="fa fa-calculator"></i>
+                          </span> Realizar cálculos
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2> Períodos de contribuição</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-striped table-bordered table-hover table-responsive" *ngIf="!isUpdating">
+                <thead>
+                  <tr>
+                    <th>Empresa</th>
+                    <th>Data Início</th>
+                    <th>Data Final</th>
+                    <th class="text-center">Condição Especial</th>
+                    <th class="text-center">Fator Condição</th>
+                    <th class="text-center">Carência</th>
+                    <th class="text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let periodo of periodosList">
+                    <td>{{periodo.empresa}}</td>
+                    <td>{{periodo.data_inicio}}</td>
+                    <td>{{periodo.data_termino}}</td>
+                    <td class="text-center">{{periodo.condicao_especial}}</td>
+                    <td class="text-center">{{periodo.fator_condicao_especial}}</td>
+                    <td class="text-center">{{periodo.carencia}}</td>
+                    <td class="text-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-xs btn-warning" (click)='getupdatePeriodo(periodo.id)'
+                          title='Editar' data-placement="bottom" tooltip="Editar">
+                          <i class='fa fa-edit fa-1-7x'></i>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-danger" (click)='deletarPeriodo(periodo.id)' title='Excluir'
+                          data-placement="bottom" tooltip="Excluir">
+                          <i class='fa fa-times fa-1-7x'></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="isUpdating" class="alert alert-info text-align-center">
+                <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <!-- end row -->
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>

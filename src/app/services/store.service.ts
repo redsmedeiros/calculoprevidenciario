@@ -29,6 +29,9 @@ import { ExpectativaVida } from '../+rgps/+rgps-resultados/ExpectativaVida.model
 import { ReajusteAutomatico } from '../+rgps/+rgps-resultados/ReajusteAutomatico.model';
 import { IntervaloReajuste } from './IntervaloReajuste.model';
 import { Indices } from './Indices.model';
+import { SeguradoContagemTempo } from '../+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
+import { CalculoContagemTempo } from '../+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.model';
+import { PeriodosContagemTempo } from '../+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import { AuthResponse } from './Auth/AuthResponse.model';
 
 @Injectable()
@@ -51,6 +54,9 @@ export class StoreService {
     carenciaProgressiva: CarenciaProgressiva[],
     reajusteAutomatico: ReajusteAutomatico[],
     expectativaVida: ExpectativaVida[],
+    seguradoContagemTempo: SeguradoContagemTempo[]
+    calculoContagemTempo: CalculoContagemTempo[],
+    periodosContagemTempo: PeriodosContagemTempo[],
     authResponse: AuthResponse[],
   } = {
     segurados: [],
@@ -69,6 +75,9 @@ export class StoreService {
     carenciaProgressiva: [],
     reajusteAutomatico: [],
     expectativaVida: [],
+    seguradoContagemTempo: [],
+    calculoContagemTempo: [],
+    periodosContagemTempo: [],
     authResponse: [],
   };
 
