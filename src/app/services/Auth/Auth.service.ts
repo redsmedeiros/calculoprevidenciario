@@ -9,12 +9,14 @@ export class Auth extends ControllerService {
   public list: AuthResponse[] = this.store.data['authResponse'];
 
 
-  public authenticate(userId, userToken) {
+  public authenticate(userId, userToken, product, type) {
 
     return new Promise((resolve, reject) => {
     	let parameters = {
     		user_id: userId,
-    		user_token: userToken
+    		user_token: userToken,
+        product: product,
+        type: type
     	};
 
       axios.get(AuthResponse.url, {params: parameters}).then(response => {

@@ -9,6 +9,7 @@ import { HttpModule } from '@angular/http';
  * Platform and Environment providers/directives/pipes
  */
 import { routing } from './app.routing'
+import { OnlyLoggedInUsersGuard } from './can-activate-route.guard'
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -103,6 +104,7 @@ type StoreType = {
     CalculoContagemTempoService,
     PeriodosContagemTempoService,
     Auth,
+    OnlyLoggedInUsersGuard
   ]
 })
 export class AppModule {

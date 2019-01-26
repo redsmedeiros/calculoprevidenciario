@@ -110,37 +110,16 @@ export class RgpsCalculosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id'];
     this.isUpdating = true;
 
-    let userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
-    let token = localStorage.getItem('user_token') || this.route.snapshot.queryParams['user_token'];
-    this.Auth.authenticate(userId, token).then((response:AuthResponse) => {
-      if(response.status){
-        localStorage.setItem('user_id', userId);
-        localStorage.setItem('user_token', token);
-        
-        this.Segurado.find(this.route.snapshot.params['id'])
-            .then(segurado => {
-                this.segurado = segurado;
-        });
-    
-        this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
-            .then((calculos) => {
-            this.updateDatatable();
-            this.isUpdating = false;
-            })
-      }else{
-        //redirecionar para pagina de login
-        swal('Erro', 'Você não esta logado ou não tem permissão para acessar esta pagina', 'error').then(()=> {
-          window.location.href = environment.loginPageUrl;
-        });
-      }
-    }).catch(err => {
-      if(err.response.status == 401){
-        //redirecionar para pagina de login
-        swal('Erro', 'É necessário estar logado para acessar esta página.', 'error').then(()=> {
-          window.location.href = environment.loginPageUrl;
-        });
-      }
+    this.Segurado.find(this.route.snapshot.params['id'])
+        .then(segurado => {
+            this.segurado = segurado;
     });
+    
+    this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
+        .then((calculos) => {
+          this.updateDatatable();
+          this.isUpdating = false;
+    })
 
 
 

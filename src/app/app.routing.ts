@@ -3,21 +3,25 @@
  */
 
 
-import {Routes, RouterModule} from '@angular/router';
+import { Routes, RouterModule, CanActivate, CanActivateChild } from '@angular/router';
 import {MainLayoutComponent} from "./shared/layout/app-layouts/main-layout.component";
 import {AuthLayoutComponent} from "./shared/layout/app-layouts/auth-layout.component";
-import {ModuleWithProviders} from "@angular/core";
+import {ModuleWithProviders, Injectable} from "@angular/core";
+import { OnlyLoggedInUsersGuard } from './can-activate-route.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    canActivateChild: [OnlyLoggedInUsersGuard],
     component: MainLayoutComponent,
+
     data: {pageTitle: 'Home'},
     children: [
       {
         path: '', 
-        // redirectTo: 'home/home', 
-        // pathMatch: 'full'
+        //redirectTo: 'home/home', 
+        //pathMatch: 'full',
+        //canActivate: [OnlyLoggedInUsersGuard],
         loadChildren: 'app/+home/home-showcase.module#HomeModule',
         data: {pageTitle: 'Home'}
       },
@@ -28,6 +32,8 @@ export const routes: Routes = [
       // },
       {
         path: 'home',
+        //canActivate: [OnlyLoggedInUsersGuard],
+        //canActivateChild: [OnlyLoggedInUsersGuard],
         loadChildren: 'app/+home/home-showcase.module#HomeModule',
         data: {pageTitle: 'Home'}
       },
@@ -57,6 +63,8 @@ export const routes: Routes = [
       // },
       {
         path: 'rgps',
+        //canActivate: [OnlyLoggedInUsersGuard],
+        //canActivateChild: [OnlyLoggedInUsersGuard],
         loadChildren: 'app/+rgps/rgps-showcase.module#RgpsShowcaseModule',
         data: {pageTitle: 'RGPS'}
       },
