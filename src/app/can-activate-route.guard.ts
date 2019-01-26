@@ -11,7 +11,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
   constructor(private Auth: Auth , private router: Router) {}
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    console.log("canActivateChild");
     let params = route.queryParams;
     let product = localStorage.getItem('product') || params.product;
     let type = localStorage.getItem('type') || params.type;
@@ -23,7 +22,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
 
         //Caso haja parametros via query string, limpa a url
         if(!(Object.keys(params).length === 0 && params.constructor === Object)){
-          console.log('entrou')
           localStorage.setItem('user_id', user_id);
           localStorage.setItem('user_token', user_token);
           localStorage.setItem('product', product);
@@ -59,7 +57,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Promise<boolean> {
-    console.log("canActivate");
     let params = route.queryParams;
     let product = localStorage.getItem('product') || params.product;
     let type = localStorage.getItem('type') || params.type;
@@ -71,7 +68,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
         
         //Caso haja parametros via query string, limpa a url
         if(!(Object.keys(params).length === 0 && params.constructor === Object)){
-          console.log('entrou')
           localStorage.setItem('user_id', user_id);
           localStorage.setItem('user_token', user_token);
           localStorage.setItem('product', product);
