@@ -19,7 +19,7 @@ import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import * as moment from 'moment';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from "../+rgps-calculos/window.service";
 
@@ -283,34 +283,47 @@ export class RgpsResultadosComponent implements OnInit {
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-        this.idadeSegurado = this.getIdadeSegurado();
-        this.dataFiliacao = this.getDataFiliacao();
-        let counter = 0;
-        for(let idCalculo of this.idsCalculo){
-          this.CalculoRgps.find(idCalculo)
-            .then((calculo:CalculoModel) => {
-              this.controleExibicao(calculo);
-              this.calculosList.push(calculo);
-              let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
-              this.checkboxIdList.push(`${calculo.id}-checkbox`);
-              let line = {
-                especie: calculo.tipo_seguro,
-                periodoInicioBeneficio:calculo.tipo_aposentadoria,
-                contribuicaoPrimaria:this.getTempoDeContribuicaoPrimaria(calculo),
-                contribuicaoSecundaria:this.getTempoDeContribuicaoSecundaria(calculo),
-                dib:calculo.data_pedido_beneficio,
-                dataCriacao:this.formatReceivedDate(calculo.data_calculo),
-                checkbox:checkBox
-              }
-              this.calculoList.push(line);
-              this.grupoCalculosTableOptions = {
-                ...this.grupoCalculosTableOptions,
-                data: this.calculoList,
-              }
-              if((counter+1) == this.idsCalculo.length)
-                this.isUpdating = false;
-              counter++;
+
+        if(localStorage.getItem('user_id') != this.segurado.user_id){
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro',
+            text: 'Você não tem permissão para acessar esta página!',
+            allowOutsideClick: false
+          }).then(()=> {
+            this.listaSegurados();
           });
+        }else{
+          this.idadeSegurado = this.getIdadeSegurado();
+          this.dataFiliacao = this.getDataFiliacao();
+          let counter = 0;
+          for(let idCalculo of this.idsCalculo){
+            this.CalculoRgps.find(idCalculo)
+              .then((calculo:CalculoModel) => {
+                this.controleExibicao(calculo);
+                this.calculosList.push(calculo);
+                let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+                this.checkboxIdList.push(`${calculo.id}-checkbox`);
+                let line = {
+                  especie: calculo.tipo_seguro,
+                  periodoInicioBeneficio:calculo.tipo_aposentadoria,
+                  contribuicaoPrimaria:this.getTempoDeContribuicaoPrimaria(calculo),
+                  contribuicaoSecundaria:this.getTempoDeContribuicaoSecundaria(calculo),
+                  dib:calculo.data_pedido_beneficio,
+                  dataCriacao:this.formatReceivedDate(calculo.data_calculo),
+                  checkbox:checkBox
+                }
+                this.calculoList.push(line);
+                this.grupoCalculosTableOptions = {
+                  ...this.grupoCalculosTableOptions,
+                  data: this.calculoList,
+                }
+                if((counter+1) == this.idsCalculo.length)
+                  this.isUpdating = false;
+                counter++;
+            });
+          }
         }
     });
   }

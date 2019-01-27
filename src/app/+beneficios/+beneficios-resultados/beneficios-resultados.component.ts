@@ -12,6 +12,7 @@ import { IntervaloReajuste } from '../../services/IntervaloReajuste.model';
 import { IndicesService } from '../../services/Indices.service';
 import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -192,33 +193,44 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.Segurado.find(this.seguradoId)
       .then(segurado => {
         this.segurado = segurado;
-      });
 
-    this.calculoId = this.route.snapshot.params['id_calculo'];
-    this.CalculoAtrasado.find(this.calculoId)
-      .then(calculo => {
-        this.calculo = calculo;
-        this.setInicioRecebidosEDevidos();
-        this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
-        if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
-          this.isTetos = true;
-          this.calculoType = 'AJ'
-        }
-
-        this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
-          .then((moeda: Moeda[]) => {
-            this.moeda = moeda;
-            this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
-              .then(indices => {
-                this.indices = indices;
-                this.jurosCorrente = this.calcularJurosCorrente();
-                this.resultadosList = this.generateTabelaResultados();
-                this.updateResultadosDatatable();
-                this.isUpdating = false;
+        if(localStorage.getItem('user_id') != this.segurado.user_id){
+              //redirecionar para pagina de segurados
+              swal({
+                type: 'error',
+                title: 'Erro',
+                text: 'Você não tem permissão para acessar esta página!',
+                allowOutsideClick: false
+              }).then(()=> {
+                window.location.href='/#/beneficios/beneficios-segurados/'
               });
-          })
+            }else{
+              this.calculoId = this.route.snapshot.params['id_calculo'];
+              this.CalculoAtrasado.find(this.calculoId)
+                .then(calculo => {
+                  this.calculo = calculo;
+                  this.setInicioRecebidosEDevidos();
+                  this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
+                  if(this.calculo.aplicar_ajuste_maximo_98_2003 == '1'){
+                    this.isTetos = true;
+                    this.calculoType = 'AJ'
+                  }
+          
+                  this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
+                    .then((moeda: Moeda[]) => {
+                      this.moeda = moeda;
+                      this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'),this.dataFinal.format('YYYY-MM-DD'))
+                        .then(indices => {
+                          this.indices = indices;
+                          this.jurosCorrente = this.calcularJurosCorrente();
+                          this.resultadosList = this.generateTabelaResultados();
+                          this.updateResultadosDatatable();
+                          this.isUpdating = false;
+                        });
+                    })
+                });
+            }
       });
-
   }
 
   esmaecerLinhas(dataCorrente, line){

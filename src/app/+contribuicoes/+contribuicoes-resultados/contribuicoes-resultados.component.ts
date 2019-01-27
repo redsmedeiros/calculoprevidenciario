@@ -7,7 +7,7 @@ import { Moeda } from '../../services/Moeda.model';
 import { ContribuicaoJurisprudencialService } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.service';
 import { ContribuicaoJurisprudencial } from '../+contribuicoes-calculos/ContribuicaoJurisprudencial.model';
 import * as moment from 'moment';
-
+import swal from 'sweetalert2';
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
@@ -63,30 +63,43 @@ export class ContribuicoesResultadosComponent implements OnInit {
       this.isUpdating = true;
       this.Segurado.find(this.route.snapshot.params['id']).then(segurado =>{
         this.segurado = segurado;
-        this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
-        this.calculoJurisprudencial = calculo;
 
-        this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
-        this.contribuicaoAte = moment(this.calculoJurisprudencial.final_atraso);
-        this.contribuicaoDe2 = (this.calculoJurisprudencial.inicio_atraso2) ? moment(this.calculoJurisprudencial.inicio_atraso2) : '';
-        this.contribuicaoAte2 = (this.calculoJurisprudencial.final_atraso2) ? moment(this.calculoJurisprudencial.final_atraso2) : '';
-                
-        this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe), moment(this.contribuicaoAte))
-          .then((moeda: Moeda[]) => {
-            this.moeda = moeda;
-            if(this.contribuicaoDe2 && this.contribuicaoAte2){
-              this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe2), moment(this.contribuicaoAte2))
-                .then((moeda: Moeda[]) => {
-                  this.moeda2 = moeda;
-                  this.updateDatatable();
-                  this.isUpdating = false;
-              });
-            }else{
-              this.updateDatatable();
-              this.isUpdating = false;
-            }
-        });
-      });
+        if(localStorage.getItem('user_id') != this.segurado.user_id){
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro',
+            text: 'Você não tem permissão para acessar esta página!',
+            allowOutsideClick: false
+          }).then(()=> {
+            this.listaSegurados();
+          });
+        }else{
+          this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
+          this.calculoJurisprudencial = calculo;
+  
+          this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
+          this.contribuicaoAte = moment(this.calculoJurisprudencial.final_atraso);
+          this.contribuicaoDe2 = (this.calculoJurisprudencial.inicio_atraso2) ? moment(this.calculoJurisprudencial.inicio_atraso2) : '';
+          this.contribuicaoAte2 = (this.calculoJurisprudencial.final_atraso2) ? moment(this.calculoJurisprudencial.final_atraso2) : '';
+                  
+          this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe), moment(this.contribuicaoAte))
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              if(this.contribuicaoDe2 && this.contribuicaoAte2){
+                this.Moeda.getByDateRangeMoment(moment(this.contribuicaoDe2), moment(this.contribuicaoAte2))
+                  .then((moeda: Moeda[]) => {
+                    this.moeda2 = moeda;
+                    this.updateDatatable();
+                    this.isUpdating = false;
+                });
+              }else{
+                this.updateDatatable();
+                this.isUpdating = false;
+              }
+          });
+          });
+        }
       });
     }   
   }
