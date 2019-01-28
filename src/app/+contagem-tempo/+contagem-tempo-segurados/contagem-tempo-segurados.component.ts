@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import { SeguradoContagemTempo as SeguradoModel } from './SeguradoContagemTempo.model';
 import { SeguradoService } from './SeguradoContagemTempo.service';
 import { ErrorService } from '../../services/error.service';
@@ -47,7 +49,8 @@ export class ContagemTempoSeguradosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
     protected router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private Auth: Auth
   ) { }
 
   ngOnInit() {

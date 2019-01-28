@@ -13,6 +13,8 @@ import { CalculoContagemTempo as CalculoModel } from '../+contagem-tempo-calculo
 import { CalculoContagemTempoService } from '../+contagem-tempo-calculos/CalculoContagemTempo.service';
 import { PeriodosContagemTempo } from './PeriodosContagemTempo.model';
 import { PeriodosContagemTempoService } from './PeriodosContagemTempo.service';
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 
 
 @FadeInTop()
@@ -95,7 +97,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected CalculoContagemTempoService: CalculoContagemTempoService,
     protected PeriodosContagemTempoService: PeriodosContagemTempoService,
-    protected errors: ErrorService
+    protected errors: ErrorService,
+    private Auth: Auth
   ) {
   }
 

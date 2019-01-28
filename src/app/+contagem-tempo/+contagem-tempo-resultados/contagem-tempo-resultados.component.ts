@@ -7,7 +7,6 @@ import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 
-
 import { SeguradoContagemTempo as SeguradoModel } from './../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo as CalculoModel } from './../+contagem-tempo-calculos/CalculoContagemTempo.model';
 import { PeriodosContagemTempo } from './../+contagem-tempo-periodos/PeriodosContagemTempo.model';
@@ -15,6 +14,9 @@ import { PeriodosContagemTempoService } from './../+contagem-tempo-periodos/Peri
 
 import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { CalculoContagemTempoService } from '../+contagem-tempo-calculos/CalculoContagemTempo.service';
+
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 
 @FadeInTop()
 @Component({
@@ -58,7 +60,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected CalculoContagemTempoService: CalculoContagemTempoService,
     //  protected PeriodosContagemTempoService: PeriodosContagemTempoService,
-    protected errors: ErrorService
+    protected errors: ErrorService,
+    private Auth: Auth
   ) {
   }
 
