@@ -9,6 +9,11 @@ export const routes:Routes = [
     loadChildren: 'app/+home/+home/home.module#HomeModule',
     data: {pageTitle: 'Home'}
   },
+  {
+  	path: '',
+    loadChildren: 'app/+home/+home/home.module#HomeModule',
+    data: {pageTitle: 'Home'}
+  }
   
 ];
 

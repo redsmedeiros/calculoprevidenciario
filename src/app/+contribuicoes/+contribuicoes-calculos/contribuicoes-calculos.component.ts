@@ -5,6 +5,10 @@ import { ContribuicaoJurisprudencialService } from './ContribuicaoJurisprudencia
 import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import * as moment from 'moment';
+import { environment } from '../../../environments/environment';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -93,7 +97,8 @@ export class ContribuicoesCalculosComponent implements OnInit {
               protected router: Router,
               private route: ActivatedRoute,
               protected Jurisprudencial: ContribuicaoJurisprudencialService,
-              protected Complementar: ContribuicaoComplementarService
+              protected Complementar: ContribuicaoComplementarService,
+              private Auth: Auth
           ) {
   }
 
@@ -102,24 +107,40 @@ export class ContribuicoesCalculosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id'];
 
     this.isUpdating = true;
+    
+
     // retrive user info
     this.Segurado.find(this.route.snapshot.params['id'])
         .then(segurado => {
             this.segurado = segurado;
+
+            if(localStorage.getItem('user_id') != this.segurado.user_id){
+              //redirecionar para pagina de segurados
+              swal({
+                type: 'error',
+                title: 'Erro',
+                text: 'Você não tem permissão para acessar esta página!',
+                allowOutsideClick: false
+              }).then(()=> {
+                window.location.href='/#/contribuicoes/contribuicoes-segurados/';
+              });
+            }else{
+              this.Jurisprudencial.get()
+                  .then(() => {
+                     this.jurisprudencialList = this.Jurisprudencial.list;
+                     this.updateDatatable();
+              })
+          
+              this.Complementar.get()
+                  .then(() => {
+                     this.complementarList = this.Complementar.list;
+                     this.updateDatatable();
+                     this.isUpdating = false;
+              });
+            }
     });
 
-    this.Jurisprudencial.get()
-        .then(() => {
-           this.jurisprudencialList = this.Jurisprudencial.list;
-           this.updateDatatable();
-    })
-
-    this.Complementar.get()
-        .then(() => {
-           this.complementarList = this.Complementar.list;
-           this.updateDatatable();
-           this.isUpdating = false;
-    })
+    
   }
 
 

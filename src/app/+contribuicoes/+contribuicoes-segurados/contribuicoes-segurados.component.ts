@@ -5,6 +5,8 @@ import { SeguradoContribuicao as SeguradoModel } from '../SeguradoContribuicao.m
 import { SeguradoService } from '../Segurado.service';
 import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
 
 @FadeInTop()
 @Component({
@@ -43,22 +45,17 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     protected Segurado: SeguradoService,
     protected Errors: ErrorService,
     protected router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private Auth: Auth
   ) {}
 
   ngOnInit() {
     this.isUpdating = true;
-    this.userId = this.route.snapshot.queryParams['user_id'];
-    if(!this.userId){
-      this.userId = localStorage.getItem('user_id');
-      console.log('entrou if: ', this.userId)
-      if(!this.userId){
-        window.location.href = environment.loginPageUrl;
-      }else{
-        localStorage.setItem('user_id', this.userId);
-      }
-    }else{
+    this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
+    if(this.userId){
       localStorage.setItem('user_id', this.userId);
+    }else{
+      window.location.href = environment.loginPageUrl;
     }
     this.Segurado.getByUserId(this.userId)
         .then(() => {

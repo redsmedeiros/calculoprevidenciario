@@ -440,13 +440,14 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let direito = true;
     let idadeMinima = true;
-    let extra;
+    let extra = 0;
     let toll;
 
     let erroString = '';
     if(this.tipoBeneficio == 4 || this.tipoBeneficio == 6){
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
       if (!direito){
+        errorArray.push("NÃO POSSUI direito ao benefício INTEGRAL."); 
         if (dib <= this.dataDib98) {
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib); 
@@ -454,7 +455,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib); 
-          direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);
+          direito = this.verificarIdadeNecessaria(this.dataDib99.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'years'), 7, 0, redutorSexo, errorArray);
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
         }
         let contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
@@ -468,7 +469,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
           errorArray.push("Falta(m) "+ tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
-          if (totalContribuicao98 > 0 && errorArray.length == 0) {
+          //if (totalContribuicao98 > 0 && errorArray.length == 0) {
+          if (totalContribuicao98 > 0 && this.tipoCalculo == '98_99') {
             let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
             let tempoProporcional = this.tratarTempoFracionado(tempo);
             // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;

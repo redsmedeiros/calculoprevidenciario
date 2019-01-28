@@ -8,6 +8,7 @@ import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/
 import { ContribuicaoComplementar } from '../+contribuicoes-complementar/ContribuicaoComplementar.model';
 import { MatrixService } from '../MatrixService.service'
 import * as moment from 'moment'
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -77,37 +78,50 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   	this.isUpdating = true;
     this.Segurado.find(this.idSegurado).then(segurado => {
       this.segurado = segurado;
-      this.Complementar.find(this.idCalculo).then(calculo => {
-        this.calculoComplementar = calculo;
-        this.mostrarJuros = this.calculoComplementar.chk_juros;
-        if(!this.mostrarJuros){
-          this.resultadosTableOptions = {
-            ...this.resultadosTableOptions,
-            columns: [
-                      {data: 'competencia'},
-                      {data: 'valor_contribuicao'},
-                      {data: 'multa'},
-                      {data: 'total'},
-            ],
-          }
-        }
-        let splited = this.calculoComplementar.inicio_atraso.split('-');
-        this.competenciaInicial = splited[1]+'/'+splited[0];
-        splited = this.calculoComplementar.final_atraso.split('-');
-        this.competenciaFinal = splited[1]+'/'+splited[0];
-        this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
-        this.resultadosList = this.generateTabelaResultados();
-        this.updateResultadosDatatable();
-        if(this.hasDetalhe){
-              this.detalhesList = this.MatrixStore.getTabelaDetalhes();
-              this.updateDetalhesDatatable();
-        }
-        this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
-          .then((moeda: Moeda[]) => {
-            this.moeda = moeda;
-            this.isUpdating = false;
+
+      if(localStorage.getItem('user_id') != this.segurado.user_id){
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro',
+            text: 'Você não tem permissão para acessar esta página!',
+            allowOutsideClick: false
+          }).then(()=> {
+            this.listaSegurados();
           });
-      });
+        }else{
+          this.Complementar.find(this.idCalculo).then(calculo => {
+          this.calculoComplementar = calculo;
+          this.mostrarJuros = this.calculoComplementar.chk_juros;
+          if(!this.mostrarJuros){
+            this.resultadosTableOptions = {
+              ...this.resultadosTableOptions,
+              columns: [
+                        {data: 'competencia'},
+                        {data: 'valor_contribuicao'},
+                        {data: 'multa'},
+                        {data: 'total'},
+              ],
+            }
+          }
+          let splited = this.calculoComplementar.inicio_atraso.split('-');
+          this.competenciaInicial = splited[1]+'/'+splited[0];
+          splited = this.calculoComplementar.final_atraso.split('-');
+          this.competenciaFinal = splited[1]+'/'+splited[0];
+          this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
+          this.resultadosList = this.generateTabelaResultados();
+          this.updateResultadosDatatable();
+          if(this.hasDetalhe){
+                this.detalhesList = this.MatrixStore.getTabelaDetalhes();
+                this.updateDetalhesDatatable();
+          }
+          this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              this.isUpdating = false;
+            });
+          });
+        }
     });
     
    

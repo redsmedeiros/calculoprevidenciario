@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
 import { environment } from '../../../environments/environment';
+import { ActivatedRoute } from '@angular/router';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import swal from 'sweetalert';
 
 @FadeInTop()
 @Component({
@@ -9,12 +13,12 @@ import { environment } from '../../../environments/environment';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() {}
+  constructor(
+  	private route: ActivatedRoute,
+  	private Auth: Auth){}
 
   ngOnInit() {
-  	if(!localStorage.getItem('user_id')){
-      swal('Erro', 'Falha de login!','error').then(() => {window.location.href = environment.loginPageUrl;});
-    }
-  }
+
+  } 
 
 }

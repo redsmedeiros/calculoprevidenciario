@@ -8,7 +8,10 @@ import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from "./window.service";
-import swal from 'sweetalert';
+import { environment } from '../../../environments/environment';
+import { Auth } from "../../services/Auth/Auth.service";
+import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import swal from 'sweetalert2';
 
 @FadeInTop()
 @Component({
@@ -71,8 +74,36 @@ export class RgpsCalculosComponent implements OnInit {
     protected router: Router,
     private route: ActivatedRoute,
     @Inject(DOCUMENT) private document: Document,
-    @Inject(WINDOW) private window: Window
+    @Inject(WINDOW) private window: Window,
+    private Auth: Auth
   ) {}
+
+  ngOnInit() {
+    this.idSegurado = this.route.snapshot.params['id'];
+    this.isUpdating = true;
+
+    this.Segurado.find(this.route.snapshot.params['id'])
+        .then(segurado => {
+            this.segurado = segurado;
+            if(localStorage.getItem('user_id') != this.segurado.user_id){
+              //redirecionar para pagina de segurados
+              swal({
+                type: 'error',
+                title: 'Erro',
+                text: 'Você não tem permissão para acessar esta página!',
+                allowOutsideClick: false
+              }).then(()=> {
+                this.voltar();
+              });
+            }else{
+              this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
+                .then((calculos) => {
+                this.updateDatatable();
+                this.isUpdating = false;
+              });   
+            }
+    });
+  }
 
   getTempoDeContribuicao(data, type, dataToSet) {
     let str = '';
@@ -100,21 +131,6 @@ export class RgpsCalculosComponent implements OnInit {
       return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}" checked><span> </span></label></div>`;
     }
     return `<div class="checkbox"><label><input type="checkbox" id='${data.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
-  }
-
-  ngOnInit() {
-    this.idSegurado = this.route.snapshot.params['id'];
-    this.isUpdating = true;
-    this.Segurado.find(this.route.snapshot.params['id'])
-        .then(segurado => {
-            this.segurado = segurado;
-    });
-
-    this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
-        .then((calculos) => {
-        this.updateDatatable();
-        this.isUpdating = false;
-        })
   }
 
   updateDatatable() {

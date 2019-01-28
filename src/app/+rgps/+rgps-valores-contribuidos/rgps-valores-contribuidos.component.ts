@@ -70,27 +70,40 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-        if(this.idsCalculos.length == 1){
-          this.CalculoRgps.find(this.idsCalculos[0])
-            .then(calculo => {
-              this.calculo = calculo;
-              this.updateDatatable(calculo);
-              this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null, 0, this.idSegurado)
-                .then((valorescontribuidos: ValorContribuido[]) => {
-                  this.initializeMatrix(valorescontribuidos);
-                  this.isUpdating = false;
-                });
-            });
+
+        if(localStorage.getItem('user_id') != this.segurado.user_id){
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro',
+            text: 'Você não tem permissão para acessar esta página!',
+            allowOutsideClick: false
+          }).then(()=> {
+            window.location.href = '/#/rgps/rgps-segurados/';
+          });
         }else{
-          let counter = 0;
-          for(let idCalculo of this.idsCalculos){
-            this.CalculoRgps.find(idCalculo)
-              .then((calculo:CalculoModel) => {
-                this.updateDatatable(calculo)
-                if((counter+1) == this.idsCalculos.length)
-                  this.isUpdating = false;
-                counter++;
-            });
+          if(this.idsCalculos.length == 1){
+            this.CalculoRgps.find(this.idsCalculos[0])
+              .then(calculo => {
+                this.calculo = calculo;
+                this.updateDatatable(calculo);
+                this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null, 0, this.idSegurado)
+                  .then((valorescontribuidos: ValorContribuido[]) => {
+                    this.initializeMatrix(valorescontribuidos);
+                    this.isUpdating = false;
+                  });
+              });
+          }else{
+            let counter = 0;
+            for(let idCalculo of this.idsCalculos){
+              this.CalculoRgps.find(idCalculo)
+                .then((calculo:CalculoModel) => {
+                  this.updateDatatable(calculo)
+                  if((counter+1) == this.idsCalculos.length)
+                    this.isUpdating = false;
+                  counter++;
+              });
+            }
           }
         }
       });

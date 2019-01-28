@@ -9,6 +9,7 @@ import { HttpModule } from '@angular/http';
  * Platform and Environment providers/directives/pipes
  */
 import { routing } from './app.routing'
+import { OnlyLoggedInUsersGuard } from './can-activate-route.guard'
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -40,7 +41,7 @@ import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-c
 import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { FileDropModule } from 'ngx-file-drop';
-
+import { Auth } from './services/Auth/Auth.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -58,7 +59,7 @@ type StoreType = {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [AppComponent],
+  bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
   ],
@@ -68,9 +69,12 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
+
     CoreModule,
     SmartadminLayoutModule,
     FileDropModule,
+
+
     routing
   ],
   exports: [
@@ -98,7 +102,9 @@ type StoreType = {
     ExpectativaVidaService,
     SeguradoContagemTempoService,
     CalculoContagemTempoService,
-    PeriodosContagemTempoService
+    PeriodosContagemTempoService,
+    Auth,
+    OnlyLoggedInUsersGuard
   ]
 })
 export class AppModule {
