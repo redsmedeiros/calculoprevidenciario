@@ -90,13 +90,13 @@ export class ImportadorCnisComponent implements OnInit {
 
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {
-    // window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-    //   seguradoId + '/' + calculoId;
+    window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
+      seguradoId + '/' + calculoId;
 
 
-    window.open(
-      '/#/contagem-tempo/contagem-tempo-resultados/' + seguradoId + '/' + calculoId,
-      '_blank');
+    // window.open(
+    //   '/#/contagem-tempo/contagem-tempo-resultados/' + seguradoId + '/' + calculoId,
+    //   '_blank');
   }
 
 }
