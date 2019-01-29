@@ -883,8 +883,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
     if (dib > dataHoje) {
-      let anos = Math.round(Math.abs(dataHoje.diff(dib, 'years', true)));
-      console.log(anos)
+      let anos = Math.abs(dataHoje.diff(dib, 'years', true));
+      if(anos < 1){
+        anos = Math.round(anos);
+      }else{
+        anos = Math.trunc(anos);
+      }
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
