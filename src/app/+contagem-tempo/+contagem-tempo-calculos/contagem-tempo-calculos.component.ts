@@ -8,6 +8,8 @@ import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTe
 import { SeguradoContagemTempo as SeguradoModel } from '../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import * as moment from 'moment';
 import swal from 'sweetalert';
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 
 @FadeInTop()
 @Component({
@@ -70,6 +72,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
     protected Errors: ErrorService,
     protected router: Router,
     private route: ActivatedRoute,
+    private Auth: Auth
   ) { }
 
   // getTempoDeContribuicao(data, type, dataToSet) {

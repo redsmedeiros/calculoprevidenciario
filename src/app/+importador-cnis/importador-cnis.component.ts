@@ -10,7 +10,8 @@ import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados/i
 import { ImportadorCnisCalculosComponent } from './+importador-cnis-calculos/importador-cnis-calculos.component';
 import { ImportadorCnisPeriodosComponent } from './+importador-cnis-periodos/importador-cnis-periodos.component';
 
-
+import { Auth } from '../services/Auth/Auth.service';
+import { AuthResponse } from '../services/Auth/AuthResponse.model';
 
 @Component({
   selector: 'app-importador-cnis',
@@ -35,7 +36,10 @@ export class ImportadorCnisComponent implements OnInit {
   @ViewChild(ImportadorCnisPeriodosComponent) PeriodosComponent: ImportadorCnisPeriodosComponent;
 
 
-  constructor(private ref: ChangeDetectorRef, private route: ActivatedRoute) { }
+  constructor(
+    private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private Auth: Auth) { }
 
   ngOnInit() {
     this.ref.markForCheck();
@@ -90,13 +94,13 @@ export class ImportadorCnisComponent implements OnInit {
 
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {
-    // window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-    //   seguradoId + '/' + calculoId;
+    window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
+      seguradoId + '/' + calculoId;
 
 
-    window.open(
-      '/#/contagem-tempo/contagem-tempo-resultados/' + seguradoId + '/' + calculoId,
-      '_blank');
+    // window.open(
+    //   '/#/contagem-tempo/contagem-tempo-resultados/' + seguradoId + '/' + calculoId,
+    //   '_blank');
   }
 
 }
