@@ -652,7 +652,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         if (irt >= 1) {
           conclusoes.push({string:"Índice de reajuste no teto:",value:this.formatDecimal(irt, 4)});//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
         }
-        conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: this.formula_expectativa_sobrevida});
+
+        if(this.formula_expectativa_sobrevida != ''){
+          conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: this.formula_expectativa_sobrevida});
+        }
+        
         conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 2)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
 
         if (this.tipoBeneficio == 29) {
@@ -871,7 +875,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     }else{
-      expectativaVida = this.ExpectativaVida.getByDates(dataInicio, dataFim);
+      expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
     return expectativaVida;
   }
@@ -895,9 +899,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
       this.formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
       //conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
-    } else if (dib <= dataInicio) {
+    } else if (dib.isSameOrBefore(dataInicio)) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
-    } else if (dib >= dataFim) {
+    } else if (dib.isSameOrAfter(dataFim)) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, dib, null);
     } else {
       expectativa = this.procurarExpectativa(idadeFracionada, null, dib, dib);
