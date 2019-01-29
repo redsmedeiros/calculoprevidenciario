@@ -1,8 +1,8 @@
 import { Model } from '../../contracts/Model';
-
+import { environment } from '../../../environments/environment';
 export class AuthResponse extends Model {
 
-  static url = 'http://codificar.ieprev.com.br/verificatoken';
+  static url = environment.authUrl;
   static form = {
     status: '',
     msg: '',

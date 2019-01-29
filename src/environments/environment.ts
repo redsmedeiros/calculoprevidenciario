@@ -6,5 +6,6 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8000/',
+  authUrl: 'http://ieprev:8080/verificatoken/',
   loginPageUrl: 'https://codificar.ieprev.com.br/auth/loginPanel',
 };
