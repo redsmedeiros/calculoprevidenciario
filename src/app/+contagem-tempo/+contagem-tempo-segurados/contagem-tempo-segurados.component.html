@@ -20,16 +20,20 @@
           </ul>
           <p class="margin-lg-top">Simula contagem do tempo de serviço para os vínculos empregatícios especial e comum
             e atividades laboradas como contribuinte individual.</p>
+          <button (click)="linkImportador()" type="button" class="btn btn-labeled btn-primary" data-placement="bottom" tooltip="Caso você tenha o arquivo CNIS (Cadastro Nacional de Informações Sociais) do segurado em .pdf gerado pelo sistema meu.inss.gov.br
+          tente importar utilizando o botão">
+            <span class="btn-label">
+              <i class="fa fa-upload"></i>
+            </span> Importador de CNIS para contagem de tempo
+          </button>
         </div>
       </article>
     </div>
     <!-- row -->
     <div class="row">
-
       <app-contagem-tempo-segurados-create (onSubmit)="onCreate($event)"></app-contagem-tempo-segurados-create>
-
     </div>
-    <br>
+
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-contagem-tempo-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-contagem-tempo-segurados-index>

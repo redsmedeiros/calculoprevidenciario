@@ -70,11 +70,11 @@ export class ContagemTempoSeguradosComponent implements OnInit {
     }
 
     this.Segurado.getByUserId(this.userId)
-        .then(() => {
-           localStorage.setItem('user_id', this.userId);
-           this.updateDatatable();
-           this.isUpdating = false;
-        });
+      .then(() => {
+        localStorage.setItem('user_id', this.userId);
+        this.updateDatatable();
+        this.isUpdating = false;
+      });
 
   }
 
@@ -105,11 +105,15 @@ export class ContagemTempoSeguradosComponent implements OnInit {
   onCreate(e) {
     this.isUpdating = true;
     this.Segurado.getByUserId(this.userId)
-        .then(() => {
-           this.updateDatatable();
-           this.list = this.Segurado.list;
-           this.isUpdating = false;
-        })
+      .then(() => {
+        this.updateDatatable();
+        this.list = this.Segurado.list;
+        this.isUpdating = false;
+      })
+  }
+
+  linkImportador() {
+    window.location.href = '/#/importador-cnis/';
   }
 
 }
