@@ -70,6 +70,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     ] 
   };
 
+  public formula_expectativa_sobrevida = '';
+  public formula_fator = '';
   public showReajustesAdministrativos = false;
   public reajustesAdministrativosTableData = [];
   public reajustesAdministrativosTableOptions = {
@@ -426,7 +428,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
+        this.formula_fator = "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)";
+        //conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
 
@@ -540,7 +543,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     conclusoes.push({string:"Idade em anos:",value:`${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada,2)}) `});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
     conclusoes.push({string:"Média das contribuições:",value:this.formatMoney(somaMedias, currency.acronimo)});//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({string:"CT - Número de competências transcorridas desde 29/11/1999:",value:numeroCompetencias});//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
-
+    conclusoes.push({string:"Fórmula Fator:",value: this.formula_fator});
     if (this.tipoBeneficio == 6 && redutorSexo == 5){
       this.contribuicaoTotal -= this.contribuicaoTotal - 5;
     }
@@ -649,7 +652,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         if (irt >= 1) {
           conclusoes.push({string:"Índice de reajuste no teto:",value:this.formatDecimal(irt, 4)});//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
         }
-
+        conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: this.formula_expectativa_sobrevida});
         conclusoes.push({string:"Expectativa de Sobrevida:",value:this.formatDecimal(expectativa, 2)});//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
 
         if (this.tipoBeneficio == 29) {
@@ -715,13 +718,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     if(secundario){
       tempo = this.contribuicaoSecundaria;
-      let contagemSecundaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
+      let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
+      //let contagemSecundaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
       return contagemSecundaria;
     }
 
     tempo = this.contribuicaoPrimaria;
-    let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
-    let contagemPrimariaAnos = contagemPrimaria / 365.25;
+    let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
+    //let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
+    //let contagemPrimariaAnos = contagemPrimaria / 365.25;
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
@@ -878,13 +883,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
     if (dib > dataHoje) {
-      let anos = Math.abs(dataHoje.diff(dib, 'years'));
-
+      let anos = Math.round(Math.abs(dataHoje.diff(dib, 'years', true)));
+      console.log(anos)
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
       expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
-      conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+      this.formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
+      //conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
     } else if (dib <= dataInicio) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib >= dataFim) {
