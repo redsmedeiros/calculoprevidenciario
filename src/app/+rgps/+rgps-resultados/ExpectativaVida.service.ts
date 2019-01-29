@@ -47,31 +47,34 @@ export class ExpectativaVidaService extends ControllerService {
   }
 
   public getByProperties(dataInicio, dataFim){
+    let resultado = {};
     if (dataInicio != null){
       if (dataFim != null) {
          //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e startDate <= dataInicio e endData >= dataFim
-        return this.list.find((expectativa) => {
+        resultado = this.list.find((expectativa) => {
           return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && moment(expectativa.data_final).isSameOrAfter(dataFim);
         });
       } else {
         //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e  startDate <= dataInicio e endData == null;
-        return this.list.find((expectativa) => {
+        resultado = this.list.find((expectativa) => {
           return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && expectativa.data_final == null;
         });
       }
     } else {
       if (dataFim != null) {
         //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e startDate == null e endData >= dataFim
-        return this.list.find((expectativa) => {
+        resultado = this.list.find((expectativa) => {
           return expectativa.data_inicial == null && moment(expectativa.data_final).isSameOrAfter(dataFim);
         });
       } else {
         //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e  startDate == null e endData == null;
-        return this.list.find((expectativa) => {
+        resultado = this.list.find((expectativa) => {
           return expectativa.data_inicial == null && expectativa.data_final == null;
         });
       }
     }
+
+    return (resultado['valor']);
   }
 
 
