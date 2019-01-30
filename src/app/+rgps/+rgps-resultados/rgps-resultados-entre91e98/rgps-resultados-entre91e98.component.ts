@@ -79,11 +79,12 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   };
 
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
+    protected route: ActivatedRoute,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
     private CalculoRgpsService:CalculoRgpsService,
-    protected rt: ActivatedRoute,) { super(null, null, null, null,null,null);}
+    protected rt: ActivatedRoute,) { super(null, route, null, null,null,null);}
 
   ngOnInit() {
     if(this.rt.snapshot.queryParams['withINPC'] == 'true'){
@@ -148,8 +149,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }else{
       dataLimite = moment('1994-07-01');
     }
-
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal)
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {

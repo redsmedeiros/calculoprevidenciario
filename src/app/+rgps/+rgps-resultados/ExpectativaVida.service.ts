@@ -47,6 +47,7 @@ export class ExpectativaVidaService extends ControllerService {
   }
 
   public getByProperties(dataInicio, dataFim){
+    console.log(dataInicio, dataFim)
     let resultado = {};
     if (dataInicio != null){
       if (dataFim != null) {
@@ -59,6 +60,11 @@ export class ExpectativaVidaService extends ControllerService {
         resultado = this.list.find((expectativa) => {
           return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && expectativa.data_final == null;
         });
+        if(!resultado){
+          resultado = this.list.find((expectativa) => {
+            return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && moment(expectativa.data_final).isSameOrAfter(dataInicio);
+          });
+        }
       }
     } else {
       if (dataFim != null) {
@@ -73,8 +79,12 @@ export class ExpectativaVidaService extends ControllerService {
         });
       }
     }
-
-    return (resultado['valor']);
+    if(resultado){
+      return resultado['valor'];
+    }else{
+      return -1
+    }
+    
   }
 
 

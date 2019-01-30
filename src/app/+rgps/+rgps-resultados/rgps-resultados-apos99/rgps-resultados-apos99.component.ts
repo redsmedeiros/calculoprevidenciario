@@ -90,12 +90,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   };
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
+    protected route: ActivatedRoute,
   	private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private CarenciaProgressiva:CarenciaProgressivaService,
     private CalculoRgpsService:CalculoRgpsService,
     private Moeda: MoedaService){
-    super(null, null, null, null,null,null); }
+    super(null, route, null, null,null,null); }
 
   ngOnInit() {
     this.boxId = this.generateBoxId();
@@ -111,7 +112,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   	let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
   	let dataLimite = moment('1994-07-01');
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite)
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {

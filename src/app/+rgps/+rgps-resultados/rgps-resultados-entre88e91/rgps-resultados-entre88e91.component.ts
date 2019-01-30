@@ -89,13 +89,14 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   };
 
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
+    protected route: ActivatedRoute,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
     private CalculoRgpsService:CalculoRgpsService,
     protected rt: ActivatedRoute,
     private IndiceInps: IndiceInpsService,
-    private SalarioMinimoMaximo: SalarioMinimoMaximoService,) { super(null, null, null, null,null,null);}
+    private SalarioMinimoMaximo: SalarioMinimoMaximoService,) { super(null, route, null, null,null,null);}
 
   ngOnInit() {
     this.boxId = this.generateBoxId();
@@ -133,8 +134,8 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     }else{
       dataLimite = moment('1994-07-01');
     }
-
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal)
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {

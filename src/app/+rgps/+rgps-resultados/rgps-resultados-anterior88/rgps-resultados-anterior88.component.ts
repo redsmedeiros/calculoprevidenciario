@@ -5,6 +5,7 @@ import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
 import { MoedaService } from '../../../services/Moeda.service';
 import { Moeda } from '../../../services/Moeda.model';
 import { IndiceInps } from '../IndiceInps.model';
+import { ActivatedRoute } from '@angular/router';
 import { IndiceInpsService } from '../IndiceInps.service';
 import { SalarioMinimoMaximo } from '../SalarioMinimoMaximo.model';
 import { SalarioMinimoMaximoService } from '../SalarioMinimoMaximo.service';
@@ -78,12 +79,13 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   };
 
   constructor(protected ValoresContribuidos: ValorContribuidoService,
+    protected route: ActivatedRoute,
     private Moeda: MoedaService,
     private IndiceInps: IndiceInpsService,
     private ReajusteAutomatico:ReajusteAutomaticoService,
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,
     private CalculoRgpsService:CalculoRgpsService,
-    ) {super(null, null, null, null, null, null);}
+    ) {super(null, route, null, null, null, null);}
 
   ngOnInit(){
     this.boxId = this.generateBoxId();
@@ -111,8 +113,8 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       dataLimite = moment('1994-07-01');
     }
 
-
-  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal)
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+  	this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal, this.idSegurado)
   		.then(valorescontribuidos => {
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
