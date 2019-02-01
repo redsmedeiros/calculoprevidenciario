@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000/',
-  authUrl: 'http://ieprev:8080/verificatoken/',
+  apiUrl: 'http://api.calculos.ieprev.com.br/',
+  authUrl: 'https://codificar.ieprev.com.br/verificatoken/',
   loginPageUrl: 'https://codificar.ieprev.com.br/auth/loginPanel',
 
   // homologacao

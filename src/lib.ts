@@ -19,7 +19,9 @@ require('bootstrap/js/modal.js'); //
 
 window['moment'] = require('moment');
 
-import 'imports-loader?jQuery=jquery!jquery-color/jquery.color.js'
+//import 'jquery-color/jquery.color.js' 
 
 require('smartadmin-plugins/notification/SmartNotification.min.js');
+
+
 
