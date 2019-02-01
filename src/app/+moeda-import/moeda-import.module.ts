@@ -7,6 +7,7 @@ import {SmartadminDatatableModule} from "../shared/ui/datatable/smartadmin-datat
 import { FormsModule } from '@angular/forms';
 import { FileDropModule } from 'ngx-file-drop';
 import { PapaParseModule } from 'ngx-papaparse';
+import { AdminLoginComponent } from "../shared/user/admin-login/admin-login.component";
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { PapaParseModule } from 'ngx-papaparse';
     FileDropModule,
     PapaParseModule,
   ],
-  declarations: [MoedaImportComponent],
+  declarations: [MoedaImportComponent, AdminLoginComponent],
   providers: [],
 })
 export class MoedaImportModule { }
