@@ -42,6 +42,12 @@ export class MoedaImportComponent implements OnInit {
       error: (error) => { this.processoAbortado(error) },
 			dynamicTyping:true,
       skipEmptyLines: true,
+      beforeFirstChunk: function(chunk) {
+                    var rows = chunk.split( /\r\n|\r|\n/ );
+                    var headings = rows[0].toLowerCase();
+                    rows[0] = headings;
+                    return rows.join("\r\n");
+                },
 		};
 		this.csvParse.parse(file, options);
   }
@@ -52,9 +58,9 @@ export class MoedaImportComponent implements OnInit {
       swal('Erro', 'Verifique o arquivo', 'error');
       return;
     }
-  	if(data.meta.fields.length != 12){
+  	if(data.meta.fields.length != 13){
       console.log(data.meta.fields)
-  		swal('Erro', 'Número incorreto de colunas. O correto são 12 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
+  		swal('Erro', 'Número incorreto de colunas. O correto são 13 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
   	}else{
   	  console.log(data)
   	  swal({
