@@ -30,6 +30,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 	public stringCabecalho;
 	public moeda;
 	public idadeSegurado;
+  public nenhumaContrib = false;
 	public conclusoes = {};
   public tableData = [];
   public listaValoresContribuidos;
@@ -155,7 +156,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       	this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
           // Exibir MSG de erro e encerrar Cálculo.
-          this.erros.push("Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme " + "<a href=\"http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29\" target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991</a>");
+          this.nenhumaContrib = true;
           this.isUpdating = false;
         }else{
           let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);

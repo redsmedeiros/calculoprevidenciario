@@ -34,6 +34,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   private rmi8090 = undefined;
   private rmi8595 = undefined;
   public isProportional = false;
+  public nenhumaContrib = false;
 	public dataInicioBeneficio;
 	public tipoBeneficio;
 	public listaValoresContribuidos;
@@ -118,7 +119,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         this.listaValoresContribuidos = valorescontribuidos;
         if(this.listaValoresContribuidos.length == 0) {
           // Exibir MSG de erro e encerrar Cálculo.
-          this.erros.push("Nenhuma contribuição encontrada posterior a 07/1994 conforme " + "http://www.ieprev.com.br//legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999");
+          this.nenhumaContrib = true;
           this.isUpdating = false;
         }else{
           let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
