@@ -273,6 +273,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
         id_calculo: [this.idCalculo],
         data: moment(element.data,'MM/YYYY').format('YYYY-MM-DD'),
         tipo: element.contributionType,
+        id_segurado: this.idSegurado,
         valor: parseFloat(element.contrib.replace('.', '').replace(',','.'))
       });
       contribuicoes.push(contribuicao);
