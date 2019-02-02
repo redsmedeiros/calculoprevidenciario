@@ -1,0 +1,28 @@
+<div class="admin-login">
+   <div class="well no-padding">
+      <form class="smart-form client-form">
+         <header>
+            Login - Admin
+         </header>
+         <fieldset>
+            
+            <section>
+               <label class="label">Senha</label>
+               <label class="input"> 
+                  <i class="icon-append fa fa-lock"></i>
+                  <input [(ngModel)]="password" type="password" name="password" data-smart-validate-input="" data-required="" data-minlength="3" data-maxnlength="20" data-message="Por favor, entre com a senha do admin">
+                  <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Digite a senha do administrativo</b> 
+               </label>
+
+
+            </section>
+            
+         </fieldset>
+         <footer>
+            <button (click)="login($event)" class="btn btn-primary">
+            Logar
+            </button>
+         </footer>
+      </form>
+   </div>
+</div> 

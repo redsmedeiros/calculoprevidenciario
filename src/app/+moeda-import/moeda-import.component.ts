@@ -6,26 +6,34 @@ import { Moeda } from '../services/Moeda.model';
 import * as moment from 'moment';
 //import swal from 'sweetalert';
 import swal from 'sweetalert2'
-
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { AdminLoginComponent } from "../shared/user/admin-login/admin-login.component";
 
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
   templateUrl: './moeda-import.component.html',
-  providers: []
+  providers: [AdminLoginComponent]
 })
 
 export class MoedaImportComponent implements OnInit {
   @ViewChild('csvFileInput') fileInput:ElementRef;
+  @ViewChild(AdminLoginComponent) adminComponent;
 
   private files: UploadFile[] = [];
   private cnisTextArea;
+  private isAuth:boolean ;
   
   constructor(private csvParse: PapaParseService,
-  	          private MoedaService: MoedaService) {}
+              private MoedaService: MoedaService) {
+
+  }
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.isAuth = this.adminComponent.isAuth
+  }
 
   parseCsv(file){
   	let options = {

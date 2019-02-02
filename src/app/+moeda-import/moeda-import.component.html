@@ -2,7 +2,7 @@
   <!-- widget grid -->
   <sa-widgets-grid>
     <!-- row -->
-    <div class="row">
+    <div class="row" *ngIf="isAuth" >
     <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
           <header>
@@ -11,7 +11,7 @@
             </span>
             <h2>Importação</h2>
           </header>
-          <div>
+          <div >
             <div class="alert alert-warning margin-top-10" role="alert">
                 <p>O modelo para importação pode ser baixado <a href="modelo_importacao_moeda.csv" target="_blank">aqui</a>.</p>
             </div>
@@ -22,8 +22,12 @@
             <input type="file" (change)="onFileInputChange($event)" accept="text/csv" #csvFileInput style="display:none"/>
             </div>
           </div>
+          
         </sa-widget>
       </article>
+    </div>
+    <div *ngIf="!isAuth">
+      <admin-login (isAuthEvent)=" isAuth = $event ;"></admin-login>
     </div>
     <!-- end row -->
   </sa-widgets-grid>
