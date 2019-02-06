@@ -77,15 +77,41 @@ export class ContagemTempoResultadosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
 
+    // this.Segurado.find(this.idSegurado)
+    //   .then(segurado => {
+    //     this.seguradoView(segurado);
+    //   });
+
+    // this.CalculoContagemTempoService.find(this.idsCalculos[0])
+    //   .then(calculo => {
+    //     this.calculoSetView(calculo);
+    //     this.isUpdating = false;
+    //   });
+
+
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
-        this.seguradoView(segurado);
-      });
-
-    this.CalculoContagemTempoService.find(this.idsCalculos[0])
-      .then(calculo => {
-        this.calculoSetView(calculo);
-        this.isUpdating = false;
+        this.segurado = segurado;
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
+          this.segurado = {};
+          // redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro - Você não tem permissão para acessar esta página!',
+            text: '',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 1500
+          }).then(() => {
+            this.voltar();
+          });
+        } else {
+          this.seguradoView(segurado);
+          this.CalculoContagemTempoService.find(this.idsCalculos[0])
+            .then(calculo => {
+              this.calculoSetView(calculo);
+            });
+        }
       });
 
   }
@@ -201,8 +227,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
   //               <style>i.fa, .not-print{ display: none; }</style>`;
 
   //  const page = '<html><head>' + css + '</head><body >' + printContents + '</body></html>';
-  
-  
+
+
 
   // }
 
@@ -268,5 +294,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
       this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
   }
 
+  voltar() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/'
+  }
 
 }

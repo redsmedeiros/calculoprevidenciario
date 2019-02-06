@@ -7,7 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { SeguradoContagemTempo as SeguradoModel } from '../+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import * as moment from 'moment';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import { Auth } from '../../services/Auth/Auth.service';
 import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 
@@ -105,14 +105,29 @@ export class ContagemTempoCalculosComponent implements OnInit {
     this.isUpdating = true;
     this.Segurado.find(this.route.snapshot.params['id'])
       .then(segurado => {
-        this.seguradoView(segurado);
+        this.segurado = segurado;
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
+          this.segurado = {};
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro - Você não tem permissão para acessar esta página!',
+            text: '',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 1500
+          }).then(() => {
+            this.voltar();
+          });
+        } else {
+          this.seguradoView(segurado);
+          this.CalculoContagemTempo.get()
+            .then(() => {
+              this.updateDatatable();
+              this.isUpdating = false;
+            })
+        }
       });
-
-    this.CalculoContagemTempo.get()
-      .then(() => {
-        this.updateDatatable();
-        this.isUpdating = false;
-      })
   }
 
   updateDatatable() {
@@ -127,7 +142,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
     this.isUpdating = true;
     this.CalculoContagemTempo.get()
       .then(() => {
-        console.log(this.CalculoContagemTempo.list);
+        // console.log(this.CalculoContagemTempo.list);
         this.calculosList = this.CalculoContagemTempo.list;
         this.updateDatatable();
         this.isUpdating = false;
@@ -155,7 +170,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
     let totalFator = { years: 0, months: 0, days: 0 };
 
-    let xValor = (this.Math.floor(dias)  / 365.25);
+    let xValor = (this.Math.floor(dias) / 365.25);
 
     totalFator.years = this.Math.floor(xValor);
     let xVarMes = (xValor - totalFator.years) * 12;
@@ -182,11 +197,11 @@ export class ContagemTempoCalculosComponent implements OnInit {
   }
 
   valoresContribuicao() {
-  
+
   }
 
   realizarCalculos() {
- 
+
   }
 
   getSelectedCalcs() {
@@ -201,5 +216,11 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
   isSegurado(element, index, array) {
     return element['id_segurado'] == this.idSegurado;
+  }
+
+
+
+  voltar() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/'
   }
 }

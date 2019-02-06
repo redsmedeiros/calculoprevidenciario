@@ -5,9 +5,16 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://api.calculos.ieprev.com.br/',
-  authUrl: 'https://codificar.ieprev.com.br/verificatoken/',
-  loginPageUrl: 'https://codificar.ieprev.com.br/auth/loginPanel',
+  // apiUrl: 'http://api.calculos.ieprev.com.br/',
+  // authUrl: 'https://codificar.ieprev.com.br/verificatoken/',
+  // loginPageUrl: 'https://codificar.ieprev.com.br/auth/loginPanel',
+
+
+  // local
+  apiUrl: 'http://localhost:8000/',
+  authUrl: 'http://ieprev:8080/verificatoken/',
+  loginPageUrl: 'http://ieprev:8080/auth/loginPanel',
+
 
   // homologacao
   // apiUrl: 'http://api.calculos.homologacao.ieprev.com.br/',

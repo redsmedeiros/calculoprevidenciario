@@ -38,7 +38,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   public calculo: any = {};
   public periodo: any = {};
   public periodosList = [];
-  public form = {...PeriodosContagemTempo.form};
+  public form = { ...PeriodosContagemTempo.form };
 
   @Output() onSubmit = new EventEmitter();
   @ViewChild('periodoFormheader') periodoFormheader: ElementRef;
@@ -113,14 +113,40 @@ export class ContagemTempoPeriodosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
 
+    // this.Segurado.find(this.idSegurado)
+    //   .then(segurado => {
+    //     this.seguradoView(segurado);
+    //   });
+
+    //   this.CalculoContagemTempoService.find(this.idsCalculos[0])
+    //   .then(calculo => {
+    //     this.calculoSetView(calculo);
+    //   });
+
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
-        this.seguradoView(segurado);
-      });
+        this.segurado = segurado;
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
+          this.segurado = {};
+          // redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro - Você não tem permissão para acessar esta página!',
+            text: '',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 1500
+          }).then(() => {
+            this.voltar();
+          });
+        } else {
+          this.seguradoView(segurado);
+          this.CalculoContagemTempoService.find(this.idsCalculos[0])
+          .then(calculo => {
+            this.calculoSetView(calculo);
+          });
+        }
 
-      this.CalculoContagemTempoService.find(this.idsCalculos[0])
-      .then(calculo => {
-        this.calculoSetView(calculo);
       });
   }
 
@@ -145,7 +171,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
     this.calculo = calculo;
   }
 
- 
+
   seguradoView(segurado) {
     segurado.id_documento = segurado.getDocumentType(segurado.id_documento);
     segurado.idade = segurado.getIdadeAtual(segurado.data_nascimento, 1);
@@ -213,44 +239,44 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   setupdatePeriodo() {
     if (this.isValid()) {
-      
-      let periodoObj = new PeriodosContagemTempo ({
-              data_inicio: this.formatPostDataDate(this.data_inicio),
-              data_termino: this.formatPostDataDate(this.data_termino),
-              empresa: this.empresa,
-              fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
-              condicao_especial: this.condicao_especial,
-              carencia: this.carencia,
-              licenca_premio_nao_usufruida: 0,
-              id_contagem_tempo: this.idsCalculos[0],
-              id: this.id,
-        });
+
+      let periodoObj = new PeriodosContagemTempo({
+        data_inicio: this.formatPostDataDate(this.data_inicio),
+        data_termino: this.formatPostDataDate(this.data_termino),
+        empresa: this.empresa,
+        fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
+        condicao_especial: this.condicao_especial,
+        carencia: this.carencia,
+        licenca_premio_nao_usufruida: 0,
+        id_contagem_tempo: this.idsCalculos[0],
+        id: this.id,
+      });
 
       console.log(periodoObj);
 
       this.PeriodosContagemTempoService
-          .update(periodoObj)
-          .then(model => {
-            this.updateTabelaPeriodosView();
-            this.toastAlert('success', 'Período adicionado com sucesso.', null);
-            this.atualizarPeriodo = 0;
-            this.resetForm();
+        .update(periodoObj)
+        .then(model => {
+          this.updateTabelaPeriodosView();
+          this.toastAlert('success', 'Período adicionado com sucesso.', null);
+          this.atualizarPeriodo = 0;
+          this.resetForm();
         }).catch((err) => {
-                console.log(err);
-                this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
-              });
+          console.log(err);
+          this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+        });
 
-    // this.PeriodosContagemTempoService
-    //       .update(periodoObj)
-    //       .then(model => {
+      // this.PeriodosContagemTempoService
+      //       .update(periodoObj)
+      //       .then(model => {
 
-    //           this.PeriodosContagemTempoService.get();
-    //       })
-    //       // .catch(errors => this.Errors.add(errors));
-    //       .catch((err) => {
-    //         console.log(err);
-    //         this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
-    //       });
+      //           this.PeriodosContagemTempoService.get();
+      //       })
+      //       // .catch(errors => this.Errors.add(errors));
+      //       .catch((err) => {
+      //         console.log(err);
+      //         this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+      //       });
 
 
     } else {
@@ -304,7 +330,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       };
 
       console.log(periodoObj);
-      
+
       this.insertPeriodo(periodoObj);
 
     } else {
@@ -341,7 +367,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       if (this.isEmpty(this.data_termino) || !dateFinalPeriodo.isValid()) {
         this.errors.add({ 'data_termino': ['Insira uma data válida'] });
       } else {
-         if (dateFinalPeriodo <= dateInicioPeriodo) {
+        if (dateFinalPeriodo <= dateInicioPeriodo) {
           this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
         }
       }
@@ -392,13 +418,13 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   }
 
   boolToLiteral(value) {
-     if (typeof value === 'number') {
+    if (typeof value === 'number') {
       value = (value) ? 'Sim' : 'Não';
-     } else {
+    } else {
       value = (value === 'Sim') ? 1 : 0;
-     }
+    }
 
-     return value;
+    return value;
   }
 
   isEmpty(data) {
@@ -417,11 +443,11 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   }
 
   checkFator() {
-    this.fator_condicao_especial = this.formatFatorPost( this.fator_condicao_especial );
+    this.fator_condicao_especial = this.formatFatorPost(this.fator_condicao_especial);
   }
 
   formatReceivedDate(inputDate) {
-    let date = moment(inputDate, 'YYYY-MM-DD' );
+    let date = moment(inputDate, 'YYYY-MM-DD');
     return date.format('DD/MM/YYYY');
   }
 
@@ -433,14 +459,14 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   }
 
   topForm() {
-     document.body.scrollTop = this.periodoFormheader.nativeElement.offsetLeft  + 500; // For Safari
-     document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
- }
+    document.body.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Safari
+    document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
+  }
 
- editSegurado() {
-  window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-    this.route.snapshot.params['id_segurado'] + '/editar?last=periodos&calc=' + this.idsCalculos[0];
-}
+  editSegurado() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
+      this.route.snapshot.params['id_segurado'] + '/editar?last=periodos&calc=' + this.idsCalculos[0];
+  }
 
   returnListaSegurados() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
@@ -448,7 +474,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   editCalculo() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar?last=periodos' ;
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar?last=periodos';
   }
 
   returnListaCalculos() {
@@ -457,8 +483,13 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       this.route.snapshot.params['id_segurado'];
   }
 
-  realizarCalculoContagemTempo(){
+  realizarCalculoContagemTempo() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-    this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+  }
+
+
+  voltar() {
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/'
   }
 }
