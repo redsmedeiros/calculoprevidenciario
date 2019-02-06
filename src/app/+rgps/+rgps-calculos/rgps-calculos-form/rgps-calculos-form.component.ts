@@ -420,7 +420,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria98dias = periodos.total88.days;
 
       this.periodoInicioBeneficio = 'Anterior a 05/10/1988';
-    
+
     } else if (dib < moment('1999-11-29')) {
 
       this.primaria98anos = periodos.total98.years;
@@ -451,22 +451,20 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99meses = periodos.total99.months;
       this.primaria99dias = periodos.total99.days;
       this.periodoInicioBeneficio = 'A partir de 29/11/1999';
-      
     } else {
 
-
     }
-
-
 
   }
 
   checkImportContagemTempo() {
-    let exportContagemTempo = this.route.snapshot.queryParams;
 
-    if (exportContagemTempo.export && exportContagemTempo.export != undefined) {
+    if (sessionStorage.exportContagemTempo && sessionStorage.exportContagemTempo != undefined) {
       this.resetForm();
       this.importContagemTempo();
+      sessionStorage.removeItem('exportContagemTempo');
+    } else {
+      this.resetForm();
     }
 
   }

@@ -36,23 +36,12 @@ export class ContagemTempoConclusaoExportarRgpsComponent implements OnInit {
 
     sessionStorage.setItem('exportContagemTempo', objExport);
 
-    // sessionStorage.label = objExport;
+   // console.log(sessionStorage.exportContagemTempo);
+   //  console.log(JSON.parse(sessionStorage.exportContagemTempo));
+    // console.log('/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true');
+   // window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true';
 
-
-    // console.log(localStorage);
-
-    // console.log(sessionStorage.exportContagemTempo);
-
-    // console.log(JSON.parse(sessionStorage.exportContagemTempo));
-    
-
-
-    // console.log('/#/rgps/rgps-calculos/' +
-    //   this.seguradoId + '?export=true');
-
-
-
-   window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId+ '?export=true';
+   window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId;
 
 
   }
