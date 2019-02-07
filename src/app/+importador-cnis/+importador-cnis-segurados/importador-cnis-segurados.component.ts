@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from 'app/services/error.service';
 
@@ -24,8 +24,11 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
   public docMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
 
+  public countSeguradoErros = 0;
+
   @Input() segurado;
   @Input() isUpdating;
+  @Output() eventCountSeguradoErros = new EventEmitter();
 
 
   public formData = { ...SeguradoModel.form };
@@ -46,7 +49,6 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }, 200);
 
   }
-
 
 
 
@@ -87,16 +89,23 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
 
   validate() {
+
+    this.countSeguradoErros = 0;
+
     if (this.formData.nome == undefined || this.formData.nome == '') {
       this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
+      this.countSeguradoErros++;
     }
 
     if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
       this.errors.add({ 'id_documento': ['O Tipo de Documento é obrigatório.'] });
+      this.countSeguradoErros++;
     }
 
-    if (this.formData.numero_documento == undefined || this.formData.id_documento == '') {
+    if (this.formData.numero_documento == undefined || this.formData.id_documento == ''
+    || !this.formData.numero_documento || this.formData.numero_documento == '') {
       this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
+      this.countSeguradoErros++;
     } else {
       let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
       let id = this.formData.id_documento.toString();
@@ -104,6 +113,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
       this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
+      this.countSeguradoErros++;
     } else {
       var dateParts = this.formData.data_nascimento.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
@@ -124,6 +134,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
       this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
     }
 
+    this.eventCountSeguradoErros.emit(this.countSeguradoErros);
   }
 
 

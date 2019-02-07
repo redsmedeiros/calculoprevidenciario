@@ -44,33 +44,32 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
   ngOnInit() { }
 
 
-
   /**
    * Seleciona os dados do segurado 
    * @param text texto completo do CNIS
    */
-  private selecionarDadosDoSegurado(text) {
+  // private selecionarDadosDoSegurado(text) {
 
-    this.segurado.type = 0;
+  //   this.segurado.type = 0;
 
-    if (text.search(/(\d{3}.\d{5}.\d{2}-\d{1})/) > 0) {
-      this.segurado.nit = text.match(/(\d{3}.\d{5}.\d{2}-\d{1})/)[0].trim();
-      this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-      this.segurado.data_nascimento = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
-      this.segurado.nome = text.substring(text.indexOf('Nome:') + 5, text.indexOf('Data de nascimento:')).trim();
-      this.segurado.type = 1;
-    } else {
-      this.segurado.nit = text.match(/(\d{1}.\d{3}.\d{3}.\d{3}-\d{1})/)[0].trim();
-      this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
-      this.segurado.data_nascimento = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
-      this.segurado.nome = text.substring(text.indexOf('Nome da Mãe:') + 12, text.indexOf('CPF:')).match(/([A-Z]|\s)+/)[0].trim();
-      this.segurado.type = 2;
-    }
+  //   if (text.search(/(\d{3}.\d{5}.\d{2}-\d{1})/) > 0) {
+  //     this.segurado.nit = text.match(/(\d{3}.\d{5}.\d{2}-\d{1})/)[0].trim();
+  //     this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+  //     this.segurado.data_nascimento = text.substring(text.indexOf('nascimento:'), text.indexOf('Nome da')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+  //     this.segurado.nome = text.substring(text.indexOf('Nome:') + 5, text.indexOf('Data de nascimento:')).trim();
+  //     this.segurado.type = 1;
+  //   } else {
+  //     this.segurado.nit = text.match(/(\d{1}.\d{3}.\d{3}.\d{3}-\d{1})/)[0].trim();
+  //     this.segurado.numero_documento = text.match(/(\d{1,3}.\d{3}.\d{3}-\d{2})/)[0].trim();
+  //     this.segurado.data_nascimento = text.substring(text.indexOf('Nit:'), text.indexOf('CPF:')).match(/(\d{2}\/\d{2}\/\d{4})/)[0].trim();
+  //     this.segurado.nome = text.substring(text.indexOf('Nome da Mãe:') + 12, text.indexOf('CPF:')).match(/([A-Z]|\s)+/)[0].trim();
+  //     this.segurado.type = 2;
+  //   }
 
-    this.segurado.userId = this.userId;
+  //   this.segurado.userId = this.userId;
 
-    return this.segurado;
-  }
+  //   return this.segurado;
+  // }
 
 
   private getDadosDoSegurado(text) {
@@ -107,39 +106,39 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
    * @param text texto completo do documento CNIS
    * @param segurado obj segurado 
    */
-  private selectSequencias(text, segurado) {
+  // private selectSequencias(text, segurado) {
 
 
-    let text_limite_seq = (segurado.type === 1) ? 'Seq.' : 'Índice';
+  //   let text_limite_seq = (segurado.type === 1) ? 'Seq.' : 'Índice';
 
 
-    const seq = []
-    const text_full = text;
-    let init = text.indexOf(text_limite_seq);
-    let count = 0;
-    let next = 0;
-    let textaux = '';
-    let fim_doc = '';
+  //   const seq = []
+  //   const text_full = text;
+  //   let init = text.indexOf(text_limite_seq);
+  //   let count = 0;
+  //   let next = 0;
+  //   let textaux = '';
+  //   let fim_doc = '';
 
 
-    while (init !== -1) {
-      count++;
-      next = text_full.indexOf(text_limite_seq, init + 1);
+  //   while (init !== -1) {
+  //     count++;
+  //     next = text_full.indexOf(text_limite_seq, init + 1);
 
-      if (next !== -1) {
-        textaux = text_full.substring(init, next);
-      } else {
-        fim_doc = (text_full.search('Legenda de Indicadores') > 0) ? text_full.indexOf('Legenda de Indicadores') : text_full.indexOf('https://meu.inss.gov.br/central/autenticidade');
-        textaux = text_full.substring(init, fim_doc);
-      }
-      textaux = textaux.replace(/(INSS - INSTITUTO NACIONAL DO SEGURO SOCIAL CNIS - Cadastro Nacional de Informações Sociais Extrato Previdenciário)(\s)(\d{2}\/\d{2}\/\d{4})(\s)(\d{2}:\d{2}:\d{2})/i, ' ');
+  //     if (next !== -1) {
+  //       textaux = text_full.substring(init, next);
+  //     } else {
+  //       fim_doc = (text_full.search('Legenda de Indicadores') > 0) ? text_full.indexOf('Legenda de Indicadores') : text_full.indexOf('https://meu.inss.gov.br/central/autenticidade');
+  //       textaux = text_full.substring(init, fim_doc);
+  //     }
+  //     textaux = textaux.replace(/(INSS - INSTITUTO NACIONAL DO SEGURO SOCIAL CNIS - Cadastro Nacional de Informações Sociais Extrato Previdenciário)(\s)(\d{2}\/\d{2}\/\d{4})(\s)(\d{2}:\d{2}:\d{2})/i, ' ');
 
-      seq.push(textaux);
-      init = next;
-    }
+  //     seq.push(textaux);
+  //     init = next;
+  //   }
 
-    return seq;
-  }
+  //   return seq;
+  // }
 
 
 
@@ -546,7 +545,7 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
     let inicio_string = null;
     let fim_string = null;
 
-    if (text_vinculo.search(/(Benefício)|(Empresário \/ Empregador)|(Contribuinte\sIndividual)|(Autônomo)|(Contribuinte)|(EMPREGADO\sDOMÉSTICO)|(\d)(\s|\D|\W)(NÃO\sCADASTRADO)/) < 0) {
+    if (text_vinculo.search(/(Benefício)|(Empresário \/ Empregador)|(Contribuinte\sIndividual)|(Autônomo)|(Contribuinte)|(EMPREGADO\sDOMÉSTICO)|(\d)(\s|\D|\W)(NÃO\sCADASTRADO)|(RECOLHIMENTO)/) < 0) {
       if (text_vinculo.search(/(\d)(\s|\D|\W)(Indeterminado)/) > 0) {
         inicio_string = text_vinculo.search(/(\d)(\s|\D|\W)(Indeterminado)/) + 15;
         fim_string = text_vinculo.search(/(Empregado|Individual|Facultativo)(\s|\D|\W)(\d{2}\/\d{2}\/\d{4})/);
@@ -560,7 +559,11 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
       origemVinculo = text_vinculo.substring(inicio_string, fim_string).trim();
 
-    } else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
+    }else if (text_vinculo.search(/(RECOLHIMENTO)/) > 0) {
+
+      origemVinculo = 'Recolhimento';
+
+    }else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
 
       origemVinculo = 'Contribuinte Individual';
 

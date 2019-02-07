@@ -25,10 +25,14 @@ export class ImportadorCnisComponent implements OnInit {
   public segurado: any;
   public vinculos: any;
   public isUploadReaderComplete = false;
+  public isCnisValid = false;
   public userId
 
   public seguradoId;
   public calculoId;
+
+  public eventCountSeguradoErros = 0;
+  public eventCountVinculosErros = 0;
 
 
   @ViewChild(ImportadorCnisSeguradosComponent) SeguradoComponent: ImportadorCnisSeguradosComponent;
@@ -75,6 +79,16 @@ export class ImportadorCnisComponent implements OnInit {
     //  console.log(this.vinculos);
     this.ref.detectChanges();
 
+  }
+
+  reciverCountSeguradoErros(eventCountSeguradoErros) {
+    this.eventCountSeguradoErros = eventCountSeguradoErros;
+    console.log(eventCountSeguradoErros);
+  }
+
+  reciverCountVinculosErros(eventCountVinculosErros) {
+    this.eventCountVinculosErros = eventCountVinculosErros;
+    console.log(eventCountVinculosErros);
   }
 
 

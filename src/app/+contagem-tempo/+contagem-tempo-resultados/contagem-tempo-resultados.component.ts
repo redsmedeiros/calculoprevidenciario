@@ -77,21 +77,9 @@ export class ContagemTempoResultadosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
 
-    // this.Segurado.find(this.idSegurado)
-    //   .then(segurado => {
-    //     this.seguradoView(segurado);
-    //   });
-
-    // this.CalculoContagemTempoService.find(this.idsCalculos[0])
-    //   .then(calculo => {
-    //     this.calculoSetView(calculo);
-    //     this.isUpdating = false;
-    //   });
-
-
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
-        this.segurado = segurado;
+        this.seguradoView(segurado);
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
           this.segurado = {};
           // redirecionar para pagina de segurados
@@ -99,19 +87,17 @@ export class ContagemTempoResultadosComponent implements OnInit {
             type: 'error',
             title: 'Erro - Você não tem permissão para acessar esta página!',
             text: '',
-            showConfirmButton: false,
             allowOutsideClick: false,
+            showConfirmButton: false,
             timer: 1500
-          }).then(() => {
-            this.voltar();
-          });
-        } else {
-          this.seguradoView(segurado);
-          this.CalculoContagemTempoService.find(this.idsCalculos[0])
-            .then(calculo => {
-              this.calculoSetView(calculo);
-            });
+          }).then(() => {});
+          this.voltar();
         }
+        this.CalculoContagemTempoService.find(this.idsCalculos[0])
+        .then(calculo => {
+          this.calculoSetView(calculo);
+          this.isUpdating = false;
+        });
       });
 
   }

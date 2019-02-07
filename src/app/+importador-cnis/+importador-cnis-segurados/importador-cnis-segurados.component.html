@@ -13,13 +13,13 @@
                 
                       <label class="col-md-2 control-label">Nome*</label>
                       <div class="col-md-3">
-                        <input [(ngModel)]="formData.nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome')" class="form-control" type="text">
+                        <input [(ngModel)]="formData.nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome'); validate();" class="form-control" type="text">
                         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
                       </div>
                 
                       <label class="col-md-2 control-label" for="select-1">Tipo de documento*</label>
                       <div class="col-md-3">
-                        <select class="form-control" id="select-1" [(ngModel)]="formData.id_documento" [ngModelOptions]="{standalone: true}"  (change)="changeDocumentMask()">
+                        <select class="form-control" id="select-1" [(ngModel)]="formData.id_documento" [ngModelOptions]="{standalone: true}"  (change)="changeDocumentMask(); validate();">
                           <option value='1'>PIS</option>
                           <option value='2'>PASEP</option>
                           <option value='3'>CPF</option>
@@ -35,13 +35,13 @@
                       <label class="col-md-2 control-label">Número do documento*</label>
                 
                       <div class="col-md-3">
-                        <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento')" class="form-control" type="text">
+                        <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento'); validate();" class="form-control" type="text">
                         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
                       </div>
                 
                       <label class="col-md-2 control-label">Data de nascimento*</label>
                       <div class="col-md-3">
-                        <input [(ngModel)]="formData.data_nascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_nascimento')" [textMask]="{mask: dateMask}" class="form-control" type="text" data-placement="bottom" tooltip="Define  a idade e assim estabelece direitos e condições de cálculos.">
+                        <input [(ngModel)]="formData.data_nascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_nascimento'); validate();" [textMask]="{mask: dateMask}" class="form-control" type="text" data-placement="bottom" tooltip="Define  a idade e assim estabelece direitos e condições de cálculos.">
                         <small *ngIf="errors.has('data_nascimento')" class="text-danger">{{ errors.get('data_nascimento') | i18n}}</small>
                       </div>
                     </div>

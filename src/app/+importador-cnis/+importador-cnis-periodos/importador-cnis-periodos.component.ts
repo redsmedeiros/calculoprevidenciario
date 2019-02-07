@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, OnChanges, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -44,6 +44,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
+  public countVinculosErros = 0;
+
+  @Output() eventCountVinculosErros = new EventEmitter();
   @ViewChild('periodoFormheader') periodoFormheader: ElementRef;
 
   constructor(
@@ -75,7 +78,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private setPeriodos(vinculos) {
-
+    this.countVinculosErros = 0;
     for (const vinculo of vinculos) {
       this.updateDatatablePeriodos(vinculo);
     }
@@ -84,8 +87,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   public updateDatatablePeriodos(vinculo) {
-
-    if (typeof vinculo === 'object' && !(/(Benefício)/i).test(vinculo.origemVinculo)) {
+    // && !(/(Benefício)/i).test(vinculo.origemVinculo) adicionados os benefícios (luis 06-02-2018)
+    if (typeof vinculo === 'object') {
 
       const line = {
         data_inicio: vinculo.periodo[0],
@@ -97,7 +100,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         index: vinculo.index
       }
       this.vinculosList.push(line);
-
+      this.isValidVinculo(line);
     }
 
   }
@@ -165,6 +168,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public setupdatePeriodo() {
     if (this.isValid()) {
 
+      this.countVinculosErros = 0;
+
       this.vinculosList.map(vinculo => {
         if (vinculo.index === this.index) {
 
@@ -177,12 +182,15 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           vinculo.condicao_especial = this.boolToLiteral(this.condicao_especial);
           vinculo.carencia = this.boolToLiteral(this.carencia);
         }
+        this.isValidVinculo(vinculo);
+
       });
 
       this.resetForm();
       this.atualizarPeriodo = 0;
       this.detector.detectChanges();
       this.toastAlert('success', 'Relação Previdenciária atualizada', null);
+
     } else {
       this.toastAlert('error', 'Verifique os dados do formulário', null);
     }
@@ -201,6 +209,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         condicao_especial: this.boolToLiteral(this.condicao_especial),
         carencia: this.boolToLiteral(this.carencia),
       }
+
       this.vinculosList.push(line);
 
       this.resetForm();
@@ -216,6 +225,13 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public deletarVinculo(index) {
     this.vinculosList = this.vinculosList.filter(vinculo => vinculo.index !== index);
+
+    this.countVinculosErros = 0;
+
+    this.vinculosList.map(vinculo => {
+      this.isValidVinculo(vinculo);
+    });
+
   }
 
   resetForm() {
@@ -228,6 +244,46 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.index = null;
   }
 
+
+
+
+  isValidVinculo(vinculo) {
+    this.countVinculosErros += (this.testeVinculo(vinculo)) ? 1 : 0;
+    this.eventCountVinculosErros.emit(this.countVinculosErros);
+  }
+
+
+  private testeVinculo(vinculo) {
+
+    if (this.isEmpty(vinculo.data_inicio)) {
+      return true;
+    }
+
+    if (this.isEmpty(vinculo.data_termino)) {
+      return true;
+    }
+    // empresa
+    if (this.isEmpty(vinculo.empresa)) {
+      return true;
+    }
+
+    // fator_condicao_especial
+    if (this.isEmpty(vinculo.fator_condicao_especial)) {
+      return true;
+    }
+
+    // condição esepecial
+    if (this.isEmpty(vinculo.condicao_especial)) {
+      return true;
+    }
+
+    // carencia
+    if (this.isEmpty(vinculo.carencia)) {
+      return true;
+    }
+
+    return false;
+  }
 
 
   isValid() {
@@ -315,7 +371,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
   isEmpty(data) {
-    if (data == undefined || data == '') {
+    if (data == undefined || data == '' || !data) {
       return true;
     }
     return false;

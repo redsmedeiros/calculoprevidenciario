@@ -114,10 +114,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let vinculo of vinculosList">
-                <td>{{vinculo.empresa}}</td>
-                <td>{{vinculo.data_inicio}}</td>
-                <td>{{vinculo.data_termino}}</td>
-                <td class="text-center">{{vinculo.condicao_especial}}</td>
+                <td [ngClass]="{'bg-color-red': vinculo.empresa =='' || !vinculo.empresa}" >{{vinculo.empresa}}</td>
+                <td [ngClass]="{'bg-color-red': vinculo.data_inicio =='' || !vinculo.data_inicio}" >{{vinculo.data_inicio}}</td>
+                <td [ngClass]="{'bg-color-red': vinculo.data_termino =='' || !vinculo.data_termino }">{{vinculo.data_termino}}</td>
+                <td class="text-center ">{{vinculo.condicao_especial}}</td>
                 <td class="text-center">{{vinculo.fator_condicao_especial}}</td>
                 <td class="text-center">{{vinculo.carencia}}</td>
                 <td class="text-center">
