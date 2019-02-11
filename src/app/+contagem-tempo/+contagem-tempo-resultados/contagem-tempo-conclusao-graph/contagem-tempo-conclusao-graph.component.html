@@ -1,3 +1,10 @@
 <div *ngIf="!isUpdateGraph">
         <sa-morris-graph [data]="dataGraph" type="line" [options]="optionsGraph"></sa-morris-graph>
+        <div id='legend'>
+                <div class="container">
+                        <div class="row">
+                                <div class="col-md-2" *ngFor="let label of objLabels; let i = index" [ngStyle]="{'color': getColorLegend(i)}" ><i class="fa fa-square" aria-hidden="true"></i> {{label}}</div>
+                        </div>
+                </div>
+        </div>
 </div>

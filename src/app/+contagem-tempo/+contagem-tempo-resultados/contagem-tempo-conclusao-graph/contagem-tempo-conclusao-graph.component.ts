@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
 
+
 @Component({
   selector: 'app-contagem-tempo-conclusao-graph',
   templateUrl: './contagem-tempo-conclusao-graph.component.html',
@@ -15,6 +16,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
   public objYkeys = [];
   public objLabels = [];
+  public lineColorsList = [];
+
 
   @Input() public periodosList = [];
 
@@ -22,10 +25,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.getGraphPeriodos();
-
-
   }
 
   private getGraphPeriodos() {
@@ -44,12 +44,40 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         labels: this.objLabels,
         smooth: false,
         ymin: 1,
-        xLabelFormat: function (d) { return d.getFullYear(); },
-        yLabelFormat: function (d) { return ' '; }, // (d > 0) ? 'Vinculo: ' + d : ''
-        // xLabelFormat: function (d) { return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
+        ymax: this.periodosList.length + 1,
+        parseTime: false,
+        resize: true,
+        lineColors: this.lineColorsList,
+        // xLabelFormat: function (d) {
+        //     return d.getFullYear();
+        // },
+        yLabelFormat: function (d) {
+
+          return (d != undefined && d) ? Math.round(d) : ''; // Math.round(d);
+        }, // (d > 0) ? 'Vinculo: ' + d : ''
+        // xLabelFormat: function (d) {
+        //   return (d.getMonth() + 1) + '/' + d.getFullYear();
+        // },
+        // xLabelFormat: function (d) { 
+        // return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
       };
 
+
+      // console.log(this.dataGraph);
+      // console.log(this.objYkeys);
+      // console.log(this.objLabels);
+
+      // this.optionsGraph.data.forEach(function (label, i) {
+      //   const legendItem = document.getElementsByTagName('<span>').text(label['label'] + ' 
+      // ( ' + label['value'] + ' )').createElement('<br><span>&nbsp;</span>');
+      //   legendItem.find('span')
+      //     .css('backgroundColor', this.optionsGraph.colors[i])
+      //     .css('width', '20px')
+      //     .css('display', 'inline-block')
+      //     .css('margin', '5px');
+      //   $('#legend').append(legendItem)
+      // });
 
 
       // this.dataGraph = [
@@ -75,6 +103,12 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
     }
     this.isUpdateGraph = false;
+
+  }
+
+
+  public getColorLegend(index) {
+    return this.lineColorsList[index];
   }
 
   private defineInicioFim() {
@@ -120,7 +154,11 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       fimVinculo = this.toMoment(vinculo.data_termino);
 
       if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-        obj[vinculo.empresa + '' + vinculo.vinculo] = vinculo.vinculo;
+        // obj[vinculo.empresa + '' + vinculo.vinculo] = vinculo.vinculo;
+        // obj[vinculo.vinculo] = vinculo.vinculo;
+        obj['Vinculo - ' + vinculo.vinculo] = vinculo.vinculo;
+        // obj['Vinculo'] = vinculo.vinculo;
+
       }
 
     }
@@ -131,10 +169,24 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
   private createLabel() {
 
+    function r() { return Math.floor(Math.random() * 255) }
+    // function r() { return this.listColors[Math.floor(Math.random() * 145)] }
+
     for (const vinculo of this.periodosList) {
 
-      this.objYkeys.push(vinculo.empresa + '' + vinculo.vinculo);
-      this.objLabels.push(vinculo.empresa );
+      // this.objYkeys.push(vinculo.empresa + '' + vinculo.vinculo);
+      // this.objLabels.push(vinculo.empresa );
+
+      // this.objYkeys.push(vinculo.vinculo);
+      // this.objLabels.push(vinculo.vinculo);
+
+      this.objYkeys.push('Vinculo - ' + vinculo.vinculo);
+      // this.objYkeys.push('Vinculo');
+      this.objLabels.push(vinculo.vinculo + 'º Vinculo');
+
+      // this.lineColorsList.push('#' + this.listColors[i]);
+      // this.lineColorsList.push(r());
+      this.lineColorsList.push('rgb(' + r() + ',' + r() + ',' + r() + ')');
     }
   }
 
