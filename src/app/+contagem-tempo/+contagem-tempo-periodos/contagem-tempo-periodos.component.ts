@@ -252,8 +252,6 @@ export class ContagemTempoPeriodosComponent implements OnInit {
         id: this.id,
       });
 
-      console.log(periodoObj);
-
       this.PeriodosContagemTempoService
         .update(periodoObj)
         .then(model => {

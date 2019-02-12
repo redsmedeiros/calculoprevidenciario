@@ -55,6 +55,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public posteriorMaio2013 = false;
 
   public periodoOptions: string[] = [];
+  public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -407,6 +408,9 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     const periodos = exportDados.dadosParaExportar;
 
+
+    console.log(exportDados);
+    
     this.dataInicioBeneficio = exportDados.dib;
 
     this.changePeriodoOptions();
@@ -533,6 +537,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
     return false;
   }
+
+ 
 
   dateMask(rawValue) {
     if (rawValue == '') {

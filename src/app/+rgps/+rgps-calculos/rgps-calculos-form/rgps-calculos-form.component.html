@@ -3,7 +3,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Data do Início do Benefício:*</label>
                     <div class="col-md-8">
-                      <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions()" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" class="form-control" type="text">
+                      <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions()" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
                       <small *ngIf="errors.has('dataInicioBeneficio')" class="text-danger">{{ errors.get('dataInicioBeneficio') | i18n}}</small>
                     </div>
                   </div>
