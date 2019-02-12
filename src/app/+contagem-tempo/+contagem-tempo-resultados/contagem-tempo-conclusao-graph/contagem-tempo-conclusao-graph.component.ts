@@ -199,7 +199,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
     do {
 
       this.createObjGraf(auxiliarDate);
-      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
+      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'y');
 
     } while (auxiliarDate <= fimContador);
 

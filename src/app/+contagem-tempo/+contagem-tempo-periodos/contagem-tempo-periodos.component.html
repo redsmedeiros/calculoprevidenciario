@@ -102,7 +102,7 @@
                 <tbody>
                   <tr>
                     <td>{{calculo.referencia_calculo}}</td>
-                    <td class="text-center">{{calculo.total_dias}}</td>
+                    <td class="text-center">{{calculo.total_ymd}}</td>
                     <td class="text-center">{{calculo.total_carencia}}</td>
                     <td class="text-center">{{calculo.created_at}}</td>
                   </tr>
@@ -146,7 +146,7 @@
                       <label class="col-md-2 control-label" for="select-1">Nome Empresa</label>
                       <div class="col-md-6" data-placement="bottom" tooltip="Nome da Empresa em até 255 caracteres.">
                         <input class="form-control" maxlength="255" [(ngModel)]="empresa" placeholder="Nome da empresa"
-                          name="empresa" (change)="errors.clear('empresa')" type="text">
+                          name="empresa" (change)="errors.clear('empresa')" type="text" autocomplete="on">
                         <small *ngIf="errors.has('empresa')" class="text-danger">{{ errors.get('empresa') }}</small>
                       </div>
                     </div>
@@ -154,7 +154,7 @@
                       <label class="col-md-2 control-label" for="select-1">Data Inicial</label>
                       <div class="col-md-2" data-placement="bottom" tooltip="Data de inicio do vínculo.">
                         <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_inicio" name="data_inicio"
-                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')">
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_inicio')" autocomplete="on">
                         <small *ngIf="errors.has('data_inicio')" class="text-danger">{{ errors.get('data_inicio') }}</small>
                       </div>
                     </div>
@@ -162,7 +162,7 @@
                       <label class="col-md-2 control-label" for="select-1">Data Final</label>
                       <div class="col-md-2" data-placement="bottom" tooltip="Data de final do vínculo.">
                         <input class="form-control" placeholder="DD/MM/AAAA" [(ngModel)]="data_termino" name="data_termino"
-                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')">
+                          [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('data_termino')" autocomplete="on">
                         <small *ngIf="errors.has('data_termino')" class="text-danger">{{ errors.get('data_termino') }}</small>
                       </div>
                     </div>
@@ -194,10 +194,10 @@
                       </div>
                       <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Estudo_contagem_especial_em_comum_matriz.pdf"
                           target="_blank" class="btn btn-block btn-info"> <sup class="fa fa-asterisk"></sup>Fatores para
-                          conversão do tempo especial em comum.</a></div>
+                          conversão do tempo <br> especial em comum.</a></div>
                       <div class="col-md-4"><a href="http://qualidade.ieprev.com.br/assets/files/pdf/Manual_aposentadoria_especial_deficientes_fatores.pdf"
                           target="_blank" class="btn btn-block btn-info"><sup class="fa fa-asterisk"></sup> Fatores para
-                          aposentadoria especial de deficientes.</a></div>
+                          aposentadoria<br> especial de deficientes.</a></div>
                     </div>
 
                     <div class="form-group">
@@ -261,7 +261,7 @@
                     <th>Data Início</th>
                     <th>Data Final</th>
                     <th class="text-center">Condição Especial</th>
-                    <th class="text-center">Fator Condição</th>
+                    <th class="text-center">Fator Multiplicador</th>
                     <th class="text-center">Carência</th>
                     <th class="text-center">Ações</th>
                   </tr>

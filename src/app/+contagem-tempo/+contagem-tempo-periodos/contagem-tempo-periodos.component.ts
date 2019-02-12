@@ -33,6 +33,7 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   public mostrarBotaoRealizarCalculos = true;
   public idSegurado = '';
   public idsCalculos = '';
+  public Math = Math;
 
   public segurado: any = {};
   public calculo: any = {};
@@ -168,8 +169,29 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   calculoSetView(calculo) {
     calculo.created_at = this.formatReceivedDate(calculo.created_at);
+
+    calculo.total_ymd =  this.formatAnosMesesDias(calculo.total_dias);
     this.calculo = calculo;
   }
+
+
+  
+  formatAnosMesesDias(dias) {
+
+    const totalFator = { years: 0, months: 0, days: 0 };
+
+    const xValor = (this.Math.floor(dias) / 365.25);
+
+    totalFator.years = this.Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = this.Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.4375;
+    totalFator.days = this.Math.round(dttDias);
+
+
+    return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
+  }
+
 
 
   seguradoView(segurado) {
