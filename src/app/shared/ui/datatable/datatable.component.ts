@@ -1,4 +1,4 @@
-import {Component, Input, ElementRef, AfterContentInit, OnInit} from '@angular/core';
+import { Component, Input, ElementRef, AfterContentInit, OnInit } from '@angular/core';
 
 declare var $: any;
 
@@ -16,9 +16,9 @@ declare var $: any;
 })
 export class DatatableComponent implements OnInit {
 
-  @Input() public options:any;
-  @Input() public filter:any;
-  @Input() public detailsFormat:any;
+  @Input() public options: any;
+  @Input() public filter: any;
+  @Input() public detailsFormat: any;
 
   @Input() public paginationLength: boolean;
   @Input() public columnsHide: boolean;
@@ -32,7 +32,7 @@ export class DatatableComponent implements OnInit {
   ngOnInit() {
     Promise.all([
       System.import('script-loader!smartadmin-plugins/datatables/datatables.min.js'),
-    ]).then(()=>{
+    ]).then(() => {
       this.render()
 
     })
@@ -64,8 +64,8 @@ export class DatatableComponent implements OnInit {
     options = $.extend(options, {
 
       "dom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs text-right'" + toolbar + ">r>" +
-      "t" +
-      "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+        "t" +
+        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
       oLanguage: {
         "sSearch": "<span class='input-group-addon'><i class='glyphicon glyphicon-search'></i></span> ",
         "sLengthMenu": "_MENU_"
@@ -73,18 +73,42 @@ export class DatatableComponent implements OnInit {
       "autoWidth": false,
       retrieve: true,
       responsive: this.responsive,
-      initComplete: (settings, json)=> {
-        element.parent().find('.input-sm', ).removeClass("input-sm").addClass('input-md');
+      initComplete: (settings, json) => {
+        element.parent().find('.input-sm').removeClass("input-sm").addClass('input-md');
       }
     });
 
-    if(!this.responsive){
-      options["createdRow"] =  ( row, data, index ) => {
-            if ( index % 2 != 0 ) {
-                $(row).css('background-color', 'white');
-            }
+    if (!this.responsive) {
+      options["createdRow"] = (row, data, index) => {
+        if (index % 2 != 0) {
+          $(row).css('background-color', 'white');
         }
+      }
     }
+    options['oLanguage'] = {
+      'sEmptyTable': 'Nenhum registro encontrado',
+      'sInfo': 'Mostrando de _START_ até _END_ de _TOTAL_ registros',
+      'sInfoEmpty': 'Mostrando 0 até 0 de 0 registros',
+      'sInfoFiltered': '(Filtrados de _MAX_ registros)',
+      'sInfoPostFix': '',
+      'sInfoThousands': '.',
+      'sLengthMenu': '_MENU_ resultados por página',
+      'sLoadingRecords': 'Carregando...',
+      'sProcessing': 'Processando...',
+      'sZeroRecords': 'Nenhum registro encontrado',
+      'sSearch': 'Pesquisar',
+      'oPaginate': {
+        'sNext': 'Próximo',
+        'sPrevious': 'Anterior',
+        'sFirst': 'Primeiro',
+        'sLast': 'Último'
+      },
+      'oAria': {
+        'sSortAscending': ': Ordenar colunas de forma ascendente',
+        'sSortDescending': ': Ordenar colunas de forma descendente'
+      }
+    };
+
     const _dataTable = element.DataTable(options);
 
     if (this.filter) {
@@ -103,17 +127,17 @@ export class DatatableComponent implements OnInit {
       element.parent().find(".dt-toolbar").append('<div class="text-right"><img src="assets/img/logo2.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
     }
 
-    if(this.detailsFormat){
+    if (this.detailsFormat) {
       let format = this.detailsFormat
       element.on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
-        var row = _dataTable.row( tr );
-        if ( row.child.isShown() ) {
+        var row = _dataTable.row(tr);
+        if (row.child.isShown()) {
           row.child.hide();
           tr.removeClass('shown');
         }
         else {
-          row.child( format(row.data()) ).show();
+          row.child(format(row.data())).show();
           tr.addClass('shown');
         }
       })

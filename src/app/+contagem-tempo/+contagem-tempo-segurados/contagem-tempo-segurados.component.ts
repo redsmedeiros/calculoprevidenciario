@@ -54,6 +54,7 @@ export class ContagemTempoSeguradosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.isUpdating = true;
 
     this.getListSegurados();
