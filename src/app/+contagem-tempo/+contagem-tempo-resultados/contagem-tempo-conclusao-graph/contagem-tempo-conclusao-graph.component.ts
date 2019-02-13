@@ -58,9 +58,25 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // xLabelFormat: function (d) {
         //   return (d.getMonth() + 1) + '/' + d.getFullYear();
         // },
-        // xLabelFormat: function (d) { 
+        // xLabelFormat: function (d) {
         // return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
+        hoverCallback: function (index, options, content, row) {
+          // console.log(row.x);
+          // console.log(row.y);
+          // console.log(index);
+          // console.log(content);
+          // console.log(options);
+          console.log(options.data[index]);
+          const obj = options.data[index];
+          let labelHover = '';
+
+          Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+            labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculos: &nbsp;' : '&nbsp;'+ obj[val] + ',';
+          });
+
+          return labelHover.slice(0, -1);
+        }
       };
 
 
@@ -140,7 +156,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
 
   private createObjGraf(auxiliarDate) {
-    let obj = {};
+    const obj = {};
 
 
     let inicioVinculo: any;
@@ -156,7 +172,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
         // obj[vinculo.empresa + '' + vinculo.vinculo] = vinculo.vinculo;
         // obj[vinculo.vinculo] = vinculo.vinculo;
-        obj['Vinculo - ' + vinculo.vinculo] = vinculo.vinculo;
+        obj[vinculo.vinculo + '-Vinculo'] = vinculo.vinculo;
         // obj['Vinculo'] = vinculo.vinculo;
 
       }
@@ -180,7 +196,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       // this.objYkeys.push(vinculo.vinculo);
       // this.objLabels.push(vinculo.vinculo);
 
-      this.objYkeys.push('Vinculo - ' + vinculo.vinculo);
+      this.objYkeys.push(vinculo.vinculo + '-Vinculo');
       // this.objYkeys.push('Vinculo');
       this.objLabels.push(vinculo.vinculo + 'º Vinculo');
 
@@ -216,12 +232,12 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-    let date = moment(inputDate, 'YYYY-MM-DD');
+    const date = moment(inputDate, 'YYYY-MM-DD');
     return date.format('DD/MM/YYYY');
   }
 
   formatPostDataDate(inputDate) {
-    let date = moment(inputDate, 'DD/MM/YYYY');
+    const date = moment(inputDate, 'DD/MM/YYYY');
     return date.format('YYYY-MM-DD');
   }
 
