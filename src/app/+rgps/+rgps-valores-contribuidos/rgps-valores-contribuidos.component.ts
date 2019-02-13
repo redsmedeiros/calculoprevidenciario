@@ -220,6 +220,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       this.salvarContribuicoes(periodoObj, this.tipoContribuicao)
       this.inicioPeriodo = ((moment(this.finalPeriodo, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
       this.finalPeriodo = this.inicioPeriodo;
+      this.salarioContribuicao = '';
     } else {
       swal('Erro', 'Confira os dados digitados', 'error');
     }
