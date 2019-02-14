@@ -35,9 +35,9 @@ export class CalculoContagemTempo extends Model {
   <div class="btn-group btn-group-justified">
     <a href='#/contagem-tempo/contagem-tempo-periodos/${this.id_segurado}/${this.id}/' class='btn btn-primary btn-xs' title="Editar Períodos" data-placement="bottom" tooltip="Editar Períodos"> <i class='fa fa-calendar fa-1-7x'></i> </a> 
     <a href='#/contagem-tempo/contagem-tempo-resultados/${this.id_segurado}/${this.id}/' class='btn btn-success btn-xs'  title="Resultado"> <i class='fa fa-calculator fa-1-7x'></i> </a>
+    <a href='#/contagem-tempo/contagem-tempo-calculos/${this.id_segurado}/${this.id}/copy' class="btn bg-color-blueLight txt-color-white btn-xs"  title="Copiar este cálculo" ><i class='fa fa-copy fa-1-7x'></i></a>
     <a href='#/contagem-tempo/contagem-tempo-calculos/${this.id_segurado}/${this.id}/editar' id='testee' class='btn btn-warning btn-xs' title='Editar Referência'> <i class='fa fa-edit fa-1-7x'></i></a> 
-    <a href='#/contagem-tempo/contagem-tempo-calculos/${this.id_segurado}/${this.id}/destroy' class='btn btn-danger btn-xs'  title='Excluir'> <i class='fa fa-times fa-1-7x'></i></a> 
+    <a href='#/contagem-tempo/contagem-tempo-calculos/${this.id_segurado}/${this.id}/destroy' class='btn btn-danger btn-xs'  title='Excluir'> <i class='fa fa-times fa-1-7x'></i></a>
   </div>
     `;
-
 }

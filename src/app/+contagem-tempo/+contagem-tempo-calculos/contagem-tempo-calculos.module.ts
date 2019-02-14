@@ -11,6 +11,7 @@ import { ContagemTempoCalculosDestroyComponent } from './contagem-tempo-calculos
 import { ContagemTempoCalculosCreateComponent } from './contagem-tempo-calculos-create/contagem-tempo-calculos-create.component';
 import { I18nModule } from '../../shared/i18n/i18n.module';
 import { TextMaskModule } from 'angular2-text-mask';
+import { ContagemTempoCalculosCopyComponent } from './contagem-tempo-calculos-copy/contagem-tempo-calculos-copy.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { TextMaskModule } from 'angular2-text-mask';
     ContagemTempoCalculosFormComponent,
     ContagemTempoCalculosIndexComponent,
     ContagemTempoCalculosDestroyComponent,
-    ContagemTempoCalculosCreateComponent
+    ContagemTempoCalculosCreateComponent,
+    ContagemTempoCalculosCopyComponent
   ]
 })
 export class ContagemTempoCalculosModule { }
