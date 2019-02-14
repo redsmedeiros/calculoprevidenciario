@@ -44,7 +44,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
     colReorder: true,
     data: this.calculosList,
     columns: [
-      { data: 'actions', width: '10%' },
+      { data: 'actions', width: '15%' },
       { data: 'referencia_calculo' },
       {
         data: 'total_dias',

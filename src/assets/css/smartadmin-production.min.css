@@ -17637,9 +17637,14 @@ body.menu-on-top.fixed-header.fixed-navigation.fixed-ribbon #ribbon {
 }
 
 body:not(.menu-on-top).desktop-detected {
-  min-height: 1190px !important
+  /* min-height: 1190px !important */
+  min-height: 500px !important; /*Ajuset footer*/
 }
 
 #extr-page body.desktop-detected {
   min-height: 100% !important
+}
+
+.row-fix-width{
+  width: 100% !important;
 }
