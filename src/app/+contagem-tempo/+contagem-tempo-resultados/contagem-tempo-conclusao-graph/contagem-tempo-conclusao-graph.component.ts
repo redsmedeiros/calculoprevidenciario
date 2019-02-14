@@ -48,6 +48,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         parseTime: false,
         resize: true,
         lineColors: this.lineColorsList,
+       // pointSize: '2px',
+       // lineWidth: '15px',
         // xLabelFormat: function (d) {
         //     return d.getFullYear();
         // },
@@ -62,12 +64,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
         hoverCallback: function (index, options, content, row) {
-          // console.log(row.x);
-          // console.log(row.y);
-          // console.log(index);
-          // console.log(content);
-          // console.log(options);
-          console.log(options.data[index]);
+          // console.log(options.data[index]);
           const obj = options.data[index];
           let labelHover = '';
 
@@ -215,7 +212,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
     do {
 
       this.createObjGraf(auxiliarDate);
-      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'y');
+      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
     } while (auxiliarDate <= fimContador);
 
