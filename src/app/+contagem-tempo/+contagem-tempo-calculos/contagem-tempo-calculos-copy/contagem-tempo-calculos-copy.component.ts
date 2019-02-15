@@ -140,7 +140,8 @@ export class ContagemTempoCalculosCopyComponent implements OnInit {
   }
 
   /**
-   * Cria a cópia do calculo e seus periodos se houver
+   * Cria a cópia do calculo e seus periodos se houver,
+   * porém ele zera o resultado para que não ocorra erro de interpretação pelo usuário
    */
   public copyCalculo() {
 

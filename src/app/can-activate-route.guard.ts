@@ -23,7 +23,8 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
     loadingAlert({
       // type: 'info',
       title: 'Aguarde por favor...',
-      allowOutsideClick: false
+      allowOutsideClick: false,
+      timer: 2000
     });
 
     loadingAlert.showLoading();
@@ -38,7 +39,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
           localStorage.setItem('user_token', user_token);
           localStorage.setItem('product', product);
           localStorage.setItem('type', type);
-          loadingAlert.close();
           this.router.navigate(['.'], { queryParams: {}, queryParamsHandling: "merge", });
           resolve(false);
         }
@@ -50,9 +50,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
             localStorage.setItem('product', product);
             localStorage.setItem('type', type);
             resolve(true);
-            setTimeout(() => {
-              loadingAlert.close();
-            }, 1000);
           }
         }).catch(err => {
           if (err.response.status == 401) {
@@ -81,6 +78,15 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
     let user_id = params.user_id || localStorage.getItem('user_id');
     let user_token = params.user_token || localStorage.getItem('user_token');
 
+    loadingAlert({
+      // type: 'info',
+      title: 'Aguarde por favor...',
+      allowOutsideClick: false,
+      timer: 2000
+    });  // loadingAlert.close();
+
+    loadingAlert.showLoading();
+
     return new Promise((resolve) => {
       if (user_id && user_token) {
         //Caso haja parametros via query string, limpa a url
@@ -90,7 +96,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
           localStorage.setItem('product', product);
           localStorage.setItem('type', type);
           this.router.navigate(['.'], { queryParams: {}, queryParamsHandling: "merge", });
-          loadingAlert.close();
           resolve(false);
         }
 
@@ -101,9 +106,6 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
             localStorage.setItem('product', product);
             localStorage.setItem('type', type);
             resolve(true);
-            setTimeout(() => {
-              loadingAlert.close();
-            }, 1000);
           }
         }).catch(err => {
           if (err.response.status == 401) {
