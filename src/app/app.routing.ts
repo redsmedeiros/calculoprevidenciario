@@ -128,6 +128,11 @@ export const routes: Routes = [
         path: 'importador-cnis',
         loadChildren: 'app/+importador-cnis/importador-cnis.module#ImportadorCnisModule',
         data: {pageTitle: 'Importação CNIS'}
+      },
+      {
+        path: 'sair',
+        loadChildren: 'app/+logout/Logout.module#LogoutModule',
+        data: {pageTitle: 'Importação CNIS'}
       }
     ]
   },

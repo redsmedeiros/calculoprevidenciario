@@ -30,7 +30,7 @@ export class ContagemTempoSeguradosComponent implements OnInit {
     colReorder: true,
     data: this.list,
     columns: [
-      { data: 'actions', width: '7%', className: 'dt-center' },
+      { data: 'actions', width: '10%', className: 'dt-center' },
       { data: 'nome' },
       {
         data: 'id_documento',
