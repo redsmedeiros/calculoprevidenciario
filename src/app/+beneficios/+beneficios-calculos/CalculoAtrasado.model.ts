@@ -86,10 +86,20 @@ export class CalculoAtrasado extends Model {
   public aplicar_juros_poupanca;
   public usar_mesma_dib;
 
+  // public actions = `
+  //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
+  //   <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
+  //   <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
+  // `;
+
+
+  
   public actions = `
-    <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
-    <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
-    <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
-  `;
+    <div class="btn-group">
+      <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="btn btn-primary btn-xs" title="Ver Cálculo">&nbsp;&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;&nbsp;</a>
+      <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="btn btn-warning btn-xs"  title="Editar">&nbsp;&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;&nbsp;</a>
+      <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar">&nbsp;&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;&nbsp;</a>
+    </div>
+    `;
 
 }

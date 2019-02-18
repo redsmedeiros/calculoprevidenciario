@@ -30,7 +30,7 @@ export class ContribuicoesSeguradosComponent implements OnInit {
     colReorder: true,
     data: this.list,
     columns: [
-      {data: 'actions'},
+      {data: 'actions', width: '15%'},
       {data: 'nome'},
       {data: 'id_documento',
         render: (data) => {

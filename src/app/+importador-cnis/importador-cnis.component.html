@@ -37,7 +37,7 @@
 
     <div class="row" *ngIf="isUploadReaderComplete" >
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <button *ngIf="(eventCountVinculosErros == 0 && eventCountSeguradoErros == 0)"  type="button" (click)="gravarImportacaoContagemTempo()"  class="btn btn-large btn-block btn-primary">Importar CNIS - Contagem de tempo</button>
+        <button *ngIf="(eventCountVinculosErros == 0 && eventCountSeguradoErros == 0)"  type="button" (click)="gravarImportacaoContagemTempo()"  class="btn btn-large btn-block btn-primary">Calcular contagem de tempo</button>
         <button *ngIf="(eventCountVinculosErros > 0 || eventCountSeguradoErros > 0)"  type="button"   class="btn btn-large btn-block btn-danger">Verifique os dados antes de prosseguir.</button>
       </div>
     </div>

@@ -33,10 +33,18 @@ export class Segurado extends Model {
   public data_segurado;
   public funcao;
   public data_entrada_servico_publico;
+  // public actions = `
+  //   <a href="#/beneficios/beneficios-segurados/${this.id}/editar"  class="action-edit"> <i title="Editar" class="fa fa-edit"></i> </a>
+  //   <a href="#/beneficios/beneficios-segurados/${this.id}/destroy" class="action-edit"> <i title="Remover" class="fa fa-times"></i> </a>
+  //   <a href="#/beneficios/beneficios-calculos/${this.id}" class="action-edit"> <i title="Ver cálculos" class="fa fa-calculator"></i> </a>
+  // `;
+
   public actions = `
-    <a href="#/beneficios/beneficios-segurados/${this.id}/editar"  class="action-edit"> <i title="Editar" class="fa fa-edit"></i> </a>
-    <a href="#/beneficios/beneficios-segurados/${this.id}/destroy" class="action-edit"> <i title="Remover" class="fa fa-times"></i> </a>
-    <a href="#/beneficios/beneficios-calculos/${this.id}" class="action-edit"> <i title="Ver cálculos" class="fa fa-calculator"></i> </a>
+   <div class="btn-group ">
+      <a href="#/beneficios/beneficios-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar as simulações do segurado">&nbsp;&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;&nbsp;</a>
+      <a href="#/beneficios/beneficios-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar o Segurado">&nbsp;&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;&nbsp;</a>
+      <a href="#/beneficios/beneficios-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar o Segurado">&nbsp;&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;&nbsp;</a>
+    </div>
   `;
 
   // Definir e padronizar front e back-end Models
