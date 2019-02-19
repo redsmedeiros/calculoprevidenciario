@@ -1,4 +1,4 @@
-.table>thead>tr>th {
+.table>thead>tr>th,
+.table>tbody>tr>td  {
     vertical-align: middle;
-    font-size: 1.5rem;
 }

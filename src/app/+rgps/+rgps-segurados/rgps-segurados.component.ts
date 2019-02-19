@@ -31,7 +31,7 @@ export class RgpsSeguradosComponent implements OnInit {
     colReorder: true,
     data: this.list,
     columns: [
-      {data: 'actions'},
+      {data: 'actions',  width: '15rem'},
       {data: 'nome'},
       {data: 'id_documento',
         render: (data) => {
