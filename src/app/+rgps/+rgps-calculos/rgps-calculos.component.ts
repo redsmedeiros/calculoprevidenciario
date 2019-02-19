@@ -50,7 +50,7 @@ export class RgpsCalculosComponent implements OnInit {
     colReorder: true,
     data: this.calculosList,
     columns: [
-      {data: 'actions'},
+      {data: 'actions', width: '18rem'},
       {data: 'tipo_seguro'},
       {data: 'tipo_aposentadoria'},
       {data: (data, type, dataToSet) => {
