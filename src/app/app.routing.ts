@@ -131,7 +131,7 @@ export const routes: Routes = [
       },
       {
         path: 'sair',
-        loadChildren: 'app/+logout/Logout.module#LogoutModule',
+        loadChildren: 'app/+logout/logout.module#LogoutModule',
         data: {pageTitle: 'Importação CNIS'}
       }
     ]
