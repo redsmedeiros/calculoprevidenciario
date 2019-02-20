@@ -22,6 +22,32 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   public periodosListInicial = [];
   public periodosList = [];
   public Math = Math;
+  // public tableOptionsPeriodos = {
+  //   colReorder: false,
+  //   paging: false,
+  //   searching: false,
+  //   ordering: false,
+  //   bInfo: false,
+  //   data: this.periodosList,
+  //   columns: [
+  //     { data: 'vinculo' },
+  //     { data: 'empresa' },
+  //     { data: 'data_inicio' },
+  //     { data: 'data_termino' },
+  //     { data: 'fator_condicao_especial' },
+  //     { data: 'carencia' },
+  //     { data: 'concomitantes.text' },
+  //     { data: 'totalSemFator.years' },
+  //     { data: 'totalSemFator.months' },
+  //     { data: 'totalSemFator.days' },
+  //     { data: 'totalComFator.years' },
+  //     { data: 'totalComFator.months' },
+  //     { data: 'totalComFator.days' },
+  //     { data: 'concomitantes.vinculosList' }
+  //   ]
+  // };
+
+
 
   @Output() periodosListRst = new EventEmitter();
 
@@ -58,6 +84,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
           this.periodosList = this.periodosListInicial;
           this.periodosListRst.emit(this.periodosList);
         }
+
+        // this.tableOptionsPeriodos = {
+        //   ...this.tableOptionsPeriodos,
+        //   data: this.periodosList,
+        // }
+
         this.isUpdating = false;
       });
   }

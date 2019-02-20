@@ -2,3 +2,18 @@
 .table>tbody>tr>td  {
     vertical-align: middle;
 }
+
+@media screen and (width: 1024px) and (height: 768px){
+
+    .table>thead>tr>th,
+        .table>tbody>tr>td  {
+        font-size: 0.9rem;
+        }
+    
+
+    .hide-1024w{
+        display: none;
+        visibility: hidden;
+    }
+
+    }
