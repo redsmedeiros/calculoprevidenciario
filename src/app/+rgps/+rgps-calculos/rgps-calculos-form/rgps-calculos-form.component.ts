@@ -99,9 +99,10 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
 
+    } else {
+      this.checkImportContagemTempo();
     }
 
-    this.checkImportContagemTempo();
 
   }
   public submit(e) {
@@ -408,9 +409,6 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     const periodos = exportDados.dadosParaExportar;
 
-
-    console.log(exportDados);
-    
     this.dataInicioBeneficio = exportDados.dib;
 
     this.changePeriodoOptions();
@@ -538,7 +536,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     return false;
   }
 
- 
+
 
   dateMask(rawValue) {
     if (rawValue == '') {
