@@ -48,8 +48,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         parseTime: false,
         resize: true,
         lineColors: this.lineColorsList,
-       // pointSize: '2px',
-       // lineWidth: '15px',
+        pointSize: '0px',
+        lineWidth: '10px',
         // xLabelFormat: function (d) {
         //     return d.getFullYear();
         // },
@@ -67,11 +67,31 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
           // console.log(options.data[index]);
           const obj = options.data[index];
           let labelHover = '';
+          let vinculos = '';
+          let periodo = '';
+          let text = '';
 
           Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
-            labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculos: &nbsp;' : '&nbsp;'+ obj[val] + ',';
+
+            if (val === 'period') {
+              periodo = obj[val];
+            } else if (obj[val] != undefined) {
+              vinculos += '&nbsp;' + obj[val] + ','
+            }
+
+            //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
           });
 
+          labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
+
+          if (vinculos != '') {
+            if (vinculos.search(/\,&nbsp;/g) > 0) {
+              labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
+            } else {
+              labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
+            }
+
+          }
           return labelHover.slice(0, -1);
         }
       };

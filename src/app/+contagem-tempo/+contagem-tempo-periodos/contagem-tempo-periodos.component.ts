@@ -143,9 +143,9 @@ export class ContagemTempoPeriodosComponent implements OnInit {
         } else {
           this.seguradoView(segurado);
           this.CalculoContagemTempoService.find(this.idsCalculos[0])
-          .then(calculo => {
-            this.calculoSetView(calculo);
-          });
+            .then(calculo => {
+              this.calculoSetView(calculo);
+            });
         }
 
       });
@@ -170,12 +170,12 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   calculoSetView(calculo) {
     calculo.created_at = this.formatReceivedDate(calculo.created_at);
 
-    calculo.total_ymd =  this.formatAnosMesesDias(calculo.total_dias);
+    calculo.total_ymd = this.formatAnosMesesDias(calculo.total_dias);
     this.calculo = calculo;
   }
 
 
-  
+
   formatAnosMesesDias(dias) {
 
     const totalFator = { years: 0, months: 0, days: 0 };
@@ -485,7 +485,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   editSegurado() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-      this.route.snapshot.params['id_segurado'] + '/editar?last=periodos&calc=' + this.idsCalculos[0];
+      this.route.snapshot.params['id_segurado'] + '/editar';
+    sessionStorage.setItem('last_url', 'periodos&calc=' + this.idsCalculos[0]);
   }
 
   returnListaSegurados() {
@@ -494,7 +495,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
 
   editCalculo() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar?last=periodos';
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar';
+    sessionStorage.setItem('last_url', 'periodos&calc=' + this.idsCalculos[0]);
   }
 
   returnListaCalculos() {
