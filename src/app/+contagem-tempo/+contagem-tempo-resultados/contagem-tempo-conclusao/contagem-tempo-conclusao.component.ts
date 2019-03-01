@@ -63,6 +63,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public idadeMinimaAposProp: any; // idadeMinimaExigidaParaAposentadoriaProporcional
   public tempoCumprirAposItentegal: any; // Tempo a cumprir para Aposentadoria Integral
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
+  public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
 
 
   public dadosParaExportar:any;
@@ -429,6 +430,18 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.somatoriaTempoContribIdade = moment.duration(rstTemp, 'days');
   }
+  
+  public somatoriaTempoContribuicaoIdadeAtual() {
+    let rstTemp = 0;
+
+    const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
+
+    rstTemp =  (this.tempoTotalConFator.asDays() + idadeDias.asDays());
+
+    this.somatoriaTempoContribIdadeAtual = moment.duration(rstTemp, 'days');
+  }
+
+
 
   private defineIdadeFinal() {
     this.idadeFinal = moment.duration(this.limitesDoVinculo.fim.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
@@ -448,6 +461,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
     this.somatoriaTempoContribuicaoIdade();
+
+    this.somatoriaTempoContribuicaoIdadeAtual();
 
   }
 

@@ -75,7 +75,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
             if (val === 'period') {
               periodo = obj[val];
-            } else if (obj[val] != undefined) {
+            } else if (typeof obj[val] != 'undefined' && obj[val] != undefined) {
               vinculos += '&nbsp;' + obj[val] + ','
             }
 
@@ -84,8 +84,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
 
           labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
 
-          if (vinculos != '') {
-            if (vinculos.search(/\,&nbsp;/g) > 0) {
+          if (typeof vinculos != 'undefined' && vinculos != '') {
+            if (vinculos.search(/\,&nbsp;/g)) {
               labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
             } else {
               labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
@@ -94,6 +94,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
           }
           return labelHover.slice(0, -1);
         }
+
       };
 
 

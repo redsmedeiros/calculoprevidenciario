@@ -45,11 +45,16 @@ export class ContagemTempoCalculosEditComponent implements OnInit, OnDestroy {
 
 
   setQueryParamsRota() {
-    let queryParamsLastURL = this.route.snapshot.queryParams;
+    // let queryParamsLastURL = this.route.snapshot.queryParams;
 
-    if ( typeof queryParamsLastURL.last !== 'undefined' && queryParamsLastURL.last != '' ) {
-      this.rotaRetorno = '/contagem-tempo/contagem-tempo-' + queryParamsLastURL.last + '/'
-      + this.route.snapshot.params['id'] + '/' + this.route.snapshot.params['id_calculo'];
+    // if ( typeof queryParamsLastURL.last !== 'undefined' && queryParamsLastURL.last != '' ) {
+    //   this.rotaRetorno = '/contagem-tempo/contagem-tempo-' + queryParamsLastURL.last + '/'
+    //   + this.route.snapshot.params['id'] + '/' + this.route.snapshot.params['id_calculo'];
+    // }
+
+    if (sessionStorage.last_url && sessionStorage.last_url != undefined) {
+      this.rotaRetorno = sessionStorage.last_url
+      sessionStorage.removeItem('last_url');
     }
 
   }

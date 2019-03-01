@@ -219,299 +219,310 @@ export class ContagemTempoPeriodosComponent implements OnInit {
       this.periodosList.push(line);
     }
 
-    // this.grupoPeriodosTableOptions = {
-    //   ...this.grupoPeriodosTableOptions,
-    //   data: this.periodosList,
-    // }
 
-  }
+    this.periodosList.sort( (a, b) => {
+      if (moment(a, 'DD/MM/YYYY') > moment(b, 'DD/MM/YYYY')) {
+        return -1;
+      }
+  });
 
-  deletarPeriodo(id) {
-    this.PeriodosContagemTempoService.find(id)
-      .then(periodo => {
-        this.PeriodosContagemTempoService.destroy(periodo)
-          .then(() => {
-            this.toastAlert('success', 'Período excluído com sucesso.', null);
-            this.updateTabelaPeriodosView();
-          }).catch((err) => {
-            this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
-          });
-      })
-  }
+  // this.grupoPeriodosTableOptions = {
+  //   ...this.grupoPeriodosTableOptions,
+  //   data: this.periodosList,
+  // }
 
-  getupdatePeriodo(id) {
-    const periodo = this.periodosList.find(x => x.id === id);
+}
 
-    this.form = periodo;
-
-    this.data_inicio = periodo.data_inicio;
-    this.data_termino = periodo.data_termino;
-    this.empresa = periodo.empresa;
-    this.fator_condicao_especial = periodo.fator_condicao_especial;
-    this.condicao_especial = this.boolToLiteral(periodo.condicao_especial);
-    this.carencia = this.boolToLiteral(periodo.carencia);
-    this.id = periodo.id;
-
-
-    this.atualizarPeriodo = periodo.id; // exibir o botao de atualizar e ocultar o insert
-
-    this.topForm();
-  }
-
-
-  setupdatePeriodo() {
-    if (this.isValid()) {
-
-      let periodoObj = new PeriodosContagemTempo({
-        data_inicio: this.formatPostDataDate(this.data_inicio),
-        data_termino: this.formatPostDataDate(this.data_termino),
-        empresa: this.empresa,
-        fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
-        condicao_especial: this.condicao_especial,
-        carencia: this.carencia,
-        licenca_premio_nao_usufruida: 0,
-        id_contagem_tempo: this.idsCalculos[0],
-        id: this.id,
-      });
-
-      this.PeriodosContagemTempoService
-        .update(periodoObj)
-        .then(model => {
+deletarPeriodo(id) {
+  this.PeriodosContagemTempoService.find(id)
+    .then(periodo => {
+      this.PeriodosContagemTempoService.destroy(periodo)
+        .then(() => {
+          this.toastAlert('success', 'Período excluído com sucesso.', null);
           this.updateTabelaPeriodosView();
-          this.toastAlert('success', 'Período adicionado com sucesso.', null);
-          this.atualizarPeriodo = 0;
-          this.resetForm();
         }).catch((err) => {
-          console.log(err);
           this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
         });
+    })
+}
 
-      // this.PeriodosContagemTempoService
-      //       .update(periodoObj)
-      //       .then(model => {
+getupdatePeriodo(id) {
+  const periodo = this.periodosList.find(x => x.id === id);
 
-      //           this.PeriodosContagemTempoService.get();
-      //       })
-      //       // .catch(errors => this.Errors.add(errors));
-      //       .catch((err) => {
-      //         console.log(err);
-      //         this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
-      //       });
+  this.form = periodo;
 
-
-    } else {
-      this.toastAlert('error', 'Confira os dados digitados', null);
-    }
-
-  }
-
-  insertPeriodo(periodoObj) {
-
-    this.isUpdating = true;
-
-    this.PeriodosContagemTempoService
-      .save(periodoObj)
-      .then(model => {
-        this.onSubmit.emit();
-        this.updateTabelaPeriodosView();
-        this.toastAlert('success', 'Período adicionado com sucesso.', null);
-        this.resetForm();
-      })
-      .catch(errors => this.errors.add(errors));
-  }
+  this.data_inicio = periodo.data_inicio;
+  this.data_termino = periodo.data_termino;
+  this.empresa = periodo.empresa;
+  this.fator_condicao_especial = periodo.fator_condicao_especial;
+  this.condicao_especial = this.boolToLiteral(periodo.condicao_especial);
+  this.carencia = this.boolToLiteral(periodo.carencia);
+  this.id = periodo.id;
 
 
+  this.atualizarPeriodo = periodo.id; // exibir o botao de atualizar e ocultar o insert
 
-  resetForm() {
-    this.data_inicio = '';
-    this.data_termino = '';
-    this.empresa = undefined;
-    this.fator_condicao_especial = 1.00;
-    this.condicao_especial = 0;
-    this.carencia = 1;
-    this.id = null;
-  }
+  this.topForm();
+}
 
 
+setupdatePeriodo() {
+  if (this.isValid()) {
 
-  submit() {
-
-    if (this.isValid()) {
-
-      let periodoObj = {
-        data_inicio: this.formatPostDataDate(this.data_inicio),
-        data_termino: this.formatPostDataDate(this.data_termino),
-        empresa: this.empresa,
-        fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
-        condicao_especial: this.condicao_especial,
-        carencia: this.carencia,
-        licenca_premio_nao_usufruida: 0,
-        id_contagem_tempo: this.idsCalculos[0]
-      };
-
-      console.log(periodoObj);
-
-      this.insertPeriodo(periodoObj);
-
-    } else {
-      this.toastAlert('error', 'Confira os dados digitados', null);
-    }
-
-  }
-
-  isValid() {
-
-    if (this.isEmpty(this.data_inicio)) {
-      this.errors.add({ 'data_inicio': ['Insira uma data'] });
-    }
-
-    if (this.isEmpty(this.data_termino)) {
-      this.errors.add({ 'data_termino': ['Insira uma data'] });
-    }
-
-    if (!this.isEmpty(this.data_inicio) && !this.isEmpty(this.data_termino)) {
-
-      let dateInicioPeriodo = moment(this.data_inicio.split('/')[2]
-        + '-' + this.data_inicio.split('/')[1]
-        + '-' + this.data_inicio.split('/')[0]);
-      let dateFinalPeriodo = moment(this.data_termino.split('/')[2]
-        + '-' + this.data_termino.split('/')[1]
-        + '-' + this.data_termino.split('/')[0]);
-
-      // inicioPeriodo
-      if (this.isEmpty(this.data_inicio) || !dateInicioPeriodo.isValid()) {
-        this.errors.add({ 'data_inicio': ['Insira uma data válida'] });
-      }
-
-      // finalPeriodo
-      if (this.isEmpty(this.data_termino) || !dateFinalPeriodo.isValid()) {
-        this.errors.add({ 'data_termino': ['Insira uma data válida'] });
-      } else {
-        if (dateFinalPeriodo <= dateInicioPeriodo) {
-          this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
-        }
-      }
-
-    }
-
-    // empresa
-    if (this.isEmpty(this.empresa)) {
-      this.errors.add({ 'empresa': ['Insira o nome da empresa'] });
-    } else {
-      this.errors.clear('empresa');
-    }
-
-    // fator_condicao_especial
-    if (this.isEmpty(this.fator_condicao_especial)) {
-      this.errors.add({ 'fator_condicao_especial': ['Insira um fator válido.'] });
-    } else {
-      this.errors.clear('fator_condicao_especial');
-    }
-
-    // condição esepecial
-    if (this.condicao_especial === undefined) {
-      this.errors.add({ 'sexo': ['O campo condição esepecial é obrigatório.'] });
-    }
-
-    // carencia
-    if (this.carencia === undefined) {
-      this.errors.add({ 'carencia': ['O campo carência é obrigatório.'] });
-    }
-
-    return this.errors.empty();
-  }
-
-
-
-  toastAlert(type, title, position) {
-
-    position = (!position) ? 'top-end' : position;
-
-    swal({
-      position: position,
-      type: type,
-      title: title,
-      showConfirmButton: false,
-      timer: 1500
+    let periodoObj = new PeriodosContagemTempo({
+      data_inicio: this.formatPostDataDate(this.data_inicio),
+      data_termino: this.formatPostDataDate(this.data_termino),
+      empresa: this.empresa,
+      fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
+      condicao_especial: this.condicao_especial,
+      carencia: this.carencia,
+      licenca_premio_nao_usufruida: 0,
+      id_contagem_tempo: this.idsCalculos[0],
+      id: this.id,
     });
 
+    this.PeriodosContagemTempoService
+      .update(periodoObj)
+      .then(model => {
+        this.updateTabelaPeriodosView();
+        this.toastAlert('success', 'Período adicionado com sucesso.', null);
+        this.atualizarPeriodo = 0;
+        this.resetForm();
+      }).catch((err) => {
+        console.log(err);
+        this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+      });
+
+    // this.PeriodosContagemTempoService
+    //       .update(periodoObj)
+    //       .then(model => {
+
+    //           this.PeriodosContagemTempoService.get();
+    //       })
+    //       // .catch(errors => this.Errors.add(errors));
+    //       .catch((err) => {
+    //         console.log(err);
+    //         this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+    //       });
+
+
+  } else {
+    this.toastAlert('error', 'Confira os dados digitados', null);
   }
 
-  boolToLiteral(value) {
-    if (typeof value === 'number') {
-      value = (value) ? 'Sim' : 'Não';
+}
+
+insertPeriodo(periodoObj) {
+
+  this.isUpdating = true;
+
+  this.PeriodosContagemTempoService
+    .save(periodoObj)
+    .then(model => {
+      this.onSubmit.emit();
+      this.updateTabelaPeriodosView();
+      this.toastAlert('success', 'Período adicionado com sucesso.', null);
+      this.resetForm();
+    })
+    .catch(errors => this.errors.add(errors));
+}
+
+
+
+resetForm() {
+  this.data_inicio = '';
+  this.data_termino = '';
+  this.empresa = undefined;
+  this.fator_condicao_especial = 1.00;
+  this.condicao_especial = 0;
+  this.carencia = 1;
+  this.id = null;
+}
+
+
+
+submit() {
+
+  if (this.isValid()) {
+
+    let periodoObj = {
+      data_inicio: this.formatPostDataDate(this.data_inicio),
+      data_termino: this.formatPostDataDate(this.data_termino),
+      empresa: this.empresa,
+      fator_condicao_especial: this.formatFatorPost(this.fator_condicao_especial),
+      condicao_especial: this.condicao_especial,
+      carencia: this.carencia,
+      licenca_premio_nao_usufruida: 0,
+      id_contagem_tempo: this.idsCalculos[0]
+    };
+
+    console.log(periodoObj);
+
+    this.insertPeriodo(periodoObj);
+
+  } else {
+    this.toastAlert('error', 'Confira os dados digitados', null);
+  }
+
+}
+
+isValid() {
+
+  if (this.isEmpty(this.data_inicio)) {
+    this.errors.add({ 'data_inicio': ['Insira uma data'] });
+  }
+
+  if (this.isEmpty(this.data_termino)) {
+    this.errors.add({ 'data_termino': ['Insira uma data'] });
+  }
+
+  if (!this.isEmpty(this.data_inicio) && !this.isEmpty(this.data_termino)) {
+
+    let dateInicioPeriodo = moment(this.data_inicio.split('/')[2]
+      + '-' + this.data_inicio.split('/')[1]
+      + '-' + this.data_inicio.split('/')[0]);
+    let dateFinalPeriodo = moment(this.data_termino.split('/')[2]
+      + '-' + this.data_termino.split('/')[1]
+      + '-' + this.data_termino.split('/')[0]);
+
+    // inicioPeriodo
+    if (this.isEmpty(this.data_inicio) || !dateInicioPeriodo.isValid()) {
+      this.errors.add({ 'data_inicio': ['Insira uma data válida'] });
+    }
+
+    // finalPeriodo
+    if (this.isEmpty(this.data_termino) || !dateFinalPeriodo.isValid()) {
+      this.errors.add({ 'data_termino': ['Insira uma data válida'] });
     } else {
-      value = (value === 'Sim') ? 1 : 0;
+      if (dateFinalPeriodo <= dateInicioPeriodo) {
+        this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
+      }
     }
 
-    return value;
   }
 
-  isEmpty(data) {
-    if (data == undefined || data == '') {
-      return true;
-    }
-    return false;
+  // empresa
+  if (this.isEmpty(this.empresa)) {
+    this.errors.add({ 'empresa': ['Insira o nome da empresa'] });
+  } else {
+    this.errors.clear('empresa');
   }
 
-  formatFatorPost(fator) {
-    return (fator === 0 || (typeof fator === 'undefined')) ? 1 : fator;
+  // fator_condicao_especial
+  if (this.isEmpty(this.fator_condicao_especial)) {
+    this.errors.add({ 'fator_condicao_especial': ['Insira um fator válido.'] });
+  } else {
+    this.errors.clear('fator_condicao_especial');
   }
 
-  removeFatorDefault() {
-    this.fator_condicao_especial = 0;
+  // condição esepecial
+  if (this.condicao_especial === undefined) {
+    this.errors.add({ 'sexo': ['O campo condição esepecial é obrigatório.'] });
   }
 
-  checkFator() {
-    this.fator_condicao_especial = this.formatFatorPost(this.fator_condicao_especial);
+  // carencia
+  if (this.carencia === undefined) {
+    this.errors.add({ 'carencia': ['O campo carência é obrigatório.'] });
   }
 
-  formatReceivedDate(inputDate) {
-    let date = moment(inputDate, 'YYYY-MM-DD');
-    return date.format('DD/MM/YYYY');
+  return this.errors.empty();
+}
+
+
+
+toastAlert(type, title, position) {
+
+  position = (!position) ? 'top-end' : position;
+
+  swal({
+    position: position,
+    type: type,
+    title: title,
+    showConfirmButton: false,
+    timer: 1500
+  });
+
+}
+
+boolToLiteral(value) {
+  if (typeof value === 'number') {
+    value = (value) ? 'Sim' : 'Não';
+  } else {
+    value = (value === 'Sim') ? 1 : 0;
   }
 
-  formatPostDataDate(inputDate) {
+  return value;
+}
 
-    let date = moment(inputDate, 'DD/MM/YYYY');
-    return date.format('YYYY-MM-DD');
-
+isEmpty(data) {
+  if (data == undefined || data == '') {
+    return true;
   }
+  return false;
+}
 
-  topForm() {
-    document.body.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Safari
-    document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
-  }
+formatFatorPost(fator) {
+  return (fator === 0 || (typeof fator === 'undefined')) ? 1 : fator;
+}
 
-  editSegurado() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-      this.route.snapshot.params['id_segurado'] + '/editar';
-    sessionStorage.setItem('last_url', 'periodos&calc=' + this.idsCalculos[0]);
-  }
+removeFatorDefault() {
+  this.fator_condicao_especial = 0;
+}
 
-  returnListaSegurados() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
-  }
+checkFator() {
+  this.fator_condicao_especial = this.formatFatorPost(this.fator_condicao_especial);
+}
 
-  editCalculo() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar';
-    sessionStorage.setItem('last_url', 'periodos&calc=' + this.idsCalculos[0]);
-  }
+formatReceivedDate(inputDate) {
+  let date = moment(inputDate, 'YYYY-MM-DD');
+  return date.format('DD/MM/YYYY');
+}
 
-  returnListaCalculos() {
+formatPostDataDate(inputDate) {
 
-    window.location.href = '#/contagem-tempo/contagem-tempo-calculos/' +
-      this.route.snapshot.params['id_segurado'];
-  }
+  let date = moment(inputDate, 'DD/MM/YYYY');
+  return date.format('YYYY-MM-DD');
 
-  realizarCalculoContagemTempo() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
-  }
+}
+
+topForm() {
+  document.body.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Safari
+  document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
+}
+
+editSegurado() {
+  sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-periodos/'
+    + this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0]);
+
+  window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
+    this.route.snapshot.params['id_segurado'] + '/editar';
+}
+
+returnListaSegurados() {
+  window.location.href = '/#/contagem-tempo/contagem-tempo-segurados';
+}
+
+editCalculo() {
+  sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-periodos/'
+    + this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0]);
+
+  window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
+    this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0] + '/editar';
+}
+
+returnListaCalculos() {
+
+  window.location.href = '#/contagem-tempo/contagem-tempo-calculos/' +
+    this.route.snapshot.params['id_segurado'];
+}
+
+realizarCalculoContagemTempo() {
+  window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
+    this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+}
 
 
-  voltar() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/'
-  }
+voltar() {
+  window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/'
+}
 }
