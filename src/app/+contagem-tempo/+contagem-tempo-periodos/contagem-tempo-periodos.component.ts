@@ -356,7 +356,7 @@ submit() {
       id_contagem_tempo: this.idsCalculos[0]
     };
 
-    console.log(periodoObj);
+   //console.log(periodoObj);
 
     this.insertPeriodo(periodoObj);
 

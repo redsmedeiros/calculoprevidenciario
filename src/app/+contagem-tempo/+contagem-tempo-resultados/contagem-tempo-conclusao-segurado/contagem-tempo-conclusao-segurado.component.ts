@@ -21,8 +21,8 @@ export class ContagemTempoConclusaoSeguradoComponent implements OnInit {
   ngOnInit() { }
 
   editSegurado() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' +
-      this.segurado.id + '/editar?last=resultados&calc=' + this.calculo.id;
+    sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-resultados/' + this.segurado.id + '/' + this.calculo.id);
+    window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' + this.segurado.id + '/editar';
   }
 
   returnListaSegurados() {
@@ -30,13 +30,12 @@ export class ContagemTempoConclusaoSeguradoComponent implements OnInit {
   }
 
   editCalculo() {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' +
-    this.segurado.id + '/' +  this.calculo.id + '/editar?last=resultados';
+    sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-resultados/' + this.segurado.id + '/' + this.calculo.id);
+    window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' + this.segurado.id + '/' + this.calculo.id + '/editar';
   }
 
   returnListaCalculos() {
-    window.location.href = '#/contagem-tempo/contagem-tempo-calculos/' +
-    this.segurado.id;
+    window.location.href = '/#/contagem-tempo/contagem-tempo-calculos/' + this.segurado.id;
   }
 
 }

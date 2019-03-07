@@ -65,8 +65,13 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
 
+  public dadosParaExportar: any; // dados para calcular RGPS
 
-  public dadosParaExportar:any;
+  private isCompleteCarencia = false;
+  private isCompleteTempoTotal = false;
+
+
+
 
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
@@ -132,77 +137,87 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
   private tempoTotal(limitesDoVinculo) {
 
-    let auxiliarDate = limitesDoVinculo.inicio;
-    const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
+    return new Promise((resolve, reject) => {
 
-    let count = 0;
-    let count88 = 0;
-    let count91 = 0;
-    let count98 = 0;
-    let count99 = 0;
-    let count03 = 0;
-    let fator = 0;
+      let auxiliarDate = limitesDoVinculo.inicio;
+      const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
 
-    do {
+      let count = 0;
+      let count88 = 0;
+      let count91 = 0;
+      let count98 = 0;
+      let count99 = 0;
+      let count03 = 0;
+      let fator = 0;
 
-      fator = this.defineMelhorFator(auxiliarDate);
+      do {
 
-      if (fator > 0) {
+        fator = this.defineMelhorFator(auxiliarDate);
 
-        count += fator;
+        if (fator > 0) {
 
-        if (auxiliarDate <= this.fimContador88) {
-          count88 += fator;
-        };
+          count += fator;
 
-        if (auxiliarDate <= this.fimContador91) {
-          count91 += fator;
-        };
+          if (auxiliarDate <= this.fimContador88) {
+            count88 += fator;
+          };
 
-        if (auxiliarDate <= this.fimContador98) {
-          count98 += fator;
-        };
+          if (auxiliarDate <= this.fimContador91) {
+            count91 += fator;
+          };
 
-        if (auxiliarDate <= this.fimContador99) {
-          count99 += fator;
-        };
+          if (auxiliarDate <= this.fimContador98) {
+            count98 += fator;
+          };
 
-        if (auxiliarDate <= this.fimContador03) {
-          count03 += fator;
-        };
+          if (auxiliarDate <= this.fimContador99) {
+            count99 += fator;
+          };
 
+          if (auxiliarDate <= this.fimContador03) {
+            count03 += fator;
+          };
+
+        }
+
+        // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
+        auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
+
+      } while (auxiliarDate < fimContador);
+
+
+
+      // console.log(count);
+      // console.log(count88);
+      // console.log(count91);
+      // console.log(count98);
+      // console.log(count99);
+
+
+      this.yearMonthDaysToFormate3(count);
+      this.yearMonthDaysToFormate(count);
+      // this.yearMonthDaysToFormate3(count88);
+      // this.yearMonthDaysToFormate3(count91);
+      // this.yearMonthDaysToFormate3(count98);
+      // this.yearMonthDaysToFormate3(count99);
+
+
+
+      this.tempoTotalConFator = moment.duration(count, 'days');
+      this.tempoTotalConFator88 = moment.duration(count88, 'days');
+      this.tempoTotalConFator91 = moment.duration(count91, 'days');
+      this.tempoTotalConFator98 = moment.duration(count98, 'days');
+      this.tempoTotalConFator99 = moment.duration(count99, 'days');
+
+      this.subTotais();
+
+      if (this.tempoTotalConFator) {
+        resolve(true);
+      } else {
+        reject(false);
       }
+    });
 
-      // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
-      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
-
-    } while (auxiliarDate < fimContador);
-
-
-
-    // console.log(count);
-    // console.log(count88);
-    // console.log(count91);
-    // console.log(count98);
-    // console.log(count99);
-
-
-    this.yearMonthDaysToFormate3(count);
-    this.yearMonthDaysToFormate(count);
-    // this.yearMonthDaysToFormate3(count88);
-    // this.yearMonthDaysToFormate3(count91);
-    // this.yearMonthDaysToFormate3(count98);
-    // this.yearMonthDaysToFormate3(count99);
-
-
-
-    this.tempoTotalConFator = moment.duration(count, 'days');
-    this.tempoTotalConFator88 = moment.duration(count88, 'days');
-    this.tempoTotalConFator91 = moment.duration(count91, 'days');
-    this.tempoTotalConFator98 = moment.duration(count98, 'days');
-    this.tempoTotalConFator99 = moment.duration(count99, 'days');
-
-    this.subTotais();
   }
 
 
@@ -305,62 +320,72 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
   private tempoCarencia(limitesDoVinculo) {
 
-    let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
-    const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
+    return new Promise((resolve, reject) => {
 
-    auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
-    fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
+      let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
+      const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
 
-    let count = 0;
-    let count88 = 0;
-    let count91 = 0;
-    let count98 = 0;
-    let count99 = 0;
-    let count03 = 0;
+      auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
+      fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
 
-    const fimContador88 = this.momentCarencia(this.fimContador88);
-    const fimContador91 = this.momentCarencia(this.fimContador91);
-    const fimContador98 = this.momentCarencia(this.fimContador98);
-    const fimContador99 = this.momentCarencia(this.fimContador99);
-    const fimContador03 = this.momentCarencia(this.fimContador03);
+      let count = 0;
+      let count88 = 0;
+      let count91 = 0;
+      let count98 = 0;
+      let count99 = 0;
+      let count03 = 0;
+
+      const fimContador88 = this.momentCarencia(this.fimContador88);
+      const fimContador91 = this.momentCarencia(this.fimContador91);
+      const fimContador98 = this.momentCarencia(this.fimContador98);
+      const fimContador99 = this.momentCarencia(this.fimContador99);
+      const fimContador03 = this.momentCarencia(this.fimContador03);
 
 
-    do {
-      if (this.defineCarenciaData(auxiliarDate)) {
-        count++;
+      do {
+        if (this.defineCarenciaData(auxiliarDate)) {
+          count++;
 
-        if (auxiliarDate <= fimContador88) {
-          count88++;
-        };
+          if (auxiliarDate <= fimContador88) {
+            count88++;
+          };
 
-        if (auxiliarDate <= fimContador91) {
-          count91++;
-        };
+          if (auxiliarDate <= fimContador91) {
+            count91++;
+          };
 
-        if (auxiliarDate <= fimContador98) {
-          count98++;
-        };
+          if (auxiliarDate <= fimContador98) {
+            count98++;
+          };
 
-        if (auxiliarDate <= fimContador99) {
-          count99++;
-        };
+          if (auxiliarDate <= fimContador99) {
+            count99++;
+          };
 
-        if (auxiliarDate <= fimContador03) {
-          count03++;
-        };
+          if (auxiliarDate <= fimContador03) {
+            count03++;
+          };
+        }
+
+
+        auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
+
+      } while (auxiliarDate <= fimContador);
+
+      this.carencia = count;
+      this.carencia88 = count88;
+      this.carencia91 = count91;
+      this.carencia98 = count98;
+      this.carencia99 = count99;
+      this.carencia03 = count03;
+
+      if (this.carencia > 0) {
+        resolve(true);
+      } else {
+        reject(false);
       }
+    });
 
-
-      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
-
-    } while (auxiliarDate <= fimContador);
-
-    this.carencia = count;
-    this.carencia88 = count88;
-    this.carencia91 = count91;
-    this.carencia98 = count98;
-    this.carencia99 = count99;
-    this.carencia03 = count03;
   }
 
 
@@ -430,13 +455,13 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.somatoriaTempoContribIdade = moment.duration(rstTemp, 'days');
   }
-  
+
   public somatoriaTempoContribuicaoIdadeAtual() {
     let rstTemp = 0;
 
     const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
 
-    rstTemp =  (this.tempoTotalConFator.asDays() + idadeDias.asDays());
+    rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
 
     this.somatoriaTempoContribIdadeAtual = moment.duration(rstTemp, 'days');
   }
@@ -473,13 +498,34 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.defineIdadeFinal();
 
+    this.tempoTotal(this.limitesDoVinculo).then(result => {
+      console.log('complete tempo total');
+      this.isCompleteTempoTotal = true;
+      this.updateCalculo();
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    this.tempoCarencia(this.limitesDoVinculo).then(result => {
+      console.log('complete carencia');
+      this.isCompleteCarencia = true;
+      this.updateCalculo();
+    }).catch((error) => {
+      console.log(error);
+    });
+
+
     this.tempoTotal(this.limitesDoVinculo);
 
     this.tempoCarencia(this.limitesDoVinculo);
 
     this.isUpdateTotal = false;
 
-    this.updateCalculo();
+    // this.updateCalculo().then(result => {
+
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
 
     this.setExportRGPSList();
   }
@@ -487,38 +533,82 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
 
   private updateCalculo() {
+    setTimeout(() => {
+      if (
+        (this.calculo.total_dias != this.Math.round(this.tempoTotalConFator.asDays()) ||
+          this.calculo.total_88 != this.Math.round(this.tempoTotalConFator88.asDays()) ||
+          this.calculo.total_91 != this.Math.round(this.tempoTotalConFator91.asDays()) ||
+          this.calculo.total_98 != this.Math.round(this.tempoTotalConFator98.asDays()) ||
+          this.calculo.total_99 != this.Math.round(this.tempoTotalConFator99.asDays()) ||
+          this.calculo.total_carencia != this.carencia)
+        &&
+        (this.isCompleteCarencia && this.isCompleteTempoTotal)
+      ) {
+        this.calculo.total_dias = this.Math.round(this.tempoTotalConFator.asDays());
+        this.calculo.total_88 = this.Math.round(this.tempoTotalConFator88.asDays());
+        this.calculo.total_91 = this.Math.round(this.tempoTotalConFator91.asDays());
+        this.calculo.total_98 = this.Math.round(this.tempoTotalConFator98.asDays());
+        this.calculo.total_99 = this.Math.round(this.tempoTotalConFator99.asDays());
+        this.calculo.total_carencia = this.carencia;
 
-    if (
-      this.calculo.total_dias != this.Math.round(this.tempoTotalConFator.asDays()) ||
-      this.calculo.total_88 != this.Math.round(this.tempoTotalConFator88.asDays()) ||
-      this.calculo.total_91 != this.Math.round(this.tempoTotalConFator91.asDays()) ||
-      this.calculo.total_98 != this.Math.round(this.tempoTotalConFator98.asDays()) ||
-      this.calculo.total_99 != this.Math.round(this.tempoTotalConFator99.asDays()) ||
-      this.calculo.total_carencia != this.carencia
-    ) {
-      this.calculo.total_dias = this.Math.round(this.tempoTotalConFator.asDays());
-      this.calculo.total_88 = this.Math.round(this.tempoTotalConFator88.asDays());
-      this.calculo.total_91 = this.Math.round(this.tempoTotalConFator91.asDays());
-      this.calculo.total_98 = this.Math.round(this.tempoTotalConFator98.asDays());
-      this.calculo.total_99 = this.Math.round(this.tempoTotalConFator99.asDays());
-      this.calculo.total_carencia = this.carencia;
+        this.CalculoContagemTempoService
+          .update(this.calculo)
+          .then(model => {
+            console.log('update ok');
+          })
+          .catch(errors => this.Errors.add(errors));
+      }
+    }, 5000);
 
-      this.CalculoContagemTempoService
-        .update(this.calculo)
-        .then(model => {
-          console.log('update ok');
-        })
-        .catch(errors => this.Errors.add(errors));
-    }
   }
 
+
+  // private updateCalculo() {
+
+  //   let updateCalculo = false;
+  //   return new Promise((resolve, reject) => {
+  //     if (
+  //       this.calculo.total_dias != this.Math.round(this.tempoTotalConFator.asDays()) ||
+  //       this.calculo.total_88 != this.Math.round(this.tempoTotalConFator88.asDays()) ||
+  //       this.calculo.total_91 != this.Math.round(this.tempoTotalConFator91.asDays()) ||
+  //       this.calculo.total_98 != this.Math.round(this.tempoTotalConFator98.asDays()) ||
+  //       this.calculo.total_99 != this.Math.round(this.tempoTotalConFator99.asDays()) ||
+  //       this.calculo.total_carencia != this.carencia
+  //     ) {
+  //       this.calculo.total_dias = this.Math.round(this.tempoTotalConFator.asDays());
+  //       this.calculo.total_88 = this.Math.round(this.tempoTotalConFator88.asDays());
+  //       this.calculo.total_91 = this.Math.round(this.tempoTotalConFator91.asDays());
+  //       this.calculo.total_98 = this.Math.round(this.tempoTotalConFator98.asDays());
+  //       this.calculo.total_99 = this.Math.round(this.tempoTotalConFator99.asDays());
+  //       this.calculo.total_carencia = this.carencia;
+
+  //       console.log(this.calculo);
+
+  //       this.CalculoContagemTempoService
+  //         .update(this.calculo)
+  //         .then(model => {
+  //           console.log('update ok');
+  //           updateCalculo = true;
+  //         })
+  //         .catch(errors => this.Errors.add(errors));
+  //     }
+
+  //     if (updateCalculo) {
+  //       resolve(true);
+  //     } else {
+  //       reject(false);
+  //     }
+  //   });
+
+  // }
+
   public setExportRGPSobj(tempo, carencia, label) {
-    return { 
+    return {
       label: label,
-      years: tempo.years(), 
-      months: tempo.months(), 
-      days: this.Math.ceil(tempo.days()), 
-      carencia: carencia, 
+      years: tempo.years(),
+      months: tempo.months(),
+      days: this.Math.ceil(tempo.days()),
+      carencia: carencia,
       totalDias: this.Math.round(tempo.asDays())
     };
   }
@@ -531,8 +621,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     itensExport.forEach(label => {
       const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label], label);
-       this.dadosParaExportar['total' + label] = objExport;
-     // this.dadosParaExportar.push(objExport);
+      this.dadosParaExportar['total' + label] = objExport;
+      // this.dadosParaExportar.push(objExport);
     });
   }
 

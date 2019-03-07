@@ -121,11 +121,11 @@ export class ContagemTempoCalculosComponent implements OnInit {
           });
         } else {
           this.seguradoView(segurado);
-          this.CalculoContagemTempo.get()
-            .then(() => {
-              this.updateDatatable();
-              this.isUpdating = false;
-            })
+          this.CalculoContagemTempo.getWithParameters(['id_segurado', this.idSegurado])
+          .then((calculos) => {
+          this.updateDatatable();
+          this.isUpdating = false;
+        });
         }
       });
   }
@@ -151,6 +151,7 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
 
   editSegurado() {
+    sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-calculos/' + this.route.snapshot.params['id']);
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' + this.route.snapshot.params['id'] + '/editar';
   }
 

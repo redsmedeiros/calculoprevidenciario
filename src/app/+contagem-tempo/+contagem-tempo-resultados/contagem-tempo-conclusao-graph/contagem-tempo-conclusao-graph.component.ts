@@ -64,35 +64,37 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); },
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
         hoverCallback: function (index, options, content, row) {
-          // console.log(options.data[index]);
-          const obj = options.data[index];
-          let labelHover = '';
-          let vinculos = '';
-          let periodo = '';
-          let text = '';
 
-          Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+        
+            // console.log(options.data[index]);
+            const obj = options.data[index];
+            let labelHover = '';
+            let vinculos = '';
+            let periodo = '';
+            let text = '';
 
-            if (val === 'period') {
-              periodo = obj[val];
-            } else if (typeof obj[val] != 'undefined' && obj[val] != undefined) {
-              vinculos += '&nbsp;' + obj[val] + ','
+            Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
+
+              if (val === 'period') {
+                periodo = obj[val];
+              } else if (typeof obj[val] !== 'undefined' && obj[val] !== undefined && obj[val] != '') {
+                vinculos += '&nbsp;' + obj[val] + ','
+              }
+              //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
+            });
+
+            labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
+
+            if (typeof vinculos != 'undefined' && vinculos != '') {
+              if (vinculos.search(/\,&nbsp;/g)) {
+                labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
+              } else {
+                labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
+              }
+
             }
-
-            //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
-          });
-
-          labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
-
-          if (typeof vinculos != 'undefined' && vinculos != '') {
-            if (vinculos.search(/\,&nbsp;/g)) {
-              labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
-            } else {
-              labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
-            }
-
-          }
-          return labelHover.slice(0, -1);
+            return labelHover.slice(0, -1);
+         
         }
 
       };
