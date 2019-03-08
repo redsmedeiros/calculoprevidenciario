@@ -31,7 +31,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
     colReorder: true,
     data: this.jurisprudencialList,
     columns: [
-      {data: 'actions'},
+      {data: 'actions', width: '15rem'},
       {data: 'id'},
       {data: 'data_calculo',
        render: (data) => {
@@ -52,7 +52,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
     data: this.complementarList,
     ordering: false,
     columns: [
-      {data: 'actions'},
+      {data: 'actions', width: '15rem'},
       {data: 'id'},
       {data: 'data_calculo',
        render: (data) => {

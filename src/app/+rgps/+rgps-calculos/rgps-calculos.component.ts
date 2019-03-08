@@ -57,7 +57,10 @@ export class RgpsCalculosComponent implements OnInit {
         return this.getTempoDeContribuicao(data,type, dataToSet);
       }},
       {data: 'data_pedido_beneficio'},
-      {data: 'valor_beneficio'},
+      {data: 'valor_beneficio',
+      render: (valor) => {
+        return this.formatMoeda(valor);
+     }},
       {data: 'data_calculo',
        render: (data) => {
           return this.formatReceivedDate(data);
@@ -155,6 +158,10 @@ export class RgpsCalculosComponent implements OnInit {
   }
   voltar(){
     window.location.href='/#/rgps/rgps-segurados/'
+  }
+
+  formatMoeda(valor){
+    return 'R$&nbsp;' + valor.toLocaleString('pt-BR');
   }
 
   formatReceivedDate(inputDate) {

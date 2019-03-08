@@ -122,10 +122,10 @@ export class ContagemTempoCalculosComponent implements OnInit {
         } else {
           this.seguradoView(segurado);
           this.CalculoContagemTempo.getWithParameters(['id_segurado', this.idSegurado])
-          .then((calculos) => {
-          this.updateDatatable();
-          this.isUpdating = false;
-        });
+            .then((calculos) => {
+              this.updateDatatable();
+              this.isUpdating = false;
+            });
         }
       });
   }
@@ -140,13 +140,20 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
   onCreate(e) {
     this.isUpdating = true;
-    this.CalculoContagemTempo.get()
+    // this.CalculoContagemTempo.get()
+    //   .then(() => {
+    //     // console.log(this.CalculoContagemTempo.list);
+    //     this.calculosList = this.CalculoContagemTempo.list;
+    //     this.updateDatatable();
+    //     this.isUpdating = false;
+    //   });
+
+      this.CalculoContagemTempo.getWithParameters(['id_segurado', this.idSegurado])
       .then(() => {
-        // console.log(this.CalculoContagemTempo.list);
         this.calculosList = this.CalculoContagemTempo.list;
         this.updateDatatable();
         this.isUpdating = false;
-      })
+      });
   }
 
 

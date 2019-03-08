@@ -126,7 +126,8 @@ export class BeneficiosCalculosComponent implements OnInit {
 
   formatMoneyValue(inputValue) {
     if (inputValue !== null)
-      return inputValue.toFixed(2).replace('.',',');
+    //  return inputValue.toFixed(2).replace('.',',');
+      return inputValue.toLocaleString('pt-BR');
     return '-';
   }
 
