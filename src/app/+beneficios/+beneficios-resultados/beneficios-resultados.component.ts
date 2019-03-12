@@ -1600,13 +1600,20 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   formatMoney(value, sigla='R$', aplicarCor=false){
-    let numeroPadronizado = value.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
-    //let string = sigla + this.formatDecimal(value, 2);
-    let string = sigla + numeroPadronizado;
-    if(aplicarCor && string.indexOf('-') != -1){
-      string = '<span style="color:red">' +string + '</span>';
+
+    if (typeof value === 'number') {
+      let numeroPadronizado = value.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
+      // let string = sigla + this.formatDecimal(value, 2);
+      let string = sigla + numeroPadronizado;
+      if(aplicarCor && string.indexOf('-') != -1) {
+        string = '<span style="color:red">' +string + '</span>';
+      }
+      return string;
+    }else {
+      return sigla + '0,00';
     }
-    return string;
+
+
   }
 
   formatRMI(value, type){
