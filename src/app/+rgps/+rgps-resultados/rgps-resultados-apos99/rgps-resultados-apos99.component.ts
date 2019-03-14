@@ -126,7 +126,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
-              console.log(moeda)
               let dataReajustesAutomaticos = this.dataInicioBeneficio;
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
@@ -493,7 +492,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       irt = (somaMedias * (coeficiente / 100))/somaMediasAux;
     }
 
-    rmi += (fatorSeguranca * numeroCompetencias) / 60;
+   // rmi += (fatorSeguranca * numeroCompetencias) / 60;
+    rmi += (fatorSeguranca * numeroCompetencias * taxaMediaSecundaria) / 60;
     rmi += taxaMediaSecundaria * ((60 - numeroCompetencias) / 60)
     rmi *= (coeficiente / 100);
 
@@ -546,7 +546,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     conclusoes.push({string:"Idade em anos:",value:`${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada,2)}) `});//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
     conclusoes.push({string:"Média das contribuições:",value:this.formatMoney(somaMedias, currency.acronimo)});//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({string:"CT - Número de competências transcorridas desde 29/11/1999:",value:numeroCompetencias});//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
-    conclusoes.push({string:"Fórmula Fator:",value: this.formula_fator});
+
+    if (this.formula_fator != '') {
+      conclusoes.push({string:"Fórmula Fator:",value: this.formula_fator});
+    }
+    
+   
+
     if (this.tipoBeneficio == 6 && redutorSexo == 5){
       this.contribuicaoTotal -= this.contribuicaoTotal - 5;
     }

@@ -897,10 +897,13 @@ export class RgpsResultadosComponent implements OnInit {
     }
   }
 
+  
+
   @HostListener("window:scroll", [])
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById("containerOpcoes");
     let navbar = document.getElementById("navbar");
+
     const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
     if(offset > this.offset(this.caixaOpcoes)){
