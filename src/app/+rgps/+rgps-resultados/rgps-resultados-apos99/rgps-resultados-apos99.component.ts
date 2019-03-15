@@ -974,15 +974,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let tempoFracionado = this.tratarTempoFracionado(contribuicao); //Separar o tempo de contribuicao em anos, meses e dias
         if (direito) {
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
-          //"POSSUI direito ao benefício proporcional."
-          //"Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
+          // "POSSUI direito ao benefício proporcional."
+          // "Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
           errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL."); 
         }else{
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
           errorArray.push("Falta(m) "+ tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
           if (totalContribuicao98 > 0) {
-            let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
+            let tempo = 35 - redutorProfessor - redutorSexo - (extra + 5) - anosContribuicao;
             let tempoProporcional = this.tratarTempoFracionado(tempo);
             // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
             // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
