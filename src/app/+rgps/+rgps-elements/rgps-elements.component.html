@@ -68,7 +68,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Valor da contribuição em atraso:</label>
                     <div class="col-md-8">
-                      <input [(ngModel)]="contribEmAtraso" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
+                      <input [(ngModel)]="contribEmAtraso" currencyMask maxlength="20" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
                     </div>
                   </div>
                 </fieldset>
@@ -88,7 +88,6 @@
           </div>
         </sa-widget>
       </article>
-
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->

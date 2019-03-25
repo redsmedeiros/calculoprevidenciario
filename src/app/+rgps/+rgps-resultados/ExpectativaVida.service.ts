@@ -29,7 +29,7 @@ export class ExpectativaVidaService extends ControllerService {
   }
 
   public getByDates(dataInicio, dataFim){
-    console.log(dataInicio, dataFim)
+    // console.log(dataInicio, dataFim)
   	for(let expectativa of this.list){
   		let startDate = (expectativa.data_inicial) ? moment(expectativa.data_inicial) : null ;
   		let endDate = (expectativa.data_final) ? moment(expectativa.data_final) : null;
@@ -47,7 +47,7 @@ export class ExpectativaVidaService extends ControllerService {
   }
 
   public getByProperties(dataInicio, dataFim){
-    console.log(dataInicio, dataFim)
+    // console.log(dataInicio, dataFim)
     let resultado = {};
     if (dataInicio != null){
       if (dataFim != null) {

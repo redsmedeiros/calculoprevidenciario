@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
+import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { ExpectativaVida } from '../+rgps-resultados/ExpectativaVida.model';
@@ -75,7 +75,8 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
        			data.push({id:calculo.id,
        								especie: calculo.tipo_aposentadoria,
        								dib: calculo.data_pedido_beneficio,
-       								beneficio: calculo.valor_beneficio});
+                       beneficio: calculo.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
+                    });
 
        			this.CalculoRgps.find(this.route.snapshot.params['id_calculo2'])
        				.then((calculo2:CalculoModel) => {
@@ -83,7 +84,8 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
        					data.push({id:calculo2.id,
        										 especie: calculo2.tipo_aposentadoria,
        										 dib: calculo2.data_pedido_beneficio,
-       										 beneficio: calculo2.valor_beneficio});
+                            beneficio: calculo2.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
+                          });
        					if(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY') < 
        					moment(this.calculo1.data_pedido_beneficio, 'DD/MM/YYYY')){
        						let aux = this.calculo1;
@@ -113,6 +115,9 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
   }
 
   recalcular(){
+    
+    this.compare_calculations(this.calculo1, this.calculo2);
+    
   }
 
   //na página de listagem de cálculos ha um checkbox para cada cálculos. Quando clicado em realizar cálculos, 
@@ -122,6 +127,9 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 	//a comparação sempre deve ser feita com exatamente 2 cálculos da forma como mostrado abaixo.
 
 	compare_calculations(calculo1, calculo2){
+    this.resultadosFacultativo = [];
+    this.resultadosDescontadoSlario = [];
+    
 		let dateFormat = ('DD/MM/YYYY');
 		let dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, dateFormat);
 		let dataInicioBeneficio2 = moment(calculo2.data_pedido_beneficio, dateFormat);
@@ -133,10 +141,11 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 
 		// Veriricar se os valores para soma de contribuicoes existem, caso não existam considerar 0.
 		let investimentoEntreDatas = parseFloat(calculo1.soma_contribuicao) - parseFloat(calculo2.soma_contribuicao);
-		investimentoEntreDatas += this.contribEmAtraso;//contribuicao em atraso no forms na pŕópria página
+		investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
 		let aliquota = this.aliquota/100;
 		investimentoEntreDatas *= aliquota;
-		let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+    let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+    
     // Variável que guarda o Total que deixou de receber caso tivesse se aposentado na primeira data
     let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
 
@@ -144,7 +153,7 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 
     if (diferencaRmi != 0) {
 			tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
-			tempoMinimo2 = totalPerdidoEntreData / (diferencaRmi / 13);
+			tempoMinimo2 = (totalPerdidoEntreData / diferencaRmi) / 13;
     }
 
     let tempoMinimo1Meses = Math.floor((tempoMinimo1 - Math.floor(tempoMinimo1)) * 12);
@@ -187,7 +196,7 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     														value:Math.floor(tempoMinimo1) + " ano(s) e " + tempoMinimo1Meses + " mes(es)"});
     
     this.resultadosFacultativo.push({string: 'Idade do segurado quando recuperar as perdas: ', 
-    														value:(idadeSeguradoDIB + tempoMinimo1) + " ano(s) " + tempoMinimo1Meses + " mes(es)"});
+    														value: Math.floor(idadeSeguradoDIB + tempoMinimo1) + " ano(s) " + tempoMinimo1Meses + " mes(es)"});
     
     this.resultadosFacultativo.push({string: 'Idade do segurado de acordo com a expectativa de sobrevida (IBGE): ', 
     														value:Math.floor(expectativaSegurado) + " anos " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"});
@@ -207,7 +216,8 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     // Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário;
     this.resultadosDescontadoSlario.push({string:'Total que deixou de receber caso tivesse se aposentado na primeira data:',
     																			value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
-    let tempoMinimo2Meses = Math.floor(tempoMinimo2 - Math.floor(tempoMinimo2) *12);
+    let tempoMinimo2Meses = Math.floor((tempoMinimo2 - Math.floor(tempoMinimo2)) * 12);
+
 
     this.resultadosDescontadoSlario.push({string:'Total perdido:',
     																			value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
@@ -219,10 +229,10 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     																			value: Math.floor(tempoMinimo2) + " ano(s) " + tempoMinimo2Meses + " mes(es)"});
     
     this.resultadosDescontadoSlario.push({string:'Idade do segurado quando recuperar as perdas:',
-    																			value: idadeSeguradoDIB + Math.floor(tempoMinimo2) + " ano(s) " + tempoMinimo2Meses + " mes(es)"});
+    																			value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2)) + " ano(s) " + tempoMinimo2Meses + " mes(es)"});
     
     this.resultadosDescontadoSlario.push({string:'Idade do segurado de acordo com a expectativa de sobrevida (IBGE):',
-    																			value: Math.floor(expectativaSegurado) + " ano(s) " + Math.floor(expectativaSegurado - Math.floor(expectativaSegurado) * 12) + " mes(es)"});
+    																			value: Math.floor(expectativaSegurado) + " ano(s) " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"});
     
     this.resultadosDescontadoSlario.push({string:'Total de ganhos até atingir a idade esperada (incluindo 13º salário):',
     																			value: this.formatMoney(expectativaTotalMeses, currency.acronimo)});
@@ -247,7 +257,9 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
-      expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
+      // expectativa = (anos * Math.abs((tempo1 + tempo2 + tempo3) / 3) - tempo1) + tempo1;
+      expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
+
     } else if (dib <= dataInicio) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib >= dataFim) {
@@ -270,10 +282,12 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     if (idadeFracionada > 80){
       idadeFracionada = 80;
     }    
+
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     }else{
-      expectativaVida = this.ExpectativaVida.getByDates(dataInicio, dataFim);
+      // expectativaVida = this.ExpectativaVida.getByDates(dataInicio, dataFim);
+      expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
     return expectativaVida;
   }

@@ -144,7 +144,7 @@ export class RgpsResultadosComponent implements OnInit {
       {data: 'contribuicaoSecundaria'},
       {data: 'dib'},
       {data: 'dataCriacao'},
-      //{data: 'checkbox'},
+      {data: 'checkbox'},
     ] 
   };
 
@@ -319,6 +319,7 @@ export class RgpsResultadosComponent implements OnInit {
                   ...this.grupoCalculosTableOptions,
                   data: this.calculoList,
                 }
+                console.log(this.calculoList);
                 if((counter+1) == this.idsCalculo.length)
                   this.isUpdating = false;
                 counter++;
