@@ -37,6 +37,23 @@ export class WidgetComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+    this.colorbutton = false;
+    this.editbutton = false;
+    this.togglebutton = false;
+    this.deletebutton = false;
+    this.fullscreenbutton = false;
+    this.custombutton = false;
+    this.collapsed = false;
+    this.sortable = false;
+    this.hidden = false;
+    this.color = 'red';
+    this.load = false;
+    this.refresh = false;
+  
+
+
+
     this.widgetId = this.genId();
 
 
@@ -46,6 +63,7 @@ export class WidgetComponent implements OnInit, AfterViewInit {
       widget.className += ' jarviswidget-sortable';
     }
 
+    this.color = 'red'
     if (this.color) {
       widget.className += (' jarviswidget-color-' + this.color);
     }

@@ -256,12 +256,12 @@
 }
 
 .smart-style-1 .jarviswidget-color-red>header {
-  background: #C02631;
-  border-color: #8F2129 !important
+  background: #831721;
+  border-color: #831721 !important
 }
 
 .smart-style-1 .jarviswidget .bg-color-red {
-  background: #C02631 !important
+  background: #831721 !important
 }
 
 .smart-style-1 .ui-chatbox-titlebar {
@@ -2545,8 +2545,8 @@ body.smart-style-4 {
 }
 
 .smart-style-5 .bg-color-red, .smart-style-5 .jarviswidget-color-red>header {
-  border-color: rgba(255, 7, 7, .43) !important;
-  background: rgba(255, 7, 7, .43) !important;
+  border-color: rgb(131, 23, 33) !important;
+  background: rgb(131, 23, 33) !important;
   color: #fff
 }
 
