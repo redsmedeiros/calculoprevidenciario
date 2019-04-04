@@ -129,33 +129,39 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 	compare_calculations(calculo1, calculo2){
     this.resultadosFacultativo = [];
     this.resultadosDescontadoSlario = [];
-    
+console.log(calculo1);
+//console.log(calculo2);
+
 		let dateFormat = ('DD/MM/YYYY');
 		let dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, dateFormat);
-		let dataInicioBeneficio2 = moment(calculo2.data_pedido_beneficio, dateFormat);
-		let dataComparacao = (dataInicioBeneficio2.clone()).startOf('month');
+    let dataInicioBeneficio2 = moment(calculo2.data_pedido_beneficio, dateFormat);
+
+	//	let dataComparacao = (dataInicioBeneficio2.clone()).startOf('month');
 
 		let totalEntreDatas = 0;
 		let tempoMinimo1 = 0;
 		let tempoMinimo2 = 0;
 
-		// Veriricar se os valores para soma de contribuicoes existem, caso não existam considerar 0.
-		let investimentoEntreDatas = parseFloat(calculo1.soma_contribuicao) - parseFloat(calculo2.soma_contribuicao);
-		investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
-		let aliquota = this.aliquota/100;
-		investimentoEntreDatas *= aliquota;
-    let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
-    
-    // Variável que guarda o Total que deixou de receber caso tivesse se aposentado na primeira data
-    let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+    // Veriricar se os valores para soma de contribuicoes existem, caso não existam considerar 0.
+		let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.soma_contribuicao);
+       
+    investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
+    let aliquota = this.aliquota/100;
 
-    let diferencaRmi = Math.abs(calculo1.valor_beneficio - calculo2.valor_beneficio);
+    investimentoEntreDatas *= aliquota;
+    let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2); 
+        
+    // Variável que guarda o Total que deixou de receber caso tivesse se aposentado na primeira data
+   
+    let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+    let diferencaRmi = Math.abs(calculo2.valor_beneficio-calculo1.valor_beneficio);
 
     if (diferencaRmi != 0) {
 			tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
 			tempoMinimo2 = (totalPerdidoEntreData / diferencaRmi) / 13;
     }
-
+   
+    
     let tempoMinimo1Meses = Math.floor((tempoMinimo1 - Math.floor(tempoMinimo1)) * 12);
 
     let idadeSegurado = Math.abs(this.dataNascimentoSegurado.diff(moment(), 'years'));
@@ -167,14 +173,13 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 
     let expectativaSegurado = expectativaDIB + idadeSeguradoDIB;
 
-    let expectativaTotalMeses = Math.floor(expectativaSegurado - (idadeSeguradoDIB + tempoMinimo1) * 13);
-
+    let expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo1)) * 13);
     if (expectativaTotalMeses < 0){
     	expectativaTotalMeses = 0;
     }
-
     expectativaTotalMeses *= diferencaRmi;
-    let currency = this.loadCurrency(dataInicioBeneficio2);
+
+      let currency = this.loadCurrency(dataInicioBeneficio2);
 
     this.idadeUltimaDib = idadeSeguradoDIB;
 
