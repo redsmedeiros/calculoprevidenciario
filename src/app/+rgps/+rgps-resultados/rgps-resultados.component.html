@@ -60,6 +60,7 @@
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+                <li><b>Idade atual:</b> {{this.idadeSegurado}} anos</li>
               </ul>
               <div id="printableSegurado" hidden>
                 <h1>Cálculo de Regime Geral da Previdência Social</h1>

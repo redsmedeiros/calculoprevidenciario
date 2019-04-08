@@ -12,8 +12,8 @@ export const environment = {
 
   // local
   apiUrl: 'http://localhost:8000/',
-  authUrl: 'http://ieprev:8080/verificatoken/',
-  loginPageUrl: 'http://ieprev:8080/auth/loginPanel',
+  authUrl: 'http://localhost/ieprev/verificatoken/',
+  loginPageUrl: 'http://localhost/ieprev/auth/loginPanel',
 
 
   // homologacao

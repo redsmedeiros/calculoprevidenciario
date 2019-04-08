@@ -284,6 +284,7 @@ export class RgpsResultadosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
 
+
         if(localStorage.getItem('user_id') != this.segurado.user_id){
           //redirecionar para pagina de segurados
           swal({
@@ -324,6 +325,7 @@ export class RgpsResultadosComponent implements OnInit {
                   this.isUpdating = false;
                 counter++;
             });
+            console.log(this.idadeSegurado);
           }
         }
     });
