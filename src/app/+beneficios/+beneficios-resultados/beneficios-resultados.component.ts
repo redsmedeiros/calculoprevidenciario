@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {FadeInTop} from "../../shared/animations/fade-in-top.decorator";
-import { Segurado as SeguradoModel } from "../+beneficios-segurados/Segurado.model";
+import { Segurado as SeguradoModel, Segurado } from "../+beneficios-segurados/Segurado.model";
 import { SeguradoService } from "../+beneficios-segurados/Segurado.service";
 import { CalculoAtrasado as CalculoModel } from "../+beneficios-calculos/CalculoAtrasado.model";
 import { CalculoAtrasadoService as CalculoService } from "../+beneficios-calculos/CalculoAtrasado.service";
@@ -165,7 +165,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private ultimoBeneficioRecebidoAntesProporcionalidade = 0.0;
   private ultimaCorrecaoMonetaria = 0.0;
   private ultimaDiferencaMensal = 0.0;
-
+  
   private dibAnteriorRecebidos = null;
   private dibAnteriorDevidos = null;
   //Variaveis para tabela de conclusões tetos
@@ -193,7 +193,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.Segurado.find(this.seguradoId)
       .then(segurado => {
         this.segurado = segurado;
-
+        this.dataNascimento();
         if(localStorage.getItem('user_id') != this.segurado.user_id){
               //redirecionar para pagina de segurados
               swal({
@@ -233,6 +233,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       });
   }
 
+
+  dataNascimento(){
+    this.segurado.data_nascimento;
+    let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    this.segurado.idade = moment().diff(idadeSegurado, 'years');
+  
+  }
   esmaecerLinhas(dataCorrente, line){
     let dataComparacao;
     let data = null;

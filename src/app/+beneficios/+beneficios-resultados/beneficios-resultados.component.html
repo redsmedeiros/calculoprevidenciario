@@ -37,6 +37,7 @@
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+                <li><b>Idade atual:</b>  {{segurado.idade}} anos</li>
               </ul>
               <div id="printableSegurado" hidden>
                 <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
