@@ -63,7 +63,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
       this.isUpdating = true;
       this.Segurado.find(this.route.snapshot.params['id']).then(segurado =>{
         this.segurado = segurado;
-
+        this.dataNascimento();
         if(localStorage.getItem('user_id') != this.segurado.user_id){
           //redirecionar para pagina de segurados
           swal({
@@ -103,7 +103,12 @@ export class ContribuicoesResultadosComponent implements OnInit {
       });
     }   
   }
-
+  dataNascimento(){
+    this.segurado.data_nascimento;
+    let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    this.segurado.idade = moment().diff(idadeSegurado, 'years');
+  
+  }
   getSalarioMinimo(data){
     return data.sigla + ' ' +this.formatMoney(data.salario_minimo);
   }

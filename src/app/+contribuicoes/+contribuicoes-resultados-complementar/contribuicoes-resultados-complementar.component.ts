@@ -78,7 +78,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   	this.isUpdating = true;
     this.Segurado.find(this.idSegurado).then(segurado => {
       this.segurado = segurado;
-
+      this.dataNascimento();
       if(localStorage.getItem('user_id') != this.segurado.user_id){
           //redirecionar para pagina de segurados
           swal({
@@ -126,7 +126,12 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     
    
   }
-
+  dataNascimento(){
+    this.segurado.data_nascimento;
+    let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    this.segurado.idade = moment().diff(idadeSegurado, 'years');
+  
+  }
   generateTabelaResultados(){
     let competencias = this.monthAndYear(this.competenciaInicial,  this.competenciaFinal);
     let dataTabelaResultados = [];
