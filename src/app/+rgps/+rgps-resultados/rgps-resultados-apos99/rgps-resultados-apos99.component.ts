@@ -1053,7 +1053,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   limitarTetosEMinimos(valor, data){
-    let moeda = data.isSameOrBefore(moment(),'month') ? this.Moeda.getByDate(data) : undefined;
+    // se a data estiver no futuro deve ser utilizado os dados no mês atual
+    let moeda = data.isSameOrBefore(moment(),'month') ? this.Moeda.getByDate(data) :  this.Moeda.getByDate(moment());
+
     let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
     let tetoSalarial = (moeda) ? moeda.teto: 0;
     let avisoString = '';
