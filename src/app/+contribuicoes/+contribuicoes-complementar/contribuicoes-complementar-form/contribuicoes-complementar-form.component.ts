@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../../services/error.service';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 
 @Component({
@@ -20,6 +20,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public chkJuros = true;
   public showMessage = false;
   public dataDecadente;
+  public contribuicoes;
 
 
   public dataMinima = new Date(1970,0,1);
@@ -46,7 +47,6 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
         this.Calculo.find(this.idCalculo)
                   .then(calculo => {
                         this.calculo = calculo;
-                        
                         let splited = this.calculo.contribuicao_basica_inicial.split('-');
                         this.contribuicaoDe = splited[1] + '/' + splited[0];
                         splited = this.calculo.contribuicao_basica_final.split('-');
@@ -56,6 +56,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
                         splited = this.calculo.final_atraso.split('-');
                         this.competenciaFinal = splited[1] + '/' + splited[0];
                         this.salarioContribuicao = this.calculo.salario;
+                        this.contribuicoes = this.calculo.contribuicoes;
                         this.submit();
                      });
     }
@@ -64,7 +65,14 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   	this.errors.clear();
   	this.validateInputs();
   	if(!this.errors.empty()){
-  		swal('Erro', 'Confira os dados digitados','error');
+  		swal({
+        type: 'error',
+        title: 'Confira os dados digitados',
+        text: '',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timer: 1500
+      });
   	}else{
       if(this.idCalculo != ''){
         this.formData.id = this.idCalculo;
@@ -76,6 +84,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 		  this.formData.contribuicao_basica_final = this.contribuicaoAte;
 		  this.formData.salario = this.salarioContribuicao;
       this.formData.chk_juros = this.chkJuros;
+      this.formData.contribuicoes = this.contribuicoes;
 		  this.onSubmit.emit(this.formData);
   	}
   }
@@ -146,9 +155,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   	}
 
   	//salarioContribuicao
-  	if(this.isEmpty(this.salarioContribuicao)){
-  		this.errors.add({"salarioContribuicao":["Insira o salário"]});
-  	}
+  	// if(this.isEmpty(this.salarioContribuicao)){
+  	// 	this.errors.add({"salarioContribuicao":["Insira o salário"]});
+  	// }
   }
 
   voltar(){

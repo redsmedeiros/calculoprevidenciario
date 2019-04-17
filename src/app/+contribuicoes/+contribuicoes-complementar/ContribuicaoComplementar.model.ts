@@ -5,19 +5,20 @@ export class ContribuicaoComplementar extends Model {
 
   static url = environment.apiUrl + 'contribuicoes/calculos/complementar';
   static form = {
-  	id: '',
-  	id_segurado: 0,
-	inicio_atraso: '',
-	final_atraso: '',
-	contribuicao_basica_inicial: '',
-	contribuicao_basica_final: '',
-	salario: '',
-	total_contribuicao: 0,
-	numero_contribuicoes: 0,
-	media_salarial: 0,
-	contribuicao_calculada: 0,
-	data_calculo: '',
-  chk_juros:''
+    id: '',
+    id_segurado: 0,
+    inicio_atraso: '',
+    final_atraso: '',
+    contribuicao_basica_inicial: '',
+    contribuicao_basica_final: '',
+    salario: '',
+    total_contribuicao: 0,
+    numero_contribuicoes: 0,
+    media_salarial: 0,
+    contribuicao_calculada: 0,
+    data_calculo: '',
+    chk_juros:'',
+    contribuicoes:''
   };
 
   public id;
@@ -33,6 +34,7 @@ export class ContribuicaoComplementar extends Model {
   public contribuicao_calculada: number;
   public data_calculo;
   public chk_juros;
+  public contribuicoes;
   // public actions = `
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i title="Editar" class='fa fa-edit'></i> </a>
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>

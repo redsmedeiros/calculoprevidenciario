@@ -195,7 +195,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let numMeses = this.getDifferenceInMonths(dataReferencia) - (numAnos*12);
     taxaJuros = ((jurosAnuais ** numAnos) * ((jurosMensais * numMeses) + 1)) - 1;
     taxaJuros = Math.min(taxaJuros, 0.5);
-    console.log(dataReferencia, numAnos, numMeses, taxaJuros);
+    //console.log(dataReferencia, numAnos, numMeses, taxaJuros);
     let totalJuros = this.getBaseAliquota() * taxaJuros;
 
     return totalJuros;

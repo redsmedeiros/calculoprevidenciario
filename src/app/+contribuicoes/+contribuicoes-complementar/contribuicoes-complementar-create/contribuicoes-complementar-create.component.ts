@@ -7,6 +7,7 @@ import { MatrixService } from '../../MatrixService.service'
 import { MoedaService } from '../../../services/Moeda.service';
 import { Moeda } from '../../../services/Moeda.model';
 import * as moment from 'moment';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contribuicoes-complementar-create',
@@ -21,6 +22,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public idSegurado;
+
+  public NumMeses = 0;
+  public listaGeralMeses  = '';
+  public contribuicao_basica_inicial_temp;
+  public contribuicao_basica_final_temp;
 
   public baseAliquota = 0;
 
@@ -58,13 +64,60 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.Moeda.getByDateRangeMoment(moment('1990-01-01'), moment())
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
-        })
+        });
+
   }
+  
 
   preencher(data){
     this.idSegurado = this.route.snapshot.params['id'];
-  	let monthList = this.monthAndYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
-    this.form.numero_contribuicoes = monthList.length*0.8;
+     let monthList = this.monthAndYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
+   
+    // this.NumMeses += monthList.length;
+    // this.form.numero_contribuicoes = this.NumMeses*0.8;
+
+    // console.log(data);
+    // console.log(data.contribuicao_basica_inicial);
+    // console.log(data.contribuicao_basica_final);
+    // console.log(this.form.numero_contribuicoes);
+    // console.log('------------');
+    // console.log(this.form);
+
+
+    if (this.form.id != undefined && this.contribuicao_basica_inicial_temp == undefined) {
+      this.contribuicao_basica_inicial_temp = this.form.contribuicao_basica_inicial;
+      this.contribuicao_basica_final_temp = this.form.contribuicao_basica_final;
+    }
+
+    if (this.contribuicao_basica_inicial_temp == undefined || this.contribuicao_basica_inicial_temp == '') {
+      this.contribuicao_basica_inicial_temp = data.contribuicao_basica_inicial;
+    }
+    if (this.contribuicao_basica_final_temp == undefined || this.contribuicao_basica_final_temp == '') {
+      this.contribuicao_basica_final_temp = data.contribuicao_basica_final;
+    }
+
+    this.contribuicao_basica_inicial_temp = (moment(data.contribuicao_basica_inicial, 'MM/YYYY') < moment(this.contribuicao_basica_inicial_temp, 'MM/YYYY'))? data.contribuicao_basica_inicial : this.contribuicao_basica_inicial_temp;
+    this.contribuicao_basica_final_temp = (moment(data.contribuicao_basica_final, 'MM/YYYY') > moment(this.contribuicao_basica_final_temp, 'MM/YYYY'))? data.contribuicao_basica_final : this.contribuicao_basica_final_temp;
+
+   
+    // this.NumMeses = this.monthAndYear(this.contribuicao_basica_inicial_temp, this.contribuicao_basica_final_temp).length;
+    // this.form.numero_contribuicoes = this.NumMeses*0.8;
+
+    // console.log(this.form.numero_contribuicoes);
+    // console.log(this.contribuicao_basica_inicial_temp);
+    // console.log(this.contribuicao_basica_final_temp);
+
+      
+    if (this.form.id != undefined && !this.matrizHasValues) {
+
+      this.matriz = JSON.parse(this.form.contribuicoes);
+      this.matrizHasValues = true;
+
+      this.matriz.map(row => { 
+        this.anosConsiderados.push(row.ano);
+      });
+
+    }else{
 
   	let ano = monthList[0].split('-')[0];
   	let valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
@@ -80,7 +133,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         this.anosConsiderados.push(ano);
   		}
   	}
-  	this.updateMatrix(+ano, valores);
+    this.updateMatrix(+ano, valores);
+    }
   }
 
   createCalculo(e){
@@ -92,19 +146,27 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.id_segurado = this.form.id_segurado;
     novoCalculo.inicio_atraso = "01/" + this.form.inicio_atraso;
     novoCalculo.final_atraso = "01/"+ this.form.final_atraso
-    novoCalculo.contribuicao_basica_inicial = "01/" + this.form.contribuicao_basica_inicial
-    novoCalculo.contribuicao_basica_final = "01/" + this.form.contribuicao_basica_final
+    novoCalculo.contribuicao_basica_inicial = "01/" + this.contribuicao_basica_inicial_temp
+    novoCalculo.contribuicao_basica_final = "01/" + this.contribuicao_basica_final_temp
     novoCalculo.salario = this.form.salario;
     novoCalculo.total_contribuicao = this.form.total_contribuicao;
     novoCalculo.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
     novoCalculo.media_salarial = this.form.media_salarial;
     novoCalculo.contribuicao_calculada = this.form.contribuicao_calculada;
     novoCalculo.chk_juros = this.form.chk_juros;
+    novoCalculo.contribuicoes = JSON.stringify(this.matriz);
 
     if(this.form.id == undefined){
         this.Calculo.save(novoCalculo).then((data:ContribuicaoModel) => {
                   this.Calculo.get().then(() =>{
-                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                  swal({
+                    type: 'success',
+                    title: 'O Cálculo foi salvo com sucesso',
+                    text: '',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timer: 1500
+                  }).then(() => {
                       window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
                     });
                   });
@@ -115,7 +177,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       novoCalculo.id = this.form.id;
       this.Calculo.update(novoCalculo).then((data:ContribuicaoModel) => {
                   this.Calculo.get().then(() =>{
-                  swal('Sucesso', 'O Cálculo foi salvo com sucesso','success').then(() => {
+                  swal({
+                    type: 'success',
+                    title: 'O Cálculo foi salvo com sucesso',
+                    text: '',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timer: 1500
+                  }).then(() => {
                       window.location.href='/#/contribuicoes/'+this.idSegurado+'/contribuicoes-resultados-complementar/'+data.id;
                     });
                   });
@@ -196,6 +265,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       return 0;
     });
 
+    // console.log(dataTabelaDetalhes);
+
+    this.form.numero_contribuicoes = dataTabelaDetalhes.length * 0.8;
+    
+    
     //Colore de vermelho os 20% menores valores. 
     //form.numero_contribuicoes contem o numero equivalente as 80% maiores contribuicoes, 
     //dividindo por 4 obtem-se os 20% restante
@@ -231,6 +305,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.form.media_salarial = this.form.total_contribuicao/Math.ceil(this.form.numero_contribuicoes);
     this.baseAliquota = this.form.media_salarial*0.2;
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
+    
   }
 
   //Valor da contribuição base para cada mês
@@ -322,7 +397,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       if(entry.ano == ano){
         let index = 0;
         for (index = 0; index < 12; ++index) {
-          if(entry.valores[index] != valores[index] && valores[index] != 'R$ 0,00'){
+          // if(entry.valores[index] != valores[index] && valores[index] != 'R$ 0,00'){
+          //   entry.valores[index] = valores[index];
+          // }
+          //permitir o valor zero
+          if(entry.valores[index] != valores[index]){
             entry.valores[index] = valores[index];
           }
         }
@@ -331,6 +410,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     }
     this.matriz.push({ "ano": ano, "valores": valores });
     this.matrizHasValues = true;
+    swal({
+      type: 'success',
+      title: 'A lista foi atualizada',
+      text: '',
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      timer: 1000
+    });
   }
   
   //Retorna uma lista com os meses entre dateStart e dateEnd
