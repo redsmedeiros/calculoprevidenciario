@@ -1750,58 +1750,61 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getTipoAposentadoria(value){
     let tipos_aposentadoria = [{
-                name: "Auxílio Doença",
-          value: 0
-        },{
-          name: "Aposentadoria por invalidez Previdenciária ou Pensão por Morte",
-          value: 1
-        },{
-          name: "Aposentadoria por idade - Trabalhador Urbano",
-          value: 2
-        },{
-          name: "Aposentadoria por tempo de contribuição",
-          value: 3
-        },{
-          name: "Aposentadoria por tempo de serviço de professor",
-          value: 4
-        },{
-          name: "Auxílio Acidente previdenciário - 50%",
-          value: 5
-        },{
-          name: "Aposentadoria por idade - Trabalhador Rural",
-          value: 6
-        },{
-          name: "Auxílio Acidente  - 30%",
-          value: 7
-        },{
-          name: "Auxílio Acidente - 40%",
-          value: 8
-        },{
-          name: "Auxílio Acidente - 60%",
-          value: 9
-        },{
-          name: "Abono de Permanência em Serviço",
-          value: 10
-        },{
-          name: "LOAS - Benefício no valor de um salário mínimo",
-          value: 11
-        },{
-          name: "Aposentadoria especial da Pessoa com Deficiência Grave",
-          value: 12
-        },{
-          name: "Aposentadoria especial da Pessoa com Deficiência Moderada",
-          value: 13
-        },{
-          name: "Aposentadoria especial da Pessoa com Deficiência Leve",
-          value: 14
-        },{
-          name: "Aposentadoria especial por Idade da Pessoa com Deficiência",
-          value: 15
-        },{
-          name: "LOAS",
-          value: 16
-        }
-    ]
+      name: "Auxílio Doença",
+      value: 0
+    },{
+      name: "Aposentadoria por invalidez Previdenciária ou Pensão por Morte",
+      value: 1
+    },{
+      name: "Aposentadoria por idade - Trabalhador Urbano",
+      value: 2
+    },{
+      name: "Aposentadoria por tempo de contribuição",
+      value: 3
+    },{
+      name: "Aposentadoria especial",
+      value: 4
+    },{    
+      name: "Aposentadoria por tempo de serviço de professor",
+      value: 5
+    },{
+      name: "Auxílio Acidente previdenciário - 50%",
+      value: 6
+    },{
+      name: "Aposentadoria por idade - Trabalhador Rural",
+      value: 7
+    },{
+      name: "Auxílio Acidente  - 30%",
+      value: 8
+    },{
+      name: "Auxílio Acidente - 40%",
+      value: 9
+    },{
+      name: "Auxílio Acidente - 60%",
+      value: 10
+    },{
+      name: "Abono de Permanência em Serviço",
+      value: 11
+    },{
+      name: "LOAS - Benefício no valor de um salário mínimo",
+      value: 12
+    },{
+      name: "Aposentadoria especial da Pessoa com Deficiência Grave",
+      value: 13
+    },{
+      name: "Aposentadoria especial da Pessoa com Deficiência Moderada",
+      value: 14
+    },{
+      name: "Aposentadoria especial da Pessoa com Deficiência Leve",
+      value: 15
+    },{
+      name: "Aposentadoria especial por Idade da Pessoa com Deficiência",
+      value: 16
+    },{
+      name: "LOAS",
+      value: 17
+    }
+  ]
     return tipos_aposentadoria[value].name;
   }
   
