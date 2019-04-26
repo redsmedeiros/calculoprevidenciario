@@ -255,6 +255,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }else if(divisorSecundario < mesesContribuicao * 0.8){
       divisorSecundario = Math.round(mesesContribuicao * 0.8);
     }
+   
+   
     let label;
     switch(this.tipoBeneficio) {
       case 1: // Auxilio Doença Previdenciario
@@ -365,8 +367,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
-        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && divisorMediaPrimaria > 1) {
-          divisorMediaPrimaria = this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
+        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && Math.round(divisorMediaPrimaria) > 1) {
+          divisorMediaPrimaria =  Math.round(numeroContribuicoes * 0.8);
+        //  divisorMediaPrimaria =  this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
         }
         break;
     }
@@ -450,13 +453,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     //Índice de Reajuste no Teto.
-    let irt = 1;
-
+    let irt = 1;    
     let mediaContribuicoesPrimarias = totalContribuicaoPrimaria;
     if (divisorMediaPrimaria > 1) {
         mediaContribuicoesPrimarias /= divisorMediaPrimaria;
-    }
 
+    }
+console.log(mediaContribuicoesPrimarias);
     let mediaContribuicoesSecundarias = totalContribuicaoSecundaria;
     if (divisorSecundario > 1) {
         mediaContribuicoesSecundarias /= divisorSecundario;    
