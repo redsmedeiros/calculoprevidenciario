@@ -838,7 +838,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let currency = this.loadCurrency(this.dataInicioBeneficio);
     let somaMedias = somaMediasGeral;
     let somaMediasString = '';
-    console.log(valorComparacao);
     
     if (fatorSeguranca >= 1 && valorRegra >=  valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao && this.tipoBeneficio == 4) {
       somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
