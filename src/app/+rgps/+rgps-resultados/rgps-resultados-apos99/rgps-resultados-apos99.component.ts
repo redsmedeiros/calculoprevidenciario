@@ -644,15 +644,28 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({string:"Fp - Fator Previdenciário:",value:fatorSeguranca});//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
             this.fatorPrevidenciario = fatorSeguranca;
           }
-        }else if(dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96){
+        }else if(dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f'){
           this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes,somaMedias);
-        }else if(dataBeneficio >= dataRegra87_97  && dataBeneficio <= dataFimRegra87_97) {
+        }else if(dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96){
+          this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes,somaMedias);
+        }else if(dataBeneficio >= dataRegra87_97  && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
           this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes,somaMedias);
-        }else if(dataBeneficio >= dataRegra88_98  && dataBeneficio <= dataFimRegra88_98) {
+        }else if(dataBeneficio >= dataRegra87_97  && dataBeneficio <= dataFimRegra87_97){
+          this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes,somaMedias);
+        }
+        else if(dataBeneficio >= dataRegra88_98  && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
           this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes,somaMedias);
-        }else if(dataBeneficio >= dataRegra89_99  && dataBeneficio <= dataFimRegra89_99) {
+        }else if(dataBeneficio >= dataRegra88_98  && dataBeneficio <= dataFimRegra88_98){
+          this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes,somaMedias);
+        }
+        else if(dataBeneficio >= dataRegra89_99  && dataBeneficio <= dataFimRegra89_99 && this.segurado.sexo == 'f') {
           this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes,somaMedias);
-        }else if(dataBeneficio >= dataRegra90_100  && dataBeneficio <= dataFimRegra90_100) {
+        }else if(dataBeneficio >= dataRegra89_99  && dataBeneficio <= dataFimRegra89_99){
+          this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes,somaMedias);
+        }
+        else if(dataBeneficio >= dataRegra90_100  && dataBeneficio <= dataFimRegra90_100 && this.segurado.sexo == 'f') {
+          this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes,somaMedias);
+        }else if(dataBeneficio >= dataRegra90_100  && dataBeneficio <= dataFimRegra90_100){
           this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes,somaMedias);
         }
         }else{
