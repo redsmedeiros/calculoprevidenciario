@@ -809,11 +809,31 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   exportarParaBeneficios(data, valor, tipoCalculo){
-    window.location.href='/#/beneficios/beneficios-calculos/'+ 
-                          tipoCalculo + '/' +
-                          this.segurado.id+
-                          '?dib='+data+'&'+
-                          'valor='+valor;
+    // window.location.href='/#/beneficios/beneficios-calculos/'+ 
+    //                       tipoCalculo + '/' +
+    //                       this.segurado.id+
+    //                       '?dib='+data+'&'+
+    //                       'valor='+valor;
+
+
+                          const objExport = JSON.stringify({
+                            seguradoId: this.segurado.id,
+                            dib: data,
+                            valor: valor,
+                          });
+                      
+                          sessionStorage.setItem('exportBeneficioAtrasado', objExport);
+
+                         // console.log(sessionStorage);
+                          
+                      
+                         // console.log(sessionStorage.exportContagemTempo);
+                         //  console.log(JSON.parse(sessionStorage.exportContagemTempo));
+                          // console.log('/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true');
+                         // window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true';
+                      
+                        window.location.href = '/#/beneficios/beneficios-calculos/'+tipoCalculo + '/' + this.segurado.id;
+
   }
 
   generateBoxId(){

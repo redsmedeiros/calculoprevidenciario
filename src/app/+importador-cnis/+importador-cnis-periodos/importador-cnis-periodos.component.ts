@@ -66,9 +66,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     let changedisUpdating = changes['isUpdating'];
     let changeEmpresa = changes['empresa'];
 
-    // console.log(changedvinculos);
-    // console.log(changedisUpdating);
-
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
     }
@@ -231,6 +228,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.vinculosList.map(vinculo => {
       this.isValidVinculo(vinculo);
     });
+
+    this.detector.detectChanges();
 
   }
 

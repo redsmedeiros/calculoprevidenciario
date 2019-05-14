@@ -181,20 +181,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     }
 
-    let dataRgps = this.route.snapshot.queryParams['dib'] || 0;
-    let valorRgps = parseFloat(this.route.snapshot.queryParams['valor']) || 0;
-    if(dataRgps && valorRgps){
-      if(this.type == 'AJ'){
-        this.chkUseSameDib = true;
-        this.rmiValoresRecebidos = valorRgps;
-      }else{
-        this.rmiValoresDevidos = valorRgps;
-      }
-    this.dibValoresDevidos = dataRgps.split('-')[2] + '/' + 
-                             dataRgps.split('-')[1] + '/' +
-                             dataRgps.split('-')[0];
-    }
-
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
       this.isEdit = true;
       this.loadCalculo();        
@@ -211,7 +197,42 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.especieValoresDevidos = 3;
       this.especieValoresRecebidos = 3;
     }
+
+    this.checkImportBeneficioAtrasado();
   }
+
+
+  importRGPS() {
+
+    const exportDados = JSON.parse(sessionStorage.exportBeneficioAtrasado);
+
+    const dataRgps = exportDados.dib || 0;
+    const valorRgps = parseFloat(exportDados.valor) || 0;
+
+    if(dataRgps && valorRgps){
+      if(this.type == 'AJ'){
+        this.chkUseSameDib = true;
+        this.rmiValoresRecebidos = valorRgps;
+      }else{
+        this.rmiValoresDevidos = valorRgps;
+      }
+    this.dibValoresDevidos = dataRgps.split('-')[2] + '/' + 
+                             dataRgps.split('-')[1] + '/' +
+                             dataRgps.split('-')[0];
+    }
+
+  }
+
+  checkImportBeneficioAtrasado() {
+
+    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
+      // this.resetForm();
+      this.importRGPS();
+      sessionStorage.removeItem('exportBeneficioAtrasado');
+    } 
+
+  }
+
 
   validateInputs() {
 

@@ -83,12 +83,12 @@ export class ImportadorCnisComponent implements OnInit {
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
-    console.log(eventCountSeguradoErros);
+    // console.log(eventCountSeguradoErros);
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {
     this.eventCountVinculosErros = eventCountVinculosErros;
-    console.log(eventCountVinculosErros);
+   // console.log(eventCountVinculosErros);
   }
 
 
