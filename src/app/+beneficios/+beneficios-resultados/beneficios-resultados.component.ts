@@ -408,6 +408,12 @@ export class BeneficiosResultadosComponent implements OnInit {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
         }
 
+
+        if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
+          beneficioRecebidoAbono = 0.0;
+        }
+
+
         if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
           diferencaMensal = beneficioDevidoAbono;
         } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
@@ -669,12 +675,17 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoTetosSemLimite = this.beneficioDevidoTetosSemLimiteSalvo;
     }
 
-    if (this.calculo.tipo_aposentadoria == '11' && !this.isTetos) { //11 = 'LOAS - beneficio salario minimo'
+    console.log(this.calculo.tipo_aposentadoria);
+    console.log(this.calculo.tipo_aposentadoria_recebida);
+    console.log(this.isTetos);
+    
+
+    if ((this.calculo.tipo_aposentadoria == '12' || this.calculo.tipo_aposentadoria == '17') && !this.isTetos) { //11 = 'LOAS - beneficio salario minimo'
       beneficioDevido = moedaDataCorrente.salario_minimo;
-    } else if (this.calculo.tipo_aposentadoria_recebida != '11') {
+    } else if (this.calculo.tipo_aposentadoria != '12' && this.calculo.tipo_aposentadoria != '17') {
       beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
       this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
-    }
+   }
 
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
@@ -880,11 +891,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
     }
-    if (this.calculo.tipo_aposentadoria_recebida == '11' && !this.isTetos) { //11: LOAS - beneficio salario minimo'
+    
+    if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
-    } else if (this.calculo.tipo_aposentadoria_recebida != '11') {
+    } else if (this.calculo.tipo_aposentadoria_recebida != '12' &&  this.calculo.tipo_aposentadoria_recebida != '17') {
       beneficioRecebido *= reajusteObj.reajuste;
     }
+
     this.beneficioRecebidoOs = this.beneficioRecebidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
@@ -1496,13 +1509,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
     }
 
-    if (tipoAposentadoria == '7') { //’Auxilio Acidente - 30%’
+    if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
       salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '8') {//‘Auxilio Acidente - 40%’
+    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
       salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '5') { //‘Auxilio Acidente Previdenciario- 50%’
+    } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
       salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 60%’
+    } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
       salMinimo *= 0.6;
     }
 
@@ -1528,13 +1541,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
     }
 
-    if (tipoAposentadoria == '7') { //’Auxilio Acidente - 30%’
+    if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
       salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '8') {//‘Auxilio Acidente - 40%’
+    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
       salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '5') { //‘Auxilio Acidente Previdenciario- 50%’
+    } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
       salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 60%’
+    } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
       salMinimo *= 0.6;
     }
 
