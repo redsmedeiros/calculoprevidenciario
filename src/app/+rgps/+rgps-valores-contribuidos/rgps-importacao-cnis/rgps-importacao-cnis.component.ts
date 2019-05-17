@@ -213,7 +213,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   aplicarRegras(arrayOrganizado) {
     let replacePontos = function (valor) {
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         valor = valor.replace('.', '');
       }
       return parseFloat(valor.replace(',', '.'));
@@ -268,13 +268,20 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   salvarContribuicoes(array){
     let contribuicoes = [];
 
+    let replacePontos = function (valor) {
+      for (let i = 0; i < 5; i++) {
+        valor = valor.replace('.', '');
+      }
+      return parseFloat(valor.replace(',', '.'));
+    };
+
     for(let element of array){
       let contribuicao = new ValorContribuido({
         id_calculo: [this.idCalculo],
         data: moment(element.data,'MM/YYYY').format('YYYY-MM-DD'),
         tipo: element.contributionType,
         id_segurado: this.idSegurado,
-        valor: parseFloat(element.contrib.replace('.', '').replace(',','.'))
+        valor: replacePontos(element.contrib)
       });
       contribuicoes.push(contribuicao);
     }
