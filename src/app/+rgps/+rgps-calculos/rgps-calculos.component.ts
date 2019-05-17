@@ -220,22 +220,25 @@ export class RgpsCalculosComponent implements OnInit {
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById("containerOpcoes");
     let navbar = document.getElementById("navbar");
+
+    
     const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
     if(offset > this.offset(this.caixaOpcoes)){
       this.navIsFixed = true;
-      navbar.classList.add("sticky")
+     // navbar.classList.add("sticky");
     }else if (this.navIsFixed){
       this.navIsFixed = false;
-      navbar.classList.remove("sticky");
+      // navbar.classList.remove("sticky");
     }
-    
-    console.log(this.navIsFixed)
   }
 
   offset(el) {
-      var rect = el.getBoundingClientRect(),
-      scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
-      return rect.top + scrollTop;
+      if (el != undefined) {
+        var rect = el.getBoundingClientRect(),
+            scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+            return rect.top + scrollTop;
+      }
   }
+
 }

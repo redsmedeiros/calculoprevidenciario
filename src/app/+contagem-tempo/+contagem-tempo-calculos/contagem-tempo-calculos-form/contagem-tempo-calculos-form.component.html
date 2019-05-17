@@ -4,6 +4,7 @@
       <label class="col-md-2 control-label bold" for="referencia_calculo">Referência do cálculo:* <i class="fa fa-question-circle fa-lg text-info"  data-placement="bottom" tooltip="Texto definido pelo usuário para identificar a simulação de cálculo de contagem tempo."></i></label>
       <div class="col-md-8">
         <input [(ngModel)]="referencia_calculo" [ngModelOptions]="{standalone: true}" class="form-control" type="text"
+        (change)="errors.clear('referencia_calculo')"
           data-placement="bottom" tooltip="Texto definido pelo usuário para identificar a simulação de cálculo de contagem tempo.">
         <small *ngIf="errors.has('referencia_calculo')" class="text-danger">{{ errors.get('referencia_calculo') |
           i18n}}</small>

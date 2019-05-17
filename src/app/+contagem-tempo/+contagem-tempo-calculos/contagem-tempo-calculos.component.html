@@ -51,7 +51,7 @@
                     <td><strong class="pull-right">Nome:</strong></td>
                     <td>{{segurado.nome}} </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="segurado.documento">
                     <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
                     <td>{{segurado.documento}} </td>
                   </tr>

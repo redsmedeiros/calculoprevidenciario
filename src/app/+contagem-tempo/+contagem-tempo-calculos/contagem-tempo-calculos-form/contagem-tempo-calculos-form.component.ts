@@ -54,6 +54,7 @@ export class ContagemTempoCalculosFormComponent implements OnInit {
 
   }
   public submit(e) {
+   
     e.preventDefault();
     this.validate();
     if (this.errors.empty()) {
@@ -65,19 +66,20 @@ export class ContagemTempoCalculosFormComponent implements OnInit {
       this.resetForm();
     }
     else {
-      console.log(this.errors.all())
+      // console.log(this.errors.all())
       swal('Erro', 'Confira os dados digitados', 'error');
     }
+    
   }
 
 
   resetForm() {
     this.formData = { ...CalculoModel.form };
-
     this.referencia_calculo = '';
   }
 
    validate() {
+    this.errors.clear('referencia_calculo');
     if (this.referencia_calculo == undefined || this.referencia_calculo == '') {
           this.errors.add({ 'referencia_calculo': ['Insira uma referência para simulação.'] });
        }

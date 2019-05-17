@@ -9,7 +9,7 @@
         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
       </div>
 
-      <label class="col-md-2 control-label" for="select-1">Tipo de documento*</label>
+      <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
       <div class="col-md-3">
         <select class="form-control" id="select-1" [(ngModel)]="formData.id_documento" [ngModelOptions]="{standalone: true}"  (change)="changeDocumentMask()">
           <option value='1'>PIS</option>
@@ -24,7 +24,7 @@
 
     <div class="form-group">
 
-      <label class="col-md-2 control-label">Número do documento*</label>
+      <label class="col-md-2 control-label">Número do documento</label>
       <!-- <div class="col-md-3"> Com mascara
         <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento')" [textMask]="{mask: docMask}" class="form-control" type="text">
         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
@@ -44,7 +44,7 @@
 
     <div class="form-group">
 
-      <label class="col-md-2 control-label"><i title="Data da primeira contribuição, define situações de direitos e formas de cálculos." class="fa fa-question-circle fa-lg"></i> Data de filiação</label>
+      <label class="col-md-2 control-label"><i title="Data da primeira contribuição, define situações de direitos e formas de cálculos." class="fa fa-question-circle fa-lg"></i> Data de filiação*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.data_filiacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_filiacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
         <small *ngIf="errors.has('data_filiacao')" class="text-danger">{{ errors.get('data_filiacao') | i18n}}</small>

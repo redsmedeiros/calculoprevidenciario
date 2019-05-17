@@ -38,9 +38,9 @@ export class ContagemTempoSeguradosFormComponent {
   }
 
   ngAfterContentInit() {
-    setTimeout(() => {
-      this.changeDocumentMask();
-    }, 200)
+    // setTimeout(() => {
+    //   this.changeDocumentMask();
+    // }, 200)
   }
 
   validate() {
@@ -48,15 +48,38 @@ export class ContagemTempoSeguradosFormComponent {
       this.errors.add({ 'nome': ["O Nome é obrigatório."] });
     }
 
-    if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
-      this.errors.add({ 'id_documento': ['O Tipo de Documento é obrigatório.'] });
+    // if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
+    //   this.errors.add({ 'id_documento': ['O Tipo de Documento é obrigatório.'] });
+    // }
+
+    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
+      this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
+    } else {
+      var dateParts = this.formData.data_nascimento.split('/');
+      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      if (isNaN(date.getTime()))
+        this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
     }
 
-    if (this.formData.numero_documento == undefined || this.formData.id_documento == '') {
-      this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
+    if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
+      // this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
     } else {
-      let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
-      let id = this.formData.id_documento.toString();
+      var dateParts = this.formData.data_filiacao.split('/');
+      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      if (isNaN(date.getTime()))
+        this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
+    }
+
+    if (this.formData.sexo == undefined || this.formData.sexo == '') {
+      this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
+    }
+
+
+    // if (this.formData.numero_documento == undefined || this.formData.id_documento == '') {
+    //   this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
+    // } else {
+    //   let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
+    //   let id = this.formData.id_documento.toString();
       // switch (id) {
       //   case '1': // PIS
       //     if (!this.validatePIS(parseInt(documentNumber)))
@@ -86,32 +109,12 @@ export class ContagemTempoSeguradosFormComponent {
       //   default:
       //     break;
       // }
-    }
+   //}
 
-    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
-      this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
-    } else {
-      var dateParts = this.formData.data_nascimento.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
-        this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
-    }
-
-    if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
-      // this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
-    } else {
-      var dateParts = this.formData.data_filiacao.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
-        this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
-    }
-
-    if (this.formData.sexo == undefined || this.formData.sexo == '') {
-      this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
-    }
-
+    
   }
 
+  /*
   changeDocumentMask() {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
@@ -226,5 +229,6 @@ export class ContagemTempoSeguradosFormComponent {
       return false;
     return true;
   }
+*/
 
 }
