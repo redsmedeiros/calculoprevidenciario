@@ -1550,7 +1550,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
       salMinimo *= 0.6;
     }
-
+        
     if (valorBeneficio <= salMinimo) {
       // Adicionar subindice ‘M’ no valor do beneficio
       return salMinimo;
