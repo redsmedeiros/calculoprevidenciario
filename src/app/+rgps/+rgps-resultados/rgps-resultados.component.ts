@@ -283,8 +283,7 @@ export class RgpsResultadosComponent implements OnInit {
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-      console.log(this.segurado);
-
+      // console.log(this.segurado);
 
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
           //redirecionar para pagina de segurados
