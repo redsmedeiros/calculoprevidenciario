@@ -88,6 +88,10 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       ] 
   };
 
+  private regraEspecie8891 = false;
+
+  
+
   constructor(private CarenciaProgressiva:CarenciaProgressivaService,
     protected route: ActivatedRoute,
     private ReajusteAutomatico:ReajusteAutomaticoService,
@@ -110,7 +114,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     this.contribuicaoSecundaria88 = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
 
   	this.idCalculo = this.calculo.id;
-  	this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    this.regraEspecie8891 = this.verificaEspecieDeBeneficio(this.tipoBeneficio);
+    
 		let dataInicio = this.dataInicioBeneficio;
 
     if(this.dataInicioBeneficio > this.dataDib98){

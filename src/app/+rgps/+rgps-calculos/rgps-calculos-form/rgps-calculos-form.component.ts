@@ -399,6 +399,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.has99 = false;
       this.hasAtual = false;
     }
+
+
+    if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
+          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ) {
+            this.hasAnterior = false;
+            this.has98 = false;
+            this.has99 = false;
+            this.hasAtual = true;
+      }
   }
 
 
@@ -531,6 +541,9 @@ export class RgpsCalculosFormComponent implements OnInit {
     } else {
       this.hasCarencia = false;
     }
+
+    // check especie aposentadoria por invalidez 
+    this.changePeriodoOptions();
   }
 
   isNumber(value) {

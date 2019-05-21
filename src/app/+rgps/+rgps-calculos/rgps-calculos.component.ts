@@ -110,13 +110,18 @@ export class RgpsCalculosComponent implements OnInit {
 
   getTempoDeContribuicao(data, type, dataToSet) {
     let str = '';
-    if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined') {
+
+// console.log(data.contribuicao_primaria_98);
+// console.log(data.contribuicao_primaria_99);
+// console.log(data.contribuicao_primaria_atual);
+
+    if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_98 !== '--') {
       str = str + data.contribuicao_primaria_98.replace(/-/g,'/') +'<br>';
     }
-    if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined') {
+    if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_99 !== '--') {
       str = str + data.contribuicao_primaria_99.replace(/-/g,'/') +'<br>';
     }
-    if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
+    if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined' && data.contribuicao_primaria_atual !== '--') {
       str = str + data.contribuicao_primaria_atual.replace(/-/g,'/') +'<br>';
     }
 

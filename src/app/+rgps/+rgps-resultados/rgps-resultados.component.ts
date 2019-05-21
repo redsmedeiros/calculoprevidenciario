@@ -628,6 +628,26 @@ export class RgpsResultadosComponent implements OnInit {
     return numeroEspecie;
   }
 
+
+/**
+ * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3,16
+ * @param especieBeneficio 
+ */
+  verificaEspecieDeBeneficio(especieBeneficio){
+    if (((especieBeneficio === 2) ||
+      (especieBeneficio === 3) ||
+      (especieBeneficio === 16))
+      ||
+      ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
+      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') )
+      ) {
+       return true;
+  }
+    return false;
+}
+
+
   formatMoney(value, sigla = 'R$') {
     let numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
     return sigla + numeroPadronizado;
