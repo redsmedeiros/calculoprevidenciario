@@ -96,7 +96,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.regraEspecie9198 = this.verificaEspecieDeBeneficio(this.tipoBeneficio);
 
     // restricao de especie
-    if (!this.regraEspecie9198) {
+    //if (!this.regraEspecie9198) {
 
       if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
         this.reajustesAdministrativos = false;
@@ -198,7 +198,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           }
 
         });
-    }
+   // }
 
   }
 
