@@ -337,6 +337,15 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.errors.clear('dataInicioBeneficio');
     this.periodoOptions = [];
 
+    let tipoInvalidezOuIdade = false;
+    if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
+          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ) {
+            tipoInvalidezOuIdade = true;
+      }
+
+
+
     if (moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')) {
       this.posteriorMaio2013 = true;
     } else {
@@ -345,22 +354,28 @@ export class RgpsCalculosFormComponent implements OnInit {
     let dib = moment(this.dataInicioBeneficio, 'DD/MM/YYYY');
     if (dib < moment('1988-10-05')) {
       this.periodoOptions.push('Anterior a 05/10/1988');
+      this.periodoInicioBeneficio = 'Anterior a 05/10/1988';
     } else if (dib >= moment('1988-10-05') && dib < moment('1991-04-05')) {
       this.periodoOptions.push('Anterior a 05/10/1988');
       this.periodoOptions.push('Entre 05/10/1988 e 04/04/1991');
+      this.periodoInicioBeneficio = 'Entre 05/10/1988 e 04/04/1991';
     } else if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+      this.periodoInicioBeneficio = 'Entre 05/04/1991 e 15/12/1998';
     } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
       this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
+      this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
     } else if (dib > moment('1999-11-29')) {
-      this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
-      this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
-      this.periodoOptions.push('A partir de 29/11/1999');
+          if (!tipoInvalidezOuIdade) {
+            this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+            this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
+          }
+        this.periodoOptions.push('A partir de 29/11/1999');
+        this.periodoInicioBeneficio = 'A partir de 29/11/1999';
     }
     var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-
 
     // if (dateBeneficio < new Date('04/05/1991')) {
     //   this.periodoOptions.push('Anterior a 05/10/1988');
@@ -393,6 +408,13 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.has98 = true;
       this.has99 = true;
       this.hasAtual = true;
+
+      if (tipoInvalidezOuIdade) {
+            this.hasAnterior = false;
+            this.has98 = false;
+            this.has99 = false;
+            this.hasAtual = true;
+      }
     } else {
       this.hasAnterior = false;
       this.has98 = false;
@@ -401,14 +423,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
 
-    if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ) {
-            this.hasAnterior = false;
-            this.has98 = false;
-            this.has99 = false;
-            this.hasAtual = true;
-      }
+   
   }
 
 

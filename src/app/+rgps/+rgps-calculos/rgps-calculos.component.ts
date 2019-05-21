@@ -103,7 +103,7 @@ export class RgpsCalculosComponent implements OnInit {
                 .then((calculos) => {
                 this.updateDatatable();
                 this.isUpdating = false;
-              });   
+              });
             }
     });
   }
