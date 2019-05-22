@@ -453,7 +453,10 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
 
-    this.somatoriaTempoContribIdade = moment.duration(rstTemp, 'days');
+    console.log(rstTemp);
+    
+
+    this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
   }
 
   public somatoriaTempoContribuicaoIdadeAtual() {
@@ -463,7 +466,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
 
-    this.somatoriaTempoContribIdadeAtual = moment.duration(rstTemp, 'days');
+    console.log(rstTemp);
+
+    this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
   }
 
 
