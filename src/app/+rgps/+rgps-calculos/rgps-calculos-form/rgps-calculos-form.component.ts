@@ -339,10 +339,10 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     let tipoInvalidezOuIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-          (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ) {
-            tipoInvalidezOuIdade = true;
-      }
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')) {
+      tipoInvalidezOuIdade = true;
+    }
 
 
 
@@ -367,12 +367,12 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
     } else if (dib > moment('1999-11-29')) {
-          if (!tipoInvalidezOuIdade) {
-            this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
-            this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
-          }
-        this.periodoOptions.push('A partir de 29/11/1999');
-        this.periodoInicioBeneficio = 'A partir de 29/11/1999';
+      if (!tipoInvalidezOuIdade) {
+        this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
+        this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
+      }
+      this.periodoOptions.push('A partir de 29/11/1999');
+      this.periodoInicioBeneficio = 'A partir de 29/11/1999';
     }
     var dateParts = this.dataInicioBeneficio.split("/");
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
@@ -410,10 +410,10 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = true;
 
       if (tipoInvalidezOuIdade) {
-            this.hasAnterior = false;
-            this.has98 = false;
-            this.has99 = false;
-            this.hasAtual = true;
+        this.hasAnterior = false;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = true;
       }
     } else {
       this.hasAnterior = false;
@@ -422,8 +422,6 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = false;
     }
 
-
-   
   }
 
 
@@ -440,16 +438,29 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     const dib = moment(exportDados.dib, 'DD/MM/YYYY');
 
-    
     if (dib < moment('1988-10-05')) {
 
       this.primaria98anos = periodos.total88.years;
       this.primaria98meses = periodos.total88.months;
       this.primaria98dias = periodos.total88.days;
-
       this.periodoInicioBeneficio = 'Anterior a 05/10/1988';
 
-    } else if (dib < moment('1999-11-29')) {
+    } else if (dib <= moment('1991-04-04')) {
+
+
+      this.primaria98anos = periodos.total91.years;
+      this.primaria98meses = periodos.total91.months;
+      this.primaria98dias = periodos.total91.days;
+      this.periodoInicioBeneficio = 'Entre 05/10/1988 e 04/04/1991';
+
+    } else if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
+
+      this.primaria98anos = periodos.total98.years;
+      this.primaria98meses = periodos.total98.months;
+      this.primaria98dias = periodos.total98.days;
+      this.periodoInicioBeneficio = 'Entre 05/04/1991 e 15/12/1998';
+
+    } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -459,14 +470,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99meses = periodos.total99.months;
       this.primaria99dias = periodos.total99.days;
 
-      if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
-        this.periodoInicioBeneficio = 'Entre 05/04/1991 e 15/12/1998';
-      } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
-        this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
-      }
+      this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
     } else if (dib > moment('1999-11-29')) {
-
 
       this.primariaAtualanos = periodos.total.years;
       this.primariaAtualmeses = periodos.total.months;
@@ -479,6 +485,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99anos = periodos.total99.years;
       this.primaria99meses = periodos.total99.months;
       this.primaria99dias = periodos.total99.days;
+
       this.periodoInicioBeneficio = 'A partir de 29/11/1999';
     }
 

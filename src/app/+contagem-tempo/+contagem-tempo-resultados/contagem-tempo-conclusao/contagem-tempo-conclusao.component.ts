@@ -453,9 +453,6 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
 
-    console.log(rstTemp);
-    
-
     this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
   }
 
@@ -465,8 +462,6 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
 
     rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
-
-    console.log(rstTemp);
 
     this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
   }
@@ -533,11 +528,17 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     // });
 
     this.setExportRGPSList();
+
+    console.log(this.tempoTotalConFator);
+    
   }
 
 
 
   private updateCalculo() {
+
+    console.log(this.tempoTotalConFator.asDays());
+
     setTimeout(() => {
       if (
         (this.calculo.total_dias != this.Math.round(this.tempoTotalConFator.asDays()) ||
@@ -629,6 +630,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       this.dadosParaExportar['total' + label] = objExport;
       // this.dadosParaExportar.push(objExport);
     });
+
+    console.log(this.dadosParaExportar);
   }
 
 

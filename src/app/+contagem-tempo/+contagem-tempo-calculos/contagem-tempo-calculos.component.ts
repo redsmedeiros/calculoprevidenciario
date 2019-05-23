@@ -187,6 +187,9 @@ export class ContagemTempoCalculosComponent implements OnInit {
     totalFator.days = this.Math.round(dttDias);
 
     // console.log(moment.duration(dias, 'days'));
+    let conversao_tempo = moment.duration(dias, 'days');
+
+    totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: conversao_tempo.days() };
 
     return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
   }
