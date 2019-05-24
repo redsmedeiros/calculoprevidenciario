@@ -162,8 +162,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
     const periodos = document.getElementById('article-periodos').innerHTML;
     const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
     const footerText = `IEPREV - Instituto de Estudos Previdenciários -
-                        Rua Timbiras, 1940 Sala 807 | Tel: (31) 3271-1701 
-                        | CEP: 30140-061 Lourdes - Belo Horizonte - MG`;
+                        Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 
+                        | CEP: 30140-069 Lourdes - Belo Horizonte - MG`;
 
     const printContents = segurado + periodos + conclusaoFinal;
 

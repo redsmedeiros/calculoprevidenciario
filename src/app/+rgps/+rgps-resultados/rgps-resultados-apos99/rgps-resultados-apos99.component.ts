@@ -648,14 +648,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
             this.fatorPrevidenciario = fatorSeguranca;
           }
-        } 
-      } 
-      
+        }
+      }
+
       // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
       //   conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
       //   this.fatorPrevidenciario = fatorSeguranca;
       // }
-      
+
       else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f') { // 86/96
         this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
       } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
@@ -676,7 +676,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
       } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100) {
         this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
-      }else {
+      } else {
         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca;
         this.fatorPrevidenciario = fatorSeguranca;
       }
@@ -788,12 +788,26 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return mesesCarencia;
   }
 
+
+
+  // case 1: //Auxilio Doença Previdenciario
+  // case 2: //Aposentadoria por invalidez previdenciaria
+  // case 5: // Aposentadoria Especial
+  // case 7: // Auxilio Acidente Previdenciario 50%
+  // case 3://Aposentadoria Idade Trabalhador Urbano
+  // case 4://Aposentadoria Tempo de Contribuicao
+  // case 16://Aposentadoria Idade Trabalhafor Rural
+  // case 25://Deficiencia Grave
+  // case 27://Deficiencia Leva
+  // case 26://Deficiencia Moderado
+  // case 28://Deficiencia PorSalvar Idade
+
   getTaxaSecundaria(redutorProfessor, redutorSexo, contadorSecundario) {
     let taxaSecundaria = 0;
     let tempoServicoSecundario = this.getTempoServico(0, 0, true);
     let quantidadePBCSecudaria = contadorSecundario;
 
-  
+
     let specieKind;
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 5 || this.tipoBeneficio == 6 ||
       this.tipoBeneficio == 8 || this.tipoBeneficio == 9 || this.tipoBeneficio == 10 ||
@@ -823,15 +837,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         taxaSecundaria = tempoServico / (35 - redutorProfessor - redutorSexo - redutorProporcional);
         break;
       case 2:
-        tempoServico = tempoServicoSecundario / 30;
+        tempoServico = tempoServicoSecundario * 12;
         let carenciaMeses = this.getMesesCarencia();
         taxaSecundaria = tempoServico / carenciaMeses;
         break;
       case 3:
-        taxaSecundaria = quantidadePBCSecudaria / 12;
+        const mesesSecundaria = (this.contribuicaoSecundaria.anos * 12) + (this.contribuicaoSecundaria.meses) + (this.contribuicaoSecundaria.dias / 30);
+        taxaSecundaria = mesesSecundaria / 12;
         break;
       case 4:
-        tempoServico = tempoServicoSecundario / 365;
+        tempoServico = tempoServicoSecundario; // 365;
         if (redutorSexo == 5) {
           taxaSecundaria = tempoServico / 20;
         } else {
@@ -839,7 +854,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
         break;
       case 5:
-        tempoServico = tempoServicoSecundario / 365;
+        tempoServico = tempoServicoSecundario; // 365;
         if (redutorSexo == 5) {
           taxaSecundaria = tempoServico / 23;
         } else {
@@ -847,7 +862,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
         break;
       case 6:
-        tempoServico = tempoServicoSecundario / 365;
+        tempoServico = tempoServicoSecundario;// / 365;
         if (redutorSexo == 5) {
           taxaSecundaria = tempoServico / 28;
         } else {
@@ -855,7 +870,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
         break;
     }
-    return taxaSecundaria;
+    return (taxaSecundaria >= 1) ? 1 : taxaSecundaria;
   }
 
   tratamentoDeRegras(dataRegra, dataFimRegra, valorRegra, valorComparacao, tempoTotalContribuicao, fatorSeguranca, resultString, comparacaoTempoContribuicao, conclusoes, somaMediasGeral) {
