@@ -484,6 +484,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (mediaContribuicoesSecundarias != 0) {
       taxaSecundaria = this.getTaxaSecundaria(redutorProfessor, redutorSexo, contadorSecundario);
       taxaMediaSecundaria = mediaContribuicoesSecundarias * taxaSecundaria;
+
       if (taxaMediaSecundaria > mediaContribuicoesSecundarias) {
         taxaMediaSecundaria = mediaContribuicoesSecundarias;
       }
@@ -536,11 +537,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //conclusoes.soma_contribuicoes_primarias = this.formatMoney(totalContribuicoesPrimarias, currency.acronimo);//resultados['Soma das Contribuições Primarias'] = currency.acrônimo + totalContribuicoesPrimarias;
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
-       
-    conclusoes.push({string:"Coeficiente do Cálculo:",value:(coeficiente<100)?this.formatDecimal(coeficiente,2)+'%':this.formatDecimal(coeficiente,0)+'%'});
-    conclusoes.push({string:"Soma das Contribuições Primarias:",value:this.formatMoney(totalContribuicaoPrimaria, currency.acronimo)});
-    conclusoes.push({string:"Divisor do Cálculo da média primária:",value:divisorMediaPrimaria});
-    conclusoes.push({string:"Média das contribuições primárias",value:this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo)});
+
+    conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 2) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
+    conclusoes.push({ string: "Soma das Contribuições Primarias:", value: this.formatMoney(totalContribuicaoPrimaria, currency.acronimo) });
+    conclusoes.push({ string: "Divisor do Cálculo da média primária:", value: divisorMediaPrimaria });
+    conclusoes.push({ string: "Média das contribuições primárias", value: this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo) });
 
     if (totalContribuicaoSecundaria > 0) {
       conclusoes.push({ string: "Soma das contribuições secundárias:", value: this.formatMoney(totalContribuicaoSecundaria, currency.acronimo) });//resultados['Soma das contribuições secundárias'] = currency.acrônumo + totalContribuicoesSecundarias;
@@ -591,7 +592,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // let minimo = moedaDib.salario_minimo;
 
     let comparacaoContribuicao = 35 - redutorSexo;
-    // console.log(comparacaoContribuicao);
 
     if (naoFocado) {
       if (fatorSeguranca <= 1) {
@@ -600,9 +600,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '(Incide fator previdenciario)' });//resultados['Fp - fator previdenciário'] = fatorSeguranca + '(Incide fator previdenciario)';
       }
     } else {
-      if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) {
-        const redutorSexo85_95 = (this.segurado.sexo == 'f')? 85 : 95;
 
+      if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) {
+        const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
         if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 4) {
           somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
           conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
@@ -648,45 +648,38 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
             this.fatorPrevidenciario = fatorSeguranca;
           }
-        } else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
-          conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
-          this.fatorPrevidenciario = fatorSeguranca;
-        } else 
-        
-        // if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95 && this.segurado.sexo == 'f') {
-        //   this.tratamentoDeRegras(dataRegra85_95, dataFimRegra85_95, contribuicao86_96, 85, tempoTotalContribuicao, fatorSeguranca, '85/95', comparacaoContribuicao, conclusoes, somaMedias);
-        // } else if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) {
-        //   this.tratamentoDeRegras(dataRegra85_95, dataFimRegra85_95, contribuicao86_96, 95, tempoTotalContribuicao, fatorSeguranca, '85/95', comparacaoContribuicao, conclusoes, somaMedias);
-        // } else
-        
-        if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra85_95 && this.segurado.sexo == 'f') { // 86/96
-          this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
-          this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
-          this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
-          this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
-        }
-        else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
-          this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98) {
-          this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
-        }
-        else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99 && this.segurado.sexo == 'f') {
-          this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99) {
-          this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
-        }
-        else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100 && this.segurado.sexo == 'f') {
-          this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
-        } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100) {
-          this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
-        }
-      } else {
+        } 
+      } 
+      
+      // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
+      //   conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
+      //   this.fatorPrevidenciario = fatorSeguranca;
+      // }
+      
+      else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f') { // 86/96
+        this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
+        this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
+        this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
+        this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
+        this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98) {
+        this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99 && this.segurado.sexo == 'f') {
+        this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99) {
+        this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100 && this.segurado.sexo == 'f') {
+        this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
+      } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100) {
+        this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
+      }else {
         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca;
         this.fatorPrevidenciario = fatorSeguranca;
-     }
+      }
     }
     if (irt >= 1) {
       conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
@@ -800,6 +793,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tempoServicoSecundario = this.getTempoServico(0, 0, true);
     let quantidadePBCSecudaria = contadorSecundario;
 
+  
     let specieKind;
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 5 || this.tipoBeneficio == 6 ||
       this.tipoBeneficio == 8 || this.tipoBeneficio == 9 || this.tipoBeneficio == 10 ||
@@ -819,7 +813,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tempoServico = 0;
     switch (specieKind) {
       case 1:
-        tempoServico = tempoServicoSecundario / 365.25;
+
+        tempoServico = tempoServicoSecundario;// / 365.25;
+
         let redutorProporcional = 0;
         if (this.isProportional) {
           redutorProporcional = 5;
