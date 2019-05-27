@@ -945,7 +945,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let expectativa = 0;
 
     let dataInicio = moment('2000-11-30');
-    let dataFim = moment('2016-12-01');
+    let dataFim = moment('2017-12-01');
     let dataHoje = moment();
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));

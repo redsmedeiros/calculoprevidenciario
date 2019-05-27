@@ -1,5 +1,5 @@
 <!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-<article class="container-fluid"  >
+<article class="container-fluid"  *ngIf="!regraEspecie9198IvalidezIdade99" >
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
@@ -88,7 +88,7 @@
 </article>
 
     <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-    <div id="{{boxId}}" class="boxCalculo">
+    <div id="{{boxId}}" class="boxCalculo" *ngIf="!regraEspecie9198IvalidezIdade99">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>

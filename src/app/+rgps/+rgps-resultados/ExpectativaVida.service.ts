@@ -10,7 +10,9 @@ export class ExpectativaVidaService extends ControllerService {
   public list: ExpectativaVida[] = this.store.data['expectativaVida'];
 
   public getByIdade(idadeFracionada) {
-
+    if (idadeFracionada > 80) {
+      idadeFracionada = 80;
+    }
     return new Promise((resolve, reject) => {
     	let parameters = ['idade', idadeFracionada, '', ''];
 	  	// if (this.list.length == 0) {

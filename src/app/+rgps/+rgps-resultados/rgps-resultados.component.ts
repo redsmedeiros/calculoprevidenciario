@@ -283,7 +283,6 @@ export class RgpsResultadosComponent implements OnInit {
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-      // console.log(this.segurado);
 
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
           //redirecionar para pagina de segurados
@@ -633,15 +632,18 @@ export class RgpsResultadosComponent implements OnInit {
  * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3,16
  * @param especieBeneficio 
  */
-  verificaEspecieDeBeneficio(especieBeneficio){
-    if (((especieBeneficio === 2) ||
+  verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib){
+    let data99 = moment('1999-11-29');
+
+    if ((((especieBeneficio === 2) ||
       (especieBeneficio === 3) ||
       (especieBeneficio === 16))
       ||
       ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') )
-      ) {
+      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ))
+      && 
+      dib > data99) {
        return true;
   }
     return false;
@@ -815,7 +817,6 @@ export class RgpsResultadosComponent implements OnInit {
       ...this.grupoCalculosTableOptions,
       data: this.calculoList,
     }
-    console.log(this.calculoList)
   }
 
   getIdadeSegurado() {
@@ -829,12 +830,6 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   exportarParaBeneficios(data, valor, tipoCalculo) {
-    // window.location.href='/#/beneficios/beneficios-calculos/'+ 
-    //                       tipoCalculo + '/' +
-    //                       this.segurado.id+
-    //                       '?dib='+data+'&'+
-    //                       'valor='+valor;
-
 
     const objExport = JSON.stringify({
       seguradoId: this.segurado.id,
@@ -843,15 +838,6 @@ export class RgpsResultadosComponent implements OnInit {
     });
 
     sessionStorage.setItem('exportBeneficioAtrasado', objExport);
-
-    // console.log(sessionStorage);
-
-
-    // console.log(sessionStorage.exportContagemTempo);
-    //  console.log(JSON.parse(sessionStorage.exportContagemTempo));
-    // console.log('/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true');
-    // window.location.href = '/#/rgps/rgps-calculos/' + this.seguradoId + '?export=true';
-
     window.location.href = '/#/beneficios/beneficios-calculos/' + tipoCalculo + '/' + this.segurado.id;
 
   }
@@ -874,7 +860,6 @@ export class RgpsResultadosComponent implements OnInit {
 
   valoresContribuidos() {
     let idList = [];
-    console.log(this.checkboxIdList)
     for (let checkboxId of this.checkboxIdList) {
       idList.push(checkboxId.split('-')[0]);
     }
@@ -922,7 +907,6 @@ export class RgpsResultadosComponent implements OnInit {
 
   compararCalculos() {
     let idList = [];
-    console.log(this.checkboxIdList)
     for (let checkboxId of this.checkboxIdList) {
       if ((<HTMLInputElement>document.getElementById(checkboxId)).checked) {
         idList.push(checkboxId.split('-')[0]);
@@ -944,12 +928,6 @@ export class RgpsResultadosComponent implements OnInit {
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById("containerOpcoes");
     let navbar = document.getElementById("navbar");
-
-
-    // console.log(this.window.pageYOffset);
-    // console.log(this.document.documentElement.scrollTop);
-    // console.log(this.document.body.scrollTop);
-
 
     // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;

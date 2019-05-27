@@ -79,7 +79,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     ]
   };
 
-  private regraEspecie9198 = false;
+  private regraEspecie9198IvalidezIdade99 = false;
 
   constructor(private CarenciaProgressiva: CarenciaProgressivaService,
     protected route: ActivatedRoute,
@@ -93,11 +93,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.isUpdating = true;
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-    this.regraEspecie9198 = this.verificaEspecieDeBeneficio(this.tipoBeneficio);
+    
 
-    // restricao de especie
-    //if (!this.regraEspecie9198) {
-
+    
       if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
         this.reajustesAdministrativos = false;
       } else {
@@ -107,6 +105,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       this.boxId = this.generateBoxId();
       this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
       let dataInicio = this.dataInicioBeneficio;
+
+      // restricao de especie invalidez com dib depois de 99 não deve exibir os calculos antigos
+      this.regraEspecie9198IvalidezIdade99 = this.verificaEspecieDeBeneficioIvalidezIdade99(this.tipoBeneficio , this.dataInicioBeneficio);
 
       this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
       if (this.tipoCalculo == '91_98') {
@@ -198,7 +199,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           }
 
         });
-   // }
 
   }
 
