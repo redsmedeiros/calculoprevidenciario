@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../../services/error.service';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import swal from 'sweetalert2';
+import * as moment from 'moment';
 
 
 @Component({
@@ -85,7 +86,10 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 		  this.formData.salario = this.salarioContribuicao;
       this.formData.chk_juros = this.chkJuros;
       this.formData.contribuicoes = this.contribuicoes;
-		  this.onSubmit.emit(this.formData);
+      this.onSubmit.emit(this.formData);
+      
+      this.contribuicaoDe = ((moment(this.contribuicaoAte, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+      this.contribuicaoAte = ((moment(this.contribuicaoAte, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
   	}
   }
 
@@ -151,8 +155,23 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   		}
   		if(dateContribuicaoAte < dateContribuicaoDe){
   			this.errors.add({"contribuicaoAte":["Insira uma data posterior a data inicial"]});
+      }
+
+      let hoje = new Date();
+       hoje = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      //console.log(dateContribuicaoAte);
+      //console.log(hoje);
+      if(dateContribuicaoAte > hoje){
+  			this.errors.add({"contribuicaoAte":["Insira uma data anterior a data atual"]});
+      }
+      
+      if( dateContribuicaoDe > hoje){
+  			this.errors.add({"contribuicaoDe":["Insira uma data anterior a data atual"]});
   		}
-  	}
+    }
+    
+
+    
 
   	//salarioContribuicao
   	// if(this.isEmpty(this.salarioContribuicao)){
@@ -160,11 +179,25 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   	// }
   }
 
+  
+
+  
+  moveNext(event, maxLength, nextElementId){
+    let value = event.srcElement.value;
+    if(value.indexOf('_') < 0 && value != ''){
+      let next = <HTMLInputElement>document.getElementById(nextElementId);
+      //console.log(next)
+      next.focus();
+    }
+  }
+
+
   voltar(){
     window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.route.snapshot.params['id'];
   }
 
   isEmpty(data){
+    //if((data === undefined || data === '' || data === null)) {
   	if(data == undefined || data == '') {
       return true;
     }

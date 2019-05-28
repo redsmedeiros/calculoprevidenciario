@@ -101,7 +101,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
-    this.boxId = this.generateBoxId();
+    this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
@@ -573,7 +573,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let contribuicao90_100 = this.contribuicaoTotal + this.idadeFracionada;
 
     let dateFormat = "DD/MM/YYYY";
-    let dataRegra85_95 = moment('17/06/2016', dateFormat);
+    let dataRegra85_95 = moment('17/06/2015', dateFormat);
     let dataRegra86_96 = moment('31/12/2018', dateFormat);
     let dataRegra87_97 = moment('31/12/2020', dateFormat);
     let dataRegra88_98 = moment('31/12/2022', dateFormat);

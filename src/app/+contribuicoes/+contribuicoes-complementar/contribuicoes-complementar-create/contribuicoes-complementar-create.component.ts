@@ -108,6 +108,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     // console.log(this.contribuicao_basica_final_temp);
 
       
+   
+    
+
     if (this.form.id != undefined && !this.matrizHasValues) {
 
       this.matriz = JSON.parse(this.form.contribuicoes);
@@ -119,23 +122,53 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     }else{
 
-  	let ano = monthList[0].split('-')[0];
-  	let valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
+    let ano = monthList[0].split('-')[0];
+
+    let valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
+    let updateValores  = this.getAnoValores(ano);
+    
+    if (updateValores !== undefined) {
+      valores = updateValores.valores;
+    }
+    
+    
+    
     this.anosConsiderados.push(ano);
   	for (let entry of monthList){
   		if(ano == entry.split('-')[0]){
-  			valores[+entry.split('-')[1]-1] =  this.formatMoney(data.salario);
+        valores[+entry.split('-')[1]-1] =  this.formatMoney(data.salario);
   		}else{
-  			this.updateMatrix(+ano, valores);
+        this.updateMatrix(+ano, valores);
     		ano = entry.split('-')[0];
-    		valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
-    		valores[+entry.split('-')[1]-1] = this.formatMoney(data.salario);
+        valores = ['R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00','R$ 0,00'];
+         updateValores  = this.getAnoValores(ano);
+        if (updateValores !== undefined) {
+          valores = updateValores.valores;
+        }
+    		valores[+entry.split('-')[1]] = this.formatMoney(data.salario);
         this.anosConsiderados.push(ano);
+        
   		}
   	}
     this.updateMatrix(+ano, valores);
     }
   }
+
+  getAnoValores(ano){
+   return this.matriz.find(row => row.ano == ano);
+  }
+
+  
+  changedGridContribuicoes(ano,event,indice){
+    let valor = event.target.value;
+
+    this.matriz.map(row => { 
+     if(row.ano === ano){
+       row.valores[indice] = valor;
+     }
+    });
+  }
+
 
   createCalculo(e){
     e.preventDefault();
@@ -390,6 +423,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   updateMatrix(ano, valores){
+
+    //console.table(ano,valores)
     if(!this.matrizHasValues){
       this.matriz.splice(0,1);
     }
@@ -410,14 +445,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     }
     this.matriz.push({ "ano": ano, "valores": valores });
     this.matrizHasValues = true;
-    swal({
-      type: 'success',
-      title: 'A lista foi atualizada',
-      text: '',
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      timer: 1000
-    });
+    // swal({
+    //   type: 'success',
+    //   title: 'A lista foi atualizada',
+    //   text: '',
+    //   showConfirmButton: false,
+    //   allowOutsideClick: false,
+    //   timer: 1000
+    // });
   }
   
   //Retorna uma lista com os meses entre dateStart e dateEnd

@@ -31,7 +31,7 @@ import { WINDOW } from "../+rgps-calculos/window.service";
 })
 export class RgpsResultadosComponent implements OnInit {
 
-  public styleTheme: string = 'style-0';
+  public styleTheme = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
   private caixaOpcoes;
@@ -46,74 +46,74 @@ export class RgpsResultadosComponent implements OnInit {
   public erroAnterior88;
   public currencyList = [
     {
-      "startDate": "1000-01-01",
-      "endDate": "1942-10-31",
-      "acronimo": "MR$",
-      "nome": "Mil-Réis",
-      "indiceCorrecaoAnterior": 1
+      'startDate': '1000-01-01',
+      'endDate': '1942-10-31',
+      'acronimo': 'MR$',
+      'nome': 'Mil-Réis',
+      'indiceCorrecaoAnterior': 1
     },
     {
-      "startDate": "1942-11-01",
-      "endDate": "1967-02-12",
-      "acronimo": "Cr$",
-      "nome": "Cruzeiro",
-      "indiceCorrecaoAnterior": 1000
+      'startDate': '1942-11-01',
+      'endDate': '1967-02-12',
+      'acronimo': 'Cr$',
+      'nome': 'Cruzeiro',
+      'indiceCorrecaoAnterior': 1000
     },
     {
-      "startDate": "1967-02-13",
-      "endDate": "1970-05-15",
-      "acronimo": "NCR$",
-      "nome": "Cruzeiro Novo",
-      "indiceCorrecaoAnterior": 1000
+      'startDate': '1967-02-13',
+      'endDate': '1970-05-15',
+      'acronimo': 'NCR$',
+      'nome': 'Cruzeiro Novo',
+      'indiceCorrecaoAnterior': 1000
     },
     {
-      "startDate": "1970-05-15",
-      "endDate": "1986-02-28",
-      "acronimo": "Cr$",
-      "nome": "Cruzeiro",
-      "indiceCorrecaoAnterior": 1
+      'startDate': '1970-05-15',
+      'endDate': '1986-02-28',
+      'acronimo': 'Cr$',
+      'nome': 'Cruzeiro',
+      'indiceCorrecaoAnterior': 1
     },
     {
-      "startDate": "1986-03-01",
-      "endDate": "1988-12-31",
-      "acronimo": "CZ$",
-      "nome": "Cruzado",
-      "indiceCorrecaoAnterior": 1000
+      'startDate': '1986-03-01',
+      'endDate': '1988-12-31',
+      'acronimo': 'CZ$',
+      'nome': 'Cruzado',
+      'indiceCorrecaoAnterior': 1000
     },
     {
-      "startDate": "1989-01-01",
-      "endDate": "1990-03-15",
-      "acronimo": "NCZ$",
-      "nome": "Cruzado Novo",
-      "indiceCorrecaoAnterior": 1000
+      'startDate': '1989-01-01',
+      'endDate': '1990-03-15',
+      'acronimo': 'NCZ$',
+      'nome': 'Cruzado Novo',
+      'indiceCorrecaoAnterior': 1000
     },
     {
-      "startDate": "1990-03-16",
-      "endDate": "1993-07-31",
-      "acronimo": "Cr$",
-      "nome": "Cruzeiro",
-      "indiceCorrecaoAnterior": 1
+      'startDate': '1990-03-16',
+      'endDate': '1993-07-31',
+      'acronimo': 'Cr$',
+      'nome': 'Cruzeiro',
+      'indiceCorrecaoAnterior': 1
     },
     {
-      "startDate": "1993-08-01",
-      "endDate": "1994-02-28",
-      "acronimo": "CR$",
-      "nome": "Cruzeiro Real",
-      "indiceCorrecaoAnterior": 1000
+      'startDate': '1993-08-01',
+      'endDate': '1994-02-28',
+      'acronimo': 'CR$',
+      'nome': 'Cruzeiro Real',
+      'indiceCorrecaoAnterior': 1000
     },
     {
-      "startDate": "1994-03-01",
-      "endDate": "1994-06-30",
-      "acronimo": "URV",
-      "nome": "Unidade Real de Valor",
-      "indiceCorrecaoAnterior": 637.639978027344
+      'startDate': '1994-03-01',
+      'endDate': '1994-06-30',
+      'acronimo': 'URV',
+      'nome': 'Unidade Real de Valor',
+      'indiceCorrecaoAnterior': 637.639978027344
     },
     {
-      "startDate": "1994-07-01",
-      "endDate": "9999-12-31",
-      "acronimo": "R$",
-      "nome": "Real",
-      "indiceCorrecaoAnterior": 1
+      'startDate': '1994-07-01',
+      'endDate': '9999-12-31',
+      'acronimo': 'R$',
+      'nome': 'Real',
+      'indiceCorrecaoAnterior': 1
     }
   ];
 
@@ -252,7 +252,7 @@ export class RgpsResultadosComponent implements OnInit {
   public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
 
-  //Datas
+  // Datas
   public dataLei9032 = moment('1995-04-28');
   public dataLei8213 = moment('1991-07-24');
   public dataReal = moment('1994-06-01');
@@ -261,7 +261,7 @@ export class RgpsResultadosComponent implements OnInit {
   public dataMP664 = moment('2015-03-01');
   public dataDecreto6939_2009 = moment('2009-08-18');
 
-  //Variaveis de controle do template
+  // Variaveis de controle do template
   public mostrarCalculoAnterior88 = false;
   public mostrarCalculo91_98 = false;
   public mostrarCalculo98_99 = false;
@@ -284,8 +284,8 @@ export class RgpsResultadosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
 
-        if (localStorage.getItem('user_id') != this.segurado.user_id) {
-          //redirecionar para pagina de segurados
+        if (localStorage.getItem('user_id') !== this.segurado.user_id) {
+          // redirecionar para pagina de segurados
           swal({
             type: 'error',
             title: 'Erro',
@@ -298,14 +298,14 @@ export class RgpsResultadosComponent implements OnInit {
           this.idadeSegurado = this.getIdadeSegurado();
           this.dataFiliacao = this.getDataFiliacao();
           let counter = 0;
-          for (let idCalculo of this.idsCalculo) {
+          for (const idCalculo of this.idsCalculo) {
             this.CalculoRgps.find(idCalculo)
               .then((calculo: CalculoModel) => {
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
-                let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+                const checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
-                let line = {
+                const line = {
                   especie: calculo.tipo_seguro,
                   periodoInicioBeneficio: calculo.tipo_aposentadoria,
                   contribuicaoPrimaria: this.getTempoDeContribuicaoPrimaria(calculo),
@@ -319,7 +319,7 @@ export class RgpsResultadosComponent implements OnInit {
                   ...this.grupoCalculosTableOptions,
                   data: this.calculoList,
                 }
-                if ((counter + 1) == this.idsCalculo.length)
+                if ((counter + 1) === this.idsCalculo.length)
                   this.isUpdating = false;
                 counter++;
               });
@@ -329,9 +329,9 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   loadCurrency(data) {
-    for (let currency of this.currencyList) {
-      let startDate = moment(currency.startDate);
-      let endDate = moment(currency.endDate);
+    for (const currency of this.currencyList) {
+      const startDate = moment(currency.startDate);
+      const endDate = moment(currency.endDate);
       if (startDate <= data && data <= endDate) {
         return currency;
       }
@@ -347,7 +347,7 @@ export class RgpsResultadosComponent implements OnInit {
       porcentagem = 0.05;
     }
     if (proporcional) {
-      let extra = this.tempoExtra(anosContribuicao, redutorProfessor, redutorSexo, 5);
+      const extra = this.tempoExtra(anosContribuicao, redutorProfessor, redutorSexo, 5);
       coeficienteAux2 = 100 * this.coeficienteProporcional(extra, porcentagem, toll);
     }
 
@@ -386,7 +386,7 @@ export class RgpsResultadosComponent implements OnInit {
         else
           coeficienteAux = 85 + anosContribuicao;
         break;
-      //Aposentadoria por tempo de serviço de professor
+      // Aposentadoria por tempo de serviço de professor
       case 6:
         coeficienteAux = coeficienteAux2;
         break;
@@ -418,7 +418,7 @@ export class RgpsResultadosComponent implements OnInit {
       case 26:
         coeficienteAux = 100;
         break;
-      //Pessoa com deficiencia Leve 100%
+      // Pessoa com deficiencia Leve 100%
       case 27:
         coeficienteAux = 100;
         break;
@@ -432,12 +432,12 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   tempoExtra(anosContribuicao, redutorProfessor, redutorSexo, extra) {
-    let retVal = anosContribuicao - (35 - redutorProfessor - redutorSexo - extra);
+    const retVal = anosContribuicao - (35 - redutorProfessor - redutorSexo - extra);
     return retVal;
   }
 
   verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra) {
-    let tempoNecessario = 35 - redutorProfessor - redutorSexo - extra;
+    const tempoNecessario = 35 - redutorProfessor - redutorSexo - extra;
     if (Math.trunc(anosContribuicao) < Math.trunc(tempoNecessario))
       return false;
     return true;
@@ -453,51 +453,51 @@ export class RgpsResultadosComponent implements OnInit {
   verificarIdadeMinima(idade, errorArray) {
     let temIdadeMinima = true;
     let idadeMinima;
-    if (this.tipoBeneficio == 3) {
-      if (this.segurado.sexo == 'm' && this.idadeSegurado < 65) {
+    if (this.tipoBeneficio === 3) {
+      if (this.segurado.sexo === 'm' && this.idadeSegurado < 65) {
         idadeMinima = 65;
         temIdadeMinima = false;
       }
-      if (this.segurado.sexo == 'f' && this.idadeSegurado < 60) {
+      if (this.segurado.sexo === 'f' && this.idadeSegurado < 60) {
         idadeMinima = 60;
         temIdadeMinima = false;
       }
-    } else if (this.tipoBeneficio == 16 || this.tipoBeneficio == 28) {
-      if (this.segurado.sexo == 'm' && this.idadeSegurado < 60) {
+    } else if (this.tipoBeneficio === 16 || this.tipoBeneficio === 28) {
+      if (this.segurado.sexo === 'm' && this.idadeSegurado < 60) {
         idadeMinima = 60;
         temIdadeMinima = false;
       }
-      if (this.segurado.sexo == 'f' && this.idadeSegurado < 55) {
+      if (this.segurado.sexo === 'f' && this.idadeSegurado < 55) {
         idadeMinima = 55;
         temIdadeMinima = false;
       }
     }
 
     if (!temIdadeMinima) {
-      errorArray.push("O segurado não tem a idade mínima (" + idadeMinima + " anos) para se aposentar por idade. Falta(m) " + (idadeMinima - this.idadeSegurado) + " ano(s) para atingir a idade mínima.");
+      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
     }
     return temIdadeMinima;
   }
 
   getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo) {
-    let idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
-    let anoNecessario = (moment(this.segurado.data_nascimento, 'DD/MM/YYYY')).add(idadeNecessaria, 'years');
+    const idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
+    const anoNecessario = (moment(this.segurado.data_nascimento, 'DD/MM/YYYY')).add(idadeNecessaria, 'years');
     return anoNecessario.year();
   }
 
   getValoresAdministrativos(rmi) {
-    let reajustesAdministrativos = true;
+    const reajustesAdministrativos = true;
     let valorBeneficio = rmi;
     let dataAnterior = null;
     let dataCorrente = null;
-    for (let reajusteAutomatico of this.reajustesAutomaticos) {
+    for (const reajusteAutomatico of this.reajustesAutomaticos) {
       if (dataAnterior == null) {
         dataAnterior = reajusteAutomatico.data_reajuste;
       } else {
         dataAnterior = dataCorrente;
       }
       dataCorrente = reajusteAutomatico.data_reajuste;
-      let reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
+      const reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
       valorBeneficio = this.convertCurrency(valorBeneficio, dataAnterior, dataCorrente);
       if (reajustesAdministrativos) {
         valorBeneficio = valorBeneficio * reajuste;
@@ -510,7 +510,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   calcularExtra(tempoServico, redutorSexo) {
     let extra;
-    if (this.tipoBeneficio == 6) {
+    if (this.tipoBeneficio === 6) {
       extra = this.calcularToll(tempoServico, 0.4, 5, redutorSexo) + this.calcularBonus(tempoServico) * (-1);
     } else {
       extra = this.calcularToll(tempoServico, 0.4, 5, redutorSexo) * (-1);
@@ -525,40 +525,40 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   verificarIdadeNecessaria(idade, redutorIdade, redutorProfessor, redutorSexo, errorArray) {
-    let idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
-    let direito = idade > idadeNecessaria;
+    const idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
+    const direito = idade > idadeNecessaria;
     if (!direito) {
-      errorArray.push("Falta(m) " + (idadeNecessaria - idade) + "ano(s)");
+      errorArray.push('Falta(m) ' + (idadeNecessaria - idade) + 'ano(s)');
     }
     return direito;
   }
 
   tratarTempoFracionado(time) {
-    let year = Math.floor(time);
-    let month = Math.round((time - year) * 12);
+    const year = Math.floor(time);
+    const month = Math.round((time - year) * 12);
 
-    let returnStr = "";
-    if (year != 0) {
-      returnStr += year + " ano(s)";
+    let returnStr = '';
+    if (year !== 0) {
+      returnStr += year + ' ano(s)';
     }
-    if (month != 0 && year != 0) {
-      returnStr += " e ";
+    if (month !== 0 && year !== 0) {
+      returnStr += ' e ';
     }
-    if (month != 0) {
-      returnStr += month + " mes(es)";
+    if (month !== 0) {
+      returnStr += month + ' mes(es)';
     }
-    if (month == 0 && year == 0) {
-      returnStr = " 0 ano(s) ";
+    if (month === 0 && year === 0) {
+      returnStr = ' 0 ano(s) ';
     }
     if (year < 0) {
-      returnStr = "";
+      returnStr = '';
     }
     return returnStr;
   }
 
   calcularBonus(tempoServico) {
     let bonus;
-    if (this.segurado.sexo == 'm') {
+    if (this.segurado.sexo === 'm') {
       bonus = 17 / 100;
     } else {
       bonus = 20 / 100;
@@ -570,55 +570,55 @@ export class RgpsResultadosComponent implements OnInit {
   getEspecieBeneficio(calculo) {
     let numeroEspecie = 0;
     switch (calculo.tipo_seguro) {
-      case "Auxílio Doença":
+      case 'Auxílio Doença':
         numeroEspecie = 1;
         break;
-      case "Aposentadoria por invalidez Previdenciária ou Pensão por Morte":
+      case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
         numeroEspecie = 2;
         break;
-      case "Aposentadoria por idade - Trabalhador Urbano":
+      case 'Aposentadoria por idade - Trabalhador Urbano':
         numeroEspecie = 3;
         break;
-      case "Aposentadoria por tempo de contribuição":
+      case 'Aposentadoria por tempo de contribuição':
         numeroEspecie = 4;
         break;
-      case "Aposentadoria por tempo de serviço":
+      case 'Aposentadoria por tempo de serviço':
         numeroEspecie = 4;
         break;
-      case "Aposentadoria especial":
+      case 'Aposentadoria especial':
         numeroEspecie = 5;
         break;
-      case "Aposentadoria por tempo de serviço de professor":
+      case 'Aposentadoria por tempo de serviço de professor':
         numeroEspecie = 6;
         break;
-      case "Auxílio Acidente previdenciário - 50%":
+      case 'Auxílio Acidente previdenciário - 50%':
         numeroEspecie = 7;
         break;
-      case "Aposentadoria por idade - Trabalhador Rural":
+      case 'Aposentadoria por idade - Trabalhador Rural':
         numeroEspecie = 16;
         break;
-      case "Auxílio Acidente - 30%":
+      case 'Auxílio Acidente - 30%':
         numeroEspecie = 17;
         break;
-      case "Auxílio Acidente - 40%":
+      case 'Auxílio Acidente - 40%':
         numeroEspecie = 18;
         break;
-      case "Auxílio Acidente - 60%":
+      case 'Auxílio Acidente - 60%':
         numeroEspecie = 19;
         break;
-      case "Abono de Permanência em Serviço":
+      case 'Abono de Permanência em Serviço':
         numeroEspecie = 20;
         break;
-      case "Aposentadoria especial da Pessoa com Deficiência Grave":
+      case 'Aposentadoria especial da Pessoa com Deficiência Grave':
         numeroEspecie = 25;
         break;
-      case "Aposentadoria especial da Pessoa com Deficiência Moderada":
+      case 'Aposentadoria especial da Pessoa com Deficiência Moderada':
         numeroEspecie = 26;
         break;
-      case "Aposentadoria especial da Pessoa com Deficiência Leve":
+      case 'Aposentadoria especial da Pessoa com Deficiência Leve':
         numeroEspecie = 27;
         break;
-      case "Aposentadoria especial por Idade da Pessoa com Deficiência":
+      case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
         numeroEspecie = 28;
         break;
       default:
@@ -630,10 +630,10 @@ export class RgpsResultadosComponent implements OnInit {
 
 /**
  * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3,16
- * @param especieBeneficio 
+ * @param especieBeneficio
  */
   verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib){
-    let data99 = moment('1999-11-29');
+    const data99 = moment('1999-11-29');
 
     if ((((especieBeneficio === 2) ||
       (especieBeneficio === 3) ||
@@ -642,7 +642,7 @@ export class RgpsResultadosComponent implements OnInit {
       ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
       (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ))
-      && 
+      &&
       dib > data99) {
        return true;
   }
@@ -651,7 +651,7 @@ export class RgpsResultadosComponent implements OnInit {
 
 
   formatMoney(value, sigla = 'R$') {
-    let numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
     return sigla + numeroPadronizado;
   }
 
@@ -661,7 +661,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-    var date = new Date(inputDate);
+    const date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
     if (!isNaN(date.getTime())) {
       // Months use 0 index.
@@ -713,9 +713,9 @@ export class RgpsResultadosComponent implements OnInit {
 
   convertCurrency(valor, dataCorrente, dataConversao) {
     let valorConvertido = parseFloat(valor);
-    for (let currency of this.currencyList) {
-      let startDate = moment(currency.startDate);
-      let endDate = moment(currency.endDate);
+    for (const currency of this.currencyList) {
+      const startDate = moment(currency.startDate);
+      const endDate = moment(currency.endDate);
       if (dataCorrente > endDate) {
         // já esta em uma data maior que a data que a moeda termina, procurar na proxima
         continue;
@@ -736,49 +736,49 @@ export class RgpsResultadosComponent implements OnInit {
   getContribuicaoObj(stringContrib) {
     let returnObj = { anos: 0, meses: 0, dias: 0 };
     if (stringContrib) {
-      let anos = (stringContrib.split('-')[0] != 'undefined') ? stringContrib.split('-')[0] : 0;
-      let meses = (stringContrib.split('-')[1] != 'undefined') ? stringContrib.split('-')[1] : 0;
-      let dias = (stringContrib.split('-')[2] != 'undefined') ? stringContrib.split('-')[2] : 0;
+      const anos = (stringContrib.split('-')[0] !== 'undefined') ? stringContrib.split('-')[0] : 0;
+      const meses = (stringContrib.split('-')[1] !== 'undefined') ? stringContrib.split('-')[1] : 0;
+      const dias = (stringContrib.split('-')[2] !== 'undefined') ? stringContrib.split('-')[2] : 0;
       returnObj = { anos: parseFloat(anos), meses: parseFloat(meses), dias: parseFloat(dias) };
     }
     return returnObj;
   }
 
   controleExibicao(calculo) {
-    let data88 = moment('1988-10-05');
-    let data91 = moment('1991-04-04');
-    let data91_98 = moment('1991-04-05');
-    let data98_99 = moment('1998-12-15');
-    let data99 = moment('1999-11-29');
-    let dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    const data88 = moment('1988-10-05');
+    const data91 = moment('1991-04-04');
+    const data91_98 = moment('1991-04-05');
+    const data98_99 = moment('1998-12-15');
+    const data99 = moment('1999-11-29');
+    const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
     if (dataInicioBeneficio < data88) {
-      //* Periodo = Anterior a 05/10/88
+      // * Periodo = Anterior a 05/10/88
       // Cálculos realizados: anterior a 88
       calculo.mostrarCalculoAnterior88 = true;
     } else if (dataInicioBeneficio >= data88 && dataInicioBeneficio <= data91) {
-      if (calculo.tipo_aposentadoria == 'Anterior a 05/10/1988') {
-        //Cálculos: Anterior a 88
+      if (calculo.tipo_aposentadoria === 'Anterior a 05/10/1988') {
+        // Cálculos: Anterior a 88
         calculo.mostrarCalculoAnterior88 = true;
-      } else if (calculo.tipo_aposentadoria == 'Entre 05/10/1988 e 04/04/1991') {
-        //Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
+      } else if (calculo.tipo_aposentadoria === 'Entre 05/10/1988 e 04/04/1991') {
+        // Cálculos: anterior a 88 + entre 91 e 98 (realizar contas no mesmo box)
         // calculo.mostrarCalculoAnterior88 = true;
         // calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo88_91 = true;
         calculo.isBlackHole = true;
       }
     } else if (dataInicioBeneficio > data91_98 && dataInicioBeneficio <= data98_99) {
-      //Cálculos: entre 91 e 98
+      // Cálculos: entre 91 e 98
       calculo.mostrarCalculo91_98 = true;
     } else if (dataInicioBeneficio > data98_99 && dataInicioBeneficio <= data99) {
-      //if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-      //Cálculos: entre 91 e 98 (tempo de contribuicao até a ementa (98)
-      //calculo.mostrarCalculo91_98 = true;
-      //}else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
-      //Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
+      // if(calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+      // Cálculos: entre 91 e 98 (tempo de contribuicao até a ementa (98)
+      // calculo.mostrarCalculo91_98 = true;
+      // }else if(calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+      // Cálculos = entre 91 e 98) (tempo de contribuicao até a lei 99)(cálculos realizados em box separados)
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
-      //}
+      // }
     } else if (dataInicioBeneficio > data99) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
@@ -792,16 +792,16 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   preencheGrupoDeCalculos() {
-    for (let calculo of this.calculosList) {
-      let especie = calculo.tipo_seguro;
-      let periodoInicioBeneficio = calculo.tipo_aposentadoria;
-      let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
-      let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
-      let dib = calculo.data_pedido_beneficio;
-      let dataCriacao = this.formatReceivedDate(calculo.data_calculo);
-      let checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+    for (const calculo of this.calculosList) {
+      const especie = calculo.tipo_seguro;
+      const periodoInicioBeneficio = calculo.tipo_aposentadoria;
+      const contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
+      const contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
+      const dib = calculo.data_pedido_beneficio;
+      const dataCriacao = this.formatReceivedDate(calculo.data_calculo);
+      const checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
       this.checkboxIdList.push(`${calculo.id}-checkbox`);
-      let line = {
+      const line = {
         especie: especie,
         periodoInicioBeneficio: periodoInicioBeneficio,
         contribuicaoPrimaria: contribuicaoPrimaria,
@@ -820,12 +820,12 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   getIdadeSegurado() {
-    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     return moment().diff(dataNascimento, 'years');
   }
 
   getIdadeNaDIB(dib) {
-    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     return dib.diff(dataNascimento, 'years');
   }
 
@@ -842,8 +842,9 @@ export class RgpsResultadosComponent implements OnInit {
 
   }
 
-  generateBoxId() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  generateBoxId(id, anoRegra) {
+    // return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return  id + '' + anoRegra;
   }
 
   editSegurado() {
@@ -859,40 +860,40 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   valoresContribuidos() {
-    let idList = [];
-    for (let checkboxId of this.checkboxIdList) {
+    const idList = [];
+    for (const checkboxId of this.checkboxIdList) {
       idList.push(checkboxId.split('-')[0]);
     }
-    let stringArr = idList.join(',');
+    const stringArr = idList.join(',');
     window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + stringArr;
   }
 
   imprimirPagina() {
-    let seguradoBox = document.getElementById('printableSegurado').innerHTML
-    let grupoCalculos = document.getElementById('boxGrupoCalculos').innerHTML + '<br>';
-    let allCalcBoxHtml = document.getElementsByClassName('boxCalculo');
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML
+    const grupoCalculos = document.getElementById('boxGrupoCalculos').innerHTML + '<br>';
+    const allCalcBoxHtml = document.getElementsByClassName('boxCalculo');
     let allCalcBoxText = '';
     for (let index = 0; index < allCalcBoxHtml.length; index++) {
       allCalcBoxText += allCalcBoxHtml[index].innerHTML + '<br><br>';
     }
 
-    //let printContents = document.getElementById('content').innerHTML;
+    // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
-    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 
   imprimirBox(boxId) {
-    let seguradoBox = document.getElementById('printableSegurado').innerHTML
-    let boxContent = document.getElementById(boxId).innerHTML;
-    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML
+    const boxContent = document.getElementById(boxId).innerHTML;
+    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
     let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write(printableString);
     popupWin.document.close();
@@ -900,20 +901,20 @@ export class RgpsResultadosComponent implements OnInit {
 
   getDataFiliacao() {
     if (this.segurado.data_filiacao) {
-      return moment(this.segurado.data_filiacao, "DD/MM/YYYY");
+      return moment(this.segurado.data_filiacao, 'DD/MM/YYYY');
     }
     return null;
   }
 
   compararCalculos() {
-    let idList = [];
-    for (let checkboxId of this.checkboxIdList) {
+    const idList = [];
+    for (const checkboxId of this.checkboxIdList) {
       if ((<HTMLInputElement>document.getElementById(checkboxId)).checked) {
         idList.push(checkboxId.split('-')[0]);
       }
     }
 
-    if (idList.length != 2) {
+    if (idList.length !== 2) {
       swal('Erro', 'Só é possível comparar 2 cálculos', 'error');
     } else {
       window.location.href = '/#/rgps/rgps-elements/' +
@@ -924,17 +925,17 @@ export class RgpsResultadosComponent implements OnInit {
 
 
 
-  @HostListener("window:scroll", [])
+  @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.caixaOpcoes = document.getElementById("containerOpcoes");
-    let navbar = document.getElementById("navbar");
+    this.caixaOpcoes = document.getElementById('containerOpcoes');
+    const navbar = document.getElementById('navbar');
 
     // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
-    if ((this.window != undefined && this.window.pageYOffset != undefined) ||
-      (this.document != undefined && this.document.documentElement.scrollTop != undefined)
-      || (this.document != undefined && this.document.body.scrollTop != undefined)
+    if ((this.window !== undefined && this.window.pageYOffset !== undefined) ||
+      (this.document !== undefined && this.document.documentElement.scrollTop !== undefined)
+      || (this.document !== undefined && this.document.body.scrollTop !== undefined)
     ) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
@@ -949,8 +950,8 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   offset(el) {
-    if (el != undefined) {
-      var rect = el.getBoundingClientRect(),
+    if (el !== undefined) {
+      const rect = el.getBoundingClientRect(),
         scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;
     }

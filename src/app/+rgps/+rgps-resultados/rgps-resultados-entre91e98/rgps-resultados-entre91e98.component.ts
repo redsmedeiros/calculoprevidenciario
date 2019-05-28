@@ -102,7 +102,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
         this.reajustesAdministrativos = true;
       }
 
-      this.boxId = this.generateBoxId();
+      this.boxId = this.generateBoxId(this.calculo.id, '98');
+      
       this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
       let dataInicio = this.dataInicioBeneficio;
 

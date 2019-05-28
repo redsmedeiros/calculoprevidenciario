@@ -103,7 +103,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,) { super(null, route, null, null,null,null);}
 
   ngOnInit() {
-    this.boxId = this.generateBoxId();
+    this.boxId = this.generateBoxId(this.calculo.id, '91');
   	this.isUpdating = true;
   	this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);

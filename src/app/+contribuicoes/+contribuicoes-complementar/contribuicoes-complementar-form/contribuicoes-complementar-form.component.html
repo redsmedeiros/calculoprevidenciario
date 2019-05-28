@@ -46,19 +46,19 @@
 			<h5 class="section-title">Contribuições utilizadas na base do cálculo</h5>
 		  <label class="col-md-2 control-label">Contribuição de</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoDe')" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="contribuicaoDe" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoDe')" placeholder="(mm/aaaa)" type="text"  (keyup)="moveNext($event, 7, 'contribuicaoAte')" id="contribuicaoDe">
 		    <small *ngIf="errors.has('contribuicaoDe')" class="text-danger">{{ errors.get('contribuicaoDe') }}</small>
 		  </div>
 		  <label class="col-md-2 control-label">Contribuição até</label>
 		  <div class="col-md-3">
-		    <input class="form-control" [(ngModel)]="contribuicaoAte" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoAte')" placeholder="(mm/aaaa)" type="text">
+		    <input class="form-control" [(ngModel)]="contribuicaoAte" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMask}" (change)="errors.clear('contribuicaoAte')" placeholder="(mm/aaaa)" (keyup)="moveNext($event, 7, 'salarioContribuicao')" type="text" id="contribuicaoAte">
 		    <small *ngIf="errors.has('contribuicaoAte')" class="text-danger">{{ errors.get('contribuicaoAte') }}</small>
 		  </div>
 		</div>
 		<div class="form-group">
 		  <label class="col-md-2 control-label">Salário de contribuição</label>
 		  <div class="col-md-3">
-		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" (change)="errors.clear('salarioContribuicao')"  maxlength="12" placeholder="R$" type="text">
+		    <input class="form-control" currencyMask [(ngModel)]="salarioContribuicao" [ngModelOptions]="{standalone: true}" (change)="errors.clear('salarioContribuicao')"  maxlength="12" placeholder="R$" type="text" id="salarioContribuicao">
 		    <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
 		  	<div class="checkbox">
           		<label>

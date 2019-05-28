@@ -45,40 +45,40 @@
             <tr *ngFor="let data of matriz" >
               <td>{{data.ano}}</td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="01-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[0] : '' }}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="01-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[0] : '' }}" (focusout) = "changedGridContribuicoes(data.ano,$event,0)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="02-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[1] : '' }}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="02-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[1] : '' }}" (focusout) = "changedGridContribuicoes(data.ano,$event,1)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="03-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[2] : '' }}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="03-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[2] : '' }}" (focusout) = "changedGridContribuicoes(data.ano,$event,2)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="04-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[3] : '' }}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="04-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[3] : '' }}" (focusout) = "changedGridContribuicoes(data.ano,$event,3)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="05-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[4] : '' }}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="05-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[4] : '' }}" (focusout) = "changedGridContribuicoes(data.ano,$event,4)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="06-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[5] : ''}}" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input maxlength="12" currencyMask id ="06-{{data.ano}}" type="text" value="{{ data.ano != 1994 ? data.valores[5] : ''}}" (focusout) = "changedGridContribuicoes(data.ano,$event,5)" class="matriz-input" [disabled]="data.ano == 1994"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="07-{{data.ano}}" type="text" value="{{ data.valores[6] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id ="07-{{data.ano}}" type="text" value="{{ data.valores[6] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,6)"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="08-{{data.ano}}" type="text" value="{{ data.valores[7] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id ="08-{{data.ano}}" type="text" value="{{ data.valores[7] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,7)"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="09-{{data.ano}}" type="text" value="{{ data.valores[8] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id ="09-{{data.ano}}" type="text" value="{{ data.valores[8] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,8)"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="10-{{data.ano}}" type="text" value="{{ data.valores[9] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id ="10-{{data.ano}}" type="text" value="{{ data.valores[9] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,9)"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id="11-{{data.ano}}" type="text" value="{{ data.valores[10] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id="11-{{data.ano}}" type="text" value="{{ data.valores[10] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,10)"/>
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id="12-{{data.ano}}" type="text" value="{{ data.valores[11] }}" class="matriz-input" />
+                <input maxlength="12" currencyMask id="12-{{data.ano}}" type="text" value="{{ data.valores[11] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,11)"/>
               </td>
             </tr>
           </tbody>

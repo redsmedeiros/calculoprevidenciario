@@ -478,9 +478,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primariaAtualmeses = periodos.total.months;
       this.primariaAtualdias = periodos.total.days;
 
-      this.primaria98anos = periodos.total91.years;
-      this.primaria98meses = periodos.total91.months;
-      this.primaria98dias = periodos.total91.days;
+      this.primaria98anos = periodos.total98.years;
+      this.primaria98meses = periodos.total98.months;
+      this.primaria98dias = periodos.total98.days;
 
       this.primaria99anos = periodos.total99.years;
       this.primaria99meses = periodos.total99.months;

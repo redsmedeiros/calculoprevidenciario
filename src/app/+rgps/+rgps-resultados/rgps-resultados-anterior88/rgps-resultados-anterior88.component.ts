@@ -88,7 +88,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     ) {super(null, route, null, null, null, null);}
 
   ngOnInit(){
-    this.boxId = this.generateBoxId();
+    this.boxId = this.generateBoxId(this.calculo.id, '88');
   	this.isUpdating = true;
   	this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
   	this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
