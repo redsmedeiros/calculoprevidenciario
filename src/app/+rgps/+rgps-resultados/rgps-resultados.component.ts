@@ -929,13 +929,12 @@ export class RgpsResultadosComponent implements OnInit {
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById('containerOpcoes');
     const navbar = document.getElementById('navbar');
-
     // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
-    if ((this.window !== undefined && this.window.pageYOffset !== undefined) ||
-      (this.document !== undefined && this.document.documentElement.scrollTop !== undefined)
-      || (this.document !== undefined && this.document.body.scrollTop !== undefined)
+    if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined ) ||
+      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined )
+      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined )
     ) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 

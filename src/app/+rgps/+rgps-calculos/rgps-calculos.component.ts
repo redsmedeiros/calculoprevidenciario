@@ -221,29 +221,39 @@ export class RgpsCalculosComponent implements OnInit {
     return element['id_segurado'] == this.idSegurado;
   }
 
-  @HostListener("window:scroll", [])
+  
+
+
+  @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.caixaOpcoes = document.getElementById("containerOpcoes");
-    let navbar = document.getElementById("navbar");
+    this.caixaOpcoes = document.getElementById('containerOpcoes');
+    const navbar = document.getElementById('navbar');
+    // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+    const offset = 0;
 
-    
-    const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
-    if(offset > this.offset(this.caixaOpcoes)){
-      this.navIsFixed = true;
-     // navbar.classList.add("sticky");
-    }else if (this.navIsFixed){
-      this.navIsFixed = false;
-      // navbar.classList.remove("sticky");
+    if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined ) ||
+      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined )
+      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined )
+    ) {
+      const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+
+      if (offset > this.offset(this.caixaOpcoes)) {
+        this.navIsFixed = true;
+        //  navbar.classList.add("sticky")
+      } else if (this.navIsFixed) {
+        this.navIsFixed = false;
+        //  navbar.classList.remove("sticky");
+      }
     }
   }
 
   offset(el) {
-      if (el != undefined) {
-        var rect = el.getBoundingClientRect(),
-            scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
-            return rect.top + scrollTop;
-      }
+    if (el !== undefined) {
+      const rect = el.getBoundingClientRect(),
+        scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+      return rect.top + scrollTop;
+    }
   }
 
 }

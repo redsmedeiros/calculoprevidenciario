@@ -131,7 +131,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
-                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                  this.ExpectativaVida.getByIdade(Math.round(this.idadeFracionada))
                     .then(expectativas => {
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
@@ -415,6 +415,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     let expectativa = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio, conclusoes);
 
+
     let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
 
@@ -550,8 +551,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Taxa:", value: this.formatDecimal(taxaSecundaria, 6) });//resultados['Taxa: '] =  taxaSecundaria;
       conclusoes.push({ string: "Média Secundária - Pós Taxa:", value: this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo) });//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     }
-
-    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada);
+    console.log(this.idadeFracionada);
+    
+    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
     conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
@@ -947,6 +949,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataInicio = moment('2000-11-30');
     let dataFim = moment('2017-12-01');
     let dataHoje = moment();
+
+    
+    
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));
       if (anos < 1) {
@@ -954,6 +959,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       } else {
         anos = Math.trunc(anos);
       }
+
       let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
       let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
       let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
