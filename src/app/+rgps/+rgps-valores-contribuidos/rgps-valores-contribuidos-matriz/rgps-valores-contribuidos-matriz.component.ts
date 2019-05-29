@@ -57,6 +57,8 @@ export class RgpsMatrizComponent implements OnInit {
       }
     }
     this.updateMatrix(+ano, valores);
+
+     this.matriz.sort(function(a, b){return a.ano - b.ano});
   }
 
   changedGrid(event){
@@ -112,6 +114,7 @@ export class RgpsMatrizComponent implements OnInit {
       }
     }
     this.matriz.push({ "ano": ano, "valores": valores });
+ 
     this.matrizHasValues = true;
   }
 
