@@ -675,17 +675,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoTetosSemLimite = this.beneficioDevidoTetosSemLimiteSalvo;
     }
 
-    console.log(this.calculo.tipo_aposentadoria);
-    console.log(this.calculo.tipo_aposentadoria_recebida);
-    console.log(this.isTetos);
-    
 
     if ((this.calculo.tipo_aposentadoria == '12' || this.calculo.tipo_aposentadoria == '17') && !this.isTetos) { //11 = 'LOAS - beneficio salario minimo'
       beneficioDevido = moedaDataCorrente.salario_minimo;
     } else if (this.calculo.tipo_aposentadoria != '12' && this.calculo.tipo_aposentadoria != '17') {
       beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
       this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
-   }
+    }
 
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
@@ -891,10 +887,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
     }
-    
+
     if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
-    } else if (this.calculo.tipo_aposentadoria_recebida != '12' &&  this.calculo.tipo_aposentadoria_recebida != '17') {
+    } else if (this.calculo.tipo_aposentadoria_recebida != '12' && this.calculo.tipo_aposentadoria_recebida != '17') {
       beneficioRecebido *= reajusteObj.reajuste;
     }
 
@@ -1148,7 +1144,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         juros += this.jurosDepois2009 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataSelic70.clone().subtract(1, 'days'));
         //juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for (let mes in mesesEntreSelicDataCalculo) {
+        for (let mes of mesesEntreSelicDataCalculo) {
           let dateMes = moment(mes);
           let mesMoeda = this.Moeda.getByDate(dateMes);
           juros += parseFloat(mesMoeda.juros_selic_70) / 100;
@@ -1168,7 +1164,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
         let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for (let mes in mesesEntreSelicDataCalculo) {
+
+        for (let mes of mesesEntreSelicDataCalculo) {
           let dateMes = moment(mes);
           let mesMoeda = this.Moeda.getByDate(dateMes);
           juros += parseFloat(mesMoeda.juros_selic_70) / 100;
@@ -1187,7 +1184,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, this.dataSelic70);
           //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
           let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-          for (let mes in mesesEntreSelicDataCalculo) {
+          for (let mes of mesesEntreSelicDataCalculo) {
             let dateMes = moment(mes);
             let mesMoeda = this.Moeda.getByDate(dateMes);
             juros += parseFloat(mesMoeda.juros_selic_70) / 100;
@@ -1550,7 +1547,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
       salMinimo *= 0.6;
     }
-        
+
     if (valorBeneficio <= salMinimo) {
       // Adicionar subindice ‘M’ no valor do beneficio
       return salMinimo;
