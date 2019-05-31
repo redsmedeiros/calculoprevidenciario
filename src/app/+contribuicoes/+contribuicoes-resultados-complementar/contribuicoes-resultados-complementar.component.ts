@@ -122,6 +122,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             });
           });
         }
+        console.log( this.resultadosList);
+        
     });
     
    

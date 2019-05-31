@@ -200,7 +200,6 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       data: this.calculoList,
     }
 
-    console.log(this.grupoCalculosTableOptions);
   }
 
   submit() {
@@ -236,12 +235,12 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   salvarContribuicoes(periodoObj, tipoContribuicao){
-    swal({
-        type: 'info',
-        title: 'Aguarde por favor...',
-        allowOutsideClick: false
-       });
-      swal.showLoading();
+    // swal({
+    //     type: 'info',
+    //     title: 'Aguarde por favor...',
+    //     allowOutsideClick: false
+    //    });
+    //   swal.showLoading();
 
     let contribuicoesAdicionadas = [];
     let monthList = this.monthAndYear(periodoObj.inicioPeriodo, periodoObj.finalPeriodo);
@@ -262,10 +261,13 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       contribuicoesAdicionadas.push(valorContribuido);
     }
     this.ValorContribuidoService.save(contribuicoesAdicionadas).then(() => {
-      swal.close();
+     // swal.close();
       swal({
+        position: 'top-end',
         type: 'success',
         title: 'Valores salvos com sucesso!',
+        showConfirmButton: false,
+        timer: 1000
       });
     });
   }
