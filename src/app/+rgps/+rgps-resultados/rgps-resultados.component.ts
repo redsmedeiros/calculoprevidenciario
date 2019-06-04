@@ -629,7 +629,7 @@ export class RgpsResultadosComponent implements OnInit {
 
 
 /**
- * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3,16
+ * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
  * @param especieBeneficio
  */
   verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib){
@@ -637,11 +637,13 @@ export class RgpsResultadosComponent implements OnInit {
 
     if ((((especieBeneficio === 2) ||
       (especieBeneficio === 3) ||
-      (especieBeneficio === 16))
+      (especieBeneficio === 16) ||
+      (especieBeneficio === 1))
       ||
       ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ))
+      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
+      (especieBeneficio === 'Auxílio Doença') ))
       &&
       dib > data99) {
        return true;

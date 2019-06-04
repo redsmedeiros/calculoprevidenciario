@@ -114,6 +114,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     if (this.form.id != undefined && !this.matrizHasValues) {
 
       this.matriz = JSON.parse(this.form.contribuicoes);
+      this.matriz.sort(function(a, b){return a.ano - b.ano});
+      
       this.matrizHasValues = true;
 
       this.matriz.map(row => { 
@@ -145,7 +147,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         if (updateValores !== undefined) {
           valores = updateValores.valores;
         }
-    		valores[+entry.split('-')[1]] = this.formatMoney(data.salario);
+    		valores[+entry.split('-')[1]-1] = this.formatMoney(data.salario);
         this.anosConsiderados.push(ano);
         
   		}
@@ -262,13 +264,20 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Tabela de detalhes gerada no momento no calculo
   generateTabelaDetalhes(){
-    let data_array = this.getMatrixData();
+    let data_array = this.getMatrixData().filter(this.onlyUnique);
     let indice_num = 0;
-    let dataTabelaDetalhes = []
+    let dataTabelaDetalhes = [];
+
+    console.log(this.getMatrixData());
+    console.log(data_array);
+    
     for(let data of data_array){
       let splitted = data.split('-');
       let mes = splitted[0];
       let contrib = splitted[1];
+
+      console.log(contrib);
+      
   
       if(contrib == 0 || contrib == ''){
         continue;
@@ -337,6 +346,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     }
     this.form.media_salarial = this.form.total_contribuicao/Math.ceil(this.form.numero_contribuicoes);
     this.baseAliquota = this.form.media_salarial*0.2;
+
+    console.log(dataTabelaDetalhes);
+    
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
     
   }
@@ -444,6 +456,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       }
     }
     this.matriz.push({ "ano": ano, "valores": valores });
+    this.matriz.sort(function(a, b){return a.ano - b.ano});
+
+
     this.matrizHasValues = true;
     // swal({
     //   type: 'success',
@@ -454,6 +469,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     //   timer: 1000
     // });
   }
+
+
   
   //Retorna uma lista com os meses entre dateStart e dateEnd
   monthAndYear(dateStart, dateEnd){

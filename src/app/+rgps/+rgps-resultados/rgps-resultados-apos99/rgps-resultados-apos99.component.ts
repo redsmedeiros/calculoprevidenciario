@@ -235,24 +235,27 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       tabelaIndex++;
     }
 
-    if (contadorSecundario < 24) {
-      contadorSecundario = 24;
-    }
 
     let mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
     let mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8) - 0.5);
     let mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6) - 0.5);
     let divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
 
-    if (contadorSecundario < mesesContribuicao * 0.6) {
-      contadorSecundario = Math.trunc(mesesContribuicao * 0.6);
-    } else if (contadorSecundario < mesesContribuicao * 0.6) {
-      contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
-    }
+    // if (contadorSecundario < mesesContribuicao * 0.6) {
+    //   contadorSecundario = Math.trunc(mesesContribuicao * 0.6);
+    // } else if (contadorSecundario < mesesContribuicao * 0.6) {
+    //   contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
+    // }
 
     let numeroContribuicoes = tableData.length;//Numero de contribuicoes carregadas para o periodo;
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
+
+    
+    if (divisorSecundario < 24) {
+      divisorSecundario = 24;
+    }
+
     if (divisorSecundario < mesesContribuicao * 0.6) {
       divisorSecundario = Math.round(mesesContribuicao * 0.6);
     } else if (divisorSecundario < mesesContribuicao * 0.8) {
@@ -263,8 +266,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let label;
     switch (this.tipoBeneficio) {
       case 1: // Auxilio Doença Previdenciario
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.6) - 0.5);
-        divisorSecundario = Math.trunc((contadorSecundario * 0.8) - 0.5);
+
+        divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
+        //modificado dia 04-06-2019
+        divisorSecundario = contadorSecundario;
+        divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
+
+ 
         if (this.withMemo) {
           // Exibir Label contendo o texto
           label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .";
@@ -551,8 +559,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Taxa:", value: this.formatDecimal(taxaSecundaria, 6) });//resultados['Taxa: '] =  taxaSecundaria;
       conclusoes.push({ string: "Média Secundária - Pós Taxa:", value: this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo) });//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     }
-    console.log(this.idadeFracionada);
-    
     conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
     conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
