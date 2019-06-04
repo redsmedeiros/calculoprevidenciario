@@ -1287,15 +1287,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
+
     if (maturidade != 0) {
       if (this.calculo.data_cessacao != '0000-00-00') { // verifica se o calculo possui data de cessacao
         //somaVincendos = this.ultimoBeneficioDevidoAntesProporcionalidade * maturidade; //Beneficio Devido da ultima linha antes da aplicação da proporcionalidade.
-        somaVincendos = this.ultimaDiferencaMensal * maturidade; //Diferneça mensal da ultima linha antes da aplicação da proporcionalidade.
+        somaVincendos = this.formatDecimal(this.ultimaDiferencaMensal,2) * maturidade; //Diferneça mensal da ultima linha antes da aplicação da proporcionalidade.
       } else {
         if (somaVincendos < 0) {
-          somaVincendos = this.ultimaDiferencaMensal * maturidade;
+          somaVincendos = this.formatDecimal( this.ultimaDiferencaMensal,2) * maturidade;
         } else {
-          somaVincendos = somaVincendos * maturidade;
+          somaVincendos = parseFloat(somaVincendos.toFixed(2)) * maturidade;
         }
       }
     } else {
