@@ -110,11 +110,17 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.competenciaFinal = splited[1]+'/'+splited[0];
           this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
           this.resultadosList = this.generateTabelaResultados();
+         
           this.updateResultadosDatatable();
           if(this.hasDetalhe){
-                this.detalhesList = this.MatrixStore.getTabelaDetalhes();
+         
+                this.detalhesList = this.MatrixStore.getTabelaDetalhes().filter(this.onlyUnique);
                 this.updateDetalhesDatatable();
+          
           }
+         //   console.log(this.calculoComplementar);
+            
+          
           this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
@@ -122,12 +128,46 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             });
           });
         }
-        console.log( this.resultadosList);
+
+      
+        
         
     });
     
    
   }
+
+
+  // getNumberFromTableEntry(tableEntry){
+  //   if(tableEntry == ''){
+  //     return 0.0;
+  //   }
+  //   return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+  // }
+
+
+  // getMatrixData(){
+  //   let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
+  //   let data_dict = [];
+  //   for(let ano of unique_anos){
+  //     data_dict.push("01/"+ano+'-'+valor_jan);
+  //     data_dict.push("02/"+ano+'-'+valor_fev);
+  //     data_dict.push("03/"+ano+'-'+valor_mar);
+  //     data_dict.push("04/"+ano+'-'+valor_abr);
+  //     data_dict.push("05/"+ano+'-'+valor_mai);
+  //     data_dict.push("06/"+ano+'-'+valor_jun);
+  //     data_dict.push("07/"+ano+'-'+valor_jul);
+  //     data_dict.push("08/"+ano+'-'+valor_ago);
+  //     data_dict.push("09/"+ano+'-'+valor_set);
+  //     data_dict.push("10/"+ano+'-'+valor_out);
+  //     data_dict.push("11/"+ano+'-'+valor_nov);
+  //     data_dict.push("12/"+ano+'-'+valor_dez);
+  //   }
+  //   return data_dict;
+  // }
+
+  
+
   dataNascimento(){
     this.segurado.data_nascimento;
     let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
@@ -143,6 +183,9 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     let total_juros = 0.0;
     let total_multa = 0.0;
     let total_total = 0.0;
+
+  //  console.log(competencias);
+    
 
     for(let competencia of competencias){
       let splited = competencia.split('-');
@@ -277,5 +320,9 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     popupWin.document.open();
     popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
+  }
+
+  onlyUnique(value, index, self) { 
+    return self.indexOf(value) === index;
   }
 }

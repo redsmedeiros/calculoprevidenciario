@@ -194,8 +194,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       // console.log(count99);
 
 
-      this.yearMonthDaysToFormate3(count);
-      this.yearMonthDaysToFormate(count);
+      // this.yearMonthDaysToFormate3(count);
+      // this.yearMonthDaysToFormate(count);
       // this.yearMonthDaysToFormate3(count88);
       // this.yearMonthDaysToFormate3(count91);
       // this.yearMonthDaysToFormate3(count98);
@@ -203,6 +203,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
 
 
+     
+      
       this.tempoTotalConFator = moment.duration(count, 'days');
       this.tempoTotalConFator88 = moment.duration(count88, 'days');
       this.tempoTotalConFator91 = moment.duration(count91, 'days');
@@ -529,7 +531,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.setExportRGPSList();
 
-    console.log(this.tempoTotalConFator);
+   // console.log(this.tempoTotalConFator);
     
   }
 
@@ -538,6 +540,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   private updateCalculo() {
 
     console.log(this.tempoTotalConFator.asDays());
+    console.log(this.Math.round(this.tempoTotalConFator.asDays()));
 
     setTimeout(() => {
       if (
