@@ -17,7 +17,7 @@
       <td>Tempo de contribuição anterior a Constituição de 88 (05/10/1988)</td>
       <td class="text-center">{{ tempoTotalConFator88.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator88.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator88.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator88.days()) }}</td>
       <td class="text-center">{{ carencia88 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator88.asDays() > 0">
@@ -30,7 +30,7 @@
       <td>Tempo de contribuição até o término do Buraco Negro (04/04/1991)</td>
       <td class="text-center">{{ tempoTotalConFator91.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator91.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator91.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator91.days())}}</td>
       <td class="text-center">{{ carencia91 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator91.asDays() > 0">
@@ -43,7 +43,7 @@
       <td>Tempo de contribuição até a Emenda nº 20/98 - (16/12/1998)</td>
       <td class="text-center">{{ tempoTotalConFator98.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator98.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator98.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator98.days()) }}</td>
       <td class="text-center">{{ carencia98 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator98.asDays() > 0">
@@ -56,7 +56,7 @@
       <td>Tempo de contribuição até a Lei nº 9876/99 - (29/11/1999)</td>
       <td class="text-center">{{ tempoTotalConFator99.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator99.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator99.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator99.days()) }}</td>
       <td class="text-center">{{ carencia99 }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator99.asDays() > 0">
@@ -69,7 +69,7 @@
       <td>Tempo total de contribuição até a data fim do último período</td>
       <td class="text-center">{{ tempoTotalConFator.years() }}</td>
       <td class="text-center">{{ tempoTotalConFator.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoTotalConFator.days()) }}</td>
       <td class="text-center">{{ carencia }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator.asDays() > 0">
@@ -82,26 +82,26 @@
       <td>Tempo de Pedágio para Aposentadoria Proporcional</td>
       <td class="text-center">{{ tempoDePedApProp.years() }}</td>
       <td class="text-center">{{ tempoDePedApProp.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoDePedApProp.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoDePedApProp.days())  }}</td>
       <td rowspan="7" colspan="2"></td>
     </tr>
     <tr>
       <td>Tempo Mínimo para Aposentadoria Proporcional com Pedágio</td>
       <td class="text-center">{{ tempoDePedApPropComPedagio.years() }}</td>
       <td class="text-center">{{ tempoDePedApPropComPedagio.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoDePedApPropComPedagio.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoDePedApPropComPedagio.days())  }}</td>
     </tr>
     <tr>
       <td>Tempo a cumprir para aposentadoria proporcional</td>
       <td class="text-center">{{ tempoParaAposProp.years() }}</td>
       <td class="text-center">{{ tempoParaAposProp.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoParaAposProp.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoParaAposProp.days())  }}</td>
     </tr>
     <tr>
       <td>Tempo a cumprir para Aposentadoria Integral</td>
       <td class="text-center">{{ tempoCumprirAposItentegal.years() }}</td>
       <td class="text-center">{{ tempoCumprirAposItentegal.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(tempoCumprirAposItentegal.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(tempoCumprirAposItentegal.days())  }}</td>
     </tr>
     <tr>
       <td>Idade mínima exigida para aposentadoria proporcional</td>
@@ -111,13 +111,13 @@
       <td>Somatória do tempo de contribuição e idade</td>
       <td class="text-center">{{ somatoriaTempoContribIdade.years() }}</td>
       <td class="text-center">{{ somatoriaTempoContribIdade.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(somatoriaTempoContribIdade.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(somatoriaTempoContribIdade.days())  }}</td>
     </tr>
     <tr>
       <td>Somatória do tempo de contribuição e idade atual</td>
       <td class="text-center">{{ somatoriaTempoContribIdadeAtual.years() }}</td>
       <td class="text-center">{{ somatoriaTempoContribIdadeAtual.months() }}</td>
-      <td class="text-center">{{ this.Math.ceil(somatoriaTempoContribIdadeAtual.days()) | number : '1.0-0' }}</td>
+      <td class="text-center">{{ this.Math.ceil(somatoriaTempoContribIdadeAtual.days()) }}</td>
     </tr>
   </tbody>
 </table>
