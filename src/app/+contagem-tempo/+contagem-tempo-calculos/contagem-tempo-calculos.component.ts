@@ -174,22 +174,27 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
 
   formatAnosMesesDias(dias) {
-    // console.log(dias);
+     console.log(parseFloat(dias));
 
     let totalFator = { years: 0, months: 0, days: 0 };
 
-    let xValor = (this.Math.floor(dias) / 365.25);
+    // let xValor = (this.Math.floor(dias) / 365.25);
 
-    totalFator.years = this.Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
-    totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.4375;
-    totalFator.days = this.Math.round(dttDias);
+    // totalFator.years = this.Math.floor(xValor);
+    // let xVarMes = (xValor - totalFator.years) * 12;
+    // totalFator.months = this.Math.floor(xVarMes);
+    // let dttDias = (xVarMes - totalFator.months) * 30.4375;
+    // totalFator.days = this.Math.round(dttDias);
 
     // console.log(moment.duration(dias, 'days'));
-    let conversao_tempo = moment.duration(dias, 'days');
+    let conversao_tempo = moment.duration(parseFloat(dias), 'days');
 
-    totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: conversao_tempo.days() };
+    console.log(conversao_tempo);
+    console.log(moment.duration(12053.200000000000,'days'));
+    console.log(moment.duration(12053.199999999788,'days'));
+    
+
+    totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: Math.ceil(conversao_tempo.days()) };
 
     return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
   }

@@ -539,25 +539,25 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
   private updateCalculo() {
 
-    console.log(this.tempoTotalConFator.asDays());
-    console.log(this.Math.round(this.tempoTotalConFator.asDays()));
+    // console.log(this.tempoTotalConFator.asDays());
+    // console.log(this.Math.round(this.tempoTotalConFator.asDays()));
 
     setTimeout(() => {
       if (
-        (this.calculo.total_dias != this.Math.round(this.tempoTotalConFator.asDays()) ||
-          this.calculo.total_88 != this.Math.round(this.tempoTotalConFator88.asDays()) ||
-          this.calculo.total_91 != this.Math.round(this.tempoTotalConFator91.asDays()) ||
-          this.calculo.total_98 != this.Math.round(this.tempoTotalConFator98.asDays()) ||
-          this.calculo.total_99 != this.Math.round(this.tempoTotalConFator99.asDays()) ||
+        (this.calculo.total_dias != this.tempoTotalConFator.asDays() ||
+          this.calculo.total_88 != this.tempoTotalConFator88.asDays() ||
+          this.calculo.total_91 != this.tempoTotalConFator91.asDays() ||
+          this.calculo.total_98 != this.tempoTotalConFator98.asDays() ||
+          this.calculo.total_99 != this.tempoTotalConFator99.asDays() ||
           this.calculo.total_carencia != this.carencia)
         &&
         (this.isCompleteCarencia && this.isCompleteTempoTotal)
       ) {
-        this.calculo.total_dias = this.Math.round(this.tempoTotalConFator.asDays());
-        this.calculo.total_88 = this.Math.round(this.tempoTotalConFator88.asDays());
-        this.calculo.total_91 = this.Math.round(this.tempoTotalConFator91.asDays());
-        this.calculo.total_98 = this.Math.round(this.tempoTotalConFator98.asDays());
-        this.calculo.total_99 = this.Math.round(this.tempoTotalConFator99.asDays());
+        this.calculo.total_dias = this.tempoTotalConFator.asDays();
+        this.calculo.total_88 = this.tempoTotalConFator88.asDays();
+        this.calculo.total_91 = this.tempoTotalConFator91.asDays();
+        this.calculo.total_98 = this.tempoTotalConFator98.asDays();
+        this.calculo.total_99 = this.tempoTotalConFator99.asDays();
         this.calculo.total_carencia = this.carencia;
 
         this.CalculoContagemTempoService
@@ -616,9 +616,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       label: label,
       years: tempo.years(),
       months: tempo.months(),
-      days: this.Math.ceil(tempo.days()),
+      days: (tempo.days() < 0)? this.Math.ceil(tempo.days()) * -1 : this.Math.ceil(tempo.days()),
       carencia: carencia,
-      totalDias: this.Math.round(tempo.asDays())
+      totalDias: tempo.asDays()
     };
   }
 

@@ -1211,7 +1211,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     resultObj.numeric = diferencaCorrigidaJuros;
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
-    if (diferencaEmAnos >= 5 && this.considerarPrescricao) {
+
+      // não deve prescrever período posterior a data da cessação
+    if (diferencaEmAnos >= 5 && dataAcaoJudicial > dataCorrente && this.considerarPrescricao) {
       diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
