@@ -251,7 +251,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
 
-    
+
     if (divisorSecundario < 24) {
       divisorSecundario = 24;
     }
@@ -272,7 +272,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         divisorSecundario = contadorSecundario;
         divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
 
- 
+
         if (this.withMemo) {
           // Exibir Label contendo o texto
           label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .";
@@ -762,15 +762,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     if (secundario) {
       tempo = this.contribuicaoSecundaria;
-      let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
+      // let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
       //let contagemSecundaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
+      let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
       return contagemSecundaria;
     }
 
     tempo = this.contribuicaoPrimaria;
-    let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
+    // let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
     //let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
     //let contagemPrimariaAnos = contagemPrimaria / 365.25;
+    let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
@@ -956,8 +958,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFim = moment('2017-12-01');
     let dataHoje = moment();
 
-    
-    
+
+
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));
       if (anos < 1) {
