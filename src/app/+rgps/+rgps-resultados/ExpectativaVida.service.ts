@@ -49,7 +49,6 @@ export class ExpectativaVidaService extends ControllerService {
   }
 
   public getByProperties(dataInicio, dataFim){
-    // console.log(dataInicio, dataFim)
     let resultado = {};
     if (dataInicio != null){
       if (dataFim != null) {

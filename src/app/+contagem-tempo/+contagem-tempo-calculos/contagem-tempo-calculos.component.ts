@@ -174,7 +174,6 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
 
   formatAnosMesesDias(dias) {
-     console.log(parseFloat(dias));
 
     let totalFator = { years: 0, months: 0, days: 0 };
 
@@ -188,11 +187,6 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
     // console.log(moment.duration(dias, 'days'));
     let conversao_tempo = moment.duration(parseFloat(dias), 'days');
-
-    console.log(conversao_tempo);
-    console.log(moment.duration(12053.200000000000,'days'));
-    console.log(moment.duration(12053.199999999788,'days'));
-    
 
     totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: Math.ceil(conversao_tempo.days()) };
 

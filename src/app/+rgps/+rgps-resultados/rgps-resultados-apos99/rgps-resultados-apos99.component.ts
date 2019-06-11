@@ -131,7 +131,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
-                  this.ExpectativaVida.getByIdade(Math.round(this.idadeFracionada))
+                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
                     .then(expectativas => {
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
@@ -763,16 +763,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (secundario) {
       tempo = this.contribuicaoSecundaria;
       // let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
-      //let contagemSecundaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
-      let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
+      let contagemSecundaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
+      //let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
       return contagemSecundaria;
     }
 
     tempo = this.contribuicaoPrimaria;
     // let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
-    //let contagemPrimaria = (parseInt(tempo.anos) * 365.25) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
-    //let contagemPrimariaAnos = contagemPrimaria / 365.25;
-    let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
+    let contagemPrimaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
+    let contagemPrimariaAnos = contagemPrimaria / 365;
+    //let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
     if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
       contagemPrimariaAnos += redutorProfessor + redutorSexo;
     }
@@ -943,10 +943,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (idadeFracionada > 80) {
       idadeFracionada = 80;
     }
+
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
+      console.log(expectativaVida);
+      
     }
     return expectativaVida;
   }
