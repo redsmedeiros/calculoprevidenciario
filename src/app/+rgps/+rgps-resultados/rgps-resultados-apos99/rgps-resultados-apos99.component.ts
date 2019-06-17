@@ -547,7 +547,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
 
-    conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 2) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
+    conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
     conclusoes.push({ string: "Soma das Contribuições Primarias:", value: this.formatMoney(totalContribuicaoPrimaria, currency.acronimo) });
     conclusoes.push({ string: "Divisor do Cálculo da média primária:", value: divisorMediaPrimaria });
     conclusoes.push({ string: "Média das contribuições primárias", value: this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo) });
