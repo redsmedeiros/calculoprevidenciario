@@ -498,7 +498,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         taxaMediaSecundaria = mediaContribuicoesSecundarias;
       }
     }
-
+    this.coeficiente = Math.floor(this.coeficiente);
     let coeficiente = this.coeficiente;
 
     let somaMedias = mediaContribuicoesPrimarias + taxaMediaSecundaria;
@@ -730,7 +730,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     } else if (this.rmi8090) {
       conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
     }
-
 
 
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
