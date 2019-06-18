@@ -770,6 +770,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.jurosCorrenteList = this.createJurosCorrenteList(competencias);
     //this.getJurosPorConpetencia((moment("2015-01-01")));
 
+    console.log(this.jurosCorrenteList);
 
 
     for (let dataCorrenteString of competencias) {
@@ -1754,7 +1755,43 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
   getJurosPorCompetencia(data) {
-    return this.jurosCorrenteList.find(obj => data.isSame(obj.data)).juros;
+
+    // console.log(data);
+    // console.log(data.startOf('month').format('YYYY-MM-DD'));
+    // console.log(this.jurosCorrenteList);
+    // console.log(data.day());
+
+   console.log(data);
+  //   for (const rowData of this.jurosCorrenteList) {
+
+  //    // if (rowData.data.isSame(data)) {
+  //     // if (rowData.data.isSame(data)) {
+      
+  //     //   console.log(rowData.data);
+  //     //   console.log(data);
+
+  //     //  // return rowData.juros;
+
+  //     // } else {
+
+  //     //  // return 0;
+
+  //     // }
+
+  //     if (moment(data).startOf('day').diff(moment(rowData.data).startOf('day'), 'days')) {
+  //       console.log( rowData.juros);
+  //       return rowData.juros;
+  //     }
+  //     //console.log('----------');
+      
+  //  }
+  //  return 0;
+
+     return this.jurosCorrenteList.find(obj => data.isSame(obj.data)).juros;
+    // return this.jurosCorrenteList.find(obj => moment(data).startOf('day').diff(moment(obj.data).startOf('day'), 'days')).juros;
+
+  
+
   }
 
 
@@ -2214,7 +2251,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let startClone = dateStart.clone();
     let timeValues = [];
     while (dateEnd > startClone || startClone.format('M') === dateEnd.format('M')) {
-      timeValues.push(startClone.format('YYYY-MM-DD'));
+      timeValues.push(startClone.startOf('month').format('YYYY-MM-DD'));
       startClone.add(1, 'month');
     }
     return timeValues;
