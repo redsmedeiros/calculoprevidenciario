@@ -224,15 +224,24 @@ export class BeneficiosResultadosComponent implements OnInit {
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
 
+                  // se ouver dib anterior considerar como a primeira data para o indice de correção
+                  const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ? this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+                 
                   // Indice devido 
-                  this.IndiceDevido.getByDateRange(moment(this.calculo.data_pedido_beneficio_esperado).clone().startOf('month').format('YYYY-MM-DD'), this.dataFinal.format('YYYY-MM-DD'))
+                  this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'), 
+                  this.dataFinal.format('YYYY-MM-DD'))
                     .then((indicesDevido: Indices) => {
-                      
+
                       for (const i_devido of this.IndiceDevido.list) {
                         this.indiceDevido.push(i_devido);
                       }
 
-                      this.IndiceRecebido.getByDateRange(moment(this.calculo.data_pedido_beneficio).clone().startOf('month').format('YYYY-MM-DD'), this.dataFinal.format('YYYY-MM-DD'))
+                      // se ouver dib anterior considerar como a primeira data para o indice de correção
+                      const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ? this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+
+                      // indice recebido
+                      this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'), 
+                      this.dataFinal.format('YYYY-MM-DD'))
                         .then(indicesRecebido => {
 
                           for (const i_recebido of this.IndiceDevido.list) {
@@ -1489,6 +1498,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+
+    // console.log(this.calculo.data_anterior_pedido_beneficio);
+    // console.log(this.calculo.previa_data_pedido_beneficio_esperado);
+
 
     if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
       this.dibAnteriorRecebidos = moment(this.calculo.data_anterior_pedido_beneficio);  //recebidos
