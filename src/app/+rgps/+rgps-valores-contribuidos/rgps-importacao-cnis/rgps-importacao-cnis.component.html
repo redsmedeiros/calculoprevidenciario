@@ -1,50 +1,127 @@
 <div id="content">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-
     <!-- row -->
     <div class="row">
-
       <article class="col-sm-12 col-md-12 col-lg-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idCalculo}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item">
+            <a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#/rgps/rgps-calculos/{{ idSegurado }}">
+              Lista de Cálculos</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/rgps/rgps-calculos/{{ idSegurado }}/{{ idCalculo }}/edit"
+            >
+              Informações para o cálculo</a
+            >
+          </li>
           <li class="breadcrumb-item active">Importação CNIS</li>
         </ol>
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
 
           <!-- widget div-->
-          <div>
-
+          <div *ngIf="!isUpdating">
             <!-- widget content -->
             <div class="widget-body">
               <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li *ngIf="segurado.numero_documento" ><b>PIS:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+                <li><b>Nome:</b> {{ segurado.nome }}</li>
+                <li *ngIf="segurado.numero_documento">
+                  <b>PIS:</b> {{ segurado.numero_documento }}
+                </li>
+                <li>
+                  <b>Data de nascimento:</b> {{ segurado.data_nascimento }}
+                </li>
+                <li *ngIf="segurado.sexo == 'm'"><b>Sexo:</b> Masculino</li>
+                <li *ngIf="segurado.sexo == 'f'"><b>Sexo:</b> Feminino</li>
               </ul>
             </div>
           </div>
         </sa-widget>
       </article>
 
+      <article
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="exibirCampoAnteriorLei13846"
+      >
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Lei 13.846/19</h2>
+          </header>
+          <div *ngIf="!isUpdating" class="widget-body">
+            <p>
+              Para os benefícios concedidos a partir de 18 de junho de 2019 foi
+              determinada a soma das contribuições concomitantes de acordo com
+              as alterações trazidas pela Lei 13.846/19.
+            </p>
+            <p>
+              <strong
+                >DIB do Cálculo: {{ calculo.data_pedido_beneficio }}</strong
+              >
+            </p>
+            <div class="form-group">
+              <label
+                class="col-md-5 control-label"
+                for="select-somarSecundaria"
+              >
+                Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?
+              </label>
+              <div class="col-md-1">
+                <select
+                  [(ngModel)]="somarSecundaria"
+                  [ngModelOptions]="{ standalone: true }"
+                  (change)="changeSomarSecundaria()"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-control"
+                  id="select-somarSecundaria"
+                >
+                  <option selected disabled> - Selecione - </option>
+                  <option value="true">SIM</option>
+                  <option value="false">NÃO</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
+        <sa-widget
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [sortable]="false"
+          [colorbutton]="false"
+          [editbutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
@@ -54,18 +131,33 @@
           <div>
             <div class="widget-body">
               <div class="alert alert-warning margin-top-10" role="alert">
-                <p>O modelo para importação pode ser baixado <a href="modelo_importacao_cnis.pdf" target="_blank">aqui</a>.</p>
-            </div>
-             <file-drop (click)="clickedDropzone()" (onFileDrop)="dropped($event)">
-              <span>Clique aqui e selecione o CNIS.pdf ou arraste para este local.</span>
-            </file-drop>
-            <input type="file" (change)="onFileInputChange($event)" accept="application/pdf" #cnisFileInput style="display:none"/>
+                <p>
+                  O modelo para importação pode ser baixado
+                  <a href="modelo_importacao_cnis.pdf" target="_blank">aqui</a>.
+                </p>
+              </div>
+              <file-drop
+                (click)="clickedDropzone()"
+                (onFileDrop)="dropped($event)"
+              >
+                <span
+                  >Clique aqui e selecione o CNIS.pdf ou arraste para este
+                  local.</span
+                >
+              </file-drop>
+              <input
+                type="file"
+                (change)="onFileInputChange($event)"
+                accept="application/pdf"
+                #cnisFileInput
+                style="display:none"
+              />
             </div>
           </div>
         </sa-widget>
       </article>
 
-<!--       <article class="col-sm-12 col-md-12 col-lg-12">
+      <!--       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -98,9 +190,7 @@
     </div>
 
     <!-- end row -->
-
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>

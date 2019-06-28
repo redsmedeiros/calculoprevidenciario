@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../../+rgps-segurados/SeguradoRgps.model';
+import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
+import { CalculoRgps as CalculoModel } from '../../+rgps-calculos/CalculoRgps.model';
 import { ErrorService } from '../../../services/error.service';
 import { ValorContribuido } from '../ValorContribuido.model'
 import { ValorContribuidoService } from '../ValorContribuido.service'
@@ -16,6 +18,7 @@ import { PDFJSStatic, PDFPageProxy } from "pdfjs-dist";
 //import {PDFJS} from 'pdfjs-dist';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
+
 @FadeInTop()
 @Component({
   selector: 'sa-datatables-showcase',
@@ -27,12 +30,17 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
 
 export class RgpsImportacaoCnisComponent implements OnInit {
-  @ViewChild('cnisFileInput') fileInput:ElementRef;
+  @ViewChild('cnisFileInput') fileInput: ElementRef;
 
   public isUpdating = false;
   public idSegurado = '';
   public idCalculo = '';
   public segurado: any = {};
+  public calculo: any;
+  public somarSecundaria: boolean = false;
+  public exibirCampoAnteriorLei13846: boolean = false;
+  public arrayPrimarias = [];
+  public arraySecundarias = [];
 
 
   //Variaveis para importação do CNIS
@@ -45,6 +53,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,
+    protected CalculoRgpsService: CalculoRgpsService,
     protected errors: ErrorService,
     protected ValorContribuidoService: ValorContribuidoService) {
   }
@@ -54,11 +63,24 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     //this.idCalculo = this.route.snapshot.params['id'];
     this.idCalculo = this.route.snapshot.params['id'];
     this.isUpdating = true;
+
     this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
-        this.isUpdating = false;
+        this.CalculoRgpsService.find(this.idCalculo)
+          .then((calculo: CalculoModel) => {
+            this.calculo = calculo;
+            if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
+              this.exibirCampoAnteriorLei13846 = true;
+            }
+            this.isUpdating = false;
+          });
       });
+
+  }
+
+  changeSomarSecundaria(){
+
   }
 
   editSegurado() {
@@ -68,43 +90,45 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   public dropped(event: UploadEvent) {
     let files = event.files;
-    if(files.length > 1){
+    if (files.length > 1) {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
       return;
     }
+    
     let file = event.files[0]
     if (file.fileEntry.isFile) { //É um arquivo?
       const fileEntry = file.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
-        if(file.type != 'application/pdf'){
+        if (file.type != 'application/pdf') {
           swal('Erro', 'Formato de arquivo inválido', 'error');
-        }else{
+        } else {
           this.processPdfFile(file)
-        }       
+        }
       });
+
     } else {
       //É um diretório
       swal('Erro', 'Não é permitido arrastar um diretório', 'error');
     }
   }
 
-  clickedDropzone(){
-    let event = new MouseEvent('click', {bubbles: false});
+  clickedDropzone() {
+    let event = new MouseEvent('click', { bubbles: false });
     this.fileInput.nativeElement.dispatchEvent(event);
   }
 
-  onFileInputChange(event){
+  onFileInputChange(event) {
     let files = event.srcElement.files;
-    if(files.length > 1){
+    if (files.length > 1) {
       swal('Erro', 'Selecione apenas um arquivo', 'error');
-    }else if(files[0].type != 'application/pdf'){
+    } else if (files[0].type != 'application/pdf') {
       swal('Erro', 'Formato de arquivo inválido', 'error');
-    }else{
-      this.processPdfFile(files[0]); 
+    } else {
+      this.processPdfFile(files[0]);
     }
   }
 
-  processPdfFile(file){
+  processPdfFile(file) {
     let PDFJS = require("pdfjs-dist");
     PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
     PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
@@ -114,8 +138,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
         // Required to prevent that i is always the total of pages
         (pageNumber => {
-            // Store the promise of getPageText that returns the text of a page
-            pagesPromises.push(this.getPageText(pageNumber, pdfDocument));
+          // Store the promise of getPageText that returns the text of a page
+          pagesPromises.push(this.getPageText(pageNumber, pdfDocument));
         })(i + 1);
       }
       // Execute all the promises
@@ -145,12 +169,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     });
   }
 
-  importFromTextArea(){
+  importFromTextArea() {
     let text = this.cnisTextArea;
     this.processText(text, true);
   }
 
-  processText(text, tipoImportacao){
+  processText(text, tipoImportacao) {
     text = text.trim().replace('\n', '\t');
 
     let empregado = null;
@@ -162,9 +186,9 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     let regras_aplicadas_array = [];
 
     empregado = text.match(this.regexpEmpregado)
-    if(tipoImportacao){
+    if (tipoImportacao) {
       facultativoOuIndividual = text.match(this.regexpFacultativoTextArea);
-    }else{
+    } else {
       facultativoOuIndividual = text.match(this.regexpFacultativoPdf);
     }
 
@@ -187,11 +211,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     } else if (!empregado && facultativoOuIndividual) {
       todas_os_periodos_array = facultativoOuIndividual_array;
     }
-    
+
     regras_aplicadas_array = this.aplicarRegras(todas_os_periodos_array);
-    if(regras_aplicadas_array.length != 0){
+
+    if (regras_aplicadas_array.length != 0) {
       this.salvarContribuicoes(regras_aplicadas_array);
-    }else{
+    } else {
       swal('Erro', 'Nenhuma contribuição encontrada no PDF', 'error');
     }
     console.log(regras_aplicadas_array);
@@ -201,12 +226,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     let arrayOrganizadoNew = [];
     let arrayText = [];
     for (let i = 0; i < text.length; i++) {
-        arrayText = text[i].replace(/\n/i, ' ').trim().split(/\s/i);
-        arrayOrganizadoNew.push({
-            data: arrayText[0].trim(),
-            contrib: arrayText[numCol].trim(),
-            contributionType: 0
-        });
+      arrayText = text[i].replace(/\n/i, ' ').trim().split(/\s/i);
+      arrayOrganizadoNew.push({
+        data: arrayText[0].trim(),
+        contrib: arrayText[numCol].trim(),
+        contributionType: 0
+      });
     }
     return arrayOrganizadoNew;
   }
@@ -226,10 +251,10 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     arrayOrganizado.sort(function (a, b) {
       let dateA = moment(a.data, 'MM/YYYY');
       let dateB = moment(b.data, 'MM/YYYY');
-      if(dateA > dateB){
+      if (dateA > dateB) {
         return 1;
       }
-      if(dateA < dateB){
+      if (dateA < dateB) {
         return -1;
       }
       return 0;
@@ -237,6 +262,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     });
 
     let teste_data = null;
+   
+
 
     arrayOrganizado.filter(function (i, index) {
       if (i.data != teste_data) {
@@ -247,25 +274,81 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       }
     });
 
-    //reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
-    let result = [];
-    arrayOrganizado.reduce(function (res, value) {
-      if (!res[value.data + "-" + value.contributionType]) {
-        res[value.data + "-" + value.contributionType] = {
-            contrib: "0,00",
-            data: value.data,
-            contributionType: value.contributionType
-        };
-        result.push(res[value.data + "-" + value.contributionType])
-      }
-      res[value.data + "-" + value.contributionType].contrib = somaContrib(res[value.data + "-" + value.contributionType].contrib, value.contrib);
-      return res;
-    }, {});
+     //reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
+     let result = [];
+     arrayOrganizado.reduce(function (res, value) {
+       if (!res[value.data + "-" + value.contributionType]) {
+         res[value.data + "-" + value.contributionType] = {
+           contrib: "0,00",
+           data: value.data,
+           contributionType: value.contributionType
+         };
+         result.push(res[value.data + "-" + value.contributionType])
+       }
+       res[value.data + "-" + value.contributionType].contrib = somaContrib(res[value.data + "-" + value.contributionType].contrib, value.contrib);
+       return res;
+     }, {});
+  
 
+    // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
+    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
+      let teste_data = null;
+      for (const objPS of arrayOrganizado) {
+        
+        if (objPS.data != teste_data) {
+          objPS.contributionType = 0;
+          teste_data = objPS.data;
+          this.arrayPrimarias.push(objPS);
+        } else {
+          objPS.contributionType = 1; // false para secundarias
+          this.arraySecundarias.push(objPS);
+        }
+
+      }
+     
+      let arraySomatorioPS = [];
+      for (const objPrim of arrayOrganizado) {
+
+          arraySomatorioPS.push({
+            contrib: (objPrim.contributionType === 0)? this.getValueSecundarias(objPrim.data, objPrim.contrib) : "0,00",
+            data: objPrim.data,
+            contributionType: objPrim.contributionType
+          });
+                 
+      }
+      
+      return arraySomatorioPS;
+    }else{
+        
+   
     return result;
+    }
+   
   }
 
-  salvarContribuicoes(array){
+  
+  getValueSecundarias(data, contrib) {
+    let replacePontos = function (valor) {
+      for (let i = 0; i < 5; i++) {
+        valor = valor.replace('.', '');
+      }
+      return parseFloat(valor.replace(',', '.'));
+    };
+
+    let somaContrib = function (valor1, valor2) {
+      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    };
+
+    let value = contrib;
+    for (const objSec of this.arraySecundarias) {
+      if (objSec.data === data) {
+        value = somaContrib(objSec.contrib, value);
+      }
+    }
+    return value
+  }
+
+  salvarContribuicoes(array) {
     let contribuicoes = [];
 
     let replacePontos = function (valor) {
@@ -275,10 +358,10 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       return parseFloat(valor.replace(',', '.'));
     };
 
-    for(let element of array){
+    for (let element of array) {
       let contribuicao = new ValorContribuido({
         id_calculo: [this.idCalculo],
-        data: moment(element.data,'MM/YYYY').format('YYYY-MM-DD'),
+        data: moment(element.data, 'MM/YYYY').format('YYYY-MM-DD'),
         tipo: element.contributionType,
         id_segurado: this.idSegurado,
         valor: replacePontos(element.contrib)
@@ -290,7 +373,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       type: 'info',
       title: 'Aguarde por favor...',
     })
-    
+
     swal.showLoading();
 
     this.ValorContribuidoService.save(contribuicoes).then(() => {
