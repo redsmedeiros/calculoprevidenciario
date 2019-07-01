@@ -74,9 +74,9 @@
                       {{segurado.nome}}
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="segurado.numero_documento" >
                     <td width="50%" style="text-align: right;">
-                      <b>PIS:</b>
+                      <b>{{segurado.getDocumentType(segurado.id_documento)}}</b>
                     </td>
                     <td width="50%">
                       {{segurado.numero_documento}}

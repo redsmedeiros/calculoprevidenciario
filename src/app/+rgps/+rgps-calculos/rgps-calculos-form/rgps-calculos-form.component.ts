@@ -139,7 +139,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.formData = { ...CalculoModel.form };
     this.dataInicioBeneficio = '';
     this.periodoInicioBeneficio = '';
-    this.especieBeneficio = '';
+    this.especieBeneficio = '- Selecione uma espécie -';
 
     this.primaria98anos = '';
     this.primaria98meses = '';
@@ -190,7 +190,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.errors.add({ "periodoInicioBeneficio": ["O período do inicio do benefício é obrigatório."] });
     }
 
-    if (this.especieBeneficio == undefined || this.especieBeneficio == '') {
+    if (this.especieBeneficio == undefined || this.especieBeneficio == '' || this.especieBeneficio == '- Selecione uma espécie -') {
       this.errors.add({ "especieBeneficio": ["A espécie do benefício é obrigatória."] });
     }
 
