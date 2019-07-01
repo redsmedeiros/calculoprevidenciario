@@ -79,9 +79,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   }
 
-  changeSomarSecundaria(){
-
-  }
+  changeSomarSecundaria(){}
 
   editSegurado() {
     window.location.href = '/#/rgps/rgps-segurados/' +
@@ -238,14 +236,11 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   aplicarRegras(arrayOrganizado) {
     let replacePontos = function (valor) {
-      for (let i = 0; i < 5; i++) {
-        valor = valor.replace('.', '');
-      }
-      return parseFloat(valor.replace(',', '.'));
+      return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
     let somaContrib = function (valor1, valor2) {
-      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+         return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
     arrayOrganizado.sort(function (a, b) {
@@ -286,6 +281,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
          result.push(res[value.data + "-" + value.contributionType])
        }
        res[value.data + "-" + value.contributionType].contrib = somaContrib(res[value.data + "-" + value.contributionType].contrib, value.contrib);
+
+      //  if (value.data == '12/2007' && value.contributionType == 1) {
+      //    console.log( value.contrib);
+      //   console.log( res[value.data + "-" + value.contributionType].contrib);
+      //  }
+
        return res;
      }, {});
   
@@ -298,7 +299,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
         if (objPS.data != teste_data) {
           objPS.contributionType = 0;
           teste_data = objPS.data;
-          this.arrayPrimarias.push(objPS);
+          // this.arrayPrimarias.push(objPS);
         } else {
           objPS.contributionType = 1; // false para secundarias
           this.arraySecundarias.push(objPS);
@@ -328,11 +329,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   
   getValueSecundarias(data, contrib) {
-    let replacePontos = function (valor) {
-      for (let i = 0; i < 5; i++) {
-        valor = valor.replace('.', '');
-      }
-      return parseFloat(valor.replace(',', '.'));
+     let replacePontos = function (valor) {
+      return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
     let somaContrib = function (valor1, valor2) {

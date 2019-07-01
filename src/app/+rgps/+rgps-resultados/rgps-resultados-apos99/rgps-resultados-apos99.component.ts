@@ -567,11 +567,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
     }
 
-
-
-    if (this.tipoBeneficio == 6 && redutorSexo == 5) {
-      this.contribuicaoTotal -= this.contribuicaoTotal - 5;
-    }
+    //???????
+    // if (this.tipoBeneficio == 6 && redutorSexo == 5) {
+    //   this.contribuicaoTotal -= this.contribuicaoTotal - 5;
+    // }
 
     let contribuicao85_95 = this.contribuicaoTotal + this.idadeFracionada;
     let contribuicao86_96 = this.contribuicaoTotal + this.idadeFracionada;
@@ -610,21 +609,28 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     } else {
 
       if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) {
+
         const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
-        if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 4) {
+        const redutorProfessor85_95 = (this.tipoBeneficio == 6)? 80 : 90;
+
+          if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 4) {
+        
           somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
           conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
           this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
           //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias
-        } else if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao && this.tipoBeneficio == 6) {
+       
+        } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorProfessor85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 6) {
+       
           somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
           conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi80_90 = this.formatMoney(somaMedias, currency.acronimo);
           this.rmi8090 = this.formatMoney(somaMedias, currency.acronimo);
           //conclusoes.push({string:"Renda Mensal Inicial com Regra 80/90:",value:rmi80_90});//resultados['Renda Mensal Inicial com Regra 80/90: '] = currency.acronimo + somaMedias
+      
         } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao && this.tipoBeneficio == 4) {
           somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
           conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)';
@@ -633,6 +639,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
           //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias;
         } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
+      
           if (this.tipoBeneficio == 6) {
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
             this.fatorPrevidenciario = fatorSeguranca;
@@ -640,7 +647,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
             this.fatorPrevidenciario = fatorSeguranca;
           }
+      
         } else if (fatorSeguranca > 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
+      
           if (this.tipoBeneficio == 6) {
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
             this.fatorPrevidenciario = fatorSeguranca;
@@ -648,7 +657,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
             this.fatorPrevidenciario = fatorSeguranca;
           }
+     
         } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao) {
+       
           if (this.tipoBeneficio == 6) {
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
             this.fatorPrevidenciario = fatorSeguranca;
@@ -656,6 +667,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
             this.fatorPrevidenciario = fatorSeguranca;
           }
+       
         }
       }
 
@@ -947,8 +959,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
-      console.log(expectativaVida);
-      
     }
     return expectativaVida;
   }
