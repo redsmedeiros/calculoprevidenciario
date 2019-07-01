@@ -279,7 +279,7 @@
       </article>
       </div>
       
-      <div class="row">
+      <div class="row" *ngIf="!this.calculo.beneficio_nao_concedido">
       <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false"
               [editbutton]="false"

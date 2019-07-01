@@ -44,7 +44,7 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
           .update(this.calculo)
           .then(model => {
             this.CalculoAtrasado.get()
-                .then(() => this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id_calculo']+'/'+this.route.snapshot.params['id']]));
+                .then(() => this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']]));
           })
           .catch(errors => this.Errors.add(errors));
   }

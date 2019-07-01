@@ -215,6 +215,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             .then(calculo => {
               this.calculo = calculo;
               this.setInicioRecebidosEDevidos();
+              //console.log(this.calculo);
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
               if (this.calculo.aplicar_ajuste_maximo_98_2003 == '1') {
                 this.isTetos = true;
@@ -824,7 +825,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.jurosCorrenteList = this.createJurosCorrenteList(competencias);
     //this.getJurosPorConpetencia((moment("2015-01-01")));
 
-    console.log(this.jurosCorrenteList);
+    //console.log(this.jurosCorrenteList);
 
 
     for (let dataCorrenteString of competencias) {
@@ -1827,7 +1828,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // console.log(this.jurosCorrenteList);
     // console.log(data.day());
 
-   console.log(data);
+  //  console.log(data);
   //   for (const rowData of this.jurosCorrenteList) {
 
   //    // if (rowData.data.isSame(data)) {
