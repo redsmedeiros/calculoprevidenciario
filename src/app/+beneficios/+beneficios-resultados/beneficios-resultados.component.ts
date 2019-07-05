@@ -2674,7 +2674,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
     let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
-    let valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
+    let valoresRecebdios = '';
+    if (typeof(document.getElementById('printableValoresRecebidos')) != 'undefined' && document.getElementById('printableValoresRecebidos') != null)
+    {
+      valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
+    }
     let honorarios = document.getElementById('printableHonorarios').innerHTML;
     let juros = document.getElementById('printableJuros').innerHTML;
     let conclusoes = document.getElementById('printableConclusoes').innerHTML;
