@@ -60,7 +60,7 @@
 
               <ul class="list-unstyled">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li *ngIf="segurado.numero_documento" ><b>PIS:</b>   {{segurado.numero_documento}}</li>
+                <li *ngIf="segurado.numero_documento" ><b>{{segurado.getDocumentType(segurado.numero_documento)}} :</b>   {{segurado.numero_documento}}</li>
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
                 <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>               

@@ -608,7 +608,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     } else {
 
-      if (dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) {
+      if ((dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) && (this.contribuicaoPrimaria.anos >= comparacaoContribuicao) ) {
 
         const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
         const redutorProfessor85_95 = (this.tipoBeneficio == 6)? 80 : 90;
@@ -737,12 +737,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
     }
 
-    if (this.rmi8595) {
+    if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
       conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
-    } else if (this.rmi8090) {
+    } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
       conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
     }
-
 
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;

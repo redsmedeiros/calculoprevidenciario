@@ -186,9 +186,17 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   ngOnInit() {
     this.isUpdating = true;
-    if (this.route.snapshot.queryParams['considerarPrescricao'] == 'false') {
+    // if (this.route.snapshot.queryParams['considerarPrescricao'] == 'false') {
+    //   this.considerarPrescricao = false;
+    // } 
+    if (sessionStorage.considerarPrescricao === 'false') {
       this.considerarPrescricao = false;
+    }else{
+      this.considerarPrescricao = true;
     }
+
+    console.log(this.considerarPrescricao);
+    
 
     if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
       this.debugMode = true;
@@ -2606,7 +2614,14 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   calcularSemPrescricao() {
-    window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
+    //window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
+    
+    let is_prescricao = 'true';
+    if (sessionStorage.considerarPrescricao === 'true') {
+      is_prescricao = 'false';
+    }
+
+    sessionStorage.setItem('considerarPrescricao', is_prescricao);
     window.location.reload();
   }
 

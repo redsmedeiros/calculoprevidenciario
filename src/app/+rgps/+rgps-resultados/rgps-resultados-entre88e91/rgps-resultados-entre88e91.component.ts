@@ -63,6 +63,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     ] 
   };
   public reajustesAdministrativos = true;
+  public Math = Math;
 
 
   public contribuicaoPrimaria88 = {anos:0,meses:0,dias:0};

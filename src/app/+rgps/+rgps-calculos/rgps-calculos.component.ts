@@ -49,6 +49,7 @@ export class RgpsCalculosComponent implements OnInit {
   public calculoTableOptions = {
     colReorder: true,
     data: this.calculosList,
+    order: [[ 5, 'desc' ]],
     columns: [
       {data: 'actions', width: '18rem'},
       {data: 'tipo_seguro'},
@@ -142,6 +143,9 @@ export class RgpsCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
+    console.log(this.calculosList);
+    
+
     this.calculoTableOptions = {
       ...this.calculoTableOptions,
       data: this.calculosList,

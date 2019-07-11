@@ -107,7 +107,6 @@ export class ContribuicoesResultadosComponent implements OnInit {
     this.segurado.data_nascimento;
     let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     this.segurado.idade = moment().diff(idadeSegurado, 'years');
-  
   }
   getSalarioMinimo(data){
     return data.sigla + ' ' +this.formatMoney(data.salario_minimo);

@@ -186,24 +186,6 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       } while (auxiliarDate < fimContador);
 
 
-
-      // console.log(count);
-      // console.log(count88);
-      // console.log(count91);
-      // console.log(count98);
-      // console.log(count99);
-
-
-      // this.yearMonthDaysToFormate3(count);
-      // this.yearMonthDaysToFormate(count);
-      // this.yearMonthDaysToFormate3(count88);
-      // this.yearMonthDaysToFormate3(count91);
-      // this.yearMonthDaysToFormate3(count98);
-      // this.yearMonthDaysToFormate3(count99);
-
-
-
-     
       
       this.tempoTotalConFator = moment.duration(count, 'days');
       this.tempoTotalConFator88 = moment.duration(count88, 'days');
@@ -465,6 +447,11 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
 
+    if (moment().isBefore(this.limitesDoVinculo.fim)) {
+      const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
+      rstTemp -= diffTempoTotal.asDays();
+    }
+
     this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
   }
 
@@ -634,7 +621,6 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       // this.dadosParaExportar.push(objExport);
     });
 
-    console.log(this.dadosParaExportar);
   }
 
 
