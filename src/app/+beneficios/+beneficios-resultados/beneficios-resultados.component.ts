@@ -224,8 +224,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 			  this.calculo = calculo;
 			  this.calculo.data = moment().format();
 			  
-			  this.calculo.dataCalculoFormatada = moment(this.calculo.data_calculo).format('DD/MM/YYYY');
-
               this.setInicioRecebidosEDevidos();
               //console.log(this.calculo);
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
