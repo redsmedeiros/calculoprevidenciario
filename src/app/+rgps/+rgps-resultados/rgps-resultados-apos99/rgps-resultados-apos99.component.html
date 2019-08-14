@@ -181,9 +181,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let conclusao of conclusoes">
+                  <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
                     <td width="50%">
-                      <span class="pull-right font-bold">{{conclusao.string}}</span>
+                      <span class="pull-right font-bold  ">{{conclusao.string}}</span>
                     </td>
                     <td>{{conclusao.value}}</td>
                   </tr>

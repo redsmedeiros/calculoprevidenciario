@@ -162,6 +162,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaTotalTetos = 0.0;
 
   private ultimaCompretencia = '';
+  private dataCalculo = '';
   private considerarPrescricao = true;
 
   private ultimoBeneficioDevidoAntesProporcionalidade = 0.0;
@@ -195,8 +196,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.considerarPrescricao = true;
     }
 
-    console.log(this.considerarPrescricao);
-    
+	console.log(this.considerarPrescricao);
 
     if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
       this.debugMode = true;
@@ -221,7 +221,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.calculoId = this.route.snapshot.params['id_calculo'];
           this.CalculoAtrasado.find(this.calculoId)
             .then(calculo => {
-              this.calculo = calculo;
+			  this.calculo = calculo;
+			  this.calculo.data = moment().format();
+			  
+			  this.calculo.dataCalculoFormatada = moment(this.calculo.data_calculo).format('DD/MM/YYYY');
+
               this.setInicioRecebidosEDevidos();
               //console.log(this.calculo);
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
@@ -848,6 +852,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
       this.ultimaCompretencia = stringCompetencia;
+	  this.dataCalculo = moment(dataCorrenteString).format();
       let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
       let beneficioDevido = 0.0;
       let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
@@ -2195,7 +2200,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   calcularVincendosTetos() {
     let somaVincendosTetos = this.ultimaRenda;
     let data = moment(this.calculo.data_citacao_reu);
-    let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
+	let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
     let maturidade = this.calculo.maturidade;
     let jurosVincendos = 0.0;
 
@@ -2315,7 +2320,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
     this.jurosDepois2003 = this.calculo.pos_interesse_2003 / 100;
-    this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
+	this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
   }
 
   //Verifica se uma data esta no periodo do buraco negro
@@ -2697,7 +2702,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let honorarios = document.getElementById('printableHonorarios').innerHTML;
     let juros = document.getElementById('printableJuros').innerHTML;
     let conclusoes = document.getElementById('printableConclusoes').innerHTML;
-    let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
+	let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + honorarios + juros + conclusoes + resultadoCalculo;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');

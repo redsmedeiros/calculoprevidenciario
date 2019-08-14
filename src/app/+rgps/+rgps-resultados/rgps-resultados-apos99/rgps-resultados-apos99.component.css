@@ -1,0 +1,8 @@
+tr.destaque{
+    background: rgba(0,150,100,0.3);
+    transition: .2s;
+}
+
+.table-hover > tbody > tr.destaque:hover{
+    background: rgba(0,150,100,0.6);
+}
