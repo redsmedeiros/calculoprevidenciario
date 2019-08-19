@@ -158,6 +158,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
 
   imprimirPagina() {
+    const grafico = document.getElementById('article-grafico').innerHTML;
     const segurado = document.getElementById('article-segurado').innerHTML;
     const periodos = document.getElementById('article-periodos').innerHTML;
     const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
@@ -165,7 +166,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
                         Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 
                         | CEP: 30140-069 Lourdes - Belo Horizonte - MG`;
 
-    const printContents = segurado + periodos + conclusaoFinal;
+    const printContents = segurado + grafico + periodos + conclusaoFinal;
 
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
                 <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
