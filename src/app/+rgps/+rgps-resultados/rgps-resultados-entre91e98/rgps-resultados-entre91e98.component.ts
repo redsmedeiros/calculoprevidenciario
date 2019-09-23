@@ -360,6 +360,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     //        rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
     // }
 
+    console.log(rmiValoresAdministrativos);
+
     if (this.reajustesAdministrativos &&
       ((this.tipoCalculo == '91_98' && this.dataInicioBeneficio >= this.dataDib99) ||
         (this.tipoCalculo == '98_99' && this.dataInicioBeneficio >= this.dataDib98))) {
@@ -410,6 +412,10 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
     let currency = this.loadCurrency(dib);
+
+    
+   // console.log(rmiValoresAdministrativos);
+    console.log(conclusoes);
 
     //Conclusões abaixo da tabela:
     conclusoes.total_contribuicoes_primarias = this.formatMoney(totalPrimaria, currency.acronimo);
@@ -700,20 +706,29 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let valorBeneficio = rmi;
     let dataAnterior = null;
     let dataCorrente = null;
+
     for (let reajusteAutomatico of this.reajustesAutomaticos) {
+
       if (dataAnterior == null) {
         dataAnterior = moment(reajusteAutomatico.data_reajuste);
       } else {
         dataAnterior = dataCorrente;
       }
+
       dataCorrente = moment(reajusteAutomatico.data_reajuste);
+
       let reajuste = (reajusteAutomatico.indice != null) ? reajusteAutomatico.indice : 1;
       valorBeneficio = this.convertCurrency(valorBeneficio, dataAnterior, dataCorrente);
+
       if (this.reajustesAdministrativos) {
         valorBeneficio = valorBeneficio * reajuste;
       }
-      valorBeneficio = (valorBeneficio < reajusteAutomatico.salario_minimo) ? reajusteAutomatico.salario_minimo : valorBeneficio;
-      valorBeneficio = (valorBeneficio > reajusteAutomatico.teto) ? reajusteAutomatico.teto : valorBeneficio;
+
+      valorBeneficio = (Number(valorBeneficio) < Number(reajusteAutomatico.salario_minimo)) ?
+                        reajusteAutomatico.salario_minimo : valorBeneficio;
+      valorBeneficio = (Number(valorBeneficio) > Number(reajusteAutomatico.teto)) ?
+                       reajusteAutomatico.teto : valorBeneficio;
+
     }
     return valorBeneficio;
   }
