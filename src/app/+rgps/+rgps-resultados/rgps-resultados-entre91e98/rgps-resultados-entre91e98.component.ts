@@ -360,7 +360,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     //        rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
     // }
 
-    console.log(rmiValoresAdministrativos);
 
     if (this.reajustesAdministrativos &&
       ((this.tipoCalculo == '91_98' && this.dataInicioBeneficio >= this.dataDib99) ||
@@ -414,9 +413,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let currency = this.loadCurrency(dib);
 
     
-   // console.log(rmiValoresAdministrativos);
-    console.log(conclusoes);
-
     //Conclusões abaixo da tabela:
     conclusoes.total_contribuicoes_primarias = this.formatMoney(totalPrimaria, currency.acronimo);
     conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaPrimaria, currency.acronimo);
