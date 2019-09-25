@@ -12,6 +12,7 @@ export class CalculoContagemTempo extends Model {
     total_91: '',
     total_98: '',
     total_99: '',
+    total_19: '',
     total_carencia: '',
     tipo_contribuicao: '',
     referencia_calculo: '',
@@ -25,6 +26,7 @@ export class CalculoContagemTempo extends Model {
   public total_91;
   public total_98;
   public total_99;
+  public total_19;
   public carencia;
   public tipo_contribuicao;
   public referencia_calculo;

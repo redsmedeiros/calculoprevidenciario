@@ -26,6 +26,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
+  public fimContador19 = this.toMoment('01/10/2019'); // Data Pec 2019
 
   // public fimContador88 = moment('1988-10-05');
   // public fimContador91 = moment('1991-04-04');
@@ -38,6 +39,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public tempoTotalConFator91: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
+  public tempoTotalConFator19: any;// Data Pec 2019
 
   public carencia = 0;
   public carencia88 = 0;
@@ -45,6 +47,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public carencia98 = 0;
   public carencia99 = 0;
   public carencia03 = 0;
+  public carencia19 = 0; // Data Pec 2019
 
   public limitesDoVinculo: any;
   public isUpdateTotal = true;
@@ -56,6 +59,12 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public idadeLimiteDias = 10957.5; // dias
   public redutorSexoDias: any; // dias
 
+   // parametros PEC 2019
+  
+
+
+
+   // parametros PEC 2019 END
 
   public tempoDePedApProp: any; // Tempo de Pedágio para Aposentadoria Proporcional
   public tempoDePedApPropComPedagio: any; // Tempo Mínimo para Aposentadoria Proporcional com Pedágio
@@ -76,8 +85,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
     protected Errors: ErrorService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
@@ -148,6 +156,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       let count98 = 0;
       let count99 = 0;
       let count03 = 0;
+      let count19 = 0;
       let fator = 0;
 
       do {
@@ -178,6 +187,10 @@ export class ContagemTempoConclusaoComponent implements OnInit {
             count03 += fator;
           };
 
+          if (auxiliarDate <= this.fimContador19) {
+            count19 += fator;
+          };
+
         }
 
         // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
@@ -186,12 +199,12 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       } while (auxiliarDate < fimContador);
 
 
-      
       this.tempoTotalConFator = moment.duration(count, 'days');
       this.tempoTotalConFator88 = moment.duration(count88, 'days');
       this.tempoTotalConFator91 = moment.duration(count91, 'days');
       this.tempoTotalConFator98 = moment.duration(count98, 'days');
       this.tempoTotalConFator99 = moment.duration(count99, 'days');
+      this.tempoTotalConFator19 = moment.duration(count19, 'days');
 
       this.subTotais();
 
@@ -205,83 +218,83 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   }
 
 
-  private yearMonthDaysToFormate(dias) {
-    let anos_rst: any;
-    let meses_rst: any;
-    let dias_rst: any;
+  // private yearMonthDaysToFormate(dias) {
+  //   let anos_rst: any;
+  //   let meses_rst: any;
+  //   let dias_rst: any;
 
 
 
-    anos_rst = this.Math.floor(dias / 365.25);
+  //   anos_rst = this.Math.floor(dias / 365.25);
 
-    if (dias > 30.4375) {
-      meses_rst = this.Math.floor((dias % 365.25) / 30.4375); // I choose 30.5 for Month (30,31) ;)
-    } else {
-      meses_rst = this.Math.floor((dias % 365.25) / 30); // I choose 30.5 for Month (30,31) ;)
-    }
+  //   if (dias > 30.4375) {
+  //     meses_rst = this.Math.floor((dias % 365.25) / 30.4375); // I choose 30.5 for Month (30,31) ;)
+  //   } else {
+  //     meses_rst = this.Math.floor((dias % 365.25) / 30); // I choose 30.5 for Month (30,31) ;)
+  //   }
 
-    dias_rst = this.Math.floor((dias % 365.25) % 30.4375);
+  //   dias_rst = this.Math.floor((dias % 365.25) % 30.4375);
 
-    let dias_rec: any;
-    let meses_rec: any;
-
-
-
-    if (dias_rst >= 30) {
-      if (dias_rst % 30 == 0) {
-        meses_rst = meses_rst + dias_rst / 30;
-        dias_rec = 0;
-      }
-      else {
-        dias_rec = dias_rst % 30;
-        meses_rst = meses_rst + dias_rst / 30;
-      }
-
-    }
-    else {
-      dias_rec = dias_rst;
-    }
-
-
-    if (meses_rst >= 12) {
-
-      if (meses_rst % 12 == 0) {
-        anos_rst = anos_rst + meses_rst / 12;
-        meses_rec = 0;
-      }
-      else {
-        meses_rec = meses_rst % 12;
-        anos_rst = anos_rst + meses_rst / 12;
-      }
-
-    }
-    else {
-      meses_rec = meses_rst;
-    }
-
-    let totalFator = { years: anos_rst, months: meses_rec, days: dias_rec, fullDays: dias };
-
-    // console.log(totalFator);
-
-    //    return rst;
-  }
+  //   let dias_rec: any;
+  //   let meses_rec: any;
 
 
 
-  private yearMonthDaysToFormate3(fullDays) {
+  //   if (dias_rst >= 30) {
+  //     if (dias_rst % 30 == 0) {
+  //       meses_rst = meses_rst + dias_rst / 30;
+  //       dias_rec = 0;
+  //     }
+  //     else {
+  //       dias_rec = dias_rst % 30;
+  //       meses_rst = meses_rst + dias_rst / 30;
+  //     }
 
-    let totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+  //   }
+  //   else {
+  //     dias_rec = dias_rst;
+  //   }
 
-    let xValor = (this.Math.floor(fullDays) / 365);
 
-    totalFator.years = this.Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
-    totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.5;
-    totalFator.days = this.Math.floor(dttDias);
+  //   if (meses_rst >= 12) {
 
-    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
-  }
+  //     if (meses_rst % 12 == 0) {
+  //       anos_rst = anos_rst + meses_rst / 12;
+  //       meses_rec = 0;
+  //     }
+  //     else {
+  //       meses_rec = meses_rst % 12;
+  //       anos_rst = anos_rst + meses_rst / 12;
+  //     }
+
+  //   }
+  //   else {
+  //     meses_rec = meses_rst;
+  //   }
+
+  //   let totalFator = { years: anos_rst, months: meses_rec, days: dias_rec, fullDays: dias };
+
+  //   // console.log(totalFator);
+
+  //   //    return rst;
+  // }
+
+
+
+  // private yearMonthDaysToFormate3(fullDays) {
+
+  //   let totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+
+  //   let xValor = (this.Math.floor(fullDays) / 365);
+
+  //   totalFator.years = this.Math.floor(xValor);
+  //   let xVarMes = (xValor - totalFator.years) * 12;
+  //   totalFator.months = this.Math.floor(xVarMes);
+  //   let dttDias = (xVarMes - totalFator.months) * 30.5;
+  //   totalFator.days = this.Math.floor(dttDias);
+
+  //   // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+  // }
 
 
   private defineCarenciaData(auxiliarDate) {
@@ -318,12 +331,14 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       let count98 = 0;
       let count99 = 0;
       let count03 = 0;
+      let count19 = 0;
 
       const fimContador88 = this.momentCarencia(this.fimContador88);
       const fimContador91 = this.momentCarencia(this.fimContador91);
       const fimContador98 = this.momentCarencia(this.fimContador98);
       const fimContador99 = this.momentCarencia(this.fimContador99);
       const fimContador03 = this.momentCarencia(this.fimContador03);
+      const fimContador19 = this.momentCarencia(this.fimContador19);
 
 
       do {
@@ -349,6 +364,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
           if (auxiliarDate <= fimContador03) {
             count03++;
           };
+          if (auxiliarDate <= fimContador19) {
+            count19++;
+          };
         }
 
 
@@ -362,6 +380,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       this.carencia98 = count98;
       this.carencia99 = count99;
       this.carencia03 = count03;
+      this.carencia19 = count19;
 
       if (this.carencia > 0) {
         resolve(true);
@@ -488,7 +507,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     this.defineIdadeFinal();
 
     this.tempoTotal(this.limitesDoVinculo).then(result => {
-      console.log('complete tempo total');
+     // console.log('complete tempo total');
       this.isCompleteTempoTotal = true;
       this.updateCalculo();
     }).catch((error) => {
@@ -496,7 +515,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     });
 
     this.tempoCarencia(this.limitesDoVinculo).then(result => {
-      console.log('complete carencia');
+     // console.log('complete carencia');
       this.isCompleteCarencia = true;
       this.updateCalculo();
     }).catch((error) => {
@@ -536,6 +555,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
           this.calculo.total_91 != this.tempoTotalConFator91.asDays() ||
           this.calculo.total_98 != this.tempoTotalConFator98.asDays() ||
           this.calculo.total_99 != this.tempoTotalConFator99.asDays() ||
+          this.calculo.total_19 != this.tempoTotalConFator19.asDays() ||
           this.calculo.total_carencia != this.carencia)
         &&
         (this.isCompleteCarencia && this.isCompleteTempoTotal)
@@ -545,18 +565,19 @@ export class ContagemTempoConclusaoComponent implements OnInit {
         this.calculo.total_91 = this.tempoTotalConFator91.asDays();
         this.calculo.total_98 = this.tempoTotalConFator98.asDays();
         this.calculo.total_99 = this.tempoTotalConFator99.asDays();
+        this.calculo.total_19 = this.tempoTotalConFator19.asDays();
         this.calculo.total_carencia = this.carencia;
 
         this.CalculoContagemTempoService
           .update(this.calculo)
           .then(model => {
-            console.log('update ok');
+            // console.log('update ok');
           })
           .catch(errors => this.Errors.add(errors));
       }
     }, 5000);
 
-  }
+   }
 
 
   // private updateCalculo() {
