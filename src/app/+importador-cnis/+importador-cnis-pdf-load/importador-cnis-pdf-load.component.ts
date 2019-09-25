@@ -161,7 +161,7 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
         if (next !== -1) {
           textaux = text_full.substring(init, next);
         } else {
-          fim_doc = (text_full.search('Legenda de Indicadores') > 0) ? text_full.indexOf('Legenda de Indicadores') : text_full.indexOf('https://meu.inss.gov.br/central/autenticidade');
+          fim_doc = (text_full.search('Legenda de Indicadores') > 0) ? text_full.indexOf('Legenda de Indicadores') : text_full.indexOf('https://meu.inss.gov.br/central/');
           textaux = text_full.substring(init, fim_doc);
         }
         textaux = textaux.replace(/(INSS - INSTITUTO NACIONAL DO SEGURO SOCIAL CNIS - Cadastro Nacional de Informações Sociais Extrato Previdenciário)(\s)(\d{2}\/\d{2}\/\d{4})(\s)(\d{2}:\d{2}:\d{2})/i, ' ');
