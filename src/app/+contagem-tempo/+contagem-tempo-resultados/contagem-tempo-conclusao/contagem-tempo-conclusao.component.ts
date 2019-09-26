@@ -59,12 +59,12 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public idadeLimiteDias = 10957.5; // dias
   public redutorSexoDias: any; // dias
 
-   // parametros PEC 2019
-  
+  // parametros PEC 2019
 
 
 
-   // parametros PEC 2019 END
+
+  // parametros PEC 2019 END
 
   public tempoDePedApProp: any; // Tempo de Pedágio para Aposentadoria Proporcional
   public tempoDePedApPropComPedagio: any; // Tempo Mínimo para Aposentadoria Proporcional com Pedágio
@@ -85,7 +85,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
     protected Errors: ErrorService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
@@ -507,7 +507,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     this.defineIdadeFinal();
 
     this.tempoTotal(this.limitesDoVinculo).then(result => {
-     // console.log('complete tempo total');
+      // console.log('complete tempo total');
       this.isCompleteTempoTotal = true;
       this.updateCalculo();
     }).catch((error) => {
@@ -515,7 +515,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     });
 
     this.tempoCarencia(this.limitesDoVinculo).then(result => {
-     // console.log('complete carencia');
+      // console.log('complete carencia');
       this.isCompleteCarencia = true;
       this.updateCalculo();
     }).catch((error) => {
@@ -537,8 +537,8 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.setExportRGPSList();
 
-   // console.log(this.tempoTotalConFator);
-    
+    // console.log(this.tempoTotalConFator);
+
   }
 
 
@@ -577,7 +577,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       }
     }, 5000);
 
-   }
+  }
 
 
   // private updateCalculo() {
@@ -624,7 +624,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       label: label,
       years: tempo.years(),
       months: tempo.months(),
-      days: (tempo.days() < 0)? this.Math.ceil(tempo.days()) * -1 : this.Math.ceil(tempo.days()),
+      days: (tempo.days() < 0) ? this.Math.ceil(tempo.days()) * -1 : this.Math.ceil(tempo.days()),
       carencia: carencia,
       totalDias: tempo.asDays()
     };
