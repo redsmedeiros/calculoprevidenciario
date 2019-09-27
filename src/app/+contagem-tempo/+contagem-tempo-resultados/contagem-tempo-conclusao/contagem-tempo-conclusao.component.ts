@@ -634,7 +634,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public setExportRGPSList() {
     this.dadosParaExportar = {};
 
-    const itensExport = ['', '88', '91', '98', '99'];
+    const itensExport = ['', '88', '91', '98', '99', '19'];
 
     itensExport.forEach(label => {
       const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label], label);

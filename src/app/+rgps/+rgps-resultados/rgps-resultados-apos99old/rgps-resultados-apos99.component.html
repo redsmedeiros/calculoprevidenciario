@@ -1,0 +1,219 @@
+<!-- Opções do Cálculo A partir de 29/11/1999-->
+      <article class="container-fluid">
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: {{boxId}}
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf='!isUpdating'>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf='!isUpdating'>
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Mostrar Reajustes Administrativos</p>
+              </td>
+              <td>
+                <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-eye"></i>
+                  </span> MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+
+      <!-- Tabela e Informações do Cálculo A partir de 29/11/1999 -->
+      <div id="{{boxId}}" class="boxCalculo">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} A partir de 29/11/1999</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Espécie:</span>
+                    </td>
+                    <td>{{calculo.tipo_seguro}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                    </td>
+                    <td>{{calculo.tipo_aposentadoria}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                    </td>
+                    <td>{{calculo.data_pedido_beneficio}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição primária:</span>
+                    </td>
+                    <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                    </td>
+                    <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="pull-right font-bold">Data de Criação:</span>
+                    </td>
+                    <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
+                  </tr>
+                </tbody>
+
+              </table>
+              <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
+                <p>{{erro}}</p>
+              </div>
+              <div class="alert alert-warning margin-top-10" *ngIf="nenhumaContrib" role="alert">
+                <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999</a></p>
+              </div>
+
+              <sa-widget [colorbutton]="false" [editbutton]="false">
+                <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
+                <div *ngIf="!isUpdating">
+                  <div class="widget-body no-padding">
+                    <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
+                    <sa-datatable [options]="tableOptions" [responsive] = "false"
+                      paginationLength="true" *ngIf="!isUpdating " tableClass="table table-striped table-bordered table-hover" width="100%">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Competência</th>
+                          <th>Índice</th>
+                          <th>Contribuição Primária</th>
+                          <th>Contribuição Secundária</th>
+                          <th>Contribuição Primária Corrigida</th>
+                          <th>Contribuição Secundária Corrigida</th>
+                          <th>Observação</th>
+                        </tr>
+                      </thead>
+                    </sa-datatable>
+                  </div>
+                </div>
+              </sa-widget>
+              <table class="table table-bordered table-hover" *ngIf="!isUpdating">
+              <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
+                    <td width="50%">
+                      <span class="pull-right font-bold  ">{{conclusao.string}}</span>
+                    </td>
+                    <td>{{conclusao.value}}</td>
+                  </tr>
+                  <!-- 
+                  <tr class="success">
+                    <td>
+                      <span class="pull-right font-bold">Renda Mensal Inicial com Fator Previdenciario:</span>
+                    </td>
+                    <td><strong class="text-success">R$ 3.072,86</strong></td>
+                  </tr> -->
+                </tbody>
+
+              </table>
+            </div>
+            
+          </div>
+          <div id="raTable-{{boxId}}" *ngIf="!isUpdating" class="widget-body" >
+              <h2  *ngIf="!isUpdating && showReajustesAdministrativos">Reajustes Administrativos</h2>
+              <hr>
+              <sa-datatable [options]="reajustesAdministrativosTableOptions" *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Competência</th>
+                      <th>Reajuste</th>
+                      <th>Benefício</th>
+                      <th>Limite</th>
+                    </tr>
+                  </thead>
+              </sa-datatable>
+            </div>
+        </sa-widget>
+      </article>
+      </div>

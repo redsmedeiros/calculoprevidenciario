@@ -143,8 +143,7 @@ export class RgpsCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
-    console.log(this.calculosList);
-    
+    //console.log(this.calculosList);
 
     this.calculoTableOptions = {
       ...this.calculoTableOptions,

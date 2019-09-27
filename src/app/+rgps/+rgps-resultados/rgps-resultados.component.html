@@ -209,26 +209,36 @@
       </article>
 
       <div *ngFor="let calculo of calculosList">
+        
         <app-rgps-resultados-anterior88 [calculo]="calculo"
         [segurado]="segurado"
         [isBlackHole]="calculo.isBlackHole" 
         *ngIf="calculo.mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
+        
         <app-rgps-resultados-entre88e91 [calculo]="calculo"
         [segurado]="segurado"
         [isBlackHole]="calculo.isBlackHole" 
         [tipoCalculo]="'91_98'"
         *ngIf="calculo.mostrarCalculo88_91"></app-rgps-resultados-entre88e91>
+        
         <app-rgps-resultados-entre91e98 [calculo]="calculo"
         [segurado]="segurado"
         [tipoCalculo]="'91_98'"
         *ngIf="calculo.mostrarCalculo91_98"></app-rgps-resultados-entre91e98>
+        
         <app-rgps-resultados-entre91e98 [calculo]="calculo"
         [segurado]="segurado"
         [tipoCalculo]="'98_99'"
         *ngIf="calculo.mostrarCalculo98_99"></app-rgps-resultados-entre91e98>
+        
         <app-rgps-resultados-apos99 [calculo]="calculo"
         [segurado]="segurado"
         *ngIf="calculo.mostrarCalculoApos99"></app-rgps-resultados-apos99>
+        
+         <app-rgps-resultados-apos-pec062019 
+        [segurado]="segurado"
+        [calculo]="calculo"
+        *ngIf="calculo.mostrarCalculoApos19"></app-rgps-resultados-apos-pec062019> 
       </div>
     </div>
 

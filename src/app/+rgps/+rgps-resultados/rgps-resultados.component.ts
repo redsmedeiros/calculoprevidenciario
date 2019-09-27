@@ -266,6 +266,7 @@ export class RgpsResultadosComponent implements OnInit {
   public mostrarCalculo91_98 = false;
   public mostrarCalculo98_99 = false;
   public mostrarCalculoApos99 = false;
+  public mostrarCalculoApos19 = false;
 
   constructor(protected router: Router,
     protected route: ActivatedRoute,
@@ -747,13 +748,16 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   controleExibicao(calculo) {
+
     const data88 = moment('1988-10-05');
     const data91 = moment('1991-04-04');
     const data91_98 = moment('1991-04-05');
     const data98_99 = moment('1998-12-15');
     const data99 = moment('1999-11-29');
+    const data19 = moment('2019-10-01');
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
+
     if (dataInicioBeneficio < data88) {
       // * Periodo = Anterior a 05/10/88
       // Cálculos realizados: anterior a 88
@@ -790,6 +794,17 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       calculo.mostrarCalculoApos99 = true;
+    }else if (dataInicioBeneficio > data99) {
+      /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
+      Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
+                entre 98 e 99 (tempo de contribuicao até lei 99)
+                entre 99 e 19 (tempo de contribuicao até PEC 2019)
+                após 19     (tempo de contribuicao após PEC 2019)
+      (cálculos em box separados)*/
+      calculo.mostrarCalculo91_98 = true;
+      calculo.mostrarCalculo98_99 = true;
+      calculo.mostrarCalculoApos99 = true;
+      calculo.mostrarCalculoApos19 = true;
     }
   }
 
