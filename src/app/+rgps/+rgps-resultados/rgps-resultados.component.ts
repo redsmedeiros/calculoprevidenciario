@@ -695,6 +695,9 @@ export class RgpsResultadosComponent implements OnInit {
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
       str = str + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
     }
+    if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
+      str = str + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+    }
 
     return str;
   }
@@ -785,7 +788,7 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       // }
-    } else if (dataInicioBeneficio > data99) {
+    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio < data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
@@ -794,18 +797,20 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       calculo.mostrarCalculoApos99 = true;
-    }else if (dataInicioBeneficio > data99) {
+    }else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 entre 99 e 19 (tempo de contribuicao até PEC 2019)
                 após 19     (tempo de contribuicao após PEC 2019)
       (cálculos em box separados)*/
-      calculo.mostrarCalculo91_98 = true;
-      calculo.mostrarCalculo98_99 = true;
-      calculo.mostrarCalculoApos99 = true;
+      calculo.mostrarCalculo91_98 = false;
+      calculo.mostrarCalculo98_99 = false;
+      calculo.mostrarCalculoApos99 = false;
       calculo.mostrarCalculoApos19 = true;
     }
+
+  
   }
 
   preencheGrupoDeCalculos() {
@@ -966,7 +971,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   offset(el) {
-    if (el !== undefined) {
+    if (el !== undefined && el.getBoundingClientRect() !== undefined) {
       const rect = el.getBoundingClientRect(),
         scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;

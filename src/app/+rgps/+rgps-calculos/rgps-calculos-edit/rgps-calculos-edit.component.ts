@@ -40,11 +40,12 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
             this.form = this.calculo;
             this.isUpdating = false;
           });
-  	console.log(this.form);
   }
 
 
   submit(data) {
+      console.log(this.calculo);
+      
     	this.CalculoRgps
           .update(this.calculo)
           .then(model => {

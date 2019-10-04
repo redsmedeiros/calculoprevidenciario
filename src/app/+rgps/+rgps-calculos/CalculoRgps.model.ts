@@ -12,7 +12,8 @@ export class CalculoRgps extends Model {
 	  data_pedido_beneficio: '',
 	  contribuicao_primaria_98: '',
 	  contribuicao_primaria_99: '',
-	  contribuicao_primaria_atual: '',
+    contribuicao_primaria_atual: '',
+    contribuicao_primaria_19: '',
 	  contribuicao_secundaria_98: '',
 	  contribuicao_secundaria_99: '',
 	  contribuicao_secundaria_atual: '',
@@ -30,6 +31,7 @@ export class CalculoRgps extends Model {
    public contribuicao_primaria_98;
    public contribuicao_primaria_99;
    public contribuicao_primaria_atual;
+   public contribuicao_primaria_19;
    public contribuicao_secundaria_98;
    public contribuicao_secundaria_99;
    public contribuicao_secundaria_atual;

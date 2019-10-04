@@ -8,7 +8,8 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Período do início do benefício:*</label>
+                    <!-- <label class="col-md-2 control-label" for="select-2">Período do início do benefício:*</label> -->
+                    <label class="col-md-2 control-label" for="select-2">Legislação aplicada:*</label>
                     <div class="col-md-8">
                       <select [(ngModel)]="periodoInicioBeneficio" (change) = "changeGrupoDos12()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
                         <option [value]="periodo" *ngFor="let periodo of periodoOptions">{{periodo}}</option>
@@ -108,7 +109,8 @@
                     </div>
                   </div>
 
-                  <h3 *ngIf="hasAtual">Tempo Total de contribuição - após a Lei nº 9.876/99</h3>
+                  <!-- <h3 *ngIf="hasAtual">Tempo Total de contribuição - após a Lei nº 9.876/99</h3> -->
+                  <h3 *ngIf="hasAtual">Tempo Total de contribuição - até a PEC 06/2019 (Lei nº 9.876/99 (de 29/11/1999 até 01/10/2019))</h3>
                   <div *ngIf="hasAtual" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
@@ -139,6 +141,25 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
+                  <h3 *ngIf="has19">Tempo Total de contribuição - após a PEC 06/2019</h3>
+                  <div *ngIf="has19" class="form-group">
+                      <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
+                      <div class="col-md-2">
+                        <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                        <small *ngIf="errors.has('primaria19anos')" class="text-danger">{{ errors.get('primaria19anos') | i18n}}</small>
+                      </div>
+                      <div class="col-md-2">
+                        <input [(ngModel)]="primaria19meses" (change)="errors.clear('primaria19meses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                        <small *ngIf="errors.has('primaria19meses')" class="text-danger">{{ errors.get('primaria19meses') | i18n}}</small>
+                      </div>
+                      <div class="col-md-2">
+                        <input [(ngModel)]="primaria19dias" (change)="errors.clear('primaria19dias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                        <small *ngIf="errors.has('primaria19dias')" class="text-danger">{{ errors.get('primaria19dias') | i18n}}</small>
+                      </div>
+                      <div class="col-md-12">
+                          <p> <i class="fa fa-info-circle"></i> Para os benefícios concedidos a partir de 18 de junho de 2019 foi determinada a soma das contribuições concomitantes de acordo com as alterações trazidas pela Lei 13.846/19.</p>
+                      </div>
+                    </div>
                   <div class="form-group" *ngIf="hasCarencia">
                     <label class="col-md-2 control-label" for="select-1">Carência:*</label>
                     <div class="col-md-1">
