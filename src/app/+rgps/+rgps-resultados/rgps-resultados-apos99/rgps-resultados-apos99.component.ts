@@ -779,12 +779,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
         rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
     } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-        console.log (rmi, somaMedias, rmi >= somaMedias);
+        // console.log (rmi, somaMedias, rmi >= somaMedias);
         rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
         rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
     }
 
-	conclusoes[conclusoes.length - 1]["class"] = "destaque";
+	conclusoes[conclusoes.length - 1]['class'] = 'destaque';
     
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
@@ -1186,7 +1186,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
       let mesesCarencia = 180;
       if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY') < this.dataLei8213) { // Verificar se a data de filiação existe
-        let anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
+        const anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
         let carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
         if (carenciaProgressiva != 0) {
           mesesCarencia = carenciaProgressiva;
@@ -1196,7 +1196,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
 
       if (this.calculo.carencia < mesesCarencia) {
-        let erroCarencia = "Falta(m) " + (mesesCarencia - this.calculo.carencia) + " mês(es) para a carência necessária.";
+        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
         errorArray.push(erroCarencia);
         return false;
       }
@@ -1206,16 +1206,25 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   getRendaMensal(conclusoes, rmi, currency) {
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
-        //conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
-        conclusoes.push({ string: "Renda Mensal Inicial com Fator Previdenciario:", value: this.formatMoney(rmi, currency.acronimo)});
+      // conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
+
+       const moedaDib = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ?
+              this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
+
+       if (rmi <= moedaDib.salario_minimo) {
+        rmi = moedaDib.salario_minimo;
+       }
+
+        conclusoes.push({ string: 'Renda Mensal Inicial com Fator Previdenciario:', value: this.formatMoney(rmi, currency.acronimo)});
       } else if (this.tipoBeneficio != 1) {
-        conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
+
+        conclusoes.push({ string: 'Renda Mensal Inicial:', value: this.formatMoney(rmi, currency.acronimo) });// resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
     }
   }
 
   getIdadeFracionada() {
-    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+    const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    const idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
     return idadeEmDias / 365.25;
   }
 
@@ -1227,27 +1236,27 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
     this.ReajusteAutomatico.getByDate(dataInicio, moment())
       .then((reajustes: ReajusteAutomatico[]) => {
-        let reajustesAutomaticos = reajustes;
+        const reajustesAutomaticos = reajustes;
         let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
-        for (let reajusteAutomatico of reajustesAutomaticos) {
+        for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
-          let siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
-          let teto = parseFloat(reajusteAutomatico.teto);
+          const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
+          const teto = parseFloat(reajusteAutomatico.teto);
           let minimo = parseFloat(reajusteAutomatico.salario_minimo);
-          if (this.tipoBeneficio == 17) {
+          if (this.tipoBeneficio === 17) {
             minimo *= 0.3;
-          } else if (this.tipoBeneficio == 18) {
+          } else if (this.tipoBeneficio === 18) {
             minimo *= 0.4;
-          } else if (this.tipoBeneficio == 7) {
+          } else if (this.tipoBeneficio === 7) {
             minimo *= 0.5;
-          } else if (this.tipoBeneficio == 19) {
+          } else if (this.tipoBeneficio === 19) {
             minimo *= 0, 6;
           }
           let reajuste = reajusteAutomatico.indice != null ? parseFloat(reajusteAutomatico.indice) : 1;
 
-          if (dataCorrente.year() == 2006 && dataCorrente.month() == 7) {
+          if (dataCorrente.year() === 2006 && dataCorrente.month() === 7) {
             reajuste = 1.000096;
           }
 
@@ -1263,7 +1272,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             valorBeneficio = teto;
             limit = 'T'
           }
-          let line = {
+          const line = {
             competencia: dataCorrente.format('MM/YYYY'),
             reajuste: reajuste,
             beneficio: this.formatMoney(valorBeneficio, siglaMoedaDataCorrente),
