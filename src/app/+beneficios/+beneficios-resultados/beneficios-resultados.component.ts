@@ -866,7 +866,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       // console.log(juros);
-
+      
 
       let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
       let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
@@ -878,6 +878,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         diferencaMensal = beneficioDevido;
 
+
       } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
         //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
@@ -888,17 +889,21 @@ export class BeneficiosResultadosComponent implements OnInit {
         //Quando a dataCorrente for maior que ambas, definido na seção 1.3.       
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
 
         let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
         if (chkboxBenefitNotGranted == 1) {
           beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
           diferencaMensal = beneficioDevido - beneficioRecebido;
+          
         } else {
           beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
           diferencaMensal = beneficioDevido - beneficioRecebido;
+          //console.log(beneficioRecebido);
+          /// Aqui
         }
-
+        
       }
 
       diferencaCorrigida = diferencaMensal * correcaoMonetaria;
@@ -1559,6 +1564,23 @@ export class BeneficiosResultadosComponent implements OnInit {
     //     this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
     //   }
     // }
+
+
+    
+    if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
+      if (parseFloat(beneficioRecebidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 0.904) {
+        beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+        this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+      }
+    }
+
+    if (dataCorrente.isSame(moment('2018-01-01'), 'year') && !this.isTetos) {
+      if (parseFloat(beneficioRecebidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 2.396) {
+        beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
+        this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
+      }
+    }
+
 
     let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
     if (indiceSuperior) {
