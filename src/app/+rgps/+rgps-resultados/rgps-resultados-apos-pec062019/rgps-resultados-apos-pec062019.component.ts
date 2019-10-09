@@ -364,7 +364,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
         // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
         //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+       // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
         if (numeroContribuicoes < mesesContribuicao60) {
           divisorMediaPrimaria = mesesContribuicao60
         }
@@ -419,7 +419,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
         if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && Math.round(divisorMediaPrimaria) > 1) {
-          divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
+         // divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
           //  divisorMediaPrimaria =  this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
         }
         break;
@@ -1321,90 +1321,76 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
 
- 
+
 
   /**
    * regra de transição regra de pontos - Art 15
    */
-  public regraPontos() {
+  public regraPontos(mesesContribuicao, valorMedio, redutorProfessor) {
 
     const pontos = this.contribuicaoTotal + this.idadeFracionada;
-    const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
-    const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
-
 
     const tempoPercentual = {
-      m:20,
-      f:15
+      m: 20,
+      f: 15
     };
-    
 
     this.conclusoesRegra1 = {
       status: false,
       msg: '',
-      valor:'',
-      valorString:'',
-      percentual:'',
-      formula:''
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: ''
     };
 
-
-    // console.log(requisitoContribuicoes[this.segurado.sexo]);
-    // console.log(this.contribuicaoPrimaria.anos);
-
-    // console.log(this.idadeSegurado);
-    // console.log(this.idadeFracionada);
-
-    // console.log(this.contribuicaoTotal);
-    // console.log(this.idadeFracionada);
-
-    // console.log(this.dataInicioBeneficio.year());
-
-    this.conclusoesRegra1.status = this.requisitosRegra1(pontos,
-      this.dataInicioBeneficio.year(),
-      this.segurado.sexo,
-      this.contribuicaoTotal);
-
-    // console.log(this.totalContribuicaoPrimaria);
-
-    if (this.conclusoesRegra1) {
+    if (redutorProfessor == 0) {
+      this.conclusoesRegra1.status = this.requisitosRegra1(pontos,
+        this.dataInicioBeneficio.year(),
+        this.segurado.sexo,
+        this.contribuicaoTotal);
+    } else {
+      this.conclusoesRegra1.status = this.requisitosRegra1Prof(pontos,
+        this.dataInicioBeneficio.year(),
+        this.segurado.sexo,
+        this.contribuicaoTotal);
+    }
 
 
-      let percentual = (Math.trunc(this.contribuicaoTotal - tempoPercentual[this.segurado.sexo]) * 2) ;
+    if (this.conclusoesRegra1.status) {
+
+      this.conclusoesRegra1.status = true;
+      let percentual = ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
       percentual += 60;
 
       this.conclusoesRegra1.percentual = percentual;
 
       percentual /= 100;
 
-      console.log(percentual);
-
       this.conclusoesRegra1.valor = (valorMedio * percentual)
 
-      this.conclusoesRegra1.valorString = this.formatMoney(this.conclusoesRegra1.valor)
-
-      console.log(valorMedio);
-      console.log(this.conclusoesRegra1);
+      this.conclusoesRegra1.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
+      this.conclusoesRegra1.valorString = this.formatMoney(this.conclusoesRegra1.valor);
 
     } else {
-
+      this.conclusoesRegra1.msg = 'Não atende os requisitos desta regra.'
     }
 
-
+    console.log(this.conclusoesRegra1);
 
   }
 
 
   public requisitosRegra1(pontos, ano, sexo, tempo_contribuicao) {
 
-
     const requisitoContribuicoes = {
       f: 30,
       m: 35
-    }
+    };
 
-
-    let regra1 = {
+    const regra1 = {
       2019: { m: 96, f: 86 },
       2020: { m: 97, f: 87 },
       2021: { m: 98, f: 88 },
@@ -1422,32 +1408,200 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       2033: { m: 105, f: 100 }
     };
 
-
-
-    if ((sexo === 'm' && ano > 2028 && pontos >= 105) 
-    && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
+    if ((sexo === 'm' && ano > 2028 && pontos >= 105)
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
       return true;
     }
 
-    if ((sexo === 'f' && ano > 2033 && pontos >= 100) 
-    && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
+    if ((sexo === 'f' && ano > 2033 && pontos >= 100)
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
       return true;
     }
 
-    return (((ano >= 2019 && ano <= 2033) && pontos >= regra1[ano][sexo]) 
-    && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
+    return (((ano >= 2019 && ano <= 2033) && pontos >= regra1[ano][sexo])
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
+
+  }
+
+  public requisitosRegra1Prof(pontos, ano, sexo, tempo_contribuicao) {
+
+    const requisitoContribuicoes = {
+      f: 25,
+      m: 30
+    };
+
+    const regra1 = {
+      2019: { m: 91, f: 81 },
+      2020: { m: 92, f: 82 },
+      2021: { m: 93, f: 83 },
+      2022: { m: 94, f: 84 },
+      2023: { m: 95, f: 85 },
+      2024: { m: 96, f: 86 },
+      2025: { m: 97, f: 87 },
+      2026: { m: 98, f: 88 },
+      2027: { m: 99, f: 89 },
+      2028: { m: 100, f: 90 },
+      2029: { m: 100, f: 91 },
+      2030: { m: 100, f: 92 }
+    };
+
+    if ((sexo === 'm' && ano > 2028 && pontos >= 100)
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
+      return true;
+    }
+
+    if ((sexo === 'f' && ano > 2030 && pontos >= 90)
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
+      return true;
+    }
+
+    return (((ano >= 2019 && ano <= 2030) && pontos >= regra1[ano][sexo])
+      && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
+
+  }
+
+
+
+  // regra 1 fim
+
+  // regra 2 inicio
+  public requisitosRegra2(idade, ano, sexo, tempo_contribuicao, redutorProfessor) {
+
+    const contribuicao_min = {
+      m: (35 - redutorProfessor),
+      f: (30 - redutorProfessor)
+    };
+
+
+    const regra2 = {
+      2019: { m: 61, f: 56 },
+      2020: { m: 61.5, f: 56.5 },
+      2021: { m: 62, f: 57 },
+      2022: { m: 62.5, f: 57.5 },
+      2023: { m: 63, f: 58 },
+      2024: { m: 63.5, f: 58.5 },
+      2025: { m: 64, f: 59 },
+      2026: { m: 64.5, f: 59.5 },
+      2027: { m: 65, f: 60 },
+      2028: { m: 65, f: 60.5 },
+      2029: { m: 65, f: 61 },
+      2030: { m: 65, f: 61.5 },
+      2031: { m: 65, f: 62 }
+    };
+
+    if ((sexo === 'm' && ano > 2027 && idade >= (65 - redutorProfessor)) && tempo_contribuicao >= contribuicao_min[sexo]) {
+      return true;
+    }
+
+    if ((sexo === 'f' && ano > 2031 && idade >= (62 - redutorProfessor)) && tempo_contribuicao >= contribuicao_min[sexo]) {
+      return true;
+    }
+
+    return (((ano >= 2019 && ano <= 2031) && idade >= (regra2[ano][sexo] - redutorProfessor))
+      && tempo_contribuicao >= contribuicao_min[sexo]) ? true : false;
 
   }
 
 
 
 
+  /**
+   * regra de transição regra de pontos - Art 16
+   */
+  public regraTempoContribuiccaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor) {
+
+    this.conclusoesRegra2 = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: ''
+    };
+
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
+    this.conclusoesRegra2.status = this.requisitosRegra2(
+      this.idadeFracionada,
+      this.dataInicioBeneficio.year(),
+      this.segurado.sexo,
+      this.contribuicaoTotal,
+      redutorProfessor);
+
+    if (this.conclusoesRegra2.status) {
+
+      this.conclusoesRegra2.status = true;
+      let percentual = ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
+      percentual += 60;
+
+      this.conclusoesRegra2.percentual = percentual;
+
+      percentual /= 100;
+
+      this.conclusoesRegra2.valor = (valorMedio * percentual)
+
+      this.conclusoesRegra2.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
+      this.conclusoesRegra2.valorString = this.formatMoney(this.conclusoesRegra2.valor);
+
+    } else {
+      this.conclusoesRegra2.msg = 'Não atende os requisitos desta regra.'
+    }
+
+
+    console.log(this.conclusoesRegra2);
+
+
+  }
+
+  // regra 2 fim
+
+
+  // regra 3 inicio
+
+
+
+  public requisitosRegra3(sexo, tempo_contribuicao, redutorProfessor) {
+
+
+    const contribuicao_min = { m: 33, f: 28 };
+
+    const contribuicao_max = { m: 35, f: 30 };
 
 
 
 
 
 
+
+  }
+
+  public regraPedagio50(mesesContribuicao, valorMedio, redutorProfessor) {
+
+
+    this.conclusoesRegra3 = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: ''
+    };
+
+
+
+
+
+  }
+
+
+  // regra 3 fim
 
 
 
@@ -1455,7 +1609,15 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
    * aplicarRegrasTransicao
   */
   public aplicarRegrasTransicao() {
-    this.regraPontos();
+    const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
+    const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
+
+
+
+    this.regraPontos(mesesContribuicao, valorMedio, redutorProfessor);
+    this.regraTempoContribuiccaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor);
+    this.regraPedagio50(mesesContribuicao, valorMedio, redutorProfessor);
   }
 
 

@@ -363,11 +363,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
               contribuicoesPrimarias12 += contribuicao.valor_primario;
               contribuicoesSecundarias12 += contribuicao.valor_secundario;
             }
-            let moeda = this.Moeda.getByDate(this.dataInicioBeneficio);// Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
+            let moeda = this.Moeda.getByDate(this.dataInicioBeneficio); // Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
             let salarioMinimoRMI = moeda.salario_minimo;
             divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / 12, 1);
 
-            console.log(divisorContribuicoes);
             
             if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
               divisorContribuicoes = salarioMinimoRMI;
@@ -375,8 +374,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             totalMediaDozeContribuicoes = divisorContribuicoes;
 
 
-            console.log(divisorContribuicoes);
-            console.log(contribuicoesPrimarias12);
             // Inserir nas conclusoes:
             //conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
             conclusoes.push({ string: "Soma das 12 últimas contribuções", value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo) });

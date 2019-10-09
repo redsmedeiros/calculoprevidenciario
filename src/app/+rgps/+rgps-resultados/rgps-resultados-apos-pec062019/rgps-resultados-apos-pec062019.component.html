@@ -171,8 +171,8 @@
               </tr>
               <tr>
                 <td>
-                  <span class="pull-right font-bold"
-                    > Tempo de Contribuição:</span
+                  <span class="pull-right font-bold">
+                    Tempo de Contribuição:</span
                   >
                 </td>
                 <td>
@@ -279,10 +279,10 @@
             <thead>
               <tr>
                 <th colspan="2">
-                  Transição 1
+                  Transição 1 - Regra de pontos
                 </th>
               </tr>
-              <tr>
+              <tr *ngIf="conclusoesRegra1.status" >
                 <th>
                   Tipo
                 </th>
@@ -292,24 +292,54 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td width="50%">Percentual</td>
-                <td>{{ conclusoesRegra1.percentual }} %</td>
-              </tr>
-              <tr>
-                <td width="50%">Valor</td>
-                <td>{{ conclusoesRegra1.valorString }}</td>
-              </tr>
+              <ng-container
+                *ngIf="
+                  conclusoesRegra1.status;
+                  then regra1Aplica;
+                  else regra1NaoAplica
+                "
+              >
+              </ng-container>
+              <ng-template #regra1Aplica>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Fórmula para percentual</span>
+                  </td>
+                  <td>{{ conclusoesRegra1.formula }}</td>
+                </tr>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Percentual</span>
+                  </td>
+                  <td>{{ conclusoesRegra1.percentual }} %</td>
+                </tr>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Valor</span>
+                  </td>
+                  <td>{{ conclusoesRegra1.valorString }}</td>
+                </tr>
+              </ng-template>
+              <ng-template #regra1NaoAplica>
+                <tr>
+                  <td colspan="2">
+                    <div class="alert alert-warning margin-top-10" role="alert">
+                      <p>{{ conclusoesRegra1.msg }}</p>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
             </tbody>
           </table>
           <table class="table table-bordered table-hover" *ngIf="!isUpdating">
             <thead>
               <tr>
                 <th colspan="2">
-                  Transição 2
+                  Transição 2 - Conjugação de tempo de contribuição com idade
+                  mínima
                 </th>
               </tr>
-              <tr>
+              <tr *ngIf="conclusoesRegra2.status">
                 <th>
                   Tipo
                 </th>
@@ -318,11 +348,45 @@
                 </th>
               </tr>
             </thead>
+
             <tbody>
-              <tr>
-                <td width="50%"></td>
-                <td></td>
-              </tr>
+              <ng-container
+                *ngIf="
+                  conclusoesRegra2.status;
+                  then regra2Aplica;
+                  else regra2NaoAplica
+                "
+              >
+              </ng-container>
+              <ng-template #regra2Aplica>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Fórmula para percentual</span>
+                  </td>
+                  <td>{{ conclusoesRegra1.formula }}</td>
+                </tr>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Percentual</span>
+                  </td>
+                  <td>{{ conclusoesRegra2.percentual }} %</td>
+                </tr>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Valor</span>
+                  </td>
+                  <td>{{ conclusoesRegra2.valorString }}</td>
+                </tr>
+              </ng-template>
+              <ng-template #regra2NaoAplica>
+                <tr>
+                  <td colspan="2">
+                    <div class="alert alert-warning margin-top-10" role="alert">
+                      <p>{{ conclusoesRegra2.msg }}</p>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
             </tbody>
           </table>
           <table class="table table-bordered table-hover" *ngIf="!isUpdating">

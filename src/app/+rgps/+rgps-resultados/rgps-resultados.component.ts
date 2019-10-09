@@ -629,11 +629,11 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
 
-/**
- * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
- * @param especieBeneficio
- */
-  verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib){
+  /**
+   * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
+   * @param especieBeneficio
+   */
+  verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib) {
     const data99 = moment('1999-11-29');
 
     if ((((especieBeneficio === 2) ||
@@ -642,15 +642,15 @@ export class RgpsResultadosComponent implements OnInit {
       (especieBeneficio === 1))
       ||
       ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-      (especieBeneficio === 'Auxílio Doença') ))
+        (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+        (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
+        (especieBeneficio === 'Auxílio Doença')))
       &&
       dib > data99) {
-       return true;
-  }
+      return true;
+    }
     return false;
-}
+  }
 
 
   formatMoney(value, sigla = 'R$') {
@@ -797,7 +797,7 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       calculo.mostrarCalculoApos99 = true;
-    }else if (dataInicioBeneficio > data19) {
+    } else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
@@ -810,7 +810,7 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculoApos19 = true;
     }
 
-  
+
   }
 
   preencheGrupoDeCalculos() {
@@ -866,7 +866,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   generateBoxId(id, anoRegra) {
     // return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    return  id + '' + anoRegra;
+    return id + '' + anoRegra;
   }
 
   editSegurado() {
@@ -954,9 +954,9 @@ export class RgpsResultadosComponent implements OnInit {
     // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
-    if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined ) ||
-      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined )
-      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined )
+    if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined) ||
+      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
+      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
     ) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
@@ -970,8 +970,14 @@ export class RgpsResultadosComponent implements OnInit {
     }
   }
 
-  offset(el) {
-    if (el !== undefined && el.getBoundingClientRect() !== undefined) {
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+    value != null && value != 'null' &&
+      value !== undefined)? true : false;
+  }
+
+  offset(el = undefined) {
+    if ( this.isExits(el) && this.isExits(el.getBoundingClientRect())) {
       const rect = el.getBoundingClientRect(),
         scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;
