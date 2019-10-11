@@ -364,7 +364,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
         // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
         //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-       // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+        // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
         if (numeroContribuicoes < mesesContribuicao60) {
           divisorMediaPrimaria = mesesContribuicao60
         }
@@ -399,7 +399,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
             let salarioMinimoRMI = moeda.salario_minimo;
             divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / 12, 1);
 
-            console.log(divisorContribuicoes);
+            // console.log(divisorContribuicoes);
 
             if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
               divisorContribuicoes = salarioMinimoRMI;
@@ -407,8 +407,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
             totalMediaDozeContribuicoes = divisorContribuicoes;
 
 
-            console.log(divisorContribuicoes);
-            console.log(contribuicoesPrimarias12);
+            // console.log(divisorContribuicoes);
+            // console.log(contribuicoesPrimarias12);
             // Inserir nas conclusoes:
             //conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
             conclusoes.push({ string: "Soma das 12 últimas contribuções", value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo) });
@@ -419,7 +419,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
         if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && Math.round(divisorMediaPrimaria) > 1) {
-         // divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
+          // divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
           //  divisorMediaPrimaria =  this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
         }
         break;
@@ -542,6 +542,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         taxaMediaSecundaria = mediaContribuicoesSecundarias;
       }
     }
+
+
     this.coeficiente = Math.floor(this.coeficiente);
     let coeficiente = this.coeficiente;
 
@@ -590,6 +592,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //conclusoes.soma_contribuicoes_primarias = this.formatMoney(totalContribuicoesPrimarias, currency.acronimo);//resultados['Soma das Contribuições Primarias'] = currency.acrônimo + totalContribuicoesPrimarias;
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
+
+    // console.log(coeficiente);
 
     conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
     conclusoes.push({ string: "Soma das Contribuições:", value: this.formatMoney(totalContribuicaoPrimaria, currency.acronimo) });
@@ -1051,8 +1055,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
 
+
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));
+
       if (anos < 1) {
         anos = Math.round(anos);
       } else {
@@ -1105,6 +1111,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     let extra;
     let toll;
 
+
+
     let erroString = '';
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
@@ -1113,12 +1121,18 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib);
         } else {
+
+
+
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib);
           direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
+
+          console.log(this.coeficiente);
         }
+
         let contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
         let tempoFracionado = this.tratarTempoFracionado(contribuicao); //Separar o tempo de contribuicao em anos, meses e dias
         if (direito) {
@@ -1325,7 +1339,15 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   /**
    * regra de transição regra de pontos - Art 15
-   */
+   * /**
+ * Regra 1: regra de pontos. Elevação em um ponto por ano. Em
+    2019: 96/86 e em 2033 105/100. Cálculo: 60%+2% por ano de
+    contribuição que exceder 20 anos de tempo de contribuição.
+    Redução de 5 anos nos pontos para professores, que
+    começam em 2019 com a regra 81/91 até atingir 95/100, com
+    a mesma elevação anual.
+ *
+ */
   public regraPontos(mesesContribuicao, valorMedio, redutorProfessor) {
 
     const pontos = this.contribuicaoTotal + this.idadeFracionada;
@@ -1465,6 +1487,20 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   // regra 1 fim
 
   // regra 2 inicio
+/**
+ *
+ * Regra 2: conjugação de tempo de contribuição com idade
+    mínima. 35 anos de contribuição para os homens e 30 para as
+    mulheres + idade mínima inicial de 61 anos para os homens e
+    56 para as mulheres, com elevação na idade mínima em 06
+    meses por ano até atingir-se mínima 65 anos para homens e
+    62 para mulheres em 2031. Cálculo: 60%+2% por ano de
+    contribuição que exceder 20 anos de tempo de contribuição
+    Bônus de 5 anos na idade mínima para professores, que
+    sobem até 60 anos de idade para ambos os sexos.
+ *
+ */
+
   public requisitosRegra2(idade, ano, sexo, tempo_contribuicao, redutorProfessor) {
 
     const contribuicao_min = {
@@ -1507,6 +1543,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   /**
    * regra de transição regra de pontos - Art 16
+   * 
    */
   public regraTempoContribuiccaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor) {
 
@@ -1561,26 +1598,33 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   // regra 2 fim
 
 
-  // regra 3 inicio
+//Regra 3
 
+/**
+ * Regra 3: Quem estiver até a 2 anos de se aposentar por
+  tempo de contribuição mínimo poderá optar por aposentar-se
+  sem cumprir idade mínima, mediante pagamento de pedágio
+  de 50% do tempo que faltava e com a aplicação do fator
+  previdenciário
+ */
 
+  public requisitosRegra3(sexo, tempo_contribuicao) {
 
-  public requisitosRegra3(sexo, tempo_contribuicao, redutorProfessor) {
-
+    let status = false;
 
     const contribuicao_min = { m: 33, f: 28 };
 
     const contribuicao_max = { m: 35, f: 30 };
 
+    if (tempo_contribuicao >= contribuicao_min[sexo] && tempo_contribuicao < contribuicao_max[sexo]) {
+      status = true;
+    }
 
-
-
-
-
+    return status;
 
   }
 
-  public regraPedagio50(mesesContribuicao, valorMedio, redutorProfessor) {
+  public regraPedagio50(mesesContribuicao, valorMedio) {
 
 
     this.conclusoesRegra3 = {
@@ -1588,21 +1632,155 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       msg: '',
       valor: '',
       valorString: '',
-      percentual: '',
+      dataParaAposentar: '',
+      tempoParaAposentar: '',
       formula: '',
-      requisitoDib: '',
-      segurado: ''
+      segurado: '',
+      fator: ''
     };
 
 
+    this.conclusoesRegra3.status = this.requisitosRegra3(this.segurado.sexo,
+      this.contribuicaoTotal);
+
+    if (this.conclusoesRegra3.status) {
+
+      const contribuicao_max = { m: 35, f: 30 };
+      const dibParaRegra3 = this.dataInicioBeneficio.clone();
+      const contribuicao = ((contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal) * 0.5);
+      const tempoFinalContrib = contribuicao + contribuicao_max[this.segurado.sexo];
+
+      this.conclusoesRegra3.tempoParaAposentar = this.tratarTempoFracionado(contribuicao);
+      this.conclusoesRegra3.formula = '((' + contribuicao_max[this.segurado.sexo] + '-' + this.contribuicaoTotal + ') * 0.5)';
+      this.conclusoesRegra3.dataParaAposentar = dibParaRegra3.add(contribuicao, 'years').format('DD/MM/YYYY');
+      this.conclusoesRegra3.valor = valorMedio * this.fatorPrevidenciario;
+      this.conclusoesRegra3.valorString = this.formatMoney(this.conclusoesRegra3.valor);
+      this.conclusoesRegra3.fator = this.fatorPrevidenciario;
+
+      // console.log(this.fatorPrevidenciario);
+      // console.log(valorMedio);
+      // console.log( this.conclusoesRegra3.tempoParaAposentar);
+      // console.log(contribuicao);
+      // console.log(tempoFinalContrib);
+      // console.log(this.conclusoesRegra3.dataParaAposentar);
 
 
+    } else {
+
+      this.conclusoesRegra3.msg = 'Não preenche os requisitos de acesso.';
+
+    }
+
+    console.log(this.conclusoesRegra3);
 
   }
 
 
   // regra 3 fim
 
+
+
+/**
+ * Regra 4 - pedagio 100%
+ *
+ * Regra 5:
+  65 anos para homens e 60 para mulheres, com elevação na idade mínima para as
+  mulheres em 06 meses por ano até atingir 62 anos de idade mínima.
+  Elevação de 06 meses por ano no tempo mínimo, até atingir-se 20 anos em 2029.
+ */
+
+  public requisitosRegra4(sexo, tempo_contribuicao, redutorProfessor) {
+
+    let status = false;
+
+    const contribuicao_min = { m: 33, f: 28 };
+
+    const contribuicao_max = { m: 35, f: 30 };
+
+   // if (tempo_contribuicao >= contribuicao_min[sexo] && tempo_contribuicao < contribuicao_max[sexo]) {
+    if (tempo_contribuicao >= contribuicao_min[sexo]) {
+      status = true;
+    }
+
+    return status;
+
+  }
+
+  public regraPedagio100(mesesContribuicao, valorMedio, redutorProfessor) {
+
+
+    this.conclusoesRegra3 = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      dataParaAposentar: '',
+      tempoDeContribuicaoAposentar: '',
+      tempoDePedagio: '',
+      tempoDePedagioTotal: '',
+      formula: '',
+      segurado: '',
+      fator: ''
+    };
+
+
+    this.conclusoesRegra3.status = this.requisitosRegra4(this.segurado.sexo,
+      this.contribuicaoTotal, redutorProfessor);
+
+    if (this.conclusoesRegra3.status) {
+
+      const contribuicao_max = { m: 35, f: 30 };
+      const dibParaRegra3 = this.dataInicioBeneficio.clone();
+      const contribuicaoDiff = (contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal);
+      const tempoDePedagio =  ((contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal) * 0.5);
+     
+      const tempoFinalContrib = contribuicao_max[this.segurado.sexo] + tempoDePedagio;
+
+      this.conclusoesRegra3.tempoDePedagio = 'Não faz jus a aplicação desta regra falta '
+                                              + this.tratarTempoFracionado(tempoDePedagio)
+                                              + ' para cumprir o pedágio.';
+      this.conclusoesRegra3.tempoDePedagioTotal = this.tratarTempoFracionado(contribuicaoDiff + tempoDePedagio);
+      this.conclusoesRegra3.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContrib) ;
+      
+      // this.conclusoesRegra3.formula = contribuicao_max[this.segurado.sexo] +' - ((' + contribuicao_max[this.segurado.sexo] + '-' + this.contribuicaoTotal + ') * 0.5)';
+      this.conclusoesRegra3.dataParaAposentar = dibParaRegra3.add(contribuicaoDiff + tempoDePedagio, 'years').format('DD/MM/YYYY');
+      
+       this.conclusoesRegra3.valor = valorMedio * this.fatorPrevidenciario;
+       this.conclusoesRegra3.valorString = this.formatMoney(this.conclusoesRegra3.valor);
+       this.conclusoesRegra3.fator = this.fatorPrevidenciario;
+
+      // console.log(this.fatorPrevidenciario);
+      // console.log(valorMedio);
+      // console.log( this.conclusoesRegra3.tempoParaAposentar);
+      // console.log(contribuicao);
+       console.log(tempoFinalContrib);
+      // console.log(this.conclusoesRegra3.dataParaAposentar);
+
+
+    } else {
+
+      this.conclusoesRegra3.msg = 'Não atende os requisitos desta regra.';
+
+    }
+
+    console.log(this.conclusoesRegra3);
+
+  }
+
+
+  // regra 4 fim
+
+/* Regra 5 idade:
+  65 anos para homens e 60 para mulheres, com elevação na idade mínima para as
+  mulheres em 06 meses por ano até atingir 62 anos de idade mínima.
+  Elevação de 06 meses por ano no tempo mínimo, até atingir-se 20 anos em 2029.
+ */
+
+
+
+
+
+   // regra 5 fim
 
 
   /**
@@ -1617,7 +1795,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     this.regraPontos(mesesContribuicao, valorMedio, redutorProfessor);
     this.regraTempoContribuiccaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor);
-    this.regraPedagio50(mesesContribuicao, valorMedio, redutorProfessor);
+    this.regraPedagio50(mesesContribuicao, valorMedio);
+    this.regraPedagio100(mesesContribuicao, valorMedio, redutorProfessor);
   }
 
 

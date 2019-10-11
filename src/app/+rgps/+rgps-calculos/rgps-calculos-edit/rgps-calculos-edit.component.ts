@@ -44,7 +44,7 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
 
 
   submit(data) {
-      console.log(this.calculo);
+      // console.log(this.calculo);
       
     	this.CalculoRgps
           .update(this.calculo)

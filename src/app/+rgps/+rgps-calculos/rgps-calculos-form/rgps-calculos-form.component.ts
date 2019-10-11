@@ -462,16 +462,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
     } else if (dateBeneficio > new Date('11/29/1999')) {
       this.hasAnterior = false;
-      this.has98 = false;
-      this.has99 = false;
-      this.hasAtual = false;
+      this.has98 = true;
+      this.has99 = true;
+      this.hasAtual = true;
       this.has19 = true;
 
       if (tipoInvalidezOuIdade) {
         this.hasAnterior = false;
-        this.has98 = false;
-        this.has99 = false;
-        this.hasAtual = false;
+        this.has98 = true;
+        this.has99 = true;
+        this.hasAtual = true;
         this.has19 = true;
       }
     } else {

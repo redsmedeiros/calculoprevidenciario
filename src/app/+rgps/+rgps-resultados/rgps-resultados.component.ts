@@ -521,8 +521,8 @@ export class RgpsResultadosComponent implements OnInit {
 
   calcularToll(tempoDeServico, porcentagem, proporcional, redutorSexo) {
     let toll = ((35 - proporcional - redutorSexo) - tempoDeServico) * porcentagem;
-    toll = (toll < 0) ? 0 : toll;
-    return toll;
+    toll = (toll < 0 || tempoDeServico == 'NaN') ? 0 : toll;
+    return 0;
   }
 
   verificarIdadeNecessaria(idade, redutorIdade, redutorProfessor, redutorSexo, errorArray) {
@@ -804,9 +804,9 @@ export class RgpsResultadosComponent implements OnInit {
                 entre 99 e 19 (tempo de contribuicao até PEC 2019)
                 após 19     (tempo de contribuicao após PEC 2019)
       (cálculos em box separados)*/
-      calculo.mostrarCalculo91_98 = false;
-      calculo.mostrarCalculo98_99 = false;
-      calculo.mostrarCalculoApos99 = false;
+      calculo.mostrarCalculo91_98 = true;
+      calculo.mostrarCalculo98_99 = true;
+      calculo.mostrarCalculoApos99 = true;
       calculo.mostrarCalculoApos19 = true;
     }
 
