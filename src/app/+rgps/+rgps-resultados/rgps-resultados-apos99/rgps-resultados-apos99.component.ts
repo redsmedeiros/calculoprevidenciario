@@ -941,13 +941,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let somaMedias = somaMediasGeral;
     let somaMediasString = '';
 
+    
+
     if (fatorSeguranca >= 1 && valorRegra >= valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao && this.tipoBeneficio == 4) {
       somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + ' - Fator Previdenciário favorável' });//conclusoes.fator_previdenciario = fatorSeguranca + '- Fator Previdenciário favorável';
       this.fatorPrevidenciario = fatorSeguranca;
+      console.log(typeof somaMedias.valor);
       if (typeof somaMedias.valor === 'number') {
         somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
       }
+      
       conclusoes.push({ string: 'Renda Mensal Inicial com Regra ' + resultString + ':', value: currency.acronimo + somaMediasString });//conclusoes.renda_mensal_inicial_com_regra = currency.acronimo + somaMedias;
       //resultados['Renda Mensal Inicial com Regra ' + resultString + ': '] = currency.acronimo + somaMedias;
     } else if (fatorSeguranca >= 1 && valorRegra >= valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao) {
@@ -1179,6 +1183,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       valorRetorno = tetoSalarial;
       avisoString = 'LIMITADO AO TETO'
     }
+
+    if (typeof valorRetorno !== 'number') {
+      valorRetorno = parseFloat(valorRetorno);
+    }
+
     return { valor: valorRetorno, aviso: avisoString };
   }
 
@@ -1245,6 +1254,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
           const teto = parseFloat(reajusteAutomatico.teto);
           let minimo = parseFloat(reajusteAutomatico.salario_minimo);
+
           if (this.tipoBeneficio === 17) {
             minimo *= 0.3;
           } else if (this.tipoBeneficio === 18) {
@@ -1252,7 +1262,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           } else if (this.tipoBeneficio === 7) {
             minimo *= 0.5;
           } else if (this.tipoBeneficio === 19) {
-            minimo *= 0, 6;
+            minimo *= 0.6;
           }
           let reajuste = reajusteAutomatico.indice != null ? parseFloat(reajusteAutomatico.indice) : 1;
 
@@ -1260,11 +1270,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             reajuste = 1.000096;
           }
 
+
           valorBeneficio *= reajuste;
-          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
+
+          const correcaoMinimo2017 = (dataCorrente.isSame(moment('2017-01-01'))
+                                        && (valorBeneficio.toFixed(3) === (minimo + 0.904).toFixed(3)));
+          const correcaoMinimo2018 = (dataCorrente.isSame(moment('2018-01-01'))
+                                        && (valorBeneficio.toFixed(3) === (minimo + 2.396).toFixed(3)));
 
           let limit = '-';
-          if (valorBeneficio < minimo) {
+          if (valorBeneficio < minimo || (correcaoMinimo2017 || correcaoMinimo2018)) {
             valorBeneficio = minimo;
             limit = 'M'
           }
@@ -1272,6 +1287,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             valorBeneficio = teto;
             limit = 'T'
           }
+
+          valorBeneficio = this.convertCurrency(valorBeneficio, dataPrevia, dataCorrente);
+
           const line = {
             competencia: dataCorrente.format('MM/YYYY'),
             reajuste: reajuste,
