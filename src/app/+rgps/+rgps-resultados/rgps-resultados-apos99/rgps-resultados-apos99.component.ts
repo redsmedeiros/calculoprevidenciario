@@ -367,16 +367,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             let salarioMinimoRMI = moeda.salario_minimo;
             divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / 12, 1);
 
-            console.log(divisorContribuicoes);
-            
             if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
               divisorContribuicoes = salarioMinimoRMI;
             }
             totalMediaDozeContribuicoes = divisorContribuicoes;
 
-
-            console.log(divisorContribuicoes);
-            console.log(contribuicoesPrimarias12);
             // Inserir nas conclusoes:
             //conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
             conclusoes.push({ string: "Soma das 12 últimas contribuções", value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo) });
@@ -635,9 +630,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           rmi2 = somaMedias * (coeficiente / 100);
           conclusoes.push({ string: "Média das contribuições x Coeficiente do Cálculo:", value: this.formatMoney(rmi2, currency.acronimo) });//resultados['Média das contribuições x Coeficiente do Cálculo: '] = currency.acronimo + rmi2;
           
-          console.log(divisorContribuicoes);
-          console.log(rmi);
-          
   
           if (parseFloat(divisorContribuicoes) < rmi) {
             rmi = divisorContribuicoes;
@@ -762,18 +754,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.getRendaMensal(conclusoes, rmi, currency);
     
-    // ULTIMA LINHA
-    // if(conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value){
-    //     conclusoes[conclusoes.length - 1]["class"] = "destaque";
-    //   } else if(conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value){
-    //     this.isUpdating = true;
-    //     console.log(conclusoes);
-    //     let valor = conclusoes[conclusoes.length-2];
-    //     conclusoes.push(valor);
-    //     conclusoes[conclusoes.length - 3] = {};
-    //     conclusoes[conclusoes.length - 1]["class"] = "destaque";
-    //     this.isUpdating = false;
-    // }
+   // ULTIMA LINHA
+    if(conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value){
+        conclusoes[conclusoes.length - 1]["class"] = "destaque";
+      } else if(conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value){
+        this.isUpdating = true;
+        //console.log(conclusoes);
+        let valor = conclusoes[conclusoes.length-2];
+        conclusoes.push(valor);
+        conclusoes[conclusoes.length - 3] = {};
+        conclusoes[conclusoes.length - 1]["class"] = "destaque";
+        this.isUpdating = false;
+    }
 
     if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
         rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
@@ -1224,7 +1216,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         rmi = moedaDib.salario_minimo;
        }
 
+     //  if (this.fatorPrevidenciario > 1) {
         conclusoes.push({ string: 'Renda Mensal Inicial com Fator Previdenciario:', value: this.formatMoney(rmi, currency.acronimo)});
+       //}
+
       } else if (this.tipoBeneficio != 1) {
 
         conclusoes.push({ string: 'Renda Mensal Inicial:', value: this.formatMoney(rmi, currency.acronimo) });// resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
