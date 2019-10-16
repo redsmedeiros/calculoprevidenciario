@@ -192,11 +192,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     // } 
     if (sessionStorage.considerarPrescricao === 'false') {
       this.considerarPrescricao = false;
-    }else{
+    } else {
       this.considerarPrescricao = true;
     }
-
-	console.log(this.considerarPrescricao);
 
     if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
       this.debugMode = true;
@@ -221,9 +219,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.calculoId = this.route.snapshot.params['id_calculo'];
           this.CalculoAtrasado.find(this.calculoId)
             .then(calculo => {
-			  this.calculo = calculo;
-			  this.calculo.data = moment().format();
-			  
+              this.calculo = calculo;
+              this.calculo.data = moment().format();
+
               this.setInicioRecebidosEDevidos();
               //console.log(this.calculo);
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
@@ -238,10 +236,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                   // se ouver dib anterior considerar como a primeira data para o indice de correção
                   const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ? this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
-                 
+
                   // Indice devido 
-                  this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'), 
-                  this.dataFinal.format('YYYY-MM-DD'))
+                  this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+                    this.dataFinal.format('YYYY-MM-DD'))
                     .then((indicesDevido: Indices) => {
 
                       for (const i_devido of this.IndiceDevido.list) {
@@ -252,8 +250,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                       const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ? this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
                       // indice recebido
-                      this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'), 
-                      this.dataFinal.format('YYYY-MM-DD'))
+                      this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+                        this.dataFinal.format('YYYY-MM-DD'))
                         .then(indicesRecebido => {
 
                           for (const i_recebido of this.IndiceDevido.list) {
@@ -850,7 +848,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
       this.ultimaCompretencia = stringCompetencia;
-	  this.dataCalculo = moment(dataCorrenteString).format();
+      this.dataCalculo = moment(dataCorrenteString).format();
       let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
       let beneficioDevido = 0.0;
       let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
@@ -866,7 +864,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       // console.log(juros);
-      
+
 
       let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
       let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
@@ -896,14 +894,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         if (chkboxBenefitNotGranted == 1) {
           beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
           diferencaMensal = beneficioDevido - beneficioRecebido;
-          
+
         } else {
           beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
           diferencaMensal = beneficioDevido - beneficioRecebido;
           //console.log(beneficioRecebido);
           /// Aqui
         }
-        
+
       }
 
       diferencaCorrigida = diferencaMensal * correcaoMonetaria;
@@ -1566,7 +1564,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
-    
+
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
       if (parseFloat(beneficioRecebidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 0.904) {
         beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
@@ -1861,36 +1859,36 @@ export class BeneficiosResultadosComponent implements OnInit {
     // console.log(this.jurosCorrenteList);
     // console.log(data.day());
 
-  //  console.log(data);
-  //   for (const rowData of this.jurosCorrenteList) {
+    //  console.log(data);
+    //   for (const rowData of this.jurosCorrenteList) {
 
-  //    // if (rowData.data.isSame(data)) {
-  //     // if (rowData.data.isSame(data)) {
-      
-  //     //   console.log(rowData.data);
-  //     //   console.log(data);
+    //    // if (rowData.data.isSame(data)) {
+    //     // if (rowData.data.isSame(data)) {
 
-  //     //  // return rowData.juros;
+    //     //   console.log(rowData.data);
+    //     //   console.log(data);
 
-  //     // } else {
+    //     //  // return rowData.juros;
 
-  //     //  // return 0;
+    //     // } else {
 
-  //     // }
+    //     //  // return 0;
 
-  //     if (moment(data).startOf('day').diff(moment(rowData.data).startOf('day'), 'days')) {
-  //       console.log( rowData.juros);
-  //       return rowData.juros;
-  //     }
-  //     //console.log('----------');
-      
-  //  }
-  //  return 0;
+    //     // }
 
-     return this.jurosCorrenteList.find(obj => data.isSame(obj.data)).juros;
+    //     if (moment(data).startOf('day').diff(moment(rowData.data).startOf('day'), 'days')) {
+    //       console.log( rowData.juros);
+    //       return rowData.juros;
+    //     }
+    //     //console.log('----------');
+
+    //  }
+    //  return 0;
+
+    return this.jurosCorrenteList.find(obj => data.isSame(obj.data)).juros;
     // return this.jurosCorrenteList.find(obj => moment(data).startOf('day').diff(moment(obj.data).startOf('day'), 'days')).juros;
 
-  
+
 
   }
 
@@ -2192,9 +2190,29 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.calculo.percentual_taxa_advogado == '') {// Verificar se há valor para o percentual do advogado.
       honorarios = 0;
       // Aplicar a porcentagem quando a data corrente estiver no intervalo definido ou quando nenhuma data for definida
+    } else if ((taxaAdvogadoInicio.isSame(dataCorrente, 'month')) ||
+      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
+
+      // inicio proporcional
+      let diasInicio = taxaAdvogadoInicio.get('date');
+      const diasMesInicio = taxaAdvogadoInicio.daysInMonth();
+      diasInicio = (diasMesInicio - diasInicio) + 1;
+      honorarios = diferecaCorrigidaJuros * ((diasInicio / diasMesInicio) * parseFloat(this.calculo.percentual_taxa_advogado));
+
+    } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
+      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
+
+      // Fim proporcional
+      const diasFinal = taxaAdvogadoFinal.get('date');
+      const diasMesFinal = taxaAdvogadoFinal.daysInMonth();
+      honorarios = diferecaCorrigidaJuros * ((diasFinal / diasMesFinal) * parseFloat(this.calculo.percentual_taxa_advogado));
+
     } else if ((taxaAdvogadoInicio <= dataCorrente && dataCorrente <= taxaAdvogadoFinal) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
+
+      // calcula o intevalo entre datas
       honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
+
     } else {
       honorarios = 0;
     }
@@ -2220,7 +2238,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   calcularVincendosTetos() {
     let somaVincendosTetos = this.ultimaRenda;
     let data = moment(this.calculo.data_citacao_reu);
-	let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
+    let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
     let maturidade = this.calculo.maturidade;
     let jurosVincendos = 0.0;
 
@@ -2340,7 +2358,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
     this.jurosDepois2003 = this.calculo.pos_interesse_2003 / 100;
-	this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
+    this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
   }
 
   //Verifica se uma data esta no periodo do buraco negro
@@ -2640,7 +2658,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   calcularSemPrescricao() {
     //window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
-    
+
     let is_prescricao = 'true';
     if (sessionStorage.considerarPrescricao === 'true') {
       is_prescricao = 'false';
@@ -2715,14 +2733,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
     let valoresRecebdios = '';
-    if (typeof(document.getElementById('printableValoresRecebidos')) != 'undefined' && document.getElementById('printableValoresRecebidos') != null)
-    {
+    if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined' && document.getElementById('printableValoresRecebidos') != null) {
       valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
     }
     let honorarios = document.getElementById('printableHonorarios').innerHTML;
     let juros = document.getElementById('printableJuros').innerHTML;
     let conclusoes = document.getElementById('printableConclusoes').innerHTML;
-	let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
+    let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + honorarios + juros + conclusoes + resultadoCalculo;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
