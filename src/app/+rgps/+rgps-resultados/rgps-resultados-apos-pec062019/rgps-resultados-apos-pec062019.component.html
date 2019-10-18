@@ -213,12 +213,12 @@
 
           <sa-widget [colorbutton]="false" [editbutton]="false">
             <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
+                <i
+                class="fa fa-gear fa-4x fa-spin txt-color-red"
+                *ngIf="isUpdating"
+              ></i>
             <div *ngIf="!isUpdating">
               <div class="widget-body no-padding">
-                <i
-                  class="fa fa-gear fa-4x fa-spin txt-color-red"
-                  *ngIf="isUpdating"
-                ></i>
                 <sa-datatable
                   [options]="tableOptions"
                   [responsive]="false"
@@ -427,6 +427,24 @@
                   </td>
                   <td>{{ conclusoesRegra3.tempoDeContribuicaoAposentar }}</td>
                 </tr>
+                <tr>
+                  <td width="50%">
+                    <span class="pull-right font-bold">Tempo atual de contribuição</span>
+                  </td>
+                  <td>{{ conclusoesRegra3.tempoDeAtualDecontribuicao }}</td>
+                </tr>
+                <tr *ngIf="conclusoesRegra3.exibirValor">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Fator Previdenciário</span>
+                    </td>
+                    <td>{{ conclusoesRegra3.fator}}</td>
+                  </tr>
+                <tr *ngIf="conclusoesRegra3.exibirValor">
+                    <td width="50%">
+                      <span class="pull-right font-bold">Renda Mensal Inicial</span>
+                    </td>
+                    <td>{{ conclusoesRegra3.valorString }}</td>
+                  </tr>
               </ng-template>
               <ng-template #regra3NaoAplica>
                 <tr>

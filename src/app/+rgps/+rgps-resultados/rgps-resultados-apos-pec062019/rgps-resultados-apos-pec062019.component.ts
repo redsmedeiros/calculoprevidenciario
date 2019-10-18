@@ -458,6 +458,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       }
       return 0;
     });
+
     let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true)); // Calcular a quantidade de meses contida entre as duas datas.
     if (numeroCompetencias > 60) {
       numeroCompetencias = 60;
@@ -675,11 +676,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         rmi2 = somaMedias * (coeficiente / 100);
         conclusoes.push({ string: "Média das contribuições x Coeficiente do Cálculo:", value: this.formatMoney(rmi2, currency.acronimo) });//resultados['Média das contribuições x Coeficiente do Cálculo: '] = currency.acronimo + rmi2;
 
-        console.log(divisorContribuicoes);
-        console.log(rmi);
-
-
-        if (parseFloat(divisorContribuicoes) < rmi) {
+             if (parseFloat(divisorContribuicoes) < rmi) {
           rmi = divisorContribuicoes;
         }
 
@@ -803,23 +800,22 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.getRendaMensal(conclusoes, rmi, currency);
 
     // ULTIMA LINHA
-    // if(conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value){
-    //     conclusoes[conclusoes.length - 1]["class"] = "destaque";
-    //   } else if(conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value){
-    //     this.isUpdating = true;
-    //     console.log(conclusoes);
-    //     let valor = conclusoes[conclusoes.length-2];
-    //     conclusoes.push(valor);
-    //     conclusoes[conclusoes.length - 3] = {};
-    //     conclusoes[conclusoes.length - 1]["class"] = "destaque";
-    //     this.isUpdating = false;
-    // }
+    if(conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value){
+        conclusoes[conclusoes.length - 1]["class"] = "destaque";
+      } else if(conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value){
+        this.isUpdating = true;
+        console.log(conclusoes);
+        let valor = conclusoes[conclusoes.length-2];
+        conclusoes.push(valor);
+        conclusoes[conclusoes.length - 3] = {};
+        conclusoes[conclusoes.length - 1]["class"] = "destaque";
+        this.isUpdating = false;
+    }
 
     if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
       rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
       rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
     } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-      console.log(rmi, somaMedias, rmi >= somaMedias);
       rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
       rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
     }
@@ -1714,8 +1710,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       msg: '',
       valor: '',
       valorString: '',
+      exibirValor: false,
       dataParaAposentar: '',
       tempoDeContribuicaoAposentar: '',
+      tempoDeAtualDecontribuicao: '',
       tempoDePedagio: '',
       tempoDePedagioTotal: '',
       formula: '',
@@ -1724,37 +1722,75 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     };
 
 
+    const tempoAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
+    const tempoContribuicaoAnosAtePec = (((tempoAtePec.anos) * 365) + ((tempoAtePec.meses) * 30) + (tempoAtePec.dias)) / 365;
+    //this.contribuicaoTotal
+    
     this.conclusoesRegra3.status = this.requisitosRegra4(this.segurado.sexo,
-      this.contribuicaoTotal, redutorProfessor);
+      tempoContribuicaoAnosAtePec, redutorProfessor);
 
     if (this.conclusoesRegra3.status) {
-
       const contribuicao_max = { m: 35, f: 30 };
-      const dibParaRegra3 = this.dataInicioBeneficio.clone();
-      const contribuicaoDiff = (contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal);
-      const tempoDePedagio =  ((contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal) * 0.5);
-     
-      const tempoFinalContrib = contribuicao_max[this.segurado.sexo] + tempoDePedagio;
 
-      this.conclusoesRegra3.tempoDePedagio = 'Não faz jus a aplicação desta regra falta '
-                                              + this.tratarTempoFracionado(tempoDePedagio)
-                                              + ' para cumprir o pedágio.';
-      this.conclusoesRegra3.tempoDePedagioTotal = this.tratarTempoFracionado(contribuicaoDiff + tempoDePedagio);
+      const dibParaRegra3 = this.dataInicioBeneficio.clone();
+
+      let contribuicaoDiff = 0;
+      let tempoDePedagio = 0;
+      let tempoFinalContrib = 0;
+      let tempoDePedagioTotal = 0;
+
+      if(tempoContribuicaoAnosAtePec <= contribuicao_max[this.segurado.sexo]){
+        contribuicaoDiff = (contribuicao_max[this.segurado.sexo] - this.contribuicaoTotal);
+
+        tempoDePedagio =  ((contribuicao_max[this.segurado.sexo] - tempoContribuicaoAnosAtePec) * 0.5);
+        tempoFinalContrib = contribuicao_max[this.segurado.sexo] + tempoDePedagio;
+      }
+
+      tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+
+      console.clear();
+      console.log('----');
+      console.log(this.calculo);
+      console.log(tempoContribuicaoAnosAtePec);
+
+      console.log(dibParaRegra3);
+      console.log(contribuicaoDiff);
+      console.log(tempoDePedagio);
+      console.log(tempoFinalContrib);
+      console.log(contribuicaoDiff + tempoDePedagio);
+
+      this.conclusoesRegra3.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagioTotal);
       this.conclusoesRegra3.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContrib) ;
       
       // this.conclusoesRegra3.formula = contribuicao_max[this.segurado.sexo] +' - ((' + contribuicao_max[this.segurado.sexo] + '-' + this.contribuicaoTotal + ') * 0.5)';
-      this.conclusoesRegra3.dataParaAposentar = dibParaRegra3.add(contribuicaoDiff + tempoDePedagio, 'years').format('DD/MM/YYYY');
+      this.conclusoesRegra3.dataParaAposentar = dibParaRegra3.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
+      this.conclusoesRegra3.tempoDeAtualDecontribuicao = this.tratarTempoFracionado(this.contribuicaoTotal);
       
-       this.conclusoesRegra3.valor = valorMedio * this.fatorPrevidenciario;
-       this.conclusoesRegra3.valorString = this.formatMoney(this.conclusoesRegra3.valor);
-       this.conclusoesRegra3.fator = this.fatorPrevidenciario;
+
+      if (tempoDePedagioTotal > 0) {
+
+        this.conclusoesRegra3.tempoDePedagio = 'Não faz jus a aplicação desta regra falta '
+        + this.tratarTempoFracionado(tempoDePedagioTotal)
+        + ' para cumprir o pedágio.';
+
+      } else {
+
+        this.conclusoesRegra3.tempoDePedagio = 'Alcançou os requisitos de tempo de contribuição';
+        this.conclusoesRegra3.valor = valorMedio * this.fatorPrevidenciario;
+        this.conclusoesRegra3.valorString = this.formatMoney(this.conclusoesRegra3.valor);
+        this.conclusoesRegra3.fator = this.fatorPrevidenciario;
+        this.conclusoesRegra3.exibirValor = true;
+
+      }
+
+
+     
 
       // console.log(this.fatorPrevidenciario);
       // console.log(valorMedio);
       // console.log( this.conclusoesRegra3.tempoParaAposentar);
       // console.log(contribuicao);
-       console.log(tempoFinalContrib);
-      // console.log(this.conclusoesRegra3.dataParaAposentar);
+       console.log(this.conclusoesRegra3);
 
 
     } else {
