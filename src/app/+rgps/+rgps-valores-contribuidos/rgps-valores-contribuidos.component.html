@@ -134,7 +134,7 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Valor*:</label>
                     <div class="col-md-2">
-                      <input class="form-control" currencyMask maxlength="12" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
+                      <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
                       <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
                     </div>
 

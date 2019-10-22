@@ -923,7 +923,7 @@
                   <strong>Observações:</strong>
                 </p>
                 <p>
-                  <strong>a) </strong> Cálculos atualizados até {{ultimaCompretencia}};</p>
+                  <strong>a) </strong> Cálculos atualizados até {{formatDate(calculo.data_calculo_pedido)}};</p>
                 <p>
                   <strong>b) </strong> Correção monetária conforme Sistema de Correção Monetária do CJF;</p>
                 <p *ngIf="calculo.tipo_correcao == 'ipca'">Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a 01/1989, IPC (IBGE) de 01/1989 a 02/1989, BTN de 03/1989 a 03/1990, IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de 01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de 05/1996 a 08/2006, IPCA-e até {{formatDate(calculo.data_calculo_pedido)}};</p>
