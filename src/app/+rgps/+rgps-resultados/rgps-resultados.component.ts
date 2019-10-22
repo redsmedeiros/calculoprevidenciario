@@ -260,6 +260,7 @@ export class RgpsResultadosComponent implements OnInit {
   public dataDib99 = moment('1999-11-29');
   public dataMP664 = moment('2015-03-01');
   public dataDecreto6939_2009 = moment('2009-08-18');
+  public dataPec062019 = moment('2019-10-22');
 
   // Variaveis de controle do template
   public mostrarCalculoAnterior88 = false;

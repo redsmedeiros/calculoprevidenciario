@@ -113,6 +113,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
+
+    if(this.dataInicioBeneficio > this.dataPec062019){
+      dataInicio = this.dataPec062019.startOf('month');; // ate a PEC06/2019
+    }
+    
     let dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
