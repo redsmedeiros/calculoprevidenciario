@@ -115,6 +115,7 @@ export class RgpsCalculosComponent implements OnInit {
 // console.log(data.contribuicao_primaria_98);
 // console.log(data.contribuicao_primaria_99);
 // console.log(data.contribuicao_primaria_atual);
+// console.log(data.contribuicao_primaria_19);
 
     if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_98 !== '--') {
       str = str + data.contribuicao_primaria_98.replace(/-/g,'/') +'<br>';
@@ -124,6 +125,9 @@ export class RgpsCalculosComponent implements OnInit {
     }
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined' && data.contribuicao_primaria_atual !== '--') {
       str = str + data.contribuicao_primaria_atual.replace(/-/g,'/') +'<br>';
+    }
+    if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_19 !== '--') {
+      str = str + data.contribuicao_primaria_19.replace(/-/g,'/') +'<br>';
     }
 
     return str;

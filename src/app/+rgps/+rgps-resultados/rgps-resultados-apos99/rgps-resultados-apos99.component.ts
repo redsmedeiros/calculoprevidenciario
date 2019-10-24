@@ -796,6 +796,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = rmi;
     this.CalculoRgpsService.update(this.calculo);
+
   }
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {

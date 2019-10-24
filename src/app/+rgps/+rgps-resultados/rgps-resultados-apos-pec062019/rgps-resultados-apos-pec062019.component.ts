@@ -107,11 +107,21 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public conclusoesRegra3: any;
   public conclusoesRegra4: any;
   public conclusoesRegra5: any;
-
-  // transição FIM 
-
+  public isRegrasTransicao = false;
 
 
+
+  public conclusoesRegraAposentadoriaEspecial: any;
+  public isRegrasAposentadoriaEspecial = false;
+
+
+  public errorRegrasTransicao = {
+    msg: '',
+    status: false
+  };
+  public checkboxIdDescarteArray = [];
+
+  // transição FIM
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
@@ -159,9 +169,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
                         .then(carencias => {
+
                           this.carenciasProgressivas = carencias;
-                          this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-                          this.aplicarRegrasTransicao();
+                          this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                          this.regrasDaReforma();
 
                           this.isUpdating = false;
                         });
@@ -172,7 +183,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       });
   }
 
-  calculo_apos_99(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
+  calculo_apos_pec_2019(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
     let moedaDib = this.Moeda.getByDate(dib);
@@ -237,12 +248,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
       let contribuicaoPrimariaRevisadaString = this.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
-      let contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
+      //let contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
       //tabela['Contribuicao Primaria Corrigida'] = currency.Acronimo + contribuicaoPrimariaRevisada
       //tabela['Contribuicao Secundaria Corrigida'] = currency.Acronimo + contribuicaoSecundariaRevisada
 
 
-      const checkBox = `<label><input type="checkbox" id='${idString}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label>`;
+      const checkBox = `<label><input type="checkbox" id='${idString}-checkbox' class="checkbox check-descarte" value="${dataContribuicaoString}"><span> </span></label>`;
+      this.checkboxIdDescarteArray.push(`${idString}-checkbox`);
 
       let line = {
         id: idString,
@@ -251,10 +263,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         contribuicao_secundaria: contribuicaoSecundariaString,
         indice_corrigido: fatorCorrigidoString,
         contribuicao_primaria_revisada: contribuicaoPrimariaRevisadaString,
-        contribuicao_secundaria_revisada: contribuicaoSecundariaRevisadaString,
+        //contribuicao_secundaria_revisada: contribuicaoSecundariaRevisadaString,
         limite: limiteString,
         valor_primario: contribuicaoPrimariaRevisada,
-        valor_secundario: contribuicaoSecundariaRevisada,
+        // valor_secundario: contribuicaoSecundariaRevisada,
         checkbox: checkBox
       };
       tableData.push(line);
@@ -488,12 +500,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       default:
         fatorSeguranca = ((tempoTotalContribuicao * aliquota) / expectativa) * (1 + (this.idadeFracionada + (tempoTotalContribuicao * aliquota)) / 100);
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
+        this.fatorPrevidenciario = fatorSeguranca;
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
         //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
         this.formula_fator = "((" + this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' + this.formatDecimal(aliquota, 2) + ") / " + this.formatDecimal(expectativa, 2) + ") * (1 + (" + this.formatDecimal(this.idadeFracionada, 2) + " + (" + this.formatDecimal(tempoTotalContribuicao, 4) + " * " + this.formatDecimal(aliquota, 2) + ")) / " + "100)";
         //conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
+    console.log(fatorSeguranca);
 
     if (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
       this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
@@ -611,7 +625,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
     // conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
-   // conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
+    // conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
     if (this.formula_fator != '') {
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
@@ -632,27 +646,27 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //   this.contribuicaoTotal -= this.contribuicaoTotal - 5;
     // }
 
-    let contribuicao85_95 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao86_96 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao87_97 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao88_98 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao89_99 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao90_100 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao85_95 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao86_96 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao87_97 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao88_98 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao89_99 = this.contribuicaoTotal + this.idadeFracionada;
+    // let contribuicao90_100 = this.contribuicaoTotal + this.idadeFracionada;
 
-    let dateFormat = "DD/MM/YYYY";
-    let dataRegra85_95 = moment('17/06/2015', dateFormat);
-    let dataRegra86_96 = moment('31/12/2018', dateFormat);
-    let dataRegra87_97 = moment('31/12/2020', dateFormat);
-    let dataRegra88_98 = moment('31/12/2022', dateFormat);
-    let dataRegra89_99 = moment('31/12/2024', dateFormat);
-    let dataRegra90_100 = moment('31/12/2026', dateFormat);
+    // let dateFormat = "DD/MM/YYYY";
+    // let dataRegra85_95 = moment('17/06/2015', dateFormat);
+    // let dataRegra86_96 = moment('31/12/2018', dateFormat);
+    // let dataRegra87_97 = moment('31/12/2020', dateFormat);
+    // let dataRegra88_98 = moment('31/12/2022', dateFormat);
+    // let dataRegra89_99 = moment('31/12/2024', dateFormat);
+    // let dataRegra90_100 = moment('31/12/2026', dateFormat);
 
-    let dataFimRegra85_95 = moment('30/12/2018', dateFormat);
-    let dataFimRegra86_96 = moment('30/12/2020', dateFormat);
-    let dataFimRegra87_97 = moment('30/12/2022', dateFormat);
-    let dataFimRegra88_98 = moment('30/12/2024', dateFormat);
-    let dataFimRegra89_99 = moment('30/12/2026', dateFormat);
-    let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
+    // let dataFimRegra85_95 = moment('30/12/2018', dateFormat);
+    // let dataFimRegra86_96 = moment('30/12/2020', dateFormat);
+    // let dataFimRegra87_97 = moment('30/12/2022', dateFormat);
+    // let dataFimRegra88_98 = moment('30/12/2024', dateFormat);
+    // let dataFimRegra89_99 = moment('30/12/2026', dateFormat);
+    // let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
 
     let dataBeneficio = this.dataInicioBeneficio;
     // let teto = moedaDib.teto;
@@ -681,121 +695,122 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           rmi = divisorContribuicoes;
         }
 
-       // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
+        // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
       }
     }
+    conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });
 
     if (naoFocado) {
       if (fatorSeguranca <= 1) {
-        conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator previdenciário'] = fatorSeguranca;
+        // conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator previdenciário'] = fatorSeguranca;
       } else {
-        conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '(Incide fator previdenciario)' });//resultados['Fp - fator previdenciário'] = fatorSeguranca + '(Incide fator previdenciario)';
+        // conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '(Incide fator previdenciario)' });//resultados['Fp - fator previdenciário'] = fatorSeguranca + '(Incide fator previdenciario)';
       }
     } else {
 
-    //   if ((dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) && (this.contribuicaoPrimaria.anos >= comparacaoContribuicao)) {
+      //   if ((dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95) && (this.contribuicaoPrimaria.anos >= comparacaoContribuicao)) {
 
-    //     const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
-    //     const redutorProfessor85_95 = (this.tipoBeneficio == 6) ? 80 : 90;
+      //     const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
+      //     const redutorProfessor85_95 = (this.tipoBeneficio == 6) ? 80 : 90;
 
-    //     if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 4) {
+      //     if (fatorSeguranca >= 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 4) {
 
-    //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
-    //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
-    //       this.fatorPrevidenciario = fatorSeguranca;
-    //       //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
-    //       this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
-    //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias
+      //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
+      //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
+      //       this.fatorPrevidenciario = fatorSeguranca;
+      //       //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
+      //       this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
+      //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias
 
-    //     } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorProfessor85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 6) {
+      //     } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorProfessor85_95 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo && this.tipoBeneficio == 6) {
 
-    //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
-    //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
-    //       this.fatorPrevidenciario = fatorSeguranca;
-    //       //let rmi80_90 = this.formatMoney(somaMedias, currency.acronimo);
-    //       this.rmi8090 = this.formatMoney(somaMedias, currency.acronimo);
-    //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 80/90:",value:rmi80_90});//resultados['Renda Mensal Inicial com Regra 80/90: '] = currency.acronimo + somaMedias
+      //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
+      //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Fator Previdenciário favorável' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- Fator Previdenciário favorável';
+      //       this.fatorPrevidenciario = fatorSeguranca;
+      //       //let rmi80_90 = this.formatMoney(somaMedias, currency.acronimo);
+      //       this.rmi8090 = this.formatMoney(somaMedias, currency.acronimo);
+      //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 80/90:",value:rmi80_90});//resultados['Renda Mensal Inicial com Regra 80/90: '] = currency.acronimo + somaMedias
 
-    //     } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao && this.tipoBeneficio == 4) {
-    //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
-    //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)';
-    //       this.fatorPrevidenciario = fatorSeguranca;
-    //       //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
-    //       this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
-    //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias;
-    //     } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
+      //     } else if (fatorSeguranca < 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao && this.tipoBeneficio == 4) {
+      //       somaMedias = (this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio)).valor;
+      //       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)' });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca + '- FP desfavorável (Aplica-se a regra 85/95)';
+      //       this.fatorPrevidenciario = fatorSeguranca;
+      //       //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
+      //       this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
+      //       //conclusoes.push({string:"Renda Mensal Inicial com Regra 85/95:",value:rmi85_95});//resultados['Renda Mensal Inicial com Regra 85/95: '] = currency.acronimo + somaMedias;
+      //     } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
 
-    //       if (this.tipoBeneficio == 6) {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       } else {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       }
+      //       if (this.tipoBeneficio == 6) {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       } else {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       }
 
-    //     } else if (fatorSeguranca > 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
+      //     } else if (fatorSeguranca > 1 && contribuicao85_95 >= redutorSexo85_95 && tempoTotalContribuicao < comparacaoContribuicao) {
 
-    //       if (this.tipoBeneficio == 6) {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       } else {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       }
+      //       if (this.tipoBeneficio == 6) {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       } else {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       }
 
-    //     } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao) {
+      //     } else if (fatorSeguranca < 1 && contribuicao85_95 < redutorSexo85_95 && tempoTotalContribuicao >= comparacaoContribuicao) {
 
-    //       if (this.tipoBeneficio == 6) {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       } else {
-    //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
-    //         this.fatorPrevidenciario = fatorSeguranca;
-    //       }
+      //       if (this.tipoBeneficio == 6) {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 80/90' });//resultados['Fp - Fator Previdenciario: '] =  fatorSeguranca + '- Não tem direito a Regra 80/90';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       } else {
+      //         conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + '- Não tem direito a Regra 85/95' });//resultados['Fp - Fator Previdenciario: '] =   fatorSeguranca + '- Não tem direito a Regra 85/95';
+      //         this.fatorPrevidenciario = fatorSeguranca;
+      //       }
 
-    //     }
-    //   }
+      //     }
+      //   }
 
-    //   // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
-    //   //   conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
-    //   //   this.fatorPrevidenciario = fatorSeguranca;
-    //   // }
+      //   // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
+      //   //   conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
+      //   //   this.fatorPrevidenciario = fatorSeguranca;
+      //   // }
 
-    //   else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f') { // 86/96
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98) {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99 && this.segurado.sexo == 'f') {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99) {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100 && this.segurado.sexo == 'f') {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100) {
-    //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
-    //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   } else {
-    //     conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca;
-    //     this.fatorPrevidenciario = fatorSeguranca;
-    //     this.getRendaMensal(conclusoes, rmi, currency);
-    //   }
+      //   else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f') { // 86/96
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 88, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98) {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra88_98, dataFimRegra88_98, contribuicao88_98, 98, tempoTotalContribuicao, fatorSeguranca, '88/98', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99 && this.segurado.sexo == 'f') {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 89, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra89_99 && dataBeneficio <= dataFimRegra89_99) {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra89_99, dataFimRegra89_99, contribuicao89_99, 99, tempoTotalContribuicao, fatorSeguranca, '89/99', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100 && this.segurado.sexo == 'f') {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 90, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else if (dataBeneficio >= dataRegra90_100 && dataBeneficio <= dataFimRegra90_100) {
+      //     rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias);
+      //     rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra90_100, dataFimRegra90_100, contribuicao90_100, 100, tempoTotalContribuicao, fatorSeguranca, '90/100', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   } else {
+      //     conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - Fator Previdenciário: '] = fatorSeguranca;
+      //     this.fatorPrevidenciario = fatorSeguranca;
+      //     this.getRendaMensal(conclusoes, rmi, currency);
+      //   }
     }
 
     this.getRendaMensal(conclusoes, rmi, currency);
@@ -1135,7 +1150,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           // "POSSUI direito ao benefício proporcional."
           // "Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
-         // errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL.");
+          // errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL.");
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
@@ -1253,12 +1268,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   getRendaMensal(conclusoes, rmi, currency) {
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
       //conclusoes.push({string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
-     // conclusoes.push({ string: "Renda Mensal Inicial com Fator Previdenciario:", value: this.formatMoney(rmi, currency.acronimo) });
+      // conclusoes.push({ string: "Renda Mensal Inicial com Fator Previdenciario:", value: this.formatMoney(rmi, currency.acronimo) });
     } else if (this.tipoBeneficio != 1) {
-     // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
+      // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
     }
 
-    console.log(conclusoes);
+
   }
 
   getIdadeFracionada() {
@@ -1848,9 +1863,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   /* 
     Regra 5 idade:
   */
-
-
-
   public getparametrosRegra5(ano) {
 
     const regra5 = {
@@ -1861,7 +1873,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       2023: { f: 62, m: 65 }
     };
 
-    if(ano <= 2019){
+    if (ano <= 2019) {
       return regra5[2019];
     }
 
@@ -1875,8 +1887,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   }
 
-
-
   /**
    * regra 5 - idade
    */
@@ -1886,23 +1896,19 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     const regra5 = this.getparametrosRegra5(ano);
 
-    
 
-    if (sexo === 'm' && idade >= 65 && tempo_contribuicao >= contribuicao_min){
+
+    if (sexo === 'm' && idade >= 65 && tempo_contribuicao >= contribuicao_min) {
       return true;
     };
 
-   
-    return (sexo === 'f' &&  idade >= regra5['f'] && tempo_contribuicao >= contribuicao_min) ? true : false;
+
+    return (sexo === 'f' && idade >= regra5['f'] && tempo_contribuicao >= contribuicao_min) ? true : false;
 
   }
 
-
-
-
   /**
    * regra de transição idade - Art 18
-   * 
    */
   public regraIdade(mesesContribuicao, valorMedio) {
 
@@ -1945,7 +1951,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
       const idadeMin = this.getparametrosRegra5(this.dataInicioBeneficio.year());
-      this.conclusoesRegra5.msg = 'Não atende os requisitos desta regra. O segurado deve possuir '+ idadeMin[this.segurado.sexo];
+      this.conclusoesRegra5.msg = 'Não atende os requisitos desta regra. O segurado deve possuir ' + idadeMin[this.segurado.sexo];
     }
 
 
@@ -1957,21 +1963,228 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   // regra 5 fim
 
 
+
+
+
+
   /**
    * aplicarRegrasTransicao
   */
-  public aplicarRegrasTransicao() {
+  public aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor) {
+
+    // const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    // const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
+    // const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
+
+    console.log(mesesContribuicao);
+    console.log(this.tipoBeneficio);
+
+    if (
+      (this.contribuicaoPrimaria.anos > 0 ||
+        this.contribuicaoPrimaria.meses > 0 ||
+        this.contribuicaoPrimaria.dias > 0) &&
+      (this.listaValoresContribuidos.length > 0)
+    ) {
+      this.errorRegrasTransicao.status = false;
+
+      this.regraPontos(mesesContribuicao, valorMedio, redutorProfessor);
+      this.regraTempoContribuicaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor);
+      this.regraPedagio50(mesesContribuicao, valorMedio);
+      this.regraPedagio100(mesesContribuicao, valorMedio, redutorProfessor);
+      this.regraIdade(mesesContribuicao, valorMedio);
+
+    } else {
+      this.errorRegrasTransicao.status = true;
+      this.errorRegrasTransicao.msg = 'Não e possível calcular falta tempo de contribuição ou valores de contribuição.';
+    }
+
+  }
+
+
+
+
+  // aposentadoria inicio especial
+
+  public regraAposentadoriaEspecial(mesesContribuicao, valorMedio, tipoBeneficio) {
+
+    this.conclusoesRegraAposentadoriaEspecial = {
+      status: false,
+      msg: '',
+      percentual: 0,
+      formula: '',
+      valor: 0,
+      valorString: '',
+      pontosSegurado: 0,
+      pontosNecessarios: 0,
+      tempoContribuicaoSegurado: 0,
+      tempoContribuicaoMin: 0,
+      statusTempo: true,
+      statusPontos: true
+    };
+
+    const tempoRegra = {
+      1915: 15,
+      1920: 20,
+      1925: 25
+    };
+
+    const tempoPercentual = {
+      1915: 15,
+      1920: 20,
+      1925: 20
+    };
+
+    const regraEspecial = {
+      1915: { pontos: 66 },
+      1920: { pontos: 76 },
+      1925: { pontos: 86 }
+    };
+
+    const pontosEspecial = Math.trunc(this.contribuicaoTotal + this.idadeFracionada);
+
+    this.conclusoesRegraAposentadoriaEspecial.pontosSegurado = pontosEspecial;
+    this.conclusoesRegraAposentadoriaEspecial.pontosNecessarios = regraEspecial[tipoBeneficio].pontos;
+    this.conclusoesRegraAposentadoriaEspecial.tempoContribuicaoSegurado = this.contribuicaoTotal;
+    this.conclusoesRegraAposentadoriaEspecial.tempoContribuicaoMin = tempoRegra[tipoBeneficio];
+
+    this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial > regraEspecial[tipoBeneficio].pontos)
+                                                        && ( this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
+
+    if (this.conclusoesRegraAposentadoriaEspecial.status) {
+
+
+      let percentual = ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[tipoBeneficio]) * 2);
+      percentual += 60;
+
+      this.conclusoesRegraAposentadoriaEspecial.percentual = percentual;
+
+      percentual /= 100;
+
+      this.conclusoesRegraAposentadoriaEspecial.valor = (valorMedio * percentual);
+
+      this.conclusoesRegraAposentadoriaEspecial.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} 
+                                                              - ${tempoPercentual[tipoBeneficio]}) * 2)`;
+
+      this.conclusoesRegraAposentadoriaEspecial.valorString = this.formatMoney(this.conclusoesRegraAposentadoriaEspecial.valor);
+
+    } else {
+      this.conclusoesRegraAposentadoriaEspecial.msg = 'O Segurado não atingiu os requisitos. ';
+
+      if(pontosEspecial > regraEspecial[tipoBeneficio].pontos){
+        this.conclusoesRegraAposentadoriaEspecial.statusPontos = false;
+      }
+
+      if( this.contribuicaoTotal >= tempoRegra[tipoBeneficio]){
+        this.conclusoesRegraAposentadoriaEspecial.statusTempo = false;
+      }
+
+    }
+
+
+
+    console.log(this.conclusoesRegraAposentadoriaEspecial);
+  }
+
+
+
+
+
+
+
+  // aposentadoria fim especial
+
+
+
+  /**
+  * aplicarRegrasTransicao
+ */
+  public regrasDaReforma() {
+
+    this.isUpdating = true;
+
+    const arrayEspecial = [1915, 1920, 1925];
+    const arrayPensao = [1900, 1901];
+
+
     const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
 
 
 
-    this.regraPontos(mesesContribuicao, valorMedio, redutorProfessor);
-    this.regraTempoContribuicaoIdadeMinima(mesesContribuicao, valorMedio, redutorProfessor);
-    this.regraPedagio50(mesesContribuicao, valorMedio);
-    this.regraPedagio100(mesesContribuicao, valorMedio, redutorProfessor);
-    this.regraIdade(mesesContribuicao, valorMedio)
+    // aplicação default false
+    if (arrayEspecial.includes(this.tipoBeneficio)) {
+
+      // Aposentadoria especial
+      this.isRegrasAposentadoriaEspecial = true;
+      this.regraAposentadoriaEspecial(mesesContribuicao, valorMedio, this.tipoBeneficio);
+
+    } else if (arrayPensao.includes(this.tipoBeneficio)) {
+
+
+
+    } else {
+      this.isRegrasTransicao = true;
+      this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
+    }
+
+
+
+    this.isUpdating = false;
+
+    // setTimeout(() => {
+    //   this.descarteContribuicoesSelecionadas();
+    // }, 5000);
+
+
+  }
+
+
+
+
+
+
+
+
+
+  setDescarteConpetencia() {
+
+  }
+
+  descarteContribuicoesSelecionadas() {
+
+
+
+    // const idList = [];
+    //     for (const checkboxId of this.checkboxIdDescarteArray) {
+    //       console.log((<HTMLInputElement>document.getElementById(checkboxId)));
+
+    //       if ((<HTMLInputElement>document.getElementById(checkboxId)).checked) {
+    //         idList.push(checkboxId.split('-')[0]);
+    //       }
+    //     }
+
+
+
+    // const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    // console.log((<HTMLInputElement>document.getElementById('296-checkbox')));
+
+
+    // const idList = [];
+    // let checkboxId = '';
+    // for (let i = 0; i <= mesesContribuicao; i++) {
+
+    //   checkboxId = i + '-checkbox';
+
+    //   console.log(document.getElementById(checkboxId));
+    //   // if ((<HTMLInputElement>document.getElementById(checkboxId)).checked) {
+    //   //   idList.push(checkboxId.split('-')[0]);
+    //   // }
+    //   console.log((<HTMLInputElement>document.getElementById(checkboxId)));
+
+    // }
+
+
   }
 
 

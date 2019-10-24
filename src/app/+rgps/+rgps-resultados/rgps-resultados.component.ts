@@ -623,6 +623,23 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
         numeroEspecie = 28;
         break;
+      // Reforma  inicio 2019
+      case 'Aposentadoria especial - 15 anos de exposição':
+        numeroEspecie = 1915;
+        break;
+      case 'Aposentadoria especial - 20 anos de exposição':
+        numeroEspecie = 1920;
+        break;
+      case 'Aposentadoria especial - 25 anos de exposição':
+        numeroEspecie = 1925;
+        break;
+      case 'Pensão por Morte instituidor aposentado na data óbito':
+        numeroEspecie = 1900;
+        break;
+      case 'Pensão por Morte instituidor não é aposentado na data óbito':
+        numeroEspecie = 1901;
+        break;
+      // Reforma  fim 2019
       default:
         break;
     }
@@ -742,7 +759,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   getContribuicaoObj(stringContrib) {
     let returnObj = { anos: 0, meses: 0, dias: 0 };
-    if (stringContrib) {
+    if (stringContrib && stringContrib !== undefined) {
       const anos = (stringContrib.split('-')[0] !== 'undefined') ? stringContrib.split('-')[0] : 0;
       const meses = (stringContrib.split('-')[1] !== 'undefined') ? stringContrib.split('-')[1] : 0;
       const dias = (stringContrib.split('-')[2] !== 'undefined') ? stringContrib.split('-')[2] : 0;
@@ -973,12 +990,12 @@ export class RgpsResultadosComponent implements OnInit {
 
   isExits(value) {
     return (typeof value !== 'undefined' &&
-    value != null && value != 'null' &&
-      value !== undefined)? true : false;
+      value != null && value != 'null' &&
+      value !== undefined) ? true : false;
   }
 
   offset(el = undefined) {
-    if ( this.isExits(el) && this.isExits(el.getBoundingClientRect())) {
+    if (this.isExits(el) && this.isExits(el.getBoundingClientRect())) {
       const rect = el.getBoundingClientRect(),
         scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;

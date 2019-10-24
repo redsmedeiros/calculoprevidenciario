@@ -193,62 +193,62 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   validate() {
     if (this.dataInicioBeneficio == undefined || this.dataInicioBeneficio == '') {
-      this.errors.add({ "dataInicioBeneficio": ["A data de inicio do benefício é obrigatória."] });
+      this.errors.add({ 'dataInicioBeneficio': ['A data de inicio do benefício é obrigatória.'] });
     } else {
-      var dateParts = this.dataInicioBeneficio.split("/");
+      var dateParts = this.dataInicioBeneficio.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()) || date < new Date('01/01/1970'))
-        this.errors.add({ "dataInicioBeneficio": ["Insira uma data válida."] });
+        this.errors.add({ 'dataInicioBeneficio': ['Insira uma data válida.'] });
     }
 
     if (this.periodoInicioBeneficio == undefined || this.periodoInicioBeneficio == '') {
-      this.errors.add({ "periodoInicioBeneficio": ["O período do inicio do benefício é obrigatório."] });
+      this.errors.add({ 'periodoInicioBeneficio': ['O período do inicio do benefício é obrigatório.'] });
     }
 
     if (this.especieBeneficio == undefined || this.especieBeneficio == '' || this.especieBeneficio == '- Selecione uma espécie -') {
-      this.errors.add({ "especieBeneficio": ["A espécie do benefício é obrigatória."] });
+      this.errors.add({ 'especieBeneficio': ['A espécie do benefício é obrigatória.'] });
     }
 
     if (this.has98 || this.hasAnterior) {
       if (this.primaria98anos == undefined || this.primaria98anos === '') {
-        this.errors.add({ "primaria98anos": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria98anos': ['Campo obrigatório.'] });
       } else {
         if (!this.isNumber(this.primaria98anos)) {
-          this.errors.add({ "primaria98anos": ["Valor inválido."] });
+          this.errors.add({ 'primaria98anos': ['Valor inválido.'] });
         }
       }
 
       if (this.primaria98dias == undefined || this.primaria98dias === '') {
-        this.errors.add({ "primaria98dias": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria98dias': ['Campo obrigatório.'] });
       } else {
         if (this.primaria98dias > 29 || !this.isNumber(this.primaria98dias)) {
-          this.errors.add({ "primaria98dias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'primaria98dias': ['Insira um valor entre 0 e 29'] });
         }
       }
 
       if (this.primaria98meses == undefined || this.primaria98meses === '') {
-        this.errors.add({ "primaria98meses": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria98meses': ['Campo obrigatório.'] });
       } else {
         if (this.primaria98meses > 11 || !this.isNumber(this.primaria98meses)) {
-          this.errors.add({ "primaria98meses": ["Insira um valor entre 0 e 11"] });
+          this.errors.add({ 'primaria98meses': ['Insira um valor entre 0 e 11'] });
         }
       }
 
       if (!(this.secundaria98anos == undefined || this.secundaria98anos === '')) {
         if (!this.isNumber(this.secundaria98anos)) {
-          this.errors.add({ "secundaria98anos": ["Valor inválido."] });
+          this.errors.add({ 'secundaria98anos': ['Valor inválido.'] });
         }
       }
 
       if (!(this.secundaria98meses == undefined || this.secundaria98meses === '')) {
         if (this.secundaria98meses > 11 || !this.isNumber(this.secundaria98meses)) {
-          this.errors.add({ "secundaria98meses": ["Insira um valor entre 1 e 11"] });
+          this.errors.add({ 'secundaria98meses': ['Insira um valor entre 1 e 11'] });
         }
       }
 
       if (!(this.secundaria98dias == undefined || this.secundaria98dias === '')) {
         if (this.secundaria98dias > 29 || !this.isNumber(this.secundaria98dias)) {
-          this.errors.add({ "secundaria98dias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'secundaria98dias': ['Insira um valor entre 0 e 29'] });
         }
       }
     }
@@ -256,96 +256,123 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if (this.has99) {
       if (this.primaria99anos == undefined || this.primaria99anos === '') {
-        this.errors.add({ "primaria99anos": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria99anos': ['Campo obrigatório.'] });
       } else {
         if (!this.isNumber(this.primaria99anos)) {
-          this.errors.add({ "primaria99anos": ["Valor inválido."] });
+          this.errors.add({ 'primaria99anos': ['Valor inválido.'] });
         }
       }
 
       if (this.primaria99meses == undefined || this.primaria99meses === '') {
-        this.errors.add({ "primaria99meses": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria99meses': ['Campo obrigatório.'] });
       } else {
         if (this.primaria99meses > 11 || !this.isNumber(this.primaria99meses)) {
-          this.errors.add({ "primaria99meses": ["Insira um valor entre 1 e 11"] });
+          this.errors.add({ 'primaria99meses': ['Insira um valor entre 1 e 11'] });
         }
       }
 
       if (this.primaria99dias == undefined || this.primaria99dias === '') {
-        this.errors.add({ "primaria99dias": ["Campo obrigatório."] });
+        this.errors.add({ 'primaria99dias': ['Campo obrigatório.'] });
       } else {
         if (this.primaria99dias > 29 || !this.isNumber(this.primaria99dias)) {
-          this.errors.add({ "primaria99dias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'primaria99dias': ['Insira um valor entre 0 e 29'] });
         }
       }
 
       if (!(this.secundaria99anos == undefined || this.secundaria99anos === '')) {
         if (!this.isNumber(this.secundaria99anos)) {
-          this.errors.add({ "secundaria99anos": ["Valor inválido."] });
+          this.errors.add({ 'secundaria99anos': ['Valor inválido.'] });
         }
       }
 
       if (!(this.secundaria99meses == undefined || this.secundaria99meses === '')) {
         if (this.secundaria99meses > 11 || !this.isNumber(this.secundaria99meses)) {
-          this.errors.add({ "secundaria99meses": ["Insira um valor entre 1 e 11"] });
+          this.errors.add({ 'secundaria99meses': ['Insira um valor entre 1 e 11'] });
         }
       }
 
       if (!(this.secundaria99dias == undefined || this.secundaria99dias === '')) {
         if (this.secundaria99dias > 29 || !this.isNumber(this.secundaria99dias)) {
-          this.errors.add({ "secundaria99dias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'secundaria99dias': ['Insira um valor entre 0 e 29'] });
         }
       }
     }
 
     if (this.hasAtual) {
       if (this.primariaAtualanos == undefined || this.primariaAtualanos === '') {
-        this.errors.add({ "primariaAtualanos": ["Campo obrigatório."] });
+        this.errors.add({ 'primariaAtualanos': ['Campo obrigatório.'] });
       } else {
         if (!this.isNumber(this.primariaAtualanos)) {
-          this.errors.add({ "primariaAtualanos": ["Valor inválido."] });
+          this.errors.add({ 'primariaAtualanos': ['Valor inválido.'] });
         }
       }
 
       if (this.primariaAtualmeses == undefined || this.primariaAtualmeses === '') {
-        this.errors.add({ "primariaAtualmeses": ["Campo obrigatório."] });
+        this.errors.add({ 'primariaAtualmeses': ['Campo obrigatório.'] });
       } else {
         if (this.primariaAtualmeses > 11 || !this.isNumber(this.primariaAtualmeses)) {
-          this.errors.add({ "primariaAtualmeses": ["Insira um valor entre 1 e 11"] });
+          this.errors.add({ 'primariaAtualmeses': ['Insira um valor entre 1 e 11'] });
         }
       }
 
       if (this.primariaAtualdias == undefined || this.primariaAtualdias === '') {
-        this.errors.add({ "primariaAtualdias": ["Campo obrigatório."] });
+        this.errors.add({ 'primariaAtualdias': ['Campo obrigatório.'] });
       } else {
         if (this.primariaAtualdias > 29 || !this.isNumber(this.primariaAtualdias)) {
-          this.errors.add({ "primariaAtualdias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'primariaAtualdias': ['Insira um valor entre 0 e 29'] });
         }
       }
 
       //Secundaria
       if (!(this.secundariaAtualanos == undefined || this.secundariaAtualanos === '')) {
         if (!this.isNumber(this.secundariaAtualanos)) {
-          this.errors.add({ "secundariaAtualanos": ["Valor inválido."] });
+          this.errors.add({ 'secundariaAtualanos': ['Valor inválido.'] });
         }
       }
 
       if (!(this.secundariaAtualmeses == undefined || this.secundariaAtualmeses === '')) {
         if (this.secundariaAtualmeses > 11 || !this.isNumber(this.secundariaAtualmeses)) {
-          this.errors.add({ "secundariaAtualmeses": ["Insira um valor entre 1 e 11"] });
+          this.errors.add({ 'secundariaAtualmeses': ['Insira um valor entre 1 e 11'] });
         }
       }
 
       if (!(this.secundariaAtualdias == undefined || this.secundariaAtualdias === '')) {
         if (this.secundariaAtualdias > 29 || !this.isNumber(this.secundariaAtualdias)) {
-          this.errors.add({ "secundariaAtualdias": ["Insira um valor entre 0 e 29"] });
+          this.errors.add({ 'secundariaAtualdias': ['Insira um valor entre 0 e 29'] });
+        }
+      }
+    }
+
+    if (this.has19) {
+      if (this.primaria19anos == undefined || this.primaria19anos === '') {
+        this.errors.add({ 'primaria19anos': ['Campo obrigatório.'] });
+      } else {
+        if (!this.isNumber(this.primaria19anos)) {
+          this.errors.add({ 'primaria19anos': ['Valor inválido.'] });
+        }
+      }
+
+      if (this.primaria19meses == undefined || this.primaria19meses === '') {
+        this.errors.add({ 'primaria19meses': ['Campo obrigatório.'] });
+      } else {
+        if (this.primaria19meses > 11 || !this.isNumber(this.primaria19meses)) {
+          this.errors.add({ 'primaria19meses': ['Insira um valor entre 1 e 11'] });
+        }
+      }
+
+      if (this.primaria19dias == undefined || this.primaria19dias === '') {
+        this.errors.add({ 'primaria19dias': ['Campo obrigatório.'] });
+      } else {
+        if (this.primaria19dias > 29 || !this.isNumber(this.primaria19dias)) {
+          this.errors.add({ 'primaria19dias': ['Insira um valor entre 0 e 29'] });
         }
       }
     }
 
     if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')) {
-      this.errors.add({ "carencia": ["Campo obrigatório."] });
+      this.errors.add({ 'carencia': ['Campo obrigatório.'] });
     }
+
   }
 
   changePeriodoOptions() {
@@ -415,7 +442,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoInicioBeneficio = 'A partir de 01/10/2019';
     }
 
-    var dateParts = this.dataInicioBeneficio.split("/");
+    var dateParts = this.dataInicioBeneficio.split('/');
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
     // if (dateBeneficio < new Date('04/05/1991')) {
@@ -446,7 +473,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.has99 = true;
       this.hasAtual = false;
       this.has19 = false;
-    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('01/10/2019')) {
+    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('10/22/2019')) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -460,7 +487,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.hasAtual = true;
         this.has19 = false;
       }
-    } else if (dateBeneficio > new Date('11/29/1999')) {
+    } else if (dateBeneficio > new Date('10/22/2019')) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -532,7 +559,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
-    } else if (dib > moment('1999-11-29') && dib < moment('2019-10-01')) {
+    } else if (dib > moment('1999-11-29') && dib < moment('2019-10-22')) {
 
       this.primariaAtualanos = periodos.total.years;
       this.primariaAtualmeses = periodos.total.months;
@@ -549,7 +576,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       // this.periodoInicioBeneficio = 'A partir de 29/11/1999';
       this.periodoInicioBeneficio = 'Entre 29/11/1999 e 01/10/2019';
 
-    } else if (dib > moment('2019-10-01')) {
+    } else if (dib > moment('2019-10-22')) {
 
       // Até a pec
       this.primariaAtualanos = periodos.total.years;
