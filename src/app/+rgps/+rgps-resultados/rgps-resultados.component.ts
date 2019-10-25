@@ -526,7 +526,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   verificarIdadeNecessaria(idade, redutorIdade, redutorProfessor, redutorSexo, errorArray) {
     const idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
-    const direito = idade > idadeNecessaria;
+    const direito = idade >= idadeNecessaria;
     if (!direito) {
       errorArray.push('Falta(m) ' + (idadeNecessaria - idade) + 'ano(s)');
     }
