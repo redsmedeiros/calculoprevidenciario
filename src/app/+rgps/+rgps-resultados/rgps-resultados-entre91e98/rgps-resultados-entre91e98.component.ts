@@ -79,7 +79,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     ]
   };
 
-  private regraEspecie9198IvalidezIdade99 = false;
 
   constructor(private CarenciaProgressiva: CarenciaProgressivaService,
     protected route: ActivatedRoute,
@@ -107,8 +106,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
       let dataInicio = this.dataInicioBeneficio;
 
-      // restricao de especie invalidez com dib depois de 99 não deve exibir os calculos antigos
-      this.regraEspecie9198IvalidezIdade99 = this.verificaEspecieDeBeneficioIvalidezIdade99(this.tipoBeneficio , this.dataInicioBeneficio);
 
       this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
       if (this.tipoCalculo == '91_98') {

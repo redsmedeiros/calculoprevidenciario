@@ -235,12 +235,12 @@
                       <th>Salário de Contribuição</th>
                       <th>Salário de Contribuição Corrigida</th>
                       <th>Observação</th>
-                      <th
+                      <!-- <th
                         title="descartar o valor e o tempo de contribuição"
                         class="text-center"
                       >
                         <i class="fa fa-ban fa-1-6x"></i>
-                      </th>
+                      </th> -->
                     </tr>
                   </thead>
                 </sa-datatable>
@@ -669,12 +669,12 @@
                 <ng-container
                   *ngIf="
                     conclusoesRegraAposentadoriaEspecial.status;
-                    then regra1Aplica;
-                    else regra1NaoAplica
+                    then aposentadoriaEspecialAplica;
+                    else aposentadoriaEspecialNaoAplica
                   "
                 >
                 </ng-container>
-                <ng-template #regra1Aplica>
+                <ng-template #aposentadoriaEspecialAplica>
                   <tr>
                     <td width="50%">
                       <span class="pull-right font-bold"
@@ -696,7 +696,7 @@
                     <td>{{ conclusoesRegraAposentadoriaEspecial.valorString }}</td>
                   </tr>
                 </ng-template>
-                <ng-template #regra1NaoAplica>
+                <ng-template #aposentadoriaEspecialNaoAplica>
                   <tr>
                     <td colspan="2">
                       <div
@@ -711,7 +711,6 @@
                             <p> Tempo de contribuição do segurado: {{ conclusoesRegraAposentadoriaEspecial.tempoContribuicaoSegurado }}</p>
                             <p> Tempo de contribuição necessário: {{ conclusoesRegraAposentadoriaEspecial.tempoContribuicaoMin }}</p>
                         </div>
-                       
                       </div>
                     </td>
                   </tr>
@@ -719,6 +718,60 @@
               </tbody>
             </table>
           </div>
+          <!-- aposentadoria especial final-->
+                
+          <!-- pensao óbito -->
+          <div *ngIf="isRegrasPensaoObito" >
+              <table
+              class="table table-bordered table-hover"
+              *ngIf="!isUpdating"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">
+                      {{ calculo.tipo_seguro }}
+                  </th>
+                </tr>
+                <tr *ngIf="conclusoesRegraPensaoObito.status">
+                  <th>
+                    Tipo
+                  </th>
+                  <th>
+                    Descrição
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngIf="conclusoesRegraPensaoObito.status">
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Fórmula para percentual</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegraPensaoObito.formula }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Percentual</span>
+                    </td>
+                    <td>{{ conclusoesRegraPensaoObito.percentual }} %</td>
+                  </tr>
+                  <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Valor base</span>
+                      </td>
+                      <td>{{ conclusoesRegraPensaoObito.valorUltimoBeneficio }} </td>
+                    </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor</span>
+                    </td>
+                    <td>{{ conclusoesRegraPensaoObito.valorString }} {{ conclusoesRegraPensaoObito.valorAviso }}</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- pensao óbito final-->
 
         </div>
       </div>

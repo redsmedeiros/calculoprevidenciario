@@ -523,12 +523,13 @@ export class RgpsResultadosComponent implements OnInit {
   calcularToll(tempoDeServico, porcentagem, proporcional, redutorSexo) {
     let toll = ((35 - proporcional - redutorSexo) - tempoDeServico) * porcentagem;
     toll = (toll < 0 || tempoDeServico == 'NaN') ? 0 : toll;
-    return 0;
+    //return 0;
+    return toll;
   }
 
   verificarIdadeNecessaria(idade, redutorIdade, redutorProfessor, redutorSexo, errorArray) {
     const idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
-    const direito = idade > idadeNecessaria;
+    const direito = idade >= idadeNecessaria;
     if (!direito) {
       errorArray.push('Falta(m) ' + (idadeNecessaria - idade) + 'ano(s)');
     }
@@ -639,6 +640,9 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Pensão por Morte instituidor não é aposentado na data óbito':
         numeroEspecie = 1901;
         break;
+      case 'Aposentadoria por incapacidade permanente':
+        numeroEspecie = 1903;
+      break;
       // Reforma  fim 2019
       default:
         break;
@@ -651,20 +655,23 @@ export class RgpsResultadosComponent implements OnInit {
    * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
    * @param especieBeneficio
    */
-  verificaEspecieDeBeneficioIvalidezIdade99(especieBeneficio, dib) {
-    const data99 = moment('1999-11-29');
+  verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
+    const dataFim = moment('1999-11-29');
 
     if ((((especieBeneficio === 2) ||
       (especieBeneficio === 3) ||
       (especieBeneficio === 16) ||
-      (especieBeneficio === 1))
+      (especieBeneficio === 1) ||
+      (especieBeneficio === 1900) ||
+      (especieBeneficio === 1901))
       ||
       ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
         (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
         (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-        (especieBeneficio === 'Auxílio Doença')))
-      &&
-      dib > data99) {
+        (especieBeneficio === 'Auxílio Doença') ||
+        (especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito')||
+        (especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')))
+      ) {
       return true;
     }
     return false;
@@ -779,6 +786,8 @@ export class RgpsResultadosComponent implements OnInit {
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
 
+    const verificaInvalidezObitoIdade = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
+
     if (dataInicioBeneficio < data88) {
       // * Periodo = Anterior a 05/10/88
       // Cálculos realizados: anterior a 88
@@ -812,9 +821,14 @@ export class RgpsResultadosComponent implements OnInit {
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 após 99     (tempo de contribuicao após a lei 99)
       (cálculos em box separados)*/
-      calculo.mostrarCalculo91_98 = true;
-      calculo.mostrarCalculo98_99 = true;
+
+      if (!verificaInvalidezObitoIdade) {
+        calculo.mostrarCalculo91_98 = true;
+        calculo.mostrarCalculo98_99 = true;
+      }
+
       calculo.mostrarCalculoApos99 = true;
+
     } else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
@@ -822,9 +836,11 @@ export class RgpsResultadosComponent implements OnInit {
                 entre 99 e 19 (tempo de contribuicao até PEC 2019)
                 após 19     (tempo de contribuicao após PEC 2019)
       (cálculos em box separados)*/
-      calculo.mostrarCalculo91_98 = true;
-      calculo.mostrarCalculo98_99 = true;
-      calculo.mostrarCalculoApos99 = true;
+      if (!verificaInvalidezObitoIdade) {
+        calculo.mostrarCalculo91_98 = true;
+        calculo.mostrarCalculo98_99 = true;
+        calculo.mostrarCalculoApos99 = true;
+      }
       calculo.mostrarCalculoApos19 = true;
     }
 

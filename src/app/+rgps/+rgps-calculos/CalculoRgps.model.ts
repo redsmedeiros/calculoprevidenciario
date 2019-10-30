@@ -21,8 +21,13 @@ export class CalculoRgps extends Model {
 	  valor_beneficio: '',
 	  soma_contribuicao: '',
 	  carencia: '',
-	  grupo_dos_12: ''
+    grupo_dos_12: '',
+    num_dependentes: '',
+    depedente_invalido: '',
+    obito_decorrencia_trabalho: '',
+    ultimo_beneficio: '',
   };
+  
    public id ;
    public id_segurado;
    public tipo_seguro;
@@ -40,6 +45,11 @@ export class CalculoRgps extends Model {
    public soma_contribuicao;
    public carencia;
    public grupo_dos_12;
+   public num_dependentes;
+   public depedente_invalido;
+   public obito_decorrencia_trabalho;
+   public ultimo_beneficio;
+
   //  public actions = `
   //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i title="Editar" class='fa fa-edit'></i> </a> 
   //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/destroy' class='action-delete'> <i title="Remover" class='fa fa-times'></i> </a> 

@@ -36,18 +36,19 @@
                         <option>Aposentadoria por idade - Trabalhador Rural</option>
                         <option>Aposentadoria por idade - Trabalhador Urbano</option>
                         <option *ngIf="periodoInicioBeneficio != 'A partir de 01/10/2019'">Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Aposentadoria por invalidez Previdenciária</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Aposentadoria por incapacidade permanente</option>
                         <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de contribuição</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço de professor</option>
-                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 30%</option>
-                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 40%</option>
-                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente - 60%</option>
-                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Auxílio Acidente previdenciário - 50%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 01/10/2019'">Auxílio Acidente - 30%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 01/10/2019'">Auxílio Acidente - 40%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 01/10/2019'">Auxílio Acidente - 60%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 01/10/2019'">Auxílio Acidente previdenciário - 50%</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Auxílio Acidente - 50%</option>
                         <option>Auxílio Doença</option>
-                        <option>LOAS</option>
-                        <option>LOAS - Benefício no valor de um salário mínimo</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Pensão por Morte instituidor aposentado na data óbito </option>
+                        <option *ngIf="periodoInicioBeneficio != 'A partir de 01/10/2019'">LOAS</option>
+                        <option *ngIf="periodoInicioBeneficio != 'A partir de 01/10/2019'">LOAS - Benefício no valor de um salário mínimo</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Pensão por Morte instituidor aposentado na data óbito</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 01/10/2019'">Pensão por Morte instituidor não é aposentado na data óbito</option>
                       </select>
                       <small *ngIf="errors.has('especieBeneficio')" class="text-danger">{{ errors.get('especieBeneficio') | i18n}}</small>
@@ -168,6 +169,43 @@
                           <p> <i class="fa fa-info-circle"></i> Para os benefícios concedidos a partir de 18 de junho de 2019 foi determinada a soma das contribuições concomitantes de acordo com as alterações trazidas pela Lei 13.846/19.</p>
                       </div>
                     </div>
+                      <div class="form-group"  *ngIf="hasPensao19">
+                        <label class="col-md-2 control-label" for="select-1">Número de dependentes:*</label>
+                        <div class="col-md-2">
+                          <!-- <input [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" type="number" min="0" max="10" step="1"> -->
+                          <select [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5 ou mais</option>
+                            </select>
+                          <small *ngIf="errors.has('numDependentes')" class="text-danger">{{ errors.get('numDependentes') | i18n}}</small>
+                        </div>
+                        <div class="checkbox col-md-8">
+                          <label>
+                            <input type="checkbox" [(ngModel)]="depedenteInvalido" class="checkbox" [ngModelOptions]="{standalone: true}">
+                            <span>Possuí dependente inválido ou com deficiência intelectual, mental ou grave?</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="hasPensao19 || hasInvalidez19">
+                        <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito'">
+                        <label class="col-md-2 control-label" for="select-1">Valor da último Benefício:*</label>
+                        <div class="col-md-1">
+                          <input [(ngModel)]="ultimoBeneficio" (change)="errors.clear('ultimoBeneficio')"  [ngModelOptions]="{standalone: true}" class="form-control" type="text" currencyMask>
+                          <small *ngIf="errors.has('ultimoBeneficio')" class="text-danger">{{ errors.get('ultimoBeneficio') | i18n}}</small>
+                        </div>
+                      </div>
+                        <div class="checkbox col-md-8" [ngClass]="{
+                          'col-md-offset-2':especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'
+                        }">
+                          <label>
+                            <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
+                            <span>O óbito foi consequência de acidente de trabalho, doença profissional ou doença do trabalho?</span>
+                          </label>
+                        </div>
+                      </div>
                   <div class="form-group" *ngIf="hasCarencia">
                     <label class="col-md-2 control-label" for="select-1">Carência:*</label>
                     <div class="col-md-1">

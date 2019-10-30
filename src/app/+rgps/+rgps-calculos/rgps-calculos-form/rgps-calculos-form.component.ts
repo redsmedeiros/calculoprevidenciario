@@ -50,6 +50,11 @@ export class RgpsCalculosFormComponent implements OnInit {
   public grupoDos12;
   public carencia;
 
+  public numDependentes;
+  public depedenteInvalido;
+  public obitoDecorrenciaTrabalho;
+  public ultimoBeneficio;
+
   public hasAnterior = false;
   public has98 = false;
   public has99 = false;
@@ -58,6 +63,9 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasCarencia = false;
   public hasGrupoDos12 = false;
   public posteriorMaio2013 = false;
+
+  public hasPensao19 = false;
+  public hasInvalidez19 = false;
 
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -108,9 +116,14 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.primaria19dias = this.formData.contribuicao_primaria_19.split('-')[2];
       }
 
+      this.numDependentes = this.formData.num_dependentes;
+      this.depedenteInvalido = this.formData.depedente_invalido;
+      this.obitoDecorrenciaTrabalho = this.formData.obito_decorrencia_trabalho;
+      this.ultimoBeneficio = this.formData.ultimo_beneficio;
 
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
+
 
     } else {
       this.checkImportContagemTempo();
@@ -138,6 +151,14 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.soma_contribuicao = '';//TODO: deixar em branco por enquanto
       this.formData.carencia = this.carencia;
       this.formData.grupo_dos_12 = this.grupoDos12;
+
+      // pensão inicio por morte
+      this.formData.num_dependentes  = this.numDependentes;
+      this.formData.depedente_invalido = this.depedenteInvalido;
+      this.formData.obito_decorrencia_trabalho = this.obitoDecorrenciaTrabalho;
+      this.formData.ultimo_beneficio = this.ultimoBeneficio;
+      // pensão fim por morte
+
       swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
        this.onSubmit.emit(this.formData);
        this.resetForm();
@@ -179,8 +200,17 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.secundariaAtualmeses = undefined;
     this.secundariaAtualdias = undefined;
 
+    this.primaria19anos = undefined;
+    this.primaria19meses = undefined;
+    this.primaria19dias = undefined;
+
     this.grupoDos12 = '';
     this.carencia = '';
+
+    this.numDependentes = 0;
+    this.depedenteInvalido = false;
+    this.obitoDecorrenciaTrabalho = false;
+    this.ultimoBeneficio = false;
 
     this.hasAnterior = false;
     this.has98 = false;
@@ -367,6 +397,18 @@ export class RgpsCalculosFormComponent implements OnInit {
           this.errors.add({ 'primaria19dias': ['Insira um valor entre 0 e 29'] });
         }
       }
+
+      
+// if (this.hasPensao19 && (this.num_dependentes == undefined || this.num_dependentes === '' || !this.isNumber(this.num_dependentes))) {
+//       this.errors.add({ 'num_dependentes': ['Campo obrigatório.'] });
+//     }
+    // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
+    //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+    // }
+    // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
+    //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+    // }
+
     }
 
     if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')) {
@@ -385,6 +427,23 @@ export class RgpsCalculosFormComponent implements OnInit {
       (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')) {
       tipoInvalidezOuIdade = true;
     }
+
+    this.hasPensao19 = false;
+    if ((this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
+      (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
+      this.hasPensao19 = true;
+      tipoInvalidezOuIdade = true;
+    }
+
+    this.hasInvalidez19 = false;
+    if ((this.especieBeneficio === 'Aposentadoria por incapacidade permanente') ) {
+      this.hasInvalidez19 = true;
+      tipoInvalidezOuIdade = true;
+    }
+
+
+    console.log(this.especieBeneficio);
+    console.log(tipoInvalidezOuIdade);
 
 
 
@@ -496,9 +555,9 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       if (tipoInvalidezOuIdade) {
         this.hasAnterior = false;
-        this.has98 = true;
-        this.has99 = true;
-        this.hasAtual = true;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = false;
         this.has19 = true;
       }
     } else {

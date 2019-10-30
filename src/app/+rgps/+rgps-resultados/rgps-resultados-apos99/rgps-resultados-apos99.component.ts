@@ -115,7 +115,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     if(this.dataInicioBeneficio > this.dataPec062019){
-      dataInicio = this.dataPec062019.startOf('month');; // ate a PEC06/2019
+      dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
     }
     
     let dataLimite = moment('1994-07-01');
@@ -1084,6 +1084,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         } else {
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
+
+          console.log(extra)
+          console.log(toll)
+
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib);
           direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);

@@ -68,10 +68,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       { data: 'contribuicao_primaria_revisada' },
       // { data: 'contribuicao_secundaria_revisada' },
       { data: 'limite' },
-      { data: 'checkbox' },
+      // { data: 'checkbox' },
     ],
     columnDefs: [
-      { 'width': '2rem', 'targets': [0, 6] },
+      // { 'width': '2rem', 'targets': [0, 6] },
+      { 'width': '2rem', 'targets': [0] },
       {
         'targets': [0, 1, 2, 3, 4, 5],
         'className': 'text-center'
@@ -109,10 +110,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public conclusoesRegra5: any;
   public isRegrasTransicao = false;
 
-
-
-  public conclusoesRegraAposentadoriaEspecial: any;
   public isRegrasAposentadoriaEspecial = false;
+  public conclusoesRegraAposentadoriaEspecial: any;
+
+  public isRegrasPensaoObito = false;
+  public conclusoesRegraPensaoObito: any;
+
+  public isRegrasInvalidez = false;
+  public conclusoesRegraInvalidez: any;
 
 
   public errorRegrasTransicao = {
@@ -507,7 +512,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         //conclusoes.push({string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
         break;
     }
-    console.log(fatorSeguranca);
+    // console.log(fatorSeguranca);
 
     if (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
       this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
@@ -2048,7 +2053,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegraAposentadoriaEspecial.tempoContribuicaoMin = tempoRegra[tipoBeneficio];
 
     this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial > regraEspecial[tipoBeneficio].pontos)
-                                                        && ( this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
+      && (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
 
     if (this.conclusoesRegraAposentadoriaEspecial.status) {
 
@@ -2070,11 +2075,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     } else {
       this.conclusoesRegraAposentadoriaEspecial.msg = 'O Segurado não atingiu os requisitos. ';
 
-      if(pontosEspecial > regraEspecial[tipoBeneficio].pontos){
+      if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
         this.conclusoesRegraAposentadoriaEspecial.statusPontos = false;
       }
 
-      if( this.contribuicaoTotal >= tempoRegra[tipoBeneficio]){
+      if (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]) {
         this.conclusoesRegraAposentadoriaEspecial.statusTempo = false;
       }
 
@@ -2085,14 +2090,100 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     console.log(this.conclusoesRegraAposentadoriaEspecial);
   }
 
-
-
-
-
-
-
   // aposentadoria fim especial
 
+
+  // pensao por morte
+
+
+  public regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+
+    console.log(this.calculo);
+
+    this.conclusoesRegraPensaoObito = {
+      status: true,
+      msg: '',
+      percentual: 0,
+      formula: '',
+      valor: 0,
+      valorString: '',
+      valorUltimoBeneficio: 0,
+      valorObs: '',
+      statusTempo: true,
+      statusPontos: true
+    };
+
+    let percentual = 100;
+    if (this.calculo.obito_decorrencia_trabalho !== 1 && this.calculo.depedente_invalido !== 1) {
+      percentual = (this.calculo.num_dependentes * 10);
+      percentual += 50;
+
+      this.conclusoesRegraPensaoObito.formula = `50% + (${this.calculo.num_dependentes}-dependentes * 10%)`;
+
+
+      percentual = (percentual > 100) ? 100 : percentual;
+
+    }else if (this.calculo.obito_decorrencia_trabalho === 1){
+      this.conclusoesRegraPensaoObito.formula = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
+    }else if (this.calculo.depedente_invalido === 1){
+      this.conclusoesRegraPensaoObito.formula = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
+    }
+
+
+    this.conclusoesRegraPensaoObito.percentual = percentual;
+
+    percentual /= 100;
+
+   
+
+    let  valorUltimoBeneficio;
+    switch (tipoBeneficio) {
+      case 1900: // é aposentado 
+
+        valorUltimoBeneficio = parseFloat(this.calculo.ultimo_beneficio);
+        this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorUltimoBeneficio : (valorUltimoBeneficio * percentual);
+
+        break;
+      case 1901: // não é aposentado
+        
+        valorUltimoBeneficio = valorMedio;
+        this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorMedio : (valorMedio * percentual);
+
+        break;
+    }
+
+    const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegraPensaoObito.valor, this.dataInicioBeneficio);
+    this.conclusoesRegraPensaoObito.valor = resutadoAjuste.valor;
+    this.conclusoesRegraPensaoObito.valorAviso = resutadoAjuste.aviso;
+    this.conclusoesRegraPensaoObito.valorString = this.formatMoney( this.conclusoesRegraPensaoObito.valor);
+    this.conclusoesRegraPensaoObito.valorUltimoBeneficio = this.formatMoney(valorUltimoBeneficio);
+
+    console.log(this.conclusoesRegraPensaoObito);
+
+  }
+
+
+  public regraInvalidez(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+
+    console.log(this.calculo);
+
+    this.conclusoesRegraInvalidez = {
+      status: true,
+      msg: '',
+      percentual: 0,
+      formula: '',
+      valor: 0,
+      valorString: '',
+      valorUltimoBeneficio: 0,
+      valorObs: '',
+      statusTempo: true,
+      statusPontos: true
+    };
+
+  }
+
+
+  // fim pensao por morte
 
 
   /**
@@ -2110,6 +2201,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
 
+    // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
+
+    // console.log(this.dataInicioBeneficio);
+    // console.log(moeda);
+    // console.log(this.tipoBeneficio);
 
 
     // aplicação default false
@@ -2120,8 +2216,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.regraAposentadoriaEspecial(mesesContribuicao, valorMedio, this.tipoBeneficio);
 
     } else if (arrayPensao.includes(this.tipoBeneficio)) {
+      // pensão 
+      this.isRegrasPensaoObito = true;
+      this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
 
-
+    }else if (this.tipoBeneficio == 1903) {
+      // invalidez
+      this.isRegrasInvalidez = true;
+      this.regraInvalidez(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
 
     } else {
       this.isRegrasTransicao = true;
