@@ -1,4 +1,4 @@
-<!-- Opções do Cálculo A partir de 29/11/1999-->
+<!-- Opções do Cálculo A partir da PEC 2019-->
 <article class="container-fluid">
   <table class="table table-hover table-bordered">
     <thead>
@@ -704,14 +704,17 @@
                         class="alert alert-warning margin-top-10"
                         role="alert" >
                         <p>{{ conclusoesRegraAposentadoriaEspecial.msg }}</p><br>
-                        <div *ngIf="conclusoesRegraAposentadoriaEspecial.statusPontos" >
-                            <p> Pontos do segurado: {{ conclusoesRegraAposentadoriaEspecial.pontosSegurado }}</p>
-                            <p> Pontos do necessários: {{ conclusoesRegraAposentadoriaEspecial.pontosNecessarios }}</p>
-                        </div>
-                        <div *ngIf="conclusoesRegraAposentadoriaEspecial.statusTempo">
-                            <p> Tempo de contribuição do segurado: {{ conclusoesRegraAposentadoriaEspecial.tempoContribuicaoSegurado }}</p>
-                            <p> Tempo de contribuição necessário: {{ conclusoesRegraAposentadoriaEspecial.tempoContribuicaoMin }}</p>
-                        </div>
+                      <ul>
+                        <li *ngIf="!conclusoesRegraAposentadoriaEspecial.statusPontos"> 
+                            Pontos , faltam {{ conclusoesRegraAposentadoriaEspecial.diffPontos }}
+                          </li>
+                        <li *ngIf="!conclusoesRegraAposentadoriaEspecial.statusTempo">
+                            Tempo de contribuição , faltam {{ conclusoesRegraAposentadoriaEspecial.diffTempoContribuicao}}
+                        </li>
+                        <li *ngIf="!conclusoesRegraAposentadoriaEspecial.statusIdade">
+                            Idade mínima, faltam {{ conclusoesRegraAposentadoriaEspecial.diffIdadeRequisito }}
+                        </li>
+                      </ul>
                       </div>
                     </td>
                   </tr>

@@ -105,7 +105,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public valorTotalContribuicoes;
   public numeroDeCompetenciasAposDescarte20 = 0;
   public valorTotalContribuicoesComDescarte20 = 0;
-  public isTransicao = true;
+  public isRegraTransitoria = true;
 
   public conclusoesRegra1: any;
   public conclusoesRegra2: any;
@@ -500,9 +500,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       for (let i = 0; i < tableData.length; i++) {
         if (i >= tableData.length - this.numeroDeCompetenciasAposDescarte20) {
           this.valorTotalContribuicoesComDescarte20 += tableData[i].valor_primario;
-        }else {
-                tableData[i].limite = "DESCONSIDERADO";
-              }
+        } else {
+          tableData[i].limite = "DESCONSIDERADO";
+        }
         // else{
         //   teste += tableData[i].valor_primario
         // }
@@ -2088,8 +2088,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       pontosNecessarios: 0,
       tempoContribuicaoSegurado: 0,
       tempoContribuicaoMin: 0,
+      diffTempoContribuicao: 0,
+      diffPontos: 0,
+      diffIdadeRequisito: 0,
       statusTempo: true,
-      statusPontos: true
+      statusPontos: true,
+      statusIdade: true,
     };
 
     const tempoRegra = {
@@ -2110,15 +2114,24 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       1925: { pontos: 86 }
     };
 
+    const idadeTransitoria = {
+      1915: 55,
+      1920: 58,
+      1925: 60
+    }
+
     const pontosEspecial = Math.trunc(this.contribuicaoTotal + this.idadeFracionada);
 
-    this.conclusoesRegraAposentadoriaEspecial.pontosSegurado = pontosEspecial;
-    this.conclusoesRegraAposentadoriaEspecial.pontosNecessarios = regraEspecial[tipoBeneficio].pontos;
-    this.conclusoesRegraAposentadoriaEspecial.tempoContribuicaoSegurado = this.contribuicaoTotal;
-    this.conclusoesRegraAposentadoriaEspecial.tempoContribuicaoMin = tempoRegra[tipoBeneficio];
+   
+   
 
     this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial > regraEspecial[tipoBeneficio].pontos)
       && (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
+
+    if (this.isRegraTransitoria) {
+      this.conclusoesRegraAposentadoriaEspecial.status = (this.idadeFracionada >= idadeTransitoria[tipoBeneficio]);
+     
+    }
 
     if (this.conclusoesRegraAposentadoriaEspecial.status) {
 
@@ -2138,16 +2151,26 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegraAposentadoriaEspecial.valorString = this.formatMoney(this.conclusoesRegraAposentadoriaEspecial.valor);
 
     } else {
-      this.conclusoesRegraAposentadoriaEspecial.msg = 'O Segurado não atingiu os requisitos. ';
+      this.conclusoesRegraAposentadoriaEspecial.msg = 'O Segurado não atingiu os requisitos: ';
 
-      if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
-        this.conclusoesRegraAposentadoriaEspecial.statusPontos = false;
-      }
-
-      if (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]) {
+      if (this.contribuicaoTotal < tempoRegra[tipoBeneficio]) {
         this.conclusoesRegraAposentadoriaEspecial.statusTempo = false;
+        this.conclusoesRegraAposentadoriaEspecial.diffTempoContribuicao = 
+                        this.tratarTempoFracionado(tempoRegra[tipoBeneficio] - this.contribuicaoTotal);
       }
 
+      if (this.isRegraTransitoria) {
+        if (this.idadeFracionada < idadeTransitoria[tipoBeneficio]) {
+          this.conclusoesRegraAposentadoriaEspecial.statusIdade = false;
+          this.conclusoesRegraAposentadoriaEspecial.diffIdadeRequisito = 
+                         this.tratarTempoFracionado((idadeTransitoria[tipoBeneficio] - this.idadeFracionada));
+        }
+      } else {
+        if (pontosEspecial < regraEspecial[tipoBeneficio].pontos) {
+          this.conclusoesRegraAposentadoriaEspecial.statusPontos = false;
+          this.conclusoesRegraAposentadoriaEspecial.diffPontos = regraEspecial[tipoBeneficio].pontos - pontosEspecial;
+        }
+      }
     }
 
 
@@ -2587,7 +2610,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const arrayIdade = [3, 16];
     const arrayEspecialDeficiente = [25, 26, 27, 28];
 
-    this.isTransicao = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
+    this.isRegraTransitoria = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
+
+    console.log(this.dataFiliacao);
+    console.log(this.dataPromulgacao2019);
+    console.log(this.isRegraTransitoria);
 
 
     const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
@@ -2601,7 +2628,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // console.log(this.tipoBeneficio);
     // console.log(this.dataFiliacao);
     // console.log(this.dataPromulgacao2019);
-    // console.log(this.isTransicao);
+    // console.log(this.isRegraTransitoria);
 
     // console.log(this.numeroDeCompetenciasAposDescarte20);
     // console.log(this.valorTotalContribuicoesComDescarte20);

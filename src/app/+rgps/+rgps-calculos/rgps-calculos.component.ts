@@ -255,8 +255,14 @@ export class RgpsCalculosComponent implements OnInit {
     }
   }
 
-  offset(el) {
-    if (el !== undefined) {
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value != 'null' &&
+      value !== undefined) ? true : false;
+  }
+
+  offset(el = undefined) {
+    if (this.isExits(el) && this.isExits(el.getBoundingClientRect())) {
       const rect = el.getBoundingClientRect(),
         scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;
