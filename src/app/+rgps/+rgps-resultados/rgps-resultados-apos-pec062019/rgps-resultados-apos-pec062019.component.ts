@@ -500,9 +500,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       for (let i = 0; i < tableData.length; i++) {
         if (i >= tableData.length - this.numeroDeCompetenciasAposDescarte20) {
           this.valorTotalContribuicoesComDescarte20 += tableData[i].valor_primario;
-        } else {
-          tableData[i].limite = "DESCONSIDERADO";
-        }
+         } 
+         //else {
+        //   tableData[i].limite = "DESCONSIDERADO";
+        // }
         // else{
         //   teste += tableData[i].valor_primario
         // }
