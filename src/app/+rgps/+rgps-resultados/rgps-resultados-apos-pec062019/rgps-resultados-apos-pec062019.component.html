@@ -210,71 +210,73 @@
               >
             </p>
           </div>
-
-          <sa-widget [colorbutton]="false" [editbutton]="false">
-            <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
-            <i
-              class="fa fa-gear fa-4x fa-spin txt-color-red"
-              *ngIf="isUpdating"
-            ></i>
-            <div *ngIf="!isUpdating">
-              <div class="widget-body no-padding">
-                <sa-datatable
-                  [options]="tableOptions"
-                  [responsive]="false"
-                  paginationLength="true"
-                  *ngIf="!isUpdating"
-                  tableClass="table table-striped table-bordered table-hover"
-                  width="100%"
-                >
+          <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
+            <sa-widget [colorbutton]="false" [editbutton]="false">
+              <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
+              <i
+                class="fa fa-gear fa-4x fa-spin txt-color-red"
+                *ngIf="isUpdating"
+              ></i>
+              <div *ngIf="!isUpdating">
+                <div class="widget-body no-padding">
+                  <sa-datatable
+                    [options]="tableOptions"
+                    [responsive]="false"
+                    paginationLength="true"
+                    *ngIf="!isUpdating"
+                    tableClass="table table-striped table-bordered table-hover"
+                    width="100%"
+                  >
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Competência</th>
+                        <th>Índice</th>
+                        <th>Salário de Contribuição</th>
+                        <th>Salário de Contribuição Corrigida</th>
+                        <th>Observação</th>
+                        <!-- <th
+                          title="descartar o valor e o tempo de contribuição"
+                          class="text-center"
+                        >
+                          <i class="fa fa-ban fa-1-6x"></i>
+                        </th> -->
+                      </tr>
+                    </thead>
+                  </sa-datatable>
+                </div>
+              </div>
+            </sa-widget>
+          </div>
+           <!-- conclusoes genericas -->
+           <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
+              <table class="table table-bordered table-hover" *ngIf="!isUpdating">
+                  <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
                   <thead>
                     <tr>
-                      <th>#</th>
-                      <th>Competência</th>
-                      <th>Índice</th>
-                      <th>Salário de Contribuição</th>
-                      <th>Salário de Contribuição Corrigida</th>
-                      <th>Observação</th>
-                      <!-- <th
-                        title="descartar o valor e o tempo de contribuição"
-                        class="text-center"
-                      >
-                        <i class="fa fa-ban fa-1-6x"></i>
-                      </th> -->
+                      <th>
+                        <span class="pull-right">Tipo</span>
+                      </th>
+                      <th>
+                        Descrição
+                      </th>
                     </tr>
                   </thead>
-                </sa-datatable>
-              </div>
-            </div>
-          </sa-widget>
-           <!-- conclusoes genericas -->
-          <table class="table table-bordered table-hover" *ngIf="!isUpdating">
-            <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
-            <thead>
-              <tr>
-                <th>
-                  Tipo
-                </th>
-                <th>
-                  Descrição
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let conclusao of conclusoes"
-                class="{{ conclusao.class }}"
-              >
-                <td width="50%">
-                  <span class="pull-right font-bold  ">{{
-                    conclusao.string
-                  }}</span>
-                </td>
-                <td>{{ conclusao.value }}</td>
-              </tr>
-            </tbody>
-          </table>
-
+                  <tbody>
+                    <tr
+                      *ngFor="let conclusao of conclusoes"
+                      class="{{ conclusao.class }}"
+                    >
+                      <td width="50%">
+                        <span class="pull-right font-bold  ">{{
+                          conclusao.string
+                        }}</span>
+                      </td>
+                      <td>{{ conclusao.value }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+           </div>
           <!-- regras transição -->
           <div *ngIf="isRegrasTransicao">
             <div *ngIf="errorRegrasTransicao.status">
@@ -296,7 +298,7 @@
                   </tr>
                   <tr *ngIf="conclusoesRegra1.status">
                     <th>
-                      Tipo
+                        <span class="pull-right">Tipo</span>
                     </th>
                     <th>
                       Descrição
@@ -361,7 +363,7 @@
                   </tr>
                   <tr *ngIf="conclusoesRegra2.status">
                     <th>
-                      Tipo
+                        <span class="pull-right">Tipo</span>
                     </th>
                     <th>
                       Descrição
@@ -426,7 +428,7 @@
                   </tr>
                   <tr *ngIf="conclusoesRegra3.status">
                     <th>
-                      Tipo
+                        <span class="pull-right">Tipo</span>
                     </th>
                     <th>
                       Descrição
@@ -510,7 +512,7 @@
                   </tr>
                   <tr *ngIf="conclusoesRegra4.status">
                     <th>
-                      Tipo
+                        <span class="pull-right">Tipo</span>
                     </th>
                     <th>
                       Descrição
@@ -586,24 +588,23 @@
                   </tr>
                   <tr *ngIf="conclusoesRegra5.status">
                     <th>
-                      Tipo
+                        <span class="pull-right">Tipo</span>
                     </th>
                     <th>
                       Descrição
                     </th>
                   </tr>
                 </thead>
-
                 <tbody>
                   <ng-container
                     *ngIf="
                       conclusoesRegra5.status;
-                      then regra2Aplica;
-                      else regra2NaoAplica
+                      then regra5Aplica;
+                      else regra5NaoAplica
                     "
                   >
                   </ng-container>
-                  <ng-template #regra2Aplica>
+                  <ng-template #regra5Aplica>
                     <tr>
                       <td width="50%">
                         <span class="pull-right font-bold"
@@ -625,7 +626,7 @@
                       <td>{{ conclusoesRegra5.valorString }}</td>
                     </tr>
                   </ng-template>
-                  <ng-template #regra2NaoAplica>
+                  <ng-template #regra5NaoAplica>
                     <tr>
                       <td colspan="2">
                         <div
@@ -658,7 +659,7 @@
                 </tr>
                 <tr *ngIf="conclusoesRegraAposentadoriaEspecial.status">
                   <th>
-                    Tipo
+                      <span class="pull-right">Tipo</span>
                   </th>
                   <th>
                     Descrição
@@ -734,7 +735,7 @@
                 </tr>
                 <tr *ngIf="conclusoesRegraPensaoObito.status">
                   <th>
-                    Tipo
+                      <span class="pull-right">Tipo</span>
                   </th>
                   <th>
                     Descrição
@@ -773,6 +774,342 @@
           </div>
           <!-- pensao óbito final-->
 
+           <!-- Aposentadoria incapacidade -->
+           <div *ngIf="isRegrasIncapacidade" >
+              <table
+              class="table table-bordered table-hover"
+              *ngIf="!isUpdating"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">
+                      {{ calculo.tipo_seguro }}
+                  </th>
+                </tr>
+                <tr *ngIf="conclusoesRegraIncapacidade.status">
+                  <th>
+                      <span class="pull-right">Tipo</span>
+                  </th>
+                  <th>
+                    Descrição
+                  </th>
+                </tr>
+              </thead>
+              <tbody *ngIf="conclusoesRegraIncapacidade.status">
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Fórmula para percentual</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegraIncapacidade.formula }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Percentual</span>
+                    </td>
+                    <td>{{ conclusoesRegraIncapacidade.percentual }} %</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor</span>
+                    </td>
+                    <td>{{ conclusoesRegraIncapacidade.valorString }} {{ conclusoesRegraIncapacidade.valorAviso }}</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Aposentadoria incapacidade-->
+
+            <!--  Auxilio doença -->
+            <div *ngIf="isRegrasAuxilioDoenca" >
+                <table
+                class="table table-bordered table-hover"
+                *ngIf="!isUpdating"
+              >
+                <thead>
+                  <tr>
+                    <th colspan="2">
+                        {{ calculo.tipo_seguro }}
+                    </th>
+                  </tr>
+                  <tr *ngIf="conclusoesRegrasAuxilioDoenca.status">
+                    <th>
+                        <span class="pull-right">Tipo</span>
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="conclusoesRegrasAuxilioDoenca.status">
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Percentual</span>
+                      </td>
+                      <td>{{ conclusoesRegrasAuxilioDoenca.percentual }} %</td>
+                    </tr>
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Valor</span>
+                      </td>
+                      <td>{{ conclusoesRegrasAuxilioDoenca.valorString }} {{ conclusoesRegrasAuxilioDoenca.valorAviso }}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Auxilio doença-->
+
+            <!--  Auxilio Acidente -->
+            <div *ngIf="isRegrasAuxilioAcidente" >
+                <table
+                class="table table-bordered table-hover"
+                *ngIf="!isUpdating"
+              >
+                <thead>
+                  <tr>
+                    <th colspan="2">
+                        {{ calculo.tipo_seguro }}
+                    </th>
+                  </tr>
+                  <tr *ngIf="conclusoesRegrasAuxilioAcidente.status">
+                    <th>
+                        <span class="pull-right">Tipo</span>
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="conclusoesRegrasAuxilioAcidente.status">
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Percentual</span>
+                      </td>
+                      <td>{{ conclusoesRegrasAuxilioAcidente.percentual }} %</td>
+                    </tr>
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Valor</span>
+                      </td>
+                      <td>{{ conclusoesRegrasAuxilioAcidente.valorString }} {{ conclusoesRegrasAuxilioAcidente.valorAviso }}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Auxilio Acidente fim-->
+            
+            <!-- idade regra final-->
+            <div *ngIf="isRegrasIdade" >
+                <table
+                class="table table-bordered table-hover"
+                *ngIf="!isUpdating && isStatusTransicaoIdade"
+              >
+                <thead>
+                  <tr>
+                    <th colspan="2">
+                      Transição 5 - Aposentadoria por idade
+                    </th>
+                  </tr>
+                  <tr *ngIf="conclusoesRegra5.status">
+                    <th>
+                        <span class="pull-right">Tipo</span>
+                    </th>
+                    <th>
+                      Descrição
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container
+                    *ngIf="
+                      conclusoesRegra5.status;
+                      then regra5Aplica;
+                      else regra5NaoAplica
+                    "
+                  >
+                  </ng-container>
+                  <ng-template #regra5Aplica>
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold"
+                          >Fórmula para percentual</span
+                        >
+                      </td>
+                      <td>{{ conclusoesRegra5.formula }}</td>
+                    </tr>
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Percentual</span>
+                      </td>
+                      <td>{{ conclusoesRegra5.percentual }} %</td>
+                    </tr>
+                    <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Valor</span>
+                      </td>
+                      <td>{{ conclusoesRegra5.valorString }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template #regra5NaoAplica>
+                    <tr>
+                      <td colspan="2">
+                        <div
+                          class="alert alert-warning margin-top-10"
+                          role="alert"
+                        >
+                          <p>{{ conclusoesRegra5.msg }}</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+              <!-- idade transicao fim-->
+              <!-- idade final -->
+              <table
+              class="table table-bordered table-hover"
+              *ngIf="!isUpdating"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">
+                      {{ calculo.tipo_seguro }} <span *ngIf="isStatusTransicaoIdade" >- Regra Transitória </span>
+                  </th>
+                </tr>
+                <tr *ngIf="conclusoesRegrasIdadeFinal.status">
+                  <th>
+                      <span class="pull-right">Tipo</span>
+                  </th>
+                  <th>
+                    Descrição
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngIf="
+                    conclusoesRegrasIdadeFinal.status;
+                    then regraFinalIdadeAplica;
+                    else regraFinalIdadeNaoAplica
+                  "
+                >
+                </ng-container>
+                <ng-template #regraFinalIdadeAplica>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Fórmula para percentual</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegrasIdadeFinal.formula }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Percentual</span>
+                    </td>
+                    <td>{{ conclusoesRegrasIdadeFinal.percentual }} %</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor</span>
+                    </td>
+                    <td>{{ conclusoesRegrasIdadeFinal.valorString }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template #regraFinalIdadeNaoAplica>
+                  <tr>
+                    <td colspan="2">
+                      <div
+                        class="alert alert-warning margin-top-10"
+                        role="alert"
+                      >
+                        <p>{{ conclusoesRegrasIdadeFinal.msg }}</p>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+            <!-- idade regra final fim-->
+
+            <!-- especial deficiente -->
+          <div *ngIf="isRegraEspecialDeficiente" >
+              <table
+              class="table table-bordered table-hover"
+              *ngIf="!isUpdating"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">
+                      {{ calculo.tipo_seguro }} 
+                  </th>
+                </tr>
+                <tr *ngIf="conclusoesRegrasEspecialDeficiente.status">
+                  <th>
+                      <span class="pull-right">Tipo</span>
+                  </th>
+                  <th>
+                    Descrição
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngIf="
+                    conclusoesRegrasEspecialDeficiente.status;
+                    then regraEspecialDeficienteAplica;
+                    else regraEspecialDeficienteNaoAplica
+                  "
+                >
+                </ng-container>
+                <ng-template #regraEspecialDeficienteAplica>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Soma das Contribuições com descarte de 20%</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegrasEspecialDeficiente.totalComDescarteString }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Divisor do Cálculo da média com descarte de 20%</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegrasEspecialDeficiente.CompetenciasComDescarte }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Percentual</span>
+                    </td>
+                    <td>{{ conclusoesRegrasEspecialDeficiente.percentual }} %</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor</span>
+                    </td>
+                    <td>{{ conclusoesRegrasEspecialDeficiente.valorString }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template #regraEspecialDeficienteNaoAplica>
+                  <tr>
+                    <td colspan="2">
+                      <div
+                        class="alert alert-warning margin-top-10"
+                        role="alert"
+                      >
+                        <p>{{ conclusoesRegrasEspecialDeficiente.msg }}</p>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+          <!-- especial deficiente -->
         </div>
       </div>
       <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">

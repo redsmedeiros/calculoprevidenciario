@@ -643,6 +643,9 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Aposentadoria por incapacidade permanente':
         numeroEspecie = 1903;
       break;
+      case 'Auxílio Acidente - 50%':
+        numeroEspecie = 1905;
+      break;
       // Reforma  fim 2019
       default:
         break;
@@ -656,26 +659,30 @@ export class RgpsResultadosComponent implements OnInit {
    * @param especieBeneficio
    */
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
-    const dataFim = moment('1999-11-29');
+    //25, 26, 27,
 
-    if ((((especieBeneficio === 2) ||
-      (especieBeneficio === 3) ||
-      (especieBeneficio === 16) ||
-      (especieBeneficio === 1) ||
-      (especieBeneficio === 1900) ||
-      (especieBeneficio === 1901))
-      ||
-      ((especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-        (especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-        (especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-        (especieBeneficio === 'Auxílio Doença') ||
-        (especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito')||
-        (especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')))
-      ) {
-      return true;
-    }
-    return false;
+    const arrayTypeNum = [1, 2, 3, 16,  28, 1900, 1901, 1903, 1905];
+    const arrayTypeText = [
+                        'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
+                        'Aposentadoria por idade - Trabalhador Urbano',
+                        'Aposentadoria por idade - Trabalhador Rural',
+                        'Auxílio Doença',
+                        'Pensão por Morte instituidor aposentado na data óbito',
+                        'Pensão por Morte instituidor não é aposentado na data óbito',
+                        'Aposentadoria por incapacidade permanente',
+                        'Auxílio Acidente - 50%',
+                        'Aposentadoria especial por Idade da Pessoa com Deficiência',
+                        // 'Aposentadoria especial da Pessoa com Deficiência Grave',
+                        // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
+                        // 'Aposentadoria especial da Pessoa com Deficiência Leve',
+                      ];
+
+    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+    return true;
   }
+  return false;
+
+}
 
 
   formatMoney(value, sigla = 'R$') {

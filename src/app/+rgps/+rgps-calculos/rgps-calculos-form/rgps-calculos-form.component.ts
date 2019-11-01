@@ -424,7 +424,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     let tipoInvalidezOuIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')) {
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
+      (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')) {
       tipoInvalidezOuIdade = true;
     }
 
@@ -441,11 +442,12 @@ export class RgpsCalculosFormComponent implements OnInit {
       tipoInvalidezOuIdade = true;
     }
 
+    if ((this.especieBeneficio === 'Auxílio Acidente - 50%') ) {
+      tipoInvalidezOuIdade = true;
+    }
 
-    console.log(this.especieBeneficio);
-    console.log(tipoInvalidezOuIdade);
-
-
+    // console.log(this.especieBeneficio);
+    // console.log(tipoInvalidezOuIdade);
 
     if (moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')) {
       this.posteriorMaio2013 = true;

@@ -101,7 +101,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   // transição INICIO
 
+  public dataPromulgacao2019 = moment('01/10/2019', 'DD/MM/YYYY');
   public valorTotalContribuicoes;
+  public numeroDeCompetenciasAposDescarte20 = 0;
+  public valorTotalContribuicoesComDescarte20 = 0;
+  public isTransicao = true;
 
   public conclusoesRegra1: any;
   public conclusoesRegra2: any;
@@ -114,10 +118,27 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public conclusoesRegraAposentadoriaEspecial: any;
 
   public isRegrasPensaoObito = false;
+  public isRegrasPensaoObitoInstituidorAposentado = false;
   public conclusoesRegraPensaoObito: any;
 
-  public isRegrasInvalidez = false;
-  public conclusoesRegraInvalidez: any;
+  public isRegrasIncapacidade = false;
+  public conclusoesRegraIncapacidade: any;
+
+  public isRegrasAuxilioDoenca = false;
+  public conclusoesRegrasAuxilioDoenca: any;
+  public contribuicoesPrimarias12 = 0;
+  public contribuicoesPrimarias12Media = 0;
+
+  public isRegrasAuxilioAcidente = false;
+  public conclusoesRegrasAuxilioAcidente;
+
+  public isRegrasIdade = false;
+  public conclusoesRegrasIdadeFinal: any;
+  public erroCarenciaMinima = false;
+  public isStatusTransicaoIdade = true;
+
+  public isRegraEspecialDeficiente = false;
+  public conclusoesRegrasEspecialDeficiente: any;
 
 
   public errorRegrasTransicao = {
@@ -139,7 +160,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   }
 
   ngOnInit() {
-    this.boxId = this.generateBoxId(this.calculo.id, '99');
+    this.boxId = this.generateBoxId(this.calculo.id, '19');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
@@ -149,10 +170,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_19);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-
+    this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     let dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
+
+
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
@@ -176,7 +199,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                         .then(carencias => {
 
                           this.carenciasProgressivas = carencias;
-                          this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                          // Quando o instituidor já está aposentado não é necessário relizar o calculo
+                          if (!this.isRegrasPensaoObitoInstituidorAposentado) {
+
+                            this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+
+                          }
                           this.regrasDaReforma();
 
                           this.isUpdating = false;
@@ -313,35 +341,35 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
     let label;
-    switch (this.tipoBeneficio) {
-      case 1: // Auxilio Doença Previdenciario
+    // switch (this.tipoBeneficio) {
+    //   case 1: // Auxilio Doença Previdenciario
 
-        divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
-        //modificado dia 04-06-2019
-        divisorSecundario = contadorSecundario;
-        divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
+    //     // divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
+    //     // //modificado dia 04-06-2019
+    //     // divisorSecundario = contadorSecundario;
+    //     // divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
 
 
-        if (this.withMemo) {
-          // Exibir Label contendo o texto
-          label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .";
-        }
-        break;
-      case 2: // Aposentadoria Por Invalidez previdenciaria
-        if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
-          //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-          if (this.withMemo) {
-            // Exibir Label contendo o texto
-            label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.";
-          }
-        }
-        break;
-      case 7: // Auxilio Doença Previdenciario 50%
-        //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-        break;
-    }
+    //     if (this.withMemo) {
+    //       // Exibir Label contendo o texto
+    //       label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .";
+    //     }
+    //     break;
+    //   case 2: // Aposentadoria Por Invalidez previdenciaria
+    //     if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
+    //       //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //       divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //       if (this.withMemo) {
+    //         // Exibir Label contendo o texto
+    //         label = "Este calculo foi realizado com base no <a href='#' onclick='javascript:alert(\"Em breve a descrição do Memorando.\");'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.";
+    //       }
+    //     }
+    //     break;
+    //   case 7: // Auxilio Doença Previdenciario 50%
+    //     //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //     divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     break;
+    // }
 
     if (this.dataFiliacao >= this.dataDib99) {
       switch (this.tipoBeneficio) {
@@ -349,7 +377,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         case 2: //Aposentadoria por invalidez previdenciaria
           if (numeroContribuicoes >= 144 || this.withMemo) {
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+            // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           } else {
             divisorMediaPrimaria = numeroContribuicoes;
           }
@@ -390,11 +418,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
             divisorMediaPrimaria = numeroContribuicoes;
           } else {
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
         }
         if (divisorMediaPrimaria < divisorMinimo) {
-          divisorMediaPrimaria = divisorMinimo;
+          // divisorMediaPrimaria = divisorMinimo;
         }
       }
     }
@@ -404,34 +432,44 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     switch (this.tipoBeneficio) {
       case 1: // Auxilio Doenca Previdenciario
         if (this.dataInicioBeneficio >= this.dataMP664) {
-          let currency = this.loadCurrency(this.dataInicioBeneficio);
-          if (numeroContribuicoes >= 12) {
-            let contribuicoesPrimarias12 = 0;
-            let contribuicoesSecundarias12 = 0;
-            for (let contribuicao of primeirasContribuicoes) {
-              contribuicoesPrimarias12 += contribuicao.valor_primario;
-              contribuicoesSecundarias12 += contribuicao.valor_secundario;
-            }
-            let moeda = this.Moeda.getByDate(this.dataInicioBeneficio);// Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
-            let salarioMinimoRMI = moeda.salario_minimo;
-            divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / 12, 1);
+          const currency = this.loadCurrency(this.dataInicioBeneficio);
 
-            // console.log(divisorContribuicoes);
+          // if (numeroContribuicoes >= 12) {
+          let contribuicoesPrimarias12 = 0;
+          let contribuicoesSecundarias12 = 0;
 
-            if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
-              divisorContribuicoes = salarioMinimoRMI;
-            }
-            totalMediaDozeContribuicoes = divisorContribuicoes;
-
-
-            // console.log(divisorContribuicoes);
-            // console.log(contribuicoesPrimarias12);
-            // Inserir nas conclusoes:
-            //conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
-            conclusoes.push({ string: "Soma das 12 últimas contribuções", value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo) });
-            //conclusoes.media_doze_ultimas_contribuicoes = this.formatMoney(divisorContribuicoes, currency.acronimo);
-            conclusoes.push({ string: "Média das 12 últimas contribuções", value: this.formatMoney(divisorContribuicoes, currency.acronimo) });
+          for (const contribuicao of primeirasContribuicoes) {
+            contribuicoesPrimarias12 += contribuicao.valor_primario;
+            contribuicoesSecundarias12 += contribuicao.valor_secundario;
           }
+
+          // Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
+          const moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ?
+            this.Moeda.getByDate(this.dataInicioBeneficio) :
+            this.Moeda.getByDate(moment());
+
+          let salarioMinimoRMI = moeda.salario_minimo;
+
+          divisorContribuicoes = ((contribuicoesPrimarias12) / 12);
+
+          // console.log(divisorContribuicoes);
+
+          if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
+            divisorContribuicoes = salarioMinimoRMI;
+          }
+          totalMediaDozeContribuicoes = divisorContribuicoes;
+
+          this.contribuicoesPrimarias12 = contribuicoesPrimarias12;
+          this.contribuicoesPrimarias12Media = divisorContribuicoes;
+
+          // console.log(divisorContribuicoes);
+          // console.log(contribuicoesPrimarias12);
+          // Inserir nas conclusoes:
+          //conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
+          conclusoes.push({ string: "Soma das 12 últimas contribuções", value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo) });
+          //conclusoes.media_doze_ultimas_contribuicoes = this.formatMoney(divisorContribuicoes, currency.acronimo);
+          conclusoes.push({ string: "Média das 12 últimas contribuções", value: this.formatMoney(divisorContribuicoes, currency.acronimo) });
+          // }
         }
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
@@ -443,6 +481,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     }
 
 
+    // ordenar por valor para descarte
     tableData.sort((entry1, entry2) => {
       if (entry1.valor_primario > entry2.valor_primario) {
         return 1;
@@ -453,19 +492,38 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       return 0;
     });
 
+    // desconsiderar (descarte de 20%)
+    this.numeroDeCompetenciasAposDescarte20 = Math.round(numeroContribuicoes * 0.8);
+    this.valorTotalContribuicoesComDescarte20 = 0;
+    // let teste = 0;
+    if (numeroContribuicoes > this.numeroDeCompetenciasAposDescarte20) {
+      for (let i = 0; i < tableData.length; i++) {
+        if (i >= tableData.length - this.numeroDeCompetenciasAposDescarte20) {
+          this.valorTotalContribuicoesComDescarte20 += tableData[i].valor_primario;
+        }else {
+                tableData[i].limite = "DESCONSIDERADO";
+              }
+        // else{
+        //   teste += tableData[i].valor_primario
+        // }
+      }
+    }
 
-    // desconsiderar
+
+    // desconsiderar (descarte)
     // if (numeroContribuicoes > divisorMediaPrimaria) {
     //   totalContribuicaoPrimaria = 0
     //   for (let i = 0; i < tableData.length; i++) {
     //     if (i >= tableData.length - divisorMediaPrimaria) {
     //       totalContribuicaoPrimaria += tableData[i].valor_primario;
-    //     } else {
+    //     } 
+    //     else {
     //       tableData[i].limite = "DESCONSIDERADO";
     //     }
     //   }
     // }
 
+    // ordenar pelo id da linha id+1
     tableData.sort((entry1, entry2) => {
       if (entry1.id > entry2.id) {
         return 1;
@@ -476,7 +534,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       return 0;
     });
 
-    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true)); // Calcular a quantidade de meses contida entre as duas datas.
+    // Calcular a quantidade de meses contida entre as duas datas.
+    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true));
     if (numeroCompetencias > 60) {
       numeroCompetencias = 60;
     } else if (numeroCompetencias > 0 && numeroCompetencias < 1) {
@@ -527,6 +586,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         naoFocado = true;
       }
     }
+
 
     //Índice de Reajuste no Teto.
     let irt = 1;
@@ -613,7 +673,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
 
-    // console.log(coeficiente);
 
     // conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
     conclusoes.push({ string: "Soma das Contribuições:", value: this.formatMoney(totalContribuicaoPrimaria, currency.acronimo) });
@@ -821,27 +880,27 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.getRendaMensal(conclusoes, rmi, currency);
 
     // ULTIMA LINHA
-    if (conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value) {
-      conclusoes[conclusoes.length - 1]["class"] = "destaque";
-    } else if (conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value) {
-      this.isUpdating = true;
-      console.log(conclusoes);
-      let valor = conclusoes[conclusoes.length - 2];
-      conclusoes.push(valor);
-      conclusoes[conclusoes.length - 3] = {};
-      conclusoes[conclusoes.length - 1]["class"] = "destaque";
-      this.isUpdating = false;
-    }
+    // if (conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value) {
+    //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
+    // } else if (conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value) {
+    //   this.isUpdating = true;
+    //   console.log(conclusoes);
+    //   let valor = conclusoes[conclusoes.length - 2];
+    //   conclusoes.push(valor);
+    //   conclusoes[conclusoes.length - 3] = {};
+    //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
+    //   this.isUpdating = false;
+    // }
 
-    if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-      rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
-      rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
-    } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-      rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
-      rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
-    }
+    // if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
+    //   rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
+    //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
+    // } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
+    //   rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
+    //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
+    // }
 
-    conclusoes[conclusoes.length - 1]["class"] = "destaque";
+    // conclusoes[conclusoes.length - 1]["class"] = "destaque";
 
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
@@ -849,7 +908,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       ...this.tableOptions,
       data: this.tableData,
     }
-    //Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+    // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = rmi;
     this.CalculoRgpsService.update(this.calculo);
@@ -870,13 +929,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   getTempoServico(redutorProfessor, redutorSexo, secundario) {
     let tempo;
 
-    if (secundario) {
-      tempo = this.contribuicaoSecundaria;
-      // let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
-      let contagemSecundaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
-      //let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
-      return contagemSecundaria;
-    }
+    // if (secundario) {
+    //   tempo = this.contribuicaoSecundaria;
+    //   // let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
+    //   let contagemSecundaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
+    //   //let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
+    //   return contagemSecundaria;
+    // }
 
     tempo = this.contribuicaoPrimaria;
     // let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
@@ -1264,6 +1323,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       if (this.calculo.carencia < mesesCarencia) {
         let erroCarencia = "Falta(m) " + (mesesCarencia - this.calculo.carencia) + " mês(es) para a carência necessária.";
         errorArray.push(erroCarencia);
+        this.erroCarenciaMinima = true;
         return false;
       }
     }
@@ -1808,6 +1868,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         tempoFinalContrib = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
       }
 
+      // console.log(tempoContribuicaoAnosAtePec);
+      //   console.log(contribuicaoDiff);
+      //   console.log(tempoDePedagio);
+
       tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       // console.clear();
@@ -1942,16 +2006,17 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     if (this.conclusoesRegra5.status) {
 
       this.conclusoesRegra5.status = true;
-      let percentual = ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
-      percentual += 60;
+
+      let percentual = 60;
+      this.conclusoesRegra5.formula = `60% (percentual mínimo)`
+      if (this.contribuicaoTotal > tempoPercentual[this.segurado.sexo]) {
+        percentual += ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
+        this.conclusoesRegra5.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
+      }
 
       this.conclusoesRegra5.percentual = percentual;
-
       percentual /= 100;
-
       this.conclusoesRegra5.valor = (valorMedio * percentual)
-
-      this.conclusoesRegra5.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
       this.conclusoesRegra5.valorString = this.formatMoney(this.conclusoesRegra5.valor);
 
     } else {
@@ -1981,8 +2046,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
     // const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
 
-    console.log(mesesContribuicao);
-    console.log(this.tipoBeneficio);
+    // console.log(mesesContribuicao);
+    // console.log(this.tipoBeneficio);
 
     if (
       (this.contribuicaoPrimaria.anos > 0 ||
@@ -2089,16 +2154,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     console.log(this.conclusoesRegraAposentadoriaEspecial);
   }
-
   // aposentadoria fim especial
 
 
   // pensao por morte
-
-
   public regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
-
-    console.log(this.calculo);
 
     this.conclusoesRegraPensaoObito = {
       status: true,
@@ -2109,8 +2169,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       valorString: '',
       valorUltimoBeneficio: 0,
       valorObs: '',
-      statusTempo: true,
-      statusPontos: true
     };
 
     let percentual = 100;
@@ -2120,23 +2178,19 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       this.conclusoesRegraPensaoObito.formula = `50% + (${this.calculo.num_dependentes}-dependentes * 10%)`;
 
-
       percentual = (percentual > 100) ? 100 : percentual;
 
-    }else if (this.calculo.obito_decorrencia_trabalho === 1){
+    } else if (this.calculo.obito_decorrencia_trabalho === 1) {
       this.conclusoesRegraPensaoObito.formula = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
-    }else if (this.calculo.depedente_invalido === 1){
+    } else if (this.calculo.depedente_invalido === 1) {
       this.conclusoesRegraPensaoObito.formula = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
     }
-
 
     this.conclusoesRegraPensaoObito.percentual = percentual;
 
     percentual /= 100;
 
-   
-
-    let  valorUltimoBeneficio;
+    let valorUltimoBeneficio;
     switch (tipoBeneficio) {
       case 1900: // é aposentado 
 
@@ -2145,7 +2199,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
         break;
       case 1901: // não é aposentado
-        
+
         valorUltimoBeneficio = valorMedio;
         this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorMedio : (valorMedio * percentual);
 
@@ -2155,46 +2209,385 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegraPensaoObito.valor, this.dataInicioBeneficio);
     this.conclusoesRegraPensaoObito.valor = resutadoAjuste.valor;
     this.conclusoesRegraPensaoObito.valorAviso = resutadoAjuste.aviso;
-    this.conclusoesRegraPensaoObito.valorString = this.formatMoney( this.conclusoesRegraPensaoObito.valor);
+    this.conclusoesRegraPensaoObito.valorString = this.formatMoney(this.conclusoesRegraPensaoObito.valor);
     this.conclusoesRegraPensaoObito.valorUltimoBeneficio = this.formatMoney(valorUltimoBeneficio);
 
     console.log(this.conclusoesRegraPensaoObito);
 
   }
+  // fim pensao por morte
 
-
-  public regraInvalidez(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+  // incapacidade permanente
+  public regraIncapacidade(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
 
     console.log(this.calculo);
 
-    this.conclusoesRegraInvalidez = {
+    this.conclusoesRegraIncapacidade = {
       status: true,
       msg: '',
       percentual: 0,
       formula: '',
       valor: 0,
       valorString: '',
-      valorUltimoBeneficio: 0,
       valorObs: '',
-      statusTempo: true,
-      statusPontos: true
     };
+
+    let percentual = 60;
+    if (this.calculo.obito_decorrencia_trabalho !== 1) {
+
+      if (Math.trunc(this.contribuicaoTotal) > 20) {
+
+        percentual += ((Math.trunc(this.contribuicaoTotal) - 20) * 2);
+        this.conclusoesRegraIncapacidade.formula = `60% + ((${Math.trunc(this.contribuicaoTotal)} - 20) * 2%)`;
+      } else {
+        this.conclusoesRegraIncapacidade.formula = `60% (o segurado possuí menos de 20 anos de contribuição.)`;
+      }
+
+      percentual = (percentual > 100) ? 100 : percentual;
+
+    } else if (this.calculo.obito_decorrencia_trabalho === 1) {
+      percentual = 100;
+      this.conclusoesRegraIncapacidade.formula = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
+    }
+
+    this.conclusoesRegraIncapacidade.percentual = percentual;
+    this.conclusoesRegraIncapacidade.valor = (percentual == 100) ? valorMedio : (valorMedio * (percentual / 100));
+
+    const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegraIncapacidade.valor, this.dataInicioBeneficio);
+    this.conclusoesRegraIncapacidade.valor = resutadoAjuste.valor;
+    this.conclusoesRegraIncapacidade.valorAviso = resutadoAjuste.aviso;
+    this.conclusoesRegraIncapacidade.valorString = this.formatMoney(this.conclusoesRegraIncapacidade.valor);
+
+
+    console.log(this.conclusoesRegraIncapacidade);
+
+  }
+  // fim incapacidade permanente
+
+
+
+  // incapacidade permanente
+  public regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+
+    console.log(this.calculo);
+
+    this.conclusoesRegrasAuxilioDoenca = {
+      status: true,
+      msg: '',
+      percentual: 0,
+      formula: '',
+      valor: 0,
+      valorString: '',
+      valorObs: '',
+    };
+
+    this.conclusoesRegrasAuxilioDoenca.percentual = 91;
+    this.conclusoesRegrasAuxilioDoenca.valor = (valorMedio * (this.conclusoesRegrasAuxilioDoenca.percentual / 100));
+
+    if (this.conclusoesRegrasAuxilioDoenca.valor > this.contribuicoesPrimarias12Media) {
+      this.conclusoesRegrasAuxilioDoenca.valor = this.contribuicoesPrimarias12Media;
+    }
+
+    const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegrasAuxilioDoenca.valor, this.dataInicioBeneficio);
+    this.conclusoesRegrasAuxilioDoenca.valor = resutadoAjuste.valor;
+    this.conclusoesRegrasAuxilioDoenca.valorAviso = resutadoAjuste.aviso;
+    this.conclusoesRegrasAuxilioDoenca.valorString = this.formatMoney(this.conclusoesRegrasAuxilioDoenca.valor);
+
+    console.log(this.conclusoesRegrasAuxilioDoenca);
+
+  }
+  // fim incapacidade permanente
+
+
+
+  // Auxilio Acidente
+  public regraAuxilioAcidente(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+
+    this.conclusoesRegrasAuxilioAcidente = {
+      status: true,
+      msg: '',
+      percentual: 0,
+      formula: '',
+      valor: 0,
+      valorString: '',
+      valorObs: '',
+    };
+
+    this.conclusoesRegrasAuxilioAcidente.percentual = 50;
+    this.conclusoesRegrasAuxilioAcidente.valor = (valorMedio * (this.conclusoesRegrasAuxilioAcidente.percentual / 100));
+    this.conclusoesRegrasAuxilioAcidente.valorString = this.formatMoney(this.conclusoesRegrasAuxilioAcidente.valor);
+
+    console.log(this.conclusoesRegrasAuxilioAcidente);
+
+  }
+  // fim Auxilio Acidente
+
+
+
+  /**
+   * Idade Final
+   */
+  public requisitosIdadeFinal(idade, ano, sexo, tempo_contribuicao, tipoBeneficio) {
+
+
+    let contribuicao_min = { m: 20, f: 15 };
+    let idade_min = { m: 65, f: 62 };
+
+    if (tipoBeneficio === 16) {
+      contribuicao_min = { m: 15, f: 15 };
+      idade_min = { m: 65, f: 60 };
+    }
+
+    if (tempo_contribuicao < contribuicao_min[sexo]) {
+      return {
+        status: false, msg: `O segurado não possuí tempo mínimo de contribuição, faltam
+                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+      }
+    }
+
+    if (idade < idade_min[sexo]) {
+      return {
+        status: false, msg: `O segurado não possuí a idade mínima, faltam 
+                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+      }
+    };
+
+
+    return { status: true, msg: 'O segurado preenche os requisitos.' };
+  }
+
+  /**
+   * regra de idade urbano Rural
+   */
+  public regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio) {
+
+    this.conclusoesRegrasIdadeFinal = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: ''
+    };
+
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
+    const requisitosRST = this.requisitosIdadeFinal(
+      this.idadeFracionada,
+      this.dataInicioBeneficio.year(),
+      this.segurado.sexo,
+      this.contribuicaoTotal,
+      tipoBeneficio);
+
+
+    this.conclusoesRegrasIdadeFinal.status = requisitosRST.status;
+
+    if (this.conclusoesRegrasIdadeFinal.status) {
+
+      this.conclusoesRegrasIdadeFinal.status = true;
+
+      let percentual = 60;
+      let percentualPorAno = 2;
+
+
+      switch (tipoBeneficio) {
+        case 3: // idade urbano Transitória
+          if (this.contribuicaoTotal > tempoPercentual[this.segurado.sexo]) {
+            percentual += ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * percentualPorAno);
+            this.conclusoesRegrasIdadeFinal.formula = `${percentual} + 
+                                                          ((${Math.trunc(this.contribuicaoTotal)} - 
+                                                          ${tempoPercentual[this.segurado.sexo]}) * ${percentualPorAno})`;
+          }
+          break;
+        case 16:
+          percentual = 70;
+          percentualPorAno = 1;
+          percentual += Math.trunc(this.contribuicaoTotal);
+          percentual = (percentual < 100) ? percentual : 100;
+          this.conclusoesRegrasIdadeFinal.formula = `${percentual} + ${Math.trunc(this.contribuicaoTotal)}`;
+          break;
+      }
+
+      this.conclusoesRegrasIdadeFinal.formula = `${percentual}% (percentual mínimo)`;
+      this.conclusoesRegrasIdadeFinal.percentual = percentual;
+      percentual /= 100;
+      this.conclusoesRegrasIdadeFinal.valor = (valorMedio * percentual)
+      this.conclusoesRegrasIdadeFinal.valorString = this.formatMoney(this.conclusoesRegrasIdadeFinal.valor);
+
+    } else {
+      this.conclusoesRegrasIdadeFinal.msg = requisitosRST.msg;
+    }
+
+
+    console.log(this.conclusoesRegrasIdadeFinal);
+
+
+  }
+  // regra idade urbano Rural fim
+
+  // regra especial do deficiente
+  public getRequisitoEspecialDeficiente(tipoBeneficio) {
+
+    let requisito: any;
+
+    switch (tipoBeneficio) {
+      case 25:
+        requisito = { m: 25, f: 20 }; // tempo Grave
+        break;
+      case 26:
+        requisito = { m: 29, f: 24 }; // tempo moderada
+        break;
+      case 27:
+        requisito = { m: 33, f: 28 }; // tempo leve
+        break;
+      case 28:
+        requisito = {
+          tempo: { m: 15, f: 15 },
+          idade: { m: 60, f: 55 }
+        };
+        break;
+    }
+
+    return requisito;
 
   }
 
 
-  // fim pensao por morte
+  public getRegraEspecialDeficiente(idade, ano, sexo, tempo_contribuicao, tipoBeneficio) {
+
+    const requisitoEspecial = this.getRequisitoEspecialDeficiente(tipoBeneficio);
+    let status = true;
+    let msg = '';
+
+    if (tipoBeneficio !== 28) {
+      // tempo
+
+      if (tempo_contribuicao < requisitoEspecial[sexo]) {
+        status = false;
+        msg = `O segurado não possuí o tempo de contribuição necessário, faltam 
+              ${this.tratarTempoFracionado((requisitoEspecial[sexo] - tempo_contribuicao))}`;
+      }
+
+    } else {
+      // idade
+
+      if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
+        status = false;
+        msg = `O segurado não possuí o(s) requisito(s), faltam 
+                ${this.tratarTempoFracionado((requisitoEspecial.tempo[sexo] - tempo_contribuicao))}
+                de tempo de contribuição `;
+      }
+
+      if (idade < requisitoEspecial.idade[sexo]) {
+
+        status = false;
+        msg += (msg == '') ? `O segurado não possuí a idade necessária, faltam
+               ${this.tratarTempoFracionado((requisitoEspecial.idade[sexo] - idade))}` :
+          ` e ${this.tratarTempoFracionado((requisitoEspecial.idade[sexo] - idade))} de idade `;
+      }
+
+    }
+
+    return { status: status, msg: msg };
+  }
 
 
   /**
-  * aplicarRegrasTransicao
- */
+   * regra de idade urbano Rural
+   */
+  public regraEspecialDeficiente(mesesContribuicao, valorMedio, tipoBeneficio) {
+
+
+    this.conclusoesRegrasEspecialDeficiente = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: '',
+      aviso: '',
+      totalComDescarte: this.valorTotalContribuicoesComDescarte20,
+      totalComDescarteString: this.formatMoney(this.valorTotalContribuicoesComDescarte20),
+      CompetenciasComDescarte: this.numeroDeCompetenciasAposDescarte20,
+      mediaComDescarte: 0
+    };
+
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
+    const requisitosRST = this.getRegraEspecialDeficiente(
+      this.idadeFracionada,
+      this.dataInicioBeneficio.year(),
+      this.segurado.sexo,
+      this.contribuicaoTotal,
+      tipoBeneficio);
+
+
+    this.conclusoesRegrasEspecialDeficiente.mediaComDescarte = (this.valorTotalContribuicoesComDescarte20 /
+      this.numeroDeCompetenciasAposDescarte20);
+    this.conclusoesRegrasEspecialDeficiente.status = requisitosRST.status;
+
+    if (tipoBeneficio !== 28 && this.conclusoesRegrasEspecialDeficiente.status) {
+      // tempo
+
+      this.conclusoesRegrasEspecialDeficiente.valor = (this.conclusoesRegrasEspecialDeficiente.mediaComDescarte);
+      this.conclusoesRegrasEspecialDeficiente.percentual = 100;
+
+    } else if (tipoBeneficio === 28 && this.conclusoesRegrasEspecialDeficiente.status) {
+      // idade
+
+      let percentual = 70 + Math.trunc(this.contribuicaoTotal);
+      percentual = (percentual < 100) ? percentual : 100;
+      this.conclusoesRegrasEspecialDeficiente.percentual = percentual;
+      percentual /= 100;
+      this.conclusoesRegrasEspecialDeficiente.valor = (this.conclusoesRegrasEspecialDeficiente.mediaComDescarte * percentual);
+
+    }
+
+    if (this.fatorPrevidenciario > 1) { // se fator maior que aplique o fator
+      this.conclusoesRegrasEspecialDeficiente.valor *= this.fatorPrevidenciario;
+
+      const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegrasEspecialDeficiente.valor, this.dataInicioBeneficio);
+      this.conclusoesRegrasEspecialDeficiente.valor = resutadoAjuste.valor;
+      this.conclusoesRegrasEspecialDeficiente.aviso = resutadoAjuste.aviso;
+      this.conclusoesRegrasEspecialDeficiente.aviso += '(Incide fator previdenciário)';
+    }
+
+    this.conclusoesRegrasEspecialDeficiente.valorString = this.formatMoney(this.conclusoesRegrasEspecialDeficiente.valor);
+
+    this.conclusoesRegrasEspecialDeficiente.msg = requisitosRST.msg;
+    console.log(this.conclusoesRegrasEspecialDeficiente);
+
+  }
+
+  // regra especial do deficiente
+
+
+
+
+
+  /**
+    * aplicarRegrasTransicao
+   */
   public regrasDaReforma() {
 
     this.isUpdating = true;
 
     const arrayEspecial = [1915, 1920, 1925];
     const arrayPensao = [1900, 1901];
+    const arrayIdade = [3, 16];
+    const arrayEspecialDeficiente = [25, 26, 27, 28];
+
+    this.isTransicao = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
 
 
     const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
@@ -2206,6 +2599,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // console.log(this.dataInicioBeneficio);
     // console.log(moeda);
     // console.log(this.tipoBeneficio);
+    // console.log(this.dataFiliacao);
+    // console.log(this.dataPromulgacao2019);
+    // console.log(this.isTransicao);
+
+    // console.log(this.numeroDeCompetenciasAposDescarte20);
+    // console.log(this.valorTotalContribuicoesComDescarte20);
+
 
 
     // aplicação default false
@@ -2216,21 +2616,50 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.regraAposentadoriaEspecial(mesesContribuicao, valorMedio, this.tipoBeneficio);
 
     } else if (arrayPensao.includes(this.tipoBeneficio)) {
+
       // pensão 
       this.isRegrasPensaoObito = true;
       this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
 
-    }else if (this.tipoBeneficio == 1903) {
-      // invalidez
-      this.isRegrasInvalidez = true;
-      this.regraInvalidez(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
+    } else if (this.tipoBeneficio === 1903) {
+
+      // incapacidade
+      this.isRegrasIncapacidade = true;
+      this.regraIncapacidade(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
+
+    } else if (this.tipoBeneficio === 1905) {
+
+      // Auxilio acidente
+      this.isRegrasAuxilioAcidente = true;
+      this.regraAuxilioAcidente(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
+
+    } else if (this.tipoBeneficio === 1) {
+
+      // Auxilio doença
+      this.isRegrasAuxilioDoenca = true;
+      this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
+
+    } else if (arrayIdade.includes(this.tipoBeneficio)) {
+
+      this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
+
+      // Aposentadoria por idade - Trabalhador Rural
+      if (!this.erroCarenciaMinima) {
+        this.isRegrasIdade = true;
+        this.regraIdade(mesesContribuicao, valorMedio);
+        this.regraIdadeFinal(mesesContribuicao, valorMedio, this.tipoBeneficio);
+      }
+
+    } else if (arrayEspecialDeficiente.includes(this.tipoBeneficio)) {
+
+      // especial deficiente
+      this.isRegraEspecialDeficiente = true;
+      this.regraEspecialDeficiente(mesesContribuicao, valorMedio, this.tipoBeneficio)
 
     } else {
       this.isRegrasTransicao = true;
       this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
     }
-
-
 
     this.isUpdating = false;
 
