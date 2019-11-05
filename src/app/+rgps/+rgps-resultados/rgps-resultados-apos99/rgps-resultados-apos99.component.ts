@@ -1085,8 +1085,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
 
-          console.log(extra)
-          console.log(toll)
+          // console.log(extra)
+          // console.log(toll)
 
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib);
           direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);

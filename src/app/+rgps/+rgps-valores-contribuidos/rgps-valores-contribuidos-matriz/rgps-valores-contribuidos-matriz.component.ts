@@ -126,10 +126,15 @@ export class RgpsMatrizComponent implements OnInit {
     if(tableEntry == ''){
       return 0.0;
     }
-    return parseFloat((tableEntry).replace(',','.'));
+
+    // console.log(tableEntry);
+    // console.log(parseFloat((tableEntry).replace(/[\.]/g, '').replace(',', '.')));
+    
+    // return parseFloat((tableEntry).replace(',', '.'));
+    return parseFloat((tableEntry).replace(/[\.]/g, '').replace(',', '.'));
   }
 
-  //Retorna uma lista com os meses entre dateStart e dateEnd
+  // Retorna uma lista com os meses entre dateStart e dateEnd
   monthAndYear(dateStart, dateEnd){
     dateStart = '01/'+dateStart;
     dateEnd = '01/'+dateEnd;

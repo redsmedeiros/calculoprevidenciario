@@ -229,7 +229,6 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     let value = event.srcElement.value;
     if(value.indexOf('_') < 0 && value != ''){
       let next = <HTMLInputElement>document.getElementById(nextElementId);
-      console.log(next)
       next.focus();
     }
   }
@@ -353,8 +352,20 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   formatMoney(data) {
-    data = parseFloat(data);
+
+         //console.log(tableEntry);
+    // console.log(parseFloat((tableEntry).replace(/[\.]/g, '').replace(',', '.')));
+   // console.log(data);
+
+   
+    if( typeof data === 'string'){
+      data = parseFloat(data);
+    }
+
+    console.log(data);
+    
     return (data.toFixed(2)).replace('.', ',');
+   
     // return 'R$ ' + (data.toFixed(2)).replace('.', ',');
   }
 

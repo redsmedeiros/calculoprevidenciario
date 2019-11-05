@@ -451,7 +451,7 @@
                       </td>
                       <td>{{ conclusoesRegra3.tempoDePedagio }}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="conclusoesRegra3.tempoDeContribuicaoAposentar > 0" >
                       <td width="50%">
                         <span class="pull-right font-bold"
                           >Tempo de contribuição necessário</span
@@ -535,7 +535,7 @@
                       </td>
                       <td>{{ conclusoesRegra4.tempoDePedagio }}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="conclusoesRegra4.tempoDeContribuicaoAposentar > 0" >
                       <td width="50%">
                         <span class="pull-right font-bold"
                           >Tempo de contribuição necessário</span
