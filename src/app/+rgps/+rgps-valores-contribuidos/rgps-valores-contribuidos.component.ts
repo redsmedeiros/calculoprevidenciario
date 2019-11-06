@@ -110,8 +110,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   contribsChanged(event, tipo_contrib){
-    console.log(event)
-    let valor = parseFloat(event.srcElement.value.replace('.', '').replace(',','.'));
+    //console.log(event)
+    let valor = parseFloat(event.srcElement.value.replace(/[\.]/g, '').replace(',','.'));
     let mes = event.srcElement.id.split('-')[0];
     let ano = event.srcElement.id.split('-')[1];
     let date = `${ano}-${mes}-01`;
@@ -123,6 +123,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
           tipo: 0,
           valor: valor,
         });
+
     swal({
         type: 'info',
         title: 'Aguarde por favor...',
@@ -300,7 +301,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   isEmpty(data) {
-    console.log(data)
+    // console.log(data)
     if (data == undefined || data === '') {
       return true;
     }
@@ -353,21 +354,11 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   formatMoney(data) {
 
-         //console.log(tableEntry);
-    // console.log(parseFloat((tableEntry).replace(/[\.]/g, '').replace(',', '.')));
-   // console.log(data);
-
-   
-    if( typeof data === 'string'){
-      data = parseFloat(data);
-    }
-
-    console.log(data);
-    
+    data = parseFloat(data);
     return (data.toFixed(2)).replace('.', ',');
-   
-    // return 'R$ ' + (data.toFixed(2)).replace('.', ',');
-  }
+ // return 'R$ ' + (data.toFixed(2)).replace('.', ','); OLD
+
+}
 
   dateMask(rawValue) {
     if (rawValue == '') {

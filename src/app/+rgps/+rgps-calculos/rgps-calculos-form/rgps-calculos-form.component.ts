@@ -180,29 +180,29 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.primaria98meses = '';
     this.primaria98dias = '';
 
-    this.secundaria98anos = undefined;
-    this.secundaria98meses = undefined;
-    this.secundaria98dias = undefined;
+    this.secundaria98anos = '';
+    this.secundaria98meses = '';
+    this.secundaria98dias = '';
 
-    this.primaria99anos = undefined;
-    this.primaria99meses = undefined;
-    this.primaria99dias = undefined;
+    this.primaria99anos = '';
+    this.primaria99meses = '';
+    this.primaria99dias = '';
 
-    this.secundaria99anos = undefined;
-    this.secundaria99meses = undefined;
-    this.secundaria99dias = undefined;
+    this.secundaria99anos = '';
+    this.secundaria99meses = '';
+    this.secundaria99dias = '';
 
-    this.primariaAtualanos = undefined;
-    this.primariaAtualmeses = undefined;
-    this.primariaAtualdias = undefined;
+    this.primariaAtualanos = '';
+    this.primariaAtualmeses = '';
+    this.primariaAtualdias = '';
 
-    this.secundariaAtualanos = undefined;
-    this.secundariaAtualmeses = undefined;
-    this.secundariaAtualdias = undefined;
+    this.secundariaAtualanos = '';
+    this.secundariaAtualmeses = '';
+    this.secundariaAtualdias = '';
 
-    this.primaria19anos = undefined;
-    this.primaria19meses = undefined;
-    this.primaria19dias = undefined;
+    this.primaria19anos = '';
+    this.primaria19meses = '';
+    this.primaria19dias = '';
 
     this.grupoDos12 = '';
     this.carencia = '';

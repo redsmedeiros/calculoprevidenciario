@@ -1481,14 +1481,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegra1.valor = (valorMedio * percentualR1)
 
       this.conclusoesRegra1.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
-      
-      this.conclusoesRegra1.valorString = this.formatMoney(this.conclusoesRegra1.valor);
 
 
       const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegra1.valor, this.dataInicioBeneficio);
       this.conclusoesRegra1.valor = resutadoAjuste.valor;
       this.conclusoesRegra1.aviso = resutadoAjuste.aviso;
 
+      this.conclusoesRegra1.valorString = this.formatMoney(this.conclusoesRegra1.valor);
     } else {
       this.conclusoesRegra1.msg = 'Não atende os requisitos desta regra.'
     }
@@ -1677,12 +1676,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       percentualR2 /= 100;
 
-      console.log(percentualR2)
-
       this.conclusoesRegra2.valor = (valorMedio * percentualR2)
 
       this.conclusoesRegra2.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} - ${tempoPercentual[this.segurado.sexo]}) * 2)`;
-
 
       const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegra2.valor, this.dataInicioBeneficio);
       this.conclusoesRegra2.valor = resutadoAjuste.valor;
@@ -2016,7 +2012,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       this.conclusoesRegra5.percentual = percentual;
       percentual /= 100;
-      this.conclusoesRegra5.valor = (valorMedio * percentual)
+      this.conclusoesRegra5.valor = (valorMedio * percentual);
+
+      const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegra5.valor, this.dataInicioBeneficio);
+      this.conclusoesRegra5.valor = resutadoAjuste.valor;
+      this.conclusoesRegra5.aviso = resutadoAjuste.aviso;
+
       this.conclusoesRegra5.valorString = this.formatMoney(this.conclusoesRegra5.valor);
 
     } else {
@@ -2123,15 +2124,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     const pontosEspecial = Math.trunc(this.contribuicaoTotal + this.idadeFracionada);
 
-   
-   
 
     this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial > regraEspecial[tipoBeneficio].pontos)
       && (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
 
     if (this.isRegraTransitoria) {
       this.conclusoesRegraAposentadoriaEspecial.status = (this.idadeFracionada >= idadeTransitoria[tipoBeneficio]);
-     
     }
 
     if (this.conclusoesRegraAposentadoriaEspecial.status) {
@@ -2149,7 +2147,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegraAposentadoriaEspecial.formula = `60 + ((${Math.trunc(this.contribuicaoTotal)} 
                                                               - ${tempoPercentual[tipoBeneficio]}) * 2)`;
 
+      const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegraAposentadoriaEspecial.valor, this.dataInicioBeneficio);
+      this.conclusoesRegraAposentadoriaEspecial.valor = resutadoAjuste.valor;
+      this.conclusoesRegraAposentadoriaEspecial.aviso = resutadoAjuste.aviso;
+
       this.conclusoesRegraAposentadoriaEspecial.valorString = this.formatMoney(this.conclusoesRegraAposentadoriaEspecial.valor);
+      this.updateResultadoCalculo(this.conclusoesRegraAposentadoriaEspecial.valor);
 
     } else {
       this.conclusoesRegraAposentadoriaEspecial.msg = 'O Segurado não atingiu os requisitos: ';
@@ -2442,7 +2445,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegrasIdadeFinal.formula = `${percentual}% (percentual mínimo)`;
       this.conclusoesRegrasIdadeFinal.percentual = percentual;
       percentual /= 100;
-      this.conclusoesRegrasIdadeFinal.valor = (valorMedio * percentual)
+      this.conclusoesRegrasIdadeFinal.valor = (valorMedio * percentual);
+
+      const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegrasIdadeFinal.valor, this.dataInicioBeneficio);
+      this.conclusoesRegrasIdadeFinal.valor = resutadoAjuste.valor;
+      this.conclusoesRegrasIdadeFinal.aviso = resutadoAjuste.aviso;
+
       this.conclusoesRegrasIdadeFinal.valorString = this.formatMoney(this.conclusoesRegrasIdadeFinal.valor);
 
     } else {
@@ -2619,9 +2627,15 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegra5,
     ];
 
+
+    const testeIsValidValor = (conclusao) => {
+      return (conclusao !== undefined && typeof conclusao !== 'undefined' && conclusao != null) &&
+      (conclusao.valor !== undefined && typeof conclusao.valor !== 'undefined' && conclusao.valor != null);
+    };
+
     let MelhorValor = 0;
     for (const conclusoresTansicao of arrayConclusoes) {
-      if (conclusoresTansicao.valor > MelhorValor) {
+      if (testeIsValidValor(conclusoresTansicao) && conclusoresTansicao.valor > MelhorValor) {
         MelhorValor = conclusoresTansicao.valor;
       }
     }
@@ -2671,8 +2685,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     // console.log(this.numeroDeCompetenciasAposDescarte20);
     // console.log(this.valorTotalContribuicoesComDescarte20);
-
-
 
     // aplicação default false
     if (arrayEspecial.includes(this.tipoBeneficio)) {
