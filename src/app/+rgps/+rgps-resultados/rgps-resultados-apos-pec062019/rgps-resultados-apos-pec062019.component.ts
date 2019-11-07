@@ -101,7 +101,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   // transição INICIO
 
-  public dataPromulgacao2019 = moment('01/10/2019', 'DD/MM/YYYY');
+  public dataPromulgacao2019 = moment('12/11/2019', 'DD/MM/YYYY');
   public valorTotalContribuicoes;
   public numeroDeContribuicoes;
   public numeroDeCompetenciasAposDescarte20 = 0;
@@ -2028,7 +2028,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     console.log(this.conclusoesRegra5);
 
-
   }
 
   // regra 5 fim
@@ -2442,7 +2441,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           break;
       }
 
-      this.conclusoesRegrasIdadeFinal.formula = `${percentual}% (percentual mínimo)`;
+      if (this.conclusoesRegrasIdadeFinal.formula == '') {
+        this.conclusoesRegrasIdadeFinal.formula = `${percentual}% (percentual mínimo)`;
+      }
+     
       this.conclusoesRegrasIdadeFinal.percentual = percentual;
       percentual /= 100;
       this.conclusoesRegrasIdadeFinal.valor = (valorMedio * percentual);
@@ -2662,7 +2664,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     if (this.dataFiliacao && this.dataFiliacao != null && moment(this.dataFiliacao).isValid()) {
       this.isRegraTransitoria = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
     }
-   
+
   //  const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
     const mesesContribuicao = this.numeroDeContribuicoes;
     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
@@ -2672,7 +2674,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // console.log(valorMedio);
     // console.log(this.dataFiliacao);
     // console.log(this.dataPromulgacao2019);
-    // console.log(this.isRegraTransitoria);
+     console.log(this.isRegraTransitoria);
 
     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
@@ -2719,7 +2721,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else if (arrayIdade.includes(this.tipoBeneficio)) {
 
-      this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
+      this.isStatusTransicaoIdade = (this.tipoBeneficio === 3 ) ? true : false;
 
       // Aposentadoria por idade - Trabalhador Rural
       if (!this.erroCarenciaMinima) {

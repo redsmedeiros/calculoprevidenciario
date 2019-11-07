@@ -121,7 +121,7 @@
   </table>
 </article>
 
-<!-- Tabela e Informações do Cálculo A partir de 01/10/2019 PEC 06/2019 -->
+<!-- Tabela e Informações do Cálculo A partir de 12/11/2019 PEC 06/2019 -->
 <div id="{{ boxId }}" class="boxCalculo">
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
@@ -130,7 +130,7 @@
           <i class="fa fa-edit"></i>
         </span>
         <h2 id="tituloCalculo">
-          {{ calculo.tipo_seguro }} A partir de 01/10/2019 PEC 06/2019
+          {{ calculo.tipo_seguro }} A partir de 12/11/2019 PEC 06/2019
         </h2>
       </header>
       <div>
@@ -906,7 +906,7 @@
             <div *ngIf="isRegrasIdade" >
                 <table
                 class="table table-bordered table-hover"
-                *ngIf="!isUpdating && isStatusTransicaoIdade"
+                *ngIf="!isUpdating && !isRegraTransitoria"
               >
                 <thead>
                   <tr>
@@ -969,7 +969,7 @@
                 </tbody>
               </table>
               <!-- idade transicao fim-->
-              <!-- idade final -->
+              <!-- idade transitoria -->
               <table
               class="table table-bordered table-hover"
               *ngIf="!isUpdating"
