@@ -26,7 +26,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
-  public fimContador19 = this.toMoment('01/10/2019'); // Data Pec 2019
+  public fimContador19 = this.toMoment('12/11/2019'); // Data EC nº 103/2019
 
   // public fimContador88 = moment('1988-10-05');
   // public fimContador91 = moment('1991-04-04');
@@ -39,7 +39,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public tempoTotalConFator91: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
-  public tempoTotalConFator19: any;// Data Pec 2019
+  public tempoTotalConFator19: any;// Data EC nº 103/2019
 
   public carencia = 0;
   public carencia88 = 0;
@@ -47,7 +47,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public carencia98 = 0;
   public carencia99 = 0;
   public carencia03 = 0;
-  public carencia19 = 0; // Data Pec 2019
+  public carencia19 = 0; // Data EC nº 103/2019
 
   public limitesDoVinculo: any;
   public isUpdateTotal = true;
@@ -59,12 +59,12 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public idadeLimiteDias = 10957.5; // dias
   public redutorSexoDias: any; // dias
 
-  // parametros PEC 2019
+  // parametros EC nº 103/2019
 
 
 
 
-  // parametros PEC 2019 END
+  // parametros EC nº 103/2019 END
 
   public tempoDePedApProp: any; // Tempo de Pedágio para Aposentadoria Proporcional
   public tempoDePedApPropComPedagio: any; // Tempo Mínimo para Aposentadoria Proporcional com Pedágio

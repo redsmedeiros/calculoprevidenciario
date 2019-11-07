@@ -1341,8 +1341,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     } else if (this.tipoBeneficio != 1) {
       // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
     }
-
-
   }
 
   getIdadeFracionada() {

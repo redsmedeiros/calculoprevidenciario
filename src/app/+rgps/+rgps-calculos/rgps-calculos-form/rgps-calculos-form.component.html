@@ -119,7 +119,7 @@
                   </div>
 
                   <!-- <h3 *ngIf="hasAtual">Tempo Total de contribuição - após a Lei nº 9.876/99</h3> -->
-                  <h3 *ngIf="hasAtual">Tempo Total de contribuição - até a PEC 06/2019 (Lei nº 9.876/99 (de 29/11/1999 até 12/11/2019))</h3>
+                  <h3 *ngIf="hasAtual">Tempo Total de contribuição - até a EC nº 103/2019 (Lei nº 9.876/99 (de 29/11/1999 até 12/11/2019))</h3>
                   <div *ngIf="hasAtual" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
                     <div class="col-md-2">
@@ -150,7 +150,7 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
-                  <h3 *ngIf="has19">Tempo Total de contribuição - após a PEC 06/2019</h3>
+                  <h3 *ngIf="has19">Tempo Total de contribuição - após a EC nº 103/2019</h3>
                   <div *ngIf="has19" class="form-group">
                       <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                       <div class="col-md-2">

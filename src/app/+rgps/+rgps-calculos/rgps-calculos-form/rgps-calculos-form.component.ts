@@ -639,11 +639,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib >= moment('2019-11-12')) {
 
-      // Até a pec
+      // Até a EC nº 103/2019
       this.primariaAtualanos = periodos.total.years;
       this.primariaAtualmeses = periodos.total.months;
       this.primariaAtualdias = periodos.total.days;
-      // Até a pec
+      // Até a EC nº 103/2019
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -653,11 +653,11 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99meses = periodos.total99.months;
       this.primaria99dias = periodos.total99.days;
 
-      // posterior a pec
+      // posterior a EC nº 103/2019
       this.primaria19anos = periodos.total19.years;
       this.primaria19meses = periodos.total19.months;
       this.primaria19dias = periodos.total19.days;
-      // posterior a pec
+      // posterior a EC nº 103/2019
 
       this.periodoInicioBeneficio = 'A partir de 12/11/2019';
     }
