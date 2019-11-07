@@ -593,12 +593,19 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   this.contribuicaoTotal -= this.contribuicaoTotal - 5;
     // }
 
-    let contribuicao85_95 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao86_96 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao87_97 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao88_98 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao89_99 = this.contribuicaoTotal + this.idadeFracionada;
-    let contribuicao90_100 = this.contribuicaoTotal + this.idadeFracionada;
+    let tempo  = this.contribuicaoTotal;
+    if (this.tipoBeneficio == 6 && redutorProfessor == 5) {
+      tempo -= 5;
+    }
+
+
+    let textoValorPontos = '';
+    let contribuicao85_95 = tempo + this.idadeFracionada;
+    let contribuicao86_96 = tempo + this.idadeFracionada;
+    let contribuicao87_97 = tempo + this.idadeFracionada;
+    let contribuicao88_98 = tempo + this.idadeFracionada;
+    let contribuicao89_99 = tempo + this.idadeFracionada;
+    let contribuicao90_100 = tempo + this.idadeFracionada;
 
     let dateFormat = "DD/MM/YYYY";
     let dataRegra85_95 = moment('17/06/2015', dateFormat);
@@ -724,15 +731,19 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       // }
 
       else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96 && this.segurado.sexo == 'f') { // 86/96
-        rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-        rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+        textoValorPontos = (this.tipoBeneficio == 6)? '81/91' : '86/96' ;
+        rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, textoValorPontos, comparacaoContribuicao, conclusoes, somaMedias);
+        rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 86, tempoTotalContribuicao, fatorSeguranca, textoValorPontos, comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
       } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) {
-        rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias);
-        rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, '86/96', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
+        textoValorPontos = (this.tipoBeneficio == 6)? '81/91' : '86/96' ;
+        rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, textoValorPontos, comparacaoContribuicao, conclusoes, somaMedias);
+        rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra86_96, dataFimRegra86_96, contribuicao86_96, 96, tempoTotalContribuicao, fatorSeguranca, textoValorPontos, comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
       } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97 && this.segurado.sexo == 'f') {
+        textoValorPontos = (this.tipoBeneficio == 6)? '82/92' : '87/97' ;
         rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
         rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 87, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
       } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
+        textoValorPontos = (this.tipoBeneficio == 6)? '82/92' : '87/97' ;
         rmi <= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias);
         rmi <= somaMedias ? this.tratamentoDeRegras(dataRegra87_97, dataFimRegra87_97, contribuicao87_97, 97, tempoTotalContribuicao, fatorSeguranca, '87/97', comparacaoContribuicao, conclusoes, somaMedias) : this.getRendaMensal(conclusoes, rmi, currency);
       } else if (dataBeneficio >= dataRegra88_98 && dataBeneficio <= dataFimRegra88_98 && this.segurado.sexo == 'f') {
