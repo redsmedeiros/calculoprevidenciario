@@ -570,6 +570,29 @@ export class RgpsResultadosComponent implements OnInit {
     return bonus;
   }
 
+
+  getEspecieReforma(novoNumeroEspecie){
+    const arrayEspecial = [1915, 1920, 1925];
+    const arrayPensao = [1900, 1901];
+
+    if (arrayEspecial.includes(novoNumeroEspecie)) {
+
+    // Especial
+    return 5;
+
+    }
+    
+    if (arrayPensao.includes(novoNumeroEspecie)) {
+
+      // pensão
+      return 2;
+     
+    }
+
+
+  }
+
+
   getEspecieBeneficio(calculo) {
     let numeroEspecie = 0;
     switch (calculo.tipo_seguro) {

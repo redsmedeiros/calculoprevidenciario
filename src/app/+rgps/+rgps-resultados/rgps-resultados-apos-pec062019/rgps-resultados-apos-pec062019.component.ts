@@ -1787,6 +1787,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
         this.conclusoesRegra3.tempoDePedagio = 'Alcançou os requisitos de tempo de contribuição';
         this.conclusoesRegra3.valor = valorMedio * this.fatorPrevidenciario;
+
+        const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegra3.valor, this.dataInicioBeneficio);
+        this.conclusoesRegra3.valor = resutadoAjuste.valor;
+        this.conclusoesRegra3.aviso = resutadoAjuste.aviso;
+
         this.conclusoesRegra3.valorString = this.formatMoney(this.conclusoesRegra3.valor);
         this.conclusoesRegra3.fator = this.fatorPrevidenciario;
         this.conclusoesRegra3.exibirValor = true;
@@ -2021,8 +2026,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     } else {
       const idadeMin = this.getparametrosRegra5(this.dataInicioBeneficio.year());
       this.conclusoesRegra5.msg = 'Não atende os requisitos desta regra. O segurado deve possuir ' + idadeMin[this.segurado.sexo];
+      
     }
-
 
     console.log(this.conclusoesRegra5);
 
@@ -2172,6 +2177,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           this.conclusoesRegraAposentadoriaEspecial.diffPontos = regraEspecial[tipoBeneficio].pontos - pontosEspecial;
         }
       }
+      this.updateResultadoCalculo(0.00);
     }
 
 
@@ -2237,6 +2243,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegraPensaoObito.valorString = this.formatMoney(this.conclusoesRegraPensaoObito.valor);
     this.conclusoesRegraPensaoObito.valorUltimoBeneficio = this.formatMoney(valorUltimoBeneficio);
 
+    this.updateResultadoCalculo(this.conclusoesRegraPensaoObito.valor);
+
     console.log(this.conclusoesRegraPensaoObito);
 
   }
@@ -2257,15 +2265,22 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       destaque: ''
     };
 
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
     let percentual = 60;
     if (this.calculo.obito_decorrencia_trabalho !== 1) {
 
-      if (Math.trunc(this.contribuicaoTotal) > 20) {
+      if (Math.trunc(this.contribuicaoTotal) > tempoPercentual[this.segurado.sexo]) {
 
-        percentual += ((Math.trunc(this.contribuicaoTotal) - 20) * 2);
-        this.conclusoesRegraIncapacidade.formula = `60% + ((${Math.trunc(this.contribuicaoTotal)} - 20) * 2%)`;
+        percentual += ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
+        this.conclusoesRegraIncapacidade.formula = `60% + ((${Math.trunc(this.contribuicaoTotal)}
+                                                    - ${tempoPercentual[this.segurado.sexo]}) * 2%)`;
       } else {
-        this.conclusoesRegraIncapacidade.formula = `60% (o segurado possuí menos de 20 anos de contribuição.)`;
+        this.conclusoesRegraIncapacidade.formula = `60% (o segurado possuí menos de 
+                                                      ${tempoPercentual[this.segurado.sexo]} anos de contribuição.)`;
       }
 
       percentual = (percentual > 100) ? 100 : percentual;
@@ -2282,7 +2297,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegraIncapacidade.valor = resutadoAjuste.valor;
     this.conclusoesRegraIncapacidade.valorAviso = resutadoAjuste.aviso;
     this.conclusoesRegraIncapacidade.valorString = this.formatMoney(this.conclusoesRegraIncapacidade.valor);
-
+    this.updateResultadoCalculo(this.conclusoesRegraIncapacidade.valor);
 
     console.log(this.conclusoesRegraIncapacidade);
 
@@ -2317,6 +2332,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegrasAuxilioDoenca.valorAviso = resutadoAjuste.aviso;
     this.conclusoesRegrasAuxilioDoenca.valorString = this.formatMoney(this.conclusoesRegrasAuxilioDoenca.valor);
 
+    this.updateResultadoCalculo(this.conclusoesRegrasAuxilioDoenca.valor);
+
     console.log(this.conclusoesRegrasAuxilioDoenca);
 
   }
@@ -2341,6 +2358,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegrasAuxilioAcidente.percentual = 50;
     this.conclusoesRegrasAuxilioAcidente.valor = (valorMedio * (this.conclusoesRegrasAuxilioAcidente.percentual / 100));
     this.conclusoesRegrasAuxilioAcidente.valorString = this.formatMoney(this.conclusoesRegrasAuxilioAcidente.valor);
+    
+    this.updateResultadoCalculo(this.conclusoesRegrasAuxilioAcidente.valor);
 
     console.log(this.conclusoesRegrasAuxilioAcidente);
 
@@ -2756,16 +2775,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
 
+  // setDescarteConpetencia() {
 
+  // }
 
-
-
-
-  setDescarteConpetencia() {
-
-  }
-
-  descarteContribuicoesSelecionadas() {
+  // descarteContribuicoesSelecionadas() {
 
 
 
@@ -2799,7 +2813,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // }
 
 
-  }
+ // }
 
 
 

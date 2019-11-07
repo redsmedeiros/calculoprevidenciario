@@ -111,7 +111,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    // Ajuste para novos tipos conforme reforma
+    this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio)
 
+    
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     if(this.dataInicioBeneficio > this.dataPec062019){
