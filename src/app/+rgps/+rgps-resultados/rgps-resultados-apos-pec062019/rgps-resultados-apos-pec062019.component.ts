@@ -1347,7 +1347,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   getIdadeFracionada() {
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days') + 1;
     return idadeEmDias / 365.25;
   }
 
@@ -2670,11 +2670,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
 
+
+    console.log(this.idadeFracionada);
+
     //  console.log(mesesContribuicao);
     // console.log(valorMedio);
     // console.log(this.dataFiliacao);
     // console.log(this.dataPromulgacao2019);
-     console.log(this.isRegraTransitoria);
+    // console.log(this.isRegraTransitoria);
 
     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
