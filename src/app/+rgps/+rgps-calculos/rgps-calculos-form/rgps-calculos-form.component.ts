@@ -54,6 +54,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public depedenteInvalido;
   public obitoDecorrenciaTrabalho;
   public ultimoBeneficio;
+  public sexoInstituidor;
 
   public hasAnterior = false;
   public has98 = false;
@@ -66,6 +67,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   public hasPensao19 = false;
   public hasInvalidez19 = false;
+  public hasPensaoNaoInstuidorAposentado = false;
+  public hasPensaoInstuidorAposentado = false;
 
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -120,6 +123,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.depedenteInvalido = this.formData.depedente_invalido;
       this.obitoDecorrenciaTrabalho = this.formData.obito_decorrencia_trabalho;
       this.ultimoBeneficio = this.formData.ultimo_beneficio;
+      this.sexoInstituidor = this.formData.sexo_instituidor;
 
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
@@ -153,15 +157,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.grupo_dos_12 = this.grupoDos12;
 
       // pensão inicio por morte
-      this.formData.num_dependentes  = this.numDependentes;
+      this.formData.num_dependentes = this.numDependentes;
       this.formData.depedente_invalido = this.depedenteInvalido;
       this.formData.obito_decorrencia_trabalho = this.obitoDecorrenciaTrabalho;
       this.formData.ultimo_beneficio = this.ultimoBeneficio;
+      this.formData.sexo_instituidor = this.sexoInstituidor;
       // pensão fim por morte
 
       swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
-       this.onSubmit.emit(this.formData);
-       this.resetForm();
+      this.onSubmit.emit(this.formData);
+      this.resetForm();
     }
     else {
       console.log(this.errors.all())
@@ -211,6 +216,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.depedenteInvalido = false;
     this.obitoDecorrenciaTrabalho = false;
     this.ultimoBeneficio = false;
+    this.sexoInstituidor = '';
 
     this.hasAnterior = false;
     this.has98 = false;
@@ -373,7 +379,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
     }
 
-    if (this.has19  && this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito') {
+    if (this.has19 && this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito') {
       if (this.primaria19anos == undefined || this.primaria19anos === '') {
         this.errors.add({ 'primaria19anos': ['Campo obrigatório.'] });
       } else {
@@ -398,16 +404,25 @@ export class RgpsCalculosFormComponent implements OnInit {
         }
       }
 
+
+      if ((this.hasPensao19 && this.hasPensaoNaoInstuidorAposentado) &&
+      (this.sexoInstituidor == undefined || this.sexoInstituidor == '')) {
+
+        this.errors.add({'sexoInstituidor': ['O campo sexo do instituidor é obrigatório.']});
+    }
+
+      if (this.hasPensao19 && 
+        (this.numDependentes == undefined || this.numDependentes === '' || !this.isNumber(this.numDependentes))) {
+            this.errors.add({ 'numDependentes': ['Campo obrigatório.'] });
+          }
+
+      // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
+      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      // }
       
-// if (this.hasPensao19 && (this.num_dependentes == undefined || this.num_dependentes === '' || !this.isNumber(this.num_dependentes))) {
-//       this.errors.add({ 'num_dependentes': ['Campo obrigatório.'] });
-//     }
-    // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
-    //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
-    // }
-    // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
-    //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
-    // }
+      // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
+      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      // }
 
     }
 
@@ -430,19 +445,30 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
     this.hasPensao19 = false;
+    this.hasPensaoNaoInstuidorAposentado = false;
+    this.hasPensaoInstuidorAposentado = false;
+
     if ((this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
       (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
       this.hasPensao19 = true;
       tipoInvalidezOuIdade = true;
+
+      // campos especificos para pensão por morte
+      if ((this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
+        this.hasPensaoNaoInstuidorAposentado = true;
+      }else{
+        this.hasPensaoInstuidorAposentado = true;
+      }
+
     }
 
     this.hasInvalidez19 = false;
-    if ((this.especieBeneficio === 'Aposentadoria por incapacidade permanente') ) {
+    if ((this.especieBeneficio === 'Aposentadoria por incapacidade permanente')) {
       this.hasInvalidez19 = true;
       tipoInvalidezOuIdade = true;
     }
 
-    if ((this.especieBeneficio === 'Auxílio Acidente - 50%') ) {
+    if ((this.especieBeneficio === 'Auxílio Acidente - 50%')) {
       tipoInvalidezOuIdade = true;
     }
 
@@ -535,6 +561,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = false;
       this.has19 = false;
     } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('11/12/2019')) {
+      
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -548,7 +575,8 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.hasAtual = true;
         this.has19 = false;
       }
-    } else if (dateBeneficio >= new Date('11/12/2019') ) {
+
+    } else if (dateBeneficio >= new Date('11/12/2019')) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -572,8 +600,6 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
   }
-
-
 
   importContagemTempo() {
 

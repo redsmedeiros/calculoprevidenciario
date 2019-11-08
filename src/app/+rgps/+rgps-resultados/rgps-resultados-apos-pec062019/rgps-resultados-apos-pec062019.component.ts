@@ -172,6 +172,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
+   
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     let dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
@@ -2188,51 +2189,78 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
   // pensao por morte
-  public regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio) {
+  public regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio, sexo_instituidor) {
 
     this.conclusoesRegraPensaoObito = {
       status: true,
       msg: '',
       percentual: 0,
+      percentualBeneficio: 0,
       formula: '',
+      formulaBeneficio: '',
       valor: 0,
+      valorBase: 0,
       valorString: '',
       valorUltimoBeneficio: 0,
       valorObs: '',
+      sexo_instituidor: '',
       destaque: ''
     };
 
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
+
     let percentual = 100;
-    if (this.calculo.obito_decorrencia_trabalho !== 1 && this.calculo.depedente_invalido !== 1) {
+    let percentualBeneficio = 100;
+
+      // 1ª parte
+      percentualBeneficio = ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.calculo.sexo_instituidor]) * 2);
+      percentualBeneficio += 60;
+      this.conclusoesRegraPensaoObito.formulaBeneficio =  `60% + ((${Math.trunc(this.contribuicaoTotal)}
+                                                            - ${tempoPercentual[this.calculo.sexo_instituidor]}) * 2%)`;
+      // 2ª parte
       percentual = (this.calculo.num_dependentes * 10);
       percentual += 50;
-
       this.conclusoesRegraPensaoObito.formula = `50% + (${this.calculo.num_dependentes}-dependentes * 10%)`;
 
-      percentual = (percentual > 100) ? 100 : percentual;
+    if (this.calculo.obito_decorrencia_trabalho === 1) {
 
-    } else if (this.calculo.obito_decorrencia_trabalho === 1) {
-      this.conclusoesRegraPensaoObito.formula = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
+      percentualBeneficio = 100;
+      this.conclusoesRegraPensaoObito.formulaBeneficio = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
+
     } else if (this.calculo.depedente_invalido === 1) {
+
+      percentual = 100;
       this.conclusoesRegraPensaoObito.formula = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
+
     }
+
+    percentualBeneficio = (percentualBeneficio > 100) ? 100 : percentualBeneficio;
+    percentual = (percentual > 100) ? 100 : percentual;
+
+    this.conclusoesRegraPensaoObito.percentualBeneficio = percentualBeneficio;
 
     this.conclusoesRegraPensaoObito.percentual = percentual;
 
     percentual /= 100;
+    percentualBeneficio /= 100;
 
     let valorUltimoBeneficio;
     switch (tipoBeneficio) {
-      case 1900: // é aposentado
+      case 1900: // é aposentado então o valor e calculado com base no valor o ultimo beneficio que usuario digitou para calculo
 
         valorUltimoBeneficio = parseFloat(this.calculo.ultimo_beneficio);
         this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorUltimoBeneficio : (valorUltimoBeneficio * percentual);
 
         break;
-      case 1901: // não é aposentado
+      case 1901: // não é aposentado 
 
-        valorUltimoBeneficio = valorMedio;
-        this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorMedio : (valorMedio * percentual);
+      this.conclusoesRegraPensaoObito.sexo_instituidor = (this.calculo.sexo_instituidor === 'm') ? 'Masculino' : 'Feminino';
+      valorUltimoBeneficio = (valorMedio * percentualBeneficio);
+      this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorMedio : (valorMedio * percentual);
 
         break;
     }
@@ -2244,7 +2272,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegraPensaoObito.valorUltimoBeneficio = this.formatMoney(valorUltimoBeneficio);
 
     this.updateResultadoCalculo(this.conclusoesRegraPensaoObito.valor);
-    console.log(this.conclusoesRegraPensaoObito.valor);
 
     console.log(this.conclusoesRegraPensaoObito);
 
@@ -2683,15 +2710,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.isRegraTransitoria = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
     }
 
-  //  const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    //  const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
     const mesesContribuicao = this.numeroDeContribuicoes;
     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
 
 
-    console.log(this.idadeFracionada);
-
-    //  console.log(mesesContribuicao);
+    // console.log(this.idadeFracionada);
+    // console.log(mesesContribuicao);
     // console.log(valorMedio);
     // console.log(this.dataFiliacao);
     // console.log(this.dataPromulgacao2019);
@@ -2720,7 +2746,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       // pensão 
       this.isRegrasPensaoObito = true;
-      this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
+      this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio, this.calculo.sexo_instituidor);
 
     } else if (this.tipoBeneficio === 1903) {
 

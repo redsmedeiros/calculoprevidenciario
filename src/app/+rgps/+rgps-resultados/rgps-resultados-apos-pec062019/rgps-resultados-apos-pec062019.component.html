@@ -745,6 +745,28 @@
                 </tr>
               </thead>
               <tbody *ngIf="conclusoesRegraPensaoObito.status">
+                  <tr *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
+                      <td width="50%">
+                        <span class="pull-right font-bold"
+                          >Sexo do instituidor do benefício</span
+                        >
+                      </td>
+                      <td>{{ conclusoesRegraPensaoObito.sexo_instituidor }}</td>
+                    </tr>
+                  <tr *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
+                      <td width="50%">
+                        <span class="pull-right font-bold"
+                          >Fórmula para percentual da média das contribuições</span
+                        >
+                      </td>
+                      <td>{{ conclusoesRegraPensaoObito.formulaBeneficio }}</td>
+                    </tr>
+                  <tr>
+                      <td width="50%">
+                        <span class="pull-right font-bold">Valor base</span>
+                      </td>
+                      <td>{{ conclusoesRegraPensaoObito.valorUltimoBeneficio }} </td>
+                  </tr>
                   <tr>
                     <td width="50%">
                       <span class="pull-right font-bold"
@@ -759,12 +781,6 @@
                     </td>
                     <td>{{ conclusoesRegraPensaoObito.percentual }} %</td>
                   </tr>
-                  <tr>
-                      <td width="50%">
-                        <span class="pull-right font-bold">Valor base</span>
-                      </td>
-                      <td>{{ conclusoesRegraPensaoObito.valorUltimoBeneficio }} </td>
-                    </tr>
                   <tr>
                     <td width="50%">
                       <span class="pull-right font-bold">Valor</span>

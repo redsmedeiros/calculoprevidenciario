@@ -150,8 +150,8 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
-                  <h3 *ngIf="has19 && especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'">Tempo Total de contribuição - após a EC nº 103/2019</h3>
-                  <div *ngIf="has19 && especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'" class="form-group">
+                  <h3 *ngIf="has19 && !hasPensaoInstuidorAposentado;">Tempo Total de contribuição - após a EC nº 103/2019</h3>
+                  <div *ngIf="has19 && !hasPensaoInstuidorAposentado;" class="form-group">
                       <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                       <div class="col-md-2">
                         <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -197,13 +197,30 @@
                           <small *ngIf="errors.has('ultimoBeneficio')" class="text-danger">{{ errors.get('ultimoBeneficio') | i18n}}</small>
                         </div>
                       </div>
-                        <div *ngIf="especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'" class="checkbox col-md-8" [ngClass]="{
-                          'col-md-offset-2':especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'
+                        <div
+                         *ngIf="hasPensaoNaoInstuidorAposentado" 
+                         class="checkbox col-md-8"
+                          [ngClass]="{
+                          'col-md-offset-2':hasPensaoNaoInstuidorAposentado
                         }">
                           <label>
                             <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
                             <span>Consequência de acidente de trabalho, doença profissional ou doença do trabalho.</span>
                           </label>
+                        </div>
+                      </div>
+                      <div class="form-group"  *ngIf="has19 && hasPensao19 && hasPensaoNaoInstuidorAposentado">
+                        <label class="col-md-2 control-label">Sexo do instituidor do benefício*</label>
+                        <div class="col-md-3">
+                          <label class="radio radio-inline">
+                            <input [(ngModel)]="sexoInstituidor" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexoInstituidor')" type="radio" name="sexoInstituidor" value="m"> Masculino </label>
+                          <label class="radio radio-inline">
+                            <input [(ngModel)]="sexoInstituidor" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexoInstituidor')" type="radio" name="sexoInstituidor" value="f"> Feminino </label>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <small *ngIf="errors.has('sexoInstituidor')" class="text-danger">{{ errors.get('sexoInstituidor')| i18n }}</small>
+                            </div>
+                          </div>
                         </div>
                       </div>
                   <div class="form-group" *ngIf="hasCarencia">

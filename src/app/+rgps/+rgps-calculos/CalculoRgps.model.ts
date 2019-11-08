@@ -26,6 +26,7 @@ export class CalculoRgps extends Model {
     depedente_invalido: '',
     obito_decorrencia_trabalho: '',
     ultimo_beneficio: '',
+    sexo_instituidor: '',
   };
   
    public id ;
@@ -49,6 +50,7 @@ export class CalculoRgps extends Model {
    public depedente_invalido;
    public obito_decorrencia_trabalho;
    public ultimo_beneficio;
+   public sexo_instituidor;
 
   //  public actions = `
   //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i title="Editar" class='fa fa-edit'></i> </a> 
