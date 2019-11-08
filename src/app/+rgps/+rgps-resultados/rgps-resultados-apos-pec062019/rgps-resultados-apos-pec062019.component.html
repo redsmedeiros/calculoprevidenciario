@@ -169,7 +169,7 @@
                 </td>
                 <td>{{ calculo.data_pedido_beneficio }}</td>
               </tr>
-              <tr>
+              <tr *ngIf="tipoBeneficio != 1900" >
                 <td>
                   <span class="pull-right font-bold">
                     Tempo de Contribuição:</span

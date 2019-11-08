@@ -589,7 +589,7 @@ export class RgpsResultadosComponent implements OnInit {
      
     }
 
-
+    return novoNumeroEspecie;
   }
 
 
@@ -859,12 +859,12 @@ export class RgpsResultadosComponent implements OnInit {
 
       calculo.mostrarCalculoApos99 = true;
 
-    } else if (dataInicioBeneficio > data19) {
+    } else if (dataInicioBeneficio >= data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
-                entre 99 e 19 (tempo de contribuicao até PEC 2019)
-                após 19     (tempo de contribuicao após PEC 2019)
+                entre 99 e 19 (tempo de contribuicao até 103/2019)
+                após 19     (tempo de contribuicao após 103/2019)
       (cálculos em box separados)*/
       if (!verificaInvalidezObitoIdade) {
         calculo.mostrarCalculo91_98 = true;

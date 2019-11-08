@@ -150,8 +150,8 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
-                  <h3 *ngIf="has19">Tempo Total de contribuição - após a EC nº 103/2019</h3>
-                  <div *ngIf="has19" class="form-group">
+                  <h3 *ngIf="has19 && especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'">Tempo Total de contribuição - após a EC nº 103/2019</h3>
+                  <div *ngIf="has19 && especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'" class="form-group">
                       <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                       <div class="col-md-2">
                         <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
@@ -197,7 +197,7 @@
                           <small *ngIf="errors.has('ultimoBeneficio')" class="text-danger">{{ errors.get('ultimoBeneficio') | i18n}}</small>
                         </div>
                       </div>
-                        <div class="checkbox col-md-8" [ngClass]="{
+                        <div *ngIf="especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'" class="checkbox col-md-8" [ngClass]="{
                           'col-md-offset-2':especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'
                         }">
                           <label>

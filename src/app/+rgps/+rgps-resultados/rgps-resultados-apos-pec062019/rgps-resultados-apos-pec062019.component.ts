@@ -2223,7 +2223,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     let valorUltimoBeneficio;
     switch (tipoBeneficio) {
-      case 1900: // é aposentado 
+      case 1900: // é aposentado
 
         valorUltimoBeneficio = parseFloat(this.calculo.ultimo_beneficio);
         this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorUltimoBeneficio : (valorUltimoBeneficio * percentual);
@@ -2244,6 +2244,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.conclusoesRegraPensaoObito.valorUltimoBeneficio = this.formatMoney(valorUltimoBeneficio);
 
     this.updateResultadoCalculo(this.conclusoesRegraPensaoObito.valor);
+    console.log(this.conclusoesRegraPensaoObito.valor);
 
     console.log(this.conclusoesRegraPensaoObito);
 

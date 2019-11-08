@@ -373,7 +373,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
     }
 
-    if (this.has19) {
+    if (this.has19  && this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito') {
       if (this.primaria19anos == undefined || this.primaria19anos === '') {
         this.errors.add({ 'primaria19anos': ['Campo obrigatório.'] });
       } else {
@@ -548,7 +548,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.hasAtual = true;
         this.has19 = false;
       }
-    } else if (dateBeneficio >= new Date('11/12/2019')) {
+    } else if (dateBeneficio >= new Date('11/12/2019') ) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -562,6 +562,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.hasAtual = false;
         this.has19 = true;
       }
+
     } else {
       this.hasAnterior = false;
       this.has98 = false;
