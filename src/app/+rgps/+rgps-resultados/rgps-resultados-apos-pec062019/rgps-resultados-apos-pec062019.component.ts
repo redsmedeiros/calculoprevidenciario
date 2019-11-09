@@ -2231,7 +2231,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       percentualBeneficio = 100;
       this.conclusoesRegraPensaoObito.formulaBeneficio = `100% (consequente de acidente de trabalho, doença profissional ou doença do trabalho)`;
 
-    } else if (this.calculo.depedente_invalido === 1) {
+    }
+
+    if (this.calculo.depedente_invalido === 1) {
 
       percentual = 100;
       this.conclusoesRegraPensaoObito.formula = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
@@ -2260,7 +2262,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       this.conclusoesRegraPensaoObito.sexo_instituidor = (this.calculo.sexo_instituidor === 'm') ? 'Masculino' : 'Feminino';
       valorUltimoBeneficio = (valorMedio * percentualBeneficio);
-      this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorMedio : (valorMedio * percentual);
+      this.conclusoesRegraPensaoObito.valor = (percentual == 100) ? valorUltimoBeneficio : (valorUltimoBeneficio * percentual);
 
         break;
     }
