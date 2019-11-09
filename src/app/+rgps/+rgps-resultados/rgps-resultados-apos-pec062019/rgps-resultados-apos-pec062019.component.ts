@@ -1822,12 +1822,16 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     let status = false;
 
-    const contribuicao_idade_min = { m: 60, f: 57 };
+    const contribuicao_idade_min = { 
+      m: 60 - redutorProfessor,
+      f: 57 - redutorProfessor
+    };
 
     const contribuicao_min = {
       m: 35 - redutorProfessor,
       f: 30 - redutorProfessor
     };
+    
     //tempo_contribuicao >= contribuicao_min[sexo] &&
 
     if (idade >= contribuicao_idade_min[sexo]) {
