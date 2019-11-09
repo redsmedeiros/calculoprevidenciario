@@ -776,7 +776,7 @@
                   <tr>
                     <td width="50%">
                       <span class="pull-right font-bold"
-                        >Fórmula para percentual em razão da quantidade de depentes</span
+                        >Fórmula para percentual em razão da quantidade de dependentes</span
                       >
                     </td>
                     <td>{{ conclusoesRegraPensaoObito.formula }}</td>
@@ -1134,6 +1134,75 @@
             </table>
           </div>
           <!-- especial deficiente -->
+
+          <!--  fim tempo professor transitoria -->
+          <div *ngIf="isRegraTransitoriaProfessor" >
+              <table
+              class="table table-bordered table-hover"
+              *ngIf="!isUpdating"
+            >
+              <thead>
+                <tr>
+                  <th colspan="2">
+                      {{ calculo.tipo_seguro }} -  Transitória
+                  </th>
+                </tr>
+                <tr *ngIf="conclusoesRegrasTransitoriaProfessor.status">
+                  <th>
+                      <span class="pull-right">Tipo</span>
+                  </th>
+                  <th>
+                    Descrição
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngIf="
+                    conclusoesRegrasTransitoriaProfessor.status;
+                    then regraTransitoriaProfessorAplica;
+                    else regraTransitoriaProfessorNaoAplica
+                  "
+                >
+                </ng-container>
+                <ng-template #regraTransitoriaProfessorAplica>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold"
+                        >Fórmula para percentual</span
+                      >
+                    </td>
+                    <td>{{ conclusoesRegrasTransitoriaProfessor.formula }}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Percentual</span>
+                    </td>
+                    <td>{{ conclusoesRegrasTransitoriaProfessor.percentual }} %</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Valor</span>
+                    </td>
+                    <td>{{ conclusoesRegrasTransitoriaProfessor.valorString }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template #regraTransitoriaProfessorNaoAplica>
+                  <tr>
+                    <td colspan="2">
+                      <div
+                        class="alert alert-warning margin-top-10"
+                        role="alert"
+                      >
+                        <p>{{ conclusoesRegrasTransitoriaProfessor.msg }}</p>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+          <!--  fim tempo professor transitoria -->
         </div>
       </div>
       <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">

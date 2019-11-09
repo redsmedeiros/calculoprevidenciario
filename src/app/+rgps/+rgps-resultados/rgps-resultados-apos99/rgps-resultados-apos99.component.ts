@@ -117,7 +117,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
-    if(this.dataInicioBeneficio > this.dataPec062019){
+    if(this.dataInicioBeneficio >= this.dataPec062019){
       dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
     }
     

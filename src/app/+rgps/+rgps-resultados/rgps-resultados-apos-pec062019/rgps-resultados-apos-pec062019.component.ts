@@ -141,6 +141,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public isRegraEspecialDeficiente = false;
   public conclusoesRegrasEspecialDeficiente: any;
 
+  public isRegraTransitoriaProfessor = false;
+  public conclusoesRegrasTransitoriaProfessor: any;
+
 
   public errorRegrasTransicao = {
     msg: '',
@@ -945,11 +948,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     let contagemPrimaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
     let contagemPrimariaAnos = contagemPrimaria / 365;
     //let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
-    if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
-      contagemPrimariaAnos += redutorProfessor + redutorSexo;
-    }
+    // if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
+    //   contagemPrimariaAnos += redutorProfessor + redutorSexo;
+    // }
 
     this.contribuicaoTotal = contagemPrimariaAnos;
+
 
     if (redutorSexo > 0) {
       if (this.tipoBeneficio == 16 || this.tipoBeneficio == 3 || this.tipoBeneficio == 4) {
@@ -2219,6 +2223,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       percentualBeneficio += 60;
       this.conclusoesRegraPensaoObito.formulaBeneficio =  `60% + ((${Math.trunc(this.contribuicaoTotal)}
                                                             - ${tempoPercentual[this.calculo.sexo_instituidor]}) * 2%)`;
+
       // 2ª parte
       percentual = (this.calculo.num_dependentes * 10);
       percentual += 50;
@@ -2238,7 +2243,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     }
 
-    percentualBeneficio = (percentualBeneficio > 100) ? 100 : percentualBeneficio;
     percentual = (percentual > 100) ? 100 : percentual;
 
     this.conclusoesRegraPensaoObito.percentualBeneficio = percentualBeneficio;
@@ -2579,7 +2583,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
   /**
-   * regra de idade urbano Rural
+   * regra especial
    */
   public regraEspecialDeficiente(mesesContribuicao, valorMedio, tipoBeneficio) {
 
@@ -2653,6 +2657,106 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   // regra especial do deficiente
 
+
+
+
+  /**
+   * regra de professor transitoria
+   */
+  public requisitosProfessorTransitoria(idade, ano, sexo, tempo_contribuicao, tipoBeneficio) {
+
+
+    let contribuicao_min = { m: 25, f: 25 };
+    let idade_min = { m: 60, f: 57 };
+
+
+
+    if (tempo_contribuicao < contribuicao_min[sexo]) {
+      return {
+        status: false, msg: `O segurado não possuí tempo mínimo de contribuição, faltam
+                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+      }
+    }
+
+    if (idade < idade_min[sexo]) {
+      return {
+        status: false, msg: `O segurado não possuí a idade mínima, faltam 
+                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+      }
+    };
+
+
+    return { status: true, msg: 'O segurado preenche os requisitos.' };
+  }
+
+
+
+
+  public regraProfessorTransitoria(mesesContribuicao, valorMedio, tipoBeneficio) {
+
+    this.conclusoesRegrasTransitoriaProfessor = {
+      status: false,
+      msg: '',
+      valor: '',
+      valorString: '',
+      percentual: '',
+      formula: '',
+      requisitoDib: '',
+      segurado: '',
+      destaque: ''
+    };
+
+    const tempoPercentual = {
+      m: 20,
+      f: 15
+    };
+
+    const requisitosRST = this.requisitosProfessorTransitoria(
+      this.idadeFracionada,
+      this.dataInicioBeneficio.year(),
+      this.segurado.sexo,
+      this.contribuicaoTotal,
+      tipoBeneficio);
+
+    
+
+    this.conclusoesRegrasTransitoriaProfessor.status = requisitosRST.status;
+    console.log(this.conclusoesRegrasTransitoriaProfessor.status);
+
+    if (this.conclusoesRegrasTransitoriaProfessor.status) {
+
+      this.conclusoesRegrasTransitoriaProfessor.status = true;
+
+
+      console.log(Math.trunc(this.contribuicaoTotal));
+
+      let percentual = 60;
+      percentual += ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
+      this.conclusoesRegrasTransitoriaProfessor.formula = ` 60 + 
+                                                          ((${Math.trunc(this.contribuicaoTotal)} - 
+                                                          ${tempoPercentual[this.segurado.sexo]}) * 2%)`;
+
+         
+      this.conclusoesRegrasTransitoriaProfessor.percentual = percentual;
+      percentual /= 100;
+      this.conclusoesRegrasTransitoriaProfessor.valor = (valorMedio * percentual);
+
+      const resutadoAjuste = this.limitarTetosEMinimos(this.conclusoesRegrasTransitoriaProfessor.valor, this.dataInicioBeneficio);
+      this.conclusoesRegrasTransitoriaProfessor.valor = resutadoAjuste.valor;
+      this.conclusoesRegrasTransitoriaProfessor.aviso = resutadoAjuste.aviso;
+
+      this.conclusoesRegrasTransitoriaProfessor.valorString = this.formatMoney(this.conclusoesRegrasTransitoriaProfessor.valor);
+      this.updateResultadoCalculo(this.conclusoesRegrasTransitoriaProfessor.valor);
+    } else {
+      this.conclusoesRegrasTransitoriaProfessor.msg = requisitosRST.msg;
+    }
+
+
+    console.log(this.conclusoesRegrasTransitoriaProfessor);
+
+
+  }
+  // regra idade transitoria
 
 
   private updateResultadoCalculo(valorRMI){
@@ -2782,6 +2886,19 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       // especial deficiente
       this.isRegraEspecialDeficiente = true;
       this.regraEspecialDeficiente(mesesContribuicao, valorMedio, this.tipoBeneficio)
+
+    }else if (this.tipoBeneficio === 6 ) {
+
+       // professor transitoria e transição
+      if( !this.isRegraTransitoria ){
+
+        this.isRegrasTransicao = true;
+        this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
+        this.atualizarCalculoMelhorRMIRegrasTransicao();
+      }
+     
+      this.isRegraTransitoriaProfessor = true;
+      this.regraProfessorTransitoria(mesesContribuicao, valorMedio, this.tipoBeneficio);
 
     } else {
       this.isRegrasTransicao = true;
