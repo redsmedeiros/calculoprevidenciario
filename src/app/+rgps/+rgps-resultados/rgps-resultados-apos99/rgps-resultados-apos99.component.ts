@@ -1251,8 +1251,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   getIdadeFracionada() {
+    
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    const idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+
+    if(this.dataInicioBeneficio >= this.dataPec062019){
+      idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
+    }
     return idadeEmDias / 365.25;
   }
 
