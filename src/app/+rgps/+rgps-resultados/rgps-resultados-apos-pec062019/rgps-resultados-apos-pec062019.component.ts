@@ -2424,7 +2424,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     if (idade < idade_min[sexo]) {
       return {
         status: false, msg: `O segurado não possuí a idade mínima, faltam 
-                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+                                ${this.tratarTempoFracionado((idade_min[sexo] - idade))} `
       }
     };
 
@@ -2681,7 +2681,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     if (idade < idade_min[sexo]) {
       return {
         status: false, msg: `O segurado não possuí a idade mínima, faltam 
-                                ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
+                                ${this.tratarTempoFracionado((idade_min[sexo] - idade))} `
       }
     };
 
