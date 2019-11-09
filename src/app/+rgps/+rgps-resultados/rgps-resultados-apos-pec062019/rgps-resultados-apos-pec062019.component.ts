@@ -696,11 +696,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     // conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     // conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
+    const arrayEspecialDeficiente = [25, 26, 27, 28];
+   if (this.tipoBeneficio == 4 || arrayEspecialDeficiente.includes(this.tipoBeneficio)) {
+
     if (this.formula_fator != '') {
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
     }
     if (irt >= 1) {
-      conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
+    //  conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
     }
 
     if (this.formula_expectativa_sobrevida != '') {
@@ -708,8 +711,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     }
 
     conclusoes.push({ string: "Expectativa de Sobrevida:", value: this.formatDecimal(expectativa, 2) });//resultados['Expectativa de Sobrevida: '] = expectativa; // Arredondar para 4 casas decimais;
+    conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });
 
-
+   }
+   
+    
     //???????
     // if (this.tipoBeneficio == 6 && redutorSexo == 5) {
     //   this.contribuicaoTotal -= this.contribuicaoTotal - 5;
@@ -767,7 +773,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         // conclusoes.push({ string: "Renda Mensal Inicial:", value: this.formatMoney(rmi, currency.acronimo) });//resultados['Renda Mensal Inicial: '] = currency.acronimo + rmi;
       }
     }
-    conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });
+   
 
     if (naoFocado) {
       if (fatorSeguranca <= 1) {
@@ -895,14 +901,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //   conclusoes[conclusoes.length - 3] = {};
     //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
     //   this.isUpdating = false;
-    // }
-
-    // if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-    //   rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
-    // } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-    //   rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
     // }
 
     // conclusoes[conclusoes.length - 1]["class"] = "destaque";

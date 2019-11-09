@@ -641,8 +641,7 @@
               </table>
             </div>
           </div>
-          
-          
+                   
           
           <!-- aposentadoria especial -->
           <div *ngIf="isRegrasAposentadoriaEspecial" >
@@ -760,6 +759,14 @@
                       </td>
                       <td>{{ conclusoesRegraPensaoObito.formulaBeneficio }}</td>
                     </tr>
+                    <tr *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
+                        <td width="50%">
+                          <span class="pull-right font-bold">
+                            Percentual a incidir sobre a média das contribuições
+                          </span>
+                        </td>
+                        <td>{{ conclusoesRegraPensaoObito.percentualBeneficio }}%</td>
+                      </tr>
                   <tr>
                       <td width="50%">
                         <span class="pull-right font-bold">Valor base</span>
@@ -778,7 +785,7 @@
                     <td width="50%">
                       <span class="pull-right font-bold">Percentual</span>
                     </td>
-                    <td>{{ conclusoesRegraPensaoObito.percentual }} %</td>
+                    <td>{{ conclusoesRegraPensaoObito.percentual }}%</td>
                   </tr>
                   <tr>
                     <td width="50%">
