@@ -1831,11 +1831,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       m: 35 - redutorProfessor,
       f: 30 - redutorProfessor
     };
-    
+
     //tempo_contribuicao >= contribuicao_min[sexo] &&
 
     if (idade >= contribuicao_idade_min[sexo]) {
-      // if (tempo_contribuicao >= contribuicao_min[sexo]) {
       status = true;
     }
 
@@ -1866,7 +1865,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const tempoContribuicaoAnosAtePec = (((tempoAtePec.anos) * 365) + ((tempoAtePec.meses) * 30) + (tempoAtePec.dias)) / 365;
 
 
-    //this.contribuicaoTotal
 
     this.conclusoesRegra4.status = this.requisitosRegra4(this.segurado.sexo,
       tempoContribuicaoAnosAtePec,
@@ -1874,7 +1872,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.idadeFracionada);
 
     if (this.conclusoesRegra4.status) {
-      // const contribuicao_min = { m: 35, f: 30 };
+
       const contribuicao_min = {
         m: 35 - redutorProfessor,
         f: 30 - redutorProfessor
@@ -2247,7 +2245,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     }
 
-    percentual = (percentual > 100) ? 100 : percentual;
+    // percentual = (percentual > 100) ? 100 : percentual;
 
     this.conclusoesRegraPensaoObito.percentualBeneficio = percentualBeneficio;
 
@@ -2319,7 +2317,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                                                       ${tempoPercentual[this.segurado.sexo]} anos de contribuição.)`;
       }
 
-      percentual = (percentual > 100) ? 100 : percentual;
+    //  percentual = (percentual > 100) ? 100 : percentual;
 
     } else if (this.calculo.obito_decorrencia_trabalho === 1) {
       percentual = 100;
@@ -2722,17 +2720,11 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.contribuicaoTotal,
       tipoBeneficio);
 
-    
-
     this.conclusoesRegrasTransitoriaProfessor.status = requisitosRST.status;
-    console.log(this.conclusoesRegrasTransitoriaProfessor.status);
 
     if (this.conclusoesRegrasTransitoriaProfessor.status) {
 
       this.conclusoesRegrasTransitoriaProfessor.status = true;
-
-
-      console.log(Math.trunc(this.contribuicaoTotal));
 
       let percentual = 60;
       percentual += ((Math.trunc(this.contribuicaoTotal) - tempoPercentual[this.segurado.sexo]) * 2);
@@ -2740,7 +2732,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                                                           ((${Math.trunc(this.contribuicaoTotal)} - 
                                                           ${tempoPercentual[this.segurado.sexo]}) * 2%)`;
 
-         
       this.conclusoesRegrasTransitoriaProfessor.percentual = percentual;
       percentual /= 100;
       this.conclusoesRegrasTransitoriaProfessor.valor = (valorMedio * percentual);
@@ -2757,7 +2748,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
     console.log(this.conclusoesRegrasTransitoriaProfessor);
-
 
   }
   // regra idade transitoria

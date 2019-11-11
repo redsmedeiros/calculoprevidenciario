@@ -198,14 +198,14 @@
                         </div>
                       </div>
                         <div
-                         *ngIf="hasPensaoNaoInstuidorAposentado" 
+                         *ngIf="hasPensaoNaoInstuidorAposentado || hasInvalidez19" 
                          class="checkbox col-md-8"
                           [ngClass]="{
-                          'col-md-offset-2':hasPensaoNaoInstuidorAposentado
+                          'col-md-offset-2':hasPensaoNaoInstuidorAposentado || hasInvalidez19
                         }">
                           <label>
                             <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
-                            <span>Consequência de acidente de trabalho, doença profissional ou doença do trabalho.</span>
+                            <span>Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho.</span>
                           </label>
                         </div>
                       </div>
