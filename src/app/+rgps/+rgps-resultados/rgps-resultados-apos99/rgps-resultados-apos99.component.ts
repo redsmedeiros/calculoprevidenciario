@@ -1095,7 +1095,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         if (dib <= this.dataDib98) {
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib);
-        } else {
+        } else if(this.tipoBeneficio != 6){
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
 

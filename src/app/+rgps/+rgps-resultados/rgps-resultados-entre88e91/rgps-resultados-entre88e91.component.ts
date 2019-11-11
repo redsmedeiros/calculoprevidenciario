@@ -114,6 +114,8 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
 
   	this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    // Ajuste para novos tipos conforme reforma
+    this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
 
 		let dataInicio = this.dataInicioBeneficio;

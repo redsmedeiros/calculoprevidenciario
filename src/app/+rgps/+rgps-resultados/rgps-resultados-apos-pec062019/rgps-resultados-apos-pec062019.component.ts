@@ -1490,7 +1490,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       this.conclusoesRegra1.valorString = this.formatMoney(this.conclusoesRegra1.valor);
     } else {
-      this.conclusoesRegra1.msg = 'Não atende os requisitos desta regra.'
+      this.conclusoesRegra1.msg = 'Não atende atende a pontuação exigida no ano da data de início do benefício.'
     }
 
     console.log(this.conclusoesRegra1);
@@ -1565,7 +1565,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       return true;
     }
 
-    if ((sexo === 'f' && ano > 2030 && pontos >= 90)
+    if ((sexo === 'f' && ano > 2030 && pontos >= 92)
       && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
       return true;
     }
@@ -1689,7 +1689,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
 
-      this.conclusoesRegra2.msg = 'Não atende os requisitos desta regra.'
+      this.conclusoesRegra2.msg = 'Não atende a idade mínima exigida no ano da data de início do benefício.'
     
     }
 
@@ -1715,8 +1715,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     let status = false;
     const contribuicao_min = { m: 33, f: 28 };
-
-    const contribuicao_max = { m: 35, f: 30 };
+    // const contribuicao_max = { m: 35, f: 30 };
 
     if (tempo_contribuicao >= contribuicao_min[sexo]) {
       status = true;
@@ -1803,7 +1802,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
 
-      this.conclusoesRegra3.msg = 'Não atende os requisitos desta regra.';
+      const contribuicao_min = { m: 33, f: 28 };
+
+      this.conclusoesRegra3.msg = `Não atende os requisitos desta regra. O segurado precisa de 
+      ${contribuicao_min[this.segurado.sexo]} anos de contribuição.`;
 
     }
 
@@ -1864,8 +1866,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const tempoAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     const tempoContribuicaoAnosAtePec = (((tempoAtePec.anos) * 365) + ((tempoAtePec.meses) * 30) + (tempoAtePec.dias)) / 365;
 
-
-
     this.conclusoesRegra4.status = this.requisitosRegra4(this.segurado.sexo,
       tempoContribuicaoAnosAtePec,
       redutorProfessor,
@@ -1919,7 +1919,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
 
-      this.conclusoesRegra4.msg = 'Não atende os requisitos desta regra.';
+      const contribuicao_idade_min = { 
+        m: 60 - redutorProfessor,
+        f: 57 - redutorProfessor
+      };
+
+      this.conclusoesRegra4.msg = `Não atende os requisitos desta regra. O segurado deve possuir
+      ${contribuicao_idade_min[this.segurado.sexo]} anos de idade.`;
 
     }
 
@@ -2030,8 +2036,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
       const idadeMin = this.getparametrosRegra5(this.dataInicioBeneficio.year());
-      this.conclusoesRegra5.msg = 'Não atende os requisitos desta regra. O segurado deve possuir ' + idadeMin[this.segurado.sexo];
-      
+      this.conclusoesRegra5.msg = 'Não atende os requisitos desta regra. O segurado deve possuir ' + idadeMin[this.segurado.sexo] + ' ano(s)';
     }
 
     console.log(this.conclusoesRegra5);
@@ -2131,8 +2136,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     const pontosEspecial = Math.trunc(this.contribuicaoTotal + this.idadeFracionada);
 
-
-    this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial > regraEspecial[tipoBeneficio].pontos)
+    this.conclusoesRegraAposentadoriaEspecial.status = (pontosEspecial >= regraEspecial[tipoBeneficio].pontos)
       && (this.contribuicaoTotal >= tempoRegra[tipoBeneficio]);
 
     if (this.isRegraTransitoria) {
