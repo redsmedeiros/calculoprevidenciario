@@ -559,6 +559,25 @@ export class RgpsResultadosComponent implements OnInit {
     return returnStr;
   }
 
+
+  tratarAnosFracionado(fullDays) {
+
+    const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+
+    //let xValor = (Math.floor(fullDays) / 365);
+
+    let xValor = fullDays;
+    totalFator.years = Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30;
+    totalFator.days = Math.floor(dttDias);
+
+    return totalFator.years + 'ano(s) e ' + totalFator.months + 'mes(es) e ' + totalFator.days + 'dia(s)';
+  }
+
+
+
   calcularBonus(tempoServico) {
     let bonus;
     if (this.segurado.sexo === 'm') {

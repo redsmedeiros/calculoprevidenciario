@@ -121,7 +121,7 @@
   </table>
 </article>
 
-<!-- Tabela e Informações do Cálculo A partir de 12/11/2019 PEC 06/2019 -->
+<!-- Tabela e Informações do Cálculo A partir de 13/11/2019 PEC 06/2019 -->
 <div id="{{ boxId }}" class="boxCalculo">
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
@@ -130,7 +130,7 @@
           <i class="fa fa-edit"></i>
         </span>
         <h2 id="tituloCalculo">
-          {{ calculo.tipo_seguro }} A partir de 12/11/2019 Emenda Constitucional nº 103/2019
+          {{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019
         </h2>
       </header>
       <div>
@@ -529,29 +529,21 @@
                   >
                   </ng-container>
                   <ng-template #regra3Aplica>
-                    <tr>
+                     <tr>
                       <td width="50%">
                         <span class="pull-right font-bold">Conclusão</span>
                       </td>
                       <td>{{ conclusoesRegra4.tempoDePedagio }}</td>
-                    </tr>
-                    <tr *ngIf="conclusoesRegra4.tempoDeContribuicaoAposentar > 0" >
-                      <td width="50%">
-                        <span class="pull-right font-bold"
-                          >Tempo de contribuição necessário</span
-                        >
-                      </td>
-                      <td>
-                        {{ conclusoesRegra4.tempoDeContribuicaoAposentar }}
-                      </td>
-                    </tr>
+                    </tr> 
                     <tr>
                       <td width="50%">
                         <span class="pull-right font-bold"
                           >Tempo atual de contribuição</span
                         >
                       </td>
-                      <td>{{ conclusoesRegra4.tempoDeAtualDecontribuicao }}</td>
+                      <td>  {{ contribuicaoPrimaria.anos }} ano(s),
+                          {{ contribuicaoPrimaria.meses }} mês(es) e
+                          {{ contribuicaoPrimaria.dias }} dia(s)</td>
                     </tr>
                     <tr *ngIf="conclusoesRegra4.exibirValor">
                       <td width="50%">

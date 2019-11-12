@@ -26,7 +26,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
-  public fimContador19 = this.toMoment('12/11/2019'); // Data EC nº 103/2019
+  public fimContador19 = this.toMoment('13/11/2019'); // Data EC nº 103/2019
 
   // public fimContador88 = moment('1988-10-05');
   // public fimContador91 = moment('1991-04-04');

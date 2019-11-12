@@ -406,20 +406,20 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
       if ((this.hasPensao19 && this.hasPensaoNaoInstuidorAposentado) &&
-      (this.sexoInstituidor == undefined || this.sexoInstituidor == '')) {
+        (this.sexoInstituidor == undefined || this.sexoInstituidor == '')) {
 
-        this.errors.add({'sexoInstituidor': ['O campo sexo do instituidor é obrigatório.']});
-    }
+        this.errors.add({ 'sexoInstituidor': ['O campo sexo do instituidor é obrigatório.'] });
+      }
 
-      if (this.hasPensao19 && 
+      if (this.hasPensao19 &&
         (this.numDependentes == undefined || this.numDependentes === '' || !this.isNumber(this.numDependentes))) {
-            this.errors.add({ 'numDependentes': ['Campo obrigatório.'] });
-          }
+        this.errors.add({ 'numDependentes': ['Campo obrigatório.'] });
+      }
 
       // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
       //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
       // }
-      
+
       // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
       //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
       // }
@@ -456,7 +456,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       // campos especificos para pensão por morte
       if ((this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
         this.hasPensaoNaoInstuidorAposentado = true;
-      }else{
+      } else {
         this.hasPensaoInstuidorAposentado = true;
       }
 
@@ -505,7 +505,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
-    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-12')) {
+    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
       if (!tipoInvalidezOuIdade) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
         this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
@@ -514,19 +514,19 @@ export class RgpsCalculosFormComponent implements OnInit {
       // this.periodoOptions.push('A partir de 29/11/1999');
       // this.periodoInicioBeneficio = 'A partir de 29/11/1999';
 
-      this.periodoOptions.push('Entre 29/11/1999 e 12/11/2019');
-      this.periodoInicioBeneficio = 'Entre 29/11/1999 e 12/11/2019';
+      this.periodoOptions.push('Entre 29/11/1999 e 13/11/2019');
+      this.periodoInicioBeneficio = 'Entre 29/11/1999 e 13/11/2019';
 
-    } else if (dib >= moment('2019-11-12')) {
+    } else if (dib >= moment('2019-11-13')) {
 
       if (!tipoInvalidezOuIdade) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
         this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       }
 
-      this.periodoOptions.push('Entre 29/11/1999 e 12/11/2019');
-      this.periodoOptions.push('A partir de 12/11/2019');
-      this.periodoInicioBeneficio = 'A partir de 12/11/2019';
+      this.periodoOptions.push('Entre 29/11/1999 e 13/11/2019');
+      this.periodoOptions.push('A partir de 13/11/2019');
+      this.periodoInicioBeneficio = 'A partir de 13/11/2019';
     }
 
     var dateParts = this.dataInicioBeneficio.split('/');
@@ -560,8 +560,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.has99 = true;
       this.hasAtual = false;
       this.has19 = false;
-    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('11/12/2019')) {
-      
+    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('11/13/2019')) {
+
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -576,7 +576,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has19 = false;
       }
 
-    } else if (dateBeneficio >= new Date('11/12/2019')) {
+    } else if (dateBeneficio >= new Date('11/13/2019')) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -647,7 +647,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
-    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-12')) {
+    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
 
       this.primariaAtualanos = periodos.total.years;
       this.primariaAtualmeses = periodos.total.months;
@@ -662,15 +662,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99dias = periodos.total99.days;
 
       // this.periodoInicioBeneficio = 'A partir de 29/11/1999';
-      this.periodoInicioBeneficio = 'Entre 29/11/1999 e 12/11/2019';
+      this.periodoInicioBeneficio = 'Entre 29/11/1999 e 13/11/2019';
 
-    } else if (dib >= moment('2019-11-12')) {
-
-      // Até a EC nº 103/2019
-      this.primariaAtualanos = periodos.total.years;
-      this.primariaAtualmeses = periodos.total.months;
-      this.primariaAtualdias = periodos.total.days;
-      // Até a EC nº 103/2019
+    } else if (dib >= moment('2019-11-13')) {
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -680,13 +674,19 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99meses = periodos.total99.months;
       this.primaria99dias = periodos.total99.days;
 
+      // Até a EC nº 103/2019
+      this.primariaAtualanos = periodos.total19.years;
+      this.primariaAtualmeses =  periodos.total19.months;
+      this.primariaAtualdias = periodos.total19.days;
+      // Até a EC nº 103/2019
+
       // posterior a EC nº 103/2019
-      this.primaria19anos = periodos.total19.years;
-      this.primaria19meses = periodos.total19.months;
-      this.primaria19dias = periodos.total19.days;
+      this.primaria19anos = periodos.total.years;
+      this.primaria19meses = periodos.total.months;
+      this.primaria19dias =  periodos.total.days;
       // posterior a EC nº 103/2019
 
-      this.periodoInicioBeneficio = 'A partir de 12/11/2019';
+      this.periodoInicioBeneficio = 'A partir de 13/11/2019';
     }
 
 
