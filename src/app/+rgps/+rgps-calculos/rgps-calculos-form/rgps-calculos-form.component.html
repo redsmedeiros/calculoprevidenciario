@@ -205,7 +205,10 @@
                         }">
                           <label>
                             <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
-                            <span>Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho.</span>
+                            <span>Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho.
+                              
+                            <i *ngIf="hasPensaoNaoInstuidorAposentado"  title="Considerando que o cálculo da pensão por morte deve utilizar como base de cálculo o valor da aposentadoria por incapacidade permanente a que o segurado instituidor do benefício faria jus na data do óbito, é entendimento do IEPREV que caso o óbito decorra de acidente do trabalho, doença profissional ou doença do trabalho, o valor da pensão por morte deverá utilizar como base 100% da média salarial, percentual sobre o qual deverá incidir a alíquota calculada conforme a quantidade de dependentes, se for o caso." class="fa fa-question-circle fa-lg"></i>
+                            </span>
                           </label>
                         </div>
                       </div>
