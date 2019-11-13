@@ -31,6 +31,17 @@ export class RgpsCalculosCreateComponent implements OnDestroy {
     this.Calculo
           .save(data)
           .then(model => {
+
+            const teste = {
+              position: 'top-end',
+              icon: 'success',
+              title: 'Cálculo salvo com sucesso.',
+              button: false,
+              timer: 1500
+            };
+
+            swal(teste);
+
             this.resetForm();
             this.onSubmit.emit();
           })

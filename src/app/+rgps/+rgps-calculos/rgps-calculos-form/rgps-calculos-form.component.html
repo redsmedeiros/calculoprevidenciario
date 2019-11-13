@@ -24,11 +24,9 @@
                         <option selected disabled> - Selecione uma espécie - </option>
                         <option  *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
                         <option  *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial</option>
-
                         <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 15 anos de exposição</option>
                         <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 20 anos de exposição</option>
                         <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 25 anos de exposição</option>
-
                         <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Grave</option>
                         <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Leve</option>
                         <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
@@ -189,7 +187,7 @@
                           </label>
                         </div>
                       </div>
-                      <div class="form-group" *ngIf="has19 && (hasPensao19 || hasInvalidez19)">
+                      <div class="form-group" *ngIf="has19 && (hasPensao19 || hasInvalidez19 || hasAuxilioAcidente)">
                         <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito'">
                         <label class="col-md-2 control-label" for="select-1">Valor da último Benefício:*</label>
                         <div class="col-md-1">
@@ -198,16 +196,16 @@
                         </div>
                       </div>
                         <div
-                         *ngIf="hasPensaoNaoInstuidorAposentado || hasInvalidez19" 
+                         *ngIf="hasPensaoNaoInstuidorAposentado || hasInvalidez19 || hasAuxilioAcidente" 
                          class="checkbox col-md-8"
                           [ngClass]="{
-                          'col-md-offset-2':hasPensaoNaoInstuidorAposentado || hasInvalidez19
+                          'col-md-offset-2':hasPensaoNaoInstuidorAposentado || hasInvalidez19 || hasAuxilioAcidente
                         }">
                           <label>
                             <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
                             <span>Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho.
-                              
                             <i *ngIf="hasPensaoNaoInstuidorAposentado"  title="Considerando que o cálculo da pensão por morte deve utilizar como base de cálculo o valor da aposentadoria por incapacidade permanente a que o segurado instituidor do benefício faria jus na data do óbito, é entendimento do IEPREV que caso o óbito decorra de acidente do trabalho, doença profissional ou doença do trabalho, o valor da pensão por morte deverá utilizar como base 100% da média salarial, percentual sobre o qual deverá incidir a alíquota calculada conforme a quantidade de dependentes, se for o caso." class="fa fa-question-circle fa-lg"></i>
+                            <i *ngIf="hasAuxilioAcidente"  title="Considerando que o cálculo do auxílio-acidente deve utilizar como base de cálculo o valor da aposentadoria por incapacidade permanente a que o segurado faria jus após a consolidação das lesões decorentes do acidente, é entendimento do IEPREV que caso o benefício decorra de acidente do trabalho, doença profissional ou doença do trabalho, o valor do auxílio-acidente deverá utilizar como base 100% da média salarial, percentual sobre o qual deverá incidir a alíquota de 50%." class="fa fa-question-circle fa-lg"></i>
                             </span>
                           </label>
                         </div>

@@ -69,6 +69,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasInvalidez19 = false;
   public hasPensaoNaoInstuidorAposentado = false;
   public hasPensaoInstuidorAposentado = false;
+  public hasAuxilioAcidente = false;
 
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -164,7 +165,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.sexo_instituidor = this.sexoInstituidor;
       // pensão fim por morte
 
-      swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
+    //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
       this.onSubmit.emit(this.formData);
       this.resetForm();
     }
@@ -436,6 +437,11 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.errors.clear('dataInicioBeneficio');
     this.periodoOptions = [];
 
+    this.hasPensao19 = false;
+    this.hasPensaoNaoInstuidorAposentado = false;
+    this.hasPensaoInstuidorAposentado = false;
+    this.hasAuxilioAcidente = false;
+
     let tipoInvalidezOuIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
@@ -443,10 +449,6 @@ export class RgpsCalculosFormComponent implements OnInit {
       (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')) {
       tipoInvalidezOuIdade = true;
     }
-
-    this.hasPensao19 = false;
-    this.hasPensaoNaoInstuidorAposentado = false;
-    this.hasPensaoInstuidorAposentado = false;
 
     if ((this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
       (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
@@ -470,6 +472,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if ((this.especieBeneficio === 'Auxílio Acidente - 50%')) {
       tipoInvalidezOuIdade = true;
+      this.hasAuxilioAcidente = true;
     }
 
     // console.log(this.especieBeneficio);

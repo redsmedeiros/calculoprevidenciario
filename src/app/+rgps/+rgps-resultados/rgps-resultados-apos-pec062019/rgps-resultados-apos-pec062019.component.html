@@ -900,6 +900,18 @@
                 </thead>
                 <tbody *ngIf="conclusoesRegrasAuxilioAcidente.status">
                     <tr>
+                        <td width="50%">
+                          <span class="pull-right font-bold">Percentual base</span>
+                        </td>
+                        <td>{{ conclusoesRegrasAuxilioAcidente.percentualParte1 }} %</td>
+                      </tr>
+                      <tr>
+                          <td width="50%">
+                            <span class="pull-right font-bold">Valor base</span>
+                          </td>
+                          <td>{{ conclusoesRegrasAuxilioAcidente.valorParte1String }} {{ conclusoesRegrasAuxilioAcidente.valorParte1Aviso }}</td>
+                        </tr>
+                    <tr>
                       <td width="50%">
                         <span class="pull-right font-bold">Percentual</span>
                       </td>
@@ -909,7 +921,7 @@
                       <td width="50%">
                         <span class="pull-right font-bold">Valor</span>
                       </td>
-                      <td>{{ conclusoesRegrasAuxilioAcidente.valorString }} {{ conclusoesRegrasAuxilioAcidente.valorAviso }}</td>
+                      <td>{{ conclusoesRegrasAuxilioAcidente.valorString }} </td>
                     </tr>
                 </tbody>
               </table>
