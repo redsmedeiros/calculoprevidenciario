@@ -836,7 +836,7 @@
               </tbody>
             </table>
           </div>
-          <!-- Aposentadoria incapacidade-->
+          <!-- Aposentadoria incapacidade fim-->
 
             <!--  Auxilio doença -->
             <div *ngIf="isRegrasAuxilioDoenca" >
@@ -875,7 +875,7 @@
                 </tbody>
               </table>
             </div>
-            <!-- Auxilio doença-->
+            <!-- Auxilio doença fim-->
 
             <!--  Auxilio Acidente -->
             <div *ngIf="isRegrasAuxilioAcidente" >
@@ -901,10 +901,16 @@
                 <tbody *ngIf="conclusoesRegrasAuxilioAcidente.status">
                     <tr>
                         <td width="50%">
-                          <span class="pull-right font-bold">Percentual base</span>
+                          <span class="pull-right font-bold">Fórmula percentual base</span>
                         </td>
-                        <td>{{ conclusoesRegrasAuxilioAcidente.percentualParte1 }} %</td>
+                        <td>{{ conclusoesRegrasAuxilioAcidente.formulaParte1 }}</td>
                       </tr>
+                      <tr>
+                          <td width="50%">
+                            <span class="pull-right font-bold">Percentual base</span>
+                          </td>
+                          <td>{{ conclusoesRegrasAuxilioAcidente.percentualParte1 }} %</td>
+                        </tr>
                       <tr>
                           <td width="50%">
                             <span class="pull-right font-bold">Valor base</span>
