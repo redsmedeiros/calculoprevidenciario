@@ -39,7 +39,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   public tempoTotalConFator91: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
-  public tempoTotalConFator19: any;// Data EC nº 103/2019
+  public tempoTotalConFator19: any; // Data EC nº 103/2019
 
   public carencia = 0;
   public carencia88 = 0;
@@ -148,7 +148,17 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     return new Promise((resolve, reject) => {
 
       let auxiliarDate = limitesDoVinculo.inicio;
-      const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
+      //const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
+
+
+      const limitesDoVinculoClone  = limitesDoVinculo.fim.clone();
+      const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+
+
+    //  console.log(teste.add(1, 'days'));
+      //console.log(this.toDateString(teste.add(1, 'days')))
+   //   console.log(moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY'));
+      console.log(fimContador)
 
       let count = 0;
       let count88 = 0;
@@ -194,9 +204,21 @@ export class ContagemTempoConclusaoComponent implements OnInit {
         }
 
         // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
-        auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
+        //auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
 
-      } while (auxiliarDate < fimContador);
+        let teste  = auxiliarDate.clone();
+        auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
+
+
+      } while (auxiliarDate <= fimContador);
+
+      console.log(this.yearMonthDaysToFormate(count));
+      console.log(moment.duration(count, 'days').humanize());
+      console.log(count88)
+      console.log(count91)
+      console.log(count98)
+      console.log(count99)
+      console.log(count19)
 
 
       this.tempoTotalConFator = moment.duration(count, 'days');
@@ -281,20 +303,21 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
 
 
-  // private yearMonthDaysToFormate3(fullDays) {
+  private yearMonthDaysToFormate(fullDays) {
 
-  //   let totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+    const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-  //   let xValor = (this.Math.floor(fullDays) / 365);
+    const xValor = (Math.ceil(fullDays) / 365.25);
 
-  //   totalFator.years = this.Math.floor(xValor);
-  //   let xVarMes = (xValor - totalFator.years) * 12;
-  //   totalFator.months = this.Math.floor(xVarMes);
-  //   let dttDias = (xVarMes - totalFator.months) * 30.5;
-  //   totalFator.days = this.Math.floor(dttDias);
+    totalFator.years = Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    totalFator.days = Math.round(dttDias);
 
-  //   // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
-  // }
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+  }
 
 
   private defineCarenciaData(auxiliarDate) {
@@ -523,9 +546,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     });
 
 
-    this.tempoTotal(this.limitesDoVinculo);
+    // this.tempoTotal(this.limitesDoVinculo);
 
-    this.tempoCarencia(this.limitesDoVinculo);
+    // this.tempoCarencia(this.limitesDoVinculo);
 
     this.isUpdateTotal = false;
 
