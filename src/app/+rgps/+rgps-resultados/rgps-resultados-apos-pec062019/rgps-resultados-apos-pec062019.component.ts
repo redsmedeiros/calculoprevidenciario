@@ -1913,9 +1913,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       //   tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
-      console.log(tempoDePedagioTotal);
 
-      this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagioTotal);
+      this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagio);
       this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContribComPedagio);
 
       // this.conclusoesRegra4.formula = contribuicao_max[this.segurado.sexo] +' - ((' + contribuicao_max[this.segurado.sexo] + '-' + this.contribuicaoTotal + ') * 0.5)';
@@ -1939,9 +1938,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
-        this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra falta ';
-        // + this.tratarTempoFracionado(tempoDePedagioTotal)
-        // + ' para cumprir o pedágio.';
+        this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra faltam - ' 
+        +  this.conclusoesRegra4.tempoDePedagioTotal
+        + ' para cumprir o pedágio.';
 
       }
 
