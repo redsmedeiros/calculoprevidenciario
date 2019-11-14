@@ -260,7 +260,7 @@ export class RgpsResultadosComponent implements OnInit {
   public dataDib99 = moment('1999-11-29');
   public dataMP664 = moment('2015-03-01');
   public dataDecreto6939_2009 = moment('2009-08-18');
-  public dataPec062019 = moment('2019-11-12');
+  public dataPec062019 = moment('2019-11-13');
 
   // Variaveis de controle do template
   public mostrarCalculoAnterior88 = false;
@@ -831,7 +831,7 @@ export class RgpsResultadosComponent implements OnInit {
     const data91_98 = moment('1991-04-05');
     const data98_99 = moment('1998-12-15');
     const data99 = moment('1999-11-29');
-    const data19 = moment('2019-11-12');
+    const data19 = moment('2019-11-13');
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
 
