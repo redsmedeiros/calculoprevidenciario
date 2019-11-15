@@ -130,6 +130,11 @@ export const routes: Routes = [
         data: {pageTitle: 'Importação CNIS'}
       },
       {
+        path: 'transicao',
+        loadChildren: 'app/+transicao/transicao.module#TransicaoModule',
+        data: {pageTitle: 'Simulador Transição'}
+      },
+      {
         path: 'sair',
         loadChildren: 'app/+logout/logout.module#LogoutModule',
         data: {pageTitle: 'Importação CNIS'}

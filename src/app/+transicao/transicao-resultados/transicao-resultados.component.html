@@ -1,0 +1,35 @@
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+  <header>
+    <span class="widget-icon font-md">
+      <i class="fa fa-user"></i>
+    </span>
+    <h2>Resultados Emenda Constitucional nº 103/2019</h2>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget content -->
+    <div class="widget-body">
+      
+      <app-transicao-resultados-pontos
+        [seguradoTransicao]="seguradoTransicao"
+      ></app-transicao-resultados-pontos>
+
+      <app-transicao-resultados-idade-progressiva
+        [seguradoTransicao]="seguradoTransicao"
+      ></app-transicao-resultados-idade-progressiva>
+
+      <app-transicao-resultados-pedagio50
+        [seguradoTransicao]="seguradoTransicao"
+      ></app-transicao-resultados-pedagio50>
+
+      <app-transicao-resultados-pedagio100
+        [seguradoTransicao]="seguradoTransicao"
+      ></app-transicao-resultados-pedagio100>
+
+      <app-transicao-resultados-idade
+        [seguradoTransicao]="seguradoTransicao"
+      ></app-transicao-resultados-idade>
+
+    </div>
+  </div>
+</sa-widget>

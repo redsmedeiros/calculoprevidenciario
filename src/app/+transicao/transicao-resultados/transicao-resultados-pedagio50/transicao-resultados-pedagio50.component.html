@@ -1,0 +1,86 @@
+
+<table
+class="table table-bordered table-hover"
+*ngIf="!isUpdating"
+>
+<thead>
+  <tr>
+    <th colspan="2">
+      Regra de Transição do art. 17 da EC nº 103/2019 (pedágio de 50%)
+      <i title="Importante destacar que existe divergência na doutrina sobre a realização ou não do descarte dos 20% menores salários de contribuição no cálculo da média salarial, especificamente para a regra de transição contida no art. 17 da Emenda Constitucional nº 103/2019. O posicionamento do IEPREV é no sentido de que não haverá descarte no cálculo da referida média salarial." class="fa fa-question-circle fa-lg"></i>
+    </th>
+  </tr>
+  <tr *ngIf="conclusoesRegra3.status">
+    <th>
+        <span class="pull-right">Tipo</span>
+    </th>
+    <th>
+      Descrição
+    </th>
+  </tr>
+</thead>
+<tbody>
+  <ng-container
+    *ngIf="
+      conclusoesRegra3.status;
+      then regra3Aplica;
+      else regra3NaoAplica
+    "
+  >
+  </ng-container>
+  <ng-template #regra3Aplica>
+    <tr>
+      <td width="50%">
+        <span class="pull-right font-bold">Conclusão</span>
+      </td>
+      <td>{{ conclusoesRegra3.tempoDePedagio }}</td>
+    </tr>
+    <tr *ngIf="conclusoesRegra3.tempoDeContribuicaoAposentar > 0" >
+      <td width="50%">
+        <span class="pull-right font-bold"
+          >Tempo de contribuição necessário</span
+        >
+      </td>
+      <td>
+        {{ conclusoesRegra3.tempoDeContribuicaoAposentar }}
+      </td>
+    </tr>
+    <tr>
+      <td width="50%">
+        <span class="pull-right font-bold"
+          >Tempo atual de contribuição</span
+        >
+      </td>
+      <td>{{ conclusoesRegra3.tempoDeAtualDecontribuicao }}</td>
+    </tr>
+    <tr *ngIf="conclusoesRegra3.exibirValor">
+      <td width="50%">
+        <span class="pull-right font-bold"
+          >Fator Previdenciário</span
+        >
+      </td>
+      <td>{{ conclusoesRegra3.fator }}</td>
+    </tr>
+    <tr *ngIf="conclusoesRegra3.exibirValor">
+      <td width="50%">
+        <span class="pull-right font-bold"
+          >Renda Mensal Inicial</span
+        >
+      </td>
+      <td>{{ conclusoesRegra3.valorString }}</td>
+    </tr>
+  </ng-template>
+  <ng-template #regra3NaoAplica>
+    <tr>
+      <td colspan="2">
+        <div
+          class="alert alert-warning margin-top-10"
+          role="alert"
+        >
+          <p>{{ conclusoesRegra3.msg }}</p>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</tbody>
+</table>

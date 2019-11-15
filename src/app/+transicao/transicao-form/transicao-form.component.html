@@ -1,0 +1,162 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well">
+          <h2 class="margin-top-0">
+            <span class="semi-bold">Simulador para as regras de transição Emenda Constitucional nº 103/2019</span>
+          </h2>
+           <h3 class="margin-top-0">
+            <span class="semi-bold">
+              <p class="margin-lg-top">Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição.</p>
+            </span>
+          </h3>
+          <!-- <dl>
+            <dt>...</dt>
+            <dd>...</dd>
+          </dl> -->
+         <div class="margin-right-5">
+            <ul>
+              <li>Art. 15 da EC nº 103/2019 (regra de pontos)</li>
+              <li>Art. 16 da EC nº 103/2019 (idade mínima progressiva)</li>
+              <li>Art. 17 da EC nº 103/2019 (pedágio de 50%) </li>
+              <li>Art. 20 da EC nº 103/2019 (pedágio de 100%)</li>
+              <li>Art. 18 da EC nº 103/2019 (aposentadoria por idade)</li>
+            </ul>
+
+              <div class="alert alert-info fade in">
+                  <i class="fa-fw fa fa-info"></i>
+                  <strong>Mais Informações!</strong><a href="http://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc103.htm" target="_blank">
+                     Clique aqui  para acessa a integra da Emenda Constitucional nº 103/2019.</a>
+                </div>
+         </div>
+        </div>
+      </article>
+    </div>
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+              <header>
+                <span class="widget-icon font-md">
+                  <i class="fa fa-user"></i>
+                </span>
+                <h2>Insira os dados do segurado</h2>
+              </header>
+              <!-- widget div-->
+              <div>
+  
+                <!-- widget content -->
+                <div class="widget-body">
+  
+                    <form class="form-horizontal">
+
+                        <fieldset>
+                          <div class="form-group">
+                      
+                            <label class="col-md-2 control-label">Nome</label>
+                            <div class="col-md-3">
+                              <input [(ngModel)]="nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome')" class="form-control" type="text">
+                              <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
+                            </div>
+                      
+                            <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
+                            <div class="col-md-3">
+                              <select class="form-control" id="select-1" [(ngModel)]="idDocumento" [ngModelOptions]="{standalone: true}" >
+                                <option value='1'>PIS</option>
+                                <option value='2'>PASEP</option>
+                                <option value='3'>CPF</option>
+                                <option value='4'>NIT</option>
+                                <option value='5'>RG</option>
+                              </select>
+                              <small *ngIf="errors.has('idDocumento')" class="text-danger">{{ errors.get('idDocumento') | i18n }}</small>
+                            </div>
+                          </div>
+                      
+                          <div class="form-group">
+                            <label class="col-md-2 control-label">Data de nascimento*</label>
+                            <div class="col-md-3">
+                              <input [(ngModel)]="dataNascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('dataNascimento')" [textMask]="{mask: dateMask}" class="form-control" type="text" data-placement="bottom" tooltip="Define  a idade e assim estabelece direitos e condições de cálculos.">
+                              <small *ngIf="errors.has('dataNascimento')" class="text-danger">{{ errors.get('dataNascimento') | i18n}}</small>
+                            </div>
+                            
+                            <label class="col-md-2 control-label">Número do documento</label>
+                            <div class="col-md-3">
+                              <input [(ngModel)]="numeroDocumento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numeroDocumento')" class="form-control" type="text">
+                              <small *ngIf="errors.has('numeroDocumento')" class="text-danger">{{ errors.get('numeroDocumento')| i18n }}</small>
+                            </div>
+                          </div>
+                      
+                          <div class="form-group" >
+                            <label class="col-md-2 control-label" >Data de filiação</label>
+                            <div class="col-md-3">
+                              <input [(ngModel)]="dataFiliacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('dataFiliacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
+                              <small *ngIf="errors.has('dataFiliacao')" class="text-danger">{{ errors.get('dataFiliacao') | i18n}}</small>
+                            </div>
+                            <div class="checkbox col-md-offset-2  col-md-3">
+                                <label>
+                                  <input type="checkbox" [(ngModel)]="professor" class="checkbox" [ngModelOptions]="{standalone: true}">
+                                  <span>Segurado(a) é Professor(a)</span>
+                                </label>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label class="col-md-2 control-label">Sexo*</label>
+                              <div class="col-md-3">
+                                <label class="radio radio-inline">
+                                  <input [(ngModel)]="sexo" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexo')" type="radio" name="sexo" value="m"> Masculino </label>
+                                <label class="radio radio-inline">
+                                  <input [(ngModel)]="sexo" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexo')" type="radio" name="sexo" value="f"> Feminino </label>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <small *ngIf="errors.has('sexo')" class="text-danger">{{ errors.get('sexo')| i18n }}</small>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+
+                        </fieldset>
+                        <fieldset>
+                            <h3 >Tempo Total de contribuição</h3>
+                            <div  class="form-group">
+                                <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
+                                <div class="col-md-2">
+                                  <input [(ngModel)]="contribuicaoAnos" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                                  <small *ngIf="errors.has('contribuicaoAnos')" class="text-danger">{{ errors.get('contribuicaoAnos') | i18n}}</small>
+                                </div>
+                                <div class="col-md-2">
+                                  <input [(ngModel)]="contribuicaoMeses" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                                  <small *ngIf="errors.has('contribuicaoMeses')" class="text-danger">{{ errors.get('contribuicaoMeses') | i18n}}</small>
+                                </div>
+                                <div class="col-md-2">
+                                  <input [(ngModel)]="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                                  <small *ngIf="errors.has('contribuicaoDias')" class="text-danger">{{ errors.get('contribuicaoDias') | i18n}}</small>
+                                </div>
+                              </div>
+                        </fieldset>
+                        <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
+                        <div class="form-actions">
+                          <div class="row">
+                            <div class="col-md-3 pull-right">
+                              <button (click)="submit($event)" type="submit" class="btn btn-success btn-block font-md" id="prosseguirResultado">
+                                Resultados    <i class="fa fa-arrow-right"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </sa-widget>
+            <div *ngIf="hasResult" >
+                <app-transicao-resultados [seguradoTransicao]="seguradoTransicao" ></app-transicao-resultados> 
+            </div>
+          </article>
+    </div>
+    <!-- end row -->
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>
