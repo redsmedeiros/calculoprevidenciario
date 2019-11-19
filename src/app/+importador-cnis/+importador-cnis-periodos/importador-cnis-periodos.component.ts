@@ -20,8 +20,6 @@ import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-perio
 export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
-
-
   @Input() vinculos;
   @Input() isUpdating;
 
@@ -57,7 +55,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     private detector: ChangeDetectorRef
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.detector.detectChanges();
+  }
 
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -79,6 +79,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     for (const vinculo of vinculos) {
       this.updateDatatablePeriodos(vinculo);
     }
+    this.detector.detectChanges();
   }
 
 
@@ -340,6 +341,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.errors.add({ 'carencia': ['O campo carência é obrigatório.'] });
     }
 
+    this.detector.detectChanges();
     return this.errors.empty();
   }
 

@@ -56,15 +56,28 @@ export class TransicaoFormComponent implements OnInit {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
+    // this.nome = 'Segurado teste teste ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '01/01/1956';
+    // this.sexo = 'm';
+    // this.professor = false;
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '10';
+    // this.contribuicaoDias = '25';
+
+
+
     this.nome = 'Segurado teste teste ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '01/01/1956';
-    this.sexo = 'm';
+    this.dataNascimento = '18/11/1964';
+    this.sexo = 'f';
     this.professor = false;
-    this.contribuicaoAnos = '33';
-    this.contribuicaoMeses = '10';
-    this.contribuicaoDias = '25';
+    this.contribuicaoAnos = '28';
+    this.contribuicaoMeses = '0';
+    this.contribuicaoDias = '0';
+
 
   }
 
@@ -139,7 +152,7 @@ export class TransicaoFormComponent implements OnInit {
 
   public submit(e) {
     e.preventDefault();
-
+    this.hasResult = false
     if (!localStorage.getItem('user_id')) {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
@@ -148,14 +161,13 @@ export class TransicaoFormComponent implements OnInit {
 
     this.setSegurado();
 
-    console.log(this.seguradoTransicao)
+    // console.log(this.seguradoTransicao)
 
-    this.hasResult = false
     if (this.errors.empty()) {
       const alertSucesso = {
         //  position: 'top-end',
         icon: 'success',
-        title: 'Sucesso a seguir o resultado',
+        title: 'Sucesso!',
         button: false,
         timer: 1500
       };
@@ -200,6 +212,7 @@ export class TransicaoFormComponent implements OnInit {
       contribuicaoAnos: this.contribuicaoAnos,
       contribuicaoMeses: this.contribuicaoMeses,
       contribuicaoDias: this.contribuicaoDias,
+      contribuicaoFracionadoAnos:'',
       idade: '',
       idadeString: '',
       idadeFracionada: '',
@@ -220,7 +233,7 @@ export class TransicaoFormComponent implements OnInit {
     this.contribuicaoAnos = '';
     this.contribuicaoMeses = '';
     this.contribuicaoDias = '';
-}
+  }
 
 
 

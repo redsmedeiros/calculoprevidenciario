@@ -9,7 +9,32 @@
   <div>
     <!-- widget content -->
     <div class="widget-body">
-      
+
+      <div>
+          <table
+          class="table table-bordered table-hover"
+          *ngIf="!isUpdating"
+          >
+          <thead>
+            <tr>
+              <th colspan="2">
+               Informações do segurado
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let seguradoInf of seguradoInformacoes" >
+                <td width="50%">
+                  <span class="pull-right font-bold"
+                    >{{ seguradoInf.label }}</span
+                  >
+                </td>
+                <td>{{ seguradoInf.value }}</td>
+              </tr>
+          </tbody>
+          </table>
+      </div>
+
       <app-transicao-resultados-pontos
         [seguradoTransicao]="seguradoTransicao"
       ></app-transicao-resultados-pontos>
