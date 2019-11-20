@@ -331,6 +331,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
       str = str + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
     }
+    if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
+      str = str + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+    }
 
     return str;
 

@@ -11,6 +11,9 @@ import { TransicaoResultadosPedagio50Component } from './transicao-resultados-pe
 import { TransicaoResultadosPedagio100Component } from './transicao-resultados-pedagio100/transicao-resultados-pedagio100.component';
 import { TransicaoResultadosIdadeComponent } from './transicao-resultados-idade/transicao-resultados-idade.component';
 
+// import { ExpectativaVidaService } from 'app/+rgps/+rgps-resultados/ExpectativaVida.service';
+// import { ExpectativaVida } from 'app/+rgps/+rgps-resultados/ExpectativaVida.model';
+
 @Component({
   selector: 'app-transicao-resultados',
   templateUrl: './transicao-resultados.component.html',
@@ -32,12 +35,19 @@ export class TransicaoResultadosComponent implements OnInit {
   public dataAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
   public isRegraTransitoria = false;
   public seguradoInformacoes = [];
+  public expectativasVida
+  public expectativa;
+  public aliquota = 0.31;
+  public ExpectativaVidaObj;
 
 
 
   constructor(
+  //  private ExpectativaVida: ExpectativaVidaService,
     // private ref: ChangeDetectorRef,
   ) {
+
+   
 
     moment.locale('pt-br');
   }
@@ -47,10 +57,17 @@ export class TransicaoResultadosComponent implements OnInit {
     // this.ref.markForCheck();
     // this.ref.detectChanges();
 
-
     this.verificarTransitoria();
     this.setInformacoesRegrasTransicao();
     this.setSeguradoInformacoes();
+
+
+    // this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
+    //   .then(expectativas => {
+    //     this.expectativasVida = expectativas;
+
+    //   });
+
 
     // console.log(this.seguradoTransicao);
 
@@ -115,6 +132,100 @@ export class TransicaoResultadosComponent implements OnInit {
 
 
 
+
+  // public procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
+  //   const dataNascimento = moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY');
+  //   const dataAgora = moment();
+  //   let expectativaVida;
+  //   if (idadeFracionada > 80) {
+  //     idadeFracionada = 80;
+  //   }
+
+  //   if (ano != null) {
+  //     expectativaVida = this.ExpectativaVida.getByAno(2020);
+  //     // Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
+  //   } else {
+  //     expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
+  //   }
+  //   return expectativaVida;
+  // }
+
+  // public projetarExpectativa(idadeFracionada, dib) {
+
+  //   let expectativa = 0;
+  //   const dataInicio = moment('2000-11-30');
+  //   const dataFim = moment('2017-12-01');
+  //   const dataHoje = moment();
+  //   let formula_expectativa_sobrevida = '';
+
+
+
+  //   if (dib > dataHoje) {
+  //     let anos = Math.abs(dataHoje.diff(dib, 'years', true));
+
+  //     if (anos < 1) {
+  //       anos = Math.round(anos);
+  //     } else {
+  //       anos = Math.trunc(anos);
+  //     }
+
+  //     const tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
+  //     const tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
+  //     const tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
+
+  //     expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
+
+  //     formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
+  //     //conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+
+  //   } else if (dib.isSameOrBefore(dataInicio)) {
+
+  //     expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
+
+  //   } else if (dib.isSameOrAfter(dataFim)) {
+
+  //     expectativa = this.procurarExpectativa(idadeFracionada, null, dib, null);
+
+  //   } else {
+
+  //     expectativa = this.procurarExpectativa(idadeFracionada, null, dib, dib);
+
+  //   }
+
+  //   if (expectativa <= 0) {
+  //     expectativa = 6;
+  //   }
+
+  //   return expectativa;
+  // }
+
+
+
+  // public getFatorPrevidenciario(dataInicioBeneficio, idadeFracionada, tempoTotalContribuicao) {
+
+  //   let fatorSeguranca = 1;
+  //   let formula_fator = '';
+
+  //   this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
+
+
+  //   fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
+  //                    (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);
+
+  //   fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
+
+
+  //   formula_fator = '((' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
+  //    + this.formatDecimal(this.aliquota, 2) + ') / ' + this.formatDecimal(this.expectativa, 2) + ') * (1 + ('
+  //     + this.formatDecimal(idadeFracionada, 2) + ' + (' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
+  //      + this.formatDecimal(this.aliquota, 2) + ')) / ' + '100)';
+
+  //   return {fator: fatorSeguranca, formula: formula_fator};
+
+  // }
+
+
+
   // public calcularIdadeFracionada(final, type) {
 
   //   const dataFinalFracionada = (final != null) ?
@@ -124,6 +235,11 @@ export class TransicaoResultadosComponent implements OnInit {
   //   return dataFinalFracionada.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'), 'years' , true);
   // }
 
+
+  public formatDecimal(value, n_of_decimal_digits) {
+    value = parseFloat(value);
+    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+  }
 
 
   public calcularIdade(final) {
@@ -169,8 +285,7 @@ export class TransicaoResultadosComponent implements OnInit {
   public verificarTransitoria() {
 
     if (this.seguradoTransicao.dataFiliacao != undefined
-      && this.seguradoTransicao.dataFiliacao != null
-      && moment(this.seguradoTransicao.dataFiliacao).isValid()) {
+      && this.seguradoTransicao.dataFiliacao != null) {
 
       this.seguradoTransicao.dataFiliacao = moment(this.seguradoTransicao.dataFiliacao, 'DD/MM/YYYY');
       this.seguradoTransicao.isRegraTransitoria = (this.seguradoTransicao.dataFiliacao.isSameOrAfter(this.dataEC1032019));
@@ -212,6 +327,23 @@ export class TransicaoResultadosComponent implements OnInit {
     const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
     const xValor = (Math.ceil(fullDays) / 365);
+
+    totalFator.years = Math.floor(xValor);
+    const xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    const dttDias = (xVarMes - totalFator.months) * 30;
+    totalFator.days = Math.round(dttDias);
+
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+  }
+
+
+  public converterTempoAnos(fullYears) {
+
+    const totalFator = { years: 0, months: 0, days: 0, fullYears: fullYears };
+
+    const xValor = fullYears;
 
     totalFator.years = Math.floor(xValor);
     const xVarMes = (xValor - totalFator.years) * 12;

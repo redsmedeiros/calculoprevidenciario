@@ -71,10 +71,11 @@ export class TransicaoFormComponent implements OnInit {
     this.nome = 'Segurado teste teste ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '18/11/1964';
+    this.dataNascimento = '20/10/1965';
+    this.dataFiliacao = '20/10/1985';
     this.sexo = 'f';
     this.professor = false;
-    this.contribuicaoAnos = '28';
+    this.contribuicaoAnos = '29';
     this.contribuicaoMeses = '0';
     this.contribuicaoDias = '0';
 
@@ -99,16 +100,16 @@ export class TransicaoFormComponent implements OnInit {
     if (this.dataNascimento === undefined || this.dataNascimento === '') {
       this.errors.add({ 'dataNascimento': ['A data de nascimento é obrigatória.'] });
     } else {
-      var dateParts = this.dataNascimento.split('/');
+      let dateParts = this.dataNascimento.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
         this.errors.add({ 'dataNascimento': ['Insira uma data válida.'] });
     }
 
     if (this.dataFiliacao === undefined || this.dataFiliacao === '') {
-      // this.errors.add({ 'dataFiliacao': ['A data de filiação é obrigatória.'] });
+       this.errors.add({ 'dataFiliacao': ['A data de filiação é obrigatória.'] });
     } else {
-      var dateParts = this.dataFiliacao.split('/');
+      let dateParts = this.dataFiliacao.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
         this.errors.add({ 'dataFiliacao': ['Insira uma data válida.'] });

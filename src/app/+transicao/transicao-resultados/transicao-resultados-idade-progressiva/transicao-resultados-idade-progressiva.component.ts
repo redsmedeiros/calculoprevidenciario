@@ -15,17 +15,17 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   public requisitoIdadeProgressivaRegra2 = {
     2019: { m: 61, md: 22265, f: 56, fd: 20440 },
-    2020: { m: 61.5, md: 22447.5, f: 56.5, fd: 20622.5 },
+    2020: { m: 61.5, md: 22448, f: 56.5, fd: 20623 },
     2021: { m: 62, md: 22630, f: 57, fd: 20805 },
-    2022: { m: 62.5, md: 22812.5, f: 57.5, fd: 20987.5 },
+    2022: { m: 62.5, md: 22813, f: 57.5, fd: 20988 },
     2023: { m: 63, md: 22995, f: 58, fd: 21170 },
-    2024: { m: 63.5, md: 23177.5, f: 58.5, fd: 21352.5 },
+    2024: { m: 63.5, md: 23178, f: 58.5, fd: 21353 },
     2025: { m: 64, md: 23360, f: 59, fd: 21535 },
-    2026: { m: 64.5, md: 23542.5, f: 59.5, fd: 21717.5 },
+    2026: { m: 64.5, md: 23543, f: 59.5, fd: 21718 },
     2027: { m: 65, md: 23725, f: 60, fd: 21900 },
-    2028: { m: 65, md: 23725, f: 60.5, fd: 22082.5 },
+    2028: { m: 65, md: 23725, f: 60.5, fd: 22083 },
     2029: { m: 65, md: 23725, f: 61, fd: 22265 },
-    2030: { m: 65, md: 23725, f: 61.5, fd: 22447.5 },
+    2030: { m: 65, md: 23725, f: 61.5, fd: 22448 },
     2031: { m: 65, md: 23725, f: 62, fd: 22630 },
   }
 
@@ -61,30 +61,25 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   conclusaoRegra2IdadeProgressiva() {
 
-    console.log(this.seguradoTransicao);
-
-    console.log(this.dataAtual);
-
-
     try {
 
       const rstRegra2IdadeTempo = this.calcularRegra2();
 
-      console.log(rstRegra2IdadeTempo);
-      
+
+
 
       this.conclusoesRegra2 = {
         status: true,
         percentual: rstRegra2IdadeTempo.percentual,
         formula: `${rstRegra2IdadeTempo.formula} = ${rstRegra2IdadeTempo.percentual}%`,
         requisitoDib: rstRegra2IdadeTempo.requisitos,
-        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.idadeDib)}` ,
+        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.idadeDib)}`,
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.tempoContribuicaoDib)}`,
         dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY')
       };
 
-
-
+      console.log(' -- Regra 2 ---');
+      console.log(this.conclusoesRegra2);
 
       // fim do processo
       this.isUpdating = false;
@@ -112,43 +107,44 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       f: 15
     };
 
-    const regra_pontos_i = this.getRequisitoRegra2(this.dataAtual.year(),
-                                                  this.seguradoTransicao.sexo,
-                                                  this.seguradoTransicao.professor,
-                                                  this.seguradoTransicao.redutorProfessorDias);
-
-    const pontosAtuais = this.seguradoTransicao.contribuicaoFracionadoAnos + this.seguradoTransicao.idadeFracionada;
-    const pontosAtuaisDias = this.seguradoTransicao.contribuicaoFracionadoDias + this.seguradoTransicao.idadeFracionadaDias;
+    const regraIdade = this.getRequisitoRegra2(this.dataAtual.year(),
+      this.seguradoTransicao.sexo,
+      this.seguradoTransicao.professor,
+      this.seguradoTransicao.redutorProfessor);
 
     let rstRegraIdadeProgressiva: any;
 
     let percentualR1 = 60;
 
+    // console.log(regraIdade);
+    // console.log(this.seguradoTransicao.idadeFracionada);
+    // console.log(this.seguradoTransicao.redutorProfessor);
+    // console.log(contribuicao_min[this.seguradoTransicao.sexo]);
 
-    if (pontosAtuais >= regra_pontos_i &&
-      this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min) {
+
+    if (this.seguradoTransicao.idadeFracionada >= regraIdade &&
+      this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
 
       rstRegraIdadeProgressiva = {
         dataDib: this.dataAtual,
-        idade: this.seguradoTransicao.idade,
+        idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
         DiffDataAtualDib: 0,
-        pontosDib: pontosAtuais,
-        requisitos: regra_pontos_i,
+        requisitos: regraIdade,
         formula: '',
         percentual: 0,
       };
 
     } else {
 
-      rstRegraIdadeProgressiva =  this.contadorRegra2();
+      rstRegraIdadeProgressiva = this.contadorRegra2();
 
     }
 
     if (Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years) >= tempoPercentualR1[this.seguradoTransicao.sexo]) {
       percentualR1 += ((Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years)
-                        - tempoPercentualR1[this.seguradoTransicao.sexo]) * 2);
+        - tempoPercentualR1[this.seguradoTransicao.sexo]) * 2);
     }
 
     rstRegraIdadeProgressiva.percentual = percentualR1;
@@ -164,7 +160,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
   public getRequisitoRegra2(ano, sexo, professor, redutorProfessorDias) {
 
     return (!professor) ? this.requisitoIdadeProgressivaRegra2[ano][sexo]
-                        : this.requisitoIdadeProgressivaRegra2[ano][sexo] - redutorProfessorDias;
+      : this.requisitoIdadeProgressivaRegra2[ano][sexo] - redutorProfessorDias;
 
   }
 
@@ -204,9 +200,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         this.seguradoTransicao.redutorProfessorDias);
 
 
-      console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        + '|' + 'idade -' + idade + '|'
-        + '|' + 'Tempo - ' + tempoContribuicao + '|');
+      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade -' + idade + '|'
+      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
       if (fimContador.status) {
 
@@ -218,10 +214,10 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
 
-        console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-          + '|' + 'idade -' + idade + '|'
-          + '|' + 'Tempo - ' + tempoContribuicao + '|'
-          + '|');
+        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+        //   + '|' + 'idade -' + idade + '|'
+        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+        //   + '|');
 
 
       }
@@ -242,7 +238,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       dataDib: auxiliarDate,
       idadeMoment: moment.duration(idade, 'days'),
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
-      idadeDib: this.converterTempoDias(idade) ,
+      idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),
       DiffDataAtualDibMoment: moment.duration(count, 'days'),
       DiffDataAtualDib: this.converterTempoDias(count),
@@ -272,20 +268,20 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     const regra2 = this.requisitoIdadeProgressivaRegra2;
 
-    if ((sexo === 'm' && ano > 2027 && idade >= 65) &&
-     tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
+    if ((sexo === 'md' && ano > 2027 && idade >= regra2[2027][sexo]) &&
+      tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2027][sexo] };
     }
 
-    if ((sexo === 'f' && ano > 2031 && idade >= 62) &&
-     tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
+    if ((sexo === 'fd' && ano > 2031 && idade >= regra2[2031][sexo]) &&
+      tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2031][sexo] };
     }
 
     return (((ano >= 2019 && ano <= 2031) && idade >= regra2[ano][sexo]) &&
-    tempo_contribuicao >= requisitoContribuicoesDias[sexo]) ?
-    { status: true, ano: ano, idade: idade, requisitosIdade: regra2[ano][sexo] } :
-    { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
+      tempo_contribuicao >= requisitoContribuicoesDias[sexo]) ?
+      { status: true, ano: ano, idade: idade, requisitosIdade: regra2[ano][sexo] } :
+      { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
 
 
   }

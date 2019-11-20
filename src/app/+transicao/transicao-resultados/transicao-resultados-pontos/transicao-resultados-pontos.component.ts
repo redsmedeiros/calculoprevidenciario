@@ -98,6 +98,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
         dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY')
       };
 
+      console.log(' -- Regra 1 ---');
       console.log(this.conclusoesRegra1);
 
       this.isUpdating = false;
@@ -329,12 +330,12 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     const regra1 = this.requisitoPontosRegra1;
 
-    if ((sexo === 'm' && ano > 2028 && pontos >= regra1['2028']['md'])
+    if ((sexo === 'md' && ano > 2028 && pontos >= regra1['2028']['md'])
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, pontos: pontos, requisitosPosntos: regra1['2028']['md'] };
     }
 
-    if ((sexo === 'f' && ano > 2033 && pontos >= regra1['2033']['fd'])
+    if ((sexo === 'fd' && ano > 2033 && pontos >= regra1['2033']['fd'])
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, pontos: pontos, requisitosPosntos: regra1['2033']['fd'] };
     }
@@ -362,12 +363,12 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     const regra1 = this.requisitoPontosRegra1Prof
 
-    if ((sexo === 'm' && ano > 2028 && pontos >= regra1['2028']['md'])
+    if ((sexo === 'md' && ano > 2028 && pontos >= regra1['2028']['md'])
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, pontos: pontos, requisitosPosntos: regra1['2030']['fd'] };
     }
 
-    if ((sexo === 'f' && ano > 2030 && pontos >= regra1['2030']['fd'])
+    if ((sexo === 'fd' && ano > 2030 && pontos >= regra1['2030']['fd'])
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, pontos: pontos, requisitosPosntos: regra1['2030']['fd'] };
     }
