@@ -86,21 +86,14 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     try {
 
-      console.log(this.seguradoTransicao);
-
       const rstRegra1Pontos = this.calcularRegra1();
 
-      console.log(rstRegra1Pontos);
-      console.log(rstRegra1Pontos.idade);
-
-
- 
       this.conclusoesRegra1 = {
         status: true,
         percentual: rstRegra1Pontos.percentual,
         formula: `${rstRegra1Pontos.formula} = ${rstRegra1Pontos.percentual}%`,
         requisitoDib: rstRegra1Pontos.requisitos,
-        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.idade)}` ,
+        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.idadeDib)}` ,
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.tempoContribuicaoDib)}`,
         dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY')
       };
@@ -130,7 +123,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       f: 15
     };
 
-    const regra_pontos_i = this.getRequisito(this.dataAtual.year(), this.seguradoTransicao.sexo, this.seguradoTransicao.professor);
+    const regra_pontos_i = this.getRequisitoRegra1(this.dataAtual.year(), this.seguradoTransicao.sexo, this.seguradoTransicao.professor);
     const regra_pontos_f = (!this.seguradoTransicao.professor) ? { y: 2033, m: 105, f: 100 } : { y: 2030, m: 100, f: 92 };
 
     const pontosAtuais = this.seguradoTransicao.contribuicaoFracionadoAnos + this.seguradoTransicao.idadeFracionada;
@@ -148,7 +141,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       rstRegraPontos = {
         dataDib: this.dataAtual,
         idade: this.seguradoTransicao.idade,
-        tempoContribuicaoDib: moment.duration(this.seguradoTransicao.contribuicaoFracionadoDias, 'days'),
+        tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
         DiffDataAtualDib: 0,
         pontosDib: pontosAtuais,
         requisitos: regra_pontos_i,
@@ -179,7 +172,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
 
-  public getRequisito(ano, sexo, professor) {
+  public getRequisitoRegra1(ano, sexo, professor) {
 
     return (!professor) ? this.requisitoPontosRegra1[ano][sexo] : this.requisitoPontosRegra1Prof[ano][sexo];
 
@@ -189,7 +182,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   public contadorRegra1(pontosAtuais, pontosAtuaisDias) {
 
-    console.log(this.dataAtual);
+  //  console.log(this.dataAtual);
 
     let auxiliarDate = this.dataAtual;
     let fimContador = { status: false, ano: 0, pontos: 0 };
@@ -275,7 +268,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       dataDib: auxiliarDate,
       idadeMoment: moment.duration(idade, 'days'),
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
-      idade: this.converterTempoDias(idade) ,
+      idadeDib: this.converterTempoDias(idade) ,
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),
       DiffDataAtualDibMoment: moment.duration(count, 'days'),
       DiffDataAtualDib: this.converterTempoDias(count),
@@ -316,16 +309,18 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   public requisitosRegra1(pontos, ano, sexo, tempo_contribuicao) {
 
-    const requisitoContribuicoes = {
-      f: 30,
-      m: 35
-    };
-
+   
 
     // console.log(pontos);
     // console.log(ano);
     // console.log(sexo);
     // console.log(tempo_contribuicao);
+
+
+    const requisitoContribuicoes = {
+      f: 30,
+      m: 35
+    };
 
     const requisitoContribuicoesDias = {
       fd: 10950,

@@ -36,7 +36,7 @@ export class TransicaoResultadosComponent implements OnInit {
 
 
   constructor(
-   // private ref: ChangeDetectorRef,
+    // private ref: ChangeDetectorRef,
   ) {
 
     moment.locale('pt-br');
@@ -67,10 +67,11 @@ export class TransicaoResultadosComponent implements OnInit {
 
     this.seguradoTransicao.idade = this.calcularIdade(null);
     this.seguradoTransicao.idadeFracionada = this.calcularIdadeFracionada(null, 'years');
-    this.seguradoTransicao.idadeFracionadaDias = this.calcularIdadeFracionada(null, 'days'); // o fim do periodo
+    this.seguradoTransicao.idadeFracionadaDias = this.calcularIdadeFracionada(null, 'days');
     this.seguradoTransicao.redutorProfessor = (this.seguradoTransicao.professor) ? 5 : 0;
+    this.seguradoTransicao.redutorProfessorDias = (this.seguradoTransicao.professor) ? 1825 : 0;
     this.seguradoTransicao.contribuicaoFracionadoAnos = this.converterTempoContribuicao('years');
-    this.seguradoTransicao.contribuicaoFracionadoDias = this.converterTempoContribuicao('days'); // o fim do periodo
+    this.seguradoTransicao.contribuicaoFracionadoDias = this.converterTempoContribuicao('days');
 
   }
 
@@ -206,9 +207,6 @@ export class TransicaoResultadosComponent implements OnInit {
   };
 
 
-
-  
-
   public converterTempoDias(fullDays) {
 
     const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
@@ -226,7 +224,6 @@ export class TransicaoResultadosComponent implements OnInit {
   }
 
 
-
   public formateStringAnosMesesDias(anos, meses, dias) {
 
     if (anos < 0) {
@@ -237,7 +234,7 @@ export class TransicaoResultadosComponent implements OnInit {
 
   }
 
-  
+
   public formateObjToStringAnosMesesDias(tempoObj) {
 
     if (tempoObj.anos < 0) {
@@ -259,7 +256,7 @@ export class TransicaoResultadosComponent implements OnInit {
     return (typeof value === 'string') ? parseInt(value) : value;
   }
 
-  formatDurationMoment(durationObj){
+  formatDurationMoment(durationObj) {
 
     return ` ${durationObj.years()} ano(s), ${durationObj.months()} mes(es) e ${Math.round(durationObj.days())} dia(s) `;
   }
