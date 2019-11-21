@@ -11,7 +11,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   @Input() seguradoTransicao;
 
   constructor() { 
-    super(null);
+    super();
   }
 
   ngOnInit() {

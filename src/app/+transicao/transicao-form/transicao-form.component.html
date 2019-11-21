@@ -56,7 +56,7 @@
                         <fieldset>
                           <div class="form-group">
                       
-                            <label class="col-md-2 control-label">Nome</label>
+                            <label class="col-md-2 control-label">Nome*</label>
                             <div class="col-md-3">
                               <input [(ngModel)]="nome" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('nome')" class="form-control" type="text">
                               <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
@@ -90,7 +90,7 @@
                           </div>
                       
                           <div class="form-group" >
-                            <label class="col-md-2 control-label" >Data de filiação</label>
+                            <label class="col-md-2 control-label" >Data de filiação* </label>
                             <div class="col-md-3">
                               <input [(ngModel)]="dataFiliacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('dataFiliacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
                               <small *ngIf="errors.has('dataFiliacao')" class="text-danger">{{ errors.get('dataFiliacao') | i18n}}</small>
@@ -120,18 +120,36 @@
 
                         </fieldset>
                         <fieldset>
-                            <h3 >Tempo Total de contribuição</h3>
+                          <h3 >Tempo de contribuição até a 13/11/2019 (EC103/2019)</h3>
+                          <div  class="form-group">
+                              <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
+                              <div class="col-md-1">
+                                <input [(ngModel)]="contribuicaoAnosAteEC103" (change)="errors.clear('contribuicaoAnosAteEC103')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                                <small *ngIf="errors.has('contribuicaoAnosAteEC103')" class="text-danger">{{ errors.get('contribuicaoAnosAteEC103') | i18n}}</small>
+                              </div>
+                              <div class="col-md-1">
+                                <input [(ngModel)]="contribuicaoMesesAteEC103" (change)="errors.clear('contribuicaoMesesAteEC103')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                                <small *ngIf="errors.has('contribuicaoMesesAteEC103')" class="text-danger">{{ errors.get('contribuicaoMesesAteEC103') | i18n}}</small>
+                              </div>
+                              <div class="col-md-1">
+                                <input [(ngModel)]="contribuicaoDiasAteEC103" (change)="errors.clear('contribuicaoDiasAteEC103')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                                <small *ngIf="errors.has('contribuicaoDiasAteEC103')" class="text-danger">{{ errors.get('contribuicaoDiasAteEC103') | i18n}}</small>
+                              </div>
+                            </div>
+                      </fieldset>
+                        <fieldset>
+                            <h3 >Tempo Total de contribuição até a data atual</h3>
                             <div  class="form-group">
                                 <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                   <input [(ngModel)]="contribuicaoAnos" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
                                   <small *ngIf="errors.has('contribuicaoAnos')" class="text-danger">{{ errors.get('contribuicaoAnos') | i18n}}</small>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                   <input [(ngModel)]="contribuicaoMeses" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
                                   <small *ngIf="errors.has('contribuicaoMeses')" class="text-danger">{{ errors.get('contribuicaoMeses') | i18n}}</small>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                   <input [(ngModel)]="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
                                   <small *ngIf="errors.has('contribuicaoDias')" class="text-danger">{{ errors.get('contribuicaoDias') | i18n}}</small>
                                 </div>

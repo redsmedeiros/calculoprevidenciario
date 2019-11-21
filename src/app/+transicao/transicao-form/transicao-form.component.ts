@@ -34,6 +34,14 @@ export class TransicaoFormComponent implements OnInit {
   public dataFiliacao;
   public sexo;
   public professor;
+
+
+  // Tempo de contribuiçãoAteEC103
+  public contribuicaoAnosAteEC103;
+  public contribuicaoMesesAteEC103;
+  public contribuicaoDiasAteEC103;
+
+
   // Tempo de contribuição
   public contribuicaoAnos;
   public contribuicaoMeses;
@@ -75,9 +83,14 @@ export class TransicaoFormComponent implements OnInit {
     this.dataFiliacao = '20/10/1985';
     this.sexo = 'f';
     this.professor = false;
+
+    this.contribuicaoAnosAteEC103 = '28';
+    this.contribuicaoMesesAteEC103 = '11';
+    this.contribuicaoDiasAteEC103 = '20';
+
     this.contribuicaoAnos = '29';
-    this.contribuicaoMeses = '0';
-    this.contribuicaoDias = '0';
+    this.contribuicaoMeses = '5';
+    this.contribuicaoDias = '5';
 
 
   }
@@ -210,6 +223,9 @@ export class TransicaoFormComponent implements OnInit {
       sexo: this.sexo,
       professor: this.professor,
       redutorProfessor: 0,
+      contribuicaoAnosAteEC103: this.contribuicaoAnosAteEC103,
+      contribuicaoMesesAteEC103: this.contribuicaoMesesAteEC103,
+      contribuicaoDiasAteEC103: this.contribuicaoDiasAteEC103,
       contribuicaoAnos: this.contribuicaoAnos,
       contribuicaoMeses: this.contribuicaoMeses,
       contribuicaoDias: this.contribuicaoDias,
@@ -231,6 +247,9 @@ export class TransicaoFormComponent implements OnInit {
     this.dataNascimento = '';
     this.sexo = '';
     this.professor = '';
+    this.contribuicaoAnosAteEC103 = '';
+    this.contribuicaoMesesAteEC103 = '';
+    this.contribuicaoDiasAteEC103 = '';
     this.contribuicaoAnos = '';
     this.contribuicaoMeses = '';
     this.contribuicaoDias = '';

@@ -20,47 +20,34 @@ class="table table-bordered table-hover"
 </thead>
 <tbody>
   <ng-container
-    *ngIf="
-      conclusoesRegra4.status;
-      then regra3Aplica;
-      else regra3NaoAplica
-    "
+    *ngIf="conclusoesRegra4.status; then regra3Aplica; else regra3NaoAplica"
   >
   </ng-container>
   <ng-template #regra3Aplica>
-     <tr>
-      <td width="50%">
-        <span class="pull-right font-bold">Conclusão</span>
-      </td>
-      <td>{{ conclusoesRegra4.tempoDePedagio }}</td>
-    </tr> 
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold"
-          >Tempo atual de contribuição</span
-        >
+        <span class="pull-right font-bold">Data de início do benefício</span>
       </td>
-      <td>  {{ contribuicaoPrimaria.anos }} ano(s),
-          {{ contribuicaoPrimaria.meses }} mês(es) e
-          {{ contribuicaoPrimaria.dias }} dia(s)</td>
+      <td>{{ conclusoesRegra4.dataDib }}</td>
     </tr>
-    <tr *ngIf="conclusoesRegra4.exibirValor">
+    <tr>
       <td width="50%">
-        <span class="pull-right font-bold"
-          >Renda Mensal Inicial</span
-        >
+        <span class="pull-right font-bold">Idade </span>
       </td>
-      <td>{{ conclusoesRegra4.valorString }}</td>
+      <td>{{ conclusoesRegra4.idadeDib }}</td>
+    </tr>
+    <tr>
+      <td width="50%">
+        <span class="pull-right font-bold">Tempo de Contribuição</span>
+      </td>
+      <td>{{ conclusoesRegra4.tempoDib }}</td>
     </tr>
   </ng-template>
   <ng-template #regra3NaoAplica>
     <tr>
       <td colspan="2">
-        <div
-          class="alert alert-warning margin-top-10"
-          role="alert"
-        >
-          <p>{{ conclusoesRegra4.msg }}</p>
+        <div class="alert alert-warning margin-top-10" role="alert">
+          <p> O segurado não possuí {{ conclusoesRegra4.requisitoDib }} anos de tempo de contribuíção na data da publicação da EC 103/2019</p>
         </div>
       </td>
     </tr>
