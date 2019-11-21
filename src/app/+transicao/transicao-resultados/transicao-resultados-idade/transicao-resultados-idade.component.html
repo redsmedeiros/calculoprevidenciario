@@ -17,48 +17,30 @@ class="table table-bordered table-hover"
     </th>
   </tr>
 </thead>
-<tbody>
-  <ng-container
-    *ngIf="
-      conclusoesRegra5.status;
-      then regra5Aplica;
-      else regra5NaoAplica
-    "
-  >
-  </ng-container>
-  <ng-template #regra5Aplica>
-    <tr>
-      <td width="50%">
-        <span class="pull-right font-bold"
-          >Fórmula para percentual</span
-        >
-      </td>
-      <td>{{ conclusoesRegra5.formula }}</td>
-    </tr>
-    <tr>
-      <td width="50%">
-        <span class="pull-right font-bold">Percentual</span>
-      </td>
-      <td>{{ conclusoesRegra5.percentual }} %</td>
-    </tr>
-    <tr>
-      <td width="50%">
-        <span class="pull-right font-bold">Valor</span>
-      </td>
-      <td>{{ conclusoesRegra5.valorString }}</td>
-    </tr>
-  </ng-template>
-  <ng-template #regra5NaoAplica>
-    <tr>
-      <td colspan="2">
-        <div
-          class="alert alert-warning margin-top-10"
-          role="alert"
-        >
-          <p>{{ conclusoesRegra5.msg }}</p>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
+<tbody *ngIf="conclusoesRegra5.status">
+  <tr>
+    <td width="50%">
+      <span class="pull-right font-bold">Data de início do benefício</span>
+    </td>
+    <td>{{ conclusoesRegra5.dataDib }}</td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <span class="pull-right font-bold">Idade </span>
+    </td>
+    <td>{{ conclusoesRegra5.idadeDib }}</td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <span class="pull-right font-bold">Tempo de Contribuição</span>
+    </td>
+    <td>{{ conclusoesRegra5.tempoDib }}</td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <span class="pull-right font-bold">Percentual da média salarial</span>
+    </td>
+    <td>{{ conclusoesRegra5.formula }}</td>
+  </tr>
 </tbody>
 </table>

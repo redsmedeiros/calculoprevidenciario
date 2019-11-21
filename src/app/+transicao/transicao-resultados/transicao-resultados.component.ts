@@ -258,6 +258,16 @@ export class TransicaoResultadosComponent implements OnInit {
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
+  
+  public converterTempoDiasParaAnos(fullDays) {
+    return (Math.ceil(fullDays) / 365);
+  }
+
+  public converterTempoAnosParaDias(fullYears) {
+
+    return Math.ceil(fullYears * 365);
+
+  }
 
 
   public converterTempoAnos(fullYears) {
@@ -275,6 +285,7 @@ export class TransicaoResultadosComponent implements OnInit {
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
+  
 
 
   public formateStringAnosMesesDias(anos, meses, dias) {

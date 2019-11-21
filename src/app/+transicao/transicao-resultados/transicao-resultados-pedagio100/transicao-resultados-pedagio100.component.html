@@ -32,15 +32,27 @@ class="table table-bordered table-hover"
     </tr>
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Idade </span>
+        <span class="pull-right font-bold">Idade na data de início do benefício</span>
       </td>
       <td>{{ conclusoesRegra4.idadeDib }}</td>
     </tr>
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Tempo de Contribuição</span>
+        <span class="pull-right font-bold">Tempo de Contribuição necessário</span>
+      </td>
+      <td>{{ conclusoesRegra4.tempoCompedagio }}</td>
+    </tr>
+    <tr>
+      <td width="50%">
+        <span class="pull-right font-bold">Tempo de Contribuição na data de início do benefício </span>
       </td>
       <td>{{ conclusoesRegra4.tempoDib }}</td>
+    </tr>
+    <tr>
+      <td width="50%">
+        <span class="pull-right font-bold">Percentual da média salarial</span>
+      </td>
+      <td>100%</td>
     </tr>
   </ng-template>
   <ng-template #regra3NaoAplica>
