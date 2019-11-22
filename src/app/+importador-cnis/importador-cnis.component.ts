@@ -93,18 +93,34 @@ export class ImportadorCnisComponent implements OnInit {
 
 
   public gravarImportacaoContagemTempo() {
-    this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
-      this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
-        this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-          this.realizarCalculoContagemTempo(seguradoId, calculoId);
-          this.seguradoId = seguradoId;
-          this.calculoId = calculoId;
+
+    const erros = this.PeriodosComponent.verificarVinculos();
+
+    if (erros === 0) {
+      
+      this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
+        this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
+          this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
+            this.realizarCalculoContagemTempo(seguradoId, calculoId);
+            this.seguradoId = seguradoId;
+            this.calculoId = calculoId;
+          });
         });
       });
-    });
+
+    }else{
+
+      swal({
+        // position: position,
+        type: 'error',
+        title: 'Verifique os dados antes de prosseguir.',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+    }
 
   }
-
 
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {

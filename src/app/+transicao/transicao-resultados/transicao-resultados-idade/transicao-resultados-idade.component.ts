@@ -31,7 +31,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   ngOnInit() {
 
-    this.isUpdating = true;
+  
     this.conclusaoRegra5Idade();
   }
 
@@ -86,7 +86,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
 
 
-  conclusaoRegra5Idade() {
+  public conclusaoRegra5Idade() {
+
+    this.isUpdating = true;
 
     try {
 

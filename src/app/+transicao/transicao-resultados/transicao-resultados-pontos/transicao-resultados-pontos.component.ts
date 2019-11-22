@@ -74,7 +74,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   ngOnInit() {
 
-    this.isUpdating = true;
+    
     this.conclusaoRegra1Pontos();
 
   }
@@ -82,6 +82,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
   public conclusaoRegra1Pontos() {
+    this.isUpdating = true;
 
 
     try {

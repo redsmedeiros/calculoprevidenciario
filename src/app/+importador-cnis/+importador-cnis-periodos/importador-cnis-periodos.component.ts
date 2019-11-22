@@ -234,6 +234,19 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   }
 
+  public verificarVinculos(){
+
+    this.countVinculosErros = 0;
+
+    this.vinculosList.map(vinculo => {
+      this.isValidVinculo(vinculo);
+    });
+
+    this.detector.detectChanges();
+
+    return this.countVinculosErros;
+  }
+
   resetForm() {
     this.data_inicio = '';
     this.data_termino = '';
@@ -243,8 +256,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.carencia = 1;
     this.index = null;
   }
-
-
 
 
   isValidVinculo(vinculo) {

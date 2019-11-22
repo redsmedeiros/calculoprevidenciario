@@ -61,9 +61,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   ngOnInit() {
 
-    this.isUpdating = true;
-
-    this.aplicarRedutorProfessor();
+   
     this.conclusaoRegra4pedagio100();
 
   }
@@ -94,6 +92,10 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
   conclusaoRegra4pedagio100() {
 
     try {
+
+      this.isUpdating = true;
+
+      this.aplicarRedutorProfessor();
 
 
       const rstRegra4pedagio100 = this.calcularRegra4();
@@ -159,11 +161,11 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     }
 
     const rstContadorRegra4 = this.contadorRegra4();
-    console.log(rstContadorRegra4);
-    console.log('--');
-    console.log(diffEntreContribuicoes);
-    console.log(this.pedagioEmAnos);
-    console.log('--');
+    // console.log(rstContadorRegra4);
+    // console.log('--');
+    // console.log(diffEntreContribuicoes);
+    // console.log(this.pedagioEmAnos);
+    // console.log('--');
 
 
     tempoFinalContribAteDib = rstContadorRegra4.tempoContribuicaoDibAnos;

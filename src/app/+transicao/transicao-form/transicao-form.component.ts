@@ -120,7 +120,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.dataFiliacao === undefined || this.dataFiliacao === '') {
-       this.errors.add({ 'dataFiliacao': ['A data de filiação é obrigatória.'] });
+      this.errors.add({ 'dataFiliacao': ['A data de filiação é obrigatória.'] });
     } else {
       let dateParts = this.dataFiliacao.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
@@ -159,6 +159,62 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
+    if (this.contribuicaoAnosAteEC103 === undefined || this.contribuicaoAnosAteEC103 === '') {
+      this.errors.add({ 'contribuicaoAnosAteEC103': ['Campo obrigatório.'] });
+    } else {
+      if (this.contribuicaoAnosAteEC103 > 100 || !this.isNumber(this.contribuicaoAnosAteEC103)) {
+        this.errors.add({ 'contribuicaoAnosAteEC103': ['Insira um valor entre 1 e 100'] });
+      }
+    }
+
+    if (this.contribuicaoMesesAteEC103 === undefined || this.contribuicaoMesesAteEC103 === '') {
+      this.errors.add({ 'contribuicaoMesesAteEC103': ['Campo obrigatório.'] });
+    } else {
+      if (this.contribuicaoMesesAteEC103 > 11 || !this.isNumber(this.contribuicaoMesesAteEC103)) {
+        this.errors.add({ 'contribuicaoMesesAteEC103': ['Insira um valor entre 1 e 11'] });
+      }
+    }
+
+    if (this.contribuicaoDiasAteEC103 === undefined || this.contribuicaoDiasAteEC103 === '') {
+      this.errors.add({ 'contribuicaoDiasAteEC103': ['Campo obrigatório.'] });
+    } else {
+      if (this.contribuicaoDiasAteEC103 > 29 || !this.isNumber(this.contribuicaoDiasAteEC103)) {
+        this.errors.add({ 'contribuicaoDiasAteEC103': ['Insira um valor entre 0 e 29'] });
+      }
+    }
+
+    const tempoTotal = this.converterTempoContribuicao(
+      this.contribuicaoAnos,
+      this.contribuicaoMeses,
+      this.contribuicaoDias,
+      'years');
+
+    const tempoTotalAteEC103 = this.converterTempoContribuicao(
+      this.contribuicaoAnosAteEC103,
+      this.contribuicaoMesesAteEC103,
+      this.contribuicaoDiasAteEC103,
+      'years');
+
+    if (tempoTotalAteEC103 > tempoTotal) {
+      this.errors.add({ 'contribuicaoAnosAteEC103': ['O tempo antes da EC103 não deve ser maior que o total.'] });
+    }
+
+  }
+
+
+  public isFormatInt(value) {
+    return (typeof value === 'string') ? parseInt(value) : value;
+  }
+
+  public converterTempoContribuicao(anos, meses, dias, type) {
+
+    anos = this.isFormatInt(anos);
+    meses = this.isFormatInt(meses);
+    dias = this.isFormatInt(dias);
+
+    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
   }
 
 
@@ -229,7 +285,7 @@ export class TransicaoFormComponent implements OnInit {
       contribuicaoAnos: this.contribuicaoAnos,
       contribuicaoMeses: this.contribuicaoMeses,
       contribuicaoDias: this.contribuicaoDias,
-      contribuicaoFracionadoAnos:'',
+      contribuicaoFracionadoAnos: '',
       idade: '',
       idadeString: '',
       idadeFracionada: '',
@@ -254,6 +310,8 @@ export class TransicaoFormComponent implements OnInit {
     this.contribuicaoMeses = '';
     this.contribuicaoDias = '';
   }
+
+
 
 
 

@@ -37,6 +37,13 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   }
 
   ngOnInit() {
+   
+    this.calcularConclusaoRegra3pedagio50();
+
+  }
+
+
+  public calcularConclusaoRegra3pedagio50(){
     this.isUpdating = true;
 
     this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
@@ -45,7 +52,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
         this.conclusaoRegra3pedagio50();
 
       });
-
   }
 
 

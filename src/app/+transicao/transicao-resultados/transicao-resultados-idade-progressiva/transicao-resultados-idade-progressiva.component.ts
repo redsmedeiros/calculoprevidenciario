@@ -54,7 +54,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   ngOnInit() {
 
-    this.isUpdating = true;
+   
     this.conclusaoRegra2IdadeProgressiva();
 
   }
@@ -63,10 +63,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     try {
 
+      this.isUpdating = true;
+
       const rstRegra2IdadeTempo = this.calcularRegra2();
-
-
-
 
       this.conclusoesRegra2 = {
         status: true,

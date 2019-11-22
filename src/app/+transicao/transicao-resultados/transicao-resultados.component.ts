@@ -46,21 +46,13 @@ export class TransicaoResultadosComponent implements OnInit {
     //  private ExpectativaVida: ExpectativaVidaService,
     // private ref: ChangeDetectorRef,
   ) {
-
-
-
-    moment.locale('pt-br');
+   moment.locale('pt-br');
   }
 
   ngOnInit() {
 
     // this.ref.markForCheck();
     // this.ref.detectChanges();
-
-    this.verificarTransitoria();
-    this.setInformacoesRegrasTransicao();
-    this.setSeguradoInformacoes();
-
 
     // this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
     //   .then(expectativas => {
@@ -71,7 +63,18 @@ export class TransicaoResultadosComponent implements OnInit {
 
     // console.log(this.seguradoTransicao);
 
+    this.setConclusoes();
+
   }
+
+
+  public setConclusoes() {
+    this.verificarTransitoria();
+    this.setInformacoesRegrasTransicao();
+    this.setSeguradoInformacoes();
+  }
+
+
 
 
   public setInformacoesRegrasTransicao() {
@@ -128,10 +131,6 @@ export class TransicaoResultadosComponent implements OnInit {
       label: 'Data Nascimento',
       value: this.isExits(this.seguradoTransicao.dataNascimento) ? this.seguradoTransicao.dataNascimento.format('DD/MM/YYYY') : null
     });
-    // rstTemp.push({
-    //   label: 'Data Nascimento',
-    //   value: this.isExits(this.seguradoTransicao.dataFiliacao) ? this.seguradoTransicao.dataFiliacao.format('DD/MM/YYYY') : null
-    // });
     rstTemp.push({
       label: 'Idade atual',
       value: `${this.seguradoTransicao.idade.years()} anos`
