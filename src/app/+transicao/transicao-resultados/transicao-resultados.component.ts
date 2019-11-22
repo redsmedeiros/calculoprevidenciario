@@ -253,12 +253,12 @@ export class TransicaoResultadosComponent implements OnInit {
     const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
     const dttDias = (xVarMes - totalFator.months) * 30;
-    totalFator.days = Math.round(dttDias);
+    totalFator.days = Math.floor(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
-  
+
   public converterTempoDiasParaAnos(fullDays) {
     return (Math.ceil(fullDays) / 365);
   }
@@ -285,7 +285,7 @@ export class TransicaoResultadosComponent implements OnInit {
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
-  
+
 
 
   public formateStringAnosMesesDias(anos, meses, dias) {
@@ -354,6 +354,63 @@ export class TransicaoResultadosComponent implements OnInit {
 
   formatPostDataDate(inputDate) {
     return moment(inputDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  }
+
+
+
+
+
+  imprimirPagina() {
+    const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
+    const footerText = `IEPREV - Instituto de Estudos Previdenciários -
+                        Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701
+                        | CEP: 30140-069 Lourdes - Belo Horizonte - MG`;
+
+    const printContents = conclusaoFinal;
+    const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-rtl.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-angular-next.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css" media="print">
+                <style>
+                      i.fa, .not-print{ display: none; }
+                      footer,div,p,td,th{font-size:10px !important;}
+                      .table>tbody>tr>td, .table>tbody>tr>th,
+                       .table>tfoot>tr>td, .table>tfoot>tr>th,
+                       .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+                       footer{}
+                </style>`;
+    // const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-skins.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-rtl.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-angular-next.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
+    //             <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css" media="print">
+    //             <style>i.fa, .not-print{ display: none; }
+    //                   div,p,td,th{font-size:12px !important;}
+    //                   .ui-sortable-handle, th{
+    //                     background-color: #831721 !important;
+    //                     border-color: #CCC !important;
+    //                     color: #fafafa !important;
+    //                   }
+    //                   </style>`;
+
+    const popupWin = window.open('', '_blank', 'width=640,height=480');
+
+    popupWin.document.open();
+    popupWin.document.write(`<!doctype html>
+                                <html>
+                                  <head>${css}</head>
+                                  <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
+                                  <body onload="window.print()">
+                                   <article>${printContents}</article>
+                                   <footer>${footerText}</footer>
+                                  </body>
+                                </html>`);
+    popupWin.document.close();
   }
 
 
