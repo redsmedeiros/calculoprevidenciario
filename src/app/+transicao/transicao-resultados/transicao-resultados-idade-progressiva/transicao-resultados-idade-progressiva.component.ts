@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
@@ -8,7 +8,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-idade-progressiva.component.html',
   styleUrls: ['./transicao-resultados-idade-progressiva.component.css']
 })
-export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResultadosComponent implements OnInit, OnChanges {
 
   @Input() seguradoTransicao;
 
@@ -28,9 +28,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     2030: { m: 65, md: 23725, f: 61.5, fd: 22448 },
     2031: { m: 65, md: 23725, f: 62, fd: 22630 },
   }
-
-
-
 
 
   public conclusoesRegra2 = {
@@ -54,7 +51,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   ngOnInit() {
 
-   
+    this.conclusaoRegra2IdadeProgressiva();
+
+  }
+
+  ngOnChanges() {
+
     this.conclusaoRegra2IdadeProgressiva();
 
   }

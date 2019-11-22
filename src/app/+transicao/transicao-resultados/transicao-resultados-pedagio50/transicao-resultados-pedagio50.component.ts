@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 
 import { ExpectativaVidaService } from 'app/+rgps/+rgps-resultados/ExpectativaVida.service';
@@ -10,7 +10,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-pedagio50.component.html',
   styleUrls: ['./transicao-resultados-pedagio50.component.css']
 })
-export class TransicaoResultadosPedagio50Component extends TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosPedagio50Component extends TransicaoResultadosComponent implements OnInit,OnChanges {
 
   @Input() seguradoTransicao;
   public isUpdating;
@@ -32,20 +32,29 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
 
-  constructor(private ExpectativaVida: ExpectativaVidaService) {
+  constructor(
+    private ExpectativaVida: ExpectativaVidaService
+    ) {
     super();
   }
 
   ngOnInit() {
    
-    this.calcularConclusaoRegra3pedagio50();
+   this.calcularConclusaoRegra3pedagio50();
 
+  }
+
+  ngOnChanges(){
+    this.calcularConclusaoRegra3pedagio50();
   }
 
 
   public calcularConclusaoRegra3pedagio50(){
     this.isUpdating = true;
 
+    if (this.isExits(this.seguradoTransicao.idadeFracionada)) {
+      console.log('teste');
+    }
     this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
       .then(expectativas => {
         this.expectativasVida = expectativas;
@@ -120,7 +129,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let idadeDib = this.seguradoTransicao.idadeFracionada;
     let contribuicaoDiff = 0;
     let tempoDePedagio = 0;
-    let tempoFinalContrib = 0;
+    let tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoAnos;
     let tempoDePedagioTotal = 0;
 
 

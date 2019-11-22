@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
 
@@ -7,7 +7,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-idade.component.html',
   styleUrls: ['./transicao-resultados-idade.component.css']
 })
-export class TransicaoResultadosIdadeComponent extends TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosIdadeComponent extends TransicaoResultadosComponent implements OnInit, OnChanges {
 
   @Input() seguradoTransicao;
 
@@ -30,12 +30,13 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   }
 
   ngOnInit() {
-
-  
     this.conclusaoRegra5Idade();
   }
 
+  ngOnChanges() {
+    this.conclusaoRegra5Idade();
 
+  }
 
   /* 
     Regra 5 idade:

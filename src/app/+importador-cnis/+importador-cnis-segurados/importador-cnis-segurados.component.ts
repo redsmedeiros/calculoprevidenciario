@@ -72,7 +72,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.formData.id_documento = '3';
     this.formData.numero_documento = segurado.numero_documento;
     this.formData.data_nascimento = segurado.data_nascimento;
-    this.formData.sexo = 'm';
+    this.formData.sexo = '';
     this.formData.funcao = segurado.funcao;
     this.formData.user_id = segurado.userId;
   }
@@ -135,6 +135,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
     this.eventCountSeguradoErros.emit(this.countSeguradoErros);
+    return this.countSeguradoErros;
   }
 
 

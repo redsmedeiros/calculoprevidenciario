@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
 
@@ -8,7 +8,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-pontos.component.html',
   styleUrls: ['./transicao-resultados-pontos.component.css']
 })
-export class TransicaoResultadosPontosComponent extends TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosPontosComponent extends TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   @Input() seguradoTransicao;
@@ -74,11 +74,19 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   ngOnInit() {
 
-    
+
     this.conclusaoRegra1Pontos();
 
   }
 
+
+  ngOnChanges() {
+
+    console.log(this.seguradoTransicao);
+    console.log(this.seguradoInformacoes);
+
+    this.conclusaoRegra1Pontos();
+  }
 
 
   public conclusaoRegra1Pontos() {
@@ -94,7 +102,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
         percentual: rstRegra1Pontos.percentual,
         formula: `${rstRegra1Pontos.formula} = ${rstRegra1Pontos.percentual}%`,
         requisitoDib: rstRegra1Pontos.requisitos,
-        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.idadeDib)}` ,
+        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.idadeDib)}`,
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.tempoContribuicaoDib)}`,
         dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY')
       };
@@ -184,7 +192,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   public contadorRegra1(pontosAtuais, pontosAtuaisDias) {
 
-  //  console.log(this.dataAtual);
+    //  console.log(this.dataAtual);
 
     let auxiliarDate = this.dataAtual;
     let fimContador = { status: false, ano: 0, pontos: 0 };
@@ -270,7 +278,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       dataDib: auxiliarDate,
       idadeMoment: moment.duration(idade, 'days'),
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
-      idadeDib: this.converterTempoDias(idade) ,
+      idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),
       DiffDataAtualDibMoment: moment.duration(count, 'days'),
       DiffDataAtualDib: this.converterTempoDias(count),
@@ -311,7 +319,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   public requisitosRegra1(pontos, ano, sexo, tempo_contribuicao) {
 
-   
+
 
     // console.log(pontos);
     // console.log(ano);

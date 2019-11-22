@@ -13,7 +13,6 @@
       <div>
           <table
           class="table table-bordered table-hover"
-          *ngIf="!isUpdating"
           >
           <thead>
             <tr>
@@ -34,7 +33,6 @@
           </tbody>
           </table>
       </div>
-
       <app-transicao-resultados-pontos
         [seguradoTransicao]="seguradoTransicao"
       ></app-transicao-resultados-pontos>
@@ -54,13 +52,11 @@
       <app-transicao-resultados-idade
         [seguradoTransicao]="seguradoTransicao"
       ></app-transicao-resultados-idade>
-
     </div>
   </div>
 </sa-widget>
 
-
-<article class="col-sm-12 col-md-12 col-lg-12"  *ngIf="!isUpdating" >
+<article class="col-sm-12 col-md-12 col-lg-12"   >
     <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
       [fullscreenbutton]="false" [custombutton]="false">
       <div *ngIf="!getPeriodosList">

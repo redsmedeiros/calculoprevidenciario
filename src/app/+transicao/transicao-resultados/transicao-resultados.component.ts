@@ -1,32 +1,35 @@
 
-import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 
 import { Auth } from '../services/Auth/Auth.service';
 import { AuthResponse } from '../services/Auth/AuthResponse.model';
 
-import { TransicaoResultadosPontosComponent } from './transicao-resultados-pontos/transicao-resultados-pontos.component';
-import { TransicaoResultadosIdadeProgressivaComponent } from './transicao-resultados-idade-progressiva/transicao-resultados-idade-progressiva.component';
-import { TransicaoResultadosPedagio50Component } from './transicao-resultados-pedagio50/transicao-resultados-pedagio50.component';
-import { TransicaoResultadosPedagio100Component } from './transicao-resultados-pedagio100/transicao-resultados-pedagio100.component';
-import { TransicaoResultadosIdadeComponent } from './transicao-resultados-idade/transicao-resultados-idade.component';
 
-// import { ExpectativaVidaService } from 'app/+rgps/+rgps-resultados/ExpectativaVida.service';
-// import { ExpectativaVida } from 'app/+rgps/+rgps-resultados/ExpectativaVida.model';
+// import { TransicaoResultadosPontosComponent } from './transicao-resultados-pontos/transicao-resultados-pontos.component';
+// import { TransicaoResultadosIdadeProgressivaComponent } from './transicao-resultados-idade-progressiva/transicao-resultados-idade-progressiva.component';
+// import { TransicaoResultadosPedagio50Component } from './transicao-resultados-pedagio50/transicao-resultados-pedagio50.component';
+// import { TransicaoResultadosPedagio100Component } from './transicao-resultados-pedagio100/transicao-resultados-pedagio100.component';
+// import { TransicaoResultadosIdadeComponent } from './transicao-resultados-idade/transicao-resultados-idade.component';
+
+
+
+import { ExpectativaVidaService } from 'app/+rgps/+rgps-resultados/ExpectativaVida.service';
+import { ExpectativaVida } from 'app/+rgps/+rgps-resultados/ExpectativaVida.model';
 
 @Component({
   selector: 'app-transicao-resultados',
   templateUrl: './transicao-resultados.component.html',
   styleUrls: ['./transicao-resultados.component.css']
 })
-export class TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   // @ViewChild(TransicaoResultadosPontosComponent) PontosComponent: TransicaoResultadosPontosComponent;
   // @ViewChild(TransicaoResultadosIdadeProgressivaComponent) IdadeProgressivaComponent: TransicaoResultadosIdadeProgressivaComponent;
   // @ViewChild(TransicaoResultadosPedagio50Component) Pedagio50Component: TransicaoResultadosPedagio50Component;
-  // @ViewChild(TransicaoResultadosPedagio100Component) Pedagio100Component: TransicaoResultadosPedagio50Component;
-  // @ViewChild(TransicaoResultadosIdadeComponent) IdadeComponent: TransicaoResultadosPedagio50Component;
+  // @ViewChild(TransicaoResultadosPedagio100Component) Pedagio100Component: TransicaoResultadosPedagio100Component;
+  // @ViewChild(TransicaoResultadosIdadeComponent) IdadeComponent: TransicaoResultadosIdadeComponent;
 
 
   @Input() seguradoTransicao;
@@ -35,15 +38,18 @@ export class TransicaoResultadosComponent implements OnInit {
   public dataAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
   public isRegraTransitoria = false;
   public seguradoInformacoes = [];
+  public aliquota = 0.31;
+
+  public ExpectativaVidaObj;
   public expectativasVida
   public expectativa;
-  public aliquota = 0.31;
-  public ExpectativaVidaObj;
+
+  private hasResultTransicao = false;
 
 
 
   constructor(
-    //  private ExpectativaVida: ExpectativaVidaService,
+    // public ExpectativaVida: ExpectativaVidaService,
     // private ref: ChangeDetectorRef,
   ) {
    moment.locale('pt-br');
@@ -68,10 +74,24 @@ export class TransicaoResultadosComponent implements OnInit {
   }
 
 
+  ngOnChanges(){
+
+    this.setConclusoes();
+  
+  }
+
   public setConclusoes() {
+
     this.verificarTransitoria();
     this.setInformacoesRegrasTransicao();
     this.setSeguradoInformacoes();
+
+    // this.PontosComponent.conclusaoRegra1Pontos();
+    // this.IdadeProgressivaComponent.conclusaoRegra2IdadeProgressiva();
+    // this.Pedagio50Component.calcularConclusaoRegra3pedagio50();
+    // this.Pedagio100Component.conclusaoRegra4pedagio100();
+    // this.IdadeComponent.conclusaoRegra5Idade();
+
   }
 
 
@@ -124,6 +144,7 @@ export class TransicaoResultadosComponent implements OnInit {
   public setSeguradoInformacoes() {
 
     const rstTemp = []
+    this.seguradoInformacoes = [];
 
     rstTemp.push({ label: 'Nome', value: this.seguradoTransicao.nome });
     rstTemp.push({ label: 'Sexo', value: (this.seguradoTransicao.sexo === 'm') ? 'Masculino' : 'Feminino' });
@@ -135,11 +156,19 @@ export class TransicaoResultadosComponent implements OnInit {
       label: 'Idade atual',
       value: `${this.seguradoTransicao.idade.years()} anos`
     });
+
+    rstTemp.push({
+      label: 'Tempo de Contribuição ate EC103/2019',
+      value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnosAteEC103,
+                                              this.seguradoTransicao.contribuicaoMesesAteEC103,
+                                              this.seguradoTransicao.contribuicaoDiasAteEC103)
+    });
+
     rstTemp.push({
       label: 'Tempo de Contribuição',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnos,
-        this.seguradoTransicao.contribuicaoMeses,
-        this.seguradoTransicao.contribuicaoDias)
+                                              this.seguradoTransicao.contribuicaoMeses,
+                                              this.seguradoTransicao.contribuicaoDias)
     });
 
     rstTemp.push({ label: 'Profissão', value: (this.seguradoTransicao.professor) ? 'Professor' : null });

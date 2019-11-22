@@ -1,5 +1,5 @@
-import { TransicaoResultadosComponent } from './../transicao-resultados/transicao-resultados.component';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { Auth } from '../../services/Auth/Auth.service';
@@ -7,6 +7,7 @@ import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
 import swal from 'sweetalert';
+import { TransicaoResultadosComponent } from '../transicao-resultados/transicao-resultados.component';
 
 
 @Component({
@@ -24,6 +25,9 @@ export class TransicaoFormComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+
+
+  @ViewChild(TransicaoResultadosComponent) transicaoResultadosComponent: TransicaoResultadosComponent;
 
 
   // segurado
@@ -79,28 +83,28 @@ export class TransicaoFormComponent implements OnInit {
     this.nome = 'Segurado teste teste ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '20/10/1965';
+    this.dataNascimento = '09/12/1960';
     this.dataFiliacao = '20/10/1985';
     this.sexo = 'm';
     this.professor = false;
 
-    this.contribuicaoAnosAteEC103 = '33';
-    this.contribuicaoMesesAteEC103 = '0';
-    this.contribuicaoDiasAteEC103 = '0';
+    this.contribuicaoAnosAteEC103 = '37';
+    this.contribuicaoMesesAteEC103 = '3';
+    this.contribuicaoDiasAteEC103 = '2';
 
-    this.contribuicaoAnos = '33';
-    this.contribuicaoMeses = '6';
-    this.contribuicaoDias = '0';
+    this.contribuicaoAnos = '37';
+    this.contribuicaoMeses = '3';
+    this.contribuicaoDias = '11';
 
 
   }
 
 
-  ngAfterContentInit() {
-    // setTimeout(() => {
-    //   this.changeDocumentMask();
-    // }, 200)
-  }
+  // ngAfterContentInit() {
+  //   // setTimeout(() => {
+  //   //   this.changeDocumentMask();
+  //   // }, 200)
+  // }
 
 
 
@@ -196,7 +200,7 @@ export class TransicaoFormComponent implements OnInit {
       'years');
 
     if (tempoTotalAteEC103 > tempoTotal) {
-      this.errors.add({ 'contribuicaoAnosAteEC103': ['O tempo antes da EC103 não deve ser maior que o total.'] });
+      this.errors.add({ 'contribuicaoAnosAteEC103': ['O tempo até da EC103 não deve ser maior que o total.'] });
     }
 
   }
@@ -221,6 +225,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
   public submit(e) {
+
     e.preventDefault();
     this.hasResult = false
     if (!localStorage.getItem('user_id')) {
@@ -234,6 +239,9 @@ export class TransicaoFormComponent implements OnInit {
     // console.log(this.seguradoTransicao)
 
     if (this.errors.empty()) {
+
+      this.hasResult = true
+
       const alertSucesso = {
         //  position: 'top-end',
         icon: 'success',
@@ -241,9 +249,13 @@ export class TransicaoFormComponent implements OnInit {
         button: false,
         timer: 1500
       };
-      swal(alertSucesso);
 
-      this.hasResult = true
+      swal(alertSucesso).then(() => {
+        if (this.hasResult) {
+          this.transicaoResultadosComponent.setConclusoes();
+        }
+      });
+
 
     } else {
       const alertSucesso = {

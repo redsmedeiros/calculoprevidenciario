@@ -95,8 +95,9 @@ export class ImportadorCnisComponent implements OnInit {
   public gravarImportacaoContagemTempo() {
 
     const erros = this.PeriodosComponent.verificarVinculos();
+    const errosSegurado = this.SeguradoComponent.validate();
 
-    if (erros === 0) {
+    if (erros === 0 && errosSegurado === 0) {
       
       this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
         this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
@@ -108,7 +109,7 @@ export class ImportadorCnisComponent implements OnInit {
         });
       });
 
-    }else{
+    } else {
 
       swal({
         // position: position,

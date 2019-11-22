@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 import * as moment from 'moment';
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
@@ -8,7 +8,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-pedagio100.component.html',
   styleUrls: ['./transicao-resultados-pedagio100.component.css']
 })
-export class TransicaoResultadosPedagio100Component extends TransicaoResultadosComponent implements OnInit {
+export class TransicaoResultadosPedagio100Component extends TransicaoResultadosComponent implements OnInit,OnChanges {
 
 
   @Input() seguradoTransicao;
@@ -61,9 +61,14 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   ngOnInit() {
 
-   
     this.conclusaoRegra4pedagio100();
 
+  }
+
+  ngOnChanges(){
+
+    this.conclusaoRegra4pedagio100();
+    
   }
 
 
