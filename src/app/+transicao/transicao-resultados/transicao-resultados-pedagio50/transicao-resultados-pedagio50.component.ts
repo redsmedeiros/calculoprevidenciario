@@ -135,8 +135,11 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let tempoFinalContribfinalComPedagio = 0;
     let tempoDePedagioTotalNecessario = 0;
 
+    
+    console.log('---- Regra 3');
+    console.log(dataDib);
 
-    if (tempoFinalContribAteEC103 <= contribuicao_minRequisito) {
+    if (tempoFinalContribAteEC103 <= contribuicao_min) {
 
       contribuicaoDiff = (contribuicao_min - tempoFinalContrib);
       tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
@@ -144,17 +147,20 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
       tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
-      tempoDePedagioTotalNecessario = tempoFinalContribfinalComPedagio - tempoFinalContrib;
+      tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
 
-      idadeDib = idadeDib + tempoDePedagioTotalNecessario;
+      idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
 
       dataDib.add(tempoDePedagioTotalNecessario, 'days');
     } else {
+
       tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+    
     }
 
+console.log(tempoDePedagioTotalNecessario);
 
-    // console.log('---- Regra 3');
+
     // console.log(tempoFinalContrib);
     // console.log(contribuicao_min);
     // console.log(tempoFinalContribAteEC103);
@@ -183,14 +189,14 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     );
 
 
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento.format('YYYY'),
-      dataDib.format('YYYY')
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento.format('YYYY'),
+    //   dataDib.format('YYYY')
+    // );
 
-    if (correcaoAnoBissexto > 0) {
-      dataDib.add(correcaoAnoBissexto, 'days');
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   dataDib.add(correcaoAnoBissexto, 'days');
+    // }
 
 
     rstRegraPedagio50 = {

@@ -243,6 +243,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
                                         );
 
     if (correcaoAnoBissexto > 0) {
+      ;
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
