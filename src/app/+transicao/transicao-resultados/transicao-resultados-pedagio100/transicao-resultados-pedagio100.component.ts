@@ -118,7 +118,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
       console.log(' -- Regra 4 ---');
-      console.log(this.seguradoTransicao);
+     // console.log(this.seguradoTransicao);
       console.log(this.conclusoesRegra4);
 
       // fim do processo
@@ -166,8 +166,10 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     }
 
     const rstContadorRegra4 = this.contadorRegra4();
-    // console.log(rstContadorRegra4);
-    // console.log('--');
+
+    console.log('---- regra 4 ---- ');
+     console.log(rstContadorRegra4);
+     console.log('----');
     // console.log(diffEntreContribuicoes);
     // console.log(this.pedagioEmAnos);
     // console.log('--');

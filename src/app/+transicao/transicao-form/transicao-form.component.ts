@@ -83,18 +83,18 @@ export class TransicaoFormComponent implements OnInit {
     this.nome = 'Segurado teste teste ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '09/12/1960';
+    this.dataNascimento = '25/11/1963';
     this.dataFiliacao = '20/10/1985';
     this.sexo = 'm';
     this.professor = false;
 
-    this.contribuicaoAnosAteEC103 = '37';
-    this.contribuicaoMesesAteEC103 = '3';
-    this.contribuicaoDiasAteEC103 = '2';
+    this.contribuicaoAnosAteEC103 = '33';
+    this.contribuicaoMesesAteEC103 = '0';
+    this.contribuicaoDiasAteEC103 = '0';
 
-    this.contribuicaoAnos = '37';
-    this.contribuicaoMeses = '3';
-    this.contribuicaoDias = '11';
+    this.contribuicaoAnos = '33';
+    this.contribuicaoMeses = '0';
+    this.contribuicaoDias = '13';
 
 
   }
@@ -110,9 +110,9 @@ export class TransicaoFormComponent implements OnInit {
 
   validate() {
 
-    // if (this.nome == undefined || this.nome == '') {
-    //   this.errors.add({ 'nome': ["O Nome é obrigatório."] });
-    // }
+    if (this.nome == undefined || this.nome == '') {
+      this.errors.add({ 'nome': ["O Nome é obrigatório."] });
+    }
 
     if (this.dataNascimento === undefined || this.dataNascimento === '') {
       this.errors.add({ 'dataNascimento': ['A data de nascimento é obrigatória.'] });

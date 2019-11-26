@@ -308,7 +308,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
     const dttDias = (xVarMes - totalFator.months) * 30;
-    totalFator.days = Math.round(dttDias);
+    totalFator.days = Math.floor(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;

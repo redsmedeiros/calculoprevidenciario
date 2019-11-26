@@ -1,0 +1,21 @@
+<sa-widget
+  [colorbutton]="false"
+  [editbutton]="false"
+  [togglebutton]="false"
+  [deletebutton]="false"
+  [fullscreenbutton]="false"
+  [custombutton]="false"
+>
+  <header>
+    <h2>{{ title }}</h2>
+  </header>
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe
+      [src]="sanitizer.bypassSecurityTrustResourceUrl(link)"
+      class="embed-responsive-item"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+    ></iframe>
+  </div>
+</sa-widget>
