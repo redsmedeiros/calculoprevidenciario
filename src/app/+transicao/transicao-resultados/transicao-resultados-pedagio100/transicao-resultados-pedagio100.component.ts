@@ -153,7 +153,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       contribuicaoDiff = (regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnos);
 
 
-      this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes;
+      this.pedagioEmAnos = tempoDePedagio;
+     // this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes;
       this.pedagioEmDias = this.converterTempoAnosParaDias(this.pedagioEmAnos);
 
       tempoFinalContrib = regra4TempoContrib + this.pedagioEmAnos;
