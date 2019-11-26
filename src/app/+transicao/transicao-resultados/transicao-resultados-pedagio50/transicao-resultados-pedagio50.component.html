@@ -56,7 +56,8 @@
       <tr>
         <td colspan="2">
           <div class="alert alert-warning margin-top-10" role="alert">
-            <p> O segurado não possuia {{ conclusoesRegra3.requisitoDib }} anos de tempo de contribuição na data da publicação da EC 103/2019</p>
+            <p *ngIf="seguradoTransicao.sexo === 'm'" >Não se aplica. O segurado não possuía {{ conclusoesRegra3.requisitoDib }} anos de tempo de contribuição na data da publicação da EC 103/2019.</p>
+            <p *ngIf="seguradoTransicao.sexo === 'f'"> Não se aplica. A segurada não possuía {{ conclusoesRegra3.requisitoDib }} anos de tempo de contribuição na data da publicação da EC 103/2019.</p>
           </div>
         </td>
       </tr>
