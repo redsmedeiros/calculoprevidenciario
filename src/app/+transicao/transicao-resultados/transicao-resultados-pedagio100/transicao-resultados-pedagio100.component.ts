@@ -8,7 +8,7 @@ import { TransicaoResultadosComponent } from './../transicao-resultados.componen
   templateUrl: './transicao-resultados-pedagio100.component.html',
   styleUrls: ['./transicao-resultados-pedagio100.component.css']
 })
-export class TransicaoResultadosPedagio100Component extends TransicaoResultadosComponent implements OnInit,OnChanges {
+export class TransicaoResultadosPedagio100Component extends TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   @Input() seguradoTransicao;
@@ -65,10 +65,10 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
 
     this.conclusaoRegra4pedagio100();
-    
+
   }
 
 
@@ -118,7 +118,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
       console.log(' -- Regra 4 ---');
-     // console.log(this.seguradoTransicao);
+      // console.log(this.seguradoTransicao);
       console.log(this.conclusoesRegra4);
 
       // fim do processo
@@ -142,7 +142,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let contribuicaoDiff = 0;
     let tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoAnos;
     let diffEntreContribuicoes = this.seguradoTransicao.contribuicaoFracionadoAnos -
-                                 this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103;
+      this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103;
 
     let tempoDePedagioTotal = 0;
     const regra4TempoContrib = this.contribuicaoMin[this.seguradoTransicao.sexo];
@@ -152,7 +152,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       tempoDePedagio = ((regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103));
       contribuicaoDiff = (regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnos);
 
-     
+
       this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes;
       this.pedagioEmDias = this.converterTempoAnosParaDias(this.pedagioEmAnos);
 
@@ -168,8 +168,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     const rstContadorRegra4 = this.contadorRegra4();
 
     console.log('---- regra 4 ---- ');
-     console.log(rstContadorRegra4);
-     console.log('----');
+    console.log(rstContadorRegra4);
+    console.log('----');
     // console.log(diffEntreContribuicoes);
     // console.log(this.pedagioEmAnos);
     // console.log('--');
@@ -210,7 +210,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     const regra4Idade = this.contribuicaoIdadeMin[sexo];
     let regra4TempoContrib = this.contribuicaoMin[sexo];
 
-    regra4TempoContrib += (sexo === 'md' || sexo === 'fd')? this.pedagioEmDias : this.pedagioEmAnos;
+    regra4TempoContrib += (sexo === 'md' || sexo === 'fd') ? this.pedagioEmDias : this.pedagioEmAnos;
 
     if ((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade)) {
       return {
@@ -289,6 +289,16 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     } while (!fimContador.status && idade <= 54750);
 
+
+
+    const correcaoAnoBissexto = this.contarBissextosEntre(
+      this.seguradoTransicao.dataNascimento.format('YYYY'),
+      auxiliarDate.format('YYYY')
+    );
+
+    if (correcaoAnoBissexto > 0) {
+      auxiliarDate.add(correcaoAnoBissexto, 'days');
+    }
 
 
     return {

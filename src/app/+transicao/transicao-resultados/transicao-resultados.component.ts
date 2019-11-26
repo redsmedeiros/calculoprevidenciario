@@ -52,7 +52,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     // public ExpectativaVida: ExpectativaVidaService,
     // private ref: ChangeDetectorRef,
   ) {
-   moment.locale('pt-br');
+    moment.locale('pt-br');
   }
 
   ngOnInit() {
@@ -74,10 +74,10 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnChanges(){
+  ngOnChanges() {
 
     this.setConclusoes();
-  
+
   }
 
   public setConclusoes() {
@@ -160,15 +160,15 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     rstTemp.push({
       label: 'Tempo de Contribuição ate EC103/2019',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnosAteEC103,
-                                              this.seguradoTransicao.contribuicaoMesesAteEC103,
-                                              this.seguradoTransicao.contribuicaoDiasAteEC103)
+        this.seguradoTransicao.contribuicaoMesesAteEC103,
+        this.seguradoTransicao.contribuicaoDiasAteEC103)
     });
 
     rstTemp.push({
       label: 'Tempo de Contribuição',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnos,
-                                              this.seguradoTransicao.contribuicaoMeses,
-                                              this.seguradoTransicao.contribuicaoDias)
+        this.seguradoTransicao.contribuicaoMeses,
+        this.seguradoTransicao.contribuicaoDias)
     });
 
     rstTemp.push({ label: 'Profissão', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
@@ -214,7 +214,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       (dataDiffAtual.months() * 30)
       + dataDiffAtual.days();
 
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal / 365;
 
   }
 
@@ -335,6 +335,26 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     return `${tempoObj.years} ano(s), ${tempoObj.months} mes(es) e ${tempoObj.days} dia(s)`;
 
+  }
+
+
+  public contarBissextosEntre(anoInicio, anofim) {
+    let contador = -1;
+    anoInicio = moment([anoInicio]);
+    anofim = moment([anofim]);
+    const auxiliar = anoInicio;
+
+    do {
+
+      if (auxiliar.isLeapYear()) {
+        contador++;
+      }
+
+      auxiliar.add(1, 'year');
+
+    } while (auxiliar < anofim);
+
+    return contador;
   }
 
 

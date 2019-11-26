@@ -149,6 +149,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       idadeDib = idadeDib + tempoDePedagioTotalNecessario;
 
       dataDib.add(tempoDePedagioTotalNecessario, 'days');
+    } else {
+      tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
     }
 
 
@@ -179,6 +181,16 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       this.converterTempoDiasParaAnos(idadeDib),
       this.converterTempoDiasParaAnos(tempoFinalContribfinalComPedagio)
     );
+
+
+    const correcaoAnoBissexto = this.contarBissextosEntre(
+      this.seguradoTransicao.dataNascimento.format('YYYY'),
+      dataDib.format('YYYY')
+    );
+
+    if (correcaoAnoBissexto > 0) {
+      dataDib.add(correcaoAnoBissexto, 'days');
+    }
 
 
     rstRegraPedagio50 = {

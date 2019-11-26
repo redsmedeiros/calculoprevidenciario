@@ -81,6 +81,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
       console.log(' -- Regra 2 ---');
       console.log(this.conclusoesRegra2);
+      console.log(this.seguradoTransicao);
 
       // fim do processo
       this.isUpdating = false;
@@ -201,9 +202,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         this.seguradoTransicao.redutorProfessorDias);
 
 
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade -' + idade + '|'
-      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
+      // console.log('P - ' + count + ' - data =' + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade =' + idade + '|'
+      //   + '|' + 'Tempo = ' + tempoContribuicao + '|');
 
       if (fimContador.status) {
 
@@ -215,7 +216,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
 
-        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+        // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
@@ -232,6 +233,19 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
     } while (!fimContador.status && idade <= 54750);
+
+
+
+
+    const correcaoAnoBissexto = this.contarBissextosEntre(
+                                        this.seguradoTransicao.dataNascimento.format('YYYY'),
+                                        auxiliarDate.format('YYYY')
+                                        );
+
+    if (correcaoAnoBissexto > 0) {
+      auxiliarDate.add(correcaoAnoBissexto, 'days');
+    }
+
 
 
 
@@ -269,12 +283,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     const regra2 = this.requisitoIdadeProgressivaRegra2;
 
-    if ((sexo === 'md' && ano > 2027 && idade >= regra2[2027][sexo]) &&
+    if ((sexo === 'md' && ano >= 2027 && idade >= regra2[2027][sexo]) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2027][sexo] };
     }
 
-    if ((sexo === 'fd' && ano > 2031 && idade >= regra2[2031][sexo]) &&
+    if ((sexo === 'fd' && ano >= 2031 && idade >= regra2[2031][sexo]) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2031][sexo] };
     }

@@ -273,6 +273,17 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     } while (!fimContador.status && pontos <= 76650);
 
 
+    
+    const correcaoAnoBissexto = this.contarBissextosEntre(
+      this.seguradoTransicao.dataNascimento.format('YYYY'),
+      auxiliarDate.format('YYYY')
+    );
+
+    if (correcaoAnoBissexto > 0) {
+      auxiliarDate.add(correcaoAnoBissexto, 'days');
+    }
+
+
 
     return {
       dataDib: auxiliarDate,
