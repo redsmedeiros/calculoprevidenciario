@@ -291,14 +291,14 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     } while (!fimContador.status && idade <= 54750);
 
 
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento,
-      auxiliarDate
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento,
+    //   auxiliarDate
+    // );
 
-    if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto, 'days');
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
+    // }
 
 
     return {
