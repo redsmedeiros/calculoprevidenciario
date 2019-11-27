@@ -272,8 +272,8 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento.format('YYYY'),
-      auxiliarDate.format('YYYY')
+      this.seguradoTransicao.dataNascimento,
+      auxiliarDate
     );
 
     if (correcaoAnoBissexto > 0) {

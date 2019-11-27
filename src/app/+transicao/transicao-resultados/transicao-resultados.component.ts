@@ -174,7 +174,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     rstTemp.push({ label: 'Espécie de aposentadoria', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
 
 
-    if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
+      if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
       rstTemp.push({ label: this.getDocumentType(this.seguradoTransicao.idDocumento), value: this.seguradoTransicao.numeroDocumento });
     }
 
@@ -345,9 +345,9 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   public contarBissextosEntre(anoInicio, anofim) {
     let contador = -1;
-    anoInicio = moment([anoInicio]);
-    anofim = moment([anofim]);
-    const auxiliar = anoInicio;
+    const anoInicioAno = moment([anoInicio.format('YYYY')]);
+    const anofimAno = moment([anofim.format('YYYY')]);
+    const auxiliar = anoInicioAno;
 
     do {
 
@@ -357,7 +357,24 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
       auxiliar.add(1, 'year');
 
-    } while (auxiliar < anofim);
+    } while (auxiliar < anofimAno);
+
+
+    const inicioAuxiliar = moment('29/02/' + anoInicio.year(), 'DD/MM/YYYY');
+    const FimAuxiliar = moment();
+
+
+    if (anoInicio.isLeapYear() && anoInicio.isSameOrBefore(anoInicio.year() + '-02-29')) {
+      contador += 1;
+    }
+
+
+    if (anofim.isLeapYear() && anofim.isSameOrAfter(anoInicio.year() + '-03-01')) {
+      contador += 1;
+    }
+
+
+
 
     return contador;
   }
@@ -365,7 +382,8 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   isExits(value) {
     return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
+      value != null && value !== 'null' &&
+      value !== '' &&
       value !== undefined) ? true : false;
   }
 
@@ -412,10 +430,10 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   scroll(id) {
 
-   if (this.isExits(id)) {
-    document.getElementById(id).scrollIntoView({behavior: 'smooth'});
-   }
-   
+    if (this.isExits(id)) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
   }
 
 
