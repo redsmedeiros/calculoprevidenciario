@@ -405,6 +405,13 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
 
+  scroll(id) {
+
+   if (this.isExits(id)) {
+    document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+   }
+   
+  }
 
 
 

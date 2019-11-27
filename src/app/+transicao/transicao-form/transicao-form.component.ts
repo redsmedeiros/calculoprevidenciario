@@ -94,7 +94,26 @@ export class TransicaoFormComponent implements OnInit {
 
     this.contribuicaoAnos = '33';
     this.contribuicaoMeses = '0';
-    this.contribuicaoDias = '14';
+    this.contribuicaoDias = '15';
+
+
+    // this.nome = 'Segurado teste teste ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '09/12/1960';
+    // this.dataFiliacao = '20/10/1985';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '37';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '0';
+
+    // this.contribuicaoAnos = '37';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '13';
+
+
 
 
   }
@@ -247,12 +266,14 @@ export class TransicaoFormComponent implements OnInit {
         icon: 'success',
         title: 'Sucesso!',
         button: false,
-        timer: 1500
+        timer: 2000
       };
 
       swal(alertSucesso).then(() => {
         if (this.hasResult) {
           this.transicaoResultadosComponent.setConclusoes();
+
+          this.scroll('resultado');
         }
       });
 
@@ -270,6 +291,18 @@ export class TransicaoFormComponent implements OnInit {
     }
   }
 
+
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value != 'null' &&
+      value !== undefined) ? true : false;
+  }
+
+  scroll(id) {
+    if (this.isExits(id)) {
+      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+    }
+  }
 
 
   isNumber(value) {

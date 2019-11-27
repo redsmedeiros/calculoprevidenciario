@@ -28,13 +28,13 @@
               <div class="alert alert-info fade in">
                   <i class="fa-fw fa fa-info"></i>
                   <strong>Mais Informações!</strong><a href="http://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc103.htm" target="_blank">
-                     Clique aqui  para acessa a integra da Emenda Constitucional nº 103/2019.</a>
+                     Clique aqui  para acessa a íntegra da Emenda Constitucional nº 103/2019.</a>
                 </div>
          </div>
         </div>
       </article>
     </div>
-    <div class="row">
+    <div class="row" id="formTransicao">
         <article class="col-sm-12 col-md-12 col-lg-12">
 
             <!-- Widget ID (each widget will need unique ID)-->
@@ -169,7 +169,7 @@
                 </div>
               </div>
             </sa-widget>
-            <div *ngIf="hasResult" >
+            <div *ngIf="hasResult" id="resultado">
                 <app-transicao-resultados [seguradoTransicao]="seguradoTransicao" ></app-transicao-resultados> 
             </div>
           </article>

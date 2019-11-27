@@ -74,18 +74,15 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   ngOnInit() {
 
-
-    this.conclusaoRegra1Pontos();
+   // this.conclusaoRegra1Pontos();
 
   }
 
 
   ngOnChanges() {
 
-    console.log(this.seguradoTransicao);
-    console.log(this.seguradoInformacoes);
-
     this.conclusaoRegra1Pontos();
+
   }
 
 
@@ -107,8 +104,8 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
         dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY')
       };
 
-      console.log(' -- Regra 1 ---');
-      console.log(this.conclusoesRegra1);
+      // console.log(' -- Regra 1 ---');
+      // console.log(this.conclusoesRegra1);
 
       this.isUpdating = false;
 
@@ -273,7 +270,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     } while (!fimContador.status && pontos <= 76650);
 
 
-    
+
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento.format('YYYY'),
       auxiliarDate.format('YYYY')

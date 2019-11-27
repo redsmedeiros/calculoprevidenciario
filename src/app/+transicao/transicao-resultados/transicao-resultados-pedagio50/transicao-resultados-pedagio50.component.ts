@@ -25,6 +25,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     formula: '',
     requisitoDib: '',
     idadeDib: '',
+    idadeDibMoment: '',
     tempoDib: '',
     dataDib: '',
     formulaFator: '',
@@ -80,6 +81,11 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
           formula: `${rstRegra3pedagio50.formula} = ${rstRegra3pedagio50.percentual}%`,
           requisitoDib: rstRegra3pedagio50.requisitos,
           idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra3pedagio50.idadeDib)}`,
+          idadeDibMoment: this.formateStringAnosMesesDias(
+                                                        rstRegra3pedagio50.idadeDibMoment.years(),
+                                                        rstRegra3pedagio50.idadeDibMoment.months(),
+                                                        rstRegra3pedagio50.idadeDibMoment.days()
+                                                        ),
           tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra3pedagio50.tempoContribuicaoDib)}`,
           dataDib: rstRegra3pedagio50.dataDib.format('DD/MM/YYYY'),
           formulaFator: rstRegra3pedagio50.formulaFator,
@@ -94,6 +100,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
           formula: '',
           requisitoDib: this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo],
           idadeDib: '',
+          idadeDibMoment: '',
           tempoDib: '',
           dataDib: '',
           formulaFator: '',
@@ -102,9 +109,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
       }
 
-
-      console.log(' -- Regra 3 ---');
-      console.log(this.conclusoesRegra3);
+      // console.log(' -- Regra 3 ---');
+      // console.log(this.conclusoesRegra3);
 
       // fim do processo
       this.isUpdating = false;
@@ -126,6 +132,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     const dataDib = this.dataAtual.clone();
     // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
+    let idadeDibMoment;
     const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDias;
     const tempoFinalContribAteEC103 = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
     const contribuicaoDiffAteEC103EAtual = tempoFinalContrib - tempoFinalContribAteEC103;
@@ -135,9 +142,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let tempoFinalContribfinalComPedagio = 0;
     let tempoDePedagioTotalNecessario = 0;
 
-    
-    console.log('---- Regra 3');
-    console.log(dataDib);
 
     if (tempoFinalContribAteEC103 <= contribuicao_min) {
 
@@ -152,34 +156,60 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
 
       dataDib.add(tempoDePedagioTotalNecessario, 'days');
+
+      
+
+
+      // const correcaoAnoBissexto = this.contarBissextosEntre(
+      //   this.seguradoTransicao.dataNascimento.format('YYYY'),
+      //   dataDib.format('YYYY')
+      // );
+
+      // if (correcaoAnoBissexto > 0) {
+      //   dataDib.add(correcaoAnoBissexto, 'days');
+      // }
+
     } else {
 
       tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
-    
+
+
+      // const correcaoAnoBissexto = this.contarBissextosEntre(
+      //   this.seguradoTransicao.dataNascimento.format('YYYY'),
+      //   dataDib.format('YYYY')
+      // );
+
+      // if (correcaoAnoBissexto > 0) {
+      //   dataDib.add(correcaoAnoBissexto, 'days');
+      // }
+
     }
 
-console.log(tempoDePedagioTotalNecessario);
+
+    idadeDibMoment = this.calcularIdade(dataDib);
+
+    // console.log(tempoDePedagioTotalNecessario);
 
 
+    // console.log('---- Regra 3 -----');
+    // console.log(idadeDibMoment);
+    // console.log(idadeDib);
     // console.log(tempoFinalContrib);
     // console.log(contribuicao_min);
     // console.log(tempoFinalContribAteEC103);
     // console.log((tempoFinalContribAteEC103 <= contribuicao_min));
     // console.log(contribuicaoDiffAteEC103EAtual);
-    // console.log('----');
     // console.log(tempoDePedagioTotalNecessario);
     // console.log(contribuicaoDiff);
     // console.log(tempoDePedagio);
     // console.log(tempoFinalContribfinalComPedagio);
-
-    // console.log('---- Regra 3');
-
+    // console.log('----');
     // console.log(contribuicaoDiff);
-    // console.log(this.converterTempoAnos(contribuicaoDiff));
+    // console.log(this.converterTempoDias(contribuicaoDiff));
     // console.log(tempoDePedagio);
-    // console.log(this.converterTempoAnos(tempoDePedagio));
+    // console.log(this.converterTempoDias(tempoDePedagio));
     // console.log(tempoFinalContribfinalComPedagio);
-    // console.log(this.converterTempoAnos(tempoFinalContribfinalComPedagio));
+    // console.log(this.converterTempoDias(tempoFinalContribfinalComPedagio));
 
 
     const fatorDib = this.getFatorPrevidenciario(
@@ -189,18 +219,9 @@ console.log(tempoDePedagioTotalNecessario);
     );
 
 
-    // const correcaoAnoBissexto = this.contarBissextosEntre(
-    //   this.seguradoTransicao.dataNascimento.format('YYYY'),
-    //   dataDib.format('YYYY')
-    // );
-
-    // if (correcaoAnoBissexto > 0) {
-    //   dataDib.add(correcaoAnoBissexto, 'days');
-    // }
-
-
     rstRegraPedagio50 = {
       dataDib: dataDib,
+      idadeDibMoment: idadeDibMoment,
       idadeDib: this.converterTempoDias(idadeDib),
       tempoContribuicaoDib: this.converterTempoDias(tempoFinalContribfinalComPedagio),
       DiffDataAtualDib: 0,

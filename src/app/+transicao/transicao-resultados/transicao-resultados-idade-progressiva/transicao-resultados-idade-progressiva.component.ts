@@ -79,9 +79,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY')
       };
 
-      console.log(' -- Regra 2 ---');
-      console.log(this.conclusoesRegra2);
-      console.log(this.seguradoTransicao);
+      // console.log(' -- Regra 2 ---');
+      // console.log(this.conclusoesRegra2);
+      // console.log(this.seguradoTransicao);
 
       // fim do processo
       this.isUpdating = false;

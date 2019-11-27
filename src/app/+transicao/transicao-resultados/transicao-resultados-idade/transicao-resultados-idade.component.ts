@@ -108,8 +108,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY')
       };
 
-      console.log(' -- Regra 5 ---');
-      console.log(this.conclusoesRegra5);
+      // console.log(' -- Regra 5 ---');
+      // console.log(this.conclusoesRegra5);
 
       // fim do processo
       this.isUpdating = false;

@@ -55,13 +55,17 @@
     </div>
   </div>
 </sa-widget>
-
-<article class="col-sm-12 col-md-12 col-lg-12"   >
-    <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-      [fullscreenbutton]="false" [custombutton]="false">
-      <div *ngIf="!getPeriodosList">
-        <div class="widget-body no-padding heigth-auto">
-          <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info no-margin btn-block" id="btn-imprimir-pagina"
+      <div class="row margin-bottom-5" *ngIf="!getPeriodosList" >
+          <div class="col-lg-4 col-md-4 ">
+              <button type="button" (click)="scroll('formTransicao')" class="btn btn-warning no-margin btn-block font-md"
+              data-placement="top" tooltip="Retornar ao formulario">
+              <span class="btn-label">
+                <i class="fa fa-edit"></i>
+              </span> Alterar
+            </button>
+          </div>
+        <div class="col-lg-4 col-md-4 pull-right">
+            <button type="submit" (click)="imprimirPagina()" class="btn btn-primary no-margin btn-block font-md" id="btn-imprimir-pagina"
             data-placement="top" tooltip="Clique aqui para imprimir">
             <span class="btn-label">
               <i class="fa fa-print"></i>
@@ -69,5 +73,3 @@
           </button>
         </div>
       </div>
-    </sa-widget>
-  </article>
