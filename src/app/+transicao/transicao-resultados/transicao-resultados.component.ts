@@ -158,20 +158,25 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     });
 
     rstTemp.push({
-      label: 'Tempo de Contribuição ate EC103/2019',
+      label: 'Tempo de contribuição até a 13/11/2019 (EC103/2019)',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnosAteEC103,
         this.seguradoTransicao.contribuicaoMesesAteEC103,
         this.seguradoTransicao.contribuicaoDiasAteEC103)
     });
 
     rstTemp.push({
-      label: 'Tempo de Contribuição',
+      label: 'Tempo Total de contribuição até a data atual',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnos,
         this.seguradoTransicao.contribuicaoMeses,
         this.seguradoTransicao.contribuicaoDias)
     });
 
-    rstTemp.push({ label: 'Profissão', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
+    rstTemp.push({ label: 'Espécie de aposentadoria', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
+
+
+    if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
+      rstTemp.push({ label: this.getDocumentType(this.seguradoTransicao.idDocumento), value: this.seguradoTransicao.numeroDocumento });
+    }
 
     for (const itemRst of rstTemp) {
 
@@ -468,6 +473,23 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     popupWin.document.close();
   }
 
+
+  public getDocumentType(id_documento) {
+    switch (id_documento) {
+      case '1':
+        return 'PIS';
+      case '2':
+        return 'PASEP';
+      case '3':
+        return 'CPF';
+      case '4':
+        return 'NIT';
+      case '5':
+        return 'RG';
+      default:
+        return 'CPF'
+    }
+  }
 
 
 
