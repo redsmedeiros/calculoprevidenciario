@@ -42,7 +42,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
   ngOnInit() {
 
-    this.calcularConclusaoRegra3pedagio50();
+   // this.calcularConclusaoRegra3pedagio50();
 
   }
 

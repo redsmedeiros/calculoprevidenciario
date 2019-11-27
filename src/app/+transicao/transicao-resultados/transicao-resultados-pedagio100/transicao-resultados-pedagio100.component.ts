@@ -61,7 +61,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   ngOnInit() {
 
-    this.conclusaoRegra4pedagio100();
+  //  this.conclusaoRegra4pedagio100();
 
   }
 

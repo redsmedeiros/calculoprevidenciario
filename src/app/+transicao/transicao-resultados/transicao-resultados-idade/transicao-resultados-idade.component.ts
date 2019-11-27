@@ -30,7 +30,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   }
 
   ngOnInit() {
-    this.conclusaoRegra5Idade();
+   // this.conclusaoRegra5Idade();
   }
 
   ngOnChanges() {
@@ -258,6 +258,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     } while (!fimContador.status && idade <= 54750);
 
+    auxiliarDate.add(1, 'days');
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento.format('YYYY'),
@@ -265,9 +266,11 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     );
 
     if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto + 1, 'days');
+      auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
+
+    console.log(auxiliarDate);
 
     return {
       dataDib: auxiliarDate,
