@@ -65,6 +65,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     dataDib: '',
     idadeDib: '',
     tempoDib: '',
+    idadeDibMoment: ''
   };
 
 
@@ -74,7 +75,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   ngOnInit() {
 
-   // this.conclusaoRegra1Pontos();
+    // this.conclusaoRegra1Pontos();
 
   }
 
@@ -101,7 +102,12 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
         requisitoDib: rstRegra1Pontos.requisitos,
         idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.idadeDib)}`,
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra1Pontos.tempoContribuicaoDib)}`,
-        dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY')
+        dataDib: rstRegra1Pontos.dataDib.format('DD/MM/YYYY'),
+        idadeDibMoment: this.formateStringAnosMesesDias(
+          rstRegra1Pontos.idadeMoment.years(),
+          rstRegra1Pontos.idadeMoment.months(),
+          rstRegra1Pontos.idadeMoment.days()
+        ),
       };
 
       // console.log(' -- Regra 1 ---');
@@ -147,6 +153,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
       rstRegraPontos = {
         dataDib: this.dataAtual,
+        idadeMoment: this.calcularIdade(this.dataAtual),
         idade: this.seguradoTransicao.idade,
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
         DiffDataAtualDib: 0,
@@ -192,6 +199,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     //  console.log(this.dataAtual);
 
     let auxiliarDate = this.dataAtual;
+    let idadeDibMoment;
     let fimContador = { status: false, ano: 0, pontos: 0 };
     let count = 1;
     let pontos = pontosAtuaisDias;
@@ -280,6 +288,33 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
+
+    idadeDibMoment = this.calcularIdade(auxiliarDate);
+
+
+    // let teste  = this.dataAtual.clone();
+
+
+
+    // console.log(teste.add(correcaoAnoBissexto + count, 'days'));
+    // console.log(pontos);
+    // console.log(count);
+
+    // console.log('idade');
+
+    // console.log(idadeDibMoment);
+    // console.log(this.converterTempoDias(idade));
+
+    // console.log(idade);
+    // console.log(this.seguradoTransicao.idadeFracionadaDias + count);
+
+    // console.log('tempo')
+    // console.log(tempoContribuicao);
+    // console.log(this.converterTempoDias(tempoContribuicao));
+    // console.log(moment.duration(tempoContribuicao, 'days'));
+
+
+    //idade = (this.seguradoTransicao.idadeFracionadaDias + count);
 
 
     return {

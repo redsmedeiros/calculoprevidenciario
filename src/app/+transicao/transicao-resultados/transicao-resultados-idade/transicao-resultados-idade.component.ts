@@ -162,6 +162,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       rstRegraIdadeProgressiva = {
         dataDib: this.dataAtual,
+        idadeMoment: this.calcularIdade(this.dataAtual),
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
         DiffDataAtualDib: 0,
@@ -274,11 +275,12 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     }
 
 
-    // console.log(moment.duration(auxiliarDate.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'))));
+
 
     return {
       dataDib: auxiliarDate,
-      idadeMoment: moment.duration(auxiliarDate.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'))),
+    //  idadeMoment: moment.duration(auxiliarDate.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'))),
+      idadeMoment: this.calcularIdade(auxiliarDate),
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),

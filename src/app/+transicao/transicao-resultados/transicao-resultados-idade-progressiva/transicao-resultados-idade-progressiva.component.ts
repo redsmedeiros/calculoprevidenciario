@@ -37,7 +37,8 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     requisitoDib: '',
     idadeDib: '',
     tempoDib: '',
-    dataDib: ''
+    dataDib: '',
+    idadeDibMoment: '',
   };
 
   public isUpdating;
@@ -51,7 +52,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   ngOnInit() {
 
-   // this.conclusaoRegra2IdadeProgressiva();
+    // this.conclusaoRegra2IdadeProgressiva();
 
   }
 
@@ -76,7 +77,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         requisitoDib: rstRegra2IdadeTempo.requisitos,
         idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.idadeDib)}`,
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.tempoContribuicaoDib)}`,
-        dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY')
+        dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY'),
+        idadeDibMoment: this.formateStringAnosMesesDias(
+          rstRegra2IdadeTempo.idadeMoment.years(),
+          rstRegra2IdadeTempo.idadeMoment.months(),
+          rstRegra2IdadeTempo.idadeMoment.days()
+        ),
       };
 
       // console.log(' -- Regra 2 ---');
@@ -238,12 +244,11 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
-                                        this.seguradoTransicao.dataNascimento,
-                                        auxiliarDate
-                                        );
+      this.seguradoTransicao.dataNascimento,
+      auxiliarDate
+    );
 
     if (correcaoAnoBissexto > 0) {
-      ;
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
@@ -252,7 +257,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     return {
       dataDib: auxiliarDate,
-      idadeMoment: moment.duration(idade, 'days'),
+      idadeMoment: this.calcularIdade(auxiliarDate),
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),

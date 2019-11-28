@@ -83,7 +83,7 @@ export class TransicaoFormComponent implements OnInit {
     this.nome = 'Segurado teste teste ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '27/11/1963';
+    this.dataNascimento = '28/11/1963';
     this.dataFiliacao = '20/10/1985';
     this.sexo = 'm';
     this.professor = false;

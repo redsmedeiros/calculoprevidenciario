@@ -50,6 +50,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     tempoDib: '',
     tempoCompedagio: '',
     dataDib: '',
+    idadeDibMoment: '',
   };
 
 
@@ -114,6 +115,11 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoDib)}`,
         tempoCompedagio: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoPedagio)}`,
         dataDib: rstRegra4pedagio100.dataDib.format('DD/MM/YYYY'),
+        idadeDibMoment: this.formateStringAnosMesesDias(
+          rstRegra4pedagio100.idadeMoment.years(),
+          rstRegra4pedagio100.idadeMoment.months(),
+          rstRegra4pedagio100.idadeMoment.days()
+          ),
       };
 
 
@@ -192,6 +198,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     rstRegraPedagio100 = {
       dataDib: dataDib,
+      idadeMoment: rstContadorRegra4.idadeMoment,
       idadeDib: this.converterTempoAnos(idadeDib),
       tempoContribuicaoDib: this.converterTempoAnos(tempoFinalContribAteDib),
       tempoContribuicaoPedagio: this.converterTempoAnos(tempoFinalContrib),
@@ -254,6 +261,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let count = 1;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
+    let idadeDibMoment;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     const sexo = this.seguradoTransicao.sexo + 'd';
 
@@ -301,9 +309,11 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     }
 
 
+    idadeDibMoment = this.calcularIdade(auxiliarDate);
+
     return {
       dataDib: auxiliarDate,
-      idadeMoment: moment.duration(idade, 'days'),
+      idadeMoment: idadeDibMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),

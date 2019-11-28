@@ -202,7 +202,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const dataFinal = (final != null) ?
       moment(final).hour(0).minute(0).second(0).millisecond(0) :
       moment().hour(0).minute(0).second(0).millisecond(0);
-    return moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'))).add(1, 'days');
+    return moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 
   }
 
@@ -344,7 +344,8 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   public contarBissextosEntre(anoInicio, anofim) {
-    let contador = -1;
+     let contador = -1;
+   // let contador = 0;
     const anoInicioAno = moment([anoInicio.format('YYYY')]);
     const anofimAno = moment([anofim.format('YYYY')]);
     const auxiliar = anoInicioAno;
@@ -361,20 +362,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
     const inicioAuxiliar = moment('29/02/' + anoInicio.year(), 'DD/MM/YYYY');
-    const FimAuxiliar = moment();
+    const FimAuxiliar = moment('01/03/' + anoInicio.year(), 'DD/MM/YYYY');
 
-
-    if (anoInicio.isLeapYear() && anoInicio.isSameOrBefore(anoInicio.year() + '-02-29')) {
+    if (anoInicioAno.isLeapYear() && anoInicio.isBefore(inicioAuxiliar)) {
       contador += 1;
     }
 
 
-    if (anofim.isLeapYear() && anofim.isSameOrAfter(anoInicio.year() + '-03-01')) {
+    if (anofimAno.isLeapYear() && anofim.isAfter(FimAuxiliar)) {
       contador += 1;
     }
-
-
-
 
     return contador;
   }
