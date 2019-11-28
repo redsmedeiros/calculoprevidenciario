@@ -321,9 +321,15 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       if (this.isEmpty(this.data_termino) || !dateFinalPeriodo.isValid()) {
         this.errors.add({ 'data_termino': ['Insira uma data válida'] });
       } else {
+
         if (dateFinalPeriodo <= dateInicioPeriodo) {
           this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
         }
+
+        if (Math.abs(dateInicioPeriodo.diff(dateFinalPeriodo, 'years')) >= 50) {
+          this.errors.add({ 'data_termino': ['O intervalo não deve ser maior que 65 anos'] });
+        }
+        
       }
 
     }
