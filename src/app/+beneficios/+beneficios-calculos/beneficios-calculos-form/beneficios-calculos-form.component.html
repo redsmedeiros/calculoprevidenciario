@@ -343,13 +343,13 @@
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
-                    <!-- <div *ngIf="devidosPosBuracoNegro">
+                    <div *ngIf="devidosPosBuracoNegro">
                       <label class="col-md-2 control-label"><i title="Índices de Reajustes de Teto (IRT) só existem para DIB's posteriores a 05/04/1991 conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg"></i> Índice de reajuste no teto da Nova RMI de valores devidos:</label>
                         <div class="col-md-3">
                           <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
                           <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
                         </div>
-                    </div> -->
+                    </div>
                   </div>
                 </fieldset>
                 <p>* Campo obrigatório</p>

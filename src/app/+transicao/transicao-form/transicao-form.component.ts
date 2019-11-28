@@ -128,6 +128,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
   validate() {
+    this.errors.clear();
 
     if (this.nome == undefined || this.nome == '') {
       this.errors.add({ 'nome': ["O Nome é obrigatório."] });
