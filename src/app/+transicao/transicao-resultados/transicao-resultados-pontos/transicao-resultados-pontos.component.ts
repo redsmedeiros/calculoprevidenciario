@@ -147,15 +147,6 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     let percentualR1 = 60;
 
 
-    // console.log(regra_pontos_i);
-    // console.log(this.seguradoTransicao.contribuicaoFracionadoAnos);
-    // console.log(contribuicao_min);
-
-    // console.table( this.seguradoTransicao);
-    
-    // console.log((pontosAtuais >= regra_pontos_i &&
-    //   this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) );
-
     if (pontosAtuais >= regra_pontos_i &&
       this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
@@ -329,7 +320,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     return {
       dataDib: auxiliarDate,
-      idadeMoment: moment.duration(idade, 'days'),
+      idadeMoment: idadeDibMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),
