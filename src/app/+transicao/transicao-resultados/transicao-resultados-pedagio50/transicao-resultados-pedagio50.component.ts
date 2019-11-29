@@ -37,7 +37,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   constructor(
     private ExpectativaVida: ExpectativaVidaService
   ) {
-    super();
+    super(null);
   }
 
   ngOnInit() {
