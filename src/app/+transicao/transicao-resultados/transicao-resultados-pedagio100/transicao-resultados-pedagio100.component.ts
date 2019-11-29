@@ -57,7 +57,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
   constructor() {
-    super();
+    super(null);
   }
 
   ngOnInit() {

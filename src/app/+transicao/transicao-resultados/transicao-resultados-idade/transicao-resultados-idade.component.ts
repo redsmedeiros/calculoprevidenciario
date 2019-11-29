@@ -27,7 +27,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   public isUpdating;
 
   constructor() {
-    super();
+    super(null);
   }
 
   ngOnInit() {

@@ -70,7 +70,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
   constructor() {
-    super();
+    super(null);
   }
 
   ngOnInit() {
@@ -147,14 +147,24 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     let percentualR1 = 60;
 
 
+    // console.log(regra_pontos_i);
+    // console.log(this.seguradoTransicao.contribuicaoFracionadoAnos);
+    // console.log(contribuicao_min);
+
+    // console.table( this.seguradoTransicao);
+    
+    // console.log((pontosAtuais >= regra_pontos_i &&
+    //   this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) );
+
     if (pontosAtuais >= regra_pontos_i &&
-      this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min) {
+      this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
 
       rstRegraPontos = {
         dataDib: this.dataAtual,
         idadeMoment: this.calcularIdade(this.dataAtual),
         idade: this.seguradoTransicao.idade,
+        idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
         DiffDataAtualDib: 0,
         pontosDib: pontosAtuais,

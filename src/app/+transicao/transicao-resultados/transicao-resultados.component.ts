@@ -2,7 +2,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 
-import { Auth } from '../services/Auth/Auth.service';
+import { Auth } from '../../services/Auth/Auth.service';
 import { AuthResponse } from '../services/Auth/AuthResponse.model';
 
 
@@ -51,6 +51,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   constructor(
     // public ExpectativaVida: ExpectativaVidaService,
     // private ref: ChangeDetectorRef,
+    private Auth: Auth
   ) {
     moment.locale('pt-br');
   }

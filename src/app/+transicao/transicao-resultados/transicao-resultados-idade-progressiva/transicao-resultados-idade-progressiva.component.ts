@@ -46,7 +46,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
   constructor() {
-    super();
+    super(null);
   }
 
 

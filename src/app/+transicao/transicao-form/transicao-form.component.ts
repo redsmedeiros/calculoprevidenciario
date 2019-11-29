@@ -80,21 +80,42 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
-    this.nome = 'Segurado teste teste ';
+    
+
+
+    // this.nome = 'Segurado teste teste ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '28/11/1963';
+    // this.dataFiliacao = '20/10/1985';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '33';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '0';
+
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '15';
+
+
+    this.nome = 'Segurado Professora ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '28/11/1963';
+    this.dataNascimento = '06/09/1970';
     this.dataFiliacao = '20/10/1985';
-    this.sexo = 'm';
-    this.professor = false;
+    this.sexo = 'f';
+    this.professor = true;
 
-    this.contribuicaoAnosAteEC103 = '33';
-    this.contribuicaoMesesAteEC103 = '0';
-    this.contribuicaoDiasAteEC103 = '0';
+    this.contribuicaoAnosAteEC103 = '35';
+    this.contribuicaoMesesAteEC103 = '6';
+    this.contribuicaoDiasAteEC103 = '10';
 
-    this.contribuicaoAnos = '33';
-    this.contribuicaoMeses = '0';
-    this.contribuicaoDias = '15';
+    this.contribuicaoAnos = '35';
+    this.contribuicaoMeses = '6';
+    this.contribuicaoDias = '25';
+
 
 
     // this.nome = 'Segurado teste teste ';
