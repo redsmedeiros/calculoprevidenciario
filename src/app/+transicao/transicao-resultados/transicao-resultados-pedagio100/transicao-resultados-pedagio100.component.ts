@@ -111,21 +111,23 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
         percentual: rstRegra4pedagio100.percentual,
         formula: `${rstRegra4pedagio100.formula} = ${rstRegra4pedagio100.percentual}%`,
         requisitoDib: rstRegra4pedagio100.requisitos,
-        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.idadeDib)}`,
-        tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoDib)}`,
-        tempoCompedagio: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoPedagio)}`,
+        idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.idadeDib, true)}`,
+        tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoDib, true)}`,
+        tempoCompedagio: `${this.formateObjToStringAnosMesesDias(rstRegra4pedagio100.tempoContribuicaoPedagio, true)}`,
         dataDib: rstRegra4pedagio100.dataDib.format('DD/MM/YYYY'),
         idadeDibMoment: this.formateStringAnosMesesDias(
           rstRegra4pedagio100.idadeMoment.years(),
           rstRegra4pedagio100.idadeMoment.months(),
-          rstRegra4pedagio100.idadeMoment.days()
+          rstRegra4pedagio100.idadeMoment.days(), 
+          true
         ),
       };
 
 
-      // console.log(' -- Regra 4 ---');
-      // console.log(this.seguradoTransicao);
-      // console.log(this.conclusoesRegra4);
+    //   console.log(' -- Regra 4 ---');
+    //   console.log(rstRegra4pedagio100);
+    //  // console.log(this.conclusoesRegra4);
+    //   console.log(this.conclusoesRegra4);
 
       // fim do processo
       this.isUpdating = false;
@@ -172,6 +174,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       //  dataDib.add(tempoDePedagioTotal, 'years');
     }
 
+
+    // console.log(this.pedagioEmAnos );
+    // console.log(this.pedagioEmDias);
 
     const VeificarRequisitoHoje = this.requisitosRegra4(
       this.dataAtual.format('YYYY'),
@@ -291,13 +296,13 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
         tempoContribuicao);
 
 
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      // console.log('P ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade -' + idade + '|'
       //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
       if (fimContador.status) {
 
-        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+        // console.log('F -' + count + ' data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
@@ -326,10 +331,29 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
-    //console.log(auxiliarDate)
-    //console.log(correcaoAnoBissexto)
-
     idadeDibMoment = this.calcularIdade(auxiliarDate);
+
+    // //console.log(auxiliarDate)
+    // //console.log(correcaoAnoBissexto)
+    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias)
+    // console.log(tempoContribuicao)
+
+    
+
+    // let testeAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
+    // let teste = moment.duration(auxiliarDate.diff(testeAtual));
+
+    
+    // let testeDiff = (this.seguradoTransicao.contribuicaoFracionadoDias - this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103);
+    // console.log(count  + (this.seguradoTransicao.contribuicaoFracionadoDias ));
+    // // tempoContribuicao = count  + (this.seguradoTransicao.contribuicaoFracionadoDias );
+
+
+    // console.log(teste.asDays());
+    // console.log(teste);
+    // console.log(tempoContribuicao);
+    // console.log(this.converterTempoDias(tempoContribuicao));
+    
 
     return {
       dataDib: auxiliarDate,

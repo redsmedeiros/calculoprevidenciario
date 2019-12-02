@@ -322,18 +322,26 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
 
-  public formateStringAnosMesesDias(anos, meses, dias) {
+  public formateStringAnosMesesDias(anos, meses, dias, notDays = false) {
+
+    if (notDays) {
+      return ` ${anos} ano(s), ${meses} mes(es)`;
+    }
 
     if (anos < 0) {
       return ` ${meses} mes(es) e ${dias} dia(s)`;
     }
 
-    return `${anos} ano(s), ${meses} mes(es) e ${dias} dia(s)`;
+    return ` ${anos} ano(s), ${meses} mes(es) e ${dias} dia(s)`;
 
   }
 
 
-  public formateObjToStringAnosMesesDias(tempoObj) {
+  public formateObjToStringAnosMesesDias(tempoObj, notDays = false) {
+
+    if (notDays) {
+      return ` ${tempoObj.years} ano(s), ${tempoObj.months} mes(es)`;
+    }
 
     if (tempoObj.anos < 0) {
       return ` ${tempoObj.months} mes(es) e ${tempoObj.days} dia(s)`;

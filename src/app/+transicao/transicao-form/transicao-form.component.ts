@@ -119,39 +119,39 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
-    this.nome = 'Jose ';
+    // this.nome = 'Jose ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '09/12/1960';
+    // this.dataFiliacao = '20/10/1985';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '37';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '0';
+
+    // this.contribuicaoAnos = '37';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '19';
+
+
+
+    this.nome = 'Teste feminino 100% ';
     this.idDocumento = '';
     this.numeroDocumento = '';
-    this.dataNascimento = '09/12/1960';
+    this.dataNascimento = '02/12/1963';
     this.dataFiliacao = '20/10/1985';
     this.sexo = 'm';
     this.professor = false;
 
-    this.contribuicaoAnosAteEC103 = '37';
+    this.contribuicaoAnosAteEC103 = '33';
     this.contribuicaoMesesAteEC103 = '0';
     this.contribuicaoDiasAteEC103 = '0';
 
-    this.contribuicaoAnos = '37';
+    this.contribuicaoAnos = '33';
     this.contribuicaoMeses = '0';
     this.contribuicaoDias = '19';
-
-
-
-    // this.nome = 'Teste feminino 100% ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '01/01/1971';
-    // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'f';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '19';
 
 
 
