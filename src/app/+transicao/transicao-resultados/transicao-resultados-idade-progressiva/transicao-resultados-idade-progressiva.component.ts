@@ -135,7 +135,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
       rstRegraIdadeProgressiva = {
-        dataDib: this.dataAtual,
+        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
         idadeMoment: this.calcularIdade(this.dataAtual),
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
@@ -183,6 +183,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     const sexo = this.seguradoTransicao.sexo + 'd';
+    let idadeMoment;
 
     // console.log(this.getRequisitosRegra1(
     //   pontos,
@@ -254,11 +255,15 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     }
 
 
+    idadeMoment = this.calcularIdade(auxiliarDate);
+    if (idadeMoment.days() === 30) {
+      idadeMoment.add(1, 'day');
+    }
 
 
     return {
       dataDib: auxiliarDate,
-      idadeMoment: this.calcularIdade(auxiliarDate),
+      idadeMoment: idadeMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),

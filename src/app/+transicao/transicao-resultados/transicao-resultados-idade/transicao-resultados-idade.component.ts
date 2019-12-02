@@ -161,7 +161,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
 
       rstRegraIdadeProgressiva = {
-        dataDib: this.dataAtual,
+        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeMoment: this.calcularIdade(this.dataAtual),
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
         tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),

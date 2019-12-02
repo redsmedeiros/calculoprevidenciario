@@ -152,7 +152,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
       rstRegraPontos = {
-        dataDib: this.dataAtual,
+        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeMoment: this.calcularIdade(this.dataAtual),
         idade: this.seguradoTransicao.idade,
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),

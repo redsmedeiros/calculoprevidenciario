@@ -184,7 +184,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     if (VeificarRequisitoHoje.status) {
 
       rstRegraPedagio100 = {
-        dataDib: dataDib,
+        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeMoment: this.calcularIdade(dataDib),
         idadeDib: this.converterTempoAnos(idadeDib),
         tempoContribuicaoDib: this.converterTempoAnos(tempoFinalContribAteDib),
@@ -320,10 +320,14 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       auxiliarDate
     );
 
+    //console.log(auxiliarDate)
+
     if (correcaoAnoBissexto > 0) {
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
+    //console.log(auxiliarDate)
+    //console.log(correcaoAnoBissexto)
 
     idadeDibMoment = this.calcularIdade(auxiliarDate);
 

@@ -7,6 +7,7 @@ import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
 import swal from 'sweetalert';
+import * as moment from 'moment';
 import { TransicaoResultadosComponent } from '../transicao-resultados/transicao-resultados.component';
 
 
@@ -80,7 +81,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
-    
+
 
 
     // this.nome = 'Segurado teste teste ';
@@ -100,39 +101,58 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '15';
 
 
-    this.nome = 'Segurado Professora ';
-    this.idDocumento = '';
-    this.numeroDocumento = '';
-    this.dataNascimento = '06/09/1970';
-    this.dataFiliacao = '20/10/1985';
-    this.sexo = 'f';
-    this.professor = true;
-
-    this.contribuicaoAnosAteEC103 = '35';
-    this.contribuicaoMesesAteEC103 = '6';
-    this.contribuicaoDiasAteEC103 = '10';
-
-    this.contribuicaoAnos = '35';
-    this.contribuicaoMeses = '6';
-    this.contribuicaoDias = '25';
-
-
-
-    // this.nome = 'Segurado teste teste ';
+    // this.nome = 'Segurado Professora ';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '09/12/1960';
+    // this.dataNascimento = '06/09/1970';
     // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'm';
+    // this.sexo = 'f';
+    // this.professor = true;
+
+    // this.contribuicaoAnosAteEC103 = '35';
+    // this.contribuicaoMesesAteEC103 = '6';
+    // this.contribuicaoDiasAteEC103 = '10';
+
+    // this.contribuicaoAnos = '35';
+    // this.contribuicaoMeses = '6';
+    // this.contribuicaoDias = '25';
+
+
+
+    this.nome = 'Jose ';
+    this.idDocumento = '';
+    this.numeroDocumento = '';
+    this.dataNascimento = '09/12/1960';
+    this.dataFiliacao = '20/10/1985';
+    this.sexo = 'm';
+    this.professor = false;
+
+    this.contribuicaoAnosAteEC103 = '37';
+    this.contribuicaoMesesAteEC103 = '0';
+    this.contribuicaoDiasAteEC103 = '0';
+
+    this.contribuicaoAnos = '37';
+    this.contribuicaoMeses = '0';
+    this.contribuicaoDias = '19';
+
+
+
+    // this.nome = 'Teste feminino 100% ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '01/01/1971';
+    // this.dataFiliacao = '20/10/1985';
+    // this.sexo = 'f';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '37';
+    // this.contribuicaoAnosAteEC103 = '33';
     // this.contribuicaoMesesAteEC103 = '0';
     // this.contribuicaoDiasAteEC103 = '0';
 
-    // this.contribuicaoAnos = '37';
+    // this.contribuicaoAnos = '33';
     // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '13';
+    // this.contribuicaoDias = '19';
+
 
 
 
@@ -151,6 +171,10 @@ export class TransicaoFormComponent implements OnInit {
   validate() {
     this.errors.clear();
 
+
+    const datanascimentoMoment = moment(this.dataNascimento, 'DD/MM/YYYY');
+    const dataFiliacaoMoment = moment(this.dataFiliacao, 'DD/MM/YYYY');
+
     if (this.nome == undefined || this.nome == '') {
       this.errors.add({ 'nome': ["O Nome é obrigatório."] });
     }
@@ -164,13 +188,22 @@ export class TransicaoFormComponent implements OnInit {
         this.errors.add({ 'dataNascimento': ['Insira uma data válida.'] });
     }
 
+
     if (this.dataFiliacao === undefined || this.dataFiliacao === '') {
       this.errors.add({ 'dataFiliacao': ['A data de filiação é obrigatória.'] });
     } else {
-      let dateParts = this.dataFiliacao.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
+
+      const dateParts = this.dataFiliacao.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+
+      if (isNaN(date.getTime())) {
         this.errors.add({ 'dataFiliacao': ['Insira uma data válida.'] });
+      }
+
+      if (dataFiliacaoMoment.isBefore(datanascimentoMoment)) {
+        this.errors.add({ 'dataFiliacao': ['Data filiação deve ser posterior a data de nascimento.'] });
+      }
+
     }
 
     if (this.sexo === undefined || this.sexo === '') {
@@ -322,7 +355,7 @@ export class TransicaoFormComponent implements OnInit {
 
   scroll(id) {
     if (this.isExits(id)) {
-      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
   }
 

@@ -220,7 +220,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
     rstRegraPedagio50 = {
-      dataDib: dataDib,
+      dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
       idadeDibMoment: idadeDibMoment,
       idadeDib: this.converterTempoDias(idadeDib),
       tempoContribuicaoDib: this.converterTempoDias(tempoFinalContribfinalComPedagio),

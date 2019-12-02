@@ -35,7 +35,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   @Input() seguradoTransicao;
 
   public dataEC1032019 = moment('13/11/2019', 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
-  public dataAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
+  public dataAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0).subtract(1, 'day');
   public isRegraTransitoria = false;
   public seguradoInformacoes = [];
   public aliquota = 0.31;
@@ -175,7 +175,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     rstTemp.push({ label: 'Espécie de aposentadoria', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
 
 
-      if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
+    if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
       rstTemp.push({ label: this.getDocumentType(this.seguradoTransicao.idDocumento), value: this.seguradoTransicao.numeroDocumento });
     }
 
@@ -345,11 +345,11 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   public contarBissextosEntre(anoInicio, anofim) {
-     let contador = -1;
-   // let contador = 0;
+  //  let contador = -1;
+    let contador = 0;
     const anoInicioAno = moment([anoInicio.format('YYYY')]);
     const anofimAno = moment([anofim.format('YYYY')]);
-    const auxiliar = anoInicioAno;
+    const auxiliar = anoInicioAno.clone();
 
     do {
 
@@ -359,20 +359,45 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
       auxiliar.add(1, 'year');
 
-    } while (auxiliar < anofimAno);
+    } while (auxiliar <= anofimAno);
 
 
     const inicioAuxiliar = moment('29/02/' + anoInicio.year(), 'DD/MM/YYYY');
-    const FimAuxiliar = moment('01/03/' + anoInicio.year(), 'DD/MM/YYYY');
 
-    if (anoInicioAno.isLeapYear() && anoInicio.isBefore(inicioAuxiliar)) {
-      contador += 1;
+    const FimAuxiliar = moment('29/02/' + anofimAno.year(), 'DD/MM/YYYY');
+ 
+    // console.log(anoInicio.format('YYYY') + ' --- ' + anofim.format('YYYY') );
+    
+    // console.log(anoInicioAno.isLeapYear() && anoInicio.isBefore(inicioAuxiliar));
+    // console.log(anofimAno.isLeapYear() && anofim.isAfter(FimAuxiliar));
+
+    // if (anoInicioAno.isLeapYear() && anoInicio.isBefore(inicioAuxiliar)) {
+    //   contador += 1;
+    // }
+
+    // if (anofimAno.isLeapYear() && anofim.isAfter(FimAuxiliar)) {
+    //   contador += 1;
+    // }
+
+
+    // console.log(contador);
+    // console.log(anoInicio);
+    // console.log(inicioAuxiliar);
+    // console.log(FimAuxiliar);
+    
+
+    // console.log( anoInicioAno.isLeapYear() && anoInicio.isAfter(inicioAuxiliar));
+
+    if (anoInicioAno.isLeapYear() && anoInicio.isAfter(inicioAuxiliar)) {
+      contador -= 1;
     }
 
-
-    if (anofimAno.isLeapYear() && anofim.isAfter(FimAuxiliar)) {
-      contador += 1;
+    
+    if (FimAuxiliar.isLeapYear() && FimAuxiliar.isAfter(anofim)) {
+      contador -= 1;
     }
+
+   // console.log(contador);
 
     return contador;
   }
@@ -405,9 +430,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     return moment(this.toDateString(dateString.add(1, 'd')), 'DD/MM/YYYY');
   }
 
-  momentCarencia(dateString) {
-    return moment(this.toDateString(dateString.date(1).hour(1).minute(1).second(1).millisecond(1)), 'DD/MM/YYYY');
-  }
+
 
   toMomentCarencia(dateString) {
     return moment(dateString, 'DD/MM/YYYY').date(1);
