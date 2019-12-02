@@ -129,7 +129,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     const contribuicao_min = this.tempoDeContribuicao50Regra3[this.seguradoTransicao.sexo + 'd'];
 
     let rstRegraPedagio50: any;
-    const dataDib = this.dataAtual.clone();
+    let dataDib = this.dataAtual.clone();
     // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
@@ -172,7 +172,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     } else {
 
       tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
-
+      dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(
       //   this.seguradoTransicao.dataNascimento.format('YYYY'),
