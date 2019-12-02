@@ -69,20 +69,6 @@ export class TransicaoFormComponent implements OnInit {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
-    // this.nome = 'Segurado teste teste ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '01/01/1956';
-    // this.sexo = 'm';
-    // this.professor = false;
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '10';
-    // this.contribuicaoDias = '25';
-
-
-
-
-
 
     // this.nome = 'Segurado teste teste ';
     // this.idDocumento = '';
@@ -137,25 +123,21 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
-    this.nome = 'Teste feminino 100% ';
-    this.idDocumento = '';
-    this.numeroDocumento = '';
-    this.dataNascimento = '02/12/1963';
-    this.dataFiliacao = '20/10/1985';
-    this.sexo = 'm';
-    this.professor = false;
+    // this.nome = 'Teste feminino 100% ';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '02/12/1963';
+    // this.dataFiliacao = '20/10/1985';
+    // this.sexo = 'm';
+    // this.professor = false;
 
-    this.contribuicaoAnosAteEC103 = '33';
-    this.contribuicaoMesesAteEC103 = '0';
-    this.contribuicaoDiasAteEC103 = '0';
+    // this.contribuicaoAnosAteEC103 = '33';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '0';
 
-    this.contribuicaoAnos = '33';
-    this.contribuicaoMeses = '0';
-    this.contribuicaoDias = '19';
-
-
-
-
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '19';
 
   }
 
