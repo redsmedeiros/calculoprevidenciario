@@ -150,7 +150,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     rstTemp.push({ label: 'Nome', value: this.seguradoTransicao.nome });
     rstTemp.push({ label: 'Sexo', value: (this.seguradoTransicao.sexo === 'm') ? 'Masculino' : 'Feminino' });
     rstTemp.push({
-      label: 'Data Nascimento',
+      label: 'Data de nascimento',
       value: this.isExits(this.seguradoTransicao.dataNascimento) ? this.seguradoTransicao.dataNascimento.format('DD/MM/YYYY') : null
     });
     rstTemp.push({
@@ -159,7 +159,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     });
 
     rstTemp.push({
-      label: 'Tempo de contribuição até a 13/11/2019 (EC103/2019)',
+      label: 'Tempo de contribuição até 13/11/2019 (EC103/2019)',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnosAteEC103,
         this.seguradoTransicao.contribuicaoMesesAteEC103,
         this.seguradoTransicao.contribuicaoDiasAteEC103)

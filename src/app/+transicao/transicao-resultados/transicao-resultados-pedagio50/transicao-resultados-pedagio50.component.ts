@@ -149,15 +149,13 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
       tempoFinalContribfinalComPedagio = contribuicao_min + tempoDePedagio;
 
-      tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+     // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
 
       idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
 
       dataDib.add(tempoDePedagioTotalNecessario, 'days');
-
-      
 
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(

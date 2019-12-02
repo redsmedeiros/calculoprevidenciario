@@ -123,10 +123,10 @@ export class TransicaoFormComponent implements OnInit {
 
 
 
-    // this.nome = 'Teste feminino 100% ';
+    // this.nome = 'Teste ';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '02/12/1963';
+    // this.dataNascimento = '02/02/1963';
     // this.dataFiliacao = '20/10/1985';
     // this.sexo = 'm';
     // this.professor = false;
