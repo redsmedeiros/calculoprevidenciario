@@ -43,18 +43,23 @@ export class RgpsCalculosFormComponent implements OnInit {
   public secundariaAtualmeses;
   public secundariaAtualdias;
 
+    //reforma EC 103/2019
   public primaria19anos;
   public primaria19meses;
   public primaria19dias;
+      //reforma EC 103/2019
 
   public grupoDos12;
   public carencia;
 
+  //reforma EC 103/2019
   public numDependentes;
   public depedenteInvalido;
   public obitoDecorrenciaTrabalho;
   public ultimoBeneficio;
   public sexoInstituidor;
+  public divisorMinimo;
+    //reforma EC 103/2019
 
   public hasAnterior = false;
   public has98 = false;
@@ -65,11 +70,14 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasGrupoDos12 = false;
   public posteriorMaio2013 = false;
 
+      //reforma EC 103/2019
   public hasPensao19 = false;
   public hasInvalidez19 = false;
   public hasPensaoNaoInstuidorAposentado = false;
   public hasPensaoInstuidorAposentado = false;
   public hasAuxilioAcidente = false;
+      //reforma EC 103/2019
+
 
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
@@ -125,7 +133,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.obitoDecorrenciaTrabalho = this.formData.obito_decorrencia_trabalho;
       this.ultimoBeneficio = this.formData.ultimo_beneficio;
       this.sexoInstituidor = this.formData.sexo_instituidor;
-
+      this.divisorMinimo = this.formData.divisor_minimo;
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
 
@@ -164,6 +172,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.ultimo_beneficio = this.ultimoBeneficio;
       this.formData.sexo_instituidor = this.sexoInstituidor;
       // pensão fim por morte
+      this.formData.divisor_minimo = this.divisorMinimo;
+
+
 
     //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
       this.onSubmit.emit(this.formData);
@@ -218,6 +229,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.obitoDecorrenciaTrabalho = false;
     this.ultimoBeneficio = false;
     this.sexoInstituidor = '';
+
+    this.divisorMinimo = false;
 
     this.hasAnterior = false;
     this.has98 = false;

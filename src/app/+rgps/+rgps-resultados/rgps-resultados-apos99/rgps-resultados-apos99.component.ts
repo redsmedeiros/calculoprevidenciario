@@ -27,6 +27,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public dataFiliacao;
   public idadeSegurado;
   public idCalculo;
+  public stringCabecalho;
   public contribuicaoTotal;
   public isUpdating = false;
   public limited;
@@ -116,6 +117,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
+    this.stringCabecalho = 'Entre  29/11/1999 a 12/11/2019'
 
     if(this.dataInicioBeneficio >= this.dataPec062019){
       dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
