@@ -497,7 +497,9 @@ export class RgpsCalculosFormComponent implements OnInit {
     (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
     (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
     (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
-    (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição')) {
+    (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição') ||
+    (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor')
+    ) {
       this.hasDivisorMinimo = true;
   }
 

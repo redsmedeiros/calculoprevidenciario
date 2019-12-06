@@ -127,15 +127,15 @@
                           <div  class="form-group">
                               <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoAnosAteEC103" (change)="errors.clear('contribuicaoAnosAteEC103')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                                <input [(ngModel)]="contribuicaoAnosAteEC103" (change)="errors.clear('contribuicaoAnosAteEC103')" [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Anos" >
                                 <small *ngIf="errors.has('contribuicaoAnosAteEC103')" class="text-danger">{{ errors.get('contribuicaoAnosAteEC103') | i18n}}</small>
                               </div>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoMesesAteEC103" (change)="errors.clear('contribuicaoMesesAteEC103')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                                <input [(ngModel)]="contribuicaoMesesAteEC103" (change)="errors.clear('contribuicaoMesesAteEC103')"  [ngModelOptions]="{standalone: true}"  type="text"class="form-control text-center" placeholder="Meses" >
                                 <small *ngIf="errors.has('contribuicaoMesesAteEC103')" class="text-danger">{{ errors.get('contribuicaoMesesAteEC103') | i18n}}</small>
                               </div>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoDiasAteEC103" (change)="errors.clear('contribuicaoDiasAteEC103')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                                <input [(ngModel)]="contribuicaoDiasAteEC103" (change)="errors.clear('contribuicaoDiasAteEC103')"  [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Dias" >
                                 <small *ngIf="errors.has('contribuicaoDiasAteEC103')" class="text-danger">{{ errors.get('contribuicaoDiasAteEC103') | i18n}}</small>
                               </div>
                             </div>
@@ -145,15 +145,15 @@
                             <div  class="form-group">
                                 <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoAnos" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                                  <input [(ngModel)]="contribuicaoAnos" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Anos" >
                                   <small *ngIf="errors.has('contribuicaoAnos')" class="text-danger">{{ errors.get('contribuicaoAnos') | i18n}}</small>
                                 </div>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoMeses" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                                  <input [(ngModel)]="contribuicaoMeses" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}"  type="text"class="form-control text-center" placeholder="Meses" >
                                   <small *ngIf="errors.has('contribuicaoMeses')" class="text-danger">{{ errors.get('contribuicaoMeses') | i18n}}</small>
                                 </div>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                                  <input [(ngModel)]="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Dias" >
                                   <small *ngIf="errors.has('contribuicaoDias')" class="text-danger">{{ errors.get('contribuicaoDias') | i18n}}</small>
                                 </div>
                               </div>

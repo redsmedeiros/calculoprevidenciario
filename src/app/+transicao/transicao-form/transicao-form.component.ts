@@ -103,6 +103,21 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoMeses = '6';
     // this.contribuicaoDias = '25';
 
+        this.nome = 'Segurado teste tempo de contribuicao ';
+    this.idDocumento = '';
+    this.numeroDocumento = '';
+    this.dataNascimento = '25/09/1967';
+    this.dataFiliacao = '20/10/1985';
+    this.sexo = 'f';
+    this.professor = false;
+
+    this.contribuicaoAnosAteEC103 = '13';
+    this.contribuicaoMesesAteEC103 = '0';
+    this.contribuicaoDiasAteEC103 = '18';
+
+    this.contribuicaoAnos = '13';
+    this.contribuicaoMeses = '1';
+    this.contribuicaoDias = '10';
 
 
     // this.nome = 'Jose ';

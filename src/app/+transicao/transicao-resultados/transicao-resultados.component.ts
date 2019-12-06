@@ -70,7 +70,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     // console.log(this.seguradoTransicao);
 
-    this.setConclusoes();
+    //  this.setConclusoes();
 
   }
 
@@ -125,6 +125,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       this.seguradoTransicao.contribuicaoDias,
       'days');
 
+    if (this.seguradoTransicao.contribuicaoFracionadoDias > 0) {
+
+      const addBissextoTempoAtual = this.contarBissextosEntre(
+        this.seguradoTransicao.dataFiliacao,
+        this.dataAtual
+      )
+
+      this.seguradoTransicao.contribuicaoFracionadoDias += addBissextoTempoAtual;
+    }
+
 
     this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 = this.converterTempoContribuicao(
       this.seguradoTransicao.contribuicaoAnosAteEC103,
@@ -137,6 +147,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       this.seguradoTransicao.contribuicaoMesesAteEC103,
       this.seguradoTransicao.contribuicaoDiasAteEC103,
       'days');
+
+    if (this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 > 0) {
+
+      const addBissextoTempoAteEC103 = this.contarBissextosEntre(
+        this.seguradoTransicao.dataFiliacao,
+        this.dataEC1032019
+      )
+      this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
+    }
+
 
   }
 
@@ -203,7 +223,14 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const dataFinal = (final != null) ?
       moment(final).hour(0).minute(0).second(0).millisecond(0) :
       moment().hour(0).minute(0).second(0).millisecond(0);
-    return moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
+
+    const idade = moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
+
+    if(idade.days() === 30){
+      idade.add(1, 'day');
+    }
+
+    return idade;
 
   }
 
@@ -231,10 +258,24 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     meses = this.isFormatInt(meses);
     dias = this.isFormatInt(dias);
 
-    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    const contribuicaoTotal = (anos * 365.2422) + (meses * 30.4368) + dias;
 
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.2422;
   }
+
+
+
+  // public converterTempoContribuicao(anos, meses, dias, type) {
+
+  //   anos = this.isFormatInt(anos);
+  //   meses = this.isFormatInt(meses);
+  //   dias = this.isFormatInt(dias);
+
+  //   const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+
+  //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+  // }
+
 
 
   public verificarTransitoria() {
@@ -352,8 +393,20 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
 
+
+
+
+  public addBissexto(data) {
+    const anoInicioAno = moment([data.format('YYYY')]);
+    const auxiliar29Fevereiro = moment('29/02' + data.format('YYYY'), 'DD/MM/YYYY');
+
+    return (anoInicioAno.isLeapYear() && data.isSame(auxiliar29Fevereiro)) ? 1 : 0;
+  }
+
+
+
   public contarBissextosEntre(anoInicio, anofim) {
-  //  let contador = -1;
+    //  let contador = -1;
     let contador = 0;
     const anoInicioAno = moment([anoInicio.format('YYYY')]);
     const anofimAno = moment([anofim.format('YYYY')]);
@@ -373,9 +426,9 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const inicioAuxiliar = moment('29/02/' + anoInicio.year(), 'DD/MM/YYYY');
 
     const FimAuxiliar = moment('29/02/' + anofimAno.year(), 'DD/MM/YYYY');
- 
+
     // console.log(anoInicio.format('YYYY') + ' --- ' + anofim.format('YYYY') );
-    
+
     // console.log(anoInicioAno.isLeapYear() && anoInicio.isBefore(inicioAuxiliar));
     // console.log(anofimAno.isLeapYear() && anofim.isAfter(FimAuxiliar));
 
@@ -392,7 +445,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     // console.log(anoInicio);
     // console.log(inicioAuxiliar);
     // console.log(FimAuxiliar);
-    
+
 
     // console.log( anoInicioAno.isLeapYear() && anoInicio.isAfter(inicioAuxiliar));
 
@@ -400,12 +453,12 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       contador -= 1;
     }
 
-    
+
     if (FimAuxiliar.isLeapYear() && FimAuxiliar.isAfter(anofim)) {
       contador -= 1;
     }
 
-   // console.log(contador);
+    // console.log(contador);
 
     return contador;
   }

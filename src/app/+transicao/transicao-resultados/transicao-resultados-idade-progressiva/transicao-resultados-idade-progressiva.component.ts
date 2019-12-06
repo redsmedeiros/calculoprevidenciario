@@ -232,6 +232,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
       }
 
+      if (this.addBissexto(auxiliarDate) > 0) {
+        count += 1;
+        idade += 1;
+        tempoContribuicao += 1;
+      }
+
       count++;
       idade += 1;
       tempoContribuicao += 1;

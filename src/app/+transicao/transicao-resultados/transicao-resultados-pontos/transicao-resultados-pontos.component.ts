@@ -110,8 +110,10 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
         ),
       };
 
-      // console.log(' -- Regra 1 ---');
-      // console.log(this.conclusoesRegra1);
+      //  console.log(' -- Regra 1 ---');
+      //  console.log(this.seguradoTransicao);
+      //  console.log(rstRegra1Pontos);
+      //  console.log(this.conclusoesRegra1);
 
       this.isUpdating = false;
 
@@ -226,13 +228,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     do {
 
 
-      fimContador = this.getRequisitosRegra1(
-        pontos,
-        auxiliarDate.year(),
-        sexo,
-        tempoContribuicao,
-        this.seguradoTransicao.professor);
-
+     
 
       // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade -' + idade + '|'
@@ -241,44 +237,44 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
       if (fimContador.status) {
 
-        // console.log(auxiliarDate);
-        // console.log(idade);
-        // console.log(tempoContribuicao);
-        // console.log(pontos);
-        // console.log(count);
-
-
-
         // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|' + 'pontos - ' + pontos + '|'
         //   + '|');
 
+      }
 
-        // console.log(auxiliarDate);
-        // console.log(moment.duration(idade, 'days'));
-        // console.log(moment.duration(idade, 'days').humanize());
-        // console.log(moment.duration(tempoContribuicao, 'days'));
-        // console.log(moment.duration(tempoContribuicao, 'days').humanize());
-        // console.log(moment.duration(count, 'days'));
-        // console.log(moment.duration(count, 'days').humanize());
-        // console.log(pontos);
+
+
+      if (this.addBissexto(auxiliarDate) > 0) {
+        count += 1;
+        idade += 1;
+        tempoContribuicao += 1;
+      //  auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
       }
+
 
       count++;
       idade += 1;
       tempoContribuicao += 1;
-      pontos = idade + tempoContribuicao;
 
+      pontos = idade + tempoContribuicao;
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
 
+
+      fimContador = this.getRequisitosRegra1(
+        pontos,
+        auxiliarDate.year(),
+        sexo,
+        tempoContribuicao,
+        this.seguradoTransicao.professor);
+
+
     } while (!fimContador.status && pontos <= 76650);
-
-
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento,
@@ -289,13 +285,11 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
-
     idadeDibMoment = this.calcularIdade(auxiliarDate);
-
 
     // let teste  = this.dataAtual.clone();
 
-
+    // tempoContribuicao += correcaoAnoBissexto;
 
     // console.log(teste.add(correcaoAnoBissexto + count, 'days'));
     // console.log(pontos);
@@ -315,7 +309,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     // console.log(moment.duration(tempoContribuicao, 'days'));
 
 
-    //idade = (this.seguradoTransicao.idadeFracionadaDias + count);
+    // idade = (this.seguradoTransicao.idadeFracionadaDias + count);
 
 
     return {
@@ -333,16 +327,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     };
 
 
-
-
-
   }
-
-
-
-
-
-
 
 
 
@@ -392,8 +377,6 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, pontos: pontos, requisitosPosntos: regra1['2033']['fd'] };
     }
-
-
 
     return (((ano >= 2019 && ano <= 2033) && pontos >= regra1[ano][sexo])
       && tempo_contribuicao >= requisitoContribuicoesDias[sexo]) ?
