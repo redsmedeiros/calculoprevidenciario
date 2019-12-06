@@ -523,12 +523,12 @@
                   <ng-container
                     *ngIf="
                       conclusoesRegra4.status;
-                      then regra3Aplica;
-                      else regra3NaoAplica
+                      then regra4Aplica;
+                      else regra4NaoAplica
                     "
                   >
                   </ng-container>
-                  <ng-template #regra3Aplica>
+                  <ng-template #regra4Aplica>
                      <tr>
                       <td width="50%">
                         <span class="pull-right font-bold">Conclusão</span>
@@ -554,7 +554,7 @@
                       <td>{{ conclusoesRegra4.valorString }}</td>
                     </tr>
                   </ng-template>
-                  <ng-template #regra3NaoAplica>
+                  <ng-template #regra4NaoAplica>
                     <tr>
                       <td colspan="2">
                         <div

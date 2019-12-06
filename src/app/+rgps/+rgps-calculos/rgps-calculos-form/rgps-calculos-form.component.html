@@ -56,62 +56,62 @@
                   <h3 *ngIf="hasAnterior">Tempo de contribuição</h3>
                   <div class="form-group" *ngIf="has98 || hasAnterior">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria98anos" (change)="errors.clear('primaria98anos')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria98anos" (change)="errors.clear('primaria98anos')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos" >
                       <small *ngIf="errors.has('primaria98anos')" class="text-danger">{{ errors.get('primaria98anos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria98meses" (change)="errors.clear('primaria98meses')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria98meses" (change)="errors.clear('primaria98meses')" [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('primaria98meses')" class="text-danger">{{ errors.get('primaria98meses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria98dias" (change)="errors.clear('primaria98dias')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria98dias" (change)="errors.clear('primaria98dias')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('primaria98dias')" class="text-danger">{{ errors.get('primaria98dias') | i18n}}</small>
                     </div>
                   </div>
                   <div class="form-group" *ngIf="has98 || hasAnterior">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria98anos" (change)="errors.clear('secundaria98anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria98anos" (change)="errors.clear('secundaria98anos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
                       <small *ngIf="errors.has('secundaria98anos')" class="text-danger">{{ errors.get('secundaria98anos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria98meses" (change)="errors.clear('secundaria98meses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria98meses" (change)="errors.clear('secundaria98meses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('secundaria98meses')" class="text-danger">{{ errors.get('secundaria98meses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria98dias" (change)="errors.clear('secundaria98dias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria98dias" (change)="errors.clear('secundaria98dias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('secundaria98dias')" class="text-danger">{{ errors.get('secundaria98dias') | i18n}}</small>
                     </div>
                   </div>
                   <h3 *ngIf="has99">Tempo de contribuição até a Lei nº 9.876/99 (29/11/1999)</h3>
                   <div *ngIf="has99" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria99anos" (change)="errors.clear('primaria99anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria99anos" (change)="errors.clear('primaria99anos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos" >
                       <small *ngIf="errors.has('primaria99anos')" class="text-danger">{{ errors.get('primaria99anos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria99meses" (change)="errors.clear('primaria99meses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria99meses" (change)="errors.clear('primaria99meses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses">
                       <small *ngIf="errors.has('primaria99meses')" class="text-danger">{{ errors.get('primaria99meses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primaria99dias" (change)="errors.clear('primaria99dias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primaria99dias" (change)="errors.clear('primaria99dias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias" >
                       <small *ngIf="errors.has('primaria99dias')" class="text-danger">{{ errors.get('primaria99dias') | i18n}}</small>
                     </div>
                   </div>
                   <div *ngIf="has99" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria99anos"  (change)="errors.clear('secundaria99anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria99anos"  (change)="errors.clear('secundaria99anos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
                       <small *ngIf="errors.has('secundaria99anos')" class="text-danger">{{ errors.get('secundaria99anos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria99meses" (change)="errors.clear('secundaria99meses')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria99meses" (change)="errors.clear('secundaria99meses')" [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('secundaria99meses')" class="text-danger">{{ errors.get('secundaria99meses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundaria99dias" (change)="errors.clear('secundaria99dias')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundaria99dias" (change)="errors.clear('secundaria99dias')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('secundaria99dias')" class="text-danger">{{ errors.get('secundaria99dias') | i18n}}</small>
                     </div>
                   </div>
@@ -120,54 +120,54 @@
                   <h3 *ngIf="hasAtual">Tempo de contribuição até a publicação da EC nº 103/2019 (Lei nº 9.876/99 (de 29/11/1999 até 13/11/2019))</h3>
                   <div *ngIf="hasAtual" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Primária*:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualanos" (change)="errors.clear('primariaAtualanos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primariaAtualanos" (change)="errors.clear('primariaAtualanos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
                       <small *ngIf="errors.has('primariaAtualanos')" class="text-danger">{{ errors.get('primariaAtualanos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualmeses" (change)="errors.clear('primariaAtualmeses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primariaAtualmeses" (change)="errors.clear('primariaAtualmeses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('primariaAtualmeses')" class="text-danger">{{ errors.get('primariaAtualmeses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualdias" (change)="errors.clear('primariaAtualdias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="primariaAtualdias" (change)="errors.clear('primariaAtualdias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('primariaAtualdias')" class="text-danger">{{ errors.get('primariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
                   <div *ngIf="hasAtual" class="form-group">
                     <label class="col-md-2 control-label" for="select-1">Contribuição Secundária:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundariaAtualanos"  (change)="errors.clear('secundariaAtualanos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundariaAtualanos"  (change)="errors.clear('secundariaAtualanos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
                       <small *ngIf="errors.has('secundariaAtualanos')" class="text-danger">{{ errors.get('secundariaAtualanos') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundariaAtualmeses" (change)="errors.clear('secundariaAtualmeses')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundariaAtualmeses" (change)="errors.clear('secundariaAtualmeses')" [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('secundariaAtualmeses')" class="text-danger">{{ errors.get('secundariaAtualmeses') | i18n}}</small>
                     </div>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="secundariaAtualdias" (change)="errors.clear('secundariaAtualdias')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                    <div class="col-md-1">
+                      <input [(ngModel)]="secundariaAtualdias" (change)="errors.clear('secundariaAtualdias')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
                   <h3 *ngIf="has19 && !hasPensaoInstuidorAposentado;">Tempo Total de contribuição - após a publicação da EC nº 103/2019</h3>
                   <div *ngIf="has19 && !hasPensaoInstuidorAposentado;" class="form-group">
                       <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
-                      <div class="col-md-2">
-                        <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Anos" type="text">
+                      <div class="col-md-1">
+                        <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos"  >
                         <small *ngIf="errors.has('primaria19anos')" class="text-danger">{{ errors.get('primaria19anos') | i18n}}</small>
                       </div>
-                      <div class="col-md-2">
-                        <input [(ngModel)]="primaria19meses" (change)="errors.clear('primaria19meses')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Meses" type="text">
+                      <div class="col-md-1">
+                        <input [(ngModel)]="primaria19meses" (change)="errors.clear('primaria19meses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                         <small *ngIf="errors.has('primaria19meses')" class="text-danger">{{ errors.get('primaria19meses') | i18n}}</small>
                       </div>
-                      <div class="col-md-2">
-                        <input [(ngModel)]="primaria19dias" (change)="errors.clear('primaria19dias')"  [ngModelOptions]="{standalone: true}" class="form-control" placeholder="Dias" type="text">
+                      <div class="col-md-1">
+                        <input [(ngModel)]="primaria19dias" (change)="errors.clear('primaria19dias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias"  >
                         <small *ngIf="errors.has('primaria19dias')" class="text-danger">{{ errors.get('primaria19dias') | i18n}}</small>
                       </div>
                       <div class="col-md-12">
                           <p> <i class="fa fa-info-circle"></i> Para os benefícios concedidos a partir de 18 de junho de 2019 foi determinada a soma das contribuições concomitantes de acordo com as alterações trazidas pela Lei 13.846/19.</p>
                       </div>
                     </div>
-                    <div class="form-group"  *ngIf="has19">
+                    <div class="form-group"  *ngIf="has19 && hasDivisorMinimo">
                       <div class="checkbox col-md-8 col-md-offset-2">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">

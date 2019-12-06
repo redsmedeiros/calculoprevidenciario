@@ -328,7 +328,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.numeroDeContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
 
 
-    const aplicarDivisorEspecies = [4, 5, 6, 1915, 1920, 1925];
+    const aplicarDivisorEspecies = [3, 4, 5, 6, 16, 1915, 1920, 1925];
     if (this.isDivisorMinimo &&
       aplicarDivisorEspecies.includes(this.tipoBeneficio) &&
       (this.numeroDeContribuicoes < this.percentual60ContribuicaoEntre94EDib)) {
@@ -1150,7 +1150,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     let expectativa = 0;
 
     let dataInicio = moment('2000-11-30');
-    let dataFim = moment('2017-12-01');
+    let dataFim = moment('2019-12-01');
     let dataHoje = moment();
 
 
@@ -1821,8 +1821,19 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       const contribuicao_min = { m: 33, f: 28 };
 
-      this.conclusoesRegra3.msg = `Não atende os requisitos desta regra. O segurado precisa de
+
+      if (tempoContribuicaoAnosAtePec > 0) {
+
+        this.conclusoesRegra3.msg = `Não atende os requisitos desta regra. O segurado precisa de
       ${contribuicao_min[this.segurado.sexo]} anos de contribuição na data de entrada em vigor da EC nº 103/2019 `;
+
+      } else {
+
+        this.conclusoesRegra3.msg = `O segurado não possuí tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
+
+      }
+
+
 
     }
 
@@ -1889,7 +1900,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       redutorProfessor,
       this.idadeFracionada);
 
-    if (this.conclusoesRegra4.status) {
+    if (this.conclusoesRegra4.status && tempoContribuicaoAnosAtePec > 0) {
 
       const contribuicao_min = {
         m: 35 - redutorProfessor,
@@ -1955,9 +1966,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
+
         this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra faltam - '
           + this.conclusoesRegra4.tempoDePedagioTotal
           + ' para cumprir o pedágio.';
+
+
+
 
       }
 
@@ -1968,8 +1983,17 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         f: 57 - redutorProfessor
       };
 
-      this.conclusoesRegra4.msg = `Não atende os requisitos desta regra. O segurado deve possuir
-      ${contribuicao_idade_min[this.segurado.sexo]} anos de idade.`;
+      this.conclusoesRegra4.status = false;
+
+      if (tempoContribuicaoAnosAtePec > 0) {
+        this.conclusoesRegra4.msg = `Não atende os requisitos desta regra. O segurado deve possuir
+          ${contribuicao_idade_min[this.segurado.sexo]} anos de idade.`;
+      } else {
+
+        this.conclusoesRegra4.msg = `O segurado não possuí tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
+
+      }
+
 
     }
 
@@ -2235,7 +2259,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
 
 
-    console.log(this.conclusoesRegraAposentadoriaEspecial);
+    // console.log(this.conclusoesRegraAposentadoriaEspecial);
   }
   // aposentadoria fim especial
 
@@ -2327,7 +2351,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     this.updateResultadoCalculo(this.conclusoesRegraPensaoObito.valor);
 
-    console.log(this.conclusoesRegraPensaoObito);
+    //console.log(this.conclusoesRegraPensaoObito);
 
   }
   // fim pensao por morte

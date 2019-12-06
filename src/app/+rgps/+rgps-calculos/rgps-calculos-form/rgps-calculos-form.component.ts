@@ -76,6 +76,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasPensaoNaoInstuidorAposentado = false;
   public hasPensaoInstuidorAposentado = false;
   public hasAuxilioAcidente = false;
+  public hasDivisorMinimo = false;
       //reforma EC 103/2019
 
 
@@ -455,6 +456,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.hasPensaoInstuidorAposentado = false;
     this.hasAuxilioAcidente = false;
 
+
     let tipoInvalidezOuIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
       (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
@@ -487,6 +489,18 @@ export class RgpsCalculosFormComponent implements OnInit {
       tipoInvalidezOuIdade = true;
       this.hasAuxilioAcidente = true;
     }
+
+
+    this.hasDivisorMinimo = false;
+    if ((this.especieBeneficio === 'Aposentadoria por tempo de contribuição') ||
+    (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+    (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
+    (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
+    (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
+    (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição')) {
+      this.hasDivisorMinimo = true;
+  }
+
 
     // console.log(this.especieBeneficio);
     // console.log(tipoInvalidezOuIdade);

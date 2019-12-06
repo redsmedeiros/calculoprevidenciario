@@ -341,7 +341,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     let expectativa = 0;
     const dataInicio = moment('2000-11-30');
-    const dataFim = moment('2017-12-01');
+    const dataFim = moment('2018-12-01');
     const dataHoje = moment();
     let formula_expectativa_sobrevida = '';
 
