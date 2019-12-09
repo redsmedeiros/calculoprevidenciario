@@ -21,38 +21,78 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     f: 15
   };
 
+  // public requisitoPontosRegra1Prof = {
+  //   2019: { m: 91, md: 33215, f: 81, fd: 29565 },
+  //   2020: { m: 92, md: 33580, f: 82, fd: 29930 },
+  //   2021: { m: 93, md: 33945, f: 83, fd: 30295 },
+  //   2022: { m: 94, md: 34310, f: 84, fd: 30660 },
+  //   2023: { m: 95, md: 34675, f: 85, fd: 31025 },
+  //   2024: { m: 96, md: 35040, f: 86, fd: 31390 },
+  //   2025: { m: 97, md: 35405, f: 87, fd: 31755 },
+  //   2026: { m: 98, md: 35770, f: 88, fd: 32120 },
+  //   2027: { m: 99, md: 36135, f: 89, fd: 32485 },
+  //   2028: { m: 100, md: 36500, f: 90, fd: 32850 },
+  //   2029: { m: 100, md: 36500, f: 91, fd: 33215 },
+  //   2030: { m: 100, md: 36500, f: 92, fd: 33580 },
+  // };
+
+
+  // public requisitoPontosRegra1 = {
+  //   2019: { m: 96, md: 35040, f: 86, fd: 31390 },
+  //   2020: { m: 97, md: 35405, f: 87, fd: 31755 },
+  //   2021: { m: 98, md: 35770, f: 88, fd: 32120 },
+  //   2022: { m: 99, md: 36135, f: 89, fd: 32485 },
+  //   2023: { m: 100, md: 36500, f: 90, fd: 32850 },
+  //   2024: { m: 101, md: 36865, f: 91, fd: 33215 },
+  //   2025: { m: 102, md: 37230, f: 92, fd: 33580 },
+  //   2026: { m: 103, md: 37595, f: 93, fd: 33945 },
+  //   2027: { m: 104, md: 37960, f: 94, fd: 34310 },
+  //   2028: { m: 105, md: 38325, f: 95, fd: 34675 },
+  //   2029: { m: 105, md: 38325, f: 96, fd: 35040 },
+  //   2030: { m: 105, md: 38325, f: 97, fd: 35405 },
+  //   2031: { m: 105, md: 38325, f: 98, fd: 35770 },
+  //   2032: { m: 105, md: 38325, f: 99, fd: 36135 },
+  //   2033: { m: 105, md: 38325, f: 100, fd: 36500 },
+
+  // }
+
+
+
+
   public requisitoPontosRegra1Prof = {
-    2019: { m: 91, md: 33215, f: 81, fd: 29565 },
-    2020: { m: 92, md: 33580, f: 82, fd: 29930 },
-    2021: { m: 93, md: 33945, f: 83, fd: 30295 },
-    2022: { m: 94, md: 34310, f: 84, fd: 30660 },
-    2023: { m: 95, md: 34675, f: 85, fd: 31025 },
-    2024: { m: 96, md: 35040, f: 86, fd: 31390 },
-    2025: { m: 97, md: 35405, f: 87, fd: 31755 },
-    2026: { m: 98, md: 35770, f: 88, fd: 32120 },
-    2027: { m: 99, md: 36135, f: 89, fd: 32485 },
-    2028: { m: 100, md: 36500, f: 90, fd: 32850 },
-    2029: { m: 100, md: 36500, f: 91, fd: 33215 },
-    2030: { m: 100, md: 36500, f: 92, fd: 33580 },
+    2019: { m: 91, md: 33237.75, f: 81, fd: 29585.25 },
+    2020: { m: 92, md: 33603, f: 82, fd: 29950.5 },
+    2021: { m: 93, md: 33968.25, f: 83, fd: 30315.75 },
+    2022: { m: 94, md: 34333.5, f: 84, fd: 30681 },
+    2023: { m: 95, md: 34698.75, f: 85, fd: 31046.25 },
+    2024: { m: 96, md: 35064, f: 86, fd: 31411.5 },
+    2025: { m: 97, md: 35429.25, f: 87, fd: 31776.75 },
+    2026: { m: 98, md: 35794.5, f: 88, fd: 32142 },
+    2027: { m: 99, md: 36159.75, f: 89, fd: 32507.25 },
+    2028: { m: 100, md: 36525, f: 90, fd: 32872.5 },
+    2029: { m: 100, md: 36525, f: 91, fd: 33237.75 },
+    2030: { m: 100, md: 36525, f: 92, fd: 33603 },
+
   };
 
 
   public requisitoPontosRegra1 = {
-    2019: { m: 96, md: 35040, f: 86, fd: 31390 },
-    2020: { m: 97, md: 35405, f: 87, fd: 31755 },
-    2021: { m: 98, md: 35770, f: 88, fd: 32120 },
-    2022: { m: 99, md: 36135, f: 89, fd: 32485 },
-    2023: { m: 100, md: 36500, f: 90, fd: 32850 },
-    2024: { m: 101, md: 36865, f: 91, fd: 33215 },
-    2025: { m: 102, md: 37230, f: 92, fd: 33580 },
-    2026: { m: 103, md: 37595, f: 93, fd: 33945 },
-    2027: { m: 104, md: 37960, f: 94, fd: 34310 },
-    2028: { m: 105, md: 38325, f: 95, fd: 34675 },
-    2029: { m: 105, md: 38325, f: 96, fd: 35040 },
-    2030: { m: 105, md: 38325, f: 97, fd: 35405 },
-    2031: { m: 105, md: 38325, f: 98, fd: 35770 },
-    2032: { m: 105, md: 38325, f: 99, fd: 36135 },
-    2033: { m: 105, md: 38325, f: 100, fd: 36500 },
+    2019: { m: 96, md: 35064, f: 86, fd: 31411.5 },
+    2020: { m: 97, md: 35429.25, f: 87, fd: 31776.75 },
+    2021: { m: 98, md: 35794.5, f: 88, fd: 32142 },
+    2022: { m: 99, md: 36159.75, f: 89, fd: 32507.25 },
+    2023: { m: 100, md: 36525, f: 90, fd: 32872.5 },
+    2024: { m: 101, md: 36890.25, f: 91, fd: 33237.75 },
+    2025: { m: 102, md: 37255.5, f: 92, fd: 33603 },
+    2026: { m: 103, md: 37620.75, f: 93, fd: 33968.25 },
+    2027: { m: 104, md: 37986, f: 94, fd: 34333.5 },
+    2028: { m: 105, md: 38351.25, f: 95, fd: 34698.75 },
+    2029: { m: 105, md: 38351.25, f: 96, fd: 35064 },
+    2030: { m: 105, md: 38351.25, f: 97, fd: 35429.25 },
+    2031: { m: 105, md: 38351.25, f: 98, fd: 35794.5 },
+    2032: { m: 105, md: 38351.25, f: 99, fd: 36159.75 },
+    2033: { m: 105, md: 38351.25, f: 100, fd: 36525 },
+
 
   }
 
@@ -211,6 +251,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     const sexo = this.seguradoTransicao.sexo + 'd';
 
+
     // console.log(this.getRequisitosRegra1(
     //   pontos,
     //   auxiliarDate.year(),
@@ -228,7 +269,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     do {
 
 
-     
+
 
       // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade -' + idade + '|'
@@ -247,13 +288,13 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
 
-      if (this.addBissexto(auxiliarDate) > 0) {
-        count += 1;
-        idade += 1;
-        tempoContribuicao += 1;
-      //  auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
+      // if (this.addBissexto(auxiliarDate) > 0) {
+      //   count += 1;
+      //   idade += 1;
+      //   tempoContribuicao += 1;
+      // //  auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
-      }
+      // }
 
 
       count++;
@@ -276,22 +317,32 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     } while (!fimContador.status && pontos <= 76650);
 
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento,
-      auxiliarDate
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento,
+    //   auxiliarDate
+    // );
 
-    if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto, 'days');
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
+    // }
 
     idadeDibMoment = this.calcularIdade(auxiliarDate);
 
-    // let teste  = this.dataAtual.clone();
+     const dibCorigida  = this.dataAtual.clone();
+    dibCorigida.add(1, 'day');
+    dibCorigida.add(count, 'days');
+
+
+    //  console.log(dibCorigida.add(count, 'days'));
+     
 
     // tempoContribuicao += correcaoAnoBissexto;
 
-    // console.log(teste.add(correcaoAnoBissexto + count, 'days'));
+    // // console.log(teste.add(correcaoAnoBissexto + count, 'days'));
+    // console.log(idade);
+    // console.log(this.converterTempoDias(idade));
+    // console.log(tempoContribuicao);
+    // console.log(this.converterTempoDias(tempoContribuicao));
     // console.log(pontos);
     // console.log(count);
 
@@ -313,7 +364,8 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
     return {
-      dataDib: auxiliarDate,
+     // dataDib: auxiliarDate,
+      dataDib: dibCorigida,
       idadeMoment: idadeDibMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
@@ -361,9 +413,14 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       m: 35
     };
 
+    // const requisitoContribuicoesDias = {
+    //   fd: 10950,
+    //   md: 12775
+    // };
+
     const requisitoContribuicoesDias = {
-      fd: 10950,
-      md: 12775
+      fd: 10957.5,
+      md: 12783.75
     };
 
     const regra1 = this.requisitoPontosRegra1;
@@ -392,9 +449,14 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       m: 30
     };
 
+    // const requisitoContribuicoesDias = {
+    //   fd: 9125,
+    //   md: 10950
+    // };
+
     const requisitoContribuicoesDias = {
-      fd: 9125,
-      md: 10950
+      fd: 9131.25,
+      md: 10957.5
     };
 
     const regra1 = this.requisitoPontosRegra1Prof

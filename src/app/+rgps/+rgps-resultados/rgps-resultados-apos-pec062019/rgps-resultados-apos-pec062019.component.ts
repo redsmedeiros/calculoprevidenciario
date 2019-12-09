@@ -1154,6 +1154,15 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     let dataHoje = moment();
 
 
+    // if (moment().isAfter(moment('01/12/' + dataHoje.year(), 'DD/MM/YYYY'))) {
+    //   dataFim = moment('01/12/' + dataHoje.year(), 'DD/MM/YYYY');
+    // }else {
+    //   dataFim = moment('01/12/' + (dataHoje.year() - 1), 'DD/MM/YYYY');
+    // }
+
+    // console.log(dataFim);
+
+
 
 
     if (dib > dataHoje) {

@@ -16,18 +16,34 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
 
+  // public contribuicaoIdadeMin = {
+  //   m: 60,
+  //   md: 21900,
+  //   f: 57,
+  //   fd: 20805,
+  // };
+
+  // public contribuicaoMin = {
+  //   m: 35,
+  //   md: 12775,
+  //   f: 30,
+  //   fd: 10950,
+  // };
+
+
+
   public contribuicaoIdadeMin = {
     m: 60,
-    md: 21900,
+    md: 21915,
     f: 57,
-    fd: 20805,
+    fd: 20819.5,
   };
 
   public contribuicaoMin = {
     m: 35,
-    md: 12775,
+    md: 12783.75,
     f: 30,
-    fd: 10950,
+    fd: 10957.5,
   };
 
   public pedagioEmDias = 0;
@@ -333,9 +349,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     //console.log(auxiliarDate)
 
-    if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto, 'days');
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
+    // }
 
     idadeDibMoment = this.calcularIdade(auxiliarDate);
 

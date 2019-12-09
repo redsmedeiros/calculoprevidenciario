@@ -275,7 +275,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     }
 
 
-
+    tempoContribuicao += correcaoAnoBissexto
 
     return {
       dataDib: auxiliarDate,

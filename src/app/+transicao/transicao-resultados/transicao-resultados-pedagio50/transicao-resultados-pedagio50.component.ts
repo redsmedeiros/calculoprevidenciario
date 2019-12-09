@@ -15,8 +15,12 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   @Input() seguradoTransicao;
   public isUpdating;
 
-  public requisitoPedagio50Regra3 = { m: 33, md: 12045, f: 28, fd: 10220 };
-  public tempoDeContribuicao50Regra3 = { m: 35, md: 12775, f: 30, fd: 10950 };
+  // public requisitoPedagio50Regra3 = { m: 33, md: 12045, f: 28, fd: 10220 };
+  // public tempoDeContribuicao50Regra3 = { m: 35, md: 12775, f: 30, fd: 10950 };
+
+
+  public requisitoPedagio50Regra3 = { m: 33, md: 12053.25, f: 28, fd: 10227 };
+  public tempoDeContribuicao50Regra3 = { m: 35, md: 12783.75, f: 30, fd: 10957.5 };
 
 
   public conclusoesRegra3 = {
@@ -54,9 +58,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   public calcularConclusaoRegra3pedagio50() {
     this.isUpdating = true;
 
-    // if (this.isExits(this.seguradoTransicao.idadeFracionada)) {
-    //   console.log('teste');
-    // }
     this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
       .then(expectativas => {
         this.expectativasVida = expectativas;
@@ -159,9 +160,10 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(
-      //   this.seguradoTransicao.dataNascimento.format('YYYY'),
-      //   dataDib.format('YYYY')
+      //   this.seguradoTransicao.dataNascimento,
+      //   dataDib
       // );
+
 
       // if (correcaoAnoBissexto > 0) {
       //   dataDib.add(correcaoAnoBissexto, 'days');
@@ -173,8 +175,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(
-      //   this.seguradoTransicao.dataNascimento.format('YYYY'),
-      //   dataDib.format('YYYY')
+      //   this.seguradoTransicao.dataNascimento,
+      //   dataDib
       // );
 
       // if (correcaoAnoBissexto > 0) {
@@ -228,6 +230,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       formulaFator: fatorDib.formula,
       fatorNaDib: fatorDib.fator,
     };
+
 
     return rstRegraPedagio50;
 

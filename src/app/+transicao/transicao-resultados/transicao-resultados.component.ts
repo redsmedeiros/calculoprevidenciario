@@ -243,26 +243,13 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     const dataDiffAtual = moment.duration(dataFinalFracionada.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 
-    const contribuicaoTotal = (dataDiffAtual.years() * 365) +
+    const contribuicaoTotal = (dataDiffAtual.years() * 365.25) +
       (dataDiffAtual.months() * 30)
       + dataDiffAtual.days();
 
-    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal /  365.25;
 
   }
-
-
-  public converterTempoContribuicao(anos, meses, dias, type) {
-
-    anos = this.isFormatInt(anos);
-    meses = this.isFormatInt(meses);
-    dias = this.isFormatInt(dias);
-
-    const contribuicaoTotal = (anos * 365.2422) + (meses * 30.4368) + dias;
-
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.2422;
-  }
-
 
 
   // public converterTempoContribuicao(anos, meses, dias, type) {
@@ -271,11 +258,23 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   //   meses = this.isFormatInt(meses);
   //   dias = this.isFormatInt(dias);
 
-  //   const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+  //   const contribuicaoTotal = (anos * 365.25) + (meses * 30) + dias;
 
-  //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+  //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   // }
 
+
+
+  public converterTempoContribuicao(anos, meses, dias, type) {
+
+    anos = this.isFormatInt(anos);
+    meses = this.isFormatInt(meses);
+    dias = this.isFormatInt(dias);
+
+    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+  }
 
 
   public verificarTransitoria() {
@@ -322,7 +321,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-    const xValor = (Math.ceil(fullDays) / 365);
+    const xValor = (Math.ceil(fullDays) / 365.25);
 
     totalFator.years = Math.floor(xValor);
     const xVarMes = (xValor - totalFator.years) * 12;
@@ -370,10 +369,10 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     }
 
     if (anos < 0) {
-      return ` ${meses} mes(es) e ${dias} dia(s)`;
+      return ` ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
     }
 
-    return ` ${anos} ano(s), ${meses} mes(es) e ${dias} dia(s)`;
+    return ` ${anos} ano(s), ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
 
   }
 
@@ -385,10 +384,10 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     }
 
     if (tempoObj.anos < 0) {
-      return ` ${tempoObj.months} mes(es) e ${tempoObj.days} dia(s)`;
+      return ` ${tempoObj.months} mes(es) e ${Math.floor(tempoObj.days)} dia(s)`;
     }
 
-    return `${tempoObj.years} ano(s), ${tempoObj.months} mes(es) e ${tempoObj.days} dia(s)`;
+    return `${tempoObj.years} ano(s), ${tempoObj.months} mes(es) e ${Math.floor(tempoObj.days)} dia(s)`;
 
   }
 
