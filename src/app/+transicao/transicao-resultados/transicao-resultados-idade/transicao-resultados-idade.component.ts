@@ -31,7 +31,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   }
 
   ngOnInit() {
-   // this.conclusaoRegra5Idade();
+    // this.conclusaoRegra5Idade();
   }
 
   ngOnChanges() {
@@ -106,8 +106,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         requisitoDib: rstRegra2IdadeTempo.requisitos,
         idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.idadeDib)}`,
         idadeMoment: this.formateStringAnosMesesDias(rstRegra2IdadeTempo.idadeMoment.years(),
-                                                      rstRegra2IdadeTempo.idadeMoment.months(),
-                                                      rstRegra2IdadeTempo.idadeMoment.days()),
+          rstRegra2IdadeTempo.idadeMoment.months(),
+          rstRegra2IdadeTempo.idadeMoment.days()),
         tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra2IdadeTempo.tempoContribuicaoDib)}`,
         dataDib: rstRegra2IdadeTempo.dataDib.format('DD/MM/YYYY')
       };
@@ -203,6 +203,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     const sexo = this.seguradoTransicao.sexo + 'd';
+    let idadeMoment;
 
     // console.log(this.getRequisitosRegra1(
     //   pontos,
@@ -237,19 +238,10 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       if (fimContador.status) {
 
-        // console.log(auxiliarDate);
-        // console.log(idade);
-        // console.log(tempoContribuicao);
-        // console.log(pontos);
-        // console.log(count);
-
-
-
         // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
-
 
       }
 
@@ -263,7 +255,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     } while (!fimContador.status && idade <= 54750);
 
-    // auxiliarDate.add(1, 'days');
+
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento,
@@ -274,13 +266,26 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       auxiliarDate.add(correcaoAnoBissexto, 'days');
     }
 
+    
+    idadeMoment = this.calcularIdade(auxiliarDate);
+    if (idadeMoment.days() === 30) {
+      idadeMoment.add(1, 'day');
+    }
 
-    tempoContribuicao += correcaoAnoBissexto
+
+    // console.log('-- regra 5');
+    
+    // console.log(correcaoAnoBissexto);
+    // console.log(auxiliarDate);
+    // console.log(idade);
+    // console.log(tempoContribuicao);
+    // console.log(count);
+
+    tempoContribuicao += correcaoAnoBissexto;
 
     return {
       dataDib: auxiliarDate,
-    //  idadeMoment: moment.duration(auxiliarDate.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY'))),
-      idadeMoment: this.calcularIdade(auxiliarDate),
+      idadeMoment: idadeMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),
       idadeDib: this.converterTempoDias(idade),
       tempoContribuicaoDib: this.converterTempoDias(tempoContribuicao),

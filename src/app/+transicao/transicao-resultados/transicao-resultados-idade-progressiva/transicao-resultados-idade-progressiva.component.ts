@@ -185,20 +185,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
 
-    // console.log(this.getRequisitosRegra1(
-    //   pontos,
-    //   auxiliarDate.year(),
-    //   sexo,
-    //   tempoContribuicao,
-    //   this.seguradoTransicao.professor));
-
-
-    // console.log(pontos);
-    // console.log(auxiliarDate.year());
-    // console.log(sexo);
-    // console.log(tempoContribuicao);
-    // console.log(this.seguradoTransicao.professor);
-
     do {
 
 
@@ -216,13 +202,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
       if (fimContador.status) {
 
-        // console.log(auxiliarDate);
-        // console.log(idade);
-        // console.log(tempoContribuicao);
-        // console.log(pontos);
-        // console.log(count);
-
-
 
         // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
@@ -232,10 +211,10 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
       }
 
-      if (this.addBissexto(auxiliarDate) > 0) {
-        count += 1;
-        tempoContribuicao += 1;
-      }
+      // if (this.addBissexto(auxiliarDate) > 0) {
+      //   count += 1;
+      //   tempoContribuicao += 1;
+      // }
 
       count++;
       idade += 1;
@@ -249,7 +228,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
 
-
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento,
       auxiliarDate
@@ -257,6 +235,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     if (correcaoAnoBissexto > 0) {
       auxiliarDate.add(correcaoAnoBissexto, 'days');
+      tempoContribuicao += correcaoAnoBissexto;
     }
 
 
@@ -264,6 +243,14 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     if (idadeMoment.days() === 30) {
       idadeMoment.add(1, 'day');
     }
+
+
+    // console.log('-- regra 2');
+    // console.log(correcaoAnoBissexto);
+    // console.log(auxiliarDate);
+    // console.log(idade);
+    // console.log(tempoContribuicao);
+    // console.log(count);
 
 
     return {
@@ -293,10 +280,16 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       m: 35
     };
 
+    // const requisitoContribuicoesDias = {
+    //   fd: 10950,
+    //   md: 12775
+    // };
+
     const requisitoContribuicoesDias = {
-      fd: 10950,
-      md: 12775
+      fd: 10957.5,
+      md: 12783.75
     };
+
 
     const regra2 = this.requisitoIdadeProgressivaRegra2;
 
