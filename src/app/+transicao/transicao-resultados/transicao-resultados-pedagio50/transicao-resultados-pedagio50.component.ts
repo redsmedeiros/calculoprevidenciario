@@ -46,7 +46,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
   ngOnInit() {
 
-   // this.calcularConclusaoRegra3pedagio50();
+    // this.calcularConclusaoRegra3pedagio50();
 
   }
 
@@ -83,10 +83,10 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
           requisitoDib: rstRegra3pedagio50.requisitos,
           idadeDib: `${this.formateObjToStringAnosMesesDias(rstRegra3pedagio50.idadeDib)}`,
           idadeDibMoment: this.formateStringAnosMesesDias(
-                                                        rstRegra3pedagio50.idadeDibMoment.years(),
-                                                        rstRegra3pedagio50.idadeDibMoment.months(),
-                                                        rstRegra3pedagio50.idadeDibMoment.days()
-                                                        ),
+            rstRegra3pedagio50.idadeDibMoment.years(),
+            rstRegra3pedagio50.idadeDibMoment.months(),
+            rstRegra3pedagio50.idadeDibMoment.days()
+          ),
           tempoDib: `${this.formateObjToStringAnosMesesDias(rstRegra3pedagio50.tempoContribuicaoDib)}`,
           dataDib: rstRegra3pedagio50.dataDib.format('DD/MM/YYYY'),
           formulaFator: rstRegra3pedagio50.formulaFator,
@@ -130,7 +130,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     const contribuicao_min = this.tempoDeContribuicao50Regra3[this.seguradoTransicao.sexo + 'd'];
 
     let rstRegraPedagio50: any;
-    let dataDib = this.dataAtual.clone();
+    let dataDib = this.dataAtual.clone().add(1, 'day');
     // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
@@ -150,20 +150,19 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
       tempoFinalContribfinalComPedagio = contribuicao_min + tempoDePedagio;
 
-     // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+      // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
 
       idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
 
-      dataDib.add(tempoDePedagioTotalNecessario, 'days');
+      dataDib.add(tempoDePedagioTotalNecessario, 'd');
 
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(
-      //   this.seguradoTransicao.dataNascimento,
+      //   this.dataAtual,
       //   dataDib
       // );
-
 
       // if (correcaoAnoBissexto > 0) {
       //   dataDib.add(correcaoAnoBissexto, 'days');
@@ -174,15 +173,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
       dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
-      // const correcaoAnoBissexto = this.contarBissextosEntre(
-      //   this.seguradoTransicao.dataNascimento,
-      //   dataDib
-      // );
-
-      // if (correcaoAnoBissexto > 0) {
-      //   dataDib.add(correcaoAnoBissexto, 'days');
-      // }
-
     }
 
 
@@ -192,6 +182,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
     // console.log('---- Regra 3 -----');
+    // console.log(tempoDePedagioTotalNecessario);
+
     // console.log(idadeDibMoment);
     // console.log(idadeDib);
     // console.log(tempoFinalContrib);
@@ -344,11 +336,15 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     let expectativa = 0;
     const dataInicio = moment('2000-11-30');
-    const dataFim = moment('2018-12-01');
+    let dataFim = moment('2019-12-01');
     const dataHoje = moment();
     let formula_expectativa_sobrevida = '';
 
-
+    if (moment().isAfter(moment('01/12/' + dataHoje.year(), 'DD/MM/YYYY'))) {
+      dataFim = moment('01/12/' + dataHoje.year(), 'DD/MM/YYYY');
+    } else {
+      dataFim = moment('01/12/' + (dataHoje.year() - 1), 'DD/MM/YYYY');
+    }
 
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));
