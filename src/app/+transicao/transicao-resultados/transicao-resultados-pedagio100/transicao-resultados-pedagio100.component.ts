@@ -285,7 +285,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   public contadorRegra4() {
 
-    let auxiliarDate = this.dataAtual;
+    let auxiliarDate = this.dataAtual.add(1, 'day');
     let fimContador = {
       status: false,
       ano: 0,
