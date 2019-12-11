@@ -334,12 +334,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
   public converterTempoDiasParaAnos(fullDays) {
-    return (Math.ceil(fullDays) / 365);
+    return ((fullDays) / 365);
+  }
+
+  public converterTempoDiasParaAnosFator(fullDays) {
+    return fullDays / 365.25;
   }
 
   public converterTempoAnosParaDias(fullYears) {
 
-    return Math.ceil(fullYears * 365);
+    return fullYears * 365.25;
 
   }
 

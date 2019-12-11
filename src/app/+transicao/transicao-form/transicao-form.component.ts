@@ -117,7 +117,7 @@ export class TransicaoFormComponent implements OnInit {
 
     this.contribuicaoAnos = '33';
     this.contribuicaoMeses = '0';
-    this.contribuicaoDias = '27';
+    this.contribuicaoDias = '28';
 
 
     // this.nome = 'Jose ';

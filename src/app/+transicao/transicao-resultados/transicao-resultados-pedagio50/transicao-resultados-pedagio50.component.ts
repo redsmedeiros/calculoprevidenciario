@@ -36,6 +36,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     fatorNaDib: '',
   };
 
+  
+
 
 
   constructor(
@@ -58,12 +60,14 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   public calcularConclusaoRegra3pedagio50() {
     this.isUpdating = true;
 
-    this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
-      .then(expectativas => {
-        this.expectativasVida = expectativas;
-        this.conclusaoRegra3pedagio50();
+    this.conclusaoRegra3pedagio50();
 
-      });
+    // this.ExpectativaVida.getByIdade(Math.floor(this.seguradoTransicao.idadeFracionada))
+    //   .then(expectativas => {
+    //     this.expectativasVida = expectativas;
+    //     this.conclusaoRegra3pedagio50();
+
+    //   });
   }
 
 
@@ -181,8 +185,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     // console.log(tempoDePedagioTotalNecessario);
 
 
-    // console.log('---- Regra 3 -----');
-    // console.log(tempoDePedagioTotalNecessario);
+    console.log('---- Regra 3 -----');
+    console.log(tempoDePedagioTotalNecessario);
+    console.log(tempoFinalContribfinalComPedagio);
 
     // console.log(idadeDibMoment);
     // console.log(idadeDib);
@@ -206,9 +211,12 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     const fatorDib = this.getFatorPrevidenciario(
       dataDib,
-      this.converterTempoDiasParaAnos(idadeDib),
-      this.converterTempoDiasParaAnos(tempoFinalContribfinalComPedagio)
+      this.converterTempoDiasParaAnosFator(idadeDib),
+      this.converterTempoDiasParaAnosFator(tempoFinalContribfinalComPedagio)
     );
+
+
+  
 
 
     rstRegraPedagio50 = {
@@ -325,6 +333,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);
+      console.log(ano);
+      console.log(expectativaVida);
+      
       // Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
@@ -361,6 +372,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
       expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
 
+      console.log(expectativa);
+
       formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
       //conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
 
@@ -389,13 +402,21 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
   public getFatorPrevidenciario(dataInicioBeneficio, idadeFracionada, tempoTotalContribuicao) {
 
+
     let fatorSeguranca = 1;
     let formula_fator = '';
 
-    this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
+
+      
+    this.ExpectativaVida.getByIdade(Math.floor(idadeFracionada))
+      .then(expectativas => {
+        this.isUpdating = true;
+        this.expectativasVida = expectativas;
+        this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
+        this.isUpdating = false;
 
 
-    fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
+        fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
       (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);
 
     fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
@@ -406,7 +427,12 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       + this.formatDecimal(idadeFracionada, 2) + ' + (' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
       + this.formatDecimal(this.aliquota, 2) + ')) / ' + '100)';
 
-    return { fator: fatorSeguranca, formula: formula_fator };
+        this.conclusoesRegra3.formulaFator = formula_fator;
+        this.conclusoesRegra3.fatorNaDib = ' ' + fatorSeguranca;
+
+      });
+
+      return { fator: fatorSeguranca, formula: formula_fator };
 
   }
 
