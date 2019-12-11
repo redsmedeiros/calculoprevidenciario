@@ -2729,6 +2729,22 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   imprimirPagina() {
+
+
+
+    const css = `
+ <style>
+       body{font-family: Arial, Helvetica, sans-serif;}
+       h1, h2{font-size:0.9rem;}
+       i.fa, .not-print{ display: none; }
+       table{margin-top: 20;}
+       footer,div,p,td,th{font-size:11px !important;}
+       .table>tbody>tr>td, .table>tbody>tr>th,
+        .table>tfoot>tr>td, .table>tfoot>tr>th,
+        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+        footer{text-align: center;}
+ </style>`;
+
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
     let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
@@ -2743,10 +2759,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + honorarios + juros + conclusoes + resultadoCalculo;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
+    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '<br>' + rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + '<title> Benefícios Atrasados - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + printContents + '<br>' + rodape + '</body></html>');
     popupWin.document.close();
   }
 

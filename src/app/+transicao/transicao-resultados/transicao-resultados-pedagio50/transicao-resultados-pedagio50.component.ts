@@ -36,7 +36,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     fatorNaDib: '',
   };
 
-  
+
 
 
 
@@ -185,9 +185,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     // console.log(tempoDePedagioTotalNecessario);
 
 
-    console.log('---- Regra 3 -----');
-    console.log(tempoDePedagioTotalNecessario);
-    console.log(tempoFinalContribfinalComPedagio);
+    // console.log('---- Regra 3 -----');
+    // console.log(tempoDePedagioTotalNecessario);
+    // console.log(tempoFinalContribfinalComPedagio);
 
     // console.log(idadeDibMoment);
     // console.log(idadeDib);
@@ -216,7 +216,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     );
 
 
-  
+
 
 
     rstRegraPedagio50 = {
@@ -333,9 +333,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);
-      console.log(ano);
-      console.log(expectativaVida);
-      
+      // console.log(ano);
+      // console.log(expectativaVida);
+
       // Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
@@ -372,7 +372,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
       expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
 
-      console.log(expectativa);
+      // console.log(expectativa);
 
       formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
       //conclusoes.push({string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
@@ -407,7 +407,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let formula_fator = '';
 
 
-      
+
     this.ExpectativaVida.getByIdade(Math.floor(idadeFracionada))
       .then(expectativas => {
         this.isUpdating = true;
@@ -417,22 +417,22 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
         fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
-      (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);
+          (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);
 
-    fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
+        fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
 
 
-    formula_fator = '((' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
-      + this.formatDecimal(this.aliquota, 2) + ') / ' + this.formatDecimal(this.expectativa, 2) + ') * (1 + ('
-      + this.formatDecimal(idadeFracionada, 2) + ' + (' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
-      + this.formatDecimal(this.aliquota, 2) + ')) / ' + '100)';
+        formula_fator = '((' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
+          + this.formatDecimal(this.aliquota, 2) + ') / ' + this.formatDecimal(this.expectativa, 2) + ') * (1 + ('
+          + this.formatDecimal(idadeFracionada, 2) + ' + (' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
+          + this.formatDecimal(this.aliquota, 2) + ')) / ' + '100)';
 
         this.conclusoesRegra3.formulaFator = formula_fator;
         this.conclusoesRegra3.fatorNaDib = ' ' + fatorSeguranca;
 
       });
 
-      return { fator: fatorSeguranca, formula: formula_fator };
+    return { fator: fatorSeguranca, formula: formula_fator };
 
   }
 

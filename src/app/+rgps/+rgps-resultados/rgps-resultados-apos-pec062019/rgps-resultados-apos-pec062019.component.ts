@@ -1139,10 +1139,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     }
 
     if (ano != null) {
-      expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
-      console.log(ano);
-      console.log(expectativaVida);
-      
+      expectativaVida = this.ExpectativaVida.getByAno(ano);
+      //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }

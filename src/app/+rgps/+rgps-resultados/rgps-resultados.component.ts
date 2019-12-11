@@ -305,7 +305,7 @@ export class RgpsResultadosComponent implements OnInit {
               .then((calculo: CalculoModel) => {
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
-                const checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+                const checkBox = `<div class="checkbox not-print"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
                 const line = {
                   especie: calculo.tipo_seguro,
@@ -590,22 +590,22 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
 
-  getEspecieReforma(novoNumeroEspecie){
+  getEspecieReforma(novoNumeroEspecie) {
     const arrayEspecial = [1915, 1920, 1925];
     const arrayPensao = [1900, 1901];
 
     if (arrayEspecial.includes(novoNumeroEspecie)) {
 
-    // Especial
-    return 5;
+      // Especial
+      return 5;
 
     }
-    
+
     if (arrayPensao.includes(novoNumeroEspecie)) {
 
       // pensão
       return 2;
-     
+
     }
 
     return novoNumeroEspecie;
@@ -684,10 +684,10 @@ export class RgpsResultadosComponent implements OnInit {
         break;
       case 'Aposentadoria por incapacidade permanente':
         numeroEspecie = 1903;
-      break;
+        break;
       case 'Auxílio Acidente - 50%':
         numeroEspecie = 1905;
-      break;
+        break;
       // Reforma  fim 2019
       default:
         break;
@@ -703,28 +703,28 @@ export class RgpsResultadosComponent implements OnInit {
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
     //25, 26, 27,
 
-    const arrayTypeNum = [1, 2, 3, 16,  28, 1900, 1901, 1903, 1905];
+    const arrayTypeNum = [1, 2, 3, 16, 28, 1900, 1901, 1903, 1905];
     const arrayTypeText = [
-                        'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
-                        'Aposentadoria por idade - Trabalhador Urbano',
-                        'Aposentadoria por idade - Trabalhador Rural',
-                        'Auxílio Doença',
-                        'Pensão por Morte instituidor aposentado na data óbito',
-                        'Pensão por Morte instituidor não é aposentado na data óbito',
-                        'Aposentadoria por incapacidade permanente',
-                        'Auxílio Acidente - 50%',
-                        'Aposentadoria especial por Idade da Pessoa com Deficiência',
-                        // 'Aposentadoria especial da Pessoa com Deficiência Grave',
-                        // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-                        // 'Aposentadoria especial da Pessoa com Deficiência Leve',
-                      ];
+      'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
+      'Aposentadoria por idade - Trabalhador Urbano',
+      'Aposentadoria por idade - Trabalhador Rural',
+      'Auxílio Doença',
+      'Pensão por Morte instituidor aposentado na data óbito',
+      'Pensão por Morte instituidor não é aposentado na data óbito',
+      'Aposentadoria por incapacidade permanente',
+      'Auxílio Acidente - 50%',
+      'Aposentadoria especial por Idade da Pessoa com Deficiência',
+      // 'Aposentadoria especial da Pessoa com Deficiência Grave',
+      // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
+      // 'Aposentadoria especial da Pessoa com Deficiência Leve',
+    ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
-    return true;
-  }
-  return false;
+      return true;
+    }
+    return false;
 
-}
+  }
 
 
   formatMoney(value, sigla = 'R$') {
@@ -982,21 +982,49 @@ export class RgpsResultadosComponent implements OnInit {
       allCalcBoxText += allCalcBoxHtml[index].innerHTML + '<br><br>';
     }
 
+
+    const css = `
+                <style>
+                      body{font-family: Arial, Helvetica, sans-serif;}
+                      h1, h2{font-size:0.9rem;}
+                      i.fa, .not-print{ display: none; }
+                      table{margin-top: 20;}
+                      footer,div,p,td,th{font-size:11px !important;}
+                      .table>tbody>tr>td, .table>tbody>tr>th,
+                       .table>tfoot>tr>td, .table>tfoot>tr>th,
+                       .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+                       footer{text-align: center;}
+                </style>`;
+
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
+    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
     const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
     popupWin.document.close();
   }
 
   imprimirBox(boxId) {
+
+    const css = `
+    <style>
+          body{font-family: Arial, Helvetica, sans-serif;}
+          h1, h2{font-size:0.9rem;}
+          i.fa, .not-print{ display: none; }
+          table{margin-top: 20;}
+          footer,div,p,td,th{font-size:11px !important;}
+          .table>tbody>tr>td, .table>tbody>tr>th,
+           .table>tfoot>tr>td, .table>tfoot>tr>th,
+           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+           footer{text-align: center;}
+    </style>`;
+
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
-    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários - Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
-    let printableString = '<html><head><link rel="stylesheet" type="text/css" href="style.css" /><style>#tituloCalculo{font-size:1.2em;}</style></head><body onload="window.print()">' + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
+    const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Rua Timbiras, 1940 Sala 810 | Tel: (31) 3271-1701 | CEP: 30140-069 Lourdes - Belo Horizonte - MG</p></footer>';
+    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();

@@ -4,118 +4,117 @@
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700");
 a[class*="action-"] {
-    color: #333;
-    margin-right: 5px;
-    transition: all .3s ease-in-out;
+  color: #333;
+  margin-right: 5px;
+  transition: all 0.3s ease-in-out;
 }
 
 a[class*="action-"]:hover {
-    color: #666;
-    margin-right: 5px;
-    transition: all .3s ease-in-out;
+  color: #666;
+  margin-right: 5px;
+  transition: all 0.3s ease-in-out;
 }
 
 .action-edit {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .action-delete {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .action-calc {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .action-import {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .action-contribut {
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .action-result {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .matriz-line {
-    text-align: right;
+  text-align: right;
 }
 
 .matriz-input {
-    width: 100%;
-    text-align: right;
-    background-color: transparent;
-    border-color: transparent;
+  width: 100%;
+  text-align: right;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .matriz-input:focus {
-    background-color: #FFF;
-    border: 1px solid #CCC;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 
 .font-bold {
-    font-weight: bolder;
+  font-weight: bolder;
 }
 
 .home-box {
-    position: relative;
-    margin: 10px 0;
+  position: relative;
+  margin: 10px 0;
 }
 
 .home-box img {
-    width: 100%;
-    /* border-radius: 5px; */
+  width: 100%;
+  /* border-radius: 5px; */
 }
 
 .home-box .home-title {
-    position: absolute;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #FFF;
-    font-weight: bold;
-    /* font-size: 25px; */
-    padding: 0 15px;
-    text-align: center;
-    margin-top: 5px;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-weight: bold;
+  /* font-size: 25px; */
+  padding: 0 15px;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .home-box .home-desc {
-    position: absolute;
-    bottom: -10px;
-    opacity: 0;
-    width: 100%;
-    text-align: justify;
-    color: #fff;
-    padding: 0 15px;
-    font-weight: 400;
-    /* font-size: 15px; */
-    transition: all .3s ease-in-out;
+  position: absolute;
+  bottom: -10px;
+  opacity: 0;
+  width: 100%;
+  text-align: justify;
+  color: #fff;
+  padding: 0 15px;
+  font-weight: 400;
+  /* font-size: 15px; */
+  transition: all 0.3s ease-in-out;
 }
 
-.home-box:hover > .home-desc{
-    opacity: 1;
-    bottom: 10px;
-    transition: all .3s ease-in-out;
+.home-box:hover > .home-desc {
+  opacity: 1;
+  bottom: 10px;
+  transition: all 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 768px) {
-    .home-box .home-title {
-        font-size: 18px;
-    }
+  .home-box .home-title {
+    font-size: 18px;
+  }
 
-    /* .home-box .home-desc {
+  /* .home-box .home-desc {
       font-size: 1.3rem;
     } */
 }
 
-
 @media screen and (max-width: 1500px) {
   .home-box .home-title {
-      font-size:  2rem;
+    font-size: 2rem;
   }
 
   .home-box .home-desc {
@@ -123,101 +122,105 @@ a[class*="action-"]:hover {
   }
 }
 
-
 @media screen and (min-width: 1500px) {
   .home-box .home-title {
-      font-size:  2.8rem;
+    font-size: 2.8rem;
   }
 
   .home-box .home-desc {
-    font-size:  2rem;
+    font-size: 2rem;
   }
 }
 
-                      
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+  .not-print {
+    display: none !important;
+  }
+}
+
 .font-0-1x {
-    font-size: 0.1rem !important;
-  }
-  .font-0-2x {
-    font-size: 0.2rem !important;
-  }
-  .font-0-3x {
-    font-size: 0.3rem !important;
-  }
-  .font-0-4x {
-    font-size: 0.4rem !important;
-  }
-  .font-0-5x {
-    font-size: 0.5rem !important;
-  }
-  .font-0-6x {
-    font-size: 0.6rem !important;
-  }
-  .font-0-7x {
-    font-size: 0.7rem !important;
-  }
-  .font-0-8x {
-    font-size: 0.8rem !important;
-  }
-  .font-0-9x {
-    font-size: 0.9rem !important;
-  }
- 
-  
-  
-  .font-1-1x {
-    font-size: 1.1rem !important;
-  }
-  .font-1-2x {
-    font-size: 1.2rem !important;
-  }
-  .font-1-3x {
-    font-size: 1.3rem !important;
-  }
-  .font-1-4x {
-    font-size: 1.4rem !important;
-  }
-  .font-1-5x {
-    font-size: 1.5rem !important;
-  }
-  .font-1-6x {
-    font-size: 1.6rem !important;
-  }
-  .font-1-7x {
-    font-size: 1.7rem !important;
-  }
-  .font-1-8x {
-    font-size: 1.8rem !important;
-  }
-  .font-1-9x {
-    font-size: 1.9rem !important;
-  }
+  font-size: 0.1rem !important;
+}
+.font-0-2x {
+  font-size: 0.2rem !important;
+}
+.font-0-3x {
+  font-size: 0.3rem !important;
+}
+.font-0-4x {
+  font-size: 0.4rem !important;
+}
+.font-0-5x {
+  font-size: 0.5rem !important;
+}
+.font-0-6x {
+  font-size: 0.6rem !important;
+}
+.font-0-7x {
+  font-size: 0.7rem !important;
+}
+.font-0-8x {
+  font-size: 0.8rem !important;
+}
+.font-0-9x {
+  font-size: 0.9rem !important;
+}
 
+.font-1-1x {
+  font-size: 1.1rem !important;
+}
+.font-1-2x {
+  font-size: 1.2rem !important;
+}
+.font-1-3x {
+  font-size: 1.3rem !important;
+}
+.font-1-4x {
+  font-size: 1.4rem !important;
+}
+.font-1-5x {
+  font-size: 1.5rem !important;
+}
+.font-1-6x {
+  font-size: 1.6rem !important;
+}
+.font-1-7x {
+  font-size: 1.7rem !important;
+}
+.font-1-8x {
+  font-size: 1.8rem !important;
+}
+.font-1-9x {
+  font-size: 1.9rem !important;
+}
 
-  .font-2-1x {
-    font-size: 2.1rem !important;
-  }
-  .font-2-2x {
-    font-size: 2.2rem !important;
-  }
-  .font-2-3x {
-    font-size: 2.3rem !important;
-  }
-  .font-2-4x {
-    font-size: 2.4rem !important;
-  }
-  .font-2-5x {
-    font-size: 2.5rem !important;
-  }
-  .font-2-6x {
-    font-size: 2.6rem !important;
-  }
-  .font-2-7x {
-    font-size: 2.7rem !important;
-  }
-  .font-2-8x {
-    font-size: 2.8rem !important;
-  }
-  .font-2-9x {
-    font-size: 2.9rem !important;
-  }
+.font-2-1x {
+  font-size: 2.1rem !important;
+}
+.font-2-2x {
+  font-size: 2.2rem !important;
+}
+.font-2-3x {
+  font-size: 2.3rem !important;
+}
+.font-2-4x {
+  font-size: 2.4rem !important;
+}
+.font-2-5x {
+  font-size: 2.5rem !important;
+}
+.font-2-6x {
+  font-size: 2.6rem !important;
+}
+.font-2-7x {
+  font-size: 2.7rem !important;
+}
+.font-2-8x {
+  font-size: 2.8rem !important;
+}
+.font-2-9x {
+  font-size: 2.9rem !important;
+}

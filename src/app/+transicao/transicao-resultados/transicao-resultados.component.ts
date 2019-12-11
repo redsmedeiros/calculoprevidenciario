@@ -544,22 +544,6 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
                        footer{}
                 </style>`;
-    // const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production-plugins.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-production.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-skins.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-rtl.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/smartadmin-angular-next.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
-    //             <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css" media="print">
-    //             <style>i.fa, .not-print{ display: none; }
-    //                   div,p,td,th{font-size:12px !important;}
-    //                   .ui-sortable-handle, th{
-    //                     background-color: #831721 !important;
-    //                     border-color: #CCC !important;
-    //                     color: #fafafa !important;
-    //                   }
-    //                   </style>`;
 
     const popupWin = window.open('', '_blank', 'width=640,height=480');
 
