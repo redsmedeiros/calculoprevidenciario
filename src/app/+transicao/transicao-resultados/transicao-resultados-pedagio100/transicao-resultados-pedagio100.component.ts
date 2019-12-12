@@ -352,7 +352,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     // console.log(this.converterTempoDias(idade));
     // console.log(tempoContribuicao);
 
-    idadeDibMoment = this.calcularIdade(auxiliarDate);
+    idadeDibMoment = this.calcularIdade(auxiliarDate.subtract(1, 'day'));
 
     // //console.log(auxiliarDate)
     // //console.log(correcaoAnoBissexto)
