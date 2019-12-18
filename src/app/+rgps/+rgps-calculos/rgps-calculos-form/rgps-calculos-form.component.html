@@ -167,6 +167,16 @@
                           <p> <i class="fa fa-info-circle"></i> Para os benefícios concedidos a partir de 18 de junho de 2019 foi determinada a soma das contribuições concomitantes de acordo com as alterações trazidas pela Lei 13.846/19.</p>
                       </div>
                     </div>
+                    <div class="form-group"  *ngIf="has19 || hasAtual">
+                      <div class="checkbox col-md-8 col-md-offset-2">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="pbcCompleto" class="checkbox" [ngModelOptions]="{standalone: true}">
+                          <span>Desejo considerar os meses de contribuição antes de 07/1994.
+                            <i title=" O STJ fixou a seguinte tese ao julgar o Tema 999: Aplica-se a regra definitiva prevista no art. 29, I e II da Lei 8.213/1991, na apuração do salário de benefício, quando mais favorável do que a regra de transição contida no art. 3º da Lei 9.876/1999, aos Segurados que ingressaram no Regime Geral da Previdência Social até o dia anterior à publicação da Lei 9.876/1999." class="fa fa-question-circle fa-lg text-info"></i>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
                     <div class="form-group"  *ngIf="has19 && hasDivisorMinimo">
                       <div class="checkbox col-md-8 col-md-offset-2">
                         <label>

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoContagemTempo as CalculoModel } from './../+contagem-tempo-calculos/CalculoContagemTempo.model';
@@ -12,7 +12,7 @@ import { CalculoContagemTempoService } from './../../+contagem-tempo-calculos/Ca
   templateUrl: './contagem-tempo-conclusao.component.html',
   styleUrls: ['./contagem-tempo-conclusao.component.css']
 })
-export class ContagemTempoConclusaoComponent implements OnInit {
+export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
   @Input() segurado;
@@ -88,11 +88,16 @@ export class ContagemTempoConclusaoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
 
     if (this.periodosList.length > 0) {
       this.createConclusaoFinal();
     }
+  }
+
+
+  ngOnChanges() {
 
   }
 
@@ -151,14 +156,14 @@ export class ContagemTempoConclusaoComponent implements OnInit {
       //const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
 
 
-      const limitesDoVinculoClone  = limitesDoVinculo.fim.clone();
+      const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
       const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
 
 
-    //  console.log(teste.add(1, 'days'));
-      //console.log(this.toDateString(teste.add(1, 'days')))
-   //   console.log(moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY'));
-      console.log(fimContador)
+      //  console.log(teste.add(1, 'days'));
+      // console.log(this.toDateString(teste.add(1, 'days')))
+      //   console.log(moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY'));
+      // console.log(fimContador)
 
       let count = 0;
       let count88 = 0;
@@ -206,7 +211,7 @@ export class ContagemTempoConclusaoComponent implements OnInit {
         // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
         //auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
 
-        let teste  = auxiliarDate.clone();
+        let teste = auxiliarDate.clone();
         auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
 
 
@@ -474,27 +479,76 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     this.idadeMinimaAposProp = rstTemp;
   }
 
+  // public somatoriaTempoContribuicaoIdade() {
+  //   let rstTemp = 0;
+
+  //   rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
+
+  //   this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
+  // }
+
+  // public somatoriaTempoContribuicaoIdadeAtual() {
+  //   let rstTemp = 0;
+
+  //   const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
+
+  //   rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
+
+  //   if (moment().isBefore(this.limitesDoVinculo.fim)) {
+  //     const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
+  //     rstTemp -= diffTempoTotal.asDays();
+  //   }
+
+  //   this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
+  // }
+
+
+
+
   public somatoriaTempoContribuicaoIdade() {
-    let rstTemp = 0;
 
-    rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
+    return new Promise((resolve, reject) => {
 
-    this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
+      let rstTemp = 0;
+
+      rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
+
+      this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
+
+      if (this.somatoriaTempoContribIdade.asDays() > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
   }
 
   public somatoriaTempoContribuicaoIdadeAtual() {
-    let rstTemp = 0;
 
-    const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
 
-    rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
+    return new Promise((resolve, reject) => {
 
-    if (moment().isBefore(this.limitesDoVinculo.fim)) {
-      const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
-      rstTemp -= diffTempoTotal.asDays();
-    }
+      let rstTemp = 0;
 
-    this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
+      const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
+
+      rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
+
+      if (moment().isBefore(this.limitesDoVinculo.fim)) {
+        const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
+        rstTemp -= diffTempoTotal.asDays();
+      }
+
+      this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
+
+      if (this.somatoriaTempoContribIdadeAtual.asDays() > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+
+
   }
 
 
@@ -516,9 +570,17 @@ export class ContagemTempoConclusaoComponent implements OnInit {
 
     this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
-    this.somatoriaTempoContribuicaoIdade();
+    this.somatoriaTempoContribuicaoIdade().then(result => {
+      console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });;
 
-    this.somatoriaTempoContribuicaoIdadeAtual();
+    this.somatoriaTempoContribuicaoIdadeAtual().then(result => {
+      console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });
 
   }
 
@@ -666,6 +728,9 @@ export class ContagemTempoConclusaoComponent implements OnInit {
     });
 
   }
+
+
+
 
 
   toMoment(dateString) {

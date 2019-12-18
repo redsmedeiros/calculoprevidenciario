@@ -185,7 +185,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
-    let dataLimite = moment('1994-07-01');
+    let dataLimite = (!this.calculo.pbc_completo)? moment('1994-07-01') : moment('1930-01-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
 
@@ -1970,7 +1970,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
         this.conclusoesRegra4.tempoDePedagio = `Alcançou os requisitos de tempo de contribuição`;
         // this.conclusoesRegra4.tempoDePedagio = this.tratarAnosFracionado(tempoDePedagio);
-        this.conclusoesRegra4.valor = valorMedio;
+        const resutadoAjuste = this.limitarTetosEMinimos(valorMedio, this.dataInicioBeneficio);
+        this.conclusoesRegra4.valor = resutadoAjuste.valor;
+      //  this.conclusoesRegra4.valor = valorMedio;
         this.conclusoesRegra4.valorString = this.formatMoney(this.conclusoesRegra4.valor);
         this.conclusoesRegra4.exibirValor = true;
 
@@ -3000,7 +3002,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
 
     } else if (arrayIdade.includes(this.tipoBeneficio)) {
-
+      // Aposentadoria por idade 
       this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
 
       // Aposentadoria por idade - Trabalhador Rural

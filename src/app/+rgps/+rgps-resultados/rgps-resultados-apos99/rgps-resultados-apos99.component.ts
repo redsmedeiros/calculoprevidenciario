@@ -123,7 +123,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
     }
 
-    let dataLimite = moment('1994-07-01');
+
+    let dataLimite = (!this.calculo.pbc_completo)? moment('1994-07-01') : moment('1930-01-01');
+
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
@@ -196,6 +198,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
       let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
+
+      // console.log(dataContribuicao);
+      // console.log(moedaContribuicao);
 
       let contribuicaoPrimariaRevisada = 0;
       let contribuicaoSecundariaRevisada = 0;

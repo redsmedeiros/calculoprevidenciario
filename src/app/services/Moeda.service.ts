@@ -67,8 +67,8 @@ export class MoedaService extends ControllerService {
   public getByDate(date){
   	date = date.startOf('month');
   	let difference = date.diff(this.firstMonth, 'months', true);
-    difference = Math.abs(difference);
-    difference = Math.floor(difference);
+    //difference = Math.abs(difference);
+	difference = Math.floor(difference);
     return this.list[difference];
   }
 

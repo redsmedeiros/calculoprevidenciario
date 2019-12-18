@@ -28,6 +28,7 @@ export class CalculoRgps extends Model {
     ultimo_beneficio: '',
     sexo_instituidor: '',
     divisor_minimo: '',
+    pbc_completo: '',
   };
   
    public id ;
@@ -53,6 +54,7 @@ export class CalculoRgps extends Model {
    public ultimo_beneficio;
    public sexo_instituidor;
    public divisor_minimo;
+   public pbc_completo;
 
   //  public actions = `
   //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i title="Editar" class='fa fa-edit'></i> </a> 
