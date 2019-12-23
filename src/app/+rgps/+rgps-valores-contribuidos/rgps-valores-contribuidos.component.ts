@@ -281,9 +281,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
       this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
     }else {
-      if (dateFinalPeriodo >= dataLimite) {
-        this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
-      }
+      // if (dateFinalPeriodo >= dataLimite) {
+      //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
+      // }
     }
 
     //finalPeriodo
@@ -294,9 +294,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
       }
 
-      if (dateFinalPeriodo >= dataLimite) {
-        this.errors.add({ "finalPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
-      }
+      // if (dateFinalPeriodo >= dataLimite) {
+      //   this.errors.add({ "finalPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
+      // }
     }
 
     //salarioContribuicao
