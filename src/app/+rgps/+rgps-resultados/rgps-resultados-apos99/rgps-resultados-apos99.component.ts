@@ -211,6 +211,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
       }
+
+      // console.log(dataContribuicao);
+      // console.log(contribuicaoPrimariaRevisada);
+
       if (contribuicaoSecundaria != 0) {
         contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor; //Inserir texto 'Limitado ao teto' e 'limitado ao minimo' quando cabivel.
         contadorSecundario++;

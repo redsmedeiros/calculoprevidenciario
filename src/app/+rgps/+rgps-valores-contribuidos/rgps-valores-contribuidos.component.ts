@@ -275,10 +275,15 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   isValid() {
     let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
     let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
+    let dataLimite = moment('1970-01-01');
 
     //inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
       this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
+    }else {
+      if (dateFinalPeriodo >= dataLimite) {
+        this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
+      }
     }
 
     //finalPeriodo
@@ -287,6 +292,10 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     } else {
       if (dateFinalPeriodo < dateInicioPeriodo) {
         this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
+      }
+
+      if (dateFinalPeriodo >= dataLimite) {
+        this.errors.add({ "finalPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
       }
     }
 

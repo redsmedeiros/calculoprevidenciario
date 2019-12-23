@@ -1022,10 +1022,33 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+
+
+
     this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
     this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
     this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
     this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
+
+
+// console.log(tableData[tableData.length-2]);
+// console.log(this.ultimoBeneficioDevidoAntesProporcionalidade);
+// console.log(this.ultimoBeneficioRecebidoAntesProporcionalidade);
+// console.log(this.ultimaRenda);
+// console.log('---');
+// console.log(this.somaVincendas);
+
+// console.log(this.somaDiferencaCorrigida);
+// console.log(this.somaJuros);
+// console.log( this.somaDevidaJudicialmente);
+// console.log('---');
+
+// console.log(this.somaDevidaJudicialmente);
+// console.log(this.somaTotalSegurado);
+
+
+
+
     if (this.calculo.acordo_pedido != 0) {
       this.calcularAcordoJudicial();
     }
