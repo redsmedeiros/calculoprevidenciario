@@ -1379,6 +1379,25 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     return idadeEmDias / 365.25;
   }
 
+
+  
+  public calcularIdadeFracionada(final, type) {
+
+    const dataFinalFracionada = (final != null) ?
+      moment(final).hour(0).minute(0).second(0).millisecond(0) :
+      moment().hour(0).minute(0).second(0).millisecond(0);
+
+    const dataDiffAtual = moment.duration(dataFinalFracionada.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
+
+    const contribuicaoTotal = (dataDiffAtual.years() * 365.25) +
+      (dataDiffAtual.months() * 30)
+      + dataDiffAtual.days();
+
+    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal /  365.25;
+
+  }
+
+
   mostrarReajustesAdministrativos(tableId) {
     if (this.showReajustesAdministrativos) {
       document.getElementById(tableId).scrollIntoView();
@@ -2086,14 +2105,22 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       m: 20,
       f: 15
     };
-
+    
     this.conclusoesRegra5.status = this.requisitosRegra5(
       this.idadeFracionada,
       this.dataInicioBeneficio.year(),
       this.segurado.sexo,
       this.contribuicaoTotal);
 
-    if (this.conclusoesRegra5.status) {
+      const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
+
+      const regraIdadeAnterior = this.requisitosRegra5(
+                                    idadeEm2019,
+                                    2019,
+                                    this.segurado.sexo,
+                                    this.contribuicaoTotal);
+     
+    if (this.conclusoesRegra5.status || regraIdadeAnterior) {
 
       this.conclusoesRegra5.status = true;
 

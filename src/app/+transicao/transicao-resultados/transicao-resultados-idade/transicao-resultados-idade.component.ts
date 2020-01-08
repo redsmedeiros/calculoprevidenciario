@@ -77,6 +77,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5475 : 15;
     const regra5 = this.getparametrosRegra5(ano, sexo);
 
+
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
       { status: true, ano: ano, idade: idade, requisitosIdade: regra5 } :
       { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
@@ -141,34 +142,42 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       f: 15
     };
 
+
+console.log(this.seguradoTransicao);
+
+
     const regraIdade = this.requisitosRegra5(this.dataAtual.year(),
       this.seguradoTransicao.sexo,
-      this.seguradoTransicao.professor,
-      this.seguradoTransicao.redutorProfessor);
+      this.seguradoTransicao.idadeFracionada,
+      this.seguradoTransicao.contribuicaoFracionadoAnos);
+
+
+    const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
+
+    const regraIdadeAnterior = this.requisitosRegra5(2019,
+      this.seguradoTransicao.sexo,
+      idadeEm2019,
+      this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103);
+
 
     let rstRegraIdadeProgressiva: any;
 
     let percentualR1 = 60;
 
-    // console.log(regraIdade);
-    // console.log(this.seguradoTransicao.idadeFracionada);
-    // console.log(this.seguradoTransicao.redutorProfessor);
-    // console.log(contribuicao_min[this.seguradoTransicao.sexo]);
+    // if (this.seguradoTransicao.idadeFracionada >= regraIdade &&
+    //   this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
+    if (regraIdade || regraIdadeAnterior) {
 
-    if (this.seguradoTransicao.idadeFracionada >= regraIdade &&
-      this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
-
-
-      rstRegraIdadeProgressiva = {
-        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
-        idadeMoment: this.calcularIdade(this.dataAtual),
-        idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
-        tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
-        DiffDataAtualDib: 0,
-        requisitos: regraIdade,
-        formula: '',
-        percentual: 0,
+        rstRegraIdadeProgressiva = {
+          dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
+          idadeMoment: this.calcularIdade(this.dataAtual),
+          idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
+          tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
+          DiffDataAtualDib: 0,
+          requisitos: regraIdade,
+          formula: '',
+          percentual: 0,
       };
 
     } else {

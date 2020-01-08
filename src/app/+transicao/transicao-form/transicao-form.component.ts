@@ -73,86 +73,19 @@ export class TransicaoFormComponent implements OnInit {
     // this.nome = 'Segurado teste teste ';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '28/11/1963';
-    // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '15';
-
-
-    // this.nome = 'Segurado Professora ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '06/09/1970';
-    // this.dataFiliacao = '20/10/1985';
+    // this.dataNascimento = '09/12/1959';
+    // this.dataFiliacao = '01/01/1991';
     // this.sexo = 'f';
-    // this.professor = true;
-
-    // this.contribuicaoAnosAteEC103 = '35';
-    // this.contribuicaoMesesAteEC103 = '6';
-    // this.contribuicaoDiasAteEC103 = '10';
-
-    // this.contribuicaoAnos = '35';
-    // this.contribuicaoMeses = '6';
-    // this.contribuicaoDias = '25';
-
-    // this.nome = 'Segurado teste tempo de contribuicao ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '10/12/1962';
-    // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'm';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoAnosAteEC103 = '16';
+    // this.contribuicaoMesesAteEC103 = '3';
     // this.contribuicaoDiasAteEC103 = '0';
 
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '28';
+    // this.contribuicaoAnos = '16';
+    // this.contribuicaoMeses = '3';
+    // this.contribuicaoDias = '0';
 
-
-    // this.nome = 'Jose ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '09/12/1960';
-    // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '37';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '37';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '19';
-
-
-
-    // this.nome = 'Teste ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '02/02/1963';
-    // this.dataFiliacao = '20/10/1985';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '19';
 
   }
 

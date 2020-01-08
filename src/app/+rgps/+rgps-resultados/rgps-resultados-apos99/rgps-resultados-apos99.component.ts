@@ -789,10 +789,41 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
-    this.getRendaMensal(conclusoes, rmi, currency);
+   // this.getRendaMensal(conclusoes, rmi, currency);
 
+
+   
+   if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
+    rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
+    rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
+  } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
+    // console.log (rmi, somaMedias, rmi >= somaMedias);
+    rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
+    rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
+  }
+
+
+    // let comparePontosFator = function (conclusoes) {
+      
+    //   for (const item of conclusoes) {
+    //     console.log(item);
+        
+    //   }
+
+    // }
+
+
+    
+    // console.log( rmi <= somaMedias)
+    // console.log(rmi)
+    // console.log(somaMedias)
+   
+    // console.log(conclusoes[conclusoes.length - 1].value)
+    // console.log(conclusoes[conclusoes.length - 2].value)
+
+    this.isUpdating = true;
     // ULTIMA LINHA
-    if (conclusoes[conclusoes.length - 1].value >= conclusoes[conclusoes.length - 2].value) {
+    if (conclusoes[conclusoes.length - 1].value > conclusoes[conclusoes.length - 2].value) {
       conclusoes[conclusoes.length - 1]["class"] = "destaque";
     } else if (conclusoes[conclusoes.length - 2].value >= conclusoes[conclusoes.length - 1].value) {
       this.isUpdating = true;
@@ -801,19 +832,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push(valor);
       conclusoes[conclusoes.length - 3] = {};
       conclusoes[conclusoes.length - 1]["class"] = "destaque";
-      this.isUpdating = false;
-    }
+     
+     }
+    //else if(conclusoes[conclusoes.length - 1].value == conclusoes[conclusoes.length - 2].value){
+    //   conclusoes[conclusoes.length - 2]["class"] = "destaque";
+    //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
+    // }
 
-    if (this.rmi8595 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-      rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 }) : this.getRendaMensal(conclusoes, rmi, currency);
-      rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 85/95:", value: this.rmi8595 });
-    } else if (this.rmi8090 && this.contribuicaoPrimaria.anos >= comparacaoContribuicao) {
-      // console.log (rmi, somaMedias, rmi >= somaMedias);
-      rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
-      rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
-    }
+    // console.log(comparePontosFator(conclusoes));
 
-    conclusoes[conclusoes.length - 1]['class'] = 'destaque';
+    this.isUpdating = false;
+
+   // conclusoes[conclusoes.length - 1]['class'] = 'destaque';
 
     this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
@@ -977,7 +1007,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
       conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca + ' - Fator Previdenciário favorável' });//conclusoes.fator_previdenciario = fatorSeguranca + '- Fator Previdenciário favorável';
       this.fatorPrevidenciario = fatorSeguranca;
-      console.log(typeof somaMedias.valor);
+    //  console.log(typeof somaMedias.valor);
       if (typeof somaMedias.valor === 'number') {
         somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
       }
