@@ -167,8 +167,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //   this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
 
-    console.log(idadeEm2019);
-    console.log(regraIdadeAnterior);
+    // console.log(idadeEm2019);
+    // console.log(regraIdadeAnterior);
     
 
     if (regraIdade.status || regraIdadeAnterior.status) {
