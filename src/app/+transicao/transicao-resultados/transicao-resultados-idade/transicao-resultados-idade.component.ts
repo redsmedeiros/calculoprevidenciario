@@ -143,13 +143,12 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     };
 
 
-console.log(this.seguradoTransicao);
-
-
     const regraIdade = this.requisitosRegra5(this.dataAtual.year(),
       this.seguradoTransicao.sexo,
       this.seguradoTransicao.idadeFracionada,
       this.seguradoTransicao.contribuicaoFracionadoAnos);
+
+      console.log(regraIdade);
 
 
     const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
@@ -167,7 +166,12 @@ console.log(this.seguradoTransicao);
     // if (this.seguradoTransicao.idadeFracionada >= regraIdade &&
     //   this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
 
-    if (regraIdade || regraIdadeAnterior) {
+
+    console.log(idadeEm2019);
+    console.log(regraIdadeAnterior);
+    
+
+    if (regraIdade.status || regraIdadeAnterior.status) {
 
         rstRegraIdadeProgressiva = {
           dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
