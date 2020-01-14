@@ -800,6 +800,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // console.log (rmi, somaMedias, rmi >= somaMedias);
     rmi >= somaMedias ? conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 }) : this.getRendaMensal(conclusoes, rmi, currency);
     rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({ string: "Renda Mensal Inicial com Regra 80/90:", value: this.rmi8090 });
+  }else{
+    this.getRendaMensal(conclusoes, rmi, currency);
   }
 
 
