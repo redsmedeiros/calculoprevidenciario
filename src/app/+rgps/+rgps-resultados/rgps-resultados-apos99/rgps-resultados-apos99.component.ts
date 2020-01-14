@@ -741,8 +741,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           }
 
         }
-        console.log('teste');
-              // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
+                      // else if (dataBeneficio < dataRegra85_95 || dataBeneficio > dataFimRegra85_95) {
       //   conclusoes.push({ string: "Fp - Fator Previdenciário:", value: fatorSeguranca });//resultados['Fp - fator Previdenciario: '] = fatorSeguranca;
       //   this.fatorPrevidenciario = fatorSeguranca;
       // }
@@ -819,7 +818,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // console.log( rmi <= somaMedias)
     // console.log(rmi)
     // console.log(somaMedias)
-     console.log(conclusoes);
+    // console.log(conclusoes);
    
     // console.log(conclusoes[conclusoes.length - 1].value)
     // console.log(conclusoes[conclusoes.length - 2].value)
