@@ -47,7 +47,7 @@
                     </div>
                 
                     <div class="form-group" >
-                      <label class="col-md-2 control-label" >Data de filiação</label>
+                      <label class="col-md-2 control-label" >Data de filiação*</label>
                       <div class="col-md-3">
                         <input [(ngModel)]="formData.data_filiacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_filiacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
                         <small *ngIf="errors.has('data_filiacao')" class="text-danger">{{ errors.get('data_filiacao') | i18n}}</small>

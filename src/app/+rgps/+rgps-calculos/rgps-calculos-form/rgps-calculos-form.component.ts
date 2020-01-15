@@ -459,18 +459,16 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.hasAuxilioAcidente = false;
 
 
-    let tipoInvalidezOuIdade = false;
+    let tipoInvalidezPensao = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
       (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')) {
-      tipoInvalidezOuIdade = true;
+      tipoInvalidezPensao = true;
     }
 
     if ((this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
       (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
       this.hasPensao19 = true;
-      tipoInvalidezOuIdade = true;
+      tipoInvalidezPensao = true;
 
       // campos especificos para pensão por morte
       if ((this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
@@ -481,14 +479,21 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     }
 
+    let tipoIdade = false;
+    if ((this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')) {
+        tipoIdade = true;
+    }
+
+
     this.hasInvalidez19 = false;
     if ((this.especieBeneficio === 'Aposentadoria por incapacidade permanente')) {
       this.hasInvalidez19 = true;
-      tipoInvalidezOuIdade = true;
+      tipoInvalidezPensao = true;
     }
 
     if ((this.especieBeneficio === 'Auxílio Acidente - 50%')) {
-      tipoInvalidezOuIdade = true;
+      tipoInvalidezPensao = true;
       this.hasAuxilioAcidente = true;
     }
 
@@ -507,7 +512,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
     // console.log(this.especieBeneficio);
-    // console.log(tipoInvalidezOuIdade);
+    // console.log(tipoInvalidezPensao);
 
     if (moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')) {
       this.posteriorMaio2013 = true;
@@ -540,7 +545,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
     } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
-      if (!tipoInvalidezOuIdade) {
+      if (!tipoInvalidezPensao) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
         this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       }
@@ -553,7 +558,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib >= moment('2019-11-13')) {
 
-      if (!tipoInvalidezOuIdade) {
+      if (!tipoInvalidezPensao) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
         this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       }
@@ -602,7 +607,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = true;
       this.has19 = false;
 
-      if (tipoInvalidezOuIdade) {
+      if (tipoInvalidezPensao) {
         this.hasAnterior = false;
         this.has98 = false;
         this.has99 = false;
@@ -617,11 +622,20 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAtual = true;
       this.has19 = true;
 
-      if (tipoInvalidezOuIdade) {
+      if (tipoInvalidezPensao) {
         this.hasAnterior = false;
         this.has98 = false;
         this.has99 = false;
         this.hasAtual = false;
+        this.has19 = true;
+      }
+
+
+      if (tipoIdade) {
+        this.hasAnterior = false;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = true;
         this.has19 = true;
       }
 

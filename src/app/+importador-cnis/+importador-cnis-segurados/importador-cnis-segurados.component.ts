@@ -122,7 +122,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
-      // this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
+       this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
     } else {
       var dateParts = this.formData.data_filiacao.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);

@@ -703,11 +703,11 @@ export class RgpsResultadosComponent implements OnInit {
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
     //25, 26, 27,
 
-    const arrayTypeNum = [1, 2, 3, 16, 28, 1900, 1901, 1903, 1905];
+    const arrayTypeNum = [1,  16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
       'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
-      'Aposentadoria por idade - Trabalhador Urbano',
-      'Aposentadoria por idade - Trabalhador Rural',
+      // 'Aposentadoria por idade - Trabalhador Urbano',
+      // 'Aposentadoria por idade - Trabalhador Rural',
       'Auxílio Doença',
       'Pensão por Morte instituidor aposentado na data óbito',
       'Pensão por Morte instituidor não é aposentado na data óbito',
@@ -717,6 +717,25 @@ export class RgpsResultadosComponent implements OnInit {
       // 'Aposentadoria especial da Pessoa com Deficiência Grave',
       // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
       // 'Aposentadoria especial da Pessoa com Deficiência Leve',
+    ];
+
+    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+      return true;
+    }
+    return false;
+
+  }
+
+
+    /**
+   * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3
+   * @param especieBeneficio
+   */
+  verificaEspecieDeBeneficioIdade(especieBeneficio) {
+    const arrayTypeNum = [ 2, 3 ];
+    const arrayTypeText = [
+       'Aposentadoria por idade - Trabalhador Urbano',
+       'Aposentadoria por idade - Trabalhador Rural',
     ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
@@ -835,7 +854,8 @@ export class RgpsResultadosComponent implements OnInit {
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
 
-    const verificaInvalidezObitoIdade = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
+    const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
+    const verificaIdade = this.verificaEspecieDeBeneficioIdade(calculo.tipo_seguro);
 
     if (dataInicioBeneficio < data88) {
       // * Periodo = Anterior a 05/10/88
@@ -871,7 +891,7 @@ export class RgpsResultadosComponent implements OnInit {
                 após 99     (tempo de contribuicao após a lei 99)
       (cálculos em box separados)*/
 
-      if (!verificaInvalidezObitoIdade) {
+      if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
       }
@@ -885,11 +905,20 @@ export class RgpsResultadosComponent implements OnInit {
                 entre 99 e 19 (tempo de contribuicao até 103/2019)
                 após 19     (tempo de contribuicao após 103/2019)
       (cálculos em box separados)*/
-      if (!verificaInvalidezObitoIdade) {
+      if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
         calculo.mostrarCalculoApos99 = true;
       }
+
+      // idade deve calcular de 1999 ate 11/2019 para direito adquirido
+      if (verificaIdade) {
+        calculo.mostrarCalculo91_98 = false;
+        calculo.mostrarCalculo98_99 = false;
+        calculo.mostrarCalculoApos99 = true;
+      }
+
+
       calculo.mostrarCalculoApos19 = true;
     }
 
