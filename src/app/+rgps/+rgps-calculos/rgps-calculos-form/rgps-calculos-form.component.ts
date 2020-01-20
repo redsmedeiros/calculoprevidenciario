@@ -667,6 +667,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria98meses = periodos.total88.months;
       this.primaria98dias = periodos.total88.days;
       this.periodoInicioBeneficio = 'Anterior a 05/10/1988';
+      this.carencia = periodos.total88.carencia;
 
     } else if (dib <= moment('1991-04-04')) {
 
@@ -675,6 +676,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria98meses = periodos.total91.months;
       this.primaria98dias = periodos.total91.days;
       this.periodoInicioBeneficio = 'Entre 05/10/1988 e 04/04/1991';
+      this.carencia = periodos.carencia91.carencia;
 
     } else if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
 
@@ -682,6 +684,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria98meses = periodos.total98.months;
       this.primaria98dias = periodos.total98.days;
       this.periodoInicioBeneficio = 'Entre 05/04/1991 e 15/12/1998';
+      this.carencia = periodos.total98.carencia;
 
     } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
 
@@ -694,6 +697,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria99dias = periodos.total99.days;
 
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
+      this.carencia = periodos.total99.carencia;
 
     } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
 
@@ -711,6 +715,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       // this.periodoInicioBeneficio = 'A partir de 29/11/1999';
       this.periodoInicioBeneficio = 'Entre 29/11/1999 e 13/11/2019';
+
+      this.carencia = periodos.total.carencia;
 
     } else if (dib >= moment('2019-11-13')) {
 
@@ -735,6 +741,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       // posterior a EC nº 103/2019
 
       this.periodoInicioBeneficio = 'A partir de 13/11/2019';
+      this.carencia = periodos.total19.carencia;
     }
 
 
