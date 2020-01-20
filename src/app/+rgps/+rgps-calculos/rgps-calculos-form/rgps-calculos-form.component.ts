@@ -676,7 +676,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria98meses = periodos.total91.months;
       this.primaria98dias = periodos.total91.days;
       this.periodoInicioBeneficio = 'Entre 05/10/1988 e 04/04/1991';
-      this.carencia = periodos.carencia91.carencia;
+      this.carencia = periodos.total91.carencia;
 
     } else if (dib >= moment('1991-04-05') && dib <= moment('1998-12-15')) {
 
