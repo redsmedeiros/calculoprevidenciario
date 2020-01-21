@@ -326,6 +326,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
   }
+
+
+  
   /*
     generateTabelaResultados() {
       let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
@@ -550,7 +553,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   
       return tableData;
     }
-  */
+
 
   /*
   // opção 1
@@ -843,6 +846,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido) {
         break;
       }
+
       let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
       let siglaDataCorrente = moedaDataCorrente.sigla;
 
@@ -1069,8 +1073,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let indiceReajuste = 0;
     let indiceReajusteOs = 0;
-
-    // console.log(dataCorrente);
 
 
     if (indiceObjCorrente == undefined) {
@@ -1651,22 +1653,30 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tipo_correcao = this.calculo.tipo_correcao;
     let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     let moedaDataAtual = this.Moeda.getByDate(moment());
-    let moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo));
+    let moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
 
     let desindexador = 0.0;
     let correcaoMonetaria = 0.0;
     if (tipo_correcao == 'ipca') {
+
       desindexador = moedaDataAtual.ipca / moedaDataCalculo.ipca;
       correcaoMonetaria = moedaDataCorrente.ipca * desindexador;
+
     } else if (tipo_correcao == 'cam') {
+
       desindexador = moedaDataAtual.cam / moedaDataCalculo.cam;
       correcaoMonetaria = moedaDataCorrente.cam * desindexador;
+
     } else if (tipo_correcao == 'tr') {
+
       desindexador = moedaDataAtual.tr / moedaDataCalculo.tr;
       correcaoMonetaria = moedaDataCorrente.tr * desindexador;
+
     } else if (tipo_correcao == 'tr032015_ipcae') {
+
       desindexador = moedaDataAtual.tr032015_ipcae / moedaDataCalculo.tr032015_ipcae;
       correcaoMonetaria = moedaDataCorrente.tr032015_ipcae * desindexador;
+
     }
     let usar_deflacao = !this.calculo.nao_usar_deflacao;
     if (!usar_deflacao) {
