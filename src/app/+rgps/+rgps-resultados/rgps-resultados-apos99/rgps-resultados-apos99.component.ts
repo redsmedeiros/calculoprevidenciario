@@ -625,7 +625,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let contribuicao89_99 = tempo + this.idadeFracionada;
     let contribuicao90_100 = tempo + this.idadeFracionada;
 
-    let dateFormat = "DD/MM/YYYY";
+    let dateFormat = 'DD/MM/YYYY';
     let dataRegra85_95 = moment('17/06/2015', dateFormat);
     let dataRegra86_96 = moment('31/12/2018', dateFormat);
     let dataRegra87_97 = moment('31/12/2020', dateFormat);
@@ -640,7 +640,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFimRegra89_99 = moment('30/12/2026', dateFormat);
     let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
 
-    let dataBeneficio = this.dataInicioBeneficio;
+    //let dataBeneficio = this.dataInicioBeneficio; // correção data da dib e não o inicio do mes 21-01-2020
+    let dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+
+    
     // let teto = moedaDib.teto;
     // let minimo = moedaDib.salario_minimo;
 
