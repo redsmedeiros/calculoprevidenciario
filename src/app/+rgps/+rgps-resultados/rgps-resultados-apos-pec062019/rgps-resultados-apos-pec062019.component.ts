@@ -264,8 +264,23 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
 
       let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
-      let fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
-      let fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
+     
+      let fator = 1;
+      let fatorLimite = 1;
+
+
+      if ((!this.calculo.pbc_completo)) {
+
+        fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
+        fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
+
+      } else {
+
+        fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
+        fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+
+      }
+
       let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
 

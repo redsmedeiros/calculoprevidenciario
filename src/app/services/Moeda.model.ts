@@ -11,6 +11,7 @@ export class Moeda extends Model {
     cam: '',
     teto: '',
     fator: '',
+    fator_pbc: '',
     sigla: '',
     nome: '',
     tr: '',
@@ -25,6 +26,7 @@ export class Moeda extends Model {
   public cam;
   public teto;
   public fator;
+  public fator_pbc;
   public sigla;
   public nome;
   public tr;
