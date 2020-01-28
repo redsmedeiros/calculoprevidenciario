@@ -17,72 +17,76 @@ import { AdminLoginComponent } from "../shared/user/admin-login/admin-login.comp
 })
 
 export class MoedaImportComponent implements OnInit {
-  @ViewChild('csvFileInput') fileInput:ElementRef;
+  @ViewChild('csvFileInput') fileInput: ElementRef;
   @ViewChild(AdminLoginComponent) adminComponent;
 
   private files: UploadFile[] = [];
   private cnisTextArea;
-  private isAuth:boolean ;
-  
+  private isAuth: boolean;
+
   constructor(private csvParse: PapaParseService,
-              private MoedaService: MoedaService) {
+    private MoedaService: MoedaService) {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.isAuth = this.adminComponent.isAuth
   }
 
-  parseCsv(file){
-  	let options = {
-  		header: true, 
-  		complete: (results) => { this.saveValues(results) },
+  parseCsv(file) {
+    let options = {
+      header: true,
+      complete: (results) => { this.saveValues(results) },
       error: (error) => { this.processoAbortado(error) },
-			dynamicTyping:true,
+      dynamicTyping: true,
       skipEmptyLines: true,
-      beforeFirstChunk: function(chunk) {
-                    var rows = chunk.split( /\r\n|\r|\n/ );
-                    var headings = rows[0].toLowerCase();
-                    rows[0] = headings;
-                    return rows.join("\r\n");
-                },
-		};
-		this.csvParse.parse(file, options);
+      beforeFirstChunk: function (chunk) {
+        var rows = chunk.split(/\r\n|\r|\n/);
+        var headings = rows[0].toLowerCase();
+        rows[0] = headings;
+        return rows.join("\r\n");
+      },
+    };
+    this.csvParse.parse(file, options);
   }
 
-  saveValues(data){
-  	let values = data.data;
-    if(values.length == 0){
+  saveValues(data) {
+    let values = data.data;
+    if (values.length == 0) {
       swal('Erro', 'Verifique o arquivo', 'error');
       return;
     }
-  	if(data.meta.fields.length != 14){
-      console.log(data.meta.fields)
-  		swal('Erro', 'Número incorreto de colunas. O correto são 13 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
-  	}else{
-  	  console.log(data)
-  	  swal({
-  	    type: 'info',
-  	    title: 'Aguarde por favor...',
-  	   });
-  	  swal.showLoading();
-  	  this.MoedaService.save(values).then(() => {
-  	    swal.close();
+    if (data.meta.fields.length != 14) {
+      // console.log(data.meta.fields)
+      swal('Erro', 'Número incorreto de colunas. O correto são 13 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
+    } else {
+      // console.log(data)
+      swal({
+        type: 'info',
+        title: 'Aguarde por favor...',
+      });
+
+      swal.showLoading();
+      console.log(values);
+
+      this.MoedaService.save(values).then(() => {
+        swal.close();
         swal({
           type: 'success',
           title: 'Importação concluída com sucesso!',
         });
-  	  }).catch(err =>{
-  	    swal.close();
-  	    console.log(err);
-  	    swal('Erro', 'Um erro ocorreu. Tente novamente mais tarde!', 'error');
-  	  });
-  	}
+
+      }).catch(err => {
+        swal.close();
+        console.log(err);
+        swal('Erro', 'Um erro ocorreu. Tente novamente mais tarde!', 'error');
+      });
+    }
   }
 
-  processoAbortado(error){
+  processoAbortado(error) {
     swal('Um erro ocorreu', error, 'error');
     console.log(error)
   }
@@ -90,7 +94,7 @@ export class MoedaImportComponent implements OnInit {
   //Arquivo é solto na área de transferência
   dropped(event: UploadEvent) {
     let files = event.files;
-    if(files.length > 1){
+    if (files.length > 1) {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
       return;
     }
@@ -98,7 +102,7 @@ export class MoedaImportComponent implements OnInit {
     if (file.fileEntry.isFile) { //É um arquivo?
       const fileEntry = file.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
-      	console.log(file)
+        console.log(file)
         this.parseCsv(file);
       });
     } else {
@@ -108,13 +112,13 @@ export class MoedaImportComponent implements OnInit {
   }
 
   //Arquivo selecionado atraves do file dialog
-  onFileInputChange(event){
+  onFileInputChange(event) {
     let files = event.srcElement.files;
-    if(files.length > 1){
+    if (files.length > 1) {
       swal('Erro', 'Selecione apenas um arquivo', 'error');
-    }else{
+    } else {
       console.log(files[0]);
-      this.parseCsv(files[0]); 
+      this.parseCsv(files[0]);
     }
   }
 
@@ -125,8 +129,8 @@ export class MoedaImportComponent implements OnInit {
   }
 
   //Zona de arquivo clicada
-  clickedDropzone(){
-    let event = new MouseEvent('click', {bubbles: false});
+  clickedDropzone() {
+    let event = new MouseEvent('click', { bubbles: false });
     this.fileInput.nativeElement.dispatchEvent(event);
   }
 
