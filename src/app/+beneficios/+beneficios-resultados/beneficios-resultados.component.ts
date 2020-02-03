@@ -174,6 +174,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dibAnteriorDevidos = null;
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
+
+
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -328,7 +330,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
-  
+
   /*
     generateTabelaResultados() {
       let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
@@ -1035,20 +1037,20 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
 
 
-// console.log(tableData[tableData.length-2]);
-// console.log(this.ultimoBeneficioDevidoAntesProporcionalidade);
-// console.log(this.ultimoBeneficioRecebidoAntesProporcionalidade);
-// console.log(this.ultimaRenda);
-// console.log('---');
-// console.log(this.somaVincendas);
+    // console.log(tableData[tableData.length-2]);
+    // console.log(this.ultimoBeneficioDevidoAntesProporcionalidade);
+    // console.log(this.ultimoBeneficioRecebidoAntesProporcionalidade);
+    // console.log(this.ultimaRenda);
+    // console.log('---');
+    // console.log(this.somaVincendas);
 
-// console.log(this.somaDiferencaCorrigida);
-// console.log(this.somaJuros);
-// console.log( this.somaDevidaJudicialmente);
-// console.log('---');
+    // console.log(this.somaDiferencaCorrigida);
+    // console.log(this.somaJuros);
+    // console.log( this.somaDevidaJudicialmente);
+    // console.log('---');
 
-// console.log(this.somaDevidaJudicialmente);
-// console.log(this.somaTotalSegurado);
+    // console.log(this.somaDevidaJudicialmente);
+    // console.log(this.somaTotalSegurado);
 
 
 
@@ -1238,13 +1240,22 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiDevidos = irtDevidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-
-    if (dataCorrente > this.dataInicioDevidos) {
-      beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
-    } else {
+    // regra para dib atrasados antes de 03/2006 e proporcinal
+    // if((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01')) 
+    //     && moment(this.calculo.data_pedido_beneficio).isBefore(moment('2006-04-01')))
+    if ((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+      && moment(this.calculo.data_pedido_beneficio).isBetween('2006-03-01', '2006-04-31')) {
       beneficioDevido = rmiDevidos;
       this.beneficioDevidoOs = beneficioDevido;
     }
+    else if (dataCorrente > this.dataInicioDevidos) {
+      beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
+    }
+    else {
+      beneficioDevido = rmiDevidos;
+      this.beneficioDevidoOs = beneficioDevido;
+    }
+
 
     //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro) {
@@ -1255,7 +1266,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
-    if ((dataCorrente.isSame('2006-08-01', 'month') ||
+    if ((
+      // dataCorrente.isSame('2006-08-01', 'month') ||
       dataCorrente.isSame('2000-06-01', 'month') ||
       dataCorrente.isSame('2001-06-01', 'month') ||
       dataCorrente.isSame('2002-06-01', 'month') ||
@@ -1364,11 +1376,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
 
-    if (dataCorrente.isSame(moment('2006-08-01')) && moment(this.calculo.data_pedido_beneficio).isBefore(moment('2006-04-01'))) {
-        beneficioDevidoFinal =  parseFloat(this.calculo.valor_beneficio_esperado);
-        beneficioDevidoFinal  *= reajusteObj.reajuste;
-        this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoFinal;
-    }
 
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
       if (parseFloat(beneficioDevidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 0.904) {
@@ -1424,7 +1431,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.ultimoSalarioMinimoDevido = beneficioDevidoAjustado;
     }
 
-    if (dataCorrente.isSame('2006-03-01', 'month') ||
+    if (
+      dataCorrente.isSame('2006-03-01', 'month') ||
       dataCorrente.isSame('2000-03-01', 'month') ||
       dataCorrente.isSame('2001-03-01', 'month') ||
       dataCorrente.isSame('2002-03-01', 'month') ||
@@ -1460,9 +1468,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    if (dataCorrente > this.dataInicioRecebidos) {
+    // regra para dib atrasados antes de 04/2006
+    if ((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+      && moment(this.calculo.data_pedido_beneficio).isBetween('2006-03-01', '2006-04-31')) {
+        beneficioRecebido = rmiRecebidos;
+        this.beneficioRecebidoOs = beneficioRecebido;
+    }
+    else if (dataCorrente > this.dataInicioRecebidos) {
       beneficioRecebido = this.ultimoBeneficioRecebidoAntesProporcionalidade;
-    } else {
+    }
+    else {
       beneficioRecebido = rmiRecebidos;
       this.beneficioRecebidoOs = beneficioRecebido;
     }
@@ -1476,7 +1491,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
-    if ((dataCorrente.isSame('2006-08-01', 'month') ||
+    if ((
+      //dataCorrente.isSame('2006-08-01', 'month') ||
       dataCorrente.isSame('2000-06-01', 'month') ||
       dataCorrente.isSame('2001-06-01', 'month') ||
       dataCorrente.isSame('2002-06-01', 'month') ||
@@ -1586,19 +1602,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioRecebidoFinal *= proporcionalidade;
       //this.proporcionalidadeUltimaLinha = true;
     }
-
-    // if(dataCorrente.isSame(moment('2017-01-01'), 'year')){
-    //   if(parseFloat(beneficioRecebidoFinal.toFixed(3)) ===  parseFloat(moedaDataCorrente.salario_minimo) + 0.904){
-    //     beneficioRecebidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
-    //     this.ultimoBeneficioRecebidoAntesProporcionalidade = parseFloat(moedaDataCorrente.salario_minimo);
-    //   }
-    // }
-    
-    if (dataCorrente.isSame(moment('2006-08-01')) && moment(this.calculo.data_pedido_beneficio).isBefore(moment('2006-04-01'))) {
-      beneficioRecebidoFinal =  parseFloat(this.calculo.valor_beneficio_concedido);
-      beneficioRecebidoFinal  *= reajusteObj.reajuste;
-      this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioRecebidoFinal;
-  }
 
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
       if (parseFloat(beneficioRecebidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 0.904) {
