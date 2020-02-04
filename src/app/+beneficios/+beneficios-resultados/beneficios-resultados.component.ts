@@ -1249,7 +1249,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (
-      moment(this.calculo.data_pedido_beneficio_esperado).isBetween('2006-03-01', '2006-03-31') &&
       (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
       ) {
       beneficioDevido = rmiDevidos;
@@ -1479,7 +1478,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 //    regra para dib atrasados antes de 04/2006
     if (
-      moment(this.dataInicioRecebidos).isBetween('2006-03-01', '2006-03-31') &&
       (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
       ) {
         beneficioRecebido = rmiRecebidos;
