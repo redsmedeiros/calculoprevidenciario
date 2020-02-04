@@ -277,6 +277,36 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
 
+  // public converterTempoContribuicao(anos, meses, dias, type) {
+
+
+
+  //   console.log(anos + ' - ' + meses + ' - ' + dias);
+  //   console.log(moment.duration({year: anos, months: meses, days: dias, hours: 0, minutes: 0, seconds: 0 }));
+  //   console.log(moment.duration({year: anos, months: meses, days: dias, hours: 0, minutes: 0, seconds: 0 }).asDays());
+  //   console.log(moment.duration({year: anos, months: meses, days: dias, hours: 0, minutes: 0, seconds: 0 }).asYears());
+
+  //   anos = this.isFormatInt(anos);
+  //   meses = this.isFormatInt(meses);
+  //   dias = this.isFormatInt(dias);
+
+  //   const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
+
+  //   console.log('anos ' + (anos * 365.25));
+  //   console.log('meses ' + (meses * 30.436875));
+  //   console.log('dias ' + dias);
+  //   console.log(contribuicaoTotal);
+
+  //   return (type === 'days' || type === 'd') ? Math.round(contribuicaoTotal) : contribuicaoTotal / 365.25;
+
+  //   // return (type === 'days' || type === 'd') ? 
+  //   //             moment.duration({year: anos, months: meses, days: dias, hours: 0, minutes: 0, seconds: 0 }).asDays() :
+  //   //             moment.duration({year: anos, months: meses, days: dias, hours: 0, minutes: 0, seconds: 0 }).asYears();
+  // }
+
+
+
+
   public verificarTransitoria() {
 
     if (this.seguradoTransicao.dataFiliacao != undefined

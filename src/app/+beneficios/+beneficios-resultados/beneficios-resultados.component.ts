@@ -1240,18 +1240,18 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiDevidos = irtDevidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    // regra para dib atrasados antes de 03/2006 e proporcinal
-    // if((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01')) 
-    //     && moment(this.calculo.data_pedido_beneficio).isBefore(moment('2006-04-01')))
-    if ((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
-      && moment(this.calculo.data_pedido_beneficio).isBetween('2006-03-01', '2006-04-31')) {
-      beneficioDevido = rmiDevidos;
-      this.beneficioDevidoOs = beneficioDevido;
-    }
-    else if (dataCorrente > this.dataInicioDevidos) {
+    if (dataCorrente > this.dataInicioDevidos) {
       beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
     }
     else {
+      beneficioDevido = rmiDevidos;
+      this.beneficioDevidoOs = beneficioDevido;
+    }
+
+    if (
+      moment(this.calculo.data_pedido_beneficio_esperado).isBetween('2006-03-01', '2006-03-31') &&
+      (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+      ) {
       beneficioDevido = rmiDevidos;
       this.beneficioDevidoOs = beneficioDevido;
     }
@@ -1468,13 +1468,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    // regra para dib atrasados antes de 04/2006
-    if ((dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
-      && moment(this.calculo.data_pedido_beneficio).isBetween('2006-03-01', '2006-04-31')) {
-        beneficioRecebido = rmiRecebidos;
-        this.beneficioRecebidoOs = beneficioRecebido;
-    }
-    else if (dataCorrente > this.dataInicioRecebidos) {
+    
+    if (dataCorrente > this.dataInicioRecebidos) {
       beneficioRecebido = this.ultimoBeneficioRecebidoAntesProporcionalidade;
     }
     else {
@@ -1482,6 +1477,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioRecebidoOs = beneficioRecebido;
     }
 
+//    regra para dib atrasados antes de 04/2006
+    if (
+      moment(this.dataInicioRecebidos).isBetween('2006-03-01', '2006-03-31') &&
+      (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+      ) {
+        beneficioRecebido = rmiRecebidos;
+        this.beneficioRecebidoOs = beneficioRecebido;
+    }
 
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro && !this.isTetos) {
       beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
