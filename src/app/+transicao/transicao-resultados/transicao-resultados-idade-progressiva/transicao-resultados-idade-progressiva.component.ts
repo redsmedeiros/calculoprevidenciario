@@ -275,6 +275,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   public requisitosRegra2(ano, sexo, idade, tempo_contribuicao, redutorProfessorDias) {
 
+
     const requisitoContribuicoes = {
       f: 30,
       m: 35
@@ -286,24 +287,24 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     // };
 
     const requisitoContribuicoesDias = {
-      fd: 10957.5,
-      md: 12783.75
+      fd: (10957.5 - redutorProfessorDias),
+      md: (12783.75 - redutorProfessorDias)
     };
 
 
     const regra2 = this.requisitoIdadeProgressivaRegra2;
 
-    if ((sexo === 'md' && ano >= 2027 && idade >= regra2[2027][sexo]) &&
+    if ((sexo === 'md' && ano >= 2027 && idade >= (regra2[2027][sexo] - redutorProfessorDias) ) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2027][sexo] };
     }
 
-    if ((sexo === 'fd' && ano >= 2031 && idade >= regra2[2031][sexo]) &&
+    if ((sexo === 'fd' && ano >= 2031 && idade >= (regra2[2031][sexo] - redutorProfessorDias) ) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2031][sexo] };
     }
 
-    return (((ano >= 2019 && ano <= 2031) && idade >= regra2[ano][sexo]) &&
+    return (((ano >= 2019 && ano <= 2031) && idade >= (regra2[ano][sexo] - redutorProfessorDias)) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) ?
       { status: true, ano: ano, idade: idade, requisitosIdade: regra2[ano][sexo] } :
       { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
