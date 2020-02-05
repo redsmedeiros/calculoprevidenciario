@@ -415,6 +415,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
         this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
         this.isUpdating = false;
 
+        tempoTotalContribuicao += this.seguradoTransicao.redutorProfessor;
+        tempoTotalContribuicao += (this.seguradoTransicao.sexo === 'f') ? 5 : 0;
+
 
         fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
           (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);

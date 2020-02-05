@@ -148,7 +148,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       this.seguradoTransicao.idadeFracionada,
       this.seguradoTransicao.contribuicaoFracionadoAnos);
 
-      console.log(regraIdade);
+      //console.log(regraIdade);
 
 
     const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
