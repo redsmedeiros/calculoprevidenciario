@@ -559,6 +559,20 @@ export class RgpsResultadosComponent implements OnInit {
     return returnStr;
   }
 
+  
+  public tratarTempoFracionadoMoment(anos, meses, dias, notDays = false) {
+
+    if (notDays) {
+      return ` ${anos} ano(s), ${meses} mes(es)`;
+    }
+
+    if (anos < 0) {
+      return ` ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+    }
+
+    return ` ${anos} ano(s), ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+
+  }
 
   tratarAnosFracionado(fullDays) {
 

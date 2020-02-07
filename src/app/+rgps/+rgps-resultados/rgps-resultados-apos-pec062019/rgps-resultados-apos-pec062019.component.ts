@@ -185,7 +185,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
-    let dataLimite = (!this.calculo.pbc_completo)? moment('1994-07-01') : moment('1930-01-01');
+    let dataLimite = (!this.calculo.pbc_completo) ? moment('1994-07-01') : moment('1930-01-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
 
@@ -264,7 +264,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
 
       let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
-     
+
       let fator = 1;
       let fatorLimite = 1;
 
@@ -1395,7 +1395,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   }
 
 
-  
+
   public calcularIdadeFracionada(final, type) {
 
     const dataFinalFracionada = (final != null) ?
@@ -1408,7 +1408,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       (dataDiffAtual.months() * 30)
       + dataDiffAtual.days();
 
-    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal /  365.25;
+    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal / 365.25;
 
   }
 
@@ -1908,6 +1908,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     //tempo_contribuicao >= contribuicao_min[sexo] &&
 
+
     if (idade >= contribuicao_idade_min[sexo]) {
       status = true;
     }
@@ -1938,6 +1939,21 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     const tempoAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     const tempoContribuicaoAnosAtePec = (((tempoAtePec.anos) * 365.25) + ((tempoAtePec.meses) * 30.4375) + (tempoAtePec.dias)) / 365.25;
 
+    const teste_tempoContribuicaoAtePecMoment = moment.duration({
+      years: tempoAtePec.anos,
+      months: tempoAtePec.meses,
+      days: tempoAtePec.dias
+    });
+
+    const tempoTotal = this.getContribuicaoObj(this.calculo.contribuicao_primaria_19);
+
+
+    const teste_tempoContribuicaoTotalMoment = moment.duration({
+      years: tempoTotal.anos,
+      months: tempoTotal.meses,
+      days: tempoTotal.dias
+    });
+
 
     this.conclusoesRegra4.status = this.requisitosRegra4(this.segurado.sexo,
       tempoContribuicaoAnosAtePec,
@@ -1951,62 +1967,94 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         f: 30 - redutorProfessor
       };
 
+      const contribuicao_min_moment = {
+        m: moment.duration(35, 'y').subtract(redutorProfessor, 'y'),
+        f: moment.duration(30, 'y').subtract(redutorProfessor, 'y')
+      };
+
       const dibParaRegra4 = this.dataInicioBeneficio.clone();
 
       let contribuicaoDiff = 0;
-      let tempoDePedagio = 0;
-      let tempoFinalContribComPedagio = 0;
-      let tempoDePedagioTotal = 0;
-
-      // console.log(tempoContribuicaoAnosAtePec);
-      // console.log(contribuicao_min[this.segurado.sexo]);
-      // console.log((tempoContribuicaoAnosAtePec <= contribuicao_min[this.segurado.sexo]));
-
-      //if (tempoContribuicaoAnosAtePec <= contribuicao_min[this.segurado.sexo]) {
-      /// contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
-
-      tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
-      tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
-
-      // }
-
-      //  console.log(tempoContribuicaoAnosAtePec);
-      //  console.log( this.contribuicaoTotal);
+      // let tempoDePedagio = 0;
+      // let tempoFinalContribComPedagio = 0;
+     // let tempoDePedagioTotal = 0;
 
 
-      //  console.log( this.tratarAnosFracionado(tempoFinalContribComPedagio));
-      //  console.log( this.tratarAnosFracionado( this.contribuicaoTotal));
-      //  console.log( this.tratarAnosFracionado( tempoDePedagio));
+      contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
+
+     // tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
+     // tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
 
 
-      //  console.log(contribuicaoDiff);
-      //  console.log(tempoDePedagio);
-      //  console.log(tempoFinalContribComPedagio);
+      let tempoDePedagio = contribuicao_min_moment[this.segurado.sexo].clone();
+          tempoDePedagio = tempoDePedagio.subtract(teste_tempoContribuicaoAtePecMoment);
+
+
+      let tempoFinalContribComPedagio = contribuicao_min_moment[this.segurado.sexo].clone();
+          tempoFinalContribComPedagio = tempoFinalContribComPedagio.add(tempoDePedagio);
+
+
+
+           this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionadoMoment(
+                                                                                        tempoDePedagio.years(),
+                                                                                        tempoDePedagio.months(),
+                                                                                        tempoDePedagio.days(),
+                                                                                        true
+                                                                                        );
+           this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionadoMoment(
+                                                                                                  tempoFinalContribComPedagio.years(),
+                                                                                                  tempoFinalContribComPedagio.months(),
+                                                                                                  tempoFinalContribComPedagio.days(),
+                                                                                                  true
+                                                                                                  );
+
 
       //   tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
+      let tempoDePedagioTotal = tempoDePedagio.clone();
+          tempoDePedagioTotal = tempoDePedagioTotal.add(tempoDePedagio);
 
-      this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagio);
-      this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContribComPedagio);
+      // this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagio);
+      // this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContribComPedagio);
 
       // this.conclusoesRegra4.formula = contribuicao_max[this.segurado.sexo] +' - ((' + contribuicao_max[this.segurado.sexo] + '-' + this.contribuicaoTotal + ') * 0.5)';
       this.conclusoesRegra4.dataParaAposentar = dibParaRegra4.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
       this.conclusoesRegra4.tempoDeAtualDecontribuicao = this.tratarTempoFracionado(this.contribuicaoTotal);
 
-      // console.log((this.contribuicaoTotal >= tempoFinalContribComPedagio) );
-      // console.log( this.contribuicaoTotal.toPrecision(5));
-      // console.log(tempoFinalContribComPedagio.toPrecision(5));
-      // console.log((this.contribuicaoTotal + 0.0014).toPrecision(5));
 
-      if (this.contribuicaoTotal.toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5)
-        ||
-        ((this.contribuicaoTotal + 0.0014).toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5))) {
+     // console.log('------ inicio ---------');
+      // contribuicao_min_moment
+      // teste_tempoContribuicaoAtePecMoment
+      // teste_tempoContribuicaoTotalMoment
+
+     
+      // console.log('------ p --------');
+
+      // console.log(tempoDePedagio);
+      // console.log(tempoFinalContribComPedagio);
+      // console.log(teste_tempoContribuicaoTotalMoment);
+
+      // console.log(tempoFinalContribComPedagio.asDays());
+      // console.log(teste_tempoContribuicaoTotalMoment.asDays());
+
+      // console.log('---')
+      // console.log(teste_tempoContribuicaoTotalMoment.asDays() >= tempoFinalContribComPedagio.asDays())
+      // console.log(contribuicao_min_moment.f === teste_tempoContribuicaoTotalMoment)
+      // console.log(contribuicao_min_moment.f === teste_tempoContribuicaoTotalMoment)
+
+      // console.log('------ p --------');
+
+      // if (this.contribuicaoTotal.toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5)
+      //   ||
+      //   ((this.contribuicaoTotal + 0.0014).toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5))) {
+      if( teste_tempoContribuicaoTotalMoment.asDays() >= tempoFinalContribComPedagio.asDays() )
+        {
 
         this.conclusoesRegra4.tempoDePedagio = `Alcançou os requisitos de tempo de contribuição`;
         // this.conclusoesRegra4.tempoDePedagio = this.tratarAnosFracionado(tempoDePedagio);
         const resutadoAjuste = this.limitarTetosEMinimos(valorMedio, this.dataInicioBeneficio);
         this.conclusoesRegra4.valor = resutadoAjuste.valor;
-      //  this.conclusoesRegra4.valor = valorMedio;
+        //  this.conclusoesRegra4.valor = valorMedio;
         this.conclusoesRegra4.valorString = this.formatMoney(this.conclusoesRegra4.valor);
         this.conclusoesRegra4.exibirValor = true;
 
@@ -2016,7 +2064,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra faltam - '
           + this.conclusoesRegra4.tempoDePedagioTotal
           + ' para cumprir o pedágio.';
-
 
 
 
@@ -2120,21 +2167,21 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       m: 20,
       f: 15
     };
-    
+
     this.conclusoesRegra5.status = this.requisitosRegra5(
       this.idadeFracionada,
       this.dataInicioBeneficio.year(),
       this.segurado.sexo,
       this.contribuicaoTotal);
 
-      const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
+    const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
 
-      const regraIdadeAnterior = this.requisitosRegra5(
-                                    idadeEm2019,
-                                    2019,
-                                    this.segurado.sexo,
-                                    this.contribuicaoTotal);
-     
+    const regraIdadeAnterior = this.requisitosRegra5(
+      idadeEm2019,
+      2019,
+      this.segurado.sexo,
+      this.contribuicaoTotal);
+
     if (this.conclusoesRegra5.status || regraIdadeAnterior) {
 
       this.conclusoesRegra5.status = true;

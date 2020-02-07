@@ -88,7 +88,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   }
 
-
+ 
   public aplicarRedutorProfessor() {
 
     if (this.seguradoTransicao.professor) {
@@ -190,9 +190,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     }
 
 
-    // console.log(this.pedagioEmAnos );
-    // console.log(this.pedagioEmDias);
-
     const VeificarRequisitoHoje = this.requisitosRegra4(
       this.dataAtual.format('YYYY'),
       this.seguradoTransicao.sexo,
@@ -217,6 +214,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     } else {
 
       rstContadorRegra4 = this.contadorRegra4();
+      console.log(rstContadorRegra4);
 
       rstRegraPedagio100 = {
         dataDib: rstContadorRegra4.dataDib,
