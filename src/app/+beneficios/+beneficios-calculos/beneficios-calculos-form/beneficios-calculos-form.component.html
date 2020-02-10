@@ -201,10 +201,10 @@
                       <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
                       <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
                     </div>
-                    <label class="col-md-2 control-label" for="select-1">Espécie valores recebidos:</label>
+                    <label class="col-md-2 control-label" for="especieRecebidoSelect">Espécie valores recebidos:</label>
                     <div class="col-md-3">
 
-                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="select-1">
+                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="especieRecebidoSelect">
                         <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
                       </select>
 

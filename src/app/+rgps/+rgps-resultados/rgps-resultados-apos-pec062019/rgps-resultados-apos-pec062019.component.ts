@@ -1974,13 +1974,13 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       const dibParaRegra4 = this.dataInicioBeneficio.clone();
 
-      let contribuicaoDiff = 0;
+      // let contribuicaoDiff = 0;
       // let tempoDePedagio = 0;
       // let tempoFinalContribComPedagio = 0;
      // let tempoDePedagioTotal = 0;
 
 
-      contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
+      //contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
 
      // tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
      // tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
@@ -2007,8 +2007,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                                                                                                   tempoFinalContribComPedagio.days(),
                                                                                                   true
                                                                                                   );
-
-
+   
       //   tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       let tempoDePedagioTotal = tempoDePedagio.clone();
@@ -2021,6 +2020,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegra4.dataParaAposentar = dibParaRegra4.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
       this.conclusoesRegra4.tempoDeAtualDecontribuicao = this.tratarTempoFracionado(this.contribuicaoTotal);
 
+     
 
      // console.log('------ inicio ---------');
       // contribuicao_min_moment
@@ -2060,10 +2060,20 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
+        let contribuicaoDiff =  tempoFinalContribComPedagio.clone()
+        contribuicaoDiff = contribuicaoDiff.subtract(teste_tempoContribuicaoTotalMoment).subtract(1, 'd');
+
+        let diffRegraDe100 = this.tratarTempoFracionadoMoment(
+                                            contribuicaoDiff.years(),
+                                            contribuicaoDiff.months(),
+                                            contribuicaoDiff.days(),
+                                      false
+                                      );
+
+
 
         this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra faltam - '
-          + this.conclusoesRegra4.tempoDePedagioTotal
-          + ' para cumprir o pedágio.';
+          + diffRegraDe100  + ' para cumprir o pedágio.';
 
 
 
