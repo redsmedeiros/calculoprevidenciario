@@ -615,7 +615,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     for(let index = 0; index < this.correcaoOptions.length; index++){
       if(this.correcaoOptions[index].value == tipoCorrecao){
         this.indiceCorrecao = index;
-        console.log(this.indiceCorrecao)
+        // console.log(this.indiceCorrecao)
       }
     }
   }

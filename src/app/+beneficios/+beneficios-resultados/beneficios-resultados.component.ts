@@ -1248,13 +1248,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoOs = beneficioDevido;
     }
 
-    if (
-      moment(this.calculo.data_pedido_beneficio_esperado).isBefore('2006-03-31') &&
-      (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
-      ) {
-      beneficioDevido = rmiDevidos;
-      this.beneficioDevidoOs = beneficioDevido;
-    }
+    // if (
+    //   moment(this.calculo.data_pedido_beneficio_esperado).isBefore('2006-03-31') &&
+    //   (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+    //   ) {
+    //   beneficioDevido = rmiDevidos;
+    //   this.beneficioDevidoOs = beneficioDevido;
+    // }
 
 
     //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
@@ -1478,13 +1478,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 //    regra para dib atrasados antes de 04/2006
-    if (
-      moment(this.dataInicioRecebidos).isBefore('2006-03-31') &&
-      (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
-      ) {
-        beneficioRecebido = rmiRecebidos;
-        this.beneficioRecebidoOs = beneficioRecebido;
-    }
+    // if (
+    //   moment(this.dataInicioRecebidos).isBefore('2006-03-31') &&
+    //   (dataCorrente.isSame('2006-04-01') || dataCorrente.isSame('2006-08-01'))
+    //   ) {
+    //     beneficioRecebido = rmiRecebidos;
+    //     this.beneficioRecebidoOs = beneficioRecebido;
+    // }
 
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro && !this.isTetos) {
       beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
@@ -2243,18 +2243,36 @@ export class BeneficiosResultadosComponent implements OnInit {
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
 
       // inicio proporcional
+      // Tempo inicio calculo
+      const dataInicioCalculo = moment(this.calculo.data_pedido_beneficio, 'YYYY-MM-DD')
+      let diasInicioCalculo = dataInicioCalculo.get('date');
+      diasInicioCalculo = (dataInicioCalculo.daysInMonth() - diasInicioCalculo) + 1;
+
+      // inicio tempo honorario
       let diasInicio = taxaAdvogadoInicio.get('date');
       const diasMesInicio = taxaAdvogadoInicio.daysInMonth();
       diasInicio = (diasMesInicio - diasInicio) + 1;
-      honorarios = diferecaCorrigidaJuros * ((diasInicio / diasMesInicio) * parseFloat(this.calculo.percentual_taxa_advogado));
+     
+      honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
 
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
 
-      // Fim proporcional
+
+      // fim proporcional
+      // Tempo inicio calculo
+      const dataFimCalculo = (this.calculo.data_cessacao != '' )?
+                              moment(this.calculo.data_cessacao, 'YYYY-MM-DD') : 
+                              moment(this.calculo.data_calculo_pedido, 'YYYY-MM-DD');
+
+      const diasFimCalculo = dataFimCalculo.get('date');
+
+      // Fim tempo honorario
       const diasFinal = taxaAdvogadoFinal.get('date');
       const diasMesFinal = taxaAdvogadoFinal.daysInMonth();
-      honorarios = diferecaCorrigidaJuros * ((diasFinal / diasMesFinal) * parseFloat(this.calculo.percentual_taxa_advogado));
+
+
+      honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
 
     } else if ((taxaAdvogadoInicio <= dataCorrente && dataCorrente <= taxaAdvogadoFinal) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
