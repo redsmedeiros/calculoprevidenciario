@@ -230,10 +230,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   }
 
   calculo_apos_pec_2019(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
-    let dib = this.dataInicioBeneficio;
+    let dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     let dibCurrency = this.loadCurrency(dib);
     let moedaDib = this.Moeda.getByDate(dib);
-    let dataComparacao = (dib.clone()).startOf('month');
+    let dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
     let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)) {
@@ -683,9 +683,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
     rmi = rmiAux;
-
     //let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
-    let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
+    let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio.clone());
     //let salarioAcidente = objMoeda.salario_minimo;
     // if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
     //   switch (this.tipoBeneficio) {
