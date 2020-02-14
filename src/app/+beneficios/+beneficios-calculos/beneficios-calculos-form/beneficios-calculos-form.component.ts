@@ -468,12 +468,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if(this.errors.empty()){
         if(!this.chkPrecedidoRecebidos){
           this.dibAnteriorValoresRecebidos = "";
-          console.log('entrou')
+         // console.log('entrou')
         }
         if(!this.chkDibAnterior){
           this.dibAnteriorValoresDevidos = "";
           this.formData.previa_data_pedido_beneficio_esperado = "";
-          console.log('entrou')
+        //  console.log('entrou')
         }
         // Data inicial do benefício DIB de valores devidos
         // OU

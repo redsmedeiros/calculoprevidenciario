@@ -2245,6 +2245,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let taxaAdvogadoInicio = null;
     let taxaAdvogadoFinal = null;
     let diferecaCorrigidaJuros = juros + diferencaCorrigida;
+
     if (this.calculo.taxa_advogado_inicio != '') {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
     }
@@ -2274,21 +2275,26 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
 
-      // fim proporcional
-      // Tempo inicio calculo
-      const dataFimCalculo = (this.calculo.data_cessacao != '' && this.calculo.data_cessacao != '0000-00-00')?
-                              moment(this.calculo.data_cessacao, 'YYYY-MM-DD') : 
-                              moment(this.calculo.data_calculo_pedido, 'YYYY-MM-DD');
-
+      const dataFimCalculo = moment(this.calculo.data_prevista_cessacao, 'YYYY-MM-DD');
       const diasFimCalculo = dataFimCalculo.get('date');
 
       // Fim tempo honorario
       const diasFinal = taxaAdvogadoFinal.get('date');
       const diasMesFinal = taxaAdvogadoFinal.daysInMonth();
-      honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
+
+     
+      if(dataFimCalculo.isSame(taxaAdvogadoFinal, 'month')){
+
+        honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
+
+      }else{
+
+        honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasMesFinal;
+
+      }
 
     } else if ((taxaAdvogadoInicio <= dataCorrente && dataCorrente <= taxaAdvogadoFinal) ||
-      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
+      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) { 
 
       // calcula o intevalo entre datas
       honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);

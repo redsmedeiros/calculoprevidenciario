@@ -455,27 +455,31 @@ export class RgpsResultadosComponent implements OnInit {
   verificarIdadeMinima(idade, errorArray) {
     let temIdadeMinima = true;
     let idadeMinima;
+
+    idade = (idade != undefined)? idade : this.idadeSegurado;
+
     if (this.tipoBeneficio === 3) {
-      if (this.segurado.sexo === 'm' && this.idadeSegurado < 65) {
+      if (this.segurado.sexo === 'm' && idade < 65) {
         idadeMinima = 65;
         temIdadeMinima = false;
       }
-      if (this.segurado.sexo === 'f' && this.idadeSegurado < 60) {
+      if (this.segurado.sexo === 'f' && idade < 60) {
         idadeMinima = 60;
         temIdadeMinima = false;
       }
     } else if (this.tipoBeneficio === 16 || this.tipoBeneficio === 28) {
-      if (this.segurado.sexo === 'm' && this.idadeSegurado < 60) {
+      if (this.segurado.sexo === 'm' && idade < 60) {
         idadeMinima = 60;
         temIdadeMinima = false;
       }
-      if (this.segurado.sexo === 'f' && this.idadeSegurado < 55) {
+      if (this.segurado.sexo === 'f' && idade < 55) {
         idadeMinima = 55;
         temIdadeMinima = false;
       }
     }
 
     if (!temIdadeMinima) {
+      const tempoAteIdade = moment.duration((idadeMinima - this.idadeSegurado), 'years')
       errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
     }
     return temIdadeMinima;
@@ -746,7 +750,7 @@ export class RgpsResultadosComponent implements OnInit {
    * @param especieBeneficio
    */
   verificaEspecieDeBeneficioIdade(especieBeneficio) {
-    const arrayTypeNum = [ 2, 3 ];
+    const arrayTypeNum = [  3, 16 ];
     const arrayTypeText = [
        'Aposentadoria por idade - Trabalhador Urbano',
        'Aposentadoria por idade - Trabalhador Rural',

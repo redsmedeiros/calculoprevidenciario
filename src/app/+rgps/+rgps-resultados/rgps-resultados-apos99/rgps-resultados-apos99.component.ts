@@ -115,7 +115,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
-
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     this.stringCabecalho = 'Entre  29/11/1999 a 12/11/2019'
 
@@ -1144,7 +1143,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
-    let idadeDoSegurado = this.idadeSegurado;
+    let idadeDoSegurado = this.idadeFracionada;
     //let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
     let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
@@ -1202,7 +1201,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         }
       }
     } else if (this.tipoBeneficio == 3) {
+      
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
+      console.log(idadeMinima);
+
       if (!idadeMinima) {
         return false;
       }
