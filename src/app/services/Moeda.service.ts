@@ -39,7 +39,7 @@ export class MoedaService extends ControllerService {
   }
 
   public getByDateRangeMoment(from, to) {
-  	console.log(from.format('DD-MM-YYYY'), to.format('DD-MM-YYYY'))
+  //	console.log(from.format('DD-MM-YYYY'), to.format('DD-MM-YYYY'))
     return new Promise((resolve, reject) => {
 	  	if (this.list.length == 0) {
 	  		this.get().then(() => {

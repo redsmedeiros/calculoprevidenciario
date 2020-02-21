@@ -77,7 +77,6 @@ export class ContribuicoesResultadosComponent implements OnInit {
         }else{
           this.Jurisprudencial.find(this.route.snapshot.params['id_calculo']).then(calculo => {
           this.calculoJurisprudencial = calculo;
-  
           this.contribuicaoDe = moment(this.calculoJurisprudencial.inicio_atraso);
           this.contribuicaoAte = moment(this.calculoJurisprudencial.final_atraso);
           this.contribuicaoDe2 = (this.calculoJurisprudencial.inicio_atraso2) ? moment(this.calculoJurisprudencial.inicio_atraso2) : '';
@@ -116,11 +115,31 @@ export class ContribuicoesResultadosComponent implements OnInit {
     return data.sigla + ' ' + this.formatMoney(data.aliquota * data.salario_minimo);
   }
 
-  getValorCorrigido(data){
-    return 'R$ ' + this.formatMoney(data.salario_minimo * data.aliquota * data.cam);
+  getValorCorrigido(data, type = 'str'){
+
+    let valor = data.salario_minimo * data.aliquota * data.cam;
+
+    const datasURV = ['1994-03-01', '1994-04-01', '1994-05-01', '1994-06-01'];
+    const valoresURV = {'1994-03-01': 931.05, '1994-04-01': 1302.05, '1994-05-01': 1875.82, '1994-06-01': 2750.00};
+
+    if (datasURV.includes(data.data_moeda)) {
+
+      valor = (valoresURV[data.data_moeda] * (data.aliquota * data.salario_minimo)) * data.cam;
+
+    }
+
+    if (type === 'str') {
+      return 'R$ ' + this.formatMoney(valor);
+    } else {
+      return valor;
+    }
+
+
   }
 
   updateDatatable() {
+    this.calculoJurisprudencial.valor_acumulado = 0;
+
     for(let moedaAtual of this.moeda){
       let line = {
         data: this.formatDate(moedaAtual.data_moeda),
@@ -129,8 +148,10 @@ export class ContribuicoesResultadosComponent implements OnInit {
         indice: moedaAtual.cam,
         valor_corrigido: this.getValorCorrigido(moedaAtual)
       }
-      this.results.push(line)
+      this.results.push(line);
+      this.calculoJurisprudencial.valor_acumulado += this.getValorCorrigido(moedaAtual, 'int');
     }
+
     if(this.contribuicaoDe2 && this.contribuicaoAte2){
       for(let moedaAtual of this.moeda2){
         let line = {
@@ -141,9 +162,11 @@ export class ContribuicoesResultadosComponent implements OnInit {
           valor_corrigido: this.getValorCorrigido(moedaAtual)
         }
         this.results.push(line)
+        this.calculoJurisprudencial.valor_acumulado += this.getValorCorrigido(moedaAtual, 'int');
       }
+
     }
-    
+
     let lastLine = {
         data: '<b>Total</b>',
         salario_minimo: '',
@@ -160,7 +183,7 @@ export class ContribuicoesResultadosComponent implements OnInit {
 
   formatMoney(data){
     data = parseFloat(data);
-    return data.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});;
+    return data.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2});
   }
 
   formatDate(data){
