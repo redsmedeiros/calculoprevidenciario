@@ -1838,11 +1838,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegra3.dataParaAposentar = dibParaRegra3.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
       this.conclusoesRegra3.tempoDeAtualDecontribuicao = this.tratarTempoFracionado(this.contribuicaoTotal);
 
-
-      if (tempoDePedagioTotal > 0) {
+      if (tempoDePedagioTotal > 0.00273973) {
 
         this.conclusoesRegra3.tempoDePedagio = 'Não faz jus a aplicação desta regra falta '
-          + this.tratarTempoFracionado(tempoDePedagioTotal)
+          + moment.duration((tempoDePedagioTotal * 365.25), 'd').locale("pt-BR").humanize()
           + ' para cumprir o pedágio.';
 
       } else {
@@ -1979,7 +1978,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
      // let tempoDePedagioTotal = 0;
 
 
-      //contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
+      // contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
 
      // tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
      // tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
@@ -1991,8 +1990,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       let tempoFinalContribComPedagio = contribuicao_min_moment[this.segurado.sexo].clone();
           tempoFinalContribComPedagio = tempoFinalContribComPedagio.add(tempoDePedagio);
-
-
 
            this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionadoMoment(
                                                                                         tempoDePedagio.years(),
