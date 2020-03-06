@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { Auth } from "../../services/Auth/Auth.service";
 import { AuthResponse } from "../../services/Auth/AuthResponse.model";
 import swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @FadeInTop()
 @Component({
@@ -51,11 +52,11 @@ export class RgpsCalculosComponent implements OnInit {
     data: this.calculosList,
     order: [[ 5, 'desc' ]],
     columns: [
-      {data: 'actions', width: '18rem'},
+      {data: 'actions', width: '20rem'},
       {data: 'tipo_seguro'},
       {data: 'tipo_aposentadoria'},
       {data: (data, type, dataToSet) => {
-        return this.getTempoDeContribuicao(data,type, dataToSet);
+        return this.getTempoDeContribuicao(data, type, dataToSet);
       }},
       {data: 'data_pedido_beneficio'},
       {data: 'valor_beneficio',
@@ -72,8 +73,8 @@ export class RgpsCalculosComponent implements OnInit {
     ] };
 
   constructor(
-    protected Segurado: SeguradoService,    
-  	protected CalculoRgps: CalculoRgpsService,
+    protected Segurado: SeguradoService,
+    protected CalculoRgps: CalculoRgpsService,
     protected Errors: ErrorService,
     protected router: Router,
     private route: ActivatedRoute,
@@ -102,11 +103,14 @@ export class RgpsCalculosComponent implements OnInit {
             }else{
               this.CalculoRgps.getWithParameters(['id_segurado', this.idSegurado])
                 .then((calculos) => {
+
                 this.updateDatatable();
                 this.isUpdating = false;
+
               });
             }
     });
+   
   }
 
   getTempoDeContribuicao(data, type, dataToSet) {
@@ -147,8 +151,6 @@ export class RgpsCalculosComponent implements OnInit {
   }
 
   updateDatatable() {
-    //console.log(this.calculosList);
-
     this.calculoTableOptions = {
       ...this.calculoTableOptions,
       data: this.calculosList,
@@ -181,8 +183,8 @@ export class RgpsCalculosComponent implements OnInit {
       date.setTime(date.getTime() + (5*60*60*1000))
       if (!isNaN(date.getTime())) {
           // Months use 0 index.
-          return  ('0' + (date.getDate())).slice(-2)+'/'+
-                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
+          return  ('0' + (date.getDate())).slice(-2) + '/' +
+                  ('0' + (date.getMonth()+1)).slice(-2) + '/' +
                          date.getFullYear();
       }
       return '';
@@ -201,17 +203,44 @@ export class RgpsCalculosComponent implements OnInit {
     }
   }
 
-  realizarCalculos(){
+  realizarCalculos(pbc_completo = false){
     let idList = this.getSelectedCalcs();
+    let pbc = (pbc_completo) ? '/pbc' : ''
+
     if(idList.length > 3){
+
       swal('Erro', 'Selecione até 3 cálculos', 'error');
+
     }else if(idList.length == 0){
+
       swal('Erro', 'Selecione pelo menos 1 cálculo', 'error');
-    }else{
+
+    }else if((this.checkDibPBCCompleto(idList) && pbc_completo)) {
+
+      swal('Erro', 'A data de início do benefício deve ser maior que 29/11/1999', 'error');
+
+    } else {
+
       let stringArr = idList.join(',');
-      window.location.href='/#/rgps/rgps-resultados/'+ 
-                            this.route.snapshot.params['id']+'/'+stringArr;
+      window.location.href = '/#/rgps/rgps-resultados/' +
+                           this.route.snapshot.params['id'] + '/' + stringArr + '' + pbc;
+
     }
+  }
+
+  checkDibPBCCompleto(idList){
+
+    idList = idList.map(Number);
+
+    for(const calculo of this.calculosList){
+
+      if( idList.includes(calculo.id) && moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('29/11/1999', 'DD/MM/YYYY'))) {
+        return true;
+      }
+
+    }
+
+    return false;
   }
 
   getSelectedCalcs(){
@@ -227,8 +256,6 @@ export class RgpsCalculosComponent implements OnInit {
   isSegurado(element, index, array){
     return element['id_segurado'] == this.idSegurado;
   }
-
-  
 
 
   @HostListener('window:scroll', [])

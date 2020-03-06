@@ -135,9 +135,14 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     });
   }
 
-  realizarCalculo() {
-    window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
-  }
+  realizarCalculo(pbc = false) {
+
+    if (pbc) {
+      window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos + '/pbc';
+    }
+      window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
+   }
+
 
   initializeMatrix(valorescontribuidos) {
     valorescontribuidos.sort((entry1, entry2) => {

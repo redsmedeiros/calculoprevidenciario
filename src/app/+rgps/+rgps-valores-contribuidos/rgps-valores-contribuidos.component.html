@@ -50,11 +50,18 @@
                       </span> Editar
                     </button>
 
-                    <button type="submit" (click)="realizarCalculo()" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled btn-primary">
+                    <button type="submit" (click)="realizarCalculo()" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled labeled btn-success">
                       <span class="btn-label">
-                        <i class="fa fa-percent"></i>
+                        <i class="fa fa-calculator"></i>
                       </span> Realizar cálculos
                     </button>
+                    
+                    <button type="submit" (click)="realizarCalculo()" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled btn-labeled bg-color-greenDark txt-color-white">
+                      <span class="btn-label">
+                        <i class="fa fa-calculator"></i>
+                      </span>  Cálculo na revisão da vida toda
+                    </button>
+
                     <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i>
                   </div>
                 </div>
@@ -100,7 +107,7 @@
 
           <header>
             <span class="widget-icon">
-              <i class="fa fa-percent"></i>
+              <i class="fa fa-money"></i>
             </span>
             <h2>Informar valor contribuido</h2>
           </header>

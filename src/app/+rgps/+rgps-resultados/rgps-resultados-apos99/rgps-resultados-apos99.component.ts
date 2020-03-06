@@ -122,8 +122,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
     }
 
-
-    let dataLimite = (!this.calculo.pbc_completo)? moment('1994-07-01') : moment('1930-01-01');
+    // pbc da vida toda
+    let dataLimite = (this.pbcCompleto) ? moment('1994-07-01') : moment('1930-01-01');
 
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
@@ -1203,8 +1203,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     } else if (this.tipoBeneficio == 3) {
       
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
-      console.log(idadeMinima);
-
+      
       if (!idadeMinima) {
         return false;
       }

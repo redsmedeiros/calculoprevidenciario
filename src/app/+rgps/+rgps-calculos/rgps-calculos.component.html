@@ -5,23 +5,29 @@
     <!-- row -->
     <div class="row">
       <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
-        <div class="col-md-12">
+        <div class="col-md-12 pull-right">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-arrow-circle-left"></i>
-                    </span> Voltar
+                    </span> Voltar para segurados
                   </button>
-                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-primary margin-right-13">
                     <span class="btn-label">
                       <i class='fa fa-money '></i>
                     </span> Valores de contribuição
                   </button>
-                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="realizarCalculos()" class="btn btn-labeled btn-success margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-calculator"></i>
                     </span> Realizar cálculos
                   </button>
-                </div>
+                  <button type="submit" (click)="realizarCalculos(true)" class="btn btn-labeled bg-color-greenDark txt-color-white margin-right-13"
+                  title="Calcular incluindo os periodos anteriores a julho de 1994.">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> Cálculo na revisão da vida toda
+                  </button>
+        </div>
       </div> 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <h1>Cálculo de Regime Geral da Previdência Social</h1>
@@ -103,9 +109,8 @@
           <div>
             <!-- widget content -->
             <div class="widget-body float-panel" style="min-height: auto;">
-
               <div class="row" id='containerOpcoes'>
-                <div class="col-md-12">
+                <div class="col-md-12 pull-right">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-arrow-circle-left"></i>
@@ -121,9 +126,13 @@
                       <i class="fa fa-calculator"></i>
                     </span> Realizar cálculos
                   </button>
+                  <button type="submit" (click)="realizarCalculos(true)" class="btn btn-labeled bg-color-greenDark txt-color-white margin-right-13">
+                    <span class="btn-label" title="Calcular incluindo os periodos anteriores a julho de 1994.">
+                      <i class="fa fa-calculator"></i>
+                    </span> Cálculo na revisão da vida toda
+                  </button>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>

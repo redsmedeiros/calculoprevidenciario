@@ -269,6 +269,9 @@ export class RgpsResultadosComponent implements OnInit {
   public mostrarCalculoApos99 = false;
   public mostrarCalculoApos19 = false;
 
+  //pbc parametro get
+  public pbcCompleto = false;
+
   constructor(protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -280,6 +283,8 @@ export class RgpsResultadosComponent implements OnInit {
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
     this.isUpdating = true;
 
     this.Segurado.find(this.idSegurado)
@@ -1101,6 +1106,10 @@ export class RgpsResultadosComponent implements OnInit {
         this.route.snapshot.params['id_segurado'] + '/' + idList[0] + '/' + idList[1];
 
     }
+  }
+
+  public getPbcDaVidatoda(){
+    return (this.route.snapshot.params['pbc'] === 'pbc');
   }
 
 
