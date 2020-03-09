@@ -123,7 +123,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // pbc da vida toda
-    let dataLimite = (this.pbcCompleto) ? moment('1994-07-01') : moment('1930-01-01');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') :  moment('1994-07-01');
 
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)

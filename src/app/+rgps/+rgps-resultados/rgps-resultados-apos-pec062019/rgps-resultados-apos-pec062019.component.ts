@@ -185,7 +185,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
-    let dataLimite = (!this.calculo.pbc_completo) ? moment('1994-07-01') : moment('1930-01-01');
+    
+    // pbc da vida toda
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') :  moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
 
