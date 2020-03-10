@@ -200,7 +200,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fatorLimite = 1;
 
 
-      if ((!this.calculo.pbc_completo)) {
+      if ((!this.pbcCompleto)) {
 
         fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
         fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;

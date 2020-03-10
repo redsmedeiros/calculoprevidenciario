@@ -272,7 +272,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let fatorLimite = 1;
 
 
-      if ((!this.calculo.pbc_completo)) {
+      if ((!this.pbcCompleto)) {
 
         fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
         fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
