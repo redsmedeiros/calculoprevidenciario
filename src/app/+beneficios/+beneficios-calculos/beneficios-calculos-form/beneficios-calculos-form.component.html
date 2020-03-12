@@ -100,48 +100,36 @@
         </sa-widget>
       </article>
 
-
-
-
-
       <article class="col-sm-12 col-md-12 col-lg-12">
-
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
-          
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-calendar"></i>
             </span>
             <h2>Datas do cálculo</h2>
-
           </header>
-
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
             <div class="widget-body">
-
               <form class="form-horizontal">
-
                 <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data do cálculo*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMask}" name="dataCalculo" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Data da citação do réu*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
-
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data de ajuizamento da ação*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
                       <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
                     </div>
@@ -153,162 +141,64 @@
           </div>
         </sa-widget>
       </article>
-
-
-      <article *ngIf="!chkNotGranted" class="col-sm-12 col-md-12 col-lg-12">
-
+      
+      <article class="col-sm-12 col-md-6 col-lg-6">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
-            </span>
-            <h2>Valores Recebidos</h2>
-
-          </header>
-
-          <!-- widget div-->
-          <div>
-
-            <!-- widget content -->
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <div class="form-group">
-                    <div class="col-md-8 col-sm-offset-2">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" name="useSameDib" [(ngModel)]="chkUseSameDib" (change)="useSameDIBChanged()" class="checkbox {{styleTheme}}" checked="checked">
-                          <span>Caso queira calcular revisão de RMI com mesma DIB selecione a caixa ao lado</span>
-                        </label>
-                      </div>
-
-                      <div class="checkbox">
-                        <label>
-                          <input name="chkPrecedidoRecebidos" [(ngModel)]='chkPrecedidoRecebidos' type="checkbox"  class="checkbox {{styleTheme}}">
-                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Data inicial do benefício DIB de valores recebidos*:</label>
-                    <div class="col-md-3">
-                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text">
-                      <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
-                    </div>
-                    <label class="col-md-2 control-label" for="especieRecebidoSelect">Espécie valores recebidos:</label>
-                    <div class="col-md-3">
-
-                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="especieRecebidoSelect">
-                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
-                      </select>
-
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Data de Cessação de valores recebidos:</label>
-                    <div class="col-md-3">
-                      <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control" type="text">
-                      <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
-                    </div>
-
-                    <div *ngIf="chkPrecedidoRecebidos">
-                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores recebidos:</label>
-                      <div class="col-md-3">
-                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
-                        <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label *ngIf="recebidosBuracoNegro" class="col-md-2 control-label">RMI de valores recebidos antes da revisão (Buraco Negro):</label>
-                    <label *ngIf="!recebidosBuracoNegro" class="col-md-2 control-label"><i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i> RMI de valores recebidos*:</label>
-                    <div class="col-md-3">
-                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
-                      <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
-                    </div>
-
-                    <div *ngIf="recebidosBuracoNegro">
-                      <label class="col-md-2 control-label">RMI de valores recebidos depois da revisão (Buraco Negro):</label>
-                      <div class="col-md-3">
-                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
-                      </div>
-                    </div>
-
-                    <div *ngIf="recebidosPosBuracoNegro">
-                      <label class="col-md-2 control-label"><i title="Índices de Reajustes de Teto (IRT) só existem para DIB's posteriores a 05/04/1991 conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg"></i> Índice de reajuste no teto da RMI de valores recebidos:</label>
-                      <div class="col-md-3">
-                        <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
-                        <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </fieldset>
-                <p>* Campo obrigatório</p>
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-money"></i>
             </span>
             <h2>Valores Devidos</h2>
           </header>
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body fix-painel-devido-recebido">
               <p *ngIf="chkDibAnterior && chkUseSameDib">
                 * Para habilitar o campo DIB Anterior, deve-se desmarcar a revisão RMI com a mesma DIB.
               </p>
               <form class="form-horizontal">
                 <fieldset>
                   <div class="form-group">
-                    <div class="col-md-8 col-sm-offset-2">
+                    <div class="col-md-11 col-sm-offset-1">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="useSameDib" [(ngModel)]="chkUseSameDib" (change)="useSameDIBChanged()" class="checkbox {{styleTheme}}" checked="checked">
+                          <span>Caso queira calcular revisão de RMI com mesma DIB </span>
+                        </label>
+                      </div>
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" name="chkDibAnterior" [(ngModel)]="chkDibAnterior" class="checkbox {{styleTheme}}" checked="checked">
-                          <span>Caso queira calcular benefício precedido com DIB anterior selecione a caixa ao lado</span>
+                          <span>Caso queira calcular benefício precedido com DIB anterior</span>
                         </label>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Data inicial do benefício DIB de valores devidos*:</label>
-                    <div class="col-md-3">
-                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control" [disabled]="chkUseSameDib" type="text">
-                      <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
-                    </div>
-                    <label class="col-md-2 control-label" for="select-1">Espécie valores devidos:</label>
-                    <div class="col-md-3">
+                    <label class="col-md-3 control-label" for="select-1">Espécie:</label>
+                    <div class="col-md-8">
                       <select name="especieValoresDevidos" [(ngModel)]="especieValoresDevidos" class="form-control" id="select-1">
                         <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
                       </select>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label  class="col-md-2 control-label">Data de Cessação de valores devidos:</label>
+                    <label class="col-md-3 control-label">Data inicial do benefício DIB*:</label>
                     <div class="col-md-3">
-                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control" type="text">
+                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control"  type="text">
+                      <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label  class="col-md-3 control-label fix-rmi-anterior">Data de Cessação:</label>
+                    <div class="col-md-3">
+                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
                     </div>
                     <div *ngIf="chkDibAnterior">
-                      <label class="col-md-2 control-label">Data inicial do benefício anterior de valores devidos:  </label>
+                      <label class="col-md-3 control-label">Data inicial do benefício anterior:  </label>
                       <div class="col-md-3">
                         <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
@@ -317,9 +207,9 @@
                   </div>
                   <div class="form-group">
                     <div *ngIf="chkNotGranted">
-                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida*:
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida*:
                       </label>
-                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">RMI não concedida antes da revisão (Buraco Negro)*:
+                      <label *ngIf="devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida antes da revisão (Buraco Negro)*:
                       </label>
                       <div class="col-md-3">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
@@ -329,22 +219,25 @@
                   </div>
                   <div class="form-group">
                     <div *ngIf="!chkNotGranted">
-                      <label *ngIf="!devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos*:</label>
-                      <label *ngIf="devidosBuracoNegro" class="col-md-2 control-label">Nova RMI de valores devidos antes da revisão (Buraco Negro):</label>
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-3 control-label">Nova RMI*:</label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-3 control-label">Nova RMI antes da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                     </div>
                     <div *ngIf="devidosBuracoNegro">
-                      <label class="col-md-2 control-label">RMI de valores devidos depois da revisão (Buraco Negro):</label>
+                      <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
                       <div class="col-md-3">
                         <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                       </div>
                     </div>
                     <div *ngIf="devidosPosBuracoNegro">
-                      <label class="col-md-2 control-label"><i title="Índices de Reajustes de Teto (IRT) só existem para DIB's posteriores a 05/04/1991 conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg"></i> Índice de reajuste no teto da Nova RMI de valores devidos:</label>
+                      <label class="col-md-3 control-label">
+                        Índice de reajuste no teto da Nova RMI:
+                        <i title="Índices de Reajustes de Teto (IRT) &#13; só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
+                        </label>
                         <div class="col-md-3">
                           <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
                           <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
@@ -359,12 +252,121 @@
         </sa-widget>
       </article>
 
+      <article *ngIf="!chkNotGranted" class="col-sm-12 col-md-6 col-lg-6">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-money"></i>
+            </span>
+            <h2>Valores Recebidos</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body fix-painel-devido-recebido">
+              <form class="form-horizontal">
+                <fieldset>
+                  <div class="form-group mt-3 mb-3">
+                    <div class="col-md-11 col-sm-offset-1">
+                      <div class="checkbox">
+                        <label>
+                          <input name="chkPrecedidoRecebidos" [(ngModel)]='chkPrecedidoRecebidos' type="checkbox"  class="checkbox {{styleTheme}}">
+                          <span>Caso queira calcular benefício precedido com DIB anterior </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label" for="especieRecebidoSelect">Espécie:</label>
+                    <div class="col-md-8">
+                      <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="especieRecebidoSelect">
+                        <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Data inicial do benefício DIB*:</label>
+                    <div class="col-md-3">
+                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text" [disabled]="chkUseSameDib">
+                      <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label fix-rmi-anterior">Data de Cessação:</label>
+                    <div class="col-md-3">
+                      <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
+                      <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
+                    </div>
+                    <div *ngIf="chkPrecedidoRecebidos">
+                      <label class="col-md-3 control-label">Data inicial do benefício anterior:</label>
+                      <div class="col-md-3">
+                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
+                        <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label *ngIf="recebidosBuracoNegro" class="col-md-3 control-label">RMI antes da revisão (Buraco Negro):</label>
+                    <label *ngIf="!recebidosBuracoNegro" class="col-md-3 control-label"><i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i> RMI*:</label>
+                    <div class="col-md-3">
+                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
+                      <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
+                    </div>
+
+                    <div *ngIf="recebidosBuracoNegro">
+                      <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
+                      <div class="col-md-3">
+                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
+                      </div>
+                    </div>
+                    <div *ngIf="recebidosPosBuracoNegro">
+                      <label class="col-md-3 control-label">
+                        Índice de reajuste no teto da RMI:
+                        <i title="Índices de Reajustes de Teto (IRT) &#13;só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
+                        </label>
+                      <div class="col-md-3">
+                        <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
+                        <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <p>* Campo obrigatório</p>
+              </form>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-money"></i>
+            </span>
+            <h2>Vincendas</h2>
+          </header>
+          <div class="widget-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-md-2 control-label"><i title="De acordo com art. 260, CPC, “o valor das prestações vincendas será igual a uma prestação anual, se a obrigação for por tempo indeterminado, ou por tempo superior a 1 (um) ano; se, por tempo inferior, será igual à soma das prestações.” Logo, no cálculo do IEPREV, o valor das prestações vincendas corresponde a prestação anual." class="fa fa-question-circle fa-lg"></i> Calcular mais:</label>
+                <div class="col-md-2">
+                  <input name="maturidade" [(ngModel)]="maturidade" class="form-control" placeholder="vincendas" type="text">
+                </div> vincendas
+              </div>
+            </form>
+          </div>
+        </sa-widget>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-money"></i>
             </span>
             <h2>Honorários</h2>
           </header>
@@ -376,33 +378,40 @@
                 <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Intervalo de Honorários:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="De" type="text">
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-2">
                       <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
                       <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
                       <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
+                
                   <div class="form-group">
-                    <label class="col-md-2 control-label"><i title="De acordo com art. 260, CPC, “o valor das prestações vincendas será igual a uma prestação anual, se a obrigação for por tempo indeterminado, ou por tempo superior a 1 (um) ano; se, por tempo inferior, será igual à soma das prestações.” Logo, no cálculo do IEPREV, o valor das prestações vincendas corresponde a prestação anual." class="fa fa-question-circle fa-lg"></i> Calcular mais:</label>
-                    <div class="col-md-3">
-                      <input name="maturidade" [(ngModel)]="maturidade" class="form-control" placeholder="vincendas" type="text">
-                    </div> vincendas
+                    <label class="col-md-2 control-label">Intervalo de Honorários de sucumbênciais: </label>
+                    <div class="col-md-2">
+                      <input name="dataHonorariosSucumbenciaDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosSucumbenciaDe" class="form-control" placeholder="De" type="text">
+                      <small *ngIf="errors.has('dataHonorariosSucumbenciaDe')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaDe') }}</small>
+                    </div>
+                    <div class="col-md-2">
+                      <input name="dataHonorariosSucumbenciaAte" [(ngModel)]="dataHonorariosSucumbenciaAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
+                      <small *ngIf="errors.has('dataHonorariosSucumbenciaAte')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaAte') }}</small>
+                    </div>
                   </div>
+
                 </fieldset>
               </form>
             </div>
@@ -447,7 +456,7 @@
   <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
     <header>
       <span class="widget-icon">
-        <i class="fa fa-eye"></i>
+        <i class="fa fa-percent"></i>
       </span>
       <h2>Juros</h2>
     </header>

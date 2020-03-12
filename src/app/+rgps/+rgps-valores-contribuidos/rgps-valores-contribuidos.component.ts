@@ -136,14 +136,13 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   realizarCalculo(pbc = false) {
-    console.log(pbc);
 
     if (pbc) {
       window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos + '/pbc';
     }else{
       window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
     }
-     
+
    }
 
 

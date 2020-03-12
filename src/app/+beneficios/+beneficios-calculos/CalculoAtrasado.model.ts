@@ -24,6 +24,9 @@ export class CalculoAtrasado extends Model {
     percentual_taxa_advogado: '',
     taxa_advogado_inicio: '',
     taxa_advogado_final: '',
+    taxa_advogado_inicio_sucumbencia: '',
+    taxa_advogado_final_sucumbencia: '',
+    taxa_advogado_aplicacao_sobre: '',
     maturidade: '',
     previo_interesse_2003: '',
     pos_interesse_2003: '',
@@ -65,6 +68,9 @@ export class CalculoAtrasado extends Model {
   public percentual_taxa_advogado;
   public taxa_advogado_inicio;
   public taxa_advogado_final;
+  public taxa_advogado_inicio_sucumbencia;
+  public taxa_advogado_final_sucumbencia;
+  public taxa_advogado_aplicacao_sobre;
   public maturidade;
   public previo_interesse_2003;
   public pos_interesse_2003;

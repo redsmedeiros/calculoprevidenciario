@@ -70,6 +70,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public jurosDepois2003;
   public jurosDepois2009;
 
+  public honorariosSobre;
+  public dataHonorariosSucumbenciaDe;
+  public dataHonorariosSucumbenciaAte;
+
   public especieValoresDevidos;
   public especieValoresRecebidos;
 
@@ -732,13 +736,20 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   useSameDIBChanged() {
   	if (this.chkUseSameDib) {
   		if (this.dibValoresRecebidos !== undefined && this.dibValoresDevidos !== null) {
-  			this.updateDIBValoresDevidos();
+        // this.updateDIBValoresDevidos();
+        this.updateDIBValoresRecebidos();
   		}
   	}
   }
 
   updateDIBValoresDevidos() { 
   	this.dibValoresDevidos = this.dibValoresRecebidos;
+  	this.checkDevidosBuracoNegro();
+  }
+
+
+  updateDIBValoresRecebidos() { 
+    this.dibValoresRecebidos =  this.dibValoresDevidos;
   	this.checkDevidosBuracoNegro();
   }
 
