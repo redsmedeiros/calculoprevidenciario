@@ -224,3 +224,9 @@ a[class*="action-"]:hover {
 .font-2-9x {
   font-size: 2.9rem !important;
 }
+
+.bg-ieprev {
+  border-color: #831721!important;
+  background: #831721 !important;
+  color: #fff !important;
+}
