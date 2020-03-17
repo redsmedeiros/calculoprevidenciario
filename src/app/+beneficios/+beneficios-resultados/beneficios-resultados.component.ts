@@ -175,6 +175,28 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
 
+  // honorarios tutela antecipada -  sucumbencia 
+
+  public exibir_sucumbencia = false;
+  public resultadosTutelaAntecipadaList = [];
+  public resultadosTutelaAntecipadaDatatableOptions = {
+    paging: false,
+    ordering: false,
+    info: false,
+    searching: false,
+    data: this.resultadosTutelaAntecipadaList,
+    columns: [
+      { data: 'competencia', class: 'text-right', width: '5rem' },
+      { data: 'indice_devidos' },
+      { data: 'beneficio_devido' },
+      { data: 'correcao_monetaria' },
+      { data: 'ganho_economico' },
+      { data: 'honorarios_sucumbencia' }
+    ]
+  }
+  
+
+
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -198,9 +220,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.considerarPrescricao = true;
     }
 
-    if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
+    if (this.route.snapshot.params['debug'] === 'true' || this.route.snapshot.params['debug'] === '1') {
       this.debugMode = true;
     }
+
+    // if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
+    //   this.debugMode = true;
+    // }
 
     this.seguradoId = this.route.snapshot.params['id'];
     this.Segurado.find(this.seguradoId)
@@ -262,6 +288,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                           this.jurosCorrente = this.calcularJurosCorrente();
                           this.resultadosList = this.generateTabelaResultados();
+                          this.calcularTutelaAntecipada()
                           this.updateResultadosDatatable();
                           this.isUpdating = false;
 
@@ -330,471 +357,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
-
-  /*
-    generateTabelaResultados() {
-      let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
-      let tableData = [];
-      let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-      let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-      //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
-      let func_beneficioDevido = this.getBeneficioDevido;
-      let func_beneficioRecebido = this.getBeneficioRecebido;
-      let abonoProporcionalDevidos = 0;
-      let abonoProporcionalRecebidos = 0;
-  
-      if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
-        let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
-        if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
-          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
-        } else {
-          abonoProporcionalDevidos = 1;
-        }
-      } else {
-        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
-      }
-  
-      if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
-        let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
-        if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
-          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
-        } else {
-          abonoProporcionalRecebidos = 1;
-        }
-      } else {
-        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
-      }
-      let chkNotGranted = this.calculo;
-      //console.log(competencias);
-  
-      for (let dataCorrenteString of competencias) {
-        let line: any = {};
-        let dataCorrente = moment(dataCorrenteString);
-        if (this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido) {
-          break;
-        }
-        let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-        let siglaDataCorrente = moedaDataCorrente.sigla;
-  
-        let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
-        this.ultimaCompretencia = stringCompetencia;
-        let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
-        let beneficioDevido = 0.0;
-        let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
-        let beneficioRecebido = 0.0;
-        let diferencaMensal = 0.0;
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-        let diferencaCorrigida = 0.0;
-        let juros = this.getJuros(dataCorrente);
-        let valorJuros = 0.0; //diferencaCorrigida * juros;
-        let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
-        let honorarios = 0.0;
-  
-  
-        // console.log(juros);
-  
-  
-        let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
-        let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
-  
-        let isPrescricao = false;
-        //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
-        if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
-          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-          diferencaMensal = beneficioDevido;
-  
-        } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-          //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
-          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-          diferencaMensal = beneficioDevido - beneficioRecebido;
-  
-        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-          //Quando a dataCorrente for maior que ambas, definido na seção 1.3.       
-          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-  
-          let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
-          if (chkboxBenefitNotGranted == 1) {
-            beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-            diferencaMensal = beneficioDevido - beneficioRecebido;
-          } else {
-            beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-            diferencaMensal = beneficioDevido - beneficioRecebido;
-          }
-  
-        }
-  
-        diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        valorJuros = diferencaCorrigida * juros;
-        let valorNumericoDiferencaCorrigidaJurosObj: any = {};
-        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
-  
-        if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
-          //Se houver o marcador, a data é prescrita
-          isPrescricao = true;
-        }
-  
-        line.competencia = stringCompetencia;
-        line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
-        line.beneficio_devido = beneficioDevidoString.resultString;
-        line.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
-        line.beneficio_recebido = beneficioRecebidoString.resultString;
-        line.diferenca_mensal = this.formatMoney(diferencaMensal, siglaDataCorrente, true);
-        line.correcao_monetaria = this.formatDecimal(correcaoMonetaria, 8);
-        line.diferenca_corrigida = this.formatMoney(diferencaCorrigida, 'R$', true);
-        line.juros = this.formatPercent(juros, 4);
-        line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
-        line.diferenca_juros = diferencaCorrigidaJuros;
-        line.honorarios = this.formatMoney(honorarios, 'R$', true);
-  
-        if (this.isTetos) {
-          this.esmaecerLinhas(dataCorrente, line);
-        }
-        tableData.push(line);
-  
-        if (!isPrescricao) {
-          //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-          this.somaDiferencaMensal += diferencaMensal;
-          this.somaCorrecaoMonetaria += correcaoMonetaria;
-          this.somaDiferencaCorrigida += diferencaCorrigida;
-          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
-          this.somaHonorarios += honorarios;
-          this.somaJuros += valorJuros;
-        }
-  
-  
-        if (!this.proporcionalidadeUltimaLinha) {
-          this.ultimaDiferencaMensal = diferencaMensal;
-        }
-        this.ultimaCorrecaoMonetaria = correcaoMonetaria;
-  
-        if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11) {
-          //Adicionar linha de abono
-  
-          let beneficioRecebidoAbono;
-          let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
-          if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
-            beneficioRecebidoAbono = 0.0;
-          } else {
-            beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
-          }
-  
-  
-          if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
-            beneficioRecebidoAbono = 0.0;
-          }
-  
-  
-          if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono;
-          } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
-          } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
-          }
-  
-          diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-          valorJuros = diferencaCorrigida * juros;
-          diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-          honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
-  
-  
-          line = {
-            ...line,
-            competencia: 'abono - ' + stringCompetencia,
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
-            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
-            diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
-            diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
-            juros: this.formatPercent(juros, 4),
-            valor_juros: this.formatMoney(valorJuros, 'R$', true),
-            diferenca_juros: diferencaCorrigidaJuros,
-            honorarios: this.formatMoney(honorarios, 'R$', true)
-          }
-  
-          if (this.isTetos) {
-            this.esmaecerLinhas(dataCorrente, line);
-          }
-  
-          tableData.push(line);
-  
-          if (this.aplicaProporcionalDevidos) {
-            this.aplicaProporcionalDevidos = false;
-            abonoProporcionalDevidos = 1;
-          }
-  
-          if (this.aplicaProporcionalRecebidos) {
-            this.aplicaProporcionalRecebidos = false;
-            abonoProporcionalRecebidos = 1;
-          }
-  
-          if (!isPrescricao) {
-            //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-            this.somaDiferencaMensal += diferencaMensal;
-            this.somaCorrecaoMonetaria += correcaoMonetaria;
-            this.somaDiferencaCorrigida += diferencaCorrigida;
-            this.somaHonorarios += honorarios;
-            this.somaJuros += valorJuros;
-            this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
-          }
-  
-        }
-      }
-  
-      this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
-      this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
-      this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
-      this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
-      if (this.calculo.acordo_pedido != 0) {
-        this.calcularAcordoJudicial();
-      }
-  
-      return tableData;
-    }
-
-
-  /*
-  // opção 1
-    generateTabelaResultados() {
-      this.jurosCorrente = 0.00000;
-      let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
-      let tableData = [];
-      let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-      let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-      //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
-      let func_beneficioDevido = this.getBeneficioDevido;
-      let func_beneficioRecebido = this.getBeneficioRecebido;
-      let abonoProporcionalDevidos = 0;
-      let abonoProporcionalRecebidos = 0;
-  
-      if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
-        let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
-        if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
-          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
-        } else {
-          abonoProporcionalDevidos = 1;
-        }
-      } else {
-        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
-      }
-  
-      if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
-        let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
-        if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
-          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
-        } else {
-          abonoProporcionalRecebidos = 1;
-        }
-      } else {
-        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
-      }
-      let chkNotGranted = this.calculo;
-  
-  
-       //inverter inicia na data mais recente 
-      competencias.reverse();
-  
-      console.log(this.dataCessacaoDevido);
-      
-      
-     
-     let indexComp = 0; 
-     for (let dataCorrenteString of competencias) {
-  
-      //  for (let [index, dataCorrenteString]  of competencias.entries()) {
-        let line: any = {};
-        let dataCorrente = moment(dataCorrenteString);
-        if (this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido) {
-          break;
-        }
-        let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-        let siglaDataCorrente = moedaDataCorrente.sigla;
-  
-        let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
-        this.ultimaCompretencia = stringCompetencia;
-        let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
-        let beneficioDevido = 0.0;
-        let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
-        let beneficioRecebido = 0.0;
-        let diferencaMensal = 0.0;
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
-        let diferencaCorrigida = 0.0;
-        let juros = (indexComp === 0)? 0 : this.getJuros(dataCorrente) ;
-        let valorJuros = 0.0; //diferencaCorrigida * juros;
-        let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
-        let honorarios = 0.0;
-  
-  
-        // console.log(juros);
-  
-  
-        let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
-        let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
-  
-        let isPrescricao = false;
-        //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
-        if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
-          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-          diferencaMensal = beneficioDevido;
-  
-        } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-          //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
-          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-          diferencaMensal = beneficioDevido - beneficioRecebido;
-  
-        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-          //Quando a dataCorrente for maior que ambas, definido na seção 1.3.       
-          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-  
-          let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
-          if (chkboxBenefitNotGranted == 1) {
-            beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-            diferencaMensal = beneficioDevido - beneficioRecebido;
-          } else {
-            beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
-            diferencaMensal = beneficioDevido - beneficioRecebido;
-          }
-  
-        }
-  
-        diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        valorJuros = diferencaCorrigida * juros;
-        let valorNumericoDiferencaCorrigidaJurosObj: any = {};
-        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
-  
-        if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
-          //Se houver o marcador, a data é prescrita
-          isPrescricao = true;
-        }
-  
-        line.competencia = stringCompetencia;
-        line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
-        line.beneficio_devido = beneficioDevidoString.resultString;
-        line.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
-        line.beneficio_recebido = beneficioRecebidoString.resultString;
-        line.diferenca_mensal = this.formatMoney(diferencaMensal, siglaDataCorrente, true);
-        line.correcao_monetaria = this.formatDecimal(correcaoMonetaria, 8);
-        line.diferenca_corrigida = this.formatMoney(diferencaCorrigida, 'R$', true);
-        line.juros = this.formatPercent(juros, 4);
-        line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
-        line.diferenca_juros = diferencaCorrigidaJuros;
-        line.honorarios = this.formatMoney(honorarios, 'R$', true);
-  
-        if (this.isTetos) {
-          this.esmaecerLinhas(dataCorrente, line);
-        }
-        indexComp ++;
-        tableData.push(line);
-  
-        if (!isPrescricao) {
-          //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-          this.somaDiferencaMensal += diferencaMensal;
-          this.somaCorrecaoMonetaria += correcaoMonetaria;
-          this.somaDiferencaCorrigida += diferencaCorrigida;
-          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
-          this.somaHonorarios += honorarios;
-          this.somaJuros += valorJuros;
-        }
-  
-  
-        if (!this.proporcionalidadeUltimaLinha) {
-          this.ultimaDiferencaMensal = diferencaMensal;
-        }
-        this.ultimaCorrecaoMonetaria = correcaoMonetaria;
-  
-        if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11) {
-          //Adicionar linha de abono
-  
-          let beneficioRecebidoAbono;
-          let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
-          if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
-            beneficioRecebidoAbono = 0.0;
-          } else {
-            beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
-          }
-  
-  
-          if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
-            beneficioRecebidoAbono = 0.0;
-          }
-  
-  
-          if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono;
-          } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
-          } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
-          }
-  
-          diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-          valorJuros = diferencaCorrigida * juros;
-          diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-          honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
-  
-  
-          line = {
-            ...line,
-            competencia: 'abono - ' + stringCompetencia,
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
-            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
-            diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
-            diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
-            juros: this.formatPercent(juros, 4),
-            valor_juros: this.formatMoney(valorJuros, 'R$', true),
-            diferenca_juros: diferencaCorrigidaJuros,
-            honorarios: this.formatMoney(honorarios, 'R$', true)
-          }
-  
-          if (this.isTetos) {
-            this.esmaecerLinhas(dataCorrente, line);
-          }
-  
-          tableData.push(line);
-  
-          if (this.aplicaProporcionalDevidos) {
-            this.aplicaProporcionalDevidos = false;
-            abonoProporcionalDevidos = 1;
-          }
-  
-          if (this.aplicaProporcionalRecebidos) {
-            this.aplicaProporcionalRecebidos = false;
-            abonoProporcionalRecebidos = 1;
-          }
-  
-          if (!isPrescricao) {
-            //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-            this.somaDiferencaMensal += diferencaMensal;
-            this.somaCorrecaoMonetaria += correcaoMonetaria;
-            this.somaDiferencaCorrigida += diferencaCorrigida;
-            this.somaHonorarios += honorarios;
-            this.somaJuros += valorJuros;
-            this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
-          }
-  
-        }
-      }
-  
-      this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
-      this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
-      this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
-      this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
-      if (this.calculo.acordo_pedido != 0) {
-        this.calcularAcordoJudicial();
-      }
-      tableData.reverse();
-      return tableData;
-    }
-  */
 
   // opção 2
   generateTabelaResultados() {
@@ -1720,202 +1282,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
-  /*
-  
-    //Seção 3.8
-    getJuros(dataCorrente) {
-      // console.log( this.jurosCorrente);
-  
-      let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
-      let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
-      let chkJurosMora = this.calculo.previo_interesse;
-      let jurosAplicado = 0.0;
-      let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
-  
-  
-      if (dataCorrente > dataMesCitacaoReu) {
-        if (dataCorrente < this.dataJuros2003) {
-          this.jurosCorrente -= this.jurosAntes2003;
-        }
-  
-        if (this.dataJuros2003 <= dataCorrente && dataCorrente < this.dataJuros2009) {
-          this.jurosCorrente -= this.jurosDepois2003;
-        }
-  
-        if (dataCorrente >= this.dataJuros2009) {
-          if (!chkBoxTaxaSelic) {
-            if (this.soma == 1) {
-              this.jurosCorrente -= this.jurosDepois2009;
-            } else {
-              this.soma = 1;
-            }
-  
-          } else {
-            if (dataCorrente < this.dataSelic70) {
-              this.jurosCorrente -= this.jurosDepois2009;
-            } else {
-              let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-              this.jurosCorrente -= parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
-            }
-          }
-        }
-        jurosAplicado = this.jurosCorrente;
-      } else {
-        if (!chkJurosMora) {
-          if (dataCorrente != dataMesCitacaoReu) {
-            jurosAplicado = 0;
-          } else {
-            jurosAplicado = this.jurosCorrente;
-          }
-        } else {
-          jurosAplicado = this.jurosCorrente;
-        }
-      }
-  
-      if (jurosAplicado < 0) {
-        jurosAplicado = 0;
-      }
-      return jurosAplicado;
-    }
-  
-    calcularJurosCorrente() {
-      let dataDoCalculo = moment(this.calculo.data_calculo_pedido).startOf('month');
-      let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
-      let data = (this.dataInicioCalculo > dataCitacaoReu) ? this.dataInicioCalculo : dataCitacaoReu;
-      data = data.startOf('month');
-      let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
-      let juros = 0.0;
-      if (data < this.dataJuros2003) {
-        //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
-        juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, this.dataJuros2003.clone().subtract(1, 'days'));
-        //juros += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
-        juros += this.jurosDepois2003 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataJuros2003);
-        if (!chkBoxTaxaSelic) {
-          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e this.calculo.data_calculo_pedido (dataDoCalculo)
-          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
-        } else {
-          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-          juros += this.jurosDepois2009 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataSelic70.clone().subtract(1, 'days'));
-          //juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
-          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-          for (let mes of mesesEntreSelicDataCalculo) {
-            let dateMes = moment(mes);
-            let mesMoeda = this.Moeda.getByDate(dateMes);
-            juros += parseFloat(mesMoeda.juros_selic_70) / 100;
-          }
-        }
-  
-      } else if (data < this.dataJuros2009) {
-        //juros = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
-        juros = this.jurosDepois2003 * this.getDifferenceInMonths(this.dataJuros2009, data);
-  
-        if (!chkBoxTaxaSelic) {
-          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
-        } else {
-          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
-  
-          //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
-          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-  
-          for (let mes of mesesEntreSelicDataCalculo) {
-            let dateMes = moment(mes);
-            let mesMoeda = this.Moeda.getByDate(dateMes);
-            juros += parseFloat(mesMoeda.juros_selic_70) / 100;
-          }
-        }
-      } else {
-  
-        if (!chkBoxTaxaSelic) {
-          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
-          juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
-        } else {
-          if (data >= this.dataSelic70) {
-            //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
-            juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
-          } else {
-            juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, this.dataSelic70);
-            //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
-            let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-            for (let mes of mesesEntreSelicDataCalculo) {
-              let dateMes = moment(mes);
-              let mesMoeda = this.Moeda.getByDate(dateMes);
-              juros += parseFloat(mesMoeda.juros_selic_70) / 100;
-            }
-          }
-        }
-      }
-      console.log(juros);
-  
-      return juros;
-    }
-    */
-
-  /*
-  //Seção 3.8 opção 1
-  getJuros(dataCorrente) {
-  
-
-    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
-    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
-    let chkJurosMora = this.calculo.previo_interesse;
-    let jurosAplicado = 0.0;
-    let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
-
-
-    if (dataCorrente >= dataMesCitacaoReu) {
-      if (dataCorrente < this.dataJuros2003) {
-        this.jurosCorrente += this.jurosAntes2003;
-      }
-
-      if (this.dataJuros2003 <= dataCorrente && dataCorrente < this.dataJuros2009) {
-        this.jurosCorrente += this.jurosDepois2003;
-      }
-
-      if (dataCorrente >= this.dataJuros2009) {
-        if (!chkBoxTaxaSelic) {
-          if (this.soma == 1) {
-            this.jurosCorrente += this.jurosDepois2009;
-          } else {
-            this.soma = 1;
-          }
-
-        } else {
-          if (dataCorrente < this.dataSelic70) {
-            this.jurosCorrente += this.jurosDepois2009;
-          } else {
-            let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-            this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
-          }
-        }
-      }
-      jurosAplicado = this.jurosCorrente;
-    } else {
-      if (!chkJurosMora) {
-        if (dataCorrente != dataMesCitacaoReu) {
-          jurosAplicado = 0;
-        } else {
-          jurosAplicado = this.jurosCorrente;
-        }
-      } else {
-        jurosAplicado = this.jurosCorrente;
-      }
-    }
-
-    if (jurosAplicado < 0) {
-      jurosAplicado = 0;
-    }
-
-    console.log( this.dataSelic70);
-    console.log( dataCorrente);
-    console.log( this.jurosCorrente);
-    console.log( jurosAplicado);
-    return jurosAplicado;
-  }
-
-  */
-
 
   getJurosPorCompetencia(data) {
 
@@ -2146,7 +1512,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // não deve prescrever período posterior a data da cessação
     if (diferencaEmAnos >= 5 && dataAcaoJudicial > dataCorrente && this.considerarPrescricao) {
-      diferencaCorrigidaJurosString += '<br>(prescrita)';
+      if (this.considerarPrescricao) {
+        diferencaCorrigidaJurosString = 'Prescrita';
+      } else {
+        diferencaCorrigidaJurosString += '<br>(prescrita)';
+      }
+     // diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
   }
@@ -2282,7 +1653,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       const diasFinal = taxaAdvogadoFinal.get('date');
       const diasMesFinal = taxaAdvogadoFinal.daysInMonth();
 
-     
+
       if(dataFimCalculo.isSame(taxaAdvogadoFinal, 'month')){
 
         honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
@@ -2305,6 +1676,74 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Somar o valor dos honorários de cada linha da tabela, menos da ultima linha.
     return honorarios;
   }
+
+    //Seção 4.3a sucumbencia / Tutela antecipada
+    public calcularTutelaAntecipada(){
+
+      console.log(this.calculo);
+      console.log(this.calculo.taxa_advogado_final_sucumbencia);
+      console.log(this.calculo.taxa_advogado_inicio_sucumbencia);
+
+
+      if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
+
+
+      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+      const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+
+
+     
+
+      console.log(this.indices);
+
+      console.log(moment(this.calculo.taxa_advogado_final_sucumbencia));
+      console.log(moment(this.calculo.taxa_advogado_inicio_sucumbencia));
+
+
+
+
+
+      const competenciasTutela = this.monthsBetween(tutelaInicio,
+                                                     tutelaFim);
+
+      // console.log(competenciasTutela);
+
+      
+      for (let dataCorrenteTutelaString of competenciasTutela) {
+        let lineTutela: any = {};
+
+        let dataTutelaCorrente = moment(dataCorrenteTutelaString);
+  
+        let moedaDataTutelaCorrente = this.Moeda.getByDate(dataTutelaCorrente);
+        let siglaDataTutelaCorrente = moedaDataTutelaCorrente.sigla;
+  
+        let stringCompetencia = (dataTutelaCorrente.month() + 1) + '/' + dataTutelaCorrente.year();
+        this.ultimaCompretencia = stringCompetencia;
+
+
+        console.log(dataCorrenteTutelaString);
+
+
+          lineTutela = {
+              competencia: stringCompetencia,
+              indice_devidos: '',
+              beneficio_devido: '',
+              correcao_monetaria: '',
+              ganho_economico: '',
+              honorarios_sucumbencia: '',
+          }
+
+          this.resultadosTutelaAntecipadaList.push(lineTutela)
+      }
+
+
+
+      }
+
+
+
+
+    }
 
   //Seção 4.4
   calcularAcordoJudicial() {
@@ -2867,5 +2306,680 @@ export class BeneficiosResultadosComponent implements OnInit {
     window.location.href = '/#/beneficios/beneficios-segurados/' +
       this.route.snapshot.params['id'] + '/editar';
   }
+
+
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value != 'null' &&
+      value !== undefined &&  value != '') 
+      ? true : false;
+  }
+
+
+
+  
+  /*
+    generateTabelaResultados() {
+      let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
+      let tableData = [];
+      let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+      let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+      //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
+      let func_beneficioDevido = this.getBeneficioDevido;
+      let func_beneficioRecebido = this.getBeneficioRecebido;
+      let abonoProporcionalDevidos = 0;
+      let abonoProporcionalRecebidos = 0;
+  
+      if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
+        let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+        if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
+          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
+        } else {
+          abonoProporcionalDevidos = 1;
+        }
+      } else {
+        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
+      }
+  
+      if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
+        let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
+        if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
+          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
+        } else {
+          abonoProporcionalRecebidos = 1;
+        }
+      } else {
+        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
+      }
+      let chkNotGranted = this.calculo;
+      //console.log(competencias);
+  
+      for (let dataCorrenteString of competencias) {
+        let line: any = {};
+        let dataCorrente = moment(dataCorrenteString);
+        if (this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido) {
+          break;
+        }
+        let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+        let siglaDataCorrente = moedaDataCorrente.sigla;
+  
+        let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
+        this.ultimaCompretencia = stringCompetencia;
+        let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
+        let beneficioDevido = 0.0;
+        let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
+        let beneficioRecebido = 0.0;
+        let diferencaMensal = 0.0;
+        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
+        let diferencaCorrigida = 0.0;
+        let juros = this.getJuros(dataCorrente);
+        let valorJuros = 0.0; //diferencaCorrigida * juros;
+        let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+        let honorarios = 0.0;
+  
+  
+        // console.log(juros);
+  
+  
+        let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
+        let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
+  
+        let isPrescricao = false;
+        //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
+        if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+          diferencaMensal = beneficioDevido;
+  
+        } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+          //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
+          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+          diferencaMensal = beneficioDevido - beneficioRecebido;
+  
+        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+          //Quando a dataCorrente for maior que ambas, definido na seção 1.3.       
+          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+  
+          let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
+          if (chkboxBenefitNotGranted == 1) {
+            beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+            diferencaMensal = beneficioDevido - beneficioRecebido;
+          } else {
+            beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+            diferencaMensal = beneficioDevido - beneficioRecebido;
+          }
+  
+        }
+  
+        diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+        valorJuros = diferencaCorrigida * juros;
+        let valorNumericoDiferencaCorrigidaJurosObj: any = {};
+        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+  
+        if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
+          //Se houver o marcador, a data é prescrita
+          isPrescricao = true;
+        }
+  
+        line.competencia = stringCompetencia;
+        line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
+        line.beneficio_devido = beneficioDevidoString.resultString;
+        line.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
+        line.beneficio_recebido = beneficioRecebidoString.resultString;
+        line.diferenca_mensal = this.formatMoney(diferencaMensal, siglaDataCorrente, true);
+        line.correcao_monetaria = this.formatDecimal(correcaoMonetaria, 8);
+        line.diferenca_corrigida = this.formatMoney(diferencaCorrigida, 'R$', true);
+        line.juros = this.formatPercent(juros, 4);
+        line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
+        line.diferenca_juros = diferencaCorrigidaJuros;
+        line.honorarios = this.formatMoney(honorarios, 'R$', true);
+  
+        if (this.isTetos) {
+          this.esmaecerLinhas(dataCorrente, line);
+        }
+        tableData.push(line);
+  
+        if (!isPrescricao) {
+          //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+          this.somaDiferencaMensal += diferencaMensal;
+          this.somaCorrecaoMonetaria += correcaoMonetaria;
+          this.somaDiferencaCorrigida += diferencaCorrigida;
+          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+          this.somaHonorarios += honorarios;
+          this.somaJuros += valorJuros;
+        }
+  
+  
+        if (!this.proporcionalidadeUltimaLinha) {
+          this.ultimaDiferencaMensal = diferencaMensal;
+        }
+        this.ultimaCorrecaoMonetaria = correcaoMonetaria;
+  
+        if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11) {
+          //Adicionar linha de abono
+  
+          let beneficioRecebidoAbono;
+          let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
+          if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
+            beneficioRecebidoAbono = 0.0;
+          } else {
+            beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
+          }
+  
+  
+          if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
+            beneficioRecebidoAbono = 0.0;
+          }
+  
+  
+          if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono;
+          } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          }
+  
+          diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+          valorJuros = diferencaCorrigida * juros;
+          diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+          honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+  
+  
+          line = {
+            ...line,
+            competencia: 'abono - ' + stringCompetencia,
+            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
+            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
+            diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
+            diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
+            juros: this.formatPercent(juros, 4),
+            valor_juros: this.formatMoney(valorJuros, 'R$', true),
+            diferenca_juros: diferencaCorrigidaJuros,
+            honorarios: this.formatMoney(honorarios, 'R$', true)
+          }
+  
+          if (this.isTetos) {
+            this.esmaecerLinhas(dataCorrente, line);
+          }
+  
+          tableData.push(line);
+  
+          if (this.aplicaProporcionalDevidos) {
+            this.aplicaProporcionalDevidos = false;
+            abonoProporcionalDevidos = 1;
+          }
+  
+          if (this.aplicaProporcionalRecebidos) {
+            this.aplicaProporcionalRecebidos = false;
+            abonoProporcionalRecebidos = 1;
+          }
+  
+          if (!isPrescricao) {
+            //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+            this.somaDiferencaMensal += diferencaMensal;
+            this.somaCorrecaoMonetaria += correcaoMonetaria;
+            this.somaDiferencaCorrigida += diferencaCorrigida;
+            this.somaHonorarios += honorarios;
+            this.somaJuros += valorJuros;
+            this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+          }
+  
+        }
+      }
+  
+      this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
+      this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
+      this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
+      this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
+      if (this.calculo.acordo_pedido != 0) {
+        this.calcularAcordoJudicial();
+      }
+  
+      return tableData;
+    }
+
+
+  /*
+  // opção 1
+    generateTabelaResultados() {
+      this.jurosCorrente = 0.00000;
+      let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
+      let tableData = [];
+      let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+      let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+      //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
+      let func_beneficioDevido = this.getBeneficioDevido;
+      let func_beneficioRecebido = this.getBeneficioRecebido;
+      let abonoProporcionalDevidos = 0;
+      let abonoProporcionalRecebidos = 0;
+  
+      if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
+        let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+        if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
+          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
+        } else {
+          abonoProporcionalDevidos = 1;
+        }
+      } else {
+        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
+      }
+  
+      if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
+        let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
+        if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
+          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
+        } else {
+          abonoProporcionalRecebidos = 1;
+        }
+      } else {
+        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
+      }
+      let chkNotGranted = this.calculo;
+  
+  
+       //inverter inicia na data mais recente 
+      competencias.reverse();
+  
+      console.log(this.dataCessacaoDevido);
+      
+      
+     
+     let indexComp = 0; 
+     for (let dataCorrenteString of competencias) {
+  
+      //  for (let [index, dataCorrenteString]  of competencias.entries()) {
+        let line: any = {};
+        let dataCorrente = moment(dataCorrenteString);
+        if (this.dataCessacaoDevido && dataCorrente > this.dataCessacaoDevido) {
+          break;
+        }
+        let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+        let siglaDataCorrente = moedaDataCorrente.sigla;
+  
+        let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
+        this.ultimaCompretencia = stringCompetencia;
+        let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
+        let beneficioDevido = 0.0;
+        let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
+        let beneficioRecebido = 0.0;
+        let diferencaMensal = 0.0;
+        let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
+        let diferencaCorrigida = 0.0;
+        let juros = (indexComp === 0)? 0 : this.getJuros(dataCorrente) ;
+        let valorJuros = 0.0; //diferencaCorrigida * juros;
+        let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+        let honorarios = 0.0;
+  
+  
+        // console.log(juros);
+  
+  
+        let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
+        let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
+  
+        let isPrescricao = false;
+        //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
+        if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+          diferencaMensal = beneficioDevido;
+  
+        } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+          //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
+          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+          diferencaMensal = beneficioDevido - beneficioRecebido;
+  
+        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+          //Quando a dataCorrente for maior que ambas, definido na seção 1.3.       
+          indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+          beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+          indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+  
+          let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
+          if (chkboxBenefitNotGranted == 1) {
+            beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+            diferencaMensal = beneficioDevido - beneficioRecebido;
+          } else {
+            beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+            diferencaMensal = beneficioDevido - beneficioRecebido;
+          }
+  
+        }
+  
+        diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+        valorJuros = diferencaCorrigida * juros;
+        let valorNumericoDiferencaCorrigidaJurosObj: any = {};
+        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+  
+        if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
+          //Se houver o marcador, a data é prescrita
+          isPrescricao = true;
+        }
+  
+        line.competencia = stringCompetencia;
+        line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
+        line.beneficio_devido = beneficioDevidoString.resultString;
+        line.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
+        line.beneficio_recebido = beneficioRecebidoString.resultString;
+        line.diferenca_mensal = this.formatMoney(diferencaMensal, siglaDataCorrente, true);
+        line.correcao_monetaria = this.formatDecimal(correcaoMonetaria, 8);
+        line.diferenca_corrigida = this.formatMoney(diferencaCorrigida, 'R$', true);
+        line.juros = this.formatPercent(juros, 4);
+        line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
+        line.diferenca_juros = diferencaCorrigidaJuros;
+        line.honorarios = this.formatMoney(honorarios, 'R$', true);
+  
+        if (this.isTetos) {
+          this.esmaecerLinhas(dataCorrente, line);
+        }
+        indexComp ++;
+        tableData.push(line);
+  
+        if (!isPrescricao) {
+          //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+          this.somaDiferencaMensal += diferencaMensal;
+          this.somaCorrecaoMonetaria += correcaoMonetaria;
+          this.somaDiferencaCorrigida += diferencaCorrigida;
+          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+          this.somaHonorarios += honorarios;
+          this.somaJuros += valorJuros;
+        }
+  
+  
+        if (!this.proporcionalidadeUltimaLinha) {
+          this.ultimaDiferencaMensal = diferencaMensal;
+        }
+        this.ultimaCorrecaoMonetaria = correcaoMonetaria;
+  
+        if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11) {
+          //Adicionar linha de abono
+  
+          let beneficioRecebidoAbono;
+          let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
+          if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
+            beneficioRecebidoAbono = 0.0;
+          } else {
+            beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
+          }
+  
+  
+          if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
+            beneficioRecebidoAbono = 0.0;
+          }
+  
+  
+          if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono;
+          } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+            diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          }
+  
+          diferencaCorrigida = diferencaMensal * correcaoMonetaria;
+          valorJuros = diferencaCorrigida * juros;
+          diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+          honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+  
+  
+          line = {
+            ...line,
+            competencia: 'abono - ' + stringCompetencia,
+            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
+            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
+            diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
+            diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
+            juros: this.formatPercent(juros, 4),
+            valor_juros: this.formatMoney(valorJuros, 'R$', true),
+            diferenca_juros: diferencaCorrigidaJuros,
+            honorarios: this.formatMoney(honorarios, 'R$', true)
+          }
+  
+          if (this.isTetos) {
+            this.esmaecerLinhas(dataCorrente, line);
+          }
+  
+          tableData.push(line);
+  
+          if (this.aplicaProporcionalDevidos) {
+            this.aplicaProporcionalDevidos = false;
+            abonoProporcionalDevidos = 1;
+          }
+  
+          if (this.aplicaProporcionalRecebidos) {
+            this.aplicaProporcionalRecebidos = false;
+            abonoProporcionalRecebidos = 1;
+          }
+  
+          if (!isPrescricao) {
+            //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+            this.somaDiferencaMensal += diferencaMensal;
+            this.somaCorrecaoMonetaria += correcaoMonetaria;
+            this.somaDiferencaCorrigida += diferencaCorrigida;
+            this.somaHonorarios += honorarios;
+            this.somaJuros += valorJuros;
+            this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+          }
+  
+        }
+      }
+  
+      this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
+      this.somaVincendas = (this.isTetos) ? this.calcularVincendosTetos() : this.calcularVincendas();
+      this.somaDevidaJudicialmente = this.somaDiferencaCorrigida + this.somaJuros;
+      this.somaTotalSegurado = this.somaDevidaJudicialmente + this.somaVincendas;
+      if (this.calculo.acordo_pedido != 0) {
+        this.calcularAcordoJudicial();
+      }
+      tableData.reverse();
+      return tableData;
+    }
+  */
+
+
+
+  /*
+  
+    //Seção 3.8
+    getJuros(dataCorrente) {
+      // console.log( this.jurosCorrente);
+  
+      let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+      let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+      let chkJurosMora = this.calculo.previo_interesse;
+      let jurosAplicado = 0.0;
+      let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
+  
+  
+      if (dataCorrente > dataMesCitacaoReu) {
+        if (dataCorrente < this.dataJuros2003) {
+          this.jurosCorrente -= this.jurosAntes2003;
+        }
+  
+        if (this.dataJuros2003 <= dataCorrente && dataCorrente < this.dataJuros2009) {
+          this.jurosCorrente -= this.jurosDepois2003;
+        }
+  
+        if (dataCorrente >= this.dataJuros2009) {
+          if (!chkBoxTaxaSelic) {
+            if (this.soma == 1) {
+              this.jurosCorrente -= this.jurosDepois2009;
+            } else {
+              this.soma = 1;
+            }
+  
+          } else {
+            if (dataCorrente < this.dataSelic70) {
+              this.jurosCorrente -= this.jurosDepois2009;
+            } else {
+              let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+              this.jurosCorrente -= parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+            }
+          }
+        }
+        jurosAplicado = this.jurosCorrente;
+      } else {
+        if (!chkJurosMora) {
+          if (dataCorrente != dataMesCitacaoReu) {
+            jurosAplicado = 0;
+          } else {
+            jurosAplicado = this.jurosCorrente;
+          }
+        } else {
+          jurosAplicado = this.jurosCorrente;
+        }
+      }
+  
+      if (jurosAplicado < 0) {
+        jurosAplicado = 0;
+      }
+      return jurosAplicado;
+    }
+  
+    calcularJurosCorrente() {
+      let dataDoCalculo = moment(this.calculo.data_calculo_pedido).startOf('month');
+      let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+      let data = (this.dataInicioCalculo > dataCitacaoReu) ? this.dataInicioCalculo : dataCitacaoReu;
+      data = data.startOf('month');
+      let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+      let juros = 0.0;
+      if (data < this.dataJuros2003) {
+        //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
+        juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, this.dataJuros2003.clone().subtract(1, 'days'));
+        //juros += calcular taxa entre 2003 e 2009 * numero de meses entre '15/01/2003' e '01/07/2009' 
+        juros += this.jurosDepois2003 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataJuros2003);
+        if (!chkBoxTaxaSelic) {
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e this.calculo.data_calculo_pedido (dataDoCalculo)
+          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
+        } else {
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+          juros += this.jurosDepois2009 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataSelic70.clone().subtract(1, 'days'));
+          //juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
+          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+          for (let mes of mesesEntreSelicDataCalculo) {
+            let dateMes = moment(mes);
+            let mesMoeda = this.Moeda.getByDate(dateMes);
+            juros += parseFloat(mesMoeda.juros_selic_70) / 100;
+          }
+        }
+  
+      } else if (data < this.dataJuros2009) {
+        //juros = calcular taxa entre 2003 e 2009 * numero de meses entre data e '01/07/2009' 
+        juros = this.jurosDepois2003 * this.getDifferenceInMonths(this.dataJuros2009, data);
+  
+        if (!chkBoxTaxaSelic) {
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, dataDoCalculo);
+        } else {
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+          juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
+  
+          //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
+          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+  
+          for (let mes of mesesEntreSelicDataCalculo) {
+            let dateMes = moment(mes);
+            let mesMoeda = this.Moeda.getByDate(dateMes);
+            juros += parseFloat(mesMoeda.juros_selic_70) / 100;
+          }
+        }
+      } else {
+  
+        if (!chkBoxTaxaSelic) {
+          //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e dataDoCalculo;
+          juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
+        } else {
+          if (data >= this.dataSelic70) {
+            //juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
+            juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, dataDoCalculo);
+          } else {
+            juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, this.dataSelic70);
+            //juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
+            let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+            for (let mes of mesesEntreSelicDataCalculo) {
+              let dateMes = moment(mes);
+              let mesMoeda = this.Moeda.getByDate(dateMes);
+              juros += parseFloat(mesMoeda.juros_selic_70) / 100;
+            }
+          }
+        }
+      }
+      console.log(juros);
+  
+      return juros;
+    }
+    */
+
+  /*
+  //Seção 3.8 opção 1
+  getJuros(dataCorrente) {
+  
+
+    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    let chkJurosMora = this.calculo.previo_interesse;
+    let jurosAplicado = 0.0;
+    let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
+
+
+    if (dataCorrente >= dataMesCitacaoReu) {
+      if (dataCorrente < this.dataJuros2003) {
+        this.jurosCorrente += this.jurosAntes2003;
+      }
+
+      if (this.dataJuros2003 <= dataCorrente && dataCorrente < this.dataJuros2009) {
+        this.jurosCorrente += this.jurosDepois2003;
+      }
+
+      if (dataCorrente >= this.dataJuros2009) {
+        if (!chkBoxTaxaSelic) {
+          if (this.soma == 1) {
+            this.jurosCorrente += this.jurosDepois2009;
+          } else {
+            this.soma = 1;
+          }
+
+        } else {
+          if (dataCorrente < this.dataSelic70) {
+            this.jurosCorrente += this.jurosDepois2009;
+          } else {
+            let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+            this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+          }
+        }
+      }
+      jurosAplicado = this.jurosCorrente;
+    } else {
+      if (!chkJurosMora) {
+        if (dataCorrente != dataMesCitacaoReu) {
+          jurosAplicado = 0;
+        } else {
+          jurosAplicado = this.jurosCorrente;
+        }
+      } else {
+        jurosAplicado = this.jurosCorrente;
+      }
+    }
+
+    if (jurosAplicado < 0) {
+      jurosAplicado = 0;
+    }
+
+    console.log( this.dataSelic70);
+    console.log( dataCorrente);
+    console.log( this.jurosCorrente);
+    console.log( jurosAplicado);
+    return jurosAplicado;
+  }
+
+  */
+
 
 }

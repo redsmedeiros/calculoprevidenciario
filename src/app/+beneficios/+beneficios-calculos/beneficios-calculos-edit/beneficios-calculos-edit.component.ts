@@ -3,6 +3,7 @@ import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado as CalculoModel } from '../CalculoAtrasado.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-beneficios-calculos-edit',
@@ -44,7 +45,16 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
           .update(this.calculo)
           .then(model => {
             this.CalculoAtrasado.get()
-                .then(() => this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']]));
+                .then(() => {
+                  this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']])
+                  swal({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Cálculo salvo com sucesso',
+                    showConfirmButton: false,
+                    timer: 5000
+                  });
+                });
           })
           .catch(errors => this.Errors.add(errors));
   }

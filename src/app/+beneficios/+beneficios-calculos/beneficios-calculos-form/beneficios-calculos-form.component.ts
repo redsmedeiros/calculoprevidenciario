@@ -4,7 +4,7 @@ import {FadeInTop} from "../../../shared/animations/fade-in-top.decorator";
 import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import * as moment from 'moment';
 
 @Component({
@@ -532,7 +532,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.data_anterior_pedido_beneficio  = data_anterior_pedido_beneficio;
         // Percentual dos Honorarios
         if (this.percentualHonorarios != undefined) {
-          this.formData.percentual_taxa_advogado  = this.percentualHonorarios.replace(',','.');
+          this.formData.percentual_taxa_advogado  = this.formatPrecentual(this.percentualHonorarios).toString().replace(',', '.');
         } else {
           this.formData.percentual_taxa_advogado = 0;
         }
@@ -540,6 +540,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
         // Intervalo de Honorarios ATE 
         this.formData.taxa_advogado_final = this.dataHonorariosAte;
+
+        this.formData.taxa_advogado_inicio_sucumbencia =  this.dataHonorariosSucumbenciaDe;
+        this.formData.taxa_advogado_final_sucumbencia =  this.dataHonorariosSucumbenciaAte;
+
+        if (this.isExits(this.formData.taxa_advogado_inicio_sucumbencia)
+           && !this.isExits(this.dataHonorariosSucumbenciaAte)  ) {
+            this.formData.taxa_advogado_final_sucumbencia = this.formData.data_calculo_pedido;
+        }
+
         // Calcular Mais (Vincendos)
         this.formData.maturidade = this.maturidade;
         // Juros anterior a janeiro 2003
@@ -568,7 +577,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.aplicar_ajuste_maximo_98_2003 = this.chkAjusteMaximo;
         // Percentual do Acordo Judicial
         if (this.acordoJudicial != undefined) {
-          this.formData.acordo_pedido = this.acordoJudicial.replace(',','.');
+          //this.formData.acordo_pedido = this.acordoJudicial.replace(',','.');
+          this.formData.acordo_pedido = this.formatPrecentual(this.acordoJudicial).toString().replace(',', '.');
         } else {
           this.formData.acordo_pedido = 0;
         }
@@ -602,14 +612,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
           this.formData.taxa_ajuste_maxima_concedida = 0;
         }
 
-        if(this.isEdit){
-          swal('Sucesso', 'Cálculo salvo com sucesso','success');
-        }
-
         this.onSubmit.emit(this.formData);
+
     }else{
       console.log(this.errors.all())
-      swal('Erro', 'Confira os dados digitados','error');
+      //swal('Erro', 'Confira os dados digitados','error');
+      swal({
+        position: 'top-end',
+        type: 'error',
+        title: 'Confira os dados digitados',
+        showConfirmButton: false,
+        timer: 2000
+      });
     }
   }
 
@@ -651,11 +665,20 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // CONDICIONAL
     let data_anterior_pedido_beneficio = this.formData.data_anterior_pedido_beneficio;
     // Percentual dos Honorarios
-    this.percentualHonorarios = this.formData.percentual_taxa_advogado.toString().replace('.',',');
+    this.percentualHonorarios = this.formatPrecentual(this.formData.percentual_taxa_advogado, false).toString().replace('.',',');
+
     // Intervalo de Honorarios DE
     this.dataHonorariosDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio);
     // Intervalo de Honorarios ATE 
     this.dataHonorariosAte = this.formatReceivedDate(this.formData.taxa_advogado_final);
+
+   // Intervalo de Honorarios inicio sucumbencia
+    this.dataHonorariosSucumbenciaDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio_sucumbencia);
+    // Intervalo de Honorarios fim sucumbencia
+    this.dataHonorariosSucumbenciaAte = this.formatReceivedDate(this.formData.taxa_advogado_final_sucumbencia);
+    // Aplicação dos honorários sobre a diferença ou sobre o devido
+    this.honorariosSobre = this.formData.taxa_advogado_aplicacao_sobre;
+
     // Calcular Mais (Vincendos)
     this.maturidade = this.formData.maturidade;
     // Juros anterior a janeiro 2003
@@ -674,9 +697,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.type = 'AJ';
     }
     this.chkAjusteMaximo = this.formData.aplicar_ajuste_maximo_98_2003;
+    
     // Percentual do Acordo Judicial
-    if (this.formData.acordo_pedido != null)
-      this.acordoJudicial = this.formData.acordo_pedido.toString().replace('.',',');
+    if (this.formData.acordo_pedido != null){
+    //  this.acordoJudicial = this.formData.acordo_pedido.toString().replace('.',',');
+      this.acordoJudicial = this.formatPrecentual(this.formData.acordo_pedido, false).toString().replace('.',',');
+    }
+
     // checkBox Não Limitar Teto para demandas Judiciais
     this.chkDemandasJudiciais = this.formData.nao_aplicar_ajuste_maximo_98_2003;
     // Data inicial do benefício DIB de valores devidos
@@ -836,12 +863,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   formatReceivedDate(inputDate) {
       var date = new Date(inputDate);
       date.setTime(date.getTime() + (5*60*60*1000))
-      if (!isNaN(date.getTime())) {
+
+      if (!isNaN(date.getTime()) && inputDate != null) {
           // Months use 0 index.
           return  ('0' + (date.getDate())).slice(-2)+'/'+
                   ('0' + (date.getMonth()+1)).slice(-2)+'/'+
                          date.getFullYear();
       }
+
       return '';
   }
 
@@ -866,6 +895,28 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   onCorrecaoChange(newCorrecao){
     this.tipoCorrecaoMonetaria = newCorrecao.value;
-    console.log(this.tipoCorrecaoMonetaria);
+    //console.log(this.tipoCorrecaoMonetaria);
   }
+
+
+  voltar(){
+    window.location.href = '/#/beneficios/beneficios-calculos/' + this.route.snapshot.params['id'];
+  }
+
+
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value != 'null' &&
+      value !== undefined &&  value != '') 
+      ? true : false;
+  }
+
+
+  formatPrecentual(valor, type = true){
+    return (type)? valor / 100 : valor * 100;
+  }
+
+
 }
+
+

@@ -10,6 +10,10 @@ export const beneficiosResultadosRoutes: Routes = [{
 {
   path: ':id/:id_calculo',
   component: BeneficiosResultadosComponent
+},
+{
+  path: ':id/:id_calculo/:debug',
+  component: BeneficiosResultadosComponent
 }];
 
 export const beneficiosResultadosRouting = RouterModule.forChild(beneficiosResultadosRoutes);

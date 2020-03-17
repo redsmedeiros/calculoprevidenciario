@@ -4,6 +4,7 @@ import { ErrorService } from '../../../services/error.service';
 import { SeguradoService } from '../../+beneficios-segurados/Segurado.service';
 import { CalculoAtrasado as CalculoModel } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-beneficios-calculos-create',
@@ -37,20 +38,29 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
         .then(segurado => {
             this.segurado = segurado;
     });
+
+    
   }
 
   submit(data) {
     this.Calculo
           .save(data)
-          .then((data:CalculoModel) => {
+          .then((data: CalculoModel) => {
             this.resetForm();
             this.onSubmit.emit();
-            swal('Sucesso', 'Cálculo realizado com sucesso','success').then((result) => {
-              if(result){
-                window.location.href='#/beneficios/beneficios-resultados/'+ data.id_segurado + '/' + data.id;
-              }
+            swal({
+              position: 'top-end',
+              type: 'success',
+              title: 'Cálculo salvo com sucesso',
+              showConfirmButton: false,
+              timer: 2000
+            }).then((result) => {
+                if(result)
+                  {
+                    window.location.href = '#/beneficios/beneficios-resultados/' + data.id_segurado + '/' + data.id;
+                   }
             });
-            
+
           })
           .catch(errors => this.Errors.add(errors));
   }

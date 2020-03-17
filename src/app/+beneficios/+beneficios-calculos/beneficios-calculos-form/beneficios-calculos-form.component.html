@@ -399,9 +399,11 @@
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
-                
                   <div class="form-group">
-                    <label class="col-md-2 control-label">Intervalo de Honorários de sucumbênciais: </label>
+                    <p class="col-md-8 text-align-center"> Honorários de sucumbênciais</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Intervalo de pagamento administrativo: </label>
                     <div class="col-md-2">
                       <input name="dataHonorariosSucumbenciaDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosSucumbenciaDe" class="form-control" placeholder="De" type="text">
                       <small *ngIf="errors.has('dataHonorariosSucumbenciaDe')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaDe') }}</small>
@@ -516,8 +518,15 @@
             <!-- widget content -->
             <div class="widget-body" style="min-height: auto;">
               <div class="row">
-                <div class="col-md-12">
-                  <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success">
+                <div class="col-md-2 pull-left">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar para cálculos
+                  </button>
+                </div>
+                <div class="col-md-2 pull-right">
+                  <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success btn-block">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
                         </span> <span *ngIf="!isEdit">Calcular</span><span *ngIf="isEdit">Salvar e Calcular</span>
@@ -528,3 +537,5 @@
           </div>
         </sa-widget>
       </article>
+
+     
