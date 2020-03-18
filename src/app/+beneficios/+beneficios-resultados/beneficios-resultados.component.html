@@ -855,7 +855,7 @@
               [custombutton]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-table"></i>
             </span>
             <h2>Resultados</h2>
           </header>
@@ -864,7 +864,7 @@
             <!-- widget content -->
             <div class="widget-body" >
               <sa-datatable [options]="resultadosDatatableOptions"
-                paginationLength="false" filter='false' tableClass="table table-striped table-bordered table-hover" [responsive]="false" width="100%" *ngIf="!isUpdating">
+                paginationLength="false" filter='false' tableClass="table table-striped table-bordered table-hover table-condensed" [responsive]="false" width="100%" *ngIf="!isUpdating">
                 <thead *ngIf="!isTetos">
                   <tr>
                     <th>Competência</th>
@@ -928,13 +928,15 @@
             <span class="widget-icon">
               <i class="fa fa-eye"></i>
             </span>
-            <h2>Resultados</h2>
+              <h2>Tutela antecipada a partir de {{dataInicialTutelaAntecipada}} até {{dataFinalTutelaAntecipada}}
+                 com honorarios de {{percentualTaxaAdvogado}}% sobre o ganho econômico
+            </h2>
           </header>
             <div> 
               <div class="row">
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                   <sa-datatable [options]="resultadosTutelaAntecipadaDatatableOptions"
-                  paginationLength="false" filter='false' tableClass="table table-striped table-bordered table-hover" [responsive]="false" width="100%" *ngIf="!isUpdating">
+                  paginationLength="false" filter='false' tableClass="table table-striped table-bordered table-hover table-condensed" [responsive]="false" width="100%" *ngIf="!isUpdating">
                   <thead >
                     <tr>
                       <th>Competência</th>

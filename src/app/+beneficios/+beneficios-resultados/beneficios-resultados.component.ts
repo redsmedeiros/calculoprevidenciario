@@ -178,6 +178,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   // honorarios tutela antecipada -  sucumbencia 
 
   public exibir_sucumbencia = false;
+  public dataInicialTutelaAntecipada;
+  public dataFinalTutelaAntecipada;
+  public percentualTaxaAdvogado;
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
     paging: false,
@@ -187,8 +190,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     data: this.resultadosTutelaAntecipadaList,
     columns: [
       { data: 'competencia', class: 'text-right', width: '5rem' },
-      { data: 'indice_devidos' },
-      { data: 'beneficio_devido' },
+      { data: 'indice_tutela' },
+      { data: 'beneficio_tutela' },
       { data: 'correcao_monetaria' },
       { data: 'ganho_economico' },
       { data: 'honorarios_sucumbencia' }
@@ -1688,16 +1691,20 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
 
 
-      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
-      const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+        this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
+        this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
+        this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
+
+        const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+        const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
 
 
      
 
-      console.log(this.indices);
+      // console.log(this.indices);
 
-      console.log(moment(this.calculo.taxa_advogado_final_sucumbencia));
-      console.log(moment(this.calculo.taxa_advogado_inicio_sucumbencia));
+      // console.log(moment(this.calculo.taxa_advogado_final_sucumbencia));
+      // console.log(moment(this.calculo.taxa_advogado_inicio_sucumbencia));
 
 
 
@@ -1708,6 +1715,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       // console.log(competenciasTutela);
 
+      console.log(this.ultimoBeneficioDevidoAntesProporcionalidade);
       
       for (let dataCorrenteTutelaString of competenciasTutela) {
         let lineTutela: any = {};
@@ -1720,15 +1728,22 @@ export class BeneficiosResultadosComponent implements OnInit {
         let stringCompetencia = (dataTutelaCorrente.month() + 1) + '/' + dataTutelaCorrente.year();
         this.ultimaCompretencia = stringCompetencia;
 
+        let indiceReajusteValoresTutela = { reajuste: 0.0, reajusteOs: 0.0 };
+        indiceReajusteValoresTutela = this.getIndiceReajusteValoresDevidos(dataTutelaCorrente);
+        
+        let correcaoMonetaria = this.getCorrecaoMonetaria(dataTutelaCorrente);
 
-        console.log(dataCorrenteTutelaString);
+        //let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
+
+
+        console.log(indiceReajusteValoresTutela);
 
 
           lineTutela = {
               competencia: stringCompetencia,
-              indice_devidos: '',
-              beneficio_devido: '',
-              correcao_monetaria: '',
+              indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
+              beneficio_tutela: '',
+              correcao_monetaria: correcaoMonetaria,
               ganho_economico: '',
               honorarios_sucumbencia: '',
           }
