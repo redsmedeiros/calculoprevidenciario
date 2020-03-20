@@ -47,10 +47,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     searching: false,
     data: this.resultadosList,
     columns: [
-      { data: 'competencia' },
-      { data: 'indice_devidos' },
+      { data: 'competencia', width: '10rem'  },
+      { data: 'indice_devidos', width:'13rem' },
       { data: 'beneficio_devido' },
-      { data: 'indice_recebidos' },
+      { data: 'indice_recebidos', width:'13rem' },
       { data: 'beneficio_recebido' },
       { data: 'diferenca_mensal' },
       { data: 'correcao_monetaria' },
@@ -176,11 +176,16 @@ export class BeneficiosResultadosComponent implements OnInit {
   public diferencaMensalTetos = 0.0;
 
   // honorarios tutela antecipada -  sucumbencia 
-
+  public isUpdatingTutela = false;
   public exibir_sucumbencia = false;
+  public indicesTutela = [];
   public dataInicialTutelaAntecipada;
   public dataFinalTutelaAntecipada;
   public percentualTaxaAdvogado;
+  public somaHonorariosTutelaAntecipada = 0;
+  public somaHonorariosTutelaAntecipadaString = '';
+  public somaTotalHonorariosString = '';
+
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
     paging: false,
@@ -189,15 +194,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     searching: false,
     data: this.resultadosTutelaAntecipadaList,
     columns: [
-      { data: 'competencia', class: 'text-right', width: '5rem' },
-      { data: 'indice_tutela' },
-      { data: 'beneficio_tutela' },
-      { data: 'correcao_monetaria' },
+      { data: 'competencia', width:'12rem' },
+      { data: 'indice_tutela', width:'13rem'},
       { data: 'ganho_economico' },
+      { data: 'correcao_monetaria' },
+      { data: 'ganho_economico_corrigido' },
       { data: 'honorarios_sucumbencia' }
     ]
   }
-  
+
 
 
 
@@ -298,14 +303,14 @@ export class BeneficiosResultadosComponent implements OnInit {
                         });
                     });
 
-                  this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'), this.dataFinal.format('YYYY-MM-DD'))
-                    .then(indices => {
-                      this.indices = indices;
-                      // this.jurosCorrente = this.calcularJurosCorrente();
-                      // this.resultadosList = this.generateTabelaResultados();
-                      // this.updateResultadosDatatable();
-                      // this.isUpdating = false;
-                    });
+                  // this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'), this.dataFinal.format('YYYY-MM-DD'))
+                  //   .then(indices => {
+                  //     this.indices = indices;
+                  //     // this.jurosCorrente = this.calcularJurosCorrente();
+                  //     // this.resultadosList = this.generateTabelaResultados();
+                  //     // this.updateResultadosDatatable();
+                  //     // this.isUpdating = false;
+                  //   });
 
                 })
             });
@@ -553,7 +558,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         line = {
           ...line,
-          competencia: 'abono - ' + stringCompetencia,
+          competencia: '<strong>'+ stringCompetencia +' - abono <strong>',
           beneficio_devido: this.formatMoney(beneficioDevidoAbono),
           beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
           diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
@@ -821,7 +826,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     //   this.beneficioDevidoOs = beneficioDevido;
     // }
 
-    
+
 
 
 
@@ -855,10 +860,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (
         moment(this.calculo.data_pedido_beneficio_esperado).isBefore('2006-03-31') &&
         dataCorrente.isSame('2006-08-01')
-        ) {
+      ) {
 
-          beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade *= 1.000100;
-          this.beneficioDevidoOs = beneficioDevido;
+        beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade *= 1.000100;
+        this.beneficioDevidoOs = beneficioDevido;
 
       }
     }
@@ -955,7 +960,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
 
-
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
       if (parseFloat(beneficioDevidoFinal.toFixed(3)) === parseFloat(moedaDataCorrente.salario_minimo) + 0.904) {
         beneficioDevidoFinal = parseFloat(moedaDataCorrente.salario_minimo);
@@ -1047,7 +1051,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    
+
     if (dataCorrente > this.dataInicioRecebidos) {
       beneficioRecebido = this.ultimoBeneficioRecebidoAntesProporcionalidade;
     }
@@ -1080,13 +1084,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       beneficioRecebido *= reajusteObj.reajuste;
 
-      
+
       //    regra proporcional 08/2006
       if (
         moment(this.dataInicioRecebidos).isBefore('2006-03-31') &&
         dataCorrente.isSame('2006-08-01')
-        ) {
-          beneficioRecebido = this.beneficioRecebidoAnterior *= 1.000100;
+      ) {
+        beneficioRecebido = this.beneficioRecebidoAnterior *= 1.000100;
       }
     }
 
@@ -1520,7 +1524,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       } else {
         diferencaCorrigidaJurosString += '<br>(prescrita)';
       }
-     // diferencaCorrigidaJurosString += '<br>(prescrita)';
+      // diferencaCorrigidaJurosString += '<br>(prescrita)';
     }
     return diferencaCorrigidaJurosString;
   }
@@ -1643,7 +1647,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       let diasInicio = taxaAdvogadoInicio.get('date');
       const diasMesInicio = taxaAdvogadoInicio.daysInMonth();
       diasInicio = (diasMesInicio - diasInicio) + 1;
-     
+
       honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
 
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
@@ -1657,18 +1661,18 @@ export class BeneficiosResultadosComponent implements OnInit {
       const diasMesFinal = taxaAdvogadoFinal.daysInMonth();
 
 
-      if(dataFimCalculo.isSame(taxaAdvogadoFinal, 'month')){
+      if (dataFimCalculo.isSame(taxaAdvogadoFinal, 'month')) {
 
         honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
 
-      }else{
+      } else {
 
         honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasMesFinal;
 
       }
 
     } else if ((taxaAdvogadoInicio <= dataCorrente && dataCorrente <= taxaAdvogadoFinal) ||
-      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) { 
+      (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
 
       // calcula o intevalo entre datas
       honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
@@ -1680,78 +1684,246 @@ export class BeneficiosResultadosComponent implements OnInit {
     return honorarios;
   }
 
-    //Seção 4.3a sucumbencia / Tutela antecipada
-    public calcularTutelaAntecipada(){
+  // Seção 4.3a sucumbencia / Tutela antecipada
 
-      console.log(this.calculo);
-      console.log(this.calculo.taxa_advogado_final_sucumbencia);
-      console.log(this.calculo.taxa_advogado_inicio_sucumbencia);
+  public getCorrecaoMonetariaTutelaAntecipada(dataCorrente, dataFimCalculo) {
+    let tipo_correcao = this.calculo.tipo_correcao;
+    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    let moedaDataAtual = this.Moeda.getByDate(moment());
+    let moedaDataCalculo = this.Moeda.getByDate(dataFimCalculo.clone());
 
+    let desindexador = 0.0;
+    let correcaoMonetaria = 0.0;
+    if (tipo_correcao == 'ipca') {
 
-      if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
+      desindexador = moedaDataAtual.ipca / moedaDataCalculo.ipca;
+      correcaoMonetaria = moedaDataCorrente.ipca * desindexador;
 
+    } else if (tipo_correcao == 'cam') {
 
-        this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
-        this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
-        this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
+      desindexador = moedaDataAtual.cam / moedaDataCalculo.cam;
+      correcaoMonetaria = moedaDataCorrente.cam * desindexador;
 
-        const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
-        const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+    } else if (tipo_correcao == 'tr') {
 
+      desindexador = moedaDataAtual.tr / moedaDataCalculo.tr;
+      correcaoMonetaria = moedaDataCorrente.tr * desindexador;
 
-     
+    } else if (tipo_correcao == 'tr032015_ipcae') {
 
-      // console.log(this.indices);
+      desindexador = moedaDataAtual.tr032015_ipcae / moedaDataCalculo.tr032015_ipcae;
+      correcaoMonetaria = moedaDataCorrente.tr032015_ipcae * desindexador;
 
-      // console.log(moment(this.calculo.taxa_advogado_final_sucumbencia));
-      // console.log(moment(this.calculo.taxa_advogado_inicio_sucumbencia));
-
-
-
-
-
-      const competenciasTutela = this.monthsBetween(tutelaInicio,
-                                                     tutelaFim);
-
-      // console.log(competenciasTutela);
-
-      console.log(this.ultimoBeneficioDevidoAntesProporcionalidade);
-      
-      for (let dataCorrenteTutelaString of competenciasTutela) {
-        let lineTutela: any = {};
-
-        let dataTutelaCorrente = moment(dataCorrenteTutelaString);
-  
-        let moedaDataTutelaCorrente = this.Moeda.getByDate(dataTutelaCorrente);
-        let siglaDataTutelaCorrente = moedaDataTutelaCorrente.sigla;
-  
-        let stringCompetencia = (dataTutelaCorrente.month() + 1) + '/' + dataTutelaCorrente.year();
-        this.ultimaCompretencia = stringCompetencia;
-
-        let indiceReajusteValoresTutela = { reajuste: 0.0, reajusteOs: 0.0 };
-        indiceReajusteValoresTutela = this.getIndiceReajusteValoresDevidos(dataTutelaCorrente);
-        
-        let correcaoMonetaria = this.getCorrecaoMonetaria(dataTutelaCorrente);
-
-        //let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
+    }
+    // let usar_deflacao = !this.calculo.nao_usar_deflacao;
+    // if (!usar_deflacao) {
+    //   if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
+    //     correcaoMonetaria = 1;
+    //   }
+    // }
+    return correcaoMonetaria;
+  }
 
 
-        console.log(indiceReajusteValoresTutela);
+  private getByDateToTypeTutela(date, type) {
+
+    const listTypeT = this.indicesTutela;
+
+    const firstMonth = listTypeT[0].data_moeda;
+
+    date = date.startOf('month');
+    let difference = date.diff(firstMonth, 'months', true);
+    difference = Math.abs(difference);
+    difference = Math.floor(difference);
+    return listTypeT[difference];
+  }
 
 
-          lineTutela = {
-              competencia: stringCompetencia,
-              indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
-              beneficio_tutela: '',
-              correcao_monetaria: correcaoMonetaria,
-              ganho_economico: '',
-              honorarios_sucumbencia: '',
-          }
 
-          this.resultadosTutelaAntecipadaList.push(lineTutela)
+  public getIndiceReajusteValoresTutela(dataCorrente, dataFimCalculo) {
+
+
+    if (dataFimCalculo != null && dataCorrente > dataFimCalculo) {
+      return { reajuste: 1.0, reajusteOs: 0.0 };
+    }
+
+    let reajuste = 0.0;
+    // let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
+    let indiceObjCorrente = this.getByDateToTypeTutela(dataCorrente, '');
+
+
+    let indiceReajuste = 0;
+    let indiceReajusteOs = 0;
+
+
+    if (indiceObjCorrente == undefined) {
+      reajuste = 0;
+    } else {
+      indiceReajuste = indiceObjCorrente.indice == null ? 1 : indiceObjCorrente.indice;
+      indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
+
+      reajuste = indiceReajuste;
+
+    }
+
+    // chkIndice é o checkbox “calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004”
+    let chkIndice = this.calculo.usar_indice_99_04;
+    if (chkIndice) {
+      if (dataCorrente.isSame(moment("1999-06-01"), 'month')) {
+        reajuste = reajuste * 1.0228;
+      }
+      if (dataCorrente.isSame(moment("2004-05-01"), 'month')) {
+        reajuste = reajuste * 1.0175;
+      }
+    }
+
+
+    if (dataCorrente <= this.dataSimplificada &&
+      moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
+      reajuste = 1;
+    }
+    else if (moment(this.calculo.data_pedido_beneficio_esperado) <= this.dataInicioBuracoNegro &&
+      dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+      reajuste = 2.198234;
+
+    }
+
+    if (this.primeiroReajusteDevidos == -1 && reajuste != 1) {
+      this.primeiroReajusteDevidos = 1;
+    }
+
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado) &&
+      moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) {
+      reajuste = 1;
+    }
+    if (dataCorrente.isSame('1994-03-01', 'month')) {
+      reajuste = 1 / 661.0052;
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+        reajuste = 1;
+      }
+    }
+
+    let reajusteOS = 0.0;
+    // let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+    // if (this.isBuracoNegro(dataPedidoBeneficioEsperado) && dataCorrente < this.dataEfeitoFinanceiro) {
+    //   if (dataCorrente < moment('1991-09-01')) {
+    //     if (indiceObjCorrente == undefined) {
+    //       reajusteOS = 0;
+    //     } else {
+    //       reajusteOS = indiceReajusteOs;
+    //     }
+    //   }
+    //   else if (indiceObjCorrente.indice) {
+    //     if (indiceObjCorrente == undefined) {
+    //       reajusteOS = 0;
+    //     } else {
+    //       reajusteOS = indiceReajuste;
+    //     }
+    //   }
+    //   else {
+    //     reajusteOS = 1;
+    //   }
+    // }
+    // if (reajusteOS == 0) {
+    //   reajusteOS = 1;
+    // }
+    return { reajuste: reajuste, reajusteOs: reajusteOS };
+  }
+
+
+
+  verificaAbonoProporcionalTutela(dib) {
+    let dibMonth = dib.month() + 1;
+
+    if (dib.date() <= 16) {
+      dibMonth -= 1;
+    }
+
+    let proporcional = 1 - dibMonth / 12;
+
+    return proporcional;
+  }
+
+
+  public getTabelaAntecipada() {
+
+    this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
+    this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
+    this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
+
+    const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+    const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+
+    const competenciasTutela = this.monthsBetween(tutelaInicio, tutelaFim);
+
+    const ultimoValorDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
+
+    let beneficioTutelaComIndice = ultimoValorDevido;
+    let moedaDataTutelaCorrente;
+    for (const dataCorrenteTutelaString of competenciasTutela) {
+      let lineTutela: any = {};
+
+      let dataTutelaCorrente = moment(dataCorrenteTutelaString);
+
+      moedaDataTutelaCorrente = this.Moeda.getByDate(dataTutelaCorrente);
+      const stringCompetencia = (dataTutelaCorrente.month() + 1) + '/' + dataTutelaCorrente.year();
+
+      let indiceReajusteValoresTutela = { reajuste: 0.0, reajusteOs: 0.0 };
+      indiceReajusteValoresTutela = this.getIndiceReajusteValoresTutela(dataTutelaCorrente, tutelaFim.clone());
+
+      const correcaoMonetaria = this.getCorrecaoMonetariaTutelaAntecipada(dataTutelaCorrente, tutelaFim.clone());
+
+      // inicio proprorcional
+      if (dataTutelaCorrente.isSame(tutelaInicio, 'month')) {
+        const diasProporcionaisTutela = this.calcularDiasProporcionais(dataTutelaCorrente,
+                                                                      tutelaFim.clone());
+        beneficioTutelaComIndice = beneficioTutelaComIndice * diasProporcionaisTutela;
+      }
+
+      // Fim proporcional
+      if (dataTutelaCorrente.isSame(tutelaFim, 'month')) {
+        const diasProporcionaisTutela = this.calcularDiasProporcionais(dataTutelaCorrente,
+                                                                       tutelaFim.clone());
+        beneficioTutelaComIndice = beneficioTutelaComIndice * diasProporcionaisTutela;
       }
 
 
+      beneficioTutelaComIndice *= indiceReajusteValoresTutela.reajuste;
+
+      const ganhoEconomicoCorrigido = beneficioTutelaComIndice * correcaoMonetaria;
+      const honorariosSucumbencia = ganhoEconomicoCorrigido * this.calculo.percentual_taxa_advogado
+
+      this.somaHonorariosTutelaAntecipada += honorariosSucumbencia;
+
+      lineTutela = {
+        competencia: stringCompetencia,
+        indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
+        ganho_economico: this.formatMoney(beneficioTutelaComIndice,  moedaDataTutelaCorrente.sigla),
+        correcao_monetaria: correcaoMonetaria,
+        ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido,  moedaDataTutelaCorrente.sigla),
+        honorarios_sucumbencia: this.formatMoney(honorariosSucumbencia,  moedaDataTutelaCorrente.sigla),
+      };
+
+      this.resultadosTutelaAntecipadaList.push(lineTutela);
+
+      // abono tutela
+
+      if (dataTutelaCorrente.month() == 11) {
+        
+          
+
+        this.resultadosTutelaAntecipadaList.push(
+          {
+            competencia: '<strong>'+ stringCompetencia +' - abono <strong>',
+            indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
+            ganho_economico: this.formatMoney(beneficioTutelaComIndice,  moedaDataTutelaCorrente.sigla),
+            correcao_monetaria: correcaoMonetaria,
+            ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido,  moedaDataTutelaCorrente.sigla),
+            honorarios_sucumbencia: this.formatMoney(honorariosSucumbencia,  moedaDataTutelaCorrente.sigla),
+          }
+        );
+
+        this.somaHonorariosTutelaAntecipada += honorariosSucumbencia;
 
       }
 
@@ -1759,6 +1931,63 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
     }
+
+      // this.resultadosTutelaAntecipadaList.push(
+      //   {
+      //     competencia: '',
+      //     indice_tutela: '',
+      //     ganho_economico: '',
+      //     correcao_monetaria: '',
+      //     ganho_economico_corrigido: '<strong>Total</strong>',
+      //     honorarios_sucumbencia: this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla),
+      // }
+      // );
+
+      this.somaHonorariosTutelaAntecipadaString = this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
+
+      this.somaTotalHonorariosString = this.formatMoney(this.somaHonorarios+ this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
+
+
+
+    this.isUpdatingTutela = false;
+  }
+
+
+
+
+  public calcularTutelaAntecipada() {
+
+    console.log(this.calculo);
+    console.log(this.calculo.taxa_advogado_final_sucumbencia);
+    console.log(this.calculo.taxa_advogado_inicio_sucumbencia);
+
+    this.isUpdatingTutela = true;
+    if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
+
+      this.exibir_sucumbencia = true;
+
+      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+      const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+      const dataInicioDosIndices = moment(this.calculo.data_pedido_beneficio_esperado);
+
+      this.Indice.getByDateRange(
+        dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
+        tutelaFim.format('YYYY-MM-DD'))
+        .then(indices => {
+
+          for (const indice of this.Indice.list) {
+            this.indicesTutela.push(indice);
+          }
+
+          this.getTabelaAntecipada();
+
+        });
+    }
+
+  }
+
+
+
 
   //Seção 4.4
   calcularAcordoJudicial() {
@@ -2063,13 +2292,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (typeof value === 'number') {
       let numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
       // let string = sigla + this.formatDecimal(value, 2);
-      let string = sigla + numeroPadronizado;
+      let string = sigla +' '+ numeroPadronizado;
       if (aplicarCor && string.indexOf('-') != -1) {
         string = '<span style="color:red">' + string + '</span>';
       }
       return string;
     } else {
-      return sigla + '0,00';
+      return sigla + ' 0,00';
     }
 
 
@@ -2121,10 +2350,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia' },
-          { data: 'indice_devidos' },
+          { data: 'competencia', width:'12rem'},
+          { data: 'indice_devidos', width:'13rem'},
           { data: 'beneficio_devido' },
-          { data: 'indice_recebidos' },
+          { data: 'indice_recebidos', width:'13rem' },
           { data: 'beneficio_recebido' },
           { data: 'diferenca_mensal' },
           { data: 'correcao_monetaria' },
@@ -2140,10 +2369,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia' },
-          { data: 'indice_devidos' },
+          { data: 'competencia', width:'12rem' },
+          { data: 'indice_devidos', width:'13rem' },
           { data: 'beneficio_devido' },
-          { data: 'indice_recebidos' },
+          { data: 'indice_recebidos', width:'13rem' },
           { data: 'beneficio_recebido' },
           { data: 'diferenca_mensal' },
           { data: 'correcao_monetaria' },
@@ -2160,7 +2389,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia' },
+          { data: 'competencia'  , width:'12rem'},
           { data: 'indice_devidos' },
           { data: 'beneficio_devido' },
           { data: 'beneficio_devido_sem_limites' },
@@ -2326,13 +2555,13 @@ export class BeneficiosResultadosComponent implements OnInit {
   isExits(value) {
     return (typeof value !== 'undefined' &&
       value != null && value != 'null' &&
-      value !== undefined &&  value != '') 
+      value !== undefined && value != '')
       ? true : false;
   }
 
 
 
-  
+
   /*
     generateTabelaResultados() {
       let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
