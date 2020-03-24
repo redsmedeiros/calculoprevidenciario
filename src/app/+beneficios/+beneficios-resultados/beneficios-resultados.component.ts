@@ -1451,7 +1451,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2001-03-01', 'month') ||
       dataCorrente.isSame('2002-03-01', 'month') ||
       dataCorrente.isSame('2003-03-01', 'month')) {
-      this.beneficioDevidoSalvo = beneficioDevidoFinal;
+      this.beneficioDevidoSalvo = (diasProporcionais != 1)? this.ultimoBeneficioDevidoAntesProporcionalidade : beneficioDevidoFinal;
       this.beneficioDevidoTetosSemLimiteSalvo = this.beneficioDevidoTetosSemLimite;
     }
 
