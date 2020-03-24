@@ -729,7 +729,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //   conclusoes.push({ string: "Média Secundária - Pós Taxa:", value: this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo) });//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     // }
 
-    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
+    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimalIdade(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
     // conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     // conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
@@ -1392,7 +1392,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   getIdadeFracionada() {
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days') + 1;
+    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days') ;
     return idadeEmDias / 365.25;
   }
 
@@ -1955,6 +1955,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       days: tempoTotal.dias
     });
 
+    console.log(this.idadeFracionada);
 
     this.conclusoesRegra4.status = this.requisitosRegra4(this.segurado.sexo,
       tempoContribuicaoAnosAtePec,

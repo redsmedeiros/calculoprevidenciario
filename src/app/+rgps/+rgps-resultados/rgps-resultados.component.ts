@@ -779,6 +779,10 @@ export class RgpsResultadosComponent implements OnInit {
     return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
   }
 
+  formatDecimalIdade(value, n_of_decimal_digits) {
+    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+  }
+
   formatReceivedDate(inputDate) {
     const date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
