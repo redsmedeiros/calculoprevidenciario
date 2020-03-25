@@ -1672,7 +1672,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2001-03-01', 'month') ||
       dataCorrente.isSame('2002-03-01', 'month') ||
       dataCorrente.isSame('2003-03-01', 'month')) {
-      this.beneficioRecebidoSalvo = beneficioRecebidoFinal;
+      // this.beneficioRecebidoSalvo = beneficioRecebidoFinal; ajuste para utilizar o ultimoa valor antes da proporcionalidade
+      this.beneficioRecebidoSalvo = (diasProporcionais != 1)? this.ultimoBeneficioRecebidoAntesProporcionalidade : beneficioRecebidoFinal;
     }
 
     resultsObj.resultString = beneficioRecebidoString;
