@@ -557,7 +557,7 @@
                     {{ formatDate(calculo.taxa_advogado_inicio) }} a
                     {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                   </li>
-                  <li *ngIf="exibir_sucumbencia" >
+                  <li *ngIf="exibirSucumbencia" >
                     <b>Honorários de tutela antecipada:</b>
                     {{ dataInicialTutelaAntecipada }} a
                     {{ dataFinalTutelaAntecipada }} 
@@ -714,13 +714,13 @@
                       {{ formatMoney(somaHonorarios) }}</span
                     >
                   </li>
-                  <li *ngIf="exibir_sucumbencia">
+                  <li *ngIf="exibirSucumbencia">
                     <b>Soma honorários de tutela antecipada:</b
                     ><span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ somaHonorariosTutelaAntecipadaString }}</span
                     >
                   </li>
-                  <li *ngIf="exibir_sucumbencia">
+                  <li *ngIf="exibirSucumbencia">
                     <b>Soma total de honorários:</b
                     ><span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ somaTotalHonorariosString }}</span
@@ -1333,7 +1333,9 @@
                 </thead>
               </sa-datatable>
               <!-- tutela antecipada -->
-              <div class="row">
+              <div class="row"
+              *ngIf="exibirSucumbencia"
+              >
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                   <sa-widget
                     [colorbutton]="false"

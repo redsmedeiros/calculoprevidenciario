@@ -177,7 +177,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   // honorarios tutela antecipada -  sucumbencia 
   public isUpdatingTutela = false;
-  public exibir_sucumbencia = false;
+  public exibirSucumbencia = false;
   public indicesTutela = [];
   public dataInicialTutelaAntecipada;
   public dataFinalTutelaAntecipada;
@@ -1994,7 +1994,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.isUpdatingTutela = true;
     if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
 
-      this.exibir_sucumbencia = true;
+      this.exibirSucumbencia = true;
 
       const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
       const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
