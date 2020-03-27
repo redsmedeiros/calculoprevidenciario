@@ -142,7 +142,7 @@
         </sa-widget>
       </article>
       
-      <article class="col-sm-12 col-md-6 col-lg-6">
+      <article class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
@@ -348,15 +348,13 @@
             </span>
             <h2>Vincendas</h2>
           </header>
-          <div class="widget-body">
-            <form class="form-horizontal">
-              <div class="form-group">
+          <div class="widget-body widget-body-custom">
+              <div class=" form-horizontal form-group">
                 <label class="col-md-2 control-label"><i title="De acordo com art. 260, CPC, “o valor das prestações vincendas será igual a uma prestação anual, se a obrigação for por tempo indeterminado, ou por tempo superior a 1 (um) ano; se, por tempo inferior, será igual à soma das prestações.” Logo, no cálculo do IEPREV, o valor das prestações vincendas corresponde a prestação anual." class="fa fa-question-circle fa-lg"></i> Calcular mais:</label>
                 <div class="col-md-2">
                   <input name="maturidade" [(ngModel)]="maturidade" class="form-control" placeholder="vincendas" type="text">
                 </div> vincendas
               </div>
-            </form>
           </div>
         </sa-widget>
       </article>
@@ -388,6 +386,36 @@
                     </div>
                   </div>
                   <div class="form-group">
+                      <label class="col-md-2 control-label">Aplicar o honorário sobre o valor:</label>
+                      <div class="col-md-4 ">
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="taxaAdvogadoAplicacaoSobre" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('taxaAdvogadoAplicacaoSobre')" type="radio" name="taxaAdvogadoAplicacaoSobre" value="dif" checked> 
+                          Diferença entre devido e recebido 
+                        </label>
+                        <label class="radio radio-inline">
+                          <input [(ngModel)]="taxaAdvogadoAplicacaoSobre" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('taxaAdvogadoAplicacaoSobre')" type="radio" name="taxaAdvogadoAplicacaoSobre" value="dev"> 
+                          Devido 
+                        </label>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" > Período pago em tutela antecipada (pagamento administrativo): 
+                    </label>
+                    <div class="col-md-2">
+                      <input name="dataHonorariosSucumbenciaDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosSucumbenciaDe" class="form-control" placeholder="De" type="text">
+                      <small *ngIf="errors.has('dataHonorariosSucumbenciaDe')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaDe') }}</small>
+                    </div>
+                    <div class="col-md-2">
+                      <input name="dataHonorariosSucumbenciaAte" [(ngModel)]="dataHonorariosSucumbenciaAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
+                      <small *ngIf="errors.has('dataHonorariosSucumbenciaAte')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaAte') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-2">
                       <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
@@ -399,21 +427,6 @@
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <p class="col-md-8 text-align-center"> Honorários de Tutela antecipada (sucumbênciais)</p>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Intervalo de pagamento administrativo: </label>
-                    <div class="col-md-2">
-                      <input name="dataHonorariosSucumbenciaDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosSucumbenciaDe" class="form-control" placeholder="De" type="text">
-                      <small *ngIf="errors.has('dataHonorariosSucumbenciaDe')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaDe') }}</small>
-                    </div>
-                    <div class="col-md-2">
-                      <input name="dataHonorariosSucumbenciaAte" [(ngModel)]="dataHonorariosSucumbenciaAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
-                      <small *ngIf="errors.has('dataHonorariosSucumbenciaAte')" class="text-danger">{{ errors.get('dataHonorariosSucumbenciaAte') }}</small>
-                    </div>
-                  </div>
-
                 </fieldset>
               </form>
             </div>

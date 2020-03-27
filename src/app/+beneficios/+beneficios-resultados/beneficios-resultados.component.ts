@@ -175,6 +175,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
 
+  // aplicar o honórario sobre 
+  public taxaAdvogadoAplicacaoSobre = ''; // dev - devido / dif - diferença entre devido e recebido
+
   // honorarios tutela antecipada -  sucumbencia 
   public isUpdatingTutela = false;
   public exibirSucumbencia = false;
@@ -484,7 +487,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       valorJuros = diferencaCorrigida * juros;
       let valorNumericoDiferencaCorrigidaJurosObj: any = {};
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-      honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+      honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevido);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
         //Se houver o marcador, a data é prescrita
@@ -553,7 +556,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         diferencaCorrigida = diferencaMensal * correcaoMonetaria;
         valorJuros = diferencaCorrigida * juros;
         diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
-        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida);
+        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevidoAbono);
 
 
         line = {
@@ -1616,13 +1619,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     return somaVincendos;
   }
 
-  //Seção 4.3
-  calculoHonorarios(dataCorrente, juros, diferencaCorrigida) {
+  // Seção 4.3
+  calculoHonorarios(dataCorrente, juros, diferencaCorrigida, beneficioDevido) {
     //Calcular Honorários para cada linha da tabela
     let honorarios = 0.0;
     let taxaAdvogadoInicio = null;
     let taxaAdvogadoFinal = null;
-    let diferecaCorrigidaJuros = juros + diferencaCorrigida;
+    let diferecaCorrigidaJuros = (this.calculo.taxa_advogado_aplicacao_sobre !== 'dev')? juros + diferencaCorrigida : beneficioDevido;
+    // let diferecaCorrigidaJuros = juros + diferencaCorrigida ;
 
     if (this.calculo.taxa_advogado_inicio != '') {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);

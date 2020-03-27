@@ -14,3 +14,8 @@
     }
 
   }
+
+
+.widget-body-custom {
+    min-height: 60px !important;
+}

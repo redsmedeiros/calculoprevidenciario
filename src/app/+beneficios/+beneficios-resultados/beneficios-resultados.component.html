@@ -709,19 +709,20 @@
               <div class="widget-body">
                 <ul class="list-unstyled" *ngIf="!isTetos">
                   <li *ngIf="somaHonorarios != 0">
-                    <b>Soma dos honorários a receber:</b
-                    ><span class="{{ tratarConclusao(somaHonorarios) }}">
+                    <b *ngIf="!exibirSucumbencia">Honorários a receber:</b>
+                    <b *ngIf="exibirSucumbencia">Honorários:</b>
+                    <span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ formatMoney(somaHonorarios) }}</span
                     >
                   </li>
                   <li *ngIf="exibirSucumbencia">
-                    <b>Soma honorários de tutela antecipada:</b
+                    <b>Honorários de tutela antecipada:</b
                     ><span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ somaHonorariosTutelaAntecipadaString }}</span
                     >
                   </li>
                   <li *ngIf="exibirSucumbencia">
-                    <b>Soma total de honorários:</b
+                    <b>Total de honorários:</b
                     ><span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ somaTotalHonorariosString }}</span
                     >
@@ -733,7 +734,7 @@
                     >
                   </li>
                   <li *ngIf="valorAcordo != 0">
-                    <b>Soma dos devidos com desconto judicial:</b
+                    <b>Total devidos com desconto judicial:</b
                     ><span class="{{ tratarConclusao(valorAcordo) }}">
                       {{ formatMoney(valorAcordo) }}</span
                     >
@@ -742,13 +743,13 @@
                   <b>Última Renda Mensal Judicialmente:</b><span class="{{tratarConclusao(ultimaRenda)}}"> {{formatMoney(ultimaRenda)}}</span>
                 </li> -->
                   <li>
-                    <b>Soma Total da Diferença Mensal:</b
+                    <b>Total da Diferença Mensal:</b
                     ><span class="{{ tratarConclusao(somaDiferencaMensal) }}">
                       {{ formatMoney(somaDiferencaMensal) }}</span
                     >
                   </li>
                   <li>
-                    <b>Soma Total da Correção Monetária:</b
+                    <b>Total da Correção Monetária:</b
                     ><span
                       class="{{
                         tratarConclusao(
@@ -764,7 +765,7 @@
                     >
                   </li>
                   <li>
-                    <b>Soma Total da Diferença Corrigida:</b
+                    <b>Total da Diferença Corrigida:</b
                     ><span
                       class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                     >
@@ -772,13 +773,13 @@
                     >
                   </li>
                   <li>
-                    <b>Soma Total do Valor dos Juros:</b
+                    <b>Total do Valor dos Juros:</b
                     ><span class="{{ tratarConclusao(somaJuros) }}">
                       {{ formatMoney(somaJuros) }}</span
                     >
                   </li>
                   <li>
-                    <b>Soma devida Judicialmente:</b
+                    <b>Total devido Judicialmente:</b
                     ><span
                       class="{{ tratarConclusao(somaDevidaJudicialmente) }}"
                     >
@@ -786,13 +787,13 @@
                     >
                   </li>
                   <li>
-                    <b>Soma das vincendas:</b
+                    <b>Total vincendas:</b
                     ><span class="{{ tratarConclusao(somaVincendas) }}">
                       {{ formatMoney(somaVincendas) }}</span
                     >
                   </li>
                   <li>
-                    <b>Soma total devida ao segurado:</b
+                    <b>Total devida ao segurado:</b
                     ><span class="{{ tratarConclusao(somaTotalSegurado) }}">
                       {{ formatMoney(somaTotalSegurado) }}</span
                     >
@@ -805,11 +806,32 @@
                     </caption>
                     <tr *ngIf="somaHonorarios != 0">
                       <td width="50%" style="text-align: right;">
-                        <b>Soma dos honorários a receber:</b>
+                        <b *ngIf="!exibirSucumbencia">Honorários a receber:</b>
+                        <b *ngIf="exibirSucumbencia">Honorários:</b>
                       </td>
                       <td width="50%">
                         <span class="{{ tratarConclusao(somaHonorarios) }}">
                           {{ formatMoney(somaHonorarios) }}</span
+                        >
+                      </td>
+                    </tr>
+                    <tr *ngIf="somaHonorarios != 0">
+                      <td width="50%" style="text-align: right;">
+                        <b>Honorários de tutela antecipada:</b>
+                      </td>
+                      <td width="50%">
+                        <span class="{{ tratarConclusao(somaHonorarios) }}">
+                          {{ somaHonorariosTutelaAntecipadaString }}</span
+                        >
+                      </td>
+                    </tr>
+                    <tr *ngIf="somaHonorarios != 0">
+                      <td width="50%" style="text-align: right;">
+                        <b>Total de honorários:</b>
+                      </td>
+                      <td width="50%">
+                        <span class="{{ tratarConclusao(somaHonorarios) }}">
+                          {{ somaTotalHonorariosString }}</span
                         >
                       </td>
                     </tr>
@@ -825,7 +847,7 @@
                     </tr>
                     <tr *ngIf="valorAcordo != 0">
                       <td width="50%" style="text-align: right;">
-                        <b>Soma dos devidos com desconto judicial:</b>
+                        <b>Total devidos com desconto judicial:</b>
                       </td>
                       <td width="50%">
                         <span class="{{ tratarConclusao(valorAcordo) }}">
@@ -845,7 +867,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma Total da Diferença Mensal:</b>
+                        <b>Total da Diferença Mensal:</b>
                       </td>
                       <td width="50%">
                         <span
@@ -877,7 +899,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma Total da Diferença Corrigida:</b>
+                        <b>Total da Diferença Corrigida:</b>
                       </td>
                       <td width="50%">
                         <span
@@ -889,7 +911,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma Total do Valor dos Juros:</b>
+                        <b>Total do Valor dos Juros:</b>
                       </td>
                       <td width="50%">
                         <span class="{{ tratarConclusao(somaJuros) }}">
@@ -899,7 +921,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma devida Judicialmente:</b>
+                        <b>Total devido Judicialmente:</b>
                       </td>
                       <td width="50%">
                         <span
@@ -911,7 +933,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma das vincendas:</b>
+                        <b>Total vincendas:</b>
                       </td>
                       <td width="50%">
                         <span class="{{ tratarConclusao(somaVincendas) }}">
@@ -921,7 +943,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma total devida ao segurado:</b>
+                        <b>Total devida ao segurado:</b>
                       </td>
                       <td width="50%">
                         <span class="{{ tratarConclusao(somaTotalSegurado) }}">
@@ -959,13 +981,13 @@
                     >
                   </li>
                   <li>
-                    <b>Soma Total da Diferença Mensal Tetos:</b
+                    <b>Total da Diferença Mensal Tetos:</b
                     ><span class="{{ tratarConclusao(somaDiferencaMensal) }}">
                       {{ formatMoney(somaDiferencaMensal) }}</span
                     >
                   </li>
                   <li>
-                    <b>Soma Total da Correção Monetária:</b
+                    <b>Total da Correção Monetária:</b
                     ><span
                       class="{{
                         tratarConclusao(
@@ -1080,7 +1102,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Soma Total da Correção Monetária:</b>
+                        <b>Total da Correção Monetária:</b>
                       </td>
                       <td width="50%">
                         <span

@@ -70,7 +70,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public jurosDepois2003;
   public jurosDepois2009;
 
-  public honorariosSobre;
+  public taxaAdvogadoAplicacaoSobre  = 'dif';
   public dataHonorariosSucumbenciaDe;
   public dataHonorariosSucumbenciaAte;
 
@@ -544,6 +544,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_advogado_inicio_sucumbencia =  this.dataHonorariosSucumbenciaDe;
         this.formData.taxa_advogado_final_sucumbencia =  this.dataHonorariosSucumbenciaAte;
 
+        // aplicação sobre devido ou diferença entre devido e recebido
+        this.formData.taxa_advogado_aplicacao_sobre =  this.taxaAdvogadoAplicacaoSobre;
+
         if (this.isExits(this.formData.taxa_advogado_inicio_sucumbencia)
            && !this.isExits(this.dataHonorariosSucumbenciaAte)  ) {
             this.formData.taxa_advogado_final_sucumbencia = this.formData.data_calculo_pedido;
@@ -553,13 +556,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.maturidade = this.maturidade;
         // Juros anterior a janeiro 2003
         if (this.jurosAntes2003 != undefined) {
-          this.formData.previo_interesse_2003 = this.jurosAntes2003.replace(',','.');
+          this.formData.previo_interesse_2003 = this.jurosAntes2003.replace(',', '.');
         } else {
           this.formData.previo_interesse_2003 = 0;
         }
         // Juros posterior a janeiro 2003
         if (this.jurosDepois2003 != undefined) {
-          this.formData.pos_interesse_2003 = this.jurosDepois2003.replace(',','.');
+          this.formData.pos_interesse_2003 = this.jurosDepois2003.replace(',', '.');
         } else {
           this.formData.pos_interesse_2003 = 0;
         }
@@ -677,7 +680,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // Intervalo de Honorarios fim sucumbencia
     this.dataHonorariosSucumbenciaAte = this.formatReceivedDate(this.formData.taxa_advogado_final_sucumbencia);
     // Aplicação dos honorários sobre a diferença ou sobre o devido
-    this.honorariosSobre = this.formData.taxa_advogado_aplicacao_sobre;
+    this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre))?
+                                       this.formData.taxa_advogado_aplicacao_sobre : 'dif';
 
     // Calcular Mais (Vincendos)
     this.maturidade = this.formData.maturidade;
