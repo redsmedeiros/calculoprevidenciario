@@ -272,6 +272,9 @@ export class RgpsResultadosComponent implements OnInit {
   //pbc parametro get
   public pbcCompleto = false;
 
+  // pbc indices de correção
+  public pbcCompletoIndices = 'inpc1084';
+
   constructor(protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -280,7 +283,9 @@ export class RgpsResultadosComponent implements OnInit {
     @Inject(WINDOW) private window: Window
   ) { }
 
+
   ngOnInit() {
+    this.calculoList = [];
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
@@ -1020,6 +1025,10 @@ export class RgpsResultadosComponent implements OnInit {
     window.location.href = '/#/rgps/rgps-calculos/' + this.idSegurado + '/' + this.idsCalculo[0] + '/edit';
   }
 
+ listaCalculos() {
+    window.location.href = '/#/rgps/rgps-calculos/' + this.idSegurado;
+  }
+
   valoresContribuidos() {
     const idList = [];
     for (const checkboxId of this.checkboxIdList) {
@@ -1116,6 +1125,35 @@ export class RgpsResultadosComponent implements OnInit {
     return (this.route.snapshot.params['pbc'] === 'pbc');
   }
 
+
+  public getPbcCompletoIndices(){
+    return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
+  }
+
+
+  
+ public calcularPBCIndices(indice) {
+
+     if (!this.isExits(indice)) {
+      this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
+      this.ngOnInit();
+    }
+
+    if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
+      //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
+       // const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
+      // this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+      //   this.router.navigate([urlpbcNew])
+      // );
+
+      this.router.navigate([urlpbcNew]);
+      this.ngOnInit();
+      //window.location.reload(true)
+      //this.ngOnInit();
+    }
+     
+   }
 
 
   @HostListener('window:scroll', [])

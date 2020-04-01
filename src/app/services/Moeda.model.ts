@@ -12,6 +12,8 @@ export class Moeda extends Model {
     teto: '',
     fator: '',
     fator_pbc: '',
+    fator_pbc_inpc1085ortn: '',
+    fator_pbc_inpc1088ortn: '',
     sigla: '',
     nome: '',
     tr: '',
@@ -27,6 +29,8 @@ export class Moeda extends Model {
   public teto;
   public fator;
   public fator_pbc;
+  public fator_pbc_inpc1085ortn;
+  public fator_pbc_inpc1088ortn;
   public sigla;
   public nome;
   public tr;

@@ -191,6 +191,8 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') :  moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
+    // indices de correção pbc da vida toda
+
 
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
@@ -271,17 +273,32 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let fator = 1;
       let fatorLimite = 1;
 
-
+       // definição de indices
       if ((!this.pbcCompleto)) {
 
         fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
         fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
 
       } else {
-
-        fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
-        fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
-
+        
+        // this.pbcCompletoIndices = (this.isExits(this.route.snapshot.params['correcao_pbc'])) ?
+        //                           this.route.snapshot.params['correcao_pbc'] : 'inpc1084';
+        
+        switch (this.getPbcCompletoIndices()) {
+            case 'inpc1085':
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1085ortn : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1085ortn : 1;
+            break;
+            case 'inpc1088':
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1088ortn : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1088ortn : 1;
+            break;
+          default: // inpc1084 == fator_pbc
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+            break;
+        }
+        
       }
 
       let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
@@ -1955,7 +1972,6 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       days: tempoTotal.dias
     });
 
-    console.log(this.idadeFracionada);
 
     this.conclusoesRegra4.status = this.requisitosRegra4(this.segurado.sexo,
       tempoContribuicaoAnosAtePec,

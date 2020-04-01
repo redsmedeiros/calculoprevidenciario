@@ -100,10 +100,10 @@
                   </tr>
                 </table>
               </div>
-              <div class="form-actions">
+              <div class="form-actions no-padding">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right" title="Editar o segurado.">
                       <span class="btn-label">
                         <i class="fa fa-pencil"></i>
                       </span> Editar
@@ -142,9 +142,9 @@
                   </tr>
                 </thead>
               </sa-datatable>
-                <div class="row not-print">
+                <div class="row not-print no-padding">
                    <div class="col-md-12">
-                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary">
+                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary pull-right">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Comparar
@@ -180,29 +180,82 @@
                   <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-user"></i>
-                    </span> Selecionar segurado
+                    </span> Retornar para lista de segurados
                   </button>
 
                   <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
-                      <i class="fa fa-calculator"></i>
-                    </span> Informações para o cálculo
+                      <i class="fa fa-edit"></i>
+                    </span> Editar informações para o cálculo
+                  </button>
+
+                  <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                    <span class="btn-label">
+                      <i class="fa fa-list"></i>
+                    </span> Retornar para lista cálculos
                   </button>
 
                   <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-dollar"></i>
-                    </span> Valores de contribuição
+                    </span> Editar valores de contribuição
                   </button>
 
-                  <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-primary margin-right-13 pull-right" 
+                  title="Imprime todos os cálculos da página.">
                     <span class="btn-label">
                       <i class="fa fa-print"></i>
-                    </span> Imprimir tudo
+                    </span> Imprimir todos os Cálculos
                   </button>
                 </div>
               </div>
 
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      <!-- opções de correção pbc completo -->
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="pbcCompleto" >
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+              [editbutton]="false"
+              [togglebutton]="false"
+              [deletebutton]="false"
+              [fullscreenbutton]="false"
+              [custombutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>Opções de correção para revisão da vida toda</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body" style="min-height: auto;">
+              <div class="row" id='opcoes_indices_pbc'>
+                <div class="col-md-12">
+                  <div class="btn-group ">
+                  <button type="button" 
+                  (click)="calcularPBCIndices('inpc1084')" 
+                  class="btn  btn-default" 
+                  [ngClass]="{'active btn-primary':( getPbcCompletoIndices() === 'inpc1084')}"  >
+                     INPC desde 10/1984 
+                  </button>
+                  <button type="button" 
+                  (click)="calcularPBCIndices('inpc1085')" 
+                  class="btn btn-default" 
+                  [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1085')}">
+                     INPC desde 10/1985
+                  </button>
+                  <button type="button" 
+                  (click)="calcularPBCIndices('inpc1088')" 
+                  class="btn btn-default" 
+                  [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1088')}">
+                     INPC desde 10/1988
+                  </button>
+                </div>
+                </div>
+              </div>
             </div>
           </div>
         </sa-widget>

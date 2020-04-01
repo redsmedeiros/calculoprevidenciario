@@ -79,7 +79,6 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasDivisorMinimo = false;
       //reforma EC 103/2019
 
-  public pbcCompleto = false;
 
 
   public periodoOptions: string[] = [];
@@ -137,10 +136,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.ultimoBeneficio = this.formData.ultimo_beneficio;
       this.sexoInstituidor = this.formData.sexo_instituidor;
       this.divisorMinimo = this.formData.divisor_minimo;
-      this.pbcCompleto = this.formData.pbc_completo;
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
-
 
     } else {
       this.checkImportContagemTempo();
@@ -177,7 +174,6 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.sexo_instituidor = this.sexoInstituidor;
       // pensão fim por morte
       this.formData.divisor_minimo = this.divisorMinimo;
-      this.formData.pbc_completo = this.pbcCompleto;
 
     //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
       this.onSubmit.emit(this.formData);

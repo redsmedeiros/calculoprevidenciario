@@ -126,6 +126,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
     let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') :  moment('1994-07-01');
 
+     // indices de correção pbc da vida toda
+     
+
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
@@ -199,7 +202,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fator = 1;
       let fatorLimite = 1;
 
-
+      // definição de indices de correção
       if ((!this.pbcCompleto)) {
 
         fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
@@ -207,8 +210,23 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       } else {
 
-        fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
-        fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+        // this.pbcCompletoIndices = (this.isExits(this.route.snapshot.params['correcao_pbc'])) ?
+        // this.route.snapshot.params['correcao_pbc'] : 'inpc1084';
+
+          switch (this.getPbcCompletoIndices()) {
+            case 'inpc1085':
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1085ortn : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1085ortn : 1;
+            break;
+            case 'inpc1088':
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1088ortn : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1088ortn : 1;
+            break;
+            default: // inpc1084 == fator_pbc
+              fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
+              fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+            break;
+          }
 
       }
 
