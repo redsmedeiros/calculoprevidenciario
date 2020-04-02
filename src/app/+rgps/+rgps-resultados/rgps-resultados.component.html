@@ -177,35 +177,39 @@
 
               <div class="row" id='containerOpcoes'>
                 <div class="col-md-12">
-                  <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13"
+                  title="Retorna para a lista de segurados.">
                     <span class="btn-label">
                       <i class="fa fa-user"></i>
-                    </span> Retornar para lista de segurados
+                    </span> Lista de segurados
                   </button>
 
-                  <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13"
+                  title="Retorna para edição de tempo de contribuição, espécie e DIB">
                     <span class="btn-label">
                       <i class="fa fa-edit"></i>
-                    </span> Editar informações para o cálculo
+                    </span> Editar cálculo
                   </button>
-
-                  <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default margin-right-13">
+ 
+                  <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default margin-right-13"
+                  title="Retorna para lista de cálculos do segurado selecionado">
                     <span class="btn-label">
                       <i class="fa fa-list"></i>
-                    </span> Retornar para lista cálculos
-                  </button>
+                    </span> Lista cálculos
+                  </button> 
 
-                  <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13">
+                  <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13"
+                  title="Retorna para editar os valores de contribuíção">
                     <span class="btn-label">
                       <i class="fa fa-dollar"></i>
-                    </span> Editar valores de contribuição
+                    </span> Editar contribuições
                   </button>
 
                   <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-primary margin-right-13 pull-right" 
                   title="Imprime todos os cálculos da página.">
                     <span class="btn-label">
                       <i class="fa fa-print"></i>
-                    </span> Imprimir todos os Cálculos
+                    </span> Imprimir todos
                   </button>
                 </div>
               </div>
@@ -238,18 +242,21 @@
                   <button type="button" 
                   (click)="calcularPBCIndices('inpc1084')" 
                   class="btn  btn-default" 
+                  title="ORTN OTN BTN /INPC a partir de 10/1984/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
                   [ngClass]="{'active btn-primary':( getPbcCompletoIndices() === 'inpc1084')}"  >
                      INPC desde 10/1984 
                   </button>
                   <button type="button" 
                   (click)="calcularPBCIndices('inpc1085')" 
                   class="btn btn-default" 
+                  title="ORTN OTN BTN /INPC a partir de 10/1985/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
                   [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1085')}">
                      INPC desde 10/1985
                   </button>
                   <button type="button" 
                   (click)="calcularPBCIndices('inpc1088')" 
                   class="btn btn-default" 
+                  title="ORTN OTN BTN /INPC a partir de 10/1988/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
                   [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1088')}">
                      INPC desde 10/1988
                   </button>

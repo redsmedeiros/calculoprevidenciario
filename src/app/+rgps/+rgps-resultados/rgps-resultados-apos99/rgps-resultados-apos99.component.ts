@@ -102,6 +102,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+    this.tableData = [];
+    this.conclusoes = [];
     this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
@@ -853,14 +855,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
 
-    // let comparePontosFator = function (conclusoes) {
-      
-    //   for (const item of conclusoes) {
-    //     console.log(item);
-        
-    //   }
 
-    // }
 
 
     
@@ -883,14 +878,24 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push(valor);
       conclusoes[conclusoes.length - 3] = {};
       conclusoes[conclusoes.length - 1]["class"] = "destaque";
-     
+
      }
     //else if(conclusoes[conclusoes.length - 1].value == conclusoes[conclusoes.length - 2].value){
     //   conclusoes[conclusoes.length - 2]["class"] = "destaque";
     //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
     // }
 
-    // console.log(comparePontosFator(conclusoes));
+    
+    for (let i = 0; i < conclusoes.length; i++) {
+      if(conclusoes[i].string == undefined && conclusoes[i].value == undefined){
+        conclusoes.splice(i,1)
+      }
+    }
+
+
+    if(conclusoes[conclusoes.length - 1].string === conclusoes[conclusoes.length - 2].string){
+      conclusoes.splice(conclusoes.length - 2,1)
+    }
 
     this.isUpdating = false;
 
@@ -1339,7 +1344,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
 
       //  if (this.fatorPrevidenciario > 1) {
-      conclusoes.push({ string: 'Renda Mensal Inicial com Fator Previdenciario:', value: this.formatMoney(rmi, currency.acronimo) });
+         conclusoes.push({ string: 'Renda Mensal Inicial com Fator Previdenciario:', value: this.formatMoney(rmi, currency.acronimo) });
       //}
 
     } else if (this.tipoBeneficio != 1) {
