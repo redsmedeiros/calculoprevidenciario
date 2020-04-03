@@ -420,6 +420,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           divisorMediaPrimaria = divisorMinimo;
         }
 
+        // divisor 
+        if(this.getPbcDaVidatoda()){
+          divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+        }
+
       }
       
       console.log(divisorMediaPrimaria)
