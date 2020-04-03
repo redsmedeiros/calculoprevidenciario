@@ -197,11 +197,18 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0) {
+        if (this.listaValoresContribuidos.length == 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
+
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
           this.isUpdating = false;
-        } else {
+
+        }else if(this.isRegrasPensaoObitoInstituidorAposentado) {
+          // pensão por morte instituidor aposentador
+          this.regrasDaReforma();
+
+        }else {
+
           let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
@@ -230,6 +237,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                     });
                 });
             });
+
         }
       });
   }
@@ -359,6 +367,15 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     this.valorTotalContribuicoes = totalContribuicaoPrimaria;
     this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    
+    if(this.getPbcDaVidatoda()){
+
+      let dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
+      this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment(dataInicioPBCRevisao), this.dataInicioBeneficio);
+    
+     }
+
+
     this.percentual60ContribuicaoEntre94EDib = Math.trunc(this.mesesContribuicaoEntre94EDib * 0.6);
     this.numeroDeContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
 

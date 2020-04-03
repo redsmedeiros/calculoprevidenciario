@@ -294,6 +294,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     let mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+
+
+    console.log(this.listaValoresContribuidos[this.listaValoresContribuidos.length-1]);
+    // meses de contribuição pbc
+     if(this.getPbcDaVidatoda()){
+
+       let dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
+       mesesContribuicao = this.getDifferenceInMonths(moment(dataInicioPBCRevisao), this.dataInicioBeneficio);
+     
+      }
+
+
     let mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8) - 0.5);
     let mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6) - 0.5);
     let divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
@@ -304,7 +316,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
     // }
 
-    let numeroContribuicoes = tableData.length;//Numero de contribuicoes carregadas para o periodo;
+    let numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
 
@@ -389,10 +401,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
         // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
         //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+       
         divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
         if (numeroContribuicoes < mesesContribuicao60) {
           divisorMediaPrimaria = mesesContribuicao60
         }
+
         if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
           if (this.withIN45) {
             divisorMediaPrimaria = numeroContribuicoes;
@@ -401,10 +415,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
         }
+
         if (divisorMediaPrimaria < divisorMinimo) {
           divisorMediaPrimaria = divisorMinimo;
         }
+
       }
+      
+      console.log(divisorMediaPrimaria)
+      console.log(divisorMinimo)
+      console.log(numeroContribuicoes)
+
     }
 
     let totalMediaDozeContribuicoes = 0;
