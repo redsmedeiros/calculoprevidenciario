@@ -1230,6 +1230,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     let irtDevidoSimplificado89 = 1;
 
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
+    rmiDevidos = this.aplicarTetosEMinimosDIB(rmiDevidos, moment(this.calculo.data_pedido_beneficio_esperado).startOf('month'));
+    console.log(rmiDevidos)
+
     let beneficioDevido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio_esperado);
     let dibMoeda = this.Moeda.getByDate(dib);
@@ -1379,9 +1382,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     }
 
+    //console.log(beneficioDevidoAjustado);
+
     this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     line.beneficio_devido_apos_revisao = this.formatMoney(this.beneficioDevidoAposRevisao);
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
+
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
@@ -2474,6 +2480,25 @@ export class BeneficiosResultadosComponent implements OnInit {
       return (31 - dib.date()) / 30;
     return 1;
   }
+
+  // correção inicial do valor devido
+ public aplicarTetosEMinimosDIB(valorBeneficio, dib) {
+    const dataCorrenteMoedaDib = this.Moeda.getByDate(dib);
+    const salMinimoDib = dataCorrenteMoedaDib.salario_minimo;
+    const tetoSalarialDib = dataCorrenteMoedaDib.teto;
+   
+    if (valorBeneficio <= salMinimoDib) {
+      // Adicionar subindice ‘M’ no valor do beneficio
+      return salMinimoDib;
+    }
+    if (valorBeneficio >= tetoSalarialDib && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+      // Adicionar subindice ‘T’ no valor do beneficio.
+      return tetoSalarialDib;
+    }
+    return valorBeneficio;
+  }
+
+
 
   //Seção 5.3
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo) {
