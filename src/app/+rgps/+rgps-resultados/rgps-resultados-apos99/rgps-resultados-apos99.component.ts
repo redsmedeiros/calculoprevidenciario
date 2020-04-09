@@ -108,7 +108,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
-    
+
     this.tableData = [];
     this.conclusoes = [];
     this.tableOptions = {
@@ -436,21 +436,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
         //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
 
-         divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
+        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
         //divisorMediaPrimaria = numeroContribuicoes;
 
         if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
-       
+
           divisorMediaPrimaria = mesesContribuicao60;
           this.msgDivisorMinimo = '(Divisor Mínimo)';
-       
+
         }
 
         if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
 
           this.exibirIN77 = true;
 
-          if (this.withIN45) {
+          if (this.withIN45 && this.isDivisorMinimo) {
 
             divisorMediaPrimaria = numeroContribuicoes;
 
@@ -465,10 +465,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
             divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
-            if (divisorMediaPrimaria < mesesContribuicao60 && this.isDivisorMinimo) {
+            if (divisorMediaPrimaria < mesesContribuicao60) {
 
-                divisorMediaPrimaria = mesesContribuicao60;
-                this.msgDivisorMinimo = '(Divisor Mínimo)';
+              divisorMediaPrimaria = mesesContribuicao60;
+              this.msgDivisorMinimo = '(Divisor Mínimo)';
 
             }
 
@@ -476,7 +476,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         }
 
-        
+
 
         // if (divisorMediaPrimaria < divisorMinimo && this.isDivisorMinimo) {
         //     divisorMediaPrimaria = divisorMinimo;
