@@ -838,9 +838,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.jurosCorrenteList = this.createJurosCorrenteList(competencias);
     //this.getJurosPorConpetencia((moment("2015-01-01")));
 
-    //console.log(this.jurosCorrenteList);
-
-
     for (let dataCorrenteString of competencias) {
 
       let line: any = {};

@@ -149,6 +149,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public divisorMinimo = 0;
   public isDivisorMinimo = true;
   public msgDivisorMinimo = '';
+  public in77 = false;
 
 
 
@@ -182,6 +183,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
+    this.msgDivisorMinimo = '';
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
@@ -368,9 +370,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.valorTotalContribuicoes = totalContribuicaoPrimaria;
     this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
     
+    // meses de contribuição pbc
     if(this.getPbcDaVidatoda()){
 
-      let dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
+      const dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
       this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment(dataInicioPBCRevisao), this.dataInicioBeneficio);
     
      }
@@ -2671,7 +2674,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     if (tipoBeneficio === 16) {
       contribuicao_min = { m: 15, f: 15 };
-      idade_min = { m: 65, f: 60 };
+      idade_min = { m: 60, f: 55 };
     }
 
     if (tempo_contribuicao < contribuicao_min[sexo]) {
@@ -2693,7 +2696,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   }
 
   /**
-   * regra de idade urbano Rural
+   * regra de idade urbano / Rural
    */
   public regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio) {
 
@@ -3082,25 +3085,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     // }
 
-    // console.log(this.contribuicaoPrimaria);
-    // console.log(this.idadeFracionada);
-    // console.log(mesesContribuicao);
-    // console.log(valorMedio);
-    // console.log(this.dataFiliacao);
-    // console.log(this.dataPromulgacao2019);
-    // console.log(this.isRegraTransitoria);
 
     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
-    // console.log(this.dataInicioBeneficio);
-    // console.log(moeda);
-    // console.log(this.tipoBeneficio);
-    // console.log(this.dataFiliacao);
-    // console.log(this.dataPromulgacao2019);
-    // console.log(this.isRegraTransitoria);
 
-    // console.log(this.numeroDeCompetenciasAposDescarte20);
-    // console.log(this.valorTotalContribuicoesComDescarte20);
 
     // aplicação default false
     if (arrayEspecial.includes(this.tipoBeneficio)) {

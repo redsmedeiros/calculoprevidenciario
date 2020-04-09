@@ -169,12 +169,17 @@
                         <p> <i class="fa fa-info-circle fa-1-8x text-info"></i> Para os benefícios concedidos a partir de 18 de junho de 2019 foi determinada a soma das contribuições concomitantes de acordo com as alterações trazidas pela Lei 13.846/19.</p>
                     </div>
                     </div>
-                    <div class="form-group"  *ngIf="has19 && hasDivisorMinimo">
+                    <div class="form-group"  *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
                       <div class="checkbox col-md-8 col-md-offset-2">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">
-                          <span>Deseja afastar a aplicação do divisor mínimo? Se sim, Marque a caixa ao lado.
+                          <span *ngIf="has19 && hasDivisorMinimo">
+                            Deseja afastar a aplicação do divisor mínimo ? Se sim, Marque a caixa ao lado. (Antes da EC103/2019: afasta a aplicação do divisor mínimo e fixar o descarte de 20% das menores contribuições)
                             <i title="A Emenda Constitucional nº 103/2019 determina, em seu art. 26, a utilização da média aritmética simples para o cálculo da média salarial. É possível se entender, dessa maneira, que não é possível a aplicação do divisor mínimo aos benefícios concedidos segundo as regras previstas na EC nº 103/2019, salvo direito adquirido. Tal aplicação seria indevida em razão de que a própria aplicação do divisor mínimo implica a utilização de um divisor diferente da quantidade de parcelas que foram somadas para o cálculo da média salarial, afastando-se, assim, a utilização do conceito de média aritmética simples imposto pelo supracitado art. 26. Considerando, contudo, que há divergência doutrinária em relação a este tópico, o simulador do IEPREV oferece as opções de aplicação do divisor mínimo e o seu afastamento." class="fa fa-question-circle fa-lg text-info"></i>
+                          </span>
+                          <span *ngIf="!has19 && hasAtual && hasDivisorMinimo">
+                            Deseja afastar a aplicação do divisor mínimo e fixar o descarte de 20% das menores contribuições? Se sim, Marque a caixa ao lado.
+                            <!-- <i title="" class="fa fa-question-circle fa-lg text-info"></i> -->
                           </span>
                         </label>
                       </div>
