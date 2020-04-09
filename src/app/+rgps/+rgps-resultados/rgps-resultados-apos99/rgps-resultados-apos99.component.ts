@@ -457,7 +457,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           } else {
 
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+            divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
           }
 
