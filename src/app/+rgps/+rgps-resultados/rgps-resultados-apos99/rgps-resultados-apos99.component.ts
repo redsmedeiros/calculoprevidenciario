@@ -440,8 +440,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         //divisorMediaPrimaria = numeroContribuicoes;
 
         if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
+       
           divisorMediaPrimaria = mesesContribuicao60;
           this.msgDivisorMinimo = '(Divisor Mínimo)';
+       
         }
 
         if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
@@ -449,16 +451,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.exibirIN77 = true;
 
           if (this.withIN45) {
+
             divisorMediaPrimaria = numeroContribuicoes;
+
           } else {
+
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
             divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+
           }
 
           if (this.naoAplicarIN77) {
 
             divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-            if (divisorMediaPrimaria < mesesContribuicao60) {
+
+            if (divisorMediaPrimaria < mesesContribuicao60 && this.isDivisorMinimo) {
 
                 divisorMediaPrimaria = mesesContribuicao60;
                 this.msgDivisorMinimo = '(Divisor Mínimo)';
@@ -482,15 +489,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // }
 
       }
-
-      //console.log(this.naoAplicarIN77);
-      // console.log('---1');
-      // console.log(divisorMediaPrimaria);
-      // console.log(divisorMinimo);
-      // console.log(mesesContribuicao80);
-      // console.log(numeroContribuicoes);
-      // console.log(numeroContribuicoes > divisorMediaPrimaria);
-      // console.log('---2/n');
 
 
     }
