@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
+import { Component, OnInit, HostListener, Inject} from '@angular/core';
 import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -1145,20 +1145,28 @@ export class RgpsResultadosComponent implements OnInit {
   public calcularPBCIndices(indice) {
 
     if (!this.isExits(indice)) {
-      this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
-      this.ngOnInit();
+     // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
+     // this.ngOnInit();
+     
+     const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+     const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
+     this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+       this.router.navigate([urlpbcNew])
+     );
     }
 
     if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
       //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
-      // const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+      const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
-      // this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
-      //   this.router.navigate([urlpbcNew])
-      // );
+      this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+        this.router.navigate([urlpbcNew])
+      );
 
-      this.router.navigate([urlpbcNew]);
-      this.ngOnInit();
+      // this.router.navigate([urlpbcNew]);
+      // this.ngOnInit();
+      
+
       //window.location.reload(true)
       //this.ngOnInit();
     }
