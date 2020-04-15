@@ -37,6 +37,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public isProportional = false;
   public nenhumaContrib = false;
   public dataInicioBeneficio;
+  public dataInicioBeneficioExport;
   public tipoBeneficio;
   public listaValoresContribuidos;
   public valorExportacao;
@@ -135,6 +136,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    this.dataInicioBeneficioExport = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
     this.idadeFracionada = this.getIdadeFracionada();
     this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
@@ -146,7 +148,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // aplicação divisor mínimo
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
     this.msgDivisorMinimo = '';
-
     //this.exibirIN77 = false;
 
 
@@ -943,11 +944,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       this.getRendaMensal(conclusoes, rmi, currency);
     }
 
-
-
-
-
-
     // console.log( rmi <= somaMedias)
     // console.log(rmi)
     // console.log(somaMedias)
@@ -975,30 +971,47 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // }
 
 
+
+    let rmi_fator = 0;
+    let rmi_pontos = 0;
+
     for (let i = 0; i < conclusoes.length; i++) {
       if (conclusoes[i].string == undefined && conclusoes[i].value == undefined) {
         conclusoes.splice(i, 1)
       }
-    }
 
+      if((/Renda Mensal Inicial com Fator/gi).test(conclusoes[i].string)) {
+        rmi_fator = conclusoes[i].value
+      }
+
+      if((/Renda Mensal Inicial com Regra/gi).test(conclusoes[i].string)){
+        rmi_pontos = conclusoes[i].value
+      }
+
+    }
 
     if (conclusoes[conclusoes.length - 1].string === conclusoes[conclusoes.length - 2].string) {
       conclusoes.splice(conclusoes.length - 2, 1)
     }
 
+    rmi_fator = this.convertDecimalValue(rmi_fator);
+    rmi_pontos = this.convertDecimalValue(rmi_pontos);
+
+
     this.isUpdating = false;
 
-    // conclusoes[conclusoes.length - 1]['class'] = 'destaque';
+   // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
+    this.valorExportacao = (rmi_fator > rmi_pontos) ? rmi_fator : rmi_pontos;
 
-    this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.tableData = tableData;
     this.tableOptions = {
       ...this.tableOptions,
       data: this.tableData,
     }
+
     //Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
-    this.calculo.valor_beneficio = rmi;
+    this.calculo.valor_beneficio = this.valorExportacao;
     this.CalculoRgpsService.update(this.calculo);
 
   }

@@ -477,7 +477,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     let tipoIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')) {
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')||
+      (this.especieBeneficio === 'Auxílio Doença')) {
         tipoIdade = true;
     }
 
@@ -564,7 +565,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoInicioBeneficio = 'A partir de 13/11/2019';
     }
 
-    var dateParts = this.dataInicioBeneficio.split('/');
+    let dateParts = this.dataInicioBeneficio.split('/');
     let dateBeneficio = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
     // if (dateBeneficio < new Date('04/05/1991')) {
@@ -609,6 +610,14 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has99 = false;
         this.hasAtual = true;
         this.has19 = false;
+      }
+
+      if (tipoIdade) {
+        this.hasAnterior = false;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = true;
+        this.has19 = true;
       }
 
     } else if (dateBeneficio >= new Date('11/13/2019')) {

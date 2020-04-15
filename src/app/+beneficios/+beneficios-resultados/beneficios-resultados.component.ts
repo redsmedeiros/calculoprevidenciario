@@ -952,8 +952,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
-      if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11) {
-        //Adicionar linha de abono
+      if (dataCorrente.month() == 11 && this.calculo.tipo_aposentadoria_recebida != 11 &&
+        this.calculo.tipo_aposentadoria != 17) { // LOAS não tem abono
+        // Adicionar linha de abono
 
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
@@ -963,11 +964,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
         }
 
-
         if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
           beneficioRecebidoAbono = 0.0;
         }
-
 
         if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
           diferencaMensal = beneficioDevidoAbono;
