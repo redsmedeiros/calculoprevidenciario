@@ -149,6 +149,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   public divisorMinimo = 0;
   public isDivisorMinimo = true;
   public msgDivisorMinimo = '';
+  public in77 = false;
 
 
 
@@ -182,24 +183,34 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
+    this.msgDivisorMinimo = '';
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
-    
+
     // pbc da vida toda
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') :  moment('1994-07-01');
+    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
+
+    // indices de correção pbc da vida toda
 
 
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0) {
+        if (this.listaValoresContribuidos.length == 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
+
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
           this.isUpdating = false;
+
+        } else if (this.isRegrasPensaoObitoInstituidorAposentado) {
+          // pensão por morte instituidor aposentador
+          this.regrasDaReforma();
+
         } else {
+
           let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
@@ -228,6 +239,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
                     });
                 });
             });
+
         }
       });
   }
@@ -271,7 +283,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let fator = 1;
       let fatorLimite = 1;
 
-
+      // definição de indices
       if ((!this.pbcCompleto)) {
 
         fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
@@ -279,8 +291,23 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
-        fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
-        fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+        // this.pbcCompletoIndices = (this.isExits(this.route.snapshot.params['correcao_pbc'])) ?
+        //                           this.route.snapshot.params['correcao_pbc'] : 'inpc1084';
+
+        switch (this.getPbcCompletoIndices()) {
+          case 'inpc1085':
+            fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1085ortn : 1;
+            fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1085ortn : 1;
+            break;
+          case 'inpc1088':
+            fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc_inpc1088ortn : 1;
+            fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc_inpc1088ortn : 1;
+            break;
+          default: // inpc1084 == fator_pbc
+            fator = (moedaContribuicao) ? moedaContribuicao.fator_pbc : 1;
+            fatorLimite = (moedaComparacao) ? moedaComparacao.fator_pbc : 1;
+            break;
+        }
 
       }
 
@@ -342,6 +369,16 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     this.valorTotalContribuicoes = totalContribuicaoPrimaria;
     this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+
+    // meses de contribuição pbc
+    if (this.getPbcDaVidatoda()) {
+
+      const dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
+      this.mesesContribuicaoEntre94EDib = this.getDifferenceInMonths(moment(dataInicioPBCRevisao), this.dataInicioBeneficio);
+
+    }
+
+
     this.percentual60ContribuicaoEntre94EDib = Math.trunc(this.mesesContribuicaoEntre94EDib * 0.6);
     this.numeroDeContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
 
@@ -729,7 +766,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     //   conclusoes.push({ string: "Média Secundária - Pós Taxa:", value: this.formatMoney(mediaContribuicoesSecundarias * taxaSecundaria, currency.acronimo) });//resultados['Média Secundárias - Pós Taxa: '] =  currency.acrônimo + taxaSecundaria;
     // }
 
-    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimal(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
+    conclusoes.push({ string: "Idade em anos:", value: `${Math.trunc(this.idadeFracionada)} (${this.formatDecimalIdade(this.idadeFracionada, 2)}) ` });//resultados['Idade em anos'] = truncate(idadeFracionada) (idadeFracionada); this.idadeFracionada.toLocaleString('pt-BR',{ style: 'decimal', maximumFractionDigits: 2}))
     // conclusoes.push({ string: "Média das contribuições:", value: this.formatMoney(somaMedias, currency.acronimo) });//resultados['Média das contribuições'] = currency.acrônimo + somaMedias;
     // conclusoes.push({ string: "CT - Número de competências transcorridas desde 29/11/1999:", value: numeroCompetencias });//resultados['CT - Número de competências transcorridas desde 29/11/1999:'] = numeroCompetencias;
 
@@ -1392,7 +1429,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
   getIdadeFracionada() {
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days') + 1;
+    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
     return idadeEmDias / 365.25;
   }
 
@@ -1978,39 +2015,39 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       // let contribuicaoDiff = 0;
       // let tempoDePedagio = 0;
       // let tempoFinalContribComPedagio = 0;
-     // let tempoDePedagioTotal = 0;
+      // let tempoDePedagioTotal = 0;
 
 
       // contribuicaoDiff = (contribuicao_min[this.segurado.sexo] - this.contribuicaoTotal);
 
-     // tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
-     // tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
+      // tempoDePedagio = (contribuicao_min[this.segurado.sexo] - tempoContribuicaoAnosAtePec);
+      // tempoFinalContribComPedagio = contribuicao_min[this.segurado.sexo] + tempoDePedagio;
 
 
       let tempoDePedagio = contribuicao_min_moment[this.segurado.sexo].clone();
-          tempoDePedagio = tempoDePedagio.subtract(teste_tempoContribuicaoAtePecMoment);
+      tempoDePedagio = tempoDePedagio.subtract(teste_tempoContribuicaoAtePecMoment);
 
 
       let tempoFinalContribComPedagio = contribuicao_min_moment[this.segurado.sexo].clone();
-          tempoFinalContribComPedagio = tempoFinalContribComPedagio.add(tempoDePedagio);
+      tempoFinalContribComPedagio = tempoFinalContribComPedagio.add(tempoDePedagio);
 
-           this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionadoMoment(
-                                                                                        tempoDePedagio.years(),
-                                                                                        tempoDePedagio.months(),
-                                                                                        tempoDePedagio.days(),
-                                                                                        true
-                                                                                        );
-           this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionadoMoment(
-                                                                                                  tempoFinalContribComPedagio.years(),
-                                                                                                  tempoFinalContribComPedagio.months(),
-                                                                                                  tempoFinalContribComPedagio.days(),
-                                                                                                  true
-                                                                                                  );
-   
+      this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionadoMoment(
+        tempoDePedagio.years(),
+        tempoDePedagio.months(),
+        tempoDePedagio.days(),
+        true
+      );
+      this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionadoMoment(
+        tempoFinalContribComPedagio.years(),
+        tempoFinalContribComPedagio.months(),
+        tempoFinalContribComPedagio.days(),
+        true
+      );
+
       //   tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       let tempoDePedagioTotal = tempoDePedagio.clone();
-          tempoDePedagioTotal = tempoDePedagioTotal.add(tempoDePedagio);
+      tempoDePedagioTotal = tempoDePedagioTotal.add(tempoDePedagio);
 
       // this.conclusoesRegra4.tempoDePedagioTotal = this.tratarTempoFracionado(tempoDePedagio);
       // this.conclusoesRegra4.tempoDeContribuicaoAposentar = this.tratarTempoFracionado(tempoFinalContribComPedagio);
@@ -2019,14 +2056,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       this.conclusoesRegra4.dataParaAposentar = dibParaRegra4.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
       this.conclusoesRegra4.tempoDeAtualDecontribuicao = this.tratarTempoFracionado(this.contribuicaoTotal);
 
-     
 
-     // console.log('------ inicio ---------');
+
+      // console.log('------ inicio ---------');
       // contribuicao_min_moment
       // teste_tempoContribuicaoAtePecMoment
       // teste_tempoContribuicaoTotalMoment
 
-     
+
       // console.log('------ p --------');
 
       // console.log(tempoDePedagio);
@@ -2046,8 +2083,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       // if (this.contribuicaoTotal.toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5)
       //   ||
       //   ((this.contribuicaoTotal + 0.0014).toPrecision(5) >= tempoFinalContribComPedagio.toPrecision(5))) {
-      if( teste_tempoContribuicaoTotalMoment.asDays() >= tempoFinalContribComPedagio.asDays() )
-        {
+      if (teste_tempoContribuicaoTotalMoment.asDays() >= tempoFinalContribComPedagio.asDays()) {
 
         this.conclusoesRegra4.tempoDePedagio = `Alcançou os requisitos de tempo de contribuição`;
         // this.conclusoesRegra4.tempoDePedagio = this.tratarAnosFracionado(tempoDePedagio);
@@ -2059,20 +2095,20 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
-        let contribuicaoDiff =  tempoFinalContribComPedagio.clone()
+        let contribuicaoDiff = tempoFinalContribComPedagio.clone()
         contribuicaoDiff = contribuicaoDiff.subtract(teste_tempoContribuicaoTotalMoment).subtract(1, 'd');
 
         let diffRegraDe100 = this.tratarTempoFracionadoMoment(
-                                            contribuicaoDiff.years(),
-                                            contribuicaoDiff.months(),
-                                            contribuicaoDiff.days(),
-                                      false
-                                      );
+          contribuicaoDiff.years(),
+          contribuicaoDiff.months(),
+          contribuicaoDiff.days(),
+          false
+        );
 
 
 
         this.conclusoesRegra4.tempoDePedagio = 'Não faz jus a aplicação desta regra faltam - '
-          + diffRegraDe100  + ' para cumprir o pedágio.';
+          + diffRegraDe100 + ' para cumprir o pedágio.';
 
 
 
@@ -2637,7 +2673,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     if (tipoBeneficio === 16) {
       contribuicao_min = { m: 15, f: 15 };
-      idade_min = { m: 65, f: 60 };
+      idade_min = { m: 60, f: 55 };
     }
 
     if (tempo_contribuicao < contribuicao_min[sexo]) {
@@ -2659,7 +2695,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
   }
 
   /**
-   * regra de idade urbano Rural
+   * regra de idade urbano / Rural
    */
   public regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio) {
 
@@ -3048,25 +3084,10 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     // }
 
-    // console.log(this.contribuicaoPrimaria);
-    // console.log(this.idadeFracionada);
-    // console.log(mesesContribuicao);
-    // console.log(valorMedio);
-    // console.log(this.dataFiliacao);
-    // console.log(this.dataPromulgacao2019);
-    // console.log(this.isRegraTransitoria);
 
     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
-    // console.log(this.dataInicioBeneficio);
-    // console.log(moeda);
-    // console.log(this.tipoBeneficio);
-    // console.log(this.dataFiliacao);
-    // console.log(this.dataPromulgacao2019);
-    // console.log(this.isRegraTransitoria);
 
-    // console.log(this.numeroDeCompetenciasAposDescarte20);
-    // console.log(this.valorTotalContribuicoesComDescarte20);
 
     // aplicação default false
     if (arrayEspecial.includes(this.tipoBeneficio)) {

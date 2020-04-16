@@ -585,3 +585,9 @@ a[class*="action-"]:hover {
 .mx-auto {
   margin-left: auto !important;
 }
+
+.bg-ieprev {
+  border-color: #831721!important;
+  background: #831721 !important;
+  color: #fff !important;
+}

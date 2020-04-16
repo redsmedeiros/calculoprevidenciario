@@ -1208,6 +1208,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+    let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
+    rmiDevidos = this.aplicarTetosEMinimosDIB(rmiDevidos, moment(this.calculo.data_pedido_beneficio_esperado).startOf('month'));
+    console.log(rmiDevidos)
+
+    // let beneficioDevido = 0.0;
+    // let dib = moment(this.calculo.data_pedido_beneficio_esperado);
+    // let dibMoeda = this.Moeda.getByDate(dib);
+    // let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
     let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
     if (indiceSuperior) {
@@ -2190,6 +2198,25 @@ export class BeneficiosResultadosComponent implements OnInit {
       return (31 - dib.date()) / 30;
     return 1;
   }
+
+  // correção inicial do valor devido
+ public aplicarTetosEMinimosDIB(valorBeneficio, dib) {
+    const dataCorrenteMoedaDib = this.Moeda.getByDate(dib);
+    const salMinimoDib = dataCorrenteMoedaDib.salario_minimo;
+    const tetoSalarialDib = dataCorrenteMoedaDib.teto;
+   
+    if (valorBeneficio <= salMinimoDib) {
+      // Adicionar subindice ‘M’ no valor do beneficio
+      return salMinimoDib;
+    }
+    if (valorBeneficio >= tetoSalarialDib && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+      // Adicionar subindice ‘T’ no valor do beneficio.
+      return tetoSalarialDib;
+    }
+    return valorBeneficio;
+  }
+
+
 
   //Seção 5.3
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo) {

@@ -53,13 +53,13 @@
                     <button type="submit" (click)="realizarCalculo()" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled labeled btn-success">
                       <span class="btn-label">
                         <i class="fa fa-calculator"></i>
-                      </span> Realizar cálculos
+                      </span> Cálculo da RMI
                     </button>
                     
                     <button type="submit" (click)="realizarCalculo(true)" *ngIf= "mostrarBotaoRealizarCalculos"class="btn btn-labeled btn-labeled bg-color-greenDark txt-color-white">
                       <span class="btn-label">
                         <i class="fa fa-calculator"></i>
-                      </span>  Cálculo na revisão da vida toda
+                      </span>  Cálculo da RMI - Revisão da Vida Toda
                     </button>
 
                     <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i>
@@ -157,6 +157,14 @@
                     </div>
                   </div>
                   <p>* Campo obrigatório</p>
+                 <div class="row">
+                   <div class=" col-md-8 col-md-offset-2">
+                    <div class="alert alert-danger bg-ieprev  fade in bold">
+                      <i class="fa-fw fa fa-warning txt-color-white fa-2x"></i>
+                        ATENÇÃO! Em caso de ausência de salário(s) de contribuição no CNIS, o valor poderá ser lançado manualmente pelo usuário, caso contrário a(s) competência(s) será(ão) descartadas do cálculo. Não havendo prova do(s) respectivo(s) valor(es), o usuário, querendo utilizar o valor do salário mínimo, poderá digitar 1,00 (neste caso o sistema limitará o salário no valor mínimo automaticamente).
+                    </div>
+                   </div>
+                 </div>
                 </fieldset>
                 <div class="form-actions">
                   <div class="row">

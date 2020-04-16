@@ -89,7 +89,7 @@ export class BeneficiosCalculosComponent implements OnInit {
                 window.location.href='/#/beneficios/beneficios-segurados/';
               });
             }else{
-              this.CalculoAtrasado.get()
+              this.CalculoAtrasado.getWithParameters(['id_segurado', this.idSegurado])
                 .then(() => {
                   this.updateDatatable();
                   this.isUpdating = false;

@@ -214,7 +214,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     } else {
 
       rstContadorRegra4 = this.contadorRegra4();
-      console.log(rstContadorRegra4);
+      //console.log(rstContadorRegra4);
 
       rstRegraPedagio100 = {
         dataDib: rstContadorRegra4.dataDib,
@@ -229,11 +229,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     }
 
-
-
-
-
-
     return rstRegraPedagio100;
 
   }
@@ -246,8 +241,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let regra4TempoContrib = this.contribuicaoMin[sexo];
 
     regra4TempoContrib += (sexo === 'md' || sexo === 'fd') ? this.pedagioEmDias : this.pedagioEmAnos;
-
-    // console.log((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade));
 
     if ((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade)) {
       return {
@@ -316,18 +309,22 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     //     tempoContribuicao += 1;
     //   }
 
-      count++;
-      idade += 1;
-      tempoContribuicao += 1;
+   
 
-      auxiliarDateClone = auxiliarDate.clone();
-      auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
+    //  console.log(auxiliarDateClone);
 
       fimContador = this.requisitosRegra4(
         auxiliarDate.year(),
         sexo,
         idade,
         tempoContribuicao);
+
+        count++;
+        idade += 1;
+        tempoContribuicao += 1;
+  
+        auxiliarDateClone = auxiliarDate.clone();
+        auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
     } while (!fimContador.status && idade <= 54750);
 
@@ -374,7 +371,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     //  console.log((tempoContribuicao));
     //  console.log(this.converterTempoDias(tempoContribuicao));
     //  console.log(moment.duration(tempoContribuicao));
-      // console.log(count);
       // console.log(tempoContribuicao);
     
 

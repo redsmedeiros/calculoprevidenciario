@@ -17,7 +17,7 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados</p>
               </td>
               <td>
-                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -34,7 +34,7 @@
                 <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
               </td>
               <td>
-                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR
@@ -55,6 +55,20 @@
                   <span class="btn-label">
                     <i class="fa fa-eye"></i>
                   </span> MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="exibirIN77" >
+              <td>
+                <p> Calcular novamente
+                  {{(!naoAplicarIN77)? 'sem aplicar' : 'e aplicar' }}
+                  <a href="http://www.in.gov.br/materia/-/asset_publisher/Kujrw0TZC2Mb/content/id/32120879/do1-2015-01-22-instrucao-normativa-n-77-de-21-de-janeiro-de-2015-32120750">Instrução Normativa - PRESIDENTE INSS nº 77 de 21/01/2015 - Art. 186</a> </p>
+              </td>
+              <td>
+                <button type="submit" (click)="afastarIN77(naoAplicarIN77)" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-calculator"></i>
+                  </span> {{(!naoAplicarIN77)? 'Sem IN-77/2015' : 'Com IN-77/2015' }}
                 </button>
               </td>
             </tr>

@@ -10,6 +10,10 @@ export const rgpsResultadosRoutes: Routes = [{
 {
   path: ':id_segurado/:id/:pbc',
   component: RgpsResultadosComponent
+},
+{
+  path: ':id_segurado/:id/:pbc/:correcao_pbc',
+  component: RgpsResultadosComponent
 }];
 
 export const rgpsResultadosRouting = RouterModule.forChild(rgpsResultadosRoutes);

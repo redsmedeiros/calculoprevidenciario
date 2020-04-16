@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
+import { Component, OnInit, HostListener, Inject} from '@angular/core';
 import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -272,6 +272,9 @@ export class RgpsResultadosComponent implements OnInit {
   //pbc parametro get
   public pbcCompleto = false;
 
+  // pbc indices de correção
+  public pbcCompletoIndices = 'inpc1084';
+
   constructor(protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -280,7 +283,9 @@ export class RgpsResultadosComponent implements OnInit {
     @Inject(WINDOW) private window: Window
   ) { }
 
+
   ngOnInit() {
+    this.calculoList = [];
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
@@ -461,7 +466,7 @@ export class RgpsResultadosComponent implements OnInit {
     let temIdadeMinima = true;
     let idadeMinima;
 
-    idade = (idade != undefined)? idade : this.idadeSegurado;
+    idade = (idade != undefined) ? idade : this.idadeSegurado;
 
     if (this.tipoBeneficio === 3) {
       if (this.segurado.sexo === 'm' && idade < 65) {
@@ -568,7 +573,7 @@ export class RgpsResultadosComponent implements OnInit {
     return returnStr;
   }
 
-  
+
   public tratarTempoFracionadoMoment(anos, meses, dias, notDays = false) {
 
     if (notDays) {
@@ -726,7 +731,7 @@ export class RgpsResultadosComponent implements OnInit {
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
     //25, 26, 27,
 
-    const arrayTypeNum = [1,  16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
+    const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
       'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
       // 'Aposentadoria por idade - Trabalhador Urbano',
@@ -750,15 +755,15 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
 
-    /**
-   * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3
-   * @param especieBeneficio
-   */
+  /**
+ * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3
+ * @param especieBeneficio
+ */
   verificaEspecieDeBeneficioIdade(especieBeneficio) {
-    const arrayTypeNum = [  3, 16 ];
+    const arrayTypeNum = [3, 16];
     const arrayTypeText = [
-       'Aposentadoria por idade - Trabalhador Urbano',
-       'Aposentadoria por idade - Trabalhador Rural',
+      'Aposentadoria por idade - Trabalhador Urbano',
+      'Aposentadoria por idade - Trabalhador Rural',
     ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
@@ -777,6 +782,20 @@ export class RgpsResultadosComponent implements OnInit {
   formatDecimal(value, n_of_decimal_digits) {
     value = parseFloat(value);
     return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+  }
+
+  public convertDecimalValue(valor) {
+    if (!isNaN(valor)) {
+      return valor;
+    }
+
+    valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
+    return isNaN(valor) ? 0 : parseFloat(valor);
+
+  }
+
+  formatDecimalIdade(value, n_of_decimal_digits) {
+    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
   }
 
   formatReceivedDate(inputDate) {
@@ -1016,6 +1035,10 @@ export class RgpsResultadosComponent implements OnInit {
     window.location.href = '/#/rgps/rgps-calculos/' + this.idSegurado + '/' + this.idsCalculo[0] + '/edit';
   }
 
+  listaCalculos() {
+    window.location.href = '/#/rgps/rgps-calculos/' + this.idSegurado;
+  }
+
   valoresContribuidos() {
     const idList = [];
     for (const checkboxId of this.checkboxIdList) {
@@ -1108,10 +1131,47 @@ export class RgpsResultadosComponent implements OnInit {
     }
   }
 
-  public getPbcDaVidatoda(){
+  public getPbcDaVidatoda() {
     return (this.route.snapshot.params['pbc'] === 'pbc');
   }
 
+
+  public getPbcCompletoIndices() {
+    return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
+  }
+
+
+
+  public calcularPBCIndices(indice) {
+
+    if (!this.isExits(indice)) {
+     // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
+     // this.ngOnInit();
+     
+     const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+     const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
+     this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+       this.router.navigate([urlpbcNew])
+     );
+    }
+
+    if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
+      //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
+      const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+      const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
+      this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+        this.router.navigate([urlpbcNew])
+      );
+
+      // this.router.navigate([urlpbcNew]);
+      // this.ngOnInit();
+      
+
+      //window.location.reload(true)
+      //this.ngOnInit();
+    }
+
+  }
 
 
   @HostListener('window:scroll', [])
