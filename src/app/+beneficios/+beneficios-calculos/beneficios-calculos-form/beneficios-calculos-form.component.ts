@@ -95,7 +95,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     {
       text: 'Tabela da Justiça Federal',
       value: 'cam'
-    },  
+    },
     {
       text: 'Tabela da TR',
       value: 'tr'
@@ -103,7 +103,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     {
       text: 'Tabela da TR até 03/2015 e IPCA-e',
       value: 'tr032015_ipcae'
-    }  
+    },
+    {
+      text: 'Tabela administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994',
+      value: 'cam_art_175_3048'
+    }
   ]
 
   public especieValoresOptions = [{

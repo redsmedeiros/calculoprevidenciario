@@ -418,12 +418,12 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-2">
-                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control" placeholder="(Ex: 0,2 p/ 20%)" type="text">
+                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control"  type="text"> <!--  placeholder="(Ex: 0,2 p/ 20%)" -->
                       <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-2">
-                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" placeholder="(Ex: 0,8 p/ 80%)" type="text">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" type="text">
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
@@ -440,7 +440,7 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Correção Monetária</h2>
+            <h2>Tabelas de correção Monetária</h2>
           </header>
           <!-- widget div-->
           <div>
@@ -449,7 +449,7 @@
               <div class="col-md-8 col-sm-offset-2">
                 <div class="form-group">
                   <div class="col-md-10">
-                    <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
+                    <!-- <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
                         <input type="radio" name="correcao" 
                                [checked]="idx === indiceCorrecao" 
@@ -457,9 +457,13 @@
                                (change)="onCorrecaoChange(correcao)">
                         {{correcao.text}}
                       </label>
-                    </div>
+                    </div> -->
+                    <select name="tipoCorrecaoMonetaria" [(ngModel)]="tipoCorrecaoMonetaria" class="form-control" id="tipoCorrecaoMonetariaSelect">{{tipoCorrecaoMonetaria}}
+                      <option *ngFor="let correcao of correcaoOptions; let idx = index" value="{{correcao.value}}">{{correcao.text}}</option>
+                    </select>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -538,7 +542,7 @@
                     </span> Voltar para cálculos
                   </button>
                 </div>
-                <div class="col-md-2 pull-right">
+                <div class="col-md-3  pull-right">
                   <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success btn-block">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
