@@ -19,7 +19,12 @@ export class Moeda extends Model {
     tr: '',
     ipca: '',
     juros_selic_70: '',
-    tr032015_ipcae: ''
+    tr032015_ipcae: '',
+    igpdi_2006_inpc062009_tr032015_ipcae: '',
+    igpdi_012004_inpc062009_tr032015_inpc: '',
+    tr_todo_periodo: '',
+    ipca_todo_periodo: '',
+    cam_art_175_3048: ''
   };
 
   public data_moeda;
@@ -37,4 +42,9 @@ export class Moeda extends Model {
   public ipca;
   public juros_selic_70;
   public tr032015_ipcae;
+  public igpdi_2006_inpc062009_tr032015_ipcae;
+  public igpdi_012004_inpc062009_tr032015_inpc;
+  public tr_todo_periodo;
+  public ipca_todo_periodo;
+  public cam_art_175_3048;
 }

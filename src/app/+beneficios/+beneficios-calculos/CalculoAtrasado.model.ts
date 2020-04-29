@@ -46,7 +46,16 @@ export class CalculoAtrasado extends Model {
     nao_usar_deflacao:'',
     usar_indice_99_04:'',
     aplicar_juros_poupanca:'',
-    usar_mesma_dib:''
+    usar_mesma_dib:'',
+    taxa_advogado_valor_fixo: '',
+    taxa_advogado_perc_100000_SM: '',
+    taxa_advogado_perc_20000_100000_SM: '',
+    taxa_advogado_perc_2000_20000_SM: '',
+    taxa_advogado_perc_200_2000_SM: '',
+    taxa_advogado_perc_ate_200_SM: '',
+    taxa_advogado_aplicar_CPCArt85: '',
+    nao_aplicar_juros_sobre_negativo: '',
+    competencia_inicio_juros: '',
   };
 
   public id: number;
@@ -91,6 +100,15 @@ export class CalculoAtrasado extends Model {
   public usar_indice_99_04;
   public aplicar_juros_poupanca;
   public usar_mesma_dib;
+  public taxa_advogado_valor_fixo;
+  public taxa_advogado_perc_100000_SM;
+  public taxa_advogado_perc_20000_100000_SM;
+  public taxa_advogado_perc_2000_20000_SM;
+  public taxa_advogado_perc_200_2000_SM;
+  public taxa_advogado_perc_ate_200_SM;
+  public taxa_advogado_aplicar_CPCArt85;
+  public nao_aplicar_juros_sobre_negativo;
+  public competencia_inicio_juros;
 
   // public actions = `
   //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>

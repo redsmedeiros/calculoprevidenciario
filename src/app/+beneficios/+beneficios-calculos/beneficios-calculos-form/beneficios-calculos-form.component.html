@@ -186,63 +186,57 @@
                   </div>
                   <div class="form-group">
                     <label class="col-md-3 control-label">Data inicial do benefício DIB*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control"  type="text">
                       <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label  class="col-md-3 control-label fix-rmi-anterior">Data de Cessação:</label>
-                    <div class="col-md-3">
+                    <label  class="col-md-3 control-label">Data de Cessação:</label>
+                    <div class="col-md-4">
                       <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
                     </div>
                     <div *ngIf="chkDibAnterior">
                       <label class="col-md-3 control-label">Data inicial do benefício anterior:  </label>
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
                       </div>
                   </div>
                   </div>
-                  <div class="form-group">
-                    <div *ngIf="chkNotGranted">
-                      <label *ngIf="!devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida*:
-                      </label>
-                      <label *ngIf="devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida antes da revisão (Buraco Negro)*:
-                      </label>
-                      <div class="col-md-3">
+                  <div *ngIf="chkNotGranted" class="form-group">
+                      <label *ngIf="!devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida*:</label>
+                      <label *ngIf="devidosBuracoNegro" class="col-md-3 control-label">RMI não concedida antes da revisão (Buraco Negro)*:</label>
+                      <div class="col-md-4">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
-                    </div>
                   </div>
-                  <div class="form-group">
-                    <div *ngIf="!chkNotGranted">
+                  <div *ngIf="!chkNotGranted" class="form-group">
                       <label *ngIf="!devidosBuracoNegro" class="col-md-3 control-label">Nova RMI*:</label>
                       <label *ngIf="devidosBuracoNegro" class="col-md-3 control-label">Nova RMI antes da revisão (Buraco Negro):</label>
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
+                  </div>
+                  <div *ngIf="devidosBuracoNegro" class="form-group">
+                    <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
+                    <div class="col-md-4">
+                      <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
+                      <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                     </div>
-                    <div *ngIf="devidosBuracoNegro">
-                      <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
-                      <div class="col-md-3">
-                        <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
-                        <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
+                  </div>
+                  <div *ngIf="devidosPosBuracoNegro" class="form-group">
+                    <label class="col-md-3 control-label">
+                      Índice de reajuste no teto da Nova RMI:
+                      <i title="Índices de Reajustes de Teto (IRT) &#13; só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
+                      </label>
+                      <div class="col-md-4">
+                        <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
+                        <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
                       </div>
-                    </div>
-                    <div *ngIf="devidosPosBuracoNegro">
-                      <label class="col-md-3 control-label">
-                        Índice de reajuste no teto da Nova RMI:
-                        <i title="Índices de Reajustes de Teto (IRT) &#13; só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
-                        </label>
-                        <div class="col-md-3">
-                          <input name="taxaAjusteMaximaEsperada" class="form-control" [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
-                          <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
-                        </div>
-                    </div>
                   </div>
                 </fieldset>
                 <p>* Campo obrigatório</p>
@@ -287,20 +281,20 @@
                   </div>
                   <div class="form-group">
                     <label class="col-md-3 control-label">Data inicial do benefício DIB*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text" [disabled]="chkUseSameDib">
                       <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-md-3 control-label fix-rmi-anterior">Data de Cessação:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
                     <div *ngIf="chkPrecedidoRecebidos">
                       <label class="col-md-3 control-label">Data inicial do benefício anterior:</label>
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
                       </div>
@@ -309,26 +303,25 @@
                   <div class="form-group">
                     <label *ngIf="recebidosBuracoNegro" class="col-md-3 control-label">RMI antes da revisão (Buraco Negro):</label>
                     <label *ngIf="!recebidosBuracoNegro" class="col-md-3 control-label"><i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i> RMI*:</label>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
-
-                    <div *ngIf="recebidosBuracoNegro">
-                      <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
-                      <div class="col-md-3">
-                        <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
-                      </div>
+                  </div>
+                  <div *ngIf="recebidosBuracoNegro" class="form-group">
+                    <label class="col-md-3 control-label">RMI depois da revisão (Buraco Negro):</label>
+                    <div class="col-md-4">
+                      <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                     </div>
-                    <div *ngIf="recebidosPosBuracoNegro">
-                      <label class="col-md-3 control-label">
-                        Índice de reajuste no teto da RMI:
-                        <i title="Índices de Reajustes de Teto (IRT) &#13;só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
-                        </label>
-                      <div class="col-md-3">
-                        <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
-                        <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
-                      </div>
+                  </div>
+                  <div *ngIf="recebidosPosBuracoNegro" class="form-group">
+                    <label class="col-md-3 control-label">
+                      Índice de reajuste no teto da RMI:
+                      <i title="Índices de Reajustes de Teto (IRT) &#13;só existem para DIB's posteriores a 05/04/1991 &#13; conforme a Lei n 8.213/91." class="fa fa-question-circle fa-lg text-info"></i> 
+                      </label>
+                    <div class="col-md-4">
+                      <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" type="text">
+                      <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
                     </div>
                   </div>
                 </fieldset>
@@ -386,20 +379,68 @@
                     </div>
                   </div>
                   <div class="form-group">
-                      <label class="col-md-2 control-label">Aplicar o honorário sobre o valor:</label>
-                      <div class="col-md-4 ">
-                        <label class="radio radio-inline">
-                          <input [(ngModel)]="taxaAdvogadoAplicacaoSobre" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('taxaAdvogadoAplicacaoSobre')" type="radio" name="taxaAdvogadoAplicacaoSobre" value="dif" checked> 
-                          Diferença entre devido e recebido 
-                        </label>
-                        <label class="radio radio-inline">
-                          <input [(ngModel)]="taxaAdvogadoAplicacaoSobre" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('taxaAdvogadoAplicacaoSobre')" type="radio" name="taxaAdvogadoAplicacaoSobre" value="dev"> 
-                          Devido 
-                        </label>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
-                          </div>
+                    <label class="col-md-2 control-label" for="taxaAdvogadoAplicacaoSobre">Aplicar o honorário sobre o valor:</label>
+                    <div class="col-md-4">
+                      <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre">
+                        <option *ngFor="let option of tipoHonorariosOptions" value="{{option.value}}">{{option.text}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 col-xs-2" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
+                      <input name='taxaAdvogadoValorFixoHonorarios' currencyMask [(ngModel)]="taxaAdvogadoValorFixoHonorarios"  class="form-control"  
+                        type="text" maxlength="14" title="Digite o valor fixo para os honorários" placeholder="Digite o valor"  >
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8 col-md-offset-2">
+                        <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <div class="checkbox">
+                        <label>
+                        <input type="checkbox" name="taxaAdvogadoAplicarCPCArt85" [(ngModel)]="taxaAdvogadoAplicarCPCArt85" class="checkbox {{styleTheme}}" checked>
+                        <span>Calcular o valor conforme §3º do Art. 85 da Lei 13105/15: </span>
+                      </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group" >
+                    <div *ngIf="taxaAdvogadoAplicarCPCArt85" class="col-md-offset-2">
+                      <div class="form-group" >
+                        <label class="col-md-4 control-label">Percentual para até 200 salários mínimos:</label>
+                        <div class="col-md-2 col-sm-2">
+                          <input name="taxaAdvogadoPercateAte200SM"  [(ngModel)]="taxaAdvogadoPercateAte200SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
+                        </div>
+                        <small *ngIf="errors.has('taxaAdvogadoPercateAte200SM')" class="text-danger">{{ errors.get('taxaAdvogadoPercateAte200SM') }}</small>
+                      </div>
+                      <div class="form-group" >
+                        <label class="col-md-4 control-label">Percentual para 200 a 2000 salários mínimos:</label>
+                        <div class="col-md-2 col-sm-2">
+                          <input name="taxaAdvogadoPerc200A2000SM"  [(ngModel)]="taxaAdvogadoPerc200A2000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
+                        </div>
+                        <small *ngIf="errors.has('taxaAdvogadoPerc200A2000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc200A2000SM') }}</small>
+                      </div>
+                      <div class="form-group" >
+                        <label class="col-md-4 control-label">Percentual para 2000 a 20000 salários mínimos:</label>
+                        <div class="col-md-2 col-sm-2">
+                          <input name="taxaAdvogadoPerc2000A20000SM"  [(ngModel)]="taxaAdvogadoPerc2000A20000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
+                        </div>
+                        <small *ngIf="errors.has('taxaAdvogadoPerc2000A20000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc2000A20000SM') }}</small>
+                      </div>
+                      <div class="form-group" >
+                        <label class="col-md-4 control-label">Percentual para 20000 a 100000 salários mínimos:</label>
+                        <div class="col-md-2 col-sm-2">
+                          <input name="taxaAdvogadoPerc20000A100000SM"  [(ngModel)]="taxaAdvogadoPerc20000A100000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
+                        </div>
+                        <small *ngIf="errors.has('taxaAdvogadoPerc20000A100000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc20000A100000SM') }}</small>
+                      </div>
+                      <div class="form-group" >
+                        <label class="col-md-4 control-label">Percentual para até 100000 salários mínimos:</label>
+                        <div class="col-md-2 col-sm-2">
+                          <input name="taxaAdvogadoPerc100000SM"  [(ngModel)]="taxaAdvogadoPerc100000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
+                        </div>
+                        <small *ngIf="errors.has('taxaAdvogadoPerc100000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc100000SM') }}</small>
                       </div>
                     </div>
                   </div>
@@ -418,12 +459,12 @@
                   <div class="form-group">
                     <label class="col-md-2 control-label">Percentual dos honorários:</label>
                     <div class="col-md-2">
-                      <input name="percentualHonorarios" [(ngModel)]="percentualHonorarios" class="form-control"  type="text"> <!--  placeholder="(Ex: 0,2 p/ 20%)" -->
+                      <input name="percentualHonorarios"  [(ngModel)]="percentualHonorarios" class="form-control text-center"  type="text" currencyMask maxlength="5"> <!--  placeholder="(Ex: 0,2 p/ 20%)" -->
                       <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
                     </div>
                     <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-2">
-                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control" type="text">
+                      <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control text-center" type="text" currencyMask maxlength="5">
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div>
                   </div>
@@ -445,10 +486,9 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <div class="col-md-8 col-sm-offset-2">
+            <div class="widget-body widget-body-custom">
                 <div class="form-group">
-                  <div class="col-md-10">
+                  <div class="col-md-8 col-sm-offset-2">
                     <!-- <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
                         <input type="radio" name="correcao" 
@@ -458,13 +498,11 @@
                         {{correcao.text}}
                       </label>
                     </div> -->
-                    <select name="tipoCorrecaoMonetaria" [(ngModel)]="tipoCorrecaoMonetaria" class="form-control" id="tipoCorrecaoMonetariaSelect">{{tipoCorrecaoMonetaria}}
-                      <option *ngFor="let correcao of correcaoOptions; let idx = index" value="{{correcao.value}}">{{correcao.text}}</option>
+                    <select name="tipoCorrecaoMonetaria" [(ngModel)]="tipoCorrecaoMonetaria" class="form-control" id="tipoCorrecaoMonetariaSelect">
+                      <option *ngFor="let correcao of correcaoOptions" value="{{correcao.value}}">{{correcao.text}}</option>
                     </select>
                   </div>
                 </div>
-
-              </div>
             </div>
           </div>
         </sa-widget>
@@ -485,31 +523,58 @@
       <div class="widget-body">
         <form class="form-horizontal">
           <fieldset>
+              <div class="form-group">
+                <label class="col-md-2 control-label">Selecione a opção:</label>
+                <div class="col-md-6">
+                  <select name="tipoDejurosSelecionado" [(ngModel)]="tipoDejurosSelecionado" (change)="setJurosAnualParaMensal()" class="form-control" id="tipoDejurosSelecionadoSelect">
+                    <option *ngFor="let tipoJuros of tipoJurosOptions" value="{{tipoJuros.value}}">{{tipoJuros.text}}</option>
+                  </select>
+                </div>
+              </div>
             <div class="form-group">
-              <label class="col-md-2 control-label">Juros anterior a janeiro 2003 (%):</label>
-              <div class="col-md-3">
-                <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text">
-                <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
-              </div>
-              <label class="col-md-2 control-label">Juros posterior a janeiro 2003 (%):</label>
-              <div class="col-md-3">
-                <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text">
-                <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-2 control-label">Juros posterior a julho 2009 (%):</label>
-              <div class="col-md-3">
-                <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text">
-                <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
-              </div>
-              <div class="col-md-5">
+              <div class="col-md-5 col-sm-offset-2">
                 <div class="checkbox">
                   <label>
                   <input type="checkbox" name="chkBoxTaxaSelic" [(ngModel)]="chkBoxTaxaSelic" class="checkbox {{styleTheme}}" checked>
                   <span>Desmarque para não aplicar os juros da poupança</span>
                 </label>
                 </div>
+              </div>
+            </div>
+             <div class="form-group">
+              <div class="col-md-5 col-sm-offset-2">
+                <div class="checkbox">
+                  <label>
+                  <input type="checkbox" name="naoAplicarJurosSobreNegativo" [(ngModel)]="naoAplicarJurosSobreNegativo" class="checkbox {{styleTheme}}" checked>
+                  <span>Marque para não aplicar os juros sobre o valor negativo.</span>
+                </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'" >
+              <label class="col-md-2 control-label">Juros anterior a janeiro 2003 (%):</label>
+              <div class="col-md-3">
+                <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" class="form-control" placeholder="0,5%" type="text" >
+                <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
+              </div>
+              <label class="col-md-2 control-label">Juros posterior a janeiro 2003 (%):</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  class="form-control" placeholder="1.0%" type="text" >
+                <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
+              <label class="col-md-2 control-label">Juros posterior a julho 2009 (%):</label>
+              <div class="col-md-3">
+                <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009" class="form-control" placeholder="0,5%" type="text" >
+                <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
+              </div>
+             </div>
+             <div class="form-group">
+              <label class="col-md-2 control-label">data inicial dos juros:</label>
+              <div class="col-md-2">
+                <input class="form-control" [textMask]="{mask: dateMask}" name="competenciaInicioJuros"  [(ngModel)]="competenciaInicioJuros" type="text">
+                <small *ngIf="errors.has('competenciaInicioJuros')" class="text-danger">{{ errors.get('competenciaInicioJuros') }}</small>
               </div>
             </div>
           </fieldset>
