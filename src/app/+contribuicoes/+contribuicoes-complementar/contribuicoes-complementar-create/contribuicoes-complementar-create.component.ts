@@ -138,7 +138,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.anosConsiderados.push(ano);
   	for (let entry of monthList){
   		if(ano == entry.split('-')[0]){
-        valores[+entry.split('-')[1]-1] =  this.formatMoney(data.salario);
+        valores[+entry.split('-')[1]-1] =  this.formatMoneyContribuicao(data.salario);
   		}else{
         this.updateMatrix(+ano, valores);
     		ano = entry.split('-')[0];
@@ -147,7 +147,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         if (updateValores !== undefined) {
           valores = updateValores.valores;
         }
-    		valores[+entry.split('-')[1]-1] = this.formatMoney(data.salario);
+    		valores[+entry.split('-')[1]-1] = this.formatMoneyContribuicao(data.salario);
         this.anosConsiderados.push(ano);
         
   		}
@@ -268,15 +268,15 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let indice_num = 0;
     let dataTabelaDetalhes = [];
 
-    console.log(this.getMatrixData());
-    console.log(data_array);
+    // console.log(this.getMatrixData());
+    // console.log(data_array);
     
     for(let data of data_array){
       let splitted = data.split('-');
       let mes = splitted[0];
       let contrib = splitted[1];
 
-      console.log(contrib);
+      // console.log(contrib);
       
   
       if(contrib == 0 || contrib == ''){
@@ -290,7 +290,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
       let line = {indice_num: indice_num, 
                   mes: mes, 
-                  contrib_base: this.formatMoney(contrib_base), 
+                  contrib_base: this.formatMoneyContribuicao(contrib_base), 
                   indice: indice, 
                   valor_corrigido: valor_corrigido
                  };
@@ -347,23 +347,61 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.form.media_salarial = this.form.total_contribuicao/Math.ceil(this.form.numero_contribuicoes);
     this.baseAliquota = this.form.media_salarial*0.2;
 
-    console.log(dataTabelaDetalhes);
+    // console.log(dataTabelaDetalhes);
     
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
     
   }
 
+  // //Valor da contribuição base para cada mês
+  // getContribBase(dataMes, contrib){
+  //   let teto = this.getTeto(dataMes);
+  //   let salario_minimo = this.getSalarioMinimo(dataMes);
+  //   contrib = parseFloat(contrib);
+  //   if(contrib < salario_minimo){
+  //     return salario_minimo;
+  //   }
+  //   if(contrib > teto){
+  //     return teto;
+  //   }
+  //   return contrib;
+  // }
+
+
+  
+  public formatDecimalValue(value) {
+
+    if (typeof value === 'string') {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
+
+  }
+
   //Valor da contribuição base para cada mês
-  getContribBase(dataMes, contrib){
+  getContribBase(dataMes, contrib) {
     let teto = this.getTeto(dataMes);
     let salario_minimo = this.getSalarioMinimo(dataMes);
-    contrib = parseFloat(contrib);
-    if(contrib < salario_minimo){
+
+    // console.log(contrib);
+    // console.log(this.formatDecimalValue(contrib));
+
+    // contrib = parseFloat(contrib);
+    contrib = this.formatDecimalValue(contrib);
+
+    if (contrib < salario_minimo) {
       return salario_minimo;
     }
-    if(contrib > teto){
+
+    if (contrib > teto) {
       return teto;
     }
+    
     return contrib;
   }
 
@@ -514,8 +552,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     return 'R$ ' + (data.toFixed(2)).replace('.',',');
   }
 
+  formatMoneyContribuicao(data){
+    //data = parseFloat(data);
+    return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  }
+
   voltar(){
-    window.location.href='/#/contribuicoes/contribuicoes-calculos/'+ this.idSegurado;
+    window.location.href = '/#/contribuicoes/contribuicoes-calculos/' + this.idSegurado;
   }
 
   onlyUnique(value, index, self) { 

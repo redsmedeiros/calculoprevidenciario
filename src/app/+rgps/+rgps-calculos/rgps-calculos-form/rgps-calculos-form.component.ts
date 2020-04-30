@@ -617,7 +617,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has98 = false;
         this.has99 = false;
         this.hasAtual = true;
-        this.has19 = true;
+        this.has19 = false;
       }
 
     } else if (dateBeneficio >= new Date('11/13/2019')) {
