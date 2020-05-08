@@ -47,10 +47,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     searching: false,
     data: this.resultadosList,
     columns: [
-      { data: 'competencia', width: '10rem'  },
-      { data: 'indice_devidos', width:'13rem' },
-      { data: 'beneficio_devido' },
-      { data: 'indice_recebidos', width:'13rem' },
+      { data: 'competencia', width: '10rem' },
+      { data: 'indice_devidos', width: '13rem' },
+      { data: 'beneficio_devido', width: '13rem' },
+      { data: 'indice_recebidos', width: '13rem' },
       { data: 'beneficio_recebido' },
       { data: 'diferenca_mensal' },
       { data: 'correcao_monetaria' },
@@ -172,6 +172,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private dibAnteriorRecebidos = null;
   private dibAnteriorDevidos = null;
+
+  // juros formato anual
+  public jurosEmFormatoAnual = '';
+
   //Variaveis para tabela de conclusões tetos
   public diferencaMensalTetos = 0.0;
 
@@ -189,6 +193,20 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaHonorariosTutelaAntecipadaString = '';
   public somaTotalHonorariosString = '';
 
+  // Honorarios CPC 85
+  public exibirHonorarioscpc85 = false;
+  public somaHonorarioscpc85 = 0;
+  public percentualHonorarioscpc85 = 0;
+  public faixaSalminimoHonorarioscpc85 = '';
+  public dataSalMinHonorarioscpc85 = '';
+  public somaHonorarioscpc85String = '';
+  public salarioMinimoHonorarioscpc85String = '';
+
+  // Honorarios Fixo
+  public exibirHonorariosValorFixo = false;
+  public somaHonorariosValorFixo = 0;
+  public somaHonorariosFixoString = '';
+
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
     paging: false,
@@ -197,8 +215,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     searching: false,
     data: this.resultadosTutelaAntecipadaList,
     columns: [
-      { data: 'competencia', width:'12rem' },
-      { data: 'indice_tutela', width:'13rem'},
+      { data: 'competencia', width: '12rem' },
+      { data: 'indice_tutela', width: '13rem' },
       { data: 'ganho_economico' },
       { data: 'correcao_monetaria' },
       { data: 'ganho_economico_corrigido' },
@@ -274,7 +292,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                   this.moeda = moeda;
 
                   // se ouver dib anterior considerar como a primeira data para o indice de correção
-                  const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ? this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+                  const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
+                    this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
 
                   // Indice devido
                   this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
@@ -286,7 +305,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                       }
 
                       // se ouver dib anterior considerar como a primeira data para o indice de correção
-                      const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ? this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+                      const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+                        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
                       // indice recebido
                       this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
@@ -299,7 +319,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                           this.jurosCorrente = this.calcularJurosCorrente();
                           this.resultadosList = this.generateTabelaResultados();
-                          this.calcularTutelaAntecipada()
+                          this.calcularTutelaAntecipada();
+                          this.getNameSelectJurosAnualParaMensal();
+                          this.calcularHonorariosCPC85();
+                          this.calcularHonorariosFixo();
                           this.updateResultadosDatatable();
                           this.isUpdating = false;
 
@@ -483,8 +506,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
 
+
       diferencaCorrigida = diferencaMensal * correcaoMonetaria;
       valorJuros = diferencaCorrigida * juros;
+
+      // Não aplicar juros em valor negativo
+      if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
+        juros = 0.000;
+        valorJuros = 0.00;
+      }
+
       let valorNumericoDiferencaCorrigidaJurosObj: any = {};
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevido);
@@ -505,7 +536,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       line.juros = this.formatPercent(juros, 4);
       line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
       line.diferenca_juros = diferencaCorrigidaJuros;
-      line.honorarios = (diferencaCorrigidaJuros != 'prescrita')? this.formatMoney(honorarios, 'R$', true) : '';
+      line.honorarios = (diferencaCorrigidaJuros != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
 
       if (this.isTetos) {
         this.esmaecerLinhas(dataCorrente, line);
@@ -549,19 +580,29 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaMensal = beneficioDevidoAbono;
         } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
           diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
-        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+        } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month')
+          && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
           diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
         }
 
         diferencaCorrigida = diferencaMensal * correcaoMonetaria;
         valorJuros = diferencaCorrigida * juros;
-        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+        diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente,
+          valorJuros,
+          diferencaCorrigida,
+          valorNumericoDiferencaCorrigidaJurosObj);
+
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevidoAbono);
 
+        // Não aplicar juros em valor negativo
+        if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
+          juros = 0.000;
+          valorJuros = 0.00;
+        }
 
         line = {
           ...line,
-          competencia: '<strong>'+ stringCompetencia +' - abono <strong>',
+          competencia: '<strong>' + stringCompetencia + ' - abono <strong>',
           beneficio_devido: this.formatMoney(beneficioDevidoAbono),
           beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
           diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
@@ -569,7 +610,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           juros: this.formatPercent(juros, 4),
           valor_juros: this.formatMoney(valorJuros, 'R$', true),
           diferenca_juros: diferencaCorrigidaJuros,
-          honorarios: (diferencaCorrigidaJuros != 'prescrita')? this.formatMoney(honorarios, 'R$', true) : ''
+          honorarios: (diferencaCorrigidaJuros != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : ''
         }
 
         if (this.isTetos) {
@@ -1261,13 +1302,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
-    let tipo_correcao = this.calculo.tipo_correcao;
-    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-    let moedaDataAtual = this.Moeda.getByDate(moment());
-    let moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
+    const tipo_correcao = this.calculo.tipo_correcao;
+    const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    const moedaDataAtual = this.Moeda.getByDate(moment());
+    const moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
+    const usar_deflacao = !this.calculo.nao_usar_deflacao;
 
     let desindexador = 0.0;
     let correcaoMonetaria = 0.0;
+
+    /*
     if (tipo_correcao == 'ipca') {
 
       desindexador = moedaDataAtual.ipca / moedaDataCalculo.ipca;
@@ -1288,8 +1332,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       desindexador = moedaDataAtual.tr032015_ipcae / moedaDataCalculo.tr032015_ipcae;
       correcaoMonetaria = moedaDataCorrente.tr032015_ipcae * desindexador;
 
-    }
-    let usar_deflacao = !this.calculo.nao_usar_deflacao;
+    } 
+    */
+
+    desindexador = moedaDataAtual[tipo_correcao] / moedaDataCalculo[tipo_correcao];
+    correcaoMonetaria = moedaDataCorrente[tipo_correcao] * desindexador;
+
     if (!usar_deflacao) {
       if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
         correcaoMonetaria = 1;
@@ -1380,12 +1428,15 @@ export class BeneficiosResultadosComponent implements OnInit {
   getJuros(dataCorrente) {
 
 
-    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
-    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
-    let chkJurosMora = this.calculo.previo_interesse;
+    const dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+    const chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    const chkJurosMora = this.calculo.previo_interesse;
     let jurosAplicado = 0.0;
-    let dataMesCitacaoReu = dataCitacaoReu.startOf('month');//dataCitacaoReu no dia 1
+    let dataMesCitacaoReu = dataCitacaoReu.startOf('month'); // dataCitacaoReu no dia 1
 
+    if (this.isExits(this.calculo.competencia_inicio_juros)) { // Inicio dos juros 
+      dataMesCitacaoReu = moment(this.calculo.competencia_inicio_juros);
+    }
 
     if (dataCorrente >= dataMesCitacaoReu) {
       if (dataCorrente < this.dataJuros2003) {
@@ -1405,12 +1456,14 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
 
         } else {
+
           if (dataCorrente < this.dataSelic70) {
             this.jurosCorrente += this.jurosDepois2009;
           } else {
             let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-            this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; //Carregado do BD na coluna da data corrente;
+            this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; // Carregado do BD na coluna da data corrente;
           }
+
         }
       }
       jurosAplicado = this.jurosCorrente;
@@ -1439,12 +1492,15 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
   calcularJurosCorrente() {
-    let dataDoCalculo = moment(this.calculo.data_calculo_pedido).startOf('month');
-    let dataCitacaoReu = moment(this.calculo.data_citacao_reu);
+    const dataDoCalculo = moment(this.calculo.data_calculo_pedido).startOf('month');
+    const dataCitacaoReu = moment(this.calculo.data_citacao_reu);
     let data = (this.dataInicioCalculo > dataCitacaoReu) ? this.dataInicioCalculo : dataCitacaoReu;
+
+
     data = data.startOf('month');
-    let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
+    const chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
     let juros = 0.0;
+
     if (data < this.dataJuros2003) {
       //juros = Calcular o juros com a taxa anterior a 2003 * numero de meses (arredondado) entre data e '15/01/2003';
       juros = this.jurosAntes2003 * this.getDifferenceInMonths(data, this.dataJuros2003.clone().subtract(1, 'days'));
@@ -1511,15 +1567,20 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.9
   getDiferencaCorrigidaJuros(dataCorrente, juros, diferencaCorrigida, resultObj) {
-    //Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros.
-    //O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.
-    //A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
+    // Está coluna será definida pela soma da coluna diferença corrigida + o valor do Juros.
+    // O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.
+    // A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
 
     let dataAcaoJudicial = (moment(this.calculo.data_acao_judicial)).startOf('month');
     let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years', true));
     let diferencaCorrigidaJuros = juros + diferencaCorrigida;
 
-    //Seção 3.10
+    // Não aplicar juros em valor negativo
+    if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
+      diferencaCorrigidaJuros = diferencaCorrigida;
+    }
+
+    // Seção 3.10
     if (this.isTetos) {
       diferencaCorrigidaJuros *= this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
     }
@@ -1632,7 +1693,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let honorarios = 0.0;
     let taxaAdvogadoInicio = null;
     let taxaAdvogadoFinal = null;
-    let diferecaCorrigidaJuros = (this.calculo.taxa_advogado_aplicacao_sobre !== 'dev')? juros + diferencaCorrigida : beneficioDevido;
+    let diferecaCorrigidaJuros = (this.calculo.taxa_advogado_aplicacao_sobre !== 'dev') ? juros + diferencaCorrigida : beneficioDevido;
     // let diferecaCorrigidaJuros = juros + diferencaCorrigida ;
 
     if (this.calculo.taxa_advogado_inicio != '') {
@@ -1695,43 +1756,101 @@ export class BeneficiosResultadosComponent implements OnInit {
     return honorarios;
   }
 
-  // Seção 4.3a sucumbencia / Tutela antecipada
+
+  // Seção 4.3b FIXO 
+  public calcularHonorariosFixo() {
+
+    if (this.calculo.taxa_advogado_aplicacao_sobre === 'fixo') {
+      this.exibirSucumbencia = false;
+      this.exibirHonorarioscpc85 = false;
+      this.exibirHonorariosValorFixo = true;
+      this.getCalculoHonorariosFixo();
+    }
+
+  }
+
+  public getCalculoHonorariosFixo() {
+
+    console.log(this.calculo);
+    this.somaHonorariosValorFixo = parseFloat(this.calculo.taxa_advogado_valor_fixo);
+    this.somaHonorariosFixoString = this.formatMoney(this.somaHonorariosValorFixo);
+
+  }
+
+
+  // Seção 4.3b CPC art85
+  public calcularHonorariosCPC85() {
+
+
+    if (this.calculo.taxa_advogado_aplicar_CPCArt85) {
+      this.exibirSucumbencia = false;
+      this.exibirHonorarioscpc85 = true;
+      this.getCalculoHonorariosCPC85();
+    }
+
+  }
+
+  public getCalculoHonorariosCPC85() {
+
+    const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
+    const infoCalculo = this.calculo
+
+    const salariosMinimos200 = moedaAtualCPC.salario_minimo * 200;
+    const salariosMinimos2000 = moedaAtualCPC.salario_minimo * 2000;
+    const salariosMinimos20000 = moedaAtualCPC.salario_minimo * 20000;
+    const salariosMinimos100000 = moedaAtualCPC.salario_minimo * 100000;
+    let faixaDeprecentual = '';
+
+    if (this.somaTotalSegurado <= salariosMinimos200) {
+
+      this.faixaSalminimoHonorarioscpc85 = 'até 200 salários mínimos';
+      faixaDeprecentual = 'taxa_advogado_perc_ate_200_SM';
+
+    } else if (this.somaTotalSegurado <= salariosMinimos200 && this.somaTotalSegurado <= salariosMinimos2000) {
+
+      this.faixaSalminimoHonorarioscpc85 = '200 a 2000 salários mínimos';
+      faixaDeprecentual = 'taxa_advogado_perc_200_2000_SM';
+
+    } else if (this.somaTotalSegurado <= salariosMinimos2000 && this.somaTotalSegurado <= salariosMinimos20000) {
+
+      this.faixaSalminimoHonorarioscpc85 = '2000 a 20000 salários mínimos';
+      faixaDeprecentual = 'taxa_advogado_perc_2000_20000_SM';
+
+    } else if (this.somaTotalSegurado <= salariosMinimos20000 && this.somaTotalSegurado <= salariosMinimos100000) {
+
+      this.faixaSalminimoHonorarioscpc85 = '20000 a 100000 salários mínimos';
+      faixaDeprecentual = 'taxa_advogado_perc_20000_100000_SM';
+
+    } else if (this.somaTotalSegurado > salariosMinimos100000) {
+
+      this.faixaSalminimoHonorarioscpc85 = 'acima 100000 salários mínimos';
+      faixaDeprecentual = 'taxa_advogado_perc_100000_SM';
+    }
+
+    this.somaHonorarioscpc85 = this.somaTotalSegurado * (this.calculo[faixaDeprecentual] / 100);
+    this.percentualHonorarioscpc85 = this.calculo[faixaDeprecentual];
+    this.dataSalMinHonorarioscpc85 = moment(this.calculo.data_calculo_pedido).format('DD/MM/YYYY');
+    this.somaHonorarioscpc85String = this.formatMoney(this.somaHonorarioscpc85, moedaAtualCPC.sigla)
+    this.salarioMinimoHonorarioscpc85String = this.formatMoney(parseFloat(moedaAtualCPC.salario_minimo), moedaAtualCPC.sigla)
+
+  }
+
+
+  // Seção 4.3b sucumbencia / Tutela antecipada
 
   public getCorrecaoMonetariaTutelaAntecipada(dataCorrente, dataFimCalculo) {
-    let tipo_correcao = this.calculo.tipo_correcao;
-    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-    let moedaDataAtual = this.Moeda.getByDate(moment());
-    let moedaDataCalculo = this.Moeda.getByDate(dataFimCalculo.clone());
+    const tipo_correcao = this.calculo.tipo_correcao;
+    const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    const moedaDataAtual = this.Moeda.getByDate(moment());
+    const moedaDataCalculo = this.Moeda.getByDate(dataFimCalculo.clone());
 
     let desindexador = 0.0;
     let correcaoMonetaria = 0.0;
-    if (tipo_correcao == 'ipca') {
 
-      desindexador = moedaDataAtual.ipca / moedaDataCalculo.ipca;
-      correcaoMonetaria = moedaDataCorrente.ipca * desindexador;
+    // adição de novas tabelas 
+    desindexador = moedaDataAtual[tipo_correcao] / moedaDataCalculo[tipo_correcao];
+    correcaoMonetaria = moedaDataCorrente[tipo_correcao] * desindexador;
 
-    } else if (tipo_correcao == 'cam') {
-
-      desindexador = moedaDataAtual.cam / moedaDataCalculo.cam;
-      correcaoMonetaria = moedaDataCorrente.cam * desindexador;
-
-    } else if (tipo_correcao == 'tr') {
-
-      desindexador = moedaDataAtual.tr / moedaDataCalculo.tr;
-      correcaoMonetaria = moedaDataCorrente.tr * desindexador;
-
-    } else if (tipo_correcao == 'tr032015_ipcae') {
-
-      desindexador = moedaDataAtual.tr032015_ipcae / moedaDataCalculo.tr032015_ipcae;
-      correcaoMonetaria = moedaDataCorrente.tr032015_ipcae * desindexador;
-
-    }
-    // let usar_deflacao = !this.calculo.nao_usar_deflacao;
-    // if (!usar_deflacao) {
-    //   if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
-    //     correcaoMonetaria = 1;
-    //   }
-    // }
     return correcaoMonetaria;
   }
 
@@ -1905,14 +2024,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       // inicio proprorcional
       if (dataTutelaCorrente.isSame(tutelaInicio, 'month')) {
         const diasProporcionaisTutela = this.calcularDiasProporcionais(dataTutelaCorrente,
-                                                                      tutelaFim.clone());
+          tutelaFim.clone());
         beneficioTutelaComIndice = beneficioTutelaComIndice * diasProporcionaisTutela;
       }
 
       // Fim proporcional
       if (dataTutelaCorrente.isSame(tutelaFim, 'month')) {
         const diasProporcionaisTutela = this.calcularDiasProporcionais(dataTutelaCorrente,
-                                                                       tutelaFim.clone());
+          tutelaFim.clone());
         beneficioTutelaComIndice = beneficioTutelaComIndice * diasProporcionaisTutela;
       }
 
@@ -1927,10 +2046,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       lineTutela = {
         competencia: stringCompetencia,
         indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
-        ganho_economico: this.formatMoney(beneficioTutelaComIndice,  moedaDataTutelaCorrente.sigla),
+        ganho_economico: this.formatMoney(beneficioTutelaComIndice, moedaDataTutelaCorrente.sigla),
         correcao_monetaria: correcaoMonetaria,
-        ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido,  moedaDataTutelaCorrente.sigla),
-        honorarios_sucumbencia: this.formatMoney(honorariosSucumbencia,  moedaDataTutelaCorrente.sigla),
+        ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido, moedaDataTutelaCorrente.sigla),
+        honorarios_sucumbencia: this.formatMoney(honorariosSucumbencia, moedaDataTutelaCorrente.sigla),
       };
 
       this.resultadosTutelaAntecipadaList.push(lineTutela);
@@ -1948,19 +2067,19 @@ export class BeneficiosResultadosComponent implements OnInit {
         if (dataTutelaCorrente.isSame(tutelaInicio, 'year') && abonoProporcionalTutela < 1) {
 
           beneficioTutelaAbono *= abonoProporcionalTutela;
-          ganhoEconomicoCorrigidoAbono  *= abonoProporcionalTutela;
+          ganhoEconomicoCorrigidoAbono *= abonoProporcionalTutela;
           honorariosSucumbenciaAbono = ganhoEconomicoCorrigidoAbono * this.calculo.percentual_taxa_advogado;
-          console.log(abonoProporcionalTutela);
+          // console.log(abonoProporcionalTutela);
         }
 
-       this.resultadosTutelaAntecipadaList.push(
+        this.resultadosTutelaAntecipadaList.push(
           {
-            competencia: '<strong>'+ stringCompetencia +' - abono <strong>',
+            competencia: '<strong>' + stringCompetencia + ' - abono <strong>',
             indice_tutela: this.formatIndicesReajustes(indiceReajusteValoresTutela, dataTutelaCorrente, 'Devido'),
-            ganho_economico: this.formatMoney(beneficioTutelaAbono,  moedaDataTutelaCorrente.sigla),
+            ganho_economico: this.formatMoney(beneficioTutelaAbono, moedaDataTutelaCorrente.sigla),
             correcao_monetaria: correcaoMonetaria,
-            ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigidoAbono,  moedaDataTutelaCorrente.sigla),
-            honorarios_sucumbencia: this.formatMoney(honorariosSucumbenciaAbono,  moedaDataTutelaCorrente.sigla),
+            ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigidoAbono, moedaDataTutelaCorrente.sigla),
+            honorarios_sucumbencia: this.formatMoney(honorariosSucumbenciaAbono, moedaDataTutelaCorrente.sigla),
           }
         );
 
@@ -1973,20 +2092,20 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-      // this.resultadosTutelaAntecipadaList.push(
-      //   {
-      //     competencia: '',
-      //     indice_tutela: '',
-      //     ganho_economico: '',
-      //     correcao_monetaria: '',
-      //     ganho_economico_corrigido: '<strong>Total</strong>',
-      //     honorarios_sucumbencia: this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla),
-      // }
-      // );
+    // this.resultadosTutelaAntecipadaList.push(
+    //   {
+    //     competencia: '',
+    //     indice_tutela: '',
+    //     ganho_economico: '',
+    //     correcao_monetaria: '',
+    //     ganho_economico_corrigido: '<strong>Total</strong>',
+    //     honorarios_sucumbencia: this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla),
+    // }
+    // );
 
-      this.somaHonorariosTutelaAntecipadaString = this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
+    this.somaHonorariosTutelaAntecipadaString = this.formatMoney(this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
 
-      this.somaTotalHonorariosString = this.formatMoney(this.somaHonorarios+ this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
+    this.somaTotalHonorariosString = this.formatMoney(this.somaHonorarios + this.somaHonorariosTutelaAntecipada, moedaDataTutelaCorrente.sigla);
 
 
 
@@ -2199,13 +2318,16 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   // correção inicial do valor devido
- public aplicarTetosEMinimosDIB(valorBeneficio, dib) {
+  public aplicarTetosEMinimosDIB(valorBeneficio, dib) {
     const dataCorrenteMoedaDib = this.Moeda.getByDate(dib);
     const salMinimoDib = dataCorrenteMoedaDib.salario_minimo;
     const tetoSalarialDib = dataCorrenteMoedaDib.teto;
 
-    if (valorBeneficio <= salMinimoDib) {
+
+
+    if (valorBeneficio <= salMinimoDib && !this.calculo.nao_aplicar_sm_beneficio_esperado) {
       // Adicionar subindice ‘M’ no valor do beneficio
+      console.log((!this.calculo.nao_aplicar_sm_beneficio_esperado))
       return salMinimoDib;
     }
     if (valorBeneficio >= tetoSalarialDib && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
@@ -2223,25 +2345,31 @@ export class BeneficiosResultadosComponent implements OnInit {
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tetoSalarial = dataCorrenteMoeda.teto;
     let tipoAposentadoria = '';
+    let naoAplicarMinimo = false;
+
     if (tipo == 'Recebido') {
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido
     } else {
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
     }
 
-    if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
-      salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
-      salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
-      salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
-      salMinimo *= 0.6;
-    }
+    if (!naoAplicarMinimo) {
+      if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
+        salMinimo *= 0.3;
+      } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
+        salMinimo *= 0.4;
+      } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
+        salMinimo *= 0.5;
+      } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
+        salMinimo *= 0.6;
+      }
 
-    if (valorBeneficio <= salMinimo) {
-      // Adicionar subindice ‘M’ no valor do beneficio
-      return salMinimo;
+      if (valorBeneficio <= salMinimo) {
+        // Adicionar subindice ‘M’ no valor do beneficio
+        return salMinimo;
+      }
     }
     if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
@@ -2252,29 +2380,39 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 5.4
   aplicarTetosEMinimosTetos(valorBeneficio, dataCorrente, dib, tipo, tetoSalarial) {
+
     let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
+    let naoAplicarMinimo = false;
+
     if (tipo == 'Recebido') {
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
     } else {
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
     }
 
-    if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
-      salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
-      salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
-      salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
-      salMinimo *= 0.6;
+    if (!naoAplicarMinimo) {
+
+      if (tipoAposentadoria == '8') { //’Auxilio Acidente - 30%’
+        salMinimo *= 0.3;
+      } else if (tipoAposentadoria == '9') {//‘Auxilio Acidente - 40%’
+        salMinimo *= 0.4;
+      } else if (tipoAposentadoria == '6') { //‘Auxilio Acidente Previdenciario- 50%’
+        salMinimo *= 0.5;
+      } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
+        salMinimo *= 0.6;
+      }
+
+      if (valorBeneficio <= salMinimo) {
+        // Adicionar subindice ‘M’ no valor do beneficio
+        return salMinimo;
+      }
+
     }
 
-    if (valorBeneficio <= salMinimo) {
-      // Adicionar subindice ‘M’ no valor do beneficio
-      return salMinimo;
-    }
     if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
@@ -2352,7 +2490,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (typeof value === 'number') {
       let numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
       // let string = sigla + this.formatDecimal(value, 2);
-      let string = sigla +' '+ numeroPadronizado;
+      let string = sigla + ' ' + numeroPadronizado;
       if (aplicarCor && string.indexOf('-') != -1) {
         string = '<span style="color:red">' + string + '</span>';
       }
@@ -2410,11 +2548,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia', width:'12rem'},
-          { data: 'indice_devidos', width:'13rem'},
-          { data: 'beneficio_devido' },
-          { data: 'indice_recebidos', width:'13rem' },
-          { data: 'beneficio_recebido' },
+          { data: 'competencia', width: '10rem' },
+          { data: 'indice_devidos', width: '8rem' },
+          { data: 'beneficio_devido', width: '10rem' },
+          { data: 'indice_recebidos', width: '8rem' },
+          { data: 'beneficio_recebido', width: '10rem' },
           { data: 'diferenca_mensal' },
           { data: 'correcao_monetaria' },
           { data: 'diferenca_corrigida' },
@@ -2429,14 +2567,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia', width:'12rem' },
-          { data: 'indice_devidos', width:'13rem' },
-          { data: 'beneficio_devido' },
-          { data: 'indice_recebidos', width:'13rem' },
-          { data: 'beneficio_recebido' },
-          { data: 'diferenca_mensal' },
+          { data: 'competencia', width: '10rem' },
+          { data: 'indice_devidos', width: '8rem' },
+          { data: 'beneficio_devido', width: '10rem' },
+          { data: 'indice_recebidos', width: '8rem' },
+          { data: 'beneficio_recebido', width: '10rem' },
+          { data: 'diferenca_mensal', width: '10rem' },
           { data: 'correcao_monetaria' },
-          { data: 'diferenca_corrigida' },
+          { data: 'diferenca_corrigida', width: '10rem' },
           { data: 'juros' },
           { data: 'valor_juros' },
           { data: 'diferenca_juros' },
@@ -2449,7 +2587,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         ...this.resultadosDatatableOptions,
         data: this.resultadosList,
         columns: [
-          { data: 'competencia'  , width:'12rem'},
+          { data: 'competencia', width: '12rem' },
           { data: 'indice_devidos' },
           { data: 'beneficio_devido' },
           { data: 'beneficio_devido_sem_limites' },
@@ -2597,13 +2735,23 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getStringTabelaCorrecaoMonetaria() {
     if (this.calculo.tipo_correcao == 'ipca')
-      return 'IPCA-e';
+      return 'IPCA-e a partir de 06/2009';
     if (this.calculo.tipo_correcao == 'tr')
-      return 'da TR';
+      return 'da TR após 06/2009';
     if (this.calculo.tipo_correcao == 'cam')
-      return 'da Justiça Federal';
+      return 'manual de cálculos SICOM da Justiça Federal';
     if (this.calculo.tipo_correcao == 'tr032015_ipcae')
       return 'TR até 03/2015 e IPCA-e';
+    if (this.calculo.tipo_correcao == 'ipca_todo_periodo')
+      return 'IPCA-e todo período';
+    if (this.calculo.tipo_correcao == 'tr_todo_periodo')
+      return 'TR todo período';
+    if (this.calculo.tipo_correcao == 'cam_art_175_3048')
+      return 'administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994';
+    if (this.calculo.tipo_correcao == 'igpdi_012004_inpc062009_tr032015_inpc')
+      return 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC';
+    if (this.calculo.tipo_correcao == 'igpdi_2006_inpc062009_tr032015_ipcae')
+      return 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e ipcae';
   }
 
   editSegurado() {
@@ -2620,6 +2768,53 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
+  public getNameSelectJurosAnualParaMensal() {
+
+    this.jurosEmFormatoAnual = ''; // Manual
+
+    const opcoesMensalParaAnual = [
+      {
+        jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5,
+        value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
+      },
+      {
+        jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5,
+        value: '6_selic', name: '6% ao ano (observando a SELIC - Poupança)'
+      },
+      {
+        jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1,
+        value: '12_ano', name: '12% ao ano'
+      },
+      {
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1,
+        value: '6_12', name: '6% ao ano (até 01/2003) / 12% ao ano'
+      },
+      {
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5,
+        value: '6_12_6', name: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano'
+      },
+      {
+        jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5,
+        value: '6_fixo', name: '6% ao ano (fixo)'
+      },
+      {
+        jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null,
+        value: 'sem_juros', name: 'Sem Juros'
+      },
+    ];
+
+    for (const confJuros of opcoesMensalParaAnual) {
+
+      if (
+        confJuros.jurosAntes2003 === this.calculo.previo_interesse_2003 &&
+        confJuros.jurosDepois2003 === this.calculo.pos_interesse_2003 &&
+        confJuros.jurosDepois2009 === this.calculo.pos_interesse_2009
+      ) {
+        this.jurosEmFormatoAnual = confJuros.name;
+      }
+
+    }
+  }
 
 
   /*

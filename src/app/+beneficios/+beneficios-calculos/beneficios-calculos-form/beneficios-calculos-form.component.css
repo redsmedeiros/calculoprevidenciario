@@ -1,5 +1,5 @@
 .fix-painel-devido-recebido{
-    min-height: 395px;
+    min-height: 450px;
 }
 
 .fix-rmi-anterior{
@@ -9,9 +9,9 @@
 
 @media (min-width: 1650px) {
 
-    /* .fix-painel-devido-recebido{
-        min-height: 350px;
-    } */
+    .fix-painel-devido-recebido{
+        min-height: 420px;
+    }
 
   }
 

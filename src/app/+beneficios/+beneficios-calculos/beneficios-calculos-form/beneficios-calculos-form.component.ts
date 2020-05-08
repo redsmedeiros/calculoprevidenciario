@@ -91,6 +91,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public tipoDejurosSelecionado;
   public competenciaInicioJuros;
 
+  // valor inferior ao salario minimo
+  public naoAplicarSMBeneficioConcedido = false;
+  public naoAplicarSMBeneficioEsperado = false;
+
   public especieValoresDevidos;
   public especieValoresRecebidos;
 
@@ -512,7 +516,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       } else if (!this.isValidFloat(this.percentualHonorarios)) {
         this.errors.add({ 'percentualHonorarios': ['O valor deve ser um número com casas decimais separadas por vírgula.'] });
         valid = false;
-      } else if (parseFloat(this.percentualHonorarios.replace(',', '.')) == 0) {
+      } else if (parseFloat(this.percentualHonorarios) == 0) {
         this.errors.add({ 'percentualHonorarios': ['O percentual dos Honorários deve ser maior que zero.'] });
         valid = false;
       }
@@ -704,9 +708,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
 
+     
+
       // opções adicionais de juros
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
       this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
+
+      // valor inferior ao salario minimo
+      this.formData.nao_aplicar_sm_beneficio_concedido = this.naoAplicarSMBeneficioConcedido;
+      this.formData.nao_aplicar_sm_beneficio_esperado = this.naoAplicarSMBeneficioEsperado;
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = this.maturidade;
@@ -917,14 +927,27 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
     this.taxaAdvogadoValorFixoHonorarios = this.formData.taxa_advogado_valor_fixo;
 
+    // valor inferior ao salario minimo
+    this.naoAplicarSMBeneficioConcedido = this.formData.nao_aplicar_sm_beneficio_concedido;
+    this.naoAplicarSMBeneficioEsperado = this.formData.nao_aplicar_sm_beneficio_esperado;
+
     this.taxaAdvogadoAplicarCPCArt85 = this.formData.taxa_advogado_aplicar_CPCArt85;
-    if (this.taxaAdvogadoAplicarCPCArt85 != null) // somente se o check for maracado
+    if (this.taxaAdvogadoAplicarCPCArt85) // somente se o check for maracado
     {
-       this.taxaAdvogadoPercateAte200SM = this.formData.taxa_advogado_perc_ate_200_SM;
-       this.taxaAdvogadoPerc200A2000SM = this.formData.taxa_advogado_perc_200_2000_SM;
-       this.taxaAdvogadoPerc2000A20000SM = this.formData.taxa_advogado_perc_2000_20000_SM;
-       this.taxaAdvogadoPerc20000A100000SM = this.formData.taxa_advogado_perc_20000_100000_SM;
-       this.taxaAdvogadoPerc100000SM = this.formData.taxa_advogado_perc_100000_SM;
+       this.taxaAdvogadoPercateAte200SM = (this.isExits(this.formData.taxa_advogado_perc_ate_200_SM)) ?
+                                              this.formData.taxa_advogado_perc_ate_200_SM : 10.00;
+
+       this.taxaAdvogadoPerc200A2000SM = (this.isExits(this.formData.taxa_advogado_perc_200_2000_SM)) ?
+                                              this.formData.taxa_advogado_perc_200_2000_SM : 8.00;
+
+       this.taxaAdvogadoPerc2000A20000SM = (this.isExits(this.formData.taxa_advogado_perc_2000_20000_SM)) ?
+                                              this.formData.taxa_advogado_perc_2000_20000_SM : 5.00;
+
+       this.taxaAdvogadoPerc20000A100000SM = (this.isExits(this.formData.taxa_advogado_perc_20000_100000_SM)) ?
+                                              this.formData.taxa_advogado_perc_20000_100000_SM : 3.00;
+
+       this.taxaAdvogadoPerc100000SM = (this.isExits(this.formData.taxa_advogado_perc_100000_SM)) ?
+                                              this.formData.taxa_advogado_perc_100000_SM : 1.00;
     }
 
     this.dibValoresDevidosChanged();
@@ -1074,7 +1097,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   isValidFloat(input) {
-    if (isNaN(input.replace(',', '.'))) {
+
+    if(typeof input == 'string' && (/\,/).test(input) ){
+      input = input.replace(',', '.');
+    }
+
+    if (isNaN(input)) {
       return false;
     }
     return true;

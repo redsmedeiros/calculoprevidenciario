@@ -550,8 +550,8 @@
             <!-- widget div-->
             <div>
               <!-- widget content -->
-              <div class="widget-body" *ngIf="!isUpdating">
-                <ul class="list-unstyled">
+              <div class="widget-body" [ngClass]="{'widget-body-custom': exibirHonorariosValorFixo}"  *ngIf="!isUpdating">
+                <ul class="list-unstyled" *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
                   <li>
                     <b>Honorários:</b>
                     {{ formatDate(calculo.taxa_advogado_inicio) }} a
@@ -570,10 +570,34 @@
                     <b>Percentual do Acordo Judicial:</b>
                     {{ formatPercent(calculo.acordo_pedido) }}
                   </li>
-                 
                 </ul>
+                <ul class="list-unstyled" *ngIf="exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
+                  <li>
+                    <b>Honorários calculados de acordo com §3º do Art. 85 da Lei 13105/15: </b>
+                    {{ percentualHonorarioscpc85 }}% Sobre o ganho econômico.
+                  </li>
+                  <li>
+                    <b>Faixa de acordo com ganho econômico:</b>
+                    {{ faixaSalminimoHonorarioscpc85 }}
+                  </li>
+                  <li>
+                    <b>Sálario Mínimo considerado:</b>
+                    {{ salarioMinimoHonorarioscpc85String }}
+                  </li>
+                  <li>
+                    <b>Data do sálario Mínimo:</b>
+                    {{ dataSalMinHonorarioscpc85 }}
+                  </li>
+                </ul>
+                <ul class="list-unstyled" *ngIf="!exibirHonorarioscpc85 && exibirHonorariosValorFixo" >
+                  <li>
+                    <b>Honorários valor fixo: </b>
+                    {{ somaHonorariosFixoString }}
+                  </li>
+                </ul>
+
                 <div id="printableHonorarios" hidden>
-                  <table class="table table-bordered table-hover">
+                  <table class="table table-bordered table-hover" *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
                     <caption>
                       <h2>Honorários</h2>
                     </caption>
@@ -611,6 +635,58 @@
                       </td>
                     </tr>
                   </table>
+                  <table class="table table-bordered table-hover" *ngIf="exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
+                    <caption>
+                      <h2>Honorários</h2>
+                    </caption>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Honorários calculados de acordo com §3º do Art. 85 da Lei 13105/15:</b>
+                      </td>
+                      <td width="50%">
+                        {{ percentualHonorarioscpc85 }}% Sobre o ganho econômico.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Faixa de acordo com ganho econômico:</b>
+                      </td>
+                      <td width="50%">
+                        {{ faixaSalminimoHonorarioscpc85 }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Sálario Mínimo considerado:</b>
+                      </td>
+                      <td width="50%">
+                        {{ salarioMinimoHonorarioscpc85String }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Data do sálario Mínimo:</b>
+                      </td>
+                      <td width="50%">
+                        {{ dataSalMinHonorarioscpc85 }}
+                      </td>
+                    </tr>
+                  </table>
+
+                  <table class="table table-bordered table-hover" *ngIf="!exibirHonorarioscpc85 && exibirHonorariosValorFixo" >
+                    <caption>
+                      <h2>Honorários</h2>
+                    </caption>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Honorários valor fixo:</b>
+                      </td>
+                      <td width="50%">
+                        {{ somaHonorariosFixoString  }}
+                      </td>
+                    </tr>
+                  </table>
+
                 </div>
               </div>
             </div>
@@ -652,6 +728,9 @@
                     <b>Juros posterior a julho de 2009:</b>
                     {{ calculo.pos_interesse_2009 }}%
                   </li>
+                  <li>
+                    <strong>{{ jurosEmFormatoAnual }}</strong>
+                  </li>
                 </ul>
                 <div id="printableJuros" hidden>
                   <table class="table table-bordered table-hover">
@@ -675,6 +754,11 @@
                         <b>Juros posterior a julho de 2009:</b>
                       </td>
                       <td width="50%">{{ calculo.pos_interesse_2009 }}%</td>
+                    </tr>
+                    <tr *ngIf="jurosEmFormatoAnual != ''" >
+                      <td width="50%" style="text-align: right;" colspan="2">
+                        <b>{{ jurosEmFormatoAnual }}</b>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -708,11 +792,17 @@
               <!-- widget content -->
               <div class="widget-body">
                 <ul class="list-unstyled" *ngIf="!isTetos">
-                  <li *ngIf="somaHonorarios != 0">
+                  <li *ngIf="somaHonorarios != 0 && !exibirHonorarioscpc85 && !exibirHonorariosValorFixo">
                     <b *ngIf="!exibirSucumbencia">Honorários a receber:</b>
                     <b *ngIf="exibirSucumbencia">Honorários:</b>
                     <span class="{{ tratarConclusao(somaHonorarios) }}">
                       {{ formatMoney(somaHonorarios) }}</span
+                    >
+                  </li>
+                  <li *ngIf="exibirHonorarioscpc85">
+                    <b>Honorários (§3º do Art. 85 CPC):</b>
+                    <span >
+                      {{ somaHonorarioscpc85String }}</span
                     >
                   </li>
                   <li *ngIf="exibirSucumbencia">
@@ -793,7 +883,7 @@
                     >
                   </li>
                   <li>
-                    <b>Total devida ao segurado:</b
+                    <b>Total devido ao segurado:</b
                     ><span class="{{ tratarConclusao(somaTotalSegurado) }}">
                       {{ formatMoney(somaTotalSegurado) }}</span
                     >
@@ -804,7 +894,7 @@
                     <caption>
                       <h2>Conclusões</h2>
                     </caption>
-                    <tr *ngIf="somaHonorarios != 0">
+                    <tr *ngIf="somaHonorarios != 0 && !exibirHonorarioscpc85 && !exibirHonorariosValorFixo">
                       <td width="50%" style="text-align: right;">
                         <b *ngIf="!exibirSucumbencia">Honorários a receber:</b>
                         <b *ngIf="exibirSucumbencia">Honorários:</b>
@@ -815,7 +905,17 @@
                         >
                       </td>
                     </tr>
-                    <tr *ngIf="somaHonorarios != 0">
+                    <tr *ngIf="exibirHonorarioscpc85">
+                      <td width="50%" style="text-align: right;">
+                        <b>Honorários (§3º do Art. 85 CPC):</b>
+                      </td>
+                      <td width="50%">
+                        <span >
+                          {{ somaHonorarioscpc85String }}</span
+                        >
+                      </td>
+                    </tr>
+                    <tr *ngIf="exibirSucumbencia">
                       <td width="50%" style="text-align: right;">
                         <b>Honorários de tutela antecipada:</b>
                       </td>
@@ -825,7 +925,7 @@
                         >
                       </td>
                     </tr>
-                    <tr *ngIf="somaHonorarios != 0">
+                    <tr *ngIf="exibirSucumbencia">
                       <td width="50%" style="text-align: right;">
                         <b>Total de honorários:</b>
                       </td>
@@ -1469,6 +1569,21 @@
                   05/1996 a 08/2006, INPC de 09/2006 a 06/2009, TR de 09/2006 a
                   de 07/2009 a 02/2015 IPCA-e até
                   {{ formatDate(calculo.data_calculo_pedido) }};
+                </p>
+                <p *ngIf="calculo.tipo_correcao == 'ipca_todo_periodo'">
+                  Linha de correção: IPCA todo o período.
+                </p>
+                <p *ngIf="calculo.tipo_correcao == 'tr_todo_periodo'">
+                  Linha de correção: TR todo o período.
+                </p>
+                <p *ngIf="calculo.tipo_correcao == 'cam_art_175_3048'">
+                  Tabela de atualização monetária das parcelas relativas a benefícios pagos com atraso -  (Art.175, Decreto No 3.048/99) - (Portaria SEPRT-ME Nº 9.638, de 09 de abril de 2020).
+                </p>
+                <p *ngIf="calculo.tipo_correcao == 'igpdi_012004_inpc062009_tr032015_inpc'">
+                  Linha de correção: ORTN/OTN/BTN até 03/1990;IPC 03/1990 a 02/1991; INPC 03/1991 a 12/1992; IRSM 01/1993 a 02/1994; URV 03/1994 a 06/1994; IPC-R 07/1994 a 06/1995; INPC 07/1995 a 04/1996; IGPdi 05/1996 a01/2004; INPC 02/2004 a 06/2009; TR 07/2009 a 03/2015; INPC em diante.
+                </p>
+                <p *ngIf="calculo.tipo_correcao == 'igpdi_2006_inpc062009_tr032015_ipcae'">
+                  linha de correção: ORTN/OTN/BTN até 03/1990;IPC 03/1990 a 02/1991; INPC 03/1991 a 12/1992; IRSM 01/1993 a 02/1994; URV 03/1994 a 06/1994; IPC-R 07/1994 a 06/1995; INPC 07/1995 a 04/1996; IGPdi 05/1996 a 08/2006; INPC 09/2006 a 06/2009; TR 07/2009 a 03/2015; IPCAe em diante.
                 </p>
                 <p><strong>c) </strong> Juros de mora:</p>
                 <p>

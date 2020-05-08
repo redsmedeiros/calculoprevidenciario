@@ -56,6 +56,8 @@ export class CalculoAtrasado extends Model {
     taxa_advogado_aplicar_CPCArt85: '',
     nao_aplicar_juros_sobre_negativo: '',
     competencia_inicio_juros: '',
+    nao_aplicar_sm_beneficio_concedido: '',
+    nao_aplicar_sm_beneficio_esperado: '',
   };
 
   public id: number;
@@ -109,6 +111,8 @@ export class CalculoAtrasado extends Model {
   public taxa_advogado_aplicar_CPCArt85;
   public nao_aplicar_juros_sobre_negativo;
   public competencia_inicio_juros;
+  public nao_aplicar_sm_beneficio_concedido;
+  public nao_aplicar_sm_beneficio_esperado;
 
   // public actions = `
   //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
