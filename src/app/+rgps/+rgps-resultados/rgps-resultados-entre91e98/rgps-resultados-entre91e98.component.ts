@@ -563,6 +563,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       coeficienteAux2 = 100 * this.coeficienteProporcional(extra, porcentagem, toll);
     }
 
+    anosContribuicao = Math.floor(anosContribuicao)
+
     switch (this.tipoBeneficio) {
       // Auxílio Doença Previdenciário
       case 1:
