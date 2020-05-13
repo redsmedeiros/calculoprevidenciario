@@ -187,7 +187,7 @@
                   <div class="form-group">
                     <label class="col-md-3 control-label">Data inicial do benefício DIB*:</label>
                     <div class="col-md-4">
-                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged()' class="form-control"  type="text">
+                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();' class="form-control"  type="text">
                       <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
                     </div>
                   </div>

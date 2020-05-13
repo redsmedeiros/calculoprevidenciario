@@ -975,7 +975,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   useSameDIBChanged() {
     if (this.chkUseSameDib) {
-      if (this.dibValoresRecebidos !== undefined && this.dibValoresDevidos !== null) {
+      if (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== null) {
         // this.updateDIBValoresDevidos();
         this.updateDIBValoresRecebidos();
       }
