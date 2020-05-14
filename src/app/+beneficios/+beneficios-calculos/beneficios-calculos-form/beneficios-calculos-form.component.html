@@ -162,7 +162,7 @@
                 <fieldset>
                   <div class="form-group">
                     <div class="col-md-11 col-sm-offset-1">
-                      <div class="checkbox">
+                      <div class="checkbox" *ngIf="!chkNotGranted" >
                         <label>
                           <input type="checkbox" name="useSameDib" [(ngModel)]="chkUseSameDib" (change)="useSameDIBChanged()" class="checkbox {{styleTheme}}" checked="checked">
                           <span>Caso queira calcular revisão de RMI com mesma DIB </span>
@@ -305,6 +305,8 @@
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
+                  </div>
+                  <div class="form-group">
                     <div *ngIf="chkPrecedidoRecebidos">
                       <label class="col-md-3 control-label">Data inicial do benefício anterior:</label>
                       <div class="col-md-4">
