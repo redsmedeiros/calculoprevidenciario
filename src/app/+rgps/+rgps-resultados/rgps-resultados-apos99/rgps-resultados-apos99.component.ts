@@ -1463,12 +1463,30 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   getIdadeFracionada() {
 
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+  //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
 
-    if (this.dataInicioBeneficio >= this.dataPec062019) {
-      idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
-    }
-    return idadeEmDias / 365.25;
+  //   if (this.dataInicioBeneficio >= this.dataPec062019) {
+  //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
+  //   }
+  //  // return idadeEmDias / 365.25;
+
+   if (this.dataInicioBeneficio >= this.dataPec062019) {
+    return this.dataPec062019.diff(dataNascimento, 'years', true);
+   }
+
+    return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
+  }
+
+
+  testeDifdata(time1, time2){
+
+      const str1= time1.split('/');
+      const str2= time2.split('/');
+                             // yyyy   , mm       , dd
+     const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
+    const dateToCompare = new Date(str2[2], str2[1] - 1, str2[0]).getTime();
+//    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+    return  (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
   mostrarReajustesAdministrativos(tableId) {

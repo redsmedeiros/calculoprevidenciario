@@ -489,10 +489,45 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
     if (!temIdadeMinima) {
-      const tempoAteIdade = moment.duration((idadeMinima - this.idadeSegurado), 'years')
-      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
+     // const tempoAteIdade = moment.duration({years: (idadeMinima - this.idadeFracionada)});
+      let stringTempo = '';
+      const tempoAteIdade = this.testeconvert((idadeMinima - this.idadeFracionada))
+      // console.log(this.testeconvert((idadeMinima - this.idadeFracionada)));
+      // console.log(tempoAteIdade);
+      
+      if(tempoAteIdade.years > 0){
+        stringTempo += tempoAteIdade.years + ' ano(s)';
+      }
+
+      if(tempoAteIdade.months > 0){
+        stringTempo += tempoAteIdade.months + ' mês(es) ';
+      }
+
+      if(tempoAteIdade.days > 0){
+        stringTempo += tempoAteIdade.days + ' dia(s)';
+      }
+
+      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' 
+      + stringTempo + ' para atingir a idade mínima.');
     }
     return temIdadeMinima;
+  }
+
+
+  testeconvert(fullYears){
+
+    const totalFator = { years: 0, months: 0, days: 0, fullYears: fullYears };
+    const xValor = fullYears;
+
+    totalFator.years = Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    totalFator.days = Math.round(dttDias);
+
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+
   }
 
   getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo) {
@@ -936,6 +971,11 @@ export class RgpsResultadosComponent implements OnInit {
       if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
+      }
+
+      if (verificaIdade) {
+        calculo.mostrarCalculo91_98 = false;
+        calculo.mostrarCalculo98_99 = false;
       }
 
       calculo.mostrarCalculoApos99 = true;
