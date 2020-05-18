@@ -18,15 +18,11 @@
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
-
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
             <div class="widget-body">
-
               <ul class="list-unstyled">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
                 <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
@@ -40,26 +36,24 @@
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
 
-              <div class="form-actions">
+              <div class="form-actions no-padding">
                 <div class="row">
                   <div class="col-md-12">
 
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
                     </button>
 
-<!--                     <button type="submit" class="btn btn-labeled btn-primary">
+                    <!--<button type="submit" class="btn btn-labeled btn-primary">
                       <span class="btn-label">
                         <i class="fa fa-percent"></i>
                       </span> Novo cálculo
                     </button> -->
-
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>
@@ -78,15 +72,22 @@
               <tbody>
                 <tr>
                   <td>
-                    <button type="submit" (click)="createNewCalculo()" class="btn btn-labeled btn-default pull-left">
+                    <button type="submit" (click)="createNewCalculo('C')" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
                         <i class="fa fa-arrow-right"></i>
-                      </span> Beneficios Atrasados
+                      </span> Concessão de beneficios
+                    </button>
+                    <br>
+                    <br>
+                    <br>
+                    <button type="submit" (click)="createNewCalculo('R')" class="btn btn-labeled btn-default pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-arrow-right"></i>
+                      </span> Revisão de beneficios 
                     </button>
                   </td>
                   <td>
                     <p>Diferenças entre valores de rendas mensais de benefícios devidos e recebidos bem como correção monetária, juros de mora e honorários. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/1439/t/calculo-de-beneficios-atrasados">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS.pdf">manual em PDF</a>, <a target="_blank"href="https://vimeo.com/209445770">videoaula</a>, <a target="_blank"href="http://www.youtube.com/watch?v=WS0Hn-MJWZc&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt">videoaula da simulaçao para Buraco Negro</a>)</p>
-
                   </td>
                 </tr>
                 <tr>
@@ -94,14 +95,14 @@
                     <button type="submit" (click)="createNewCalculoJudicial()" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
                         <i class="fa fa-arrow-right"></i>
-                      </span> Benefícios Atrasados - Teto 12/1998 e 12/2003
+                      </span> Revisão benefícios Atrasados - Teto 12/1998 e 12/2003
                     </button>
                   </td>
                   <td>
                     <p>Simula diferenças devidas referente aos tetos legais de R$1200,00 para 12/1998 e R$2400,00 para 12/2003 quando no cálculo de seu salário de benefício houve limitação ao teto do salário de contribuição vigente no momento da concessão, fazendo jus, portanto, a revisão judicial. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/22868/t/beneficio-atrasados-tetos">manual</a>, <a target="_blank"href="http://www.youtube.com/watch?v=SHWS5Z945d8">videoaula</a>)</p>
                   </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                   <td>
                     <button type="submit" (click)="createNewCalculoIndices()" class="btn btn-labeled btn-default pull-left">
                       <span class="btn-label">
@@ -112,7 +113,7 @@
                   <td>
                     <p>Simula revisão com acréscimo dos índices de 2,28% em 06/1999 e 1,75% em 05/2004. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/34152/t/beneficio-atrasados---indices-06-99-e-05-04">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS%2099-04.pdf">manual em PDF</a>, <a target="_blank"href="https://www.youtube.com/watch?v=v-GFKdUxwYE&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt&index=9">videoaula</a>)</p>
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
@@ -161,9 +162,6 @@
           </table>
         </div>
       </div>
-
-
-
 
     </div>
 

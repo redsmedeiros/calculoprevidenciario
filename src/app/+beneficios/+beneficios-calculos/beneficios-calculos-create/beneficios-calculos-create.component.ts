@@ -20,6 +20,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   public calculoType;
   public form = {...CalculoModel.form};
   private mostrarTabelaTaxaSelic = false;
+  private seguradoId = '';
 
   @Output() onSubmit = new EventEmitter();
 
@@ -32,6 +33,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
 	) { }
 
   ngOnInit() {
+    this.seguradoId = this.route.snapshot.params['id']
   	this.calculoType = this.route.snapshot.params['type'];
 
   	this.Segurado.find(this.route.snapshot.params['id'])

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { Segurado as SeguradoModel } from '../+beneficios-segurados/Segurado.model';
 import { CalculoAtrasadoService } from './CalculoAtrasado.service';
@@ -22,7 +22,7 @@ export class BeneficiosCalculosComponent implements OnInit {
 
   public isUpdating = false;
 
-  public segurado:any = {};
+  public segurado: any = {};
 
   public calculosList = this.CalculoAtrasado.list;
 
@@ -32,42 +32,57 @@ export class BeneficiosCalculosComponent implements OnInit {
     colReorder: true,
     data: this.calculosList,
     columns: [
-      {data: 'actions'},
-      {data: 'data_calculo',
-       render: (data) => {
+      { data: 'actions' },
+      {
+        data: 'data_calculo',
+        render: (data) => {
           return this.formatReceivedDateTime(data);
-       }},
-      {data: 'data_citacao_reu',
-       render: (data) => {
+        }
+      },
+      {
+        data: 'data_citacao_reu',
+        render: (data) => {
           return this.formatReceivedDate(data);
-       }},
-      {data: 'data_acao_judicial',
-             render: (data) => {
+        }
+      },
+      {
+        data: 'data_acao_judicial',
+        render: (data) => {
           return this.formatReceivedDate(data);
-       }},
-      {data: 'data_pedido_beneficio',
-             render: (data) => {
+        }
+      },
+      {
+        data: 'data_pedido_beneficio',
+        render: (data) => {
           return this.formatReceivedDate(data);
-       }},
-      {data: 'valor_beneficio_concedido',
-       render: (data) => {
-          return this.formatMoneyValue(data);
-       }},
-      {data: 'data_pedido_beneficio_esperado',
-             render: (data) => {
-          return this.formatReceivedDate(data);
-       }},
-      {data: 'valor_beneficio_esperado',
+        }
+      },
+      {
+        data: 'valor_beneficio_concedido',
         render: (data) => {
           return this.formatMoneyValue(data);
-       }},
-    ] };
+        }
+      },
+      {
+        data: 'data_pedido_beneficio_esperado',
+        render: (data) => {
+          return this.formatReceivedDate(data);
+        }
+      },
+      {
+        data: 'valor_beneficio_esperado',
+        render: (data) => {
+          return this.formatMoneyValue(data);
+        }
+      },
+    ]
+  };
 
   constructor(protected Segurado: SeguradoService,
-	          protected router: Router,
-              private route: ActivatedRoute,
-              private CalculoAtrasado: CalculoAtrasadoService,
-              private Auth: Auth) {}
+    protected router: Router,
+    private route: ActivatedRoute,
+    private CalculoAtrasado: CalculoAtrasadoService,
+    private Auth: Auth) { }
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id'];
@@ -75,27 +90,27 @@ export class BeneficiosCalculosComponent implements OnInit {
     this.isUpdating = true;
     // retrive user info
     this.Segurado.find(this.route.snapshot.params['id'])
-        .then(segurado => {
-            this.segurado = segurado;
+      .then(segurado => {
+        this.segurado = segurado;
 
-            if(localStorage.getItem('user_id') != this.segurado.user_id){
-              //redirecionar para pagina de segurados
-              swal({
-                type: 'error',
-                title: 'Erro',
-                text: 'Você não tem permissão para acessar esta página!',
-                allowOutsideClick: false
-              }).then(()=> {
-                window.location.href='/#/beneficios/beneficios-segurados/';
-              });
-            }else{
-              this.CalculoAtrasado.getWithParameters(['id_segurado', this.idSegurado])
-                .then(() => {
-                  this.updateDatatable();
-                  this.isUpdating = false;
-                });
-            }
-    });
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
+          //redirecionar para pagina de segurados
+          swal({
+            type: 'error',
+            title: 'Erro',
+            text: 'Você não tem permissão para acessar esta página!',
+            allowOutsideClick: false
+          }).then(() => {
+            window.location.href = '/#/beneficios/beneficios-segurados/';
+          });
+        } else {
+          this.CalculoAtrasado.getWithParameters(['id_segurado', this.idSegurado])
+            .then(() => {
+              this.updateDatatable();
+              this.isUpdating = false;
+            });
+        }
+      });
 
   }
 
@@ -108,47 +123,56 @@ export class BeneficiosCalculosComponent implements OnInit {
   }
 
   formatReceivedDate(inputDate) {
-      var date = new Date(inputDate);
-      date.setTime(date.getTime() + (5*60*60*1000))
-      if (!isNaN(date.getTime())) {
-          // Months use 0 index.
-          return  ('0' + (date.getDate())).slice(-2)+'/'+
-                  ('0' + (date.getMonth()+1)).slice(-2)+'/'+
-                         date.getFullYear();
-      }
-      return '';
+    var date = new Date(inputDate);
+    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
+    if (!isNaN(date.getTime())) {
+      // Months use 0 index.
+      return ('0' + (date.getDate())).slice(-2) + '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+        date.getFullYear();
+    }
+    return '';
   }
 
   formatReceivedDateTime(inputDateTime) {
-    return inputDateTime.substring(11, 19) + ' ' + 
-           this.formatReceivedDate(inputDateTime.substring(0, 10));
+    return inputDateTime.substring(11, 19) + ' ' +
+      this.formatReceivedDate(inputDateTime.substring(0, 10));
   }
 
   formatMoneyValue(inputValue) {
     if (inputValue !== null)
-    //  return inputValue.toFixed(2).replace('.',',');
+      //  return inputValue.toFixed(2).replace('.',',');
       return inputValue.toLocaleString('pt-BR');
     return '-';
   }
 
   editSegurado() {
-    window.location.href='/#/beneficios/beneficios-segurados/'+ 
-                            this.route.snapshot.params['id']+'/editar';
+    window.location.href = '/#/beneficios/beneficios-segurados/' +
+      this.route.snapshot.params['id'] + '/editar';
   }
 
-  createNewCalculo() {
-  	window.location.href='/#/beneficios/beneficios-calculos/A/'+ this.route.snapshot.params['id'];
+  createNewCalculo(type) {
+
+    if (type === 'C') {
+      // Concessão
+      window.location.href = '/#/beneficios/beneficios-calculos/AC/' + this.route.snapshot.params['id'];
+
+    } else if (type === 'R') {
+      // Revisão
+      window.location.href = '/#/beneficios/beneficios-calculos/AR/' + this.route.snapshot.params['id'];
+    }
+    
   }
 
   createNewCalculoJudicial() {
-    window.location.href='/#/beneficios/beneficios-calculos/AJ/'+this.route.snapshot.params['id'];
+    window.location.href = '/#/beneficios/beneficios-calculos/AJ/' + this.route.snapshot.params['id'];
   }
 
   createNewCalculoIndices() {
-    window.location.href='/#/beneficios/beneficios-calculos/AI/'+this.route.snapshot.params['id'];
+    window.location.href = '/#/beneficios/beneficios-calculos/AI/' + this.route.snapshot.params['id'];
   }
 
-  isSegurado(element, index, array){
+  isSegurado(element, index, array) {
     return element['id_segurado'] == this.idSegurado;
   }
 }
