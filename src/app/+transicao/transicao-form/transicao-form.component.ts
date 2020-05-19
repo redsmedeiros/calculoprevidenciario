@@ -106,21 +106,21 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '3';
 
 
-    this.nome = 'Robson - 24-03-2020';
-    this.idDocumento = '';
-    this.numeroDocumento = '';
-    this.dataNascimento = '04/01/1966';
-    this.dataFiliacao = '01/01/1980';
-    this.sexo = 'f';
-    this.professor = false;
+    // this.nome = 'Robson - 24-03-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '04/01/1966';
+    // this.dataFiliacao = '01/01/1980';
+    // this.sexo = 'f';
+    // this.professor = false;
 
-    this.contribuicaoAnosAteEC103 = '33';
-    this.contribuicaoMesesAteEC103 = '3';
-    this.contribuicaoDiasAteEC103 = '16';
+    // this.contribuicaoAnosAteEC103 = '33';
+    // this.contribuicaoMesesAteEC103 = '3';
+    // this.contribuicaoDiasAteEC103 = '16';
 
-    this.contribuicaoAnos = '33';
-    this.contribuicaoMeses = '7';
-    this.contribuicaoDias = '26';
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '7';
+    // this.contribuicaoDias = '26';
 
   }
 
