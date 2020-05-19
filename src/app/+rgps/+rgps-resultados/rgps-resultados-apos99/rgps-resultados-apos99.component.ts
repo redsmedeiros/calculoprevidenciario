@@ -997,7 +997,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     rmi_fator = this.convertDecimalValue(rmi_fator);
     rmi_pontos = this.convertDecimalValue(rmi_pontos);
 
-
     this.isUpdating = false;
 
    // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
@@ -1009,7 +1008,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       data: this.tableData,
     }
 
-    //Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+    // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = this.valorExportacao;
     this.CalculoRgpsService.update(this.calculo);
