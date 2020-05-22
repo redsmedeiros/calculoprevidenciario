@@ -18,8 +18,12 @@ import * as moment from 'moment';
 export class BeneficiosCalculosFormComponent implements OnInit {
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-   public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
+                            '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
+                            '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
 
+  public IndiceMask =  [ /\d/, ',', /\d/, /\d/, /\d/, /\d/];
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -79,7 +83,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public taxaAdvogadoValorFixoHonorarios;
 
   // CPC Art85
-  public taxaAdvogadoAplicarCPCArt85 = false;
+  public taxaAdvogadoAplicarCPCArt85 = ''; // false devido | true dif entre devido e recebido
   public taxaAdvogadoPercateAte200SM = 0;
   public taxaAdvogadoPerc200A2000SM = 0;
   public taxaAdvogadoPerc2000A20000SM = 0;
@@ -97,7 +101,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   //Num Processo
   public numeroProcesso = '';
-  public afastarPrescricao = '';
+  public afastarPrescricao = false;
+  public calcularAbono13UltimoMes = false;
 
   public especieValoresDevidos;
   public especieValoresRecebidos;
@@ -118,7 +123,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: ''
     },
     {
-      text: 'Tabela da IPCAe a partir de 06/2009',
+      text: 'Tabela da IPCAe a partir de 07/2009',
       value: 'ipca'
     },
     {
@@ -126,11 +131,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: 'ipca_todo_periodo'
     },
     {
-      text: 'Tabela do manual de cálculos SICOM da Justiça Federal',
+      text: 'Tabela do manual de cálculos da Justiça Federal',
       value: 'cam'
     },
     {
-      text: 'Tabela da TR após 06/2009',
+      text: 'Tabela da TR após 07/2009',
       value: 'tr'
     },
     {
@@ -150,8 +155,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: 'igpdi_012004_inpc062009_tr032015_inpc'
     },
     {
-      text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e ipcae',
+      text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e IPCA-e',
       value: 'igpdi_2006_inpc062009_tr032015_ipcae'
+    },
+    {
+      text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e INPC',
+      value: 'igpdi_012004_inpc062009_tr092017_inpc'
+    },
+    {
+      text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e IPCA-e',
+      value: 'igpdi_012004_inpc062009_tr092017_ipcae'
     },
   ];
 
@@ -163,11 +176,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Auxílio Doença',
       value: 0
     }, {
-      name: 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
+      name: 'Aposentadoria por invalidez Previdenciária',
+      value: 1
+    }, {
+      name: 'Pensão por Morte',
       value: 1
     }, {
       name: 'Aposentadoria por idade - Trabalhador Urbano',
       value: 2
+    }, {
+      name: 'Aposentadoria por idade - Trabalhador Rural',
+      value: 7
     }, {
       name: 'Aposentadoria por tempo de contribuição',
       value: 3
@@ -177,18 +196,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }, {
       name: 'Aposentadoria por tempo de serviço de professor',
       value: 5
+    // }, {
+    //   name: 'Auxílio Acidente previdenciário - 50%',
+    //   value: 6
     }, {
-      name: 'Auxílio Acidente previdenciário - 50%',
-      value: 6
-    }, {
-      name: 'Aposentadoria por idade - Trabalhador Rural',
-      value: 7
-    }, {
-      name: 'Auxílio Acidente  - 30%',
+      name: 'Auxílio Acidente - 30%',
       value: 8
     }, {
       name: 'Auxílio Acidente - 40%',
       value: 9
+    }, {
+      name: 'Auxílio Acidente - 50%',
+      value: 6
     }, {
       name: 'Auxílio Acidente - 60%',
       value: 10
@@ -196,22 +215,25 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Abono de Permanência em Serviço',
       value: 11
     }, {
-      name: 'LOAS - Benefício no valor de um salário mínimo',
+      name: 'LOAS - Benfeficio de prestação continuada - BPC (salário mínimo)',
       value: 12
     }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
+      name: 'Aposentadoria Pessoa com Deficiência',
       value: 13
     }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      value: 14
-    }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
-      value: 15
-    }, {
+    //   name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
+    //   value: 13
+    // }, {
+    //   name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
+    //   value: 14
+    // }, {
+    //   name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
+    //   value: 15
+    // }, {
       name: 'Aposentadoria especial por Idade da Pessoa com Deficiência',
       value: 16
     }, {
-      name: 'LOAS',
+      name: 'Benfeficio de prestação continuada - BPC',
       value: 17
     }
   ];
@@ -222,11 +244,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: ''
     },
     {
-      text: 'Diferença entre valor devido e recebido',
+      text: 'Não calcular honorários',
+      value: 'nao_calc'
+    },
+    {
+      text: 'a diferença entre os valores devidos e recebidos',
       value: 'dif'
     },
     {
-      text: 'Devido',
+      text: 'aplicar percentual de honorários sobre o devido',
       value: 'dev'
     },
     {
@@ -374,7 +400,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.isEmptyInput(this.dataCalculo)) {
       // this.errors.add({ 'dataCalculo': ['A data do Cálculo é Necessária.'] });
       // valid = false;
-    } else if (!this.isValidDate(this.dataCalculo)) {
+    } else if (!moment(this.dataCalculo, 'MM/YYYY').isValid()) {
       this.errors.add({ 'dataCalculo': ['Insira uma data Válida.'] });
       valid = false;
     } else if (moment(this.dataCalculo, 'DD/MM/YYYY') < this.dataMinima) {
@@ -400,12 +426,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.errors.add({ 'dataCitacaoReu': ['Insira uma data Válida.'] });
       valid = false;
     } else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
-      this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
-      valid = false;
+      // this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
+      // valid = false;
     }
 
     // Check if its necessary to validate the box of 'Valores Recebidos'
     if (!this.chkNotGranted) {
+
+      if (this.isEmptyInput(this.especieValoresRecebidos)) {
+        this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
+        valid = false;
+      }
 
       if (this.isEmptyInput(this.dibValoresRecebidos)) {
         this.errors.add({ 'dibValoresRecebidos': ['A DIB de Valores Recebidos é Necessária.'] });
@@ -464,6 +495,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
 
+    if (this.isEmptyInput(this.especieValoresDevidos)) {
+      this.errors.add({ 'especieValoresDevidos': ['Selecione uma opção.'] });
+      valid = false;
+    }
+
     if (this.isEmptyInput(this.dibValoresDevidos)) {
       this.errors.add({ 'dibValoresDevidos': ['A DIB de Valores Devidos é Necessária.'] });
       valid = false;
@@ -516,15 +552,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
 
     if (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte)) {
-      if (!this.isValidDate(this.dataHonorariosDe)) {
-        this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
-        valid = false;
-      } else {
-        if (moment(this.dataHonorariosDe, 'DD/MM/YYYY') < this.dataMinima) {
-          this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que 01/1970'] });
-          valid = false;
-        }
-      }
+      // if (!this.isValidDate(this.dataHonorariosDe)) {
+      //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
+      //   valid = false;
+      // } else {
+      //   if (moment(this.dataHonorariosDe, 'DD/MM/YYYY') < this.dataMinima) {
+      //     this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que 01/1970'] });
+      //     valid = false;
+      //   }
+      // }
 
       if (!this.isValidDate(this.dataHonorariosAte)) {
         this.errors.add({ 'dataHonorariosAte': ['Insira uma data válida.'] });
@@ -536,12 +572,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
           valid = false;
         }
 
-        if (this.isValidDate(this.dataHonorariosDe)) {
-          if (moment(this.dataHonorariosAte, 'DD/MM/YYYY') < this.dataMinima) {
-            this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que a data de inicio'] });
-            valid = false;
-          }
-        }
+        // if (this.isValidDate(this.dataHonorariosDe)) {
+        //   if (moment(this.dataHonorariosAte, 'DD/MM/YYYY') < this.dataMinima) {
+        //     this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que a data de inicio'] });
+        //     valid = false;
+        //   }
+        // }
       }
 
       if (this.isEmptyInput(this.percentualHonorarios)) {
@@ -599,7 +635,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     // cpc 85
-    if (this.taxaAdvogadoAplicarCPCArt85) {
+    if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') {
+
+      if (this.isEmptyInput(this.taxaAdvogadoAplicarCPCArt85)) {
+        this.errors.add({ 'taxaAdvogadoAplicarCPCArt85': ['- Selecione uma opção.'] });
+        valid = false;
+      }
 
       if (!(this.taxaAdvogadoPercateAte200SM >= 10.00 && this.taxaAdvogadoPercateAte200SM <= 20.00)) {
         this.errors.add({ 'taxaAdvogadoPercateAte200SM': ['O valor deve estar entre 10 e 20.'] });
@@ -636,6 +677,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   submit(e) {
     e.preventDefault();
     this.validateInputs();
+
+    this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
+
     if (this.errors.empty()) {
       if (!this.chkPrecedidoRecebidos) {
         this.dibAnteriorValoresRecebidos = '';
@@ -668,7 +712,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Id Segurado
       this.formData.id_segurado = this.route.snapshot.params['id'];
       // Data do cálculo:
-      this.formData.data_calculo_pedido = this.dataCalculo;
+     // this.formData.data_calculo_pedido = this.dataCalculo;
+      this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').format('01/MM/YYYY');
+
       // Data da citação do réu
       this.formData.data_acao_judicial = this.dataAcaoJudicial;
       // Data da ajuizamento da ação:
@@ -704,6 +750,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.percentual_taxa_advogado = 0;
       }
       // Intervalo de Honorarios DE
+      this.dataHonorariosDe = this.dibValoresDevidos;
       this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
       // Intervalo de Honorarios ATE
       this.formData.taxa_advogado_final = this.dataHonorariosAte;
@@ -741,19 +788,26 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       }
 
-
-
-
       // opções adicionais de juros
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
-      this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
+     // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
-      // valor inferior ao salario minimo
+    if (this.isExits(this.competenciaInicioJuros)) {
+      this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
+     }else{
+      this.formData.competencia_inicio_juros = null;
+     }
+
+     // valor inferior ao salario minimo
       this.formData.nao_aplicar_sm_beneficio_concedido = this.naoAplicarSMBeneficioConcedido;
       this.formData.nao_aplicar_sm_beneficio_esperado = this.naoAplicarSMBeneficioEsperado;
 
+      this.formData.numero_processo = this.numeroProcesso;
+      this.formData.afastar_prescricao = this.afastarPrescricao;
+      this.formData.calcular_abono_13_ultimo_mes = this.calcularAbono13UltimoMes;
+
       // Calcular Mais (Vincendos)
-      this.formData.maturidade = this.maturidade;
+      this.formData.maturidade = (this.maturidade) ? 12 : 0;
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
@@ -815,13 +869,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (this.taxaAjusteMaximaEsperada != undefined) {
         this.formData.taxa_ajuste_maxima_esperada = this.taxaAjusteMaximaEsperada.replace(',', '.');
       } else {
-        this.formData.taxa_ajuste_maxima_esperada = 0;
+        this.formData.taxa_ajuste_maxima_esperada = 0.0;
       }
       // Índice de reajuste no teto da Nova RMI de valores recebidos:
       if (this.taxaAjusteMaximaConcedida != undefined) {
         this.formData.taxa_ajuste_maxima_concedida = this.taxaAjusteMaximaConcedida.replace(',', '.');
       } else {
-        this.formData.taxa_ajuste_maxima_concedida = 0;
+        this.formData.taxa_ajuste_maxima_concedida = 0.0;
       }
 
 
@@ -837,7 +891,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         showConfirmButton: false,
         timer: 2000
       });
+
+      // .then(() => {
+      //   setTimeout(() => {
+      //     this.scroll('inicioForm');
+      //   }, 1000)
+      // });
+
     }
+
+
   }
 
   preencherCorrecaoMonetaria() {
@@ -854,7 +917,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   loadCalculo() {
     this.preencherCorrecaoMonetaria();
     // Data do cálculo:
-    this.dataCalculo = this.formatReceivedDate(this.formData.data_calculo_pedido);
+    // this.dataCalculo = this.formatReceivedDate(this.formData.data_calculo_pedido);
+    this.dataCalculo = moment(this.formData.data_calculo_pedido, 'YYYY-MM-DD').format('MM/YYYY');
+
     // Data da citação do réu
     this.dataAcaoJudicial = this.formatReceivedDate(this.formData.data_acao_judicial);
     // Data da ajuizamento da ação:
@@ -877,8 +942,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.chkJurosMora = this.formData.previo_interesse;
     // CONDICIONAL
     let data_anterior_pedido_beneficio = this.formData.data_anterior_pedido_beneficio;
+
     // Percentual dos Honorarios
-    this.percentualHonorarios = this.formatPrecentual(this.formData.percentual_taxa_advogado, false).toString().replace('.', ',');
+
+    this.percentualHonorarios = Math.floor(this.formData.percentual_taxa_advogado * 100);
 
     // Intervalo de Honorarios DE
     this.dataHonorariosDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio);
@@ -942,6 +1009,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.taxa_ajuste_maxima_esperada != null) {
       this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.', ',');
     }
+    
     // CheckBox 'Desmarque para não aplicar os juros da poupança'
     this.chkBoxTaxaSelic = this.formData.aplicar_juros_poupanca;
     this.chkUseSameDib = this.formData.usar_mesma_dib;
@@ -958,30 +1026,39 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     this.naoAplicarJurosSobreNegativo = this.formData.nao_aplicar_juros_sobre_negativo;
-    this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
-    this.taxaAdvogadoValorFixoHonorarios = this.formData.taxa_advogado_valor_fixo;
+   // this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
+  
+   if (this.isExits(this.formData.competencia_inicio_juros)) {
+    this.competenciaInicioJuros = moment(this.formData.competencia_inicio_juros, 'YYYY-MM-DD').format('MM/YYYY');
+   }
+  
+   this.taxaAdvogadoValorFixoHonorarios = this.formData.taxa_advogado_valor_fixo;
 
     // valor inferior ao salario minimo
     this.naoAplicarSMBeneficioConcedido = this.formData.nao_aplicar_sm_beneficio_concedido;
     this.naoAplicarSMBeneficioEsperado = this.formData.nao_aplicar_sm_beneficio_esperado;
 
+    this.numeroProcesso = this.formData.numero_processo;
+    this.afastarPrescricao = this.formData.afastar_prescricao;
+    this.calcularAbono13UltimoMes = this.formData.calcular_abono_13_ultimo_mes;
     this.taxaAdvogadoAplicarCPCArt85 = this.formData.taxa_advogado_aplicar_CPCArt85;
-    if (this.taxaAdvogadoAplicarCPCArt85) // somente se o check for maracado
+
+    if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
       this.taxaAdvogadoPercateAte200SM = (this.isExits(this.formData.taxa_advogado_perc_ate_200_SM)) ?
-        this.formData.taxa_advogado_perc_ate_200_SM : 10.00;
+        this.formData.taxa_advogado_perc_ate_200_SM : 0;
 
       this.taxaAdvogadoPerc200A2000SM = (this.isExits(this.formData.taxa_advogado_perc_200_2000_SM)) ?
-        this.formData.taxa_advogado_perc_200_2000_SM : 8.00;
+        this.formData.taxa_advogado_perc_200_2000_SM : 0;
 
       this.taxaAdvogadoPerc2000A20000SM = (this.isExits(this.formData.taxa_advogado_perc_2000_20000_SM)) ?
-        this.formData.taxa_advogado_perc_2000_20000_SM : 5.00;
+        this.formData.taxa_advogado_perc_2000_20000_SM : 0;
 
       this.taxaAdvogadoPerc20000A100000SM = (this.isExits(this.formData.taxa_advogado_perc_20000_100000_SM)) ?
-        this.formData.taxa_advogado_perc_20000_100000_SM : 3.00;
+        this.formData.taxa_advogado_perc_20000_100000_SM : 0;
 
       this.taxaAdvogadoPerc100000SM = (this.isExits(this.formData.taxa_advogado_perc_100000_SM)) ?
-        this.formData.taxa_advogado_perc_100000_SM : 1.00;
+        this.formData.taxa_advogado_perc_100000_SM : 0;
     }
 
     this.dibValoresDevidosChanged();
@@ -1171,11 +1248,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return (type) ? valor / 100 : valor * 100;
   }
 
-  public setJurosAnualParaMensal() {
+  public setJurosAnualParaMensal(tipoDejurosSelecionado) {
 
     // console.log(this.tipoDejurosSelecionado);
 
-    switch (this.tipoDejurosSelecionado) {
+    switch (tipoDejurosSelecionado) {
       case '12_6':
         // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
         this.jurosAntes2003 = 1.00;
@@ -1238,22 +1315,22 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public getValueSelectJurosAnualParaMensal() {
 
     const opcoesMensalParaAnual = [
-      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5, poupanca: true, value: '12_6' },  // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
-      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupanca: true, value: '6_selic' }, // 6% ao ano (observando a SELIC - Poupança)
-      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1, poupanca: true, value: '12_ano' }, // 12% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1, poupanca: true, value: '6_12' }, // 6% ao ano (até 01/2003) / 12% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, poupanca: true, value: '6_12_6' }, // 6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupanca: true, value: '6_fixo' }, // 6% ao ano (fixo)
-      { jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null, poupanca: true, value: 'sem_juros' },
+      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 1, value: '12_6' },  // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
+      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 1, value: '6_selic' }, // 6% ao ano (observando a SELIC - Poupança)
+      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '12_ano' }, // 12% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '6_12' }, // 6% ao ano (até 01/2003) / 12% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_12_6' }, // 6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_fixo' }, // 6% ao ano (fixo)
+      { jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null, poupancaSelic: 0, value: 'sem_juros' },
     ];
-
+    
     for (const confJuros of opcoesMensalParaAnual) {
 
       if (
         confJuros.jurosAntes2003 === this.formData.previo_interesse_2003 &&
         confJuros.jurosDepois2003 === this.formData.pos_interesse_2003 &&
         confJuros.jurosDepois2009 === this.formData.pos_interesse_2009 &&
-        confJuros.jurosDepois2009 === this.formData.chkBoxTaxaSelic
+        confJuros.poupancaSelic === this.formData.aplicar_juros_poupanca
       ) {
         return confJuros.value;
       }
@@ -1262,6 +1339,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return 'manual';
 
   }
+
+
+  scroll(id) {
+    if (this.isExits(id)) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
 
 }
 

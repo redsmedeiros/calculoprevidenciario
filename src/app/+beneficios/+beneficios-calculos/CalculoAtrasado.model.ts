@@ -43,10 +43,10 @@ export class CalculoAtrasado extends Model {
     tipo_aposentadoria_recebida: '',
     concedido_anterior_dib: '',
     esperado_anterior: '',
-    nao_usar_deflacao:'',
-    usar_indice_99_04:'',
-    aplicar_juros_poupanca:'',
-    usar_mesma_dib:'',
+    nao_usar_deflacao: '',
+    usar_indice_99_04: '',
+    aplicar_juros_poupanca: '',
+    usar_mesma_dib: '',
     taxa_advogado_valor_fixo: '',
     taxa_advogado_perc_100000_SM: '',
     taxa_advogado_perc_20000_100000_SM: '',
@@ -58,6 +58,9 @@ export class CalculoAtrasado extends Model {
     competencia_inicio_juros: '',
     nao_aplicar_sm_beneficio_concedido: '',
     nao_aplicar_sm_beneficio_esperado: '',
+    numero_processo: '',
+    afastar_prescricao: '',
+    calcular_abono_13_ultimo_mes: ''
   };
 
   public id: number;
@@ -113,6 +116,9 @@ export class CalculoAtrasado extends Model {
   public competencia_inicio_juros;
   public nao_aplicar_sm_beneficio_concedido;
   public nao_aplicar_sm_beneficio_esperado;
+  public numero_processo;
+  public afastar_prescricao;
+  public calcular_abono_13_ultimo_mes;
 
   // public actions = `
   //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
@@ -121,7 +127,6 @@ export class CalculoAtrasado extends Model {
   // `;
 
 
-  
   public actions = `
     <div class="btn-group">
       <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="btn btn-primary btn-xs" title="Ver Cálculo">&nbsp;&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;&nbsp;</a>

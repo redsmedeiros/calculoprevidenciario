@@ -22,6 +22,8 @@ export class Moeda extends Model {
     tr032015_ipcae: '',
     igpdi_2006_inpc062009_tr032015_ipcae: '',
     igpdi_012004_inpc062009_tr032015_inpc: '',
+    igpdi_012004_inpc062009_tr092017_inpc: '',
+    igpdi_012004_inpc062009_tr092017_ipcae: '',
     tr_todo_periodo: '',
     ipca_todo_periodo: '',
     cam_art_175_3048: ''
@@ -44,6 +46,8 @@ export class Moeda extends Model {
   public tr032015_ipcae;
   public igpdi_2006_inpc062009_tr032015_ipcae;
   public igpdi_012004_inpc062009_tr032015_inpc;
+  public igpdi_012004_inpc062009_tr092017_inpc;
+  public igpdi_012004_inpc062009_tr092017_ipcae;
   public tr_todo_periodo;
   public ipca_todo_periodo;
   public cam_art_175_3048;
