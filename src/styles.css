@@ -130,6 +130,13 @@ a[class*="action-"]:hover {
   .home-box .home-desc {
     font-size: 2rem;
   }
+
+  .img-icone-custom{
+    height: 30rem !important;
+  }
+  .img-icone-custom-t{
+    height: 12rem !important;
+  }
 }
 
 @media print {

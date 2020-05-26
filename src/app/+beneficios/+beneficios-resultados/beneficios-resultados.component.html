@@ -220,7 +220,7 @@
                         {{ formatDate(calculo.data_calculo_pedido) }}
                       </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="calculo.maturidade != 0" >
                       <td width="50%" style="text-align: right;">
                         <b>Vincendas:</b>
                       </td>
@@ -783,14 +783,14 @@
                         {{ formatPercent(calculo.acordo_pedido) }}
                       </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td width="50%" style="text-align: right;">
                         <b>Vincendas:</b>
                       </td>
                       <td width="50%">
                         {{ calculo.maturidade }}
                       </td>
-                    </tr>
+                    </tr> -->
                   </table>
                   <table
                     class="table table-bordered table-hover"
@@ -1712,7 +1712,7 @@
                       >
                     </td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td width="50%" style="text-align: right;">
                       <b>Soma das vincendas Tetos:</b>
                     </td>
@@ -1723,7 +1723,7 @@
                         {{ formatMoney(somaVincendas) }}</span
                       >
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <td width="50%" style="text-align: right;">
                       <b>Soma total devida ao segurado Tetos:</b>

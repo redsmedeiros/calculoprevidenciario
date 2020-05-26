@@ -319,8 +319,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                           this.resultadosList = this.generateTabelaResultados();
                           this.getNameSelectJurosAnualParaMensal();
                           this.calcularHonorariosCPC85();
-                          this.calcularTutelaAntecipada();
                           this.calcularHonorariosFixo();
+                          this.calcularTutelaAntecipada();
                           this.updateResultadosDatatable();
                           this.isUpdating = false;
 
@@ -515,7 +515,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
 
       let valorNumericoDiferencaCorrigidaJurosObj: any = {};
-      diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida, valorNumericoDiferencaCorrigidaJurosObj);
+
+      diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente,
+                                                                valorJuros,
+                                                                diferencaCorrigida,
+                                                                valorNumericoDiferencaCorrigidaJurosObj);
+
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevido);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
@@ -553,12 +558,18 @@ export class BeneficiosResultadosComponent implements OnInit {
         // para calcular o homorario sobre a soma do devido 
         this.somaDevidosreajustados += Math.round(beneficioDevido * 100) / 100;
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-
           this.somaDevidosreajustadosAtefinalHonorario += Math.round(this.somaDevidosreajustadosAtefinalHonorario * 100) / 100;
-
         }
 
+        // soma tutela antecipada
+         if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) && 
+         (dataCorrente.isSameOrAfter(this.calculo.data_cessacao,'month')
+         && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
+         this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
+       }
+
       }
+
       // console.log(!isPrescricao);
       //  console.log(Math.round(beneficioDevido * 100) / 100);
 
@@ -663,10 +674,16 @@ export class BeneficiosResultadosComponent implements OnInit {
           // para calcular o homorario sobre a soma do devido 
           this.somaDevidosreajustados += Math.round(beneficioDevido * 100) / 100;
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-
             this.somaDevidosreajustadosAtefinalHonorario += Math.round(this.somaDevidosreajustadosAtefinalHonorario * 100) / 100;
-
           }
+
+         // soma tutela antecipada
+          if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) && 
+                (dataCorrente.isSameOrAfter(this.calculo.data_cessacao,'month')
+                 && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
+              this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
+            }
+
 
         }
 
@@ -1717,6 +1734,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   // Seção 4.3
   calculoHonorarios(dataCorrente, juros, diferencaCorrigida, beneficioDevido) {
+
+    if (this.calculo.taxa_advogado_aplicacao_sobre === 'nao_calc') {
+      return 0;
+    }
+
     //Calcular Honorários para cada linha da tabela
     let honorarios = 0.0;
     let taxaAdvogadoInicio = null;
@@ -1797,19 +1819,23 @@ export class BeneficiosResultadosComponent implements OnInit {
       const fixoFim = moment(this.calculo.taxa_advogado_final)
       const dataInicioDosIndices = moment(this.calculo.taxa_advogado_inicio);
 
-      this.Indice.getByDateRange(
-        dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
-        fixoFim.format('YYYY-MM-DD'))
-        .then(indices => {
+      // this.Indice.getByDateRange(
+      //   dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
+      //   fixoFim.format('YYYY-MM-DD'))
+      //   .then(indices => {
 
-          for (const indice of this.Indice.list) {
-            this.indicesFixo.push(indice);
-          }
+      //     for (const indice of this.Indice.list) {
+      //       this.indicesFixo.push(indice);
+      //     }
 
-          this.getCalculoHonorariosFixo();
+      //     this.getCalculoHonorariosFixo();
 
-        });
-    }
+      //   });
+
+    this.getCalculoHonorariosFixo();
+
+  }
+
 
   }
 
@@ -1841,16 +1867,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       // inicio proprorcional
       if (dataFixoCorrente.isSame(fixoInicio, 'month')) {
-        const diasProporcionaisTutela = this.calcularDiasProporcionais(dataFixoCorrente,
+        const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
           fixoFim.clone());
-          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisTutela;
+          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
       }
 
       // Fim proporcional
       if (dataFixoCorrente.isSame(fixoFim, 'month')) {
-        const diasProporcionaisTutela = this.calcularDiasProporcionais(dataFixoCorrente,
+        const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
           fixoFim.clone());
-          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisTutela;
+          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
       }
 
 
@@ -1859,7 +1885,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       const ganhoEconomicoCorrigido = beneficioFixoComIndice * correcaoMonetaria;
       const honorariosFixo = ganhoEconomicoCorrigido * this.calculo.percentual_taxa_advogado;
 
-      this.somaHonorariosTutelaAntecipada += honorariosFixo;
+      somaHonorariosFixo += honorariosFixo;
 
       lineFixo = {
         competencia: stringCompetencia,
@@ -1906,7 +1932,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    console.log(somaHonorariosFixo);
+   // console.log(this.resultadosFixoAntecipadaList);
+    // console.log(somaHonorariosFixo);
 
     this.somaHonorarios = somaHonorariosFixo;
 
@@ -2054,6 +2081,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let listTypeT = this.indicesTutela;
     if(type === 'fixo'){
       listTypeT = this.indicesFixo;
+      return 1;
     }
 
     const firstMonth = listTypeT[0].data_moeda;
@@ -2173,15 +2201,21 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public getTabelaAntecipada() {
 
-    this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
-    this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
-    this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
+    // this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
+    // this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
 
-    const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
-    const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+        // const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+    // const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
+
+    this.dataInicialTutelaAntecipada = moment(this.calculo.cessacaoValoresRecebidos).format('DD/MM/YYYY');
+    this.dataFinalTutelaAntecipada = moment(this.calculo.data_calculo_pedido).format('DD/MM/YYYY');
+
+    const tutelaInicio = moment(this.calculo.cessacaoValoresRecebidos)
+    const tutelaFim = moment(this.calculo.data_calculo_pedido)
 
     const competenciasTutela = this.monthsBetween(tutelaInicio, tutelaFim);
 
+    this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
     let beneficioTutelaComIndice = this.ultimoBeneficioDevidoAntesProporcionalidade;;
     let moedaDataTutelaCorrente;
 
@@ -2286,7 +2320,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-    this.isUpdatingTutela = false;
+    // this.isUpdatingTutela = false;
   }
 
 
@@ -2294,31 +2328,29 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public calcularTutelaAntecipada() {
 
-    // console.log(this.calculo);
-    // console.log(this.calculo.taxa_advogado_final_sucumbencia);
-    // console.log(this.calculo.taxa_advogado_inicio_sucumbencia);
+    this.isUpdatingTutela = false;
+    // if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
+    if (this.isExits(this.calculo.data_cessacao) && moment(this.calculo.data_cessacao).isValid()) {
 
-    this.isUpdatingTutela = true;
-    if (this.isExits(this.calculo.taxa_advogado_inicio_sucumbencia) && this.isExits(this.calculo.taxa_advogado_final_sucumbencia)) {
 
-      this.exibirSucumbencia = true;
+      const tutelaInicio = moment(this.calculo.data_cessacao)
+      const tutelaFim = moment(this.calculo.data_calculo_pedido)
+      const dataInicioDosIndices = moment(this.calculo.data_calculo_pedido);
 
-      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
-      const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
-      const dataInicioDosIndices = moment(this.calculo.data_pedido_beneficio_esperado);
+      // this.Indice.getByDateRange(
+      //   dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
+      //   tutelaFim.format('YYYY-MM-DD'))
+      //   .then(indices => {
 
-      this.Indice.getByDateRange(
-        dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
-        tutelaFim.format('YYYY-MM-DD'))
-        .then(indices => {
+      //     for (const indice of this.Indice.list) {
+      //       this.indicesTutela.push(indice);
+      //     }
 
-          for (const indice of this.Indice.list) {
-            this.indicesTutela.push(indice);
-          }
+      //     //this.getTabelaAntecipada();
 
-          this.getTabelaAntecipada();
+      //     this.isUpdatingTutela = false;
+      //   });
 
-        });
     }
 
   }
