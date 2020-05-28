@@ -633,7 +633,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         line = {
           ...line,
-          competencia: '<strong>' + dataCorrente.year() + ' - abono <strong>',
+          competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
           beneficio_devido: this.formatMoney(beneficioDevidoAbono),
           beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
           diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
@@ -1077,7 +1077,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let minimoAplicado = false;
     if (beneficioDevidoAjustado == moedaDataCorrente.teto) {
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
-      beneficioDevidoString += ' /T';
+      beneficioDevidoString += '/T';
     } else if (beneficioDevidoAjustado == moedaDataCorrente.salario_minimo) {
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioDevidoString += '/M';
@@ -1306,15 +1306,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     let minimoAplicado = false;
     if (beneficioRecebidoAjustado == moedaDataCorrente.teto) {
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
-      beneficioRecebidoString += ' -<br>  T';
+      beneficioRecebidoString += '/T';
     } else if (beneficioRecebidoAjustado == moedaDataCorrente.salario_minimo) {
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
-      beneficioRecebidoString += ' -<br> M';
+      beneficioRecebidoString += '/M';
       minimoAplicado = true;
     }
 
     if (diasProporcionais != 1) {
-      beneficioRecebidoString += ' <br>p';
+      beneficioRecebidoString += '/p';
     }
 
     this.aplicarReajusteUltimoRecebido = false;
@@ -2794,7 +2794,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'correcao_monetaria' },
           { data: 'diferenca_corrigida' },
           { data: 'juros' },
-          { data: 'valor_juros' },
+          { data: 'valor_juros' , width: '10rem'},
           // { data: 'diferenca_juros' },
           // { data: 'honorarios' }
         ]
@@ -2810,10 +2810,10 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'indice_recebidos', width: '8rem' },
           { data: 'beneficio_recebido', width: '10rem' },
           { data: 'diferenca_mensal', width: '10rem' },
-          { data: 'correcao_monetaria' },
+          { data: 'correcao_monetaria', width: '10rem' },
           { data: 'diferenca_corrigida', width: '10rem' },
-          { data: 'juros' },
-          { data: 'valor_juros' },
+          { data: 'juros' , width: '10rem' },
+          { data: 'valor_juros' , width: '10rem'},
           // { data: 'diferenca_juros' },
         ]
       }
@@ -2942,10 +2942,11 @@ export class BeneficiosResultadosComponent implements OnInit {
        h1, h2{font-size:0.9rem;}
        i.fa, .not-print{ display: none; }
        table{margin-top: 20;}
-       footer,div,p,td,th{font-size:11px !important;}
+       footer,div,p,th{font-size:11px;}
        .table>tbody>tr>td, .table>tbody>tr>th,
         .table>tfoot>tr>td, .table>tfoot>tr>th,
-        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 5px;}
+        .table>tbody>tr>td { white-space: nowrap !important; font-size:8.5px !important;}
         footer{text-align: center;}
  </style>`;
 

@@ -117,7 +117,7 @@
                   <div class="form-group">
                     <label class="col-md-4 control-label">Data da citação (se houver):</label>
                     <div class="col-md-2">
-                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" name="dataCitacaoReu" class="form-control" type="text">
+                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" (blur)="setCompetenciaInicioJurosIsNull()"  name="dataCitacaoReu" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
@@ -229,7 +229,7 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label  class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data final dos atrasado:</label>
+                    <label  class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data final dos Atrasados:</label>
                     <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
@@ -239,7 +239,7 @@
                     <div >
                       <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:  </label>
                       <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
-                        <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" class="form-control" type="text">
+                        <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
                       </div>
                   </div>
@@ -367,7 +367,7 @@
                     <div >
                       <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:</label>
                       <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
-                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" class="form-control" [textMask]="{mask: dateMask}" type="text">
+                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" [textMask]="{mask: dateMask}" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
                       </div>
                     </div>
@@ -464,6 +464,16 @@
                     </select>
                   </div>
                 </div>
+                <div class="form-group" >
+                  <div class="col-md-8 col-sm-offset-2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="chkNaoUsarDeflacao" [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
+                        <span>Para não utilizar deflação na correção monetária marque a caixa</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </sa-widget>
@@ -509,16 +519,6 @@
                   <input type="checkbox" name="naoAplicarJurosSobreNegativo" [(ngModel)]="naoAplicarJurosSobreNegativo" class="checkbox {{styleTheme}}" checked>
                   <span>Marque para não aplicar os juros sobre o valor negativo.</span>
                 </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group" *ngIf="tipoDejurosSelecionado !== 'sem_juros'">
-              <div class="col-md-8 col-sm-offset-3">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="chkNaoUsarDeflacao" [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
-                    <span>Para não utilizar deflação na correção monetária marque a caixa</span>
-                  </label>
                 </div>
               </div>
             </div>

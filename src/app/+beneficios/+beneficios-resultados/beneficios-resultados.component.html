@@ -88,7 +88,7 @@
                       {{ segurado.nome }}
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="segurado.numero_documento" >
                     <td width="50%" style="text-align: right;">
                       <b *ngIf="segurado.id_documento == 1">PIS:</b>
                       <b *ngIf="segurado.id_documento == 2">PASEP:</b>
@@ -807,16 +807,11 @@
                         >
                       </td>
                       <td width="50%">
-                        {{ percentualHonorarioscpc85 }}% Sobre o ganho
-                        econômico.
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="50%" style="text-align: right;">
-                        <b>Faixa de acordo com ganho econômico:</b>
-                      </td>
-                      <td width="50%">
-                        {{ faixaSalminimoHonorarioscpc85 }}
+                        <ul>
+                          <li  *ngFor="let rst85 of faixaSalminimoHonorarioscpc85List" >
+                            {{ rst85.label }} :  {{ rst85.percentual }} %
+                          </li>
+                        </ul>
                       </td>
                     </tr>
                     <tr>

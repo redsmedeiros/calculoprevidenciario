@@ -215,7 +215,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Abono de Permanência em Serviço',
       value: 11
     }, {
-      name: 'LOAS - Benfeficio de prestação continuada - BPC (salário mínimo)',
+      name: 'Benefício de prestação continuada - BPC ', // (salário mínimo)
       value: 12
     }, {
       name: 'Aposentadoria Pessoa com Deficiência',
@@ -232,10 +232,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // }, {
       name: 'Aposentadoria especial por Idade da Pessoa com Deficiência',
       value: 16
-    }, {
-      name: 'Benfeficio de prestação continuada - BPC',
-      value: 17
     }
+    // , {
+    //   name: 'Benfeficio de prestação continuada - BPC',
+    //   value: 17
+    // }
   ];
 
   public tipoHonorariosOptions = [
@@ -248,11 +249,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: 'nao_calc'
     },
     {
-      text: 'a diferença entre os valores devidos e recebidos',
+      text: 'Percentual sobre a diferença entre valores devido e recebido',
       value: 'dif'
     },
     {
-      text: 'aplicar percentual de honorários sobre o devido',
+      text: 'Percentual sobre valor devido',
       value: 'dev'
     },
     {
@@ -321,11 +322,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.type = this.route.snapshot.params['type'];
 
 
-      if (this.type === 'AC') {
-        this.chkNotGranted = true;
-      } else if (this.type === 'AR') {
-        this.chkNotGranted = false;
-      }
+      // if (this.type === 'AC') {
+      //   this.chkNotGranted = false;
+      // } else if (this.type === 'AR') {
+      //   this.chkNotGranted = true;
+      // }
 
       if (this.type == 'AJ') {
         this.chkAjusteMaximo = true;
@@ -431,7 +432,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     // Check if its necessary to validate the box of 'Valores Recebidos'
-    if (!this.chkNotGranted) {
+    if (!this.isEmptyInput(this.especieValoresRecebidos) ||
+        !this.isEmptyInput(this.dibValoresRecebidos) ||
+        !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
+        !this.isEmptyInput(this.rmiValoresRecebidos) ||
+        !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
 
       if (this.isEmptyInput(this.especieValoresRecebidos)) {
         this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
@@ -674,22 +679,29 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return valid;
   }
 
-  submit(e) {
+ submit(e) {
     e.preventDefault();
     this.validateInputs();
 
     this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
 
     if (this.errors.empty()) {
-      if (!this.chkPrecedidoRecebidos) {
-        this.dibAnteriorValoresRecebidos = '';
-        // console.log('entrou')
-      }
-      if (!this.chkDibAnterior) {
-        this.dibAnteriorValoresDevidos = '';
+
+      // if (!this.chkPrecedidoRecebidos) {
+      //   this.dibAnteriorValoresRecebidos = '';
+      //   // console.log('entrou')
+      // }
+
+      // if (!this.chkDibAnterior) {
+      //   this.dibAnteriorValoresDevidos = '';
+      //   this.formData.previa_data_pedido_beneficio_esperado = '';
+      //   //  console.log('entrou')
+      // }
+
+      if(this.isEmptyInput(this.dibAnteriorValoresDevidos)){
         this.formData.previa_data_pedido_beneficio_esperado = '';
-        //  console.log('entrou')
       }
+
       // Data inicial do benefício DIB de valores devidos
       // OU
       // Data inicial do benefício DIB de valores recebidos
@@ -912,6 +924,20 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         // console.log(this.indiceCorrecao)
       }
     }
+  }
+
+  setCcheckBoxdibAnterior(){
+
+    if (!this.isEmptyInput(this.dibAnteriorValoresDevidos)) {
+      this.chkDibAnterior = true;
+    }
+
+    //recebido
+    if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+      this.chkPrecedidoRecebidos = true;
+    }
+
+
   }
 
   loadCalculo() {
@@ -1161,6 +1187,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   jurosMoraChanged() {
     console.log(this.chkJurosMora);
+  }
+
+  setCompetenciaInicioJurosIsNull(){
+    if (this.isEmptyInput(this.competenciaInicioJuros)) {
+      this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
+    }
   }
 
   // return true if date1 is before or igual date2

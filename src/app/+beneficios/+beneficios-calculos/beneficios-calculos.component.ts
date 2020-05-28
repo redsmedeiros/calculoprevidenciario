@@ -152,16 +152,17 @@ export class BeneficiosCalculosComponent implements OnInit {
   }
 
   createNewCalculo(type) {
+    window.location.href = '/#/beneficios/beneficios-calculos/A/' + this.route.snapshot.params['id'];
 
-    if (type === 'C') {
-      // Concessão
-      window.location.href = '/#/beneficios/beneficios-calculos/AC/' + this.route.snapshot.params['id'];
+    // if (type === 'C') {
+    //   // Concessão
+    //   window.location.href = '/#/beneficios/beneficios-calculos/AC/' + this.route.snapshot.params['id'];
 
-    } else if (type === 'R') {
-      // Revisão
-      window.location.href = '/#/beneficios/beneficios-calculos/AR/' + this.route.snapshot.params['id'];
-    }
-    
+    // } else if (type === 'R') {
+    //   // Revisão
+    //   window.location.href = '/#/beneficios/beneficios-calculos/AR/' + this.route.snapshot.params['id'];
+    // }
+
   }
 
   createNewCalculoJudicial() {
