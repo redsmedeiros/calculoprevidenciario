@@ -176,26 +176,30 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Auxílio Doença',
       value: 0
     }, {
-      name: 'Aposentadoria por invalidez Previdenciária',
+      name: 'Aposentadoria por Invalidez ',
       value: 1
     }, {
       name: 'Pensão por Morte',
       value: 1
     }, {
-      name: 'Aposentadoria por idade - Trabalhador Urbano',
+      name: 'Aposentadoria por Idade - Trabalhador Urbano',
       value: 2
     }, {
-      name: 'Aposentadoria por idade - Trabalhador Rural',
+      name: 'Aposentadoria por Idade - Trabalhador Rural',
       value: 7
     }, {
-      name: 'Aposentadoria por tempo de contribuição',
+      name: 'Aposentadoria por Tempo de Contribuição',
       value: 3
     }, {
-      name: 'Aposentadoria especial',
+      name: 'Aposentadoria Especial',
       value: 4
-    }, {
-      name: 'Aposentadoria por tempo de serviço de professor',
-      value: 5
+    },{
+      name: 'Aposentadoria por Tempo de Contribuição Professor',
+      value: 5 
+    
+    // {
+    //   name: 'Aposentadoria por Tempo de Serviço de professor',
+    //   value: 5
     // }, {
     //   name: 'Auxílio Acidente previdenciário - 50%',
     //   value: 6
@@ -215,7 +219,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Abono de Permanência em Serviço',
       value: 11
     }, {
-      name: 'Benefício de prestação continuada - BPC ', // (salário mínimo)
+      name: 'Benefício de Prestação Continuada - BPC ', // (salário mínimo)
       value: 12
     }, {
       name: 'Aposentadoria Pessoa com Deficiência',
@@ -230,7 +234,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     //   name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
     //   value: 15
     // }, {
-      name: 'Aposentadoria especial por Idade da Pessoa com Deficiência',
+      name: 'Aposentadoria por Idade da Pessoa com Deficiência',
       value: 16
     }
     // , {
@@ -682,24 +686,22 @@ export class BeneficiosCalculosFormComponent implements OnInit {
  submit(e) {
     e.preventDefault();
     this.validateInputs();
-
+    
+    this.setCcheckBoxdibAnterior();
+    this.setCheckRevisao();
     this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
 
     if (this.errors.empty()) {
 
-      // if (!this.chkPrecedidoRecebidos) {
-      //   this.dibAnteriorValoresRecebidos = '';
-      //   // console.log('entrou')
-      // }
+      if (!this.chkPrecedidoRecebidos) {
+        this.dibAnteriorValoresRecebidos = '';
+        // console.log('entrou')
+      }
 
-      // if (!this.chkDibAnterior) {
-      //   this.dibAnteriorValoresDevidos = '';
-      //   this.formData.previa_data_pedido_beneficio_esperado = '';
-      //   //  console.log('entrou')
-      // }
-
-      if(this.isEmptyInput(this.dibAnteriorValoresDevidos)){
+      if (!this.chkDibAnterior) {
+        this.dibAnteriorValoresDevidos = '';
         this.formData.previa_data_pedido_beneficio_esperado = '';
+        //  console.log('entrou')
       }
 
       // Data inicial do benefício DIB de valores devidos
@@ -871,8 +873,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.previa_data_pedido_beneficio_esperado = this.dibAnteriorValoresDevidos;
       // Data de Cessação de valores devidos
       this.formData.data_prevista_cessacao = this.cessacaoValoresDevidos;
+      
       // Espécie valores recebidos
-      this.formData.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
+      if (!this.isEmptyInput(this.especieValoresRecebidos)) {
+        this.formData.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
+      }
+     
       // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
       this.formData.concedido_anterior_dib = this.chkPrecedidoRecebidos;
       // CheckBox Beneficio Precedido com DIB Anterior (devidos)
@@ -925,6 +931,21 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
   }
+
+  setCheckRevisao(){
+
+    // this.chkNotGranted se verdadeiro existe recebido;
+    if (!this.isEmptyInput(this.dibValoresDevidos) && !this.isEmptyInput(this.dibValoresRecebidos)) {
+      this.chkNotGranted = false;
+    } else {
+      this.chkNotGranted = true;
+    }
+
+    console.log(this.chkNotGranted);
+  }
+
+
+
 
   setCcheckBoxdibAnterior(){
 
@@ -1022,8 +1043,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dibAnteriorValoresDevidos = this.formatReceivedDate(this.formData.previa_data_pedido_beneficio_esperado);
     // Data de Cessação de valores devidos
     this.cessacaoValoresDevidos = this.formatReceivedDate(this.formData.data_prevista_cessacao);
+    
     // Espécie valores recebidos
-    this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
+    //this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
+
+    if (!this.isEmptyInput(this.formData.valor_beneficio_concedido) 
+        && !this.isEmptyInput(this.formData.rmiValoresRecebidos)) {
+      this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
+    }else{
+      this.especieValoresRecebidos = '';
+    }
+    
     // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
     this.chkPrecedidoRecebidos = this.formData.concedido_anterior_dib;
     // CheckBox Beneficio Precedido com DIB Anterior (devidos)
@@ -1043,7 +1073,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.chkNotGranted || this.chkUseSameDib) {
       // Valores Devidos
       this.dibValoresDevidos = this.formatReceivedDate(dataPedidoBeneficio);
-      this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
+      //this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
       this.dibAnteriorValoresDevidos = this.formatReceivedDate(data_anterior_pedido_beneficio);
     } else {
       // Valores Recebidos

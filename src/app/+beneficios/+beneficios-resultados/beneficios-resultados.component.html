@@ -1000,9 +1000,9 @@
                 <li>
                   <strong>Diferença corrigida</strong>
                   <span
-                    class="{{ tratarConclusao(somaDiferencaMensal) }}"
+                    class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                   >
-                    {{ formatMoney(somaDiferencaMensal) }}
+                    {{ formatMoney(somaDiferencaCorrigida) }}
                   </span>
                 </li>
                 <li>
@@ -1013,9 +1013,9 @@
                 <li>
                   <strong>Sub Total (diferença corrigida + juros)</strong>
                   <span
-                    class="{{ tratarConclusao(somaDiferencaMensal + somaJuros) }}"
+                    class="{{ tratarConclusao(somaDiferencaCorrigida + somaJuros) }}"
                   >
-                    {{ formatMoney(somaDiferencaMensal + somaJuros) }}
+                    {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
                   </span>
                 </li>
                 <li>
@@ -1026,8 +1026,8 @@
                 </li>
                 <li>
                   <strong>Total Geral: </strong>
-                  <span class="{{ tratarConclusao(somaTotalSegurado) }}" >
-                    {{ formatMoney(somaTotalSegurado) }}
+                  <span class="{{ tratarConclusao(somaTotalSegurado + somaHonorarios) }}" >
+                    {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
                   </span>
                 </li>
               </ul>
@@ -1042,9 +1042,9 @@
                     </td>
                         <td width="50%">
                           <span
-                        class="{{ tratarConclusao(somaDiferencaMensal) }}"
+                        class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                       >
-                        {{ formatMoney(somaDiferencaMensal) }}
+                        {{ formatMoney(somaDiferencaCorrigida) }}
                       </span>
                     </td>
                   </tr>
@@ -1063,9 +1063,9 @@
                     </td>
                         <td width="50%">
                           <span
-                          class="{{ tratarConclusao(somaDiferencaMensal + somaJuros) }}"
+                          class="{{ tratarConclusao(somaDiferencaCorrigida + somaJuros) }}"
                         >
-                          {{ formatMoney(somaDiferencaMensal + somaJuros) }}
+                          {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
                         </span>
                     </td>
                   </tr>
@@ -1084,8 +1084,8 @@
                       <b>Total Geral: </b>
                     </td>
                         <td width="50%">
-                          <span class="{{ tratarConclusao(somaTotalSegurado) }}" >
-                            {{ formatMoney(somaTotalSegurado) }}
+                          <span class="{{ tratarConclusao(somaTotalSegurado + somaHonorarios) }}" >
+                            {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
                           </span>
                     </td>
                   </tr>

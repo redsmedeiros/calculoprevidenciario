@@ -304,7 +304,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                       // se ouver dib anterior considerar como a primeira data para o indice de correção
                       const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-                        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+                                                    this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
                       // indice recebido
                       this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),

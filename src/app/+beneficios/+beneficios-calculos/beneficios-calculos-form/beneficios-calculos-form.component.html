@@ -178,7 +178,7 @@
         </sa-widget>
       </article>
       
-      <article class="col-xs-12 col-sm-12" [ngClass]="(chkNotGranted)? 'col-md-12 col-lg-12' : 'col-md-6 col-lg-6'" >
+      <article class="col-xs-12 col-sm-12" [ngClass]="(false)? 'col-md-12 col-lg-12' : 'col-md-6 col-lg-6'" >
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
@@ -190,7 +190,7 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body"  [ngClass]="(chkNotGranted)? '' : 'fix-painel-devido-recebido'">
+            <div class="widget-body"  [ngClass]="(false)? '' : 'fix-painel-devido-recebido'">
               <!-- <p *ngIf="chkDibAnterior && chkUseSameDib">
                 * Para habilitar o campo DIB Anterior, deve-se desmarcar a revisão RMI com a mesma DIB.
               </p> -->
@@ -213,8 +213,8 @@
                     </div>
                   </div> -->
                   <div class="form-group">
-                    <label class="control-label" for="select-1" [ngClass]="(!chkNotGranted)?  'col-md-2' : 'col-md-4'">Espécie:</label>
-                    <div class="" [ngClass]="(!chkNotGranted)? 'col-md-9' : 'col-md-6 col-lg-6'" >
+                    <label class="control-label" for="select-1" [ngClass]="(true)?  'col-md-2' : 'col-md-4'">Espécie:</label>
+                    <div class="" [ngClass]="(true)? 'col-md-9' : 'col-md-6 col-lg-6'" >
                       <select name="especieValoresDevidos" [(ngModel)]="especieValoresDevidos" class="form-control" id="select-1">
                         <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
                       </select>
@@ -222,57 +222,58 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data de início de benefício - DIB*:</label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
-                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();' class="form-control"  type="text">
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de início de benefício - DIB*:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                      <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();setCheckRevisao();'
+                       class="form-control"  type="text">
                       <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label  class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data final dos Atrasados:</label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <label  class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data final dos Atrasados:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
                     <div >
-                      <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:  </label>
-                      <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                      <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:  </label>
+                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
                       </div>
                   </div>
                   </div>
                   <div *ngIf="chkNotGranted" class="form-group">
-                      <label *ngIf="!devidosBuracoNegro" class=" control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI*:</label>
-                      <label *ngIf="devidosBuracoNegro" class=" control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI antes da revisão (Buraco Negro)*:</label>
-                      <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                      <label *ngIf="!devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI*:</label>
+                      <label *ngIf="devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI antes da revisão (Buraco Negro)*:</label>
+                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                   </div>
                   <div *ngIf="!chkNotGranted" class="form-group">
-                      <label *ngIf="!devidosBuracoNegro" class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI*:</label>
-                      <label *ngIf="devidosBuracoNegro" class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">RMI antes da revisão (Buraco Negro):</label>
-                      <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                      <label *ngIf="!devidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda mensal inicial - RMI*:</label>
+                      <label *ngIf="devidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">RMI antes da revisão (Buraco Negro):</label>
+                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
                         <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
                       </div>
                   </div>
                   <div *ngIf="devidosBuracoNegro" class="form-group">
-                    <label class=" control-label"  [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">RMI depois da revisão (Buraco Negro):</label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <label class=" control-label"  [ngClass]="(true)?  'col-md-7' : 'col-md-4'">RMI depois da revisão (Buraco Negro):</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                     </div>
                   </div>
                   <div *ngIf="devidosPosBuracoNegro" class="form-group">
-                    <label class=" control-label"  [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">
+                    <label class=" control-label"  [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       Índice de limitação no teto se houver:
                       <i title="Índice de Reajuste de Teto (IRT) só existepara beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
                       </label>
-                      <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name="taxaAjusteMaximaEsperada" class="form-control" [textMask]="{mask: IndiceMask, guide: false}"  [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
                         <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
                       </div>
@@ -315,7 +316,7 @@
         </sa-widget>
       </article>
 
-      <article *ngIf="!chkNotGranted" class="col-sm-12 col-md-6 col-lg-6">
+      <article class="col-sm-12 col-md-6 col-lg-6">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
@@ -341,8 +342,8 @@
                     </div>
                   </div> -->
                   <div class="form-group">
-                    <label class=" control-label" for="especieRecebidoSelect" [ngClass]="(!chkNotGranted)?  'col-md-2' : 'col-md-4'">Espécie:</label>
-                    <div class="" [ngClass]="(!chkNotGranted)? 'col-md-9' : 'col-md-6 col-lg-6'" >
+                    <label class=" control-label" for="especieRecebidoSelect" [ngClass]="(true)?  'col-md-2' : 'col-md-4'">Espécie:</label>
+                    <div class="" [ngClass]="(true)? 'col-md-9' : 'col-md-6 col-lg-6'" >
                       <select name="especieValoresRecebidos" [(ngModel)]="especieValoresRecebidos" class="form-control" id="especieRecebidoSelect">
                         <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
                       </select>
@@ -350,51 +351,52 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data de início de benefício - DIB*:</label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
-                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged()" [(ngModel)]="dibValoresRecebidos" type="text" [disabled]="chkUseSameDib">
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de início de benefício - DIB*:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                      <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged();setCheckRevisao();"
+                       [(ngModel)]="dibValoresRecebidos" type="text" [disabled]="chkUseSameDib">
                       <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label fix-rmi-anterior" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data final recebidos:</label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <label class="control-label fix-rmi-anterior" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data final recebidos:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
                     <div >
-                      <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:</label>
-                      <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                      <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:</label>
+                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" [textMask]="{mask: dateMask}" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label *ngIf="recebidosBuracoNegro" class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">
+                    <label *ngIf="recebidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       RMI antes da revisão (Buraco Negro):</label>
-                    <label *ngIf="!recebidosBuracoNegro" class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">
+                    <label *ngIf="!recebidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       <i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" 
                       title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i>Renda mensal inicial - RMI*:</label>
-                    <div class="col-md-4"  [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <div class="col-md-4"  [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
                   </div>
                   <div *ngIf="recebidosBuracoNegro" class="form-group">
-                    <label class="control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">RMI depois da revisão (Buraco Negro):</label>
-                    <div class="" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">RMI depois da revisão (Buraco Negro):</label>
+                    <div class="" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                     </div>
                   </div>
                   <div *ngIf="recebidosPosBuracoNegro" class="form-group">
-                    <label class=" control-label" [ngClass]="(!chkNotGranted)?  'col-md-7' : 'col-md-4'">
+                    <label class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       Índice de reajuste no teto da RMI:
                       <i title="Índice de Reajuste de Teto (IRT) só existepara beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
                       </label>
-                    <div class="col-md-4" [ngClass]="(!chkNotGranted)?  'col-md-4' : 'col-md-2'">
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" [textMask]="{mask: IndiceMask, guide: false}" type="text">
                       <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
                     </div>
