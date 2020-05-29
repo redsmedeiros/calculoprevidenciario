@@ -750,6 +750,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
 
+    this.carencia = periodos['total' + exportDados.typeExport].carencia;
+
     this.errors.clear();
     this.changePeriodoOptions();
     this.validate();
