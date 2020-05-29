@@ -571,13 +571,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
     this.somatoriaTempoContribuicaoIdade().then(result => {
-      console.log(result);
+     // console.log(result);
     }).catch((error) => {
       console.log(error);
-    });;
+    });
 
     this.somatoriaTempoContribuicaoIdadeAtual().then(result => {
-      console.log(result);
+     // console.log(result);
     }).catch((error) => {
       console.log(error);
     });
