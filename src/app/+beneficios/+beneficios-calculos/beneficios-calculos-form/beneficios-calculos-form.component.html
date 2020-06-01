@@ -279,6 +279,13 @@
                       </div>
                   </div>
                   <div class="form-group">
+                    <label class="col-md-7 control-label">Número do benefício (se houver):</label>
+                    <div class="col-md-4">
+                      <input [(ngModel)]="numeroBeneficioDevido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioDevido" class="form-control" type="text" maxlength="200">
+                      <small *ngIf="errors.has('numeroBeneficioDevido')" class="text-danger">{{ errors.get('numeroBeneficioDevido') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <div class="col-md-8 col-sm-offset-3">
                       <div class="checkbox">
                         <label>
@@ -359,20 +366,18 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="control-label fix-rmi-anterior" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data final recebidos:</label>
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data final recebidos:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
-                    <div >
                       <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data inicial do benefício anterior se houver:</label>
                       <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                         <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" [textMask]="{mask: dateMask}" type="text">
                         <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
                       </div>
-                    </div>
                   </div>
                   <div class="form-group">
                     <label *ngIf="recebidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
@@ -399,6 +404,13 @@
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" [textMask]="{mask: IndiceMask, guide: false}" type="text">
                       <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-7 control-label">Número do benefício (se houver):</label>
+                    <div class="col-md-4">
+                      <input [(ngModel)]="numeroBeneficioRecebido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioRecebido" class="form-control" type="text" maxlength="200">
+                      <small *ngIf="errors.has('numeroBeneficioRecebido')" class="text-danger">{{ errors.get('numeroBeneficioRecebido') }}</small>
                     </div>
                   </div>
                   <div class="form-group">

@@ -60,7 +60,9 @@ export class CalculoAtrasado extends Model {
     nao_aplicar_sm_beneficio_esperado: '',
     numero_processo: '',
     afastar_prescricao: '',
-    calcular_abono_13_ultimo_mes: ''
+    calcular_abono_13_ultimo_mes: '',
+    numero_beneficio_devido: '',
+    numero_beneficio_recebido: '',
   };
 
   public id: number;
@@ -119,6 +121,8 @@ export class CalculoAtrasado extends Model {
   public numero_processo;
   public afastar_prescricao;
   public calcular_abono_13_ultimo_mes;
+  public numero_beneficio_devido;
+  public numero_beneficio_recebido;
 
   // public actions = `
   //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>

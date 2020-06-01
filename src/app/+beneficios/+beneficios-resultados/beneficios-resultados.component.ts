@@ -59,7 +59,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       { data: 'valor_juros' },
       { data: 'diferenca_juros' },
       { data: 'honorarios' }
-    ]
+    ],
+    columnDefs: [
+      { className: 'nowrapText', targets: '_all' },
+  ]
   }
   private aplicaProporcionalDevidos = false;
   private aplicaProporcionalRecebidos = false;
@@ -2797,7 +2800,10 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'valor_juros' , width: '10rem'},
           // { data: 'diferenca_juros' },
           // { data: 'honorarios' }
-        ]
+        ],
+        columnDefs: [
+          { className: 'nowrapText', targets: '_all' },
+      ]
       }
     } else {
       this.resultadosDatatableOptions = {
@@ -2815,7 +2821,10 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'juros' , width: '10rem' },
           { data: 'valor_juros' , width: '10rem'},
           // { data: 'diferenca_juros' },
-        ]
+        ],
+        columnDefs: [
+          { className: 'nowrapText', targets: '_all' },
+      ]
       }
     }
 
@@ -2842,7 +2851,10 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'valor_juros' },
           { data: 'diferenca_juros' },
           { data: 'dias_proporcionais' },
-        ]
+        ],
+        columnDefs: [
+          { className: 'nowrapText', targets: '_all' },
+      ]
       }
     }
   }

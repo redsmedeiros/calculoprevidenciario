@@ -300,6 +300,9 @@
                       )
                     }}
                   </li>
+                  <li *ngIf="calculo.numero_beneficio_devido">
+                    <b>Número do benefício:</b> {{ calculo.numero_beneficio_devido }}
+                  </li>
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_esperado">
                     <b>Renda mensal inicial - RMI não limitada ao salário mínimo.</b>
                   </li>
@@ -381,6 +384,14 @@
                         }}
                       </td>
                     </tr>
+                    <tr *ngIf="calculo.numero_beneficio_devido">
+                      <td width="50%" style="text-align: right;">
+                        <b>Número do benefício:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.numero_beneficio_devido }}
+                      </td>
+                    </tr>
                   </table>
                 </div>
               </div>
@@ -452,6 +463,9 @@
                         "Recebidos"
                       )
                     }}
+                  </li>
+                  <li *ngIf="calculo.numero_beneficio_recebido">
+                    <b>Número do benefício:</b> {{ calculo.numero_beneficio_recebido }}
                   </li>
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_concedido">
                     <b>Renda mensal inicial - RMI não limitada ao salário mínimo.</b>
@@ -535,6 +549,14 @@
                             "Recebidos"
                           )
                         }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.numero_beneficio_recebido">
+                      <td width="50%" style="text-align: right;">
+                        <b>Número do benefício:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.numero_beneficio_recebido }}
                       </td>
                     </tr>
                   </table>
@@ -775,7 +797,7 @@
                         {{ formatPercent(calculo.percentual_taxa_advogado) }}
                       </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="calculo.acordo_pedido != 0" >
                       <td width="50%" style="text-align: right;">
                         <b>Percentual do Acordo Judicial:</b>
                       </td>

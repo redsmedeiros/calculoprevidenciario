@@ -20,10 +20,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
-                            '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
-                            '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
+    '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
+    '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
+  public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/ ];
+  // 111.111.111-1
 
-  public IndiceMask =  [ /\d/, ',', /\d/, /\d/, /\d/, /\d/];
+
+  public IndiceMask = [/\d/, ',', /\d/, /\d/, /\d/, /\d/];
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -99,8 +102,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public naoAplicarSMBeneficioConcedido = false;
   public naoAplicarSMBeneficioEsperado = false;
 
-  //Num Processo
+  // Num Processo / num beneficio
   public numeroProcesso = '';
+  public numeroBeneficioDevido = '';
+  public numeroBeneficioRecebido = '';
+
   public afastarPrescricao = false;
   public calcularAbono13UltimoMes = false;
 
@@ -193,16 +199,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }, {
       name: 'Aposentadoria Especial',
       value: 4
-    },{
+    }, {
       name: 'Aposentadoria por Tempo de Contribuição Professor',
-      value: 5 
-    
-    // {
-    //   name: 'Aposentadoria por Tempo de Serviço de professor',
-    //   value: 5
-    // }, {
-    //   name: 'Auxílio Acidente previdenciário - 50%',
-    //   value: 6
+      value: 5
+
+      // {
+      //   name: 'Aposentadoria por Tempo de Serviço de professor',
+      //   value: 5
+      // }, {
+      //   name: 'Auxílio Acidente previdenciário - 50%',
+      //   value: 6
     }, {
       name: 'Auxílio Acidente - 30%',
       value: 8
@@ -225,15 +231,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       name: 'Aposentadoria Pessoa com Deficiência',
       value: 13
     }, {
-    //   name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
-    //   value: 13
-    // }, {
-    //   name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-    //   value: 14
-    // }, {
-    //   name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
-    //   value: 15
-    // }, {
+      //   name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
+      //   value: 13
+      // }, {
+      //   name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
+      //   value: 14
+      // }, {
+      //   name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
+      //   value: 15
+      // }, {
       name: 'Aposentadoria por Idade da Pessoa com Deficiência',
       value: 16
     }
@@ -437,10 +443,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     // Check if its necessary to validate the box of 'Valores Recebidos'
     if (!this.isEmptyInput(this.especieValoresRecebidos) ||
-        !this.isEmptyInput(this.dibValoresRecebidos) ||
-        !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
-        !this.isEmptyInput(this.rmiValoresRecebidos) ||
-        !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+      !this.isEmptyInput(this.dibValoresRecebidos) ||
+      !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
+      !this.isEmptyInput(this.rmiValoresRecebidos) ||
+      !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
 
       if (this.isEmptyInput(this.especieValoresRecebidos)) {
         this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
@@ -560,7 +566,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
 
-    if (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte)) {
+    if (this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+      (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte))) {
       // if (!this.isValidDate(this.dataHonorariosDe)) {
       //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
       //   valid = false;
@@ -683,10 +690,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return valid;
   }
 
- submit(e) {
+  submit(e) {
     e.preventDefault();
     this.validateInputs();
-    
+
     this.setCcheckBoxdibAnterior();
     this.setCheckRevisao();
     this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
@@ -726,7 +733,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Id Segurado
       this.formData.id_segurado = this.route.snapshot.params['id'];
       // Data do cálculo:
-     // this.formData.data_calculo_pedido = this.dataCalculo;
+      // this.formData.data_calculo_pedido = this.dataCalculo;
       this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').format('01/MM/YYYY');
 
       // Data da citação do réu
@@ -804,21 +811,24 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // opções adicionais de juros
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
-     // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
+      // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
-    if (this.isExits(this.competenciaInicioJuros)) {
-      this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
-     }else{
-      this.formData.competencia_inicio_juros = null;
-     }
+      if (this.isExits(this.competenciaInicioJuros)) {
+        this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
+      } else {
+        this.formData.competencia_inicio_juros = null;
+      }
 
-     // valor inferior ao salario minimo
+      // valor inferior ao salario minimo
       this.formData.nao_aplicar_sm_beneficio_concedido = this.naoAplicarSMBeneficioConcedido;
       this.formData.nao_aplicar_sm_beneficio_esperado = this.naoAplicarSMBeneficioEsperado;
 
       this.formData.numero_processo = this.numeroProcesso;
       this.formData.afastar_prescricao = this.afastarPrescricao;
       this.formData.calcular_abono_13_ultimo_mes = this.calcularAbono13UltimoMes;
+      
+      this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
+      this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
@@ -873,12 +883,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.previa_data_pedido_beneficio_esperado = this.dibAnteriorValoresDevidos;
       // Data de Cessação de valores devidos
       this.formData.data_prevista_cessacao = this.cessacaoValoresDevidos;
-      
+
       // Espécie valores recebidos
       if (!this.isEmptyInput(this.especieValoresRecebidos)) {
         this.formData.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
       }
-     
+
       // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
       this.formData.concedido_anterior_dib = this.chkPrecedidoRecebidos;
       // CheckBox Beneficio Precedido com DIB Anterior (devidos)
@@ -932,7 +942,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
   }
 
-  setCheckRevisao(){
+  setCheckRevisao() {
 
     // this.chkNotGranted se verdadeiro existe recebido;
     if (!this.isEmptyInput(this.dibValoresDevidos) && !this.isEmptyInput(this.dibValoresRecebidos)) {
@@ -941,13 +951,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.chkNotGranted = true;
     }
 
-    console.log(this.chkNotGranted);
+    // console.log(this.chkNotGranted);
   }
 
 
 
 
-  setCcheckBoxdibAnterior(){
+  setCcheckBoxdibAnterior() {
 
     if (!this.isEmptyInput(this.dibAnteriorValoresDevidos)) {
       this.chkDibAnterior = true;
@@ -1005,7 +1015,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dataHonorariosSucumbenciaAte = this.formatReceivedDate(this.formData.taxa_advogado_final_sucumbencia);
     // Aplicação dos honorários sobre a diferença ou sobre o devido
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
-      this.formData.taxa_advogado_aplicacao_sobre : 'dif';
+      this.formData.taxa_advogado_aplicacao_sobre : '';
 
     // Calcular Mais (Vincendos)
     this.maturidade = this.formData.maturidade;
@@ -1043,17 +1053,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dibAnteriorValoresDevidos = this.formatReceivedDate(this.formData.previa_data_pedido_beneficio_esperado);
     // Data de Cessação de valores devidos
     this.cessacaoValoresDevidos = this.formatReceivedDate(this.formData.data_prevista_cessacao);
-    
-    // Espécie valores recebidos
-    //this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
 
-    if (!this.isEmptyInput(this.formData.valor_beneficio_concedido) 
-        && !this.isEmptyInput(this.formData.rmiValoresRecebidos)) {
+    // Espécie valores recebidos
+    // this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
+    if (this.isExits(this.formData.valor_beneficio_concedido)) {
       this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
-    }else{
+    } else {
       this.especieValoresRecebidos = '';
     }
-    
+
     // CheckBox Beneficio Precedido com DIB Anterior (recebidos)
     this.chkPrecedidoRecebidos = this.formData.concedido_anterior_dib;
     // CheckBox Beneficio Precedido com DIB Anterior (devidos)
@@ -1065,15 +1073,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.taxa_ajuste_maxima_esperada != null) {
       this.taxaAjusteMaximaEsperada = this.formData.taxa_ajuste_maxima_esperada.toString().replace('.', ',');
     }
-    
+
     // CheckBox 'Desmarque para não aplicar os juros da poupança'
     this.chkBoxTaxaSelic = this.formData.aplicar_juros_poupanca;
     this.chkUseSameDib = this.formData.usar_mesma_dib;
+    this.chkNaoUsarDeflacao = this.formData.nao_usar_deflacao;
 
     if (this.chkNotGranted || this.chkUseSameDib) {
       // Valores Devidos
       this.dibValoresDevidos = this.formatReceivedDate(dataPedidoBeneficio);
-      //this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
+      // this.dibValoresRecebidos = this.formatReceivedDate(dataPedidoBeneficio);
       this.dibAnteriorValoresDevidos = this.formatReceivedDate(data_anterior_pedido_beneficio);
     } else {
       // Valores Recebidos
@@ -1082,13 +1091,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     this.naoAplicarJurosSobreNegativo = this.formData.nao_aplicar_juros_sobre_negativo;
-   // this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
-  
-   if (this.isExits(this.formData.competencia_inicio_juros)) {
-    this.competenciaInicioJuros = moment(this.formData.competencia_inicio_juros, 'YYYY-MM-DD').format('MM/YYYY');
-   }
-  
-   this.taxaAdvogadoValorFixoHonorarios = this.formData.taxa_advogado_valor_fixo;
+    // this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
+
+    if (this.isExits(this.formData.competencia_inicio_juros)) {
+      this.competenciaInicioJuros = moment(this.formData.competencia_inicio_juros, 'YYYY-MM-DD').format('MM/YYYY');
+    }
+
+    this.taxaAdvogadoValorFixoHonorarios = this.formData.taxa_advogado_valor_fixo;
 
     // valor inferior ao salario minimo
     this.naoAplicarSMBeneficioConcedido = this.formData.nao_aplicar_sm_beneficio_concedido;
@@ -1098,6 +1107,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.afastarPrescricao = this.formData.afastar_prescricao;
     this.calcularAbono13UltimoMes = this.formData.calcular_abono_13_ultimo_mes;
     this.taxaAdvogadoAplicarCPCArt85 = this.formData.taxa_advogado_aplicar_CPCArt85;
+
+    this.numeroBeneficioDevido = this.formData.numero_beneficio_devido;
+    this.numeroBeneficioRecebido = this.formData.numero_beneficio_recebido;
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
@@ -1219,7 +1231,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     console.log(this.chkJurosMora);
   }
 
-  setCompetenciaInicioJurosIsNull(){
+  setCompetenciaInicioJurosIsNull() {
     if (this.isEmptyInput(this.competenciaInicioJuros)) {
       this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
@@ -1385,7 +1397,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_fixo' }, // 6% ao ano (fixo)
       { jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null, poupancaSelic: 0, value: 'sem_juros' },
     ];
-    
+
     for (const confJuros of opcoesMensalParaAnual) {
 
       if (
