@@ -186,7 +186,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       value: 1
     }, {
       name: 'Pensão por Morte',
-      value: 1
+      value: 22
     }, {
       name: 'Aposentadoria por Idade - Trabalhador Urbano',
       value: 2
@@ -448,7 +448,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       !this.isEmptyInput(this.rmiValoresRecebidos) ||
       !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
 
-      if (this.isEmptyInput(this.especieValoresRecebidos)) {
+      if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
         this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
         valid = false;
       }
@@ -692,11 +692,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   submit(e) {
     e.preventDefault();
-    this.validateInputs();
-
+   
     this.setCcheckBoxdibAnterior();
     this.setCheckRevisao();
     this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
+    
+    this.validateInputs();
 
     if (this.errors.empty()) {
 
@@ -1013,6 +1014,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dataHonorariosSucumbenciaDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio_sucumbencia);
     // Intervalo de Honorarios fim sucumbencia
     this.dataHonorariosSucumbenciaAte = this.formatReceivedDate(this.formData.taxa_advogado_final_sucumbencia);
+    
     // Aplicação dos honorários sobre a diferença ou sobre o devido
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
       this.formData.taxa_advogado_aplicacao_sobre : '';

@@ -491,6 +491,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
         //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
+
+        // teste 02/06
+        // console.log(dataCorrente);
+        // console.log(indiceReajusteValoresDevidos);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
 
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
@@ -900,8 +904,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (dataCorrente > this.dataInicioDevidos) {
       beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
-    }
-    else {
+    }else {
       beneficioDevido = rmiDevidos;
       this.beneficioDevidoOs = beneficioDevido;
     }
@@ -915,10 +918,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
-
-
-
-    //aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro) {
       beneficioDevido = irtDevidoSimplificado89 * moedaDataCorrente.salario_minimo;
       if (this.aplicarReajusteUltimoDevido) {
@@ -955,6 +955,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
     }
+   
+    
 
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
@@ -1382,11 +1384,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     desindexador = moedaDataAtual[tipo_correcao] / moedaDataCalculo[tipo_correcao];
     correcaoMonetaria = moedaDataCorrente[tipo_correcao] * desindexador;
 
+
     if (!usar_deflacao) {
       if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
         correcaoMonetaria = 1;
       }
     }
+
     return correcaoMonetaria;
   }
 
@@ -1755,7 +1759,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.calculo.taxa_advogado_final != '') {
       taxaAdvogadoFinal = moment(this.calculo.taxa_advogado_final);
     }
-
+  
     if (this.calculo.percentual_taxa_advogado == '') {// Verificar se há valor para o percentual do advogado.
       honorarios = 0;
       // Aplicar a porcentagem quando a data corrente estiver no intervalo definido ou quando nenhuma data for definida
@@ -1773,7 +1777,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       const diasMesInicio = taxaAdvogadoInicio.daysInMonth();
       diasInicio = (diasMesInicio - diasInicio) + 1;
 
-      honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
+     // honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
+      honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
 
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
@@ -2885,62 +2890,58 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getTipoAposentadoria(value) {
-    let tipos_aposentadoria = [{
-      name: 'Auxílio Doença',
-      value: 0
-    }, {
-      name: 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
-      value: 1
-    }, {
-      name: 'Aposentadoria por idade - Trabalhador Urbano',
-      value: 2
-    }, {
-      name: 'Aposentadoria por tempo de contribuição',
-      value: 3
-    }, {
-      name: 'Aposentadoria especial',
-      value: 4
-    }, {
-      name: 'Aposentadoria por tempo de serviço de professor',
-      value: 5
-    }, {
-      name: 'Auxílio Acidente previdenciário - 50%',
-      value: 6
-    }, {
-      name: 'Aposentadoria por idade - Trabalhador Rural',
-      value: 7
-    }, {
-      name: 'Auxílio Acidente  - 30%',
-      value: 8
-    }, {
-      name: 'Auxílio Acidente - 40%',
-      value: 9
-    }, {
-      name: 'Auxílio Acidente - 60%',
-      value: 10
-    }, {
-      name: 'Abono de Permanência em Serviço',
-      value: 11
-    }, {
-      name: 'LOAS - Benefício no valor de um salário mínimo',
-      value: 12
-    }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
-      value: 13
-    }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      value: 14
-    }, {
-      name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
-      value: 15
-    }, {
-      name: 'Aposentadoria especial por Idade da Pessoa com Deficiência',
-      value: 16
-    }, {
-      name: 'LOAS',
-      value: 17
-    }
-    ]
+    let tipos_aposentadoria = [
+      {
+        name: 'Auxílio Doença',
+        value: 0
+      }, {
+        name: 'Aposentadoria por Invalidez ',
+        value: 1
+      }, {
+        name: 'Pensão por Morte',
+        value: 22
+      }, {
+        name: 'Aposentadoria por Idade - Trabalhador Urbano',
+        value: 2
+      }, {
+        name: 'Aposentadoria por Idade - Trabalhador Rural',
+        value: 7
+      }, {
+        name: 'Aposentadoria por Tempo de Contribuição',
+        value: 3
+      }, {
+        name: 'Aposentadoria Especial',
+        value: 4
+      }, {
+        name: 'Aposentadoria por Tempo de Contribuição Professor',
+        value: 5
+      }, {
+        name: 'Auxílio Acidente - 30%',
+        value: 8
+      }, {
+        name: 'Auxílio Acidente - 40%',
+        value: 9
+      }, {
+        name: 'Auxílio Acidente - 50%',
+        value: 6
+      }, {
+        name: 'Auxílio Acidente - 60%',
+        value: 10
+      }, {
+        name: 'Abono de Permanência em Serviço',
+        value: 11
+      }, {
+        name: 'Benefício de Prestação Continuada - BPC ', // (salário mínimo)
+        value: 12
+      }, {
+        name: 'Aposentadoria Pessoa com Deficiência',
+        value: 13
+      },
+      {
+       name: 'Aposentadoria por Idade da Pessoa com Deficiência',
+       value: 16
+      }
+    ];
     return tipos_aposentadoria[value].name;
   }
 

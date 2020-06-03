@@ -300,6 +300,9 @@
                       )
                     }}
                   </li>
+                  <li *ngIf="calculo.taxa_ajuste_maxima_esperada">
+                    <b>Índice de limitação no teto:</b> {{ calculo.taxa_ajuste_maxima_esperada }}
+                  </li>
                   <li *ngIf="calculo.numero_beneficio_devido">
                     <b>Número do benefício:</b> {{ calculo.numero_beneficio_devido }}
                   </li>
@@ -463,6 +466,9 @@
                         "Recebidos"
                       )
                     }}
+                  </li>
+                  <li *ngIf="calculo.taxa_ajuste_maxima_concedida">
+                    <b>Índice de limitação no teto:</b> {{ calculo.taxa_ajuste_maxima_concedida }}
                   </li>
                   <li *ngIf="calculo.numero_beneficio_recebido">
                     <b>Número do benefício:</b> {{ calculo.numero_beneficio_recebido }}
@@ -919,10 +925,10 @@
                 <thead *ngIf="!isTetos">
                   <tr>
                     <th>Competência</th>
-                    <th>Indice de Reajuste de Valores Devidos</th>
+                    <th>Indice de<br> Reajuste de<br> Valores Devidos</th>
                     <!-- <th>Benefício Devido Tetos</th> -->
                     <th>Benefício Devido</th>
-                    <th>Indice de Reajuste de Valores Recebidos</th>
+                    <th>Indice de<br> Reajuste de<br> Valores Recebidos</th>
                     <!-- <th>Benefício Recebido Tetos</th> -->
                     <th>Benefício Recebido</th>
                     <!-- <th>Diferença Mensal Tetos</th> -->
