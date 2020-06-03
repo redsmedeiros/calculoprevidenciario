@@ -784,6 +784,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
+    
     if (dataBeneficio >= this.dataMP664) {
       if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
         if (totalMediaDozeContribuicoes > 0)
@@ -970,10 +971,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
     // }
 
-
-
     let rmi_fator = 0;
     let rmi_pontos = 0;
+    let rmi_outras_especies = 0;
 
     for (let i = 0; i < conclusoes.length; i++) {
       if (conclusoes[i].string == undefined && conclusoes[i].value == undefined) {
@@ -988,6 +988,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         rmi_pontos = conclusoes[i].value
       }
 
+      if((/Renda Mensal Inicial/gi).test(conclusoes[i].string)){
+        rmi_outras_especies = conclusoes[i].value;
+      }
+
     }
 
     if (conclusoes[conclusoes.length - 1].string === conclusoes[conclusoes.length - 2].string) {
@@ -996,11 +1000,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     rmi_fator = this.convertDecimalValue(rmi_fator);
     rmi_pontos = this.convertDecimalValue(rmi_pontos);
-
-    this.isUpdating = false;
+    rmi_outras_especies = this.convertDecimalValue(rmi_outras_especies);
 
    // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.valorExportacao = (rmi_fator > rmi_pontos) ? rmi_fator : rmi_pontos;
+
+    if (this.valorExportacao === 0) {
+      this.valorExportacao = rmi_outras_especies;
+    }
 
     this.tableData = tableData;
     this.tableOptions = {
@@ -1008,6 +1015,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       data: this.tableData,
     }
 
+    this.isUpdating = false;
     // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = this.valorExportacao;
@@ -1489,17 +1497,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   mostrarReajustesAdministrativos(tableId) {
+
     if (this.showReajustesAdministrativos) {
       document.getElementById(tableId).scrollIntoView();
       return;
     }
+
     let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
     this.ReajusteAutomatico.getByDate(dataInicio, moment())
       .then((reajustes: ReajusteAutomatico[]) => {
+
         const reajustesAutomaticos = reajustes;
         let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
+
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
