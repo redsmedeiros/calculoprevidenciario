@@ -23,8 +23,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
     '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
   public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/ ];
-  // 111.111.111-1
-
 
   public IndiceMask = [/\d/, ',', /\d/, /\d/, /\d/, /\d/];
   public styleTheme: string = 'style-0';
@@ -316,10 +314,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   ];
 
 
+
   @Input() formData;
   @Input() errors: ErrorService;
   @Input() type;
   @Output() onSubmit = new EventEmitter;
+  
 
   constructor(
     protected router: Router,

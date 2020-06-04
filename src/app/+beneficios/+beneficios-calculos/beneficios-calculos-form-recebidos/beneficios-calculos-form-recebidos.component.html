@@ -1,0 +1,64 @@
+<button class="btn btn-primary btn-small pull-right" (click)="recebidosModal.show()">
+  Adicionar Recebidos
+</button>
+
+
+<div bsModal #recebidosModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+             <button type="button" class="close" (click)="recebidosModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Lista de recebidos</h4>
+      </div>
+      <div class="modal-body">
+
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label
+                class="control-label"
+                for="especieRecebidoSelectChild"
+                [ngClass]="true ? 'col-md-2' : 'col-md-4'"
+                >Espécie:</label
+              >
+              <div
+                class=""
+                [ngClass]="true ? 'col-md-9' : 'col-md-6 col-lg-6'"
+              >
+                <select
+                  name="especieValoresRecebidosChild"
+                  [(ngModel)]="especieValoresRecebidosChild"
+                  class="form-control"
+                  id="especieRecebidoSelectChild"
+                >
+                  <option
+                    *ngFor="let option of especieValoresOptionsChild"
+                    value="{{ option.value }}"
+                    >{{ option.name }}</option
+                  >
+                </select>
+                <small
+                  *ngIf="errors.has('especieValoresRecebidosChild')"
+                  class="text-danger"
+                  >{{ errors.get("especieValoresRecebidosChild") }}</small
+                >
+              </div>
+            </div>
+        </fieldset>
+        </form>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="recebidosModal.hide()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" >
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

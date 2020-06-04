@@ -13,6 +13,7 @@ import {I18nModule} from '../../shared/i18n/i18n.module';
 import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+import { BeneficiosCalculosFormRecebidosComponent } from './beneficios-calculos-form-recebidos/beneficios-calculos-form-recebidos.component';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: 'left',
@@ -38,7 +39,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
               BeneficiosCalculosCreateComponent,
               BeneficiosCalculosEditComponent,
               BeneficiosCalculosFormComponent,
-              BeneficiosCalculosIndexComponent],
+              BeneficiosCalculosIndexComponent,
+              BeneficiosCalculosFormRecebidosComponent],
   providers: [
   { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })

@@ -1,0 +1,15 @@
+.modal-header{
+    background-color: #831721;
+}
+
+.modal-body{
+    color: black;
+}
+
+.close{
+    color: white;
+}
+
+.modal-dialog{
+    margin-top: 10rem;
+}
