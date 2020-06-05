@@ -1475,7 +1475,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getJuros(dataCorrente) {
 
-
     const dataCitacaoReu = moment(this.calculo.data_citacao_reu);
     const chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
     const chkJurosMora = this.calculo.previo_interesse;
@@ -2987,9 +2986,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getStringTabelaCorrecaoMonetaria() {
     if (this.calculo.tipo_correcao == 'ipca')
-      return 'IPCA-e a partir de 06/2009';
+      return 'IPCA-e a partir de 07/2009';
     if (this.calculo.tipo_correcao == 'tr')
-      return 'da TR após 06/2009';
+      return 'da TR após 07/2009';
     if (this.calculo.tipo_correcao == 'cam')
       return 'manual de cálculos SICOM da Justiça Federal';
     if (this.calculo.tipo_correcao == 'tr032015_ipcae')

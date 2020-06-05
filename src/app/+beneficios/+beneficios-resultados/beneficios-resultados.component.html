@@ -395,6 +395,14 @@
                         {{ calculo.numero_beneficio_devido }}
                       </td>
                     </tr>
+                    <tr *ngIf="calculo.taxa_ajuste_maxima_esperada">
+                      <td width="50%" style="text-align: right;">
+                        <b>Índice de limitação no teto:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.taxa_ajuste_maxima_esperada }}
+                      </td>
+                    </tr>
                   </table>
                 </div>
               </div>
@@ -563,6 +571,14 @@
                       </td>
                       <td width="50%">
                         {{ calculo.numero_beneficio_recebido }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
+                      <td width="50%" style="text-align: right;">
+                        <b>Índice de limitação no teto:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.taxa_ajuste_maxima_concedida }}
                       </td>
                     </tr>
                   </table>
@@ -749,7 +765,7 @@
                   *ngIf="exibirHonorarioscpc85"
                 >
                   <li>
-                    <b>Honorários calculados de acordo com §3º do Art. 85 da Lei 13105/15:</b>
+                    <b>Honorários calculados Conforme § 3º, art. 85, do CPC/2015:</b>
                   </li>
                   <li>
                     <b>Faixa:</b>
@@ -829,10 +845,7 @@
                     </caption>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b
-                          >Honorários calculados de acordo com §3º do Art. 85 da
-                          Lei 13105/15:</b
-                        >
+                        <b>Honorários calculados Conforme § 3º, art. 85, do CPC/2015:</b>
                       </td>
                       <td width="50%">
                         <ul>

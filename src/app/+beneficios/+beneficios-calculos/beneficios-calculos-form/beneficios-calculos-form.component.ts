@@ -123,7 +123,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private indiceCorrecao = 0;
   public correcaoOptions = [
     {
-      text: '- Selecione uma opção -',
+      text: '- Selecione uma Opção -',
       value: ''
     },
     {
@@ -174,7 +174,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public especieValoresOptions = [
     {
-      name: '- Selecione uma opção -',
+      name: '- Selecione uma Opção -',
       value: ''
     }, {
       name: 'Auxílio Doença',
@@ -249,23 +249,23 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public tipoHonorariosOptions = [
     {
-      text: '- Selecione uma opção -',
+      text: '- Selecione uma Opção -',
       value: ''
     },
     {
-      text: 'Não calcular honorários',
+      text: 'Não Calcular Honorários',
       value: 'nao_calc'
     },
     {
-      text: 'Percentual sobre a diferença entre valores devido e recebido',
+      text: 'Percentual Sobre a Diferença Entre Valores Devido e Recebido',
       value: 'dif'
     },
     {
-      text: 'Percentual sobre valor devido',
+      text: 'Percentual Sobre Valor Devido',
       value: 'dev'
     },
     {
-      text: 'Calcular o valor conforme §3º do Art. 85 da Lei 13105/15',
+      text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015',
       value: 'CPC85'
     },
     {
@@ -276,7 +276,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public tipoJurosOptions = [
     {
-      text: '- Selecione uma opção -',
+      text: '- Selecione uma Opção -',
       value: ''
     },
     {
@@ -566,7 +566,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
 
-    if (this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+    if ( this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
       (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte))) {
       // if (!this.isValidDate(this.dataHonorariosDe)) {
       //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
@@ -579,13 +579,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // }
 
       if (!this.isValidDate(this.dataHonorariosAte)) {
-        this.errors.add({ 'dataHonorariosAte': ['Insira uma data válida.'] });
-        valid = false;
+        //this.errors.add({ 'dataHonorariosAte': ['Insira uma data válida.'] });
+        //valid = false;
       } else {
 
         if (moment(this.dataHonorariosAte, 'DD/MM/YYYY') < this.dataMinima) {
-          this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que 01/1970'] });
-          valid = false;
+          //this.errors.add({ 'dataHonorariosAte': ['A data deve ser maior que 01/1970'] });
+          ///valid = false;
         }
 
         // if (this.isValidDate(this.dataHonorariosDe)) {
@@ -653,7 +653,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // cpc 85
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') {
 
-      if (this.isEmptyInput(this.taxaAdvogadoAplicarCPCArt85)) {
+      if (this.isEmptyInput(this.taxaAdvogadoAplicarCPCArt85) && this.taxaAdvogadoAplicarCPCArt85 != '0') {
         this.errors.add({ 'taxaAdvogadoAplicarCPCArt85': ['- Selecione uma opção.'] });
         valid = false;
       }
@@ -774,8 +774,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Intervalo de Honorarios DE
       this.dataHonorariosDe = this.dibValoresDevidos;
       this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
+      console.log(this.dataHonorariosAte);
       // Intervalo de Honorarios ATE
-      this.formData.taxa_advogado_final = this.dataHonorariosAte;
+      this.formData.taxa_advogado_final = (this.isExits(this.dataHonorariosAte))?
+                                          this.dataHonorariosAte : this.formData.data_calculo_pedido;
 
       this.formData.taxa_advogado_inicio_sucumbencia = this.dataHonorariosSucumbenciaDe;
       this.formData.taxa_advogado_final_sucumbencia = this.dataHonorariosSucumbenciaAte;
@@ -791,7 +793,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // cpc 85
       this.formData.taxa_advogado_aplicar_CPCArt85 = this.taxaAdvogadoAplicarCPCArt85;
-      if (this.taxaAdvogadoAplicarCPCArt85) // somente se o check for maracado
+      if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') 
       {
 
         this.formData.taxa_advogado_perc_ate_200_SM = this.taxaAdvogadoPercateAte200SM;
@@ -827,7 +829,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.numero_processo = this.numeroProcesso;
       this.formData.afastar_prescricao = this.afastarPrescricao;
       this.formData.calcular_abono_13_ultimo_mes = this.calcularAbono13UltimoMes;
-      
+
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
 
@@ -1115,6 +1117,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
+      console.log(this.formData.taxa_advogado_perc_ate_200_SM);
       this.taxaAdvogadoPercateAte200SM = (this.isExits(this.formData.taxa_advogado_perc_ate_200_SM)) ?
         this.formData.taxa_advogado_perc_ate_200_SM : 0;
 
@@ -1234,7 +1237,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   setCompetenciaInicioJurosIsNull() {
-    if (this.isEmptyInput(this.competenciaInicioJuros)) {
+    console.log(this.competenciaInicioJuros);
+    console.log(this.dataCitacaoReu);
+
+    console.log(!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month'));
+
+    if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month') ) {
       this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
   }
