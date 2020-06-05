@@ -97,6 +97,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   // IN77
   public exibirIN77 = false;
   public naoAplicarIN77 = false;
+  public irtRejusteAdministrativo = 0;
+
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
@@ -724,6 +726,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
     }
     if (irt >= 1) {
+      this.irtRejusteAdministrativo = irt;
       conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
     }
 
@@ -1512,6 +1515,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
 
+        console.log(reajustesAutomaticos );
+        console.log(dataPrevia );
+        
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
@@ -1535,6 +1541,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
           valorBeneficio *= reajuste;
+
+          if(dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1){
+            valorBeneficio *= this.irtRejusteAdministrativo;
+          }
 
           const correcaoMinimo2017 = (dataCorrente.isSame(moment('2017-01-01'))
             && (valorBeneficio.toFixed(3) === (minimo + 0.904).toFixed(3)));
@@ -1562,10 +1572,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.reajustesAdministrativosTableData.push(line);
           dataPrevia = dataCorrente;
         }
+
+        
         this.reajustesAdministrativosTableOptions = {
           ...this.reajustesAdministrativosTableOptions,
           data: this.reajustesAdministrativosTableData,
         }
+
         this.showReajustesAdministrativos = true;
         document.getElementById(tableId).scrollIntoView();
       });
