@@ -62,7 +62,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     ],
     columnDefs: [
       { className: 'nowrapText', targets: '_all' },
-  ]
+    ]
   }
   private aplicaProporcionalDevidos = false;
   private aplicaProporcionalRecebidos = false;
@@ -307,7 +307,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                       // se ouver dib anterior considerar como a primeira data para o indice de correção
                       const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-                                                    this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+                        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
                       // indice recebido
                       this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
@@ -441,7 +441,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     const dataFinalParaHonorarioDevido = (this.isExits(this.calculo.taxa_advogado_final)) ?
       this.calculo.taxa_advogado_final : this.calculo.calculo.data_calculo_pedido;
 
-
     for (let dataCorrenteString of competencias) {
 
       let line: any = {};
@@ -524,9 +523,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       let valorNumericoDiferencaCorrigidaJurosObj: any = {};
 
       diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente,
-                                                                valorJuros,
-                                                                diferencaCorrigida,
-                                                                valorNumericoDiferencaCorrigidaJurosObj);
+        valorJuros,
+        diferencaCorrigida,
+        valorNumericoDiferencaCorrigidaJurosObj);
 
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevido);
 
@@ -569,11 +568,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
         // soma tutela antecipada
-         if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) && 
-         (dataCorrente.isSameOrAfter(this.calculo.data_cessacao,'month')
-         && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
-         this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
-       }
+        if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) &&
+          (dataCorrente.isSameOrAfter(this.calculo.data_cessacao, 'month')
+            && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
+          this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
+        }
 
       }
 
@@ -684,12 +683,12 @@ export class BeneficiosResultadosComponent implements OnInit {
             this.somaDevidosreajustadosAtefinalHonorario += Math.round(this.somaDevidosreajustadosAtefinalHonorario * 100) / 100;
           }
 
-         // soma tutela antecipada
-          if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) && 
-                (dataCorrente.isSameOrAfter(this.calculo.data_cessacao,'month')
-                 && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
-              this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
-            }
+          // soma tutela antecipada
+          if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) &&
+            (dataCorrente.isSameOrAfter(this.calculo.data_cessacao, 'month')
+              && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
+            this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
+          }
 
 
         }
@@ -904,7 +903,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (dataCorrente > this.dataInicioDevidos) {
       beneficioDevido = this.ultimoBeneficioDevidoAntesProporcionalidade;
-    }else {
+    } else {
       beneficioDevido = rmiDevidos;
       this.beneficioDevidoOs = beneficioDevido;
     }
@@ -955,8 +954,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
     }
-   
-    
+
+
 
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
@@ -1346,8 +1345,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     return beneficioRecebidoFinal;
   }
 
+
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
+
+
+
     const tipo_correcao = this.calculo.tipo_correcao;
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     const moedaDataAtual = this.Moeda.getByDate(moment());
@@ -1384,12 +1387,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     desindexador = moedaDataAtual[tipo_correcao] / moedaDataCalculo[tipo_correcao];
     correcaoMonetaria = moedaDataCorrente[tipo_correcao] * desindexador;
 
+    // em análise 08/06/2020
+    // if (!usar_deflacao) {
 
-    if (!usar_deflacao) {
-      if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
-        correcaoMonetaria = 1;
-      }
-    }
+    //   if (correcaoMonetaria < 1.0 && dataCorrente > moment('1994-06-01')) {
+    //     correcaoMonetaria = 1;
+    //   }
+    // }
 
     return correcaoMonetaria;
   }
@@ -1758,7 +1762,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.calculo.taxa_advogado_final != '') {
       taxaAdvogadoFinal = moment(this.calculo.taxa_advogado_final);
     }
-  
+
     if (this.calculo.percentual_taxa_advogado == '') {// Verificar se há valor para o percentual do advogado.
       honorarios = 0;
       // Aplicar a porcentagem quando a data corrente estiver no intervalo definido ou quando nenhuma data for definida
@@ -1776,7 +1780,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       const diasMesInicio = taxaAdvogadoInicio.daysInMonth();
       diasInicio = (diasMesInicio - diasInicio) + 1;
 
-     // honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
+      // honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
       honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
 
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
@@ -1839,9 +1843,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       //   });
 
-    this.getCalculoHonorariosFixo();
+      this.getCalculoHonorariosFixo();
 
-  }
+    }
 
 
   }
@@ -1876,14 +1880,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (dataFixoCorrente.isSame(fixoInicio, 'month')) {
         const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
           fixoFim.clone());
-          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
+        beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
       }
 
       // Fim proporcional
       if (dataFixoCorrente.isSame(fixoFim, 'month')) {
         const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
           fixoFim.clone());
-          beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
+        beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
       }
 
 
@@ -1939,7 +1943,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-   // console.log(this.resultadosFixoAntecipadaList);
+    // console.log(this.resultadosFixoAntecipadaList);
     // console.log(somaHonorariosFixo);
 
     this.somaHonorarios = somaHonorariosFixo;
@@ -2086,7 +2090,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private getByDateToTypeHonorario(date, type) {
 
     let listTypeT = this.indicesTutela;
-    if(type === 'fixo'){
+    if (type === 'fixo') {
       listTypeT = this.indicesFixo;
       return 1;
     }
@@ -2211,7 +2215,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // this.dataInicialTutelaAntecipada = moment(this.calculo.taxa_advogado_inicio_sucumbencia).format('DD/MM/YYYY');
     // this.dataFinalTutelaAntecipada = moment(this.calculo.taxa_advogado_final_sucumbencia).format('DD/MM/YYYY');
 
-        // const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
+    // const tutelaInicio = moment(this.calculo.taxa_advogado_inicio_sucumbencia)
     // const tutelaFim = moment(this.calculo.taxa_advogado_final_sucumbencia)
 
     this.dataInicialTutelaAntecipada = moment(this.calculo.cessacaoValoresRecebidos).format('DD/MM/YYYY');
@@ -2801,13 +2805,13 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'correcao_monetaria' },
           { data: 'diferenca_corrigida' },
           { data: 'juros' },
-          { data: 'valor_juros' , width: '10rem'},
+          { data: 'valor_juros', width: '10rem' },
           // { data: 'diferenca_juros' },
           // { data: 'honorarios' }
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
-      ]
+        ]
       }
     } else {
       this.resultadosDatatableOptions = {
@@ -2822,13 +2826,13 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'diferenca_mensal', width: '10rem' },
           { data: 'correcao_monetaria', width: '10rem' },
           { data: 'diferenca_corrigida', width: '10rem' },
-          { data: 'juros' , width: '10rem' },
-          { data: 'valor_juros' , width: '10rem'},
+          { data: 'juros', width: '10rem' },
+          { data: 'valor_juros', width: '10rem' },
           // { data: 'diferenca_juros' },
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
-      ]
+        ]
       }
     }
 
@@ -2858,7 +2862,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
-      ]
+        ]
       }
     }
   }
@@ -2937,8 +2941,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         value: 13
       },
       {
-       name: 'Aposentadoria por Idade da Pessoa com Deficiência',
-       value: 16
+        name: 'Aposentadoria por Idade da Pessoa com Deficiência',
+        value: 16
       }
     ];
     return tipos_aposentadoria[value].name;

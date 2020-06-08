@@ -774,7 +774,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Intervalo de Honorarios DE
       this.dataHonorariosDe = this.dibValoresDevidos;
       this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
-      console.log(this.dataHonorariosAte);
       // Intervalo de Honorarios ATE
       this.formData.taxa_advogado_final = (this.isExits(this.dataHonorariosAte))?
                                           this.dataHonorariosAte : this.formData.data_calculo_pedido;
@@ -1117,7 +1116,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
-      console.log(this.formData.taxa_advogado_perc_ate_200_SM);
       this.taxaAdvogadoPercateAte200SM = (this.isExits(this.formData.taxa_advogado_perc_ate_200_SM)) ?
         this.formData.taxa_advogado_perc_ate_200_SM : 0;
 
