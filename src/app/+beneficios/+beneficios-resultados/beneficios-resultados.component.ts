@@ -2806,8 +2806,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'diferenca_corrigida' },
           { data: 'juros' },
           { data: 'valor_juros', width: '10rem' },
-          // { data: 'diferenca_juros' },
-          // { data: 'honorarios' }
+          { data: 'diferenca_juros' },
+          { data: 'honorarios' }
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
@@ -2893,78 +2893,49 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getTipoAposentadoria(value) {
-    let tipos_aposentadoria = [
-      {
-        name: 'Auxílio Doença',
-        value: 0
-      }, {
-        name: 'Aposentadoria por Invalidez ',
-        value: 1
-      }, {
-        name: 'Pensão por Morte',
-        value: 22
-      }, {
-        name: 'Aposentadoria por Idade - Trabalhador Urbano',
-        value: 2
-      }, {
-        name: 'Aposentadoria por Idade - Trabalhador Rural',
-        value: 7
-      }, {
-        name: 'Aposentadoria por Tempo de Contribuição',
-        value: 3
-      }, {
-        name: 'Aposentadoria Especial',
-        value: 4
-      }, {
-        name: 'Aposentadoria por Tempo de Contribuição Professor',
-        value: 5
-      }, {
-        name: 'Auxílio Acidente - 30%',
-        value: 8
-      }, {
-        name: 'Auxílio Acidente - 40%',
-        value: 9
-      }, {
-        name: 'Auxílio Acidente - 50%',
-        value: 6
-      }, {
-        name: 'Auxílio Acidente - 60%',
-        value: 10
-      }, {
-        name: 'Abono de Permanência em Serviço',
-        value: 11
-      }, {
-        name: 'Benefício de Prestação Continuada - BPC ', // (salário mínimo)
-        value: 12
-      }, {
-        name: 'Aposentadoria Pessoa com Deficiência',
-        value: 13
-      },
-      {
-        name: 'Aposentadoria por Idade da Pessoa com Deficiência',
-        value: 16
-      }
+    const tipos_aposentadoria = [
+        {name: '- Selecione uma Opção -', value: ''},
+        {name: 'Abono de Permanência em Serviço', value: 11},
+        {name: 'Aposentadoria Especial', value: 4},
+        {name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7},
+        {name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2},
+        {name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16},
+        {name: 'Aposentadoria por Invalidez ', value: 1},
+        {name: 'Aposentadoria por Tempo de Contribuição', value: 3},
+        {name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5},
+        {name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13},
+        {name: 'Aposentadoria por Tempo de Serviço', value: 18},
+        {name: 'Auxílio Acidente - 30%', value: 8},
+        {name: 'Auxílio Acidente - 40%', value: 9},
+        {name: 'Auxílio Acidente - 50%', value: 6},
+        {name: 'Auxílio Acidente - 60%', value: 10},
+        {name: 'Auxílio Doença', value: 0},
+        {name: 'Auxílio por Incapacidade Permanente', value: 19},
+        {name: 'Auxílio por Incapacidade Temporária', value: 20},
+        {name: 'Benefício de Prestação Continuada - BPC ', value: 12},
+        {name: 'Pensão por Morte', value: 22}
     ];
-    return tipos_aposentadoria[value].name;
+
+    // return tipos_aposentadoria[value].name;
+    return (tipos_aposentadoria.filter(item => value === item.value))[0].name;
+
   }
 
   imprimirPagina() {
 
-
-
     const css = `
- <style>
-       body{font-family: Arial, Helvetica, sans-serif;}
-       h1, h2{font-size:0.9rem;}
-       i.fa, .not-print{ display: none; }
-       table{margin-top: 20;}
-       footer,div,p,th{font-size:11px;}
-       .table>tbody>tr>td, .table>tbody>tr>th,
-        .table>tfoot>tr>td, .table>tfoot>tr>th,
-        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 5px;}
-        .table>tbody>tr>td { white-space: nowrap !important; font-size:8.5px !important;}
-        footer{text-align: center;}
- </style>`;
+      <style>
+            body{font-family: Arial, Helvetica, sans-serif;}
+            h1, h2{font-size:0.9rem;}
+            i.fa, .not-print{ display: none; }
+            table{margin-top: 20;}
+            footer,div,p,th{font-size:11px;}
+            .table>tbody>tr>td, .table>tbody>tr>th,
+              .table>tfoot>tr>td, .table>tfoot>tr>th,
+              .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 5px;}
+              .table>tbody>tr>td { white-space: nowrap !important; font-size:8.5px !important;}
+              footer{text-align: center;}
+      </style>`;
 
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
     let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;

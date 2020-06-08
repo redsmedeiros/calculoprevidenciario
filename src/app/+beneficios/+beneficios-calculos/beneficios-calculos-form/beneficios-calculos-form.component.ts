@@ -22,7 +22,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
     '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
     '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
-  public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/ ];
+  public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
 
   public IndiceMask = [/\d/, ',', /\d/, /\d/, /\d/, /\d/];
   public styleTheme: string = 'style-0';
@@ -122,195 +122,62 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private tipoCorrecaoMonetaria = '';
   private indiceCorrecao = 0;
   public correcaoOptions = [
-    {
-      text: '- Selecione uma Opção -',
-      value: ''
-    },
-    {
-      text: 'Tabela da IPCAe a partir de 07/2009',
-      value: 'ipca'
-    },
-    {
-      text: 'Tabela da IPCA-e todo período',
-      value: 'ipca_todo_periodo'
-    },
-    {
-      text: 'Tabela do manual de cálculos da Justiça Federal',
-      value: 'cam'
-    },
-    {
-      text: 'Tabela da TR após 07/2009',
-      value: 'tr'
-    },
-    {
-      text: 'Tabela da TR todo período',
-      value: 'tr_todo_periodo'
-    },
-    {
-      text: 'Tabela da TR até 03/2015 e IPCA-e',
-      value: 'tr032015_ipcae'
-    },
-    {
-      text: 'Tabela administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994',
-      value: 'cam_art_175_3048'
-    },
-    {
-      text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC',
-      value: 'igpdi_012004_inpc062009_tr032015_inpc'
-    },
-    {
-      text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e IPCA-e',
-      value: 'igpdi_2006_inpc062009_tr032015_ipcae'
-    },
-    {
-      text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e INPC',
-      value: 'igpdi_012004_inpc062009_tr092017_inpc'
-    },
-    {
-      text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e IPCA-e',
-      value: 'igpdi_012004_inpc062009_tr092017_ipcae'
-    },
+    { text: '- Selecione uma Opção -', value: '' },
+    { text: 'Tabela da IPCAe a partir de 07/2009', value: 'ipca' },
+    { text: 'Tabela da IPCA-e todo período', value: 'ipca_todo_periodo' },
+    { text: 'Tabela do manual de cálculos da Justiça Federal', value: 'cam' },
+    { text: 'Tabela da TR após 07/2009', value: 'tr' },
+    { text: 'Tabela da TR todo período', value: 'tr_todo_periodo' },
+    { text: 'Tabela da TR até 03/2015 e IPCA-e', value: 'tr032015_ipcae' },
+    { text: 'Tabela administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994', value: 'cam_art_175_3048' },
+    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
+    { text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e IPCA-e', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
+    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e INPC', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
+    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e IPCA-e', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
   ];
 
   public especieValoresOptions = [
-    {
-      name: '- Selecione uma Opção -',
-      value: ''
-    }, {
-      name: 'Auxílio Doença',
-      value: 0
-    }, {
-      name: 'Aposentadoria por Invalidez ',
-      value: 1
-    }, {
-      name: 'Pensão por Morte',
-      value: 22
-    }, {
-      name: 'Aposentadoria por Idade - Trabalhador Urbano',
-      value: 2
-    }, {
-      name: 'Aposentadoria por Idade - Trabalhador Rural',
-      value: 7
-    }, {
-      name: 'Aposentadoria por Tempo de Contribuição',
-      value: 3
-    }, {
-      name: 'Aposentadoria Especial',
-      value: 4
-    }, {
-      name: 'Aposentadoria por Tempo de Contribuição Professor',
-      value: 5
-
-      // {
-      //   name: 'Aposentadoria por Tempo de Serviço de professor',
-      //   value: 5
-      // }, {
-      //   name: 'Auxílio Acidente previdenciário - 50%',
-      //   value: 6
-    }, {
-      name: 'Auxílio Acidente - 30%',
-      value: 8
-    }, {
-      name: 'Auxílio Acidente - 40%',
-      value: 9
-    }, {
-      name: 'Auxílio Acidente - 50%',
-      value: 6
-    }, {
-      name: 'Auxílio Acidente - 60%',
-      value: 10
-    }, {
-      name: 'Abono de Permanência em Serviço',
-      value: 11
-    }, {
-      name: 'Benefício de Prestação Continuada - BPC ', // (salário mínimo)
-      value: 12
-    }, {
-      name: 'Aposentadoria Pessoa com Deficiência',
-      value: 13
-    }, {
-      //   name: 'Aposentadoria especial da Pessoa com Deficiência Grave',
-      //   value: 13
-      // }, {
-      //   name: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      //   value: 14
-      // }, {
-      //   name: 'Aposentadoria especial da Pessoa com Deficiência Leve',
-      //   value: 15
-      // }, {
-      name: 'Aposentadoria por Idade da Pessoa com Deficiência',
-      value: 16
-    }
-    // , {
-    //   name: 'Benfeficio de prestação continuada - BPC',
-    //   value: 17
-    // }
+    { name: '- Selecione uma Opção -', value: '' },
+    { name: 'Abono de Permanência em Serviço', value: 11 },
+    { name: 'Aposentadoria Especial', value: 4 },
+    { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
+    { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
+    { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
+    { name: 'Aposentadoria por Invalidez ', value: 1 },
+    { name: 'Aposentadoria por Tempo de Contribuição', value: 3 },
+    { name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5 },
+    { name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13 },
+    { name: 'Aposentadoria por Tempo de Serviço', value: 18 },
+    { name: 'Auxílio Acidente - 30%', value: 8 },
+    { name: 'Auxílio Acidente - 40%', value: 9 },
+    { name: 'Auxílio Acidente - 50%', value: 6 },
+    { name: 'Auxílio Acidente - 60%', value: 10 },
+    { name: 'Auxílio Doença', value: 0 },
+    { name: 'Auxílio por Incapacidade Permanente', value: 19 },
+    { name: 'Auxílio por Incapacidade Temporária', value: 20 },
+    { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+    { name: 'Pensão por Morte', value: 22 }
   ];
 
   public tipoHonorariosOptions = [
-    {
-      text: '- Selecione uma Opção -',
-      value: ''
-    },
-    {
-      text: 'Não Calcular Honorários',
-      value: 'nao_calc'
-    },
-    {
-      text: 'Percentual Sobre a Diferença Entre Valores Devido e Recebido',
-      value: 'dif'
-    },
-    {
-      text: 'Percentual Sobre Valor Devido',
-      value: 'dev'
-    },
-    {
-      text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015',
-      value: 'CPC85'
-    },
-    {
-      text: 'Fixo',
-      value: 'fixo'
-    }
+    { text: '- Selecione uma Opção -', value: '' },
+    { text: 'Não Calcular Honorários', value: 'nao_calc' },
+    { text: 'Percentual Sobre a Diferença Entre Valores Devido e Recebido', value: 'dif' },
+    { text: 'Percentual Sobre Valor Devido', value: 'dev' },
+    { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
+    { text: 'Fixo', value: 'fixo' }
   ];
 
   public tipoJurosOptions = [
-    {
-      text: '- Selecione uma Opção -',
-      value: ''
-    },
-    {
-      text: 'Sem juros',
-      value: 'sem_juros'
-    },
-    {
-      text: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)',
-      value: '12_6'
-    },
-    {
-      text: '6% ao ano (observando a SELIC - Poupança)',
-      value: '6_selic'
-    },
-    {
-      text: '12% ao ano',
-      value: '12_ano'
-    },
-    {
-      text: '6% ao ano (até 01/2003) / 12% ao ano',
-      value: '6_12'
-    },
-    {
-      text: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano',
-      value: '6_12_6'
-    },
-    {
-      text: '6% ao ano (fixo)',
-      value: '6_fixo'
-    },
-    {
-      text: 'Desejo definir manualmente',
-      value: 'manual'
-    }
+    { text: '- Selecione uma Opção -', value: '' },
+    { text: 'Sem juros', value: 'sem_juros' },
+    { text: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)', value: '12_6' },
+    { text: '6% ao ano (observando a SELIC - Poupança)', value: '6_selic' },
+    { text: '12% ao ano', value: '12_ano' },
+    { text: '6% ao ano (até 01/2003) / 12% ao ano', value: '6_12' },
+    { text: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano', value: '6_12_6' },
+    { text: '6% ao ano (fixo)', value: '6_fixo' },
+    { text: 'Desejo definir manualmente', value: 'manual' }
   ];
 
 
@@ -319,7 +186,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   @Input() errors: ErrorService;
   @Input() type;
   @Output() onSubmit = new EventEmitter;
-  
+
 
   constructor(
     protected router: Router,
@@ -566,7 +433,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
 
-    if ( this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+    if (this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+        this.taxaAdvogadoAplicacaoSobre !== 'CPC85' && 
       (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte))) {
       // if (!this.isValidDate(this.dataHonorariosDe)) {
       //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
@@ -658,45 +526,52 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         valid = false;
       }
 
-      if (!(this.taxaAdvogadoPercateAte200SM >= 10.00 && this.taxaAdvogadoPercateAte200SM <= 20.00)) {
+      if (this.taxaAdvogadoPercateAte200SM != 0
+        && !(this.taxaAdvogadoPercateAte200SM >= 10.00 && this.taxaAdvogadoPercateAte200SM <= 20.00)) {
         this.errors.add({ 'taxaAdvogadoPercateAte200SM': ['O valor deve estar entre 10 e 20.'] });
         valid = false;
       }
 
-      if (!(this.taxaAdvogadoPerc200A2000SM >= 8.00 && this.taxaAdvogadoPerc200A2000SM <= 10.00)) {
+      if (this.taxaAdvogadoPerc200A2000SM != 0
+        && !(this.taxaAdvogadoPerc200A2000SM >= 8.00 && this.taxaAdvogadoPerc200A2000SM <= 10.00)) {
         this.errors.add({ 'taxaAdvogadoPerc200A2000SM': ['O valor deve estar entre 8 e 10.'] });
         valid = false;
       }
 
 
-      if (!(this.taxaAdvogadoPerc2000A20000SM >= 5.00 && this.taxaAdvogadoPerc2000A20000SM <= 8.00)) {
+      if (this.taxaAdvogadoPerc2000A20000SM != 0
+        && !(this.taxaAdvogadoPerc2000A20000SM >= 5.00 && this.taxaAdvogadoPerc2000A20000SM <= 8.00)) {
         this.errors.add({ 'taxaAdvogadoPerc2000A20000SM': ['O valor deve estar entre 5 e 8.'] });
         valid = false;
       }
 
 
-      if (!(this.taxaAdvogadoPerc20000A100000SM >= 3.00 && this.taxaAdvogadoPerc20000A100000SM <= 5.00)) {
+      if (this.taxaAdvogadoPerc20000A100000SM != 0
+        && !(this.taxaAdvogadoPerc20000A100000SM >= 3.00 && this.taxaAdvogadoPerc20000A100000SM <= 5.00)) {
         this.errors.add({ 'taxaAdvogadoPerc20000A100000SM': ['O valor deve estar entre 3 e 5 .'] });
         valid = false;
       }
 
-      if (!(this.taxaAdvogadoPerc100000SM >= 1.00 && this.taxaAdvogadoPerc100000SM <= 3.00)) {
+      if (this.taxaAdvogadoPerc100000SM != 0
+        && !(this.taxaAdvogadoPerc100000SM >= 1.00 && this.taxaAdvogadoPerc100000SM <= 3.00)) {
         this.errors.add({ 'taxaAdvogadoPerc100000SM': ['O valor deve estar entre 1 e 3.'] });
         valid = false;
       }
 
     }
 
+    console.log(this.errors);
+
     return valid;
   }
 
   submit(e) {
     e.preventDefault();
-   
+
     this.setCcheckBoxdibAnterior();
     this.setCheckRevisao();
     this.setJurosAnualParaMensal(this.tipoDejurosSelecionado);
-    
+
     this.validateInputs();
 
     if (this.errors.empty()) {
@@ -775,8 +650,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.dataHonorariosDe = this.dibValoresDevidos;
       this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
       // Intervalo de Honorarios ATE
-      this.formData.taxa_advogado_final = (this.isExits(this.dataHonorariosAte))?
-                                          this.dataHonorariosAte : this.formData.data_calculo_pedido;
+      this.formData.taxa_advogado_final = (this.isExits(this.dataHonorariosAte)) ?
+        this.dataHonorariosAte : this.formData.data_calculo_pedido;
 
       this.formData.taxa_advogado_inicio_sucumbencia = this.dataHonorariosSucumbenciaDe;
       this.formData.taxa_advogado_final_sucumbencia = this.dataHonorariosSucumbenciaAte;
@@ -792,8 +667,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // cpc 85
       this.formData.taxa_advogado_aplicar_CPCArt85 = this.taxaAdvogadoAplicarCPCArt85;
-      if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') 
-      {
+      if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') {
 
         this.formData.taxa_advogado_perc_ate_200_SM = this.taxaAdvogadoPercateAte200SM;
         this.formData.taxa_advogado_perc_200_2000_SM = this.taxaAdvogadoPerc200A2000SM;
@@ -1015,7 +889,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dataHonorariosSucumbenciaDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio_sucumbencia);
     // Intervalo de Honorarios fim sucumbencia
     this.dataHonorariosSucumbenciaAte = this.formatReceivedDate(this.formData.taxa_advogado_final_sucumbencia);
-    
+
     // Aplicação dos honorários sobre a diferença ou sobre o devido
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
       this.formData.taxa_advogado_aplicacao_sobre : '';
@@ -1240,7 +1114,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     console.log(!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month'));
 
-    if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month') ) {
+    if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month')) {
       this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
   }

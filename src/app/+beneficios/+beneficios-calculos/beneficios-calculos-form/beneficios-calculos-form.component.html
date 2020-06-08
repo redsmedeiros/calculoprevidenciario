@@ -222,6 +222,13 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="col-md-7 control-label">Número do Benefício:</label>
+                    <div class="col-md-4">
+                      <input [(ngModel)]="numeroBeneficioDevido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioDevido" class="form-control" type="text" maxlength="200">
+                      <small *ngIf="errors.has('numeroBeneficioDevido')" class="text-danger">{{ errors.get('numeroBeneficioDevido') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início de Benefício - DIB*:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();setCheckRevisao();'
@@ -277,13 +284,6 @@
                         <input name="taxaAjusteMaximaEsperada" class="form-control" [textMask]="{mask: IndiceMask, guide: false}"  [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
                         <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
                       </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-7 control-label">Número do Benefício:</label>
-                    <div class="col-md-4">
-                      <input [(ngModel)]="numeroBeneficioDevido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioDevido" class="form-control" type="text" maxlength="200">
-                      <small *ngIf="errors.has('numeroBeneficioDevido')" class="text-danger">{{ errors.get('numeroBeneficioDevido') }}</small>
-                    </div>
                   </div>
                   <div class="form-group">
                     <div class="col-md-8 col-sm-offset-3">
@@ -362,6 +362,13 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="col-md-7 control-label">Número do Benefício:</label>
+                    <div class="col-md-4">
+                      <input [(ngModel)]="numeroBeneficioRecebido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioRecebido" class="form-control" type="text" maxlength="200">
+                      <small *ngIf="errors.has('numeroBeneficioRecebido')" class="text-danger">{{ errors.get('numeroBeneficioRecebido') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início de Benefício - DIB*:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged();setCheckRevisao();"
@@ -408,13 +415,6 @@
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="taxaAjusteMaximaConcedida" class="form-control" [(ngModel)]="taxaAjusteMaximaConcedida" [textMask]="{mask: IndiceMask, guide: false}" type="text">
                       <small *ngIf="errors.has('taxaAjusteMaximaConcedida')" class="text-danger">{{ errors.get('taxaAjusteMaximaConcedida') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-7 control-label">Número do Benefício:</label>
-                    <div class="col-md-4">
-                      <input [(ngModel)]="numeroBeneficioRecebido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioRecebido" class="form-control" type="text" maxlength="200">
-                      <small *ngIf="errors.has('numeroBeneficioRecebido')" class="text-danger">{{ errors.get('numeroBeneficioRecebido') }}</small>
                     </div>
                   </div>
                   <div class="form-group">
