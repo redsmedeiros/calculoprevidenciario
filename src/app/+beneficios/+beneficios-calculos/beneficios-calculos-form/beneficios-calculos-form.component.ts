@@ -140,6 +140,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { name: '- Selecione uma Opção -', value: '' },
     { name: 'Abono de Permanência em Serviço', value: 11 },
     { name: 'Aposentadoria Especial', value: 4 },
+    { name: 'Aposentadoria por Incapacidade Permanente', value: 19 },
     { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
     { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
     { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
@@ -153,7 +154,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { name: 'Auxílio Acidente - 50%', value: 6 },
     { name: 'Auxílio Acidente - 60%', value: 10 },
     { name: 'Auxílio Doença', value: 0 },
-    { name: 'Auxílio por Incapacidade Permanente', value: 19 },
     { name: 'Auxílio por Incapacidade Temporária', value: 20 },
     { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
     { name: 'Pensão por Morte', value: 22 }
@@ -559,8 +559,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
     }
-
-    console.log(this.errors);
 
     return valid;
   }
@@ -1109,11 +1107,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   setCompetenciaInicioJurosIsNull() {
-    console.log(this.competenciaInicioJuros);
-    console.log(this.dataCitacaoReu);
-
-    console.log(!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month'));
-
     if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month')) {
       this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }

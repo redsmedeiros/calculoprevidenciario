@@ -590,23 +590,21 @@ export class BeneficiosResultadosComponent implements OnInit {
         && this.calculo.tipo_aposentadoria_recebida != 11) {
 
 
-
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
 
         //  // Adicionar linha de abono
-        //  if(this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')){
-        //   abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
-        //   console.log(this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
-        //   beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
-        // }
+         if(this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')){
+          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
+          //console.log(this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
+          beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
+        }
 
         if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
           beneficioRecebidoAbono = 0.0;
         } else {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
         }
-
 
         if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
           beneficioRecebidoAbono = 0.0;
@@ -1535,10 +1533,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       jurosAplicado = 0;
     }
 
-    // console.log(this.dataSelic70);
-    // console.log(dataCorrente);
-    // console.log(this.jurosCorrente);
-    // console.log(jurosAplicado);
     return jurosAplicado;
   }
 
@@ -1966,7 +1960,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public getCalculoHonorariosCPC85() {
 
-    const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
+    //const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
+    const moedaAtualCPC = this.Moeda.getByDate(moment());
     const salariosMinimos200 = moedaAtualCPC.salario_minimo * 200;
     const salariosMinimos2000 = moedaAtualCPC.salario_minimo * 2000;
     const salariosMinimos20000 = moedaAtualCPC.salario_minimo * 20000;
@@ -2029,6 +2024,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       valorBaseParaCalculoAuxiliar = this.somaDiferencaCorrigidaJuros;
     }
 
+   // console.log(valorBaseParaCalculoAuxiliar);
     let faixaDeprecentual = '';
     let continuaRegras = true;
 
@@ -2059,7 +2055,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    this.dataSalMinHonorarioscpc85 = moment(this.calculo.data_calculo_pedido).format('DD/MM/YYYY');
+    // console.log( parametrosoHonorariosCPC85 );
+    // console.log( this.faixaSalminimoHonorarioscpc85List );
+
+    //this.dataSalMinHonorarioscpc85 = moment(this.calculo.data_calculo_pedido).format('DD/MM/YYYY');
+    this.dataSalMinHonorarioscpc85 = moment().format('DD/MM/YYYY');
     this.somaHonorarioscpc85String = this.formatMoney(this.somaHonorarioscpc85, moedaAtualCPC.sigla);
     this.salarioMinimoHonorarioscpc85String = this.formatMoney(parseFloat(moedaAtualCPC.salario_minimo), moedaAtualCPC.sigla);
 
@@ -2806,8 +2806,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'diferenca_corrigida' },
           { data: 'juros' },
           { data: 'valor_juros', width: '10rem' },
-          { data: 'diferenca_juros' },
-          { data: 'honorarios' }
+          // { data: 'diferenca_juros' },
+          // { data: 'honorarios' }
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
@@ -2893,6 +2893,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getTipoAposentadoria(value) {
+    
     const tipos_aposentadoria = [
         {name: '- Selecione uma Opção -', value: ''},
         {name: 'Abono de Permanência em Serviço', value: 11},
@@ -2920,6 +2921,26 @@ export class BeneficiosResultadosComponent implements OnInit {
     return (tipos_aposentadoria.filter(item => value === item.value))[0].name;
 
   }
+
+  getTipoHonorario(value){
+
+    const tipoHonorariosOptions = [
+      { text: '- Selecione uma Opção -', value: '' },
+      { text: 'Não Calcular Honorários', value: 'nao_calc' },
+      { text: 'Percentual Sobre a Diferença Entre Valores Devido e Recebido', value: 'dif' },
+      { text: 'Percentual Sobre Valor Devido', value: 'dev' },
+      { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
+      { text: 'Fixo', value: 'fixo' }
+    ];
+
+    return (tipoHonorariosOptions.filter(item => value === item.value))[0].text;
+
+  }
+
+
+
+
+
 
   imprimirPagina() {
 

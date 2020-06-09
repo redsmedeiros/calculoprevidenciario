@@ -25,7 +25,7 @@
                 seguradoId
               }}/{{ calculoId }}/edit"
             >
-              Informações para o cálculo</a
+              Informações para o Cálculo</a
             >
           </li>
           <li class="breadcrumb-item active">Resultados</li>
@@ -43,7 +43,7 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
           <div>
             <div class="widget-body">
@@ -65,11 +65,11 @@
                   <b>RG:</b> {{ segurado.numero_documento }}
                 </li>
                 <li>
-                  <b>Data de nascimento:</b> {{ segurado.data_nascimento }}
+                  <b>Data de Nascimento:</b> {{ segurado.data_nascimento }}
                 </li>
                 <li *ngIf="segurado.sexo == 'm'"><b>Sexo:</b> Masculino</li>
                 <li *ngIf="segurado.sexo == 'f'"><b>Sexo:</b> Feminino</li>
-                <li><b>Idade atual:</b> {{ segurado.idade }} anos</li>
+                <li><b>Idade Atual:</b> {{ segurado.idade }} anos</li>
               </ul>
               <div id="printableSegurado" hidden>
                 <h1 *ngIf="!isTetos">Resultado do Cálculo de Atrasados</h1>
@@ -168,11 +168,11 @@
                     {{ calculo.numero_processo }}
                   </li>
                   <li>
-                    <b>Data de ajuizamento da ação:</b>
+                    <b>Data de Ajuizamento da Ação:</b>
                     {{ formatDate(calculo.data_acao_judicial) }}
                   </li>
                   <li>
-                    <b>Data da citação:</b>
+                    <b>Data da Citação:</b>
                     {{ formatDate(calculo.data_citacao_reu) }}
                   </li>
                   <li>
@@ -198,7 +198,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data de ajuizamento da ação:</b>
+                        <b>Data de Ajuizamento da Ação:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_acao_judicial) }}
@@ -206,7 +206,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data da citação:</b>
+                        <b>Data da Citação:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_citacao_reu) }}
@@ -270,29 +270,29 @@
                     {{ getTipoAposentadoria(calculo.tipo_aposentadoria) }}
                   </li>
                   <li>
-                    <b>Data de início de benefício - DIB:</b>
+                    <b>Data de Início de Benefício - DIB:</b>
                     {{ formatDate(calculo.data_pedido_beneficio_esperado) }}
                   </li>
                   <li>
-                    <b>Data inicial do benefício anterior:</b>
+                    <b>Data Inicial do Benefício Anterior:</b>
                     {{
                       formatDate(calculo.previa_data_pedido_beneficio_esperado)
                     }}
                   </li>
                   <li>
-                    <b>Data final dos atrasado:</b>
+                    <b>Data Final dos Atrasado:</b>
                     {{ formatDate(calculo.data_prevista_cessacao) }}
                   </li>
                   <li *ngIf="!calculo.valor_beneficio_esperado_revisao">
-                    <b>Renda mensal inicial - RMI:</b>
+                    <b>Renda Mensal Inicial - RMI:</b>
                     {{ formatRMI(calculo.valor_beneficio_esperado, "Devidos") }}
                   </li>
                   <li *ngIf="calculo.valor_beneficio_esperado_revisao">
-                    <b>Renda mensal inicial - RMI antes da revisão:</b>
+                    <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                     {{ formatRMI(calculo.valor_beneficio_esperado, "Devidos") }}
                   </li>
                   <li *ngIf="calculo.valor_beneficio_esperado_revisao">
-                    <b>Renda mensal inicial - RMI depois da revisão:</b>
+                    <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                     {{
                       formatRMI(
                         calculo.valor_beneficio_esperado_revisao,
@@ -301,16 +301,16 @@
                     }}
                   </li>
                   <li *ngIf="calculo.taxa_ajuste_maxima_esperada">
-                    <b>Índice de limitação no teto:</b> {{ calculo.taxa_ajuste_maxima_esperada }}
+                    <b>Índice de Limitação no Teto:</b> {{ calculo.taxa_ajuste_maxima_esperada }}
                   </li>
                   <li *ngIf="calculo.numero_beneficio_devido">
-                    <b>Número do benefício:</b> {{ calculo.numero_beneficio_devido }}
+                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_devido }}
                   </li>
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_esperado">
-                    <b>Renda mensal inicial - RMI não limitada ao salário mínimo.</b>
+                    <b>Renda Mensal Inicial - RMI não Limitada ao Salário Mínimo.</b>
                   </li>
                   <li *ngIf="calculo.nao_aplicar_ajuste_maximo_98_2003">
-                    <b>Renda mensal inicial - RMI não limitada ao teto para demandas judiciais.</b>
+                    <b>Renda Mensal Inicial - RMI não Limitada ao Teto para Demandas Judiciais.</b>
                   </li>
                 </ul>
                 <div id="printableValoresDevidos" hidden>
@@ -328,7 +328,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data de início de benefício - DIB:</b>
+                        <b>Data de Início de Benefício - DIB:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_pedido_beneficio_esperado) }}
@@ -336,7 +336,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data inicial do benefício anterior:</b>
+                        <b>Data Inicial do Benefício Anterior:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -348,7 +348,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data final dos atrasado:</b>
+                        <b>Data Final dos Atrasados:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_prevista_cessacao) }}
@@ -356,7 +356,7 @@
                     </tr>
                     <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI:</b>
+                        <b>Renda Mensal Inicial - RMI:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -366,7 +366,7 @@
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI antes da revisão:</b>
+                        <b>Renda Mensal Inicial - RMI antes da Revisão:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -376,7 +376,7 @@
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI depois da revisão:</b>
+                        <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -389,7 +389,7 @@
                     </tr>
                     <tr *ngIf="calculo.numero_beneficio_devido">
                       <td width="50%" style="text-align: right;">
-                        <b>Número do benefício:</b>
+                        <b>Número do Benefício:</b>
                       </td>
                       <td width="50%">
                         {{ calculo.numero_beneficio_devido }}
@@ -397,7 +397,7 @@
                     </tr>
                     <tr *ngIf="calculo.taxa_ajuste_maxima_esperada">
                       <td width="50%" style="text-align: right;">
-                        <b>Índice de limitação no teto:</b>
+                        <b>Índice de Limitação no Teto:</b>
                       </td>
                       <td width="50%">
                         {{ calculo.taxa_ajuste_maxima_esperada }}
@@ -443,31 +443,31 @@
                     }}
                   </li>
                   <li>
-                    <b>Data de início de benefício - DIB:</b>
+                    <b>Data de Início de Benefício - DIB:</b>
                     {{ formatDate(calculo.data_pedido_beneficio) }}
                   </li>
                   <li>
-                    <b>Data inicial do benefício anterior se houver:</b>
+                    <b>Data Inicial do Benefício Anterior se Houver:</b>
                     {{ formatDate(calculo.data_anterior_pedido_beneficio) }}
                   </li>
                   <li>
-                    <b>Data final recebidos:</b>
+                    <b>Data Final Recebidos:</b>
                     {{ formatDate(calculo.data_cessacao) }}
                   </li>
                   <li *ngIf="!calculo.valor_beneficio_concedido_revisao">
-                    <b>Renda mensal inicial - RMI:</b>
+                    <b>Renda Mensal Inicial - RMI:</b>
                     {{
                       formatRMI(calculo.valor_beneficio_concedido, "Recebidos")
                     }}
                   </li>
                   <li *ngIf="calculo.valor_beneficio_concedido_revisao">
-                    <b>Renda mensal inicial - RMI antes da revisão:</b>
+                    <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                     {{
                       formatRMI(calculo.valor_beneficio_concedido, "Recebidos")
                     }}
                   </li>
                   <li *ngIf="calculo.valor_beneficio_concedido_revisao">
-                    <b>Renda mensal inicial - RMI depois da revisão:</b>
+                    <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                     {{
                       formatRMI(
                         calculo.valor_beneficio_concedido_revisao,
@@ -476,13 +476,13 @@
                     }}
                   </li>
                   <li *ngIf="calculo.taxa_ajuste_maxima_concedida">
-                    <b>Índice de limitação no teto:</b> {{ calculo.taxa_ajuste_maxima_concedida }}
+                    <b>Índice de Limitação no Teto:</b> {{ calculo.taxa_ajuste_maxima_concedida }}
                   </li>
                   <li *ngIf="calculo.numero_beneficio_recebido">
-                    <b>Número do benefício:</b> {{ calculo.numero_beneficio_recebido }}
+                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_recebido }}
                   </li>
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_concedido">
-                    <b>Renda mensal inicial - RMI não limitada ao salário mínimo.</b>
+                    <b>Renda Mensal Inicial - RMI não Limitada ao Salário Mínimo.</b>
                   </li>
                 </ul>
                 <div id="printableValoresRecebidos" hidden>
@@ -504,7 +504,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data de início de benefício - DIB:</b>
+                        <b>Data de Início de Benefício - DIB:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_pedido_beneficio) }}
@@ -512,7 +512,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data inicial do benefício anterior se houver:</b>
+                        <b>Data Inicial do Benefício Anterior se Houver:</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_anterior_pedido_beneficio) }}
@@ -520,7 +520,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data final recebidos::</b>
+                        <b>Data Final Recebidos::</b>
                       </td>
                       <td width="50%">
                         {{ formatDate(calculo.data_cessacao) }}
@@ -528,7 +528,7 @@
                     </tr>
                     <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI:</b>
+                        <b>Renda Mensal Inicial - RMI:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -541,7 +541,7 @@
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI antes da revisão:</b>
+                        <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -554,7 +554,7 @@
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td width="50%" style="text-align: right;">
-                        <b>Renda mensal inicial - RMI depois da revisão:</b>
+                        <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                       </td>
                       <td width="50%">
                         {{
@@ -567,7 +567,7 @@
                     </tr>
                     <tr *ngIf="calculo.numero_beneficio_recebido">
                       <td width="50%" style="text-align: right;">
-                        <b>Número do benefício:</b>
+                        <b>Número do Benefício:</b>
                       </td>
                       <td width="50%">
                         {{ calculo.numero_beneficio_recebido }}
@@ -575,7 +575,7 @@
                     </tr>
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
                       <td width="50%" style="text-align: right;">
-                        <b>Índice de limitação no teto:</b>
+                        <b>Índice de Limitação no Teto:</b>
                       </td>
                       <td width="50%">
                         {{ calculo.taxa_ajuste_maxima_concedida }}
@@ -662,15 +662,15 @@
               <div class="widget-body">
                 <ul class="list-unstyled">
                   <li>
-                    <b>Juros anterior a janeiro de 2003:</b>
+                    <b>Juros Anterior a Janeiro de 2003:</b>
                     {{ calculo.previo_interesse_2003 }}%
                   </li>
                   <li>
-                    <b>Juros posterior a janeiro de 2003:</b>
+                    <b>Juros Posterior a Janeiro de 2003:</b>
                     {{ calculo.pos_interesse_2003 }}%
                   </li>
                   <li>
-                    <b>Juros posterior a julho de 2009:</b>
+                    <b>Juros Posterior a Julho de 2009:</b>
                     {{ calculo.pos_interesse_2009 }}%
                   </li>
                   <li>
@@ -684,19 +684,19 @@
                     </caption>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Juros anterior a janeiro de 2003:</b>
+                        <b>Juros Anterior a Janeiro de 2003:</b>
                       </td>
                       <td width="50%">{{ calculo.previo_interesse_2003 }}%</td>
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Juros posterior a janeiro de 2003:</b>
+                        <b>Juros Posterior a Janeiro de 2003:</b>
                       </td>
                       <td width="50%">{{ calculo.pos_interesse_2003 }}%</td>
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Juros posterior a julho de 2009:</b>
+                        <b>Juros Posterior a Julho de 2009:</b>
                       </td>
                       <td width="50%">{{ calculo.pos_interesse_2009 }}%</td>
                     </tr>
@@ -751,8 +751,11 @@
                     {{ dataInicialTutelaAntecipada }} a
                     {{ dataFinalTutelaAntecipada }}
                   </li> -->
+                  <li *ngIf="!exibirHonorarioscpc85">
+                    <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
+                  </li>
                   <li *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
-                    <b>Percentual dos honorários:</b>
+                    <b>Percentual dos Honorários:</b>
                     {{ formatPercent(calculo.percentual_taxa_advogado) }}
                   </li>
                   <!-- <li>
@@ -765,7 +768,7 @@
                   *ngIf="exibirHonorarioscpc85"
                 >
                   <li>
-                    <b>Honorários calculados Conforme § 3º, art. 85, do CPC/2015:</b>
+                    <b>Honorários Conforme § 3º, art. 85, do CPC/2015:</b>
                   </li>
                   <li>
                     <b>Faixa:</b>
@@ -776,11 +779,11 @@
                     </ul>
                   </li>
                   <li>
-                    <b>Sálario Mínimo considerado:</b>
+                    <b>Sálario Mínimo Considerado:</b>
                     {{ salarioMinimoHonorarioscpc85String }}
                   </li>
                   <li>
-                    <b>Data do sálario Mínimo:</b>
+                    <b>Data do Sálario Mínimo:</b>
                     {{ dataSalMinHonorarioscpc85 }}
                   </li>
                 </ul>
@@ -789,7 +792,7 @@
                   *ngIf="exibirHonorariosValorFixo"
                 >
                   <li>
-                    <b>Honorários valor fixo: </b>
+                    <b>Honorários Valor Fixo: </b>
                     {{ somaHonorariosFixoString }}
                   </li>
                 </ul>
@@ -811,9 +814,14 @@
                         {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                       </td>
                     </tr>
+                    <tr *ngIf="!exibirHonorarioscpc85">
+                      <td width="50%" style="text-align: center;" colspan="2">
+                        <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
+                      </td>
+                    </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Percentual dos honorários:</b>
+                        <b>Percentual dos Honorários:</b>
                       </td>
                       <td width="50%">
                         {{ formatPercent(calculo.percentual_taxa_advogado) }}
@@ -845,7 +853,7 @@
                     </caption>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Honorários calculados Conforme § 3º, art. 85, do CPC/2015:</b>
+                        <b>Honorários Conforme § 3º, art. 85, do CPC/2015:</b>
                       </td>
                       <td width="50%">
                         <ul>
@@ -857,7 +865,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Sálario Mínimo considerado:</b>
+                        <b>Sálario Mínimo Considerado:</b>
                       </td>
                       <td width="50%">
                         {{ salarioMinimoHonorarioscpc85String }}
@@ -865,7 +873,7 @@
                     </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Data do sálario Mínimo:</b>
+                        <b>Data do Sálario Mínimo:</b>
                       </td>
                       <td width="50%">
                         {{ dataSalMinHonorarioscpc85 }}
@@ -882,7 +890,7 @@
                     </caption>
                     <tr>
                       <td width="50%" style="text-align: right;">
-                        <b>Honorários valor fixo:</b>
+                        <b>Honorários Valor Fixo:</b>
                       </td>
                       <td width="50%">
                         {{ somaHonorariosFixoString }}
@@ -1039,7 +1047,7 @@
             <div class="widget-body">
               <ul  class="list-unstyled" *ngIf="!isTetos">
                 <li>
-                  <strong>Diferença corrigida</strong>
+                  <strong>Diferença Corrigida</strong>
                   <span
                     class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                   >
@@ -1058,6 +1066,12 @@
                   >
                     {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
                   </span>
+                </li>
+                <li  *ngIf="calculo.maturidade != 0">
+                  <b>Total Vincendas:</b
+                  ><span class="{{ tratarConclusao(somaVincendas) }}">
+                    {{ formatMoney(somaVincendas) }}</span
+                  >
                 </li>
                 <li>
                   <strong>Honorários Advocatícios: </strong>
@@ -1079,7 +1093,7 @@
                   </caption>
                   <tr>
                     <td width="50%" style="text-align: right;">
-                      <b>Diferença corrigida:</b>
+                      <b>Diferença Corrigida:</b>
                     </td>
                         <td width="50%">
                           <span
@@ -1108,6 +1122,16 @@
                         >
                           {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
                         </span>
+                    </td>
+                  </tr>
+                  <tr  *ngIf="calculo.maturidade != 0">
+                    <td width="50%" style="text-align: right;">
+                      <b>Total Vincendas: </b>
+                    </td>
+                        <td width="50%">
+                          <span class="{{ tratarConclusao(somaVincendas) }}">
+                            {{ formatMoney(somaVincendas) }}</span
+                          >
                     </td>
                   </tr>
                   <tr>
@@ -1941,7 +1965,8 @@
         - Taxa de {{ calculo.previo_interesse_2003 }}% até 12/2002 ,
         taxa de {{ calculo.pos_interesse_2003 }}% de 01/2003 até
         06/2009 , taxa de {{ calculo.pos_interesse_2009 }}% de 07/2009
-        até 18/08/2017 Quando a sentença determinar a utilização de
+        até {{ formatDate(calculo.data_calculo_pedido) }}.
+         Quando a sentença determinar a utilização de
         juros pelo critério da poupança será adotado o conteúdo ditado
         pela Lei 12703/2012 a partir de 07/2012.
       </p>
