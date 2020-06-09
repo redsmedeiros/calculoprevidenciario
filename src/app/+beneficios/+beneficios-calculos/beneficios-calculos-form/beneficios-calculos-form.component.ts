@@ -608,7 +608,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.id_segurado = this.route.snapshot.params['id'];
       // Data do cálculo:
       // this.formData.data_calculo_pedido = this.dataCalculo;
-      this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').format('01/MM/YYYY');
+      this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').endOf('month').format('DD/MM/YYYY');
 
       // Data da citação do réu
       this.formData.data_acao_judicial = this.dataAcaoJudicial;

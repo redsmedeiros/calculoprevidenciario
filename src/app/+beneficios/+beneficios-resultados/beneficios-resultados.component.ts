@@ -562,9 +562,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaJuros += valorJuros;
 
         // para calcular o homorario sobre a soma do devido 
-        this.somaDevidosreajustados += Math.round(beneficioDevido * 100) / 100;
+        this.somaDevidosreajustados +=  (beneficioDevido * correcaoMonetaria) + valorJuros;
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-          this.somaDevidosreajustadosAtefinalHonorario += Math.round(this.somaDevidosreajustadosAtefinalHonorario * 100) / 100;
+          this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + valorJuros ;
         }
 
         // soma tutela antecipada
@@ -664,8 +664,6 @@ export class BeneficiosResultadosComponent implements OnInit {
           abonoProporcionalRecebidos = 1;
         }
 
-        //console.log(Math.round(beneficioDevidoAbono * 100) / 100);
-
         if (!isPrescricao) {
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
           this.somaDiferencaMensal += diferencaMensal;
@@ -676,9 +674,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
           // para calcular o homorario sobre a soma do devido 
-          this.somaDevidosreajustados += Math.round(beneficioDevido * 100) / 100;
+          this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + valorJuros;
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-            this.somaDevidosreajustadosAtefinalHonorario += Math.round(this.somaDevidosreajustadosAtefinalHonorario * 100) / 100;
+            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + valorJuros;
           }
 
           // soma tutela antecipada
@@ -1062,10 +1060,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (dataCorrente.isSame(this.dataFinal, 'month')) {
-      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      let proporcionalidade = this.dataFinal.date() / 30;
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
+    //  let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
       let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
@@ -1469,9 +1469,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     return jurosList.reverse();
   }
-
-
-
 
 
 
@@ -1960,8 +1957,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public getCalculoHonorariosCPC85() {
 
-    //const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
-    const moedaAtualCPC = this.Moeda.getByDate(moment());
+    const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
     const salariosMinimos200 = moedaAtualCPC.salario_minimo * 200;
     const salariosMinimos2000 = moedaAtualCPC.salario_minimo * 2000;
     const salariosMinimos20000 = moedaAtualCPC.salario_minimo * 20000;
@@ -2019,47 +2015,42 @@ export class BeneficiosResultadosComponent implements OnInit {
     let valorBaseParaCalculoAuxiliar = 0;
 
     if (this.calculo.taxa_advogado_aplicar_CPCArt85) {
-      valorBaseParaCalculoAuxiliar = this.somaDevidosreajustados;
+      valorBaseParaCalculoAuxiliar = this.somaDevidosreajustadosAtefinalHonorario;
     } else {
       valorBaseParaCalculoAuxiliar = this.somaDiferencaCorrigidaJuros;
     }
 
-   // console.log(valorBaseParaCalculoAuxiliar);
     let faixaDeprecentual = '';
     let continuaRegras = true;
 
     this.somaHonorarioscpc85 = 0;
+
     for (const linhaCPC85 of parametrosoHonorariosCPC85) {
 
       if (continuaRegras) {
 
         linhaCPC85.status = true;
         linhaCPC85.percentual = this.calculo[linhaCPC85.faixa];
-        linhaCPC85.resultado = valorBaseParaCalculoAuxiliar * (linhaCPC85.percentual / 100);
-        linhaCPC85.resultadoString = this.formatMoney(linhaCPC85.resultado, moedaAtualCPC.sigla);
+       
+        if (valorBaseParaCalculoAuxiliar > linhaCPC85.valorMax) {
+         
+          linhaCPC85.resultado = linhaCPC85.valorMax * (linhaCPC85.percentual / 100);
+          continuaRegras = true;
+          valorBaseParaCalculoAuxiliar -= linhaCPC85.valorMax;
 
+        }else{
+          linhaCPC85.resultado = valorBaseParaCalculoAuxiliar * (linhaCPC85.percentual / 100);
+          continuaRegras = false;
+        }
+
+        linhaCPC85.resultadoString = this.formatMoney(linhaCPC85.resultado, moedaAtualCPC.sigla);
         this.faixaSalminimoHonorarioscpc85List.push(linhaCPC85);
         this.somaHonorarioscpc85 += linhaCPC85.resultado;
       }
 
-      if (valorBaseParaCalculoAuxiliar > linhaCPC85.valorMax) {
-
-        continuaRegras = true;
-        valorBaseParaCalculoAuxiliar -= linhaCPC85.valorMax;
-
-      } else {
-
-        continuaRegras = false;
-
-      }
-
     }
 
-    // console.log( parametrosoHonorariosCPC85 );
-    // console.log( this.faixaSalminimoHonorarioscpc85List );
-
-    //this.dataSalMinHonorarioscpc85 = moment(this.calculo.data_calculo_pedido).format('DD/MM/YYYY');
-    this.dataSalMinHonorarioscpc85 = moment().format('DD/MM/YYYY');
+    this.dataSalMinHonorarioscpc85 = moment(this.calculo.data_calculo_pedido).format('MM/YYYY');
     this.somaHonorarioscpc85String = this.formatMoney(this.somaHonorarioscpc85, moedaAtualCPC.sigla);
     this.salarioMinimoHonorarioscpc85String = this.formatMoney(parseFloat(moedaAtualCPC.salario_minimo), moedaAtualCPC.sigla);
 
@@ -2468,6 +2459,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+
+   if(this.dataFinal.isBefore(this.calculo.data_prevista_cessacao)){
+    this.dataFinal = moment(this.calculo.data_prevista_cessacao);
+   }
 
 
     // Prescrição
