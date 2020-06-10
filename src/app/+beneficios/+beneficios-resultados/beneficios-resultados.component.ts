@@ -1099,13 +1099,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (dataCorrente.isSame(this.dataFinal, 'month')
       && (this.dataCessacaoDevido == null || this.dataFinal.isSame(this.dataCessacaoDevido))) {
 
-      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+    // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      let proporcionalidade = ((this.dataFinal.date() >= 30 )? 30 : this.dataFinal.date()) / 30 ;
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
 
-      let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      //let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      let proporcionalidade = ((this.dataCessacaoDevido.date() >= 30 )? 30 : this.dataCessacaoDevido.date())  / 30;
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
@@ -1314,13 +1316,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (dataCorrente.isSame(this.dataFinal, 'month') &&
       this.dataCessacaoRecebido == null || this.dataFinal.isSame(this.dataCessacaoRecebido)) {
 
-      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
+      let proporcionalidade = ((this.dataFinal.date() >= 30 )? 30 : this.dataFinal.date())  / 30;
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
     } else if (this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')) {
 
-      let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
+      // let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
+      let proporcionalidade = ((this.dataCessacaoRecebido.date() >= 30 )? 30 : this.dataCessacaoRecebido.date())  / 30;
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
