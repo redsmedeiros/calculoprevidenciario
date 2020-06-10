@@ -496,7 +496,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         // teste 02/06
         // console.log(dataCorrente);
         // console.log(indiceReajusteValoresDevidos);
-        
+
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
 
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
@@ -567,11 +567,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaJuros += valorJuros;
 
         // para calcular o homorario sobre a soma do devido 
-        this.somaDevidosreajustados +=  (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+        this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
 
           this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
-                                                          (beneficioDevido * correcaoMonetaria * juros) ;
+            (beneficioDevido * correcaoMonetaria * juros);
 
           this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
@@ -603,17 +603,35 @@ export class BeneficiosResultadosComponent implements OnInit {
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
 
-        //  // Adicionar linha de abono
-         if(this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')){
-          abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
-          //console.log(this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
-          beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
-        }
+
+
 
         if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
           beneficioRecebidoAbono = 0.0;
         } else {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
+        }
+
+
+        //  // Adicionar linha de abono
+        if (this.calculo.calcular_abono_13_ultimo_mes) {
+
+          if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
+
+            abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
+            //console.log(this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
+            beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
+
+          }
+
+          if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
+
+            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
+            //console.log(this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
+            beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
+
+          }
+
         }
 
         if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
@@ -689,7 +707,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
 
             this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
-                                                            (beneficioDevido * correcaoMonetaria * juros);
+              (beneficioDevido * correcaoMonetaria * juros);
 
             this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
@@ -1055,7 +1073,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
-      let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
+    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
 
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
@@ -1076,21 +1094,21 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    
+
     // Calcular proporcional no final devido
-    if (dataCorrente.isSame(this.dataFinal, 'month') 
-        && (this.dataCessacaoDevido == null || this.dataFinal.isSame(this.dataCessacaoDevido))) {
-     
+    if (dataCorrente.isSame(this.dataFinal, 'month')
+      && (this.dataCessacaoDevido == null || this.dataFinal.isSame(this.dataCessacaoDevido))) {
+
       let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
-    
+
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
-      
+
       let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
-    
+
     }
 
     let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
@@ -1289,12 +1307,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
-   
+
     let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
 
     // Calcular proporcional no final recebido
     if (dataCorrente.isSame(this.dataFinal, 'month') &&
-        this.dataCessacaoRecebido == null || this.dataFinal.isSame(this.dataCessacaoRecebido)) {
+      this.dataCessacaoRecebido == null || this.dataFinal.isSame(this.dataCessacaoRecebido)) {
 
       let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioRecebidoFinal *= proporcionalidade;
@@ -2072,11 +2090,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           continuaRegras = true;
           valorBaseParaCalculoAuxiliar -= linhaCPC85.valorMax;
 
-        }else{
+        } else {
 
           linhaCPC85.resultado = valorBaseParaCalculoAuxiliar * (linhaCPC85.percentual / 100);
           continuaRegras = false;
-        
+
         }
 
         linhaCPC85.resultadoString = this.formatMoney(linhaCPC85.resultado, moedaAtualCPC.sigla);
@@ -2496,9 +2514,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
 
-   if(this.dataFinal.isBefore(this.calculo.data_prevista_cessacao)){
-    this.dataFinal = moment(this.calculo.data_prevista_cessacao);
-   }
+    if (this.dataFinal.isBefore(this.calculo.data_prevista_cessacao)) {
+      this.dataFinal = moment(this.calculo.data_prevista_cessacao);
+    }
 
 
     // Prescrição
@@ -2924,28 +2942,28 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getTipoAposentadoria(value) {
-    
+
     const tipos_aposentadoria = [
-        {name: '- Selecione uma Opção -', value: ''},
-        {name: 'Abono de Permanência em Serviço', value: 11},
-        {name: 'Aposentadoria Especial', value: 4},
-        {name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7},
-        {name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2},
-        {name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16},
-        {name: 'Aposentadoria por Invalidez ', value: 1},
-        {name: 'Aposentadoria por Tempo de Contribuição', value: 3},
-        {name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5},
-        {name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13},
-        {name: 'Aposentadoria por Tempo de Serviço', value: 18},
-        {name: 'Auxílio Acidente - 30%', value: 8},
-        {name: 'Auxílio Acidente - 40%', value: 9},
-        {name: 'Auxílio Acidente - 50%', value: 6},
-        {name: 'Auxílio Acidente - 60%', value: 10},
-        {name: 'Auxílio Doença', value: 0},
-        {name: 'Auxílio por Incapacidade Permanente', value: 19},
-        {name: 'Auxílio por Incapacidade Temporária', value: 20},
-        {name: 'Benefício de Prestação Continuada - BPC ', value: 12},
-        {name: 'Pensão por Morte', value: 22}
+      { name: '- Selecione uma Opção -', value: '' },
+      { name: 'Abono de Permanência em Serviço', value: 11 },
+      { name: 'Aposentadoria Especial', value: 4 },
+      { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
+      { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
+      { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
+      { name: 'Aposentadoria por Invalidez ', value: 1 },
+      { name: 'Aposentadoria por Tempo de Contribuição', value: 3 },
+      { name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5 },
+      { name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13 },
+      { name: 'Aposentadoria por Tempo de Serviço', value: 18 },
+      { name: 'Auxílio Acidente - 30%', value: 8 },
+      { name: 'Auxílio Acidente - 40%', value: 9 },
+      { name: 'Auxílio Acidente - 50%', value: 6 },
+      { name: 'Auxílio Acidente - 60%', value: 10 },
+      { name: 'Auxílio Doença', value: 0 },
+      { name: 'Auxílio por Incapacidade Permanente', value: 19 },
+      { name: 'Auxílio por Incapacidade Temporária', value: 20 },
+      { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+      { name: 'Pensão por Morte', value: 22 }
     ];
 
     // return tipos_aposentadoria[value].name;
@@ -2953,7 +2971,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   }
 
-  getTipoHonorario(value){
+  getTipoHonorario(value) {
 
     const tipoHonorariosOptions = [
       { text: '- Selecione uma Opção -', value: '' },
