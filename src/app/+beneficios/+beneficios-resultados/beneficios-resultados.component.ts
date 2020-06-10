@@ -3044,10 +3044,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5,
         value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
       },
-      {
-        jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5,
-        value: '6_selic', name: '6% ao ano (observando a SELIC - Poupança)'
-      },
+      // {
+      //   jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5,
+      //   value: '6_selic', name: '6% ao ano (observando a SELIC - Poupança)'
+      // },
       {
         jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1,
         value: '12_ano', name: '12% ao ano'
