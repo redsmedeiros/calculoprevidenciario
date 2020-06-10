@@ -529,7 +529,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         valorNumericoDiferencaCorrigidaJurosObj);
 
 
-      valorDevidohonorario = (beneficioDevido * correcaoMonetaria) + valorJuros;
+      valorDevidohonorario = (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
@@ -565,9 +565,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaJuros += valorJuros;
 
         // para calcular o homorario sobre a soma do devido 
-        this.somaDevidosreajustados +=  (beneficioDevido * correcaoMonetaria) + valorJuros;
+        this.somaDevidosreajustados +=  (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-          this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + valorJuros ;
+          this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros) ;
         }
 
         // soma tutela antecipada
@@ -630,7 +630,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaCorrigida,
           valorNumericoDiferencaCorrigidaJurosObj);
 
-        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + valorJuros;
+        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
@@ -678,9 +678,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
           // para calcular o homorario sobre a soma do devido 
-          this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + valorJuros;
+          this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + valorJuros;
+            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
           }
 
           // soma tutela antecipada
@@ -2036,16 +2036,18 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         linhaCPC85.status = true;
         linhaCPC85.percentual = this.calculo[linhaCPC85.faixa];
-       
+
         if (valorBaseParaCalculoAuxiliar > linhaCPC85.valorMax) {
-         
+
           linhaCPC85.resultado = linhaCPC85.valorMax * (linhaCPC85.percentual / 100);
           continuaRegras = true;
           valorBaseParaCalculoAuxiliar -= linhaCPC85.valorMax;
 
         }else{
+
           linhaCPC85.resultado = valorBaseParaCalculoAuxiliar * (linhaCPC85.percentual / 100);
           continuaRegras = false;
+        
         }
 
         linhaCPC85.resultadoString = this.formatMoney(linhaCPC85.resultado, moedaAtualCPC.sigla);

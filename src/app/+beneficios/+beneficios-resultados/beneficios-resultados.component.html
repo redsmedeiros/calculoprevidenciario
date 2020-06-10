@@ -217,7 +217,7 @@
                         <b>Atualizado até:</b>
                       </td>
                       <td width="50%">
-                        {{ formatDate(calculo.data_calculo_pedido) }}
+                        {{ formatDateCompetencia(calculo.data_calculo_pedido) }}
                       </td>
                     </tr>
                     <tr *ngIf="calculo.maturidade != 0" >
@@ -854,6 +854,15 @@
                     <caption>
                       <h2>Honorários</h2>
                     </caption>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Intervalo de Honorários:</b>
+                      </td>
+                      <td width="50%">
+                        {{ formatDate(calculo.taxa_advogado_inicio) }} a
+                        {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
+                      </td>
+                    </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
                         <b>Honorários Conforme § 3º, art. 85, do CPC/2015:</b>
