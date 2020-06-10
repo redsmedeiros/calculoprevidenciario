@@ -198,6 +198,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   public somaDevidosreajustados = 0;
   public somaDevidosreajustadosAtefinalHonorario = 0;
+  public somaDiferencaReajustadosAtefinalHonorario = 0;
   // Honorarios CPC 85
   public exibirHonorarioscpc85 = false;
   public somaHonorarioscpc85 = 0;
@@ -567,7 +568,12 @@ export class BeneficiosResultadosComponent implements OnInit {
         // para calcular o homorario sobre a soma do devido 
         this.somaDevidosreajustados +=  (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-          this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros) ;
+
+          this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
+                                                          (beneficioDevido * correcaoMonetaria * juros) ;
+
+          this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+
         }
 
         // soma tutela antecipada
@@ -680,7 +686,12 @@ export class BeneficiosResultadosComponent implements OnInit {
           // para calcular o homorario sobre a soma do devido 
           this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
-            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+
+            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
+                                                            (beneficioDevido * correcaoMonetaria * juros);
+
+            this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+
           }
 
           // soma tutela antecipada
@@ -689,7 +700,6 @@ export class BeneficiosResultadosComponent implements OnInit {
               && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
             this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
           }
-
 
         }
 
@@ -2020,9 +2030,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     let valorBaseParaCalculoAuxiliar = 0;
 
     if (this.calculo.taxa_advogado_aplicar_CPCArt85) {
+
       valorBaseParaCalculoAuxiliar = this.somaDevidosreajustadosAtefinalHonorario;
+
     } else {
-      valorBaseParaCalculoAuxiliar = this.somaDiferencaCorrigidaJuros;
+
+      valorBaseParaCalculoAuxiliar = this.somaDiferencaReajustadosAtefinalHonorario;
+
     }
 
     let faixaDeprecentual = '';
