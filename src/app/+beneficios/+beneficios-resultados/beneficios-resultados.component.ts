@@ -496,6 +496,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         // teste 02/06
         // console.log(dataCorrente);
         // console.log(indiceReajusteValoresDevidos);
+        
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
 
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
@@ -1054,7 +1055,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
-    let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
+      let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
+
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
@@ -1074,16 +1076,21 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    if (dataCorrente.isSame(this.dataFinal, 'month')) {
-      // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
-      let proporcionalidade = this.dataFinal.date() / 30;
+    
+    // Calcular proporcional no final devido
+    if (dataCorrente.isSame(this.dataFinal, 'month') 
+        && (this.dataCessacaoDevido == null || this.dataFinal.isSame(this.dataCessacaoDevido))) {
+     
+      let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
+    
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
-    //  let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      
       let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
+    
     }
 
     let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
@@ -1128,6 +1135,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     resultsObj.resultString = beneficioDevidoString;
     this.beneficioDevidoAnterior = beneficioDevidoFinal;
+
     return beneficioDevidoFinal;
   }
 
@@ -1281,16 +1289,23 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
+   
     let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
 
-    if (dataCorrente.isSame(this.dataFinal, 'month')) {
+    // Calcular proporcional no final recebido
+    if (dataCorrente.isSame(this.dataFinal, 'month') &&
+        this.dataCessacaoRecebido == null || this.dataFinal.isSame(this.dataCessacaoRecebido)) {
+
       let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
+
     } else if (this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')) {
+
       let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
       beneficioRecebidoFinal *= proporcionalidade;
-      //this.proporcionalidadeUltimaLinha = true;
+      this.proporcionalidadeUltimaLinha = true;
+
     }
 
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
