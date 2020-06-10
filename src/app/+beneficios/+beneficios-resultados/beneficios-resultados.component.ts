@@ -468,6 +468,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       let diferencaCorrigidaJuros = ''; //this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       let honorarios = 0.0;
       let isPrescricao = false;
+      let valorDevidohonorario = 0;
 
       // console.log(juros);
 
@@ -527,7 +528,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         diferencaCorrigida,
         valorNumericoDiferencaCorrigidaJurosObj);
 
-      honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevido);
+
+      valorDevidohonorario = (beneficioDevido * correcaoMonetaria) + valorJuros;
+      honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
         //Se houver o marcador, a data é prescrita
@@ -553,7 +556,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       tableData.push(line);
 
       if (!isPrescricao) {
-        //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
+        // Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
         this.somaDiferencaMensal += diferencaMensal;
         this.somaCorrecaoMonetaria += correcaoMonetaria;
         this.somaDiferencaCorrigida += diferencaCorrigida;
@@ -627,7 +630,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaCorrigida,
           valorNumericoDiferencaCorrigidaJurosObj);
 
-        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, beneficioDevidoAbono);
+        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + valorJuros;
+        honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
         if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
@@ -711,6 +715,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // console.log(this.somaDevidaJudicialmente);
     // console.log(this.somaTotalSegurado);
+    // console.log(this.somaHonorarios);
 
     if (this.calculo.acordo_pedido != 0) {
       this.calcularAcordoJudicial();
@@ -2976,24 +2981,44 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getStringTabelaCorrecaoMonetaria() {
-    if (this.calculo.tipo_correcao == 'ipca')
-      return 'IPCA-e a partir de 07/2009';
-    if (this.calculo.tipo_correcao == 'tr')
-      return 'da TR após 07/2009';
-    if (this.calculo.tipo_correcao == 'cam')
-      return 'manual de cálculos SICOM da Justiça Federal';
-    if (this.calculo.tipo_correcao == 'tr032015_ipcae')
-      return 'TR até 03/2015 e IPCA-e';
-    if (this.calculo.tipo_correcao == 'ipca_todo_periodo')
-      return 'IPCA-e todo período';
-    if (this.calculo.tipo_correcao == 'tr_todo_periodo')
-      return 'TR todo período';
-    if (this.calculo.tipo_correcao == 'cam_art_175_3048')
-      return 'administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994';
-    if (this.calculo.tipo_correcao == 'igpdi_012004_inpc062009_tr032015_inpc')
-      return 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC';
-    if (this.calculo.tipo_correcao == 'igpdi_2006_inpc062009_tr032015_ipcae')
-      return 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e ipcae';
+    // if (this.calculo.tipo_correcao == 'ipca')
+    //   return 'IPCA-e a partir de 07/2009';
+    // if (this.calculo.tipo_correcao == 'tr')
+    //   return 'da TR após 07/2009';
+    // if (this.calculo.tipo_correcao == 'cam')
+    //   return 'manual de cálculos SICOM da Justiça Federal';
+    // if (this.calculo.tipo_correcao == 'tr032015_ipcae')
+    //   return 'TR até 03/2015 e IPCA-e';
+    // if (this.calculo.tipo_correcao == 'ipca_todo_periodo')
+    //   return 'IPCA-e todo período';
+    // if (this.calculo.tipo_correcao == 'tr_todo_periodo')
+    //   return 'TR todo período';
+    // if (this.calculo.tipo_correcao == 'cam_art_175_3048')
+    //   return 'administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994';
+    // if (this.calculo.tipo_correcao == 'igpdi_012004_inpc062009_tr032015_inpc')
+    //   return 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC';
+    // if (this.calculo.tipo_correcao == 'igpdi_2006_inpc062009_tr032015_ipcae')
+    //   return 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e ipcae';
+
+
+    const correcaoOptions = [
+      { text: '- Selecione uma Opção -', value: '' },
+      { text: 'IPCAe a partir de 07/2009', value: 'ipca' },
+      { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
+      { text: 'Manual de cálculos da Justiça Federal', value: 'cam' },
+      { text: 'TR após 07/2009', value: 'tr' },
+      { text: 'TR todo período', value: 'tr_todo_periodo' },
+      { text: 'TR até 03/2015 e IPCA-e', value: 'tr032015_ipcae' },
+      { text: 'Administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994', value: 'cam_art_175_3048' },
+      { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
+      { text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e IPCA-e', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
+      { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e INPC', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
+      { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e IPCA-e', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
+    ];
+
+
+    return (correcaoOptions.filter(item => this.calculo.tipo_correcao === item.value))[0].text;
+
   }
 
   editSegurado() {

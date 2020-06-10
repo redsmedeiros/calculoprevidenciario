@@ -269,6 +269,9 @@
                     <b>Espécie:</b>
                     {{ getTipoAposentadoria(calculo.tipo_aposentadoria) }}
                   </li>
+                  <li *ngIf="calculo.numero_beneficio_devido">
+                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_devido }}
+                  </li>
                   <li>
                     <b>Data de Início de Benefício - DIB:</b>
                     {{ formatDate(calculo.data_pedido_beneficio_esperado) }}
@@ -303,9 +306,6 @@
                   <li *ngIf="calculo.taxa_ajuste_maxima_esperada">
                     <b>Índice de Limitação no Teto:</b> {{ calculo.taxa_ajuste_maxima_esperada }}
                   </li>
-                  <li *ngIf="calculo.numero_beneficio_devido">
-                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_devido }}
-                  </li>
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_esperado">
                     <b>Renda Mensal Inicial - RMI não Limitada ao Salário Mínimo.</b>
                   </li>
@@ -324,6 +324,14 @@
                       </td>
                       <td width="50%">
                         {{ getTipoAposentadoria(calculo.tipo_aposentadoria) }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.numero_beneficio_devido">
+                      <td width="50%" style="text-align: right;">
+                        <b>Número do Benefício:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.numero_beneficio_devido }}
                       </td>
                     </tr>
                     <tr>
@@ -387,14 +395,7 @@
                         }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.numero_beneficio_devido">
-                      <td width="50%" style="text-align: right;">
-                        <b>Número do Benefício:</b>
-                      </td>
-                      <td width="50%">
-                        {{ calculo.numero_beneficio_devido }}
-                      </td>
-                    </tr>
+                  
                     <tr *ngIf="calculo.taxa_ajuste_maxima_esperada">
                       <td width="50%" style="text-align: right;">
                         <b>Índice de Limitação no Teto:</b>
@@ -442,6 +443,9 @@
                       getTipoAposentadoria(calculo.tipo_aposentadoria_recebida)
                     }}
                   </li>
+                  <li *ngIf="calculo.numero_beneficio_recebido">
+                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_recebido }}
+                  </li>
                   <li>
                     <b>Data de Início de Benefício - DIB:</b>
                     {{ formatDate(calculo.data_pedido_beneficio) }}
@@ -478,9 +482,7 @@
                   <li *ngIf="calculo.taxa_ajuste_maxima_concedida">
                     <b>Índice de Limitação no Teto:</b> {{ calculo.taxa_ajuste_maxima_concedida }}
                   </li>
-                  <li *ngIf="calculo.numero_beneficio_recebido">
-                    <b>Número do Benefício:</b> {{ calculo.numero_beneficio_recebido }}
-                  </li>
+                 
                   <li *ngIf="calculo.nao_aplicar_sm_beneficio_concedido">
                     <b>Renda Mensal Inicial - RMI não Limitada ao Salário Mínimo.</b>
                   </li>
@@ -500,6 +502,14 @@
                             calculo.tipo_aposentadoria_recebida
                           )
                         }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.numero_beneficio_recebido">
+                      <td width="50%" style="text-align: right;">
+                        <b>Número do Benefício:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.numero_beneficio_recebido }}
                       </td>
                     </tr>
                     <tr>
@@ -565,14 +575,7 @@
                         }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.numero_beneficio_recebido">
-                      <td width="50%" style="text-align: right;">
-                        <b>Número do Benefício:</b>
-                      </td>
-                      <td width="50%">
-                        {{ calculo.numero_beneficio_recebido }}
-                      </td>
-                    </tr>
+
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
                       <td width="50%" style="text-align: right;">
                         <b>Índice de Limitação no Teto:</b>
@@ -751,12 +754,12 @@
                     {{ dataInicialTutelaAntecipada }} a
                     {{ dataFinalTutelaAntecipada }}
                   </li> -->
-                  <li *ngIf="!exibirHonorarioscpc85">
-                    <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
-                  </li>
                   <li *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
                     <b>Percentual dos Honorários:</b>
                     {{ formatPercent(calculo.percentual_taxa_advogado) }}
+                  </li>
+                  <li *ngIf="!exibirHonorarioscpc85">
+                    <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
                   </li>
                   <!-- <li>
                     <b>Percentual do Acordo Judicial:</b>
@@ -814,17 +817,17 @@
                         {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                       </td>
                     </tr>
-                    <tr *ngIf="!exibirHonorarioscpc85">
-                      <td width="50%" style="text-align: center;" colspan="2">
-                        <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
-                      </td>
-                    </tr>
                     <tr>
                       <td width="50%" style="text-align: right;">
                         <b>Percentual dos Honorários:</b>
                       </td>
                       <td width="50%">
                         {{ formatPercent(calculo.percentual_taxa_advogado) }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="!exibirHonorarioscpc85">
+                      <td width="50%" style="text-align: center;" colspan="2">
+                        <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
                       </td>
                     </tr>
                     <tr *ngIf="calculo.acordo_pedido != 0" >
@@ -1878,7 +1881,7 @@
       </p>
       <p>
         <strong>a) </strong> Cálculos atualizados até
-        {{ formatDate(calculo.data_calculo_pedido) }};
+        {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
       </p>
       <p>
         <strong>b) </strong> Correção monetária conforme Sistema de
@@ -1892,7 +1895,7 @@
         01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de
         07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de
         05/1996 a 08/2006, IPCA-e até
-        {{ formatDate(calculo.data_calculo_pedido) }};
+        {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
       </p>
       <p *ngIf="calculo.tipo_correcao == 'tr'">
         Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de
@@ -1902,7 +1905,7 @@
         01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de
         07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de
         05/1996 a 08/2006, TR de 09/2006 a
-        {{ formatDate(calculo.data_calculo_pedido) }} ;​
+        {{ formatDateCompetencia(calculo.data_calculo_pedido) }} ;​
       </p>
       <p *ngIf="calculo.tipo_correcao == 'cam'">
         Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de
@@ -1912,7 +1915,7 @@
         01/04/94) em 03/1994, URV de 04/1994 a 07/1994, IPC-R de
         07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de
         05/1996 a 08/2006, INPC de 09/2006 a
-        {{ formatDate(calculo.data_calculo_pedido) }};
+        {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
       </p>
       <p *ngIf="calculo.tipo_correcao == 'tr032015_ipcae'">
         Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de
@@ -1923,7 +1926,7 @@
         07/1994 a 06/1995, INPC de 07/1995 a 04/1996, IGP-di de
         05/1996 a 08/2006, INPC de 09/2006 a 06/2009, TR de 09/2006 a
         de 07/2009 a 02/2015 IPCA-e até
-        {{ formatDate(calculo.data_calculo_pedido) }};
+        {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
       </p>
       <p *ngIf="calculo.tipo_correcao == 'ipca_todo_periodo'">
         Linha de correção: IPCA todo o período.
@@ -1965,7 +1968,7 @@
         - Taxa de {{ calculo.previo_interesse_2003 }}% até 12/2002 ,
         taxa de {{ calculo.pos_interesse_2003 }}% de 01/2003 até
         06/2009 , taxa de {{ calculo.pos_interesse_2009 }}% de 07/2009
-        até {{ formatDate(calculo.data_calculo_pedido) }}.
+        até {{ formatDateCompetencia(calculo.data_calculo_pedido) }}.
          Quando a sentença determinar a utilização de
         juros pelo critério da poupança será adotado o conteúdo ditado
         pela Lei 12703/2012 a partir de 07/2012.
