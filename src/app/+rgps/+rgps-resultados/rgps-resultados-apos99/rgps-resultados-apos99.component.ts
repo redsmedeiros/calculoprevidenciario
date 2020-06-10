@@ -97,6 +97,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   // IN77
   public exibirIN77 = false;
   public naoAplicarIN77 = false;
+  public irtRejusteAdministrativo = 0;
+
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
@@ -724,6 +726,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
     }
     if (irt >= 1) {
+      this.irtRejusteAdministrativo = irt;
       conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
     }
 
@@ -784,6 +787,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
+    
     if (dataBeneficio >= this.dataMP664) {
       if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
         if (totalMediaDozeContribuicoes > 0)
@@ -970,10 +974,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   conclusoes[conclusoes.length - 1]["class"] = "destaque";
     // }
 
-
-
     let rmi_fator = 0;
     let rmi_pontos = 0;
+    let rmi_outras_especies = 0;
 
     for (let i = 0; i < conclusoes.length; i++) {
       if (conclusoes[i].string == undefined && conclusoes[i].value == undefined) {
@@ -988,6 +991,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         rmi_pontos = conclusoes[i].value
       }
 
+      if((/Renda Mensal Inicial/gi).test(conclusoes[i].string)){
+        rmi_outras_especies = conclusoes[i].value;
+      }
+
     }
 
     if (conclusoes[conclusoes.length - 1].string === conclusoes[conclusoes.length - 2].string) {
@@ -996,12 +1003,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     rmi_fator = this.convertDecimalValue(rmi_fator);
     rmi_pontos = this.convertDecimalValue(rmi_pontos);
-
-
-    this.isUpdating = false;
+    rmi_outras_especies = this.convertDecimalValue(rmi_outras_especies);
 
    // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.valorExportacao = (rmi_fator > rmi_pontos) ? rmi_fator : rmi_pontos;
+
+    if (this.valorExportacao === 0) {
+      this.valorExportacao = rmi_outras_especies;
+    }
 
     this.tableData = tableData;
     this.tableOptions = {
@@ -1009,7 +1018,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       data: this.tableData,
     }
 
-    //Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+    this.isUpdating = false;
+    // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = this.valorExportacao;
     this.CalculoRgpsService.update(this.calculo);
@@ -1463,26 +1473,51 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   getIdadeFracionada() {
 
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+  //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
 
-    if (this.dataInicioBeneficio >= this.dataPec062019) {
-      idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
-    }
-    return idadeEmDias / 365.25;
+  //   if (this.dataInicioBeneficio >= this.dataPec062019) {
+  //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
+  //   }
+  //  // return idadeEmDias / 365.25;
+
+   if (this.dataInicioBeneficio >= this.dataPec062019) {
+    return this.dataPec062019.diff(dataNascimento, 'years', true);
+   }
+
+    return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
+  }
+
+
+  testeDifdata(time1, time2){
+
+      const str1= time1.split('/');
+      const str2= time2.split('/');
+                             // yyyy   , mm       , dd
+     const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
+    const dateToCompare = new Date(str2[2], str2[1] - 1, str2[0]).getTime();
+//    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+    return  (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
   mostrarReajustesAdministrativos(tableId) {
+
     if (this.showReajustesAdministrativos) {
       document.getElementById(tableId).scrollIntoView();
       return;
     }
+
     let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
     this.ReajusteAutomatico.getByDate(dataInicio, moment())
       .then((reajustes: ReajusteAutomatico[]) => {
+
         const reajustesAutomaticos = reajustes;
         let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
+
+        console.log(reajustesAutomaticos );
+        console.log(dataPrevia );
+        
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
@@ -1506,6 +1541,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
           valorBeneficio *= reajuste;
+
+          if(dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1){
+            valorBeneficio *= this.irtRejusteAdministrativo;
+          }
 
           const correcaoMinimo2017 = (dataCorrente.isSame(moment('2017-01-01'))
             && (valorBeneficio.toFixed(3) === (minimo + 0.904).toFixed(3)));
@@ -1533,10 +1572,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.reajustesAdministrativosTableData.push(line);
           dataPrevia = dataCorrente;
         }
+
+        
         this.reajustesAdministrativosTableOptions = {
           ...this.reajustesAdministrativosTableOptions,
           data: this.reajustesAdministrativosTableData,
         }
+
         this.showReajustesAdministrativos = true;
         document.getElementById(tableId).scrollIntoView();
       });

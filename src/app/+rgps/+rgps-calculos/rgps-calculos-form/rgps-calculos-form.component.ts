@@ -161,8 +161,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.contribuicao_secundaria_98 = this.formatDate('98', 1);
       this.formData.contribuicao_secundaria_99 = this.formatDate('99', 1);
       this.formData.contribuicao_secundaria_atual = this.formatDate('atual', 1);
-      this.formData.valor_beneficio = ''; //TODO: deixar em branco por enquanto
-      this.formData.soma_contribuicao = '';//TODO: deixar em branco por enquanto
+      this.formData.valor_beneficio = ''; // TODO: deixar em branco por enquanto
+      this.formData.soma_contribuicao = ''; // TODO: deixar em branco por enquanto
       this.formData.carencia = this.carencia;
       this.formData.grupo_dos_12 = this.grupoDos12;
 
@@ -617,7 +617,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has98 = false;
         this.has99 = false;
         this.hasAtual = true;
-        this.has19 = true;
+        this.has19 = false;
       }
 
     } else if (dateBeneficio >= new Date('11/13/2019')) {
@@ -721,7 +721,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       // this.periodoInicioBeneficio = 'A partir de 29/11/1999';
       this.periodoInicioBeneficio = 'Entre 29/11/1999 e 13/11/2019';
 
-      this.carencia = periodos.total.carencia;
+      this.carencia = periodos.total19.carencia;
 
     } else if (dib >= moment('2019-11-13')) {
 
@@ -746,9 +746,11 @@ export class RgpsCalculosFormComponent implements OnInit {
       // posterior a EC nº 103/2019
 
       this.periodoInicioBeneficio = 'A partir de 13/11/2019';
-      this.carencia = periodos.total19.carencia;
+      this.carencia = periodos.total.carencia;
     }
 
+
+    this.carencia = periodos['total' + exportDados.typeExport].carencia;
 
     this.errors.clear();
     this.changePeriodoOptions();

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Inject} from '@angular/core';
+import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -489,10 +489,45 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
     if (!temIdadeMinima) {
-      const tempoAteIdade = moment.duration((idadeMinima - this.idadeSegurado), 'years')
-      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
+      // const tempoAteIdade = moment.duration({years: (idadeMinima - this.idadeFracionada)});
+      let stringTempo = '';
+      const tempoAteIdade = this.testeconvert((idadeMinima - this.idadeFracionada))
+      // console.log(this.testeconvert((idadeMinima - this.idadeFracionada)));
+      // console.log(tempoAteIdade);
+
+      if (tempoAteIdade.years > 0) {
+        stringTempo += tempoAteIdade.years + ' ano(s)';
+      }
+
+      if (tempoAteIdade.months > 0) {
+        stringTempo += tempoAteIdade.months + ' mês(es) ';
+      }
+
+      if (tempoAteIdade.days > 0) {
+        stringTempo += tempoAteIdade.days + ' dia(s)';
+      }
+
+      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) '
+        + stringTempo + ' para atingir a idade mínima.');
     }
     return temIdadeMinima;
+  }
+
+
+  testeconvert(fullYears) {
+
+    const totalFator = { years: 0, months: 0, days: 0, fullYears: fullYears };
+    const xValor = fullYears;
+
+    totalFator.years = Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    totalFator.days = Math.round(dttDias);
+
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+
   }
 
   getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo) {
@@ -785,11 +820,17 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   public convertDecimalValue(valor) {
+
     if (!isNaN(valor)) {
       return valor;
     }
 
-    valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
+    if ((/\,/).test(valor)) {
+      valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
+    } else {
+      valor = valor.replace('R$', '');
+    }
+
     return isNaN(valor) ? 0 : parseFloat(valor);
 
   }
@@ -936,6 +977,11 @@ export class RgpsResultadosComponent implements OnInit {
       if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
+      }
+
+      if (verificaIdade) {
+        calculo.mostrarCalculo91_98 = false;
+        calculo.mostrarCalculo98_99 = false;
       }
 
       calculo.mostrarCalculoApos99 = true;
@@ -1145,27 +1191,27 @@ export class RgpsResultadosComponent implements OnInit {
   public calcularPBCIndices(indice) {
 
     if (!this.isExits(indice)) {
-     // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
-     // this.ngOnInit();
-     
-     const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
-     const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
-     this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
-       this.router.navigate([urlpbcNew])
-     );
+      // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
+      // this.ngOnInit();
+
+      const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
+      const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
+      this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
+        this.router.navigate([urlpbcNew])
+      );
     }
 
     if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
       //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
-      const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado ;
+      const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
-      this.router.navigateByUrl(urlpbcAtual, {skipLocationChange: true}).then(() =>
+      this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
         this.router.navigate([urlpbcNew])
       );
 
       // this.router.navigate([urlpbcNew]);
       // this.ngOnInit();
-      
+
 
       //window.location.reload(true)
       //this.ngOnInit();

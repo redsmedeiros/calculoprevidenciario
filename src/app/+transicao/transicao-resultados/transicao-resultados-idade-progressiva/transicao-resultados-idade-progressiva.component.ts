@@ -14,19 +14,20 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
   public requisitoIdadeProgressivaRegra2 = {
-    2019: { m: 61, md: 22265, f: 56, fd: 20440 },
-    2020: { m: 61.5, md: 22448, f: 56.5, fd: 20623 },
-    2021: { m: 62, md: 22630, f: 57, fd: 20805 },
-    2022: { m: 62.5, md: 22813, f: 57.5, fd: 20988 },
-    2023: { m: 63, md: 22995, f: 58, fd: 21170 },
-    2024: { m: 63.5, md: 23178, f: 58.5, fd: 21353 },
-    2025: { m: 64, md: 23360, f: 59, fd: 21535 },
-    2026: { m: 64.5, md: 23543, f: 59.5, fd: 21718 },
-    2027: { m: 65, md: 23725, f: 60, fd: 21900 },
-    2028: { m: 65, md: 23725, f: 60.5, fd: 22083 },
-    2029: { m: 65, md: 23725, f: 61, fd: 22265 },
-    2030: { m: 65, md: 23725, f: 61.5, fd: 22448 },
-    2031: { m: 65, md: 23725, f: 62, fd: 22630 },
+    2019: { m: 61, md: 22280, f: 56, fd: 20440 },
+    2020: { m: 61.5, md: 22462, f: 56.5, fd: 20636 },
+    2021: { m: 62, md: 22645, f: 57, fd: 20819 },
+    2022: { m: 62.5, md: 22828, f: 57.5, fd: 21001 },
+    2023: { m: 63, md: 23010, f: 58, fd: 21184 },
+    2024: { m: 63.5, md: 23193, f: 58.5, fd: 21367 },
+    2025: { m: 64, md: 23376, f: 59, fd: 21549 },
+    2026: { m: 64.5, md: 23558, f: 59.5, fd: 21732 },
+    2027: { m: 65, md: 23741, f: 60, fd: 21915 },
+    2028: { m: 65, md: 23741, f: 60.5, fd: 22097 },
+    2029: { m: 65, md: 23741, f: 61, fd: 22280 },
+    2030: { m: 65, md: 23741, f: 61.5, fd: 22462 },
+    2031: { m: 65, md: 23741, f: 62, fd: 22645 },
+
   }
 
 
@@ -178,7 +179,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     let auxiliarDate = this.dataAtual;
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
-    let count = 1;
+    let count = 0;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
@@ -208,7 +209,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
 
-
       }
 
       // if (this.addBissexto(auxiliarDate) > 0) {
@@ -226,17 +226,17 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     } while (!fimContador.status && idade <= 54750);
 
-
+   // console.log(idade);
 
     const correcaoAnoBissexto = this.contarBissextosEntre(
       this.seguradoTransicao.dataNascimento,
       auxiliarDate
     );
 
-    if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto, 'days');
-      tempoContribuicao += correcaoAnoBissexto;
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
+    //   tempoContribuicao += correcaoAnoBissexto;
+    // }
 
 
     idadeMoment = this.calcularIdade(auxiliarDate);
@@ -294,12 +294,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     const regra2 = this.requisitoIdadeProgressivaRegra2;
 
-    if ((sexo === 'md' && ano >= 2027 && idade >= (regra2[2027][sexo] - redutorProfessorDias) ) &&
+    if ((sexo === 'md' && ano >= 2027 && idade >= (regra2[2027][sexo] - redutorProfessorDias)) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2027][sexo] };
     }
 
-    if ((sexo === 'fd' && ano >= 2031 && idade >= (regra2[2031][sexo] - redutorProfessorDias) ) &&
+    if ((sexo === 'fd' && ano >= 2031 && idade >= (regra2[2031][sexo] - redutorProfessorDias)) &&
       tempo_contribuicao >= requisitoContribuicoesDias[sexo]) {
       return { status: true, ano: ano, idade: idade, requisitosIdade: regra2[2031][sexo] };
     }

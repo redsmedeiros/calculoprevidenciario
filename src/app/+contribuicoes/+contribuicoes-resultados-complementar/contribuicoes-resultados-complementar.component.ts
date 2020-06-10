@@ -297,7 +297,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   formatMoney(data){
     data = parseFloat(data);
-    return 'R$ ' + data.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});;
+    return 'R$ ' + data.toLocaleString('pt-BR', {maximumFractionDigits:2, minimumFractionDigits:2});
   }
 
   listaSegurados(){

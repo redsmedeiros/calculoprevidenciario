@@ -44,13 +44,22 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
         }
 
         this.Auth.authenticate(user_id, user_token, product, type).then((response: AuthResponse) => {
+       
           if (response.status) {
             localStorage.setItem('user_id', user_id);
             localStorage.setItem('user_token', user_token);
             localStorage.setItem('product', product);
             localStorage.setItem('type', type);
             resolve(true);
+          } else {
+            loadingAlert.close();
+            //redirecionar para pagina de login
+            swal('Erro (CAC0)', 'É necessário estar logado para acessar esta página.', 'error').then(() => {
+              window.location.href = environment.loginPageUrl;
+            });
+            resolve(false);
           }
+
         }).catch(err => {
           if (err.response.status == 401) {
             loadingAlert.close();

@@ -109,9 +109,9 @@ export class TransicaoFormComponent implements OnInit {
     // this.nome = 'Robson - 24-03-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '27/12/1966';
+    // this.dataNascimento = '04/01/1966';
     // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'm';
+    // this.sexo = 'f';
     // this.professor = false;
 
     // this.contribuicaoAnosAteEC103 = '33';
