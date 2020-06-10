@@ -172,7 +172,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: '- Selecione uma Opção -', value: '' },
     { text: 'Sem juros', value: 'sem_juros' },
     { text: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)', value: '12_6' },
-    { text: '6% ao ano (observando a SELIC - Poupança)', value: '6_selic' },
+    // { text: '6% ao ano (observando a SELIC - Poupança)', value: '6_selic' },
     { text: '12% ao ano', value: '12_ano' },
     { text: '6% ao ano (até 01/2003) / 12% ao ano', value: '6_12' },
     { text: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano', value: '6_12_6' },
