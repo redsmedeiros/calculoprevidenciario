@@ -155,6 +155,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { name: 'Auxílio Acidente - 60%', value: 10 },
     { name: 'Auxílio Doença', value: 0 },
     { name: 'Auxílio por Incapacidade Temporária', value: 20 },
+    { name: 'Auxílio Reclusão', value: 23 },
     { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
     { name: 'Pensão por Morte', value: 22 }
   ];
@@ -606,9 +607,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.usar_mesma_dib = this.chkUseSameDib;
       // Id Segurado
       this.formData.id_segurado = this.route.snapshot.params['id'];
+      
       // Data do cálculo:
       // this.formData.data_calculo_pedido = this.dataCalculo;
       this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').endOf('month').format('DD/MM/YYYY');
+
+      if (this.isEmptyInput(this.dataCalculo)) {
+
+        this.formData.data_calculo_pedido = moment(moment(), 'MM/YYYY').endOf('month').format('DD/MM/YYYY');
+
+      }
 
       // Data da citação do réu
       this.formData.data_acao_judicial = this.dataAcaoJudicial;

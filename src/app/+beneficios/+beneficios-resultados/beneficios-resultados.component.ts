@@ -552,6 +552,17 @@ export class BeneficiosResultadosComponent implements OnInit {
       line.diferenca_juros = diferencaCorrigidaJuros;
       line.honorarios = (diferencaCorrigidaJuros != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
 
+
+      if (isPrescricao) {
+        line.diferenca_mensal = 'Prescrita';
+        line.correcao_monetaria = '0';
+        line.diferenca_corrigida = '0';
+        line.juros = '0';
+        line.valor_juros = '0';
+        line.diferenca_juros = '0';
+        line.honorarios = '0';
+      }
+
       if (this.isTetos) {
         this.esmaecerLinhas(dataCorrente, line);
       }
@@ -664,6 +675,20 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorJuros = 0.00;
         }
 
+      if (isPrescricao) {
+        line = {
+          ...line,
+          competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
+          beneficio_devido: this.formatMoney(beneficioDevidoAbono),
+          beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
+          diferenca_corrigida: '0',
+          diferenca_mensal: 'Prescrita',
+          juros: '0',
+          valor_juros: '0',
+          diferenca_juros: '0',
+          honorarios: '0'
+        }
+      } else {
         line = {
           ...line,
           competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
@@ -676,6 +701,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferenca_juros: diferencaCorrigidaJuros,
           honorarios: (diferencaCorrigidaJuros != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : ''
         }
+      }
 
         if (this.isTetos) {
           this.esmaecerLinhas(dataCorrente, line);
@@ -2967,6 +2993,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       { name: 'Auxílio por Incapacidade Permanente', value: 19 },
       { name: 'Auxílio por Incapacidade Temporária', value: 20 },
       { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+      { name: 'Auxílio Reclusão', value: 23 },
       { name: 'Pensão por Morte', value: 22 }
     ];
 
