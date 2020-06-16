@@ -372,7 +372,7 @@
                     <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início de Benefício - DIB*:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input class="form-control" [textMask]="{mask: dateMask}" name="dibValoresRecebidos" (blur)="dibValoresRecebidosChanged();setCheckRevisao();"
-                       [(ngModel)]="dibValoresRecebidos" type="text" [disabled]="chkUseSameDib">
+                       [(ngModel)]="dibValoresRecebidos" type="text" >
                       <small *ngIf="errors.has('dibValoresRecebidos')" class="text-danger">{{ errors.get('dibValoresRecebidos') }}</small>
                     </div>
                   </div>

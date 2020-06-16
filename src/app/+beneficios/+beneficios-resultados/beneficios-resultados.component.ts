@@ -127,6 +127,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataInicioCalculo = null;
   //Data da ultima linha da tabela
   private dataFinal = null;
+  private dataFinalAtual = null;
   //
   private dataCessacaoDevido = null;
   private dataCessacaoRecebido = null;
@@ -196,10 +197,18 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaHonorariosTutelaAntecipadaString = '';
   public somaTotalHonorariosString = '';
 
-  public somaDevidosreajustados = 0;
+  public somaDevidosCorrigido = 0;
+  public somaRecebidosCorrigido = 0;
+  public somaDiferencaCorrigidaAtual = 0;
+  public somaDiferencaCorrigidaAnterior = 0;
+
+  public somaNumeroCompetenciasAtual = 0;
+  public somaNumeroCompetenciasAnterior = 0;
+
   public somaDevidosreajustadosAtefinalHonorario = 0;
   public somaDiferencaReajustadosAtefinalHonorario = 0;
-  // Honorarios CPC 85
+
+    // Honorarios CPC 85
   public exibirHonorarioscpc85 = false;
   public somaHonorarioscpc85 = 0;
   public percentualHonorarioscpc85 = 0;
@@ -568,6 +577,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       tableData.push(line);
 
+      this.somaDevidosCorrigido += Math.round( beneficioDevido * 100) / 100;
+      this.somaRecebidosCorrigido += Math.round( beneficioRecebido * 100) / 100;
+
       if (!isPrescricao) {
         // Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
         this.somaDiferencaMensal += diferencaMensal;
@@ -577,8 +589,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.somaHonorarios += honorarios;
         this.somaJuros += valorJuros;
 
-        // para calcular o homorario sobre a soma do devido 
-        this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+        // para calcular o homorario sobre a soma do devido
+
         if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
 
           this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
@@ -594,6 +606,9 @@ export class BeneficiosResultadosComponent implements OnInit {
             && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
           this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
         }
+
+        // 
+        this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida);
 
       }
 
@@ -719,6 +734,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           abonoProporcionalRecebidos = 1;
         }
 
+        
+        this.somaDevidosCorrigido += Math.round(beneficioDevidoAbono * 100) / 100;
+        this.somaRecebidosCorrigido += Math.round(beneficioRecebidoAbono * 100) / 100;
+
+       
         if (!isPrescricao) {
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
           this.somaDiferencaMensal += diferencaMensal;
@@ -729,11 +749,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
           // para calcular o homorario sobre a soma do devido 
-          this.somaDevidosreajustados += (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+        
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
 
-            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevido * correcaoMonetaria) +
-              (beneficioDevido * correcaoMonetaria * juros);
+            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevidoAbono * correcaoMonetaria) +
+              (beneficioDevidoAbono * correcaoMonetaria * juros);
 
             this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
 
@@ -746,6 +766,9 @@ export class BeneficiosResultadosComponent implements OnInit {
             this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
           }
 
+
+          this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida);
+  
         }
 
       }
@@ -778,6 +801,25 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     return tableData;
   }
+
+  public calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida)
+  {
+
+    if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
+
+      this.somaNumeroCompetenciasAtual += 1;
+      this.somaDiferencaCorrigidaAtual += diferencaCorrigida;
+
+    }else{
+
+      this.somaNumeroCompetenciasAnterior  += 1;
+      this.somaDiferencaCorrigidaAnterior += diferencaCorrigida;
+
+    }
+
+  }
+
+
 
   //Seção 3.1
   getIndiceReajusteValoresDevidos(dataCorrente) {
@@ -2543,6 +2585,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+    this.dataFinalAtual = moment();
 
     if (this.dataFinal.isBefore(this.calculo.data_prevista_cessacao)) {
       this.dataFinal = moment(this.calculo.data_prevista_cessacao);
@@ -3018,10 +3061,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
-
-
-
-
   imprimirPagina() {
 
     const css = `
@@ -3036,6 +3075,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 5px;}
               .table>tbody>tr>td { white-space: nowrap !important; font-size:8.5px !important;}
               footer{text-align: center;}
+            .text-center{ text-align: center; }
       </style>`;
 
     let seguradoBox = document.getElementById('printableSegurado').innerHTML;
@@ -3050,8 +3090,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     let correcao = document.getElementById('printableCorrecao').innerHTML;
     let conclusoes = document.getElementById('printableConclusoes').innerHTML;
     let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
+    let printableRRA = document.getElementById('printableRRA').innerHTML;
 
-    let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + correcao + juros + honorarios + resultadoCalculo + conclusoes;
+    let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + correcao + juros + honorarios + resultadoCalculo + printableRRA + conclusoes;
     printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG</p></footer>';
     let popupWin = window.open('', '_blank', 'width=300,height=300');

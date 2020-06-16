@@ -1033,6 +1033,59 @@
         </sa-widget>
       </article>
     </div>
+    
+    <div class="row"  *ngIf="!isUpdating" >
+      <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-list"></i>
+            </span>
+            <h2> RENDIMENTOS RECEBIDOS ACUMULADAMENTE - RRA (12.350/2010)</h2>
+          </header>
+
+          <!-- widget div-->
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom no-margin no-padding">
+              <div id="printableRRA" class="no-margin no-padding">
+                <caption class="text-center" hidden>
+                  <h2>RENDIMENTOS RECEBIDOS ACUMULADAMENTE - RRA (12.350/2010)</h2>
+                </caption>
+                <table class="table table-bordered table-hover no-margin no-padding">
+                  <thead>
+                    <tr>
+                      <th class="text-center" colspan="2"> Exercícios Anteriores</th>
+                      <th class="text-center"colspan="2"> Exercício Atual</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">Parcelas</th>
+                      <th class="text-center">Valor</th>
+                      <th class="text-center">Parcelas</th>
+                      <th class="text-center">Valor</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center">{{ somaNumeroCompetenciasAnterior }}</td>
+                    <td class="text-center">{{ formatMoney(somaDiferencaCorrigidaAnterior)  }}</td>
+                    <td class="text-center">{{ somaNumeroCompetenciasAtual  }}</td>
+                    <td class="text-center">{{ formatMoney(somaDiferencaCorrigidaAtual) }}</td>
+                  </tr>
+                </tbody>
+                </table>
+              </div>
+            </div>
+        </sa-widget>
+      </article>
+    </div>
+
 
     <div class="row">
       <article

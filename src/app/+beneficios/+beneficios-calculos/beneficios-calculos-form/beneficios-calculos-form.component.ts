@@ -605,6 +605,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
       this.formData.usar_mesma_dib = this.chkUseSameDib;
+      
       // Id Segurado
       this.formData.id_segurado = this.route.snapshot.params['id'];
       
