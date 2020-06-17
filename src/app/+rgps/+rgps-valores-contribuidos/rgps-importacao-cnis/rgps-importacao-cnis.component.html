@@ -39,9 +39,8 @@
           </header>
 
           <!-- widget div-->
-          <div *ngIf="!isUpdating">
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body" *ngIf="!isUpdating">
               <ul class="list-unstyled">
                 <li><b>Nome:</b> {{ segurado.nome }}</li>
                 <li *ngIf="segurado.numero_documento">
@@ -54,7 +53,6 @@
                 <li *ngIf="segurado.sexo == 'f'"><b>Sexo:</b> Feminino</li>
               </ul>
             </div>
-          </div>
         </sa-widget>
       </article>
 
@@ -74,7 +72,7 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Lei 13.846/19</h2>
+            <h2>Soma das Contribuições Primárias e Secundárias - Lei 13.846/19</h2>
           </header>
           <div *ngIf="!isUpdating" class="widget-body">
             <p>
@@ -87,25 +85,28 @@
                 >DIB do Cálculo: {{ calculo.data_pedido_beneficio }}</strong
               >
             </p>
-            <div class="form-group">
-              <label
-                class="col-md-5 control-label"
-                for="select-somarSecundaria"
-              >
-                Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?
-              </label>
-              <div class="col-md-2">
-                <select
-                  [(ngModel)]="somarSecundaria"
-                  [ngModelOptions]="{ standalone: true }"
-                  (change)="changeSomarSecundaria()"
-                  [ngModelOptions]="{ standalone: true }"
-                  class="form-control"
-                  id="select-somarSecundaria"
+
+            <div class="alert alert-warning ">
+              <div class="row form-group form-horizontal m-2">
+                <label
+                  class="col-md-5 control-label"
+                  for="select-somarSecundaria"
                 >
-                  <option value="true">SIM</option>
-                  <option value="false">NÃO</option>
-                </select>
+                <strong>Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?</strong>
+                </label>
+                <div class="col-md-2">
+                  <select
+                    [(ngModel)]="somarSecundaria"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="changeSomarSecundaria()"
+                    [ngModelOptions]="{ standalone: true }"
+                    class="form-control"
+                    id="select-somarSecundaria"
+                  >
+                    <option value="true">SIM</option>
+                    <option value="false">NÃO</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
