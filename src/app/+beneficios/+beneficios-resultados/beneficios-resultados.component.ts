@@ -644,16 +644,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
 
-            abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
-            //console.log(this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
+            abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
 
           }
 
           if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
 
-            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido).endOf('month'));
-            //console.log(this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido).endOf('month')));
+            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido));
             beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
 
           }
@@ -1466,8 +1464,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
-
-
 
     const tipo_correcao = this.calculo.tipo_correcao;
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
@@ -2317,11 +2313,12 @@ export class BeneficiosResultadosComponent implements OnInit {
   verificaAbonoProporcionalTutela(dib) {
     let dibMonth = dib.month() + 1;
 
-    if (dib.date() <= 16) {
+    if (dib.date() < 15) {
       dibMonth -= 1;
     }
 
     let proporcional = 1 - dibMonth / 12;
+
 
     return proporcional;
   }
@@ -2784,29 +2781,35 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   verificaAbonoProporcionalDevidos(dib) {
     let dibMonth = dib.month() + 1;
-    if (dib.date() <= 16) {
+    
+    if (dib.date() < 15) {
       dibMonth -= 1;
     }
+
     let proporcional = 1 - dibMonth / 12;
+
     if (proporcional < 1) {
       this.aplicaProporcionalDevidos = true;
     } else {
       this.aplicaProporcionalDevidos = false;
     }
+
     return proporcional;
   }
 
   verificaAbonoProporcionalRecebidos(dib) {
     let dibMonth = dib.month() + 1;
-    if (dib.date() <= 16) {
+    if (dib.date() < 15) {
       dibMonth -= 1;
     }
     let proporcional = 1 - dibMonth / 12;
+
     if (proporcional < 1) {
       this.aplicaProporcionalRecebidos = true;
     } else {
       this.aplicaProporcionalRecebidos = false;
     }
+
     return proporcional;
   }
 
