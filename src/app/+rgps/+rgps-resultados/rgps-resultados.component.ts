@@ -336,6 +336,7 @@ export class RgpsResultadosComponent implements OnInit {
                 counter++;
               });
           }
+
         }
       });
   }
@@ -863,19 +864,23 @@ export class RgpsResultadosComponent implements OnInit {
   getTempoDeContribuicaoPrimaria(data) {
     let str = '';
     if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_98.replace(/-/g, '/') + '<br>';
+      str += '<tr><td class="no-padding">Até EC 20/98</td><td class="no-padding">'
+        + data.contribuicao_primaria_98.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_99.replace(/-/g, '/') + '<br>';
+      str += '<tr><td class="no-padding">Até EC 9.876/99</td><td class="no-padding">'
+        + data.contribuicao_primaria_99.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
+      str += '<tr><td class="no-padding">Entre Lei nº 9.876/99 e EC 103/2019</td><td class="no-padding">'
+        + data.contribuicao_primaria_atual.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
-      str = str + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+      str += '<tr><td class="no-padding">Após 103/2019</td><td class="no-padding">'
+        + data.contribuicao_primaria_19.replace(/-/g, '/') + '</td></tr>';
     }
 
-    return str;
+    return '<table class="table  no-padding no-margin">' + str + '</table>';
   }
 
   getTempoDeContribuicaoSecundaria(data) {

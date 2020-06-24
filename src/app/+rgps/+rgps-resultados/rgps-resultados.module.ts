@@ -10,6 +10,7 @@ import { RgpsResultadosApos99Component } from './rgps-resultados-apos99/rgps-res
 import { RgpsResultadosEntre88e91Component } from './rgps-resultados-entre88e91/rgps-resultados-entre88e91.component';
 import { WINDOW_PROVIDERS } from '../+rgps-calculos/window.service';
 import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec062019/rgps-resultados-apos-pec062019.component';
+import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103/rgps-resultados-apos-pec103.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec
                 RgpsResultadosEntre91e98Component,
                 RgpsResultadosApos99Component,
                 RgpsResultadosEntre88e91Component,
-                RgpsResultadosAposPec062019Component]
+                RgpsResultadosAposPec062019Component,
+                RgpsResultadosAposPec103Component]
 })
 export class RgpsResultadosModule { }

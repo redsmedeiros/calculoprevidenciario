@@ -127,9 +127,9 @@
             <h2>Grupo de Cálculos para os valores de contribuição</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
+            <div class="widget-body no-padding ">
               <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                paginationLength="false" tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
                 <thead>
                   <tr>
                     <th>Espécie</th>
@@ -299,6 +299,13 @@
         [segurado]="segurado"
         [calculo]="calculo"
         *ngIf="calculo.mostrarCalculoApos19"></app-rgps-resultados-apos-pec062019> 
+
+
+        <app-rgps-resultados-apos-pec103
+        [segurado]="segurado"
+        [calculo]="calculo"
+        *ngIf="calculo.mostrarCalculoApos19"
+        ></app-rgps-resultados-apos-pec103>
       </div>
     </div>
 
