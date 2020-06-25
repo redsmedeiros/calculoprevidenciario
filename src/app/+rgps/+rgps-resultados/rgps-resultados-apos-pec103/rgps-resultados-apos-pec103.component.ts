@@ -1,4 +1,5 @@
 
+
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ExpectativaVida } from '../ExpectativaVida.model';
@@ -11,16 +12,20 @@ import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
 import { Moeda } from '../../../services/Moeda.model';
 import { MoedaService } from '../../../services/Moeda.service';
-import { RgpsResultadosComponent } from '../rgps-resultados.component'
+import { RgpsResultadosComponent } from '../rgps-resultados.component';
 import * as moment from 'moment';
 
+import { RegrasAcesso } from './regrasAcesso/regras-acesso';
 
 
 
 @Component({
   selector: 'app-rgps-resultados-apos-pec103',
   templateUrl: './rgps-resultados-apos-pec103.component.html',
-  styleUrls: ['./rgps-resultados-apos-pec103.component.css']
+  styleUrls: ['./rgps-resultados-apos-pec103.component.css'],
+  providers : [
+    RegrasAcesso
+  ]
 })
 export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent implements OnInit {
 
@@ -32,9 +37,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public idadeSegurado;
   public idCalculo;
   public contribuicaoTotal;
+  public contribuicaoPrimariaAtePec;
   public isUpdating = false;
   public nenhumaContrib = false;
   public contribuicaoPrimaria = { anos: 0, meses: 0, dias: 0 };
+  public isRegraTransitoria = true;
 
 
   public divisorMinimo = 0;
@@ -55,21 +62,22 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService,
+    private regrasAcesso: RegrasAcesso
 
-
-    )
-  {
+  ) {
     super(null, route, null, null, null, null);
   }
 
 
   ngOnInit() {
-   
-   this.getListaCompetencias();
+    
+    this.getListaCompetencias();
+
   }
 
 
-  public getListaCompetencias(){
+  public getListaCompetencias() {
+
     this.boxId = this.generateBoxId(this.calculo.id, '19');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
@@ -77,6 +85,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
     this.idadeFracionada = this.getIdadeFracionada();
     this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_19);
+    this.contribuicaoPrimariaAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
@@ -102,7 +111,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         } else if (this.isRegrasPensaoObitoInstituidorAposentado) {
           // pensão por morte instituidor aposentador
-         // this.regrasDaReforma();
+          // this.regrasDaReforma();
 
         } else {
 
@@ -124,11 +133,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
                           // Quando o instituidor já está aposentado não é necessário relizar o calculo
                           if (!this.isRegrasPensaoObitoInstituidorAposentado) {
 
-                            //this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
 
+                           
+                            //this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                            this.getVerificarOpcoesDeRegra();
+
+                            console.log(this.contribuicaoPrimaria);
+                            console.log(this.contribuicaoPrimariaAtePec);
                           }
-                         
-                         // this.regrasDaReforma();
+
+                          // this.regrasDaReforma();
 
                           this.isUpdating = false;
                         });
@@ -139,6 +153,47 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         }
       });
   }
+
+
+  public getVerificarOpcoesDeRegra() {
+
+    if (this.dataFiliacao && this.dataFiliacao != null && moment(this.dataFiliacao).isValid()) {
+      this.isRegraTransitoria = (this.dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
+    }
+
+    const tempo = this.contribuicaoPrimaria;
+    const tempoContribuicaoTotal = {
+      dias: (tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias,
+      anos: ((tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias) / 365.25
+    };
+
+
+    const tempoAtePec = this.contribuicaoPrimaria;
+    const tempoContribuicaoTotalAtePec = {
+      dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias,
+      anos: ((tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias) / 365.25
+    };
+
+
+    const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
+    const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
+
+    this.regrasAcesso.getVerificacaoRegras(
+                                            this.dataInicioBeneficio,
+                                            this.dataFiliacao,
+                                            this.tipoBeneficio,
+                                            this.isRegraTransitoria,
+                                            this.contribuicaoPrimaria,
+                                            tempoContribuicaoTotal,
+                                            tempoContribuicaoTotalAtePec,
+                                            this.idadeSegurado,
+                                            this.idadeFracionada,
+                                            this.segurado.sexo,
+                                            redutorProfessor,
+                                            redutorSexo
+                                            );
+  }
+
 
 
   getIdadeFracionada() {
