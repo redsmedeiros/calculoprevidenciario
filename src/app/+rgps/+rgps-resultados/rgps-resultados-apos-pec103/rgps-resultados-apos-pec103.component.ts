@@ -23,7 +23,7 @@ import { RegrasAcesso } from './regrasAcesso/regras-acesso';
   selector: 'app-rgps-resultados-apos-pec103',
   templateUrl: './rgps-resultados-apos-pec103.component.html',
   styleUrls: ['./rgps-resultados-apos-pec103.component.css'],
-  providers : [
+  providers: [
     RegrasAcesso
   ]
 })
@@ -70,7 +70,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
   ngOnInit() {
-    
+
     this.getListaCompetencias();
 
   }
@@ -133,13 +133,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
                           // Quando o instituidor já está aposentado não é necessário relizar o calculo
                           if (!this.isRegrasPensaoObitoInstituidorAposentado) {
 
-
-                           
-                            //this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                            // this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
                             this.getVerificarOpcoesDeRegra();
 
-                            console.log(this.contribuicaoPrimaria);
                             console.log(this.contribuicaoPrimariaAtePec);
+                            console.log(this.contribuicaoPrimaria);
                           }
 
                           // this.regrasDaReforma();
@@ -166,32 +164,47 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       dias: (tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias,
       anos: ((tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias) / 365.25
     };
+    const tempoContribuicaoTotalMoment = moment.duration({
+      years: tempo.anos,
+      months: tempo.meses,
+      days: tempo.dias
+    });
 
 
-    const tempoAtePec = this.contribuicaoPrimaria;
+
+    const tempoAtePec = this.contribuicaoPrimariaAtePec;
     const tempoContribuicaoTotalAtePec = {
       dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias,
       anos: ((tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias) / 365.25
     };
+
+    const tempoContribuicaoTotalAtePecMoment = moment.duration({
+      years: tempoAtePec.anos,
+      months: tempoAtePec.meses,
+      days: tempoAtePec.dias
+    });
+
 
 
     const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
 
     this.regrasAcesso.getVerificacaoRegras(
-                                            this.dataInicioBeneficio,
-                                            this.dataFiliacao,
-                                            this.tipoBeneficio,
-                                            this.isRegraTransitoria,
-                                            this.contribuicaoPrimaria,
-                                            tempoContribuicaoTotal,
-                                            tempoContribuicaoTotalAtePec,
-                                            this.idadeSegurado,
-                                            this.idadeFracionada,
-                                            this.segurado.sexo,
-                                            redutorProfessor,
-                                            redutorSexo
-                                            );
+      this.dataInicioBeneficio,
+      this.dataFiliacao,
+      this.tipoBeneficio,
+      this.isRegraTransitoria,
+      this.contribuicaoPrimaria,
+      tempoContribuicaoTotal,
+      tempoContribuicaoTotalAtePec,
+      tempoContribuicaoTotalMoment,
+      tempoContribuicaoTotalAtePecMoment,
+      this.idadeSegurado,
+      this.idadeFracionada,
+      this.segurado.sexo,
+      redutorProfessor,
+      redutorSexo
+    );
   }
 
 
