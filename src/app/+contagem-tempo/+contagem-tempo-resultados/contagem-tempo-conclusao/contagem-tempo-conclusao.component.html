@@ -120,13 +120,13 @@
       <td>Idade mínima exigida para aposentadoria proporcional  Emenda nº 20/98 - (16/12/1998)</td>
       <td colspan="3" class="text-center"> {{ idadeMinimaAposProp }}</td>
     </tr>
-    <tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeA">
       <td>Somatória do tempo de contribuição e idade Lei 13.183/2015 - (04/11/2015)</td>
       <td class="text-center">{{ somatoriaTempoContribIdade.years() }}</td>
       <td class="text-center">{{ somatoriaTempoContribIdade.months() }}</td>
       <td class="text-center">{{ this.Math.ceil(somatoriaTempoContribIdade.days())  }}</td>
     </tr>
-    <tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeB">
       <td>Somatória do tempo de contribuição e idade atual Lei 13.183/2015 - (04/11/2015)</td>
       <td class="text-center">{{ somatoriaTempoContribIdadeAtual.years() }}</td>
       <td class="text-center">{{ somatoriaTempoContribIdadeAtual.months() }}</td>

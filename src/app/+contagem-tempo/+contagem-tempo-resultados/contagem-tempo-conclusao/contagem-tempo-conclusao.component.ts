@@ -59,6 +59,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idadeLimiteDias = 10957.5; // dias
   public redutorSexoDias: any; // dias
 
+  public isUpdateTotalTempoIdadeA = true;
+  public isUpdateTotalTempoIdadeB = true;
   // parametros EC nº 103/2019
 
 
@@ -570,14 +572,17 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
+
     this.somatoriaTempoContribuicaoIdade().then(result => {
      // console.log(result);
+      this.isUpdateTotalTempoIdadeA = false;
     }).catch((error) => {
       console.log(error);
     });
 
     this.somatoriaTempoContribuicaoIdadeAtual().then(result => {
      // console.log(result);
+     this.isUpdateTotalTempoIdadeB = false;
     }).catch((error) => {
       console.log(error);
     });
