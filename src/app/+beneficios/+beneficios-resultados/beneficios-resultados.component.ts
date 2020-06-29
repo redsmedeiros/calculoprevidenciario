@@ -2917,6 +2917,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   updateResultadosDatatable() {
+
     if (this.calculo.percentual_taxa_advogado != 0) {
       this.resultadosDatatableOptions = {
         ...this.resultadosDatatableOptions,
@@ -2955,6 +2956,30 @@ export class BeneficiosResultadosComponent implements OnInit {
           { data: 'juros', width: '10rem' },
           { data: 'valor_juros', width: '10rem' },
           // { data: 'diferenca_juros' },
+        ],
+        columnDefs: [
+          { className: 'nowrapText', targets: '_all' },
+        ]
+      }
+    }
+
+    if (this.isTetos) {
+      this.resultadosDatatableOptions = {
+        ...this.resultadosDatatableOptions,
+        data: this.resultadosList,
+        columns: [
+          { data: 'competencia', width: '10rem' },
+          { data: 'indice_devidos', width: '8rem' },
+          { data: 'beneficio_devido', width: '10rem' },
+          { data: 'indice_recebidos', width: '8rem' },
+          { data: 'beneficio_recebido', width: '10rem' },
+          { data: 'diferenca_mensal' },
+          { data: 'correcao_monetaria' },
+          { data: 'diferenca_corrigida' },
+          { data: 'juros' },
+          { data: 'valor_juros', width: '10rem' },
+          // { data: 'diferenca_juros' },
+          // { data: 'honorarios' }
         ],
         columnDefs: [
           { className: 'nowrapText', targets: '_all' },
