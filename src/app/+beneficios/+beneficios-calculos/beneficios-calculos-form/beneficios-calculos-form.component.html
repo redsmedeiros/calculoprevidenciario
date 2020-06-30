@@ -275,7 +275,7 @@
                       <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
                     </div>
                   </div>
-                  <div *ngIf="devidosPosBuracoNegro" class="form-group">
+                   <div  class="form-group"> <!-- *ngIf="devidosPosBuracoNegro" -->
                     <label class=" control-label"  [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       Índice de Limitação no Teto (se houver):
                       <i title="Índice de Reajuste de Teto (IRT) só existepara beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
@@ -407,7 +407,7 @@
                       <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                     </div>
                   </div>
-                  <div *ngIf="recebidosPosBuracoNegro" class="form-group">
+                  <div  class="form-group"> <!--*ngIf="recebidosPosBuracoNegro"-->
                     <label class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       Índice de Limitação no Teto (se houver):
                       <i title="Índice de Reajuste de Teto (IRT) só existepara beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
