@@ -138,8 +138,8 @@
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th>
-                  Tipo
+                <th width="50%">
+                  <span class="pull-right font-bold"> Tipo </span>
                 </th>
                 <th>
                   Descrição
@@ -1216,7 +1216,7 @@
           <!--  fim tempo professor transitoria -->
         </div>
       </div>
-      <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">
+      <div id="raTable-{{ boxId }}" *ngIf="!isUpdating && showReajustesAdministrativos" class="widget-body">
         <h2 *ngIf="!isUpdating && showReajustesAdministrativos">
           Reajustes Administrativos
         </h2>

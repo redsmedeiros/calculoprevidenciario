@@ -1,11 +1,19 @@
 import { RgpsResultadosAposPec103Component } from './../rgps-resultados-apos-pec103.component';
 import * as moment from 'moment';
+// import { Injectable } from '@angular/core';
 
+// @Injectable()
 
 export class RegrasAcesso {
 
     public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
     private contribuicaoTotal;
+
+
+    private arrayEspecial = [1915, 1920, 1925];
+    private arrayPensao = [1900, 1901];
+    private arrayEspecialDeficiente = [25, 26, 27, 28];
+    private arrayIdade = [3, 16];
 
     public listaConclusaoAcesso = [];
     public conclusaoAcesso = {
@@ -20,6 +28,7 @@ export class RegrasAcesso {
         tempoTotalAteEC103: 0,
         tempoTotalAposEC103: 0,
         requisitos: {
+            ano: 0,
             tempo: 0,
             idade: 0,
             pedagio: 0,
@@ -27,36 +36,100 @@ export class RegrasAcesso {
         }
     };
 
-    // conclusaoAcessoRegraAcessoPontos;
-    // conclusaoAcessoRegrasAcessoIdadeProgressiva;
-    // conclusaoAcessoRegraAcessoPedagio100;
-    // conclusaoAcessoRegraAcessoPedagio50;
-    // conclusaoAcessoRegraAcessoIdade;
-
     constructor() {
 
     }
 
-    calcularRMI() {
+
+    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[]) {
+
+        listaConclusaoAcesso.forEach((elementTipo, indice) => {
+            // console.log(elementTipo);
+            // console.log(indice);
+
+            elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
+        })
+
+        console.log(listaConclusaoAcesso);
+
+    }
+
+    private gerarParametrosPorTipoAposentadoria(elementTipo) {
+
+        const calculosPossiveis = [];
+        console.log(elementTipo);
+
+        if (!elementTipo.status) {
+            return calculosPossiveis;
+        }
+
+
+        const maximoDescarteAnos = 0
+        const maximoDescarteContribuioes = 0
+
+
+        // if (condition) {
+
+        // }
+
+
+
+
+        return [];
 
     }
 
 
+    private setConclusaoAcesso(
+        regra: string,
+        status: boolean,
+        pontosTotal: number,
+        idade: number,
+        tempoTotalAteEC103: number,
+        tempoTotalAposEC103: number,
+        requisitos: object
+    ) {
+        if (status) {
+            this.listaConclusaoAcesso.push({
+                regra: regra,
+                status: status,
+                pontosTotal: pontosTotal,
+                idade: idade,
+                tempoTotalAteEC103: tempoTotalAteEC103,
+                tempoTotalAposEC103: tempoTotalAposEC103,
+                requisitos: requisitos
+            });
+        } else {
+            this.listaConclusaoAcesso.push({
+                regra: regra,
+                status: false,
+                pontosTotal: 0,
+                idade: 0,
+                tempoTotalAteEC103: 0,
+                tempoTotalAposEC103: 0,
+                requisitos: requisitos
+            });
+        }
+    }
+
+
+
+
     public getVerificacaoRegras(
-        dataInicioBeneficio,
-        dataFiliacao,
-        tipoBeneficio,
-        isRegraTransitoria,
-        contribuicaoPrimaria,
-        tempoContribuicaoTotal,
-        tempoContribuicaoTotalAtePec,
-        tempoContribuicaoTotalMoment,
-        tempoContribuicaoTotalAtePecMoment,
-        idadeSegurado,
-        idadeFracionada,
-        sexo,
-        redutorProfessor,
-        redutorSexo
+        dataInicioBeneficio: any,
+        dataFiliacao: any,
+        tipoBeneficio: number,
+        isRegraTransitoria: boolean,
+        contribuicaoPrimaria: any,
+        tempoContribuicaoTotal: any,
+        tempoContribuicaoTotalAtePec: any,
+        tempoContribuicaoTotalMoment: any,
+        tempoContribuicaoTotalAtePecMoment: any,
+        idadeSegurado: number,
+        idadeFracionada: number,
+        sexo: string,
+        redutorProfessor: number,
+        redutorSexo: number
     ) {
 
         if (
@@ -65,11 +138,8 @@ export class RegrasAcesso {
             return this.listaConclusaoAcesso;
         }
 
-        const arrayEspecial = [1915, 1920, 1925];
-        const arrayPensao = [1900, 1901];
-        const arrayEspecialDeficiente = [25, 26, 27, 28];
-        const arrayIdade = [3, 16];
-        
+
+
 
         // const mesesContribuicao = divisor;
         // const valorMedio = (valorTotalContribuicoes / mesesContribuicao);
@@ -80,11 +150,12 @@ export class RegrasAcesso {
         const ano = dataInicioBeneficio.year();
 
 
-       // tipoBeneficio = 25;
+        // tipoBeneficio = 3;
+        // tipoBeneficio = 1915;
 
 
         // aplicação default false
-        if (arrayEspecial.includes(tipoBeneficio)) {
+        if (this.arrayEspecial.includes(tipoBeneficio)) {
 
             // Aposentadoria especial
             //   this.isRegrasAposentadoriaEspecial = true;
@@ -132,7 +203,7 @@ export class RegrasAcesso {
             //   this.isRegrasAuxilioDoenca = true;
             //   this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio);
 
-        } else if (arrayEspecialDeficiente.includes(tipoBeneficio)) {
+        } else if (this.arrayEspecialDeficiente.includes(tipoBeneficio)) {
 
             // especial deficiente
             //   this.isRegraEspecialDeficiente = true;
@@ -146,8 +217,8 @@ export class RegrasAcesso {
                 tipoBeneficio
             )
 
-        } else if (arrayIdade.includes(tipoBeneficio)) {
-            
+        } else if (this.arrayIdade.includes(tipoBeneficio)) {
+
             // Aposentadoria por idade
             //   this.isStatusTransicaoIdade = (tipoBeneficio === 3) ? true : false;
 
@@ -158,6 +229,23 @@ export class RegrasAcesso {
             //     this.regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio);
             //   }
 
+
+
+            this.regraAcessoIdadeTransitoria(
+                idadeFracionada,
+                ano,
+                sexo,
+                this.contribuicaoTotal,
+                tipoBeneficio
+            )
+            this.regraAcessoIdade(
+                idadeFracionada,
+                ano,
+                sexo,
+                this.contribuicaoTotal
+            )
+
+
         } else if (tipoBeneficio === 6) {
 
             // professor transitoria e transição
@@ -167,7 +255,7 @@ export class RegrasAcesso {
                 //this.verificaRegrasTransicao(contribuicaoPrimaria);
                 // this.atualizarCalculoMelhorRMIRegrasTransicao();
 
-                this.regraAcessoPontos(pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
+                this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.RegrasAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.regraAcessoPedagio100(
                     sexo,
@@ -201,7 +289,7 @@ export class RegrasAcesso {
             //   this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
             //   this.atualizarCalculoMelhorRMIRegrasTransicao();
 
-            this.regraAcessoPontos(pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
+            this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
             this.RegrasAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
             this.regraAcessoPedagio100(
                 sexo,
@@ -222,19 +310,18 @@ export class RegrasAcesso {
                 dataInicioBeneficio.clone());
             this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
 
-
-
-
         }
 
-        console.log(this.listaConclusaoAcesso);
+        //console.log(this.listaConclusaoAcesso);
+
+        return this.listaConclusaoAcesso;
 
     }
+
+
+
     // transição regras de acesso inicio
-
-
-
-    public regraAcessoPontos(pontos, ano, sexo, tempo_contribuicao, redutorProfessor) {
+    public regraAcessoPontos(idadeFracionada, pontos, ano, sexo, tempo_contribuicao, redutorProfessor) {
 
         let status = false;
         let requisitoContribuicoes = { f: 30, m: 35 };
@@ -308,41 +395,22 @@ export class RegrasAcesso {
         }
 
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'pontos',
-                status: status,
-                pontosTotal: pontos,
+        this.setConclusaoAcesso(
+            'pontos',
+            status,
+            pontos,
+            idadeFracionada,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: requisitoContribuicoes[sexo],
                 idade: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: requisitoContribuicoes[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: pontosRequeridos
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'pontos',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: requisitoContribuicoes[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: pontosRequeridos
-                }
-            });
-        }
+                pedagio: 0,
+                pontos: pontosRequeridos,
+                ano: ano
+            }
+        );
+
 
     }
 
@@ -391,45 +459,23 @@ export class RegrasAcesso {
         status = (((ano >= 2019 && ano <= 2031) && idade >= (regra2[ano][sexo] - redutorProfessor))
             && tempo_contribuicao >= contribuicao_min[sexo]) ? true : false;
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'idadeProgressiva',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: (idade - (regra2[ano][sexo] - redutorProfessor)),
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - contribuicao_min[sexo]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: contribuicao_min[sexo],
-                    idade: (regra2[ano][sexo] - redutorProfessor),
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'idadeProgressiva',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: contribuicao_min[sexo],
-                    idade: (regra2[ano][sexo] - redutorProfessor),
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        }
+
+        this.setConclusaoAcesso(
+            'idadeProgressiva',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: contribuicao_min[sexo],
+                idade: (regra2[ano][sexo] - redutorProfessor),
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
+
 
     }
 
@@ -498,43 +544,21 @@ export class RegrasAcesso {
 
         }
 
-
-
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'pedagio100',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: (idade - contribuicao_idade_min[sexo]),
-                tempoTotalAteEC103: tempoContribuicaoTotalAtePec,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: tempoFinalContribComPedagio,
-                    idade: contribuicao_idade_min[sexo],
-                    pedagio: tempoDePedagio,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'pedagio100',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoTotalAteEC103: tempoContribuicaoTotalAtePec,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: tempoFinalContribComPedagio,
-                    idade: contribuicao_idade_min[sexo],
-                    pedagio: tempoDePedagio,
-                    pontos: 0
-                }
-            });
-        }
+        this.setConclusaoAcesso(
+            'pedagio100',
+            status,
+            0,
+            idade,
+            tempoContribuicaoTotalAtePec,
+            tempo_contribuicao,
+            {
+                tempo: tempoFinalContribComPedagio,
+                idade: contribuicao_idade_min[sexo],
+                pedagio: tempoDePedagio,
+                pontos: 0,
+                ano: 0
+            }
+        );
 
     }
 
@@ -579,45 +603,22 @@ export class RegrasAcesso {
 
         }
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'pedagio50',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempoContribuicaoTotalAtePec - contribuicao_max[sexo]),
-                tempoTotalAteEC103: tempoContribuicaoTotalAtePec,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: tempoDePedagioTotal,
-                    idade: 0,
-                    pedagio: tempoDePedagio,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'pedagio50',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: tempoDePedagioTotal,
-                    idade: 0,
-                    pedagio: tempoDePedagio,
-                    pontos: 0
-                }
-            });
-        }
+
+        this.setConclusaoAcesso(
+            'pedagio50',
+            status,
+            0,
+            idade,
+            tempoContribuicaoTotalAtePec,
+            tempo_contribuicao,
+            {
+                tempo: tempoDePedagioTotal,
+                idade: 0,
+                pedagio: tempoDePedagio,
+                pontos: 0,
+                ano: 0
+            }
+        );
 
     }
 
@@ -663,45 +664,21 @@ export class RegrasAcesso {
         // status =  (sexo === 'f' && idade >= regra5['f'] && tempo_contribuicao >= contribuicao_min) ? true : false;
         status = (idade >= regra5[sexo] && tempo_contribuicao >= contribuicao_min) ? true : false;
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'idade',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: (idade - (regra5[sexo])),
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - contribuicao_min),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: contribuicao_min,
-                    idade: regra5[sexo],
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'idade',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: contribuicao_min,
-                    idade: regra5[sexo],
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        }
+        this.setConclusaoAcesso(
+            'idade',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: contribuicao_min,
+                idade: regra5[sexo],
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
 
     }
 
@@ -733,45 +710,22 @@ export class RegrasAcesso {
             status = true;
         }
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'idadeTransitoria',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - contribuicao_min[sexo]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: contribuicao_min[sexo],
-                    idade: 0,
-                    pedagio: idade_min[sexo],
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'idadeTransitoria',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: contribuicao_min[sexo],
-                    idade: 0,
-                    pedagio: idade_min[sexo],
-                    pontos: 0
-                }
-            });
-        }
+
+        this.setConclusaoAcesso(
+            'idadeTransitoria',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: contribuicao_min[sexo],
+                idade: idade_min[sexo],
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
 
     }
 
@@ -831,47 +785,21 @@ export class RegrasAcesso {
         }
 
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'especial',
-                status: status,
-                pontosTotal: pontosEspecial,
-                pontosExcendente: (pontosEspecial - regraEspecial[tipoBeneficio].pontos),
-                idadeAteEC103: 0,
-                idadeAposEC103: idadeFracionada,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (contribuicaoTotalTempoAnos - tempoRegra[tipoBeneficio]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: contribuicaoTotalTempoAnos,
-                requisitos: {
-                    tempo: tempoRegra[tipoBeneficio],
-                    idade: idade_min,
-                    pedagio: 0,
-                    pontos: regraEspecial[tipoBeneficio].pontos
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'especial',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idadeFracionada,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: tempoRegra[tipoBeneficio],
-                    idade: idade_min,
-                    pedagio: 0,
-                    pontos: regraEspecial[tipoBeneficio].pontos
-                }
-            });
-        }
-
-
+        this.setConclusaoAcesso(
+            'especial',
+            status,
+            pontosEspecial,
+            idadeFracionada,
+            0,
+            contribuicaoTotalTempoAnos,
+            {
+                tempo: tempoRegra[tipoBeneficio],
+                idade: idade_min,
+                pedagio: 0,
+                pontos: regraEspecial[tipoBeneficio].pontos,
+                ano: 0
+            }
+        );
 
     }
 
@@ -899,45 +827,22 @@ export class RegrasAcesso {
             status = false;
         }
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'incapacidade',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - tempoPercentual[sexo]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: tempoPercentual[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'incapacidade',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: tempoPercentual[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        }
+        this.setConclusaoAcesso(
+            'incapacidade',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: tempoPercentual[sexo],
+                idade: 0,
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
+
 
     }
 
@@ -967,45 +872,22 @@ export class RegrasAcesso {
             status = false;
         }
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'incapacidade',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - tempoPercentualParte1[sexo]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: tempoPercentualParte1[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'incapacidade',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: tempoPercentualParte1[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        }
+
+        this.setConclusaoAcesso(
+            'acidente',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: tempoPercentualParte1[sexo],
+                idade: 0,
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
 
     }
 
@@ -1022,11 +904,11 @@ export class RegrasAcesso {
         tipoBeneficio
     ) {
 
-        const getRequisitoEspecialDeficiente = (tipoBeneficio) => {
+        const getRequisitoEspecialDeficiente = (tipoBeneficioREQ: number) => {
 
             let requisito: any;
 
-            switch (tipoBeneficio) {
+            switch (tipoBeneficioREQ) {
                 case 25:
                     requisito = { m: 25, f: 20 }; // tempo Grave
                     break;
@@ -1074,52 +956,24 @@ export class RegrasAcesso {
         }
 
 
-        if (status) {
-            this.listaConclusaoAcesso.push({
-                regra: 'deficiente',
-                status: status,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: idade,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: (tempo_contribuicao - requisitoEspecial[sexo]),
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: tempo_contribuicao,
-                requisitos: {
-                    tempo: requisitoEspecial[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        } else {
-            this.listaConclusaoAcesso.push({
-                regra: 'deficiente',
-                status: false,
-                pontosTotal: 0,
-                pontosExcendente: 0,
-                idadeAteEC103: 0,
-                idadeAposEC103: 0,
-                tempoExcendenteAteEC103: 0,
-                tempoExcendenteAposEC103: 0,
-                tempoTotalAteEC103: 0,
-                tempoTotalAposEC103: 0,
-                requisitos: {
-                    tempo: requisitoEspecial[sexo],
-                    idade: 0,
-                    pedagio: 0,
-                    pontos: 0
-                }
-            });
-        }
+        this.setConclusaoAcesso(
+            'deficiente',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: requisitoEspecial[sexo],
+                idade: 0,
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
+
+
     }
-
-
-
-
-
-
 
 
 
