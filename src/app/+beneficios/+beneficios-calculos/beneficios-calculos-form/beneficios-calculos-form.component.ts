@@ -123,6 +123,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
+    { text: 'Não Aplicar correção', value: 'sem_correcao' },
     { text: 'IPCAe a partir de 07/2009', value: 'ipca' },
     { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
     { text: 'Manual de cálculos da Justiça Federal', value: 'cam' },
@@ -277,8 +278,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     let valid = true;
 
     if (this.isEmptyInput(this.dataCalculo)) {
-      // this.errors.add({ 'dataCalculo': ['A data do Cálculo é Necessária.'] });
-      // valid = false;
+      this.errors.add({ 'dataCalculo': ['A data do Cálculo é Necessária.'] });
+      valid = false;
     } else if (!moment(this.dataCalculo, 'MM/YYYY').isValid()) {
       this.errors.add({ 'dataCalculo': ['Insira uma data Válida.'] });
       valid = false;
@@ -288,8 +289,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isEmptyInput(this.dataAcaoJudicial)) {
-      // this.errors.add({ 'dataAcaoJudicial': ['A data da Ação Jucidical é Necessária.'] });
-      // valid = false;
+      this.errors.add({ 'dataAcaoJudicial': ['A data da Ação Jucidical é Necessária.'] });
+      valid = false;
     } else if (!this.isValidDate(this.dataAcaoJudicial)) {
       this.errors.add({ 'dataAcaoJudicial': ['Insira uma data Válida.'] });
       valid = false;
@@ -422,17 +423,32 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     }
 
-    if (!this.isEmptyInput(this.cessacaoValoresDevidos)) {
+  //  if (!this.isEmptyInput(this.cessacaoValoresDevidos)) { }
 
-      if (!this.isValidDate(this.cessacaoValoresDevidos)) {
+      if (this.isEmptyInput(this.cessacaoValoresDevidos)) {
+        this.errors.add({ 'cessacaoValoresDevidos': ['A Data Final dos Atrasados é Necessária.'] });
+        valid = false;
+      }if (!this.isValidDate(this.cessacaoValoresDevidos)) {
         this.errors.add({ 'cessacaoValoresDevidos': ['Insira uma data válida.'] });
         valid = false;
       } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
         valid = false;
       }
+   
+    if(this.isEmptyInput(this.tipoCorrecaoMonetaria)){
+      this.errors.add({ 'tipoCorrecaoMonetaria': ['Selecione uma opção'] });
+      valid = false;
+    }
+   if(this.isEmptyInput(this.tipoDejurosSelecionado)){
+      this.errors.add({ 'tipoDejurosSelecionado': ['Selecione uma opção'] });
+      valid = false;
     }
 
+    if(this.isEmptyInput(this.taxaAdvogadoAplicacaoSobre)){
+      this.errors.add({ 'taxaAdvogadoAplicacaoSobre': ['Selecione uma opção'] });
+      valid = false;
+    }
 
     if (this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
         this.taxaAdvogadoAplicacaoSobre !== 'CPC85' && 
@@ -1178,9 +1194,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   isValidDate(date) {
+
+    if(!this.isExits(date)){
+      return false;
+    }
+
     let bits = date.split('/');
     let d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
+
   }
 
   onCorrecaoChange(newCorrecao) {

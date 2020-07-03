@@ -637,14 +637,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         //  // Adicionar linha de abono
         if (this.calculo.calcular_abono_13_ultimo_mes) {
 
-          if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
+          if (dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) {
 
             abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
 
           }
 
-          if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
+          if (dataCorrente.isSame(this.calculo.data_cessacao, 'month')) {
 
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_cessacao));
             beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
@@ -1493,7 +1493,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     } 
     */
 
-    if (this.isExits(tipo_correcao)) {
+    if (this.isExits(tipo_correcao) && tipo_correcao !== 'sem_correcao') {
       desindexador = moedaDataAtual[tipo_correcao] / moedaDataCalculo[tipo_correcao];
       correcaoMonetaria = moedaDataCorrente[tipo_correcao] * desindexador;
     }
@@ -3155,6 +3155,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const correcaoOptions = [
       { text: 'Não Aplicar', value: '' },
+      { text: 'Sem correção', value: 'sem_correcao' },
       { text: 'IPCAe a partir de 07/2009', value: 'ipca' },
       { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
       { text: 'Manual de cálculos da Justiça Federal', value: 'cam' },

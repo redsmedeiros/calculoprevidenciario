@@ -107,8 +107,8 @@
                       <small *ngIf="errors.has('numeroProcesso')" class="text-danger">{{ errors.get('numeroProcesso') }}</small>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label class="col-md-4 control-label">Data de Ajuizamento da Ação*:</label>
+                  <div class="form-group" [ngClass]="{' has-error ': errors.has('dataAcaoJudicial')}">
+                    <label class="col-md-4 control-label">Data do Ajuizamento da Ação*:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
                       <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
@@ -121,8 +121,8 @@
                       <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label class="col-md-4 control-label">Atualizar até:</label>
+                  <div class="form-group" [ngClass]="{'has-error': errors.has('dataCalculo')}">
+                    <label class="col-md-4 control-label">Atualizar até*:</label>
                     <div class="col-md-2">
                       <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMaskCompetencia}" name="dataCalculo" class="form-control" type="text">
                       <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
@@ -466,7 +466,7 @@
           <div>
             <!-- widget content -->
             <div class="widget-body widget-body-custom">
-                <div class="form-group">
+                <div class="form-group" [ngClass]="{'has-error': errors.has('tipoCorrecaoMonetaria')}">
                   <div class="col-md-8 col-sm-offset-2">
                     <!-- <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
@@ -480,6 +480,7 @@
                     <select name="tipoCorrecaoMonetaria" [(ngModel)]="tipoCorrecaoMonetaria" class="form-control" id="tipoCorrecaoMonetariaSelect">
                       <option *ngFor="let correcao of correcaoOptions" value="{{correcao.value}}">{{correcao.text}}</option>
                     </select>
+                    <small *ngIf="errors.has('tipoCorrecaoMonetaria')" class="text-danger">{{ errors.get('tipoCorrecaoMonetaria')| i18n }}</small>
                   </div>
                 </div>
                 <!-- <div class="form-group" >
@@ -512,12 +513,13 @@
       <div class="widget-body">
         <form class="form-horizontal">
           <fieldset>
-              <div class="form-group">
+              <div class="form-group" [ngClass]="{'has-error': errors.has('tipoDejurosSelecionado')}">
                 <label class="col-md-3 control-label">Selecione a opção:</label>
                 <div class="col-md-6">
                   <select name="tipoDejurosSelecionado" [(ngModel)]="tipoDejurosSelecionado" (change)="setJurosAnualParaMensal()" class="form-control" id="tipoDejurosSelecionadoSelect">
                     <option *ngFor="let tipoJuros of tipoJurosOptions" value="{{tipoJuros.value}}">{{tipoJuros.text}}</option>
                   </select>
+                  <small *ngIf="errors.has('tipoDejurosSelecionado')" class="text-danger">{{ errors.get('tipoDejurosSelecionado')| i18n }}</small>
                 </div>
               </div>
             <!-- <div class="form-group">
@@ -617,12 +619,14 @@
                       </div>
                     </div>
                   </div> -->
-                  <div class="form-group" >
+                  <div class="form-group" [ngClass]="{'has-error': errors.has('taxaAdvogadoAplicacaoSobre')}" >
                     <label class="col-md-3 control-label" for="taxaAdvogadoAplicacaoSobre">Percentual de Honorário Sobre:</label>
                     <div class="" [ngClass]="(taxaAdvogadoAplicacaoSobre === 'fixo')? 'col-md-4' : 'col-md-6'">
-                      <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre">
+                      <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre" 
+                      >
                         <option *ngFor="let option of tipoHonorariosOptions" value="{{option.value}}">{{option.text}}</option>
                       </select>
+                      <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
                     </div>
                     <div class="col-md-2" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
                       <input name='taxaAdvogadoValorFixoHonorarios' currencyMask [(ngModel)]="taxaAdvogadoValorFixoHonorarios"  class="form-control"  
@@ -630,14 +634,10 @@
                         <small *ngIf="errors.has('taxaAdvogadoValorFixoHonorarios')" class="text-danger">{{ errors.get('taxaAdvogadoValorFixoHonorarios') }}</small>
                     </div>
                     <div class="col-md-3" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
-                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="data da inicial honorário fixo" tooltip="data da inicial honorário fixo" type="text">
+                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" 
+                      class="form-control" placeholder="data da inicial honorário fixo" tooltip="data da inicial honorário fixo" type="text">
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
-                    <div class="row">
-                      <div class="col-md-8 col-md-offset-2">
-                        <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
-                      </div>
-                  </div>
                   </div>
                   <div class="form-group">
                     <div *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'" class="col-md-offset-1">
