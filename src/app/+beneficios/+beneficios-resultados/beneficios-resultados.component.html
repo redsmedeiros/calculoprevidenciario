@@ -754,7 +754,7 @@
                     {{ dataInicialTutelaAntecipada }} a
                     {{ dataFinalTutelaAntecipada }}
                   </li> -->
-                  <li *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
+                  <li *ngIf="calculo.percentual_taxa_advogado != 0 && !exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
                     <b>Percentual dos Honorários:</b>
                     {{ formatPercent(calculo.percentual_taxa_advogado) }}
                   </li>
@@ -817,7 +817,7 @@
                         {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                       </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="calculo.percentual_taxa_advogado != 0" >
                       <td width="50%" style="text-align: right;">
                         <b>Percentual dos Honorários:</b>
                       </td>
