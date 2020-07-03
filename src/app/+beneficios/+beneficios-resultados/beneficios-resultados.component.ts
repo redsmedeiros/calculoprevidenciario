@@ -616,9 +616,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
-
       if (dataCorrente.month() == 11
-        || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month'))
+        || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month'))
         && this.calculo.tipo_aposentadoria_recebida != 11) {
 
 
@@ -647,7 +646,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           if (dataCorrente.isSame(this.calculo.data_calculo_pedido, 'month')) {
 
-            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_calculo_pedido));
+            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_cessacao));
             beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
 
           }
