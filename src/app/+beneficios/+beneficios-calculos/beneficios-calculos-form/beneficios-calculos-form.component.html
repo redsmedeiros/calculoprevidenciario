@@ -466,8 +466,10 @@
           <div>
             <!-- widget content -->
             <div class="widget-body widget-body-custom">
+              <form class="form-horizontal">
                 <div class="form-group" [ngClass]="{'has-error': errors.has('tipoCorrecaoMonetaria')}">
-                  <div class="col-md-8 col-sm-offset-2">
+                  <label class="col-md-3 control-label">Selecione a opção *:</label>
+                  <div class="col-md-7 ">
                     <!-- <div  *ngFor="let correcao of correcaoOptions; let idx = index" class="radio">
                       <label>
                         <input type="radio" name="correcao" 
@@ -483,6 +485,7 @@
                     <small *ngIf="errors.has('tipoCorrecaoMonetaria')" class="text-danger">{{ errors.get('tipoCorrecaoMonetaria')| i18n }}</small>
                   </div>
                 </div>
+              </form>
                 <!-- <div class="form-group" >
                   <div class="col-md-8 col-sm-offset-2">
                     <div class="checkbox">
@@ -514,7 +517,7 @@
         <form class="form-horizontal">
           <fieldset>
               <div class="form-group" [ngClass]="{'has-error': errors.has('tipoDejurosSelecionado')}">
-                <label class="col-md-3 control-label">Selecione a opção:</label>
+                <label class="col-md-3 control-label">Selecione a opção *:</label>
                 <div class="col-md-6">
                   <select name="tipoDejurosSelecionado" [(ngModel)]="tipoDejurosSelecionado" (change)="setJurosAnualParaMensal()" class="form-control" id="tipoDejurosSelecionadoSelect">
                     <option *ngFor="let tipoJuros of tipoJurosOptions" value="{{tipoJuros.value}}">{{tipoJuros.text}}</option>
@@ -620,7 +623,7 @@
                     </div>
                   </div> -->
                   <div class="form-group" [ngClass]="{'has-error': errors.has('taxaAdvogadoAplicacaoSobre')}" >
-                    <label class="col-md-3 control-label" for="taxaAdvogadoAplicacaoSobre">Percentual de Honorário Sobre:</label>
+                    <label class="col-md-3 control-label" for="taxaAdvogadoAplicacaoSobre">Percentual de Honorário Sobre*:</label>
                     <div class="" [ngClass]="(taxaAdvogadoAplicacaoSobre === 'fixo')? 'col-md-4' : 'col-md-6'">
                       <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre" 
                       >

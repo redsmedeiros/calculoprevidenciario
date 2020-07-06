@@ -637,14 +637,17 @@ export class BeneficiosResultadosComponent implements OnInit {
         //  // Adicionar linha de abono
         if (this.calculo.calcular_abono_13_ultimo_mes) {
 
-          if (dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) {
+          if (beneficioDevidoAbono > 0 && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) {
 
             abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
 
           }
 
-          if (dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) { // this.calculo.data_cessacao
+          if (
+            this.isExits(this.calculo.data_cessacao) && beneficioRecebidoAbono > 0 &&
+            dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
+          ) { // this.calculo.data_cessacao
 
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_cessacao));
             beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;

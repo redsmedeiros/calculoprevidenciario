@@ -289,7 +289,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isEmptyInput(this.dataAcaoJudicial)) {
-      this.errors.add({ 'dataAcaoJudicial': ['A data da Ação Jucidical é Necessária.'] });
+      this.errors.add({ 'dataAcaoJudicial': ['A data do Ajuizamento é Necessária.'] });
       valid = false;
     } else if (!this.isValidDate(this.dataAcaoJudicial)) {
       this.errors.add({ 'dataAcaoJudicial': ['Insira uma data Válida.'] });
@@ -435,18 +435,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
         valid = false;
       }
-   
+
     if(this.isEmptyInput(this.tipoCorrecaoMonetaria)){
-      this.errors.add({ 'tipoCorrecaoMonetaria': ['Selecione uma opção'] });
+      this.errors.add({ 'tipoCorrecaoMonetaria': ['Selecione uma opção válida.'] });
       valid = false;
     }
    if(this.isEmptyInput(this.tipoDejurosSelecionado)){
-      this.errors.add({ 'tipoDejurosSelecionado': ['Selecione uma opção'] });
+      this.errors.add({ 'tipoDejurosSelecionado': ['Selecione uma opção válida.'] });
       valid = false;
     }
 
     if(this.isEmptyInput(this.taxaAdvogadoAplicacaoSobre)){
-      this.errors.add({ 'taxaAdvogadoAplicacaoSobre': ['Selecione uma opção'] });
+      this.errors.add({ 'taxaAdvogadoAplicacaoSobre': ['Selecione uma opção válida.'] });
       valid = false;
     }
 
