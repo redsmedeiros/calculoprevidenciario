@@ -644,7 +644,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           }
 
-          if (dataCorrente.isSame(this.calculo.data_cessacao, 'month')) {
+          if (dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) { // this.calculo.data_cessacao
 
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(moment(this.calculo.data_cessacao));
             beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
