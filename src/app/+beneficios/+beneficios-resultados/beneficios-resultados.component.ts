@@ -820,8 +820,9 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Seção 3.1
   getIndiceReajusteValoresDevidos(dataCorrente) {
 
-    if (this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido)
+    if (this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
+    }
 
 
     let reajuste = 0.0;
@@ -854,9 +855,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-
-
-
     if (dataCorrente <= this.dataSimplificada &&
       moment(this.calculo.data_pedido_beneficio_esperado) < this.dataInicioBuracoNegro) {
       reajuste = 1;
@@ -875,6 +873,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       moment(this.calculo.data_pedido_beneficio_esperado) == this.dataInicioCalculo) {
       reajuste = 1;
     }
+
     if (dataCorrente.isSame('1994-03-01', 'month')) {
       reajuste = 1 / 661.0052;
       if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
@@ -906,13 +905,23 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (reajusteOS == 0) {
       reajusteOS = 1;
     }
+
+    if (dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')
+      && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')) {
+
+      reajuste = 1;
+
+    }
+
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
 
   //Seção 3.2
   getIndiceReajusteValoresRecebidos(dataCorrente) {
-    if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)
+    if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
+    }
+
     let reajuste = 0.0;
     let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
@@ -941,9 +950,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.primeiroReajusteRecebidos = 1;
     }
 
-    if (dataCorrente == moment(this.calculo.data_pedido_beneficio) && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio) 
+    && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
       reajuste = 1;
     }
+
     if (dataCorrente.isSame('1994-03-01', 'month')) {
       reajuste = 1 / 661.0052;
       if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
@@ -975,6 +986,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (reajusteOS == 0) {
       reajusteOS = 1;
     }
+
+    if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'year')
+    && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio, 'year')) {
+
+      reajuste = 1;
+
+    }
+
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
 
@@ -2913,7 +2932,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
     if (reajusteObj.reajusteOs == 0.0 || dataCorrente >= this.dataEfeitoFinanceiro) {
-      //Não tem reajuste OS
+      // Não tem reajuste OS
       stringIndice = this.formatDecimal(reajusteObj.reajuste, 6);
     } else {
       stringIndice = '' + this.formatDecimal(reajusteObj.reajuste, 6) + '<br>' + this.formatDecimal(reajusteObj.reajusteOs, 6) + 'OS'
