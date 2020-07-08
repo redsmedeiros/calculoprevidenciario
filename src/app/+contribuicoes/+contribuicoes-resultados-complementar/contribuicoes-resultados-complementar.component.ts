@@ -108,7 +108,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.competenciaInicial = splited[1]+'/'+splited[0];
           splited = this.calculoComplementar.final_atraso.split('-');
           this.competenciaFinal = splited[1]+'/'+splited[0];
-          this.baseAliquota = (this.calculoComplementar.media_salarial*0.2);
+          this.baseAliquota = (this.calculoComplementar.media_salarial * 0.2);
           this.resultadosList = this.generateTabelaResultados();
          
           this.updateResultadosDatatable();
