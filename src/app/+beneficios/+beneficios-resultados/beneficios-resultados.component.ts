@@ -616,9 +616,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
-      if (dataCorrente.month() == 11
-        || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month'))
-        && this.calculo.tipo_aposentadoria_recebida != 11) {
+      // console.log(this.calculo.tipo_aposentadoria_recebida);
+      // console.log(this.calculo.tipo_aposentadoria);
+      if ((dataCorrente.month() == 11 
+            && this.calculo.tipo_aposentadoria_recebida !== 11 
+            && (this.calculo.tipo_aposentadoria_recebida !== 12 && this.calculo.tipo_aposentadoria !== 12))
+            || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
+                 && (this.calculo.tipo_aposentadoria_recebida !== 12 && this.calculo.tipo_aposentadoria !== 12))
+        ) {
 
 
         let beneficioRecebidoAbono;
@@ -2711,7 +2716,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (valorBeneficio <= salMinimoDib && !this.calculo.nao_aplicar_sm_beneficio_esperado) {
       // Adicionar subindice ‘M’ no valor do beneficio
-      console.log((!this.calculo.nao_aplicar_sm_beneficio_esperado))
+      // console.log((!this.calculo.nao_aplicar_sm_beneficio_esperado))
       return salMinimoDib;
     }
     if (valorBeneficio >= tetoSalarialDib && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
