@@ -19,7 +19,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-  public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
+  public NumProcessoMask = [/\d/,/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
     '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
     '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
   public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
