@@ -57,27 +57,73 @@ export class RegrasAcesso {
     private gerarParametrosPorTipoAposentadoria(elementTipo) {
 
         const calculosPossiveis = [];
+        const calculoPossivel = {
+            ano: 0,
+            tempo: 0,
+            idade: 0,
+            pedagio: 0,
+            pontos: 0
+        };
+
         console.log(elementTipo);
 
         if (!elementTipo.status) {
             return calculosPossiveis;
         }
 
-
-        const maximoDescarteAnos = 0
-        const maximoDescarteContribuioes = 0
-
-
-        // if (condition) {
-
-        // }
+        const idade =  [ 'idadeTransitoria' , 'idade'];
+        const maximoDescarte = {anos: 0, meses: 0 }
+        let difIdadeExcedente = 0;
+        let difTempoContribExcedente = 0;
 
 
+        // idade (transição e transitoria)
+        if (idade.includes(elementTipo.regra)) {
 
+            difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
+            difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
+
+            maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
+            maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+
+            console.log(difIdadeExcedente);
+            console.log(maximoDescarte);
+
+        }
+
+        // Tempo de contribuição (regras de transição)
+        if (elementTipo.regra === 6) {
+
+            difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
+            difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
+
+            maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
+            maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+
+            console.log(difIdadeExcedente);
+            console.log(maximoDescarte);
+
+        }
+
+
+        this.criarListaPossibilidades(maximoDescarte,
+                                      elementTipo.requisitos);
 
         return [];
 
     }
+
+
+    private criarListaPossibilidades(
+        maximoDescarte,
+        requisitos
+    ){
+
+
+
+
+    }
+
 
 
     private setConclusaoAcesso(
@@ -97,7 +143,9 @@ export class RegrasAcesso {
                 idade: idade,
                 tempoTotalAteEC103: tempoTotalAteEC103,
                 tempoTotalAposEC103: tempoTotalAposEC103,
-                requisitos: requisitos
+                requisitos: requisitos,
+                calculosPossiveis: [],
+                excedente: {}
             });
         } else {
             this.listaConclusaoAcesso.push({
@@ -107,7 +155,9 @@ export class RegrasAcesso {
                 idade: 0,
                 tempoTotalAteEC103: 0,
                 tempoTotalAposEC103: 0,
-                requisitos: requisitos
+                requisitos: requisitos,
+                calculosPossiveis: [],
+                excedente: {}
             });
         }
     }
@@ -150,7 +200,7 @@ export class RegrasAcesso {
         const ano = dataInicioBeneficio.year();
 
 
-        // tipoBeneficio = 3;
+        // tipoBeneficio = 6;
         // tipoBeneficio = 1915;
 
 
@@ -252,7 +302,7 @@ export class RegrasAcesso {
             if (!isRegraTransitoria) {
 
                 // this.isRegrasTransicao = true;
-                //this.verificaRegrasTransicao(contribuicaoPrimaria);
+                // this.verificaRegrasTransicao(contribuicaoPrimaria);
                 // this.atualizarCalculoMelhorRMIRegrasTransicao();
 
                 this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
@@ -312,7 +362,7 @@ export class RegrasAcesso {
 
         }
 
-        //console.log(this.listaConclusaoAcesso);
+        // console.log(this.listaConclusaoAcesso);
 
         return this.listaConclusaoAcesso;
 
@@ -631,9 +681,9 @@ export class RegrasAcesso {
 
         let status = false;
         const contribuicao_min = 15;
-        let idadeMin = 0;
+        const idadeMin = 0;
 
-        const regraIdadeParm = (ano, sexo) => {
+        const regraIdadeParm = (anoR) => {
 
             const regra5 = {
                 2019: { f: 60, m: 65 },
@@ -643,21 +693,21 @@ export class RegrasAcesso {
                 2023: { f: 62, m: 65 }
             };
 
-            if (ano <= 2019) {
+            if (anoR <= 2019) {
                 return regra5[2019];
             }
 
-            if (ano > 2019 && ano <= 2023) {
-                return regra5[ano];
+            if (anoR > 2019 && anoR <= 2023) {
+                return regra5[anoR];
             }
 
-            if (ano > 2023) {
+            if (anoR > 2023) {
                 return regra5[2023];
             }
 
         };
 
-        const regra5 = regraIdadeParm(ano, sexo);
+        const regra5 = regraIdadeParm(ano);
 
         // status =  (sexo === 'm' && idade >= 65 && tempo_contribuicao >= contribuicao_min) ? true : false;
 
@@ -1007,7 +1057,8 @@ export class RegrasAcesso {
     //     // }
 
 
-    //     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
+    //     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? 
+            // this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
 
 
@@ -1020,7 +1071,7 @@ export class RegrasAcesso {
 
     //     } else if (arrayPensao.includes(this.tipoBeneficio)) {
 
-    //       // pensão 
+    //       // pensão
     //       this.isRegrasPensaoObito = true;
     //       this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio, this.calculo.sexo_instituidor);
 
@@ -1043,7 +1094,7 @@ export class RegrasAcesso {
     //       this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
 
     //     } else if (arrayIdade.includes(this.tipoBeneficio)) {
-    //       // Aposentadoria por idade 
+    //       // Aposentadoria por idade
     //       this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
 
     //       // Aposentadoria por idade - Trabalhador Rural
