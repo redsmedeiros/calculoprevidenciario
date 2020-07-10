@@ -50,64 +50,100 @@ export class RegrasAcesso {
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
         })
 
-        console.log(listaConclusaoAcesso);
+        //  console.log(listaConclusaoAcesso);
 
     }
 
     private gerarParametrosPorTipoAposentadoria(elementTipo) {
 
-        const calculosPossiveis = [];
+        let calculosPossiveis = [];
         const calculoPossivel = {
-            ano: 0,
             tempo: 0,
             idade: 0,
-            pedagio: 0,
             pontos: 0
         };
 
+
         console.log(elementTipo);
+
 
         if (!elementTipo.status) {
             return calculosPossiveis;
         }
 
-        const idade =  [ 'idadeTransitoria' , 'idade'];
-        const maximoDescarte = {anos: 0, meses: 0 }
+        const idade = ['idadeTransitoria', 'idade'];
+        const maximoDescarte = { anos: 0, meses: 0 }
         let difIdadeExcedente = 0;
         let difTempoContribExcedente = 0;
+        let difPontosExcedente = 0;
 
 
         // idade (transição e transitoria)
-        if (idade.includes(elementTipo.regra)) {
+        // if (idade.includes(elementTipo.regra)) {
+
+        //     difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
+        //     difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
+
+        //     maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
+        //     maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+
+        //     // console.log(difIdadeExcedente);
+        //     // console.log(maximoDescarte);
+
+        // }
+
+
+        //   // Especial
+        //   if (elementTipo.regra === 'especial') {
+
+
+
+        difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
+
+        maximoDescarte.anos = difTempoContribExcedente;
+
+        if (elementTipo.requisitos.idade > 0) {
 
             difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
-            difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
-
-            maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
-            maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
-
-            console.log(difIdadeExcedente);
-            console.log(maximoDescarte);
+            maximoDescarte.anos = (difIdadeExcedente > maximoDescarte.anos) ? maximoDescarte.anos : difIdadeExcedente;
 
         }
+
+        if (elementTipo.requisitos.pontos > 0) {
+
+            difPontosExcedente = elementTipo.pontos - elementTipo.requisitos.pontos;
+            maximoDescarte.anos = (difPontosExcedente > maximoDescarte.anos) ? maximoDescarte.anos : difPontosExcedente;
+
+        }
+
+        maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+
+        console.log(difTempoContribExcedente);
+        console.log(maximoDescarte.anos);
+
+        // console.log(difIdadeExcedente);
+        // console.log(maximoDescarte);
+
+        //  }
 
         // Tempo de contribuição (regras de transição)
-        if (elementTipo.regra === 6) {
+        // if (elementTipo.regra === 6) {
 
-            difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
-            difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
+        //     difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
+        //     difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
 
-            maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
-            maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+        //     maximoDescarte.anos = (difIdadeExcedente > difTempoContribExcedente) ? difTempoContribExcedente : difIdadeExcedente;
+        //     maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
 
-            console.log(difIdadeExcedente);
-            console.log(maximoDescarte);
+        //     console.log(difIdadeExcedente);
+        //     console.log(maximoDescarte);
 
-        }
+        // }
 
+        calculosPossiveis = this.criarListaPossibilidades(maximoDescarte,
+            elementTipo.requisitos);
 
-        this.criarListaPossibilidades(maximoDescarte,
-                                      elementTipo.requisitos);
+        console.log(calculosPossiveis);
 
         return [];
 
@@ -117,13 +153,33 @@ export class RegrasAcesso {
     private criarListaPossibilidades(
         maximoDescarte,
         requisitos
-    ){
+    ) {
 
+        const calculosPossiveis = [];
 
+        calculosPossiveis.push({
+            tempo: requisitos.tempo,
+            idade: requisitos.idade,
+            pontos: requisitos.pontos,
+            descarteContrib: maximoDescarte.meses
+        });
 
+        for (let i = 1; i < maximoDescarte.anos; i++) {
+
+            /// console.log(i);
+
+            calculosPossiveis.push({
+                tempo: (requisitos.tempo + i),
+                idade: (requisitos.idade + i),
+                pontos: ((requisitos.pontos > 0) ? (requisitos.pontos + (i * 2)) : 0),
+                descarteContrib: maximoDescarte.meses - (i * 12)
+            });
+
+        }
+
+        return calculosPossiveis;
 
     }
-
 
 
     private setConclusaoAcesso(
@@ -139,7 +195,7 @@ export class RegrasAcesso {
             this.listaConclusaoAcesso.push({
                 regra: regra,
                 status: status,
-                pontosTotal: pontosTotal,
+                pontos: pontosTotal,
                 idade: idade,
                 tempoTotalAteEC103: tempoTotalAteEC103,
                 tempoTotalAposEC103: tempoTotalAposEC103,
@@ -151,7 +207,7 @@ export class RegrasAcesso {
             this.listaConclusaoAcesso.push({
                 regra: regra,
                 status: false,
-                pontosTotal: 0,
+                pontos: 0,
                 idade: 0,
                 tempoTotalAteEC103: 0,
                 tempoTotalAposEC103: 0,
@@ -201,7 +257,7 @@ export class RegrasAcesso {
 
 
         // tipoBeneficio = 6;
-        // tipoBeneficio = 1915;
+        tipoBeneficio = 1925;
 
 
         // aplicação default false
@@ -1058,7 +1114,7 @@ export class RegrasAcesso {
 
 
     //     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? 
-            // this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
+    // this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
 
 
 
