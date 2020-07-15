@@ -9,6 +9,7 @@ import { RgpsResultadosEntre91e98Component } from './rgps-resultados-entre91e98/
 import { RgpsResultadosApos99Component } from './rgps-resultados-apos99/rgps-resultados-apos99.component';
 import { RgpsResultadosEntre88e91Component } from './rgps-resultados-entre88e91/rgps-resultados-entre88e91.component';
 import { WINDOW_PROVIDERS } from '../+rgps-calculos/window.service';
+import {AccordionModule} from 'ngx-bootstrap';
 import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec062019/rgps-resultados-apos-pec062019.component';
 import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103/rgps-resultados-apos-pec103.component';
 
@@ -17,7 +18,8 @@ import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103
     CommonModule,
     rgpsResultadosRouting,
     SmartadminModule,
-    SmartadminDatatableModule
+    SmartadminDatatableModule,
+    AccordionModule.forRoot(),
   ],
   providers: [WINDOW_PROVIDERS],
   declarations: [RgpsResultadosComponent,

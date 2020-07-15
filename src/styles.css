@@ -598,3 +598,8 @@ a[class*="action-"]:hover {
   background: #831721 !important;
   color: #fff !important;
 }
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body{
+  margin: 0 !important;
+  padding: 0 !important;
+}
