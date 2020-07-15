@@ -3136,26 +3136,37 @@ export class BeneficiosResultadosComponent implements OnInit {
             .text-center{ text-align: center; }
       </style>`;
 
-    let seguradoBox = document.getElementById('printableSegurado').innerHTML;
-    let dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
-    let valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML;
+    const dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
+    const valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
     let valoresRecebdios = '';
-    if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined' && document.getElementById('printableValoresRecebidos') != null) {
+    if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined' 
+                && document.getElementById('printableValoresRecebidos') != null) {
       valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
     }
-    let honorarios = document.getElementById('printableHonorarios').innerHTML;
-    let juros = document.getElementById('printableJuros').innerHTML;
-    let correcao = document.getElementById('printableCorrecao').innerHTML;
-    let conclusoes = document.getElementById('printableConclusoes').innerHTML;
-    let resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
-    let printableRRA = document.getElementById('printableRRA').innerHTML;
+    const honorarios = document.getElementById('printableHonorarios').innerHTML;
+    const juros = document.getElementById('printableJuros').innerHTML;
+    const correcao = document.getElementById('printableCorrecao').innerHTML;
+    const conclusoes = document.getElementById('printableConclusoes').innerHTML;
+    const resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
+    const printableRRA = document.getElementById('printableRRA').innerHTML;
 
-    let printContents = seguradoBox + dadosCalculo + valoresDevidos + valoresRecebdios + correcao + juros + honorarios + resultadoCalculo + printableRRA + conclusoes;
-    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    let rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG</p></footer>';
-    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    let printContents = seguradoBox + dadosCalculo +
+                        valoresDevidos + valoresRecebdios
+                        + correcao + juros + honorarios
+                        + resultadoCalculo + printableRRA + conclusoes;
+
+    printContents = printContents.replace(/<table/g,
+         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    const rodape = `<footer style="color: #c5c7c8;"><img src="assets/img/logo-IEPREV.png" style="opacity: 0.4;">
+                  <p>Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+                  </footer>`;
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head>' + css + '<title> Benefícios Atrasados - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + printContents + '<br>' + rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + '<title> Benefícios Atrasados - '
+                            + this.segurado.nome + '</title></head><body onload="window.print()">'
+                            + printContents + '<br>' + rodape + '</body></html>');
     popupWin.document.close();
   }
 

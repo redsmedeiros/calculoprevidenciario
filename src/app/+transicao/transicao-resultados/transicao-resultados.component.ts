@@ -555,7 +555,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   imprimirPagina() {
     const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
-    const footerText = `IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG`;
+    // const footerText = `IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG`;
 
     const printContents = conclusaoFinal;
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
@@ -582,7 +582,12 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                                   <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
-                                   <footer>${footerText}</footer>
+                                  <footer style="color: #c5c7c8!important;">
+                                    <img src="assets/img/logo-IEPREV.png" 
+                                    style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+                                    <p style="text-align: center;">
+                                    Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+                                  </footer>
                                   </body>
                                 </html>`);
     popupWin.document.close();
