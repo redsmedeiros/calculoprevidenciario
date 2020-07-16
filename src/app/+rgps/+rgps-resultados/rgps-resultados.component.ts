@@ -1107,9 +1107,9 @@ export class RgpsResultadosComponent implements OnInit {
     const css = `
                 <style>
                       body{font-family: Arial, Helvetica, sans-serif;}
-                      h1, h2{font-size:0.9rem;}
+                      h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
                       i.fa, .not-print{ display: none; }
-                      table{margin-top: 20;}
+                      table{margin-top: 10px;padding-top: 10px;}
                       footer,div,p,td,th{font-size:11px !important;}
                       .table>tbody>tr>td, .table>tbody>tr>th,
                        .table>tfoot>tr>td, .table>tfoot>tr>th,
@@ -1119,10 +1119,14 @@ export class RgpsResultadosComponent implements OnInit {
 
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
-    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-    const rodape = `<footer style="color: #c5c7c8!important;">
-                      <img src="assets/img/logo-IEPREV.png" style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                      <p style="text-align: center;">Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+    printContents = printContents.replace(/<table/g,
+    '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
+                      <img src="assets/img/logo-IEPREV.png"
+                      style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+                      <p style="text-align: center; color: #c5c7c8 !important;">
+                      Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
                     </footer>`;
     const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
@@ -1139,8 +1143,8 @@ export class RgpsResultadosComponent implements OnInit {
           body{font-family: Arial, Helvetica, sans-serif;}
           h1, h2{font-size:0.9rem;}
           i.fa, .not-print{ display: none; }
-          table{margin-top: 20;}
-          footer,div,p,td,th{font-size:11px !important;}
+          table{margin-top: 10px;}
+          footer,div,p,td,th{font-size:10px !important;}
           .table>tbody>tr>td, .table>tbody>tr>th,
            .table>tfoot>tr>td, .table>tfoot>tr>th,
            .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
@@ -1149,10 +1153,12 @@ export class RgpsResultadosComponent implements OnInit {
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
-    const rodape = `<footer style="color: #c5c7c8!important;">
-    <img src="assets/img/logo-IEPREV.png" style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-    <p style="text-align: center;">Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-  </footer>`;
+    const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
+                      <img src="assets/img/logo-IEPREV.png" 
+                      style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+                      <p style="text-align: center; color: #c5c7c8 !important;">
+                      Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+                    </footer>`;
     let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
                           + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
                           + boxContent + rodape + '</body></html>';

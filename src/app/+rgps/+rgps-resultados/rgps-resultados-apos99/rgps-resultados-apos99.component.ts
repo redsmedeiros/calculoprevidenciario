@@ -664,7 +664,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let somaMediasAux = this.corrigirBeneficio(somaMedias, coeficiente, moedaDib);
 
     if (this.limited) {
-      irt = (somaMedias * (coeficiente / 100)) / somaMediasAux;
+
+      // 16-07-2020 DR Sergio o fator deve ser aplicado na média antes de cálcular o IRT
+      irt = ((somaMedias * (coeficiente / 100)) * fatorSeguranca) / somaMediasAux;
+
     }
 
     // rmi += (fatorSeguranca * numeroCompetencias) / 60;
@@ -726,6 +729,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: "Fórmula Fator:", value: this.formula_fator });
     }
     if (irt >= 1) {
+
       this.irtRejusteAdministrativo = irt;
       conclusoes.push({ string: "Índice de reajuste no teto:", value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
     }
