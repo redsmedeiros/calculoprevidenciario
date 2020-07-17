@@ -642,9 +642,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.limited = false;
 
-    let rmi = fatorSeguranca * numeroCompetencias * mediaContribuicoesPrimarias / 60;
-
-    rmi += mediaContribuicoesPrimarias * ((60 - numeroCompetencias) / 60);
+    // old 17-07-2020
+    // let rmi = fatorSeguranca * numeroCompetencias * mediaContribuicoesPrimarias / 60;
+    // rmi += mediaContribuicoesPrimarias * ((60 - numeroCompetencias) / 60);
 
     let taxaSecundaria = 0;
     let taxaMediaSecundaria = 0;
@@ -670,19 +670,41 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     }
 
+
+      // RMI Renda mensal
+      let rmi = 0;
+
+      // passo 1
+      rmi = somaMedias * fatorSeguranca;
+
+      // passo 2
+      rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+
+      if(!this.limited) {  // Se não foi corrigido ao percentual do teto
+        rmi *= (coeficiente / 100);
+      }
+
+    // console.log(numeroCompetencias);
+    // console.log(rmi);
+    // console.log(coeficiente);
+    // console.log(rmi);
+
+    // old 17-07-2020
     // rmi += (fatorSeguranca * numeroCompetencias) / 60;
+
     rmi += (fatorSeguranca * numeroCompetencias * taxaMediaSecundaria) / 60;
     rmi += taxaMediaSecundaria * ((60 - numeroCompetencias) / 60)
-    rmi *= (coeficiente / 100);
+   // rmi *= (coeficiente / 100);
 
     this.limited = false;
+    // old modificado 17/07/2020
+    // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+    // rmi = rmiAux;
+    
 
-    let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
-    rmi = rmiAux;
-
-    //let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
+    // let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
     let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-    //let salarioAcidente = objMoeda.salario_minimo;
+    // let salarioAcidente = objMoeda.salario_minimo;
     if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
       switch (this.tipoBeneficio) {
         case 17:// Auxilio Acidente 30
@@ -1521,8 +1543,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
 
-        console.log(reajustesAutomaticos );
-        console.log(dataPrevia );
+        // console.log(reajustesAutomaticos );
+        // console.log(dataPrevia );
         
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
