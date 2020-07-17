@@ -16,7 +16,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-rgps-resultados-apos99',
-  templateUrl: './rgps-resultados-apos99.component.html',
+  templateUrl: `./rgps-resultados-apos99.component.html`,
   styleUrls: ['./rgps-resultados-apos99.component.css']
 })
 export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
@@ -111,6 +111,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+    console.log();
 
     this.tableData = [];
     this.conclusoes = [];

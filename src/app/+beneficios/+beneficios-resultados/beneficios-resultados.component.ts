@@ -616,13 +616,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
-      // console.log(this.calculo.tipo_aposentadoria_recebida);
-      // console.log(this.calculo.tipo_aposentadoria);
-      if ((dataCorrente.month() == 11 
-            && this.calculo.tipo_aposentadoria_recebida !== 11 
-            && (this.calculo.tipo_aposentadoria_recebida !== 12 && this.calculo.tipo_aposentadoria !== 12))
+      //  console.log(this.calculo.tipo_aposentadoria_recebida);
+      //  console.log(this.calculo.tipo_aposentadoria);
+      if ((dataCorrente.month() === 11 && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
             || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
-                 && (this.calculo.tipo_aposentadoria_recebida !== 12 && this.calculo.tipo_aposentadoria !== 12))
+                 && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
         ) {
 
 
@@ -659,6 +657,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           }
 
+        }
+
+        if (this.calculo.tipo_aposentadoria == 12 || this.calculo.tipo_aposentadoria == 17) {
+          beneficioDevidoAbono = 0.0;
         }
 
         if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
