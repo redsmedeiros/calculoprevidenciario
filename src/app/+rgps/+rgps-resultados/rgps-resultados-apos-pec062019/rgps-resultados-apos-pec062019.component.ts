@@ -755,7 +755,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     // conclusoes.push({ string: "Coeficiente do Cálculo:", value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%' });
     conclusoes.push({ string: "Soma das Contribuições:", value: this.formatMoney(totalContribuicaoPrimaria, currency.acronimo) });
-    conclusoes.push({ string: "Divisor do Cálculo da média:", value: divisorMediaPrimaria + ' ' + this.msgDivisorMinimo });
+    conclusoes.push({ string: "Divisor do Cálculo:", value: divisorMediaPrimaria + ' ' + this.msgDivisorMinimo });
     conclusoes.push({ string: "Média das contribuições", value: this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo) });
 
     // if (totalContribuicaoSecundaria > 0) {

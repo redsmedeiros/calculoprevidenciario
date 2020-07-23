@@ -12,6 +12,8 @@ import { WINDOW_PROVIDERS } from '../+rgps-calculos/window.service';
 import {AccordionModule} from 'ngx-bootstrap';
 import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec062019/rgps-resultados-apos-pec062019.component';
 import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103/rgps-resultados-apos-pec103.component';
+import { ListaCompetenciasComponent } from './rgps-resultados-apos-pec103/calculoMedia/lista-competencias/lista-competencias.component';
+import { ConclusoesRmiComponent } from './rgps-resultados-apos-pec103/conclusoes/conclusoes-rmi/conclusoes-rmi.component';
 
 @NgModule({
   imports: [
@@ -28,6 +30,8 @@ import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103
                 RgpsResultadosApos99Component,
                 RgpsResultadosEntre88e91Component,
                 RgpsResultadosAposPec062019Component,
-                RgpsResultadosAposPec103Component]
+                RgpsResultadosAposPec103Component,
+                ListaCompetenciasComponent,
+                ConclusoesRmiComponent]
 })
 export class RgpsResultadosModule { }

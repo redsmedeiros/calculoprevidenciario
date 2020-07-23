@@ -1,0 +1,61 @@
+
+<div *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
+  <sa-widget [colorbutton]="false" [editbutton]="false">
+    <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
+    <i
+      class="fa fa-gear fa-4x fa-spin txt-color-red"
+      *ngIf="isUpdating"
+    ></i>
+    <!--<div *ngIf="!isUpdating">
+      <div class="widget-body no-padding">
+        <sa-datatable
+          [options]="tableOptions"
+          [responsive]="false"
+          paginationLength="true"
+          *ngIf="!isUpdating"
+          tableClass="table table-striped table-bordered table-hover"
+          width="100%"
+        >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Competência</th>
+              <th>Índice</th>
+              <th>Salário de Contribuição</th>
+              <th>Salário de Contribuição Corrigida</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+        </sa-datatable>
+      </div>
+    </div> -->
+  </sa-widget>
+</div>
+
+<!-- conclusoes genericas -->
+<div *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
+  <table class="table table-bordered table-hover" *ngIf="!isUpdating">
+    <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
+    <thead>
+      <tr>
+        <th>
+          <span class="pull-right">Tipo</span>
+        </th>
+        <th>
+          Descrição
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let conclusao of conclusoes"
+        class="{{ conclusao.class }}"
+      >
+        <td width="50%">
+          <span class="pull-right font-bold">{{ conclusao.string }}</span>
+        </td>
+        <td>{{ conclusao.value }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

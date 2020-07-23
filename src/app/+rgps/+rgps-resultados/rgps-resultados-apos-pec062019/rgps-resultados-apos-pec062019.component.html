@@ -1,128 +1,29 @@
 <!-- Opções do Cálculo A partir da PEC 2019-->
 <article class="container-fluid">
-   <table class="table table-hover table-bordered">
-    <thead>
-      <tr>
-        <th>Cálculo nº: {{ boxId }}</th>
-        <th>
-          Ação
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf="!isUpdating">
-        <td>
-          <p>Exportar para o cálculo de Benefícios Atrasados</p>
-        </td>
-        <td>
-          <button
-            type="submit"
-            *ngIf="erros.length == 0"
-            (click)="
-              exportarParaBeneficios(
-                dataInicioBeneficio.format('YYYY-MM-DD'),
-                valorExportacao,
-                'A'
-              )
-            "
-            class="btn btn-labeled btn-primary pull-right"
-          >
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span>
-            EXPORTAR
-          </button>
-          <button
-            type="submit"
-            *ngIf="erros.length != 0"
-            class="btn btn-labeled btn-primary pull-right"
-            disabled
-          >
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span>
-            EXPORTAR
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="!isUpdating">
-        <td>
-          <p>
-            Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e
-            12/2003
-          </p>
-        </td>
-        <td>
-          <button
-            type="submit"
-            *ngIf="erros.length == 0"
-            (click)="
-              exportarParaBeneficios(
-                dataInicioBeneficio.format('YYYY-MM-DD'),
-                valorExportacao,
-                'AJ'
-              )
-            "
-            class="btn btn-labeled btn-primary pull-right"
-          >
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span>
-            EXPORTAR
-          </button>
-          <button
-            type="submit"
-            *ngIf="erros.length != 0"
-            class="btn btn-labeled btn-primary pull-right"
-            disabled
-          >
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span>
-            EXPORTAR
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p>Mostrar Reajustes Administrativos</p>
-        </td>
-        <td>
-          <button
-            type="submit"
-            (click)="mostrarReajustesAdministrativos('raTable-' + boxId)"
-            class="btn btn-labeled btn-primary pull-right"
-          >
-            <span class="btn-label">
-              <i class="fa fa-eye"></i>
-            </span>
-            MOSTRAR
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p>Imprimir o cálculo</p>
-        </td>
-        <td>
-          <button
-            type="submit"
-            (click)="imprimirBox(boxId)"
-            class="btn btn-labeled btn-primary pull-right"
-          >
-            <span class="btn-label">
-              <i class="fa fa-print"></i>
-            </span>
-            IMPRIMIR
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+ 
 </article>
 
+<section class="container-fluid">
+
+<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
+  <accordion-group [isOpen]="false" #group1062019062019>
+    <h4 class="panel-title" accordion-heading>
+      <a
+        ><i
+          class="pull-right fa fa-lg"
+          [ngClass]="{
+            'fa-angle-down': group1062019062019?.isOpen,
+            'fa-angle-up': !group1062019062019?.isOpen
+          }"
+        ></i>
+        <strong>{{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019</strong></a
+      >
+    </h4>
+    <div class="no-padding no-margin">
+    
+   
 <!-- Tabela e Informações do Cálculo A partir de 13/11/2019 PEC 06/2019 -->
-<div id="{{ boxId }}" class="boxCalculo">
+<div id="{{ boxId }}" class="boxCalculo row">
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
       <header>
@@ -134,8 +35,8 @@
         </h2>
       </header>
       <div>
-        <div class="widget-body">
-          <table class="table table-bordered table-hover">
+        <div class="widget-body no-padding">
+          <table class="table table-bordered table-hover no-padding">
             <thead>
               <tr>
                 <th width="50%">
@@ -213,14 +114,15 @@
 
           <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
             
-            <accordion class="smart-accordion-default panel-group" [closeOthers]="true">
+            <!-- <accordion class="smart-accordion-default panel-group" [closeOthers]="true">
               <accordion-group [isOpen]="false" #group1062019062019 >
                 <h4 class="panel-title" accordion-heading><a><i class="pull-right fa fa-lg"
                                           [ngClass]="{'fa-angle-down': group1062019062019?.isOpen,
                                           'fa-angle-up': !group1062019062019?.isOpen}"></i>
                   <strong>Lista de competências</strong></a>
                 </h4>
-                <div class="no-padding no-margin">
+                <div class="no-padding no-margin"> -->
+
                   <sa-widget [colorbutton]="false" [editbutton]="false">
                     <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
                     <i
@@ -257,9 +159,11 @@
                       </div>
                     </div>
                   </sa-widget>
-                </div>
+                
+                <!-- </div>
               </accordion-group>
-            </accordion>
+            </accordion> -->
+
           </div>
            <!-- conclusoes genericas -->
            <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
@@ -1124,7 +1028,7 @@
                   <tr>
                     <td width="50%">
                       <span class="pull-right font-bold"
-                        >Divisor do Cálculo da média com descarte de 20%</span
+                        >Divisor do Cálculo com descarte de 20%</span
                       >
                     </td>
                     <td>{{ conclusoesRegrasEspecialDeficiente.CompetenciasComDescarte }}</td>
@@ -1254,3 +1158,133 @@
     </sa-widget>
   </article>
 </div>
+
+
+
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>Cálculo nº: {{ boxId }}</th>
+      <th>
+        Ação
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="!isUpdating">
+      <td>
+        <p>Exportar para o cálculo de Benefícios Atrasados</p>
+      </td>
+      <td>
+        <button
+          type="submit"
+          *ngIf="erros.length == 0"
+          (click)="
+            exportarParaBeneficios(
+              dataInicioBeneficio.format('YYYY-MM-DD'),
+              valorExportacao,
+              'A'
+            )
+          "
+          class="btn btn-labeled btn-primary pull-right"
+        >
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span>
+          EXPORTAR
+        </button>
+        <button
+          type="submit"
+          *ngIf="erros.length != 0"
+          class="btn btn-labeled btn-primary pull-right"
+          disabled
+        >
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span>
+          EXPORTAR
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="!isUpdating">
+      <td>
+        <p>
+          Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e
+          12/2003
+        </p>
+      </td>
+      <td>
+        <button
+          type="submit"
+          *ngIf="erros.length == 0"
+          (click)="
+            exportarParaBeneficios(
+              dataInicioBeneficio.format('YYYY-MM-DD'),
+              valorExportacao,
+              'AJ'
+            )
+          "
+          class="btn btn-labeled btn-primary pull-right"
+        >
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span>
+          EXPORTAR
+        </button>
+        <button
+          type="submit"
+          *ngIf="erros.length != 0"
+          class="btn btn-labeled btn-primary pull-right"
+          disabled
+        >
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span>
+          EXPORTAR
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Mostrar Reajustes Administrativos</p>
+      </td>
+      <td>
+        <button
+          type="submit"
+          (click)="mostrarReajustesAdministrativos('raTable-' + boxId)"
+          class="btn btn-labeled btn-primary pull-right"
+        >
+          <span class="btn-label">
+            <i class="fa fa-eye"></i>
+          </span>
+          MOSTRAR
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Imprimir o cálculo</p>
+      </td>
+      <td>
+        <button
+          type="submit"
+          (click)="imprimirBox(boxId)"
+          class="btn btn-labeled btn-primary pull-right"
+        >
+          <span class="btn-label">
+            <i class="fa fa-print"></i>
+          </span>
+          IMPRIMIR
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+    </div>
+  </accordion-group>
+</accordion>
+
+
+</section>

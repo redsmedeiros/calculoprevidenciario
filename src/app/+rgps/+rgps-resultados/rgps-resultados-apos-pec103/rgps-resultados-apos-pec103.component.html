@@ -1,126 +1,31 @@
 <article class="container-fluid">
-    <table class="table table-hover table-bordered">
-      <thead>
-        <tr>
-          <th>Cálculo nº: {{ boxId }}</th>
-          <th>
-            Ação
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngIf="!isUpdating && isExits(valorExportacao)">
-          <td>
-            <p>Exportar para o cálculo de Benefícios Atrasados</p>
-          </td>
-          <td>
-            <button
-              type="submit"
-              *ngIf="erros.length == 0"
-              (click)="
-                exportarParaBeneficios(
-                  dataInicioBeneficio.format('YYYY-MM-DD'),
-                  valorExportacao,
-                  'A'
-                )
-              "
-              class="btn btn-labeled btn-primary pull-right"
-            >
-              <span class="btn-label">
-                <i class="fa fa-link"></i>
-              </span>
-              EXPORTAR
-            </button>
-            <button
-              type="submit"
-              *ngIf="erros.length != 0"
-              class="btn btn-labeled btn-primary pull-right"
-              disabled
-            >
-              <span class="btn-label">
-                <i class="fa fa-link"></i>
-              </span>
-              EXPORTAR
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="!isUpdating && isExits(valorExportacao)">
-          <td>
-            <p>
-              Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e
-              12/2003
-            </p>
-          </td>
-          <td>
-            <button
-              type="submit"
-              *ngIf="erros.length == 0"
-              (click)="
-                exportarParaBeneficios(
-                  dataInicioBeneficio.format('YYYY-MM-DD'),
-                  valorExportacao,
-                  'AJ'
-                )
-              "
-              class="btn btn-labeled btn-primary pull-right"
-            >
-              <span class="btn-label">
-                <i class="fa fa-link"></i>
-              </span>
-              EXPORTAR
-            </button>
-            <button
-              type="submit"
-              *ngIf="erros.length != 0"
-              class="btn btn-labeled btn-primary pull-right"
-              disabled
-            >
-              <span class="btn-label">
-                <i class="fa fa-link"></i>
-              </span>
-              EXPORTAR
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Mostrar Reajustes Administrativos</p>
-          </td>
-          <td>
-            <button
-              type="submit"
-              (click)="mostrarReajustesAdministrativos('raTable-' + boxId)"
-              class="btn btn-labeled btn-primary pull-right"
-            >
-              <span class="btn-label">
-                <i class="fa fa-eye"></i>
-              </span>
-              MOSTRAR
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>Imprimir o cálculo</p>
-          </td>
-          <td>
-            <button
-              type="submit"
-              (click)="imprimirBox(boxId)"
-              class="btn btn-labeled btn-primary pull-right"
-            >
-              <span class="btn-label">
-                <i class="fa fa-print"></i>
-              </span>
-              IMPRIMIR
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+   
 </article>
 
-<div id="{{ boxId }}" class="boxCalculo">
+
+
+
+<section class="container-fluid">
+	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
+	  <accordion-group [isOpen]="false" #group1062019062019>
+	    <h4 class="panel-title" accordion-heading>
+	      <a
+	        ><i
+	          class="pull-right fa fa-lg"
+	          [ngClass]="{
+	            'fa-angle-down': group1062019062019?.isOpen,
+	            'fa-angle-up': !group1062019062019?.isOpen
+	          }"
+	        ></i>
+	        <strong>{{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019 </strong></a
+	      >
+	    </h4>
+	    <div class="no-padding no-margin">
+	    
+
+       
+
+<div id="{{ boxId }}" class="boxCalculo row">
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
       <header>
@@ -132,8 +37,8 @@
         </h2>
       </header>
       <div>
-        <div class="widget-body">
-          <table class="table table-bordered table-hover">
+        <div class="widget-body no-padding">
+          <table class="table table-bordered table-hover no-padding">
             <thead>
               <tr>
                 <th width="50%">
@@ -208,71 +113,9 @@
               >
             </p>
           </div>
-          <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
-            <sa-widget [colorbutton]="false" [editbutton]="false">
-              <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
-              <i
-                class="fa fa-gear fa-4x fa-spin txt-color-red"
-                *ngIf="isUpdating"
-              ></i>
-               <!--<div *ngIf="!isUpdating">
-                <div class="widget-body no-padding">
-                  <sa-datatable
-                    [options]="tableOptions"
-                    [responsive]="false"
-                    paginationLength="true"
-                    *ngIf="!isUpdating"
-                    tableClass="table table-striped table-bordered table-hover"
-                    width="100%"
-                  >
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Competência</th>
-                        <th>Índice</th>
-                        <th>Salário de Contribuição</th>
-                        <th>Salário de Contribuição Corrigida</th>
-                        <th>Observação</th>
-                      </tr>
-                    </thead>
-                  </sa-datatable>
-                </div>
-              </div> -->
-            </sa-widget>
-          </div>
-           <!-- conclusoes genericas -->
-           <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" >
-              <table class="table table-bordered table-hover" *ngIf="!isUpdating">
-                  <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
-                  <thead>
-                    <tr>
-                      <th>
-                        <span class="pull-right">Tipo</span>
-                      </th>
-                      <th>
-                        Descrição
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="let conclusao of conclusoes"
-                      class="{{ conclusao.class }}"
-                    >
-                      <td width="50%">
-                        <span class="pull-right font-bold  ">{{
-                          conclusao.string
-                        }}</span>
-                      </td>
-                      <td>{{ conclusao.value }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-           </div>
-         
-          
-
-
+         <app-lista-competencias
+            [listaConclusaoAcesso]="listaConclusaoAcesso"
+         ></app-lista-competencias>
         </div>
       </div>
       <!-- <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">
@@ -300,3 +143,135 @@
     </sa-widget>
   </article>
 </div>
+
+        
+
+
+
+
+
+
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Cálculo nº: {{ boxId }}</th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!isUpdating && isExits(valorExportacao)">
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  *ngIf="erros.length == 0"
+                  (click)="
+                    exportarParaBeneficios(
+                      dataInicioBeneficio.format('YYYY-MM-DD'),
+                      valorExportacao,
+                      'A'
+                    )
+                  "
+                  class="btn btn-labeled btn-primary pull-right"
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span>
+                  EXPORTAR
+                </button>
+                <button
+                  type="submit"
+                  *ngIf="erros.length != 0"
+                  class="btn btn-labeled btn-primary pull-right"
+                  disabled
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span>
+                  EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!isUpdating && isExits(valorExportacao)">
+              <td>
+                <p>
+                  Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e
+                  12/2003
+                </p>
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  *ngIf="erros.length == 0"
+                  (click)="
+                    exportarParaBeneficios(
+                      dataInicioBeneficio.format('YYYY-MM-DD'),
+                      valorExportacao,
+                      'AJ'
+                    )
+                  "
+                  class="btn btn-labeled btn-primary pull-right"
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span>
+                  EXPORTAR
+                </button>
+                <button
+                  type="submit"
+                  *ngIf="erros.length != 0"
+                  class="btn btn-labeled btn-primary pull-right"
+                  disabled
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span>
+                  EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Mostrar Reajustes Administrativos</p>
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  (click)="mostrarReajustesAdministrativos('raTable-' + boxId)"
+                  class="btn btn-labeled btn-primary pull-right"
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-eye"></i>
+                  </span>
+                  MOSTRAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button
+                  type="submit"
+                  (click)="imprimirBox(boxId)"
+                  class="btn btn-labeled btn-primary pull-right"
+                >
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span>
+                  IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+	    </div>
+	  </accordion-group>
+	</accordion>
+</section>

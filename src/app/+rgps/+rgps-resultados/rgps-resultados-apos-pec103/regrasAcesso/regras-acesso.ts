@@ -7,7 +7,9 @@ import * as moment from 'moment';
 export class RegrasAcesso {
 
     public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
-    private contribuicaoTotal;
+    private contribuicaoTotal = 0;
+    private numeroDeContribuicoes = 0;
+    private carenciaConformDataFiliacao = 0;
 
 
     private arrayEspecial = [1915, 1920, 1925];
@@ -16,33 +18,22 @@ export class RegrasAcesso {
     private arrayIdade = [3, 16];
 
     public listaConclusaoAcesso = [];
-    public conclusaoAcesso = {
-        regra: '',
-        status: false,
-        pontosTotal: 0,
-        pontosExcendente: 0,
-        idadeAteEC103: 0,
-        idadeAposEC103: 0,
-        tempoExcendenteAteEC103: 0,
-        tempoExcendenteAposEC103: 0,
-        tempoTotalAteEC103: 0,
-        tempoTotalAposEC103: 0,
-        requisitos: {
-            ano: 0,
-            tempo: 0,
-            idade: 0,
-            pedagio: 0,
-            pontos: 0
-        }
-    };
+    public conclusaoAcesso = {};
+    public expectativaSobrevida = {};
+    public fatorPrevidenciario = {};
 
     constructor() { }
 
     /**
      * Adicionar a lista de conclusões os parametros para cada possibilidade
      * @param  {any[]} listaConclusaoAcesso
+     * @param  {} numeroDeContribuicoes
+     * @param  {} carenciaConformDataFiliacao
      */
-    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[]) {
+    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[], numeroDeContribuicoes , carenciaConformDataFiliacao) {
+
+        this.numeroDeContribuicoes = numeroDeContribuicoes;
+        this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
 
         listaConclusaoAcesso.forEach((elementTipo, indice) => {
             // console.log(elementTipo);
@@ -69,14 +60,14 @@ export class RegrasAcesso {
         };
 
 
-        console.log(elementTipo);
+       // console.log(elementTipo);
 
 
         if (!elementTipo.status) {
             return calculosPossiveis;
         }
 
-        const idade = ['idadeTransitoria', 'idade'];
+        const especieIdade = ['idadeTransitoria', 'idade'];
         const maximoDescarte = { anos: 0, meses: 0 }
         let difIdadeExcedente = 0;
         let difTempoContribExcedente = 0;
@@ -108,7 +99,8 @@ export class RegrasAcesso {
 
         maximoDescarte.anos = difTempoContribExcedente;
 
-        if (elementTipo.requisitos.idade > 0) {
+        if (elementTipo.requisitos.idade > 0
+            && (elementTipo.regra === 'especial' || elementTipo.regra === 'pontos')) {
 
             difIdadeExcedente = elementTipo.idade - elementTipo.requisitos.idade;
             maximoDescarte.anos = (difIdadeExcedente > maximoDescarte.anos) ? maximoDescarte.anos : difIdadeExcedente;
@@ -122,6 +114,19 @@ export class RegrasAcesso {
         }
 
         maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
+
+
+        // Ajuste para considerar a carrencia mínima para idade
+        if(['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
+
+            // console.log(this.numeroDeContribuicoes);
+            // console.log(this.numeroDeContribuicoes -  this.carenciaConformDataFiliacao);
+            const maxDescarteCarencia = (this.numeroDeContribuicoes -  this.carenciaConformDataFiliacao);
+
+            maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+            maximoDescarte.anos =   Math.floor(maximoDescarte.meses / 12);
+
+        }
 
         // console.log(difTempoContribExcedente);
         // console.log(maximoDescarte.anos);
@@ -145,13 +150,9 @@ export class RegrasAcesso {
 
         // }
 
-        calculosPossiveis = this.criarListaPossibilidades(maximoDescarte,
-                                                         elementTipo);
-
-        console.log(calculosPossiveis);
+        calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
 
         return calculosPossiveis;
-
     }
 
 
@@ -195,10 +196,10 @@ export class RegrasAcesso {
         const requisitos = elementTipo.requisitos;
         const calculosPossiveis = [];
         const idadeInicial = elementTipo.idade;
-        const tempoInicial =  elementTipo.tempoTotalAposEC103;
-        const pontosInicial =  elementTipo.pontos;
+        const tempoInicial = elementTipo.tempoTotalAposEC103;
+        const pontosInicial = elementTipo.pontos;
 
-        for (let i =  maximoDescarte.anos; i >= 0 ; i--) {
+        for (let i = maximoDescarte.anos; i >= 0; i--) {
 
             // console.log(i);
 
@@ -206,10 +207,17 @@ export class RegrasAcesso {
                 tempo: (tempoInicial - i),
                 idade: (idadeInicial - i),
                 pontos: ((requisitos.pontos > 0) ? (pontosInicial - (i * 2)) : 0),
-                descarteContrib: (i * 12),
+                descarteContrib: Math.floor(i * 12),
                 listaCompetencias: [],
+                lista12Competencias: [],
                 mediaDasContribuicoes: 0,
-                numeroCompetencias: 0
+                somaContribuicoes: 0,
+                numeroCompetencias: 0,
+                salarioBeneficio: 0,
+                irt: 0,
+                rmi: 0,
+                formulaFator: '',
+                fator: 0,
             });
 
         }
@@ -218,7 +226,7 @@ export class RegrasAcesso {
 
     }
 
-    
+
     /**
      * Set conclusão
      * @param  {string} regra
@@ -248,7 +256,8 @@ export class RegrasAcesso {
                 tempoTotalAposEC103: tempoTotalAposEC103,
                 requisitos: requisitos,
                 calculosPossiveis: [],
-                excedente: {}
+                expectativaSobrevida: this.expectativaSobrevida,
+                fatorPrevidenciario: this.fatorPrevidenciario
             });
         } else {
             this.listaConclusaoAcesso.push({
@@ -260,7 +269,7 @@ export class RegrasAcesso {
                 tempoTotalAposEC103: 0,
                 requisitos: requisitos,
                 calculosPossiveis: [],
-                excedente: {}
+                expectativaSobrevida: 0
             });
         }
     }
@@ -298,7 +307,9 @@ export class RegrasAcesso {
         idadeFracionada: number,
         sexo: string,
         redutorProfessor: number,
-        redutorSexo: number
+        redutorSexo: number,
+        expectativaSobrevida: object,
+        fatorPrevidenciario: object
     ) {
 
         if (
@@ -307,13 +318,8 @@ export class RegrasAcesso {
             return this.listaConclusaoAcesso;
         }
 
-
-
-
-        // const mesesContribuicao = divisor;
-        // const valorMedio = (valorTotalContribuicoes / mesesContribuicao);
-        // const redutorProfessor = (tipoBeneficio == 6) ? 5 : 0;
-
+        this.expectativaSobrevida = expectativaSobrevida;
+        this.fatorPrevidenciario = fatorPrevidenciario;
         this.contribuicaoTotal = tempoContribuicaoTotal.anos;
         const pontos = tempoContribuicaoTotal.anos + idadeFracionada;
         const ano = dataInicioBeneficio.year();
@@ -321,7 +327,6 @@ export class RegrasAcesso {
 
         // tipoBeneficio = 6;
         // tipoBeneficio = 1925;
-
 
         // aplicação default false
         if (this.arrayEspecial.includes(tipoBeneficio)) {
@@ -372,6 +377,15 @@ export class RegrasAcesso {
             //   this.isRegrasAuxilioDoenca = true;
             //   this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio);
 
+
+            this.regraAcessoAuxilioDoenca(
+                idadeFracionada,
+                ano,
+                sexo,
+                this.contribuicaoTotal
+            );
+
+
         } else if (this.arrayEspecialDeficiente.includes(tipoBeneficio)) {
 
             // especial deficiente
@@ -398,22 +412,24 @@ export class RegrasAcesso {
             //     this.regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio);
             //   }
 
+            if (isRegraTransitoria) {
 
+                this.regraAcessoIdadeTransitoria(
+                    idadeFracionada,
+                    ano,
+                    sexo,
+                    this.contribuicaoTotal,
+                    tipoBeneficio);
 
-            this.regraAcessoIdadeTransitoria(
-                idadeFracionada,
-                ano,
-                sexo,
-                this.contribuicaoTotal,
-                tipoBeneficio
-            )
-            this.regraAcessoIdade(
-                idadeFracionada,
-                ano,
-                sexo,
-                this.contribuicaoTotal
-            )
+            } else {
 
+                this.regraAcessoIdade(
+                    idadeFracionada,
+                    ano,
+                    sexo,
+                    this.contribuicaoTotal);
+
+            }
 
         } else if (tipoBeneficio === 6) {
 
@@ -444,9 +460,7 @@ export class RegrasAcesso {
                     tempoContribuicaoTotalMoment,
                     tempoContribuicaoTotalAtePecMoment,
                     dataInicioBeneficio.clone());
-                this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
-
-
+                // this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
 
             }
 
@@ -477,7 +491,7 @@ export class RegrasAcesso {
                 tempoContribuicaoTotalMoment,
                 tempoContribuicaoTotalAtePecMoment,
                 dataInicioBeneficio.clone());
-            this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
+            //  this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
 
         }
 
@@ -489,7 +503,16 @@ export class RegrasAcesso {
 
 
 
-    // transição regras de acesso inicio
+
+    /**
+     * transição regras de acesso inicio
+     * @param  {} idadeFracionada
+     * @param  {} pontos
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} redutorProfessor
+     */
     public regraAcessoPontos(idadeFracionada, pontos, ano, sexo, tempo_contribuicao, redutorProfessor) {
 
         let status = false;
@@ -673,43 +696,26 @@ export class RegrasAcesso {
             f: 30 - redutorProfessor
         };
 
-        let tempoExcendenteAposEC103 = tempoContribuicaoTotalMoment.clone();
-        let tempoFinalContribComPedagio;
         let tempoDePedagio;
+        let contribuicaoDiff = 0;
+        let tempoFinalContrib = 0;
+        let tempoDePedagioTotal = 0;
+
 
         if (idade >= contribuicao_idade_min[sexo] && tempoContribuicaoTotalAtePec.anos > 0) {
 
-            const contribuicao_min_moment = {
-                m: moment.duration(35, 'y').subtract(redutorProfessor, 'y'),
-                f: moment.duration(30, 'y').subtract(redutorProfessor, 'y')
-            };
+            if (tempoContribuicaoTotalAtePec.anos <= contribuicao_min[sexo]) {
 
-
-            tempoDePedagio = (contribuicao_min_moment[sexo].clone())
-                .subtract(tempoContribuicaoTotalAtePecMoment);
-
-
-            tempoFinalContribComPedagio = (contribuicao_min_moment[sexo].clone()).add(tempoDePedagio);
-
-            let tempoDePedagioTotal = tempoDePedagio.clone();
-            tempoDePedagioTotal = tempoDePedagioTotal.add(tempoDePedagio);
-
-            const dataParaAposentar = dataInicioBeneficio.add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
-
-            if (tempoContribuicaoTotalMoment.asDays() >= tempoFinalContribComPedagio.asDays()) {
-
-                tempoExcendenteAposEC103 = tempoExcendenteAposEC103.subtract(tempoFinalContribComPedagio);
-                console.log(tempoExcendenteAposEC103);
-
-                status = true;
+                contribuicaoDiff = (contribuicao_min[sexo] - tempo_contribuicao);
+                tempoDePedagio = ((contribuicao_min[sexo] - tempoContribuicaoTotalAtePec.anos));
+                tempoFinalContrib = contribuicao_min[sexo] + tempoDePedagio;
 
             } else {
-
-                let contribuicaoDiff = tempoFinalContribComPedagio.clone()
-                contribuicaoDiff = contribuicaoDiff.subtract(tempoContribuicaoTotalMoment).subtract(1, 'd');
-
-                status = false;
+                tempoFinalContrib = contribuicao_min[sexo];
             }
+
+            tempoDePedagioTotal = (contribuicaoDiff + tempoDePedagio);
+            status = (tempo_contribuicao >= tempoDePedagioTotal) ? true : false;
 
         }
 
@@ -721,7 +727,7 @@ export class RegrasAcesso {
             tempoContribuicaoTotalAtePec,
             tempo_contribuicao,
             {
-                tempo: tempoFinalContribComPedagio,
+                tempo: tempoFinalContrib,
                 idade: contribuicao_idade_min[sexo],
                 pedagio: tempoDePedagio,
                 pontos: 0,
@@ -754,21 +760,21 @@ export class RegrasAcesso {
 
         if (tempoContribuicaoTotalAtePec.anos >= contribuicao_min[sexo]) {
 
-
             if (tempoContribuicaoTotalAtePec.anos <= contribuicao_max[sexo]) {
 
                 contribuicaoDiff = (contribuicao_max[sexo] - tempo_contribuicao);
                 tempoDePedagio = ((contribuicao_max[sexo] - tempoContribuicaoTotalAtePec.anos) * 0.5);
                 tempoFinalContrib = contribuicao_max[sexo] + tempoDePedagio;
 
+            } else {
+                tempoFinalContrib = contribuicao_max[sexo];
             }
 
-            tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
-            tempoDePedagioTotal = (tempoDePedagioTotal <= 0) ? 0 : tempoDePedagioTotal;
+            tempoDePedagioTotal = (contribuicaoDiff + tempoDePedagio);
+            //  tempoDePedagioTotal = (tempoDePedagioTotal <= 0) ? 0 : tempoDePedagioTotal;
+            // status = (tempoDePedagioTotal > 0.00273973) ? false : true;
 
-            dataParaAposentar = (dataInicioBeneficio.clone()).add(tempoDePedagioTotal, 'years').format('DD/MM/YYYY');
-
-            status = (tempoDePedagioTotal > 0.00273973) ? false : true;
+            status = (tempo_contribuicao >= tempoDePedagioTotal) ? true : false;
 
         }
 
@@ -781,7 +787,7 @@ export class RegrasAcesso {
             tempoContribuicaoTotalAtePec,
             tempo_contribuicao,
             {
-                tempo: tempoDePedagioTotal,
+                tempo: tempoFinalContrib,
                 idade: 0,
                 pedagio: tempoDePedagio,
                 pontos: 0,
@@ -958,11 +964,11 @@ export class RegrasAcesso {
 
         if (status) {
 
-          if(pontosEspecial > regraEspecial[tipoBeneficio].pontos){
-            pontosExcendente = (pontosEspecial - regraEspecial[tipoBeneficio].pontos) / 2
-            tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
-            idade_min = idadeFracionada - pontosExcendente;
-          }
+            if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
+                pontosExcendente = (pontosEspecial - regraEspecial[tipoBeneficio].pontos) / 2
+                tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
+                idade_min = idadeFracionada - pontosExcendente;
+            }
 
         }
 
@@ -1046,7 +1052,6 @@ export class RegrasAcesso {
 
         if (Math.trunc(tempo_contribuicao) > tempoPercentualParte1[sexo]) {
 
-            percentualParte1 += ((Math.trunc(tempo_contribuicao) - tempoPercentualParte1[sexo]) * 2);
             status = true;
 
         } else {
@@ -1064,6 +1069,49 @@ export class RegrasAcesso {
             tempo_contribuicao,
             {
                 tempo: tempoPercentualParte1[sexo],
+                idade: 0,
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
+
+    }
+
+
+    // Auxilio doença
+    public regraAcessoAuxilioDoenca(
+        idade,
+        ano,
+        sexo,
+        tempo_contribuicao
+    ) {
+
+        const requisitoTempoContrib = {
+            m: 1,
+            f: 1
+        }; // 12 meses
+
+        let status = false;
+        if (Math.trunc(tempo_contribuicao) >= requisitoTempoContrib[sexo]) {
+
+            status = true;
+
+        } else {
+
+            status = false;
+        }
+
+
+        this.setConclusaoAcesso(
+            'doenca',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: requisitoTempoContrib[sexo],
                 idade: 0,
                 pedagio: 0,
                 pontos: 0,

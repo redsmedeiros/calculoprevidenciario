@@ -1,5 +1,3 @@
-
-
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ExpectativaVida } from '../ExpectativaVida.model';
@@ -16,7 +14,8 @@ import { RgpsResultadosComponent } from '../rgps-resultados.component';
 import * as moment from 'moment';
 
 import { RegrasAcesso } from './regrasAcesso/regras-acesso';
-import { RegrasAcessoConclusoes } from './regrasAcesso/regras-acesso-conclusoes';
+import { RegrasAcessoConclusoes } from './conclusoes/regras-acesso-conclusoes';
+import { CalcularListaContribuicoes } from './calculoMedia/calcular-lista-contribuicoes';
 
 
 
@@ -26,7 +25,8 @@ import { RegrasAcessoConclusoes } from './regrasAcesso/regras-acesso-conclusoes'
   styleUrls: ['./rgps-resultados-apos-pec103.component.css'],
   providers: [
     RegrasAcesso,
-    RegrasAcessoConclusoes
+    RegrasAcessoConclusoes,
+    CalcularListaContribuicoes
   ]
 })
 export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent implements OnInit {
@@ -44,11 +44,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public nenhumaContrib = false;
   public contribuicaoPrimaria = { anos: 0, meses: 0, dias: 0 };
   public isRegraTransitoria = true;
+  public primeiraDataTabela;
+  public carenciaConformDataFiliacao;
 
-
+  public expectativaSobrevida = { expectativa: 0, formula_expectativa_sobrevida: '' };
+  public fatorPrevidenciario = { fatorPrevidenciario: 0, fatorPrevidenciarioFormula: '' };
   public divisorMinimo = 0;
   public isDivisorMinimo = true;
   public msgDivisorMinimo = '';
+
+  public errosArray = [];
 
 
   // transição INICIO
@@ -68,7 +73,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService,
     private regrasAcesso: RegrasAcesso,
-    private regrasAcessoConclusoes: RegrasAcessoConclusoes
+    private regrasAcessoConclusoes: RegrasAcessoConclusoes,
+    private calcularListaContribuicoes: CalcularListaContribuicoes
 
   ) {
     super(null, route, null, null, null, null);
@@ -77,13 +83,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   ngOnInit() {
 
-    this.getListaCompetencias();
+    this.inicializarCalculoRMI();
 
   }
 
 
 
-  public getListaCompetencias() {
+  public inicializarCalculoRMI() {
 
     this.boxId = this.generateBoxId(this.calculo.id, '20');
     this.isUpdating = true;
@@ -122,29 +128,32 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         } else {
 
-          const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(primeiraDataTabela, moment())
+          this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          this.Moeda.getByDateRange(this.primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
-              let dataReajustesAutomaticos = this.dataInicioBeneficio;
+              const dataReajustesAutomaticos = this.dataInicioBeneficio;
+
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
+
                   this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
                     .then(expectativas => {
+
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
                         .then(carencias => {
 
                           this.carenciasProgressivas = carencias;
+
                           // Quando o instituidor já está aposentado não é necessário relizar o calculo
                           if (!this.isRegrasPensaoObitoInstituidorAposentado) {
 
-                            // this.calculo_apos_pec_2019(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
                             this.getVerificarOpcoesDeRegra();
 
-                            console.log(this.contribuicaoPrimariaAtePec);
-                            console.log(this.contribuicaoPrimaria);
+                            // console.log(this.contribuicaoPrimariaAtePec);
+                            // console.log(this.contribuicaoPrimaria);
                           }
 
                           // this.regrasDaReforma();
@@ -159,7 +168,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       });
   }
 
-
+  /**
+   * Verificar a aplição das regras conforme especie
+   */
   public getVerificarOpcoesDeRegra() {
 
     if (this.dataFiliacao && this.dataFiliacao != null && moment(this.dataFiliacao).isValid()) {
@@ -177,8 +188,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       days: tempo.dias
     });
 
-
-
     const tempoAtePec = this.contribuicaoPrimariaAtePec;
     const tempoContribuicaoTotalAtePec = {
       dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias,
@@ -190,35 +199,93 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       months: tempoAtePec.meses,
       days: tempoAtePec.dias
     });
-
-
-
     const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
 
-    this.listaConclusaoAcesso =  this.regrasAcesso.getVerificacaoRegras(
-                                                                      this.dataInicioBeneficio,
-                                                                      this.dataFiliacao,
-                                                                      this.tipoBeneficio,
-                                                                      this.isRegraTransitoria,
-                                                                      this.contribuicaoPrimaria,
-                                                                      tempoContribuicaoTotal,
-                                                                      tempoContribuicaoTotalAtePec,
-                                                                      tempoContribuicaoTotalMoment,
-                                                                      tempoContribuicaoTotalAtePecMoment,
-                                                                      this.idadeSegurado,
-                                                                      this.idadeFracionada,
-                                                                      this.segurado.sexo,
-                                                                      redutorProfessor,
-                                                                      redutorSexo
-                                                                    );
+    const numeroDeContribuicoes = this.getMesesDeContribuicao();
 
+    this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
+    this.fatorPrevidenciario = this.calcularFatorPrevidenciario(tempoContribuicaoTotal.anos,
+      this.expectativaSobrevida.expectativa);
+    // const numeroDeCarencias = this.calculo.carencia;
 
-  this.regrasAcesso.calCularTempoMaximoExcluido(this.listaConclusaoAcesso);
+    if (this.verificarRegrasIniciais(
+      redutorProfessor,
+      redutorSexo
+    )) {
+      this.listaConclusaoAcesso = this.regrasAcesso.getVerificacaoRegras(
+        this.dataInicioBeneficio,
+        this.dataFiliacao,
+        this.tipoBeneficio,
+        this.isRegraTransitoria,
+        this.contribuicaoPrimaria,
+        tempoContribuicaoTotal,
+        tempoContribuicaoTotalAtePec,
+        tempoContribuicaoTotalMoment,
+        tempoContribuicaoTotalAtePecMoment,
+        this.idadeSegurado,
+        this.idadeFracionada,
+        this.segurado.sexo,
+        redutorProfessor,
+        redutorSexo,
+        this.expectativaSobrevida,
+        this.fatorPrevidenciario
+      );
 
+      this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
+        this.listaConclusaoAcesso,
+        numeroDeContribuicoes,
+        this.carenciaConformDataFiliacao
+      );
+
+      this.listaConclusaoAcesso = this.calcularListaContribuicoes.criarListasCompetenciasParaPossibilidades(
+        this.Moeda,
+        this.listaValoresContribuidos,
+        this.listaConclusaoAcesso,
+        this.calculo,
+        this.pbcCompleto,
+        this.getPbcCompletoIndices());
+    }
+
+    console.log(this.listaConclusaoAcesso);
 
   }
 
+
+
+  private verificarRegrasIniciais(redutorProfessor, redutorSexo) {
+    let status = false;
+
+    status = this.verificarCarencia(redutorProfessor, redutorSexo);
+
+    return status;
+  }
+
+
+
+
+  private getMesesDeContribuicao() {
+
+    if (this.listaValoresContribuidos.length <= 0) {
+      return 0;
+    }
+
+    if (this.pbcCompleto) {
+      return this.listaValoresContribuidos.length;
+    }
+
+    let numeroContribuicoes = 0;
+    this.listaValoresContribuidos.forEach(element => {
+
+      if (moment('1994-07-01').isSameOrBefore(element.data, 'month') && element.valor_primaria) {
+        numeroContribuicoes += 1;
+      }
+
+    });
+
+    return numeroContribuicoes;
+
+  }
 
 
   getIdadeFracionada() {
@@ -226,13 +293,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
-
   limitarTetosEMinimos(valor, data) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
-    let moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
 
-    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
-    let tetoSalarial = (moeda) ? moeda.teto : 0;
+    const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
 
@@ -247,6 +313,147 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
+  private calcularFatorPrevidenciario(tempoTotalContribuicao, expectativa) {
+
+    let fatorPrevidenciario = 1;
+    let fatorPrevidenciarioFormula = '';
+    const aliquota = 0.31;
+
+    fatorPrevidenciario = ((tempoTotalContribuicao * aliquota) / expectativa) *
+      (1 + (this.idadeFracionada + (tempoTotalContribuicao * aliquota)) / 100);
+    fatorPrevidenciario = parseFloat(fatorPrevidenciario.toFixed(4));
+
+    // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
+    fatorPrevidenciarioFormula = '((' + this.formatDecimal(tempoTotalContribuicao, 4) +
+                                  ' * ' + this.formatDecimal(aliquota, 2) + ') / ' +
+                                  this.formatDecimal(expectativa, 2) + ') * (1 + (' +
+                                  this.formatDecimal(this.idadeFracionada, 2) + ' + (' +
+                                  this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' +
+                                  this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
+
+    return {
+      fatorPrevidenciario: fatorPrevidenciario,
+      fatorPrevidenciarioFormula: fatorPrevidenciarioFormula
+    };
+  }
+
+
+
+
+  private procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
+    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    let dataAgora = moment();
+    let expectativaVida;
+    if (idadeFracionada > 80) {
+      idadeFracionada = 80;
+    }
+
+    if (ano != null) {
+      expectativaVida = this.ExpectativaVida.getByAno(ano);
+      //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
+    } else {
+      expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
+    }
+    return expectativaVida;
+  }
+
+  private projetarExpectativa(idadeFracionada, dib) {
+    let expectativa = 0;
+    const dataInicio = moment('2000-11-30');
+    const dataFim = moment('2019-12-01');
+    const dataHoje = moment();
+    let formula_expectativa_sobrevida;
+
+    if (dib > dataHoje) {
+      let anos = Math.abs(dataHoje.diff(dib, 'years', true));
+
+      if (anos < 1) {
+        anos = Math.round(anos);
+      } else {
+        anos = Math.trunc(anos);
+      }
+
+      const tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
+      const tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
+      const tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
+
+      expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
+
+      formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
+
+    } else if (dib.isSameOrBefore(dataInicio)) {
+      expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
+    } else if (dib.isSameOrAfter(dataFim)) {
+      expectativa = this.procurarExpectativa(idadeFracionada, null, dib, null);
+    } else {
+      expectativa = this.procurarExpectativa(idadeFracionada, null, dib, dib);
+    }
+
+    if (expectativa <= 0) {
+      expectativa = 6;
+    }
+
+    return { expectativa: expectativa, 
+            formula_expectativa_sobrevida: formula_expectativa_sobrevida 
+          };
+  }
+
+
+
+
+  /**
+   * Na especie idade verifica se o segurado possui carrencia mínima para acesso a regra
+   * @param  {} redutorProfessor
+   * @param  {} redutorSexo
+   * @param  {} errorArray
+   */
+  private verificarCarencia(redutorProfessor, redutorSexo) {
+
+    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16) {
+
+      const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
+
+      let mesesCarencia = 180;
+      if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY') < this.dataLei8213) { // Verificar se a data de filiação existe
+
+        const anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
+        const carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
+
+        if (carenciaProgressiva != 0) {
+          mesesCarencia = carenciaProgressiva;
+        } else if (anoNecessario < 1991) {
+          mesesCarencia = 60;
+        }
+
+      }
+
+      this.carenciaConformDataFiliacao = mesesCarencia;
+
+      if (this.calculo.carencia < mesesCarencia) {
+        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
+        this.errosArray.push(erroCarencia);
+        // this.erroCarenciaMinima = true;
+        return false;
+      }
+
+    }
+
+    return true;
+  }
+
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
+  }
+
+  isEmpty(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
+  }
 
   // mostrarReajustesAdministrativos(tableId) {
   //   if (this.showReajustesAdministrativos) {
