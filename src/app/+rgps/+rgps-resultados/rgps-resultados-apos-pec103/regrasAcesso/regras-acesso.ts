@@ -30,7 +30,7 @@ export class RegrasAcesso {
      * @param  {} numeroDeContribuicoes
      * @param  {} carenciaConformDataFiliacao
      */
-    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[], numeroDeContribuicoes , carenciaConformDataFiliacao) {
+    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[], numeroDeContribuicoes, carenciaConformDataFiliacao) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
@@ -60,7 +60,7 @@ export class RegrasAcesso {
         };
 
 
-       // console.log(elementTipo);
+        // console.log(elementTipo);
 
 
         if (!elementTipo.status) {
@@ -117,14 +117,14 @@ export class RegrasAcesso {
 
 
         // Ajuste para considerar a carrencia mínima para idade
-        if(['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
+        if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
             // console.log(this.numeroDeContribuicoes);
             // console.log(this.numeroDeContribuicoes -  this.carenciaConformDataFiliacao);
-            const maxDescarteCarencia = (this.numeroDeContribuicoes -  this.carenciaConformDataFiliacao);
+            const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
 
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
-            maximoDescarte.anos =   Math.floor(maximoDescarte.meses / 12);
+            maximoDescarte.anos = Math.floor(maximoDescarte.meses / 12);
 
         }
 
@@ -211,6 +211,7 @@ export class RegrasAcesso {
                 listaCompetencias: [],
                 lista12Competencias: [],
                 mediaDasContribuicoes: 0,
+                mediaDasContribuicoesString: '',
                 somaContribuicoes: 0,
                 numeroCompetencias: 0,
                 salarioBeneficio: 0,
@@ -239,6 +240,7 @@ export class RegrasAcesso {
      */
     private setConclusaoAcesso(
         regra: string,
+        label: string,
         status: boolean,
         pontosTotal: number,
         idade: number,
@@ -250,6 +252,7 @@ export class RegrasAcesso {
             this.listaConclusaoAcesso.push({
                 regra: regra,
                 status: status,
+                label: label,
                 pontos: pontosTotal,
                 idade: idade,
                 tempoTotalAteEC103: tempoTotalAteEC103,
@@ -262,6 +265,7 @@ export class RegrasAcesso {
         } else {
             this.listaConclusaoAcesso.push({
                 regra: regra,
+                label: label,
                 status: false,
                 pontos: 0,
                 idade: 0,
@@ -589,6 +593,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pontos',
+            'Regra de Transição do art. 15 da EC nº 103/2019 (regra de pontos)',
             status,
             pontos,
             idadeFracionada,
@@ -654,6 +659,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'idadeProgressiva',
+            'Regra de Transição do art. 16 da EC nº 103/2019 (idade mínima progressiva)',
             status,
             0,
             idade,
@@ -721,6 +727,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pedagio100',
+            'Regra de Transição do art. 20 da EC nº 103/2019 (pedágio de 100%)',
             status,
             0,
             idade,
@@ -781,6 +788,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pedagio50',
+            'Regra de Transição do art. 17 da EC nº 103/2019 (pedágio de 50%)',
             status,
             0,
             idade,
@@ -841,6 +849,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'idade',
+            'Regra de Transição do art. 18 da EC nº 103/2019 (aposentadoria por idade)',
             status,
             0,
             idade,
@@ -875,10 +884,12 @@ export class RegrasAcesso {
         let contribuicao_min = { m: 20, f: 15 };
         let idade_min = { m: 65, f: 62 };
         let status = false;
+        let label = 'Aposentadoria por idade - Trabalhador Urbano - Regra Transitória';
 
         if (tipoBeneficio === 16) {
             contribuicao_min = { m: 15, f: 15 };
             idade_min = { m: 60, f: 55 };
+            label = 'Aposentadoria por idade - Trabalhador Rural - Regra Transitória'
         }
 
         if (tempo_contribuicao >= contribuicao_min[sexo] && idade >= idade_min[sexo]) {
@@ -886,8 +897,10 @@ export class RegrasAcesso {
         }
 
 
+
         this.setConclusaoAcesso(
             'idadeTransitoria',
+            label,
             status,
             0,
             idade,
@@ -942,6 +955,12 @@ export class RegrasAcesso {
             1925: 60
         }
 
+        const label = {
+            1915: 'Aposentadoria especial - 15 anos de exposição',
+            1920: 'Aposentadoria especial - 20 anos de exposição',
+            1925: 'Aposentadoria especial - 25 anos de exposição'
+        }
+
         let status = false;
         let idade_min = 0;
         let tempoMinimo = tempoRegra[tipoBeneficio];
@@ -975,6 +994,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'especial',
+            label[tipoBeneficio],
             status,
             pontosEspecial,
             idadeFracionada,
@@ -1017,6 +1037,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'incapacidade',
+            '',
             status,
             0,
             idade,
@@ -1047,7 +1068,6 @@ export class RegrasAcesso {
             f: 15
         };
 
-        let percentualParte1 = 60;
         let status = false;
 
         if (Math.trunc(tempo_contribuicao) > tempoPercentualParte1[sexo]) {
@@ -1062,6 +1082,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'acidente',
+            'Auxílio Acidente',
             status,
             0,
             idade,
@@ -1105,6 +1126,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'doenca',
+            '',
             status,
             0,
             idade,
@@ -1188,6 +1210,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'deficiente',
+            'Auxílio Doença',
             status,
             0,
             idade,

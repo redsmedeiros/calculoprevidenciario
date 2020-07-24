@@ -1,41 +1,42 @@
 <article class="container-fluid">
-   
-</article>
 
-
-
-
-<section class="container-fluid">
+<section>
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
-	  <accordion-group [isOpen]="false" #group1062019062019>
+	  <accordion-group [isOpen]="false" #group1120192020>
 	    <h4 class="panel-title" accordion-heading>
-	      <a
-	        ><i
-	          class="pull-right fa fa-lg"
-	          [ngClass]="{
-	            'fa-angle-down': group1062019062019?.isOpen,
-	            'fa-angle-up': !group1062019062019?.isOpen
-	          }"
-	        ></i>
-	        <strong>{{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019 </strong></a
-	      >
+	      <a>
+          <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019 </strong>
+          <i
+          class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
+          *ngIf="isUpdating"></i>
+          <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
+            &nbsp;&nbsp;
+            {{ (!group1120192020?.isOpen)? "Abrir" : "Fechar"}}
+            <i
+            *ngIf="!isUpdating"
+            class="pull-right fa fa-lg p-1"
+            [ngClass]="{
+              'fa-angle-down': group1120192020?.isOpen,
+              'fa-angle-up': !group1120192020?.isOpen
+            }"
+          ></i>&nbsp;&nbsp;
+          </button>
+          </a>
 	    </h4>
 	    <div class="no-padding no-margin">
-	    
-
        
 
 <div id="{{ boxId }}" class="boxCalculo row">
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
-      <header>
+      <!-- <header>
         <span class="widget-icon">
           <i class="fa fa-edit"></i>
         </span>
         <h2 id="tituloCalculo">
           {{ calculo.tipo_seguro }} A partir de 13/11/2019 Emenda Constitucional nº 103/2019
         </h2>
-      </header>
+      </header> -->
       <div>
         <div class="widget-body no-padding">
           <table class="table table-bordered table-hover no-padding">
@@ -275,3 +276,4 @@
 	  </accordion-group>
 	</accordion>
 </section>
+</article>

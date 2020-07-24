@@ -1,105 +1,44 @@
-<!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
 <article class="container-fluid"  >
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>
-                Cálculo nº: {{boxId}}
-              </th>
-              <th>
-                Ação
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="!isUpdating">
-              <td>
-                <p>Exportar para o cálculo de Benefícios Atrasados</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="!isUpdating">
-              <td>
-                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p  *ngIf='reajustesAdministrativos'>Calcular com base na tabela do INPC vigente na data da DIB</p>
-                <p  *ngIf='!reajustesAdministrativos'>Calcular Administrativamente</p>
-              </td>
-              <td>
-                <button type="submit" (click)="calcularComINPC()" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-calculator"></i>
-                  </span> CÁLCULAR
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p>Mostrar Reajustes Administrativos</p>
-              </td>
-              <td>
-                <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-eye"></i>
-                  </span> MOSTRAR
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p>Imprimir o cálculo</p>
-              </td>
-              <td>
-                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-print"></i>
-                  </span> IMPRIMIR
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-</article>
+
+<section >
+	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
+	  <accordion-group [isOpen]="false" #group19911998>
+	    <h4 class="panel-title" accordion-heading>
+	      <a>
+          <strong  id='tituloCalculo'>{{calculo.tipo_seguro}} {{stringCabecalho}} </strong>
+            <i
+            class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
+            *ngIf="isUpdating"></i>
+            <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
+              &nbsp;&nbsp;
+              {{ (!group19911998?.isOpen)? "Abrir" : "Fechar"}}
+              <i
+              *ngIf="!isUpdating"
+              class="pull-right fa fa-lg p-1"
+              [ngClass]="{
+                'fa-angle-down': group19911998?.isOpen,
+                'fa-angle-up': !group19911998?.isOpen
+              }"
+            ></i>&nbsp;&nbsp;
+            </button>
+        </a>
+	    </h4>
+	    <div class="no-padding no-margin">
+	    
 
     <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-    <div id="{{boxId}}" class="boxCalculo" *ngIf="!regraEspecie9198IvalidezIdade99">
+    <div id="{{boxId}}" class="boxCalculo row" *ngIf="!regraEspecie9198IvalidezIdade99">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
+          <!-- <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} {{stringCabecalho}}</h2>
-          </header>
+          </header> -->
           <div>
-            <div class="widget-body">
-              <table class="table table-bordered table-hover">
+            <div class="widget-body no-padding">
+              <table class="table table-bordered table-hover no-padding">
                 <thead>
                   <tr>
                     <th width="50%">
@@ -161,25 +100,26 @@
               <div class="alert alert-warning margin-top-10" *ngIf="nenhumaContrib" role="alert">
                 <p>Nenhuma contribuição encontrada em 48 meses anteriores a DIB conforme <a href="http://www.ieprev.com.br/legislacao/10634/lei-no-8.213,-de-24-7-1991---atualizada-ate-dezembro-2008#art29" target='_blank'>Art. 29 da Lei nº 8.213, de 24/7/1991</a></p>
               </div>
+              <div>
+                <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
+                <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && direito" [responsive] = "false"
+                  paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Competência</th>
+                      <th>Fator</th>
+                      <th>Contribuição Primaria</th>
+                      <th>Contribuição Secundária</th>
+                      <th>Contribuição Primária Corrigida</th>
+                      <th>Contribuição Secundária Corrigida</th>
+                      <th>Limite</th>
+                    </tr>
+                  </thead>
+                </sa-datatable>
+              </div>
             </div>
-            <div>
-              <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
-              <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && direito" [responsive] = "false"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Competência</th>
-                    <th>Fator</th>
-                    <th>Contribuição Primaria</th>
-                    <th>Contribuição Secundária</th>
-                    <th>Contribuição Primária Corrigida</th>
-                    <th>Contribuição Secundária Corrigida</th>
-                    <th>Limite</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-            </div>
+          
             <div class="widget-body" *ngIf="!isUpdating && direito">
               <table class="table table-bordered table-hover">
                 <tbody>
@@ -283,3 +223,96 @@
         </sa-widget>
 </article>
 </div>
+
+<!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>
+        Cálculo nº: {{boxId}}
+      </th>
+      <th>
+        Ação
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="!isUpdating">
+      <td>
+        <p>Exportar para o cálculo de Benefícios Atrasados</p>
+      </td>
+      <td>
+        <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span> EXPORTAR
+        </button>
+        <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span> EXPORTAR
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="!isUpdating">
+      <td>
+        <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+      </td>
+      <td>
+        <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span> EXPORTAR
+        </button>
+        <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+          <span class="btn-label">
+            <i class="fa fa-link"></i>
+          </span> EXPORTAR
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p  *ngIf='reajustesAdministrativos'>Calcular com base na tabela do INPC vigente na data da DIB</p>
+        <p  *ngIf='!reajustesAdministrativos'>Calcular Administrativamente</p>
+      </td>
+      <td>
+        <button type="submit" (click)="calcularComINPC()" class="btn btn-labeled btn-primary pull-right">
+          <span class="btn-label">
+            <i class="fa fa-calculator"></i>
+          </span> CÁLCULAR
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Mostrar Reajustes Administrativos</p>
+      </td>
+      <td>
+        <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
+          <span class="btn-label">
+            <i class="fa fa-eye"></i>
+          </span> MOSTRAR
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>Imprimir o cálculo</p>
+      </td>
+      <td>
+        <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
+          <span class="btn-label">
+            <i class="fa fa-print"></i>
+          </span> IMPRIMIR
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+	    </div>
+	  </accordion-group>
+	</accordion>
+</section>
+</article>

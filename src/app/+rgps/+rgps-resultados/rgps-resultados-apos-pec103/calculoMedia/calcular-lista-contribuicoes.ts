@@ -10,6 +10,33 @@ export class CalcularListaContribuicoes {
     private calculo;
     private pbcCompleto;
     private indicesSelecionado;
+    private dibCurrency;
+
+    private tableData = []
+
+    private tableOptions = {
+        colReorder: false,
+        paging: false,
+        searching: false,
+        ordering: false,
+        bInfo: false,
+        data: this.tableData,
+        columns: [
+          { data: 'id' },
+          { data: 'competencia' },
+          { data: 'indice_corrigido' },
+          { data: 'contribuicao_primaria' },
+          { data: 'contribuicao_primaria_revisada' },
+          { data: 'limite' },
+        ],
+        columnDefs: [
+          { 'width': '2rem', 'targets': [0] },
+          {
+            'targets': [0, 1, 2, 3, 4, 5],
+            'className': 'text-center'
+          }
+        ]
+      };
 
     /**
      * Criar a listas de competencias para cada possibilidade caso o calculo tenha mais de uma possibilidade
@@ -60,6 +87,7 @@ export class CalcularListaContribuicoes {
 
                 this.criarListaContribPossibilidade(elementPossibilidade);
                 this.realizarDescarteContribuicoes(elementPossibilidade);
+                this.setTableOption(elementPossibilidade);
 
             });
         }
@@ -85,7 +113,7 @@ export class CalcularListaContribuicoes {
 
         const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
         // const moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
-        const dibCurrency = DefinicaoMoeda.loadCurrency(dib);
+        this.dibCurrency = DefinicaoMoeda.loadCurrency(dib);
         const dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
         const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
@@ -115,7 +143,7 @@ export class CalcularListaContribuicoes {
             // contribuição
             contribuicaoPrimariaRevisada = (contribuicaoPrimariaRevisada * fatorCorrigido);
             contribuicaoPrimariaRevisada = DefinicaoMoeda.convertCurrency(contribuicaoPrimariaRevisada, dataContribuicao, dib);
-            const contribuicaoPrimariaRevisadaString = DefinicaoMoeda.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
+            const contribuicaoPrimariaRevisadaString = DefinicaoMoeda.formatMoney(contribuicaoPrimariaRevisada, this.dibCurrency.acronimo);
 
             line = {
                 id: index + 1,
@@ -177,6 +205,9 @@ export class CalcularListaContribuicoes {
             elementPossibilidade.numeroCompetencias = indexMax;
             elementPossibilidade.somaContribuicoes = somaContribuicoes;
             elementPossibilidade.mediaDasContribuicoes = (somaContribuicoes / indexMax);
+            elementPossibilidade.mediaDasContribuicoesString = DefinicaoMoeda.formatMoney(elementPossibilidade.mediaDasContribuicoes,
+                                                                                            this.dibCurrency.acronimo);
+            
 
             elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
                 if (entry1.id > entry2.id) {
@@ -188,6 +219,21 @@ export class CalcularListaContribuicoes {
                 return 0;
             });
 
+
+        return elementPossibilidade;
+    }
+
+    
+    /**
+     * Modelar as informações para exibir no componente
+     * @param  {} tableData
+     */
+    private setTableOption(elementPossibilidade){
+
+          elementPossibilidade.listaCompetencias = this.tableOptions = {
+                                                    ...this.tableOptions,
+                                                    data: elementPossibilidade.listaCompetencias,
+                                                };
 
         return elementPossibilidade;
     }

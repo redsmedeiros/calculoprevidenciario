@@ -1,66 +1,30 @@
-<!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+
 <article class="container-fluid">
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>
-                Cálculo nº: {{boxId}}
-              </th>
-              <th>
-                Ação
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="!isUpdating">
-              <td>
-                <p>Exportar para o cálculo de Benefícios Atrasados</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="!isUpdating">
-              <td>
-                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p>Imprimir o cálculo</p>
-              </td>
-              <td>
-                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-print"></i>
-                  </span> IMPRIMIR
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-</article>
+<section >
+	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
+	  <accordion-group [isOpen]="false" #group19981991>
+	    <h4 class="panel-title" accordion-heading>
+	      <a>
+          <strong  id='tituloCalculo'>{{calculo.tipo_seguro}} Entre 05/10/1988 e 04/04/1991 </strong>
+          <i
+          class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
+          *ngIf="isUpdating"></i>
+          <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
+            &nbsp;&nbsp;
+            {{ (!group19981991?.isOpen)? "Abrir" : "Fechar"}}
+            <i
+            *ngIf="!isUpdating"
+            class="pull-right fa fa-lg p-1"
+            [ngClass]="{
+              'fa-angle-down': group19981991?.isOpen,
+              'fa-angle-up': !group19981991?.isOpen
+            }"
+          ></i>&nbsp;&nbsp;
+          </button>
+        </a>
+	    </h4>
+	    <div class="no-padding no-margin">
+
 
     <div id="{{boxId}}" class="boxCalculo"  *ngIf="!regraEspecie8891IvalidezIdade99">
       <article class="col-sm-12 col-md-12 col-lg-12">
@@ -72,8 +36,8 @@
             <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} Entre 05/10/1988 e 04/04/1991</h2>
           </header>
           <div class="container">
-            <div class="widget-body">
-              <table class="table table-bordered table-hover">
+            <div class="widget-body no-padding">
+              <table class="table table-bordered table-hover no-padding">
                 <thead>
                   <tr>
                     <th width="50%">
@@ -359,3 +323,84 @@
         </sa-widget>
 </article>
 </div>
+
+
+
+
+
+
+	     <!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
+        <table class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>
+                Cálculo nº: {{boxId}}
+              </th>
+              <th>
+                Ação
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="!isUpdating">
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!isUpdating">
+              <td>
+                <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+              </td>
+              <td>
+                <button type="submit" *ngIf='direito' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao.replace(',','.'), 'AJ')" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+                <button type="submit" *ngIf='!direito' class="btn btn-labeled btn-primary pull-right" disabled>
+                  <span class="btn-label">
+                    <i class="fa fa-link"></i>
+                  </span> EXPORTAR
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Imprimir o cálculo</p>
+              </td>
+              <td>
+                <button type="submit" (click)="imprimirBox(boxId)" class="btn btn-labeled btn-primary pull-right">
+                  <span class="btn-label">
+                    <i class="fa fa-print"></i>
+                  </span> IMPRIMIR
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+	    </div>
+	  </accordion-group>
+	</accordion>
+</section>
+</article>
+
+
+
+
+
+
+
+
+
