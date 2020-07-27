@@ -1,4 +1,4 @@
-import { RgpsResultadosAposPec103Component } from './../rgps-resultados-apos-pec103.component';
+
 import * as moment from 'moment';
 // import { Injectable } from '@angular/core';
 
@@ -21,6 +21,7 @@ export class RegrasAcesso {
     public conclusaoAcesso = {};
     public expectativaSobrevida = {};
     public fatorPrevidenciario = {};
+    private moedaDib = {};
 
     constructor() { }
 
@@ -201,8 +202,6 @@ export class RegrasAcesso {
 
         for (let i = maximoDescarte.anos; i >= 0; i--) {
 
-            // console.log(i);
-
             calculosPossiveis.push({
                 tempo: (tempoInicial - i),
                 idade: (idadeInicial - i),
@@ -219,6 +218,8 @@ export class RegrasAcesso {
                 rmi: 0,
                 formulaFator: '',
                 fator: 0,
+                percentual: 0,
+                percentual_formula: ''
             });
 
         }
@@ -260,7 +261,8 @@ export class RegrasAcesso {
                 requisitos: requisitos,
                 calculosPossiveis: [],
                 expectativaSobrevida: this.expectativaSobrevida,
-                fatorPrevidenciario: this.fatorPrevidenciario
+                fatorPrevidenciario: this.fatorPrevidenciario,
+                moedaDib: this.moedaDib
             });
         } else {
             this.listaConclusaoAcesso.push({
@@ -273,7 +275,8 @@ export class RegrasAcesso {
                 tempoTotalAposEC103: 0,
                 requisitos: requisitos,
                 calculosPossiveis: [],
-                expectativaSobrevida: 0
+                expectativaSobrevida: 0,
+                moedaDib: {}
             });
         }
     }
@@ -313,7 +316,8 @@ export class RegrasAcesso {
         redutorProfessor: number,
         redutorSexo: number,
         expectativaSobrevida: object,
-        fatorPrevidenciario: object
+        fatorPrevidenciario: object,
+        moedaDib: object
     ) {
 
         if (
@@ -327,6 +331,7 @@ export class RegrasAcesso {
         this.contribuicaoTotal = tempoContribuicaoTotal.anos;
         const pontos = tempoContribuicaoTotal.anos + idadeFracionada;
         const ano = dataInicioBeneficio.year();
+        this.moedaDib = moedaDib;
 
 
         // tipoBeneficio = 6;

@@ -158,4 +158,31 @@ export class DefinicaoMoeda {
 
     }
 
+    /**
+     * Ajustar ao teto e minimo
+     /**
+      * @param  {} valor
+      * @param  {} data
+      * @param  {} moeda
+      */
+    private limitarTetosEMinimos(valor, moeda) {
+
+        const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+        const tetoSalarial = (moeda) ? moeda.teto : 0;
+        let avisoString = '';
+        let valorRetorno = valor;
+
+        if (moeda && valor < salarioMinimo) {
+            valorRetorno = salarioMinimo;
+            avisoString = 'LIMITADO AO MÍNIMO'
+        } else if (moeda && valor > tetoSalarial) {
+            valorRetorno = tetoSalarial;
+            avisoString = 'LIMITADO AO TETO'
+        }
+        return { valor: valorRetorno, aviso: avisoString };
+    }
+
+
+
+
 }

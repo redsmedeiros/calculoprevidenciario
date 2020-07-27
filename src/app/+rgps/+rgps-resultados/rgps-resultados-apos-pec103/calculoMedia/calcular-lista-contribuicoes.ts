@@ -22,28 +22,30 @@ export class CalcularListaContribuicoes {
         bInfo: false,
         data: this.tableData,
         columns: [
-          { data: 'id' },
-          { data: 'competencia' },
-          { data: 'indice_corrigido' },
-          { data: 'contribuicao_primaria' },
-          { data: 'contribuicao_primaria_revisada' },
-          { data: 'limite' },
+            { data: 'id' },
+            { data: 'competencia' },
+            { data: 'indice_corrigido' },
+            { data: 'contribuicao_primaria' },
+            { data: 'contribuicao_primaria_revisada' },
+            { data: 'limite' },
         ],
         columnDefs: [
-          { 'width': '2rem', 'targets': [0] },
-          {
-            'targets': [0, 1, 2, 3, 4, 5],
-            'className': 'text-center'
-          }
+            { 'width': '2rem', 'targets': [0] },
+            {
+                'targets': [0, 1, 2, 3, 4, 5],
+                'className': 'text-center'
+            }
         ]
-      };
+    };
 
     /**
      * Criar a listas de competencias para cada possibilidade caso o calculo tenha mais de uma possibilidade
      * @param  {object} moeda
-     * @param  {Array} contribuicoes
-     * @param  {Array} listaConclusaoAcesso
+     * @param  {Array<object>} contribuicoes
+     * @param  {Array<object>} listaConclusaoAcesso
      * @param  {object} calculo
+     * @param  {boolean} pbcCompleto
+     * @param  {Array<object>} indicesSelecionado
      */
     public criarListasCompetenciasParaPossibilidades(
         moeda: object,
@@ -51,7 +53,7 @@ export class CalcularListaContribuicoes {
         listaConclusaoAcesso: Array<object>,
         calculo: object,
         pbcCompleto: boolean,
-        indicesSelecionado
+        indicesSelecionado: Array<object>
     ) {
 
         this.Moeda = moeda;
@@ -61,15 +63,9 @@ export class CalcularListaContribuicoes {
         this.pbcCompleto = pbcCompleto;
         this.indicesSelecionado = indicesSelecionado;
 
-        // console.log(moeda);
-        // console.log(contribuicoes);
-        // console.log(listaConclusaoAcesso);
-
         listaConclusaoAcesso.forEach(elementRegraEspecie => {
             this.verificarListaParaUmaRegraEspecie(elementRegraEspecie);
         });
-
-        // console.log(listaConclusaoAcesso);
 
         return listaConclusaoAcesso;
 
@@ -101,10 +97,6 @@ export class CalcularListaContribuicoes {
      */
     private criarListaContribPossibilidade(elementPossibilidade) {
 
-        // this.Moeda 
-        // 
-
-
         let line = {};
         const list = [];
         const list12 = [];
@@ -112,7 +104,7 @@ export class CalcularListaContribuicoes {
         let limiteString = '';
 
         const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-        // const moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
+        //this.moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
         this.dibCurrency = DefinicaoMoeda.loadCurrency(dib);
         const dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
         const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
@@ -177,63 +169,62 @@ export class CalcularListaContribuicoes {
      */
     private realizarDescarteContribuicoes(elementPossibilidade) {
 
-            // menor valor primeiro
-            elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
-                if (entry1.valor_primario > entry2.valor_primario) {
-                    return 1;
-                }
-                if (entry1.valor_primario < entry2.valor_primario) {
-                    return -1;
-                }
-                return 0;
-            });
+        // menor valor primeiro
+        elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
+            if (entry1.valor_primario > entry2.valor_primario) {
+                return 1;
+            }
+            if (entry1.valor_primario < entry2.valor_primario) {
+                return -1;
+            }
+            return 0;
+        });
 
-            let somaContribuicoes = 0;
-            const indexMax = (elementPossibilidade.listaCompetencias.length - elementPossibilidade.descarteContrib);
+        let somaContribuicoes = 0;
+        const indexMax = (elementPossibilidade.listaCompetencias.length - elementPossibilidade.descarteContrib);
 
-            // somar e sinalizar a contribuição descartada
-            elementPossibilidade.listaCompetencias.forEach((element, index) => {
+        // somar e sinalizar a contribuição descartada
+        elementPossibilidade.listaCompetencias.forEach((element, index) => {
 
-                if (index >= elementPossibilidade.descarteContrib) {
-                    somaContribuicoes += element.valor_primario;
-                } else {
-                    element.limite = 'DESCONSIDERADO';
-                }
+            if (index >= elementPossibilidade.descarteContrib) {
+                somaContribuicoes += element.valor_primario;
+            } else {
+                element.limite = 'DESCONSIDERADO';
+            }
 
-            });
+        });
 
-            elementPossibilidade.numeroCompetencias = indexMax;
-            elementPossibilidade.somaContribuicoes = somaContribuicoes;
-            elementPossibilidade.mediaDasContribuicoes = (somaContribuicoes / indexMax);
-            elementPossibilidade.mediaDasContribuicoesString = DefinicaoMoeda.formatMoney(elementPossibilidade.mediaDasContribuicoes,
-                                                                                            this.dibCurrency.acronimo);
-            
+        elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
+            if (entry1.id > entry2.id) {
+                return 1;
+            }
+            if (entry1.id < entry2.id) {
+                return -1;
+            }
+            return 0;
+        });
 
-            elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
-                if (entry1.id > entry2.id) {
-                    return 1;
-                }
-                if (entry1.id < entry2.id) {
-                    return -1;
-                }
-                return 0;
-            });
-
+        elementPossibilidade.numeroCompetencias = indexMax;
+        elementPossibilidade.somaContribuicoes = somaContribuicoes;
+        elementPossibilidade.mediaDasContribuicoes = (somaContribuicoes / indexMax);
+        elementPossibilidade.mediaDasContribuicoesString = DefinicaoMoeda.formatMoney(
+                                                                    elementPossibilidade.mediaDasContribuicoes,
+                                                                    this.dibCurrency.acronimo);
 
         return elementPossibilidade;
     }
 
-    
+
     /**
      * Modelar as informações para exibir no componente
      * @param  {} tableData
      */
-    private setTableOption(elementPossibilidade){
+    private setTableOption(elementPossibilidade) {
 
-          elementPossibilidade.listaCompetencias = this.tableOptions = {
-                                                    ...this.tableOptions,
-                                                    data: elementPossibilidade.listaCompetencias,
-                                                };
+        elementPossibilidade.listaCompetencias = this.tableOptions = {
+            ...this.tableOptions,
+            data: elementPossibilidade.listaCompetencias,
+        };
 
         return elementPossibilidade;
     }
@@ -288,7 +279,9 @@ export class CalcularListaContribuicoes {
      */
     private limitarTetosEMinimos(valor, data) {
         // se a data estiver no futuro deve ser utilizado os dados no mês atual
-        const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+        const moeda = data.isSameOrBefore(moment(), 'month') ?
+            this.Moeda.getByDate(data) :
+            this.Moeda.getByDate(moment());
 
         const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
         const tetoSalarial = (moeda) ? moeda.teto : 0;
@@ -304,8 +297,6 @@ export class CalcularListaContribuicoes {
         }
         return { valor: valorRetorno, aviso: avisoString };
     }
-
-
 
 
 

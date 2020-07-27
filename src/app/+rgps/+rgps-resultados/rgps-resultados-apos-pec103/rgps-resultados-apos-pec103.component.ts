@@ -14,8 +14,8 @@ import { RgpsResultadosComponent } from '../rgps-resultados.component';
 import * as moment from 'moment';
 
 import { RegrasAcesso } from './regrasAcesso/regras-acesso';
-import { RegrasAcessoConclusoes } from './conclusoes/regras-acesso-conclusoes';
 import { CalcularListaContribuicoes } from './calculoMedia/calcular-lista-contribuicoes';
+import { conclusoesFinais } from './conclusoes/conclusoes-finais';
 
 
 
@@ -25,8 +25,8 @@ import { CalcularListaContribuicoes } from './calculoMedia/calcular-lista-contri
   styleUrls: ['./rgps-resultados-apos-pec103.component.css'],
   providers: [
     RegrasAcesso,
-    RegrasAcessoConclusoes,
-    CalcularListaContribuicoes
+    CalcularListaContribuicoes,
+    conclusoesFinais
   ]
 })
 export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent implements OnInit {
@@ -46,7 +46,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public isRegraTransitoria = true;
   public primeiraDataTabela;
   public carenciaConformDataFiliacao;
+  public intervaloDeContribuicoes = 0;
 
+  public moedaDib;
   public expectativaSobrevida = { expectativa: 0, formula_expectativa_sobrevida: '' };
   public fatorPrevidenciario = { fatorPrevidenciario: 0, fatorPrevidenciarioFormula: '' };
   public divisorMinimo = 0;
@@ -73,9 +75,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService,
     private regrasAcesso: RegrasAcesso,
-    private regrasAcessoConclusoes: RegrasAcessoConclusoes,
-    private calcularListaContribuicoes: CalcularListaContribuicoes
-
+    private calcularListaContribuicoes: CalcularListaContribuicoes,
+    private conclusoesFinais: conclusoesFinais
   ) {
     super(null, route, null, null, null, null);
   }
@@ -209,10 +210,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.expectativaSobrevida.expectativa);
     // const numeroDeCarencias = this.calculo.carencia;
 
+    this.moedaDib = this.getMoedaDib();
+
     if (this.verificarRegrasIniciais(
       redutorProfessor,
       redutorSexo
     )) {
+
       this.listaConclusaoAcesso = this.regrasAcesso.getVerificacaoRegras(
         this.dataInicioBeneficio,
         this.dataFiliacao,
@@ -229,7 +233,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         redutorProfessor,
         redutorSexo,
         this.expectativaSobrevida,
-        this.fatorPrevidenciario
+        this.fatorPrevidenciario,
+        this.moedaDib
       );
 
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
@@ -245,12 +250,25 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo,
         this.pbcCompleto,
         this.getPbcCompletoIndices());
+
+
+      this.listaConclusaoAcesso = this.conclusoesFinais.createConclusoesFinais(
+        this.moedaDib,
+        this.listaConclusaoAcesso,
+        this.calculo,
+        this.pbcCompleto);
+
     }
+
 
     console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
   }
+
+
+
+
 
 
 
@@ -264,7 +282,22 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
 
+  private getMoedaDib() {
+    const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    const moedadib = dib.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(dib) : this.Moeda.getByDate(moment());
 
+    return {
+      teto: moedadib.teto,
+      tetoString: this.formatMoney(moedadib.teto, moedadib.sigla),
+      salario_minimo: moedadib.salario_minimo,
+      salario_minimoString: this.formatMoney(moedadib.salario_minimo, moedadib.sigla),
+      sigla: moedadib.sigla,
+    }
+  }
+
+  /**
+   * Contar o número de competencias onde existe contribuições
+   */
   private getMesesDeContribuicao() {
 
     if (this.listaValoresContribuidos.length <= 0) {
@@ -278,11 +311,14 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     let numeroContribuicoes = 0;
     this.listaValoresContribuidos.forEach(element => {
 
-      if (moment('1994-07-01').isSameOrBefore(element.data, 'month') && element.valor_primaria) {
+      if (this.primeiraDataTabela.isSameOrBefore(element.data, 'month') && element.valor_primaria) {
         numeroContribuicoes += 1;
       }
 
     });
+
+    // Set numero total de meses entre o inicio e fim das contribuições
+    this.intervaloDeContribuicoes = (this.dataInicioBeneficio.clone()).startOf('month').diff(this.primeiraDataTabela, 'month');
 
     return numeroContribuicoes;
 
@@ -293,10 +329,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
   }
 
-
   limitarTetosEMinimos(valor, data) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
-    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const moeda = data.isSameOrBefore(moment(), 'month') ?
+                                                        this.Moeda.getByDate(data) :
+                                                        this.Moeda.getByDate(moment());
 
     const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
     const tetoSalarial = (moeda) ? moeda.teto : 0;
@@ -326,11 +363,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
     fatorPrevidenciarioFormula = '((' + this.formatDecimal(tempoTotalContribuicao, 4) +
-                                  ' * ' + this.formatDecimal(aliquota, 2) + ') / ' +
-                                  this.formatDecimal(expectativa, 2) + ') * (1 + (' +
-                                  this.formatDecimal(this.idadeFracionada, 2) + ' + (' +
-                                  this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' +
-                                  this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
+      ' * ' + this.formatDecimal(aliquota, 2) + ') / ' +
+      this.formatDecimal(expectativa, 2) + ') * (1 + (' +
+      this.formatDecimal(this.idadeFracionada, 2) + ' + (' +
+      this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' +
+      this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
     return {
       fatorPrevidenciario: fatorPrevidenciario,
@@ -342,8 +379,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
   private procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
-    let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    let dataAgora = moment();
+    // let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    // let dataAgora = moment();
     let expectativaVida;
     if (idadeFracionada > 80) {
       idadeFracionada = 80;
@@ -359,11 +396,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
   private projetarExpectativa(idadeFracionada, dib) {
+
     let expectativa = 0;
     const dataInicio = moment('2000-11-30');
-    const dataFim = moment('2019-12-01');
+    const dataFim = moment((moment().year() - 1) + '-12-01');
     const dataHoje = moment();
-    let formula_expectativa_sobrevida;
+    let formula_expectativa_sobrevida = '';
 
     if (dib > dataHoje) {
       let anos = Math.abs(dataHoje.diff(dib, 'years', true));
@@ -394,9 +432,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       expectativa = 6;
     }
 
-    return { expectativa: expectativa, 
-            formula_expectativa_sobrevida: formula_expectativa_sobrevida 
-          };
+    return {
+      expectativa: expectativa,
+      formula_expectativa_sobrevida: formula_expectativa_sobrevida
+    };
   }
 
 

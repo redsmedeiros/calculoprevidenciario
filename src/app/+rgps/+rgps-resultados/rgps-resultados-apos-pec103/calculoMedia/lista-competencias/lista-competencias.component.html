@@ -1,3 +1,8 @@
+
+          <i
+          class="fa fa-gear fa-4x fa-spin txt-color-red center"
+          *ngIf="isUpdating"></i>
+
 <article *ngIf="!isUpdating">
   
   <div class="row">
@@ -15,9 +20,6 @@
             <accordion-group [isOpen]="false" #group1>
               <h4 class="panel-title" accordion-heading>
                 <a>
-                  <!-- <i class="pull-right fa fa-lg"
-                                        [ngClass]="{'fa-angle-down': group1?.isOpen,
-                                        'fa-angle-up': !group1?.isOpen}"></i> -->
                                         <strong>Calculo considerando {{ calculoPossivel.numeroCompetencias }} contribuições com a média de 
                                           {{calculoPossivel.mediaDasContribuicoesString}}</strong>
                                         <i
