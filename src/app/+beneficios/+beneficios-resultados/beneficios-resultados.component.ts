@@ -627,9 +627,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
 
-
-
-
         if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
           beneficioRecebidoAbono = 0.0;
         } else {
@@ -1076,8 +1073,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-
-    this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
+   this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
@@ -1100,7 +1096,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+  
+
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') || 
+    dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') || 
+    dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioDevido /= 1000;
       this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
@@ -1131,7 +1131,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tetoDevidos = parseFloat(moedaDataCorrente.teto);
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-        tetoDevidos = 1200.0;
+        tetoDevidos = 1200.00;
         if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
           beneficioDevido = this.beneficioDevidoAposRevisaoTetos;
         } else {
@@ -1139,7 +1139,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
       }
       if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-        tetoDevidos = 2400.0;
+        tetoDevidos = 2400.00;
         if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
           beneficioDevido = this.beneficioDevidoAposRevisaoTetos;
         } else {
@@ -1150,6 +1150,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     line.beneficio_devido_sem_limites = this.formatMoney(beneficioDevido);
 
+    if(this.isTetos){ // qaundo o tipo é AJ 28/07/2020
+      this.beneficioDevidoTetosSemLimite = beneficioDevido;
+    }
+    
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = 0;
     if (this.isTetos) {
@@ -1383,6 +1387,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
+
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
     if (this.isTetos) {
@@ -2668,9 +2673,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
     //dataFinal é a data_calculo_pedido acrescido de um mês
 
-
-
-
     if (this.calculo.data_prevista_cessacao != '0000-00-00')
       this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
     if (this.calculo.data_cessacao != '0000-00-00')
@@ -2762,10 +2764,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         return salMinimo;
       }
     }
-    if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+
+    
+    // && dib >= this.dataInicioBuracoNegro removido 28/07/2020 - DR. Sergio
+    if (valorBeneficio >= tetoSalarial  && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
     }
+
     return valorBeneficio;
   }
 
@@ -2804,7 +2810,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if (valorBeneficio >= tetoSalarial && dib >= this.dataInicioBuracoNegro && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+    // removido && dib >= this.dataInicioBuracoNegro  removido 28/07/2020 - DR. Sergio
+    if (valorBeneficio >= tetoSalarial  && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
     }
