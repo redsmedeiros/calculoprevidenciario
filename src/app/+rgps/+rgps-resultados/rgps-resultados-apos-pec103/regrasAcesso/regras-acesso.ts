@@ -37,13 +37,8 @@ export class RegrasAcesso {
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
 
         listaConclusaoAcesso.forEach((elementTipo, indice) => {
-            // console.log(elementTipo);
-            // console.log(indice);
-
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
         })
-
-        //  console.log(listaConclusaoAcesso);
 
         return listaConclusaoAcesso;
     }
@@ -120,8 +115,6 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-            // console.log(this.numeroDeContribuicoes);
-            // console.log(this.numeroDeContribuicoes -  this.carenciaConformDataFiliacao);
             const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
 
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
@@ -450,7 +443,7 @@ export class RegrasAcesso {
                 // this.atualizarCalculoMelhorRMIRegrasTransicao();
 
                 this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
-                this.RegrasAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
+                this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.regraAcessoPedagio100(
                     sexo,
                     this.contribuicaoTotal,
@@ -482,7 +475,7 @@ export class RegrasAcesso {
             //   this.atualizarCalculoMelhorRMIRegrasTransicao();
 
             this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
-            this.RegrasAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
+            this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
             this.regraAcessoPedagio100(
                 sexo,
                 this.contribuicaoTotal,
@@ -617,7 +610,7 @@ export class RegrasAcesso {
     }
 
 
-    public RegrasAcessoIdadeProgressiva
+    public regraAcessoIdadeProgressiva
         (
             idade,
             ano,

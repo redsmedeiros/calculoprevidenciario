@@ -50,7 +50,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   public moedaDib;
   public expectativaSobrevida = { expectativa: 0, formula_expectativa_sobrevida: '' };
-  public fatorPrevidenciario = { fatorPrevidenciario: 0, fatorPrevidenciarioFormula: '' };
+  public fatorPrevidenciario = { fatorPrevidenciarioValue: 0, fatorPrevidenciarioFormula: '' };
   public divisorMinimo = 0;
   public isDivisorMinimo = true;
   public msgDivisorMinimo = '';
@@ -255,6 +255,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.listaConclusaoAcesso = this.conclusoesFinais.createConclusoesFinais(
         this.moedaDib,
         this.listaConclusaoAcesso,
+        this.segurado,
         this.calculo,
         this.pbcCompleto);
 
@@ -370,7 +371,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
     return {
-      fatorPrevidenciario: fatorPrevidenciario,
+      fatorPrevidenciarioValue: fatorPrevidenciario,
       fatorPrevidenciarioFormula: fatorPrevidenciarioFormula
     };
   }
