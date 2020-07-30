@@ -371,7 +371,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
   dataNascimento() {
-    this.segurado.data_nascimento;
+
     let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     this.segurado.idade = moment().diff(idadeSegurado, 'years');
 
@@ -695,8 +695,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           line = {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
-            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
+            beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
             diferenca_corrigida: '0',
             diferenca_mensal: 'Prescrita',
             juros: '0',
@@ -708,9 +708,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           line = {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono),
-            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono),
-            diferenca_corrigida: this.formatMoney(diferencaCorrigida, 'R$', true),
+            beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
+            diferenca_corrigida: this.formatMoney(diferencaCorrigida, siglaDataCorrente, true),
             diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
             juros: this.formatPercent(juros, 4),
             valor_juros: this.formatMoney(valorJuros, 'R$', true),
@@ -1109,6 +1109,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     line.beneficio_devido_apos_revisao_sem_limites = this.formatMoney(this.beneficioDevidoAposRevisao);
+    
 
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     // taxa_ajuste_maxima_esperada definida no CRUD
@@ -1275,17 +1276,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-
     if (dataCorrente > this.dataInicioRecebidos) {
       beneficioRecebido = this.ultimoBeneficioRecebidoAntesProporcionalidade;
-    }
-    else {
+    } else {
       beneficioRecebido = rmiRecebidos;
       this.beneficioRecebidoOs = beneficioRecebido;
     }
 
 
-    if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro && !this.isTetos) {
+   // removido DR. Sergio 30/07/2020 (&& !this.isTetos)
+    if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro ) {
       beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
       if (this.aplicarReajusteUltimoRecebido) {
         beneficioRecebido = this.beneficioRecebidoAnterior;
@@ -1301,14 +1301,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
     }
-
+ 
     if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
     } else if (this.calculo.tipo_aposentadoria_recebida != '12' && this.calculo.tipo_aposentadoria_recebida != '17') {
 
       beneficioRecebido *= reajusteObj.reajuste;
 
-
+      
       //    regra proporcional 08/2006
       if (
         moment(this.dataInicioRecebidos).isBefore('2006-03-31') &&
@@ -1352,6 +1352,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     line.beneficio_recebido_apos_revisao_sem_limites = this.formatMoney(this.beneficioRecebidoAposRevisaoTetos);
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    
+
 
     if (this.calculo.taxa_ajuste_maxima_concedida != undefined && this.calculo.taxa_ajuste_maxima_concedida > 1) {
       if (this.dataComecoLei8870 <= dataPedidoBeneficio &&
@@ -1370,7 +1372,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (chkBeneficioNaoConcedido) {
       beneficioRecebido = 0;
     }
-
+   
     let tetoRecebidos = moedaDataCorrente.teto;
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
@@ -1387,6 +1389,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
+    
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
