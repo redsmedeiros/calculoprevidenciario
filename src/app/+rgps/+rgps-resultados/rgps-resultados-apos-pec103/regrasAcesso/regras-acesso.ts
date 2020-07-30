@@ -202,17 +202,13 @@ export class RegrasAcesso {
                 descarteContrib: Math.floor(i * 12),
                 listaCompetencias: [],
                 lista12Competencias: [],
-                mediaDasContribuicoes: 0,
-                mediaDasContribuicoesString: '',
-                somaContribuicoes: 0,
+                mediaDasContribuicoes: {},
+                somaContribuicoes: {},
                 numeroCompetencias: 0,
                 salarioBeneficio: 0,
                 irt: 0,
                 rmi: 0,
-                formulaFator: '',
                 fator: 0,
-                percentual: 0,
-                percentual_formula: ''
             });
 
         }

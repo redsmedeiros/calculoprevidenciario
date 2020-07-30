@@ -205,11 +205,21 @@ export class CalcularListaContribuicoes {
         });
 
         elementPossibilidade.numeroCompetencias = indexMax;
-        elementPossibilidade.somaContribuicoes = somaContribuicoes;
-        elementPossibilidade.mediaDasContribuicoes = (somaContribuicoes / indexMax);
-        elementPossibilidade.mediaDasContribuicoesString = DefinicaoMoeda.formatMoney(
-                                                                    elementPossibilidade.mediaDasContribuicoes,
-                                                                    this.dibCurrency.acronimo);
+
+        elementPossibilidade.somaContribuicoes = {
+            value: somaContribuicoes,
+            valueString: DefinicaoMoeda.formatMoney(
+                somaContribuicoes,
+                this.dibCurrency.acronimo)
+        };
+
+        const mediaDasContribuicoes = (somaContribuicoes / indexMax);
+        elementPossibilidade.mediaDasContribuicoes = {
+            value: mediaDasContribuicoes,
+            valueString: DefinicaoMoeda.formatMoney(
+                mediaDasContribuicoes,
+                this.dibCurrency.acronimo)
+        };
 
         return elementPossibilidade;
     }
