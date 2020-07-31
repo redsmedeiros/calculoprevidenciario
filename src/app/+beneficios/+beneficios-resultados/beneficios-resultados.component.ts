@@ -619,9 +619,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       //  console.log(this.calculo.tipo_aposentadoria_recebida);
       //  console.log(this.calculo.tipo_aposentadoria);
       if ((dataCorrente.month() === 11 && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
-            || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
-                 && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
-        ) {
+        || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
+          && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
+      ) {
 
 
         let beneficioRecebidoAbono;
@@ -954,8 +954,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.primeiroReajusteRecebidos = 1;
     }
 
-    if (dataCorrente == moment(this.calculo.data_pedido_beneficio) 
-    && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
+    if (dataCorrente == moment(this.calculo.data_pedido_beneficio)
+      && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
       reajuste = 1;
     }
 
@@ -992,7 +992,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'year')
-    && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio, 'year')) {
+      && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio, 'year')) {
 
       reajuste = 1;
 
@@ -1073,7 +1073,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-   this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
+    this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
@@ -1096,11 +1096,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-  
 
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') || 
-    dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') || 
-    dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioDevido /= 1000;
       this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
@@ -1109,7 +1109,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     line.beneficio_devido_apos_revisao_sem_limites = this.formatMoney(this.beneficioDevidoAposRevisao);
-    
+
 
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     // taxa_ajuste_maxima_esperada definida no CRUD
@@ -1151,10 +1151,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     line.beneficio_devido_sem_limites = this.formatMoney(beneficioDevido);
 
-    if(this.isTetos){ // qaundo o tipo é AJ 28/07/2020
+    if (this.isTetos) { // qaundo o tipo é AJ 28/07/2020
       this.beneficioDevidoTetosSemLimite = beneficioDevido;
     }
-    
+
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = 0;
     if (this.isTetos) {
@@ -1194,15 +1194,24 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (dataCorrente.isSame(this.dataFinal, 'month')
       && (this.dataCessacaoDevido == null || this.dataFinal.isSame(this.dataCessacaoDevido))) {
 
+      let diasConsiderados = this.dataFinal.date();
+      if ((this.dataFinal.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
+        diasConsiderados = 30;
+      }
+
       // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
-      let proporcionalidade = ((this.dataFinal.date() >= 30) ? 30 : this.dataFinal.date()) / 30;
+      let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
 
-      //let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
-      let proporcionalidade = ((this.dataCessacaoDevido.date() >= 30) ? 30 : this.dataCessacaoDevido.date()) / 30;
+      let diasConsiderados = this.dataCessacaoDevido.date();
+      if ((this.dataCessacaoDevido.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
+        diasConsiderados = 30;
+      }
+      // let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
+      let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioDevidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
@@ -1284,8 +1293,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-   // removido DR. Sergio 30/07/2020 (&& !this.isTetos)
-    if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro ) {
+    // removido DR. Sergio 30/07/2020 (&& !this.isTetos)
+    if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro) {
       beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
       if (this.aplicarReajusteUltimoRecebido) {
         beneficioRecebido = this.beneficioRecebidoAnterior;
@@ -1301,14 +1310,14 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
     }
- 
+
     if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
     } else if (this.calculo.tipo_aposentadoria_recebida != '12' && this.calculo.tipo_aposentadoria_recebida != '17') {
 
       beneficioRecebido *= reajusteObj.reajuste;
 
-      
+
       //    regra proporcional 08/2006
       if (
         moment(this.dataInicioRecebidos).isBefore('2006-03-31') &&
@@ -1352,7 +1361,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     line.beneficio_recebido_apos_revisao_sem_limites = this.formatMoney(this.beneficioRecebidoAposRevisaoTetos);
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    
+
 
 
     if (this.calculo.taxa_ajuste_maxima_concedida != undefined && this.calculo.taxa_ajuste_maxima_concedida > 1) {
@@ -1372,7 +1381,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (chkBeneficioNaoConcedido) {
       beneficioRecebido = 0;
     }
-   
+
     let tetoRecebidos = moedaDataCorrente.teto;
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
@@ -1389,7 +1398,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
-    
+
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
@@ -1414,15 +1423,25 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (dataCorrente.isSame(this.dataFinal, 'month') && this.dataCessacaoRecebido == null) {
       // 03/07/2020 || this.dataFinal.isSame(this.dataCessacaoRecebido)
 
+      let diasConsiderados = this.dataFinal.date();
+      if ((this.dataFinal.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
+        diasConsiderados = 30;
+      }
+
       // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
-      let proporcionalidade = ((this.dataFinal.date() >= 30) ? 30 : this.dataFinal.date()) / 30;
+      let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
     } else if (this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')) {
 
+      let diasConsiderados = this.dataCessacaoRecebido.date();
+      if ((this.dataCessacaoRecebido.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
+        diasConsiderados = 30;
+      }
+
       // let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
-      let proporcionalidade = ((this.dataCessacaoRecebido.date() >= 30) ? 30 : this.dataCessacaoRecebido.date()) / 30;
+      let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioRecebidoFinal *= proporcionalidade;
       this.proporcionalidadeUltimaLinha = true;
 
@@ -2768,9 +2787,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    
+
     // && dib >= this.dataInicioBuracoNegro removido 28/07/2020 - DR. Sergio
-    if (valorBeneficio >= tetoSalarial  && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+    if (valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
     }
@@ -2814,7 +2833,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     // removido && dib >= this.dataInicioBuracoNegro  removido 28/07/2020 - DR. Sergio
-    if (valorBeneficio >= tetoSalarial  && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+    if (valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
     }
@@ -3152,8 +3171,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     const dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     const valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
     let valoresRecebdios = '';
-    if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined' 
-                && document.getElementById('printableValoresRecebidos') != null) {
+    if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined'
+      && document.getElementById('printableValoresRecebidos') != null) {
       valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
     }
     const honorarios = document.getElementById('printableHonorarios').innerHTML;
@@ -3164,12 +3183,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     const printableRRA = document.getElementById('printableRRA').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo +
-                        valoresDevidos + valoresRecebdios
-                        + correcao + juros + honorarios
-                        + resultadoCalculo + printableRRA + conclusoes;
+      valoresDevidos + valoresRecebdios
+      + correcao + juros + honorarios
+      + resultadoCalculo + printableRRA + conclusoes;
 
     printContents = printContents.replace(/<table/g,
-         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
     const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
                       <img src="assets/img/logo-IEPREV.png" 
@@ -3180,8 +3199,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     popupWin.document.write('<html><head>' + css + '<title> Benefícios Atrasados - '
-                            + this.segurado.nome + '</title></head><body onload="window.print()">'
-                            + printContents + '<br>' + rodape + '</body></html>');
+      + this.segurado.nome + '</title></head><body onload="window.print()">'
+      + printContents + '<br>' + rodape + '</body></html>');
     popupWin.document.close();
   }
 
