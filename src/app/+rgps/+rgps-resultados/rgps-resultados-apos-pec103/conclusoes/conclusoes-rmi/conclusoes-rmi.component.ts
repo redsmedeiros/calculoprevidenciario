@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-conclusoes-rmi',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConclusoesRmiComponent implements OnInit {
 
+
+  @Input() conclusoes;
+  @Input() regraLabel;
+  @Input() isUpdating;
+
   constructor() { }
 
   ngOnInit() {
+
+    // console.log(this.conclusoes);
+
   }
 
 }

@@ -92,7 +92,7 @@ export class conclusoesFinais {
         let slBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            slBeneficio *= elementRegraEspecie.fatorPrevidenciario.fatorPrevidenciarioValue;
+            slBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
         }
 
         slBeneficio = this.limitarTetosEMinimos(slBeneficio)
@@ -110,11 +110,12 @@ export class conclusoesFinais {
         let irtBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            irtBeneficio *= elementRegraEspecie.fatorPrevidenciario.fatorPrevidenciarioValue;
+
+            irtBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
         }
 
         irtBeneficio /= elementPossibilidade.salarioBeneficio.value;
-        elementPossibilidade.irt = irtBeneficio;
+        elementPossibilidade.irt = {value: irtBeneficio , valueString: irtBeneficio.toFixed(4)};
 
     }
 
@@ -161,8 +162,6 @@ export class conclusoesFinais {
     }
 
 
-
-
     private setConclusao(
         order: number,
         label: string,
@@ -179,11 +178,20 @@ export class conclusoesFinais {
 
         const listC = []
 
-        listC.push(this.setConclusao(0, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+        if (elementRegraEspecie.regra === 'pedagio50') {
+            listC.push(this.setConclusao(0, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+        }
+
         listC.push(this.setConclusao(1, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
         listC.push(this.setConclusao(2, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
         listC.push(this.setConclusao(3, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
-        listC.push(this.setConclusao(4, 'Índice de Reajuste Teto', elementPossibilidade.irt));
+
+
+        if (elementPossibilidade.irt > 1) {
+            listC.push(this.setConclusao(4, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
+        }
+
+
         listC.push(this.setConclusao(5, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
         listC.push(this.setConclusao(6, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
 
@@ -205,7 +213,6 @@ export class conclusoesFinais {
 
 
     // define aliquotas por espepecie - inicio
-
     private defineAliquotaIdade(elementPossibilidade) {
 
         const tempoParaPercentual = {

@@ -104,7 +104,7 @@ export class CalcularListaContribuicoes {
         let limiteString = '';
 
         const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-        //this.moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
+        // this.moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
         this.dibCurrency = DefinicaoMoeda.loadCurrency(dib);
         const dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
         const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
@@ -116,7 +116,8 @@ export class CalcularListaContribuicoes {
             const moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ?
                 this.Moeda.getByDate(dataContribuicao) : undefined;
             const currency = DefinicaoMoeda.loadCurrency(dataContribuicao);
-            const contribuicaoPrimariaString = DefinicaoMoeda.formatMoney(contribuicaoPrimaria, currency.acronimo);
+
+
             const fatorObj = this.getFatorparaRMI(moedaContribuicao, moedaComparacao);
             const fatorCorrigido = (moedaContribuicao) ? (fatorObj.fator / fatorObj.fatorLimite) : 1;
             const fatorCorrigidoString = DefinicaoMoeda.formatDecimal(fatorCorrigido, 6);
@@ -130,9 +131,14 @@ export class CalcularListaContribuicoes {
                 const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
                 contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
                 limiteString = valorAjustadoObj.aviso;
+
+
             }
 
             // contribuição
+            const contribuicaoPrimariaString = DefinicaoMoeda.formatMoney(contribuicaoPrimariaRevisada, currency.acronimo);
+
+            // contribuição com indice de correção
             contribuicaoPrimariaRevisada = (contribuicaoPrimariaRevisada * fatorCorrigido);
             contribuicaoPrimariaRevisada = DefinicaoMoeda.convertCurrency(contribuicaoPrimariaRevisada, dataContribuicao, dib);
             const contribuicaoPrimariaRevisadaString = DefinicaoMoeda.formatMoney(contribuicaoPrimariaRevisada, this.dibCurrency.acronimo);

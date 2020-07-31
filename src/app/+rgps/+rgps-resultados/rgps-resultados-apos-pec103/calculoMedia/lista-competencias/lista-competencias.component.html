@@ -20,11 +20,10 @@
               <h4 class="panel-title" accordion-heading>
                 <a>
                   <strong
-                    >Calculo considerando
-                    {{ calculoPossivel.numeroCompetencias }} contribuições com a
-                    média de
+                    >Cálculo com
+                    {{ calculoPossivel.numeroCompetencias }} salários de contribuição - RMI
                     {{
-                      calculoPossivel.mediaDasContribuicoes.valueString
+                      calculoPossivel.rmi.valueString
                     }}</strong
                   >
                   <i
@@ -79,34 +78,11 @@
 
                 <!-- conclusoes genericas -->
                 <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
-                  <table
-                    class="table table-bordered table-hover no-padding"
-                    *ngIf="!isUpdating"
-                  >
-                    <thead>
-                      <tr>
-                        <th>
-                          <span class="pull-right">Tipo</span>
-                        </th>
-                        <th>
-                          Descrição
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="let conclusao of conclusoes"
-                        class="{{ conclusao.class }}"
-                      >
-                        <td width="50%">
-                          <span class="pull-right font-bold">{{
-                            conclusao.string
-                          }}</span>
-                        </td>
-                        <td>{{ conclusao.value }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <app-conclusoes-rmi
+                    [conclusoes]="calculoPossivel.conclusoes"
+                    [regraLabel]="calculoPorRegra.label"
+                    [isUpdating]="isUpdating"
+                  ></app-conclusoes-rmi>
                 </div>
               </div>
             </accordion-group>

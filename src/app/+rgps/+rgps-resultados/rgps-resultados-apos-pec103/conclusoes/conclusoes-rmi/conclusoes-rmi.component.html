@@ -1,3 +1,29 @@
-<p>
-  conclusoes-rmi works!
-</p>
+<table
+class="table table-bordered table-hover no-padding"
+*ngIf="!isUpdating"
+>
+<thead>
+  <tr>
+    <th colspan="2">
+      <span >{{regraLabel}}</span>
+    </th>
+  </tr>
+  <tr>
+    <th>
+      <span class="pull-right">Tipo</span>
+    </th>
+    <th>
+      Descrição
+    </th>
+  </tr>
+</thead>
+<tbody>
+  <tr
+    *ngFor="let conclusao of conclusoes"
+    class="{{ conclusao.class }}"
+  >
+    <td width="50%"> <span class="pull-right font-bold">{{ conclusao.label }}</span> </td>
+    <td>{{ conclusao.valueString }}</td>
+  </tr>
+</tbody>
+</table>

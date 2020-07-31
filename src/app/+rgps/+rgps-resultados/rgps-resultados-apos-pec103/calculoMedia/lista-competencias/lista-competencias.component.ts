@@ -9,6 +9,7 @@ export class ListaCompetenciasComponent implements OnInit {
 
 
   @Input() listaConclusaoAcesso;
+  @Input() isUpdating;
 
   constructor() { }
 
