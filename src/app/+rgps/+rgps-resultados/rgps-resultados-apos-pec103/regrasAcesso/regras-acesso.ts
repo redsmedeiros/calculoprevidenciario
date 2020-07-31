@@ -209,6 +209,8 @@ export class RegrasAcesso {
                 irt: 0,
                 rmi: 0,
                 fator: 0,
+                moeda: {},
+                conclusoes: []
             });
 
         }
