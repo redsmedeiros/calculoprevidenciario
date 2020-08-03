@@ -104,19 +104,21 @@ export class CalcularListaContribuicoes {
         let limiteString = '';
 
         const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-        // this.moedaDib = this.Moeda.getByDate(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'));
         this.dibCurrency = DefinicaoMoeda.loadCurrency(dib);
         const dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
         const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
         this.contribuicoes.forEach((contribuicao, index) => {
 
-            const contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
+            let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
+            const contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
+
+            contribuicaoPrimaria += contribuicaoSecundaria;
+
             const dataContribuicao = moment(contribuicao.data);
             const moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ?
                 this.Moeda.getByDate(dataContribuicao) : undefined;
             const currency = DefinicaoMoeda.loadCurrency(dataContribuicao);
-
 
             const fatorObj = this.getFatorparaRMI(moedaContribuicao, moedaComparacao);
             const fatorCorrigido = (moedaContribuicao) ? (fatorObj.fator / fatorObj.fatorLimite) : 1;
@@ -131,7 +133,6 @@ export class CalcularListaContribuicoes {
                 const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
                 contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
                 limiteString = valorAjustadoObj.aviso;
-
 
             }
 
