@@ -21,6 +21,19 @@
             }"
           ></i>&nbsp;&nbsp;
           </button>
+
+          <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
+          type="submit"
+          (click)="imprimirBox(boxId)"
+          >
+            &nbsp;&nbsp; <i
+            *ngIf="!isUpdating"
+            class=" fa fa-print pull-left fa fa-lg p-1"
+          ></i>
+            Imprimir
+           &nbsp;&nbsp;
+          </button>
+        
           </a>
 	    </h4>
 	    <div class="no-padding no-margin">
@@ -116,6 +129,8 @@
           </div>
          <app-lista-competencias
             [listaConclusaoAcesso]="listaConclusaoAcesso"
+            [isUpdating]="isUpdating"
+            [isRegrasTransicao]="isRegrasTransicao"
          ></app-lista-competencias>
         </div>
       </div>

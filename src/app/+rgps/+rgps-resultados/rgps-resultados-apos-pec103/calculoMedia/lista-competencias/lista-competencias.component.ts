@@ -10,9 +10,14 @@ export class ListaCompetenciasComponent implements OnInit {
 
   @Input() listaConclusaoAcesso;
   @Input() isUpdating;
+  @Input() isRegrasTransicao;
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+   
+
+  }
 
 }

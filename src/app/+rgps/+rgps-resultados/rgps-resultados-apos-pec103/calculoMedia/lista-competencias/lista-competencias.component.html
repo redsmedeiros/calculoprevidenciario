@@ -4,7 +4,24 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div *ngFor="let calculoPorRegra of listaConclusaoAcesso">
-        <!-- <span>{{ calculoPorRegra.label }}</span> -->
+        <sa-widget *ngIf="isRegrasTransicao" class="no-padding no-margin"
+          [colorbutton]="false"
+          [editbutton]="false"
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-gear"></i>
+            </span>
+            <h2>{{ calculoPorRegra.label }}</h2>
+          </header>
+          <!-- <div class="widget-body" style="min-height: auto;"></div> -->
+        </sa-widget>
         <accordion
           class="smart-accordion-default panel-group"
           [closeOthers]="true"
@@ -15,16 +32,14 @@
               let i = index
             "
           >
-            <!-- <span>{{ calculoPossivel.descarteContrib}}</span> -->
             <accordion-group [isOpen]="false" #group1>
               <h4 class="panel-title" accordion-heading>
                 <a>
                   <strong
                     >Cálculo com
-                    {{ calculoPossivel.numeroCompetencias }} salários de contribuição - RMI
-                    {{
-                      calculoPossivel.rmi.valueString
-                    }}</strong
+                    {{ calculoPossivel.numeroCompetencias }} salários de
+                    contribuição - RMI
+                    {{ calculoPossivel.rmi.valueString }}</strong
                   >
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
@@ -32,7 +47,7 @@
                   ></i>
                   <button
                     *ngIf="!isUpdating"
-                    class="btn btn-primary pull-right btn-xs"
+                    class="btn btn-primary pull-right btn-xs not-print"
                     type="button"
                   >
                     &nbsp;&nbsp;

@@ -44,6 +44,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public nenhumaContrib = false;
   public contribuicaoPrimaria = { anos: 0, meses: 0, dias: 0 };
   public isRegraTransitoria = true;
+  public isRegrasTransicao = false;
   public primeiraDataTabela;
   public carenciaConformDataFiliacao;
   public intervaloDeContribuicoes = 0;
@@ -103,8 +104,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
+    this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
     this.msgDivisorMinimo = '';
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
+
+
+  
 
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 

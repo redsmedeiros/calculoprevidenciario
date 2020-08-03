@@ -110,6 +110,7 @@ export class conclusoesFinais {
         let irtBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
+            console.log(elementRegraEspecie.fatorPrevidenciario);
 
             irtBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
         }
@@ -154,7 +155,7 @@ export class conclusoesFinais {
         let rmi = elementPossibilidade.salarioBeneficio.value * (elementPossibilidade.aliquota.value / 100);
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            rmi = elementPossibilidade.salarioBeneficio.value * elementPossibilidade.aliquota.value;
+            rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
         }
 
         elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
@@ -254,9 +255,9 @@ export class conclusoesFinais {
 
     private defineAliquotaPedagio50(elementPossibilidade, elementRegraEspecie) {
 
-        const aliquota = elementRegraEspecie.fatorPrevidenciario.value;
+        const aliquota = 100;
         const formula = '100% média salarial aplicando o Fator previdenciario';
-        const valueString = aliquota.toFixed(4);
+        const valueString = aliquota + '%'
 
         return this.setAliquota(
             aliquota,
@@ -269,7 +270,7 @@ export class conclusoesFinais {
 
         const aliquota = 100;
         const formula = '100% média salarial aplicando o Fator previdenciario';
-        const valueString = aliquota.toFixed(0);
+        const valueString = aliquota + '%'
 
         return this.setAliquota(
             aliquota,
