@@ -272,6 +272,9 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
 
+      contribuicaoPrimaria += contribuicaoSecundaria;
+      contribuicaoSecundaria = 0;
+
       let idString = contadorPrimario + 1; //tabela['id'] = contadorPrimario;
       contadorPrimario++;
       let dataContribuicaoString = dataContribuicao.format('MM/YYYY');//tabela['dataContribuicao'] = contribuicao.dataContribuicao;

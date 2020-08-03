@@ -230,11 +230,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
 
-      let idString = contadorPrimario + 1; //tabela['id'] = contadorPrimario;
+      if (this.dataInicioBeneficioExport.isAfter('2019-06-18')) {
+        contribuicaoPrimaria += contribuicaoSecundaria;
+        contribuicaoSecundaria = 0;
+      }
+
+
+      let idString = contadorPrimario + 1; // tabela['id'] = contadorPrimario;
       contadorPrimario++;
-      let dataContribuicaoString = dataContribuicao.format('MM/YYYY');//tabela['dataContribuicao'] = contribuicao.dataContribuicao;
-      let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); //tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
-      let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
+      let dataContribuicaoString = dataContribuicao.format('MM/YYYY'); // tabela['dataContribuicao'] = contribuicao.dataContribuicao;
+      let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); // tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
+      let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); // tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
 
       let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
 
