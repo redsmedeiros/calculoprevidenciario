@@ -4,7 +4,8 @@
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div *ngFor="let calculoPorRegra of listaConclusaoAcesso">
-        <sa-widget *ngIf="isRegrasTransicao" class="no-padding no-margin"
+        
+        <sa-widget *ngIf="isRegrasTransicao && calculoPorRegra.calculosPossiveis.length > 0" class="no-padding no-margin"
           [colorbutton]="false"
           [editbutton]="false"
           [colorbutton]="false"

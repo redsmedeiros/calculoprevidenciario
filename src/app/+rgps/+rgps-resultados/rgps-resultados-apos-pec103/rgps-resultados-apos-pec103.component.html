@@ -24,7 +24,7 @@
 
           <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
           type="submit"
-          (click)="imprimirBox(boxId)"
+          (click)="imprimirBox($event, boxId)"
           >
             &nbsp;&nbsp; <i
             *ngIf="!isUpdating"
@@ -267,7 +267,7 @@
               <td>
                 <button
                   type="submit"
-                  (click)="imprimirBox(boxId)"
+                  (click)="imprimirBox($event, boxId)"
                   class="btn btn-labeled btn-primary pull-right"
                 >
                   <span class="btn-label">

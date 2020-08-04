@@ -1124,16 +1124,22 @@ export class RgpsResultadosComponent implements OnInit {
 
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
-    printContents = printContents.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    printContents = printContents.replace(/<table/g,
+      `<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"`);
     const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG</p></footer>';
     const popupWin = window.open('', '_blank', 'width=300,height=300');
+
     popupWin.document.open();
-    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + 
+    '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome +
+    '</title></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
+
     popupWin.document.close();
   }
 
-  imprimirBox(boxId) {
-
+  imprimirBox(event, boxId) {
+    event​.stopPropagation();
     const css = `
     <style>
           body{font-family: Arial, Helvetica, sans-serif;}
@@ -1150,9 +1156,16 @@ export class RgpsResultadosComponent implements OnInit {
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
     const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG</p></footer>';
-    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
-    printableString = printableString.replace(/<table/g, '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    let printableString = '<html><head>' + css 
+    + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
+    + this.segurado.nome + '</title></head><body onload="window.print()">' 
+    + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
+ 
+    printableString = printableString.replace(/<table/g,
+      `<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"`);
     const popupWin = window.open('', '_blank', 'width=300,height=300');
+    
     popupWin.document.open();
     popupWin.document.write(printableString);
     popupWin.document.close();

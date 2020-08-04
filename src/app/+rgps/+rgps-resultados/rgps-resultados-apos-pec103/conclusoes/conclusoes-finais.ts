@@ -110,8 +110,6 @@ export class conclusoesFinais {
         let irtBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            console.log(elementRegraEspecie.fatorPrevidenciario);
-
             irtBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
         }
 
