@@ -224,13 +224,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let primeirasContribuicoes = [];
     let tabelaIndex = 0;
     let tableData = []
+    
     for (let contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
       let contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
 
-      if (this.dataInicioBeneficioExport.isAfter('2019-06-18')) {
+      if (this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')) {
         contribuicaoPrimaria += contribuicaoSecundaria;
         contribuicaoSecundaria = 0;
       }
