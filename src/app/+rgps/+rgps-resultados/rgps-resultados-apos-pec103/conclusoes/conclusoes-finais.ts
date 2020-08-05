@@ -58,6 +58,8 @@ export class conclusoesFinais {
                 this.calcularConclusaoPossibilidade(elementPossibilidade, elementRegraEspecie);
 
             });
+
+            this.aplicarDestaqueMelhorValor(elementRegraEspecie);
         }
 
         return elementRegraEspecie;
@@ -76,7 +78,7 @@ export class conclusoesFinais {
         this.calcularAliquotaBeneficio(elementPossibilidade, elementRegraEspecie);
         this.calcularRMIBeneficio(elementPossibilidade, elementRegraEspecie);
         this.gerarListaConlusões(elementPossibilidade, elementRegraEspecie);
-
+        
 
         return elementPossibilidade;
     }
@@ -114,7 +116,7 @@ export class conclusoesFinais {
         }
 
         irtBeneficio /= elementPossibilidade.salarioBeneficio.value;
-        elementPossibilidade.irt = {value: irtBeneficio , valueString: irtBeneficio.toFixed(4)};
+        elementPossibilidade.irt = { value: irtBeneficio, valueString: irtBeneficio.toFixed(4) };
 
     }
 
@@ -131,7 +133,7 @@ export class conclusoesFinais {
             especial: this.defineAliquotaAposentadoriaEspecial,
             acidente: this.defineAliquotaAuxilioAcidente,
             doenca: this.defineAliquotaAuxilioDoenca,
-            deficiente: this.defineAliquotaEspecialDeficiente,
+            deficiente: this.defineAliquotaDeficiente,
             incapacidade: this.defineAliquotaIncapacidade,
         };
 
@@ -147,7 +149,11 @@ export class conclusoesFinais {
         }
 
     }
-
+    /**
+     * Calcular RMI
+     * @param  {} elementPossibilidade
+     * @param  {} elementRegraEspecie
+     */
     private calcularRMIBeneficio(elementPossibilidade, elementRegraEspecie) {
 
         let rmi = elementPossibilidade.salarioBeneficio.value * (elementPossibilidade.aliquota.value / 100);
@@ -197,6 +203,25 @@ export class conclusoesFinais {
         elementPossibilidade.conclusoes = listC;
     }
 
+    /**
+     * Ordenar decrescente as possibilidades e aplicar destaque a melhor
+     * @param  {} elementRegraEspecie
+     */
+    private aplicarDestaqueMelhorValor(elementRegraEspecie){
+
+        elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
+            if (entry1.rmi.value < entry2.rmi.value) {
+                return 1;
+            }
+            if (entry1.rmi.value > entry2.rmi.value) {
+                return -1;
+            }
+            return 0;
+        });
+        elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
+
+    }
+
 
     private setAliquota(
         value: number,
@@ -212,6 +237,8 @@ export class conclusoesFinais {
 
 
     // define aliquotas por espepecie - inicio
+
+
     private defineAliquotaIdade(elementPossibilidade) {
 
         const tempoParaPercentual = {
@@ -281,22 +308,79 @@ export class conclusoesFinais {
 
     private defineAliquotaAposentadoriaEspecial(elementPossibilidade, elementRegraEspecie) {
 
-        return this.setAliquota(0, '', '');
+        const tempoParaPercentual = (elementRegraEspecie.requisitos.tempo === 15) ? 15 : 20;
 
+        let aliquota = 60;
+        let formula = '60'
+        let valueString = aliquota + '%'
+
+        if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual) {
+            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual) * 2);
+            formula = `60 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual}) X 2)`;
+            valueString = aliquota + '%'
+        }
+
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula,
+        );
     }
+
+
+    /**
+     * Aliquota de deficiente
+     * @param  {} elementPossibilidade
+     * @param  {} elementRegraEspecie
+     */
+    private defineAliquotaDeficiente(elementPossibilidade, elementRegraEspecie) {
+
+        let aliquota = 70;
+        let formula = '70'
+        let valueString = aliquota + '%'
+
+
+        aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo)) * 1);
+        aliquota = (aliquota > 100) ? 100 : aliquota;
+        formula = `70 + (${Math.floor(elementPossibilidade.tempo)} X 1)`;
+        valueString = aliquota + '%';
+
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula,
+        );
+    }
+
     private defineAliquotaAuxilioAcidente(elementPossibilidade, elementRegraEspecie) {
 
-        return this.setAliquota(0, '', '');
+        const aliquota = 50;
+        const formula = '50%';
+        const valueString = aliquota + '%'
+
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula
+        );
+
     }
+
     private defineAliquotaAuxilioDoenca(elementPossibilidade, elementRegraEspecie) {
 
-        return this.setAliquota(0, '', '');
-    }
-    private defineAliquotaEspecialDeficiente(elementPossibilidade, elementRegraEspecie) {
+
+
+
+
 
         return this.setAliquota(0, '', '');
     }
+
     private defineAliquotaIncapacidade(elementPossibilidade, elementRegraEspecie) {
+
+
+
+
 
         return this.setAliquota(0, '', '');
     }

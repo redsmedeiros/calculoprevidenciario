@@ -210,7 +210,8 @@ export class RegrasAcesso {
                 rmi: 0,
                 fator: 0,
                 moeda: {},
-                conclusoes: []
+                conclusoes: [],
+                destaqueMelhorValorRMI: false
             });
 
         }
@@ -253,7 +254,7 @@ export class RegrasAcesso {
                 calculosPossiveis: [],
                 expectativaSobrevida: this.expectativaSobrevida,
                 fatorPrevidenciario: this.fatorPrevidenciario,
-                moedaDib: this.moedaDib
+                moedaDib: this.moedaDib,
             });
         } else {
             this.listaConclusaoAcesso.push({
@@ -324,16 +325,8 @@ export class RegrasAcesso {
         const ano = dataInicioBeneficio.year();
         this.moedaDib = moedaDib;
 
-
-        // tipoBeneficio = 6;
-        // tipoBeneficio = 1925;
-
         // aplicação default false
         if (this.arrayEspecial.includes(tipoBeneficio)) {
-
-            // Aposentadoria especial
-            //   this.isRegrasAposentadoriaEspecial = true;
-            //   this.regraAposentadoriaEspecial(mesesContribuicao, valorMedio, tipoBeneficio);
 
             this.regraAcessoAposentadoriaEspecial(
                 pontos,
@@ -349,8 +342,6 @@ export class RegrasAcesso {
 
         } else if (tipoBeneficio === 1903) {
 
-            // incapacidade
-            //   this.isRegrasIncapacidade = true;
             this.regraAcessoIncapacidade(
                 idadeFracionada,
                 ano,
@@ -360,10 +351,6 @@ export class RegrasAcesso {
 
         } else if (tipoBeneficio === 1905) {
 
-            // Auxilio acidente
-            //   this.isRegrasAuxilioAcidente = true;
-            //   this.regraAuxilioAcidente(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio);
-
             this.regraAcessoAuxilioAcidente(
                 idadeFracionada,
                 ano,
@@ -372,11 +359,6 @@ export class RegrasAcesso {
             );
 
         } else if (tipoBeneficio === 1) {
-
-            // Auxilio doença
-            //   this.isRegrasAuxilioDoenca = true;
-            //   this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, tipoBeneficio);
-
 
             this.regraAcessoAuxilioDoenca(
                 idadeFracionada,
@@ -388,11 +370,7 @@ export class RegrasAcesso {
 
         } else if (this.arrayEspecialDeficiente.includes(tipoBeneficio)) {
 
-            // especial deficiente
-            //   this.isRegraEspecialDeficiente = true;
-            //   this.regraEspecialDeficiente(mesesContribuicao, valorMedio, tipoBeneficio)
-
-            this.regraAcessoEspecialDeficiente(
+            this.regraAcessoDeficiente(
                 idadeFracionada,
                 ano,
                 sexo,
@@ -436,10 +414,6 @@ export class RegrasAcesso {
             // professor transitoria e transição
             if (!isRegraTransitoria) {
 
-                // this.isRegrasTransicao = true;
-                // this.verificaRegrasTransicao(contribuicaoPrimaria);
-                // this.atualizarCalculoMelhorRMIRegrasTransicao();
-
                 this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.regraAcessoPedagio100(
@@ -460,17 +434,9 @@ export class RegrasAcesso {
                     tempoContribuicaoTotalMoment,
                     tempoContribuicaoTotalAtePecMoment,
                     dataInicioBeneficio.clone());
-                // this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
-
             }
 
-            //   isRegraTransitoriaProfessor = true;
-            //   this.regraProfessorTransitoria(mesesContribuicao, valorMedio, tipoBeneficio);
-
         } else {
-            //   isRegrasTransicao = true;
-            //   this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
-            //   this.atualizarCalculoMelhorRMIRegrasTransicao();
 
             this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
             this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
@@ -491,11 +457,8 @@ export class RegrasAcesso {
                 tempoContribuicaoTotalMoment,
                 tempoContribuicaoTotalAtePecMoment,
                 dataInicioBeneficio.clone());
-            //  this.regraAcessoIdade(idadeFracionada, ano, sexo, this.contribuicaoTotal);
 
         }
-
-        // console.log(this.listaConclusaoAcesso);
 
         return this.listaConclusaoAcesso;
 
@@ -607,7 +570,14 @@ export class RegrasAcesso {
 
     }
 
-
+    /**
+     * Regra de acesso idade progressiva
+     * @param  {} idade
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} redutorProfessor
+     */
     public regraAcessoIdadeProgressiva
         (
             idade,
@@ -675,7 +645,17 @@ export class RegrasAcesso {
 
 
 
-
+    /**
+     * Regra de acesso Pedagio de 100 do periodo que faltava antes da reforma
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} redutorProfessor
+     * @param  {} idade
+     * @param  {} tempoContribuicaoTotalAtePec
+     * @param  {} tempoContribuicaoTotalMoment
+     * @param  {} tempoContribuicaoTotalAtePecMoment
+     * @param  {} dataInicioBeneficio
+     */
     public regraAcessoPedagio100(
         sexo,
         tempo_contribuicao,
@@ -739,8 +719,17 @@ export class RegrasAcesso {
         );
 
     }
-
-
+    /**
+     * egra de acesso Pedagio de 50% do periodo que faltava antes da reforma
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} redutorProfessor
+     * @param  {} idade
+     * @param  {} tempoContribuicaoTotalAtePec
+     * @param  {} tempoContribuicaoTotalMoment
+     * @param  {} tempoContribuicaoTotalAtePecMoment
+     * @param  {} dataInicioBeneficio
+     */
     public regraAcessoPedagio50(
         sexo,
         tempo_contribuicao,
@@ -802,9 +791,12 @@ export class RegrasAcesso {
     }
 
 
-
     /**
-     * regra 5 - idade
+     * Regra de acesso idade transição
+     * @param  {} idade
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
      */
     public regraAcessoIdade(idade, ano, sexo, tempo_contribuicao) {
 
@@ -862,11 +854,14 @@ export class RegrasAcesso {
 
     }
 
-
-    // transição regras de acesso fim
-
-    //
-
+    /**
+     * Regra idade transitoria (FINAL)
+     * @param  {} idade
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} tipoBeneficio
+     */
     public regraAcessoIdadeTransitoria
         (
             idade,
@@ -914,7 +909,18 @@ export class RegrasAcesso {
     }
 
 
-    // Aposentadoria especial
+    /**
+     * Regra de Acesso aposentadoria Especial transição e transitoria
+     * @param  {} pontosEspecial
+     * @param  {} contribuicaoTotalTempoAnos
+     * @param  {} idadeFracionada
+     * @param  {} tipoBeneficio
+     * @param  {} isRegraTransitoria
+     * @param  {} tempoContribuicaoTotalAtePec
+     * @param  {} tempoContribuicaoTotalMoment
+     * @param  {} tempoContribuicaoTotalAtePecMoment
+     * @param  {} dataInicioBeneficio
+     */
     public regraAcessoAposentadoriaEspecial(
         pontosEspecial,
         contribuicaoTotalTempoAnos,
@@ -981,7 +987,7 @@ export class RegrasAcesso {
 
             if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
                 pontosExcendente = (pontosEspecial - regraEspecial[tipoBeneficio].pontos) / 2
-                tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
+                // tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
                 idade_min = idadeFracionada - pontosExcendente;
             }
 
@@ -1059,10 +1065,7 @@ export class RegrasAcesso {
         tempo_contribuicao
     ) {
 
-        const tempoPercentualParte1 = {
-            m: 20,
-            f: 15
-        };
+        const tempoPercentualParte1 = { m: 1,  f: 1 };
 
         let status = false;
 
@@ -1096,7 +1099,13 @@ export class RegrasAcesso {
     }
 
 
-    // Auxilio doença
+    /**
+     * Regra acesso auxilio doença
+     * @param  {} idade
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     */
     public regraAcessoAuxilioDoenca(
         idade,
         ano,
@@ -1140,11 +1149,15 @@ export class RegrasAcesso {
     }
 
 
-
-
-    // regra especial do deficiente
-
-    public regraAcessoEspecialDeficiente(
+    /**
+     * regra especial do deficiente
+     * @param  {} idade
+     * @param  {} ano
+     * @param  {} sexo
+     * @param  {} tempo_contribuicao
+     * @param  {} tipoBeneficio
+     */
+    public regraAcessoDeficiente(
         idade,
         ano,
         sexo,
@@ -1152,33 +1165,18 @@ export class RegrasAcesso {
         tipoBeneficio
     ) {
 
-        const getRequisitoEspecialDeficiente = (tipoBeneficioREQ: number) => {
-
-            let requisito: any;
-
-            switch (tipoBeneficioREQ) {
-                case 25:
-                    requisito = { m: 25, f: 20 }; // tempo Grave
-                    break;
-                case 26:
-                    requisito = { m: 29, f: 24 }; // tempo moderada
-                    break;
-                case 27:
-                    requisito = { m: 33, f: 28 }; // tempo leve
-                    break;
-                case 28:
-                    requisito = {
-                        tempo: { m: 15, f: 15 },
-                        idade: { m: 60, f: 55 }
-                    };
-                    break;
+        const requisitoPCD = {
+            25: { m: 25, f: 20, label: 'Aposentadoria Pessoa com Deficiência Grave' },
+            26: { m: 29, f: 24, label: 'Aposentadoria Pessoa com Deficiência Moderada' },
+            27: { m: 33, f: 28, label: 'Aposentadoria Pessoa com Deficiência Leve' },
+            28: {
+                tempo: { m: 15, f: 15 },
+                idade: { m: 60, f: 55 },
+                label: 'Aposentadoria por Idade da Pessoa com Deficiência'
             }
-
-            return requisito;
-
         };
 
-        const requisitoEspecial = getRequisitoEspecialDeficiente(tipoBeneficio);
+        const requisitoEspecial = requisitoPCD[tipoBeneficio];
 
         let status = true;
 
@@ -1197,7 +1195,6 @@ export class RegrasAcesso {
             }
 
             if (idade < requisitoEspecial.idade[sexo]) {
-
                 status = false;
             }
 
@@ -1206,7 +1203,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'deficiente',
-            'Auxílio Doença',
+            requisitoEspecial.label,
             status,
             0,
             idade,
@@ -1223,118 +1220,5 @@ export class RegrasAcesso {
 
 
     }
-
-
-
-    // public regrasDaReforma(
-    //     dataFiliacao,
-    // ) {
-
-    //     const arrayEspecial = [1915, 1920, 1925];
-    //     const arrayPensao = [1900, 1901];
-    //     const arrayIdade = [3, 16];
-    //     const arrayEspecialDeficiente = [25, 26, 27, 28];
-
-    //     if (dataFiliacao && dataFiliacao != null && moment(dataFiliacao).isValid()) {
-    //       this.isRegraTransitoria = (dataFiliacao.isSameOrAfter(this.dataPromulgacao2019));
-    //     }
-
-    //     //  const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
-    //     // const mesesContribuicao = this.numeroDeContribuicoes;
-    //     const mesesContribuicao = this.divisorMinimo;
-    //     const valorMedio = (this.valorTotalContribuicoes / mesesContribuicao);
-    //     const redutorProfessor = (tipoBeneficio == 6) ? 5 : 0;
-
-    //     //if( typeof this.contribuicaoTotal === 'undefined'  ){
-
-    //     const tempo = this.contribuicaoPrimaria;
-    //     let contagemPrimaria = (tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias;
-    //     let contagemPrimariaAnos = contagemPrimaria / 365.25;
-
-    //     this.contribuicaoTotal = contagemPrimariaAnos;
-
-    //     // }
-
-
-    //     // let moeda = this.dataInicioBeneficio.isSameOrBefore(moment(), 'month') ? 
-    // this.Moeda.getByDate(this.dataInicioBeneficio) : this.Moeda.getByDate(moment());
-
-
-
-    //     // aplicação default false
-    //     if (arrayEspecial.includes(this.tipoBeneficio)) {
-
-    //       // Aposentadoria especial
-    //       this.isRegrasAposentadoriaEspecial = true;
-    //       this.regraAposentadoriaEspecial(mesesContribuicao, valorMedio, this.tipoBeneficio);
-
-    //     } else if (arrayPensao.includes(this.tipoBeneficio)) {
-
-    //       // pensão
-    //       this.isRegrasPensaoObito = true;
-    //       this.regraPensaoPorMorte(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio, this.calculo.sexo_instituidor);
-
-    //     } else if (this.tipoBeneficio === 1903) {
-
-    //       // incapacidade
-    //       this.isRegrasIncapacidade = true;
-    //       this.regraIncapacidade(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
-
-    //     } else if (this.tipoBeneficio === 1905) {
-
-    //       // Auxilio acidente
-    //       this.isRegrasAuxilioAcidente = true;
-    //       this.regraAuxilioAcidente(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
-
-    //     } else if (this.tipoBeneficio === 1) {
-
-    //       // Auxilio doença
-    //       this.isRegrasAuxilioDoenca = true;
-    //       this.regraAuxilioDoenca(mesesContribuicao, valorMedio, redutorProfessor, this.tipoBeneficio);
-
-    //     } else if (arrayIdade.includes(this.tipoBeneficio)) {
-    //       // Aposentadoria por idade
-    //       this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
-
-    //       // Aposentadoria por idade - Trabalhador Rural
-    //       if (!this.erroCarenciaMinima) {
-    //         this.isRegrasIdade = true;
-    //         this.regraIdade(mesesContribuicao, valorMedio);
-    //         this.regraIdadeFinal(mesesContribuicao, valorMedio, this.tipoBeneficio);
-    //       }
-
-    //     } else if (arrayEspecialDeficiente.includes(this.tipoBeneficio)) {
-
-    //       // especial deficiente
-    //       this.isRegraEspecialDeficiente = true;
-    //       this.regraEspecialDeficiente(mesesContribuicao, valorMedio, this.tipoBeneficio)
-
-    //     } else if (this.tipoBeneficio === 6) {
-
-    //       // professor transitoria e transição
-    //       if (!this.isRegraTransitoria) {
-
-    //         this.isRegrasTransicao = true;
-    //         this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
-    //         this.atualizarCalculoMelhorRMIRegrasTransicao();
-    //       }
-
-    //       this.isRegraTransitoriaProfessor = true;
-    //       this.regraProfessorTransitoria(mesesContribuicao, valorMedio, this.tipoBeneficio);
-
-    //     } else {
-    //       this.isRegrasTransicao = true;
-    //       this.aplicarRegrasTransicao(mesesContribuicao, valorMedio, redutorProfessor);
-    //       this.atualizarCalculoMelhorRMIRegrasTransicao();
-
-    //     }
-
-
-    //     // setTimeout(() => {
-    //     //   this.descarteContribuicoesSelecionadas();
-    //     // }, 5000);
-
-
-    //   }
 
 }

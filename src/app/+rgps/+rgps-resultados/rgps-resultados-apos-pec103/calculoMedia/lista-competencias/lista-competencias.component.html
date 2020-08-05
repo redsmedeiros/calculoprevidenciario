@@ -34,14 +34,17 @@
             "
           >
             <accordion-group [isOpen]="false" #group1>
-              <h4 class="panel-title" accordion-heading>
-                <a>
+              <h4 class="panel-title" accordion-heading >
+                <a
+                [ngClass]="{
+                  'alert alert-success alert-block': calculoPossivel.destaqueMelhorValorRMI
+                }"
+                >
                   <strong
                     >Cálculo com
                     {{ calculoPossivel.numeroCompetencias }} salários de
                     contribuição - RMI
-                    {{ calculoPossivel.rmi.valueString }}</strong
-                  >
+                    {{ calculoPossivel.rmi.valueString }}</strong>
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
                     *ngIf="isUpdating"
