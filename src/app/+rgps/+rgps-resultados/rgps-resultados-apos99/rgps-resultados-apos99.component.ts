@@ -240,8 +240,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let idString = contadorPrimario + 1; // tabela['id'] = contadorPrimario;
       contadorPrimario++;
       let dataContribuicaoString = dataContribuicao.format('MM/YYYY'); // tabela['dataContribuicao'] = contribuicao.dataContribuicao;
-      let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); // tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
-      let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); // tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
+      // let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); // tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
+      // let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); // tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
+
+    
 
       let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
 
@@ -278,20 +280,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
 
 
+
       let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
 
       let contribuicaoPrimariaRevisada = 0;
       let contribuicaoSecundariaRevisada = 0;
-
-      contribuicaoPrimariaRevisada = contribuicaoPrimariaRevisada * fatorCorrigido;
-      contribuicaoSecundariaRevisada = contribuicaoSecundariaRevisada * fatorCorrigido;
-
-
-      contribuicaoPrimariaRevisada = this.convertCurrency(contribuicaoPrimariaRevisada, dataContribuicao, dib);
-      contribuicaoSecundariaRevisada = this.convertCurrency(contribuicaoSecundariaRevisada, dataContribuicao, dib);
-
-
+      
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
         let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
@@ -299,17 +294,27 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         limiteString = valorAjustadoObj.aviso;
       }
 
+
       if (contribuicaoSecundaria != 0) {
-        contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor;
+        contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor; //Inserir texto 'Limitado ao teto' e 'limitado ao minimo' quando cabivel.
         contadorSecundario++;
       }
+
+      const contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimariaRevisada, currency.acronimo);
+      const contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundariaRevisada, currency.acronimo);
+
+      contribuicaoPrimariaRevisada = contribuicaoPrimariaRevisada * fatorCorrigido;
+      contribuicaoSecundariaRevisada = contribuicaoSecundariaRevisada * fatorCorrigido;
+
+      contribuicaoPrimariaRevisada = this.convertCurrency(contribuicaoPrimariaRevisada, dataContribuicao, dib);
+      contribuicaoSecundariaRevisada = this.convertCurrency(contribuicaoSecundariaRevisada, dataContribuicao, dib);
 
       totalContribuicaoPrimaria += contribuicaoPrimariaRevisada;
       totalContribuicaoSecundaria += contribuicaoSecundariaRevisada;
 
 
-      let contribuicaoPrimariaRevisadaString = this.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
-      let contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
+      const contribuicaoPrimariaRevisadaString = this.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
+      const contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
       //tabela['Contribuicao Primaria Corrigida'] = currency.Acronimo + contribuicaoPrimariaRevisada
       //tabela['Contribuicao Secundaria Corrigida'] = currency.Acronimo + contribuicaoSecundariaRevisada
 
@@ -674,32 +679,34 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
 
-    // RMI Renda mensal
-    let rmi = 0;
+      // RMI Renda mensal
+      let rmi = 0;
 
-    // passo 1
-    rmi = somaMedias * fatorSeguranca;
+      // passo 1
+      rmi = somaMedias * fatorSeguranca;
 
-    // passo 2
-    rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+      // passo 2
+      rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
+      
 
+      if(!this.limited) {  // Se não foi corrigido ao percentual do teto
+        rmi *= (coeficiente / 100);
+      }
 
-    if (!this.limited) {  // Se não foi corrigido ao percentual do teto
-      rmi *= (coeficiente / 100);
-    }
-
-    // old 17-07-2020
-    // rmi += (fatorSeguranca * numeroCompetencias) / 60;
 
     rmi += (fatorSeguranca * numeroCompetencias * taxaMediaSecundaria) / 60;
     rmi += taxaMediaSecundaria * ((60 - numeroCompetencias) / 60)
-    // rmi *= (coeficiente / 100);
+   // rmi *= (coeficiente / 100);
 
 
-    rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+   rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
-    this.limited = false;
+   this.limited = false;
+    // old modificado 17/07/2020
+    // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+    // rmi = rmiAux;
+    
 
     // let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
     let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
@@ -812,7 +819,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
-
+    
     if (dataBeneficio >= this.dataMP664) {
       if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
         if (totalMediaDozeContribuicoes > 0)
@@ -1008,15 +1015,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.splice(i, 1)
       }
 
-      if ((/Renda Mensal Inicial com Fator/gi).test(conclusoes[i].string)) {
+      if((/Renda Mensal Inicial com Fator/gi).test(conclusoes[i].string)) {
         rmi_fator = conclusoes[i].value
       }
 
-      if ((/Renda Mensal Inicial com Regra/gi).test(conclusoes[i].string)) {
+      if((/Renda Mensal Inicial com Regra/gi).test(conclusoes[i].string)){
         rmi_pontos = conclusoes[i].value
       }
 
-      if ((/Renda Mensal Inicial/gi).test(conclusoes[i].string)) {
+      if((/Renda Mensal Inicial/gi).test(conclusoes[i].string)){
         rmi_outras_especies = conclusoes[i].value;
       }
 
@@ -1030,7 +1037,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     rmi_pontos = this.convertDecimalValue(rmi_pontos);
     rmi_outras_especies = this.convertDecimalValue(rmi_outras_especies);
 
-    // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
+   // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.valorExportacao = (rmi_fator > rmi_pontos) ? rmi_fator : rmi_pontos;
 
     if (this.valorExportacao === 0) {
@@ -1048,7 +1055,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.calculo.valor_beneficio = this.valorExportacao;
 
     this.isUpdating = false;
-
+    
     this.CalculoRgpsService.update(this.calculo);
 
   }
@@ -1500,30 +1507,30 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   getIdadeFracionada() {
 
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+  //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
 
-    //   if (this.dataInicioBeneficio >= this.dataPec062019) {
-    //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
-    //   }
-    //  // return idadeEmDias / 365.25;
+  //   if (this.dataInicioBeneficio >= this.dataPec062019) {
+  //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
+  //   }
+  //  // return idadeEmDias / 365.25;
 
-    if (this.dataInicioBeneficio >= this.dataPec062019) {
-      return this.dataPec062019.diff(dataNascimento, 'years', true);
-    }
+   if (this.dataInicioBeneficio >= this.dataPec062019) {
+    return this.dataPec062019.diff(dataNascimento, 'years', true);
+   }
 
     return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
   }
 
 
-  testeDifdata(time1, time2) {
+  testeDifdata(time1, time2){
 
-    const str1 = time1.split('/');
-    const str2 = time2.split('/');
-    // yyyy   , mm       , dd
-    const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
+      const str1= time1.split('/');
+      const str2= time2.split('/');
+                             // yyyy   , mm       , dd
+     const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
     const dateToCompare = new Date(str2[2], str2[1] - 1, str2[0]).getTime();
-    //    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
-    return (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+//    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+    return  (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
   mostrarReajustesAdministrativos(tableId) {
@@ -1544,7 +1551,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         // console.log(reajustesAutomaticos );
         // console.log(dataPrevia );
-
+        
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
@@ -1569,7 +1576,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           valorBeneficio *= reajuste;
 
-          if (dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1) {
+          if(dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1){
             valorBeneficio *= this.irtRejusteAdministrativo;
           }
 
@@ -1600,7 +1607,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataPrevia = dataCorrente;
         }
 
-
+        
         this.reajustesAdministrativosTableOptions = {
           ...this.reajustesAdministrativosTableOptions,
           data: this.reajustesAdministrativosTableData,
