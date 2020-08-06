@@ -1327,8 +1327,12 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       if (!this.verificarCarencia(-5, redutorProfessor, redutorSexo, errorArray)) {
         return false;
       }
-    } else if (this.tipoBeneficio == 5) {
-      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
+    } else if ([1915,1920,1925].includes(this.tipoBeneficio)) {
+
+      const parametrosParaVerificarTempoDeServico = {  5: 20, 1915: 20, 1920: 15, 1925: 10 }
+      const valorExtra = parametrosParaVerificarTempoDeServico[this.tipoBeneficio];
+
+      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, valorExtra);
       if (!direito) {
         errorArray.push("Não possui direito ao benefício de aposentadoria especial.");
       }
