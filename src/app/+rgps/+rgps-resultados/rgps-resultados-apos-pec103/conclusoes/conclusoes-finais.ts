@@ -1,12 +1,8 @@
-import { DefinicaoMoeda } from '../share-rmi/definicao-moeda';
+
 import * as moment from 'moment';
 
-
-// conclusaoAcessoRegraAcessoPontos;
-// conclusaoAcessoRegrasAcessoIdadeProgressiva;
-// conclusaoAcessoRegraAcessoPedagio100;
-// conclusaoAcessoRegraAcessoPedagio50;
-// conclusaoAcessoRegraAcessoIdade;
+import { DefinicaoTempo } from './../share-rmi/definicao-tempo';
+import { DefinicaoMoeda } from '../share-rmi/definicao-moeda';
 
 export class conclusoesFinais {
 
@@ -19,6 +15,7 @@ export class conclusoesFinais {
     private pbcCompleto;
     private indicesSelecionado;
     private dibCurrency;
+
 
 
     public createConclusoesFinais(
@@ -60,9 +57,74 @@ export class conclusoesFinais {
             });
 
             this.aplicarDestaqueMelhorValor(elementRegraEspecie);
+        } else {
+
+            this.conclusaoPossibilidadeNaoAtenteRequisitos(elementRegraEspecie);
         }
 
         return elementRegraEspecie;
+    }
+
+
+
+    private conclusaoPossibilidadeNaoAtenteRequisitos(elementRegraEspecie) {
+
+        const requisitosNaoAtendidos = [];
+
+
+        if (elementRegraEspecie.requisitos.tempo > 0 && elementRegraEspecie.tempoTotalAposEC103 < elementRegraEspecie.requisitos.tempo) {
+
+            const diferenca = elementRegraEspecie.requisitos.tempo - elementRegraEspecie.tempoTotalAposEC103;
+            const diferencaOBJ = DefinicaoTempo.converterTempoAnos(diferenca);
+            const diferencaString = `Faltam ${DefinicaoTempo.formateObjToStringAnosMesesDias(diferencaOBJ)} de tempo de Contribuição.`;
+
+            requisitosNaoAtendidos.push({ tipo: 'tempo', value: diferenca, valueString: diferencaString });
+        }
+
+        if (elementRegraEspecie.requisitos.tempoAnterior > 0
+            && elementRegraEspecie.tempoTotalAteEC103.anos < elementRegraEspecie.requisitos.tempoAnterior) {
+
+            const diferenca = elementRegraEspecie.requisitos.tempoAnterior - elementRegraEspecie.tempoTotalAteEC103.anos;
+            const diferencaOBJ = DefinicaoTempo.converterTempoAnos(diferenca);
+            const diferencaString = `Faltam 
+               ${DefinicaoTempo.formateObjToStringAnosMesesDias(diferencaOBJ)} de tempo de Contribuição anterior a EC103/2019.`;
+
+            requisitosNaoAtendidos.push({ tipo: 'tempo', value: diferenca, valueString: diferencaString });
+        }
+
+
+        if (elementRegraEspecie.requisitos.idade > 0 && elementRegraEspecie.idade < elementRegraEspecie.requisitos.idade) {
+
+            const diferenca = elementRegraEspecie.requisitos.idade - elementRegraEspecie.idade;
+            const diferencaOBJ = DefinicaoTempo.converterTempoAnos(diferenca);
+            const diferencaString = `Faltam ${DefinicaoTempo.formateObjToStringAnosMesesDias(diferencaOBJ)} de idade.`;
+
+            requisitosNaoAtendidos.push({ tipo: 'idade', value: diferenca, valueString: diferencaString });
+        }
+
+
+        if (elementRegraEspecie.requisitos.pontos > 0 && elementRegraEspecie.pontos < elementRegraEspecie.requisitos.pontos) {
+
+            const diferenca = Math.floor(elementRegraEspecie.requisitos.pontos - elementRegraEspecie.pontos);
+            const diferencaString = `Faltam ${diferenca} pontos.`;
+
+            requisitosNaoAtendidos.push({ tipo: 'pontos', value: diferenca, valueString: diferencaString });
+        }
+
+
+
+
+
+        // tempo: tempoFinalContrib,
+        // idade: contribuicao_idade_min[sexo],
+        // pedagio: tempoDePedagioTotal,
+        // pontos: 0,
+        // ano: 0
+
+
+        elementRegraEspecie.requisitosNaoAtendidos = requisitosNaoAtendidos;
+
+
     }
 
     /**
@@ -78,7 +140,6 @@ export class conclusoesFinais {
         this.calcularAliquotaBeneficio(elementPossibilidade, elementRegraEspecie);
         this.calcularRMIBeneficio(elementPossibilidade, elementRegraEspecie);
         this.gerarListaConlusões(elementPossibilidade, elementRegraEspecie);
-        
 
         return elementPossibilidade;
     }
@@ -207,7 +268,7 @@ export class conclusoesFinais {
      * Ordenar decrescente as possibilidades e aplicar destaque a melhor
      * @param  {} elementRegraEspecie
      */
-    private aplicarDestaqueMelhorValor(elementRegraEspecie){
+    private aplicarDestaqueMelhorValor(elementRegraEspecie) {
 
         elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
             if (entry1.rmi.value < entry2.rmi.value) {
@@ -368,21 +429,30 @@ export class conclusoesFinais {
 
     private defineAliquotaAuxilioDoenca(elementPossibilidade, elementRegraEspecie) {
 
+        const aliquota = 91;
+        const formula = '91%';
+        const valueString = aliquota + '%'
 
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula
+        );
 
-
-
-
-        return this.setAliquota(0, '', '');
     }
 
     private defineAliquotaIncapacidade(elementPossibilidade, elementRegraEspecie) {
 
+        const aliquota = 100;
+        const formula = '100%';
+        const valueString = aliquota + '%'
 
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula
+        );
 
-
-
-        return this.setAliquota(0, '', '');
     }
 
 
@@ -417,8 +487,6 @@ export class conclusoesFinais {
             aviso: avisoString
         };
     }
-
-
 
 
 

@@ -239,7 +239,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         redutorSexo,
         this.expectativaSobrevida,
         this.fatorPrevidenciario,
-        this.moedaDib
+        this.moedaDib,
+        numeroDeContribuicoes,
       );
 
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
@@ -472,6 +473,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         }
 
       }
+      
 
       this.carenciaConformDataFiliacao = mesesCarencia;
 
