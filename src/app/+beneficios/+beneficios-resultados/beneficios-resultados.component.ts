@@ -910,12 +910,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       reajusteOS = 1;
     }
 
-    if (dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')
-      && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')) {
+    // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')
+    //   && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio_esperado, 'year')) {
 
-      reajuste = 1;
+    //   reajuste = 1;
 
-    }
+    // }
 
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
@@ -991,12 +991,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       reajusteOS = 1;
     }
 
-    if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'year')
-      && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio, 'year')) {
+    // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'year')
+    //   && this.dataInicioCalculo.isSame(this.calculo.data_pedido_beneficio, 'year')) {
 
-      reajuste = 1;
+    //   reajuste = 1;
 
-    }
+    // }
 
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
