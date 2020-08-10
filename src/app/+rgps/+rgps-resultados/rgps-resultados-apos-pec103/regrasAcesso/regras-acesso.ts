@@ -63,7 +63,6 @@ export class RegrasAcesso {
             return calculosPossiveis;
         }
 
-        const especieIdade = ['idadeTransitoria', 'idade'];
         const maximoDescarte = { anos: 0, meses: 0 }
         let difIdadeExcedente = 0;
         let difTempoContribExcedente = 0;
@@ -95,7 +94,8 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-            const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
+            // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
+            const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = (maximoDescarte.meses / 12);
 
@@ -162,10 +162,11 @@ export class RegrasAcesso {
         const pontosInicial = elementTipo.pontos;
 
         // Valor default sem decrementar
+        if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
             calculosPossiveis.push({
                 tempo: (tempoInicial),
                 idade: (idadeInicial),
-                pontos: ((requisitos.pontos > 0) ? pontosInicial  : 0),
+                pontos: ((requisitos.pontos > 0) ? pontosInicial : 0),
                 descarteContrib: 0,
                 listaCompetencias: [],
                 lista12Competencias: [],
@@ -180,6 +181,7 @@ export class RegrasAcesso {
                 conclusoes: [],
                 destaqueMelhorValorRMI: false
             });
+        }
 
         for (let i = maximoDescarte.anos; i >= 0; i--) {
 
@@ -409,15 +411,6 @@ export class RegrasAcesso {
 
                 this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
                 this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
-                this.regraAcessoPedagio100(
-                    sexo,
-                    this.contribuicaoTotal,
-                    redutorProfessor,
-                    idadeFracionada,
-                    tempoContribuicaoTotalAtePec,
-                    tempoContribuicaoTotalMoment,
-                    tempoContribuicaoTotalAtePecMoment,
-                    dataInicioBeneficio.clone());
                 this.regraAcessoPedagio50(
                     sexo,
                     this.contribuicaoTotal,
@@ -427,14 +420,23 @@ export class RegrasAcesso {
                     tempoContribuicaoTotalMoment,
                     tempoContribuicaoTotalAtePecMoment,
                     dataInicioBeneficio.clone());
+                this.regraAcessoPedagio100(
+                    sexo,
+                    this.contribuicaoTotal,
+                    redutorProfessor,
+                    idadeFracionada,
+                    tempoContribuicaoTotalAtePec,
+                    tempoContribuicaoTotalMoment,
+                    tempoContribuicaoTotalAtePecMoment,
+                    dataInicioBeneficio.clone());
+
             }
 
         } else {
 
             this.regraAcessoPontos(idadeFracionada, pontos, ano, sexo, this.contribuicaoTotal, redutorProfessor);
             this.regraAcessoIdadeProgressiva(idadeFracionada, ano, sexo, this.contribuicaoTotal, redutorProfessor);
-            this.regraAcessoPedagio100(
-                sexo,
+            this.regraAcessoPedagio50(sexo,
                 this.contribuicaoTotal,
                 redutorProfessor,
                 idadeFracionada,
@@ -442,7 +444,8 @@ export class RegrasAcesso {
                 tempoContribuicaoTotalMoment,
                 tempoContribuicaoTotalAtePecMoment,
                 dataInicioBeneficio.clone());
-            this.regraAcessoPedagio50(sexo,
+            this.regraAcessoPedagio100(
+                sexo,
                 this.contribuicaoTotal,
                 redutorProfessor,
                 idadeFracionada,
@@ -545,7 +548,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pontos',
-            'Regra de Transição do art. 15 da EC nº 103/2019 (regra de pontos)',
+            'Regra de Transição do art. 15 da EC nº 103/2019 (Regra de pontos progressiva)',
             status,
             pontos,
             idadeFracionada,
@@ -618,7 +621,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'idadeProgressiva',
-            'Regra de Transição do art. 16 da EC nº 103/2019 (idade mínima progressiva)',
+            'Regra de Transição do art. 16 da EC nº 103/2019 (Regra de idade mínima progressiva)',
             status,
             0,
             idade,
@@ -696,7 +699,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pedagio100',
-            'Regra de Transição do art. 20 da EC nº 103/2019 (pedágio de 100%)',
+            'Regra de Transição do art. 20 da EC nº 103/2019 (Regra de pedágio de 100% e idade)',
             status,
             0,
             idade,
@@ -766,7 +769,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pedagio50',
-            'Regra de Transição do art. 17 da EC nº 103/2019 (pedágio de 50%)',
+            'Regra de Transição do art. 17 da EC nº 103/2019 (Regra de pedágio de 50%)',
             status,
             0,
             idade,
@@ -831,7 +834,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'idade',
-            'Regra de Transição do art. 18 da EC nº 103/2019 (aposentadoria por idade)',
+            'Regra de Transição do art. 18 da EC nº 103/2019 (Aposentadoria por idade)',
             status,
             0,
             idade,

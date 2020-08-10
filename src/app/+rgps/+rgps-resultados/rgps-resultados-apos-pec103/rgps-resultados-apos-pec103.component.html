@@ -127,11 +127,19 @@
               >
             </p>
           </div>
-         <app-lista-competencias
+
+         <app-lista-competencias *ngIf="!isRegrasPensaoObitoInstituidorAposentado" 
             [listaConclusaoAcesso]="listaConclusaoAcesso"
             [isUpdating]="isUpdating"
             [isRegrasTransicao]="isRegrasTransicao"
          ></app-lista-competencias>
+
+         <app-conclusoes-rmi *ngIf="isRegrasPensaoObitoInstituidorAposentado"
+         [conclusoes]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.list"
+         [regraLabel]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.label"
+         [isUpdating]="isUpdating"
+       ></app-conclusoes-rmi>
+
         </div>
       </div>
       <!-- <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">

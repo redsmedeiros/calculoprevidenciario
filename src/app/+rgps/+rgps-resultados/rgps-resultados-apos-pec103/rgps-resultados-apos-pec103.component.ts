@@ -62,6 +62,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   // transição INICIO
   public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
   public isRegrasPensaoObitoInstituidorAposentado = false;
+  public conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado = {};
 
 
   public listaConclusaoAcesso = [];
@@ -109,7 +110,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
 
-  
+
 
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
@@ -131,6 +132,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         } else if (this.isRegrasPensaoObitoInstituidorAposentado) {
           // pensão por morte instituidor aposentador
           // this.regrasDaReforma();
+
+          const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+          this.Moeda.getByDateRange(dib, moment())
+            .then((moeda: Moeda[]) => {
+              this.regrasPensaoObitoInstituidorAposentado();
+            });
 
         } else {
 
@@ -316,9 +323,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     }
 
     let numeroContribuicoes = 0;
-    this.listaValoresContribuidos.forEach(element => {
+    this.listaValoresContribuidos.forEach(contribuicao => {
 
-      if (this.primeiraDataTabela.isSameOrBefore(element.data, 'month') && element.valor_primaria) {
+      if (this.primeiraDataTabela.isSameOrBefore(contribuicao.data, 'month') && contribuicao.valor_primaria) {
         numeroContribuicoes += 1;
       }
 
@@ -332,6 +339,35 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
+  public regrasPensaoObitoInstituidorAposentado() {
+
+    this.moedaDib = this.getMoedaDib();
+
+    this.conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado =
+      this.conclusoesFinais.calcularPensaoObitoInstituidorAposentado(this.calculo, this.moedaDib);
+
+    this.isUpdating = false;
+
+  }
+
+
+
+  /**
+   * Updade valor do RMI
+   * @param  {} valorRMI
+   * @param  {} somaContribuicoes
+   */
+  private updateResultadoCalculo(valorRMI, somaContribuicoes) {
+
+    // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+    this.calculo.soma_contribuicao = somaContribuicoes;
+    this.calculo.valor_beneficio = valorRMI;
+    this.CalculoRgpsService.update(this.calculo);
+
+  }
+
+
+
   getIdadeFracionada() {
     return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
   }
@@ -339,8 +375,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   limitarTetosEMinimos(valor, data) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
     const moeda = data.isSameOrBefore(moment(), 'month') ?
-                                                        this.Moeda.getByDate(data) :
-                                                        this.Moeda.getByDate(moment());
+      this.Moeda.getByDate(data) :
+      this.Moeda.getByDate(moment());
 
     const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
     const tetoSalarial = (moeda) ? moeda.teto : 0;
@@ -473,7 +509,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         }
 
       }
-      
+
 
       this.carenciaConformDataFiliacao = mesesCarencia;
 

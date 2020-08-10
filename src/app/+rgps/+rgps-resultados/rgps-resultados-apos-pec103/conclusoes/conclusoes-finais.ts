@@ -139,7 +139,7 @@ export class conclusoesFinais {
         this.calcularIndiceRejusteTeto(elementPossibilidade, elementRegraEspecie);
         this.calcularAliquotaBeneficio(elementPossibilidade, elementRegraEspecie);
         this.calcularRMIBeneficio(elementPossibilidade, elementRegraEspecie);
-        this.gerarListaConlusões(elementPossibilidade, elementRegraEspecie);
+        this.gerarListaConlusoes(elementPossibilidade, elementRegraEspecie);
 
         return elementPossibilidade;
     }
@@ -240,26 +240,29 @@ export class conclusoesFinais {
         };
     }
 
-    private gerarListaConlusões(elementPossibilidade, elementRegraEspecie) {
+    private gerarListaConlusoes(elementPossibilidade, elementRegraEspecie) {
 
         const listC = []
 
         if (elementRegraEspecie.regra === 'pedagio50') {
+
             listC.push(this.setConclusao(0, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+            listC.push(this.setConclusao(1, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
+
         }
 
-        listC.push(this.setConclusao(1, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
-        listC.push(this.setConclusao(2, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
-        listC.push(this.setConclusao(3, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
+        listC.push(this.setConclusao(2, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
+        listC.push(this.setConclusao(3, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
+        listC.push(this.setConclusao(4, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
 
         if (elementPossibilidade.irt > 1) {
-            listC.push(this.setConclusao(4, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
+            listC.push(this.setConclusao(5, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 
 
-        listC.push(this.setConclusao(5, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
-        listC.push(this.setConclusao(6, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
+        listC.push(this.setConclusao(7, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
+        listC.push(this.setConclusao(8, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
 
         elementPossibilidade.conclusoes = listC;
     }
@@ -443,20 +446,87 @@ export class conclusoesFinais {
 
     private defineAliquotaIncapacidade(elementPossibilidade, elementRegraEspecie) {
 
-        const aliquota = 100;
-        const formula = '100%';
-        const valueString = aliquota + '%'
 
-        return this.setAliquota(
-            aliquota,
-            valueString,
-            formula
-        );
+        console.log(this.calculo.obito_decorrencia_trabalho);
+
+
+        if (!this.calculo.obito_decorrencia_trabalho) {
+
+            return this.defineAliquotaIdade(elementPossibilidade);
+
+        } else {
+
+            const aliquota = 100;
+            const formula = '100%';
+            const valueString = aliquota + '%'
+
+            return this.setAliquota(
+                aliquota,
+                valueString,
+                formula
+            );
+
+        }
 
     }
 
 
     // define aliquotas por espepecie - fim
+
+    /**
+     * calcular pensão por óbito de Instituidor Aposentado
+     * @param  {} calculo
+     * @param  {} moeda
+     */
+    public calcularPensaoObitoInstituidorAposentado( calculo, moeda) {
+
+        const salarioBeneficio = { value: 0, valueString: '' };
+        const aliquotaDependentes = { value: 0, valueString: '', formula: '' };
+        const rmi = { value: 0, valueString: '' };
+
+        const tempoPercentual = {
+            m: 20,
+            f: 15
+        };
+
+        aliquotaDependentes.value = (calculo.num_dependentes * 10);
+        aliquotaDependentes.value += 50;
+        aliquotaDependentes.value = (aliquotaDependentes.value > 100) ? 100 : aliquotaDependentes.value;
+        aliquotaDependentes.valueString = aliquotaDependentes.value + '%';
+        aliquotaDependentes.formula = `50% + (${calculo.num_dependentes} * 10%)`;
+
+        if (calculo.depedente_invalido === 1) {
+
+            aliquotaDependentes.value = 100;
+            aliquotaDependentes.valueString = '100%';
+            aliquotaDependentes.formula
+                = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
+
+        }
+
+        salarioBeneficio.value = parseFloat(calculo.ultimo_beneficio);
+        salarioBeneficio.valueString = DefinicaoMoeda.formatMoney(salarioBeneficio.value, moeda.acronimo);
+
+        rmi.value = salarioBeneficio.value * (aliquotaDependentes.value / 100);
+        rmi.valueString = DefinicaoMoeda.formatMoney(rmi.value, moeda.acronimo);
+
+      return  this.gerarConlusoesPensaoObitoInstituidorAposentado(moeda, salarioBeneficio, aliquotaDependentes, rmi);
+
+    }
+
+
+    private gerarConlusoesPensaoObitoInstituidorAposentado(moeda, salarioBeneficio, aliquotaDependentes, rmi) {
+
+        const listC = []
+
+       // listC.push(this.setConclusao(0, 'Teto do Salário de Contribuição', moeda.tetoString));
+        listC.push(this.setConclusao(1, 'Salário de Benefício', salarioBeneficio.valueString));
+        listC.push(this.setConclusao(2, 'Alíquota do Benefício', aliquotaDependentes.valueString));
+        listC.push(this.setConclusao(3, 'Renda Mensal Inicial', rmi.valueString));
+
+
+        return {list: listC, label: ''};
+    }
 
 
 
