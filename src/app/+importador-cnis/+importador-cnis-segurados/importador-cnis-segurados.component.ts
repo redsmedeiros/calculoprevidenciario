@@ -91,6 +91,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   validate() {
 
     this.countSeguradoErros = 0;
+    this.errors.clear();
 
     if (this.formData.nome == undefined || this.formData.nome == '') {
       this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
@@ -103,7 +104,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
     if (this.formData.numero_documento == undefined || this.formData.id_documento == ''
-    || !this.formData.numero_documento || this.formData.numero_documento == '') {
+      || !this.formData.numero_documento || this.formData.numero_documento == '') {
       this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
       this.countSeguradoErros++;
     } else {
@@ -115,23 +116,33 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
       this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
       this.countSeguradoErros++;
     } else {
-      var dateParts = this.formData.data_nascimento.split('/');
+
+      let dateParts = this.formData.data_nascimento.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
+
+      if (isNaN(date.getTime())) {
         this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
+        this.countSeguradoErros++;
+      }
     }
 
+
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
-       this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
+      this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
+      this.countSeguradoErros++;
     } else {
-      var dateParts = this.formData.data_filiacao.split('/');
+      let dateParts = this.formData.data_filiacao.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
+
+      if (isNaN(date.getTime())) {
         this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
+        this.countSeguradoErros++;
+      }
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
       this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
+      this.countSeguradoErros++;
     }
 
     this.eventCountSeguradoErros.emit(this.countSeguradoErros);
