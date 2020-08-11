@@ -13,7 +13,6 @@ export class RegrasAcesso {
 
 
     private arrayEspecial = [1915, 1920, 1925];
-    private arrayPensao = [1900, 1901];
     private arrayEspecialDeficiente = [25, 26, 27, 28];
     private arrayIdade = [3, 16];
 
@@ -90,7 +89,6 @@ export class RegrasAcesso {
 
         maximoDescarte.meses = Math.floor(maximoDescarte.anos * 12);
 
-
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
@@ -101,16 +99,14 @@ export class RegrasAcesso {
 
         }
 
-
-        // Ajuste para considerar a carrencia mínima para auxilio acidente e doença
-        if (['acidente', 'doenca', 'incapacidade'].includes(elementTipo.regra)) {
+        // Ajuste para considerar a carrencia mínima para auxilio acidente, doença, pensaoObito e incapacidade
+        if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
 
             const maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = maximoDescarte.meses / 12;
 
         }
-
 
         calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
 
@@ -371,19 +367,18 @@ export class RegrasAcesso {
                 sexo,
                 this.contribuicaoTotal,
                 tipoBeneficio
-            )
+            );
+
+        } else if (tipoBeneficio === 1901) {
+
+            this.regraAcessoPensaoObitoInstituidorNaoAposentado(
+                idadeFracionada,
+                ano,
+                sexo,
+                this.contribuicaoTotal
+            );
 
         } else if (this.arrayIdade.includes(tipoBeneficio)) {
-
-            // Aposentadoria por idade
-            //   this.isStatusTransicaoIdade = (tipoBeneficio === 3) ? true : false;
-
-            // Aposentadoria por idade - Trabalhador Rural
-            //   if (!this.erroCarenciaMinima) {
-            //     this.isRegrasIdade = true;
-            //     this.regraIdade(mesesContribuicao, valorMedio);
-            //     this.regraIdadeFinal(mesesContribuicao, valorMedio, tipoBeneficio);
-            //   }
 
             if (isRegraTransitoria) {
 
@@ -1218,6 +1213,53 @@ export class RegrasAcesso {
             tempo_contribuicao,
             {
                 tempo: requisitoEspecial[sexo],
+                tempoAnterior: 0,
+                idade: 0,
+                pedagio: 0,
+                pontos: 0,
+                ano: ano
+            }
+        );
+
+
+    }
+
+
+
+    // Pensão por Morte instituidor não é aposentado na data óbito
+    public regraAcessoPensaoObitoInstituidorNaoAposentado(
+        idade,
+        ano,
+        sexo,
+        tempo_contribuicao
+    ) {
+
+        const requisitoTempoContrib = {
+            m: 1,
+            f: 1
+        }; // 12 meses
+
+        let status = false;
+        if (Math.trunc(tempo_contribuicao) >= requisitoTempoContrib[sexo] && this.numeroDeContribuicoes > 12) {
+
+            status = true;
+
+        } else {
+
+            status = false;
+        }
+
+
+        this.setConclusaoAcesso(
+            'pensaoObito',
+            'Pensão por Morte instituidor não é aposentado na data óbito',
+            status,
+            0,
+            idade,
+            0,
+            tempo_contribuicao,
+            {
+                tempo: requisitoTempoContrib[sexo],
                 tempoAnterior: 0,
                 idade: 0,
                 pedagio: 0,

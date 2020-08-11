@@ -344,12 +344,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.moedaDib = this.getMoedaDib();
 
     this.conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado =
-      this.conclusoesFinais.calcularPensaoObitoInstituidorAposentado(this.calculo, this.moedaDib);
+      this.conclusoesFinais.calcularPensaoObito(this.calculo, this.moedaDib, this.tipoBeneficio);
 
     this.isUpdating = false;
 
   }
-
 
 
   /**
@@ -365,8 +364,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.CalculoRgpsService.update(this.calculo);
 
   }
-
-
 
   getIdadeFracionada() {
     return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;

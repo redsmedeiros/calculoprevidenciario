@@ -66,7 +66,10 @@ export class conclusoesFinais {
     }
 
 
-
+    /**
+     * Quando o segurado não cumpre os requisitos da especie
+     * @param  {} elementRegraEspecie
+     */
     private conclusaoPossibilidadeNaoAtenteRequisitos(elementRegraEspecie) {
 
         const requisitosNaoAtendidos = [];
@@ -111,19 +114,7 @@ export class conclusoesFinais {
             requisitosNaoAtendidos.push({ tipo: 'pontos', value: diferenca, valueString: diferencaString });
         }
 
-
-
-
-
-        // tempo: tempoFinalContrib,
-        // idade: contribuicao_idade_min[sexo],
-        // pedagio: tempoDePedagioTotal,
-        // pontos: 0,
-        // ano: 0
-
-
         elementRegraEspecie.requisitosNaoAtendidos = requisitosNaoAtendidos;
-
 
     }
 
@@ -196,6 +187,7 @@ export class conclusoesFinais {
             doenca: this.defineAliquotaAuxilioDoenca,
             deficiente: this.defineAliquotaDeficiente,
             incapacidade: this.defineAliquotaIncapacidade,
+            pensaoObito: this.defineAliquotaPensaoObitoInstituidorNaoAposentado,
         };
 
         if (methodsPorEspecie[elementRegraEspecie.regra] !== undefined) {
@@ -255,14 +247,22 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(3, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
         listC.push(this.setConclusao(4, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
-
         if (elementPossibilidade.irt > 1) {
             listC.push(this.setConclusao(5, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 
-
         listC.push(this.setConclusao(7, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
         listC.push(this.setConclusao(8, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
+
+        if (elementRegraEspecie.regra === 'pensaoObito') {
+
+            const conclusaoPensao = this.calcularPensaoObito(this.calculo,
+                                                            elementPossibilidade.moeda,
+                                                            1901,
+                                                            elementPossibilidade.rmi.value);
+            listC.push(...conclusaoPensao.list);
+
+        }
 
         elementPossibilidade.conclusoes = listC;
     }
@@ -380,7 +380,7 @@ export class conclusoesFinais {
 
         if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual) {
             aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual) * 2);
-            formula = `60 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual}) X 2)`;
+            formula = `60 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual}) * 2)`;
             valueString = aliquota + '%'
         }
 
@@ -446,9 +446,27 @@ export class conclusoesFinais {
 
     private defineAliquotaIncapacidade(elementPossibilidade, elementRegraEspecie) {
 
+        if (!this.calculo.obito_decorrencia_trabalho) {
 
-        console.log(this.calculo.obito_decorrencia_trabalho);
+            return this.defineAliquotaIdade(elementPossibilidade);
 
+        } else {
+
+            const aliquota = 100;
+            const formula = '100%';
+            const valueString = aliquota + '%'
+
+            return this.setAliquota(
+                aliquota,
+                valueString,
+                formula
+            );
+
+        }
+
+    }
+
+    private defineAliquotaPensaoObitoInstituidorNaoAposentado(elementPossibilidade, elementRegraEspecie) {
 
         if (!this.calculo.obito_decorrencia_trabalho) {
 
@@ -477,12 +495,14 @@ export class conclusoesFinais {
      * calcular pensão por óbito de Instituidor Aposentado
      * @param  {} calculo
      * @param  {} moeda
+     * @param  {} tipoBeneficio
+     * @param  {} valorSalarioBeneficio = 0 default 0 para aposentadoria com intituidor aposentado
      */
-    public calcularPensaoObitoInstituidorAposentado( calculo, moeda) {
+    public calcularPensaoObito(calculo, moeda, tipoBeneficio, ultimoBeneficioRMI = 0) {
 
         const salarioBeneficio = { value: 0, valueString: '' };
         const aliquotaDependentes = { value: 0, valueString: '', formula: '' };
-        const rmi = { value: 0, valueString: '' };
+        let rmi = { value: 0, valueString: '' };
 
         const tempoPercentual = {
             m: 20,
@@ -504,31 +524,65 @@ export class conclusoesFinais {
 
         }
 
-        salarioBeneficio.value = parseFloat(calculo.ultimo_beneficio);
+        salarioBeneficio.value = (tipoBeneficio === 1901) ? ultimoBeneficioRMI : parseFloat(calculo.ultimo_beneficio);
         salarioBeneficio.valueString = DefinicaoMoeda.formatMoney(salarioBeneficio.value, moeda.acronimo);
 
-        rmi.value = salarioBeneficio.value * (aliquotaDependentes.value / 100);
-        rmi.valueString = DefinicaoMoeda.formatMoney(rmi.value, moeda.acronimo);
+        rmi = this.limitarTetosEMinimos(salarioBeneficio.value * (aliquotaDependentes.value / 100));
 
-      return  this.gerarConlusoesPensaoObitoInstituidorAposentado(moeda, salarioBeneficio, aliquotaDependentes, rmi);
+        if (tipoBeneficio === 1900) {
+            return this.gerarConlusoesPensaoObitoInstituidorAposentado(moeda,
+                salarioBeneficio,
+                aliquotaDependentes,
+                rmi);
+        }
 
+        return this.gerarConlusoesPensaoObitoInstituidorNaoAposentado(moeda,
+            salarioBeneficio,
+            aliquotaDependentes,
+            rmi);
     }
 
-
-    private gerarConlusoesPensaoObitoInstituidorAposentado(moeda, salarioBeneficio, aliquotaDependentes, rmi) {
+    /**
+     * @param  {} moeda
+     * @param  {} salarioBeneficio
+     * @param  {} aliquotaDependentes
+     * @param  {} rmi
+     */
+    private gerarConlusoesPensaoObitoInstituidorAposentado(moeda,
+        salarioBeneficio,
+        aliquotaDependentes,
+        rmi) {
 
         const listC = []
 
-       // listC.push(this.setConclusao(0, 'Teto do Salário de Contribuição', moeda.tetoString));
         listC.push(this.setConclusao(1, 'Salário de Benefício', salarioBeneficio.valueString));
         listC.push(this.setConclusao(2, 'Alíquota do Benefício', aliquotaDependentes.valueString));
         listC.push(this.setConclusao(3, 'Renda Mensal Inicial', rmi.valueString));
 
-
-        return {list: listC, label: ''};
+        return { list: listC, label: 'Pensão por Morte instituidor aposentado na data óbito' };
     }
 
+    /**
+     * @param  {} moeda
+     * @param  {} salarioBeneficio
+     * @param  {} aliquotaDependentes
+     * @param  {} rmi
+     * @param  {} elementPossibilidade
+     */
+    private gerarConlusoesPensaoObitoInstituidorNaoAposentado(
+        moeda,
+        salarioBeneficio,
+        aliquotaDependentes,
+        rmi) {
 
+        const listC = []
+
+        // listC.push(this.setConclusao(91, 'Salário de Benefício', salarioBeneficio.valueString));
+        listC.push(this.setConclusao(92, 'Alíquota do Benefício (Pensão por Morte)', aliquotaDependentes.valueString));
+        listC.push(this.setConclusao(93, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
+
+       return { list: listC, label: 'Pensão por Morte instituidor não é aposentado na data óbito' };
+    }
 
     /**
        * Ajustar ao teto e minimo
