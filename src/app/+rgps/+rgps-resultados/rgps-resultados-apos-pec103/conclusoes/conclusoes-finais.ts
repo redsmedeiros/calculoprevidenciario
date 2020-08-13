@@ -236,19 +236,22 @@ export class conclusoesFinais {
 
         const listC = []
 
+        listC.push(this.setConclusao(0, `Soma dos ${elementPossibilidade.numeroCompetencias} maiores salários de Contribuição`,
+                                                                            elementPossibilidade.somaContribuicoes.valueString));
+
         if (elementRegraEspecie.regra === 'pedagio50') {
 
-            listC.push(this.setConclusao(0, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
-            listC.push(this.setConclusao(1, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
+            listC.push(this.setConclusao(1, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+            listC.push(this.setConclusao(2, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
 
         }
 
-        listC.push(this.setConclusao(2, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
-        listC.push(this.setConclusao(3, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
-        listC.push(this.setConclusao(4, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
+        listC.push(this.setConclusao(3, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
+        listC.push(this.setConclusao(4, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
+        listC.push(this.setConclusao(5, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
         if (elementPossibilidade.irt > 1) {
-            listC.push(this.setConclusao(5, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
+            listC.push(this.setConclusao(6, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 
         listC.push(this.setConclusao(7, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));

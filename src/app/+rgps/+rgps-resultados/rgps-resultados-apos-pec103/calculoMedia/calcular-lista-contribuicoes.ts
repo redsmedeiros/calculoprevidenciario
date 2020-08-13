@@ -1,5 +1,7 @@
 import * as moment from 'moment';
 import { DefinicaoMoeda } from '../share-rmi/definicao-moeda';
+import { debounceTime } from 'rxjs/operator/debounceTime';
+import { switchMap } from 'rxjs/operator/switchMap';
 
 
 export class CalcularListaContribuicoes {

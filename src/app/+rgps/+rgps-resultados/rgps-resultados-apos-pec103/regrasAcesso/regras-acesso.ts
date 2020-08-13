@@ -35,9 +35,14 @@ export class RegrasAcesso {
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
 
-        listaConclusaoAcesso.forEach((elementTipo, indice) => {
+        // listaConclusaoAcesso.forEach((elementTipo, indice) => {
+        //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
+        // });
+
+
+        for (const elementTipo of listaConclusaoAcesso) {
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
-        })
+        }
 
         return listaConclusaoAcesso;
     }
@@ -179,6 +184,8 @@ export class RegrasAcesso {
             });
         }
 
+        console.log(maximoDescarte.meses);
+
         for (let i = maximoDescarte.anos; i >= 0; i--) {
 
             calculosPossiveis.push({
@@ -201,6 +208,51 @@ export class RegrasAcesso {
             });
 
         }
+
+        // let count12meses = 0;
+        // let tempoPorAno = tempoInicial;
+        // let idadePorAno = idadeInicial;
+        // let pontosPorAno = pontosInicial;
+
+        // for (let i = maximoDescarte.meses; i >= 0; i--) {
+
+        //     count12meses++;
+
+        //     if (count12meses === 11) {
+
+
+        //         tempoPorAno -= 1;
+        //         idadePorAno -= 1;
+
+        //         if (pontosInicial > 0) {
+        //             pontosPorAno -= 2;
+        //         }
+
+        //         count12meses = 0;
+        //     }
+
+
+
+        //     calculosPossiveis.push({
+        //         tempo: tempoPorAno,
+        //         idade: idadePorAno,
+        //         pontos: pontosPorAno,
+        //         descarteContrib: i,
+        //         listaCompetencias: [],
+        //         lista12Competencias: [],
+        //         mediaDasContribuicoes: {},
+        //         somaContribuicoes: {},
+        //         numeroCompetencias: 0,
+        //         salarioBeneficio: 0,
+        //         irt: 0,
+        //         rmi: 0,
+        //         fator: 0,
+        //         moeda: {},
+        //         conclusoes: [],
+        //         destaqueMelhorValorRMI: false
+        //     });
+
+        // }
 
         return calculosPossiveis;
 

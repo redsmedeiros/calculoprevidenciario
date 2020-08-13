@@ -4,7 +4,7 @@
 
     <!-- row -->
     <div class="row">
-      <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
+      <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
         <div class="col-md-12 pull-right">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
@@ -28,54 +28,47 @@
                     </span> Cálculo da RMI - Revisão da Vida Toda
                   </button>
         </div>
-      </div> 
+      </div>  -->
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo de Regime Geral da Previdência Social</h1>
+        <h3 class="p-1 m-1">Cálculo de Regime Geral da Previdência Social</h3>
         <!-- Widget ID (each widget will need unique ID)-->
-        <ol class="breadcrumb">
+        <ol class="breadcrumb pb-2 mb-2">
           <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item active">Lista dos cálculos de RGPS realizados </li>
         </ol>
-        <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-    
-              [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-    
-              -->
+        <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false" class="pb-1 mb-2">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
-
-          <!-- widget div-->
           <div>
-
-            <!-- widget content -->
-            <div class="widget-body">
-
-              <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li *ngIf="segurado.numero_documento" ><b>{{segurado.getDocumentType(segurado.numero_documento)}} :</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>               
-              </ul>
-
-              <div class="form-actions">
+            <div class="widget-body p-0 widget-body-fix">
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong> Nome: </strong>{{segurado.nome}}</p>
+              </div>
+              <div class="col-md-3">
+                <p><strong>Data de nascimento: </strong>{{segurado.data_nascimento}}</p>
+              </div>
+              <div class="col-md-2">
+                <p><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</p>
+              </div>
+              <div class="col-md-3">
+                <p *ngIf="segurado.numero_documento"><strong> {{segurado.getDocumentType(segurado.numero_documento)}} :</strong>
+                  {{segurado.numero_documento}}</p>
+              </div>
+            </div>
+              <div class="form-actions p-0">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info pull-left">
+                      <span class="btn-label">
+                        <i class="fa fa-arrow-circle-left"></i>
+                      </span> Voltar para segurados
+                    </button>
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
@@ -89,8 +82,7 @@
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
+      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
               [togglebutton]="false"
@@ -105,9 +97,7 @@
             </span>
             <h2>Próximas etapas</h2>
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body float-panel" style="min-height: auto;">
               <div class="row" id='containerOpcoes'>
                 <div class="col-md-12 pull-right">
@@ -136,53 +126,52 @@
             </div>
           </div>
         </sa-widget>
-      </article>
+      </article> -->
+      
 
-      <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+              <!-- <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create>  -->
 
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-rgps-calculos-index> 
+        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions" (onSubmit)="onCreate($event)"></app-rgps-calculos-index> 
       </article>
       
-      <div class="row row-fix-width">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-times"></i></td>
-                <td>Remover</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-money"></i></td>
-                <td>Inserir valores de contribuição</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-arrow-down"></i></td>
-                <td>Importar dados do CNIS</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-calculator"></i></td>
-                <td>Ver resultados</td>
-              </tr>
-            </tbody>
-          </table>
+      <div >
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading m-0 p-1">
+              <strong>LEGENDA</strong>
+            </div>
+            <div class="panel-body m-0 p-0">
+              <div class="btn-group btn-group-justified p-1">
+                <a class="btn btn-default btn-xs"  title="Inserir Valores de Contribuição">
+                    <i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-1 pull-left"></i>
+                  <strong>Inserir valores de contribuição</strong>
+                </a>
+                <a class="btn btn-default btn-xs"  title="Importar Dados do CNIS">
+                    <i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-1 pull-left"></i>
+                  <strong>Importar dados do CNIS</strong>
+                </a>
+                <a class="btn btn-default btn-xs"title="Calcular">
+                    <i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-1 pull-left"></i>
+                  <strong>Calcular RMI</strong>
+                </a>
+              </div>
+              <div class="btn-group btn-group-justified p-1">
+                <a class="btn btn-default btn-xs" title="Calcular na revisão da vida toda">
+                    <i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-1 pull-left"></i>
+                  <strong> Calcular RMI na revisão da vida toda</strong>
+                </a>
+                <a class="btn btn-default btn-xs" title="Editar o cálculo">&nbsp;
+                    <i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-1 pull-left"></i>
+                  <strong>Editar</strong>
+                </a>
+                <a class="btn btn-default btn-xs " title="Remover este cálculo">
+                    <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-1 pull-left"></i>
+                  <strong>Remover</strong>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

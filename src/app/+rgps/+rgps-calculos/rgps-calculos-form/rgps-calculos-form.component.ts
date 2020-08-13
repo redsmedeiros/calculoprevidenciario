@@ -43,11 +43,11 @@ export class RgpsCalculosFormComponent implements OnInit {
   public secundariaAtualmeses;
   public secundariaAtualdias;
 
-    //reforma EC 103/2019
+  //reforma EC 103/2019
   public primaria19anos;
   public primaria19meses;
   public primaria19dias;
-      //reforma EC 103/2019
+  //reforma EC 103/2019
 
   public grupoDos12;
   public carencia;
@@ -59,7 +59,11 @@ export class RgpsCalculosFormComponent implements OnInit {
   public ultimoBeneficio;
   public sexoInstituidor;
   public divisorMinimo;
-    //reforma EC 103/2019
+  public calcularDescarteAposEC103 = false;
+  public isCalcularDescarteAposEC103 = false;
+  public calcularDescarteDeficienteEC103 = false;
+  public iscalcularDescarteDeficienteEC103 = false;
+  //reforma EC 103/2019
 
   public hasAnterior = false;
   public has98 = false;
@@ -70,14 +74,14 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasGrupoDos12 = false;
   public posteriorMaio2013 = false;
 
-      //reforma EC 103/2019
+  //reforma EC 103/2019
   public hasPensao19 = false;
   public hasInvalidez19 = false;
   public hasPensaoNaoInstuidorAposentado = false;
   public hasPensaoInstuidorAposentado = false;
   public hasAuxilioAcidente = false;
   public hasDivisorMinimo = false;
-      //reforma EC 103/2019
+  //reforma EC 103/2019
 
 
 
@@ -138,6 +142,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.divisorMinimo = this.formData.divisor_minimo;
       this.carencia = this.formData.carencia;
       this.grupoDos12 = this.formData.grupo_dos_12;
+      this.calcularDescarteAposEC103 = this.formData.calcular_descarte_apos_ec103;
+      this.calcularDescarteDeficienteEC103 = this.formData.calcular_descarte_deficiente_ec103;
 
     } else {
       this.checkImportContagemTempo();
@@ -174,8 +180,10 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.sexo_instituidor = this.sexoInstituidor;
       // pensão fim por morte
       this.formData.divisor_minimo = this.divisorMinimo;
+      this.formData.calcular_descarte_apos_ec103 = this.calcularDescarteAposEC103;
+      this.formData.calcular_descarte_deficiente_ec103 = this.calcularDescarteDeficienteEC103;
 
-    //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
+      //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
       this.onSubmit.emit(this.formData);
       this.resetForm();
     }
@@ -477,9 +485,9 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     let tipoIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural')||
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
       (this.especieBeneficio === 'Auxílio Doença')) {
-        tipoIdade = true;
+      tipoIdade = true;
     }
 
 
@@ -497,15 +505,15 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     this.hasDivisorMinimo = false;
     if ((this.especieBeneficio === 'Aposentadoria por tempo de contribuição') ||
-    (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-    (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-    (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
-    (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
-    (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição') ||
-    (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor')
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
+      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
+      (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
+      (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
+      (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição') ||
+      (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor')
     ) {
       this.hasDivisorMinimo = true;
-  }
+    }
 
 
     // console.log(this.especieBeneficio);
@@ -735,14 +743,14 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       // Até a EC nº 103/2019
       this.primariaAtualanos = periodos.total19.years;
-      this.primariaAtualmeses =  periodos.total19.months;
+      this.primariaAtualmeses = periodos.total19.months;
       this.primariaAtualdias = periodos.total19.days;
       // Até a EC nº 103/2019
 
       // posterior a EC nº 103/2019
       this.primaria19anos = periodos.total.years;
       this.primaria19meses = periodos.total.months;
-      this.primaria19dias =  periodos.total.days;
+      this.primaria19dias = periodos.total.days;
       // posterior a EC nº 103/2019
 
       this.periodoInicioBeneficio = 'A partir de 13/11/2019';
@@ -821,17 +829,68 @@ export class RgpsCalculosFormComponent implements OnInit {
       return 'erro nos parametros';
     }
   }
+
+
   changeEspecieBeneficio() {
     this.errors.clear('especieBeneficio');
-    if (this.especieBeneficio == 'Aposentadoria por idade - Trabalhador Rural' || this.especieBeneficio == 'Aposentadoria por idade - Trabalhador Urbano') {
+    if (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural'
+      || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;
     }
 
-    // check especie aposentadoria por invalidez 
+    // check especie aposentadoria por invalidez
     this.changePeriodoOptions();
+    this.checkIsCalcularDescarteAposEC103();
+    this.checkIsCalcularDescarteDeficienteEC103();
   }
+  /**
+   * Habilitar o calculo unico com 100% dos salarios de contribuição
+   *  para aposentadoria de pessoa com deficiencia
+   */
+  private checkIsCalcularDescarteAposEC103() {
+
+    const especiesActive = [
+      'Aposentadoria por incapacidade permanente',
+      'Auxílio Doença',
+      'Aposentadoria especial - 15 anos de exposição',
+    ];
+
+    this.isCalcularDescarteAposEC103 = false;
+
+    if ((this.has19 && !this.hasPensaoInstuidorAposentado)
+      && especiesActive.includes(this.especieBeneficio)) {
+
+      this.isCalcularDescarteAposEC103 = true;
+
+    }
+
+  }
+  /**
+   * Habilitar o descarte de 20% para aposentadoria de pessoa com deficiencia
+   */
+  private checkIsCalcularDescarteDeficienteEC103() {
+
+    const especiesActive = [
+      'Aposentadoria especial da Pessoa com Deficiência Grave',
+      'Aposentadoria especial da Pessoa com Deficiência Leve',
+      'Aposentadoria especial da Pessoa com Deficiência Moderada',
+      'Aposentadoria especial por Idade da Pessoa com Deficiência'
+    ];
+
+    this.iscalcularDescarteDeficienteEC103 = false;
+
+    if ((this.has19 && !this.hasPensaoInstuidorAposentado)
+      && especiesActive.includes(this.especieBeneficio)) {
+
+      this.iscalcularDescarteDeficienteEC103 = true;
+
+    }
+
+  }
+
+
 
   isNumber(value) {
     if (!isNaN(value) && Number.isInteger(+value)) {
