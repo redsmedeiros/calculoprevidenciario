@@ -129,6 +129,13 @@ export class RgpsResultadosComponent implements OnInit {
   public listaValoresContribuidos;
   public tipoBeneficio;
 
+    // Variaveis de controle do template
+    public mostrarCalculoAnterior88 = false;
+    public mostrarCalculo91_98 = false;
+    public mostrarCalculo98_99 = false;
+    public mostrarCalculoApos99 = false;
+    public mostrarCalculoApos19 = false;
+
   public calculoList = [];
   public grupoCalculosTableOptions = {
     colReorder: false,
@@ -143,8 +150,8 @@ export class RgpsResultadosComponent implements OnInit {
       { data: 'contribuicaoPrimaria' },
       { data: 'contribuicaoSecundaria' },
       { data: 'dib' },
-      { data: 'dataCriacao' },
-      { data: 'checkbox' },
+      // { data: 'dataCriacao' },
+      { data: 'checkbox', class: 'not-print', visible: (this.mostrarCalculoApos19) },
     ]
   };
 
@@ -262,12 +269,7 @@ export class RgpsResultadosComponent implements OnInit {
   public dataDecreto6939_2009 = moment('2009-08-18');
   public dataPec062019 = moment('2019-11-13');
 
-  // Variaveis de controle do template
-  public mostrarCalculoAnterior88 = false;
-  public mostrarCalculo91_98 = false;
-  public mostrarCalculo98_99 = false;
-  public mostrarCalculoApos99 = false;
-  public mostrarCalculoApos19 = false;
+
 
   //pbc parametro get
   public pbcCompleto = false;
@@ -872,7 +874,7 @@ export class RgpsResultadosComponent implements OnInit {
         + data.contribuicao_primaria_99.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
-      str += '<tr><td class="no-padding">Entre Lei nº 9.876/99 e EC 103/2019</td><td class="no-padding">'
+      str += '<tr><td class="no-padding">Até EC 103/2019</td><td class="no-padding">'
         + data.contribuicao_primaria_atual.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
@@ -1015,7 +1017,14 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculoApos19 = true;
     }
 
+    this.mostrarCalculoAnterior88 = calculo.mostrarCalculoAnterior88;
+    this.mostrarCalculo91_98 = calculo.mostrarCalculo91_98;
+    this.mostrarCalculo98_99 =  calculo.mostrarCalculo98_99;
+    this.mostrarCalculoApos99 =    calculo.mostrarCalculoApos99;
+    this.mostrarCalculoApos19 =     calculo.mostrarCalculoApos19;
+        
 
+    console.log(calculo.mostrarCalculoApos19)
   }
 
   preencheGrupoDeCalculos() {
@@ -1131,15 +1140,15 @@ export class RgpsResultadosComponent implements OnInit {
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
-    popupWin.document.write('<html><head>' + css + 
-    '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome +
-    '</title></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css +
+      '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' + this.segurado.nome +
+      '</title></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
 
     popupWin.document.close();
   }
 
   imprimirBox(event, boxId) {
-    event​.stopPropagation();
+    event.stopPropagation();
     const css = `
     <style>
           body{font-family: Arial, Helvetica, sans-serif;}
@@ -1157,15 +1166,15 @@ export class RgpsResultadosComponent implements OnInit {
     const boxContent = document.getElementById(boxId).innerHTML;
     const rodape = '<footer><p>IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG</p></footer>';
 
-    let printableString = '<html><head>' + css 
-    + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-    + this.segurado.nome + '</title></head><body onload="window.print()">' 
-    + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
- 
+    let printableString = '<html><head>' + css
+      + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">'
+      + seguradoBox + ' <br> ' + boxContent + rodape + '</body></html>';
+
     printableString = printableString.replace(/<table/g,
       `<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"`);
     const popupWin = window.open('', '_blank', 'width=300,height=300');
-    
+
     popupWin.document.open();
     popupWin.document.write(printableString);
     popupWin.document.close();

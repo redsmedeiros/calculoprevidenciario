@@ -61,6 +61,7 @@
                     {{ calculoPossivel.numeroCompetencias }} salários de
                     contribuição - RMI
                     {{ calculoPossivel.rmi.valueString }}</strong>
+                    <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
                     *ngIf="isUpdating"

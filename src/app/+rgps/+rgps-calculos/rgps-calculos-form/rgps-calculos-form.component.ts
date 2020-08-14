@@ -854,7 +854,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     const especiesActive = [
       'Aposentadoria por incapacidade permanente',
       'Auxílio Doença',
-      'Aposentadoria especial - 15 anos de exposição',
+      'Auxílio Acidente - 50%',
     ];
 
     this.isCalcularDescarteAposEC103 = false;
@@ -863,6 +863,10 @@ export class RgpsCalculosFormComponent implements OnInit {
       && especiesActive.includes(this.especieBeneficio)) {
 
       this.isCalcularDescarteAposEC103 = true;
+
+    } else {
+
+      this.calcularDescarteAposEC103 = false;
 
     }
 
@@ -885,6 +889,10 @@ export class RgpsCalculosFormComponent implements OnInit {
       && especiesActive.includes(this.especieBeneficio)) {
 
       this.iscalcularDescarteDeficienteEC103 = true;
+
+    } else {
+
+      this.calcularDescarteDeficienteEC103 = false;
 
     }
 

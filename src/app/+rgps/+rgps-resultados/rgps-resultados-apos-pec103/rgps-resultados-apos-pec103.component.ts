@@ -48,13 +48,14 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public primeiraDataTabela;
   public carenciaConformDataFiliacao;
   public intervaloDeContribuicoes = 0;
+  public valorExportacao = 0;
 
   public moedaDib;
   public expectativaSobrevida = { expectativa: 0, formula_expectativa_sobrevida: '' };
   public fatorPrevidenciario = { value: 0, formula: '' };
-  public divisorMinimo = 0;
-  public isDivisorMinimo = true;
-  public msgDivisorMinimo = '';
+
+  private melhorValorRMI = 0;
+  private melhorSoma = 0;
 
   public errosArray = [];
 
@@ -106,11 +107,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
-    this.msgDivisorMinimo = '';
-    this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
-
-
-
 
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
@@ -123,7 +119,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
+        if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
 
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
@@ -253,7 +249,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
         this.listaConclusaoAcesso,
         numeroDeContribuicoes,
-        this.carenciaConformDataFiliacao
+        this.carenciaConformDataFiliacao,
+        this.calculo
       );
 
       this.listaConclusaoAcesso = this.calcularListaContribuicoes.criarListasCompetenciasParaPossibilidades(
@@ -278,6 +275,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
+
+
+    this.updateResultadoCalculo();
   }
 
 
@@ -356,14 +356,64 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    * @param  {} valorRMI
    * @param  {} somaContribuicoes
    */
-  private updateResultadoCalculo(valorRMI, somaContribuicoes) {
+  private updateResultadoCalculo() {
 
-    // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-    this.calculo.soma_contribuicao = somaContribuicoes;
-    this.calculo.valor_beneficio = valorRMI;
-    this.CalculoRgpsService.update(this.calculo);
+
+    this.setMelhorValorRMI();
+
+    setTimeout(() => {
+
+      // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+      this.calculo.soma_contribuicao = this.melhorSoma;
+      this.calculo.valor_beneficio = this.melhorValorRMI;
+      this.CalculoRgpsService.update(this.calculo);
+
+    }, 2000);
+
 
   }
+
+
+  private setMelhorValorRMI() {
+
+
+    let melhorValorRMI = 0;
+    let melhorSoma = 0;
+    let melhorCalculo;
+
+    if (this.listaConclusaoAcesso.length > 1) {
+
+      for (const elementEspecie of this.listaConclusaoAcesso) {
+
+        melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
+
+        if (elementEspecie.status && this.isExits(melhorCalculo.rmi.value)
+            && melhorValorRMI < melhorCalculo.rmi.value) {
+          melhorValorRMI = melhorCalculo.rmi.value;
+          melhorSoma = melhorCalculo.somaContribuicoes.value;
+        }
+
+      }
+
+
+    } else {
+
+      melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
+
+      if (melhorCalculo.status && this.isExits(melhorCalculo.rmi.value)) {
+        melhorValorRMI = melhorCalculo.rmi.value;
+        melhorSoma = melhorCalculo.somaContribuicoes.value;
+      }
+
+    }
+
+    this.melhorValorRMI = melhorValorRMI;
+    this.valorExportacao = melhorValorRMI;
+    this.melhorSoma = melhorSoma;
+
+  }
+
+
 
   getIdadeFracionada() {
     return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;

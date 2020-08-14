@@ -35,7 +35,8 @@
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo de Regime Geral da Previdência Social</h1>
+        <!-- <h1>Cálculo de Regime Geral da Previdência Social</h1> -->
+        <h3 class="p-1 m-1">Cálculo de Regime Geral da Previdência Social</h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
@@ -53,8 +54,8 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <ul class="list-unstyled">
+            <div class="widget-body m-0 p-0">
+              <ul class="list-unstyled m-0">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
                 <li  *ngIf="segurado.numero_documento" ><b>{{segurado.getDocumentType(segurado.id_documento)}}:</b>   {{segurado.numero_documento}}</li>
                 <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
@@ -119,17 +120,29 @@
 
       <!-- tabela com o grupo de cálculos -->
       <article class="col-sm-12 col-md-12 col-lg-12" id='boxGrupoCalculos'>
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+        <sa-widget 
+        [colorbutton]="false"
+        [editbutton]="false"
+        [colorbutton]="false"
+        [editbutton]="false"
+        [togglebutton]="false"
+        [deletebutton]="false"
+        [fullscreenbutton]="false"
+        [custombutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Grupo de Cálculos para os valores de contribuição</h2>
+            <!-- <h2>Grupo de Cálculos para os valores de contribuição</h2> -->
+            <h2>Informações do Cálculo</h2>
           </header>
           <div>
-            <div class="widget-body no-padding ">
+            <div class="widget-body no-padding">
               <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
-                paginationLength="false" tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
+                paginationLength="false" 
+                tableClass="table table-striped table-condensed table-bordered table-hover no-padding" 
+                width="100%">
                 <thead>
                   <tr>
                     <th>Espécie</th>
@@ -137,12 +150,13 @@
                     <th>Contribuição Primária (Ano/Mês/Dia)</th>
                     <th>Contribuição Secundária (Ano/Mês/Dia)</th>
                     <th>DIB</th>
-                    <th>Data de Criação</th>
-                    <th class="not-print" *ngIf="!calculo.mostrarCalculoApos19">Comparar</th>
+                    <!-- <th>Data de Criação</th> -->
+                    <th class="not-print" *ngIf="!mostrarCalculoApos19">Comparar</th>
                   </tr>
                 </thead>
               </sa-datatable>
-                <div class="row not-print no-padding" *ngIf="!calculo.mostrarCalculoApos19" >
+                <div *ngIf="!mostrarCalculoApos19" 
+                class="row not-print no-padding" >
                    <div class="col-md-12">
                     <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary pull-right">
                         <span class="btn-label">
@@ -156,69 +170,7 @@
         </sa-widget>
       </article>
       <div class="container-fluid">
-      <!-- opções do calculo -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-gear"></i>
-            </span>
-            <h2>Opções</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body" style="min-height: auto;">
 
-              <div class="row" id='containerOpcoes'>
-                <div class="col-md-12">
-                  <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13"
-                  title="Retorna para a lista de segurados.">
-                    <span class="btn-label">
-                      <i class="fa fa-user"></i>
-                    </span> Lista de segurados
-                  </button>
-
-                  <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13"
-                  title="Retorna para edição de tempo de contribuição, espécie e DIB">
-                    <span class="btn-label">
-                      <i class="fa fa-edit"></i>
-                    </span> Editar cálculo
-                  </button>
- 
-                  <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default margin-right-13"
-                  title="Retorna para lista de cálculos do segurado selecionado">
-                    <span class="btn-label">
-                      <i class="fa fa-list"></i>
-                    </span> Lista cálculos
-                  </button> 
-
-                  <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13"
-                  title="Retorna para editar os valores de contribuíção">
-                    <span class="btn-label">
-                      <i class="fa fa-dollar"></i>
-                    </span> Editar contribuições
-                  </button>
-
-                  <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-primary margin-right-13 pull-right" 
-                  title="Imprime todos os cálculos da página.">
-                    <span class="btn-label">
-                      <i class="fa fa-print"></i>
-                    </span> Imprimir todos
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </sa-widget>
-      </article>
       <!-- opções de correção pbc completo -->
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="pbcCompleto" >
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
@@ -309,6 +261,64 @@
         *ngIf="calculo.mostrarCalculoApos19"
         ></app-rgps-resultados-apos-pec103>
       </div>
+
+
+            <!-- opções do calculo -->
+           <article class="col-sm-12 col-md-12 col-lg-12">
+              <!--  <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
+                    [editbutton]="false"
+                    [togglebutton]="false"
+                    [deletebutton]="false"
+                    [fullscreenbutton]="false"
+                    [custombutton]="false">
+                <header>
+                </header>
+                <div>
+                  <div class="widget-body p-0 m-0" style="min-height: auto;"> -->
+      
+                    <div class="row not-print mb-0" id='containerOpcoes'>
+                      <div class="col-md-12">
+                        <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para a lista de segurados.">
+                          <span class="btn-label">
+                            <i class="fa fa-user"></i>
+                          </span> Segurados
+                        </button>
+      
+                        <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para edição de tempo de contribuição, espécie e DIB">
+                          <span class="btn-label">
+                            <i class="fa fa-edit"></i>
+                          </span> Cálculo
+                        </button>
+       
+                        <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para lista de cálculos do segurado selecionado">
+                          <span class="btn-label">
+                            <i class="fa fa-list"></i>
+                          </span> Lista cálculos
+                        </button> 
+      
+                        <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para editar os valores de contribuíção">
+                          <span class="btn-label">
+                            <i class="fa fa-edit"></i>
+                          </span> Contribuições
+                        </button>
+      
+                        <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled  btn-default mr-3 pull-right" 
+                        title="Imprime todos os cálculos da página.">
+                          <span class="btn-label">
+                            <i class="fa fa-print"></i>
+                          </span> Imprimir todos
+                        </button>
+                      </div>
+                    </div>
+      
+                  <!-- </div>
+                </div>
+              </sa-widget>-->
+            </article> 
     </div>
 
     <!-- end row -->

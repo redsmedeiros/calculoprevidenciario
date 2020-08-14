@@ -5,7 +5,7 @@
 	  <accordion-group [isOpen]="false" #group1120192020>
 	    <h4 class="panel-title" accordion-heading>
 	      <a>
-          <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 EC nº 103/2019 - Exclusão dos menores salários de contribuições </strong>
+          <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 EC nº 103/2019 </strong>
           <i
           class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
           *ngIf="isUpdating"></i>
@@ -185,7 +185,7 @@
               <td>
                 <button
                   type="submit"
-                  *ngIf="erros.length == 0"
+                  *ngIf="valorExportacao == 0"
                   (click)="
                     exportarParaBeneficios(
                       dataInicioBeneficio.format('YYYY-MM-DD'),
@@ -202,7 +202,7 @@
                 </button>
                 <button
                   type="submit"
-                  *ngIf="erros.length != 0"
+                  *ngIf="valorExportacao != 0"
                   class="btn btn-labeled btn-primary pull-right"
                   disabled
                 >
@@ -223,7 +223,7 @@
               <td>
                 <button
                   type="submit"
-                  *ngIf="erros.length == 0"
+                  *ngIf="valorExportacao != 0"
                   (click)="
                     exportarParaBeneficios(
                       dataInicioBeneficio.format('YYYY-MM-DD'),
@@ -240,7 +240,7 @@
                 </button>
                 <button
                   type="submit"
-                  *ngIf="erros.length != 0"
+                  *ngIf="valorExportacao != 0"
                   class="btn btn-labeled btn-primary pull-right"
                   disabled
                 >
@@ -251,7 +251,7 @@
                 </button>
               </td>
             </tr>
-            <tr>
+            <!-- <tr>
               <td>
                 <p>Mostrar Reajustes Administrativos</p>
               </td>
@@ -267,7 +267,7 @@
                   MOSTRAR
                 </button>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td>
                 <p>Imprimir o cálculo</p>

@@ -3,8 +3,10 @@
 <!-- <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" href='#create-calculo'>
   <i class="fa fa-plus"></i> Criar um novo calculo
 </a> -->
-<button class="btn btn-primary btn-sm pull-right" (click)="modalCreate.show()">
-  Criar um novo calculo
+<button class="btn btn-labeled btn-primary btn-sm pull-right" (click)="modalCreate.show()">
+  <span class="btn-label">
+  <i class="fa fa-plus"></i> Criar um novo calculo
+</span>
 </button>
 <div bsModal #modalCreate="bs-modal" class="modal fade" id="create-calculo">
   <div class="modal-dialog modal-lg">
@@ -18,10 +20,9 @@
                 <i class="fa fa-plus"></i>
               </span>
               <h2>Adicionar informações para cálculos</h2>
-              <button type="button" class="btn btn-xs pull-right btn-danger" (click)="lgModal.hide()" aria-hidden="true">
+              <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCreate.hide()" aria-hidden="true">
                 <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"></i>
               </button>
-              
             </header>
             <div>
               <div class="widget-body mb-0">

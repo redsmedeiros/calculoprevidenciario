@@ -610,7 +610,7 @@ export class conclusoesFinais {
 
         return {
             value: valueRetorno,
-            valueString: DefinicaoMoeda.formatMoney(valueRetorno, moeda.acronimo),
+            valueString: DefinicaoMoeda.formatMoney(valueRetorno),
             aviso: avisoString
         };
     }

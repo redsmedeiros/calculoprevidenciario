@@ -10,6 +10,7 @@ export class RegrasAcesso {
     private contribuicaoTotal = 0;
     private numeroDeContribuicoes = 0;
     private carenciaConformDataFiliacao = 0;
+    private calculo;
 
 
     private arrayEspecial = [1915, 1920, 1925];
@@ -30,10 +31,14 @@ export class RegrasAcesso {
      * @param  {} numeroDeContribuicoes
      * @param  {} carenciaConformDataFiliacao
      */
-    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[], numeroDeContribuicoes, carenciaConformDataFiliacao) {
+    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[],
+        numeroDeContribuicoes,
+        carenciaConformDataFiliacao,
+        calculo) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
+        this.calculo = calculo;
 
         // listaConclusaoAcesso.forEach((elementTipo, indice) => {
         //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
@@ -113,7 +118,24 @@ export class RegrasAcesso {
 
         }
 
-        calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
+
+        if (!this.calculo.calcular_descarte_apos_ec103 && !this.calculo.calcular_descarte_deficiente_ec103) {
+
+            calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
+
+        } else {
+
+            // pessoa com deficiencia com descarte de 20%
+            if (this.calculo.calcular_descarte_deficiente_ec103) {
+
+                maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
+
+            }
+
+            calculosPossiveis = this.criarPossibilidadeUnica(maximoDescarte, elementTipo);
+
+        }
+
 
         return calculosPossiveis;
     }
@@ -253,6 +275,50 @@ export class RegrasAcesso {
         //     });
 
         // }
+
+        return calculosPossiveis;
+
+    }
+
+    /**
+      * Criar uma unica possibilidade com 100% ou 80% das contribuições existentes
+      * @param  {} maximoDescarte tempo maximo em anos a ser descartado
+      * @param  {} elementTipo calculo por tipo
+      */
+    private criarPossibilidadeUnica(
+        maximoDescarte,
+        elementTipo
+    ) {
+
+        const requisitos = elementTipo.requisitos;
+        const calculosPossiveis = [];
+        const idadeInicial = elementTipo.idade;
+        const tempoInicial = elementTipo.tempoTotalAposEC103;
+        const pontosInicial = elementTipo.pontos;
+
+
+
+        // Valor default sem decrementar
+        calculosPossiveis.push({
+            tempo: (tempoInicial),
+            idade: (idadeInicial),
+            pontos: ((requisitos.pontos > 0) ? pontosInicial : 0),
+            descarteContrib: maximoDescarte.meses,
+            listaCompetencias: [],
+            lista12Competencias: [],
+            mediaDasContribuicoes: {},
+            somaContribuicoes: {},
+            numeroCompetencias: 0,
+            salarioBeneficio: 0,
+            irt: 0,
+            rmi: 0,
+            fator: 0,
+            moeda: {},
+            conclusoes: [],
+            destaqueMelhorValorRMI: false
+        });
+
+        console.log(maximoDescarte.meses);
 
         return calculosPossiveis;
 
