@@ -419,9 +419,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
     }
 
-    if (this.dataFiliacao >= this.dataDib99) {
+     if (this.dataFiliacao >= this.dataDib99) {
       switch (this.tipoBeneficio) {
-        case 1: //Auxilio Doença Previdenciario
+       // case 1: //Auxilio Doença Previdenciario
         case 2: //Aposentadoria por invalidez previdenciaria
           if (numeroContribuicoes >= 144 || this.withMemo) {
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
@@ -430,7 +430,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = numeroContribuicoes;
           }
           break;
-        case 5: // Aposentadoria Especial
+      //  case 5: // Aposentadoria Especial
         case 7: // Auxilio Acidente Previdenciario 50%
           if (numeroContribuicoes < 144 || this.withMemo) {
             divisorMediaPrimaria = numeroContribuicoes;
@@ -439,12 +439,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
           break;
-        case 3://Aposentadoria Idade Trabalhador Urbano
-        case 4://Aposentadoria Tempo de Contribuicao
-        case 16://Aposentadoria Idade Trabalhafor Rural
-        case 25://Deficiencia Grave
-        case 27://Deficiencia Leva
-        case 26://Deficiencia Moderado
+        // case 3://Aposentadoria Idade Trabalhador Urbano
+        // case 4://Aposentadoria Tempo de Contribuicao
+        // case 16://Aposentadoria Idade Trabalhafor Rural
+        // case 25://Deficiencia Grave
+        // case 27://Deficiencia Leva
+        // case 26://Deficiencia Moderado
         case 28://Deficiencia PorSalvar Idade
           //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
           divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
@@ -511,9 +511,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // }
 
       }
-
-
     }
+
+    console.log(divisorMediaPrimaria);
 
     let totalMediaDozeContribuicoes = 0;
     let divisorContribuicoes;
