@@ -118,12 +118,8 @@ export class RegrasAcesso {
 
         }
 
-
-        if (!this.calculo.calcular_descarte_apos_ec103 && !this.calculo.calcular_descarte_deficiente_ec103) {
-
-            calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
-
-        } else {
+        if ((!this.calculo.calcular_descarte_apos_ec103 && ['acidente', 'doenca', 'incapacidade'].includes(elementTipo.regra))
+            || !this.calculo.calcular_descarte_deficiente_ec103 && elementTipo.regra === 'deficiente') {
 
             // pessoa com deficiencia com descarte de 20%
             if (this.calculo.calcular_descarte_deficiente_ec103) {
@@ -134,12 +130,14 @@ export class RegrasAcesso {
 
             calculosPossiveis = this.criarPossibilidadeUnica(maximoDescarte, elementTipo);
 
-        }
+        } else {
 
+            calculosPossiveis = this.criarListaPossibilidades(maximoDescarte, elementTipo);
+
+        }
 
         return calculosPossiveis;
     }
-
 
     /**
      * Criar a lista de parametros de acordo com as regras de acesso e requisitos
@@ -206,8 +204,6 @@ export class RegrasAcesso {
             });
         }
 
-        console.log(maximoDescarte.meses);
-
         for (let i = maximoDescarte.anos; i >= 0; i--) {
 
             calculosPossiveis.push({
@@ -230,6 +226,35 @@ export class RegrasAcesso {
             });
 
         }
+
+       /// console.log(maximoDescarte);
+
+        if (elementTipo.regra === 'idade' && maximoDescarte.meses > 11) {
+
+            const lastPossibilidade = calculosPossiveis[calculosPossiveis.length - 1];
+            const maximoDescarteIdade  = maximoDescarte.meses + 11
+
+            calculosPossiveis.push({
+                tempo: lastPossibilidade.tempo,
+                idade: lastPossibilidade.idade,
+                pontos: 0,
+                descarteContrib: maximoDescarteIdade,
+                listaCompetencias: [],
+                lista12Competencias: [],
+                mediaDasContribuicoes: {},
+                somaContribuicoes: {},
+                numeroCompetencias: 0,
+                salarioBeneficio: 0,
+                irt: 0,
+                rmi: 0,
+                fator: 0,
+                moeda: {},
+                conclusoes: [],
+                destaqueMelhorValorRMI: false
+            });
+
+        }
+
 
         // let count12meses = 0;
         // let tempoPorAno = tempoInicial;
@@ -1286,9 +1311,21 @@ export class RegrasAcesso {
     ) {
 
         const requisitoPCD = {
-            25: { m: 25, f: 20, label: 'Aposentadoria Pessoa com Deficiência Grave' },
-            26: { m: 29, f: 24, label: 'Aposentadoria Pessoa com Deficiência Moderada' },
-            27: { m: 33, f: 28, label: 'Aposentadoria Pessoa com Deficiência Leve' },
+            25: {
+                tempo: { m: 25, f: 20 },
+                idade: { m: 0, f: 0 },
+                label: 'Aposentadoria Pessoa com Deficiência Grave'
+            },
+            26: {
+                tempo: { m: 29, f: 24 },
+                idade: { m: 0, f: 0 },
+                label: 'Aposentadoria Pessoa com Deficiência Moderada'
+            },
+            27: {
+                tempo: { m: 33, f: 28 },
+                idade: { m: 0, f: 0 },
+                label: 'Aposentadoria Pessoa com Deficiência Leve'
+            },
             28: {
                 tempo: { m: 15, f: 15 },
                 idade: { m: 60, f: 55 },
@@ -1300,25 +1337,32 @@ export class RegrasAcesso {
 
         let status = true;
 
-        if (tipoBeneficio !== 28) {
-            // tempo
-
-            if (tempo_contribuicao < requisitoEspecial[sexo]) {
-                status = false;
-            }
-
-        } else {
-            // idade
-
-            if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
-                status = false;
-            }
-
-            if (idade < requisitoEspecial.idade[sexo]) {
-                status = false;
-            }
-
+        // tempo
+        if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
+            status = false;
         }
+
+        // idade
+        if (idade < requisitoEspecial.idade[sexo]) {
+            status = false;
+        }
+
+
+        // if (tipoBeneficio !== 28) {
+        //     // tempo
+
+        //     if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
+        //         status = false;
+        //     }
+
+        // } else {
+        //     // idade
+
+        //     if (tempo_contribuicao < requisitoEspecial.tempo[sexo] && idade < requisitoEspecial.idade[sexo]) {
+        //         status = false;
+        //     }
+
+        // }
 
 
         this.setConclusaoAcesso(
@@ -1330,9 +1374,9 @@ export class RegrasAcesso {
             0,
             tempo_contribuicao,
             {
-                tempo: requisitoEspecial[sexo],
+                tempo: requisitoEspecial.tempo[sexo],
                 tempoAnterior: 0,
-                idade: 0,
+                idade: requisitoEspecial.idade[sexo],
                 pedagio: 0,
                 pontos: 0,
                 ano: ano

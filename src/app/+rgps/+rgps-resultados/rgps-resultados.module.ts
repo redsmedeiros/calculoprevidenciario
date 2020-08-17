@@ -29,7 +29,7 @@ import { ConclusoesRmiComponent } from './rgps-resultados-apos-pec103/conclusoes
                 RgpsResultadosEntre91e98Component,
                 RgpsResultadosApos99Component,
                 RgpsResultadosEntre88e91Component,
-                RgpsResultadosAposPec062019Component,
+                // RgpsResultadosAposPec062019Component,
                 RgpsResultadosAposPec103Component,
                 ListaCompetenciasComponent,
                 ConclusoesRmiComponent]

@@ -71,7 +71,7 @@
                     <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
+                      </span> <span class="px-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </button>
                   </div>
                 </div>
@@ -135,46 +135,25 @@
         <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions" (onSubmit)="onCreate($event)"></app-rgps-calculos-index> 
       </article>
       
-      <div >
+       <div >
         <div class="col-md-12">
           <div class="panel panel-default">
             <div class="panel-heading m-0 p-1">
               <strong>LEGENDA</strong>
             </div>
-            <div class="panel-body m-0 p-0">
-              <div class="btn-group btn-group-justified p-1">
-                <a class="btn btn-default btn-xs"  title="Inserir Valores de Contribuição">
-                    <i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-1 pull-left"></i>
-                  <strong>Inserir valores de contribuição</strong>
-                </a>
-                <a class="btn btn-default btn-xs"  title="Importar Dados do CNIS">
-                    <i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-1 pull-left"></i>
-                  <strong>Importar dados do CNIS</strong>
-                </a>
-                <a class="btn btn-default btn-xs"title="Calcular">
-                    <i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-1 pull-left"></i>
-                  <strong>Calcular RMI</strong>
-                </a>
-              </div>
-              <div class="btn-group btn-group-justified p-1">
-                <a class="btn btn-default btn-xs" title="Calcular na revisão da vida toda">
-                    <i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-1 pull-left"></i>
-                  <strong> Calcular RMI na revisão da vida toda</strong>
-                </a>
-                <a class="btn btn-default btn-xs" title="Editar o cálculo">&nbsp;
-                    <i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-1 pull-left"></i>
-                  <strong>Editar</strong>
-                </a>
-                <a class="btn btn-default btn-xs " title="Remover este cálculo">
-                    <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-1 pull-left"></i>
-                  <strong>Remover</strong>
-                </a>
-              </div>
+            <div class="panel-body m-1 p-1">
+              <ul class="list-inline">
+                <li><i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-0 pull-left"></i> Valores de contribuição</li>
+                <li><i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-0 pull-left"></i> Importar CNIS</li>
+                <li><i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-0 pull-left"></i> Calcular RMI</li>
+                <li><i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-0 pull-left"></i> Calcular RMI na revisão da vida toda</li>
+                <li><i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"></i> Editar</li>
+                <li><i class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"></i> Remover</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- end row -->

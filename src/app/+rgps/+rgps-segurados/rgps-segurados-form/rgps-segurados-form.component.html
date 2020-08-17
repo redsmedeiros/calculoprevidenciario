@@ -64,16 +64,19 @@
       </div>
     </div>
 
-    <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
+    
   </fieldset>
 
-  <div class="form-actions">
+  <div class="form-actions p-0">
     <div class="row">
-      <div class="col-md-12">
-        <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success">
+      <div class="col-md-6">
+        <p class="pull-left pl-3">(*) Preenchimento Obrigatório.</p>
+      </div>
+      <div class="col-md-6">
+        <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success pull-right">
           <span class="btn-label">
             <i class="fa fa-save"></i>
-          </span> Salvar
+          </span>&nbsp;&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;&nbsp;&nbsp;
         </button>
       </div>
     </div>

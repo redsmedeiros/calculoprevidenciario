@@ -237,7 +237,7 @@ export class conclusoesFinais {
         const listC = []
 
         listC.push(this.setConclusao(0, `Soma dos ${elementPossibilidade.numeroCompetencias} maiores salários de Contribuição`,
-                                                                            elementPossibilidade.somaContribuicoes.valueString));
+            elementPossibilidade.somaContribuicoes.valueString));
 
         if (elementRegraEspecie.regra === 'pedagio50') {
 
@@ -260,9 +260,9 @@ export class conclusoesFinais {
         if (elementRegraEspecie.regra === 'pensaoObito') {
 
             const conclusaoPensao = this.calcularPensaoObito(this.calculo,
-                                                            elementPossibilidade.moeda,
-                                                            1901,
-                                                            elementPossibilidade.rmi.value);
+                elementPossibilidade.moeda,
+                1901,
+                elementPossibilidade.rmi.value);
             listC.push(...conclusaoPensao.list);
 
         }
@@ -285,7 +285,21 @@ export class conclusoesFinais {
             }
             return 0;
         });
+
+
         elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
+
+        // ordenar pelo numero de contribuicoes
+        elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
+            if (entry1.descarteContrib < entry2.descarteContrib) {
+                return 1;
+            }
+            if (entry1.descarteContrib > entry2.descarteContrib) {
+                return -1;
+            }
+            return 0;
+        });
+
 
     }
 
@@ -584,7 +598,7 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(92, 'Alíquota do Benefício (Pensão por Morte)', aliquotaDependentes.valueString));
         listC.push(this.setConclusao(93, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
 
-       return { list: listC, label: 'Pensão por Morte instituidor não é aposentado na data óbito' };
+        return { list: listC, label: 'Pensão por Morte instituidor não é aposentado na data óbito' };
     }
 
     /**

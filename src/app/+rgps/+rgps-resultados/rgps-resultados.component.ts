@@ -129,12 +129,12 @@ export class RgpsResultadosComponent implements OnInit {
   public listaValoresContribuidos;
   public tipoBeneficio;
 
-    // Variaveis de controle do template
-    public mostrarCalculoAnterior88 = false;
-    public mostrarCalculo91_98 = false;
-    public mostrarCalculo98_99 = false;
-    public mostrarCalculoApos99 = false;
-    public mostrarCalculoApos19 = false;
+  // Variaveis de controle do template
+  public mostrarCalculoAnterior88 = false;
+  public mostrarCalculo91_98 = false;
+  public mostrarCalculo98_99 = false;
+  public mostrarCalculoApos99 = false;
+  public mostrarCalculoApos19 = false;
 
   public calculoList = [];
   public grupoCalculosTableOptions = {
@@ -1019,12 +1019,10 @@ export class RgpsResultadosComponent implements OnInit {
 
     this.mostrarCalculoAnterior88 = calculo.mostrarCalculoAnterior88;
     this.mostrarCalculo91_98 = calculo.mostrarCalculo91_98;
-    this.mostrarCalculo98_99 =  calculo.mostrarCalculo98_99;
-    this.mostrarCalculoApos99 =    calculo.mostrarCalculoApos99;
-    this.mostrarCalculoApos19 =     calculo.mostrarCalculoApos19;
-        
+    this.mostrarCalculo98_99 = calculo.mostrarCalculo98_99;
+    this.mostrarCalculoApos99 = calculo.mostrarCalculoApos99;
+    this.mostrarCalculoApos19 = calculo.mostrarCalculoApos19;
 
-    console.log(calculo.mostrarCalculoApos19)
   }
 
   preencheGrupoDeCalculos() {

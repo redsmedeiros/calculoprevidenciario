@@ -126,7 +126,7 @@ export class DefinicaoMoeda {
      */
     static formatMoney(value, sigla = 'R$') {
         const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-        return sigla + numeroPadronizado;
+        return sigla + ' ' + numeroPadronizado;
     }
     /**
      * 

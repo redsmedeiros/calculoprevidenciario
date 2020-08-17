@@ -249,8 +249,11 @@ export class RgpsCalculosFormComponent implements OnInit {
   }
 
   validate() {
+
+    this.errors.clear();
+
     if (this.dataInicioBeneficio == undefined || this.dataInicioBeneficio == '') {
-      this.errors.add({ 'dataInicioBeneficio': ['A data de inicio do benefício é obrigatória.'] });
+      this.errors.add({ 'dataInicioBeneficio': ['A Data é obrigatória.'] });
     } else {
       var dateParts = this.dataInicioBeneficio.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
@@ -259,7 +262,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
     if (this.periodoInicioBeneficio == undefined || this.periodoInicioBeneficio == '') {
-      this.errors.add({ 'periodoInicioBeneficio': ['O período do inicio do benefício é obrigatório.'] });
+      this.errors.add({ 'periodoInicioBeneficio': ['Selecione período.'] });
     }
 
     if (this.especieBeneficio == undefined || this.especieBeneficio == '' || this.especieBeneficio == '- Selecione uma espécie -') {

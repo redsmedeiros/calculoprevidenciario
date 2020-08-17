@@ -1,5 +1,5 @@
 <!-- Widget ID (each widget will need unique ID)-->
-<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" class="mb-2">
   <header>
     <span class="widget-icon">
       <i class="fa fa-table"></i>
@@ -9,7 +9,7 @@
   <div>
     <div class="widget-body no-padding">
       <sa-datatable [options]="datatableOptions"
-        paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+        paginationLength="true" tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
         <thead>
           <tr>
             <th>Ações</th>

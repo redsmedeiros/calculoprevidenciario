@@ -166,7 +166,7 @@ export class CalcularListaContribuicoes {
         // console.log(elementPossibilidade);
 
         elementPossibilidade.listaCompetencias = list;
-        elementPossibilidade.lista12Competencias = list12;
+        // elementPossibilidade.lista12Competencias = list12;
 
         return elementPossibilidade;
 

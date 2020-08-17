@@ -59,13 +59,14 @@
                   <strong
                     >Cálculo com
                     {{ calculoPossivel.numeroCompetencias }} salários de
-                    contribuição - RMI
+                    contribuição -  {{ calculoPossivel.aliquota.valueString }} - RMI
                     {{ calculoPossivel.rmi.valueString }}</strong>
                     <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
                     *ngIf="isUpdating"
                   ></i>
+
                   <button
                     *ngIf="!isUpdating"
                     class="btn btn-primary pull-right btn-xs not-print"
@@ -83,6 +84,17 @@
                     ></i
                     >&nbsp;&nbsp;
                   </button>
+                  <!-- <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
+                  type="submit"
+                  (click)="imprimirBox($event, boxId)"
+                  >
+                    &nbsp;&nbsp; <i
+                    *ngIf="!isUpdating"
+                    class=" fa fa-print pull-left fa fa-lg p-1"
+                  ></i>
+                    Imprimir
+                   &nbsp;&nbsp;
+                  </button> -->
                 </a>
               </h4>
               <div class="no-padding">
