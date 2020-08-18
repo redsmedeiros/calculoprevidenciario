@@ -1,35 +1,36 @@
-<!-- Widget ID (each widget will need unique ID)-->
-<sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false">
-  <header>
-    <span class="widget-icon">
-      <i class="fa fa-table"></i>
-    </span> 
-    <h2>Cálculos Cadastrados</h2>
-    <!-- <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" href='#create-calculo'>
-      <i class="fa fa-plus"></i> Criar um novo calculo
-    </a> -->
 
-    <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
-  </header>
-  <div>
-    <div class="widget-body no-padding">
-      <sa-datatable [options]="datatableOptions"
-        paginationLength="true" 
-        tableClass="table table-striped table-bordered table-hover table-condensed"
-         width="100%">
-        <thead>
-          <tr>
-            <th>Ações</th>
-            <th>Espécie</th>
-            <th>Período para início de benefício</th>
-            <th>Contribuição Primária (Ano/Mês/Dia)</th>
-            <th>DIB</th>
-            <th>RMI</th>
-            <th>Data de Criação</th>
-            <!-- <th>Selecionar</th>  -->
-          </tr>
-        </thead>
-      </sa-datatable>
-    </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span> 
+          <h2>Cálculos Cadastrados</h2>
+          <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create> 
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <sa-datatable [options]="datatableOptions"
+              paginationLength="true" 
+              tableClass="table table-striped table-bordered table-hover table-condensed"
+              width="100%">
+              <thead>
+                <tr>
+                  <th>Ações</th>
+                  <th>Espécie</th>
+                  <th>Período para início de benefício</th>
+                  <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                  <th>DIB</th>
+                  <th>RMI</th>
+                  <th>Data de Criação</th>
+                  <!-- <th>Selecionar</th>  -->
+                </tr>
+              </thead>
+            </sa-datatable>
+          </div>
+        </div>
+      </sa-widget>
   </div>
-</sa-widget>
+</div>

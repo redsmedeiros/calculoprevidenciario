@@ -2,7 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
-import swal from 'sweetalert2';
+// import swal from 'sweetalert2';
+import swal from 'sweetalert';
 import * as moment from 'moment';
 
 @Component({
@@ -188,8 +189,20 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.resetForm();
     }
     else {
-      console.log(this.errors.all())
-      swal('Erro', 'Confira os dados digitados', 'error');
+
+      // console.log(this.errors.all())
+      //swal('Erro', 'Confira os dados digitados', 'error');
+
+      const swalErrorConf = {
+        position: 'top-end',
+        icon: 'error',
+        title: 'Confira os dados digitados',
+        button: false,
+        timer: 1500
+      };
+
+      swal(swalErrorConf);
+
     }
   }
 
@@ -458,6 +471,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   changePeriodoOptions() {
     this.errors.clear('dataInicioBeneficio');
+    this.errors.clear('periodoInicioBeneficio');
     this.periodoOptions = [];
 
     this.hasPensao19 = false;

@@ -1,9 +1,107 @@
-<div id="content" class="pgContent" *ngIf="!isUpdating">
+<div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
 
-    <!-- row -->
-    <div class="row">
+   <div class="row mb-3">
+     <div class=" col-sm-12 col-md-12 col-lg-12">
+      <h4>Cálculo de Regime Geral da Previdência Social</h4>
+     </div>
+   </div>
+   
+
+   <div class="row mb-2">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+        <li class="breadcrumb-item active">Lista dos cálculos de RGPS realizados </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class=" col-sm-12 col-md-12 col-lg-12">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false" class="mb-3">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Dados do segurado</h2>
+        </header>
+        <div>
+          <div class="widget-body p-0 widget-body-fix">
+          <div class="row">
+            <div class="col-md-4">
+              <p><strong> Nome: </strong>{{segurado.nome}}</p>
+            </div>
+            <div class="col-md-3">
+              <p><strong>Data de nascimento: </strong>{{segurado.data_nascimento}}</p>
+            </div>
+            <div class="col-md-2">
+              <p><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</p>
+            </div>
+            <div class="col-md-3">
+              <p *ngIf="segurado.numero_documento"><strong> {{segurado.getDocumentType(segurado.numero_documento)}} :</strong>
+                {{segurado.numero_documento}}</p>
+            </div>
+          </div>
+            <div class="form-actions p-0 mt-2">
+              <div class="row">
+                <div class="col-md-12">
+                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info pull-left">
+                    <span class="btn-label">
+                      <i class="fa fa-arrow-circle-left"></i>
+                    </span> Voltar para segurados
+                  </button>
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </span> <span class="px-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sa-widget>
+    </div>
+  </div>
+
+    </div>
+  </div>
+      
+      <div class="row mb-0"  *ngIf="!isUpdating">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions" (onSubmit)="onCreate($event)"></app-rgps-calculos-index> 
+        </div>
+      </div>
+
+       <div class="row mb-0">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading m-0 p-1">
+              <strong>LEGENDA</strong>
+            </div>
+            <div class="panel-body m-1 p-2">
+              <ul class="list-inline m-0 p-0">
+                <li><i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-0 pull-left"></i> - Valores de contribuição</li>
+                <li><i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-0 pull-left"></i> - Importar CNIS</li>
+                <li><i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-0 pull-left"></i> - Calcular RMI</li>
+                <li><i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-0 pull-left"></i> - Calcular RMI na revisão da vida toda</li>
+                <li><i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"></i> - Editar</li>
+                <li><i class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"></i> - Remover</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+
+</div>
       <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
         <div class="col-md-12 pull-right">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
@@ -29,59 +127,9 @@
                   </button>
         </div>
       </div>  -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <h3 class="p-1 m-1">Cálculo de Regime Geral da Previdência Social</h3>
-        <!-- Widget ID (each widget will need unique ID)-->
-        <ol class="breadcrumb pb-2 mb-2">
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item active">Lista dos cálculos de RGPS realizados </li>
-        </ol>
-        <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false" class="pb-1 mb-2">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-edit"></i>
-            </span>
-            <h2>Dados do segurado</h2>
-          </header>
-          <div>
-            <div class="widget-body p-0 widget-body-fix">
-            <div class="row">
-              <div class="col-md-4">
-                <p><strong> Nome: </strong>{{segurado.nome}}</p>
-              </div>
-              <div class="col-md-3">
-                <p><strong>Data de nascimento: </strong>{{segurado.data_nascimento}}</p>
-              </div>
-              <div class="col-md-2">
-                <p><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</p>
-              </div>
-              <div class="col-md-3">
-                <p *ngIf="segurado.numero_documento"><strong> {{segurado.getDocumentType(segurado.numero_documento)}} :</strong>
-                  {{segurado.numero_documento}}</p>
-              </div>
-            </div>
-              <div class="form-actions p-0">
-                <div class="row">
-                  <div class="col-md-12">
-                    <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-circle-left"></i>
-                      </span> Voltar para segurados
-                    </button>
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
-                      <span class="btn-label">
-                        <i class="fa fa-pencil-square-o"></i>
-                      </span> <span class="px-5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
 
-            </div>
-          </div>
-        </sa-widget>
-      </article>
 
+      
       <!-- <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
               [editbutton]="false"
@@ -131,35 +179,4 @@
 
               <!-- <app-rgps-calculos-create (onSubmit)="onCreate($event)"></app-rgps-calculos-create>  -->
 
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions" (onSubmit)="onCreate($event)"></app-rgps-calculos-index> 
-      </article>
-      
-       <div >
-        <div class="col-md-12">
-          <div class="panel panel-default">
-            <div class="panel-heading m-0 p-1">
-              <strong>LEGENDA</strong>
-            </div>
-            <div class="panel-body m-1 p-1">
-              <ul class="list-inline">
-                <li><i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-0 pull-left"></i> Valores de contribuição</li>
-                <li><i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-0 pull-left"></i> Importar CNIS</li>
-                <li><i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-0 pull-left"></i> Calcular RMI</li>
-                <li><i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-0 pull-left"></i> Calcular RMI na revisão da vida toda</li>
-                <li><i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"></i> Editar</li>
-                <li><i class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"></i> Remover</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- end row -->
-
-  </sa-widgets-grid>
-
-  <!-- end widget grid -->
-
-</div>
+   

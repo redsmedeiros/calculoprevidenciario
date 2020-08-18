@@ -146,9 +146,9 @@ export class RgpsResultadosComponent implements OnInit {
     data: this.calculoList,
     columns: [
       { data: 'especie' },
-      { data: 'periodoInicioBeneficio' },
-      { data: 'contribuicaoPrimaria' },
-      { data: 'contribuicaoSecundaria' },
+      // { data: 'periodoInicioBeneficio' },
+      // { data: 'contribuicaoPrimaria' },
+      // { data: 'contribuicaoSecundaria' },
       { data: 'dib' },
       // { data: 'dataCriacao' },
       { data: 'checkbox', class: 'not-print', visible: (this.mostrarCalculoApos19) },
@@ -813,13 +813,18 @@ export class RgpsResultadosComponent implements OnInit {
 
 
   formatMoney(value, sigla = 'R$') {
+
+    value = parseFloat(value);
     const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-    return sigla + numeroPadronizado;
+    return sigla + ' ' + numeroPadronizado;
+  
   }
 
   formatDecimal(value, n_of_decimal_digits) {
+
     value = parseFloat(value);
     return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+  
   }
 
   public convertDecimalValue(valor) {

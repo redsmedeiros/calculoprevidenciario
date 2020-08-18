@@ -1,36 +1,48 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <h4>Cálculo de Regime Geral da Previdência Social</h4>
-        <ol class="breadcrumb">
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h4 >Cálculo de Regime Geral da Previdência Social</h4>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <ol class="breadcrumb m-0">
           <li class="breadcrumb-item active">Criar/Buscar Segurado</li>
         </ol>
-        <!-- <div class="well">
-          <h2 class="margin-top-0">
-            <span class="semi-bold">Instrução do cálculo</span>
-          </h2>
-          <ul class="list-unstyled">
-            <li><a routerlink="/tutorial" target="_blank" href="#/tutorial">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
-          </ul>
-          <p class="margin-lg-top">Calcula a Renda Mensal Inicial de benefícios com datas de início a partir de  Janeiro de 1970, com aplicação da legislação histórica vigente. Efetua inclusive a revisão do Buraco Negro, para os benefícios com datas de início no período entre 05/10/1988 e 05/04/1991.</p>
-        </div> -->
-      </article>
+      </div>
     </div>
     <!-- row -->
-    <div *ngIf="!isEdit"class="row">
+    <div *ngIf="!isEdit"class="row mb-3">
       <app-rgps-segurados-create (onSubmit)="onCreate($event)"></app-rgps-segurados-create>
     </div>
-    <div *ngIf="isEdit"class="row">
+    <div *ngIf="isEdit"class="row mb-3">
       <app-rgps-segurados-edit (onSubmit)="onCreate($event)"></app-rgps-segurados-edit>
     </div>
     <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+      <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-rgps-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-rgps-segurados-index>
-      </article>
+      </div>
     </div>
-    <div class="row">
+
+    <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading m-0 p-1">
+                <strong>LEGENDA</strong>
+              </div>
+              <div class="panel-body m-1 p-1">
+                <ul class="list-inline">
+                  <li><i class="fa fa-calculator fa-1-7x bg-color-blue txt-color-white p-1"></i> - Calculos do Segurado</li>
+                  <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> - Editar</li>
+                  <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> - Remover</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="row mb-3">
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading m-0 p-1">
@@ -44,23 +56,7 @@
           </div>
         </div>
       </div>
-</div>
-    <div class="row">
-          <div class="col-md-12">
-            <div class="panel panel-default">
-              <div class="panel-heading m-0 p-1">
-                <strong>LEGENDA</strong>
-              </div>
-              <div class="panel-body m-1 p-1">
-                <ul class="list-inline">
-                  <li><i class="fa fa-calculator fa-1-7x bg-color-blue txt-color-white p-1"></i>Calculos do Segurado</li>
-                  <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> Editar</li>
-                  <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> Remover</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-    </div>
+  </div>
 
     <!-- end row -->
   </sa-widgets-grid>

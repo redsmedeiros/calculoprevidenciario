@@ -5,7 +5,7 @@
 
     <!-- row -->
     <div class="row">
-      <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
+      <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
         <div class="col-md-12">
           <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
             <span class="btn-label">
@@ -31,7 +31,7 @@
             </span> Imprimir tudo
           </button>
         </div>
-      </div> 
+      </div>  -->
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
@@ -146,9 +146,9 @@
                 <thead>
                   <tr>
                     <th>Espécie</th>
-                    <th>Período para início de benefício</th>
+                    <!-- <th>Período para início de benefício</th>
                     <th>Contribuição Primária (Ano/Mês/Dia)</th>
-                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
+                    <th>Contribuição Secundária (Ano/Mês/Dia)</th> -->
                     <th>DIB</th>
                     <!-- <th>Data de Criação</th> -->
                     <th class="not-print" *ngIf="!mostrarCalculoApos19">Comparar</th>
@@ -264,18 +264,7 @@
 
 
             <!-- opções do calculo -->
-           <article class="col-sm-12 col-md-12 col-lg-12">
-              <!--  <sa-widget [colorbutton]="false" [editbutton]="false"  [colorbutton]="false"
-                    [editbutton]="false"
-                    [togglebutton]="false"
-                    [deletebutton]="false"
-                    [fullscreenbutton]="false"
-                    [custombutton]="false">
-                <header>
-                </header>
-                <div>
-                  <div class="widget-body p-0 m-0" style="min-height: auto;"> -->
-      
+           <!-- <article class="col-sm-12 col-md-12 col-lg-12">
                     <div class="row not-print mb-0" id='containerOpcoes'>
                       <div class="col-md-12">
                         <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default mr-3 pull-right"
@@ -314,11 +303,7 @@
                         </button>
                       </div>
                     </div>
-      
-                  <!-- </div>
-                </div>
-              </sa-widget>-->
-            </article> 
+            </article>  -->
     </div>
 
     <!-- end row -->

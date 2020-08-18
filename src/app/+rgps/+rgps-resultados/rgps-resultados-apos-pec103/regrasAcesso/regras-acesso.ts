@@ -229,9 +229,11 @@ export class RegrasAcesso {
 
        /// console.log(maximoDescarte);
 
-        if (elementTipo.regra === 'idade' && maximoDescarte.meses > 11) {
+       const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
 
-            const lastPossibilidade = calculosPossiveis[calculosPossiveis.length - 1];
+
+        if (elementTipo.regra === 'idade' && this.numeroDeContribuicoes > 11) {
+
             const maximoDescarteIdade  = maximoDescarte.meses + 11
 
             calculosPossiveis.push({

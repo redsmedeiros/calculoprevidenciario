@@ -125,9 +125,13 @@ export class DefinicaoMoeda {
      * @param  {} sigla='R$'
      */
     static formatMoney(value, sigla = 'R$') {
+
+        value = parseFloat(value);
         const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+
         return sigla + ' ' + numeroPadronizado;
     }
+
     /**
      * 
      * @param  {} value
@@ -173,12 +177,17 @@ export class DefinicaoMoeda {
         let valorRetorno = valor;
 
         if (moeda && valor < salarioMinimo) {
-            valorRetorno = salarioMinimo;
+
+            valorRetorno = parseFloat(salarioMinimo);
             avisoString = 'LIMITADO AO MÍNIMO'
+
         } else if (moeda && valor > tetoSalarial) {
-            valorRetorno = tetoSalarial;
+
+            valorRetorno = parseFloat(tetoSalarial);
             avisoString = 'LIMITADO AO TETO'
+
         }
+
         return { valor: valorRetorno, aviso: avisoString };
     }
 

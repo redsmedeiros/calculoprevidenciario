@@ -239,23 +239,25 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(0, `Soma dos ${elementPossibilidade.numeroCompetencias} maiores salários de Contribuição`,
             elementPossibilidade.somaContribuicoes.valueString));
 
+        listC.push(this.setConclusao(1, `Divisor da Média`, elementPossibilidade.numeroCompetencias));
+
         if (elementRegraEspecie.regra === 'pedagio50') {
 
-            listC.push(this.setConclusao(1, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
-            listC.push(this.setConclusao(2, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+            listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
 
         }
 
-        listC.push(this.setConclusao(3, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
-        listC.push(this.setConclusao(4, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
-        listC.push(this.setConclusao(5, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
+        listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
+        listC.push(this.setConclusao(5, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
+        listC.push(this.setConclusao(6, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
         if (elementPossibilidade.irt > 1) {
-            listC.push(this.setConclusao(6, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
+            listC.push(this.setConclusao(7, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 
-        listC.push(this.setConclusao(7, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
-        listC.push(this.setConclusao(8, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
+        listC.push(this.setConclusao(8, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
+        listC.push(this.setConclusao(9, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
 
         if (elementRegraEspecie.regra === 'pensaoObito') {
 

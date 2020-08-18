@@ -3,11 +3,11 @@
 <section>
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group1120192020>
-	    <h4 class="panel-title" accordion-heading>
+	    <h4 class="panel-title py-0" accordion-heading>
 	      <a>
           <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 EC nº 103/2019 </strong>
           <i
-          class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
+          class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
           *ngIf="isUpdating"></i>
           <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
             &nbsp;&nbsp;
@@ -52,7 +52,7 @@
       </header> -->
       <div>
         <div class="widget-body no-padding">
-          <table class="table table-bordered table-hover no-padding">
+          <table class="table table-bordered table-condensed table-hover no-padding">
             <thead>
               <tr>
                 <th width="50%">
@@ -70,14 +70,14 @@
                 </td>
                 <td>{{ calculo.tipo_seguro }}</td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td>
                   <span class="pull-right font-bold"
                     >Período para o início do benefício:</span
                   >
                 </td>
                 <td>{{ calculo.tipo_aposentadoria }}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td>
                   <span class="pull-right font-bold"
@@ -168,7 +168,7 @@
   </article>
 </div>
 
-        <table class="table table-hover table-bordered">
+        <!-- <table class="table table-hover table-bordered">
           <thead>
             <tr>
               <th>Cálculo nº: {{ boxId }}</th>
@@ -251,7 +251,7 @@
                 </button>
               </td>
             </tr>
-            <!-- <tr>
+            <tr>
               <td>
                 <p>Mostrar Reajustes Administrativos</p>
               </td>
@@ -267,7 +267,7 @@
                   MOSTRAR
                 </button>
               </td>
-            </tr> -->
+            </tr>
             <tr>
               <td>
                 <p>Imprimir o cálculo</p>
@@ -286,7 +286,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
 
 	    </div>
 	  </accordion-group>
