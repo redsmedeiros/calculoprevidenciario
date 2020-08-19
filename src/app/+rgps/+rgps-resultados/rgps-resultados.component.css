@@ -48,3 +48,6 @@
   padding-top: 60px;
 }
 
+.widget-body-custom {
+  min-height: 20px !important;
+}

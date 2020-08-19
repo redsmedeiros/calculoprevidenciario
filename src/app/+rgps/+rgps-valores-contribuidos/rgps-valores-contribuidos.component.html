@@ -31,7 +31,7 @@
           <div>
 
             <!-- widget content -->
-            <div class="widget-body">
+            <div class="widget-body pb-0 widget-body-custom">
 
               <ul class="list-unstyled">
                 <li><b>Nome:</b>  {{segurado.nome}} </li>
@@ -41,7 +41,7 @@
                 <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
               </ul>
 
-              <div class="form-actions">
+              <div class="form-actions p-0 mt-4">
                 <div class="row">
                   <div class="col-md-12">
                     <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
@@ -62,7 +62,7 @@
                       </span>  Cálculo da RMI - Revisão da Vida Toda
                     </button>
 
-                    <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i>
+                    <!-- <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i> -->
                   </div>
                 </div>
               </div>
@@ -82,7 +82,7 @@
             <h2>Grupo de Cálculos para os valores de contribuição</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
+            <div class="widget-body no-padding widget-body-custom hidden-dt">
               <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
                 paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
                 <thead>
@@ -166,7 +166,7 @@
                    </div>
                  </div>
                 </fieldset>
-                <div class="form-actions">
+                <div class="form-actions p-0 mt-3">
                   <div class="row">
                     <div class="col-md-12">
                       <button type="submit" (click)="submit()" class="btn btn-labeled btn-primary">

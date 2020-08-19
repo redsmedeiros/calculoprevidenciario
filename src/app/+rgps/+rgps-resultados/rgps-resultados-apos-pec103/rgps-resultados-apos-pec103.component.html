@@ -3,37 +3,36 @@
 <section>
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group1120192020>
-	    <h4 class="panel-title py-0" accordion-heading>
+	    <h4 class="panel-title " accordion-heading>
 	      <a>
-          <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 EC nº 103/2019 </strong>
-          <i
-          class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
-          *ngIf="isUpdating"></i>
-          <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
-            &nbsp;&nbsp;
-            {{ (!group1120192020?.isOpen)? "Abrir" : "Fechar"}}
+            <strong id="tituloCalculo">{{ calculo.tipo_seguro }} A partir de 13/11/2019 EC nº 103/2019 </strong>
             <i
-            *ngIf="!isUpdating"
-            class="pull-right fa fa-lg p-1"
-            [ngClass]="{
-              'fa-angle-down': group1120192020?.isOpen,
-              'fa-angle-up': !group1120192020?.isOpen
-            }"
-          ></i>&nbsp;&nbsp;
-          </button>
+            class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
+            *ngIf="isUpdating"></i>
+            <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
+              &nbsp;&nbsp;
+              {{ (!group1120192020?.isOpen)? "Abrir" : "Fechar"}}
+              <i
+              *ngIf="!isUpdating"
+              class="pull-right fa fa-lg p-1"
+              [ngClass]="{
+                'fa-angle-down': group1120192020?.isOpen,
+                'fa-angle-up': !group1120192020?.isOpen
+              }"
+            ></i>&nbsp;&nbsp;
+            </button>
 
-          <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
-          type="submit"
-          (click)="imprimirBox($event, boxId)"
-          >
-            &nbsp;&nbsp; <i
-            *ngIf="!isUpdating"
-            class=" fa fa-print pull-left fa fa-lg p-1"
-          ></i>
-            Imprimir
-           &nbsp;&nbsp;
-          </button>
-        
+            <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
+            type="submit"
+            (click)="imprimirBox($event, boxId)"
+            >
+              &nbsp;&nbsp; <i
+              *ngIf="!isUpdating"
+              class=" fa fa-print pull-left fa fa-lg p-1"
+            ></i>
+              Imprimir
+            &nbsp;&nbsp;
+            </button>
           </a>
 	    </h4>
 	    <div class="no-padding no-margin">
@@ -41,7 +40,7 @@
 
 <div id="{{ boxId }}" class="boxCalculo row">
   <article class="col-sm-12 col-md-12 col-lg-12">
-    <sa-widget [colorbutton]="false" [editbutton]="false">
+    <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
       <!-- <header>
         <span class="widget-icon">
           <i class="fa fa-edit"></i>

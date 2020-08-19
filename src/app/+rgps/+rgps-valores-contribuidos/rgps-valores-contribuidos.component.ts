@@ -38,6 +38,10 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   public grupoCalculosTableOptions = {
     colReorder: false,
+    paging: false,
+    searching: false,
+    ordering: false,
+    bInfo: false,
     data: this.calculoList,
     columns: [
       { data: 'especie' },

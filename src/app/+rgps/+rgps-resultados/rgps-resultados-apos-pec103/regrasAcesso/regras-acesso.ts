@@ -182,6 +182,9 @@ export class RegrasAcesso {
         const tempoInicial = elementTipo.tempoTotalAposEC103;
         const pontosInicial = elementTipo.pontos;
 
+        // console.log(maximoDescarte);
+        // console.log((maximoDescarte.anos) - Math.floor(maximoDescarte.anos));
+
         // Valor default sem decrementar
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
             calculosPossiveis.push({
@@ -230,7 +233,6 @@ export class RegrasAcesso {
        /// console.log(maximoDescarte);
 
        const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
-
 
         if (elementTipo.regra === 'idade' && this.numeroDeContribuicoes > 11) {
 

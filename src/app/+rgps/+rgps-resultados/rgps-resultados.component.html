@@ -101,7 +101,7 @@
                   </tr>
                 </table>
               </div>
-              <div class="form-actions no-padding">
+              <div class="form-actions no-padding mt-3">
                 <div class="row">
                   <div class="col-md-12">
                     <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right" title="Editar o segurado.">
@@ -138,10 +138,10 @@
             <h2>Informações do Cálculo</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
+            <div class="widget-body no-padding widget-body-custom hidden-dt">
               <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating"
                 paginationLength="false" 
-                tableClass="table table-striped table-condensed table-bordered table-hover no-padding" 
+                tableClass="table table-condensed table-bordered no-padding" 
                 width="100%">
                 <thead>
                   <tr>
@@ -155,8 +155,7 @@
                   </tr>
                 </thead>
               </sa-datatable>
-                <div *ngIf="!mostrarCalculoApos19" 
-                class="row not-print no-padding" >
+                <div *ngIf="!mostrarCalculoApos19" class="row not-print no-padding" >
                    <div class="col-md-12">
                     <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary pull-right">
                         <span class="btn-label">

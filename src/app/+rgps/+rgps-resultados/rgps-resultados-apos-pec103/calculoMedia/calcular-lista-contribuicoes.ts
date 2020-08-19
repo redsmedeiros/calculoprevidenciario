@@ -141,9 +141,6 @@ export class CalcularListaContribuicoes {
             // contribuição
             const contribuicaoPrimariaString = DefinicaoMoeda.formatMoney(contribuicaoPrimariaRevisada, currency.acronimo);
 
-            console.log(contribuicaoPrimariaRevisada);
-            console.log(contribuicaoPrimariaString);
-
             // contribuição com indice de correção
             contribuicaoPrimariaRevisada = (contribuicaoPrimariaRevisada * fatorCorrigido);
             contribuicaoPrimariaRevisada = DefinicaoMoeda.convertCurrency(contribuicaoPrimariaRevisada, dataContribuicao, dib);

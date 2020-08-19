@@ -603,3 +603,24 @@ a[class*="action-"]:hover {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+
+.hidden-dt .dt-toolbar{
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+.hidden-dt .dt-toolbar-footer{
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+
+.table-condensed-custom.table>tbody>tr>td, 
+.table-condensed-custom.table>tbody>tr>th, 
+.table-condensed-custom.table>tfoot>tr>td, 
+.table-condensed-custom.table>tfoot>tr>th, 
+.table-condensed-custom.table>thead>tr>td, 
+.table-condensed-custom.table>thead>tr>th {
+  padding: 3px 2px !important;
+}
