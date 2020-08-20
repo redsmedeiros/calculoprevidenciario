@@ -31,6 +31,7 @@ export class CalculoRgps extends Model {
     pbc_completo: '',
     calcular_descarte_apos_ec103: '',
     calcular_descarte_deficiente_ec103: '',
+    media_12_ultimos: '',
   };
 
   public id;
@@ -59,6 +60,7 @@ export class CalculoRgps extends Model {
   public pbc_completo;
   public calcular_descarte_apos_ec103;
   public calcular_descarte_deficiente_ec103;
+  public media_12_ultimos;
 
   //  public actions = `
   //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i title="Editar" class='fa fa-edit'></i> </a> 

@@ -280,12 +280,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       //     tempoTotalAteEC103: tempoTotalAteEC103,
       //     tempoTotalAposEC103: tempoTotalAposEC103,
       //     requisitos:  {
-                        //     tempo: contribuicao_min[sexo],
-                        //     idade: (regra2[ano][sexo] - redutorProfessor),
-                        //     pedagio: 0,
-                        //     pontos: 0,
-                        //     ano: ano
-                        // },
+      //     tempo: contribuicao_min[sexo],
+      //     idade: (regra2[ano][sexo] - redutorProfessor),
+      //     pedagio: 0,
+      //     pontos: 0,
+      //     ano: ano
+      // },
       //     requisitosNaoAtendidos: [],
       //     calculosPossiveis: [],
       //     expectativaSobrevida: 0,
@@ -309,7 +309,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     let status = false;
     status = this.verificarCarencia(redutorProfessor, redutorSexo);
     return status;
-    
+
   }
 
 
@@ -416,7 +416,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     } else {
 
-      melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
+      if (this.listaConclusaoAcesso[0].calculosPossiveis.length > 1) {
+        melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI));
+      } else {
+        melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis[0];
+      }
 
       if (melhorCalculo.status && this.isExits(melhorCalculo.rmi.value)) {
         melhorValorRMI = melhorCalculo.rmi.value;

@@ -64,6 +64,8 @@ export class RgpsCalculosFormComponent implements OnInit {
   public isCalcularDescarteAposEC103 = false;
   public calcularDescarteDeficienteEC103 = false;
   public iscalcularDescarteDeficienteEC103 = false;
+  public media12Ultimos = false;
+  public ismedia12Ultimos = false;
   //reforma EC 103/2019
 
   public hasAnterior = false;
@@ -145,6 +147,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.grupoDos12 = this.formData.grupo_dos_12;
       this.calcularDescarteAposEC103 = this.formData.calcular_descarte_apos_ec103;
       this.calcularDescarteDeficienteEC103 = this.formData.calcular_descarte_deficiente_ec103;
+      this.media12Ultimos  = this.formData.media_12_ultimos;
 
     } else {
       this.checkImportContagemTempo();
@@ -183,12 +186,13 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.divisor_minimo = this.divisorMinimo;
       this.formData.calcular_descarte_apos_ec103 = this.calcularDescarteAposEC103;
       this.formData.calcular_descarte_deficiente_ec103 = this.calcularDescarteDeficienteEC103;
+      this.formData.media_12_ultimos = this.media12Ultimos;
 
       //  swal('Sucesso', 'Cálculo salvo com sucesso', 'success');
       this.onSubmit.emit(this.formData);
       this.resetForm();
-    }
-    else {
+
+    } else {
 
       // console.log(this.errors.all())
       //swal('Erro', 'Confira os dados digitados', 'error');
@@ -861,6 +865,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     // check especie aposentadoria por invalidez
     this.changePeriodoOptions();
+    this.checkIsmedia12Ultimos();
     this.checkIsCalcularDescarteAposEC103();
     this.checkIsCalcularDescarteDeficienteEC103();
     this.translateNovosNomesEspecie();
@@ -913,6 +918,31 @@ export class RgpsCalculosFormComponent implements OnInit {
       ];
 
       this.especieBeneficio = (novasEspecies.find((element) => element.antigo === this.especieBeneficio)).novo;
+
+    }
+
+  }
+ 
+  /**
+   * verificar a aplicação da media dos 12 ultimos salarios
+   */
+  private checkIsmedia12Ultimos() {
+
+    const especiesActive = [
+      'Auxílio Doença',
+      'Auxílio por Incapacidade Temporária',
+    ];
+
+    this.ismedia12Ultimos = false;
+
+    if ((this.has19 && !this.hasPensaoInstuidorAposentado)
+      && especiesActive.includes(this.especieBeneficio)) {
+
+      this.ismedia12Ultimos = true;
+
+    } else {
+
+      this.media12Ultimos  = false;
 
     }
 

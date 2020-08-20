@@ -175,6 +175,14 @@
                         <small *ngIf="errors.has('primaria19dias')" class="text-danger">{{ errors.get('primaria19dias') | i18n}}</small>
                       </div>
                     </div>
+                    <div *ngIf="has19 && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
+                      <div class="checkbox col-md-offset-3 col-md-9">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="media12Ultimos" class="checkbox" [ngModelOptions]="{standalone: true}">
+                          <span>Deseja afastar a média dos 12 últimos salários.</span>
+                        </label>
+                      </div>
+                    </div>
                     <div *ngIf="has19 && !hasPensaoInstuidorAposentado && isCalcularDescarteAposEC103;" class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>

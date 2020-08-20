@@ -84,7 +84,7 @@ export class CalcularListaContribuicoes {
             elementRegraEspecie.calculosPossiveis.forEach(elementPossibilidade => {
 
                 this.criarListaContribPossibilidade(elementPossibilidade);
-                this.realizarDescarteContribuicoes(elementPossibilidade);
+                this.realizarDescarteContribuicoes(elementPossibilidade, elementRegraEspecie);
                 this.setTableOption(elementPossibilidade);
 
             });
@@ -101,7 +101,8 @@ export class CalcularListaContribuicoes {
 
         let line = {};
         const list = [];
-        const list12 = [];
+       
+
         let contribuicaoPrimariaRevisada = 0;
         let limiteString = '';
 
@@ -158,15 +159,9 @@ export class CalcularListaContribuicoes {
 
             list.push(line);
 
-            if (index < 12) {
-                list12.push(line)
-            }
-
         });
-        // console.log(elementPossibilidade);
 
         elementPossibilidade.listaCompetencias = list;
-        // elementPossibilidade.lista12Competencias = list12;
 
         return elementPossibilidade;
 
@@ -176,7 +171,7 @@ export class CalcularListaContribuicoes {
      * Realizar o descarte das contribuições previamente calculado com base na regra de aposentadoria da especie
      * @param  {} elementPossibilidade
      */
-    private realizarDescarteContribuicoes(elementPossibilidade) {
+    private realizarDescarteContribuicoes(elementPossibilidade, elementRegraEspecie) {
 
         // menor valor primeiro
         elementPossibilidade.listaCompetencias.sort((entry1, entry2) => {
@@ -189,11 +184,19 @@ export class CalcularListaContribuicoes {
             return 0;
         });
 
+        const list12 = [];
+        let soma12Ultimas = 0;
         let somaContribuicoes = 0;
         const indexMax = (elementPossibilidade.listaCompetencias.length - elementPossibilidade.descarteContrib);
+        const isDoenca12 = (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos);
 
         // somar e sinalizar a contribuição descartada
         elementPossibilidade.listaCompetencias.forEach((element, index) => {
+
+            if (index < 12 && isDoenca12) {
+               // list12.push(element)
+                soma12Ultimas += element.valor_primario;
+            }
 
             if (index >= elementPossibilidade.descarteContrib) {
                 somaContribuicoes += element.valor_primario;
@@ -229,6 +232,19 @@ export class CalcularListaContribuicoes {
                 mediaDasContribuicoes,
                 this.dibCurrency.acronimo)
         };
+
+        if (isDoenca12) {
+
+            // elementPossibilidade.lista12Competencias = list12;
+            const mediaDasContribuicoes12 = soma12Ultimas / 12;
+            elementPossibilidade.mediaDasContribuicoes12 =  {
+                value: mediaDasContribuicoes12,
+                valueString: DefinicaoMoeda.formatMoney(
+                    mediaDasContribuicoes12,
+                    this.dibCurrency.acronimo)
+            };
+
+        }
 
         return elementPossibilidade;
     }

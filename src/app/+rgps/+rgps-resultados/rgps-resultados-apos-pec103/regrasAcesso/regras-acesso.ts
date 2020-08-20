@@ -123,10 +123,12 @@ export class RegrasAcesso {
         }
 
         if ((!this.calculo.calcular_descarte_apos_ec103 && ['acidente', 'doenca', 'incapacidade'].includes(elementTipo.regra))
-            || !this.calculo.calcular_descarte_deficiente_ec103 && elementTipo.regra === 'deficiente') {
+            ||  elementTipo.regra === 'deficiente') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
 
+            maximoDescarte.meses = 0;
+            maximoDescarte.anos = 0;
             // pessoa com deficiencia com descarte de 20%
-            if (this.calculo.calcular_descarte_deficiente_ec103) {
+            if (!this.calculo.calcular_descarte_deficiente_ec103 && elementTipo.regra === 'deficiente') {
 
                 maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
 
@@ -186,10 +188,13 @@ export class RegrasAcesso {
         const tempoInicial = elementTipo.tempoTotalAposEC103;
         const pontosInicial = elementTipo.pontos;
 
+
         // Valor default sem decrementar
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
 
-           // console.log(Math.floor((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) / 12));
+            //    console.log(Math.floor((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) / 12));
+            //    console.log(Math.floor((maximoDescarte.meses) - Math.floor(maximoDescarte.meses)));
+            //    console.log(maximoDescarte);
 
             calculosPossiveis.push({
                 tempo: (tempoInicial),
@@ -199,11 +204,13 @@ export class RegrasAcesso {
                 listaCompetencias: [],
                 lista12Competencias: [],
                 mediaDasContribuicoes: {},
+                mediaDasContribuicoes12: {},
                 somaContribuicoes: {},
                 numeroCompetencias: 0,
                 salarioBeneficio: 0,
                 irt: 0,
                 rmi: 0,
+                rmiConsiderado: 0,
                 fator: 0,
                 moeda: {},
                 conclusoes: [],
@@ -221,11 +228,13 @@ export class RegrasAcesso {
                 listaCompetencias: [],
                 lista12Competencias: [],
                 mediaDasContribuicoes: {},
+                mediaDasContribuicoes12: {},
                 somaContribuicoes: {},
                 numeroCompetencias: 0,
                 salarioBeneficio: 0,
                 irt: 0,
                 rmi: 0,
+                rmiConsiderado: 0,
                 fator: 0,
                 moeda: {},
                 conclusoes: [],
@@ -236,42 +245,48 @@ export class RegrasAcesso {
 
         /// console.log(maximoDescarte);
 
-        const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
-        const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
-        console.log(lastPossibilidade.descarteContrib);
-        console.log(maximoDescarte.meses);
-        console.log(this.numeroDeContribuicoes);
-        console.log(this.numeroDeContribuicoes - maximoDescarte.meses);
-        console.log(numeroConsideradoFinal);
+        // console.log(lastPossibilidade.descarteContrib);
+        // console.log(maximoDescarte.meses);
+        // console.log(this.numeroDeContribuicoes);
+        // console.log(this.numeroDeContribuicoes - maximoDescarte.meses);
+        // console.log(numeroConsideradoFinal);
 
-        if (elementTipo.regra === 'idade' 
-        && this.numeroDeContribuicoes > 11 
-        && numeroConsideradoFinal === 12) {
+        if (elementTipo.regra === 'idade') {
+
+            const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
+            const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
+
+            if (this.numeroDeContribuicoes > 11
+                && numeroConsideradoFinal === 12) {
 
 
-            const maximoDescarteIdade = maximoDescarte.meses + 11
+                const maximoDescarteIdade = maximoDescarte.meses + 11
 
-            calculosPossiveis.push({
-                tempo: lastPossibilidade.tempo,
-                idade: lastPossibilidade.idade,
-                pontos: 0,
-                descarteContrib: maximoDescarteIdade,
-                listaCompetencias: [],
-                lista12Competencias: [],
-                mediaDasContribuicoes: {},
-                somaContribuicoes: {},
-                numeroCompetencias: 0,
-                salarioBeneficio: 0,
-                irt: 0,
-                rmi: 0,
-                fator: 0,
-                moeda: {},
-                conclusoes: [],
-                destaqueMelhorValorRMI: false
-            });
+                calculosPossiveis.push({
+                    tempo: lastPossibilidade.tempo,
+                    idade: lastPossibilidade.idade,
+                    pontos: 0,
+                    descarteContrib: maximoDescarteIdade,
+                    listaCompetencias: [],
+                    lista12Competencias: [],
+                    mediaDasContribuicoes: {},
+                    mediaDasContribuicoes12: {},
+                    somaContribuicoes: {},
+                    numeroCompetencias: 0,
+                    salarioBeneficio: 0,
+                    irt: 0,
+                    rmi: 0,
+                    rmiConsiderado: 0,
+                    fator: 0,
+                    moeda: {},
+                    conclusoes: [],
+                    destaqueMelhorValorRMI: false
+                });
 
+            }
         }
+
 
 
         // let count12meses = 0;
@@ -350,11 +365,13 @@ export class RegrasAcesso {
             listaCompetencias: [],
             lista12Competencias: [],
             mediaDasContribuicoes: {},
+            mediaDasContribuicoes12: {},
             somaContribuicoes: {},
             numeroCompetencias: 0,
             salarioBeneficio: 0,
             irt: 0,
             rmi: 0,
+            rmiConsiderado: 0,
             fator: 0,
             moeda: {},
             conclusoes: [],
@@ -1291,7 +1308,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'doenca',
-            'Auxílio Doença',
+            'Auxílio por Incapacidade Temporária',
             status,
             0,
             idade,
@@ -1330,22 +1347,22 @@ export class RegrasAcesso {
             25: {
                 tempo: { m: 25, f: 20 },
                 idade: { m: 0, f: 0 },
-                label: 'Aposentadoria Pessoa com Deficiência Grave'
+                label: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
             },
             26: {
                 tempo: { m: 29, f: 24 },
                 idade: { m: 0, f: 0 },
-                label: 'Aposentadoria Pessoa com Deficiência Moderada'
+                label: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
             },
             27: {
                 tempo: { m: 33, f: 28 },
                 idade: { m: 0, f: 0 },
-                label: 'Aposentadoria Pessoa com Deficiência Leve'
+                label: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
             },
             28: {
                 tempo: { m: 15, f: 15 },
                 idade: { m: 60, f: 55 },
-                label: 'Aposentadoria por Idade da Pessoa com Deficiência'
+                label: 'Aposentadoria por Idade da PcD'
             }
         };
 

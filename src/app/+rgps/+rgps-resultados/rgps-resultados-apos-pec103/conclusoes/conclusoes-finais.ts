@@ -211,12 +211,23 @@ export class conclusoesFinais {
 
         let rmi = elementPossibilidade.salarioBeneficio.value * (elementPossibilidade.aliquota.value / 100);
 
-        if (elementRegraEspecie.regra === 'pedagio50') {
+        if (elementRegraEspecie.regra === 'pedagio50' ||
+            (elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)) {
+
             rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
+
         }
 
         elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
         elementPossibilidade.moeda = this.moedaDib;
+
+        if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
+
+            elementPossibilidade.rmiConsiderado = (elementPossibilidade.rmi.value < elementPossibilidade.mediaDasContribuicoes12.value) ?
+                elementPossibilidade.rmi : elementPossibilidade.mediaDasContribuicoes12;
+
+        }
+
     }
 
 
@@ -241,7 +252,9 @@ export class conclusoesFinais {
 
         listC.push(this.setConclusao(1, `Divisor da Média`, elementPossibilidade.numeroCompetencias));
 
-        if (elementRegraEspecie.regra === 'pedagio50') {
+        if (elementRegraEspecie.regra === 'pedagio50' ||
+            (elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)
+        ) {
 
             listC.push(this.setConclusao(2, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
             listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
@@ -258,6 +271,14 @@ export class conclusoesFinais {
 
         listC.push(this.setConclusao(8, 'Alíquota do Benefício', elementPossibilidade.aliquota.valueString));
         listC.push(this.setConclusao(9, 'Renda Mensal Inicial', elementPossibilidade.rmi.valueString));
+
+        if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
+
+            listC.push(this.setConclusao(10, 'Média dos 12 últimos Salários de contribuição',
+                elementPossibilidade.mediaDasContribuicoes12.valueString));
+            listC.push(this.setConclusao(11, 'Renda Mensal Inicial Considerada',
+                elementPossibilidade.rmiConsiderado.valueString));
+        }
 
         if (elementRegraEspecie.regra === 'pensaoObito') {
 
@@ -278,30 +299,33 @@ export class conclusoesFinais {
      */
     private aplicarDestaqueMelhorValor(elementRegraEspecie) {
 
-        elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-            if (entry1.rmi.value < entry2.rmi.value) {
-                return 1;
-            }
-            if (entry1.rmi.value > entry2.rmi.value) {
-                return -1;
-            }
-            return 0;
-        });
+        if (elementRegraEspecie.calculosPossiveis.length > 1) {
+
+            elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
+                if (entry1.rmi.value < entry2.rmi.value) {
+                    return 1;
+                }
+                if (entry1.rmi.value > entry2.rmi.value) {
+                    return -1;
+                }
+                return 0;
+            });
 
 
-        elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
+            elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
 
-        // ordenar pelo numero de contribuicoes
-        elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-            if (entry1.descarteContrib < entry2.descarteContrib) {
-                return 1;
-            }
-            if (entry1.descarteContrib > entry2.descarteContrib) {
-                return -1;
-            }
-            return 0;
-        });
+            // ordenar pelo numero de contribuicoes
+            elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
+                if (entry1.descarteContrib < entry2.descarteContrib) {
+                    return 1;
+                }
+                if (entry1.descarteContrib > entry2.descarteContrib) {
+                    return -1;
+                }
+                return 0;
+            });
 
+        }
 
     }
 
