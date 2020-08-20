@@ -9,11 +9,11 @@ class="table table-bordered table-hover no-padding"
     </th>
   </tr>
   <tr>
-    <th>
-      <span class="pull-right">Tipo</span>
+    <th  style="text-align: right;">
+      <span class="pull-right font-bold">Tipo</span>
     </th>
-    <th>
-      Descrição
+    <th style="text-align: left;">
+      <span class="font-bold">Descrição</span>
     </th>
   </tr>
 </thead>
@@ -22,7 +22,7 @@ class="table table-bordered table-hover no-padding"
     *ngFor="let conclusao of conclusoes"
     class="{{ conclusao.class }}"
   >
-    <td width="50%"> <span class="pull-right font-bold">{{ conclusao.label }}</span> </td>
+    <td width="50%" style="text-align: right;"> <span class="pull-right font-bold">{{ conclusao.label }}</span> </td>
     <td>{{ conclusao.valueString }}</td>
   </tr>
 </tbody>

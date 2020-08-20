@@ -50,21 +50,21 @@
         </h2>
       </header> -->
       <div>
-        <div class="widget-body no-padding">
-          <table class="table table-bordered table-condensed table-hover no-padding">
+        <div class="widget-body no-padding" id="printableCalculo">
+          <table class="table table-bordered table-condensed table-hover no-padding" >
             <thead>
               <tr>
-                <th width="50%">
+                <th width="50%" style="text-align: right;" >
                   <span class="pull-right font-bold"> Tipo </span>
                 </th>
-                <th  width="50%">
-                  Descrição
+                <th  width="50%" style="text-align: left;" >
+                  <span class="font-bold">Descrição</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td width="50%">
+                <td width="50%" style="text-align: right;">
                   <span class="pull-right font-bold">Espécie:</span>
                 </td>
                 <td>{{ calculo.tipo_seguro }}</td>
@@ -78,33 +78,34 @@
                 <td>{{ calculo.tipo_aposentadoria }}</td>
               </tr> -->
               <tr>
-                <td>
-                  <span class="pull-right font-bold"
+                <td width="50%" style="text-align: right;">
+                  <span class="pull-right font-bold" 
                     >Data de Início do Benefício:</span
                   >
                 </td>
                 <td>{{ calculo.data_pedido_beneficio }}</td>
               </tr>
               <tr *ngIf="tipoBeneficio != 1900" >
-                <td>
+                <td  width="50%" style="text-align: right;">
                   <span class="pull-right font-bold">
                     Tempo de Contribuição:</span
                   >
                 </td>
-                <td>
+                <td >
                   {{ contribuicaoPrimaria.anos }} ano(s),
                   {{ contribuicaoPrimaria.meses }} mês(es) e
                   {{ contribuicaoPrimaria.dias }} dia(s)
                 </td>
               </tr>
               <tr>
-                <td>
+                <td width="50%" style="text-align: right;">
                   <span class="pull-right font-bold">Data de Criação:</span>
                 </td>
                 <td>{{ formatReceivedDate(calculo.data_calculo) }}</td>
               </tr>
             </tbody>
           </table>
+        </div>
           <div
             class="alert alert-warning margin-top-10"
             *ngFor="let erro of erros"
@@ -131,6 +132,7 @@
             [listaConclusaoAcesso]="listaConclusaoAcesso"
             [isUpdating]="isUpdating"
             [isRegrasTransicao]="isRegrasTransicao"
+            [segurado] ="segurado"
          ></app-lista-competencias>
 
          <app-conclusoes-rmi *ngIf="isRegrasPensaoObitoInstituidorAposentado"
@@ -139,7 +141,7 @@
          [isUpdating]="isUpdating"
        ></app-conclusoes-rmi>
 
-        </div>
+        
       </div>
       <!-- <div id="raTable-{{ boxId }}" *ngIf="!isUpdating" class="widget-body">
         <h2 *ngIf="!isUpdating && showReajustesAdministrativos">

@@ -51,17 +51,38 @@
           >
             <accordion-group [isOpen]="false" #group1>
               <h4 class="panel-title" accordion-heading >
-                <a
+                <a 
                 [ngClass]="{
                   'alert alert-success alert-block m-0': calculoPossivel.destaqueMelhorValorRMI
                 }"
                 >
-                  <strong
-                    >Cálculo com
-                    {{ calculoPossivel.numeroCompetencias }} salários de
-                    contribuição -  {{ calculoPossivel.aliquota.valueString }} - RMI
-                    {{ calculoPossivel.rmi.valueString }}</strong>
-                    <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
+                  <!-- <strong>Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição -  
+                    {{ calculoPossivel.aliquota.valueString }} - RMI
+                    {{ calculoPossivel.rmi.valueString }}
+                  </strong> -->
+
+                  <ul class="list-inline m-0">
+                    <li class="px-2"><strong>  Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição</strong></li>
+                    <li class="px-2"><strong> - {{ calculoPossivel.aliquota.valueString }} -</strong></li>
+                    <li class="px-2"><strong> RMI {{ calculoPossivel.rmi.valueString }}</strong></li>
+                  </ul>
+                  
+                    
+                    <!-- <div class=" col-md-3 col-lg-3 font-bold">
+                      Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição 
+                    </div>
+                    
+                    <div class="col-md-1 col-lg-1 font-bold">
+                       - {{ calculoPossivel.aliquota.valueString }} -
+                    </div>
+                    <div class=" col-md-2 col-lg-2 font-bold">
+                       RMI {{ calculoPossivel.rmi.valueString }}
+                    </div>
+                     <div class=" col-md-2 col-lg-2" *ngIf="calculoPossivel.destaqueMelhorValorRMI">
+                      <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
+                    </div> -->
+                 
+                   <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
                     *ngIf="isUpdating"
@@ -84,9 +105,9 @@
                     ></i
                     >&nbsp;&nbsp;
                   </button>
-                  <!-- <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
+                   <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3 not-print" 
                   type="submit"
-                  (click)="imprimirBox($event, boxId)"
+                  (click)="imprimirBox($event, i)"
                   >
                     &nbsp;&nbsp; <i
                     *ngIf="!isUpdating"
@@ -94,14 +115,14 @@
                   ></i>
                     Imprimir
                    &nbsp;&nbsp;
-                  </button> -->
+                  </button> 
                 </a>
               </h4>
-              <div class="no-padding">
-                <sa-widget [colorbutton]="false" [editbutton]="false">
+              <div class="no-padding" >
+                <sa-widget [colorbutton]="false" [editbutton]="false" >
                   <div *ngIf="!isUpdating">
                     <div class="widget-body no-padding">
-                      <sa-datatable
+                      <sa-datatable id="lista-{{i}}"
                         [options]="calculoPossivel.listaCompetencias"
                         [responsive]="false"
                         paginationLength="true"
@@ -125,7 +146,7 @@
                 </sa-widget>
 
                 <!-- conclusoes genericas -->
-                <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
+                <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" id="conclusao-{{i}}">
                   <app-conclusoes-rmi
                     [conclusoes]="calculoPossivel.conclusoes"
                     [regraLabel]="calculoPorRegra.label"
