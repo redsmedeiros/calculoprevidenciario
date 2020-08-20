@@ -317,8 +317,13 @@ export class RgpsResultadosComponent implements OnInit {
               .then((calculo: CalculoModel) => {
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
-                const checkBox = `<div class="checkbox not-print"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+                const checkBox = `<div class="checkbox not-print"><label>
+                                  <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
+                                  <span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
+
+                calculo.tipo_seguro = this.translateNovosNomesEspecie( calculo.tipo_seguro)
+                
                 const line = {
                   especie: calculo.tipo_seguro,
                   periodoInicioBeneficio: calculo.tipo_aposentadoria,
@@ -328,15 +333,17 @@ export class RgpsResultadosComponent implements OnInit {
                   dataCriacao: this.formatReceivedDate(calculo.data_calculo),
                   checkbox: checkBox
                 }
+
                 this.calculoList.push(line);
                 this.grupoCalculosTableOptions = {
                   ...this.grupoCalculosTableOptions,
                   data: this.calculoList,
                 }
+
                 if ((counter + 1) === this.idsCalculo.length)
                   this.isUpdating = false;
-                counter++;
-              });
+                  counter++;
+                });
           }
 
         }
@@ -755,6 +762,30 @@ export class RgpsResultadosComponent implements OnInit {
         numeroEspecie = 1905;
         break;
       // Reforma  fim 2019
+      // Reforma  inicio alterações 2020
+      case 'Auxílio por Incapacidade Temporária':
+        numeroEspecie = 1;
+        break;
+      case 'Auxílio Acidente':
+        numeroEspecie = 1905;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
+        numeroEspecie = 25
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
+        numeroEspecie = 26
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
+        numeroEspecie = 27
+        break;
+      case 'Aposentadoria por Idade da PcD':
+        numeroEspecie = 28
+        break;
+      case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
+        numeroEspecie = 6;
+        break;
+      // Reforma  fim alterações 2020
+
       default:
         break;
     }
@@ -783,6 +814,9 @@ export class RgpsResultadosComponent implements OnInit {
       // 'Aposentadoria especial da Pessoa com Deficiência Grave',
       // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
       // 'Aposentadoria especial da Pessoa com Deficiência Leve',
+      'Auxílio por Incapacidade Temporária',
+      'Auxílio Acidente',
+      'Aposentadoria por Idade da PcD',
     ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
@@ -817,14 +851,14 @@ export class RgpsResultadosComponent implements OnInit {
     value = parseFloat(value);
     const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
     return sigla + ' ' + numeroPadronizado;
-  
+
   }
 
   formatDecimal(value, n_of_decimal_digits) {
 
     value = parseFloat(value);
     return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
-  
+
   }
 
   public convertDecimalValue(valor) {
@@ -1247,6 +1281,57 @@ export class RgpsResultadosComponent implements OnInit {
       //this.ngOnInit();
     }
 
+  }
+
+  private translateNovosNomesEspecie(especie) {
+
+    if (this.mostrarCalculoApos19 &&
+      [
+        'Auxílio Doença',
+        'Auxílio Acidente - 50%',
+        'Aposentadoria Especial da Pessoa com Deficiência grave',
+        'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+        'Aposentadoria Especial da Pessoa com Deficiência Leve',
+        'Aposentadoria por Idade da Pessoa com Deficiência',
+        'Aposentadoria por tempo de serviço de professor'
+      ].includes(especie)) {
+
+      const novasEspecies = [
+        {
+          antigo: 'Auxílio Doença',
+          novo: 'Auxílio por Incapacidade Temporária'
+        },
+        {
+          antigo: 'Auxílio Acidente - 50%',
+          novo: 'Auxílio Acidente'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência grave',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Leve',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
+        },
+        {
+          antigo: 'Aposentadoria por Idade da Pessoa com Deficiência',
+          novo: 'Aposentadoria por Idade da PcD'
+        },
+        {
+          antigo: 'Aposentadoria por tempo de serviço de professor',
+          novo: 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
+        }
+      ];
+
+      return (novasEspecies.find((element) => element.antigo === especie)).novo;
+
+    }
+
+    return especie;
   }
 
 

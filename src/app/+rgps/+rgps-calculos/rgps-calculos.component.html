@@ -31,7 +31,13 @@
         </header>
         <div>
           <div class="widget-body p-0 widget-body-fix">
-          <div class="row">
+            <ul class="list-inline m-0">
+              <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+              <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+              <li  class="px-5"><strong>Data de nascimento:</strong>  {{segurado.data_nascimento}}</li>
+              <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+            </ul>
+          <!-- <div class="row">
             <div class="col-md-4">
               <p><strong> Nome: </strong>{{segurado.nome}}</p>
             </div>
@@ -45,8 +51,8 @@
               <p *ngIf="segurado.numero_documento"><strong> {{segurado.getDocumentType(segurado.numero_documento)}} :</strong>
                 {{segurado.numero_documento}}</p>
             </div>
-          </div>
-            <div class="form-actions p-0 mt-2">
+          </div> -->
+            <div class="form-actions p-0 mt-3">
               <div class="row">
                 <div class="col-md-12">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info pull-left">

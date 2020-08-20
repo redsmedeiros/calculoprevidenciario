@@ -10,9 +10,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class RgpsSeguradosFormComponent {
 
-  public dateMask = [/\d/, /\d/,'/',/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  public docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+  public docMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -21,20 +21,40 @@ export class RgpsSeguradosFormComponent {
   public submit(e) {
     e.preventDefault();
 
-    if(!localStorage.getItem('user_id')){
-      swal('Erro', 'Falha de login!','error').then(() => {window.location.href = environment.loginPageUrl;});
+    if (!localStorage.getItem('user_id')) {
+      swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
     this.validate();
 
     if (this.errors.empty()) {
-      swal('Sucesso', 'Segurado salvo com sucesso','success');
+
+      const swalSuccess = {
+        position: 'top-end',
+        icon: 'success',
+        title: 'Confira os dados digitados',
+        button: false,
+        timer: 1500
+      };
+
+      swal(swalSuccess);
+
+      //swal('Sucesso', 'Segurado salvo com sucesso','success');
       this.formData.funcao = "rgps";
-      this.formData.user_id = localStorage.getItem('user_id'); 
-      this.onSubmit.emit( this.formData );
-    }
-    else {
-      swal('Erro', 'Confira os dados digitados','error');
+      this.formData.user_id = localStorage.getItem('user_id');
+      this.onSubmit.emit(this.formData);
+    } else {
+
+      const swalErrorConf = {
+        position: 'top-end',
+        icon: 'error',
+        title: 'Confira os dados digitados',
+        button: false,
+        timer: 1500
+      };
+
+      swal(swalErrorConf);
+      //swal('Erro', 'Confira os dados digitados','error');
     }
   }
 
@@ -45,30 +65,30 @@ export class RgpsSeguradosFormComponent {
   }
 
   validate() {
-    if(this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({"nome":["O Nome é obrigatório."]});
+    if (this.formData.nome == undefined || this.formData.nome == '') {
+      this.errors.add({ "nome": ["O Nome é obrigatório."] });
     }
-    
+
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
-      this.errors.add({"data_nascimento":["A data de nascimento é obrigatória."]});
+      this.errors.add({ "data_nascimento": ["A data de nascimento é obrigatória."] });
     } else {
       var dateParts = this.formData.data_nascimento.split("/");
-      let date = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
+      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({"data_nascimento":["Insira uma data válida."]});
+        this.errors.add({ "data_nascimento": ["Insira uma data válida."] });
     }
 
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == "") {
-      this.errors.add({"data_filiacao":["A data de filiação é obrigatória."]});
+      this.errors.add({ "data_filiacao": ["A data de filiação é obrigatória."] });
     } else {
       var dateParts = this.formData.data_filiacao.split("/");
-      let date = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
+      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({"data_filiacao":["Insira uma data válida ou deixe em branco."]});
+        this.errors.add({ "data_filiacao": ["Insira uma data válida ou deixe em branco."] });
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
-        this.errors.add({"sexo":["O campo sexo é obrigatório."]});
+      this.errors.add({ "sexo": ["O campo sexo é obrigatório."] });
     }
 
     // if(this.formData.id_documento == undefined || this.formData.id_documento == '') {
@@ -80,35 +100,35 @@ export class RgpsSeguradosFormComponent {
     // } else {
     //   let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi,'');
     //   let id = this.formData.id_documento.toString();
-      // switch (id) {
-      //   case '1': //PIS
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["PIS inválido."]});
-      //     break;
+    // switch (id) {
+    //   case '1': //PIS
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["PIS inválido."]});
+    //     break;
 
-      //   case '2': //PASEP
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["PASEP inválido."]});
-      //     break;
+    //   case '2': //PASEP
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["PASEP inválido."]});
+    //     break;
 
-      //   case '3': //CPF
-      //     if (!this.validateCPF(documentNumber))
-      //       this.errors.add({"numero_documento":["CPF inválido."]});
-      //     break;
+    //   case '3': //CPF
+    //     if (!this.validateCPF(documentNumber))
+    //       this.errors.add({"numero_documento":["CPF inválido."]});
+    //     break;
 
-      //   case '4': //NIT
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["NIT inválido."]});
-      //     break;
+    //   case '4': //NIT
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["NIT inválido."]});
+    //     break;
 
-      //   case '5': //RG
-      //     if (!this.validateRG(documentNumber))
-      //       this.errors.add({"numero_documento":["RG inválido."]});
-      //     break;
+    //   case '5': //RG
+    //     if (!this.validateRG(documentNumber))
+    //       this.errors.add({"numero_documento":["RG inválido."]});
+    //     break;
 
-      //   default:
-      //     break;
-      // }
+    //   default:
+    //     break;
+    // }
     //}
 
 
@@ -151,34 +171,34 @@ export class RgpsSeguradosFormComponent {
   //   var total=0;
   //   var resto=0;
   //   var strResto="";
- 
+
   //   var numPIS=pis.toString();
-      
+
   //   var resultado;
   //   for(let i=0;i<=9;i++)
   //   {
   //     resultado = parseInt((numPIS.slice(i,i+1)))*parseInt(ftap.slice(i,i+1));
   //     total=total+resultado;
   //   }
-  
+
   //   resto = (total % 11)
-  
+
   //   if (resto != 0)
   //   {
   //     resto=11-resto;
   //   }
-  
+
   //   if (resto==10 || resto==11)
   //   {
   //     strResto=resto+"";
   //     resto = parseInt(strResto.slice(1,2));
   //   }
-  
+
   //   if (resto!=parseInt(numPIS.slice(10,11)))
   //   {
   //     return false;
   //   }
-  
+
   //   return true;
   // }
 

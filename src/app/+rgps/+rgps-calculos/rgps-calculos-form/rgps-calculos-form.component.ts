@@ -503,7 +503,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     let tipoIdade = false;
     if ((this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
       (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-      (this.especieBeneficio === 'Auxílio Doença')) {
+      (this.especieBeneficio === 'Auxílio Doença') ||
+      (this.especieBeneficio === 'Auxílio por Incapacidade Temporária')) {
       tipoIdade = true;
     }
 
@@ -514,7 +515,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       tipoInvalidezPensao = true;
     }
 
-    if ((this.especieBeneficio === 'Auxílio Acidente - 50%')) {
+    if ((this.especieBeneficio === 'Auxílio Acidente - 50%') || (this.especieBeneficio === 'Auxílio Acidente')) {
       tipoInvalidezPensao = true;
       this.hasAuxilioAcidente = true;
     }
@@ -527,7 +528,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
       (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
       (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição') ||
-      (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor')
+      (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor') ||
+      (this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)')
     ) {
       this.hasDivisorMinimo = true;
     }
@@ -861,7 +863,61 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.changePeriodoOptions();
     this.checkIsCalcularDescarteAposEC103();
     this.checkIsCalcularDescarteDeficienteEC103();
+    this.translateNovosNomesEspecie();
   }
+
+
+  private translateNovosNomesEspecie() {
+
+    if (this.isEdit &&
+      this.has19 &&
+      [
+        'Auxílio Doença',
+        'Auxílio Acidente - 50%',
+        'Aposentadoria Especial da Pessoa com Deficiência grave',
+        'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+        'Aposentadoria Especial da Pessoa com Deficiência Leve',
+        'Aposentadoria por Idade da Pessoa com Deficiência',
+        'Aposentadoria por tempo de serviço de professor'
+      ].includes(this.especieBeneficio)) {
+
+      const novasEspecies = [
+        {
+          antigo: 'Auxílio Doença',
+          novo: 'Auxílio por Incapacidade Temporária'
+        },
+        {
+          antigo: 'Auxílio Acidente - 50%',
+          novo: 'Auxílio Acidente'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência grave',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
+        },
+        {
+          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Leve',
+          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
+        },
+        {
+          antigo: 'Aposentadoria por Idade da Pessoa com Deficiência',
+          novo: 'Aposentadoria por Idade da PcD'
+        },
+        {
+          antigo: 'Aposentadoria por tempo de serviço de professor',
+          novo: 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
+        }
+      ];
+
+      this.especieBeneficio = (novasEspecies.find((element) => element.antigo === this.especieBeneficio)).novo;
+
+    }
+
+  }
+
   /**
    * Habilitar o calculo unico com 100% dos salarios de contribuição
    *  para aposentadoria de pessoa com deficiencia
@@ -872,6 +928,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por incapacidade permanente',
       'Auxílio Doença',
       'Auxílio Acidente - 50%',
+      'Auxílio por Incapacidade Temporária',
+      'Auxílio Acidente'
     ];
 
     this.isCalcularDescarteAposEC103 = false;
@@ -897,7 +955,11 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria especial da Pessoa com Deficiência Grave',
       'Aposentadoria especial da Pessoa com Deficiência Leve',
       'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      'Aposentadoria especial por Idade da Pessoa com Deficiência'
+      'Aposentadoria especial por Idade da Pessoa com Deficiência',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)',
+      'Aposentadoria por Idade da PcD',
     ];
 
     this.iscalcularDescarteDeficienteEC103 = false;

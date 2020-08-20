@@ -54,14 +54,13 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body m-0 p-0">
-              <ul class="list-unstyled m-0">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li  *ngIf="segurado.numero_documento" ><b>{{segurado.getDocumentType(segurado.id_documento)}}:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
-                <li><b>Idade atual:</b>  {{this.idadeSegurado}} anos</li>
+            <div class="widget-body widget-body-custom m-0 p-0 ">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+                <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+                <li  class="px-5"><strong>Data de nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+                <li  class="px-5"><strong>Idade atual:</strong>  {{this.idadeSegurado}} anos</li>
               </ul>
               <div id="printableSegurado" hidden>
                 <h1>Cálculo de Regime Geral da Previdência Social</h1>
@@ -155,7 +154,7 @@
                   </tr>
                 </thead>
               </sa-datatable>
-                <div *ngIf="!mostrarCalculoApos19" class="row not-print no-padding" >
+                <!-- <div *ngIf="!mostrarCalculoApos19" class="row not-print no-padding" >
                    <div class="col-md-12">
                     <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary pull-right">
                         <span class="btn-label">
@@ -163,7 +162,7 @@
                         </span> Comparar
                     </button>
                   </div>
-                </div>
+                </div> -->
             </div>
           </div>
         </sa-widget>

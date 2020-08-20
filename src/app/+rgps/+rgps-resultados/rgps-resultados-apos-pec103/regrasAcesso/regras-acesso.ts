@@ -64,9 +64,7 @@ export class RegrasAcesso {
             pontos: 0
         };
 
-
         // console.log(elementTipo);
-
 
         if (!elementTipo.status) {
             return calculosPossiveis;
@@ -77,9 +75,7 @@ export class RegrasAcesso {
         let difTempoContribExcedente = 0;
         let difPontosExcedente = 0;
 
-
         difTempoContribExcedente = elementTipo.tempoTotalAposEC103 - elementTipo.requisitos.tempo;
-
 
         maximoDescarte.anos = difTempoContribExcedente;
 
@@ -116,6 +112,14 @@ export class RegrasAcesso {
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = maximoDescarte.meses / 12;
 
+        }
+
+        // evitar que o numero de contribuicoes seja negativo
+        if (this.numeroDeContribuicoes < maximoDescarte.meses) {
+
+            const tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            maximoDescarte.meses = tempAjusteMaximoDescarte;
+            maximoDescarte.anos = maximoDescarte.meses / 12;
         }
 
         if ((!this.calculo.calcular_descarte_apos_ec103 && ['acidente', 'doenca', 'incapacidade'].includes(elementTipo.regra))
@@ -182,11 +186,11 @@ export class RegrasAcesso {
         const tempoInicial = elementTipo.tempoTotalAposEC103;
         const pontosInicial = elementTipo.pontos;
 
-        // console.log(maximoDescarte);
-        // console.log((maximoDescarte.anos) - Math.floor(maximoDescarte.anos));
-
         // Valor default sem decrementar
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
+
+           // console.log(Math.floor((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) / 12));
+
             calculosPossiveis.push({
                 tempo: (tempoInicial),
                 idade: (idadeInicial),
@@ -230,13 +234,23 @@ export class RegrasAcesso {
 
         }
 
-       /// console.log(maximoDescarte);
+        /// console.log(maximoDescarte);
 
-       const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
+        const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
+        const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
-        if (elementTipo.regra === 'idade' && this.numeroDeContribuicoes > 11) {
+        console.log(lastPossibilidade.descarteContrib);
+        console.log(maximoDescarte.meses);
+        console.log(this.numeroDeContribuicoes);
+        console.log(this.numeroDeContribuicoes - maximoDescarte.meses);
+        console.log(numeroConsideradoFinal);
 
-            const maximoDescarteIdade  = maximoDescarte.meses + 11
+        if (elementTipo.regra === 'idade' 
+        && this.numeroDeContribuicoes > 11 
+        && numeroConsideradoFinal === 12) {
+
+
+            const maximoDescarteIdade = maximoDescarte.meses + 11
 
             calculosPossiveis.push({
                 tempo: lastPossibilidade.tempo,
@@ -346,8 +360,6 @@ export class RegrasAcesso {
             conclusoes: [],
             destaqueMelhorValorRMI: false
         });
-
-        console.log(maximoDescarte.meses);
 
         return calculosPossiveis;
 

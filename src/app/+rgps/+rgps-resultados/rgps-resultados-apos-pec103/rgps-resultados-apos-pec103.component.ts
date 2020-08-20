@@ -269,13 +269,34 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo,
         this.pbcCompleto);
 
-    }
+    } else {
 
+      //   this.listaConclusaoAcesso.push({
+      //     regra: regra,
+      //     label: label,
+      //     status: false,
+      //     pontos: pontosTotal,
+      //     idade: idade,
+      //     tempoTotalAteEC103: tempoTotalAteEC103,
+      //     tempoTotalAposEC103: tempoTotalAposEC103,
+      //     requisitos:  {
+                        //     tempo: contribuicao_min[sexo],
+                        //     idade: (regra2[ano][sexo] - redutorProfessor),
+                        //     pedagio: 0,
+                        //     pontos: 0,
+                        //     ano: ano
+                        // },
+      //     requisitosNaoAtendidos: [],
+      //     calculosPossiveis: [],
+      //     expectativaSobrevida: 0,
+      //     moedaDib: {}
+      // });
+
+    }
 
     console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
-
 
     this.updateResultadoCalculo();
   }
@@ -283,15 +304,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
 
-
-
-
   private verificarRegrasIniciais(redutorProfessor, redutorSexo) {
+
     let status = false;
-
     status = this.verificarCarencia(redutorProfessor, redutorSexo);
-
     return status;
+    
   }
 
 
@@ -388,7 +406,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
 
         if (elementEspecie.status && this.isExits(melhorCalculo.rmi.value)
-            && melhorValorRMI < melhorCalculo.rmi.value) {
+          && melhorValorRMI < melhorCalculo.rmi.value) {
           melhorValorRMI = melhorCalculo.rmi.value;
           melhorSoma = melhorCalculo.somaContribuicoes.value;
         }

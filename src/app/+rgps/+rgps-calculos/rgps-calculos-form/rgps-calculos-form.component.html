@@ -27,28 +27,35 @@
                     <div class="col-md-9">
                       <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="especieBeneficio">
                         <option selected disabled> - Selecione uma espécie - </option>
-                        <option  *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
-                        <option  *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial</option>
-                        <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 15 anos de exposição</option>
-                        <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 20 anos de exposição</option>
-                        <option  *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 25 anos de exposição</option>
-                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Grave</option>
-                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option *ngIf="posteriorMaio2013">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option *ngIf="posteriorMaio2013">Aposentadoria especial por Idade da Pessoa com Deficiência</option>
+                        <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
+                        <option *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 15 anos de exposição</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 20 anos de exposição</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria especial - 25 anos de exposição</option>
+                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial da Pessoa com Deficiência Grave</option>
+                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial da Pessoa com Deficiência Leve</option>
+                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
+                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria especial por Idade da Pessoa com Deficiência</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por Idade da PcD</option>
                         <option>Aposentadoria por idade - Trabalhador Rural</option>
                         <option>Aposentadoria por idade - Trabalhador Urbano</option>
                         <option *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por incapacidade permanente</option>
                         <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de contribuição</option>
-                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço de professor</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Aposentadoria por Tempo de Contribuição do(a) Professor(a)</option>
+                        <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Aposentadoria por tempo de serviço de professor</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Acidente - 30%</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Acidente - 40%</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Acidente - 60%</option>
                         <option *ngIf="periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Acidente previdenciário - 50%</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Auxílio Acidente - 50%</option>
-                        <option>Auxílio Doença</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019' && periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Acidente - 50%</option>
+                        <option *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">Auxílio Doença</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Auxílio Acidente</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Auxílio por Incapacidade Temporária</option>
                         <option *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">LOAS</option>
                         <option *ngIf="periodoInicioBeneficio != 'A partir de 13/11/2019'">LOAS - Benefício no valor de um salário mínimo</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 13/11/2019'">Pensão por Morte instituidor aposentado na data óbito</option>
@@ -274,7 +281,7 @@
                 <div class="form-actions p-0">
                   <div class="row">
                     <div class="col-md-12">
-                      <span class="pull-left ml-2">(*) Peenchimento Obrigatório.</span>
+                      <span class="pull-left ml-2" [ngClass]="{'py-2':'isEdit'}" >(*) Preenchimento Obrigatório.</span>
                       <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-primary mr-2">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
