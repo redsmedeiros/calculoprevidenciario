@@ -65,24 +65,9 @@
                     <li class="px-2"><strong>  Cálculo com {{ calculoPossivel.numeroCompetencias }} Salários de Contribuição</strong></li>
                     <li class="px-2"><strong> - {{ calculoPossivel.aliquota.valueString }} -</strong></li>
                     <li class="px-2"><strong> RMI {{ calculoPossivel.rmi.valueString }}</strong></li>
+                    <li class="px-2"><span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span></li>
                   </ul>
-                  
-                    
-                    <!-- <div class=" col-md-3 col-lg-3 font-bold">
-                      Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição 
-                    </div>
-                    
-                    <div class="col-md-1 col-lg-1 font-bold">
-                       - {{ calculoPossivel.aliquota.valueString }} -
-                    </div>
-                    <div class=" col-md-2 col-lg-2 font-bold">
-                       RMI {{ calculoPossivel.rmi.valueString }}
-                    </div>
-                     <div class=" col-md-2 col-lg-2" *ngIf="calculoPossivel.destaqueMelhorValorRMI">
-                      <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
-                    </div> -->
-                 
-                   <span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span>
+                   
                   <i
                     class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
                     *ngIf="isUpdating"

@@ -8,7 +8,7 @@
     <accordion-group [isOpen]="false" #groupApos1999>
       <h4 class="panel-title" accordion-heading>
         <a>
-          <strong id='tituloCalculo' > Data de Início do Benefício entre 29/11/1999 e 12/11/2019 </strong>
+          <strong id='tituloCalculo' > Data de Início do Benefício entre 29/11/1999 e 13/11/2019 </strong>
         <i
         class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
         *ngIf="isUpdating"
@@ -76,14 +76,14 @@
                       <td>
                         <span class="pull-right font-bold">Período para o início do benefício:</span>
                       </td>
-                      <!-- <td>{{calculo.tipo_aposentadoria}}</td> -->
-                      <td>{{stringCabecalho}}</td>
+                      <td>{{calculo.tipo_aposentadoria}}</td>
+                      <!-- <td>{{stringCabecalho}}</td> -->
                     </tr>
                     <tr>
                       <td>
                         <span class="pull-right font-bold">Data de Início do Benefício:</span>
                       </td>
-                      <td>{{calculo.data_pedido_beneficio}}</td>
+                      <td>{{dataInicioBeneficioString}}</td>
                     </tr>
                     <tr>
                       <td>
@@ -120,17 +120,17 @@
                     <div class="widget-body no-padding">
                       <sa-datatable [options]="tableOptions" [responsive] = "false"
                         paginationLength="true" *ngIf="!isUpdating " 
-                        tableClass="table table-striped table-bordered table-hover no-padding" width="100%">
+                        tableClass="table table-striped table-condensed table-bordered table-hover no-padding" width="100%">
                         <thead>
                           <tr>
-                            <th>#</th>
-                            <th>Competência</th>
-                            <th>Índice</th>
-                            <th>Contribuição Primária</th>
-                            <th>Contribuição Secundária</th>
-                            <th>Contribuição Primária Corrigida</th>
-                            <th>Contribuição Secundária Corrigida</th>
-                            <th>Observação</th>
+                            <th class="text-align-center">#</th>
+                            <th class="text-align-center">Competência</th>
+                            <th class="text-align-center">Índice</th>
+                            <th class="text-align-center">Contribuição Primária</th>
+                            <th class="text-align-center">Contribuição Secundária</th>
+                            <th class="text-align-center">Contribuição Primária Corrigida</th>
+                            <th class="text-align-center">Contribuição Secundária Corrigida</th>
+                            <th class="text-align-center">Observação</th>
                           </tr>
                         </thead>
                       </sa-datatable>
@@ -161,12 +161,11 @@
               </div>
               
             </div>
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="widget-body" >
-                <h2  *ngIf="!isUpdating && showReajustesAdministrativos">Reajustes Administrativos</h2>
-                <hr>
+            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="no-padding mt-2" >
+                <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos"><strong>Reajustes Administrativos</strong></h4>
                 <sa-datatable [options]="reajustesAdministrativosTableOptions" 
                 *ngIf="!isUpdating && showReajustesAdministrativos" 
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                paginationLength="true" tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
                     <thead>
                       <tr>
                         <th>Competência</th>
@@ -187,7 +186,7 @@
     <thead>
       <tr>
         <th>
-          Cálculo nº: {{boxId}} - {{calculo.tipo_seguro}} de 29/11/1999 a 12/11/2019
+          Cálculo nº: {{boxId}} - {{calculo.tipo_seguro}} de 29/11/1999 a 13/11/2019
         </th>
         <th>
           Ação

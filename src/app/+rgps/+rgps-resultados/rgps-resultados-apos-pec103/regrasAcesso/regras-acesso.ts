@@ -62,8 +62,6 @@ export class RegrasAcesso {
             pontos: 0
         };
 
-        // console.log(elementTipo);
-
         if (!elementTipo.status) {
             return calculosPossiveis;
         }
@@ -106,13 +104,10 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para auxilio acidente, doença, pensaoObito e incapacidade
         if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
 
-
             const maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
-            maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+           // maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+            maximoDescarte.meses = maxDescarteCarencia;
             maximoDescarte.anos = maximoDescarte.meses / 12;
-
-            console.log(maxDescarteCarencia)
-            console.log(maximoDescarte)
 
         }
 

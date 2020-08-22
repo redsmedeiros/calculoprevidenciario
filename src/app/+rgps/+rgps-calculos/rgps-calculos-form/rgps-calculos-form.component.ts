@@ -526,7 +526,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       (this.especieBeneficio === 'Aposentadoria por incapacidade permanente') ||
       (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito') ||
       (this.especieBeneficio === 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito')
-      ) {
+    ) {
       this.hasInvalidez19 = true;
       tipoInvalidezPensao = true;
     }
@@ -536,13 +536,14 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.hasAuxilioAcidente = true;
     }
 
-
     this.hasDivisorMinimo = false;
     if ([
       'Aposentadoria por tempo de contribuição',
       'Aposentadoria por Tempo de Contribuição',
       'Aposentadoria por idade - Trabalhador Urbano',
       'Aposentadoria por idade - Trabalhador Rural',
+      'Aposentadoria por Idade - Trabalhador Urbano',
+      'Aposentadoria por Idade - Trabalhador Rural',
       'Aposentadoria especial - 15 anos de exposição',
       'Aposentadoria especial - 20 anos de exposição',
       'Aposentadoria especial - 25 anos de exposição',
@@ -551,6 +552,11 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria Especial - 25 anos',
       'Aposentadoria por tempo de serviço de professor',
       'Aposentadoria por Tempo de Contribuição do(a) Professor(a)',
+      'Aposentadoria especial da Pessoa com Deficiência Grave',
+      'Aposentadoria especial da Pessoa com Deficiência Moderada',
+      'Aposentadoria especial da Pessoa com Deficiência Leve',
+      'Aposentadoria especial por Idade da Pessoa com Deficiência',
+      'Aposentadoria por Idade da Pessoa com Deficiência',
       'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)',
       'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)',
       'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)',
@@ -559,10 +565,6 @@ export class RgpsCalculosFormComponent implements OnInit {
     ) {
       this.hasDivisorMinimo = true;
     }
-
-
-    // console.log(this.especieBeneficio);
-    // console.log(tipoInvalidezPensao);
 
     if (moment(this.dataInicioBeneficio, 'DD/MM/YYYY') > moment('2013-05-08')) {
       this.posteriorMaio2013 = true;
@@ -594,7 +596,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
 
-    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
+    } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
       if (!tipoInvalidezPensao) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
         this.periodoOptions.push('Entre 16/12/1998 e 28/11/1999');
@@ -606,7 +608,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoOptions.push('Entre 29/11/1999 e 13/11/2019');
       this.periodoInicioBeneficio = 'Entre 29/11/1999 e 13/11/2019';
 
-    } else if (dib >= moment('2019-11-13')) {
+    } else if (dib > moment('2019-11-13')) {
 
       if (!tipoInvalidezPensao) {
         this.periodoOptions.push('Entre 05/04/1991 e 15/12/1998');
@@ -614,8 +616,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       this.periodoOptions.push('Entre 29/11/1999 e 13/11/2019');
-      this.periodoOptions.push('A partir de 13/11/2019');
-      this.periodoInicioBeneficio = 'A partir de 13/11/2019';
+      this.periodoOptions.push('A partir de 14/11/2019');
+      this.periodoInicioBeneficio = 'A partir de 14/11/2019';
     }
 
     let dateParts = this.dataInicioBeneficio.split('/');
@@ -649,7 +651,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.has99 = true;
       this.hasAtual = false;
       this.has19 = false;
-    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio < new Date('11/13/2019')) {
+    } else if (dateBeneficio > new Date('11/29/1999') && dateBeneficio <= new Date('11/13/2019')) {
 
       this.hasAnterior = false;
       this.has98 = true;
@@ -673,7 +675,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has19 = false;
       }
 
-    } else if (dateBeneficio >= new Date('11/13/2019')) {
+    } else if (dateBeneficio > new Date('11/13/2019')) {
       this.hasAnterior = false;
       this.has98 = true;
       this.has99 = true;
@@ -757,7 +759,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoInicioBeneficio = 'Entre 16/12/1998 e 28/11/1999';
       this.carencia = periodos.total99.carencia;
 
-    } else if (dib > moment('1999-11-29') && dib < moment('2019-11-13')) {
+    } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
 
       this.primariaAtualanos = periodos.total.years;
       this.primariaAtualmeses = periodos.total.months;
@@ -776,7 +778,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       this.carencia = periodos.total19.carencia;
 
-    } else if (dib >= moment('2019-11-13')) {
+    } else if (dib > moment('2019-11-13')) {
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -798,7 +800,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.primaria19dias = periodos.total.days;
       // posterior a EC nº 103/2019
 
-      this.periodoInicioBeneficio = 'A partir de 13/11/2019';
+      this.periodoInicioBeneficio = 'A partir de 14/11/2019';
       this.carencia = periodos.total.carencia;
     }
 
@@ -901,9 +903,11 @@ export class RgpsCalculosFormComponent implements OnInit {
       [
         'Auxílio Doença',
         'Auxílio Acidente - 50%',
-        'Aposentadoria Especial da Pessoa com Deficiência grave',
-        'Aposentadoria Especial da Pessoa com Deficiência Moderada',
-        'Aposentadoria Especial da Pessoa com Deficiência Leve',
+        'Aposentadoria especial da Pessoa com Deficiência Grave',
+        'Aposentadoria especial da Pessoa com Deficiência Leve',
+        'Aposentadoria especial da Pessoa com Deficiência Moderada',
+        'Aposentadoria especial por Idade da Pessoa com Deficiência',
+        'Aposentadoria especial por Idade da Pessoa com Deficiência',
         'Aposentadoria por Idade da Pessoa com Deficiência',
         'Aposentadoria por tempo de serviço de professor',
         'Aposentadoria especial - 15 anos de exposição',
@@ -931,15 +935,15 @@ export class RgpsCalculosFormComponent implements OnInit {
           novo: 'Auxílio Acidente'
         },
         {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência grave',
+          antigo: 'Aposentadoria especial da Pessoa com Deficiência Grave',
           novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
         },
         {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+          antigo: 'Aposentadoria especial da Pessoa com Deficiência Moderada',
           novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
         },
         {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Leve',
+          antigo: 'Aposentadoria especial da Pessoa com Deficiência Leve',
           novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
         },
         {
@@ -1127,4 +1131,105 @@ export class RgpsCalculosFormComponent implements OnInit {
     mask.push(/\d/);
     return mask;
   }
+
+
+
+  public getEspecieBeneficio(especie) {
+    let numeroEspecie = 0;
+    switch (especie) {
+      case 'Auxílio Doença':
+      case 'Auxílio por Incapacidade Temporária':
+        numeroEspecie = 1;
+        break;
+      case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
+        numeroEspecie = 2;
+        break;
+      case 'Aposentadoria por Idade - Trabalhador Urbano':
+      case 'Aposentadoria por idade - Trabalhador Urbano':
+        numeroEspecie = 3;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição':
+      case 'Aposentadoria por tempo de contribuição':
+      case 'Aposentadoria por tempo de serviço':
+        numeroEspecie = 4;
+        break;
+      case 'Aposentadoria especial':
+        numeroEspecie = 5;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
+      case 'Aposentadoria por tempo de serviço de professor':
+        numeroEspecie = 6;
+        break;
+      case 'Auxílio Acidente previdenciário - 50%':
+        numeroEspecie = 7;
+        break;
+      case 'Aposentadoria por Idade - Trabalhador Rural':
+      case 'Aposentadoria por idade - Trabalhador Rural':
+        numeroEspecie = 16;
+        break;
+      case 'Auxílio Acidente - 30%':
+        numeroEspecie = 17;
+        break;
+      case 'Auxílio Acidente - 40%':
+        numeroEspecie = 18;
+        break;
+      case 'Auxílio Acidente - 60%':
+        numeroEspecie = 19;
+        break;
+      case 'Abono de Permanência em Serviço':
+        numeroEspecie = 20;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
+      case 'Aposentadoria especial da Pessoa com Deficiência Grave':
+        numeroEspecie = 25;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
+      case 'Aposentadoria especial da Pessoa com Deficiência Moderada':
+        numeroEspecie = 26;
+        break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
+      case 'Aposentadoria especial da Pessoa com Deficiência Leve':
+        numeroEspecie = 27;
+        break;
+      case 'Aposentadoria por Idade da PcD':
+      case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
+        numeroEspecie = 28;
+        break;
+      // Reforma  inicio 2019
+      case 'Aposentadoria Especial - 15 anos':
+      case 'Aposentadoria especial - 15 anos de exposição':
+        numeroEspecie = 1915;
+        break;
+      case 'Aposentadoria Especial - 20 anos':
+      case 'Aposentadoria especial - 20 anos de exposição':
+        numeroEspecie = 1920;
+        break;
+      case 'Aposentadoria Especial - 25 anos':
+      case 'Aposentadoria especial - 25 anos de exposição':
+        numeroEspecie = 1925;
+        break;
+      case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
+      case 'Pensão por Morte instituidor aposentado na data óbito':
+        numeroEspecie = 1900;
+        break;
+      case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
+      case 'Pensão por Morte instituidor não é aposentado na data óbito':
+        numeroEspecie = 1901;
+        break;
+      case 'Aposentadoria por Incapacidade Permanente':
+      case 'Aposentadoria por incapacidade permanente':
+        numeroEspecie = 1903;
+        break;
+      case 'Auxílio Acidente':
+      case 'Auxílio Acidente - 50%':
+        numeroEspecie = 1905;
+        break;
+      default:
+        break;
+    }
+    return numeroEspecie;
+  }
+
+
+
 }

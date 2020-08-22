@@ -160,13 +160,15 @@
                     <div class="col-md-6">
                       <popover-content #avisoContribuicao
                       title="ATENÇÃO!"
-                      [closeOnClickOutside]="true">
+                      [closeOnClickOutside]="true"
+                      >
                       <div class="alert alert-danger bg-ieprev fade in bold">
                          Em caso de ausência de salário(s) de contribuição no CNIS, o valor poderá ser lançado manualmente pelo usuário, caso contrário a(s) competência(s) será(ão) descartadas do cálculo. Não havendo prova do(s) respectivo(s) valor(es), o usuário, querendo utilizar o valor do salário mínimo, poderá digitar 1,00 (neste caso o sistema limitará o salário no valor mínimo automaticamente).
                       </div>
                       </popover-content>
                         <button type="button" class="btn btn-labeled btn-info pull-left" 
                         popoverPlacement="top" 
+                        [popoverOnHover]="true"
                         [popover]="avisoContribuicao">
                           <span class="btn-label">
                             <i class="fa fa-warning"></i>

@@ -625,3 +625,10 @@ a[class*="action-"]:hover {
 .widget-body-custom {
   min-height: 20px !important;
 }
+
+
+
+
+.popover {
+  max-width: 600px !important;
+}

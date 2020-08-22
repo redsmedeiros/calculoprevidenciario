@@ -256,7 +256,7 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(0, `Soma dos Salários de Contribuição Considerados`,
             elementPossibilidade.somaContribuicoes.valueString));
 
-        const divisor = (elementPossibilidade.numeroCompetencias === this.divisorMinimo.value) ?
+        const divisor = (this.divisorMinimo.aplicar) ?
                             this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
         listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
 

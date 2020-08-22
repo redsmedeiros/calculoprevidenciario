@@ -38,6 +38,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public nenhumaContrib = false;
   public dataInicioBeneficio;
   public dataInicioBeneficioExport;
+  public dataInicioBeneficioString;
+  public aplicarRejusteAposAposEC103 = false;
   public tipoBeneficio;
   public listaValoresContribuidos;
   public valorExportacao;
@@ -69,7 +71,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       { data: 'contribuicao_secundaria' },
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
-      { data: 'limite' },
+      { data: 'limite', class: ''},
+    ],
+    columnDefs: [
+        { 'width': '13rem', 'targets': [7] },
     ]
   };
 
@@ -130,6 +135,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         { data: 'contribuicao_primaria_revisada' },
         { data: 'contribuicao_secundaria_revisada' },
         { data: 'limite' },
+      ],
+      columnDefs: [
+          { 'width': '13rem', 'targets': [7] },
       ]
     };
 
@@ -137,8 +145,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
+
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     this.dataInicioBeneficioExport = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+
+    // direito adquirido após a EC103
+    if (this.dataInicioBeneficio.isSameOrAfter(this.dataPec062019)) {
+
+      this.dataInicioBeneficio = moment('13/11/2019', 'DD/MM/YYYY');
+      this.dataInicioBeneficioExport = moment('13/11/2019', 'DD/MM/YYYY');
+      this.aplicarRejusteAposAposEC103 = true;
+
+    }
+
+    this.dataInicioBeneficioString = this.dataInicioBeneficio.format('DD/MM/YYYY');
+
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
     this.idadeFracionada = this.getIdadeFracionada();
     this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
@@ -155,7 +176,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
-    this.stringCabecalho = 'Entre  29/11/1999 a 12/11/2019'
+    this.stringCabecalho = 'Entre  29/11/1999 a 13/11/2019'
 
     if (this.dataInicioBeneficio >= this.dataPec062019) {
       dataInicio = this.dataPec062019.startOf('month'); // ate a PEC06/2019
@@ -193,6 +214,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
                           this.carenciasProgressivas = carencias;
                           this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
                           this.isUpdating = false;
+
+                         
+
                         });
                     });
                 });
@@ -787,7 +811,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
-    
+
     if (dataBeneficio >= this.dataMP664) {
       if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
         if (totalMediaDozeContribuicoes > 0)
@@ -983,15 +1007,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.splice(i, 1)
       }
 
-      if((/Renda Mensal Inicial com Fator/gi).test(conclusoes[i].string)) {
+      if ((/Renda Mensal Inicial com Fator/gi).test(conclusoes[i].string)) {
         rmi_fator = conclusoes[i].value
       }
 
-      if((/Renda Mensal Inicial com Regra/gi).test(conclusoes[i].string)){
+      if ((/Renda Mensal Inicial com Regra/gi).test(conclusoes[i].string)) {
         rmi_pontos = conclusoes[i].value
       }
 
-      if((/Renda Mensal Inicial/gi).test(conclusoes[i].string)){
+      if ((/Renda Mensal Inicial/gi).test(conclusoes[i].string)) {
         rmi_outras_especies = conclusoes[i].value;
       }
 
@@ -1005,7 +1029,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     rmi_pontos = this.convertDecimalValue(rmi_pontos);
     rmi_outras_especies = this.convertDecimalValue(rmi_outras_especies);
 
-   // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
+    // this.valorExportacao = this.formatDecimal(rmi, 2).replace(',', '.');
     this.valorExportacao = (rmi_fator > rmi_pontos) ? rmi_fator : rmi_pontos;
 
     if (this.valorExportacao === 0) {
@@ -1019,6 +1043,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     this.isUpdating = false;
+
+    if (this.aplicarRejusteAposAposEC103) {
+      setTimeout(() => {
+        this.mostrarReajustesAdministrativos(this.boxId);
+      }, 2000);
+    }
+
     // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = this.valorExportacao;
@@ -1473,30 +1504,30 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   getIdadeFracionada() {
 
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-  //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+    //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
 
-  //   if (this.dataInicioBeneficio >= this.dataPec062019) {
-  //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
-  //   }
-  //  // return idadeEmDias / 365.25;
+    //   if (this.dataInicioBeneficio >= this.dataPec062019) {
+    //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
+    //   }
+    //  // return idadeEmDias / 365.25;
 
-   if (this.dataInicioBeneficio >= this.dataPec062019) {
-    return this.dataPec062019.diff(dataNascimento, 'years', true);
-   }
+    if (this.dataInicioBeneficio >= this.dataPec062019) {
+      return this.dataPec062019.diff(dataNascimento, 'years', true);
+    }
 
     return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
   }
 
 
-  testeDifdata(time1, time2){
+  testeDifdata(time1, time2) {
 
-      const str1= time1.split('/');
-      const str2= time2.split('/');
-                             // yyyy   , mm       , dd
-     const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
+    const str1 = time1.split('/');
+    const str2 = time2.split('/');
+    // yyyy   , mm       , dd
+    const dob = new Date(str1[2], str1[1] - 1, str1[0]).getTime();
     const dateToCompare = new Date(str2[2], str2[1] - 1, str2[0]).getTime();
-//    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
-    return  (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+    //    const age = (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
+    return (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
   mostrarReajustesAdministrativos(tableId) {
@@ -1506,18 +1537,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return;
     }
 
-    let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+   // let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+    let dataInicio = this.dataInicioBeneficio;
     this.ReajusteAutomatico.getByDate(dataInicio, moment())
       .then((reajustes: ReajusteAutomatico[]) => {
 
         const reajustesAutomaticos = reajustes;
-        let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
+        let valorBeneficio = (this.valorExportacao) ? parseFloat(this.valorExportacao) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
 
-        console.log(reajustesAutomaticos );
-        console.log(dataPrevia );
-        
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;
@@ -1542,7 +1571,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           valorBeneficio *= reajuste;
 
-          if(dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1){
+          if (dataPrevia.isSame(dataCorrente) && this.irtRejusteAdministrativo > 1) {
             valorBeneficio *= this.irtRejusteAdministrativo;
           }
 
@@ -1573,7 +1602,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataPrevia = dataCorrente;
         }
 
-        
+
         this.reajustesAdministrativosTableOptions = {
           ...this.reajustesAdministrativosTableOptions,
           data: this.reajustesAdministrativosTableData,

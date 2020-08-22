@@ -689,29 +689,31 @@ export class RgpsResultadosComponent implements OnInit {
     let numeroEspecie = 0;
     switch (calculo.tipo_seguro) {
       case 'Auxílio Doença':
+      case 'Auxílio por Incapacidade Temporária':
         numeroEspecie = 1;
         break;
       case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
         numeroEspecie = 2;
         break;
+      case 'Aposentadoria por Idade - Trabalhador Urbano':
       case 'Aposentadoria por idade - Trabalhador Urbano':
         numeroEspecie = 3;
         break;
       case 'Aposentadoria por tempo de contribuição':
-        numeroEspecie = 4;
-        break;
       case 'Aposentadoria por tempo de serviço':
         numeroEspecie = 4;
         break;
       case 'Aposentadoria especial':
         numeroEspecie = 5;
         break;
+      case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
       case 'Aposentadoria por tempo de serviço de professor':
         numeroEspecie = 6;
         break;
       case 'Auxílio Acidente previdenciário - 50%':
         numeroEspecie = 7;
         break;
+      case 'Aposentadoria por Idade - Trabalhador Rural':
       case 'Aposentadoria por idade - Trabalhador Rural':
         numeroEspecie = 16;
         break;
@@ -727,92 +729,51 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Abono de Permanência em Serviço':
         numeroEspecie = 20;
         break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
       case 'Aposentadoria especial da Pessoa com Deficiência Grave':
         numeroEspecie = 25;
         break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
       case 'Aposentadoria especial da Pessoa com Deficiência Moderada':
         numeroEspecie = 26;
         break;
+      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
       case 'Aposentadoria especial da Pessoa com Deficiência Leve':
         numeroEspecie = 27;
         break;
+      case 'Aposentadoria por Idade da PcD':
       case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
         numeroEspecie = 28;
         break;
       // Reforma  inicio 2019
+      case 'Aposentadoria Especial - 15 anos':
       case 'Aposentadoria especial - 15 anos de exposição':
         numeroEspecie = 1915;
         break;
+      case 'Aposentadoria Especial - 20 anos':
       case 'Aposentadoria especial - 20 anos de exposição':
         numeroEspecie = 1920;
         break;
+      case 'Aposentadoria Especial - 25 anos':
       case 'Aposentadoria especial - 25 anos de exposição':
         numeroEspecie = 1925;
         break;
+      case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
       case 'Pensão por Morte instituidor aposentado na data óbito':
         numeroEspecie = 1900;
         break;
+      case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
       case 'Pensão por Morte instituidor não é aposentado na data óbito':
         numeroEspecie = 1901;
         break;
+      case 'Aposentadoria por Incapacidade Permanente':
       case 'Aposentadoria por incapacidade permanente':
         numeroEspecie = 1903;
         break;
+      case 'Auxílio Acidente':
       case 'Auxílio Acidente - 50%':
         numeroEspecie = 1905;
         break;
-      // Reforma  fim 2019
-      // Reforma  inicio alterações 2020
-      case 'Auxílio por Incapacidade Temporária':
-        numeroEspecie = 1;
-        break;
-      case 'Auxílio Acidente':
-        numeroEspecie = 1905;
-        break;
-      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
-        numeroEspecie = 25
-        break;
-      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
-        numeroEspecie = 26
-        break;
-      case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
-        numeroEspecie = 27
-        break;
-      case 'Aposentadoria por Idade da PcD':
-        numeroEspecie = 28
-        break;
-        case 'Aposentadoria por Tempo de Contribuição':
-        numeroEspecie = 4;
-        break;
-      case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
-        numeroEspecie = 6;
-        break;
-      case 'Aposentadoria Especial - 15 anos':
-        numeroEspecie = 1915;
-        break;
-      case 'Aposentadoria Especial - 20 anos':
-        numeroEspecie = 1920;
-        break;
-      case 'Aposentadoria Especial - 25 anos':
-        numeroEspecie = 1925;
-        break;
-      case 'Aposentadoria por Idade - Trabalhador Rural':
-        numeroEspecie = 16;
-        break;
-      case 'Aposentadoria por Idade - Trabalhador Urbano':
-        numeroEspecie = 3;
-        break;
-      case 'Aposentadoria por Incapacidade Permanente':
-        numeroEspecie = 1903;
-        break;
-      case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
-        numeroEspecie = 1900;
-        break;
-      case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
-        numeroEspecie = 1901;
-        break;
-      // Reforma  fim alterações 2020
-
       default:
         break;
     }
@@ -1225,6 +1186,11 @@ export class RgpsResultadosComponent implements OnInit {
           i.fa, .not-print{ display: none; }
           table{margin-top: 20;}
           footer,div,p,td,th{font-size:11px !important;}
+          li {
+            display: inline-block;
+            font-size: 11px;
+            padding: 5px;
+          }
           .table>tbody>tr>td, .table>tbody>tr>th,
            .table>tfoot>tr>td, .table>tfoot>tr>th,
            .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
@@ -1405,3 +1371,133 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
 }
+
+
+
+// case 'Auxílio Doença':
+//         numeroEspecie = 1;
+//         break;
+//       case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
+//         numeroEspecie = 2;
+//         break;
+//       case 'Aposentadoria por idade - Trabalhador Urbano':
+//         numeroEspecie = 3;
+//         break;
+//       case 'Aposentadoria por tempo de contribuição':
+//         numeroEspecie = 4;
+//         break;
+//       case 'Aposentadoria por tempo de serviço':
+//         numeroEspecie = 4;
+//         break;
+//       case 'Aposentadoria especial':
+//         numeroEspecie = 5;
+//         break;
+//       case 'Aposentadoria por tempo de serviço de professor':
+//         numeroEspecie = 6;
+//         break;
+//       case 'Auxílio Acidente previdenciário - 50%':
+//         numeroEspecie = 7;
+//         break;
+//       case 'Aposentadoria por idade - Trabalhador Rural':
+//         numeroEspecie = 16;
+//         break;
+//       case 'Auxílio Acidente - 30%':
+//         numeroEspecie = 17;
+//         break;
+//       case 'Auxílio Acidente - 40%':
+//         numeroEspecie = 18;
+//         break;
+//       case 'Auxílio Acidente - 60%':
+//         numeroEspecie = 19;
+//         break;
+//       case 'Abono de Permanência em Serviço':
+//         numeroEspecie = 20;
+//         break;
+//       case 'Aposentadoria especial da Pessoa com Deficiência Grave':
+//         numeroEspecie = 25;
+//         break;
+//       case 'Aposentadoria especial da Pessoa com Deficiência Moderada':
+//         numeroEspecie = 26;
+//         break;
+//       case 'Aposentadoria especial da Pessoa com Deficiência Leve':
+//         numeroEspecie = 27;
+//         break;
+//       case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
+//         numeroEspecie = 28;
+//         break;
+//       // Reforma  inicio 2019
+//       case 'Aposentadoria especial - 15 anos de exposição':
+//         numeroEspecie = 1915;
+//         break;
+//       case 'Aposentadoria especial - 20 anos de exposição':
+//         numeroEspecie = 1920;
+//         break;
+//       case 'Aposentadoria especial - 25 anos de exposição':
+//         numeroEspecie = 1925;
+//         break;
+//       case 'Pensão por Morte instituidor aposentado na data óbito':
+//         numeroEspecie = 1900;
+//         break;
+//       case 'Pensão por Morte instituidor não é aposentado na data óbito':
+//         numeroEspecie = 1901;
+//         break;
+//       case 'Aposentadoria por incapacidade permanente':
+//         numeroEspecie = 1903;
+//         break;
+//       case 'Auxílio Acidente - 50%':
+//         numeroEspecie = 1905;
+//         break;
+//       // Reforma  fim 2019
+//       // Reforma  inicio alterações 2020
+//       case 'Auxílio por Incapacidade Temporária':
+//         numeroEspecie = 1;
+//         break;
+//       case 'Auxílio Acidente':
+//         numeroEspecie = 1905;
+//         break;
+//       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
+//         numeroEspecie = 25
+//         break;
+//       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
+//         numeroEspecie = 26
+//         break;
+//       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
+//         numeroEspecie = 27
+//         break;
+//       case 'Aposentadoria por Idade da PcD':
+//         numeroEspecie = 28
+//         break;
+//         case 'Aposentadoria por Tempo de Contribuição':
+//         numeroEspecie = 4;
+//         break;
+//       case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
+//         numeroEspecie = 6;
+//         break;
+//       case 'Aposentadoria Especial - 15 anos':
+//         numeroEspecie = 1915;
+//         break;
+//       case 'Aposentadoria Especial - 20 anos':
+//         numeroEspecie = 1920;
+//         break;
+//       case 'Aposentadoria Especial - 25 anos':
+//         numeroEspecie = 1925;
+//         break;
+//       case 'Aposentadoria por Idade - Trabalhador Rural':
+//         numeroEspecie = 16;
+//         break;
+//       case 'Aposentadoria por Idade - Trabalhador Urbano':
+//         numeroEspecie = 3;
+//         break;
+//       case 'Aposentadoria por Incapacidade Permanente':
+//         numeroEspecie = 1903;
+//         break;
+//       case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
+//         numeroEspecie = 1900;
+//         break;
+//       case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
+//         numeroEspecie = 1901;
+//         break;
+//       // Reforma  fim alterações 2020
+
+//       default:
+//         break;
