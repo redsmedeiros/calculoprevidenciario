@@ -111,11 +111,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
       this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
       if (this.tipoCalculo == '91_98') {
-        this.stringCabecalho = 'Entre 05/04/1991 e 15/12/1998'
+        this.stringCabecalho = '05/04/1991 e 15/12/1998'
         this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
         this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
       } else if (this.tipoCalculo == '98_99') {
-        this.stringCabecalho = 'Entre 16/12/1998 e 28/11/1999'
+        this.stringCabecalho = '16/12/1998 e 28/11/1999'
         this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
         this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
       }

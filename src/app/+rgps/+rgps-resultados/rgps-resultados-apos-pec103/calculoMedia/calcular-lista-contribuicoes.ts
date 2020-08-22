@@ -13,6 +13,7 @@ export class CalcularListaContribuicoes {
     private pbcCompleto;
     private indicesSelecionado;
     private dibCurrency;
+    private divisorMinimo;
 
     private tableData = []
 
@@ -55,7 +56,8 @@ export class CalcularListaContribuicoes {
         listaConclusaoAcesso: Array<object>,
         calculo: object,
         pbcCompleto: boolean,
-        indicesSelecionado: Array<object>
+        indicesSelecionado: Array<object>,
+        divisorMinimo: object
     ) {
 
         this.Moeda = moeda;
@@ -64,6 +66,7 @@ export class CalcularListaContribuicoes {
         this.calculo = calculo;
         this.pbcCompleto = pbcCompleto;
         this.indicesSelecionado = indicesSelecionado;
+        this.divisorMinimo = divisorMinimo;
 
         listaConclusaoAcesso.forEach(elementRegraEspecie => {
             this.verificarListaParaUmaRegraEspecie(elementRegraEspecie);
@@ -101,7 +104,6 @@ export class CalcularListaContribuicoes {
 
         let line = {};
         const list = [];
-       
 
         let contribuicaoPrimariaRevisada = 0;
         let limiteString = '';
@@ -187,14 +189,21 @@ export class CalcularListaContribuicoes {
         const list12 = [];
         let soma12Ultimas = 0;
         let somaContribuicoes = 0;
-        const indexMax = (elementPossibilidade.listaCompetencias.length - elementPossibilidade.descarteContrib);
+        let indexMax = (elementPossibilidade.listaCompetencias.length - elementPossibilidade.descarteContrib);
         const isDoenca12 = (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos);
+
+        if (this.divisorMinimo.aplicar
+            && indexMax < this.divisorMinimo.value
+            && elementRegraEspecie.regra === 'deficiente') {
+
+            indexMax = this.divisorMinimo.value;
+        }
 
         // somar e sinalizar a contribuição descartada
         elementPossibilidade.listaCompetencias.forEach((element, index) => {
 
             if (index < 12 && isDoenca12) {
-               // list12.push(element)
+                // list12.push(element)
                 soma12Ultimas += element.valor_primario;
             }
 
@@ -216,8 +225,6 @@ export class CalcularListaContribuicoes {
             return 0;
         });
 
-        elementPossibilidade.numeroCompetencias = indexMax;
-
         elementPossibilidade.somaContribuicoes = {
             value: somaContribuicoes,
             valueString: DefinicaoMoeda.formatMoney(
@@ -225,7 +232,9 @@ export class CalcularListaContribuicoes {
                 this.dibCurrency.acronimo)
         };
 
+        elementPossibilidade.numeroCompetencias = indexMax;
         const mediaDasContribuicoes = (somaContribuicoes / indexMax);
+
         elementPossibilidade.mediaDasContribuicoes = {
             value: mediaDasContribuicoes,
             valueString: DefinicaoMoeda.formatMoney(
@@ -237,7 +246,7 @@ export class CalcularListaContribuicoes {
 
             // elementPossibilidade.lista12Competencias = list12;
             const mediaDasContribuicoes12 = soma12Ultimas / 12;
-            elementPossibilidade.mediaDasContribuicoes12 =  {
+            elementPossibilidade.mediaDasContribuicoes12 = {
                 value: mediaDasContribuicoes12,
                 valueString: DefinicaoMoeda.formatMoney(
                     mediaDasContribuicoes12,

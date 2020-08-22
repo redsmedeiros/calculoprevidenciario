@@ -35,7 +35,7 @@
         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
       </div>
 
-      <label class="col-md-2 control-label"><i title="Define a idade e assim estabelece direitos e condições de cálculos." class="fa fa-question-circle fa-lg"></i> Data de nascimento*</label>
+      <label class="col-md-2 control-label"><i title="Define a idade e assim estabelece direitos e condições de cálculos." class="fa fa-question-circle fa-lg"></i> Data de Nascimento*</label>
       <div class="col-md-3">
         <input [(ngModel)]="formData.data_nascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_nascimento')" [textMask]="{mask: dateMask}" class="form-control" type="text">
         <small *ngIf="errors.has('data_nascimento')" class="text-danger">{{ errors.get('data_nascimento') | i18n}}</small>

@@ -322,8 +322,8 @@ export class RgpsResultadosComponent implements OnInit {
                                   <span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
 
-                calculo.tipo_seguro = this.translateNovosNomesEspecie( calculo.tipo_seguro)
-                
+                calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
+
                 const line = {
                   especie: calculo.tipo_seguro,
                   periodoInicioBeneficio: calculo.tipo_aposentadoria,
@@ -342,8 +342,8 @@ export class RgpsResultadosComponent implements OnInit {
 
                 if ((counter + 1) === this.idsCalculo.length)
                   this.isUpdating = false;
-                  counter++;
-                });
+                counter++;
+              });
           }
 
         }
@@ -781,8 +781,35 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Aposentadoria por Idade da PcD':
         numeroEspecie = 28
         break;
+        case 'Aposentadoria por Tempo de Contribuição':
+        numeroEspecie = 4;
+        break;
       case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
         numeroEspecie = 6;
+        break;
+      case 'Aposentadoria Especial - 15 anos':
+        numeroEspecie = 1915;
+        break;
+      case 'Aposentadoria Especial - 20 anos':
+        numeroEspecie = 1920;
+        break;
+      case 'Aposentadoria Especial - 25 anos':
+        numeroEspecie = 1925;
+        break;
+      case 'Aposentadoria por Idade - Trabalhador Rural':
+        numeroEspecie = 16;
+        break;
+      case 'Aposentadoria por Idade - Trabalhador Urbano':
+        numeroEspecie = 3;
+        break;
+      case 'Aposentadoria por Incapacidade Permanente':
+        numeroEspecie = 1903;
+        break;
+      case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
+        numeroEspecie = 1900;
+        break;
+      case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
+        numeroEspecie = 1901;
         break;
       // Reforma  fim alterações 2020
 
@@ -807,8 +834,11 @@ export class RgpsResultadosComponent implements OnInit {
       // 'Aposentadoria por idade - Trabalhador Rural',
       'Auxílio Doença',
       'Pensão por Morte instituidor aposentado na data óbito',
+      'Pensão por Morte - Instituidor não Aposentado na Data do Óbito',
+      'Pensão por Morte - Instituidor Aposentado na Data do Óbito',
       'Pensão por Morte instituidor não é aposentado na data óbito',
       'Aposentadoria por incapacidade permanente',
+      'Aposentadoria por Incapacidade Permanente',
       'Auxílio Acidente - 50%',
       'Aposentadoria especial por Idade da Pessoa com Deficiência',
       // 'Aposentadoria especial da Pessoa com Deficiência Grave',
@@ -836,6 +866,8 @@ export class RgpsResultadosComponent implements OnInit {
     const arrayTypeText = [
       'Aposentadoria por idade - Trabalhador Urbano',
       'Aposentadoria por idade - Trabalhador Rural',
+      'Aposentadoria por Idade - Trabalhador Urbano',
+      'Aposentadoria por Idade - Trabalhador Rural',
     ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {

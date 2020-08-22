@@ -1,19 +1,16 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-
    <div class="row mb-3">
      <div class=" col-sm-12 col-md-12 col-lg-12">
-      <h4>Cálculo de Regime Geral da Previdência Social</h4>
+      <h3 class="p-1 m-1 no-print">Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
      </div>
    </div>
-   
-
    <div class="row mb-2">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-        <li class="breadcrumb-item active">Lista dos cálculos de RGPS realizados </li>
+        <li class="breadcrumb-item active">Lista de Cálculos Cadastrados</li>
       </ol>
     </div>
   </div>
@@ -27,38 +24,23 @@
           <span class="widget-icon">
             <i class="fa fa-edit"></i>
           </span>
-          <h2>Dados do segurado</h2>
+          <h2>Dados do Segurado</h2>
         </header>
         <div>
           <div class="widget-body p-0 widget-body-fix">
             <ul class="list-inline m-0">
               <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
               <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
-              <li  class="px-5"><strong>Data de nascimento:</strong>  {{segurado.data_nascimento}}</li>
+              <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
               <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
             </ul>
-          <!-- <div class="row">
-            <div class="col-md-4">
-              <p><strong> Nome: </strong>{{segurado.nome}}</p>
-            </div>
-            <div class="col-md-3">
-              <p><strong>Data de nascimento: </strong>{{segurado.data_nascimento}}</p>
-            </div>
-            <div class="col-md-2">
-              <p><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</p>
-            </div>
-            <div class="col-md-3">
-              <p *ngIf="segurado.numero_documento"><strong> {{segurado.getDocumentType(segurado.numero_documento)}} :</strong>
-                {{segurado.numero_documento}}</p>
-            </div>
-          </div> -->
             <div class="form-actions p-0 mt-3">
               <div class="row">
                 <div class="col-md-12">
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info pull-left">
                     <span class="btn-label">
                       <i class="fa fa-arrow-circle-left"></i>
-                    </span> Voltar para segurados
+                    </span> Voltar para Segurados
                   </button>
                   <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
                     <span class="btn-label">
@@ -87,14 +69,14 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="panel panel-default">
             <div class="panel-heading m-0 p-1">
-              <strong>LEGENDA</strong>
+              <strong>Legenda</strong>
             </div>
             <div class="panel-body m-1 p-2">
               <ul class="list-inline m-0 p-0">
-                <li><i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-0 pull-left"></i> - Valores de contribuição</li>
+                <li><i class="fa fa-money fa-1-9x bg-color-blue txt-color-white p-0 pull-left"></i> - Valores de Contribuição</li>
                 <li><i class="fa fa-arrow-down fa-1-9x bg-color-blueLight txt-color-white p-0 pull-left"></i> - Importar CNIS</li>
                 <li><i class="fa fa-calculator bg-color-blueLight fa-1-9x txt-color-white p-0 pull-left"></i> - Calcular RMI</li>
-                <li><i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-0 pull-left"></i> - Calcular RMI na revisão da vida toda</li>
+                <li><i class="fa fa-calculator fa-1-9x bg-color-greenDark txt-color-white p-0 pull-left"></i> - Calcular RMI - Revisão da Vida Toda</li>
                 <li><i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"></i> - Editar</li>
                 <li><i class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"></i> - Remover</li>
               </ul>
@@ -113,7 +95,7 @@
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-arrow-circle-left"></i>
-                    </span> Voltar para segurados
+                    </span> Voltar para Segurados
                   </button>
                   <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-primary margin-right-13">
                     <span class="btn-label">
@@ -158,7 +140,7 @@
                   <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info margin-right-13">
                     <span class="btn-label">
                       <i class="fa fa-arrow-circle-left"></i>
-                    </span> Voltar para segurados
+                    </span> Voltar para Segurados
                   </button>
                   <button type="submit" (click)="valoresContribuicao()" class="btn btn-labeled btn-primary margin-right-13">
                     <span class="btn-label">

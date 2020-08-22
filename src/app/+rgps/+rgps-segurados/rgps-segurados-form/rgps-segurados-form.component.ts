@@ -70,7 +70,7 @@ export class RgpsSeguradosFormComponent {
     }
 
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
-      this.errors.add({ "data_nascimento": ["A data de nascimento é obrigatória."] });
+      this.errors.add({ "data_nascimento": ["A data de Nascimento é obrigatória."] });
     } else {
       var dateParts = this.formData.data_nascimento.split("/");
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);

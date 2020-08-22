@@ -148,14 +148,16 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
   verificaErros(){
     let erro = "";
     let anoContribuicaoPrimariaAnterior88 = this.contribuicaoPrimaria.anos;
-    if ((this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
+    if ((this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Rural" ||
+        this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Rural" ||
+        this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
          this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Urbano") && this.calculo.carencia < 60){
       erro = "Falta(m) "+ (60 - this.calculo.carencia) + " mês(es) para a carencia necessária.";
     }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) " + (65 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
     }else if(this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
       erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    }else if((this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" || this.calculo.tipo_seguro == "Aposentadoria por tempo de contribuição") && 
+    }else if((this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" || this.calculo.tipo_seguro == "Aposentadoria por tempo de contribuição" || this.calculo.tipo_seguro == "Aposentadoria por Tempo de Contribuição") && 
              anoContribuicaoPrimariaAnterior88 < 30){
       let qtde_anos = 30 - this.contribuicaoPrimaria.anos;
       let qtde_meses = 12 - this.contribuicaoPrimaria.meses;

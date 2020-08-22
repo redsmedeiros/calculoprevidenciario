@@ -3124,7 +3124,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       // Aposentadoria por idade 
       this.isStatusTransicaoIdade = (this.tipoBeneficio === 3) ? true : false;
 
-      // Aposentadoria por idade - Trabalhador Rural
+      // Aposentadoria por Idade - Trabalhador Rural
       if (!this.erroCarenciaMinima) {
         this.isRegrasIdade = true;
         this.regraIdade(mesesContribuicao, valorMedio);

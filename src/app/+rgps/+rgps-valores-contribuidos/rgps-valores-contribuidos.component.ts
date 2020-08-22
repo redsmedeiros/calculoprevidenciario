@@ -45,11 +45,11 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     data: this.calculoList,
     columns: [
       { data: 'especie' },
-      { data: 'periodoInicioBeneficio' },
-      { data: 'contribuicaoPrimaria' },
-      { data: 'contribuicaoSecundaria' },
+      // { data: 'periodoInicioBeneficio' },
+      // { data: 'contribuicaoPrimaria' },
+      // { data: 'contribuicaoSecundaria' },
       { data: 'dib' },
-      { data: 'dataCriacao' },
+      // { data: 'dataCriacao' },
     ]
   };
 

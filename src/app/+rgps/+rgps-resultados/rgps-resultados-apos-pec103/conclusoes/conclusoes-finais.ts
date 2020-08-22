@@ -15,7 +15,7 @@ export class conclusoesFinais {
     private pbcCompleto;
     private indicesSelecionado;
     private dibCurrency;
-
+    private divisorMinimo;
 
 
     public createConclusoesFinais(
@@ -23,7 +23,8 @@ export class conclusoesFinais {
         listaConclusaoAcesso: Array<object>,
         segurado: object,
         calculo: object,
-        pbcCompleto: boolean
+        pbcCompleto: boolean,
+        divisorMinimo: object
     ) {
 
         this.moedaDib = moedaDib;
@@ -31,12 +32,11 @@ export class conclusoesFinais {
         this.calculo = calculo;
         this.segurado = segurado;
         this.pbcCompleto = pbcCompleto;
+        this.divisorMinimo = divisorMinimo;
 
         listaConclusaoAcesso.forEach(elementRegraEspecie => {
             this.criarConclusaoPossibilidade(elementRegraEspecie);
         });
-
-        // console.log(listaConclusaoAcesso);
 
         return listaConclusaoAcesso;
 
@@ -211,8 +211,12 @@ export class conclusoesFinais {
 
         let rmi = elementPossibilidade.salarioBeneficio.value * (elementPossibilidade.aliquota.value / 100);
 
-        if (elementRegraEspecie.regra === 'pedagio50' ||
-            (elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)) {
+        if (elementRegraEspecie.regra === 'pedagio50') {
+
+            rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
+        }
+
+        if ((elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)) {
 
             rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
 
@@ -247,18 +251,21 @@ export class conclusoesFinais {
 
         const listC = []
 
-        listC.push(this.setConclusao(0, `Soma dos ${elementPossibilidade.numeroCompetencias} maiores salários de Contribuição`,
+        // listC.push(this.setConclusao(0, `Soma dos ${elementPossibilidade.numeroCompetencias} maiores salários de Contribuição`,
+        //     elementPossibilidade.somaContribuicoes.valueString));
+        listC.push(this.setConclusao(0, `Soma dos Salários de Contribuição Considerados`,
             elementPossibilidade.somaContribuicoes.valueString));
 
-        listC.push(this.setConclusao(1, `Divisor da Média`, elementPossibilidade.numeroCompetencias));
+        const divisor = (elementPossibilidade.numeroCompetencias === this.divisorMinimo.value) ?
+                            this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
+        listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||
             (elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)
         ) {
 
-            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.value));
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.valueMelhorString));
             listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
-
         }
 
         listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
@@ -602,7 +609,7 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(2, 'Alíquota do Benefício', aliquotaDependentes.valueString));
         listC.push(this.setConclusao(3, 'Renda Mensal Inicial', rmi.valueString));
 
-        return { list: listC, label: 'Pensão por Morte instituidor aposentado na data óbito' };
+        return { list: listC, label: 'Pensão por Morte - Instituidor Aposentado na Data do Óbito' };
     }
 
     /**
@@ -624,7 +631,7 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(92, 'Alíquota do Benefício (Pensão por Morte)', aliquotaDependentes.valueString));
         listC.push(this.setConclusao(93, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
 
-        return { list: listC, label: 'Pensão por Morte instituidor não é aposentado na data óbito' };
+        return { list: listC, label: 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito' };
     }
 
     /**

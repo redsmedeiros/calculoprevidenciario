@@ -12,7 +12,6 @@ export class RegrasAcesso {
     private carenciaConformDataFiliacao = 0;
     private calculo;
 
-
     private arrayEspecial = [1915, 1920, 1925];
     private arrayEspecialDeficiente = [25, 26, 27, 28];
     private arrayIdade = [3, 16];
@@ -43,7 +42,6 @@ export class RegrasAcesso {
         // listaConclusaoAcesso.forEach((elementTipo, indice) => {
         //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
         // });
-
 
         for (const elementTipo of listaConclusaoAcesso) {
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
@@ -108,9 +106,15 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para auxilio acidente, doença, pensaoObito e incapacidade
         if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
 
+            
+            console.log(maximoDescarte)
+            
             const maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = maximoDescarte.meses / 12;
+
+            console.log(maxDescarteCarencia)
+            console.log(maximoDescarte)
 
         }
 
@@ -122,8 +126,9 @@ export class RegrasAcesso {
             maximoDescarte.anos = maximoDescarte.meses / 12;
         }
 
-        if ((!this.calculo.calcular_descarte_apos_ec103 && ['acidente', 'doenca', 'incapacidade'].includes(elementTipo.regra))
-            ||  elementTipo.regra === 'deficiente') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
+        if ((!this.calculo.calcular_descarte_apos_ec103
+            && ['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra))
+            || elementTipo.regra === 'deficiente') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
 
             maximoDescarte.meses = 0;
             maximoDescarte.anos = 0;
@@ -1044,12 +1049,12 @@ export class RegrasAcesso {
         let contribuicao_min = { m: 20, f: 15 };
         let idade_min = { m: 65, f: 62 };
         let status = false;
-        let label = 'Aposentadoria por idade - Trabalhador Urbano - Regra Transitória';
+        let label = 'Aposentadoria por Idade - Trabalhador Urbano - Regra Transitória';
 
         if (tipoBeneficio === 16) {
             contribuicao_min = { m: 15, f: 15 };
             idade_min = { m: 60, f: 55 };
-            label = 'Aposentadoria por idade - Trabalhador Rural - Regra Transitória'
+            label = 'Aposentadoria por Idade - Trabalhador Rural - Regra Transitória'
         }
 
         if (tempo_contribuicao >= contribuicao_min[sexo] && idade >= idade_min[sexo]) {
@@ -1128,9 +1133,9 @@ export class RegrasAcesso {
         }
 
         const label = {
-            1915: 'Aposentadoria especial - 15 anos de exposição',
-            1920: 'Aposentadoria especial - 20 anos de exposição',
-            1925: 'Aposentadoria especial - 25 anos de exposição'
+            1915: 'Aposentadoria Especial - 15 anos',
+            1920: 'Aposentadoria Especial - 20 anos',
+            1925: 'Aposentadoria Especial - 25 anos'
         }
 
         let status = false;
@@ -1214,7 +1219,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'incapacidade',
-            'Aposentadoria por incapacidade permanente',
+            'Aposentadoria por Incapacidade Permanente',
             status,
             0,
             idade,
@@ -1421,7 +1426,7 @@ export class RegrasAcesso {
 
 
 
-    // Pensão por Morte instituidor não é aposentado na data óbito
+    // Pensão por Morte - Instituidor não Aposentado na Data do Óbito
     public regraAcessoPensaoObitoInstituidorNaoAposentado(
         idade,
         ano,
@@ -1447,7 +1452,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'pensaoObito',
-            'Pensão por Morte instituidor não é aposentado na data óbito',
+            'Pensão por Morte - Instituidor não Aposentado na Data do Óbito',
             status,
             0,
             idade,

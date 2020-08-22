@@ -147,7 +147,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.grupoDos12 = this.formData.grupo_dos_12;
       this.calcularDescarteAposEC103 = this.formData.calcular_descarte_apos_ec103;
       this.calcularDescarteDeficienteEC103 = this.formData.calcular_descarte_deficiente_ec103;
-      this.media12Ultimos  = this.formData.media_12_ultimos;
+      this.media12Ultimos = this.formData.media_12_ultimos;
 
     } else {
       this.checkImportContagemTempo();
@@ -420,7 +420,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
     }
 
-    if (this.has19 && this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito') {
+    if (this.has19 && (this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'
+      && this.especieBeneficio != 'Pensão por Morte - Instituidor Aposentado na Data do Óbito')) {
       if (this.primaria19anos == undefined || this.primaria19anos === '') {
         this.errors.add({ 'primaria19anos': ['Campo obrigatório.'] });
       } else {
@@ -490,13 +491,16 @@ export class RgpsCalculosFormComponent implements OnInit {
       tipoInvalidezPensao = true;
     }
 
-    if ((this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
+    if ((this.especieBeneficio === 'Pensão por Morte - Instituidor Aposentado na Data do Óbito') ||
+      (this.especieBeneficio === 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito') ||
+      (this.especieBeneficio === 'Pensão por Morte instituidor aposentado na data óbito') ||
       (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
       this.hasPensao19 = true;
       tipoInvalidezPensao = true;
 
       // campos especificos para pensão por morte
-      if ((this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
+      if ((this.especieBeneficio === 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito') ||
+        (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito')) {
         this.hasPensaoNaoInstuidorAposentado = true;
       } else {
         this.hasPensaoInstuidorAposentado = true;
@@ -505,16 +509,24 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
     let tipoIdade = false;
-    if ((this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-      (this.especieBeneficio === 'Auxílio Doença') ||
-      (this.especieBeneficio === 'Auxílio por Incapacidade Temporária')) {
+    if ([
+      'Aposentadoria por idade - Trabalhador Urbano',
+      'Aposentadoria por idade - Trabalhador Rural',
+      'Aposentadoria por Idade - Trabalhador Urbano',
+      'Aposentadoria por Idade - Trabalhador Rural',
+      'Auxílio Doença',
+      'Auxílio por Incapacidade Temporária'
+    ].includes(this.especieBeneficio)) {
       tipoIdade = true;
     }
 
 
     this.hasInvalidez19 = false;
-    if ((this.especieBeneficio === 'Aposentadoria por incapacidade permanente')) {
+    if ((this.especieBeneficio === 'Aposentadoria por Incapacidade Permanente') ||
+      (this.especieBeneficio === 'Aposentadoria por incapacidade permanente') ||
+      (this.especieBeneficio === 'Pensão por Morte instituidor não é aposentado na data óbito') ||
+      (this.especieBeneficio === 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito')
+      ) {
       this.hasInvalidez19 = true;
       tipoInvalidezPensao = true;
     }
@@ -526,14 +538,24 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
     this.hasDivisorMinimo = false;
-    if ((this.especieBeneficio === 'Aposentadoria por tempo de contribuição') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') ||
-      (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural') ||
-      (this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição') ||
-      (this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição') ||
-      (this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição') ||
-      (this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor') ||
-      (this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)')
+    if ([
+      'Aposentadoria por tempo de contribuição',
+      'Aposentadoria por Tempo de Contribuição',
+      'Aposentadoria por idade - Trabalhador Urbano',
+      'Aposentadoria por idade - Trabalhador Rural',
+      'Aposentadoria especial - 15 anos de exposição',
+      'Aposentadoria especial - 20 anos de exposição',
+      'Aposentadoria especial - 25 anos de exposição',
+      'Aposentadoria Especial - 15 anos',
+      'Aposentadoria Especial - 20 anos',
+      'Aposentadoria Especial - 25 anos',
+      'Aposentadoria por tempo de serviço de professor',
+      'Aposentadoria por Tempo de Contribuição do(a) Professor(a)',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)',
+      'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)',
+      'Aposentadoria por Idade da PcD',
+    ].includes(this.especieBeneficio)
     ) {
       this.hasDivisorMinimo = true;
     }
@@ -883,10 +905,23 @@ export class RgpsCalculosFormComponent implements OnInit {
         'Aposentadoria Especial da Pessoa com Deficiência Moderada',
         'Aposentadoria Especial da Pessoa com Deficiência Leve',
         'Aposentadoria por Idade da Pessoa com Deficiência',
-        'Aposentadoria por tempo de serviço de professor'
+        'Aposentadoria por tempo de serviço de professor',
+        'Aposentadoria especial - 15 anos de exposição',
+        'Aposentadoria especial - 20 anos de exposição',
+        'Aposentadoria especial - 25 anos de exposição',
+        'Aposentadoria por idade - Trabalhador Rural',
+        'Aposentadoria por idade - Trabalhador Urbano',
+        'Aposentadoria por incapacidade permanente',
+        'Pensão por Morte instituidor aposentado na data óbito',
+        'Pensão por Morte instituidor não é aposentado na data do óbito',
+        'Aposentadoria por tempo de contribuição'
       ].includes(this.especieBeneficio)) {
 
       const novasEspecies = [
+        {
+          antigo: 'Aposentadoria por tempo de contribuição',
+          novo: 'Aposentadoria por Tempo de Contribuição'
+        },
         {
           antigo: 'Auxílio Doença',
           novo: 'Auxílio por Incapacidade Temporária'
@@ -914,6 +949,38 @@ export class RgpsCalculosFormComponent implements OnInit {
         {
           antigo: 'Aposentadoria por tempo de serviço de professor',
           novo: 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
+        },
+        {
+          antigo: 'Aposentadoria especial - 15 anos de exposição',
+          novo: 'Aposentadoria Especial - 15 anos'
+        },
+        {
+          antigo: 'Aposentadoria especial - 20 anos de exposição',
+          novo: 'Aposentadoria Especial - 20 anos'
+        },
+        {
+          antigo: 'Aposentadoria especial - 25 anos de exposição',
+          novo: 'Aposentadoria Especial - 25 anos'
+        },
+        {
+          antigo: 'Aposentadoria por idade - Trabalhador Rural',
+          novo: 'Aposentadoria por Idade - Trabalhador Rural'
+        },
+        {
+          antigo: 'Aposentadoria por idade - Trabalhador Urbano',
+          novo: 'Aposentadoria por Idade - Trabalhador Urbano'
+        },
+        {
+          antigo: 'Aposentadoria por incapacidade permanente',
+          novo: 'Aposentadoria por Incapacidade Permanente'
+        },
+        {
+          antigo: 'Pensão por Morte instituidor aposentado na data óbito',
+          novo: 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'
+        },
+        {
+          antigo: 'Pensão por Morte instituidor não é aposentado na data do óbito',
+          novo: 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito'
         }
       ];
 
@@ -922,7 +989,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
 
   }
- 
+
   /**
    * verificar a aplicação da media dos 12 ultimos salarios
    */
@@ -942,7 +1009,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else {
 
-      this.media12Ultimos  = false;
+      this.media12Ultimos = false;
 
     }
 
@@ -956,10 +1023,13 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     const especiesActive = [
       'Aposentadoria por incapacidade permanente',
+      'Aposentadoria por Incapacidade Permanente',
       'Auxílio Doença',
       'Auxílio Acidente - 50%',
       'Auxílio por Incapacidade Temporária',
-      'Auxílio Acidente'
+      'Auxílio Acidente',
+      'Pensão por Morte instituidor não é aposentado na data óbito',
+      'Pensão por Morte - Instituidor não Aposentado na Data do Óbito'
     ];
 
     this.isCalcularDescarteAposEC103 = false;

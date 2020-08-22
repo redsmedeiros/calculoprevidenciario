@@ -2,7 +2,22 @@
 
   <!-- widget grid -->
   <sa-widgets-grid>
-
+    <div class="row mb-3">
+      <div class=" col-sm-12 col-md-12 col-lg-12">
+       <h3 class="p-1 m-1 no-print">Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class=" col-sm-12 col-md-12 col-lg-12">
+        <ol class="breadcrumb mb-4">
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculo[0]}}/edit"> Informações para o Cálculo</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-valores-contribuidos/{{idSegurado}}/{{idsCalculo[0]}}"> Valores de Contribuição</a></li>
+          <li class="breadcrumb-item active">Resultados dos Cálculos</li>
+        </ol>
+      </div>
+    </div>
     <!-- row -->
     <div class="row">
       <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
@@ -32,24 +47,16 @@
           </button>
         </div>
       </div>  -->
+  
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- <h1>Cálculo de Regime Geral da Previdência Social</h1> -->
-        <h3 class="p-1 m-1">Cálculo de Regime Geral da Previdência Social</h3>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculo[0]}}/edit"> Informações para o cálculo</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-valores-contribuidos/{{idSegurado}}/{{idsCalculo[0]}}"> Valores de Contribuição</a></li>
-          <li class="breadcrumb-item active">Resultados dos Cálculos</li>
-        </ol>
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
           <!-- widget div-->
           <div>
@@ -57,13 +64,12 @@
             <div class="widget-body widget-body-custom m-0 p-0 ">
               <ul class="list-inline m-0">
                 <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
-                <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
-                <li  class="px-5"><strong>Data de nascimento:</strong>  {{segurado.data_nascimento}}</li>
-                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
-                <li  class="px-5"><strong>Idade atual:</strong>  {{this.idadeSegurado}} anos</li>
+                <li class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+                <li class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+                <li class="px-5"><strong>Idade atual:</strong>  {{this.idadeSegurado}} anos</li>
               </ul>
               <div id="printableSegurado" hidden>
-                <h4>Cálculo de Regime Geral da Previdência Social</h4>
                 <table class="table table-bordered table-hover">
                   <!-- <caption><h2>Dados do Segurado</h2></caption> -->
                   <tr>

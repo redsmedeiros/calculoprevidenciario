@@ -58,7 +58,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   private melhorSoma = 0;
 
   public errosArray = [];
-
+  private divisorMinimo = { value: 0, valueString: '', aplicar: false };
 
   // transição INICIO
   public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
@@ -111,11 +111,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     // pbc da vida toda
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    // indices de correção pbc da vida toda
+    // this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+    // const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 
+    const dataLimite = moment('1994-07-01');
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+
+    // indices de correção pbc da vida toda
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
         this.listaValoresContribuidos = valorescontribuidos;
@@ -216,6 +218,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
     this.fatorPrevidenciario = this.calcularFatorPrevidenciario(tempoContribuicaoTotal.anos,
       this.expectativaSobrevida.expectativa);
+    this.divisorMinimo = this.calcularDivisorMinimo(numeroDeContribuicoes, this.tipoBeneficio);
     // const numeroDeCarencias = this.calculo.carencia;
 
     this.moedaDib = this.getMoedaDib();
@@ -259,15 +262,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.listaConclusaoAcesso,
         this.calculo,
         this.pbcCompleto,
-        this.getPbcCompletoIndices());
-
+        this.getPbcCompletoIndices(),
+        this.divisorMinimo);
 
       this.listaConclusaoAcesso = this.conclusoesFinais.createConclusoesFinais(
         this.moedaDib,
         this.listaConclusaoAcesso,
         this.segurado,
         this.calculo,
-        this.pbcCompleto);
+        this.pbcCompleto,
+        this.divisorMinimo);
 
     } else {
 
@@ -369,27 +373,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
-  /**
-   * Updade valor do RMI
-   * @param  {} valorRMI
-   * @param  {} somaContribuicoes
-   */
-  private updateResultadoCalculo() {
-
-
-    this.setMelhorValorRMI();
-
-    setTimeout(() => {
-
-      // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-      this.calculo.soma_contribuicao = this.melhorSoma;
-      this.calculo.valor_beneficio = this.melhorValorRMI;
-      this.CalculoRgpsService.update(this.calculo);
-
-    }, 2000);
-
-
-  }
 
 
   private setMelhorValorRMI() {
@@ -405,14 +388,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
 
-        if (elementEspecie.status && this.isExits(melhorCalculo.rmi.value)
-          && melhorValorRMI < melhorCalculo.rmi.value) {
+        if (elementEspecie.status && this.isExits(melhorCalculo.rmi.value)) {
           melhorValorRMI = melhorCalculo.rmi.value;
           melhorSoma = melhorCalculo.somaContribuicoes.value;
         }
 
       }
-
 
     } else {
 
@@ -422,7 +403,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis[0];
       }
 
-      if (melhorCalculo.status && this.isExits(melhorCalculo.rmi.value)) {
+      if (this.isExits(melhorCalculo.rmi.value)) {
         melhorValorRMI = melhorCalculo.rmi.value;
         melhorSoma = melhorCalculo.somaContribuicoes.value;
       }
@@ -432,6 +413,27 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.melhorValorRMI = melhorValorRMI;
     this.valorExportacao = melhorValorRMI;
     this.melhorSoma = melhorSoma;
+
+  }
+
+
+  /**
+   * Updade valor do RMI
+   * @param  {} valorRMI
+   * @param  {} somaContribuicoes
+   */
+  private updateResultadoCalculo() {
+
+    this.setMelhorValorRMI();
+
+    setTimeout(() => {
+
+      // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+      this.calculo.soma_contribuicao = this.melhorSoma;
+      this.calculo.valor_beneficio = this.melhorValorRMI;
+      this.CalculoRgpsService.update(this.calculo);
+
+    }, 2000);
 
   }
 
@@ -463,6 +465,34 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
+  private calcularDivisorMinimo(numeroDeContribuicoes, especie) {
+
+    if ([25, 26, 27, 28].includes(especie) && !this.calculo.calcular_descarte_deficiente_ec103) {
+
+      let perc60Competencias = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+
+      perc60Competencias = Math.trunc(perc60Competencias * 0.6);
+      const aplicarDivisor = (!this.calculo.divisor_minimo) ? true : false;
+
+      perc60Competencias = (numeroDeContribuicoes < perc60Competencias) ?
+        numeroDeContribuicoes : perc60Competencias;
+
+      return {
+        value: perc60Competencias,
+        valueString: perc60Competencias + ' - (Divisor Mínimo)',
+        aplicar: aplicarDivisor
+      };
+    }
+
+    return {
+      value: 0,
+      valueString: '',
+      aplicar: false
+    };
+
+  }
+
+
   private calcularFatorPrevidenciario(tempoTotalContribuicao, expectativa) {
 
     let fatorPrevidenciario = 1;
@@ -481,9 +511,14 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' +
       this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
+    const valueString = this.formatDecimal(fatorPrevidenciario, 4);
+    const valueMelhorString = (fatorPrevidenciario > 1) ? this.formatDecimal(fatorPrevidenciario, 4) : this.formatDecimal(1, 4);
+
     return {
       value: fatorPrevidenciario,
-      formula: fatorPrevidenciarioFormula
+      formula: fatorPrevidenciarioFormula,
+      valueString: valueString,
+      valueMelhorString: valueMelhorString
     };
   }
 

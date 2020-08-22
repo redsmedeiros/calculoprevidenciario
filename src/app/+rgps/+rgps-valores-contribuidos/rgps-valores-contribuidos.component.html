@@ -1,19 +1,24 @@
 <div id="content">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-
-    <!-- row -->
-    <div class="row">
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo de Regime Geral da Previdência Social</h1>
+    <div class="row mb-3">
+      <div class=" col-sm-12 col-md-12 col-lg-12">
+        <h3 class="p-1 m-1 no-print">Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class=" col-sm-12 col-md-12 col-lg-12">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculos[0]}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculos[0]}}/edit"> Informações para o Cálculo</a></li>
           <li class="breadcrumb-item active">Valores de Contribuição</li>
         </ol>
+      </div>
+    </div>
+    <!-- row -->
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
               [deletebutton]="false"
@@ -23,24 +28,18 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado</h2>
-
+            <h2>Dados do Segurado</h2>
           </header>
-
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
             <div class="widget-body pb-0 widget-body-custom">
-
-              <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li  *ngIf="segurado.numero_documento"><b>PIS:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+                <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+                <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
               </ul>
-
               <div class="form-actions p-0 mt-4">
                 <div class="row">
                   <div class="col-md-12">
@@ -79,7 +78,7 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Grupo de Cálculos para os valores de contribuição</h2>
+            <h2>Grupo de Cálculos para os valores de Contribuição</h2>
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom hidden-dt">
@@ -88,11 +87,11 @@
                 <thead>
                   <tr>
                     <th>Espécie</th>
-                    <th>Período para início de benefício</th>
+                    <!-- <th>Período para início de benefício</th>
                     <th>Contribuição Primária (Ano/Mês/Dia)</th>
-                    <th>Contribuição Secundária (Ano/Mês/Dia)</th>
+                    <th>Contribuição Secundária (Ano/Mês/Dia)</th> -->
                     <th>DIB</th>
-                    <th>Data de Criação</th>
+                    <!-- <th>Data de Criação</th> -->
                   </tr>
                 </thead>
               </sa-datatable>
@@ -103,72 +102,79 @@
 
       <article class="col-sm-12 col-md-12 col-lg-12">
 
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+    
 
+        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-money"></i>
             </span>
             <h2>Informar valor contribuido</h2>
           </header>
-
           <div>
-
-            <div class="widget-body">
-
-              <form class="form-horizontal">
-
-                <fieldset>
-
-                  <h3>Tempo de contribuição</h3>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">De*:</label>
-                    <div class="col-md-2">
+            <div class="widget-body widget-body-custom">
+              <form class="form-inline">
+                <fieldset class="row pb-5 pt-3">
+                  <!-- <div class="form-group"> -->
+                    <div class="col-md-3">
+                      <label class="control-label" for="inicioPeriodo">De*:</label>
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo" (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
                       <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
                     </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Até*:</label>
-                    <div class="col-md-2">
+                  <!-- </div>
+                  <div class="form-group"> -->
+                    <div class="col-md-3">
+                      <label class="control-label" for="finalPeriodo">Até*:</label>
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
                       <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
                     </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Valor*:</label>
-                    <div class="col-md-2">
+                  <!-- </div>
+                  <div class="form-group"> -->
+                    <div class="col-md-3">
+                      <label class="control-label" for="salarioContribuicao">Valor*:</label>
                       <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
                       <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
                     </div>
-
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-md-2 control-label">Tipo de Contribuição:</label>
+                  <!-- </div>
+                  <div class="form-group"> -->
                     <div class="col-md-3">
+                      <!-- <label class="control-label">Tipo:</label> -->
                       <label class="radio radio-inline">
-                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária </label>
+                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária</label>
                       <label class="radio radio-inline">
-                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária </label>
+                        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária</label>
                     </div>
-                  </div>
-                  <p>* Campo obrigatório</p>
-                 <div class="row">
-                   <div class=" col-md-8 col-md-offset-2">
-                    <div class="alert alert-danger bg-ieprev  fade in bold">
-                      <i class="fa-fw fa fa-warning txt-color-white fa-2x"></i>
+                  <!-- </div> -->
+                 </fieldset>
+                 <!-- <div class="row">
+                   <div class=" col-md-12">
+                    <div class="alert alert-danger bg-ieprev fade in bold">
+                      <i class="fa-fw fa fa-warning txt-color-white fa-1-7x"></i>
                         ATENÇÃO! Em caso de ausência de salário(s) de contribuição no CNIS, o valor poderá ser lançado manualmente pelo usuário, caso contrário a(s) competência(s) será(ão) descartadas do cálculo. Não havendo prova do(s) respectivo(s) valor(es), o usuário, querendo utilizar o valor do salário mínimo, poderá digitar 1,00 (neste caso o sistema limitará o salário no valor mínimo automaticamente).
                     </div>
                    </div>
-                 </div>
-                </fieldset>
-                <div class="form-actions p-0 mt-3">
+                 </div> -->
+                
+                <div class="form-actions p-0 mt-0">
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
+                      <popover-content #avisoContribuicao
+                      title="ATENÇÃO!"
+                      [closeOnClickOutside]="true">
+                      <div class="alert alert-danger bg-ieprev fade in bold">
+                         Em caso de ausência de salário(s) de contribuição no CNIS, o valor poderá ser lançado manualmente pelo usuário, caso contrário a(s) competência(s) será(ão) descartadas do cálculo. Não havendo prova do(s) respectivo(s) valor(es), o usuário, querendo utilizar o valor do salário mínimo, poderá digitar 1,00 (neste caso o sistema limitará o salário no valor mínimo automaticamente).
+                      </div>
+                      </popover-content>
+                        <button type="button" class="btn btn-labeled btn-info pull-left" 
+                        popoverPlacement="top" 
+                        [popover]="avisoContribuicao">
+                          <span class="btn-label">
+                            <i class="fa fa-warning"></i>
+                          </span> ATENÇÃO! 
+                        </button>
+                        <span class="pull-left p-2">(*) Preenchimento Obrigatório.</span>
+                    </div>
+                    <div class="col-md-6">
                       <button type="submit" (click)="submit()" class="btn btn-labeled btn-primary">
                         <span class="btn-label">
                           <i class="fa fa-calendar"></i>
@@ -219,3 +225,37 @@
   <!-- end widget grid -->
 
 </div>
+<!-- 
+
+<fieldset class="row">
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="select-1">De*:</label>
+    <div class="col-md-2">
+      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo" (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
+      <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="select-1">Até*:</label>
+    <div class="col-md-2">
+      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
+      <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="select-1">Valor*:</label>
+    <div class="col-md-2">
+      <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
+      <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-2 control-label">Tipo de Contribuição:</label>
+    <div class="col-md-3">
+      <label class="radio radio-inline">
+        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária </label>
+      <label class="radio radio-inline">
+        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária </label>
+    </div>
+  </div>
+ </fieldset> -->

@@ -884,7 +884,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   verificaErros(){
     let erro = "";
     let anoContribuicaoPrimariaAnterior88 = this.contribuicaoPrimaria88.anos;
-    if ((this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
+    if ((this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Rural" ||
+          this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Urbano" ||
+          this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
          this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Urbano") && this.calculo.carencia < 60){
       erro = "Falta(m) "+ (60 - this.calculo.carencia) + " mês(es) para a carencia necessária.";
     }else if(this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)){
