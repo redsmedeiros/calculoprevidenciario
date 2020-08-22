@@ -196,6 +196,7 @@ export class CalcularListaContribuicoes {
             && indexMax < this.divisorMinimo.value
             && elementRegraEspecie.regra === 'deficiente') {
 
+            elementPossibilidade.descarteContrib = 0;
             indexMax = this.divisorMinimo.value;
         }
 

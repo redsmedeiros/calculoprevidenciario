@@ -106,9 +106,7 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para auxilio acidente, doença, pensaoObito e incapacidade
         if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
 
-            
-            console.log(maximoDescarte)
-            
+
             const maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = maximoDescarte.meses / 12;
