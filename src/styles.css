@@ -604,13 +604,11 @@ a[class*="action-"]:hover {
 }
 
 .hidden-dt .dt-toolbar {
-  padding: 0px !important;
-  margin: 0px !important;
+ display: none !important;
 }
 
 .hidden-dt .dt-toolbar-footer {
-  padding: 0px !important;
-  margin: 0px !important;
+  display: none !important;
 }
 
 .table-condensed-custom.table > tbody > tr > td,

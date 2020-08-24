@@ -467,15 +467,18 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   private calcularDivisorMinimo(numeroDeContribuicoes, especie) {
 
-    if ([25, 26, 27, 28].includes(especie) && !this.calculo.calcular_descarte_deficiente_ec103) {
+    if ([25, 26, 27, 28].includes(especie) 
+    && !this.calculo.calcular_descarte_deficiente_ec103
+    && !this.calculo.divisor_minimo) {
 
       let perc60Competencias = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
 
       perc60Competencias = Math.trunc(perc60Competencias * 0.6);
-      const aplicarDivisor = (!this.calculo.divisor_minimo) ? true : false;
+      let aplicarDivisor = (!this.calculo.divisor_minimo) ? true : false;
 
-      perc60Competencias = (numeroDeContribuicoes < perc60Competencias) ?
-        numeroDeContribuicoes : perc60Competencias;
+      const perc80Contribuicoes = numeroDeContribuicoes * 0.8;
+
+      aplicarDivisor = (perc80Contribuicoes < perc60Competencias);
 
       return {
         value: perc60Competencias,

@@ -222,15 +222,16 @@ export class conclusoesFinais {
 
         }
 
-        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
-        elementPossibilidade.moeda = this.moedaDib;
-
         if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
 
             elementPossibilidade.rmiConsiderado = (elementPossibilidade.rmi.value < elementPossibilidade.mediaDasContribuicoes12.value) ?
                 elementPossibilidade.rmi : elementPossibilidade.mediaDasContribuicoes12;
 
         }
+
+        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
+        elementPossibilidade.moeda = this.moedaDib;
+
 
     }
 
@@ -257,7 +258,7 @@ export class conclusoesFinais {
             elementPossibilidade.somaContribuicoes.valueString));
 
         const divisor = (this.divisorMinimo.aplicar) ?
-                            this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
+            this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
         listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||

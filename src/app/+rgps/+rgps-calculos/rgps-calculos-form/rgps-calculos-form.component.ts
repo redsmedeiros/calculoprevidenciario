@@ -487,7 +487,9 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     let tipoInvalidezPensao = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-      (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')) {
+      (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')||
+      (this.especieBeneficio === 'Aposentadoria por Idade da Pessoa com Deficiência')
+      ) {
       tipoInvalidezPensao = true;
     }
 
@@ -514,6 +516,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por idade - Trabalhador Rural',
       'Aposentadoria por Idade - Trabalhador Urbano',
       'Aposentadoria por Idade - Trabalhador Rural',
+      'Aposentadoria por Idade da PcD',
       'Auxílio Doença',
       'Auxílio por Incapacidade Temporária'
     ].includes(this.especieBeneficio)) {
@@ -881,7 +884,9 @@ export class RgpsCalculosFormComponent implements OnInit {
   changeEspecieBeneficio() {
     this.errors.clear('especieBeneficio');
     if (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural'
-      || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano') {
+      || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano'
+      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano'
+      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano') {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;
@@ -947,7 +952,7 @@ export class RgpsCalculosFormComponent implements OnInit {
           novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
         },
         {
-          antigo: 'Aposentadoria por Idade da Pessoa com Deficiência',
+          antigo: 'Aposentadoria especial por Idade da Pessoa com Deficiência',
           novo: 'Aposentadoria por Idade da PcD'
         },
         {

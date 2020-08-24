@@ -103,17 +103,17 @@
                   </button> 
                 </a>
               </h4>
-              <div class="no-padding" >
+              <div *ngIf="!isUpdating" class="no-padding" >
                 <sa-widget [colorbutton]="false" [editbutton]="false" >
-                  <div *ngIf="!isUpdating">
-                    <div class="widget-body no-padding">
+                   <div >
+                    <div class="widget-body no-padding hidden-dt"> 
                       <sa-datatable 
                          id="lista-{{i}}"
                         [options]="calculoPossivel.listaCompetencias"
                         [responsive]="false"
                         paginationLength="true"
                         *ngIf="!isUpdating"
-                        tableClass="table table-striped table-bordered table-hover"
+                        tableClass="table table-striped table-bordered table-hover table-condensed"
                         width="100%"
                       >
                         <thead>
@@ -127,8 +127,8 @@
                           </tr>
                         </thead>
                       </sa-datatable>
-                    </div>
-                  </div>
+                     </div>
+                  </div> 
                 </sa-widget>
 
                 <!-- conclusoes genericas -->

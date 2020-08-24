@@ -238,15 +238,16 @@
                           <span>Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição).</span>
                         </label>
                         <popover-content #aviso100PCD
-                        title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
+                        title="Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição)"
                         [closeOnClickOutside]="true"
                         >
                         <div class="alert alert-danger bg-ieprev fade in bold" 
                         *ngIf="[25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))" >
-                              O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, inclusive quanto aos critérios de cálculo, 
-                              ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. Apesar disso, o artigo 70-J, do Decreto 3.048/99 determina que o salário de benefício da
-                              Aposentadoria da PcD será apurado na forma do artigo 32 (m.a.s de 100% dos SC). Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício para exclusão do 
-                              mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo das duas formas.
+                          O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, 
+                          inclusive quanto aos critérios de cálculo, ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. 
+                          Apesar disso, o artigo 70-J, do Decreto 3.048/99 determina que o salário de benefício da Aposentadoria da PcD será apurado 
+                          na forma do artigo 32 (m.a.s de 100% dos SC). O Simulador IEPREV realiza o cálculo com utilização da  m.a.s dos 80% > SC, mas 
+                          possibilita a elaboração do cálculo pela m.a.s de 100% dos SC.
                         </div>
                         </popover-content>
                           <button type="button" class="btn btn-small btn-info" 
@@ -267,7 +268,7 @@
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
                           <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
-                            Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)
+                            Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
                           </span>
                         </label>
                         <popover-content #avisoDescarteMenoresSalarios
@@ -277,7 +278,8 @@
                         <div class="alert alert-danger bg-ieprev fade in bold" 
                         *ngIf="[1915,1920,1925].includes(getEspecieBeneficio(especieBeneficio)) 
                         || [4,6].includes(getEspecieBeneficio(especieBeneficio))
-                        || [3,16].includes(getEspecieBeneficio(especieBeneficio))" >
+                        || [3,16].includes(getEspecieBeneficio(especieBeneficio))
+                        || [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))" >
                           Opção aplicada aos benefício concedidos com base no direito adquirido até 13/11/2019 (§ 1°, do art. 188-e, do Decreto 3.048/99). 
                           Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
                           possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
@@ -290,7 +292,8 @@
                           [popover]="avisoDescarteMenoresSalarios"
                           *ngIf="[1915,1920,1925].includes(getEspecieBeneficio(especieBeneficio)) 
                           || [4,6].includes(getEspecieBeneficio(especieBeneficio))
-                          || [3,16].includes(getEspecieBeneficio(especieBeneficio))"
+                          || [3,16].includes(getEspecieBeneficio(especieBeneficio))
+                          || [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))"
                           >
                               <i class="fa fa-question-circle fa-1-6x"></i>
                           </button>

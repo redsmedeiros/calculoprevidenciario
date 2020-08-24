@@ -192,6 +192,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
                         this.carenciasProgressivas = carencias;
                         this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
                         this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+                        console.log(this.erros);
                         this.isUpdating = false;
                       });
                   });
@@ -306,7 +307,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       totalSecundaria += valorSecundarioRevisado;
 
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimarioRevisado, dibCurrency.acronimo);
-      let contribuicaoSecundariaRevisadaString = "";
+      let contribuicaoSecundariaRevisadaString = '';
       if (!this.isBlackHole) {
         contribuicaoSecundariaRevisadaString = this.formatMoney(valorSecundarioRevisado, dibCurrency.acronimo); // Acronimo da moeda após a conversão.
       }
@@ -464,7 +465,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
       if (!direito) {
-        errorArray.push("NÃO POSSUI direito ao benefício INTEGRAL.");
+        errorArray.push('NÃO POSSUI direito ao benefício INTEGRAL.');
         if (dib <= this.dataDib98) {
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib);
@@ -481,18 +482,18 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           //"POSSUI direito ao benefício proporcional."
           //"Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
-          errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL.");
+          errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) ' + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
-          errorArray.push("Falta(m) " + tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
+          errorArray.push('Falta(m) ' + tempoFracionado + ' para completar o tempo de serviço necessário para o benefício INTEGRAL.');
           //if (totalContribuicao98 > 0 && errorArray.length == 0) {
           if (totalContribuicao98 > 0 && this.tipoCalculo == '98_99') {
             let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
             let tempoProporcional = this.tratarTempoFracionado(tempo);
             // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
             // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
-            errorArray.push("Falta(m) " + tempoProporcional + " para completar o tempo de serviço necessário para o benefício PROPORCIONAL.");
+            errorArray.push('Falta(m) ' + tempoProporcional + ' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.');
           }
         }
       }
@@ -507,7 +508,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else if (this.tipoBeneficio == 5) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
       if (!direito) {
-        errorArray.push("Não possui direito ao benefício de aposentadoria especial.");
+        errorArray.push('Não possui direito ao benefício de aposentadoria especial.');
       }
     } else if (this.tipoBeneficio == 16) {
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
@@ -520,29 +521,29 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else if (this.tipoBeneficio == 25) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 10);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('Não há direito ao Benefício');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
       }
     } else if (this.tipoBeneficio == 26) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 6);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('Não há direito ao Benefício');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
       }
     } else if (this.tipoBeneficio == 27) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 2);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('Não há direito ao Benefício');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.   
       }
     } else if (this.tipoBeneficio == 28) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 20);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('Não há direito ao Benefício');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.
       }
       if (!this.verificarIdadeMinima(idadeDoSegurado, errorArray)) {
-        errorArray.push("");
+        errorArray.push('Não há direito ao Benefício');
         return false; // Exibir Mensagem de erro com a idade faltando;
       }
     }
@@ -688,7 +689,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
     if (!temIdadeMinima) {
-      errorArray.push("O segurado não tem a idade mínima (" + idadeMinima + " anos) para se aposentar por idade. Falta(m) " + (idadeMinima - this.idadeSegurado) + " ano(s) para atingir a idade mínima.");
+      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
     }
     return temIdadeMinima;
   }
@@ -744,7 +745,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       }
 
       if (this.calculo.carencia < mesesCarencia) {
-        let erroCarencia = "Falta(m) " + (mesesCarencia - this.calculo.carencia) + " mês(es) para a carência necessária.";
+        let erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
         errorArray.push(erroCarencia);
         return false;
       }
@@ -772,7 +773,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
     let direito = idade > idadeNecessaria;
     if (!direito) {
-      errorArray.push("Falta(m) " + (idadeNecessaria - idade) + " ano(s) para atingir a idade mínima.");
+      errorArray.push('Falta(m) ' + (idadeNecessaria - idade) + ' ano(s) para atingir a idade mínima.');
     }
     return direito;
   }
@@ -781,21 +782,21 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let year = Math.floor(time);
     let month = Math.round((time - year) * 12);
 
-    let returnStr = "";
+    let returnStr = '';
     if (year != 0) {
-      returnStr += year + " ano(s)";
+      returnStr += year + ' ano(s)';
     }
     if (month != 0 && year != 0) {
-      returnStr += " e ";
+      returnStr += ' e ';
     }
     if (month != 0) {
-      returnStr += month + " mes(es)";
+      returnStr += month + ' mes(es)';
     }
     if (month == 0 && year == 0) {
-      returnStr = " 0 ano(s) ";
+      returnStr = ' 0 ano(s) ';
     }
     if (year < 0) {
-      returnStr = "";
+      returnStr = '';
     }
     return returnStr;
   }
