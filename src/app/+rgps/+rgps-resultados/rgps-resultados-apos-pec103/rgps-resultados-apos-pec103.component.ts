@@ -64,6 +64,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
   public isRegrasPensaoObitoInstituidorAposentado = false;
   public conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado = {};
+  public rmiFinalCustom;
 
 
   public listaConclusaoAcesso = [];
@@ -366,7 +367,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.moedaDib = this.getMoedaDib();
 
     this.conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado =
-      this.conclusoesFinais.calcularPensaoObito(this.calculo, this.moedaDib, this.tipoBeneficio);
+      this.conclusoesFinais.calcularPensaoObito(this.calculo, this.moedaDib, this.tipoBeneficio, null);
 
     this.isUpdating = false;
 

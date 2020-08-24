@@ -3,7 +3,7 @@
                  <div class="row">
                   <div class="col-md-6">
                     <div class="form-group mb-4">
-                      <label class="col-md-6 control-label" [ngClass]="{'pt-0':!isEdit}"  for="dataInicioBeneficio"><strong>Data do Início do Benefício:*</strong></label>
+                      <label class="col-md-6 control-label" [ngClass]="{'pt-0':!isEdit}"  for="dataInicioBeneficio"><strong>Data do Início do Benefício*:</strong></label>
                       <div class="col-md-5">
                         <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions()" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
                         <small *ngIf="errors.has('dataInicioBeneficio')" class="text-danger">{{ errors.get('dataInicioBeneficio') | i18n}}</small>
@@ -12,7 +12,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group mb-4">
-                      <label class="col-md-5 control-label"  [ngClass]="{'pt-0':!isEdit}" for="periodoInicioBeneficio"><strong>Período do benefício:*</strong></label>
+                      <label class="col-md-5 control-label"  [ngClass]="{'pt-0':!isEdit}" for="periodoInicioBeneficio"><strong>Período do Benefício*:</strong></label>
                       <div class="col-md-7">
                         <select [(ngModel)]="periodoInicioBeneficio" (change) = "changeGrupoDos12()" [ngModelOptions]="{standalone: true}" class="form-control" id="periodoInicioBeneficio">
                           <option [value]="periodo" *ngFor="let periodo of periodoOptions">{{periodo}}</option>
@@ -301,7 +301,7 @@
                       </div>
                     </div>
                       <div class="form-group mb-4"  *ngIf="has19 && hasPensao19">
-                        <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="numDependentes"><strong>Número de dependentes:*</strong></label>
+                        <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="numDependentes"><strong>Número de Dependentes*:</strong></label>
                         <div class="col-md-2">
                           <!-- <input [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" type="number" min="0" max="10" step="1"> -->
                           <select [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" id="numDependentes">
@@ -341,7 +341,7 @@
                       </div>
                       <div class="form-group mb-4" *ngIf="has19 && (hasPensao19 || hasInvalidez19 || hasAuxilioAcidente)">
                         <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito' || especieBeneficio == 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'">
-                        <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="ultimoBeneficio"><strong>Valor da último Benefício:*</strong></label>
+                        <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="ultimoBeneficio"><strong>Valor da último Benefício*:</strong></label>
                         <div class="col-md-3">
                           <input [(ngModel)]="ultimoBeneficio" (change)="errors.clear('ultimoBeneficio')"  [ngModelOptions]="{standalone: true}" class="form-control" type="text" currencyMask>
                           <small *ngIf="errors.has('ultimoBeneficio')" class="text-danger">{{ errors.get('ultimoBeneficio') | i18n}}</small>
@@ -384,7 +384,7 @@
                         </div>
                       </div>
                       <div class="form-group mb-4"  *ngIf="has19 && hasPensao19 && hasPensaoNaoInstuidorAposentado">
-                        <label class="col-md-4 control-label"  [ngClass]="{'pt-0':!isEdit}"><strong>Sexo do instituidor do benefício*</strong></label>
+                        <label class="col-md-4 control-label"  [ngClass]="{'pt-0':!isEdit}"><strong>Sexo do instituidor do benefício*:</strong></label>
                         <div class="col-md-3">
                           <label class="radio radio-inline">
                             <input [(ngModel)]="sexoInstituidor" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('sexoInstituidor')" type="radio" name="sexoInstituidor" value="m"> Masculino </label>
@@ -398,7 +398,7 @@
                         </div>
                       </div>
                   <div class="form-group mb-4" *ngIf="hasCarencia">
-                    <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="carencia">Carência:*</label>
+                    <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="carencia">Carência*:</label>
                     <div class="col-md-3">
                       <input [(ngModel)]="carencia" placeholder="Meses" (change)="errors.clear('carencia')" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
                       <small *ngIf="errors.has('carencia')" class="text-danger">{{ errors.get('carencia') | i18n}}</small>
@@ -421,7 +421,7 @@
                       <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-primary mr-2">
                         <span class="btn-label">
                           <i class="fa fa-save"></i>
-                        </span> <span *ngIf="isEdit">&nbsp;&nbsp;Salvar&nbsp;&nbsp;</span>
+                        </span> <span *ngIf="isEdit">&nbsp;&nbsp;Salvar e Calcular&nbsp;&nbsp;</span>
                                 <span *ngIf="!isEdit">&nbsp;&nbsp;Inserir&nbsp;&nbsp;</span>
                       </button>
                     </div>

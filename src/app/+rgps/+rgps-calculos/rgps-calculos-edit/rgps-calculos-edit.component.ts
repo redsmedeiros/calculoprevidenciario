@@ -64,7 +64,8 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
 
         swal(teste).then(() => {
           this.CalculoRgps.get()
-            .then(() => this.router.navigate(['/rgps/rgps-calculos/' + this.route.snapshot.params['id']]));
+           // .then(() => this.router.navigate(['/rgps/rgps-calculos/' + this.route.snapshot.params['id']]));
+            .then(() => this.router.navigate(['/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo]));
         });
 
       })

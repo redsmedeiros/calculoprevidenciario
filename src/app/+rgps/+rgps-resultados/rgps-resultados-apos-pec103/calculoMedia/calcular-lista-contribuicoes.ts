@@ -86,7 +86,7 @@ export class CalcularListaContribuicoes {
 
             elementRegraEspecie.calculosPossiveis.forEach(elementPossibilidade => {
 
-                this.criarListaContribPossibilidade(elementPossibilidade);
+                this.criarListaContribPossibilidade(elementPossibilidade, elementRegraEspecie);
                 this.realizarDescarteContribuicoes(elementPossibilidade, elementRegraEspecie);
                 this.setTableOption(elementPossibilidade);
 
@@ -100,10 +100,11 @@ export class CalcularListaContribuicoes {
     /**
      * @param  {} elementPossibilidade
      */
-    private criarListaContribPossibilidade(elementPossibilidade) {
+    private criarListaContribPossibilidade(elementPossibilidade, elementRegraEspecie) {
 
         let line = {};
         const list = [];
+        const list12 = [];
 
         let contribuicaoPrimariaRevisada = 0;
         let limiteString = '';
@@ -112,6 +113,8 @@ export class CalcularListaContribuicoes {
         this.dibCurrency = DefinicaoMoeda.loadCurrency(dib);
         const dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
         const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
+        const isDoenca12 = (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos);
+
 
         this.contribuicoes.forEach((contribuicao, index) => {
 
@@ -161,9 +164,14 @@ export class CalcularListaContribuicoes {
 
             list.push(line);
 
+            if (index < 12 && isDoenca12) {
+                list12.push(line)
+            }
+
         });
 
         elementPossibilidade.listaCompetencias = list;
+        elementPossibilidade.lista12Competencias = list12;
 
         return elementPossibilidade;
 
@@ -203,11 +211,6 @@ export class CalcularListaContribuicoes {
         // somar e sinalizar a contribuição descartada
         elementPossibilidade.listaCompetencias.forEach((element, index) => {
 
-            if (index < 12 && isDoenca12) {
-                // list12.push(element)
-                soma12Ultimas += element.valor_primario;
-            }
-
             if (index >= elementPossibilidade.descarteContrib) {
                 somaContribuicoes += element.valor_primario;
             } else {
@@ -244,6 +247,11 @@ export class CalcularListaContribuicoes {
         };
 
         if (isDoenca12) {
+
+            // somar e sinalizar a contribuição descartada
+            elementPossibilidade.lista12Competencias.forEach((element, index) => {
+                soma12Ultimas += element.valor_primario;
+            });
 
             // elementPossibilidade.lista12Competencias = list12;
             const mediaDasContribuicoes12 = soma12Ultimas / 12;

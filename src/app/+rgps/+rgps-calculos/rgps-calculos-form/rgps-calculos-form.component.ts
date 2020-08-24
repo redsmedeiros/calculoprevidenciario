@@ -100,10 +100,13 @@ export class RgpsCalculosFormComponent implements OnInit {
   ngOnInit() {
     if (this.isEdit) {
       this.dataInicioBeneficio = this.formData.data_pedido_beneficio;
+
       this.changePeriodoOptions();
       this.especieBeneficio = this.formData.tipo_seguro;
       this.changeEspecieBeneficio();
-      this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
+      this.periodoInicioBeneficio = ((this.formData.tipo_aposentadoria === 'A partir de 13/11/2019') ?
+                                      'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
+ //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
       this.changeGrupoDos12();
       if (this.formData.contibuicao_primaria_98 != '') {
         this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];

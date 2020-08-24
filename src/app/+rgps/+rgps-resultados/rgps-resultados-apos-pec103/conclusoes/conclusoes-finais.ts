@@ -222,15 +222,16 @@ export class conclusoesFinais {
 
         }
 
+        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
+        elementPossibilidade.moeda = this.moedaDib;
+
         if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
 
             elementPossibilidade.rmiConsiderado = (elementPossibilidade.rmi.value < elementPossibilidade.mediaDasContribuicoes12.value) ?
                 elementPossibilidade.rmi : elementPossibilidade.mediaDasContribuicoes12;
+            elementPossibilidade.rmiConsiderado = this.limitarTetosEMinimos(elementPossibilidade.rmiConsiderado.value)
 
         }
-
-        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
-        elementPossibilidade.moeda = this.moedaDib;
 
 
     }
@@ -290,10 +291,14 @@ export class conclusoesFinais {
 
         if (elementRegraEspecie.regra === 'pensaoObito') {
 
-            const conclusaoPensao = this.calcularPensaoObito(this.calculo,
+            const conclusaoPensao = this.calcularPensaoObito(
+                this.calculo,
                 elementPossibilidade.moeda,
                 1901,
-                elementPossibilidade.rmi.value);
+                elementPossibilidade,
+                elementPossibilidade.rmi.value
+            );
+
             listC.push(...conclusaoPensao.list);
 
         }
@@ -521,7 +526,26 @@ export class conclusoesFinais {
 
         if (!this.calculo.obito_decorrencia_trabalho) {
 
-            return this.defineAliquotaIdade(elementPossibilidade);
+            const tempoParaPercentual = {
+                m: 20,
+                f: 15
+            };
+
+            let aliquota = 60;
+            let formula = '60'
+            let valueString = aliquota + '%'
+
+            if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual[this.calculo.sexo_instituidor]) {
+                aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual[this.calculo.sexo_instituidor]) * 2);
+                formula = `60 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual[this.calculo.sexo_instituidor]}) X 2)`;
+                valueString = aliquota + '%'
+            }
+
+            return this.setAliquota(
+                aliquota,
+                valueString,
+                formula,
+            );
 
         } else {
 
@@ -549,11 +573,13 @@ export class conclusoesFinais {
      * @param  {} tipoBeneficio
      * @param  {} valorSalarioBeneficio = 0 default 0 para aposentadoria com intituidor aposentado
      */
-    public calcularPensaoObito(calculo, moeda, tipoBeneficio, ultimoBeneficioRMI = 0) {
+    public calcularPensaoObito(calculo, moeda, tipoBeneficio, elementPossibilidade, ultimoBeneficioRMI = 0) {
 
-        const salarioBeneficio = { value: 0, valueString: '' };
+        const salarioBeneficio = { value: 0, valueString: '', aviso: '' };
         const aliquotaDependentes = { value: 0, valueString: '', formula: '' };
         let rmi = { value: 0, valueString: '' };
+        this.calculo = calculo;
+        this.moedaDib = moeda;
 
         const tempoPercentual = {
             m: 20,
@@ -575,22 +601,27 @@ export class conclusoesFinais {
 
         }
 
-        salarioBeneficio.value = (tipoBeneficio === 1901) ? ultimoBeneficioRMI : parseFloat(calculo.ultimo_beneficio);
+        const salarioBeneficioAtual = (tipoBeneficio === 1901) ? ultimoBeneficioRMI : parseFloat(calculo.ultimo_beneficio);
+        salarioBeneficio.value = (this.limitarTetosEMinimos(salarioBeneficioAtual)).value;
         salarioBeneficio.valueString = DefinicaoMoeda.formatMoney(salarioBeneficio.value, moeda.acronimo);
 
         rmi = this.limitarTetosEMinimos(salarioBeneficio.value * (aliquotaDependentes.value / 100));
+
+
 
         if (tipoBeneficio === 1900) {
             return this.gerarConlusoesPensaoObitoInstituidorAposentado(moeda,
                 salarioBeneficio,
                 aliquotaDependentes,
                 rmi);
+        } else {
+            elementPossibilidade.rmi = rmi;
+            return this.gerarConlusoesPensaoObitoInstituidorNaoAposentado(moeda,
+                salarioBeneficio,
+                aliquotaDependentes,
+                rmi);
         }
 
-        return this.gerarConlusoesPensaoObitoInstituidorNaoAposentado(moeda,
-            salarioBeneficio,
-            aliquotaDependentes,
-            rmi);
     }
 
     /**
@@ -607,8 +638,11 @@ export class conclusoesFinais {
         const listC = []
 
         listC.push(this.setConclusao(1, 'Salário de Benefício', salarioBeneficio.valueString));
-        listC.push(this.setConclusao(2, 'Alíquota do Benefício', aliquotaDependentes.valueString));
-        listC.push(this.setConclusao(3, 'Renda Mensal Inicial', rmi.valueString));
+        listC.push(this.setConclusao(2, 'Número de Dependentes', (this.calculo.num_dependentes)));
+        listC.push(this.setConclusao(3, 'Possuí dependente inválido ou com deficiência intelectual, mental ou grave',
+            (this.calculo.depedente_invalido) ? 'SIM' : 'Não'));
+        listC.push(this.setConclusao(4, 'Alíquota do Benefício', aliquotaDependentes.valueString));
+        listC.push(this.setConclusao(19000, 'Renda Mensal Inicial', rmi.valueString));
 
         return { list: listC, label: 'Pensão por Morte - Instituidor Aposentado na Data do Óbito' };
     }
@@ -629,8 +663,10 @@ export class conclusoesFinais {
         const listC = []
 
         // listC.push(this.setConclusao(91, 'Salário de Benefício', salarioBeneficio.valueString));
+        listC.push(this.setConclusao(91, 'Sexo do instituidor do benefício',
+            ((this.calculo.sexo_instituidor === 'm') ? 'Masculino  ' : 'Feminino')));
         listC.push(this.setConclusao(92, 'Alíquota do Benefício (Pensão por Morte)', aliquotaDependentes.valueString));
-        listC.push(this.setConclusao(93, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
+        listC.push(this.setConclusao(19000, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
 
         return { list: listC, label: 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito' };
     }
@@ -640,9 +676,9 @@ export class conclusoesFinais {
        * @param  {} value
        */
     private limitarTetosEMinimos(value) {
+
         // se a data estiver no futuro deve ser utilizado os dados no mês atual
         const moeda = this.moedaDib;
-
         const salarioMinimo = (moeda) ? parseFloat(moeda.salario_minimo) : 0;
         const tetoSalarial = (moeda) ? parseFloat(moeda.teto) : 0;
         let avisoString = '';
