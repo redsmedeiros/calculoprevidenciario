@@ -668,6 +668,9 @@ export class conclusoesFinais {
         // listC.push(this.setConclusao(91, 'Salário de Benefício', salarioBeneficio.valueString));
         listC.push(this.setConclusao(91, 'Sexo do instituidor do benefício',
             ((this.calculo.sexo_instituidor === 'm') ? 'Masculino  ' : 'Feminino')));
+        listC.push(this.setConclusao(2, 'Número de Dependentes', (this.calculo.num_dependentes)));
+        listC.push(this.setConclusao(3, 'Possuí dependente inválido ou com deficiência intelectual, mental ou grave',
+            (this.calculo.depedente_invalido) ? 'SIM' : 'Não'));
         listC.push(this.setConclusao(92, 'Alíquota do Benefício (Pensão por Morte)', aliquotaDependentes.valueString));
         listC.push(this.setConclusao(19000, 'Renda Mensal Inicial (Pensão por Morte)', rmi.valueString));
 

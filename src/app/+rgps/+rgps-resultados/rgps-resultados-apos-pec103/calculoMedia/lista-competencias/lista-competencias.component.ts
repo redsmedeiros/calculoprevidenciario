@@ -33,7 +33,7 @@ export class ListaCompetenciasComponent implements OnInit {
     const calculoBox = document.getElementById('printableCalculo').innerHTML
     const boxlista = document.getElementById('lista-' + boxId).innerHTML;
     const boxconclusao = document.getElementById('conclusao-' + boxId).innerHTML;
-    const rodape = `<footer><img src='./assets/img/rodapesimulador.png' alt='Logo'></footer>`;
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
                 <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
@@ -54,8 +54,8 @@ export class ListaCompetenciasComponent implements OnInit {
                        padding: 3.5px 8px;
                       border-color: #000 !important
                     }
-                      footer{text-align: center;}
-                      .page-break { page-break-before: always; }
+                      footer{text-align: center; margin-top: 110px;}
+                      .page-break { page-break-inside: avoid;}
                       </style>`;
     const printContents = seguradoBox + calculoBox + boxlista + boxconclusao;
 
@@ -68,7 +68,7 @@ export class ListaCompetenciasComponent implements OnInit {
                                   <title> Renda Mensal Inicial - ${this.segurado.nome}</title>
                                   <body onload="window.print()">
                                    <article class="mt-5">${printContents}</article>
-                                   <footer>${rodape}</footer>
+                                   <footer class="mt-5">${rodape}</footer>
                                   </body>
                                 </html>`);
     popupWin.document.close();

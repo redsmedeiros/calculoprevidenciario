@@ -14,7 +14,7 @@ import { ModalDirective } from 'ngx-bootstrap';
     ErrorService
   ]
 })
-export class RgpsCalculosCreateComponent implements OnDestroy {
+export class RgpsCalculosCreateComponent implements OnInit, OnDestroy {
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
   public form = { ...CalculoModel.form };
@@ -28,6 +28,13 @@ export class RgpsCalculosCreateComponent implements OnDestroy {
     protected router: Router,
     private route: ActivatedRoute,
   ) { }
+
+  ngOnInit() {
+
+    this.checkImportContagemTempoOpemModal();
+  
+  }
+
 
   submit(data) {
     this.Calculo
@@ -51,12 +58,23 @@ export class RgpsCalculosCreateComponent implements OnDestroy {
   }
 
 
-  public showChildModal():void {
+  public showChildModal(): void {
     this.modalCreate.show();
   }
 
-  public hideChildModal():void {
+  public hideChildModal(): void {
     this.modalCreate.hide();
+  }
+
+
+  checkImportContagemTempoOpemModal() {
+
+    if (sessionStorage.exportContagemTempo && sessionStorage.exportContagemTempo !== undefined) {
+      setTimeout(() => {
+        this.modalCreate.show();
+      }, 2000);
+    }
+
   }
 
 

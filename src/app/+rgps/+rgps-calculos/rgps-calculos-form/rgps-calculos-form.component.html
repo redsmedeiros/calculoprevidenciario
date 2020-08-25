@@ -65,7 +65,7 @@
                     </div>
                   </div>
                   <h5 *ngIf="has98" class="pl-5 pb-3"><strong>Tempo de Contribuição até a Emenda nº 20/98 (16/12/1998)</strong></h5>
-                  <h5 *ngIf="hasAnterior" class="pl-5">Tempo de contribuição</h5>
+                  <h5 *ngIf="hasAnterior" class="pl-5"><strong>Tempo de contribuição</strong></h5>
                   <div class="form-group mb-4" *ngIf="has98 || hasAnterior">
                     <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="primaria98anos"><strong>Contribuição Primária*:</strong></label>
                     <div class="col-md-2">
@@ -132,15 +132,15 @@
                   <div *ngIf="hasAtual" class="form-group mb-4">
                     <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="primariaAtualanos"><strong>Contribuição Primária*:</strong></label>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualanos" (change)="errors.clear('primariaAtualanos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
+                      <input [(ngModel)]="primariaAtualanos" (change)="errors.clear('primariaAtualanos'); clearCarenciaChange();" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" >
                       <small *ngIf="errors.has('primariaAtualanos')" class="text-danger">{{ errors.get('primariaAtualanos') | i18n}}</small>
                     </div>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualmeses" (change)="errors.clear('primariaAtualmeses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
+                      <input [(ngModel)]="primariaAtualmeses" (change)="errors.clear('primariaAtualmeses'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                       <small *ngIf="errors.has('primariaAtualmeses')" class="text-danger">{{ errors.get('primariaAtualmeses') | i18n}}</small>
                     </div>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualdias" (change)="errors.clear('primariaAtualdias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
+                      <input [(ngModel)]="primariaAtualdias" (change)="errors.clear('primariaAtualdias'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" >
                       <small *ngIf="errors.has('primariaAtualdias')" class="text-danger">{{ errors.get('primariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
@@ -170,15 +170,15 @@
                   <div *ngIf="has19 && !hasPensaoInstuidorAposentado;" class="form-group mb-4">
                       <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="primaria19anos"><strong>Contribuição *:</strong></label>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos')" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos"  >
+                        <input [(ngModel)]="primaria19anos" (change)="errors.clear('primaria19anos'); clearCarenciaChange();" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos"  >
                         <small *ngIf="errors.has('primaria19anos')" class="text-danger">{{ errors.get('primaria19anos') | i18n}}</small>
                       </div>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19meses" (change)="errors.clear('primaria19meses')"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
+                        <input [(ngModel)]="primaria19meses" (change)="errors.clear('primaria19meses'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" >
                         <small *ngIf="errors.has('primaria19meses')" class="text-danger">{{ errors.get('primaria19meses') | i18n}}</small>
                       </div>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19dias" (change)="errors.clear('primaria19dias')"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias"  >
+                        <input [(ngModel)]="primaria19dias" (change)="errors.clear('primaria19dias'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias"  >
                         <small *ngIf="errors.has('primaria19dias')" class="text-danger">{{ errors.get('primaria19dias') | i18n}}</small>
                       </div>
                     </div>
@@ -190,8 +190,45 @@
                       </div>
                     </div>
   
-  
-
+                    <div class="form-group mb-4"  *ngIf="has19 && hasPensao19">
+                      <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="numDependentes"><strong>Número de Dependentes*:</strong></label>
+                      <div class="col-md-2">
+                        <!-- <input [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" type="number" min="0" max="10" step="1"> -->
+                        <select [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" id="numDependentes">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5 ou mais</option>
+                          </select>
+                        <small *ngIf="errors.has('numDependentes')" class="text-danger">{{ errors.get('numDependentes') | i18n}}</small>
+                      </div>
+                      <div class="checkbox col-md-8 col-md-offset-3">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="depedenteInvalido" class="checkbox" [ngModelOptions]="{standalone: true}">
+                          <span>Possuí dependente inválido ou com deficiência intelectual, mental ou grave.</span>
+                        </label>
+                        <popover-content #avisoDecorrenteAcidente
+                        title="Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho"
+                        [closeOnClickOutside]="true"
+                        >
+                        <div class="alert alert-danger bg-ieprev fade in bold" 
+                        *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
+                        getEspecieBeneficio(especieBeneficio) === 1901" >
+                          Neste caso a alíquota da Pensão por Morte será de 100% (§ 2°, I, do art. 23, da EC 103/2019)
+                        </div>
+                        </popover-content>
+                          <button type="button" class="btn btn-small btn-info" 
+                          popoverPlacement="left" 
+                          [popoverOnHover]="true"
+                          [popover]="avisoDecorrenteAcidente"
+                          *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
+                                getEspecieBeneficio(especieBeneficio) === 1901"
+                          >
+                              <i class="fa fa-question-circle fa-1-6x"></i>
+                          </button>
+                      </div>
+                    </div>
                     <div *ngIf="has19 && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
@@ -229,7 +266,8 @@
                           >
                           <div class="alert alert-danger bg-ieprev fade in bold" 
                           *ngIf="getEspecieBeneficio(especieBeneficio) === 1 
-                          || getEspecieBeneficio(especieBeneficio) === 1903" >
+                          || getEspecieBeneficio(especieBeneficio) === 1903
+                          || getEspecieBeneficio(especieBeneficio) === 1901" >
                             Os §§ 24 a 27, do art. 32, do Decreto 3.048/99 determinam que para fins do cálculo das aposentadorias programadas para as quais seja 
                             exigido tempo mínimo de contribuição, poderão ser excluídas do cálculo da média dos salários de contribuição, as contribuições que 
                             resultem em redução do valor do benefício, conforme previsto no § 6°, do artigo 26, da EC 103/2019, excetuando os benefício não programáveis. 
@@ -242,7 +280,8 @@
                             [popoverOnHover]="true"
                             [popover]="avisoDescarteMenoresSalarios"
                             *ngIf="getEspecieBeneficio(especieBeneficio) === 1 
-                            || getEspecieBeneficio(especieBeneficio) === 1903" 
+                            || getEspecieBeneficio(especieBeneficio) === 1903
+                            || getEspecieBeneficio(especieBeneficio) === 1901" 
                             >
                                 <i class="fa fa-question-circle fa-1-6x"></i>
                             </button>
@@ -317,45 +356,7 @@
                           
                       </div>
                     </div>
-                      <div class="form-group mb-4"  *ngIf="has19 && hasPensao19">
-                        <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="numDependentes"><strong>Número de Dependentes*:</strong></label>
-                        <div class="col-md-2">
-                          <!-- <input [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" type="number" min="0" max="10" step="1"> -->
-                          <select [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" id="numDependentes">
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5 ou mais</option>
-                            </select>
-                          <small *ngIf="errors.has('numDependentes')" class="text-danger">{{ errors.get('numDependentes') | i18n}}</small>
-                        </div>
-                        <div class="checkbox col-md-8 col-md-offset-3">
-                          <label>
-                            <input type="checkbox" [(ngModel)]="depedenteInvalido" class="checkbox" [ngModelOptions]="{standalone: true}">
-                            <span>Possuí dependente inválido ou com deficiência intelectual, mental ou grave.</span>
-                          </label>
-                          <popover-content #avisoDecorrenteAcidente
-                          title="Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho"
-                          [closeOnClickOutside]="true"
-                          >
-                          <div class="alert alert-danger bg-ieprev fade in bold" 
-                          *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
-                          getEspecieBeneficio(especieBeneficio) === 1901" >
-                            Neste caso a alíquota da Pensão por Morte será de 100% (§ 2°, I, do art. 23, da EC 103/2019)
-                          </div>
-                          </popover-content>
-                            <button type="button" class="btn btn-small btn-info" 
-                            popoverPlacement="left" 
-                            [popoverOnHover]="true"
-                            [popover]="avisoDecorrenteAcidente"
-                            *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
-                          getEspecieBeneficio(especieBeneficio) === 1901"
-                            >
-                                <i class="fa fa-question-circle fa-1-6x"></i>
-                            </button>
-                        </div>
-                      </div>
+
                       <div class="form-group mb-4" *ngIf="has19 && (hasPensao19 || hasInvalidez19 || hasAuxilioAcidente)">
                         <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito' || especieBeneficio == 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'">
                         <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="ultimoBeneficio"><strong>Valor da último Benefício*:</strong></label>

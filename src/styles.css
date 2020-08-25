@@ -625,8 +625,17 @@ a[class*="action-"]:hover {
 }
 
 
-
-
 .popover {
   max-width: 600px !important;
+}
+
+
+.swal-text {
+  padding: 17px;
+  display: block;
+  margin: 22px;
+  text-align: center;
+  color: red ;
+  font-weight: 800;
+  font-size: 2rem;  
 }

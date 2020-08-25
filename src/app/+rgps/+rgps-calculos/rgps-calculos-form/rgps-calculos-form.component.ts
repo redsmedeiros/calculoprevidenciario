@@ -106,8 +106,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.especieBeneficio = this.formData.tipo_seguro;
       this.changeEspecieBeneficio();
       this.periodoInicioBeneficio = ((this.formData.tipo_aposentadoria === 'A partir de 13/11/2019') ?
-                                      'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
- //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
+        'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
+      //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
       this.changeGrupoDos12();
       if (this.formData.contibuicao_primaria_98 != '') {
         this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];
@@ -498,9 +498,9 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     let tipoInvalidezPensao = false;
     if ((this.especieBeneficio === 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte') ||
-      (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência')||
+      (this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência') ||
       (this.especieBeneficio === 'Aposentadoria por Idade da Pessoa com Deficiência')
-      ) {
+    ) {
       tipoInvalidezPensao = true;
     }
 
@@ -816,10 +816,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       this.periodoInicioBeneficio = 'A partir de 14/11/2019';
       // this.carencia = periodos.total.carencia;
+
+      this.carencia = periodos.total19.carencia;
     }
 
-
-    this.carencia = periodos['total' + exportDados.typeExport].carencia;
+    this.carenciaAposEc103 = periodos['total' + exportDados.typeExport].carencia;
 
     this.errors.clear();
     this.changePeriodoOptions();
@@ -839,7 +840,30 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   }
 
+  public clearCarenciaChange() {
 
+    if (this.hasCarencia) {
+
+      this.carencia = '';
+      this.carenciaAposEc103 = ''
+
+
+      const errorCarencia = {
+        position: 'top-end',
+        icon: 'error',
+        //title: 'O Tempo de Contribuição foi alterado manualmente - Verificar Carência.',
+        text: 'O Tempo de Contribuição foi alterado manualmente - Verificar Carência.',
+        closeOnClickOutside: true,
+        closeOnEsc: true,
+        button: false,
+        timer: 120000,
+      };
+
+      swal(errorCarencia);
+
+    }
+
+  }
 
   changeGrupoDos12() {
     this.errors.clear('periodoInicioBeneficio');

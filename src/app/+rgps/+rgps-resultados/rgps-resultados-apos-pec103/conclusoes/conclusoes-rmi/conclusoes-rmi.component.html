@@ -2,7 +2,7 @@
 class="table table-bordered table-hover no-padding"
 *ngIf="!isUpdating"
 >
-<thead>
+<thead class="not-print">
   <tr>
     <th colspan="2">
       <span >{{regraLabel}}</span>
@@ -18,6 +18,19 @@ class="table table-bordered table-hover no-padding"
   </tr>
 </thead>
 <tbody>
+  <tr>
+    <td colspan="2">
+      <strong >{{regraLabel}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td  style="text-align: right;">
+      <span class="pull-right font-bold"><b>Tipo</b></span>
+    </td>
+    <td style="text-align: left;">
+      <span class="font-bold"><b>Descrição</b></span>
+    </td>
+  </tr>
   <tr
     *ngFor="let conclusao of conclusoes"
     class="{{ conclusao.class }}"
