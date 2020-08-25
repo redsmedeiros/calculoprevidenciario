@@ -45,7 +45,7 @@
       <!-- Tabela e Informações do Cálculo A partir de 29/11/1999 -->
       <div id="{{boxId}}" class="boxCalculo row">
         <article class="col-sm-12 col-md-12 col-lg-12">
-          <sa-widget [colorbutton]="false" [editbutton]="false">
+          <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
             <!-- <header>
               <span class="widget-icon">
                 <i class="fa fa-edit"></i>
@@ -113,7 +113,7 @@
                   <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999</a></p>
                 </div>
   
-                <sa-widget [colorbutton]="false" [editbutton]="false">
+                <sa-widget [colorbutton]="false" [editbutton]="false" *ngIf="erros.length === 0" >
                   <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
                   <i class="fa fa-gear fa-2x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                   <div *ngIf="!isUpdating">
@@ -137,8 +137,8 @@
                     </div>
                   </div>
                 </sa-widget>
-                <table class="table table-bordered table-hover" *ngIf="!isUpdating">
-                <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0"> -->
+                <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating"> -->
+                <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0">
                   <thead>
                     <tr>
                       <th>
@@ -161,7 +161,7 @@
               </div>
               
             </div>
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="no-padding mt-2" >
+            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && erros.length === 0" class="no-padding mt-2" >
                 <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos"><strong>Reajustes Administrativos</strong></h4>
                 <sa-datatable [options]="reajustesAdministrativosTableOptions" 
                 *ngIf="!isUpdating && showReajustesAdministrativos" 
@@ -182,7 +182,7 @@
 
 
 
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered" *ngIf="erros.length === 0" >
     <thead>
       <tr>
         <th>

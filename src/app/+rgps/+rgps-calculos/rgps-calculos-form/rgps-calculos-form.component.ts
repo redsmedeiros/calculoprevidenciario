@@ -52,6 +52,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   public grupoDos12;
   public carencia;
+  public carenciaAposEc103;
 
   //reforma EC 103/2019
   public numDependentes;
@@ -147,6 +148,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.sexoInstituidor = this.formData.sexo_instituidor;
       this.divisorMinimo = this.formData.divisor_minimo;
       this.carencia = this.formData.carencia;
+      this.carenciaAposEc103 = this.formData.carencia_apos_ec103;
       this.grupoDos12 = this.formData.grupo_dos_12;
       this.calcularDescarteAposEC103 = this.formData.calcular_descarte_apos_ec103;
       this.calcularDescarteDeficienteEC103 = this.formData.calcular_descarte_deficiente_ec103;
@@ -177,6 +179,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.formData.valor_beneficio = ''; // TODO: deixar em branco por enquanto
       this.formData.soma_contribuicao = ''; // TODO: deixar em branco por enquanto
       this.formData.carencia = this.carencia;
+      this.formData.carencia_apos_ec103 = this.carenciaAposEc103;
       this.formData.grupo_dos_12 = this.grupoDos12;
 
       // pensão inicio por morte EC103
@@ -250,6 +253,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     this.grupoDos12 = '';
     this.carencia = '';
+    this.carenciaAposEc103 = '';
 
     this.numDependentes = 0;
     this.depedenteInvalido = false;
@@ -473,6 +477,10 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')) {
       this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+    }
+
+    if (this.has19 && (this.hasCarencia && (this.carenciaAposEc103 == undefined || this.carenciaAposEc103 === ''))) {
+      this.errors.add({ 'carenciaAposEc103': ['Campo obrigatório.'] });
     }
 
   }
@@ -807,7 +815,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       // posterior a EC nº 103/2019
 
       this.periodoInicioBeneficio = 'A partir de 14/11/2019';
-      this.carencia = periodos.total.carencia;
+      // this.carencia = periodos.total.carencia;
     }
 
 
@@ -889,7 +897,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     if (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural'
       || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano'
       || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano'
-      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano') {
+      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural') {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;

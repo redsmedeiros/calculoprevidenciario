@@ -389,7 +389,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
 
-        if (elementEspecie.status && this.isExits(melhorCalculo.rmi.value)) {
+        if (elementEspecie.status && 
+          (this.isExits(melhorCalculo) && this.isExits(melhorCalculo.rmi) && this.isExits(melhorCalculo.rmi.value))) {
           melhorValorRMI = melhorCalculo.rmi.value;
           melhorSoma = melhorCalculo.somaContribuicoes.value;
         }
@@ -404,7 +405,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         melhorCalculo = this.listaConclusaoAcesso[0].calculosPossiveis[0];
       }
 
-      if (this.isExits(melhorCalculo.rmi.value)) {
+      if (this.isExits(melhorCalculo) && this.isExits(melhorCalculo.rmi) && this.isExits(melhorCalculo.rmi.value)) {
         melhorValorRMI = melhorCalculo.rmi.value;
         melhorSoma = melhorCalculo.somaContribuicoes.value;
       }
@@ -618,11 +619,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       }
 
+      this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
-      this.carenciaConformDataFiliacao = mesesCarencia;
-
-      if (this.calculo.carencia < mesesCarencia) {
-        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
+      if (this.calculo.carencia_apos_ec103 < mesesCarencia) {
+       //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
+        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia_apos_ec103) + ' mês(es) para a carência necessária.';
         this.errosArray.push(erroCarencia);
         // this.erroCarenciaMinima = true;
         return false;

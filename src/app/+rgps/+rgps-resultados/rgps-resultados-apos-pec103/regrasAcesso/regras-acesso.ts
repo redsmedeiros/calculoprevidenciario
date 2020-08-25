@@ -188,9 +188,12 @@ export class RegrasAcesso {
 
 
         // Valor default sem decrementar
+
+
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
 
-            //    console.log(Math.floor((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) / 12));
+            // console.log(maximoDescarte.anos - Math.floor(maximoDescarte.anos));
+            //    console.log(Math.floor((maximoDescarte.anos - Math.floor(maximoDescarte.anos)) / 12));
             //    console.log(Math.floor((maximoDescarte.meses) - Math.floor(maximoDescarte.meses)));
             //    console.log(maximoDescarte);
 

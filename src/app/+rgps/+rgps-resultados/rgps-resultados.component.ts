@@ -699,6 +699,7 @@ export class RgpsResultadosComponent implements OnInit {
       case 'Aposentadoria por idade - Trabalhador Urbano':
         numeroEspecie = 3;
         break;
+      case 'Aposentadoria por Tempo de Contribuição':
       case 'Aposentadoria por tempo de contribuição':
       case 'Aposentadoria por tempo de serviço':
         numeroEspecie = 4;

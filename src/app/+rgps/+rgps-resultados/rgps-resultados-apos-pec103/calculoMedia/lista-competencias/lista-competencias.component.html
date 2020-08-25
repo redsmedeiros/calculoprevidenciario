@@ -64,8 +64,7 @@
                   <ul class="list-inline m-0">
                     <li class="px-2"><strong>  Cálculo com {{ calculoPossivel.numeroCompetencias }} Salários de Contribuição</strong></li>
                     <li class="px-2"><strong> - {{ calculoPossivel.aliquota.valueString }} -</strong></li>
-                    <li class="px-2" *ngIf="calculoPorRegra.regra !== 'doenca'" ><strong> RMI {{ calculoPossivel.rmi.valueString }}</strong></li>
-                    <li class="px-2" *ngIf="calculoPorRegra.regra === 'doenca'"><strong> RMI {{ calculoPossivel.rmiConsiderado.valueString }}</strong></li>
+                    <li class="px-2" ><strong> RMI {{ calculoPossivel.rmi.valueString }}</strong></li>
                     <li class="px-2"><span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span></li>
                   </ul>
                    
@@ -146,7 +145,5 @@
         </accordion>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="isRegrasPensaoObitoInstituidorAposentado">
-
-    </div>
+    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="isRegrasPensaoObitoInstituidorAposentado"></div> -->
 </article>

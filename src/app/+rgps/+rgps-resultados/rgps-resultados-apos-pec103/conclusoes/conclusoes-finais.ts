@@ -229,7 +229,8 @@ export class conclusoesFinais {
 
             elementPossibilidade.rmiConsiderado = (elementPossibilidade.rmi.value < elementPossibilidade.mediaDasContribuicoes12.value) ?
                 elementPossibilidade.rmi : elementPossibilidade.mediaDasContribuicoes12;
-            elementPossibilidade.rmiConsiderado = this.limitarTetosEMinimos(elementPossibilidade.rmiConsiderado.value)
+            elementPossibilidade.rmiConsiderado = this.limitarTetosEMinimos(elementPossibilidade.rmiConsiderado.value);
+            
 
         }
 
@@ -287,6 +288,8 @@ export class conclusoesFinais {
                 elementPossibilidade.mediaDasContribuicoes12.valueString));
             listC.push(this.setConclusao(11, 'Renda Mensal Inicial Considerada',
                 elementPossibilidade.rmiConsiderado.valueString));
+
+                elementPossibilidade.rmi = elementPossibilidade.rmiConsiderado;
         }
 
         if (elementRegraEspecie.regra === 'pensaoObito') {
