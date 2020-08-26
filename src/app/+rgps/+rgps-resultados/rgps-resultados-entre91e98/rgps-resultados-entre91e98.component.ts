@@ -86,7 +86,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
     private CalculoRgpsService: CalculoRgpsService,
-    protected rt: ActivatedRoute, ) { super(null, route, null, null, null, null); }
+    protected rt: ActivatedRoute,) { super(null, route, null, null, null, null); }
 
   ngOnInit() {
     this.isUpdating = true;
@@ -94,7 +94,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
-    
 
     
       if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
@@ -140,65 +139,108 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       }
 
 
-      dataInicio = (dataInicio.clone()).startOf('month');
-      let mesesLimite = 0;
-      let mesesLimiteTotal = 0;
-      if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
-        mesesLimite = 18;
-        mesesLimiteTotal = 12;
-      } else {
-        mesesLimite = 48;
-        mesesLimiteTotal = 36;
-      }
-      if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998') {
-        mesesLimite = 48;
-        mesesLimiteTotal = 36;
-      }
-      let dataLimite;
-      if (mesesLimite > 0) {
-        dataLimite = (dataInicio.clone()).add(-mesesLimite, 'months');
-      } else {
-        dataLimite = moment('1994-07-01');
-      }
-      this.idSegurado = this.route.snapshot.params['id_segurado'];
-      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
-        .then(valorescontribuidos => {
-          this.listaValoresContribuidos = valorescontribuidos;
-          if (this.listaValoresContribuidos.length == 0) {
-            // Exibir MSG de erro e encerrar Cálculo.
-            this.nenhumaContrib = true;
-            this.isUpdating = false;
-          } else {
-            let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-            this.Moeda.getByDateRange(primeiraDataTabela, moment())
-              .then((moeda: Moeda[]) => {
-                this.moeda = moeda;
-                let dataReajustesAutomaticos = this.dataInicioBeneficio;
-                // if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-                //   dataReajustesAutomaticos = this.dataDib98;
-                // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
-                //   dataReajustesAutomaticos = this.dataDib99;
-                // }
-                if (this.tipoCalculo == '91_98') {
-                  dataReajustesAutomaticos = this.dataDib98;
-                } else if (this.tipoCalculo == '98_99') {
-                  dataReajustesAutomaticos = this.dataDib99;
-                }
-                this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-                  .then(reajustes => {
-                    this.reajustesAutomaticos = reajustes;
-                    this.CarenciaProgressiva.getCarencias()
-                      .then(carencias => {
-                        this.carenciasProgressivas = carencias;
-                        this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-                        this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-                        this.isUpdating = false;
-                      });
-                  });
-              });
-          }
+    // if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
+    //   this.reajustesAdministrativos = false;
+    // } else {
+    //   this.reajustesAdministrativos = true;
+    // }
 
-        });
+    // this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    // let dataInicio = this.dataInicioBeneficio;
+
+
+    // this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
+    // if (this.tipoCalculo == '91_98') {
+    //   this.stringCabecalho = 'Entre 05/04/1991 e 15/12/1998'
+    //   this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+    //   this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+    //   this.boxId = this.generateBoxId(this.calculo.id, '9198');
+    // } else if (this.tipoCalculo == '98_99') {
+    //   this.stringCabecalho = 'Entre 16/12/1998 e 28/11/1999'
+    //   this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
+    //   this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
+    //   this.boxId = this.generateBoxId(this.calculo.id, '9899');
+    // }
+
+    // // if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && 
+    // //   this.dataInicioBeneficio > this.dataDib99) {
+    // //   dataInicio = this.dataDib99;
+    // // }
+    // // if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' &&
+    // //   this.dataInicioBeneficio > this.dataDib98) {
+    // //   dataInicio = this.dataDib98;
+    // // }
+
+    // if (this.tipoCalculo == '91_98') {
+    //   if (this.dataInicioBeneficio > this.dataDib98) {
+    //     dataInicio = this.dataDib98;
+    //   }
+    // } else if (this.tipoCalculo == '98_99') {
+    //   if (this.dataInicioBeneficio > this.dataDib99) {
+    //     dataInicio = this.dataDib99;
+    //   }
+    // }
+
+
+    dataInicio = (dataInicio.clone()).startOf('month');
+    let mesesLimite = 0;
+    let mesesLimiteTotal = 0;
+    if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
+      mesesLimite = 18;
+      mesesLimiteTotal = 12;
+    } else {
+      mesesLimite = 48;
+      mesesLimiteTotal = 36;
+    }
+    if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998') {
+      mesesLimite = 48;
+      mesesLimiteTotal = 36;
+    }
+    let dataLimite;
+    if (mesesLimite > 0) {
+      dataLimite = (dataInicio.clone()).add(-mesesLimite, 'months');
+    } else {
+      dataLimite = moment('1994-07-01');
+    }
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+      .then(valorescontribuidos => {
+        this.listaValoresContribuidos = valorescontribuidos;
+        if (this.listaValoresContribuidos.length == 0) {
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.nenhumaContrib = true;
+          this.isUpdating = false;
+        } else {
+          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          this.Moeda.getByDateRange(primeiraDataTabela, moment())
+            .then((moeda: Moeda[]) => {
+              this.moeda = moeda;
+              let dataReajustesAutomaticos = this.dataInicioBeneficio;
+              // if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+              //   dataReajustesAutomaticos = this.dataDib98;
+              // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+              //   dataReajustesAutomaticos = this.dataDib99;
+              // }
+              if (this.tipoCalculo == '91_98') {
+                dataReajustesAutomaticos = this.dataDib98;
+              } else if (this.tipoCalculo == '98_99') {
+                dataReajustesAutomaticos = this.dataDib99;
+              }
+              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+                .then(reajustes => {
+                  this.reajustesAutomaticos = reajustes;
+                  this.CarenciaProgressiva.getCarencias()
+                    .then(carencias => {
+                      this.carenciasProgressivas = carencias;
+                      this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                      this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+                      this.isUpdating = false;
+                    });
+                });
+            });
+        }
+
+      });
 
   }
 
@@ -411,7 +453,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let currency = this.loadCurrency(dib);
 
-    
+
     //Conclusões abaixo da tabela:
     conclusoes.total_contribuicoes_primarias = this.formatMoney(totalPrimaria, currency.acronimo);
     conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaPrimaria, currency.acronimo);
@@ -722,9 +764,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       }
 
       valorBeneficio = (Number(valorBeneficio) < Number(reajusteAutomatico.salario_minimo)) ?
-                        reajusteAutomatico.salario_minimo : valorBeneficio;
+        reajusteAutomatico.salario_minimo : valorBeneficio;
       valorBeneficio = (Number(valorBeneficio) > Number(reajusteAutomatico.teto)) ?
-                       reajusteAutomatico.teto : valorBeneficio;
+        reajusteAutomatico.teto : valorBeneficio;
 
     }
     return valorBeneficio;

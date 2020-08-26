@@ -16,7 +16,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-rgps-resultados-apos99',
-  templateUrl: './rgps-resultados-apos99.component.html',
+  templateUrl: `./rgps-resultados-apos99.component.html`,
   styleUrls: ['./rgps-resultados-apos99.component.css']
 })
 export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
@@ -41,6 +41,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public dataInicioBeneficioString;
   public aplicarRejusteAposAposEC103 = false;
   public tipoBeneficio;
+  public tipoBeneficioPosReforma;
   public listaValoresContribuidos;
   public valorExportacao;
   public moeda;
@@ -116,6 +117,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+    console.log();
 
     this.tableData = [];
     this.conclusoes = [];
@@ -166,6 +168,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    this.tipoBeneficioPosReforma = this.getEspecieBeneficio(this.calculo); // ajuste especial regra de acesso
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
     // aplicação divisor mínimo
@@ -247,19 +250,28 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let primeirasContribuicoes = [];
     let tabelaIndex = 0;
     let tableData = []
+
     for (let contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
       let contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
 
-      let idString = contadorPrimario + 1; //tabela['id'] = contadorPrimario;
-      contadorPrimario++;
-      let dataContribuicaoString = dataContribuicao.format('MM/YYYY');//tabela['dataContribuicao'] = contribuicao.dataContribuicao;
-      let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); //tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
-      let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); //tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
+      if (this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')) {
+        contribuicaoPrimaria += contribuicaoSecundaria;
+        contribuicaoSecundaria = 0;
+      }
 
-      let moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
+
+      let idString = contadorPrimario + 1; // tabela['id'] = contadorPrimario;
+      contadorPrimario++;
+      let dataContribuicaoString = dataContribuicao.format('MM/YYYY'); // tabela['dataContribuicao'] = contribuicao.dataContribuicao;
+      // let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); // tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
+      // let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); // tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
+
+
+
+      const moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataContribuicao) : undefined;
 
 
       let fator = 1;
@@ -298,11 +310,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let fatorCorrigido = (moedaContribuicao) ? (fator / fatorLimite) : 1;
       let fatorCorrigidoString = this.formatDecimal(fatorCorrigido, 6); // tabela['fatorCorrigido'] = fator/fatorLimite;
 
-      // console.log(dataContribuicao);
-      // console.log(moedaContribuicao);
-
       let contribuicaoPrimariaRevisada = 0;
       let contribuicaoSecundariaRevisada = 0;
+
+      // regra para contribuições secundarias e teto 06/08/2020
+      let somaContribuicoesMaiorTeto = false;
 
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
@@ -311,13 +323,20 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         limiteString = valorAjustadoObj.aviso;
       }
 
-      // console.log(dataContribuicao);
-      // console.log(contribuicaoPrimariaRevisada);
-
-      if (contribuicaoSecundaria != 0) {
-        contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor; //Inserir texto 'Limitado ao teto' e 'limitado ao minimo' quando cabivel.
+       if (contribuicaoSecundaria != 0 && limiteString !== 'LIMITADO AO TETO') {
+        contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor;
+        //Inserir texto 'Limitado ao teto' e 'limitado ao minimo' quando cabivel.
         contadorSecundario++;
       }
+
+      if (contribuicaoSecundaria != 0 && ((contribuicaoPrimaria + contribuicaoSecundaria) > moedaContribuicao.teto)) {
+        somaContribuicoesMaiorTeto = true;
+        contribuicaoPrimaria = moedaContribuicao.teto;
+        contribuicaoSecundaria = 0
+      }
+
+      const contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimariaRevisada, currency.acronimo);
+      const contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundariaRevisada, currency.acronimo);
 
       contribuicaoPrimariaRevisada = contribuicaoPrimariaRevisada * fatorCorrigido;
       contribuicaoSecundariaRevisada = contribuicaoSecundariaRevisada * fatorCorrigido;
@@ -329,8 +348,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       totalContribuicaoSecundaria += contribuicaoSecundariaRevisada;
 
 
-      let contribuicaoPrimariaRevisadaString = this.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
-      let contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
+      const contribuicaoPrimariaRevisadaString = this.formatMoney(contribuicaoPrimariaRevisada, dibCurrency.acronimo);
+      const contribuicaoSecundariaRevisadaString = this.formatMoney(contribuicaoSecundariaRevisada, dibCurrency.acronimo);
       //tabela['Contribuicao Primaria Corrigida'] = currency.Acronimo + contribuicaoPrimariaRevisada
       //tabela['Contribuicao Secundaria Corrigida'] = currency.Acronimo + contribuicaoSecundariaRevisada
 
@@ -424,9 +443,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
     }
 
-    if (this.dataFiliacao >= this.dataDib99) {
+     if (this.dataFiliacao >= this.dataDib99) {
       switch (this.tipoBeneficio) {
-        case 1: //Auxilio Doença Previdenciario
+       // case 1: //Auxilio Doença Previdenciario
         case 2: //Aposentadoria por invalidez previdenciaria
           if (numeroContribuicoes >= 144 || this.withMemo) {
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
@@ -435,7 +454,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = numeroContribuicoes;
           }
           break;
-        case 5: // Aposentadoria Especial
+      //  case 5: // Aposentadoria Especial
         case 7: // Auxilio Acidente Previdenciario 50%
           if (numeroContribuicoes < 144 || this.withMemo) {
             divisorMediaPrimaria = numeroContribuicoes;
@@ -444,12 +463,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
           break;
-        case 3://Aposentadoria Idade Trabalhador Urbano
-        case 4://Aposentadoria Tempo de Contribuicao
-        case 16://Aposentadoria Idade Trabalhafor Rural
-        case 25://Deficiencia Grave
-        case 27://Deficiencia Leva
-        case 26://Deficiencia Moderado
+        // case 3://Aposentadoria Idade Trabalhador Urbano
+        // case 4://Aposentadoria Tempo de Contribuicao
+        // case 16://Aposentadoria Idade Trabalhafor Rural
+        // case 25://Deficiencia Grave
+        // case 27://Deficiencia Leva
+        // case 26://Deficiencia Moderado
         case 28://Deficiencia PorSalvar Idade
           //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
           divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
@@ -516,9 +535,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // }
 
       }
-
-
     }
+
+    console.log(divisorMediaPrimaria);
 
     let totalMediaDozeContribuicoes = 0;
     let divisorContribuicoes;
@@ -666,9 +685,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.limited = false;
 
-    let rmi = fatorSeguranca * numeroCompetencias * mediaContribuicoesPrimarias / 60;
-
-    rmi += mediaContribuicoesPrimarias * ((60 - numeroCompetencias) / 60);
+    // old 17-07-2020
+    // let rmi = fatorSeguranca * numeroCompetencias * mediaContribuicoesPrimarias / 60;
+    // rmi += mediaContribuicoesPrimarias * ((60 - numeroCompetencias) / 60);
 
     let taxaSecundaria = 0;
     let taxaMediaSecundaria = 0;
@@ -688,22 +707,45 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let somaMediasAux = this.corrigirBeneficio(somaMedias, coeficiente, moedaDib);
 
     if (this.limited) {
-      irt = (somaMedias * (coeficiente / 100)) / somaMediasAux;
+
+      // 16-07-2020 DR Sergio o fator deve ser aplicado na média antes de cálcular o IRT
+      irt = ((somaMedias * (coeficiente / 100)) * fatorSeguranca) / somaMediasAux;
+
     }
 
-    // rmi += (fatorSeguranca * numeroCompetencias) / 60;
+
+    // RMI Renda mensal
+    let rmi = 0;
+
+    // passo 1
+    rmi = somaMedias * fatorSeguranca;
+
+    // passo 2
+    rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+
+
+
+    if (!this.limited) {  // Se não foi corrigido ao percentual do teto
+      rmi *= (coeficiente / 100);
+    }
+
+
     rmi += (fatorSeguranca * numeroCompetencias * taxaMediaSecundaria) / 60;
     rmi += taxaMediaSecundaria * ((60 - numeroCompetencias) / 60)
-    rmi *= (coeficiente / 100);
+    // rmi *= (coeficiente / 100);
+
+
+    rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
     this.limited = false;
+    // old modificado 17/07/2020
+    // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
+    // rmi = rmiAux;
 
-    let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
-    rmi = rmiAux;
 
-    //let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
+    // let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
     let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-    //let salarioAcidente = objMoeda.salario_minimo;
+    // let salarioAcidente = objMoeda.salario_minimo;
     if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
       switch (this.tipoBeneficio) {
         case 17:// Auxilio Acidente 30
@@ -750,6 +792,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({ string: 'Fórmula Fator:', value: this.formula_fator });
     }
     if (irt >= 1) {
+
       this.irtRejusteAdministrativo = irt;
       conclusoes.push({ string: 'Índice de reajuste no teto:', value: this.formatDecimal(irt, 4) });//resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
     }
@@ -1053,6 +1096,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
     this.calculo.soma_contribuicao = somaContribuicoes;
     this.calculo.valor_beneficio = this.valorExportacao;
+
+    this.isUpdating = false;
+
     this.CalculoRgpsService.update(this.calculo);
 
   }
@@ -1388,8 +1434,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         errorArray.push('Não possui direito ao benefício.');
         return false;
       }
-    } else if (this.tipoBeneficio === 5) {
-      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
+    } else if (this.tipoBeneficio == 5 || [1915, 1920, 1925].includes(this.tipoBeneficioPosReforma)) {
+
+      const parametrosParaVerificarTempoDeServico = { 5: 20, 1915: 20, 1920: 15, 1925: 10 }
+      const valorExtra = parametrosParaVerificarTempoDeServico[this.tipoBeneficioPosReforma];
+
+      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, valorExtra);
+
       if (!direito) {
         errorArray.push('Não possui direito ao benefício de aposentadoria especial.');
       }

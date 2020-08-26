@@ -75,18 +75,18 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
 
-        if(localStorage.getItem('user_id') != this.segurado.user_id){
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
           //redirecionar para pagina de segurados
           swal({
             type: 'error',
             title: 'Erro',
             text: 'Você não tem permissão para acessar esta página!',
             allowOutsideClick: false
-          }).then(()=> {
+          }).then(() => {
             window.location.href = '/#/rgps/rgps-segurados/';
           });
-        }else{
-          if(this.idsCalculos.length == 1){
+        } else {
+          if (this.idsCalculos.length == 1) {
             this.CalculoRgps.find(this.idsCalculos[0])
               .then(calculo => {
                 this.calculo = calculo;
@@ -97,43 +97,43 @@ export class RgpsValoresContribuidosComponent implements OnInit {
                     this.isUpdating = false;
                   });
               });
-          }else{
+          } else {
             let counter = 0;
-            for(let idCalculo of this.idsCalculos){
+            for (let idCalculo of this.idsCalculos) {
               this.CalculoRgps.find(idCalculo)
-                .then((calculo:CalculoModel) => {
+                .then((calculo: CalculoModel) => {
                   this.updateDatatable(calculo)
-                  if((counter+1) == this.idsCalculos.length)
+                  if ((counter + 1) == this.idsCalculos.length)
                     this.isUpdating = false;
                   counter++;
-              });
+                });
             }
           }
         }
       });
   }
 
-  contribsChanged(event, tipo_contrib){
-    //console.log(event)
-    let valor = parseFloat(event.srcElement.value.replace(/[\.]/g, '').replace(',','.'));
-    let mes = event.srcElement.id.split('-')[0];
-    let ano = event.srcElement.id.split('-')[1];
-    let date = `${ano}-${mes}-01`;
+  contribsChanged(event, tipo_contrib) {
 
-    let valorContribuido = new ValorContribuido({
-          id_calculo: this.idsCalculos,
-          id_segurado: this.idSegurado,
-          data: date,
-          tipo: 0,
-          valor: valor,
-        });
+    const valor = parseFloat(event.srcElement.value.replace(/[\.]/g, '').replace(',', '.'));
+    const mes = event.srcElement.id.split('-')[0];
+    const ano = event.srcElement.id.split('-')[1];
+    const date = `${ano}-${mes}-01`;
+
+    const valorContribuido = new ValorContribuido({
+      id_calculo: this.idsCalculos,
+      id_segurado: this.idSegurado,
+      data: date,
+      tipo: tipo_contrib,
+      valor: valor,
+    });
 
     swal({
-        type: 'info',
-        title: 'Aguarde por favor...',
-        allowOutsideClick: false
-       });
-      swal.showLoading();
+      type: 'info',
+      title: 'Aguarde por favor...',
+      allowOutsideClick: false
+    });
+    swal.showLoading();
     this.ValorContribuidoService.save([valorContribuido]).then(() => {
       swal.close();
     });
@@ -143,19 +143,19 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
     if (pbc) {
       window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos + '/pbc';
-    }else{
+    } else {
       window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculos;
     }
 
-   }
+  }
 
 
   initializeMatrix(valorescontribuidos) {
     valorescontribuidos.sort((entry1, entry2) => {
-      if(moment(entry1.data) > moment(entry2.data)){
+      if (moment(entry1.data) > moment(entry2.data)) {
         return 1;
       }
-      if(moment(entry1.data) < moment(entry2.data)){
+      if (moment(entry1.data) < moment(entry2.data)) {
         return -1;
       }
       return 0;
@@ -166,10 +166,10 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       let ano = 0
       let valuesPrimaria = [];
       let valuesSecundaria = [];
-      for(let contribuicao of valorescontribuidos){
+      for (let contribuicao of valorescontribuidos) {
         let contribAno = parseInt((contribuicao.data).split('-')[0]);
         let contribMes = parseInt((contribuicao.data).split('-')[1]);
-        if (contribAno != ano){
+        if (contribAno != ano) {
           this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
           this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
           ano = contribAno;
@@ -183,8 +183,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         valuesPrimaria[contribMes - 1] = this.formatMoney(contribuicao.valor_primaria);
         valuesSecundaria[contribMes - 1] = this.formatMoney(contribuicao.valor_secundaria);
       }
-    this.matrizContribuicoesPrimarias.matriz.splice(0, 1);
-    this.matrizContribuicoesSecundarias.matriz.splice(0, 1);
+      this.matrizContribuicoesPrimarias.matriz.splice(0, 1);
+      this.matrizContribuicoesSecundarias.matriz.splice(0, 1);
     }
   }
 
@@ -237,15 +237,15 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     }
   }
 
-  moveNext(event, maxLength, nextElementId){
+  moveNext(event, maxLength, nextElementId) {
     let value = event.srcElement.value;
-    if(value.indexOf('_') < 0 && value != ''){
+    if (value.indexOf('_') < 0 && value != '') {
       let next = <HTMLInputElement>document.getElementById(nextElementId);
       next.focus();
     }
   }
 
-  salvarContribuicoes(periodoObj, tipoContribuicao){
+  salvarContribuicoes(periodoObj, tipoContribuicao) {
     // swal({
     //     type: 'info',
     //     title: 'Aguarde por favor...',
@@ -272,7 +272,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       contribuicoesAdicionadas.push(valorContribuido);
     }
     this.ValorContribuidoService.save(contribuicoesAdicionadas).then(() => {
-     // swal.close();
+      // swal.close();
       swal({
         position: 'top-end',
         type: 'success',
@@ -291,7 +291,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     //inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
       this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
-    }else {
+    } else {
       // if (dateFinalPeriodo >= dataLimite) {
       //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
       // }
@@ -379,9 +379,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
     data = parseFloat(data);
     return (data.toFixed(2)).replace('.', ',');
- // return 'R$ ' + (data.toFixed(2)).replace('.', ','); OLD
+    // return 'R$ ' + (data.toFixed(2)).replace('.', ','); OLD
 
-}
+  }
 
   dateMask(rawValue) {
     if (rawValue == '') {
@@ -414,20 +414,20 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       this.route.snapshot.params['id_segurado'] + '/editar';
   }
 
-  monthAndYear(dateStart, dateEnd){
-    dateStart = '01/'+dateStart;
-    dateEnd = '01/'+dateEnd;
+  monthAndYear(dateStart, dateEnd) {
+    dateStart = '01/' + dateStart;
+    dateEnd = '01/' + dateEnd;
 
     let startSplit = dateStart.split('/');
     let endSplit = dateEnd.split('/');
 
-    dateStart = moment(startSplit[2]+'-'+startSplit[1]+'-'+startSplit[0]);
-    dateEnd = moment(endSplit[2]+'-'+endSplit[1]+'-'+endSplit[0]);
+    dateStart = moment(startSplit[2] + '-' + startSplit[1] + '-' + startSplit[0]);
+    dateEnd = moment(endSplit[2] + '-' + endSplit[1] + '-' + endSplit[0]);
     let timeValues = [];
 
     while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
-       timeValues.push(dateStart.format('YYYY-MM'));
-       dateStart.add(1,'month');
+      timeValues.push(dateStart.format('YYYY-MM'));
+      dateStart.add(1, 'month');
     }
     return timeValues;
   }

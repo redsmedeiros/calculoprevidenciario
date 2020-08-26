@@ -88,7 +88,7 @@ export class ImportadorCnisComponent implements OnInit {
 
   reciverCountVinculosErros(eventCountVinculosErros) {
     this.eventCountVinculosErros = eventCountVinculosErros;
-   // console.log(eventCountVinculosErros);
+    // console.log(eventCountVinculosErros);
   }
 
 
@@ -98,7 +98,7 @@ export class ImportadorCnisComponent implements OnInit {
     const errosSegurado = this.SeguradoComponent.validate();
 
     if (erros === 0 && errosSegurado === 0) {
-      
+
       this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
         this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
           this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {

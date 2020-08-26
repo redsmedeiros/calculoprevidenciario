@@ -161,7 +161,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 		const segurado = document.getElementById('article-segurado').innerHTML;
 		const periodos = document.getElementById('article-periodos').innerHTML;
 		const conclusaoFinal = document.getElementById('article-conclusao').innerHTML;
-		const footerText = `IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG`;
+		// const footerText = `IEPREV - Instituto de Estudos Previdenciários <br> Tel: (31) 3271-1701 BH/MG`;
 
 		const printContents = segurado + periodos + conclusaoFinal;
 
@@ -175,11 +175,11 @@ export class ContagemTempoResultadosComponent implements OnInit {
                 <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css" media="print">
                 <style>i.fa, .not-print{ display: none; }
                       div,p,td,th{font-size:12px !important;}
-                      .ui-sortable-handle, th{
-                        background-color: #831721 !important;
-                        border-color: #CCC !important;
-                        color: #fafafa !important;
-                      }
+                    //   .ui-sortable-handle, th{
+                    //     background-color: #831721 !important;
+                    //     border-color: #CCC !important;
+                    //     color: #fafafa !important;
+                    //   }
                       </style>`;
 
 		const popupWin = window.open('', '_blank', 'width=640,height=480');
@@ -191,7 +191,12 @@ export class ContagemTempoResultadosComponent implements OnInit {
                                   <title>Contagem Tempo - ${this.segurado.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
-                                   <footer>${footerText}</footer>
+								   <footer style="color: #c5c7c8 !important; margin-top: 80px;">
+                                    <img src="assets/img/logo-IEPREV.png" 
+                                    style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+                                    <p style="text-align: center; color: #c5c7c8 !important;">
+                                    Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+                                  </footer>
                                   </body>
                                 </html>`);
 		popupWin.document.close();

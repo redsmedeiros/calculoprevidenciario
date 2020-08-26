@@ -137,6 +137,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     
     this.anosConsiderados.push(ano);
   	for (let entry of monthList){
+      
   		if(ano == entry.split('-')[0]){
         valores[+entry.split('-')[1]-1] =  this.formatMoneyContribuicao(data.salario);
   		}else{
@@ -269,14 +270,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let dataTabelaDetalhes = [];
 
     // console.log(this.getMatrixData());
-    // console.log(data_array);
+   //  console.log(data_array);
     
     for(let data of data_array){
       let splitted = data.split('-');
       let mes = splitted[0];
       let contrib = splitted[1];
 
-      // console.log(contrib);
+     // console.log(splitted);
       
   
       if(contrib == 0 || contrib == ''){
@@ -340,14 +341,16 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         }));
 
     for(index = index; index < dataTabelaDetalhes.length; index++){
+    
       dataTabelaDetalhes[index].valor_corrigido = this.formatMoney(dataTabelaDetalhes[index].valor_corrigido);
-      dataTabelaDetalhes[index].indice_num = index+1;
+      dataTabelaDetalhes[index].indice_num = index + 1;
       this.form.total_contribuicao += parseFloat((dataTabelaDetalhes[index].valor_corrigido).split(' ')[1].replace(',','.'));
+    
     }
-    this.form.media_salarial = this.form.total_contribuicao/Math.ceil(this.form.numero_contribuicoes);
-    this.baseAliquota = this.form.media_salarial*0.2;
 
-    // console.log(dataTabelaDetalhes);
+    this.form.media_salarial = this.form.total_contribuicao / Math.ceil(this.form.numero_contribuicoes);
+    this.baseAliquota = this.form.media_salarial * 0.2;
+
     
     this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
     
@@ -469,11 +472,21 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     if(tableEntry == ''){
       return 0.0;
     }
-    return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+    // return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+
+    const value = tableEntry.split(' ')[1];
+    if (typeof value === 'string') {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
   }
 
   updateMatrix(ano, valores){
-
     //console.table(ano,valores)
     if(!this.matrizHasValues){
       this.matriz.splice(0,1);

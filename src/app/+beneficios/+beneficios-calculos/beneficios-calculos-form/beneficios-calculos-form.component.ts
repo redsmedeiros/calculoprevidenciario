@@ -19,7 +19,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-  public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
+  public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
     '-', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
     '.', /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/];
   public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
@@ -123,6 +123,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
+    { text: 'Não Aplicar correção', value: 'sem_correcao' },
     { text: 'IPCAe a partir de 07/2009', value: 'ipca' },
     { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
     { text: 'Manual de cálculos da Justiça Federal', value: 'cam' },
@@ -277,8 +278,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     let valid = true;
 
     if (this.isEmptyInput(this.dataCalculo)) {
-      // this.errors.add({ 'dataCalculo': ['A data do Cálculo é Necessária.'] });
-      // valid = false;
+      this.errors.add({ 'dataCalculo': ['A data do Cálculo é Necessária.'] });
+      valid = false;
     } else if (!moment(this.dataCalculo, 'MM/YYYY').isValid()) {
       this.errors.add({ 'dataCalculo': ['Insira uma data Válida.'] });
       valid = false;
@@ -288,8 +289,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isEmptyInput(this.dataAcaoJudicial)) {
-      // this.errors.add({ 'dataAcaoJudicial': ['A data da Ação Jucidical é Necessária.'] });
-      // valid = false;
+      this.errors.add({ 'dataAcaoJudicial': ['A data do Ajuizamento é Necessária.'] });
+      valid = false;
     } else if (!this.isValidDate(this.dataAcaoJudicial)) {
       this.errors.add({ 'dataAcaoJudicial': ['Insira uma data Válida.'] });
       valid = false;
@@ -422,20 +423,35 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     }
 
-    if (!this.isEmptyInput(this.cessacaoValoresDevidos)) {
+    //  if (!this.isEmptyInput(this.cessacaoValoresDevidos)) { }
 
-      if (!this.isValidDate(this.cessacaoValoresDevidos)) {
-        this.errors.add({ 'cessacaoValoresDevidos': ['Insira uma data válida.'] });
-        valid = false;
-      } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
-        valid = false;
-      }
+    if (this.isEmptyInput(this.cessacaoValoresDevidos)) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['A Data Final dos Atrasados é Necessária.'] });
+      valid = false;
+    } if (!this.isValidDate(this.cessacaoValoresDevidos)) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['Insira uma data válida.'] });
+      valid = false;
+    } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
+      valid = false;
     }
 
+    if (this.isEmptyInput(this.tipoCorrecaoMonetaria)) {
+      this.errors.add({ 'tipoCorrecaoMonetaria': ['Selecione uma opção válida.'] });
+      valid = false;
+    }
+    if (this.isEmptyInput(this.tipoDejurosSelecionado)) {
+      this.errors.add({ 'tipoDejurosSelecionado': ['Selecione uma opção válida.'] });
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.taxaAdvogadoAplicacaoSobre)) {
+      this.errors.add({ 'taxaAdvogadoAplicacaoSobre': ['Selecione uma opção válida.'] });
+      valid = false;
+    }
 
     if (this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
-        this.taxaAdvogadoAplicacaoSobre !== 'CPC85' && 
+      this.taxaAdvogadoAplicacaoSobre !== 'CPC85' &&
       (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte))) {
       // if (!this.isValidDate(this.dataHonorariosDe)) {
       //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
@@ -605,10 +621,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
       this.formData.usar_mesma_dib = this.chkUseSameDib;
-      
+
       // Id Segurado
       this.formData.id_segurado = this.route.snapshot.params['id'];
-      
+
       // Data do cálculo:
       // this.formData.data_calculo_pedido = this.dataCalculo;
       this.formData.data_calculo_pedido = moment(this.dataCalculo, 'MM/YYYY').endOf('month').format('DD/MM/YYYY');
@@ -696,10 +712,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
       // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
+      this.setCompetenciaInicioJurosIsNull();
       if (this.isExits(this.competenciaInicioJuros)) {
         this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
-      } else {
-        this.formData.competencia_inicio_juros = null;
       }
 
       // valor inferior ao salario minimo
@@ -1116,9 +1131,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   setCompetenciaInicioJurosIsNull() {
+
     if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month')) {
       this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
+
+    if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
+      this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
+    }
+
   }
 
   // return true if date1 is before or igual date2
@@ -1178,9 +1199,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   isValidDate(date) {
+
+    if (!this.isExits(date)) {
+      return false;
+    }
+
     let bits = date.split('/');
     let d = new Date(bits[2], bits[1] - 1, bits[0]);
     return d && (d.getMonth() + 1) == bits[1];
+
   }
 
   onCorrecaoChange(newCorrecao) {
@@ -1261,9 +1288,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         break;
       case 'sem_juros':
         // sem juros
-        this.jurosAntes2003 = null;
-        this.jurosDepois2003 = null;
-        this.jurosDepois2009 = null;
+        this.jurosAntes2003 = 0;
+        this.jurosDepois2003 = 0;
+        this.jurosDepois2009 = 0;
         this.chkBoxTaxaSelic = false;
         break;
     }
@@ -1273,14 +1300,21 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public getValueSelectJurosAnualParaMensal() {
 
     const opcoesMensalParaAnual = [
-      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 1, value: '12_6' },  // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
-      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 1, value: '6_selic' }, // 6% ao ano (observando a SELIC - Poupança)
-      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '12_ano' }, // 12% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '6_12' }, // 6% ao ano (até 01/2003) / 12% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_12_6' }, // 6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano
-      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_fixo' }, // 6% ao ano (fixo)
-      { jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null, poupancaSelic: 0, value: 'sem_juros' },
+      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 1, value: '12_6' },
+      // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
+      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 1, value: '6_selic' },
+      // 6% ao ano (observando a SELIC - Poupança)
+      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '12_ano' },
+      // 12% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1, poupancaSelic: 0, value: '6_12' },
+      // 6% ao ano (até 01/2003) / 12% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_12_6' },
+      // 6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano
+      { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 0, value: '6_fixo' },
+      // 6% ao ano (fixo)
+      { jurosAntes2003: 0, jurosDepois2003: 0, jurosDepois2009: 0, poupancaSelic: 0, value: 'sem_juros' },
     ];
+
 
     for (const confJuros of opcoesMensalParaAnual) {
 

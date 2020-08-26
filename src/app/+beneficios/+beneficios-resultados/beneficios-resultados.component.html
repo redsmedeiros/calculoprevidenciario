@@ -754,7 +754,7 @@
                     {{ dataInicialTutelaAntecipada }} a
                     {{ dataFinalTutelaAntecipada }}
                   </li> -->
-                  <li *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
+                  <li *ngIf="calculo.percentual_taxa_advogado != 0 && !exibirHonorarioscpc85 && !exibirHonorariosValorFixo" >
                     <b>Percentual dos Honorários:</b>
                     {{ formatPercent(calculo.percentual_taxa_advogado) }}
                   </li>
@@ -817,7 +817,7 @@
                         {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                       </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="calculo.percentual_taxa_advogado != 0" >
                       <td width="50%" style="text-align: right;">
                         <b>Percentual dos Honorários:</b>
                       </td>
@@ -1018,10 +1018,10 @@
                     <th>Diferença Corrigida Tetos</th>
                     <th>Juros</th>
                     <!-- <th>Valor dos Juros</th> -->
-                    <th>Valor dos Juros Tetos</th>
+                    <th *ngIf="debugMode">Valor dos Juros Tetos</th>
                     <!-- <th>Diferença Corrigida + Juros</th> -->
-                    <th>Diferença Corrigida + Juros Tetos</th>
-                    <th *ngIf="calculo.percentual_taxa_advogado != 0">
+                    <th *ngIf="debugMode">Diferença Corrigida + Juros Tetos</th>
+                    <th *ngIf="calculo.percentual_taxa_advogado != 0 && debugMode">
                       Honorários<br />Tetos
                     </th>
                     <th *ngIf="debugMode">Dias<br />proporcionais</th>
@@ -1543,11 +1543,11 @@
               <!-- teto conclusão -->
               <ul  class="list-unstyled" *ngIf="isTetos">
                 <li>
-                  <strong>Diferença corrigida</strong>
+                  <strong>Diferença Corrigida</strong>
                   <span
-                    class="{{ tratarConclusao(somaDiferencaMensal) }}"
+                    class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                   >
-                    {{ formatMoney(somaDiferencaMensal) }}
+                    {{ formatMoney(somaDiferencaCorrigida) }}
                   </span>
                 </li>
                 <li>
@@ -1558,10 +1558,16 @@
                 <li>
                   <strong>Sub Total (diferença corrigida + juros)</strong>
                   <span
-                    class="{{ tratarConclusao(somaDiferencaMensal + somaJuros) }}"
+                    class="{{ tratarConclusao(somaDiferencaCorrigida + somaJuros) }}"
                   >
-                    {{ formatMoney(somaDiferencaMensal + somaJuros) }}
+                    {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
                   </span>
+                </li>
+                <li  *ngIf="calculo.maturidade != 0">
+                  <b>Total Vincendas:</b
+                  ><span class="{{ tratarConclusao(somaVincendas) }}">
+                    {{ formatMoney(somaVincendas) }}</span
+                  >
                 </li>
                 <li>
                   <strong>Honorários Advocatícios: </strong>
@@ -1571,8 +1577,8 @@
                 </li>
                 <li>
                   <strong>Total Geral: </strong>
-                  <span class="{{ tratarConclusao(somaTotalSegurado) }}" >
-                    {{ formatMoney(somaTotalSegurado) }}
+                  <span class="{{ tratarConclusao(somaTotalSegurado + somaHonorarios) }}" >
+                    {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
                   </span>
                 </li>
               </ul>
@@ -1583,17 +1589,67 @@
                   </caption>
                   <tr>
                     <td width="50%" style="text-align: right;">
-                      <b>Soma dos honorários a receber Tetos:</b>
+                      <b>Diferença Corrigida:</b>
                     </td>
-                    <td width="50%">
-                      <span
-                        class="{{ tratarConclusao(somaHonorarios) }}"
+                        <td width="50%">
+                          <span
+                        class="{{ tratarConclusao(somaDiferencaCorrigida) }}"
                       >
-                        {{ formatMoney(somaHonorarios) }}</span
-                      >
+                        {{ formatMoney(somaDiferencaCorrigida) }}
+                      </span>
                     </td>
                   </tr>
-                
+                  <tr>
+                    <td width="50%" style="text-align: right;">
+                      <b>Valor dos Juros: </b>
+                    </td>
+                        <td width="50%">
+                          <span class="{{ tratarConclusao(somaJuros) }}">
+                            {{ formatMoney(somaJuros) }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: right;">
+                      <b>Sub Total (diferença corrigida + juros): </b>
+                    </td>
+                        <td width="50%">
+                          <span
+                          class="{{ tratarConclusao(somaDiferencaCorrigida + somaJuros) }}"
+                        >
+                          {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
+                        </span>
+                    </td>
+                  </tr>
+                  <tr  *ngIf="calculo.maturidade != 0">
+                    <td width="50%" style="text-align: right;">
+                      <b>Total Vincendas: </b>
+                    </td>
+                        <td width="50%">
+                          <span class="{{ tratarConclusao(somaVincendas) }}">
+                            {{ formatMoney(somaVincendas) }}</span
+                          >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: right;">
+                      <b>Honorários Advocatícios: </b>
+                    </td>
+                        <td width="50%">
+                          <span class="{{ tratarConclusao(somaHonorarios) }}">
+                            {{ formatMoney(somaHonorarios) }}</span
+                          >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: right;">
+                      <b>Total Geral: </b>
+                    </td>
+                        <td width="50%">
+                          <span class="{{ tratarConclusao(somaTotalSegurado + somaHonorarios) }}" >
+                            {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
+                          </span>
+                    </td>
+                  </tr>
                 </table>
               </div>
 
@@ -1705,8 +1761,8 @@
                   >
                 </li>
               </ul> -->
-
-              <div id="printableConclusoes" *ngIf="isTetos" hidden>
+              <!-- teto OLD -->
+              <div id="printableConclusoes_old" *ngIf="isTetos" hidden>
                 <table class="table table-bordered table-hover">
                   <caption>
                     <h2>Conclusões</h2>
@@ -1744,18 +1800,6 @@
                         class="{{ tratarConclusao(valorAcordo) }}"
                       >
                         {{ formatMoney(valorAcordo) }}</span
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="50%" style="text-align: right;">
-                      <b>Última Renda Mensal Judicialmente Tetos:</b>
-                    </td>
-                    <td width="50%">
-                      <span
-                        class="{{ tratarConclusao(ultimaRenda) }}"
-                      >
-                        {{ formatMoney(ultimaRenda) }}</span
                       >
                     </td>
                   </tr>

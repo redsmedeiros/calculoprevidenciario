@@ -28,10 +28,10 @@
                       <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="especieBeneficio">
                         <option selected disabled> - Selecione uma espécie - </option>
                         <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
-                        <option *ngIf="periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria Especial - 15 anos</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria Especial - 20 anos</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria Especial - 25 anos</option>
+                        <option *ngIf="periodoInicioBeneficio != 'A partir de 14/11/2019' && periodoInicioBeneficio != 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria especial</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 15 anos</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 20 anos</option>
+                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 25 anos</option>
                         <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Grave</option>
                         <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Leve</option>
                         <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
