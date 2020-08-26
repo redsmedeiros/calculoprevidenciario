@@ -847,16 +847,24 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.carencia = '';
       this.carenciaAposEc103 = ''
 
-
       const errorCarencia = {
         position: 'top-end',
         icon: 'error',
-        //title: 'O Tempo de Contribuição foi alterado manualmente - Verificar Carência.',
-        text: 'O Tempo de Contribuição foi alterado manualmente - Verificar Carência.',
+        // title: 'O Tempo de Contribuição foi alterado manualmente - Verificar Carência.',
+        text: `Atenção! Toda vez que o tempo de contribuição for alterado manualmente o tempo
+         de carência deverá ser inserido pelo usuário para confirmação e segurança da simulação.`,
         closeOnClickOutside: true,
         closeOnEsc: true,
         button: false,
         timer: 120000,
+        // content: {
+        //   element: 'label',
+        //   attributes: {
+        //     placeholder: 'Type your password',
+        //     type: 'password',
+        //     text: 'teste'
+        //   },
+        // },
       };
 
       swal(errorCarencia);

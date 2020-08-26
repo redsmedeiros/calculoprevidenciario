@@ -54,7 +54,7 @@ export class ListaCompetenciasComponent implements OnInit {
                        padding: 3.5px 8px;
                       border-color: #000 !important
                     }
-                      footer{text-align: center; margin-top: 110px;}
+                      footer{text-align: center; margin-top: 50px;}
                       .page-break { page-break-inside: avoid;}
                       </style>`;
     const printContents = seguradoBox + calculoBox + boxlista + boxconclusao;
