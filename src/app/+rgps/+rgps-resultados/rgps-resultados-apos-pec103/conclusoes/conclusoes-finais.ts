@@ -211,10 +211,10 @@ export class conclusoesFinais {
 
         let rmi = elementPossibilidade.salarioBeneficio.value * (elementPossibilidade.aliquota.value / 100);
 
-        if (elementRegraEspecie.regra === 'pedagio50') {
+        // if (elementRegraEspecie.regra === 'pedagio50') {
 
-            rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
-        }
+        //     rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
+        // }
 
         if ((elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)) {
 
@@ -230,7 +230,6 @@ export class conclusoesFinais {
             elementPossibilidade.rmiConsiderado = (elementPossibilidade.rmi.value < elementPossibilidade.mediaDasContribuicoes12.value) ?
                 elementPossibilidade.rmi : elementPossibilidade.mediaDasContribuicoes12;
             elementPossibilidade.rmiConsiderado = this.limitarTetosEMinimos(elementPossibilidade.rmiConsiderado.value);
-            
 
         }
 

@@ -76,7 +76,7 @@ export class CalculoRgps extends Model {
       <div class="btn-group">
         <a href="#/rgps/rgps-valores-contribuidos/${this.id_segurado}/${this.id}/" class="btn bg-color-blue txt-color-white btn-xs "  title="Inserir Valores de Contribuição">&nbsp;<i class="fa fa-money fa-1-7x"></i>&nbsp;</a>
         <a href="#/rgps/rgps-importacao-cnis/${this.id_segurado}/${this.id}/" class="btn bg-color-blueLight txt-color-white btn-xs"  title="Importar Dados do CNIS">&nbsp;<i class="fa fa-arrow-down fa-1-7x"></i>&nbsp;</a>
-        <a href="#/rgps/rgps-resultados/${this.id_segurado}/${this.id}/" class="btn btn-success btn-xs "title="Cálcular">&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;</a>
+        <a href="#/rgps/rgps-resultados/${this.id_segurado}/${this.id}/" class="btn btn-success btn-xs "title="Calcular">&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;</a>
         <a href="#/rgps/rgps-resultados/${this.id_segurado}/${this.id}/pbc" class="btn bg-color-greenDark txt-color-white btn-xs "title="Cálculo na revisão da vida toda">&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;</a>
         <a href="#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="btn btn-warning btn-xs "  title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</a>
         <a href="#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/destroy" class="btn btn-danger btn-xs " title="Remover este cálculo" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</a>
