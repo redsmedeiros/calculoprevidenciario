@@ -126,6 +126,7 @@ export class conclusoesFinais {
     private calcularConclusaoPossibilidade(elementPossibilidade, elementRegraEspecie) {
 
 
+        this.calcularFator(elementPossibilidade, elementRegraEspecie);
         this.calcularSalarioBeneficio(elementPossibilidade, elementRegraEspecie);
         this.calcularIndiceRejusteTeto(elementPossibilidade, elementRegraEspecie);
         this.calcularAliquotaBeneficio(elementPossibilidade, elementRegraEspecie);
@@ -134,6 +135,43 @@ export class conclusoesFinais {
 
         return elementPossibilidade;
     }
+
+
+    private calcularFator(elementPossibilidade, elementRegraEspecie) {
+
+        let fatorPrevidenciario = 1;
+        let fatorPrevidenciarioFormula = '';
+        let valueString = '';
+        let valueMelhorString = '';
+        const aliquota = 0.31;
+
+        console.log(elementRegraEspecie.expectativaSobrevida.expectativa);
+        console.log(elementPossibilidade.tempo);
+
+        fatorPrevidenciario = ((elementPossibilidade.tempo * aliquota) / elementRegraEspecie.expectativaSobrevida.expectativa) *
+            (1 + (elementRegraEspecie.idade + (elementPossibilidade.tempo * aliquota)) / 100);
+        fatorPrevidenciario = parseFloat(fatorPrevidenciario.toFixed(4));
+
+        // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
+        fatorPrevidenciarioFormula = '((' + DefinicaoMoeda.formatDecimal(elementPossibilidade.tempo, 4) +
+            ' * ' + DefinicaoMoeda.formatDecimal(aliquota, 2) + ') / ' +
+            DefinicaoMoeda.formatDecimal(elementRegraEspecie.expectativaSobrevida.expectativa, 2) + ') * (1 + (' +
+            DefinicaoMoeda.formatDecimal(elementRegraEspecie.idade, 2) + ' + (' +
+            DefinicaoMoeda.formatDecimal(elementPossibilidade.tempo, 4) + ' * ' +
+            DefinicaoMoeda.formatDecimal(aliquota, 2) + ')) / ' + '100)';
+
+        valueString = DefinicaoMoeda.formatDecimal(fatorPrevidenciario, 4);
+        valueMelhorString = DefinicaoMoeda.formatDecimal(fatorPrevidenciario, 4);
+
+        elementPossibilidade.fator = {
+            value: fatorPrevidenciario,
+            formula: fatorPrevidenciarioFormula,
+            valueString: valueString,
+            valueMelhorString: valueMelhorString
+        };
+
+    }
+
 
 
     /**
@@ -146,7 +184,7 @@ export class conclusoesFinais {
         let slBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            slBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
+            slBeneficio *= elementPossibilidade.fator.value;
         }
 
         slBeneficio = this.limitarTetosEMinimos(slBeneficio)
@@ -164,7 +202,7 @@ export class conclusoesFinais {
         let irtBeneficio = elementPossibilidade.mediaDasContribuicoes.value;
 
         if (elementRegraEspecie.regra === 'pedagio50') {
-            irtBeneficio *= elementRegraEspecie.fatorPrevidenciario.value;
+            irtBeneficio *= elementPossibilidade.fator.value;
         }
 
         irtBeneficio /= elementPossibilidade.salarioBeneficio.value;
@@ -213,12 +251,12 @@ export class conclusoesFinais {
 
         // if (elementRegraEspecie.regra === 'pedagio50') {
 
-        //     rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
+        //     rmi = elementPossibilidade.salarioBeneficio.value * elementPossibilidade.fator.value;
         // }
 
-        if ((elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)) {
+        if ((elementRegraEspecie.regra === 'deficiente' && elementPossibilidade.fator.value > 1)) {
 
-            rmi = elementPossibilidade.salarioBeneficio.value * elementRegraEspecie.fatorPrevidenciario.value;
+            rmi = elementPossibilidade.salarioBeneficio.value * elementPossibilidade.fator.value;
 
         }
 
@@ -263,11 +301,11 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||
-            (elementRegraEspecie.regra === 'deficiente' && elementRegraEspecie.fatorPrevidenciario.value > 1)
+            (elementRegraEspecie.regra === 'deficiente' && elementPossibilidade.fator.value > 1)
         ) {
 
-            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.valueMelhorString));
-            listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementRegraEspecie.fatorPrevidenciario.formula));
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementPossibilidade.fator.valueMelhorString));
+            listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementPossibilidade.fator.formula));
         }
 
         listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
@@ -288,7 +326,7 @@ export class conclusoesFinais {
             listC.push(this.setConclusao(11, 'Renda Mensal Inicial Considerada',
                 elementPossibilidade.rmiConsiderado.valueString));
 
-                elementPossibilidade.rmi = elementPossibilidade.rmiConsiderado;
+            elementPossibilidade.rmi = elementPossibilidade.rmiConsiderado;
         }
 
         if (elementRegraEspecie.regra === 'pensaoObito') {

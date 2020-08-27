@@ -53,6 +53,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public moedaDib;
   public expectativaSobrevida = { expectativa: 0, formula_expectativa_sobrevida: '' };
   public fatorPrevidenciario = { value: 0, formula: '' };
+  public fatorPrevidenciarioParametros = { value: 0, formula: '' };
 
   private melhorValorRMI = 0;
   private melhorSoma = 0;
@@ -65,6 +66,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public isRegrasPensaoObitoInstituidorAposentado = false;
   public conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado = {};
   public rmiFinalCustom;
+
+
 
 
   public listaConclusaoAcesso = [];
@@ -517,7 +520,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
     const valueString = this.formatDecimal(fatorPrevidenciario, 4);
-    const valueMelhorString = (fatorPrevidenciario > 1) ? this.formatDecimal(fatorPrevidenciario, 4) : this.formatDecimal(1, 4);
+    const valueMelhorString = this.formatDecimal(fatorPrevidenciario, 4);
+   // const valueMelhorString = (fatorPrevidenciario > 1) ? this.formatDecimal(fatorPrevidenciario, 4) : this.formatDecimal(1, 4);
 
     return {
       value: fatorPrevidenciario,

@@ -265,9 +265,7 @@
                           [closeOnClickOutside]="true"
                           >
                           <div class="alert alert-danger bg-ieprev fade in bold" 
-                          *ngIf="getEspecieBeneficio(especieBeneficio) === 1 
-                          || getEspecieBeneficio(especieBeneficio) === 1903
-                          || getEspecieBeneficio(especieBeneficio) === 1901" >
+                          *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" >
                             Os §§ 24 a 27, do art. 32, do Decreto 3.048/99 determinam que para fins do cálculo das aposentadorias programadas para as quais seja 
                             exigido tempo mínimo de contribuição, poderão ser excluídas do cálculo da média dos salários de contribuição, as contribuições que 
                             resultem em redução do valor do benefício, conforme previsto no § 6°, do artigo 26, da EC 103/2019, excetuando os benefício não programáveis. 
@@ -279,9 +277,7 @@
                             popoverPlacement="left" 
                             [popoverOnHover]="true"
                             [popover]="avisoDescarteMenoresSalarios"
-                            *ngIf="getEspecieBeneficio(especieBeneficio) === 1 
-                            || getEspecieBeneficio(especieBeneficio) === 1903
-                            || getEspecieBeneficio(especieBeneficio) === 1901" 
+                            *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" 
                             >
                                 <i class="fa fa-question-circle fa-1-6x"></i>
                             </button>

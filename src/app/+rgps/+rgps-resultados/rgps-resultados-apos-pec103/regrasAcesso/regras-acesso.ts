@@ -212,7 +212,7 @@ export class RegrasAcesso {
                 irt: 0,
                 rmi: 0,
                 rmiConsiderado: 0,
-                fator: 0,
+                fator: {},
                 moeda: {},
                 conclusoes: [],
                 destaqueMelhorValorRMI: false
@@ -236,7 +236,7 @@ export class RegrasAcesso {
                 irt: 0,
                 rmi: 0,
                 rmiConsiderado: 0,
-                fator: 0,
+                fator: {},
                 moeda: {},
                 conclusoes: [],
                 destaqueMelhorValorRMI: false
@@ -373,7 +373,7 @@ export class RegrasAcesso {
             irt: 0,
             rmi: 0,
             rmiConsiderado: 0,
-            fator: 0,
+            fator: {},
             moeda: {},
             conclusoes: [],
             destaqueMelhorValorRMI: false
