@@ -109,6 +109,9 @@
                 <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
                   <p>{{erro}}</p>
                 </div>
+                <div class="alert alert-warning margin-top-10" *ngIf="msgProporcionalAteEC1032019 !== ''"  role="alert">
+                  <p>{{msgProporcionalAteEC1032019}}</p>
+                </div>
                 <div class="alert alert-warning margin-top-10" *ngIf="nenhumaContrib" role="alert">
                   <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999</a></p>
                 </div>

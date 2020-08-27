@@ -1159,7 +1159,7 @@ export class RgpsResultadosComponent implements OnInit {
                       .table>tbody>tr>td, .table>tbody>tr>th,
                        .table>tfoot>tr>td, .table>tfoot>tr>th,
                        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-                       footer{text-align: center;}
+                       footer{text-align: center; margin-top: 50px;}
                 </style>`;
 
     // let printContents = document.getElementById('content').innerHTML;
@@ -1167,18 +1167,19 @@ export class RgpsResultadosComponent implements OnInit {
     printContents = printContents.replace(/<table/g,
     '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
-    const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
-                      <img src="assets/img/logo-IEPREV.png"
-                      style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                      <p style="text-align: center; color: #c5c7c8 !important;">
-                      Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-                    </footer>`;
+    // const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
+    //                   <img src="assets/img/logo-IEPREV.png"
+    //                   style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+    //                   <p style="text-align: center; color: #c5c7c8 !important;">
+    //                   Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+    //                 </footer>`;
+                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
     popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
                             + this.segurado.nome + '</title></head><body onload="window.print()">' 
-                            + printContents + rodape + '</body></html>');
+                            + printContents +'<br><br><br>'+ rodape + '</body></html>');
     popupWin.document.close();
   }
 
@@ -1194,20 +1195,22 @@ export class RgpsResultadosComponent implements OnInit {
           .table>tbody>tr>td, .table>tbody>tr>th,
            .table>tfoot>tr>td, .table>tfoot>tr>th,
            .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-           footer{text-align: center;}
+           footer{text-align: center; margin-top: 50px;}
     </style>`;
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
-    const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
-                      <img src="assets/img/logo-IEPREV.png" 
-                      style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                      <p style="text-align: center; color: #c5c7c8 !important;">
-                      Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-                    </footer>`;
+    // const rodape = ` <footer style="color: #c5c7c8 !important; margin-top: 80px;">
+    //                   <img src="assets/img/logo-IEPREV.png" 
+    //                   style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
+    //                   <p style="text-align: center; color: #c5c7c8 !important;">
+    //                   Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+    //                 </footer>`;
+
+                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
                           + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
-                          + boxContent + rodape + '</body></html>';
+                          + boxContent +'<br><br><br>'+ rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
          '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');

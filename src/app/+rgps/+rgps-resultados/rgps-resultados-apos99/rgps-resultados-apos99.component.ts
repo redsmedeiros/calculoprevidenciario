@@ -104,6 +104,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public exibirIN77 = false;
   public naoAplicarIN77 = false;
   public irtRejusteAdministrativo = 0;
+  public msgProporcionalAteEC1032019 = '';
 
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
@@ -1409,8 +1410,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           // "POSSUI direito ao benefício proporcional."
           // "Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
 
-          errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
-            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
+         // errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
+                               //     + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
+         this.msgProporcionalAteEC1032019 = 'POSSUI direito ao benefício proporcional. Falta(m) '
+                                            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.';
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
