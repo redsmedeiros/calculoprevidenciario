@@ -250,13 +250,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
-
-  private correcao30Dias() {
-
-
-
-
-  }
   /**
    * Ajustar o periodo de 30 ou 31 para um mês completo
    */
@@ -268,7 +261,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     correcaoPeriodos.forEach(label => {
 
       if (this['tempoTotalConFator' + label].days() >= 30) {
-        console.log(this['tempoTotalConFator' + label]);
+
         this['tempoTotalConFator' + label] = moment.duration(
           {
             years: this['tempoTotalConFator' + label].years(),
@@ -279,8 +272,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             milliseconds: 0,
             minutes: 0
           });
-        console.log(this['tempoTotalConFator' + label]);
-        console.log(this['tempoTotalConFator' + label].asDays());
+
       }
     });
 
