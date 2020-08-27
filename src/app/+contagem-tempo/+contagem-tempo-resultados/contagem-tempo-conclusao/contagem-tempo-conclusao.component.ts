@@ -235,6 +235,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator99 = moment.duration(count99, 'days');
       this.tempoTotalConFator19 = moment.duration(count19, 'days');
 
+      this.ajusteHumanizadoDateINSS();
+
+
       this.subTotais();
 
       if (this.tempoTotalConFator) {
@@ -245,6 +248,46 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     });
 
   }
+
+
+
+  private correcao30Dias() {
+
+
+
+
+  }
+  /**
+   * Ajustar o periodo de 30 ou 31 para um mês completo
+   */
+  private ajusteHumanizadoDateINSS() {
+
+    const correcaoPeriodos = ['', '88', '91', '98', '99', '19'];
+
+
+    correcaoPeriodos.forEach(label => {
+
+      if (this['tempoTotalConFator' + label].days() >= 30) {
+        console.log(this['tempoTotalConFator' + label]);
+        this['tempoTotalConFator' + label] = moment.duration(
+          {
+            years: this['tempoTotalConFator' + label].years(),
+            months: (this['tempoTotalConFator' + label].months() + 1),
+            days: 0,
+            seconds: 0,
+            hours: 0,
+            milliseconds: 0,
+            minutes: 0
+          });
+        console.log(this['tempoTotalConFator' + label]);
+        console.log(this['tempoTotalConFator' + label].asDays());
+      }
+    });
+
+  }
+
+
+
 
 
   // private yearMonthDaysToFormate(dias) {
@@ -574,15 +617,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
     this.somatoriaTempoContribuicaoIdade().then(result => {
-     // console.log(result);
+      // console.log(result);
       this.isUpdateTotalTempoIdadeA = false;
     }).catch((error) => {
       console.log(error);
     });
 
     this.somatoriaTempoContribuicaoIdadeAtual().then(result => {
-     // console.log(result);
-     this.isUpdateTotalTempoIdadeB = false;
+      // console.log(result);
+      this.isUpdateTotalTempoIdadeB = false;
     }).catch((error) => {
       console.log(error);
     });

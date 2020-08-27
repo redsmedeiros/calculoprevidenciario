@@ -538,8 +538,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
-    console.log(divisorMediaPrimaria);
-
     let totalMediaDozeContribuicoes = 0;
     let divisorContribuicoes;
     switch (this.tipoBeneficio) {

@@ -1918,7 +1918,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       } else {
 
-        this.conclusoesRegra3.msg = `O segurado não possuí tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
+        this.conclusoesRegra3.msg = `O segurado não i tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
 
       }
 
@@ -2135,7 +2135,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
           ${contribuicao_idade_min[this.segurado.sexo]} anos de idade.`;
       } else {
 
-        this.conclusoesRegra4.msg = `O segurado não possuí tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
+        this.conclusoesRegra4.msg = `O segurado não possui tempo de contribuição na data de entrada em vigor da EC nº 103/2019 `;
 
       }
 
@@ -2466,7 +2466,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     if (this.calculo.depedente_invalido === 1) {
 
       percentual = 100;
-      this.conclusoesRegraPensaoObito.formula = `100% (Possuí dependente inválido ou com deficiência intelectual, mental ou grave)`;
+      this.conclusoesRegraPensaoObito.formula = `100% (Possui dependente inválido ou com deficiência intelectual, mental ou grave)`;
 
     }
 
@@ -2538,7 +2538,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
         this.conclusoesRegraIncapacidade.formula = `60% + ((${Math.trunc(this.contribuicaoTotal)}
                                                     - ${tempoPercentual[this.segurado.sexo]}) * 2%)`;
       } else {
-        this.conclusoesRegraIncapacidade.formula = `60% (o segurado possuí menos de 
+        this.conclusoesRegraIncapacidade.formula = `60% (o segurado possui menos de 
                                                       ${tempoPercentual[this.segurado.sexo]} anos de contribuição.)`;
       }
 
@@ -2633,7 +2633,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     } else {
 
-      this.conclusoesRegrasAuxilioAcidente.formulaParte1 = `60% (o segurado possuí menos de 
+      this.conclusoesRegrasAuxilioAcidente.formulaParte1 = `60% (o segurado possui menos de 
                                                     ${tempoPercentualParte1[this.segurado.sexo]} anos de contribuição.)`;
 
     }
@@ -2685,14 +2685,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     if (tempo_contribuicao < contribuicao_min[sexo]) {
       return {
-        status: false, msg: `O segurado não possuí tempo mínimo de contribuição, faltam
+        status: false, msg: `O segurado não possui tempo mínimo de contribuição, faltam
                                 ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
       }
     }
 
     if (idade < idade_min[sexo]) {
       return {
-        status: false, msg: `O segurado não possuí a idade mínima, faltam 
+        status: false, msg: `O segurado não possui a idade mínima, faltam 
                                 ${this.tratarTempoFracionado((idade_min[sexo] - idade))} `
       }
     };
@@ -2823,7 +2823,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       if (tempo_contribuicao < requisitoEspecial[sexo]) {
         status = false;
-        msg = `O segurado não possuí o tempo de contribuição necessário, faltam 
+        msg = `O segurado não possui o tempo de contribuição necessário, faltam 
               ${this.tratarTempoFracionado((requisitoEspecial[sexo] - tempo_contribuicao))}`;
       }
 
@@ -2832,7 +2832,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
       if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
         status = false;
-        msg = `O segurado não possuí o(s) requisito(s), faltam 
+        msg = `O segurado não possui o(s) requisito(s), faltam 
                 ${this.tratarTempoFracionado((requisitoEspecial.tempo[sexo] - tempo_contribuicao))}
                 de tempo de contribuição `;
       }
@@ -2840,7 +2840,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
       if (idade < requisitoEspecial.idade[sexo]) {
 
         status = false;
-        msg += (msg == '') ? `O segurado não possuí a idade necessária, faltam
+        msg += (msg == '') ? `O segurado não possui a idade necessária, faltam
                ${this.tratarTempoFracionado((requisitoEspecial.idade[sexo] - idade))}` :
           ` e ${this.tratarTempoFracionado((requisitoEspecial.idade[sexo] - idade))} de idade `;
       }
@@ -2942,14 +2942,14 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
 
     if (tempo_contribuicao < contribuicao_min[sexo]) {
       return {
-        status: false, msg: `O segurado não possuí tempo mínimo de contribuição, faltam
+        status: false, msg: `O segurado não possui tempo mínimo de contribuição, faltam
                                 ${this.tratarTempoFracionado((contribuicao_min[sexo] - tempo_contribuicao))} `
       }
     }
 
     if (idade < idade_min[sexo]) {
       return {
-        status: false, msg: `O segurado não possuí a idade mínima, faltam 
+        status: false, msg: `O segurado não possui a idade mínima, faltam 
                                 ${this.tratarTempoFracionado((idade_min[sexo] - idade))} `
       }
     };
