@@ -1,149 +1,183 @@
 <i class="fa fa-gear fa-4x fa-spin txt-color-red center" *ngIf="isUpdating"></i>
 
 <article class="row" *ngIf="!isUpdating">
-    <div  *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
-      <!-- class="col-xs-12 col-sm-12 col-md-12 col-lg-12" -->
-      <div *ngFor="let calculoPorRegra of listaConclusaoAcesso">
-        
-        <sa-widget  class="no-padding no-margin"
-          [colorbutton]="false"
-          [editbutton]="false"
-          [colorbutton]="false"
-          [editbutton]="false"
-          [togglebutton]="false"
-          [deletebutton]="false"
-          [fullscreenbutton]="false"
-          [custombutton]="false"
-        >
-          <header>
-            <span class="widget-icon">
-              <i 
+  <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado">
+    <!-- class="col-xs-12 col-sm-12 col-md-12 col-lg-12" -->
+    <div *ngFor="let calculoPorRegra of listaConclusaoAcesso">
+      <sa-widget
+        class="no-padding no-margin"
+        [colorbutton]="false"
+        [editbutton]="false"
+        [colorbutton]="false"
+        [editbutton]="false"
+        [togglebutton]="false"
+        [deletebutton]="false"
+        [fullscreenbutton]="false"
+        [custombutton]="false"
+      >
+        <header>
+          <span class="widget-icon">
+            <i
               class="fa fa-lg"
-              [ngClass]=" {
+              [ngClass]="{
                 'fa-check-circle-o font-2-1x': calculoPorRegra?.status,
                 'fa-times-circle-o font-2-1x': !calculoPorRegra?.status
-              }"></i>
-            </span>
-            <h2 >{{ calculoPorRegra.label }}</h2> <!-- *ngIf="isRegrasTransicao" -->
-          </header>
-          <div class="widget-body" style="min-height: auto;" *ngIf="!calculoPorRegra.status">
-              <div class="alert alert-warning margin-top-10" role="alert">
-                Não atingiu os requisitos necessários:
-              </div>
-              <ol>
-               <ul>
-                 <li *ngFor="let requisitosNaoAtendido of calculoPorRegra.requisitosNaoAtendidos">
-                   {{requisitosNaoAtendido.valueString}}
-                 </li>
-               </ul>
-              </ol>
-          </div>
-        </sa-widget>
-        <accordion
-          class="smart-accordion-default panel-group"
-          [closeOthers]="true"
+              }"
+            ></i>
+          </span>
+          <h2>{{ calculoPorRegra.label }}</h2>
+          <!-- *ngIf="isRegrasTransicao" -->
+        </header>
+        <div
+          class="widget-body"
+          style="min-height: auto"
+          *ngIf="!calculoPorRegra.status"
         >
-          <div
-            *ngFor="
-              let calculoPossivel of calculoPorRegra.calculosPossiveis;
-              let i = index
-            "
-          >
-            <accordion-group [isOpen]="false" #group1>
-              <h4 class="panel-title" accordion-heading >
-                <a 
+          <div class="alert alert-warning margin-top-10" role="alert">
+            Não atingiu os requisitos necessários:
+          </div>
+          <ol>
+            <ul>
+              <li
+                *ngFor="
+                  let requisitosNaoAtendido of calculoPorRegra.requisitosNaoAtendidos
+                "
+              >
+                {{ requisitosNaoAtendido.valueString }}
+              </li>
+            </ul>
+          </ol>
+        </div>
+      </sa-widget>
+      <accordion
+        class="smart-accordion-default panel-group"
+        [closeOthers]="true"
+      >
+        <div
+          *ngFor="
+            let calculoPossivel of calculoPorRegra.calculosPossiveis;
+            let i = index
+          "
+        >
+          <accordion-group [isOpen]="false" #group1>
+            <h4 class="panel-title" accordion-heading>
+              <a
                 [ngClass]="{
-                  'alert alert-success alert-block m-0': calculoPossivel.destaqueMelhorValorRMI
+                  'alert alert-success alert-block m-0':
+                    calculoPossivel.destaqueMelhorValorRMI
                 }"
-                >
-                  <!-- <strong>Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição -  
+              >
+                <!-- <strong>Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição -  
                     {{ calculoPossivel.aliquota.valueString }} - RMI
                     {{ calculoPossivel.rmi.valueString }}
                   </strong> -->
 
-                  <ul class="list-inline m-0">
-                    <li class="px-2"><strong>  Cálculo com {{ calculoPossivel.numeroCompetencias }} Salários de Contribuição</strong></li>
-                    <li class="px-2"><strong> - {{ calculoPossivel.aliquota.valueString }} -</strong></li>
-                    <li class="px-2" ><strong> RMI {{ calculoPossivel.rmi.valueString }}</strong></li>
-                    <li class="px-2"><span *ngIf="calculoPossivel.destaqueMelhorValorRMI" class="badge badge-success">Benefício mais vantajoso</span></li>
-                  </ul>
-                   
+                <ul class="list-inline m-0">
+                  <li class="px-2">
+                    <strong>
+                      Cálculo com
+                      {{ calculoPossivel.numeroCompetencias }} Salários de
+                      Contribuição</strong
+                    >
+                  </li>
+                  <li class="px-2">
+                    <strong>
+                      - {{ calculoPossivel.aliquota.valueString }} -</strong
+                    >
+                  </li>
+                  <li class="px-2">
+                    <strong> RMI {{ calculoPossivel.rmi.valueString }}</strong>
+                  </li>
+                  <li class="px-2">
+                    <span
+                      *ngIf="calculoPossivel.destaqueMelhorValorRMI"
+                      class="badge badge-success"
+                      >Benefício mais vantajoso</span
+                    >
+                  </li>
+                </ul>
+
+                <i
+                  class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
+                  *ngIf="isUpdating"
+                ></i>
+
+                <button
+                  *ngIf="!isUpdating"
+                  class="btn btn-primary pull-right btn-xs not-print"
+                  type="button"
+                >
+                  &nbsp;&nbsp;
+                  {{ !group1?.isOpen ? "Abrir" : "Fechar" }}
                   <i
-                    class="fa fa-gear fa-2x fa-spin txt-color-red pull-right"
-                    *ngIf="isUpdating"
-                  ></i>
-
-                  <button
                     *ngIf="!isUpdating"
-                    class="btn btn-primary pull-right btn-xs not-print"
-                    type="button"
-                  >
-                    &nbsp;&nbsp;
-                    {{ !group1?.isOpen ? "Abrir" : "Fechar" }}
-                    <i
-                      *ngIf="!isUpdating"
-                      class="pull-right fa fa-lg"
-                      [ngClass]="{
-                        'fa-angle-down': group1?.isOpen,
-                        'fa-angle-up': !group1?.isOpen
-                      }"
-                    ></i
-                    >&nbsp;&nbsp;
-                  </button>
-                   <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3 not-print" 
+                    class="pull-right fa fa-lg"
+                    [ngClass]="{
+                      'fa-angle-down': group1?.isOpen,
+                      'fa-angle-up': !group1?.isOpen
+                    }"
+                  ></i
+                  >&nbsp;&nbsp;
+                </button>
+                <button
+                  *ngIf="!isUpdating"
+                  class="btn btn-primary pull-right btn-xs mr-3 not-print"
                   type="submit"
-                  (click)="imprimirBox($event, i)"
-                  >
-                    &nbsp;&nbsp; <i
+                  (click)="imprimirBox($event, i + calculoPorRegra.regra)"
+                >
+                  &nbsp;&nbsp;
+                  <i
                     *ngIf="!isUpdating"
-                    class=" fa fa-print pull-left fa fa-lg p-1"
+                    class="fa fa-print pull-left fa fa-lg p-1"
                   ></i>
-                    Imprimir
-                   &nbsp;&nbsp;
-                  </button> 
-                </a>
-              </h4>
-              <div *ngIf="!isUpdating" class="no-padding" >
-                <sa-widget [colorbutton]="false" [editbutton]="false" >
-                   <div >
-                    <div class="widget-body no-padding hidden-dt"> 
-                      <sa-datatable 
-                         id="lista-{{i}}"
-                        [options]="calculoPossivel.listaCompetencias"
-                        [responsive]="false"
-                        paginationLength="true"
-                        *ngIf="!isUpdating"
-                        tableClass="table table-striped table-bordered table-hover table-condensed"
-                        width="100%"
-                      >
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Competência</th>
-                            <th>Índice</th>
-                            <th>Salário de Contribuição</th>
-                            <th>Salário de Contribuição Corrigido</th>
-                            <th>Observação</th>
-                          </tr>
-                        </thead>
-                      </sa-datatable>
-                     </div>
-                  </div> 
-                </sa-widget>
-
-                <!-- conclusoes genericas -->
-                <div *ngIf="!isRegrasPensaoObitoInstituidorAposentado" id="conclusao-{{i}}" class="page-break">
-                  <app-conclusoes-rmi
-                    [conclusoes]="calculoPossivel.conclusoes"
-                    [regraLabel]="calculoPorRegra.label"
-                    [isUpdating]="isUpdating"
-                  ></app-conclusoes-rmi>
+                  Imprimir &nbsp;&nbsp;
+                </button>
+              </a>
+            </h4>
+            <div *ngIf="!isUpdating" class="no-padding">
+              <sa-widget [colorbutton]="false" [editbutton]="false">
+                <div>
+                  <div class="widget-body no-padding hidden-dt">
+                    <sa-datatable
+                      id="lista-{{ i + calculoPorRegra.regra }}"
+                      [options]="calculoPossivel.listaCompetencias"
+                      [responsive]="false"
+                      paginationLength="true"
+                      *ngIf="!isUpdating"
+                      tableClass="table table-striped table-bordered table-hover table-condensed"
+                      width="100%"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Competência</th>
+                          <th>Índice</th>
+                          <th>Salário de Contribuição</th>
+                          <th>Salário de Contribuição Corrigido</th>
+                          <th>Observação</th>
+                        </tr>
+                      </thead>
+                    </sa-datatable>
+                  </div>
                 </div>
+              </sa-widget>
+              <!-- conclusoes genericas -->
+              <div
+                *ngIf="!isRegrasPensaoObitoInstituidorAposentado"
+                id="conclusao-{{ i + calculoPorRegra.regra }}"
+                class="page-break"
+              >
+                <app-conclusoes-rmi
+                  [conclusoes]="calculoPossivel.conclusoes"
+                  [regraLabel]="calculoPorRegra.label"
+                  [isUpdating]="isUpdating"
+                ></app-conclusoes-rmi>
               </div>
-            </accordion-group>
-          </div>
-        </accordion>
-      </div>
+            </div>
+          </accordion-group>
+        </div>
+      </accordion>
     </div>
-    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="isRegrasPensaoObitoInstituidorAposentado"></div> -->
+  </div>
+  <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="isRegrasPensaoObitoInstituidorAposentado"></div> -->
 </article>
