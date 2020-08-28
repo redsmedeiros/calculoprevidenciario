@@ -136,7 +136,11 @@ export class conclusoesFinais {
         return elementPossibilidade;
     }
 
-
+    /**
+     * Calcular o fator para cada possibilidade
+     * @param  {} elementPossibilidade
+     * @param  {} elementRegraEspecie
+     */
     private calcularFator(elementPossibilidade, elementRegraEspecie) {
 
         let fatorPrevidenciario = 1;
@@ -144,17 +148,24 @@ export class conclusoesFinais {
         let valueString = '';
         let valueMelhorString = '';
         const aliquota = 0.31;
+        let tempoConsiderado = elementPossibilidade.tempo;
 
-        fatorPrevidenciario = ((elementPossibilidade.tempo * aliquota) / elementRegraEspecie.expectativaSobrevida.expectativa) *
-            (1 + (elementRegraEspecie.idade + (elementPossibilidade.tempo * aliquota)) / 100);
+        if (this.calculo.tipoBeneficio === 16 ||
+            this.calculo.tipoBeneficio === 3 ||
+            this.calculo.tipoBeneficio === 4) {
+            tempoConsiderado += this.calculo.redutorSexo;
+        }
+
+        fatorPrevidenciario = ((tempoConsiderado * aliquota) / elementRegraEspecie.expectativaSobrevida.expectativa) *
+            (1 + (elementRegraEspecie.idade + (tempoConsiderado * aliquota)) / 100);
         fatorPrevidenciario = parseFloat(fatorPrevidenciario.toFixed(4));
 
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
-        fatorPrevidenciarioFormula = '((' + DefinicaoMoeda.formatDecimal(elementPossibilidade.tempo, 4) +
+        fatorPrevidenciarioFormula = '((' + DefinicaoMoeda.formatDecimal(tempoConsiderado, 4) +
             ' * ' + DefinicaoMoeda.formatDecimal(aliquota, 2) + ') / ' +
             DefinicaoMoeda.formatDecimal(elementRegraEspecie.expectativaSobrevida.expectativa, 2) + ') * (1 + (' +
             DefinicaoMoeda.formatDecimal(elementRegraEspecie.idade, 2) + ' + (' +
-            DefinicaoMoeda.formatDecimal(elementPossibilidade.tempo, 4) + ' * ' +
+            DefinicaoMoeda.formatDecimal(tempoConsiderado, 4) + ' * ' +
             DefinicaoMoeda.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
         valueString = DefinicaoMoeda.formatDecimal(fatorPrevidenciario, 4);

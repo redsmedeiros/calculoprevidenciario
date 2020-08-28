@@ -217,6 +217,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
 
+    this.calculo.redutorProfessor = redutorProfessor;
+    this.calculo.redutorSexo = redutorSexo;
+    this.calculo.tipoBeneficio = this.tipoBeneficio;
+    
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
