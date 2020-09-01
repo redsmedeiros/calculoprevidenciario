@@ -934,8 +934,7 @@ export class RegrasAcesso {
             //  tempoDePedagioTotal = (tempoDePedagioTotal <= 0) ? 0 : tempoDePedagioTotal;
             // status = (tempoDePedagioTotal > 0.00273973) ? false : true;
 
-
-            status = (tempo_contribuicao >= tempoDePedagioTotal) ? true : false;
+            status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
 
         }
 

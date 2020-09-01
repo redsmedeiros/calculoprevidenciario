@@ -1381,7 +1381,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (this.tipoBeneficio === 4 || this.tipoBeneficio === 6) {
 
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
-      console.log(direito);
 
       if (!direito) {
         if (dib <= this.dataDib98) {
