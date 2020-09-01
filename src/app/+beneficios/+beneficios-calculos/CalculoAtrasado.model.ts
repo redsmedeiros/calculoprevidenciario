@@ -63,6 +63,7 @@ export class CalculoAtrasado extends Model {
     calcular_abono_13_ultimo_mes: '',
     numero_beneficio_devido: '',
     numero_beneficio_recebido: '',
+    num_dependentes: '',
   };
 
   public id: number;
@@ -123,6 +124,7 @@ export class CalculoAtrasado extends Model {
   public calcular_abono_13_ultimo_mes;
   public numero_beneficio_devido;
   public numero_beneficio_recebido;
+  public num_dependentes;
 
   // public actions = `
   //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>

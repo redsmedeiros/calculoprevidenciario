@@ -228,6 +228,7 @@
                         {{ calculo.maturidade }}
                       </td>
                     </tr>
+
                   </table>
                 </div>
               </div>
@@ -302,6 +303,10 @@
                         "Devidos"
                       )
                     }}
+                  </li>
+                  <li *ngIf="calculo.tipo_aposentadoria == 22">
+                    <b>Número de Dependentes:</b>
+                    {{ calculo.num_dependentes }}
                   </li>
                   <li *ngIf="calculo.taxa_ajuste_maxima_esperada">
                     <b>Índice de Limitação no Teto:</b> {{ calculo.taxa_ajuste_maxima_esperada }}
@@ -402,6 +407,14 @@
                       </td>
                       <td width="50%">
                         {{ calculo.taxa_ajuste_maxima_esperada }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.tipo_aposentadoria == 22" >
+                      <td width="50%" style="text-align: right;">
+                        <b> Número de Dependentes:</b>
+                      </td>
+                      <td width="50%">
+                        {{ calculo.numero_dependentes }}
                       </td>
                     </tr>
                   </table>
@@ -961,12 +974,13 @@
                     <th>Indice de<br> Reajuste de<br> Valores Devidos</th>
                     <!-- <th>Benefício Devido Tetos</th> -->
                     <th>Benefício Devido</th>
+                    <th *ngIf="calculo.tipo_aposentadoria == 22">Valor da<br> Quota do <br>Dependente</th>
                     <th>Indice de<br> Reajuste de<br> Valores Recebidos</th>
                     <!-- <th>Benefício Recebido Tetos</th> -->
                     <th>Benefício Recebido</th>
                     <!-- <th>Diferença Mensal Tetos</th> -->
                     <th>Diferença Mensal</th>
-                    <th>Correção Monetária</th>
+                    <th>Correção <br> Monetária</th>
                     <th>Diferença Corrigida</th>
                     <!-- <th>Diferença Corrigida Tetos</th> -->
                     <th>Juros</th>

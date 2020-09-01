@@ -50,6 +50,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       { data: 'competencia', width: '10rem' },
       { data: 'indice_devidos', width: '13rem' },
       { data: 'beneficio_devido', width: '13rem' },
+      { data: 'beneficio_devido_quota_dependente', width: '10rem' },
       { data: 'indice_recebidos', width: '13rem' },
       { data: 'beneficio_recebido' },
       { data: 'diferenca_mensal' },
@@ -316,9 +317,13 @@ export class BeneficiosResultadosComponent implements OnInit {
                       }
 
                       // se ouver dib anterior considerar como a primeira data para o indice de correção
-                      const date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+                      let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
                         this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
+                      date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+                      if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+                        this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+                      }
                       // indice recebido
                       this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
                         this.dataFinal.format('YYYY-MM-DD'))
@@ -547,9 +552,19 @@ export class BeneficiosResultadosComponent implements OnInit {
         isPrescricao = true;
       }
 
+      let beneficio_devido_quota_dependente = 0;
+      if (this.calculo.tipo_aposentadoria === 22) {
+        console.log(beneficioDevido);
+        const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
+        beneficio_devido_quota_dependente = beneficioDevido / numDependentes;
+        // beneficioDevido = beneficio_devido_quota_dependente;
+      }
+
+
       line.competencia = stringCompetencia;
       line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
       line.beneficio_devido = beneficioDevidoString.resultString;
+      line.beneficio_devido_quota_dependente = this.formatMoney(beneficio_devido_quota_dependente, siglaDataCorrente, true);
       line.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
       line.beneficio_recebido = beneficioRecebidoString.resultString;
       line.diferenca_mensal = this.formatMoney(diferencaMensal, siglaDataCorrente, true);
@@ -681,6 +696,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorJuros,
           diferencaCorrigida,
           valorNumericoDiferencaCorrigidaJurosObj);
+          
 
         valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
@@ -691,11 +707,20 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorJuros = 0.00;
         }
 
+        let beneficio_devido_quota_dependente_abono = 0;
+        if (this.calculo.tipo_aposentadoria === 22) {
+          console.log(beneficioDevidoAbono);
+          const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
+          beneficio_devido_quota_dependente_abono = beneficioDevidoAbono / numDependentes;
+          // beneficioDevidoAbono = beneficio_devido_quota_dependente_abono;
+        }
+
         if (isPrescricao) {
           line = {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
             beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_devido_quota_dependente: this.formatMoney(beneficio_devido_quota_dependente_abono, siglaDataCorrente, true),
             beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
             diferenca_corrigida: '0',
             diferenca_mensal: 'Prescrita',
@@ -709,6 +734,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
             beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_devido_quota_dependente: this.formatMoney(beneficio_devido_quota_dependente_abono, siglaDataCorrente, true),
             beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
             diferenca_corrigida: this.formatMoney(diferencaCorrigida, siglaDataCorrente, true),
             diferenca_mensal: this.formatMoney(diferencaMensal, siglaDataCorrente, true),
@@ -2978,104 +3004,56 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   updateResultadosDatatable() {
 
-    if (this.calculo.percentual_taxa_advogado != 0) {
-      this.resultadosDatatableOptions = {
-        ...this.resultadosDatatableOptions,
-        data: this.resultadosList,
-        columns: [
-          { data: 'competencia', width: '10rem' },
-          { data: 'indice_devidos', width: '8rem' },
-          { data: 'beneficio_devido', width: '10rem' },
-          { data: 'indice_recebidos', width: '8rem' },
-          { data: 'beneficio_recebido', width: '10rem' },
-          { data: 'diferenca_mensal' },
-          { data: 'correcao_monetaria' },
-          { data: 'diferenca_corrigida' },
-          { data: 'juros' },
-          { data: 'valor_juros', width: '10rem' },
-          // { data: 'diferenca_juros' },
-          // { data: 'honorarios' }
-        ],
-        columnDefs: [
-          { className: 'nowrapText', targets: '_all' },
-        ]
-      }
-    } else {
-      this.resultadosDatatableOptions = {
-        ...this.resultadosDatatableOptions,
-        data: this.resultadosList,
-        columns: [
-          { data: 'competencia', width: '10rem' },
-          { data: 'indice_devidos', width: '8rem' },
-          { data: 'beneficio_devido', width: '10rem' },
-          { data: 'indice_recebidos', width: '8rem' },
-          { data: 'beneficio_recebido', width: '10rem' },
-          { data: 'diferenca_mensal', width: '10rem' },
-          { data: 'correcao_monetaria', width: '10rem' },
-          { data: 'diferenca_corrigida', width: '10rem' },
-          { data: 'juros', width: '10rem' },
-          { data: 'valor_juros', width: '10rem' },
-          // { data: 'diferenca_juros' },
-        ],
-        columnDefs: [
-          { className: 'nowrapText', targets: '_all' },
-        ]
-      }
+    let columns = [];
+    columns.push({ data: 'competencia', width: '10rem' });
+    columns.push({ data: 'indice_devidos', width: '8rem' });
+    columns.push({ data: 'beneficio_devido', width: '10rem' });
+
+    if (this.calculo.tipo_aposentadoria === 22) {
+      columns.push({ data: 'beneficio_devido_quota_dependente', width: '10rem' });
     }
 
-    if (this.isTetos) {
-      this.resultadosDatatableOptions = {
-        ...this.resultadosDatatableOptions,
-        data: this.resultadosList,
-        columns: [
-          { data: 'competencia', width: '10rem' },
-          { data: 'indice_devidos', width: '8rem' },
-          { data: 'beneficio_devido', width: '10rem' },
-          { data: 'indice_recebidos', width: '8rem' },
-          { data: 'beneficio_recebido', width: '10rem' },
-          { data: 'diferenca_mensal' },
-          { data: 'correcao_monetaria' },
-          { data: 'diferenca_corrigida' },
-          { data: 'juros' },
-          { data: 'valor_juros', width: '10rem' },
-          // { data: 'diferenca_juros' },
-          // { data: 'honorarios' }
-        ],
-        columnDefs: [
-          { className: 'nowrapText', targets: '_all' },
-        ]
-      }
-    }
+    columns.push({ data: 'indice_recebidos', width: '8rem' });
+    columns.push({ data: 'beneficio_recebido', width: '10rem' });
+    columns.push({ data: 'diferenca_mensal' });
+    columns.push({ data: 'correcao_monetaria' });
+    columns.push({ data: 'diferenca_corrigida' });
+    columns.push({ data: 'juros' });
+    columns.push({ data: 'valor_juros', width: '10rem' });
 
     if (this.debugMode) {
-      this.resultadosDatatableOptions = {
-        ...this.resultadosDatatableOptions,
-        data: this.resultadosList,
-        columns: [
-          { data: 'competencia', width: '12rem' },
-          { data: 'indice_devidos' },
-          { data: 'beneficio_devido' },
-          { data: 'beneficio_devido_sem_limites' },
-          { data: 'beneficio_devido_apos_revisao_sem_limites' },
-          { data: 'beneficio_devido_apos_revisao' },
-          { data: 'indice_recebidos' },
-          { data: 'beneficio_recebido' },
-          { data: 'beneficio_recebido_sem_limites' },
-          { data: 'beneficio_recebido_apos_revisao_sem_limites' },
-          { data: 'beneficio_recebido_apos_revisao' },
-          { data: 'diferenca_mensal' },
-          { data: 'correcao_monetaria' },
-          { data: 'diferenca_corrigida' },
-          { data: 'juros' },
-          { data: 'valor_juros' },
-          { data: 'diferenca_juros' },
-          { data: 'dias_proporcionais' },
-        ],
-        columnDefs: [
-          { className: 'nowrapText', targets: '_all' },
-        ]
-      }
+      columns = [
+        { data: 'competencia', width: '12rem' },
+        { data: 'indice_devidos' },
+        { data: 'beneficio_devido' },
+        { data: 'beneficio_devido_sem_limites' },
+        { data: 'beneficio_devido_apos_revisao_sem_limites' },
+        { data: 'beneficio_devido_apos_revisao' },
+        { data: 'indice_recebidos' },
+        { data: 'beneficio_recebido' },
+        { data: 'beneficio_recebido_sem_limites' },
+        { data: 'beneficio_recebido_apos_revisao_sem_limites' },
+        { data: 'beneficio_recebido_apos_revisao' },
+        { data: 'diferenca_mensal' },
+        { data: 'correcao_monetaria' },
+        { data: 'diferenca_corrigida' },
+        { data: 'juros' },
+        { data: 'valor_juros' },
+        { data: 'diferenca_juros' },
+        { data: 'dias_proporcionais' },
+      ];
     }
+
+    this.resultadosDatatableOptions = {
+      ...this.resultadosDatatableOptions,
+      data: this.resultadosList,
+      columns: columns,
+      columnDefs: [
+        { className: 'nowrapText', targets: '_all' },
+      ]
+    }
+
+
   }
 
 
@@ -3092,7 +3070,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   calcularSemPrescricao() {
-    //window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '?considerarPrescricao=false' : window.location.href.split('?')[0];
+    // window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '? 
+    // considerarPrescricao=false' : window.location.href.split('?')[0];
 
     let is_prescricao = 'true';
     if (sessionStorage.considerarPrescricao === 'true') {

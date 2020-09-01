@@ -1156,6 +1156,7 @@ export class RgpsResultadosComponent implements OnInit {
                       i.fa, .not-print{ display: none; }
                       table{margin-top: 10px;padding-top: 10px;}
                       footer,div,p,td,th{font-size:11px !important;}
+                      .list-inline{ display:inline; }
                       .table>tbody>tr>td, .table>tbody>tr>th,
                        .table>tfoot>tr>td, .table>tfoot>tr>th,
                        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
@@ -1192,6 +1193,7 @@ export class RgpsResultadosComponent implements OnInit {
           i.fa, .not-print{ display: none; }
           table{margin-top: 10px;}
           footer,div,p,td,th{font-size:10px !important;}
+          .list-inline{ display:inline; }
           .table>tbody>tr>td, .table>tbody>tr>th,
            .table>tfoot>tr>td, .table>tfoot>tr>th,
            .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}

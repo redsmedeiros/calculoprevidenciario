@@ -28,18 +28,38 @@ export class BeneficiosSeguradosFormComponent {
     this.validate();
 
     if (this.errors.empty()) {
-      swal('Sucesso', 'Segurado salvo com sucesso', 'success');
-      this.formData.funcao = "beneficios";
+
+      const SuccessSeguradoForm = {
+        position: 'top-end',
+        icon: 'success',
+        title: 'Segurado salvo com sucesso',
+        button: false,
+        timer: 1500
+      };
+
+      swal(SuccessSeguradoForm);
+
+      this.formData.funcao = 'beneficios';
       this.formData.user_id = localStorage.getItem('user_id');
       this.onSubmit.emit(this.formData);
-    }
-    else {
-      swal('Erro', 'Confira os dados digitados', 'error');
+
+    } else {
+
+      // swal('Erro', 'Confira os dados digitados', 'error');
+      const ErrorSeguradoForm = {
+        position: 'top-end',
+        icon: 'error',
+        title: 'Confira os dados digitados',
+        button: false,
+        timer: 1500
+      };
+
+      swal(ErrorSeguradoForm);
+
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterContentInit() {
     // setTimeout(() => {
@@ -49,21 +69,21 @@ export class BeneficiosSeguradosFormComponent {
 
   validate() {
     if (this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({ "nome": ["O Nome é obrigatório."] });
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
     }
 
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
-      this.errors.add({ "sexo": ["O campo sexo é obrigatório."] });
+      this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
     }
 
-    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
-      this.errors.add({ "data_nascimento": ["A data de nascimento é obrigatória."] });
+    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
+      this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
     } else {
-      var dateParts = this.formData.data_nascimento.split("/");
+      let dateParts = this.formData.data_nascimento.split('/');
       let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({ "data_nascimento": ["Insira uma data válida."] });
+        this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
     }
 
 
