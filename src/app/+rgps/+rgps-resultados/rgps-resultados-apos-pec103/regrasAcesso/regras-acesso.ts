@@ -670,18 +670,8 @@ export class RegrasAcesso {
                 2033: { m: 105, f: 100 }
             };
 
-            // if ((sexo === 'm' && ano > 2028 && pontos >= 105)
-            //     && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
-            //     return true;
-
-            // }
-
-            // if ((sexo === 'f' && ano > 2033 && pontos >= 100)
-            //     && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
-            //     return true;
-            // }
-            pontosRequeridos = regra1[ano][sexo];
-            status = (((ano >= 2019 && ano <= 2033) && pontos >= regra1[ano][sexo])
+            pontosRequeridos = (ano >= 2033)? regra1[2033][sexo] : regra1[ano][sexo];
+            status = (((ano >= 2019) && pontos >= pontosRequeridos)
                 && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
 
         } else {
@@ -703,17 +693,8 @@ export class RegrasAcesso {
                 2030: { m: 100, f: 92 }
             };
 
-            // if ((sexo === 'm' && ano > 2028 && pontos >= 100)
-            //     && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
-            //     return true;
-            // }
-
-            // if ((sexo === 'f' && ano > 2030 && pontos >= 92)
-            //     && tempo_contribuicao >= requisitoContribuicoes[sexo]) {
-            //     return true;
-            // }
-            pontosRequeridos = regra1[ano][sexo];
-            status = (((ano >= 2019 && ano <= 2030) && pontos >= regra1[ano][sexo])
+            pontosRequeridos = (ano >= 2030)? regra1[2033][sexo] : regra1[ano][sexo];
+            status = (((ano >= 2019) && pontos >= pontosRequeridos)
                 && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
         }
 
@@ -779,15 +760,10 @@ export class RegrasAcesso {
             2031: { m: 65, f: 62 }
         };
 
-        // if ((sexo === 'm' && ano > 2027 && idade >= (65 - redutorProfessor)) && tempo_contribuicao >= contribuicao_min[sexo]) {
-        //     return true;
-        // }
 
-        // if ((sexo === 'f' && ano > 2031 && idade >= (62 - redutorProfessor)) && tempo_contribuicao >= contribuicao_min[sexo]) {
-        //     return true;
-        // }
+        const ajusteRegraAcessso = (ano >= 2031 ) ? regra2[2031][sexo] : regra2[ano][sexo];
 
-        status = (((ano >= 2019 && ano <= 2031) && idade >= (regra2[ano][sexo] - redutorProfessor))
+        status = (((ano >= 2019 && ano <= 2031) && idade >= (ajusteRegraAcessso - redutorProfessor))
             && tempo_contribuicao >= contribuicao_min[sexo]) ? true : false;
 
 
@@ -801,7 +777,7 @@ export class RegrasAcesso {
             tempo_contribuicao,
             {
                 tempo: contribuicao_min[sexo],
-                idade: (regra2[ano][sexo] - redutorProfessor),
+                idade: (ajusteRegraAcessso - redutorProfessor),
                 pedagio: 0,
                 pontos: 0,
                 ano: ano
@@ -998,9 +974,6 @@ export class RegrasAcesso {
 
         const regra5 = regraIdadeParm(ano);
 
-        // status =  (sexo === 'm' && idade >= 65 && tempo_contribuicao >= contribuicao_min) ? true : false;
-
-        // status =  (sexo === 'f' && idade >= regra5['f'] && tempo_contribuicao >= contribuicao_min) ? true : false;
         status = (idade >= regra5[sexo] && tempo_contribuicao >= contribuicao_min) ? true : false;
 
         this.setConclusaoAcesso(
@@ -1379,23 +1352,6 @@ export class RegrasAcesso {
         if (idade < requisitoEspecial.idade[sexo]) {
             status = false;
         }
-
-
-        // if (tipoBeneficio !== 28) {
-        //     // tempo
-
-        //     if (tempo_contribuicao < requisitoEspecial.tempo[sexo]) {
-        //         status = false;
-        //     }
-
-        // } else {
-        //     // idade
-
-        //     if (tempo_contribuicao < requisitoEspecial.tempo[sexo] && idade < requisitoEspecial.idade[sexo]) {
-        //         status = false;
-        //     }
-
-        // }
 
 
         this.setConclusaoAcesso(
