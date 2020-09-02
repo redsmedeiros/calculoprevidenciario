@@ -1613,8 +1613,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
 
-        console.log(reajustes);
-        console.log(typeof reajustesAutomaticos);
         const reajuste02_2020 = new ReajusteAutomatico;
           reajuste02_2020.data_reajuste = '2020-02-01';
           reajuste02_2020.indice = 1; //1,005774783445621
@@ -1623,7 +1621,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         reajustesAutomaticos.push(reajuste02_2020);
 
-        console.log(reajustesAutomaticos);
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);
           const siglaMoedaDataCorrente = this.loadCurrency(dataCorrente).acronimo;

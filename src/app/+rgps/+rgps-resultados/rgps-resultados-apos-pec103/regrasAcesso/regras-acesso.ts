@@ -763,9 +763,8 @@ export class RegrasAcesso {
 
         const ajusteRegraAcessso = (ano >= 2031 ) ? regra2[2031][sexo] : regra2[ano][sexo];
 
-        status = (((ano >= 2019 && ano <= 2031) && idade >= (ajusteRegraAcessso - redutorProfessor))
+        status = (((ano >= 2019) && idade >= (ajusteRegraAcessso - redutorProfessor))
             && tempo_contribuicao >= contribuicao_min[sexo]) ? true : false;
-
 
         this.setConclusaoAcesso(
             'idadeProgressiva',
