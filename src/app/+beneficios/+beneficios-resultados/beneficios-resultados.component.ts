@@ -490,6 +490,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
       let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
 
+
+      const beneficioDevidoAntesRateio = beneficioDevido;
+      let beneficio_devido_quota_dependente = 0;
+      if (this.calculo.tipo_aposentadoria === 22) {
+        console.log(beneficioDevido);
+        const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
+        beneficio_devido_quota_dependente = beneficioDevido / numDependentes;
+        beneficioDevido = beneficio_devido_quota_dependente;
+      }
+
       //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
       if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
@@ -550,14 +560,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
         //Se houver o marcador, a data é prescrita
         isPrescricao = true;
-      }
-
-      let beneficio_devido_quota_dependente = 0;
-      if (this.calculo.tipo_aposentadoria === 22) {
-        console.log(beneficioDevido);
-        const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
-        beneficio_devido_quota_dependente = beneficioDevido / numDependentes;
-        // beneficioDevido = beneficio_devido_quota_dependente;
       }
 
 
@@ -679,6 +681,14 @@ export class BeneficiosResultadosComponent implements OnInit {
           beneficioRecebidoAbono = 0.0;
         }
 
+        const beneficioDevidoAbonoAntesRateio = beneficioDevidoAbono;
+        let beneficio_devido_quota_dependente_abono = 0;
+        // Rateio de pensão por morte
+        if (this.calculo.tipo_aposentadoria === 22) {
+          const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
+          beneficio_devido_quota_dependente_abono = beneficioDevidoAbono / numDependentes;
+          beneficioDevidoAbono = beneficio_devido_quota_dependente_abono;
+        }
 
         if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
           diferencaMensal = beneficioDevidoAbono;
@@ -696,7 +706,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorJuros,
           diferencaCorrigida,
           valorNumericoDiferencaCorrigidaJurosObj);
-          
+
 
         valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
@@ -707,19 +717,12 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorJuros = 0.00;
         }
 
-        let beneficio_devido_quota_dependente_abono = 0;
-        if (this.calculo.tipo_aposentadoria === 22) {
-          console.log(beneficioDevidoAbono);
-          const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
-          beneficio_devido_quota_dependente_abono = beneficioDevidoAbono / numDependentes;
-          // beneficioDevidoAbono = beneficio_devido_quota_dependente_abono;
-        }
 
         if (isPrescricao) {
           line = {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_devido: this.formatMoney(beneficioDevidoAbonoAntesRateio, siglaDataCorrente, true),
             beneficio_devido_quota_dependente: this.formatMoney(beneficio_devido_quota_dependente_abono, siglaDataCorrente, true),
             beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
             diferenca_corrigida: '0',
@@ -733,7 +736,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           line = {
             ...line,
             competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
-            beneficio_devido: this.formatMoney(beneficioDevidoAbono, siglaDataCorrente, true),
+            beneficio_devido: this.formatMoney(beneficioDevidoAbonoAntesRateio, siglaDataCorrente, true),
             beneficio_devido_quota_dependente: this.formatMoney(beneficio_devido_quota_dependente_abono, siglaDataCorrente, true),
             beneficio_recebido: this.formatMoney(beneficioRecebidoAbono, siglaDataCorrente, true),
             diferenca_corrigida: this.formatMoney(diferencaCorrigida, siglaDataCorrente, true),
