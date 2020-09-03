@@ -456,6 +456,17 @@ export class BeneficiosResultadosComponent implements OnInit {
     const dataFinalParaHonorarioDevido = (this.isExits(this.calculo.taxa_advogado_final)) ?
       this.calculo.taxa_advogado_final : this.calculo.calculo.data_calculo_pedido;
 
+    const isPensaoPorMorte = (this.calculo.tipo_aposentadoria === 22);
+    const defineBeneficioDevidoQuotaDependente = (beneficioDevido) => {
+
+      if (isPensaoPorMorte) {
+        const numDependentes = (this.calculo.num_dependentes === 0) ? 1 : this.calculo.num_dependentes;
+        return beneficioDevido / numDependentes;
+      }
+
+      return beneficioDevido;
+    };
+
     for (let dataCorrenteString of competencias) {
 
       let line: any = {};
@@ -486,35 +497,38 @@ export class BeneficiosResultadosComponent implements OnInit {
       let valorDevidohonorario = 0;
 
       // console.log(juros);
+      let beneficioDevidoAntesRateio = beneficioDevido;
+      let beneficio_devido_quota_dependente = 0;
 
-      let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevido, siglaDataCorrente) };
+      let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevidoAntesRateio, siglaDataCorrente) };
       let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
 
 
-      const beneficioDevidoAntesRateio = beneficioDevido;
-      let beneficio_devido_quota_dependente = 0;
-      if (this.calculo.tipo_aposentadoria === 22) {
-        console.log(beneficioDevido);
-        const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
-        beneficio_devido_quota_dependente = beneficioDevido / numDependentes;
-        beneficioDevido = beneficio_devido_quota_dependente;
-      }
 
-      //Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
+
+
+
+      // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
       if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
+        beneficioDevidoAntesRateio = beneficioDevido;
+
+        beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
+        beneficioDevido = beneficio_devido_quota_dependente;
+
         diferencaMensal = beneficioDevido;
 
 
       } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-        //Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
+        // Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
         beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
         diferencaMensal = beneficioDevido - beneficioRecebido;
 
-      } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month') && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-        //Quando a dataCorrente for maior que ambas, definido na seção 1.3.
+      } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month')
+        && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+        // Quando a dataCorrente for maior que ambas, definido na seção 1.3.
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
 
         // teste 02/06
@@ -522,16 +536,31 @@ export class BeneficiosResultadosComponent implements OnInit {
         // console.log(indiceReajusteValoresDevidos);
 
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
 
-        let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
-        if (chkboxBenefitNotGranted == 1) {
-          beneficioRecebido = 0;//func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+        const chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
+        if (chkboxBenefitNotGranted === 1) {
+          beneficioRecebido = 0;
+          // func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+
+          beneficioDevidoAntesRateio = beneficioDevido;
+          beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
+          beneficioDevido = beneficio_devido_quota_dependente;
+
           diferencaMensal = beneficioDevido - beneficioRecebido;
 
         } else {
-          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
+          beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente,
+            indiceReajusteValoresRecebidos,
+            beneficioRecebidoString, line);
+
+          if (isPensaoPorMorte) {
+            beneficioDevidoAntesRateio = beneficioDevido;
+            beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
+            beneficioDevido = beneficio_devido_quota_dependente;
+          }
+
+
           diferencaMensal = beneficioDevido - beneficioRecebido;
         }
 
@@ -596,14 +625,16 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
       this.somaRecebidosCorrigido += Math.round(beneficioRecebido * 100) / 100;
 
+
+
       if (!isPrescricao) {
         // Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-        this.somaDiferencaMensal += diferencaMensal;
-        this.somaCorrecaoMonetaria += correcaoMonetaria;
-        this.somaDiferencaCorrigida += diferencaCorrigida;
-        this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
-        this.somaHonorarios += honorarios;
-        this.somaJuros += valorJuros;
+        this.somaDiferencaMensal += Math.round(diferencaMensal * 100) / 100;
+        this.somaCorrecaoMonetaria += Math.round(correcaoMonetaria * 100) / 100;
+        this.somaDiferencaCorrigida += Math.round(diferencaCorrigida * 100) / 100;
+        this.somaDiferencaCorrigidaJuros += Math.round(valorNumericoDiferencaCorrigidaJurosObj.numeric * 100) / 100;
+        this.somaHonorarios += Math.round(honorarios * 100) / 100;
+        this.somaJuros += Math.round(valorJuros * 100) / 100;
 
         // para calcular o homorario sobre a soma do devido
 
@@ -684,9 +715,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         const beneficioDevidoAbonoAntesRateio = beneficioDevidoAbono;
         let beneficio_devido_quota_dependente_abono = 0;
         // Rateio de pensão por morte
-        if (this.calculo.tipo_aposentadoria === 22) {
-          const numDependentes = (this.calculo.num_dependentes === 0)? 1 : this.calculo.num_dependentes;
-          beneficio_devido_quota_dependente_abono = beneficioDevidoAbono / numDependentes;
+        if (isPensaoPorMorte) {
+          beneficio_devido_quota_dependente_abono = defineBeneficioDevidoQuotaDependente(beneficioDevidoAbono);
           beneficioDevidoAbono = beneficio_devido_quota_dependente_abono;
         }
 
@@ -771,12 +801,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         if (!isPrescricao) {
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-          this.somaDiferencaMensal += diferencaMensal;
-          this.somaCorrecaoMonetaria += correcaoMonetaria;
-          this.somaDiferencaCorrigida += diferencaCorrigida;
-          this.somaHonorarios += honorarios;
-          this.somaJuros += valorJuros;
-          this.somaDiferencaCorrigidaJuros += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+          this.somaDiferencaMensal += Math.round(diferencaMensal * 100) / 100;
+          this.somaCorrecaoMonetaria += Math.round(correcaoMonetaria * 100) / 100;
+          this.somaDiferencaCorrigida += Math.round(diferencaCorrigida * 100) / 100;
+          this.somaHonorarios += Math.round(honorarios * 100) / 100;
+          this.somaJuros += Math.round(valorJuros * 100) / 100;
+          this.somaDiferencaCorrigidaJuros += Math.round(valorNumericoDiferencaCorrigidaJurosObj.numeric * 100) / 100;
 
           // para calcular o homorario sobre a soma do devido 
 
@@ -802,6 +832,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
       }
+
     }
 
     this.ultimaRenda = this.ultimoBeneficioDevidoAntesProporcionalidade - this.ultimoBeneficioRecebidoAntesProporcionalidade;
