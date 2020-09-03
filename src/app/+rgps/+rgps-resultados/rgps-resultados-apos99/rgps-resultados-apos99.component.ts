@@ -1381,7 +1381,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (this.tipoBeneficio === 4 || this.tipoBeneficio === 6) {
 
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
-      console.log(direito);
 
       if (!direito) {
         if (dib <= this.dataDib98) {
@@ -1603,6 +1602,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return;
     }
 
+
     // let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
     let dataInicio = this.dataInicioBeneficio;
     this.ReajusteAutomatico.getByDate(dataInicio, moment())
@@ -1612,6 +1612,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let valorBeneficio = (this.valorExportacao) ? parseFloat(this.valorExportacao) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
+
+        const reajuste02_2020 = new ReajusteAutomatico;
+          reajuste02_2020.data_reajuste = '2020-02-01';
+          reajuste02_2020.indice = 1; //1,005774783445621
+          reajuste02_2020.salario_minimo = '1045.00';
+          reajuste02_2020.teto = '6101.06';
+
+        reajustesAutomaticos.push(reajuste02_2020);
 
         for (const reajusteAutomatico of reajustesAutomaticos) {
           dataCorrente = moment(reajusteAutomatico.data_reajuste);

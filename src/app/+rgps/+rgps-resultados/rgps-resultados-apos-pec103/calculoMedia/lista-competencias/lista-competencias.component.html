@@ -67,28 +67,23 @@
                     calculoPossivel.destaqueMelhorValorRMI
                 }"
               >
-                <!-- <strong>Cálculo com {{ calculoPossivel.numeroCompetencias }} salários de contribuição -  
-                    {{ calculoPossivel.aliquota.valueString }} - RMI
-                    {{ calculoPossivel.rmi.valueString }}
-                  </strong> -->
-
                 <ul class="list-inline m-0">
-                  <li class="px-2">
+                  <li class="list-inline-print px-2">
                     <strong>
                       Cálculo com
                       {{ calculoPossivel.numeroCompetencias }} Salários de
                       Contribuição</strong
                     >
                   </li>
-                  <li class="px-2">
+                  <li class="list-inline-print px-2">
                     <strong>
                       - {{ calculoPossivel.aliquota.valueString }} -</strong
                     >
                   </li>
-                  <li class="px-2">
+                  <li class="list-inline-print px-2">
                     <strong> RMI {{ calculoPossivel.rmi.valueString }}</strong>
                   </li>
-                  <li class="px-2">
+                  <li class="list-inline-print px-2">
                     <span
                       *ngIf="calculoPossivel.destaqueMelhorValorRMI"
                       class="badge badge-success"
