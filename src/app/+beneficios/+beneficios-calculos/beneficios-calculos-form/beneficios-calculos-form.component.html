@@ -634,7 +634,7 @@
                   </div> -->
                   <div class="form-group" [ngClass]="{'has-error': errors.has('taxaAdvogadoAplicacaoSobre')}" >
                     <label class="col-md-3 control-label" for="taxaAdvogadoAplicacaoSobre">Percentual de Honorário Sobre*:</label>
-                    <div class="" [ngClass]="(taxaAdvogadoAplicacaoSobre === 'fixo')? 'col-md-4' : 'col-md-6'">
+                    <div class="" [ngClass]="(taxaAdvogadoAplicacaoSobre === 'fixo')? 'col-md-4' : 'col-md-7'">
                       <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre" 
                       >
                         <option *ngFor="let option of tipoHonorariosOptions" value="{{option.value}}">{{option.text}}</option>
@@ -652,23 +652,23 @@
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'" class="col-md-offset-1">
-                      <div class="form-group">
-                        <label class="col-md-5 control-label">Aplicar Percentuais Sobre:</label>
-                        <div class="col-md-2">
-                            <select name="taxaAdvogadoAplicarCPCArt85" [(ngModel)]="taxaAdvogadoAplicarCPCArt85"  class="form-control" id="taxaAdvogadoAplicarCPCArt85">
-                              <option value="">- Selecione -</option>
-                              <option value="1">Devido</option>
-                              <option value="0">Diferença</option>
-                            </select>
-                            <div class="row">
-                            <div class="col-md-12">
-                              <small *ngIf="errors.has('taxaAdvogadoAplicarCPCArt85')" class="text-danger">{{ errors.get('taxaAdvogadoAplicarCPCArt85')| i18n }}</small>
-                            </div>
-                          </div>
+                  <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'">
+                    <label class="col-md-3 control-label">Aplicar Percentuais Sobre:</label>
+                    <div class="col-md-7">
+                        <select name="taxaAdvogadoAplicarCPCArt85" [(ngModel)]="taxaAdvogadoAplicarCPCArt85"  class="form-control" id="taxaAdvogadoAplicarCPCArt85">
+                          <option value="">- Selecione -</option>
+                          <option value="1">Percentual sobre o Valor Total do Benefício Devido</option>
+                          <option value="0">Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido</option>
+                        </select>
+                        <div class="row">
+                        <div class="col-md-12">
+                          <small *ngIf="errors.has('taxaAdvogadoAplicarCPCArt85')" class="text-danger">{{ errors.get('taxaAdvogadoAplicarCPCArt85')| i18n }}</small>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'">
+                    <div  class="col-md-offset-1">
                       <div class="form-group" >
                         <label class="col-md-5 control-label">Percentual Sobre o Valor até 200 Salários Mínimos (SM):</label>
                         <div class="col-md-2 col-sm-2">
