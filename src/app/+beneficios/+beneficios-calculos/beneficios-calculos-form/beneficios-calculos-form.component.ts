@@ -105,6 +105,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public numeroBeneficioDevido = '';
   public numeroBeneficioRecebido = '';
 
+  public numDependentes = 0;
+
   public afastarPrescricao = false;
   public calcularAbono13UltimoMes = false;
 
@@ -577,6 +579,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     }
 
+    if (this.especieValoresDevidos === 22 && this.numDependentes >= 20) {
+      this.errors.add({ 'numDependentes': ['O valor deve ser nenor que 20'] });
+    }
+
     return valid;
   }
 
@@ -727,6 +733,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
+      this.formData.num_dependentes = this.numDependentes;
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
@@ -1009,6 +1016,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     this.numeroBeneficioDevido = this.formData.numero_beneficio_devido;
     this.numeroBeneficioRecebido = this.formData.numero_beneficio_recebido;
+    this.numDependentes = this.formData.num_dependentes;
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
