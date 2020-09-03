@@ -19,7 +19,7 @@ export class TutorialListComponent implements OnInit {
       value: '453291034'
     }, {
       label: 'MIGRANDO OS SALÁRIOS DE CONTRIBUIÇÃO DO CNIS',
-      value: '453291170'
+      value: '454141361'
     }, {
       label: 'RMI DA APOSENTADORIA POR IDADE',
       value: '453291169'
