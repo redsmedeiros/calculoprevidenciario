@@ -1,11 +1,14 @@
+
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
+import { Recebidos } from './../Recebidos.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
+import { validateConfig } from '@angular/router/src/config';
 
 @Component({
   selector: 'app-beneficios-calculos-form',
@@ -184,6 +187,23 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: 'Desejo definir manualmente', value: 'manual' }
   ];
 
+  // Multiplos recebidos
+  private listRecebidos = [];
+  // private recebidoMultiplo;
+  // private recebidoMultiplo = {
+  //   id: '',
+  //   actions: '',
+  //   especieValoresRecebidos: '',
+  //   numeroBeneficioRecebido: '',
+  //   dibValoresRecebidos: '',
+  //   cessacaoValoresRecebidos: '',
+  //   dibAnteriorValoresRecebidos: '',
+  //   rmiValoresRecebidos: 0.00,
+  //   rmiValoresRecebidosBuracoNegro: '',
+  //   taxaAjusteMaximaConcedida: 0.00,
+  //   naoAplicarSMBeneficioConcedido: false,
+  // };
+
 
 
   @Input() formData;
@@ -195,7 +215,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
-    private Calculo: CalculoAtrasadoService) { }
+    private Calculo: CalculoAtrasadoService
+  ) { }
 
   ngOnInit() {
     if (this.route.snapshot.params['type'] !== undefined) {
@@ -1305,6 +1326,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   }
 
+
   public getValueSelectJurosAnualParaMensal() {
 
     const opcoesMensalParaAnual = [
@@ -1340,6 +1362,175 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   }
 
+
+  private inserirRecebidoList(event) {
+
+    const recebidoMultiplo = new Recebidos(
+      this.listRecebidos.length + 1,
+      this.especieValoresRecebidos,
+      this.numeroBeneficioRecebido,
+      this.dibValoresRecebidos,
+      this.cessacaoValoresRecebidos,
+      this.dibAnteriorValoresRecebidos,
+      this.rmiValoresRecebidos,
+      this.rmiValoresRecebidosBuracoNegro,
+      this.taxaAjusteMaximaConcedida,
+      this.naoAplicarSMBeneficioConcedido);
+
+    console.log(recebidoMultiplo);
+
+
+    if (this.validRecebidos()) {
+      this.updateDatatableRecebidos(recebidoMultiplo);
+      this.clearFormRecebido();
+    }
+
+  }
+
+
+  private clearFormRecebido() {
+    this.especieValoresRecebidos = '';
+    this.numeroBeneficioRecebido = '';
+    this.dibValoresRecebidos = '';
+    this.cessacaoValoresRecebidos = '';
+    this.dibAnteriorValoresRecebidos = '';
+    this.rmiValoresRecebidos = '';
+    this.rmiValoresRecebidosBuracoNegro = '';
+    this.taxaAjusteMaximaConcedida = '';
+    this.naoAplicarSMBeneficioConcedido = false;
+  }
+
+
+  private updateDatatableRecebidos(recebidos) {
+
+    let line = {};
+
+    if (typeof recebidos === 'object') {
+
+      line = recebidos;
+
+      this.listRecebidos.push(line);
+    }
+
+
+    this.listRecebidos.sort((a, b) => {
+      if (moment(a, 'DD/MM/YYYY') > moment(b, 'DD/MM/YYYY')) {
+        return -1;
+      }
+    });
+
+  }
+
+  validRecebidos() {
+
+    let valid = true;
+    this.errors.clear();
+
+    // Check if its necessary to validate the box of 'Valores Recebidos'
+    // if (!this.isEmptyInput(this.especieValoresRecebidos) ||
+    //   !this.isEmptyInput(this.dibValoresRecebidos) ||
+    //   !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
+    //   !this.isEmptyInput(this.rmiValoresRecebidos) ||
+    //   !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+      if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
+        this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
+        valid = false;
+      }
+
+      if (this.isEmptyInput(this.dibValoresRecebidos)) {
+        this.errors.add({ 'dibValoresRecebidos': ['A DIB de Valores Recebidos é Necessária.'] });
+        valid = false;
+      } else {
+
+        if (!this.isValidDate(this.dibValoresRecebidos)) {
+          this.errors.add({ 'dibValoresRecebidos': ['Insira uma data Válida.'] });
+          valid = false;
+        } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+          this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+          valid = false;
+        }
+
+      }
+
+      if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
+        !this.isValidDate(this.cessacaoValoresRecebidos) &&
+        !this.isEmptyInput(this.dibValoresDevidos) &&
+        !this.isValidDate(this.dibValoresDevidos) &&
+        !this.compareDates(this.dibValoresDevidos, this.cessacaoValoresRecebidos)) {
+
+        this.errors.add({ 'cessacaoValoresRecebidos': ['A Cessação de valores recebidos deve ser maior que a DIB de valores devidos.'] });
+        valid = false;
+      }
+
+      if (this.isEmptyInput(this.rmiValoresRecebidos)) {
+        this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos é Necessária.'] });
+        valid = false;
+      } else if (this.rmiValoresRecebidos == 0) {
+        this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos deve ser maior que zero.'] });
+        valid = false;
+      }
+
+      if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+        if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
+          this.errors.add({ 'dibAnteriorValoresRecebidos': ['Insira uma data válida.'] });
+          valid = false;
+        } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+          this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+          valid = false;
+        }
+      }
+
+
+      if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+
+        if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
+          this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
+          valid = false;
+        } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+          this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+          valid = false;
+        }
+      }
+   // }
+
+    return valid;
+  }
+
+
+
+  getTipoAposentadoria(value) {
+
+    value = parseInt(value, 10);
+    const tipos_aposentadoria = [
+      { name: '', value: '' },
+      { name: 'Abono de Permanência em Serviço', value: 11 },
+      { name: 'Aposentadoria Especial', value: 4 },
+      { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
+      { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
+      { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
+      { name: 'Aposentadoria por Invalidez ', value: 1 },
+      { name: 'Aposentadoria por Tempo de Contribuição', value: 3 },
+      { name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5 },
+      { name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13 },
+      { name: 'Aposentadoria por Tempo de Serviço', value: 18 },
+      { name: 'Auxílio Acidente - 30%', value: 8 },
+      { name: 'Auxílio Acidente - 40%', value: 9 },
+      { name: 'Auxílio Acidente - 50%', value: 6 },
+      { name: 'Auxílio Acidente - 60%', value: 10 },
+      { name: 'Auxílio Doença', value: 0 },
+      { name: 'Auxílio por Incapacidade Permanente', value: 19 },
+      { name: 'Auxílio por Incapacidade Temporária', value: 20 },
+      { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+      { name: 'Auxílio Reclusão', value: 23 },
+      { name: 'Pensão por Morte', value: 22 }
+    ];
+
+    // return tipos_aposentadoria[value].name;
+    return (tipos_aposentadoria.filter(item => value === item.value))[0].name;
+
+  }
 
   scroll(id) {
     if (this.isExits(id)) {
