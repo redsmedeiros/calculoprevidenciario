@@ -44,12 +44,20 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   */
   public getparametrosRegra5(ano, sexo) {
 
+    // const regra5 = {
+    //   2019: { m: 65, md: 23725, f: 60, fd: 21900 },
+    //   2020: { m: 65, md: 23725, f: 60.5, fd: 22083 },
+    //   2021: { m: 65, md: 23725, f: 61, fd: 22265 },
+    //   2022: { m: 65, md: 23725, f: 61.5, fd: 22448 },
+    //   2023: { m: 65, md: 23725, f: 62, fd: 22630 },
+    // };
+
     const regra5 = {
-      2019: { m: 65, md: 23725, f: 60, fd: 21900 },
-      2020: { m: 65, md: 23725, f: 60.5, fd: 22083 },
-      2021: { m: 65, md: 23725, f: 61, fd: 22265 },
-      2022: { m: 65, md: 23725, f: 61.5, fd: 22448 },
-      2023: { m: 65, md: 23725, f: 62, fd: 22630 },
+      2019: { m: 65, md: 23742, f: 60, fd: 21915 },
+      2020: { m: 65, md: 23742, f: 60.5, fd: 22098 },
+      2021: { m: 65, md: 23742, f: 61, fd: 22280 },
+      2022: { m: 65, md: 23742, f: 61.5, fd: 22463 },
+      2023: { m: 65, md: 23742, f: 62, fd: 22645 },
     };
 
     if (ano <= 2019) {
@@ -77,6 +85,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5475 : 15;
     const regra5 = this.getparametrosRegra5(ano, sexo);
 
+    // console.log(regra5);
+    // console.log(contribuicao_min);
 
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
       { status: true, ano: ano, idade: idade, requisitosIdade: regra5 } :
@@ -148,7 +158,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       this.seguradoTransicao.idadeFracionada,
       this.seguradoTransicao.contribuicaoFracionadoAnos);
 
-      //console.log(regraIdade);
+    //console.log(regraIdade);
 
 
     const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
@@ -169,24 +179,26 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     // console.log(idadeEm2019);
     // console.log(regraIdadeAnterior);
-    
+
 
     if (regraIdade.status || regraIdadeAnterior.status) {
 
-        rstRegraIdadeProgressiva = {
-          dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
-          idadeMoment: this.calcularIdade(this.dataAtual),
-          idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
-          tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
-          DiffDataAtualDib: 0,
-          requisitos: regraIdade,
-          formula: '',
-          percentual: 0,
+      rstRegraIdadeProgressiva = {
+        dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
+        idadeMoment: this.calcularIdade(this.dataAtual),
+        idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
+        tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
+        DiffDataAtualDib: 0,
+        requisitos: regraIdade,
+        formula: '',
+        percentual: 0,
       };
 
     } else {
 
       rstRegraIdadeProgressiva = this.contadorRegra5();
+
+      // console.log(rstRegraIdadeProgressiva);
 
     }
 
@@ -211,7 +223,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     let auxiliarDate = this.dataAtual;
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
-    let count = 1;
+    let count = 0;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
@@ -249,15 +261,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       //   + '|' + 'idade -' + idade + '|'
       //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
-      if (fimContador.status) {
-
-        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        //   + '|' + 'idade -' + idade + '|'
-        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-        //   + '|');
-
-      }
-
       count++;
       idade += 1;
       tempoContribuicao += 1;
@@ -266,35 +269,48 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
 
+      if (fimContador.status) {
+
+        console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+          + '|' + 'idade -' + idade + '|'
+          + '|' + 'Tempo - ' + tempoContribuicao + '|'
+          + '|');
+
+      }
+
     } while (!fimContador.status && idade <= 54750);
 
 
 
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento,
-      auxiliarDate
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento,
+    //   auxiliarDate
+    // );
 
-    if (correcaoAnoBissexto > 0) {
-      auxiliarDate.add(correcaoAnoBissexto, 'days');
-    }
+    // if (correcaoAnoBissexto > 0) {
+    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
+    // }
 
-    
+
+    // console.log(auxiliarDate);
+
     idadeMoment = this.calcularIdade(auxiliarDate);
+    idadeMoment.add(-1, 'day');
+
     if (idadeMoment.days() === 30) {
       idadeMoment.add(1, 'day');
     }
 
 
     // console.log('-- regra 5');
-    
+
     // console.log(correcaoAnoBissexto);
     // console.log(auxiliarDate);
     // console.log(idade);
     // console.log(tempoContribuicao);
     // console.log(count);
 
-    tempoContribuicao += correcaoAnoBissexto;
+  //  tempoContribuicao += correcaoAnoBissexto;
 
     return {
       dataDib: auxiliarDate,

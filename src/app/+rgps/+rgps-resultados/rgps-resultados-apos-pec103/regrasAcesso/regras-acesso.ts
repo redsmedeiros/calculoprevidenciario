@@ -557,7 +557,7 @@ export class RegrasAcesso {
 
         } else if (this.arrayIdade.includes(tipoBeneficio)) {
 
-            if (isRegraTransitoria) {
+            if (isRegraTransitoria || tipoBeneficio === 16) {
 
                 this.regraAcessoIdadeTransitoria(
                     idadeFracionada,
@@ -908,8 +908,9 @@ export class RegrasAcesso {
             tempoDePedagioTotal = (contribuicaoDiff + tempoDePedagio);
             //  tempoDePedagioTotal = (tempoDePedagioTotal <= 0) ? 0 : tempoDePedagioTotal;
             // status = (tempoDePedagioTotal > 0.00273973) ? false : true;
+            /// status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
 
-            status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
+            status = ((tempoFinalContrib - tempo_contribuicao) < 0.002737850787132) ? true : false;
 
         }
 
@@ -1021,7 +1022,7 @@ export class RegrasAcesso {
         if (tipoBeneficio === 16) {
             contribuicao_min = { m: 15, f: 15 };
             idade_min = { m: 60, f: 55 };
-            label = 'Aposentadoria por Idade - Trabalhador Rural - Regra Transitória'
+            label = 'Aposentadoria por Idade - Trabalhador Rural'
         }
 
         if (tempo_contribuicao >= contribuicao_min[sexo] && idade >= idade_min[sexo]) {

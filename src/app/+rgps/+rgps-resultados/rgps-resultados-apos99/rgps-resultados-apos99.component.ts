@@ -102,7 +102,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public msgDivisorMinimo = '';
   // IN77
   public exibirIN77 = false;
-  public naoAplicarIN77 = false;
+  public naoAplicarIN77 = true;
   public irtRejusteAdministrativo = 0;
   public msgProporcionalAteEC1032019 = '';
 
@@ -412,6 +412,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       divisorSecundario = Math.round(mesesContribuicao * 0.8);
     }
 
+    if (!this.isDivisorMinimo) {
+      divisorSecundario = Math.round(contadorSecundario * 0.8);
+    }
 
     let label;
     switch (this.tipoBeneficio) {
@@ -485,6 +488,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
         //divisorMediaPrimaria = numeroContribuicoes;
+
 
         if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 

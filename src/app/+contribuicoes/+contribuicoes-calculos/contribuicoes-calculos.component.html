@@ -1,244 +1,267 @@
 <div id="content" *ngIf="!isUpdating">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-
     <!-- row -->
     <div class="row">
-
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo: Contribuições Atrasadas</h1>
+        <h1>Contribuições em Atraso</h1>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item active">Lista dos cálculos de Contribuições Atrasadas realizados </li>
+          <li class="breadcrumb-item">
+            <a href="#/contribuicoes/contribuicoes-segurados">
+              Criar/Buscar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item active">
+            Lista dos cálculos de Contribuições Atrasadas realizados
+          </li>
         </ol>
+      </article>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [sortable]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-    
-              [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-    
-              -->
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [sortable]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado selecionado</h2>
-
           </header>
 
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
-            <div class="widget-body">
-
-              <ul class="list-unstyled">
-                <li>
-
-                  <b>Nome:</b> {{segurado.nome}}</li>
-                <li>
-                  <b>{{getDocumentType(segurado.id_documento)}}</b> {{segurado.numero_documento}}</li>
-                <li>
-                  <b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
+            <div class="widget-body p-0 widget-body-custom">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
+                <li class="px-5" *ngIf="segurado.numero_documento">
+                  <strong
+                    >{{
+                      segurado.getDocumentType(segurado.id_documento)
+                    }}:</strong
+                  >
+                  {{ segurado.numero_documento }}
+                </li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong>
+                  {{ segurado.data_nascimento }}
+                </li>
+                <li class="px-5">
+                  <strong>Sexo:</strong>
+                  {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                </li>
               </ul>
-
-
-              <div class="form-actions">
+              <div class="form-actions p-0 mt-3">
                 <div class="row">
                   <div class="col-md-12">
-
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button
+                      type="submit"
+                      (click)="editSegurado()"
+                      class="btn btn-labeled btn-info pull-right"
+                    >
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
+                      </span>
+                      Editar
                     </button>
-<!-- 
-                    <button type="submit" class="btn btn-labeled btn-primary">
-                      <span class="btn-label">
-                        <i class="fa fa-percent"></i>
-                      </span> Novo cálculo
-                    </button> -->
-
+                    <!-- 
+               <button type="submit" class="btn btn-labeled btn-primary">
+                 <span class="btn-label">
+                   <i class="fa fa-percent"></i>
+                 </span> Novo cálculo
+               </button> -->
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </sa-widget>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">
+                <button
+                  type="submit"
+                  (click)="createNewJurisprudencial()"
+                  class="btn btn-labeled btn-info"
+                  style="width: 250px"
+                >
+                  <span class="btn-label pull-left">
+                    <i class="fa fa-arrow-right"></i>
+                  </span>
+                  <p class="m-2">Jurisprudencial</p>
+                </button>
+              </td>
+              <td>
+                <p>
+                  Cálculo de contribuições em atraso conforme entendimento
+                  jurisprudencial
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center">
+                <button
+                  type="submit"
+                  (click)="createNewComplementar()"
+                  class="btn btn-labeled btn-info"
+                  style="width: 250px"
+                >
+                  <span class="btn-label pull-left">
+                    <i class="fa fa-arrow-right"></i>
+                  </span>
+                  <p class="m-2">Lei Complementar N° 128/08</p>
+                </button>
+              </td>
+              <td>
+                <p>
+                  O cálculo dos valores apresentados acima foram realizados com
+                  base na recente Lei Complementar nº. 128, de dezembro de 2008,
+                  que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [sortable]="false"
+        >
+          <header>
+            <ul class="nav nav-tabs pull-left in">
+              <li [class.active]="state.tabs.selectedTab == 'hr1'">
+                <a (click)="state.tabs.selectedTab = 'hr1'">
+                  <span class="hidden-mobile hidden-tablet">
+                    Jurisprudencial
+                  </span>
+                </a>
+              </li>
+
+              <li [class.active]="state.tabs.selectedTab == 'hr2'">
+                <a (click)="state.tabs.selectedTab = 'hr2'">
+                  <span class="hidden-mobile hidden-tablet">
+                    Lei Complementar N° 128/08
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </header>
+
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body">
+              <tabset>
+                <tab [active]="state.tabs.selectedTab == 'hr1'">
+                  <div class="alert alert-info" role="alert">
+                    Cálculo de contribuições em atraso conforme entendimento
+                    jurisprudencial
+                  </div>
+                  <div class="widget-body no-padding">
+                    <sa-datatable
+                      *ngIf="!isUpdating"
+                      paginationLength="true"
+                      [options]="jurisprudencialTableOptions"
+                      tableClass="table table-striped table-bordered table-hover table-condensed"
+                      width="100%"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Ações</th>
+                          <th>Número</th>
+                          <th>Data do Cálculo</th>
+                          <th>Contribuição Inicial</th>
+                          <th>Contribuição Final</th>
+                        </tr>
+                      </thead>
+                    </sa-datatable>
+                  </div>
+                </tab>
+                <tab [active]="state.tabs.selectedTab == 'hr2'">
+                  <div class="alert alert-info" role="alert">
+                    O cálculo dos valores apresentados abaixo foram realizados
+                    com base na recente Lei Complementar nº. 128, de dezembro de
+                    2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
+                  </div>
+                  <app-contribuicoes-complementar-index
+                    *ngIf="!isUpdating"
+                    [datatableOptions]="complementarTableOptions"
+                  ></app-contribuicoes-complementar-index>
+                </tab>
+              </tabset>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </sa-widget>
+        <!-- end widget -->
       </article>
     </div>
 
-
-
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-12">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sistema</th>
-                  <th>Descrição</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <button type="submit" (click)="createNewJurisprudencial()" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Jurisprudencial
-                    </button>
-                  </td>
-                  <td>
-                    <p>Cálculo de contribuições em atraso conforme entendimento jurisprudencial</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <button type="submit" (click)="createNewComplementar()" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Lei complementar n. 128/08
-                    </button>
-                  </td>
-                  <td>
-                    <p>O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº. 128,
-                      de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91. </p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="container-fluid">
-        <div class="row">
-          <article class="col-sm-12 col-md-12 col-lg-12">
-            <!-- Widget ID (each widget will need unique ID)-->
-            <sa-widget [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [sortable]="false">
-
-              <header>
-                <ul class="nav nav-tabs pull-left in">
-                  <li [class.active]="state.tabs.selectedTab=='hr1'">
-                    <a (click)="state.tabs.selectedTab = 'hr1'">
-                      <span class="hidden-mobile hidden-tablet"> Jurisprudencial </span>
-                    </a>
-                  </li>
-
-                  <li [class.active]="state.tabs.selectedTab=='hr2'">
-                    <a (click)="state.tabs.selectedTab = 'hr2'">
-                      <span class="hidden-mobile hidden-tablet"> Lei complementar n. 128/08 </span>
-                    </a>
-                  </li>
-                </ul>
-              </header>
-
-              <!-- widget div-->
-              <div>
-
-                <!-- widget content -->
-                <div class="widget-body">
-
-                  <tabset>
-                    <tab [active]="state.tabs.selectedTab == 'hr1'">
-
-                      <div class="alert alert-info" role="alert">Cálculo de contribuições em atraso conforme entendimento jurisprudencial</div>
-                      <div class="widget-body no-padding">
-                        <sa-datatable  *ngIf="!isUpdating" paginationLength="true" [options]="jurisprudencialTableOptions" tableClass="table table-striped table-bordered table-hover" width="100%">
-                          <thead>
-                            <tr>
-                              <th>Ações</th>
-                              <th>Número</th>
-                              <th>Data do Cálculo</th>
-                              <th>Contribuição Inicial</th>
-                              <th>Contribuição Final</th>
-                            </tr>
-                          </thead>
-                        </sa-datatable>
-                      </div>
-
-                    </tab>
-                    <tab [active]="state.tabs.selectedTab == 'hr2'">
-                      <div class="alert alert-info" role="alert">O cálculo dos valores apresentados abaixo foram realizados com base na recente Lei Complementar nº.
-                        128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.</div>
-                      <app-contribuicoes-complementar-index *ngIf="!isUpdating"  [datatableOptions]="complementarTableOptions"></app-contribuicoes-complementar-index>
-                    </tab>
-                  </tabset>
-                </div>
-                <!-- end widget content -->
-              </div>
-              <!-- end widget div -->
-            </sa-widget>
-            <!-- end widget -->
-          </article>
-
-          <div class="col-sm-4 col-sm-offset-4">
-            <table class="table table-bordered table-hover table-condensed">
-              <thead>
-                <tr>
-                  <th colspan="2" class="text-align-center">LEGENDA</th>
-                </tr>
-              </thead>
-              <thead>
-                <tr>
-                  <th>Símbolo</th>
-                  <th>Descrição</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <i class="fa fa-edit"></i>
-                  </td>
-                  <td>Editar Cálculo</td>
-                </tr>
-                <tr>
-                  <td>
-                    <i class="fa fa-times"></i>
-                  </td>
-                  <td>Remover</td>
-                </tr>
-                <tr>
-                  <td>
-                    <i class="fa fa-search"></i>
-                  </td>
-                  <td>Ver resultados</td>
-                </tr>
-                
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-
     <!-- end row -->
-
+    <div class="row mb-0">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-2">
+            <ul class="list-inline m-0 p-0">
+              <li>
+                <i
+                  class="fa fa-calculator btn-primary fa-1-9x txt-color-white p-0 pull-left"
+                ></i>
+                Calcular
+              </li>
+              <li>
+                <i
+                  class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"
+                ></i>
+                Editar
+              </li>
+              <li>
+                <i
+                  class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"
+                ></i>
+                Remover
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>

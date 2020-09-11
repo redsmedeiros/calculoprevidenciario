@@ -32,7 +32,7 @@ export class BeneficiosCalculosComponent implements OnInit {
     colReorder: true,
     data: this.calculosList,
     columns: [
-      { data: 'actions' },
+      { data: 'actions', width: '12rem' },
       {
         data: 'data_calculo',
         render: (data) => {
@@ -52,18 +52,6 @@ export class BeneficiosCalculosComponent implements OnInit {
         }
       },
       {
-        data: 'data_pedido_beneficio',
-        render: (data) => {
-          return this.formatReceivedDate(data);
-        }
-      },
-      {
-        data: 'valor_beneficio_concedido',
-        render: (data) => {
-          return this.formatMoneyValue(data);
-        }
-      },
-      {
         data: 'data_pedido_beneficio_esperado',
         render: (data) => {
           return this.formatReceivedDate(data);
@@ -75,6 +63,21 @@ export class BeneficiosCalculosComponent implements OnInit {
           return this.formatMoneyValue(data);
         }
       },
+      {
+        data: 'data_pedido_beneficio',
+        render: (data) => {
+          return this.formatReceivedDate(data);
+        }
+      },
+      {
+        data: 'valor_beneficio_concedido',
+        render: (data) => {
+          return this.formatMoneyValue(data);
+        }
+      },
+    ],
+    columnDefs: [
+      { className: 'text-center', targets: '_all' },
     ]
   };
 

@@ -84,7 +84,7 @@
         </sa-widget>
       </article> -->
 
-      <article class="col-sm-12 col-md-12 col-lg-12" id='inicioForm'>
+      <article class="col-sm-12 col-md-12 col-lg-12" id='inicioForm'> 
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
@@ -237,13 +237,6 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label  class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data Final dos Atrasados*:</label>
-                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
-                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
-                      <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group">
                     <div >
                       <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Benefício Anterior (Se houver):  </label>
                       <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
@@ -252,6 +245,14 @@
                       </div>
                   </div>
                   </div>
+                  <div class="form-group">
+                    <label  class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data Final dos Atrasados*:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                      <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
+                      <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
+                    </div>
+                  </div>
+                
                   <div *ngIf="chkNotGranted" class="form-group">
                       <label *ngIf="!devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda Mensal Inicial - RMI*:</label>
                       <label *ngIf="devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda mensal Inicial - RMI antes da revisão (Buraco Negro)*:</label>
@@ -387,18 +388,18 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Benefício Anterior  (Se houver):</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                      <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" [textMask]="{mask: dateMask}" type="text">
+                      <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
+                    </div>
+                </div>
+                  <div class="form-group">
                     <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data Final Recebidos:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresRecebidos" [(ngModel)]="cessacaoValoresRecebidos" [textMask]="{mask: dateMask}" class="form-control " type="text">
                       <small *ngIf="errors.has('cessacaoValoresRecebidos')" class="text-danger">{{ errors.get('cessacaoValoresRecebidos') }}</small>
                     </div>
-                  </div>
-                  <div class="form-group">
-                      <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Benefício Anterior  (Se houver):</label>
-                      <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
-                        <input name='dibAnteriorValoresRecebidos' [(ngModel)]="dibAnteriorValoresRecebidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" [textMask]="{mask: dateMask}" type="text">
-                        <small *ngIf="errors.has('dibAnteriorValoresRecebidos')" class="text-danger">{{ errors.get('dibAnteriorValoresRecebidos') }}</small>
-                      </div>
                   </div>
                   <div class="form-group">
                     <label *ngIf="recebidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
@@ -586,7 +587,7 @@
                 <div class="col-md-8 col-sm-offset-2">
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
+                      <input type="checkbox" name="chkIndice" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
                       <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa.</span>
                     </label>
                   </div>

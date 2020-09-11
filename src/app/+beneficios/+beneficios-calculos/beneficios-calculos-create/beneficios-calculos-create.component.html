@@ -7,12 +7,12 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1 *ngIf="calculoType != 'AJ'">Cálculo: Benefícios Atrasados</h1>
-        <h1 *ngIf="calculoType == 'AJ'">Cálculo: Benefícios Atrasados - Tetos Judiciais</h1>
+        <h1 *ngIf="calculoType != 'AJ'">Benefícios Atrasados</h1>
+        <h1 *ngIf="calculoType == 'AJ'">Benefícios Atrasados - Revisão do Teto</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#/beneficios/beneficios-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item"><a href="#/beneficios/beneficios-calculos/{{seguradoId}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item active">Informações para o cálculo</li>
+          <li class="breadcrumb-item active">Informações para o Cálculo</li>
         </ol>
         <div class="well" *ngIf="type=='AJ'">
           <p>Este aplicativo atende as demandas judiciais para os tetos legais de 12/1998 no valor de R$1200,00 e 12/2003 no valor de R$2400,00. </p>

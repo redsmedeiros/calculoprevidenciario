@@ -21,6 +21,7 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
   public calculo;
   private seguradoId = '';
   public isUpdating = false;
+  public type;
   constructor(
   	protected CalculoAtrasado: CalculoAtrasadoService,
     protected Errors: ErrorService,
@@ -29,7 +30,9 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
-    this.seguradoId = this.route.snapshot.params['id']
+    this.seguradoId = this.route.snapshot.params['id'];
+    this.type = this.route.snapshot.params['type'];
+    
   		this.isUpdating = true;
   	    this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
           .then(calculo => {

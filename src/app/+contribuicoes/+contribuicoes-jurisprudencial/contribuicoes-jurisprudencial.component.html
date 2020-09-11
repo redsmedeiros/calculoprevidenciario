@@ -7,30 +7,17 @@
     <div class="row">
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo: Contribuições Atrasadas - Jurisprudencial</h1>
+        <h1>Contribuições Atrasadas - Jurisprudencial</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item active">Informações para o cálculo</li>
+          <li class="breadcrumb-item active">Informações para o Cálculo</li>
         </ol>
         <!-- Widget ID (each widget will need unique ID)-->
         <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-
-              [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-
-              -->
           <header>
             <span class="widget-icon">
-              <i class="fa fa-eye"></i>
+              <i class="fa fa-calculator"></i>
             </span>
             <h2>Cálculo de Contribuições</h2>
 
@@ -41,14 +28,10 @@
 
             <!-- widget content -->
             <div class="widget-body">
-
               <p>
                 Contribuições utilizadas na base do cálculo
               </p>
-
-
               <!-- <form class="form-horizontal"> -->
-
                 <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Ínicio do 1º período*</label>
@@ -81,10 +64,10 @@
                   </div>
                 </fieldset>
 
-                <div class="form-actions">
+                <div class="form-actions p-0 mt-3">
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="submit" (click)="createNewCalculation()" class="btn btn-labeled btn-primary">
+                      <button type="submit" (click)="createNewCalculation()" class="btn btn-labeled btn-primary pull-right">
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
                         </span> Calcular

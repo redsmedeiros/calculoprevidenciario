@@ -200,22 +200,53 @@ export class ContribuicoesResultadosComponent implements OnInit {
   }
 
   imprimirPagina(){
+
+    const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
+                <link rel="stylesheet" type="text/css"  href="assets/css/your_style.css" media="print">
+                <style>i.fa, .not-print{ display: none; }
+                      div,p,td,th{font-size:11px !important;}
+                      table{margin-top: 20px;}
+                      .table-bordered, .table-bordered>tbody>tr>td,
+                      .table-bordered>tbody>tr>th,
+                      .table-bordered>tfoot>tr>td,
+                      .table-bordered>tfoot>tr>th,
+                      .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+                        border: 1px solid #000 !important;
+                    }
+                     .table>tbody>tr>td, .table>tbody>tr>th,
+                     .table>tfoot>tr>td, .table>tfoot>tr>th,
+                     .table>thead>tr>td, .table>thead>tr>th {
+                       padding: 3.5px 8px;
+                      border-color: #000 !important
+                    }
+                      footer{text-align: center; margin-top: 50px;}
+                      .page-break { page-break-inside: avoid;}
+                      </style>`;
+
+
     let seguradoBox = document.getElementById('printableSegurado').innerHTML
     let printContents = document.getElementById('boxCalculo').innerHTML;
     printContents = seguradoBox + printContents
-    printContents = printContents.replace(/<table/g, 
-      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    // printContents = printContents.replace(/<table/g, 
+    //   '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
-      const rodape = `<footer style="color: #c5c7c8!important;margin-top: 80px;">
-        <img src="assets/img/logo-IEPREV.png" style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-        <p style="text-align: center;">Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-      </footer>`;
-
+      const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
     let popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' 
-                              + printContents + rodape + '</body></html>');
+    // popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' 
+    //                           + printContents + rodape + '</body></html>');
+
+                              popupWin.document.write(`<!doctype html>
+                              <html>
+                                <head>${css}</head>
+                                <title> Contribuições Atrasadas - Jurisprudencial - ${this.segurado.nome}</title>
+                                <body onload="window.print()">
+                                 <article class="mt-5">${printContents}</article>
+                                 <footer class="mt-5">${rodape}</footer>
+                                </body>
+                              </html>`);
     popupWin.document.close();
   }
 

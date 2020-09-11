@@ -25,9 +25,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
 
   public IndiceMask = [/\d/, ',', /\d/, /\d/, /\d/, /\d/];
-  public styleTheme: string = 'style-0';
 
+  public styleTheme: string = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
+  
   public isEdit = false;
 
   public chkNotGranted = false;
@@ -126,17 +127,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
     { text: 'Não Aplicar correção', value: 'sem_correcao' },
-    { text: 'IPCAe a partir de 07/2009', value: 'ipca' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-e a partir de 07/2009 (Tema 810 STF)', value: 'ipca' },
     { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
-    { text: 'Manual de cálculos da Justiça Federal', value: 'cam' },
+    { text: 'Manual de Cálculos da Justiça Federal', value: 'cam' },
     { text: 'TR após 07/2009', value: 'tr' },
     { text: 'TR todo período', value: 'tr_todo_periodo' },
-    { text: 'TR até 03/2015 e IPCA-e', value: 'tr032015_ipcae' },
+    { text: 'TR até 03/2015 - IPCA-e', value: 'tr032015_ipcae' },
     { text: 'Administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994', value: 'cam_art_175_3048' },
-    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
-    { text: 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e IPCA-e', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
-    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e INPC', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
-    { text: 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 09/2017 e IPCA-e', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
+    { text: 'IGPDI até 2006 - INPC até 06/2009 - TR até 03/2015 - IPCA-e', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - INPC', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - IPCA-e', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
   ];
 
   public especieValoresOptions = [
@@ -175,11 +176,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public tipoJurosOptions = [
     { text: '- Selecione uma Opção -', value: '' },
     { text: 'Sem juros', value: 'sem_juros' },
-    { text: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)', value: '12_6' },
+    { text: '12% ao ano (até 06/2009) - 6% ao ano + Poupança (Lei 11.960/2009)', value: '12_6' },
     // { text: '6% ao ano (observando a SELIC - Poupança)', value: '6_selic' },
     { text: '12% ao ano', value: '12_ano' },
-    { text: '6% ao ano (até 01/2003) / 12% ao ano', value: '6_12' },
-    { text: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano', value: '6_12_6' },
+    { text: '6% ao ano (até 01/2003) - 12% ao ano', value: '6_12' },
+    { text: '6% ao ano (até 01/2003) - 12% ao ano (até 06/2009) - 6% ao ano', value: '6_12_6' },
     { text: '6% ao ano (fixo)', value: '6_fixo' },
     { text: 'Desejo definir manualmente', value: 'manual' }
   ];

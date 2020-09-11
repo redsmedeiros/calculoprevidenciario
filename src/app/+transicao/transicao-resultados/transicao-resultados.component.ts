@@ -574,6 +574,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                 </style>`;
 
     const popupWin = window.open('', '_blank', 'width=640,height=480');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
     popupWin.document.open();
     popupWin.document.write(`<!doctype html>
@@ -582,12 +583,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                                   <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
-                                  <footer style="color: #c5c7c8 !important; margin-top: 80px;">
-                                    <img src="assets/img/logo-IEPREV.png"
-                                    style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                                    <p style="text-align: center; color: #c5c7c8 !important;">
-                                    Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-                                  </footer>
+                                   <footer class="mt-5">${rodape}</footer>
                                   </body>
                                 </html>`);
     popupWin.document.close();
