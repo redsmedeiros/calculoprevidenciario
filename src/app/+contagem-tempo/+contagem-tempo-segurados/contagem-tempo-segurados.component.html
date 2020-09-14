@@ -1,87 +1,111 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <div class="well">
-          <h2 class="margin-top-0">
-            <span class="semi-bold">Cálculo de contagem de Tempo</span>
-          </h2>
-          <h4 class="margin-top-0">
-            <span class="semi-bold">Instrução do cálculo</span>
-          </h4>
-          <ul class="list-unstyled">
-            <li><a routerLink="/tutorial" target="_blank">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
-          </ul>
-          <!-- <ul class="list-unstyled">
-            <li><a href="http://qualidade.ieprev.com.br/conteudo/id/36744/t/contagem-de-tempo-de-servico">Veja aqui</a>
-              Manual do Simulador de Contagem de Tempo de Serviço</li>
-            <li><a href="https://vimeo.com/333388893">Veja aqui</a> Videoaula de utilização do Simulador de Contagem de
-              Tempo de Serviço</li>
-            <li><a href="http://qualidade.ieprev.com.br/conteudo/id/32655/t/orientacoes-basicas-sobre-aposentadoria-especial-dos-deficientes-e-fatores-multiplicadores">Veja
-                aqui</a> Orientações básicas sobre aposentadoria especial dos deficientes e fatores multiplicadores</li>
-          </ul> -->
-          <p class="margin-lg-top">Simula contagem do tempo de serviço para os vínculos empregatícios especial e comum
-            e atividades laboradas como contribuinte individual.</p>
-          <button (click)="linkImportador()" type="button" class="btn btn-labeled btn-primary" data-placement="bottom" tooltip="Caso você tenha o arquivo CNIS (Cadastro Nacional de Informações Sociais) do segurado em .pdf gerado pelo sistema meu.inss.gov.br
-          tente importar utilizando o botão">
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="p-1 m-1 no-print">Contagem de Tempo de Contribuição</h3>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Criar/Buscar Segurado</li>
+        </ol>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="well p-3 mb-3">
+          <button
+            (click)="linkImportador()"
+            type="button"
+            class="btn btn-labeled btn-primary"
+            data-placement="bottom"
+            tooltip="Caso você tenha o arquivo CNIS (Cadastro Nacional de Informações Sociais) do segurado em .pdf gerado pelo sistema meu.inss.gov.br
+          tente importar utilizando o botão"
+          >
             <span class="btn-label">
               <i class="fa fa-upload"></i>
-            </span> Importador de CNIS para contagem de tempo
+            </span>
+            Importador de CNIS para Contagem de Tempo
           </button>
         </div>
-      </article>
+      </div>
     </div>
     <!-- row -->
     <div class="row">
-      <app-contagem-tempo-segurados-create (onSubmit)="onCreate($event)"></app-contagem-tempo-segurados-create>
+      <app-contagem-tempo-segurados-create
+        (onSubmit)="onCreate($event)"
+      ></app-contagem-tempo-segurados-create>
     </div>
 
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-contagem-tempo-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-contagem-tempo-segurados-index>
+        <app-contagem-tempo-segurados-index
+          [list]="list"
+          [datatableOptions]="datatableOptions"
+        ></app-contagem-tempo-segurados-index>
       </article>
 
+    </div>
+    <!-- end row -->
 
-      <div class="row row-fix-width">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-times"></i>
-                </td>
-                <td>Remover</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-calculator"></i>
-                </td>
-                <td>Ver resultados</td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-inline">
+              <li>
+                <i
+                  class="fa fa-list fa-1-7x bg-color-blue txt-color-white p-1"
+                ></i>
+                Calculos do Segurado
+              </li>
+              <li>
+                <i
+                  class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"
+                ></i>
+                Editar
+              </li>
+              <li>
+                <i
+                  class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"
+                ></i>
+                Remover
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    <!-- end row -->
+
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Instrução do Cálculo</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-unstyled">
+              <li>
+                <a routerLink="/tutorial" target="_blank"
+                  >Clique aqui e veja os tutoriais e manuais dos simuladores</a
+                >
+              </li>
+            </ul>
+            <p class="margin-lg-top">
+              Simula contagem do tempo de serviço para os vínculos empregatícios
+              especial e comum e atividades laboradas como contribuinte
+              individual.
+            </p>
+          </div>
+        </div>
+      </div>
+  </div>
+
   </sa-widgets-grid>
   <!-- end widget grid -->
 </div>

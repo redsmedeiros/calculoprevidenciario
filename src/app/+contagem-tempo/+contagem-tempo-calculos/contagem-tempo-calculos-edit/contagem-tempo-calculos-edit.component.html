@@ -24,7 +24,7 @@
         <div>
 
           <!-- widget content -->
-          <div *ngIf = "!isUpdating" class="widget-body">
+          <div *ngIf = "!isUpdating" class="widget-body widget-body-custom">
 
             <app-contagem-tempo-calculos-form [errors]="Errors" [formData]="form" [isEdit]="edit_mode" (onSubmit)="submit($event)"></app-contagem-tempo-calculos-form>
 

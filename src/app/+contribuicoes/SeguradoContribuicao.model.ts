@@ -52,4 +52,22 @@ export class SeguradoContribuicao extends Model {
   public tipo = this['funcao'];
   public documento = this['numero_documento'];
   public data_cadastro = this['created_at'];
+
+  public getDocumentType(id_documento) {
+    switch (id_documento) {
+      case 1:
+        return 'PIS';
+      case 2:
+        return 'PASEP';
+      case 3:
+        return 'CPF';
+      case 4:
+        return 'NIT';
+      case 5:
+        return 'RG';
+      default:
+        return 'CPF'
+    }
+  }
+  
 }

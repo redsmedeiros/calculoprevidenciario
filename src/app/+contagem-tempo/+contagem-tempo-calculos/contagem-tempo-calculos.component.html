@@ -1,93 +1,65 @@
 <div id="content">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-      <div class="row">
-          <article class="col-sm-12 col-md-12 col-lg-12">
-            <div class="well">
-              <h3 class="no-margin">
-                <span class="semi-bold">Cálculo de contagem de Tempo</span>
-              </h3>
-            </div>
-          </article>
-        </div>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="p-1 m-1 no-print">Contagem de Tempo de Contribuição</h3>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="#/contagem-tempo/contagem-tempo-segurados">
+              Criar/Buscar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item active">Lista de Cálculos Cadastrados</li>
+        </ol>
+      </div>
+    </div>
 
     <!-- row -->
     <div class="row">
-
       <article class="col-sm-12 col-md-12 col-lg-12">
-
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
-          <!-- widget options:
-              usage: <sa-widget [editbutton]="false">
-    
-              [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="true"
-              [sortable]="false"
-    
-              -->
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do segurado</h2>
-
           </header>
 
           <!-- widget div-->
           <div>
-
             <!-- widget content -->
-            <div class="widget-body no-padding">
-              <table class="table table-condensed  table-responsive">
-                <tbody>
-                  <tr>
-                    <td><strong class="pull-right">Nome:</strong></td>
-                    <td>{{segurado.nome}} </td>
-                  </tr>
-                  <tr *ngIf="segurado.documento">
-                    <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
-                    <td>{{segurado.documento}} </td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Data de nascimento:</strong></td>
-                    <td>{{segurado.data_nascimento}}</td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Idade:</strong></td>
-                    <td>{{segurado.idade}}</td>
-                  </tr>
-                  <tr>
-                    <td><strong class="pull-right">Sexo:</strong></td>
-                    <td>
-                      <span *ngIf="segurado.sexo=='m'">Masculino</span>
-                      <span *ngIf="segurado.sexo=='f'">Feminino</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="widget-body widget-body-custom">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+                <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li  class="px-5"><strong>Idade:</strong>  {{ segurado.idade}}</li>
+                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+                <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+              </ul>
             </div>
-            <div class="form-actions no-margin  no-padding ">
+            <div class="form-actions p-0 mt-3">
               <div class="row">
-                <div class="">
-
-                  <button type="submit" (click)="returnListaSegurados()" class="btn btn-labeled btn-info pull-left" id="retornarSegurados"
-                    data-placement="bottom" tooltip="Retorna para lista de segurados do simulador de contagem de tempo.">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-left"></i>
-                    </span> Retornar para Segurados
-                  </button>
-
-                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right" id="editarSegurado">
+                <div class="col-md-12">
+                  <button
+                    type="submit"
+                    (click)="editSegurado()"
+                    class="btn btn-labeled btn-info pull-right"
+                    id="editarSegurado"
+                  >
                     <span class="btn-label">
                       <i class="fa fa-pencil-square-o"></i>
-                    </span> Editar
+                    </span>
+                    Editar
                   </button>
                 </div>
               </div>
@@ -96,62 +68,41 @@
         </sa-widget>
       </article>
 
-      <app-contagem-tempo-calculos-create (onSubmit)="onCreate($event)"></app-contagem-tempo-calculos-create>
+      <app-contagem-tempo-calculos-create
+        (onSubmit)="onCreate($event)"
+      ></app-contagem-tempo-calculos-create>
 
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-contagem-tempo-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-contagem-tempo-calculos-index>
+        <app-contagem-tempo-calculos-index
+          [list]="calculosList"
+          [datatableOptions]="calculoTableOptions"
+        ></app-contagem-tempo-calculos-index>
       </article>
 
-      <div class="row row-fix-width">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><i class="fa fa-calendar"></i></td>
-                <td>Inserir/Editar períodos</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-calculator"></i></td>
-                <td>Ver resultados</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-copy"></i>
-                </td>
-                <td>Copiar valores do último cálculo</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar</td>
-              </tr>
-              <tr>
-                <td><i class="fa fa-times"></i></td>
-                <td>Remover</td>
-              </tr>
-            </tbody>
-          </table>
+    
+    </div>
+
+    <div class="row mb-0">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-2">
+            <ul class="list-inline m-0 p-0">
+              <li><i class="fa fa-calendar fa-1-9x btn-primary txt-color-white p-1 pull-left"></i>Inserir/Editar períodos</li>
+              <li><i class="fa fa-calculator bg-color-greenLight fa-1-9x txt-color-white p-1 pull-left"></i> Resultado</li>
+              <li><i class="fa fa-copy fa-1-9x bg-color-blueLight txt-color-white p-1 pull-left"></i>Copiar valores do último cálculo</li>
+              <li><i class="fa fa-edit fa-1-9x btn-warning txt-color-white p-1 pull-left"></i> Editar</li>
+              <li><i class="fa fa-times fa-1-9x btn-danger txt-color-white p-1 pull-left"></i> Remover</li>
+            </ul>
+          </div>
         </div>
       </div>
-
     </div>
 
     <!-- end row -->
-
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>
