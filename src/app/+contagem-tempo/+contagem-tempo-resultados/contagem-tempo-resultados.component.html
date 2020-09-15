@@ -1,25 +1,24 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-      <div class="row">
-          <article class="col-sm-12 col-md-12 col-lg-12">
-            <div class="well">
-              <h3 class="no-margin">
-                <span class="semi-bold">Contagem de Tempo de Contribuição</span>
-              </h3>
-            </div>
-          </article>
-        </div>
-        <!-- <div class="row mb-3 not-print">
+    <div class="row mb-4">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="no-margin">
+          <span class="semi-bold">Contagem de Tempo de Contribuição</span>
+        </h3>
+      </div>
+    </div>
+        <div class="row mb-3 not-print">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados"> Criar/Buscar Segurado</a></li>
-              <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-              <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-              <li class="breadcrumb-item active">Lista de Cálculos Cadastrados</li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados/{{idSegurado}}/editar"> Editar Segurado</a></li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-calculos/{{idSegurado}}/{{this.idsCalculos[0]}}/editar"> Editar Cálculo</a></li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-periodos/{{idSegurado}}/{{this.idsCalculos[0]}}"> Editar Períodos</a></li>
+              <li class="breadcrumb-item active">Resultado</li>
             </ol>
           </div>
-        </div> -->
+        </div>
     <!-- row -->
     <div class="row">
       <article id='article-segurado' class="col-sm-12 col-md-12 col-lg-12" >
@@ -94,7 +93,7 @@
                 data-placement="top" tooltip="Clique aqui para imprimir">
                 <span class="btn-label">
                   <i class="fa fa-print"></i>
-                </span> Imprimir
+                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Imprimir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </button>
                <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"
                 data-placement="top" tooltip="Clique para exportar PDF">

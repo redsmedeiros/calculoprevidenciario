@@ -1478,11 +1478,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
         }
       }
-      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-        if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
-          beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
-        }
-      }
+      // if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+      //   if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+      //     beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
+      //   }
+      // }
      }
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
@@ -3262,7 +3262,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
     const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-    const title = `<title> Benefícios Atrasados - ' + ${this.segurado.nome} + '</title>`;
+    const title = `<title> Benefícios Atrasados - ${this.segurado.nome}</title>`;
 
     const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
