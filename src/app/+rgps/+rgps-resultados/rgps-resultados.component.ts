@@ -697,7 +697,11 @@ export class RgpsResultadosComponent implements OnInit {
         break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
       case 'Aposentadoria por idade - Trabalhador Urbano':
+      case 'Aposentadoria Programada':
         numeroEspecie = 3;
+        break;
+      case 'Aposentadoria Programada - Professor':
+        numeroEspecie = 31;
         break;
       case 'Aposentadoria por Tempo de Contribuição':
       case 'Aposentadoria por tempo de contribuição':
@@ -824,12 +828,14 @@ export class RgpsResultadosComponent implements OnInit {
  * @param especieBeneficio
  */
   verificaEspecieDeBeneficioIdade(especieBeneficio) {
-    const arrayTypeNum = [3, 16];
+    const arrayTypeNum = [3, 16, 31];
     const arrayTypeText = [
       'Aposentadoria por idade - Trabalhador Urbano',
       'Aposentadoria por idade - Trabalhador Rural',
       'Aposentadoria por Idade - Trabalhador Urbano',
       'Aposentadoria por Idade - Trabalhador Rural',
+      'Aposentadoria Programada',
+      'Aposentadoria Programada - Professor'
     ];
 
     if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {

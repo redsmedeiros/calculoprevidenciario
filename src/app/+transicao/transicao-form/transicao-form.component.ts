@@ -8,7 +8,9 @@ import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
 import swal from 'sweetalert';
 import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
 import { TransicaoResultadosComponent } from '../transicao-resultados/transicao-resultados.component';
+
 
 
 @Component({
@@ -26,6 +28,9 @@ export class TransicaoFormComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public number2Mask = [/\d/, /\d/];
+
+  private inputFunctions = InputFunctions;
 
 
   @ViewChild(TransicaoResultadosComponent) transicaoResultadosComponent: TransicaoResultadosComponent;

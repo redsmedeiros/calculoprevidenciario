@@ -2,9 +2,12 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
+import { SeguradoService } from 'app/+rgps/+rgps-segurados/SeguradoRgps.service';
 // import swal from 'sweetalert2';
 import swal from 'sweetalert';
 import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
+
 
 @Component({
   selector: 'app-rgps-calculos-form',
@@ -92,13 +95,25 @@ export class RgpsCalculosFormComponent implements OnInit {
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
+  private segurado;
+  private isTransitoria = false;
+
+  private inputFunctions = InputFunctions;
+
   @Input() formData;
   @Input() errors: ErrorService;
   @Input() isEdit: boolean;
   @Output() onSubmit = new EventEmitter;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    protected Segurado: SeguradoService
+  ) { }
+
   ngOnInit() {
+
+    this.getSegurado();
+
     if (this.isEdit) {
       this.dataInicioBeneficio = this.formData.data_pedido_beneficio;
 
@@ -160,6 +175,23 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
   }
+
+
+  private getSegurado() {
+
+    this.Segurado.find(this.route.snapshot.params['id'])
+      .then(segurado => {
+        this.segurado = segurado;
+
+        if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY').isAfter('2019-11-13')) {
+          this.isTransitoria = true;
+        }
+
+      });
+
+  }
+
+
   public submit(e) {
     e.preventDefault();
     this.validate();
@@ -529,7 +561,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por Idade - Trabalhador Rural',
       'Aposentadoria por Idade da PcD',
       'Auxílio Doença',
-      'Auxílio por Incapacidade Temporária'
+      'Auxílio por Incapacidade Temporária',
+      'Aposentadoria Programada',
+      'Aposentadoria Programada - Professor'
     ].includes(this.especieBeneficio)) {
       tipoIdade = true;
     }
@@ -1194,7 +1228,11 @@ export class RgpsCalculosFormComponent implements OnInit {
         break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
       case 'Aposentadoria por idade - Trabalhador Urbano':
+      case 'Aposentadoria Programada':
         numeroEspecie = 3;
+        break;
+      case 'Aposentadoria Programada - Professor':
+        numeroEspecie = 31;
         break;
       case 'Aposentadoria por Tempo de Contribuição':
       case 'Aposentadoria por tempo de contribuição':
@@ -1277,7 +1315,6 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
     return numeroEspecie;
   }
-
 
 
 }
