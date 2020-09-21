@@ -592,6 +592,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por idade - Trabalhador Rural',
       'Aposentadoria por Idade - Trabalhador Urbano',
       'Aposentadoria por Idade - Trabalhador Rural',
+      'Aposentadoria Programada',
+      'Aposentadoria Programada - Professor',
       'Aposentadoria especial - 15 anos de exposição',
       'Aposentadoria especial - 20 anos de exposição',
       'Aposentadoria especial - 25 anos de exposição',
@@ -963,7 +965,9 @@ export class RgpsCalculosFormComponent implements OnInit {
     if (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural'
       || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano'
       || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano'
-      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural') {
+      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural'
+      || this.especieBeneficio === 'Aposentadoria Programada'
+      || this.especieBeneficio === 'Aposentadoria Programada - Professor') {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;

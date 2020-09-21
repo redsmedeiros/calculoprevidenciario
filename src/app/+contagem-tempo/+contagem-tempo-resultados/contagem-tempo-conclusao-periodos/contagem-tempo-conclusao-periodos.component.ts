@@ -281,8 +281,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   // }
 
   public dataDiffDateToDate(date1, date2, fator) {
-    let b = moment(date1);
-    let a = moment(date2).add(1, 'd');
+    let b = moment(date1).startOf('day');
+   // let a = moment(date2).add(1, 'd');
+    let a = moment(date2).startOf('day');
     let total = { years: 0, months: 0, days: 0 };
     let totalFator = { years: 0, months: 0, days: 0 };
     let totalGeralEmDias = 0;
@@ -302,16 +303,17 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     b.add(diff, 'days');
     total.days = diff;
 
+    if (a.isSame(b) && totalGeralEmDias <= 0) {
+      total.days = 1;
+    }
 
-    let xValor = (this.Math.floor(totalGeralEmDias) / 365);
+    let xValor = (this.Math.floor(totalGeralEmDias) / 365.25);
     // console.log(totalGeralEmDias * fator);
-    // console.log(xValor);
-
 
     totalFator.years = this.Math.floor(xValor);
     let xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30;
+    let dttDias = (xVarMes - totalFator.months) * 30.4375;
     totalFator.days = this.Math.floor(dttDias);
 
     //  console.log(totalFator);
@@ -321,7 +323,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       // let xDias = ((total.days / 30) / 12);
       // let xMeses = (total.months / 12);
       // let xValor = ((total.years + xDias + xMeses) * fator);
+
       let xValor = (this.Math.floor(totalGeralEmDias) * fator / 365.25);
+
       // console.log(totalGeralEmDias * fator);
       // console.log(xValor);
 

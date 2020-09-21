@@ -97,11 +97,10 @@ export class RegrasAcesso {
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
-            let maxDescarteCarencia = (this.numeroDeContribuicoes > 180)? (this.numeroDeContribuicoes - 180) : this.numeroDeContribuicoes;
+            const maxDescarteCarencia = (this.numeroDeContribuicoes > 180) ?
+                (this.numeroDeContribuicoes - 180)
+                : this.numeroDeContribuicoes;
 
-            if (this.calculo.calcular_descarte_apos_ec103) {
-                maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
-            }
 
             maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.anos = (maximoDescarte.meses / 12);

@@ -3,6 +3,7 @@ import { CalculoContagemTempoService } from '../CalculoContagemTempo.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoContagemTempo as CalculoModel } from '../CalculoContagemTempo.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contagem-tempo-calculos-edit',
@@ -58,7 +59,16 @@ export class ContagemTempoCalculosEditComponent implements OnInit, OnDestroy {
     this.CalculoContagemTempo
       .update(this.calculo)
       .then(model => {
-        swal('Sucesso', 'Cálculo salvo com sucesso', 'success').then(() => {
+        swal(
+          {
+            type: 'success',
+            title: 'Cálculo salvo com sucesso',
+            text: '',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 1500
+          }
+        ).then(() => {
           this.CalculoContagemTempo.get()
             .then(() => this.router.navigate([this.rotaRetorno]));
         });

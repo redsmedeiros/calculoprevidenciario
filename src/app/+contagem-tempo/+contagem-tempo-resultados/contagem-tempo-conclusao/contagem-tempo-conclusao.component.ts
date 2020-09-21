@@ -141,9 +141,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       inicioVinculo = this.toMoment(vinculo.data_inicio);
       fimVinculo = this.toMoment(vinculo.data_termino);
 
-      if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+      // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+      //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // }
+
+      if (auxiliarDate > inicioVinculo && auxiliarDate < fimVinculo) {
         fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       }
+      
 
     }
     return Number(fator);
@@ -159,12 +164,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
       const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
-      const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+     // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+      const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
 
 
       //  console.log(teste.add(1, 'days'));
       // console.log(this.toDateString(teste.add(1, 'days')))
       //   console.log(moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY'));
+      // console.log(limitesDoVinculo)
       // console.log(fimContador)
 
       let count = 0;
@@ -184,27 +191,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
           count += fator;
 
-          if (auxiliarDate <= this.fimContador88) {
+          if (auxiliarDate < this.fimContador88) {
             count88 += fator;
           };
 
-          if (auxiliarDate <= this.fimContador91) {
+          if (auxiliarDate < this.fimContador91) {
             count91 += fator;
           };
 
-          if (auxiliarDate <= this.fimContador98) {
+          if (auxiliarDate < this.fimContador98) {
             count98 += fator;
           };
 
-          if (auxiliarDate <= this.fimContador99) {
+          if (auxiliarDate < this.fimContador99) {
             count99 += fator;
           };
 
-          if (auxiliarDate <= this.fimContador03) {
+          if (auxiliarDate < this.fimContador03) {
             count03 += fator;
           };
 
-          if (auxiliarDate <= this.fimContador19) {
+          if (auxiliarDate < this.fimContador19) {
             count19 += fator;
           };
 
@@ -217,8 +224,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
 
 
-      } while (auxiliarDate <= fimContador);
+      // } while (auxiliarDate < fimContador);
+      } while (fimContador.isAfter(auxiliarDate));
 
+
+      // console.log(auxiliarDate);
+      // console.log(count);
       // console.log(this.yearMonthDaysToFormate(count));
       // console.log(moment.duration(count, 'days').humanize());
       // console.log(count88)

@@ -190,37 +190,26 @@
                         <input [(ngModel)]="carenciaAposEc103" placeholder="Meses" (change)="errors.clear('carenciaAposEc103')" [ngModelOptions]="{standalone: true}"  maxlength="4"  class="form-control text-align-center" type="text">
                         <small *ngIf="errors.has('carenciaAposEc103')" class="text-danger">{{ errors.get('carenciaAposEc103') | i18n}}</small>
                       </div>
-                    </div>
-
-                     <div class="form-group mb-4"  
-                    *ngIf="(has19 || hasAtual) && hasDivisorMinimo || (((has19 || hasAtual) && hasDivisorMinimo) 
-                       && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103));">
-                      <div class="checkbox col-md-9 col-md-offset-3">
-                        <label>
-                          <input type="checkbox" [(ngModel)]="calcularDescarteAposEC103" class="checkbox" [ngModelOptions]="{standalone: true}">  
-                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
-                            Afastar a Carência Mínima de 180 contribuições.
-                          </span>
-                        </label>
-                        <popover-content #avisoDescarteMenoresSalarios
-                        title="Afastar o limite da carência mínima de 180 contribuições."
+                      <div class="col-md-1">
+                        <popover-content #avisoCarencia
+                        title="Carência"
                         [closeOnClickOutside]="true"
                         >
                         <div class="alert alert-danger bg-ieprev fade in bold" 
-                        *ngIf="[3,16].includes(getEspecieBeneficio(especieBeneficio))" >
+                        *ngIf="[3,16,31].includes(getEspecieBeneficio(especieBeneficio))" >
+                        Embora a EC 103/2019 não tenha previsto a carência como requisito para concessão das aposentadorias programada, por idade, tempo de contribuição e especial, o Decreto 3.048/1999, com redação dada pelo Decreto 10.410/2020, exige número mínimo de contribuições mensais (180 (cento e oitenta)) para concessão dessas prestações (art. 29, II). E nos casos que possibilita o descarte das menores contribuições para cálculo do salário de benefício, o faz desde que mantida a quantidade de contribuições equivalentes ao período de carência e observado o tempo mínimo de contribuição necessário à elegibilidade da aposentadoria requerida (art. 32, § 26). Portanto, o Simulador de Cálculos IEPREV apresentará resultados, sempre preservando a carência mínima exigida para concessão do benefício.
                         </div>
                         </popover-content>
                           <button type="button" class="btn btn-small btn-info" 
                           popoverPlacement="left" 
                           [popoverOnHover]="true"
-                          [popover]="avisoDescarteMenoresSalarios"
-                          *ngIf="[3,16].includes(getEspecieBeneficio(especieBeneficio))" >
+                          [popover]="avisoCarencia"
+                          *ngIf="[3,16,31].includes(getEspecieBeneficio(especieBeneficio))" >
                               <i class="fa fa-question-circle fa-1-6x"></i>
                           </button>
                       </div>
                     </div>
 
-  
                     <div class="form-group mb-4"  *ngIf="has19 && hasPensao19">
                       <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="numDependentes"><strong>Número de Dependentes*:</strong></label>
                       <div class="col-md-2">
@@ -359,10 +348,7 @@
                         [closeOnClickOutside]="true"
                         >
                         <div class="alert alert-danger bg-ieprev fade in bold" 
-                        *ngIf="[1915,1920,1925].includes(getEspecieBeneficio(especieBeneficio)) 
-                        || [4,6].includes(getEspecieBeneficio(especieBeneficio))
-                        || [3,16].includes(getEspecieBeneficio(especieBeneficio))
-                        || [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))" >
+                        *ngIf="hasDivisorMinimo" >
                           Opção aplicada aos benefício concedidos com base no direito adquirido até 13/11/2019 (§ 1°, do art. 188-e, do Decreto 3.048/99). 
                           Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
                           possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
@@ -373,10 +359,7 @@
                           popoverPlacement="left" 
                           [popoverOnHover]="true"
                           [popover]="avisoDescarteMenoresSalarios"
-                          *ngIf="[1915,1920,1925].includes(getEspecieBeneficio(especieBeneficio)) 
-                          || [4,6].includes(getEspecieBeneficio(especieBeneficio))
-                          || [3,16].includes(getEspecieBeneficio(especieBeneficio))
-                          || [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))"
+                          *ngIf="hasDivisorMinimo"
                           >
                               <i class="fa fa-question-circle fa-1-6x"></i>
                           </button>

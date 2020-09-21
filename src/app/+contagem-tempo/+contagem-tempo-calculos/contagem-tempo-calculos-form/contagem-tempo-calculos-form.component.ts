@@ -61,7 +61,7 @@ export class ContagemTempoCalculosFormComponent implements OnInit {
 
       this.formData.id_segurado = this.route.snapshot.params['id'];
       this.formData.referencia_calculo = this.referencia_calculo;
-      swal('Sucesso', 'Cálculo salvo com sucesso', 'success')
+      //swal('Sucesso', 'Cálculo salvo com sucesso', 'success')
       this.onSubmit.emit(this.formData);
       this.resetForm();
     }
