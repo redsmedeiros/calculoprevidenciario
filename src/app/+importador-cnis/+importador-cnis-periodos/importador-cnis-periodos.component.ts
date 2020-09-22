@@ -322,8 +322,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         this.errors.add({ 'data_termino': ['Insira uma data válida'] });
       } else {
 
-        if (dateFinalPeriodo <= dateInicioPeriodo) {
-          this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
+        if (dateFinalPeriodo < dateInicioPeriodo) {
+          this.errors.add({ 'data_termino': ['Insira uma data posterior ou igual a data inicial'] });
         }
 
         if (Math.abs(dateInicioPeriodo.diff(dateFinalPeriodo, 'years')) >= 50) {

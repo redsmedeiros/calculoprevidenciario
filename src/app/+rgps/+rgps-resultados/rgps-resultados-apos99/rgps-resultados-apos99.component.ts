@@ -258,7 +258,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
 
-      if (this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')) {
+      if (
+        this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
+        || this.calculo.somar_contribuicao_secundaria
+      ) {
         contribuicaoPrimaria += contribuicaoSecundaria;
         contribuicaoSecundaria = 0;
       }
@@ -324,7 +327,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         limiteString = valorAjustadoObj.aviso;
       }
 
-       if (contribuicaoSecundaria != 0 && limiteString !== 'LIMITADO AO TETO') {
+      if (contribuicaoSecundaria != 0 && limiteString !== 'LIMITADO AO TETO') {
         contribuicaoSecundariaRevisada = (this.limitarTetosEMinimos(contribuicaoSecundaria, dataContribuicao)).valor;
         //Inserir texto 'Limitado ao teto' e 'limitado ao minimo' quando cabivel.
         contadorSecundario++;
@@ -379,16 +382,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     // meses de contribuição pbc
-    if (this.getPbcDaVidatoda()) {
+    // if (this.getPbcDaVidatoda()) {
+    //   // const dataInicioPBCRevisao = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+    //   const dataInicioPBCRevisao = moment(this.segurado.data_filiacao, 'DD/MM/YYYY');
+    //   mesesContribuicao = this.getDifferenceInMonths(dataInicioPBCRevisao, this.dataInicioBeneficio);
+    // }
 
-      const dataInicioPBCRevisao = this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data;
-      mesesContribuicao = this.getDifferenceInMonths(moment(dataInicioPBCRevisao), this.dataInicioBeneficio);
 
-    }
-
-
-    let mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8) - 0.5);
-    let mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6) - 0.5);
+    let mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8));
+    let mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6));
     let divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
 
     // if (contadorSecundario < mesesContribuicao * 0.6) {
@@ -447,9 +449,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
     }
 
-     if (this.dataFiliacao >= this.dataDib99) {
+    if (this.dataFiliacao >= this.dataDib99) {
       switch (this.tipoBeneficio) {
-       // case 1: //Auxilio Doença Previdenciario
+        case 1: //Auxilio Doença Previdenciario
         case 2: //Aposentadoria por invalidez previdenciaria
           if (numeroContribuicoes >= 144 || this.withMemo) {
             //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
@@ -458,7 +460,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = numeroContribuicoes;
           }
           break;
-      //  case 5: // Aposentadoria Especial
+        //  case 5: // Aposentadoria Especial
         case 7: // Auxilio Acidente Previdenciario 50%
           if (numeroContribuicoes < 144 || this.withMemo) {
             divisorMediaPrimaria = numeroContribuicoes;
@@ -467,14 +469,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           }
           break;
-        // case 3://Aposentadoria Idade Trabalhador Urbano
-        // case 4://Aposentadoria Tempo de Contribuicao
-        // case 16://Aposentadoria Idade Trabalhafor Rural
-        // case 25://Deficiencia Grave
-        // case 27://Deficiencia Leva
-        // case 26://Deficiencia Moderado
-        case 28://Deficiencia PorSalvar Idade
-          //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        case 3: // Aposentadoria Idade Trabalhador Urbano
+        case 4: // Aposentadoria Tempo de Contribuicao
+        case 16: // Aposentadoria Idade Trabalhafor Rural
+        case 25: // Deficiencia Grave
+        case 27: // Deficiencia Leva
+        case 26: // Deficiencia Moderado
+        case 28: // Deficiencia PorSalvar Idade
+          // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
           divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
           break;
       }
@@ -488,7 +490,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
         //divisorMediaPrimaria = numeroContribuicoes;
-
 
         if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 
@@ -507,7 +508,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           } else {
 
-            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
             divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
           }
@@ -527,6 +527,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         }
 
+         // divisor PBC
+        if(this.getPbcDaVidatoda()){
+          this.exibirIN77 = false;
+          divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+          this.msgDivisorMinimo = '';
+        }
 
 
         // if (divisorMediaPrimaria < divisorMinimo && this.isDivisorMinimo) {
@@ -1411,10 +1417,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           // "POSSUI direito ao benefício proporcional."
           // "Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
 
-         // errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
-                               //     + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
-         this.msgProporcionalAteEC1032019 = 'POSSUI direito ao benefício proporcional. Falta(m) '
-                                            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.';
+          // errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
+          //     + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
+          this.msgProporcionalAteEC1032019 = 'POSSUI direito ao benefício proporcional. Falta(m) '
+            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.';
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
@@ -1618,10 +1624,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let dataCorrente = dataInicio;
 
         const reajuste02_2020 = new ReajusteAutomatico;
-          reajuste02_2020.data_reajuste = '2020-02-01';
-          reajuste02_2020.indice = 1; //1,005774783445621
-          reajuste02_2020.salario_minimo = '1045.00';
-          reajuste02_2020.teto = '6101.06';
+        reajuste02_2020.data_reajuste = '2020-02-01';
+        reajuste02_2020.indice = 1; //1,005774783445621
+        reajuste02_2020.salario_minimo = '1045.00';
+        reajuste02_2020.teto = '6101.06';
 
         reajustesAutomaticos.push(reajuste02_2020);
 

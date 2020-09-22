@@ -892,7 +892,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         closeOnClickOutside: true,
         closeOnEsc: true,
         button: false,
-        timer: 120000,
+        timer: 5000,
         // content: {
         //   element: 'label',
         //   attributes: {

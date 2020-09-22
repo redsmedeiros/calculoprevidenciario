@@ -342,11 +342,26 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       totalFator = total;
     }
 
+    total = this.ajusteHumanizadoDateINSS(total);
+    totalFator = this.ajusteHumanizadoDateINSS(totalFator);
     // console.log(total);
 
     return { semFator: total, comFator: totalFator };
   };
 
+
+  /**
+   * Ajustar o periodo de 30 ou 31 para um mês completo
+   */
+  private ajusteHumanizadoDateINSS(tempoObj) {
+
+      if (tempoObj.days >= 30) {
+        tempoObj.months += 1;
+        tempoObj.days = 0;
+      }
+
+      return tempoObj;
+  }
 
   public dateDiffPeriodos(inicio, fim, fator) {
 

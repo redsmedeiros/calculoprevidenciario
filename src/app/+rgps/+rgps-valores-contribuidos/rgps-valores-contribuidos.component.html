@@ -146,6 +146,32 @@
                     </div>
                   <!-- </div> -->
                  </fieldset>
+                 <fieldset class="row pt-3"
+                 *ngIf="exibirCampoAnteriorLei13846" 
+                 >
+                  <div class="alert alert-warning ">
+                    <div class="form-group form-horizontal">
+                      <label
+                        class="col-md-11 control-label"
+                        for="select-somarSecundaria"
+                      >
+                      <strong>Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?</strong>
+                      </label>
+                      <div class="col-md-1">
+                        <select
+                          [(ngModel)]="somarSecundaria"
+                          [ngModelOptions]="{ standalone: true }"
+                          (change)="somarSecundariaUpdate()"
+                          class="form-control"
+                          id="select-somarSecundaria"
+                        >
+                          <option value="1">SIM</option>
+                          <option value="0">NÃO</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                 </fieldset>
                  <!-- <div class="row">
                    <div class=" col-md-12">
                     <div class="alert alert-danger bg-ieprev fade in bold">
