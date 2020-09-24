@@ -145,7 +145,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      if (auxiliarDate > inicioVinculo && auxiliarDate < fimVinculo) {
+      if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
         fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       }
       
@@ -207,7 +207,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count99 += fator;
           };
 
-          if (auxiliarDate < this.fimContador03) {
+          if (auxiliarDate <= this.fimContador03) {
             count03 += fator;
           };
 
@@ -225,7 +225,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
       // } while (auxiliarDate < fimContador);
-      } while (fimContador.isAfter(auxiliarDate));
+      } while (fimContador.isSameOrAfter(auxiliarDate));
 
 
       // console.log(auxiliarDate);
@@ -239,12 +239,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(count19)
 
 
-      this.tempoTotalConFator = moment.duration(count, 'days');
-      this.tempoTotalConFator88 = moment.duration(count88, 'days');
-      this.tempoTotalConFator91 = moment.duration(count91, 'days');
-      this.tempoTotalConFator98 = moment.duration(count98, 'days');
-      this.tempoTotalConFator99 = moment.duration(count99, 'days');
-      this.tempoTotalConFator19 = moment.duration(count19, 'days');
+      this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
+      this.tempoTotalConFator88 = moment.duration(Math.floor(count88), 'days');
+      this.tempoTotalConFator91 = moment.duration(Math.floor(count91), 'days');
+      this.tempoTotalConFator98 = moment.duration(Math.floor(count98), 'days');
+      this.tempoTotalConFator99 = moment.duration(Math.floor(count99), 'days');
+      this.tempoTotalConFator19 = moment.duration(Math.floor(count19), 'days');
+
+      // console.log(count);
+      // console.log(this.tempoTotalConFator);
+      // console.log(moment.duration(9067, 'days'));
 
       this.ajusteHumanizadoDateINSS();
 
@@ -285,6 +289,23 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           });
 
       }
+
+
+      // if (this['tempoTotalConFator' + label].months() >= 12) {
+
+      //   this['tempoTotalConFator' + label] = moment.duration(
+      //     {
+      //       years: this['tempoTotalConFator' + label].years() + 1,
+      //       months: (this['tempoTotalConFator' + label].months() - 12),
+      //       days: 0,
+      //       seconds: 0,
+      //       hours: 0,
+      //       milliseconds: 0,
+      //       minutes: 0
+      //     });
+
+      // }
+
     });
 
   }

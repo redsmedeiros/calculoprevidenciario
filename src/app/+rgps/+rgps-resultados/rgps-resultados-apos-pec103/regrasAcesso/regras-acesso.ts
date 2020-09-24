@@ -98,11 +98,9 @@ export class RegrasAcesso {
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
             const maxDescarteCarencia = (this.numeroDeContribuicoes > 180) ?
-                (this.numeroDeContribuicoes - 180)
-                : this.numeroDeContribuicoes;
+                (this.numeroDeContribuicoes - 180) : 0;
 
-
-            maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+            maximoDescarte.meses = maxDescarteCarencia;
             maximoDescarte.anos = (maximoDescarte.meses / 12);
 
         }
@@ -120,7 +118,9 @@ export class RegrasAcesso {
         // evitar que o numero de contribuicoes seja negativo
         if (this.numeroDeContribuicoes < maximoDescarte.meses) {
 
-            const tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            let tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            tempAjusteMaximoDescarte = (tempAjusteMaximoDescarte < 0) ? 0 : tempAjusteMaximoDescarte;
+
             maximoDescarte.meses = tempAjusteMaximoDescarte;
             maximoDescarte.anos = maximoDescarte.meses / 12;
         }
