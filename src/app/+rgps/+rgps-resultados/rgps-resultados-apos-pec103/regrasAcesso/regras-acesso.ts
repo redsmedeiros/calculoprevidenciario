@@ -97,8 +97,22 @@ export class RegrasAcesso {
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
-            const maxDescarteCarencia = (this.numeroDeContribuicoes > 180) ?
-                (this.numeroDeContribuicoes - 180) : 0;
+            let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
+
+           if ((this.numeroDeContribuicoes < 180) ) {
+
+                // console.log(this.calculo.carencia_apos_ec103)
+                // console.log(this.numeroDeContribuicoes)
+
+                maxDescarteCarencia = this.calculo.carencia_apos_ec103 - 180;
+
+                if (maxDescarteCarencia >= this.numeroDeContribuicoes ) {
+
+                    maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
+
+                }
+
+            }
 
             maximoDescarte.meses = maxDescarteCarencia;
             maximoDescarte.anos = (maximoDescarte.meses / 12);
