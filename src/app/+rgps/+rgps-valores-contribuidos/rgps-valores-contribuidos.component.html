@@ -64,12 +64,40 @@
                     <!-- <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf= "!mostrarBotaoRealizarCalculos"></i> -->
                   </div>
                 </div>
+
               </div>
 
             </div>
           </div>
         </sa-widget>
       </article>
+
+      <div class="row mb-3">
+        <article class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="exibirCampoAnteriorLei13846" 
+        >
+         <div class="alert alert-warning mx-4 py-1">
+           <div class="form-group form-inline m-0" style="text-align: right;">
+             <label
+               class="control-label"
+               for="select-somarSecundaria"
+             >
+             <strong>Somar Salários de Contribuição (para DIB anterior a 18/06/2019)?</strong>
+             </label>
+               <select
+                 [(ngModel)]="somarSecundaria"
+                 [ngModelOptions]="{ standalone: true }"
+                 (change)="somarSecundariaUpdate()"
+                 class="form-control"
+                 id="select-somarSecundaria"
+               >
+                 <option value="1">SIM</option>
+                 <option value="0">NÃO</option>
+               </select>
+           </div>
+         </div>
+        </article>
+      </div>
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
@@ -78,7 +106,7 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Grupo de Cálculos para os Valores de Contribuição</h2>
+            <h2>Informações do Benefício</h2>
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom hidden-dt">
@@ -109,7 +137,7 @@
             <span class="widget-icon">
               <i class="fa fa-money"></i>
             </span>
-            <h2>Informar Valor Contribuído</h2>
+            <h2>Informar Valor dos Salários de Contribuição</h2>
           </header>
           <div>
             <div class="widget-body widget-body-custom">
@@ -146,32 +174,7 @@
                     </div>
                   <!-- </div> -->
                  </fieldset>
-                 <fieldset class="row pt-3"
-                 *ngIf="exibirCampoAnteriorLei13846" 
-                 >
-                  <div class="alert alert-warning ">
-                    <div class="form-group form-horizontal">
-                      <label
-                        class="col-md-11 control-label"
-                        for="select-somarSecundaria"
-                      >
-                      <strong>Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?</strong>
-                      </label>
-                      <div class="col-md-1">
-                        <select
-                          [(ngModel)]="somarSecundaria"
-                          [ngModelOptions]="{ standalone: true }"
-                          (change)="somarSecundariaUpdate()"
-                          class="form-control"
-                          id="select-somarSecundaria"
-                        >
-                          <option value="1">SIM</option>
-                          <option value="0">NÃO</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                 </fieldset>
+                
                  <!-- <div class="row">
                    <div class=" col-md-12">
                     <div class="alert alert-danger bg-ieprev fade in bold">

@@ -145,10 +145,23 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
-        fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+      //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // }
+
+      if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
+
+        if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+          fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        }
+
+      } else {
+
+        if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+          fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        }
+
       }
-      
 
     }
     return Number(fator);
@@ -164,7 +177,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
       const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
-     // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+      // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
       const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
 
 
@@ -224,7 +237,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
 
 
-      // } while (auxiliarDate < fimContador);
+        // } while (auxiliarDate < fimContador);
       } while (fimContador.isSameOrAfter(auxiliarDate));
 
 

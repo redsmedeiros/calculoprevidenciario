@@ -59,7 +59,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public tipoContribuicao = 'Primaria';
 
   public exibirCampoAnteriorLei13846 = false;
-  public somarSecundaria = 0;
+  public somarSecundaria = "0";
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -122,8 +122,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   private isSomarSecundariaCheck() {
 
+    console.log(this.calculo.somar_contribuicao_secundaria)
     if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
-      this.somarSecundaria = this.calculo.somar_contribuicao_secundaria;
+      this.somarSecundaria = "" + this.calculo.somar_contribuicao_secundaria;
       this.exibirCampoAnteriorLei13846 = true;
     }
 

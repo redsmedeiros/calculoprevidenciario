@@ -288,7 +288,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     // console.log(a);
     // console.log(b);
     //console.log(Number(a.format('DD')))
-    if (Number(a.format('DD')) <= 30) {
+    if (Number(a.format('DD')) <= 30 && (Number(b.format('DD')) < Number(a.format('DD')))) {
       a = a.add(1, 'd');
     }
 
@@ -320,16 +320,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       total.days = 1;
     }
 
-    let xValor = (this.Math.floor(totalGeralEmDias) / 365); // 365.25
+    let xValor = (this.Math.floor(totalGeralEmDias) / 365.25); // 365.25
     // console.log(totalGeralEmDias * fator);
 
     totalFator.years = this.Math.floor(xValor);
     let xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30; // 30.4375
+    let dttDias = (xVarMes - totalFator.months) * 30.4375; // 30.4375
     totalFator.days = this.Math.floor(dttDias);
 
-      // console.log(totalFator);
+    //   console.log(totalFator);
 
 
     if (fator !== 1 && fator > 0) {
@@ -337,7 +337,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       // let xMeses = (total.months / 12);
       // let xValor = ((total.years + xDias + xMeses) * fator);
 
-      let xValor = (this.Math.floor(totalGeralEmDias) * fator / 365); //  365.25
+      let xValor = (this.Math.floor(totalGeralEmDias) * fator / 365.25); //  365.25
 
       // console.log(totalGeralEmDias * fator);
       // console.log(xValor);
@@ -346,7 +346,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       totalFator.years = this.Math.floor(xValor);
       let xVarMes = (xValor - totalFator.years) * 12;
       totalFator.months = this.Math.floor(xVarMes);
-      let dttDias = (xVarMes - totalFator.months) * 30; //30.4375
+      let dttDias = (xVarMes - totalFator.months) * 30.4375; // 30.4375
       totalFator.days = this.Math.floor(dttDias);
 
       //  console.log(totalFator);
