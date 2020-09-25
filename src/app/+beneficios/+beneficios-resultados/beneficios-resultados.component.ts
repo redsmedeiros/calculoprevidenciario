@@ -463,7 +463,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         const numDependentes = (this.calculo.num_dependentes === 0) ? 1 : this.calculo.num_dependentes;
         return beneficioDevido / numDependentes;
       }
-
+      
       return beneficioDevido;
     };
 
@@ -505,14 +505,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-
-
-
       // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
       if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         beneficioDevidoAntesRateio = beneficioDevido;
+       
 
         beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
         beneficioDevido = beneficio_devido_quota_dependente;
@@ -537,6 +535,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+
+       // console.log(beneficioDevido);
 
         const chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
         if (chkboxBenefitNotGranted === 1) {
@@ -622,14 +622,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
 
 
-      if (!isPrescricao 
-        || dataCorrente.isSame('2004/01/01', 'month')
-        || dataCorrente.isSame('1998/12/01', 'month')
+      if (
+        !isPrescricao 
+        || dataCorrente.isSame('2004-01-01', 'month')
+        || dataCorrente.isSame('1998-12-01', 'month')
         || (indiceReajusteValoresDevidos.reajuste !== 1.00
         || indiceReajusteValoresRecebidos.reajuste !== 1.00)
         ) {
         tableData.push(line);
-      }
+     }
 
 
       this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
@@ -1102,8 +1103,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes;
     if ((
       // dataCorrente.isSame('2006-08-01', 'month') ||
-      dataCorrente.isSame('2000-06-01', 'month') ||
-      dataCorrente.isSame('2001-06-01', 'month') ||
+      //dataCorrente.isSame('2000-06-01', 'month') || /// correção 25/09/2020 DR sergio / José
+     // dataCorrente.isSame('2001-06-01', 'month') ||
       dataCorrente.isSame('2002-06-01', 'month') ||
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioDevidoSalvo != undefined) {
       beneficioDevido = this.beneficioDevidoSalvo;
@@ -1385,8 +1386,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
     if ((
       //dataCorrente.isSame('2006-08-01', 'month') ||
-      dataCorrente.isSame('2000-06-01', 'month') ||
-      dataCorrente.isSame('2001-06-01', 'month') ||
+      // dataCorrente.isSame('2000-06-01', 'month') || /// correção 25/09/2020 DR sergio / José
+      // dataCorrente.isSame('2001-06-01', 'month') ||
       dataCorrente.isSame('2002-06-01', 'month') ||
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
       beneficioRecebido = this.beneficioRecebidoSalvo;
