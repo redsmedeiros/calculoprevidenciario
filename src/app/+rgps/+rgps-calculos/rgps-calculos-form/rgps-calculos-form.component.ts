@@ -507,7 +507,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     }
 
-    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')) {
+    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')
+      && this.getEspecieBeneficio(this.especieBeneficio) != 31) {
       this.errors.add({ 'carencia': ['Campo obrigatório.'] });
     }
 
@@ -746,6 +747,14 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has98 = false;
         this.has99 = false;
         this.hasAtual = true;
+        this.has19 = true;
+      }
+
+      if (this.getEspecieBeneficio(this.especieBeneficio) === 31) {
+        this.hasAnterior = false;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = false;
         this.has19 = true;
       }
 

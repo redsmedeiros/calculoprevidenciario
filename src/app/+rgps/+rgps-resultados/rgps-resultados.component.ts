@@ -1052,6 +1052,12 @@ export class RgpsResultadosComponent implements OnInit {
         calculo.mostrarCalculoApos99 = true;
       }
 
+      if (this.getEspecieBeneficio(calculo) === 31) {
+        calculo.mostrarCalculo91_98 = false;
+        calculo.mostrarCalculo98_99 = false;
+        calculo.mostrarCalculoApos99 = false;
+      }
+
 
       calculo.mostrarCalculoApos19 = true;
     }

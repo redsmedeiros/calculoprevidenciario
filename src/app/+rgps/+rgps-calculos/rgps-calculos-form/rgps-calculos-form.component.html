@@ -161,7 +161,7 @@
                       <small *ngIf="errors.has('secundariaAtualdias')" class="text-danger">{{ errors.get('secundariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
-                  <div class="form-group mb-4" *ngIf="hasCarencia">
+                  <div class="form-group mb-4" *ngIf="hasCarencia && ![31].includes(getEspecieBeneficio(especieBeneficio))">
                     <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="carencia"><strong>Carência*:</strong></label>
                     <div class="col-md-2">
                       <input [(ngModel)]="carencia" placeholder="Meses" (change)="errors.clear('carencia')" [ngModelOptions]="{standalone: true}"   maxlength="4" class="form-control text-align-center" type="text">
