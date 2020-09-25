@@ -1160,12 +1160,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    console.log(dataCorrente.format('DD/MM/YYYY'));
-    console.log(this.beneficioDevidoAposRevisao);
-    console.log(this.beneficioDevidoAposRevisaoTetos);
-    console.log(beneficioDevido);
-    console.log(this.beneficioDevidoOs);
-    console.log('-----');
+    // console.log(dataCorrente.format('DD/MM/YYYY'));
+    // console.log(this.beneficioDevidoAposRevisao);
+    // console.log(this.beneficioDevidoAposRevisaoTetos);
+    // console.log(beneficioDevido);
+    // console.log(this.beneficioDevidoOs);
+    // console.log('-----');
 
 
 

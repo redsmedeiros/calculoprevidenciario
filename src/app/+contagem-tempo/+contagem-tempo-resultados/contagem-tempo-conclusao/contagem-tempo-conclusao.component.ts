@@ -149,7 +149,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
+      // if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
+      if (
+        Number(fimVinculo.format('DD')) <= 30
+        || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD')))
+        || ((Number(fimVinculo.format('DD')) === 31 && (Number(inicioVinculo.format('DD')) === 31)))
+      ) {
 
         if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
           fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;

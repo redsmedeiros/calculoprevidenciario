@@ -288,8 +288,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     // console.log(a);
     // console.log(b);
     //console.log(Number(a.format('DD')))
-    if (Number(a.format('DD')) <= 30 
-        && (Number(b.format('DD')) < Number(a.format('DD')))
+    if ( 
+        Number(a.format('DD')) <= 30 
+        || (Number(b.format('DD')) < Number(a.format('DD')))
+        || ((Number(a.format('DD')) === 31 && (Number(b.format('DD')) === 31))
+        )
     ) {
       a = a.add(1, 'd');
     }
