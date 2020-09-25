@@ -151,9 +151,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       // if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
       if (
-        Number(fimVinculo.format('DD')) <= 30
-        || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD')))
-        || ((Number(fimVinculo.format('DD')) === 31 && (Number(inicioVinculo.format('DD')) === 31)))
+        (Number(fimVinculo.format('DD')) <= 30
+        || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
+        && !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
+        && !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
       ) {
 
         if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {

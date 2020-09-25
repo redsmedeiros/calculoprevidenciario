@@ -282,20 +282,41 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   public dataDiffDateToDate(date1, date2, fator) {
     let b = moment(date1);
-   // let a = moment(date2).add(1, 'd');
+    // let a = moment(date2).add(1, 'd');
     let a = moment(date2);
 
     // console.log(a);
     // console.log(b);
-    //console.log(Number(a.format('DD')))
-    if ( 
-        Number(a.format('DD')) <= 30 
-        || (Number(b.format('DD')) < Number(a.format('DD')))
-        || ((Number(a.format('DD')) === 31 && (Number(b.format('DD')) === 31))
-        )
+
+    // console.log(b.format('DD/MM/YYYY') + "|" + a.format('DD/MM/YYYY'));
+
+
+    // console.log(b.format('DD/MM/YYYY') + "|" + a.format('DD/MM/YYYY'));
+
+    // if (
+    //     Number(a.daysInMonth()) <= 30 || (Number(b.format('DD')) < Number(a.format('DD')))
+    //     || (b.daysInMonth() === 30 && a.daysInMonth() === 30)
+    //     || (b.daysInMonth() === 31 && a.daysInMonth() === 30)
+
+    // ) {
+
+    if (
+      (Number(a.format('DD')) <= 30
+        || (Number(b.format('DD')) < Number(a.format('DD'))))
+      && !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
+      && !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
     ) {
+
+
+      // console.log(b.daysInMonth());
+      // console.log(a.daysInMonth());
+
       a = a.add(1, 'd');
     }
+
+    // if ((b.daysInMonth() === 31 && a.daysInMonth() === 31)) {
+    //   a = a.add(- 1, 'd');
+    // }
 
     let total = { years: 0, months: 0, days: 0 };
     let totalFator = { years: 0, months: 0, days: 0 };
@@ -373,18 +394,18 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private ajusteHumanizadoDateINSS(tempoObj) {
 
-      if (tempoObj.days >= 30) {
-        tempoObj.months += 1;
-        tempoObj.days = 0;
-      }
+    if (tempoObj.days >= 30) {
+      tempoObj.months += 1;
+      tempoObj.days = 0;
+    }
 
 
-      if (tempoObj.months >= 12) {
-        tempoObj.months = (tempoObj.months - 12);
-        tempoObj.years += 1;
-      }
+    if (tempoObj.months >= 12) {
+      tempoObj.months = (tempoObj.months - 12);
+      tempoObj.years += 1;
+    }
 
-      return tempoObj;
+    return tempoObj;
   }
 
   public dateDiffPeriodos(inicio, fim, fator) {
