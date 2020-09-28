@@ -463,7 +463,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         const numDependentes = (this.calculo.num_dependentes === 0) ? 1 : this.calculo.num_dependentes;
         return beneficioDevido / numDependentes;
       }
-      
+
       return beneficioDevido;
     };
 
@@ -510,7 +510,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         beneficioDevidoAntesRateio = beneficioDevido;
-       
+
 
         beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
         beneficioDevido = beneficio_devido_quota_dependente;
@@ -536,7 +536,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
 
-       // console.log(beneficioDevido);
+        // console.log(beneficioDevido);
 
         const chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
         if (chkboxBenefitNotGranted === 1) {
@@ -623,14 +623,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       if (
-        !isPrescricao 
+        !isPrescricao
         || dataCorrente.isSame('2004-01-01', 'month')
         || dataCorrente.isSame('1998-12-01', 'month')
         || (indiceReajusteValoresDevidos.reajuste !== 1.00
-        || indiceReajusteValoresRecebidos.reajuste !== 1.00)
-        ) {
+          || indiceReajusteValoresRecebidos.reajuste !== 1.00)
+      ) {
         tableData.push(line);
-     }
+      }
 
 
       this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
@@ -670,7 +670,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
 
-      if (this.proporcionalidadeUltimaLinha) {
+      if (!this.proporcionalidadeUltimaLinha) {
         this.ultimaDiferencaMensal = diferencaMensal;
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
@@ -759,7 +759,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
 
-        if (!isPrescricao ) {
+        if (!isPrescricao) {
           //   line = {
           //     ...line,
           //     competencia: '<strong>' + dataCorrente.year() + '-abono <strong>',
@@ -1104,7 +1104,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if ((
       // dataCorrente.isSame('2006-08-01', 'month') ||
       //dataCorrente.isSame('2000-06-01', 'month') || /// correção 25/09/2020 DR sergio / José
-     // dataCorrente.isSame('2001-06-01', 'month') ||
+      // dataCorrente.isSame('2001-06-01', 'month') ||
       dataCorrente.isSame('2002-06-01', 'month') ||
       dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioDevidoSalvo != undefined) {
       beneficioDevido = this.beneficioDevidoSalvo;
@@ -1235,7 +1235,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = 0;
 
-  
+
     if (this.isTetos) {
       beneficioDevidoAjustado = this.aplicarTetosEMinimosTetos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido', tetoDevidos);
     } else {
@@ -1314,9 +1314,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
     }
 
-    if (diasProporcionais != 1) {
+    if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
       beneficioDevidoString += '/p';
     }
+
+    // console.log(diasProporcionais);
+    // console.log(beneficioDevidoString);
 
     this.aplicarReajusteUltimoDevido = false;
     //a condição abaixo só é executada quando o valor aplicado é o salario minimo
@@ -1474,7 +1477,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // alterado 09/09/2020 erro de rejuste em 1998
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-       tetoRecebidos = 1081.50;
+        tetoRecebidos = 1081.50;
         if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
           beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
         }
@@ -1484,7 +1487,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       //     beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
       //   }
       // }
-     }
+    }
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
 
@@ -1492,7 +1495,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
     if (this.isTetos) {
-      beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido', tetoRecebidos); 
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido', tetoRecebidos);
     } else {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido');
     }
@@ -1576,7 +1579,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
     }
 
-    if (diasProporcionais != 1) {
+    if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
       beneficioRecebidoString += '/p';
     }
 
@@ -3113,7 +3116,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       columns = [
         { data: 'competencia', width: '12rem' },
         { data: 'indice_devidos', width: '10rem' },
-        { data: 'beneficio_devido', width: '10rem'},
+        { data: 'beneficio_devido', width: '10rem' },
         { data: 'beneficio_devido_sem_limites' },
         { data: 'beneficio_devido_apos_revisao_sem_limites' },
         { data: 'beneficio_devido_apos_revisao' },
