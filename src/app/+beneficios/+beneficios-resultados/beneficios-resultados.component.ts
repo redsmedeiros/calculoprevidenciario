@@ -670,7 +670,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
 
-      if (!this.proporcionalidadeUltimaLinha) {
+      if (this.proporcionalidadeUltimaLinha) {
         this.ultimaDiferencaMensal = diferencaMensal;
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
