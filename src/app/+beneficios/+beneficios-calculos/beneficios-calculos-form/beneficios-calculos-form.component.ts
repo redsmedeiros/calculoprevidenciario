@@ -106,7 +106,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public numeroBeneficioDevido = '';
   public numeroBeneficioRecebido = '';
 
-  public numDependentes = 0;
+  public numDependentes = 1;
 
   public afastarPrescricao = false;
   public calcularAbono13UltimoMes = false;

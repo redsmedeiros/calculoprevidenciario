@@ -143,47 +143,29 @@
             <div class="widget-body widget-body-custom">
               <form class="form-inline">
                 <fieldset class="row pb-5 pt-3">
-                  <!-- <div class="form-group"> -->
                     <div class="col-md-3">
                       <label class="control-label" for="inicioPeriodo">De*:</label>
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo" (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
                       <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
                     </div>
-                  <!-- </div>
-                  <div class="form-group"> -->
                     <div class="col-md-3">
                       <label class="control-label" for="finalPeriodo">Até*:</label>
                       <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
                       <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
                     </div>
-                  <!-- </div>
-                  <div class="form-group"> -->
                     <div class="col-md-3">
                       <label class="control-label" for="salarioContribuicao">Valor*:</label>
                       <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
                       <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
                     </div>
-                  <!-- </div>
-                  <div class="form-group"> -->
                     <div class="col-md-3">
-                      <!-- <label class="control-label">Tipo:</label> -->
                       <label class="radio radio-inline">
                         <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária</label>
                       <label class="radio radio-inline">
                         <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária</label>
                     </div>
-                  <!-- </div> -->
                  </fieldset>
-                
-                 <!-- <div class="row">
-                   <div class=" col-md-12">
-                    <div class="alert alert-danger bg-ieprev fade in bold">
-                      <i class="fa-fw fa fa-warning txt-color-white fa-1-7x"></i>
-                        ATENÇÃO! Em caso de ausência de salário(s) de contribuição no CNIS, o valor poderá ser lançado manualmente pelo usuário, caso contrário a(s) competência(s) será(ão) descartadas do cálculo. Não havendo prova do(s) respectivo(s) valor(es), o usuário, querendo utilizar o valor do salário mínimo, poderá digitar 1,00 (neste caso o sistema limitará o salário no valor mínimo automaticamente).
-                    </div>
-                   </div>
-                 </div> -->
-                
+
                 <div class="form-actions p-0 mt-0">
                   <div class="row">
                     <div class="col-md-6">
@@ -228,7 +210,7 @@
             <h2> Contribuições Primárias</h2>
           </header>
           <div>
-            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, '0')" #contribuicoesPrimarias></app-rgps-valores-contribuidos-matriz>
+            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, 0)" #contribuicoesPrimarias></app-rgps-valores-contribuidos-matriz>
           </div>
         </sa-widget>
       </article>
@@ -242,7 +224,7 @@
             <h2> Contribuições Secundárias</h2>
           </header>
           <div>
-            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, '1')" #contribuicoesSecundarias></app-rgps-valores-contribuidos-matriz>
+            <app-rgps-valores-contribuidos-matriz (valueChanged)="contribsChanged($event, 1)" #contribuicoesSecundarias></app-rgps-valores-contribuidos-matriz>
           </div>
         </sa-widget>
       </article>
@@ -256,37 +238,3 @@
   <!-- end widget grid -->
 
 </div>
-<!-- 
-
-<fieldset class="row">
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="select-1">De*:</label>
-    <div class="col-md-2">
-      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo" (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
-      <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="select-1">Até*:</label>
-    <div class="col-md-2">
-      <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo" (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('finalPeriodo')">
-      <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-md-2 control-label" for="select-1">Valor*:</label>
-    <div class="col-md-2">
-      <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao" name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
-      <small *ngIf="errors.has('salarioContribuicao')" class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="col-md-2 control-label">Tipo de Contribuição:</label>
-    <div class="col-md-3">
-      <label class="radio radio-inline">
-        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Primaria"> Primária </label>
-      <label class="radio radio-inline">
-        <input type="radio" [(ngModel)]="tipoContribuicao" name="tipoContribuicao" value="Secundaria"> Secundária </label>
-    </div>
-  </div>
- </fieldset> -->
