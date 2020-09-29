@@ -49,9 +49,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns: [
       { data: 'competencia', width: '10rem' },
       { data: 'indice_devidos', width: '13rem' },
-      { data: 'beneficio_devido', width: '13rem' },
+      { data: 'beneficio_devido', width: '15rem' },
       { data: 'beneficio_devido_quota_dependente', width: '10rem' },
-      { data: 'indice_recebidos', width: '13rem' },
+      { data: 'indice_recebidos', width: '15rem' },
       { data: 'beneficio_recebido' },
       { data: 'diferenca_mensal' },
       { data: 'correcao_monetaria' },
@@ -243,7 +243,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     ]
   }
 
-
+  private isMinimoInicialDevido = false;
+  private isMinimoInicialRecebido = false;
 
 
   constructor(protected router: Router,
@@ -2838,6 +2839,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (valorBeneficio <= salMinimoDib && !this.calculo.nao_aplicar_sm_beneficio_esperado) {
       // Adicionar subindice ‘M’ no valor do beneficio
       // console.log((!this.calculo.nao_aplicar_sm_beneficio_esperado))
+      this.isMinimoInicialDevido = true;
       return salMinimoDib;
     }
     if (valorBeneficio >= tetoSalarialDib && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
@@ -2877,7 +2879,17 @@ export class BeneficiosResultadosComponent implements OnInit {
         salMinimo *= 0.6;
       }
 
-      if (valorBeneficio <= salMinimo) {
+
+      if (tipo === 'Recebido'
+        && moment(this.calculo.data_pedido_beneficio).isSame(dataCorrente, 'month')
+        && valorBeneficio <= salMinimo) {
+        this.isMinimoInicialRecebido = true;
+      }
+
+
+      if (valorBeneficio <= salMinimo ||
+        (this.isMinimoInicialDevido && tipo === 'Devido')
+        || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
         // Adicionar subindice ‘M’ no valor do beneficio
         return salMinimo;
       }
@@ -2924,7 +2936,15 @@ export class BeneficiosResultadosComponent implements OnInit {
         salMinimo *= 0.6;
       }
 
-      if (valorBeneficio <= salMinimo) {
+      if (tipo === 'Recebido'
+        && moment(this.calculo.data_pedido_beneficio).isSame(dataCorrente, 'month')
+        && valorBeneficio <= salMinimo) {
+        this.isMinimoInicialRecebido = true;
+      }
+
+      if (valorBeneficio <= salMinimo ||
+        (this.isMinimoInicialDevido && tipo === 'Devido')
+        || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
         // Adicionar subindice ‘M’ no valor do beneficio
         return salMinimo;
       }
@@ -3098,14 +3118,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let columns = [];
     columns.push({ data: 'competencia', width: '10rem' });
     columns.push({ data: 'indice_devidos', width: '8rem' });
-    columns.push({ data: 'beneficio_devido', width: '10rem' });
+    columns.push({ data: 'beneficio_devido', width: '13rem' });
 
     if (this.calculo.tipo_aposentadoria === 22) {
       columns.push({ data: 'beneficio_devido_quota_dependente', width: '10rem' });
     }
 
     columns.push({ data: 'indice_recebidos', width: '8rem' });
-    columns.push({ data: 'beneficio_recebido', width: '10rem' });
+    columns.push({ data: 'beneficio_recebido', width: '13rem' });
     columns.push({ data: 'diferenca_mensal' });
     columns.push({ data: 'correcao_monetaria' });
     columns.push({ data: 'diferenca_corrigida' });
@@ -3116,12 +3136,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       columns = [
         { data: 'competencia', width: '12rem' },
         { data: 'indice_devidos', width: '10rem' },
-        { data: 'beneficio_devido', width: '10rem' },
+        { data: 'beneficio_devido', width: '12rem' },
         { data: 'beneficio_devido_sem_limites' },
         { data: 'beneficio_devido_apos_revisao_sem_limites' },
         { data: 'beneficio_devido_apos_revisao' },
         { data: 'indice_recebidos', width: '10rem' },
-        { data: 'beneficio_recebido', width: '10rem' },
+        { data: 'beneficio_recebido', width: '12rem' },
         { data: 'beneficio_recebido_sem_limites' },
         { data: 'beneficio_recebido_apos_revisao_sem_limites' },
         { data: 'beneficio_recebido_apos_revisao' },
