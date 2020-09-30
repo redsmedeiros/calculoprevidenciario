@@ -1578,6 +1578,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioRecebidoString += '/M';
       minimoAplicado = true;
+
+      if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
+        this.isMinimoInicialRecebido = true;
+      }
     }
 
     if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
@@ -2879,14 +2883,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         salMinimo *= 0.6;
       }
 
-
-      if (tipo === 'Recebido'
-        && moment(this.calculo.data_pedido_beneficio).isSame(dataCorrente, 'month')
-        && valorBeneficio <= salMinimo) {
-        this.isMinimoInicialRecebido = true;
-      }
-
-
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
         || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
@@ -2934,12 +2930,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         salMinimo *= 0.5;
       } else if (tipoAposentadoria == '10') {//‘Auxilio Acidente - 60%’
         salMinimo *= 0.6;
-      }
-
-      if (tipo === 'Recebido'
-        && moment(this.calculo.data_pedido_beneficio).isSame(dataCorrente, 'month')
-        && valorBeneficio <= salMinimo) {
-        this.isMinimoInicialRecebido = true;
       }
 
       if (valorBeneficio <= salMinimo ||
@@ -3118,14 +3108,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     let columns = [];
     columns.push({ data: 'competencia', width: '10rem' });
     columns.push({ data: 'indice_devidos', width: '8rem' });
-    columns.push({ data: 'beneficio_devido', width: '13rem' });
+    columns.push({ data: 'beneficio_devido', width: '14rem' });
 
     if (this.calculo.tipo_aposentadoria === 22) {
       columns.push({ data: 'beneficio_devido_quota_dependente', width: '10rem' });
     }
 
     columns.push({ data: 'indice_recebidos', width: '8rem' });
-    columns.push({ data: 'beneficio_recebido', width: '13rem' });
+    columns.push({ data: 'beneficio_recebido', width: '14rem' });
     columns.push({ data: 'diferenca_mensal' });
     columns.push({ data: 'correcao_monetaria' });
     columns.push({ data: 'diferenca_corrigida' });
@@ -3136,12 +3126,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       columns = [
         { data: 'competencia', width: '12rem' },
         { data: 'indice_devidos', width: '10rem' },
-        { data: 'beneficio_devido', width: '12rem' },
+        { data: 'beneficio_devido', width: '14rem' },
         { data: 'beneficio_devido_sem_limites' },
         { data: 'beneficio_devido_apos_revisao_sem_limites' },
         { data: 'beneficio_devido_apos_revisao' },
         { data: 'indice_recebidos', width: '10rem' },
-        { data: 'beneficio_recebido', width: '12rem' },
+        { data: 'beneficio_recebido', width: '14rem' },
         { data: 'beneficio_recebido_sem_limites' },
         { data: 'beneficio_recebido_apos_revisao_sem_limites' },
         { data: 'beneficio_recebido_apos_revisao' },
