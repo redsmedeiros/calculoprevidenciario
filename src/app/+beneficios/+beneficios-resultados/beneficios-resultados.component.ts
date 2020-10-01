@@ -1284,7 +1284,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioDevidoFinal *= proporcionalidade;
-      this.proporcionalidadeUltimaLinha = true;
+      // this.proporcionalidadeUltimaLinha = true;
+
+      if (proporcionalidade != 1) {
+        this.proporcionalidadeUltimaLinha = true;
+      }
 
     } else if (this.dataCessacaoDevido != null && dataCorrente.isSame(this.dataCessacaoDevido, 'month')) {
 
@@ -1295,7 +1299,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       // let proporcionalidade = this.dataCessacaoDevido.date() / this.dataCessacaoDevido.daysInMonth();
       let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioDevidoFinal *= proporcionalidade;
-      this.proporcionalidadeUltimaLinha = true;
+      // this.proporcionalidadeUltimaLinha = true;
+
+      if (proporcionalidade != 1) {
+        this.proporcionalidadeUltimaLinha = true;
+      }
 
     }
 
@@ -1402,6 +1410,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     } else if (this.calculo.tipo_aposentadoria_recebida != '12' && this.calculo.tipo_aposentadoria_recebida != '17') {
 
       beneficioRecebido *= reajusteObj.reajuste;
+      beneficioRecebido = (Math.round(beneficioRecebido * 100) / 100);
+      // console.log(beneficioRecebido);
+      // console.log( (Math.round(beneficioRecebido * 100) / 100));
+      //beneficioRecebido = Math.round((beneficioRecebido * 100) / 100);
 
       //    regra proporcional 08/2006
       if (
@@ -1441,6 +1453,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioRecebidoAposRevisao *= reajusteObj.reajuste;
       this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
+
 
     if (dataCorrente.isSame(this.dataCorteCruzado, 'month') || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioRecebido /= 1000;
@@ -1527,7 +1540,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       // let proporcionalidade = this.dataFinal.date() / this.dataFinal.daysInMonth();
       let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioRecebidoFinal *= proporcionalidade;
-      this.proporcionalidadeUltimaLinha = true;
+
+      if (proporcionalidade != 1) {
+        this.proporcionalidadeUltimaLinha = true;
+      }
 
     } else if (this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')) {
 
@@ -1539,7 +1555,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       // let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
       let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioRecebidoFinal *= proporcionalidade;
-      this.proporcionalidadeUltimaLinha = true;
+
+      if (proporcionalidade != 1) {
+        this.proporcionalidadeUltimaLinha = true;
+      }
 
     }
 
@@ -1609,6 +1628,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     resultsObj.resultString = beneficioRecebidoString;
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
+
     return beneficioRecebidoFinal;
   }
 

@@ -250,7 +250,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     let primeirasContribuicoes = [];
     let tabelaIndex = 0;
-    let tableData = []
+    let tableData = [];
+    let idString = 0;
 
     for (let contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
@@ -267,8 +268,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
 
 
-      let idString = contadorPrimario + 1; // tabela['id'] = contadorPrimario;
-      contadorPrimario++;
+      idString += 1; // tabela['id'] = contadorPrimario;
+
       let dataContribuicaoString = dataContribuicao.format('MM/YYYY'); // tabela['dataContribuicao'] = contribuicao.dataContribuicao;
       // let contribuicaoPrimariaString = this.formatMoney(contribuicaoPrimaria, currency.acronimo); // tabela['Contribuicao Primaria'] = currency.acronimo + contribuicaoPrimaria;
       // let contribuicaoSecundariaString = this.formatMoney(contribuicaoSecundaria, currency.acronimo); // tabela['Contribuicao Secundaria'] = currency.acronimo + contribuicaoSecundaria;
@@ -322,6 +323,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
+        contadorPrimario++;
         let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
         contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
@@ -399,7 +401,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
     // }
 
-    let numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
+    // let numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
+    let numeroContribuicoes = contadorPrimario; // Numero de contribuicoes carregadas para o periodo;
+
+    // console.log(tableData.length)
+    // console.log(numeroContribuicoes)
+    // console.log(contadorSecundario)
+    // console.log(Math.round(mesesContribuicao * 0.8))
+    // console.log(Math.round(mesesContribuicao * 0.6))
+
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
 
@@ -527,8 +537,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         }
 
-         // divisor PBC
-        if(this.getPbcDaVidatoda()){
+        // divisor PBC
+        if (this.getPbcDaVidatoda()) {
           this.exibirIN77 = false;
           divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
           this.msgDivisorMinimo = '';
