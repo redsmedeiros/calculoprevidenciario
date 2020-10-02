@@ -38,8 +38,8 @@
 
     <!-- Tabela e Informações do Cálculo Entre 05/04/1991 e 15/12/1998 -->
     <div id="{{boxId}}" class="boxCalculo row" *ngIf="!regraEspecie9198IvalidezIdade99">
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
+      <article class="col-sm-12 col-md-12 col-lg-12 no-margin">
+        <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
           <!-- <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -47,7 +47,7 @@
             <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} {{stringCabecalho}}</h2>
           </header> -->
           <div>
-            <div class="widget-body no-padding">
+            <div class="widget-body no-padding hidden-dt">
               <table class="table table-bordered table-hover no-padding">
                 <thead>
                   <tr>
@@ -113,7 +113,7 @@
               <div>
                 <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                 <sa-datatable [options]="tableOptions" *ngIf="!isUpdating && direito" [responsive] = "false"
-                  paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+                  paginationLength="true" tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -128,10 +128,7 @@
                   </thead>
                 </sa-datatable>
               </div>
-            </div>
-          
-            <div class="widget-body" *ngIf="!isUpdating && direito">
-              <table class="table table-bordered table-hover">
+              <table class="table table-bordered table-hover table-condensed">
                 <tbody>
                   <tr>
                     <td width="50%">
@@ -215,10 +212,11 @@
               </table>
             </div>
 
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating" class="widget-body" >
-              <h2  *ngIf="!isUpdating && showReajustesAdministrativos">Reajustes Administrativos</h2>
-              <hr>
-              <sa-datatable [options]="reajustesAdministrativosTableOptions" *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="widget-body hidden-dt no-margin" >
+              <h3 class="p-2 m-1">Reajustes Administrativos</h3>
+              <sa-datatable [options]="reajustesAdministrativosTableOptions" 
+              *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
+               tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
                   <thead>
                     <tr>
                       <th>Competência</th>
@@ -229,6 +227,7 @@
                   </thead>
               </sa-datatable>
             </div>
+           
           </div>
         </sa-widget>
 </article>

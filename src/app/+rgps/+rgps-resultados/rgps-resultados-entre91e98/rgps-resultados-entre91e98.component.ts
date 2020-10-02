@@ -289,12 +289,10 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let tableData = [];
     let index = 0;
     for (let contribuicao of this.listaValoresContribuidos) {
-      contagemPrimaria++;
 
       let valorPrimario = parseFloat(contribuicao.valor_primaria);
       let valorSecundario = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
-
       let contribuicaoPrimaria = 0;
 
       if (valorPrimario != null) {
@@ -331,6 +329,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
         let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
         contribuicaoPrimaria = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
+        contagemPrimaria++;
       }
 
       if (contribuicaoSecundaria != 0) {
@@ -367,7 +366,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
 
-    if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 5 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
+    if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 
+      || this.tipoBeneficio == 5 || this.tipoBeneficio == 3 
+      || this.tipoBeneficio == 16) {
       if (contagemPrimaria < 24) {
         contagemPrimaria = 24;
       }
@@ -453,14 +454,14 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     let currency = this.loadCurrency(dib);
 
-
     //Conclusões abaixo da tabela:
     conclusoes.total_contribuicoes_primarias = this.formatMoney(totalPrimaria, currency.acronimo);
     conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaPrimaria, currency.acronimo);
     conclusoes.divisor_calculo_media = contagemPrimaria;
 
-    if (totalSecundaria > 0)
-      conclusoes.total_contribuicoes_secundarias = this.formatMoney(totalSecundaria, currency.acronimo);;
+    if (totalSecundaria > 0){
+      conclusoes.total_contribuicoes_secundarias = this.formatMoney(totalSecundaria, currency.acronimo);
+    }
     if (mediaSecundaria > 0) {
       conclusoes.media_contribuicoes_secundarias = this.formatMoney(mediaSecundaria, currency.acronimo);
       conclusoes.divisor_calculo_media_secundaria = contagemSecundaria;
@@ -468,7 +469,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     conclusoes.media_contribuicoes = this.formatMoney(contribuicaoMedia, currency.acronimo);
     conclusoes.coeficiente = this.coeficiente;
-    conclusoes.indice_reajuste_teto = indiceReajuste;
+    conclusoes.indice_reajuste_teto = this.formatDecimal(indiceReajuste, 6);
     conclusoes.salario_minimo = this.formatMoney(moedaComparacao.salario_minimo, currency.acronimo);
     conclusoes.teto = this.formatMoney(moedaComparacao.teto, currency.acronimo);
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currency.acronimo);
@@ -922,7 +923,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           }
           let line = {
             competencia: dataCorrente.format('MM/YYYY'),
-            reajuste: reajuste,
+            reajuste: this.formatDecimal(reajuste, 6),
             beneficio: this.formatMoney(valorBeneficio, siglaMoedaDataCorrente),
             limite: limit
           };
