@@ -226,6 +226,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   public resultadosFixoAntecipadaList = [];
   public indicesFixo = [];
 
+  private dataFinalPrescricao;
+
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
     paging: false,
@@ -416,6 +418,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tableData = [];
     let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years');
 
     //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
     let func_beneficioDevido = this.getBeneficioDevido;
@@ -569,7 +572,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       diferencaCorrigida = (correcaoMonetaria === 0) ? diferencaMensal : diferencaMensal * correcaoMonetaria;
 
-      valorJuros = diferencaCorrigida * juros;
+      if (juros > 0) {
+        valorJuros = diferencaCorrigida * juros;
+      }
 
       // Não aplicar juros em valor negativo
       if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
@@ -630,7 +635,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         || (indiceReajusteValoresDevidos.reajuste !== 1.00
           || indiceReajusteValoresRecebidos.reajuste !== 1.00)
       ) {
-        tableData.push(line);
+      tableData.push(line);
       }
 
 
@@ -1252,6 +1257,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficioEsperado);
 
+    // Final Prescrição
+    if (dataCorrente.isSame(this.dataFinalPrescricao, 'month') && this.considerarPrescricao) {
+      diasProporcionais = this.calcularDiasProporcionais(dataCorrente, this.dataFinalPrescricao.clone());
+    }
+
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
@@ -1522,6 +1532,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPedidoBeneficio);
+
+    //Final Prescrição
+    if (dataCorrente.isSame(this.dataFinalPrescricao, 'month') && this.considerarPrescricao) {
+      diasProporcionais = this.calcularDiasProporcionais(dataCorrente, this.dataFinalPrescricao.clone());
+    }
+
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
@@ -1756,6 +1772,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
+
+    //console.log(jurosList);
+
     return jurosList.reverse();
   }
 
@@ -1906,9 +1925,17 @@ export class BeneficiosResultadosComponent implements OnInit {
     // O subíndice ‘(prescrita)’ deve ser adicionado quando houver prescrição.
     // A prescrição é ocorre quando a data corrente tem mais de cinco anos de diferença da data_acao_judicial.
 
-    let dataAcaoJudicial = (moment(this.calculo.data_acao_judicial)).startOf('month');
+    // let dataAcaoJudicial = (moment(this.calculo.data_acao_judicial)).startOf('month');
+    let dataAcaoJudicial = moment(this.calculo.data_acao_judicial);
     let diferencaEmAnos = Math.abs(dataCorrente.diff(dataAcaoJudicial, 'years', true));
     let diferencaCorrigidaJuros = juros + diferencaCorrigida;
+
+    const dataFinalPrescricao = this.dataFinalPrescricao.clone();
+    let diasProporcionais = 1;
+    if (dataCorrente.isSame(dataFinalPrescricao, 'month')) {
+      diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataFinalPrescricao);
+    }
+
 
     // Não aplicar juros em valor negativo
     if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
@@ -1919,19 +1946,34 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.isTetos) {
       diferencaCorrigidaJuros *= this.calcularDiasProporcionais(dataCorrente, moment(this.calculo.data_pedido_beneficio_esperado));
     }
+
     resultObj.numeric = diferencaCorrigidaJuros;
     // let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros);
     let diferencaCorrigidaJurosString = this.formatMoney(diferencaCorrigidaJuros, 'R$', true);
 
-    // não deve prescrever período posterior a data da cessação
-    if (diferencaEmAnos >= 5 && dataAcaoJudicial > dataCorrente && this.considerarPrescricao) {
-      if (this.considerarPrescricao) {
+    if (dataCorrente.isSameOrBefore(dataFinalPrescricao, 'month')
+      && dataAcaoJudicial > dataCorrente
+      && this.considerarPrescricao) {
+
+      if (this.considerarPrescricao && diasProporcionais === 1) {
         diferencaCorrigidaJurosString = 'prescrita';
       } else {
-        diferencaCorrigidaJurosString += '<br>(prescrita)';
+        //  diferencaCorrigidaJurosString += '<br>(prescrita)';
       }
-      // diferencaCorrigidaJurosString += '<br>(prescrita)';
+
     }
+
+    // não deve prescrever período posterior a data da cessação
+    // if (diferencaEmAnos >= 5 && dataAcaoJudicial > dataCorrente && this.considerarPrescricao) {
+    //   if (this.considerarPrescricao) {
+    //     diferencaCorrigidaJurosString = 'prescrita';
+    //   } else {
+    //     diferencaCorrigidaJurosString += '<br>(prescrita)';
+    //   }
+    //   // diferencaCorrigidaJurosString += '<br>(prescrita)';
+    // }
+
+
     return diferencaCorrigidaJurosString;
   }
 
