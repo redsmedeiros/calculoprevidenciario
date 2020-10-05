@@ -24,11 +24,11 @@
           </button>
           <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
           type="submit"
-          (click)="imprimirBox(event, boxId)"
+          (click)="imprimirBox($event, boxId)"
           >
             &nbsp;&nbsp; <i
             *ngIf="!isUpdating"
-            class=" fa fa-print pull-right fa fa-lg p-1"
+            class=" fa fa-print pull-left fa fa-lg p-1"
           ></i>
             Imprimir
            &nbsp;&nbsp;
@@ -40,16 +40,16 @@
 
     <div id="{{boxId}}" class="boxCalculo"  *ngIf="!regraEspecie8891IvalidezIdade99">
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
+        <sa-widget [colorbutton]="false" [editbutton]="false" class="no-padding no-margin">
+          <!-- <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} Entre 05/10/1988 e 04/04/1991</h2>
-          </header>
-          <div class="container">
+          </header> -->
+          <div >
             <div class="widget-body no-padding hidden-dt">
-              <table class="table table-bordered table-hover no-padding">
+              <table class="table table-bordered table-hover no-padding table-condensed">
                 <thead>
                   <tr>
                     <th width="50%">
@@ -108,12 +108,12 @@
             </div>
             <!-- <div class="container"> -->
             <div class="row">
-              <div id="tabela_concl_88" class="col">
+              <div id="tabela_concl_88" class="col-md-6">
                 <i class="fa fa-gear fa-4x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                 <div>
-                  <div class="well"><p>Cálculo conforme Dec 83080/79 (Efeito financeiro entre a DIB e maio de 1992)</p></div>
+                  <div class="well font-bold"><p>Cálculo conforme Dec 83080/79 <br>(Efeito financeiro entre a DIB e maio de 1992)</p></div>
                   <sa-datatable [options]="tableOptions88" *ngIf="!isUpdating && !erro"
-                    paginationLength="true" tableClass="table table-striped table-bordered table-hover">
+                    paginationLength="true" tableClass="table table-striped table-bordered table-hover table-condensed">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -126,7 +126,7 @@
                   </sa-datatable>
                 </div>
                 <div class="widget-body" *ngIf="!isUpdating && !erro">
-                  <table class="table table-bordered table-hover">
+                  <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
                         <td width="50%">
@@ -228,11 +228,11 @@
                   </table>
                 </div>
               </div>
-              <div id="tabela_concl_91_98" class="col">
+              <div id="tabela_concl_91_98" class="col-md-6">
                 <div>
-                  <div class="well"><p>Cálculo conforme Lei 8213/91 (Efeito financeiro a partir de junho de 1992)</p></div>
+                  <div class="well font-bold"><p>Cálculo conforme Lei 8213/91 <br>(Efeito financeiro a partir de junho de 1992)</p></div>
                   <sa-datatable [options]="tableOptions91_98" *ngIf="!isUpdating && direito" [responsive] = "false"
-                  paginationLength="true" tableClass="table table-striped table-bordered table-hover">
+                  paginationLength="true" tableClass="table table-striped table-bordered table-hover table-condensed">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -245,7 +245,7 @@
                   </sa-datatable>
                 </div>
                 <div class="widget-body" *ngIf="!isUpdating && direito">
-                  <table class="table table-bordered table-hover">
+                  <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
                         <td width="50%">
@@ -393,7 +393,7 @@
                 <p>Imprimir o cálculo</p>
               </td>
               <td>
-                <button type="submit" (click)="imprimirBox(event, boxId)" class="btn btn-labeled btn-primary pull-right">
+                <button type="submit" (click)="imprimirBox($event, boxId)" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-print"></i>
                   </span> IMPRIMIR
