@@ -635,7 +635,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         || (indiceReajusteValoresDevidos.reajuste !== 1.00
           || indiceReajusteValoresRecebidos.reajuste !== 1.00)
       ) {
-      tableData.push(line);
+        tableData.push(line);
       }
 
 
@@ -1406,14 +1406,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
-    if ((
-      //dataCorrente.isSame('2006-08-01', 'month') ||
-      // dataCorrente.isSame('2000-06-01', 'month') || /// correção 25/09/2020 DR sergio / José
-      // dataCorrente.isSame('2001-06-01', 'month') ||
-      dataCorrente.isSame('2002-06-01', 'month') ||
-      dataCorrente.isSame('2003-06-01', 'month')) && this.beneficioRecebidoSalvo != undefined) {
-      beneficioRecebido = this.beneficioRecebidoSalvo;
-    }
+    // if ((
+    //   //dataCorrente.isSame('2006-08-01', 'month') ||
+    //   // dataCorrente.isSame('2000-06-01', 'month') || /// correção 25/09/2020 DR sergio / José
+    //   // dataCorrente.isSame('2001-06-01', 'month') ||
+    //   dataCorrente.isSame('2002-06-01', 'month') ||
+    //   dataCorrente.isSame('2003-06-01', 'month')) 
+    //   && this.beneficioRecebidoSalvo != undefined) {
+    //   beneficioRecebido = this.beneficioRecebidoSalvo;
+    // }
+
 
     if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
       beneficioRecebido = moedaDataCorrente.salario_minimo;
