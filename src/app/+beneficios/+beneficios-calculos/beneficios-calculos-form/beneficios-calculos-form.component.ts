@@ -9,6 +9,7 @@ import { Recebidos } from './../Recebidos.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { validateConfig } from '@angular/router/src/config';
+import { DefinicaoMoeda } from '../../shared-beneficios-atrasados/definicao-moeda';
 
 @Component({
   selector: 'app-beneficios-calculos-form',
@@ -33,6 +34,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
   public isEdit = false;
 
+  public definicaoMoeda = DefinicaoMoeda;
+
   public chkNotGranted = false;
   public chkUseSameDib = false;
   public chkJurosMora = true;
@@ -51,6 +54,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public devidosPosBuracoNegro = false;
 
   public dibValoresRecebidos;
+  public dipValoresRecebidos;
   public dibValoresDevidos;
   public dibAnteriorValoresDevidos;
   public dibAnteriorValoresRecebidos;
@@ -1064,6 +1068,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
 
   dibValoresRecebidosChanged() {
+
+    if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
+      this.dipValoresRecebidos = this.dibValoresRecebidos;
+      this.validRecebidos();
+    }
+
     if (this.chkUseSameDib) {
       if (this.dibValoresRecebidos !== undefined && this.dibValoresDevidos !== null) {
         this.updateDIBValoresDevidos();
@@ -1370,6 +1380,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.especieValoresRecebidos,
       this.numeroBeneficioRecebido,
       this.dibValoresRecebidos,
+      this.dipValoresRecebidos,
       this.cessacaoValoresRecebidos,
       this.dibAnteriorValoresRecebidos,
       this.rmiValoresRecebidos,
@@ -1392,6 +1403,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.especieValoresRecebidos = '';
     this.numeroBeneficioRecebido = '';
     this.dibValoresRecebidos = '';
+    this.dipValoresRecebidos = '';
     this.cessacaoValoresRecebidos = '';
     this.dibAnteriorValoresRecebidos = '';
     this.rmiValoresRecebidos = '';
@@ -1433,67 +1445,82 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     //   !this.isEmptyInput(this.rmiValoresRecebidos) ||
     //   !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
 
-      if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
-        this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
+    if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
+      this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.dibValoresRecebidos)) {
+      this.errors.add({ 'dibValoresRecebidos': ['A DIB de Valores Recebidos é Necessária.'] });
+      valid = false;
+    } else {
+
+      if (!this.isValidDate(this.dibValoresRecebidos)) {
+        this.errors.add({ 'dibValoresRecebidos': ['Insira uma data Válida.'] });
+        valid = false;
+      } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
       }
 
-      if (this.isEmptyInput(this.dibValoresRecebidos)) {
-        this.errors.add({ 'dibValoresRecebidos': ['A DIB de Valores Recebidos é Necessária.'] });
+    }
+
+    if (this.isEmptyInput(this.dipValoresRecebidos)) {
+      this.errors.add({ 'dipValoresRecebidos': ['A DIP de Valores Recebidos é Necessária.'] });
+      valid = false;
+    } else {
+
+      if (!this.isValidDate(this.dipValoresRecebidos)) {
+        this.errors.add({ 'dipValoresRecebidos': ['Insira uma data Válida.'] });
         valid = false;
-      } else {
-
-        if (!this.isValidDate(this.dibValoresRecebidos)) {
-          this.errors.add({ 'dibValoresRecebidos': ['Insira uma data Válida.'] });
-          valid = false;
-        } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-          this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-          valid = false;
-        }
-
-      }
-
-      if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
-        !this.isValidDate(this.cessacaoValoresRecebidos) &&
-        !this.isEmptyInput(this.dibValoresDevidos) &&
-        !this.isValidDate(this.dibValoresDevidos) &&
-        !this.compareDates(this.dibValoresDevidos, this.cessacaoValoresRecebidos)) {
-
-        this.errors.add({ 'cessacaoValoresRecebidos': ['A Cessação de valores recebidos deve ser maior que a DIB de valores devidos.'] });
+      } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
       }
 
-      if (this.isEmptyInput(this.rmiValoresRecebidos)) {
-        this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos é Necessária.'] });
+    }
+
+    if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
+      !this.isValidDate(this.cessacaoValoresRecebidos) &&
+      !this.isEmptyInput(this.dibValoresDevidos) &&
+      !this.isValidDate(this.dibValoresDevidos) &&
+      !this.compareDates(this.dibValoresDevidos, this.cessacaoValoresRecebidos)) {
+
+      this.errors.add({ 'cessacaoValoresRecebidos': ['A Cessação de valores recebidos deve ser maior que a DIB de valores devidos.'] });
+      valid = false;
+    }
+
+    if (this.isEmptyInput(this.rmiValoresRecebidos)) {
+      this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos é Necessária.'] });
+      valid = false;
+    } else if (this.rmiValoresRecebidos == 0) {
+      this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos deve ser maior que zero.'] });
+      valid = false;
+    }
+
+    if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+      if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
+        this.errors.add({ 'dibAnteriorValoresRecebidos': ['Insira uma data válida.'] });
         valid = false;
-      } else if (this.rmiValoresRecebidos == 0) {
-        this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos deve ser maior que zero.'] });
+      } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
       }
+    }
 
-      if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
 
-        if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
-          this.errors.add({ 'dibAnteriorValoresRecebidos': ['Insira uma data válida.'] });
-          valid = false;
-        } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-          this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-          valid = false;
-        }
+    if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+
+      if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
+        this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
+        valid = false;
+      } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+        valid = false;
       }
-
-
-      if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
-
-        if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
-          this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
-          valid = false;
-        } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-          this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-          valid = false;
-        }
-      }
-   // }
+    }
+    // }
 
     return valid;
   }

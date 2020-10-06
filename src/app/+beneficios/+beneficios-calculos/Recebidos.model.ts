@@ -5,12 +5,14 @@ export class Recebidos {
   public especie;
   public numeroBeneficio;
   public dib;
+  public dip;
   public cessacao;
   public dibAnterior;
   public rmi;
   public rmiBuracoNegro;
   public irt;
   public reajuesteMinimo;
+  
 
   // public action = `
   //         <div class="btn-group">
@@ -29,6 +31,7 @@ export class Recebidos {
       especie,
       numeroBeneficio,
       dib,
+      dip,
       cessacao,
       dibAnterior,
       rmi,
@@ -40,6 +43,7 @@ export class Recebidos {
       this.especie = especie;
       this.numeroBeneficio = numeroBeneficio;
       this.dib = dib;
+      this.dip = dip;
       this.cessacao = cessacao;
       this.dibAnterior = dibAnterior;
       this.rmi = rmi;
