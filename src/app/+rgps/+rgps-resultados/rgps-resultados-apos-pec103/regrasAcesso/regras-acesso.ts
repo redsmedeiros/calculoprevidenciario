@@ -844,11 +844,10 @@ export class RegrasAcesso {
             f: 30 - redutorProfessor
         };
 
-        let tempoDePedagio;
+        let tempoDePedagio = 0;
         let contribuicaoDiff = 0;
         let tempoFinalContrib = contribuicao_min[sexo];
         let tempoDePedagioTotal = 0;
-
 
         if (idade >= contribuicao_idade_min[sexo] && tempoContribuicaoTotalAtePec.anos > 0) {
 
