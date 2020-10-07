@@ -130,15 +130,15 @@ export class DefinicaoMoeda {
             return '';
         }
 
-
         value = parseFloat(value);
         const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
 
         if (exibirSigla) {
-            return numeroPadronizado;
-        } else {
             return sigla + ' ' + numeroPadronizado;
         }
+
+        return numeroPadronizado;
+
     }
 
 

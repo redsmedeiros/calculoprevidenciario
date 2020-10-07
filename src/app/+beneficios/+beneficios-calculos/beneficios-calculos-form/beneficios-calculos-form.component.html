@@ -237,6 +237,14 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Pagamento - DIP*:</label>
+                    <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                      <input name='dipValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dipValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();setCheckRevisao();'
+                       class="form-control"  type="text">
+                      <small *ngIf="errors.has('dipValoresDevidos')" class="text-danger">{{ errors.get('dipValoresDevidos') }}</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label  class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data Final dos Atrasados*:</label>
                     <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
                       <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
@@ -415,7 +423,7 @@
                       <i *ngIf="especieValoresRecebidos == '16' || especieValoresRecebidos == '11'" 
                       title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo." class="fa fa-question-circle fa-lg"></i>Renda Mensal Inicial - RMI*:</label>
                     <div class="col-md-4"  [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
-                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text" (change)="validRecebidos()">
+                      <input name="rmiValoresRecebidos" currencyMask [(ngModel)]="rmiValoresRecebidos" class="form-control" type="text" (blur)="validRecebidos()">
                       <small *ngIf="errors.has('rmiValoresRecebidos')" class="text-danger">{{ errors.get('rmiValoresRecebidos') }}</small>
                     </div>
                   </div>
@@ -470,13 +478,16 @@
             <h2> Lista de Valores Recebidos</h2>
           </header>
           <div>
-            <div class="widget-body no-padding">
-              <table class="table table-striped table-bordered table-hover table-responsive table-condensed" *ngIf="!isUpdating">
+            <div class="widget-body no-padding widget-body-custom">
+              <div *ngIf="listRecebidos.length === 0" >Não há Períodos Recebidos</div>
+              <table class="table table-striped table-bordered table-hover table-responsive table-condensed" 
+              *ngIf="!isUpdating && listRecebidos.length > 0">
                 <thead>
                   <tr>
                     <th>Espécie</th>
-                    <th>Num Benefício</th>
-                    <th>Início DIB</th>
+                    <th>Número</th>
+                    <th>DIB</th>
+                    <th>DIP</th>
                     <th>Final</th>
                     <th class="text-center">DIB Anterior</th>
                     <th class="text-center">RMI</th>
@@ -490,6 +501,7 @@
                     <td>{{getTipoAposentadoria(recebidoLine.especie)}}</td>
                     <td>{{recebidoLine.numeroBeneficio}}</td>
                     <td>{{recebidoLine.dib}}</td>
+                    <td>{{recebidoLine.dip}}</td>
                     <td>{{recebidoLine.cessacao}}</td>
                     <td>{{recebidoLine.dibAnterior}}</td>
                     <td class="text-center">
@@ -497,8 +509,8 @@
                       {{definicaoMoeda.formatMoney(recebidoLine.rmiBuracoNegro)}}
                     </td>
                     <td class="text-center">{{recebidoLine.irt}}</td>
-                    <td class="text-center">{{(recebidoLine.reajuesteMinimo) ? 'Sim' : 'Não'}}</td>
-                    <td class="text-center">
+                    <td class="text-center">{{(recebidoLine.reajuesteMinimo) ? 'Não' : 'Sim'}}</td>
+                    <td class="text-center" width='8rem'>
                       <div class="btn-group">
                         <button type="button" class="btn btn-xs btn-warning" (click)='getupdatePeriodo(recebidoLine.id)' title='Editar' >
                           <i class='fa fa-edit fa-1-7x'></i>

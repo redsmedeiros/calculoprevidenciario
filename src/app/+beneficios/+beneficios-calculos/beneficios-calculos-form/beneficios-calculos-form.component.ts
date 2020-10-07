@@ -56,6 +56,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dibValoresRecebidos;
   public dipValoresRecebidos;
   public dibValoresDevidos;
+  public dipValoresDevidos;
   public dibAnteriorValoresDevidos;
   public dibAnteriorValoresRecebidos;
 
@@ -1083,6 +1084,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   dibValoresDevidosChanged() {
+
+    if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
+      this.dipValoresDevidos = this.dibValoresDevidos;
+    }
+
     this.checkDevidosBuracoNegro();
   }
 
@@ -1451,7 +1457,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isEmptyInput(this.dibValoresRecebidos)) {
-      this.errors.add({ 'dibValoresRecebidos': ['A DIB de Valores Recebidos é Necessária.'] });
+      this.errors.add({ 'dibValoresRecebidos': ['A DIB é obrigatoria.'] });
       valid = false;
     } else {
 
@@ -1466,7 +1472,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isEmptyInput(this.dipValoresRecebidos)) {
-      this.errors.add({ 'dipValoresRecebidos': ['A DIP de Valores Recebidos é Necessária.'] });
+      this.errors.add({ 'dipValoresRecebidos': ['A DIP é obrigatoria.'] });
       valid = false;
     } else {
 
