@@ -450,7 +450,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
   getIdadeFracionada() {
-    return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
+    // return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
+    return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'years', true)
   }
 
   limitarTetosEMinimos(valor, data) {
