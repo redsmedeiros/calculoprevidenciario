@@ -11,9 +11,7 @@ export class Recebidos {
   public rmi;
   public rmiBuracoNegro;
   public irt;
-  public reajuesteMinimo;
-  
-
+  public reajusteMinimo;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -26,31 +24,31 @@ export class Recebidos {
   //   `;
 
 
-    constructor(
-      id,
-      especie,
-      numeroBeneficio,
-      dib,
-      dip,
-      cessacao,
-      dibAnterior,
-      rmi,
-      rmiBuracoNegro,
-      irt,
-      reajuesteMinimo
-    ){
-      this.id = id;
-      this.especie = especie;
-      this.numeroBeneficio = numeroBeneficio;
-      this.dib = dib;
-      this.dip = dip;
-      this.cessacao = cessacao;
-      this.dibAnterior = dibAnterior;
-      this.rmi = rmi;
-      this.rmiBuracoNegro = rmiBuracoNegro;
-      this.irt = irt;
-      this.reajuesteMinimo = reajuesteMinimo;
-    }
+  constructor(
+    id,
+    especie,
+    numeroBeneficio,
+    dib,
+    dip,
+    cessacao,
+    dibAnterior,
+    rmi,
+    rmiBuracoNegro,
+    irt,
+    reajusteMinimo
+  ) {
+    this.id = id;
+    this.especie = especie;
+    this.numeroBeneficio = numeroBeneficio;
+    this.dib = dib;
+    this.dip = dip;
+    this.cessacao = cessacao;
+    this.dibAnterior = dibAnterior;
+    this.rmi = rmi;
+    this.rmiBuracoNegro = rmiBuracoNegro;
+    this.irt = irt;
+    this.reajusteMinimo = reajusteMinimo;
+  }
 
 
 }

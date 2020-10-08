@@ -64,6 +64,10 @@ export class CalculoAtrasado extends Model {
     numero_beneficio_devido: '',
     numero_beneficio_recebido: '',
     num_dependentes: '',
+    dip_valores_devidos: '',
+    list_recebidos: '',
+    list_acrescimos_deducoes: '',
+    data_adicional_25: '',
   };
 
   public id: number;
@@ -125,12 +129,10 @@ export class CalculoAtrasado extends Model {
   public numero_beneficio_devido;
   public numero_beneficio_recebido;
   public num_dependentes;
-
-  // public actions = `
-  //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
-  //   <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
-  //   <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
-  // `;
+  public dip_valores_devidos;
+  public list_recebidos;
+  public list_acrescimos_deducoes;
+  public data_adicional_25;
 
 
   public actions = `
@@ -142,3 +144,11 @@ export class CalculoAtrasado extends Model {
     `;
 
 }
+
+
+
+  // public actions = `
+  //   <a href="#/beneficios/beneficios-calculos/A/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit">  <i title="Editar" class='fa fa-edit'></i> </a>
+  //   <a href="#/beneficios/beneficios-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
+  //   <a href="#/beneficios/beneficios-resultados/${this.id_segurado}/${this.id}" class="action-edit"> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
+  // `;
