@@ -2191,89 +2191,91 @@ export class BeneficiosResultadosComponent implements OnInit {
     const fixoFim = moment(this.calculo.taxa_advogado_final)
     const competenciasFixo = this.monthsBetween(fixoInicio, fixoFim);
 
-    let beneficioFixoComIndice = this.somaHonorariosValorFixo;
-    let moedaDataFixoCorrente;
+    // let beneficioFixoComIndice = this.somaHonorariosValorFixo;
+    // let moedaDataFixoCorrente;
+    // let indiceReajusteValoresFixo = { reajuste: 0.0, reajusteOs: 0.0 };
+    const correcaoMonetaria = this.getCorrecaoMonetaria(fixoInicio) ;
+    let somaHonorariosFixo = this.somaHonorariosValorFixo;
+    somaHonorariosFixo *= correcaoMonetaria;
 
-    let somaHonorariosFixo = 0;
-    for (const dataCorrenteFixoString of competenciasFixo) {
-      let lineFixo: any = {};
+    // for (const dataCorrenteFixoString of competenciasFixo) {
+    //   let lineFixo: any = {};
 
-      const dataFixoCorrente = moment(dataCorrenteFixoString);
+    //   const dataFixoCorrente = moment(dataCorrenteFixoString);
 
-      moedaDataFixoCorrente = this.Moeda.getByDate(dataFixoCorrente);
-      const stringCompetencia = (dataFixoCorrente.month() + 1) + '/' + dataFixoCorrente.year();
+    //   moedaDataFixoCorrente = this.Moeda.getByDate(dataFixoCorrente);
+    //   const stringCompetencia = (dataFixoCorrente.month() + 1) + '/' + dataFixoCorrente.year();
 
-      let indiceReajusteValoresFixo = { reajuste: 0.0, reajusteOs: 0.0 };
-      indiceReajusteValoresFixo = this.getIndiceReajusteValoresHonorario(dataFixoCorrente, fixoFim.clone(), 'fixo');
+    //   indiceReajusteValoresFixo = this.getIndiceReajusteValoresHonorario(dataFixoCorrente, fixoFim.clone(), 'fixo');
 
-      const correcaoMonetaria = this.getCorrecaoMonetariaHonorarios(dataFixoCorrente, fixoFim.clone());
+    //   const correcaoMonetaria = this.getCorrecaoMonetariaHonorarios(dataFixoCorrente, fixoFim.clone());
 
-      // inicio proprorcional
-      if (dataFixoCorrente.isSame(fixoInicio, 'month')) {
-        const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
-          fixoFim.clone());
-        beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
-      }
+    //   // inicio proprorcional
+    //   if (dataFixoCorrente.isSame(fixoInicio, 'month')) {
+    //     const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
+    //       fixoFim.clone());
+    //     beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
+    //   }
 
-      // Fim proporcional
-      if (dataFixoCorrente.isSame(fixoFim, 'month')) {
-        const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
-          fixoFim.clone());
-        beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
-      }
+    //   // Fim proporcional
+    //   if (dataFixoCorrente.isSame(fixoFim, 'month')) {
+    //     const diasProporcionaisFixo = this.calcularDiasProporcionais(dataFixoCorrente,
+    //       fixoFim.clone());
+    //     beneficioFixoComIndice = beneficioFixoComIndice * diasProporcionaisFixo;
+    //   }
 
 
-      beneficioFixoComIndice *= indiceReajusteValoresFixo.reajuste;
+    //   beneficioFixoComIndice *= indiceReajusteValoresFixo.reajuste;
 
-      const ganhoEconomicoCorrigido = beneficioFixoComIndice * correcaoMonetaria;
-      const honorariosFixo = ganhoEconomicoCorrigido * this.calculo.percentual_taxa_advogado;
+    //   const ganhoEconomicoCorrigido = beneficioFixoComIndice * correcaoMonetaria;
+    //   const honorariosFixo = ganhoEconomicoCorrigido * this.calculo.percentual_taxa_advogado;
 
-      somaHonorariosFixo += honorariosFixo;
+    //   somaHonorariosFixo += honorariosFixo;
 
-      lineFixo = {
-        competencia: stringCompetencia,
-        indice_fixo: this.formatIndicesReajustes(indiceReajusteValoresFixo, dataFixoCorrente, 'Devido'),
-        ganho_economico: this.formatMoney(beneficioFixoComIndice, moedaDataFixoCorrente.sigla),
-        correcao_monetaria: correcaoMonetaria,
-        ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido, moedaDataFixoCorrente.sigla),
-        honorarios_sucumbencia: this.formatMoney(honorariosFixo, moedaDataFixoCorrente.sigla),
-      };
+    //   lineFixo = {
+    //     competencia: stringCompetencia,
+    //     indice_fixo: this.formatIndicesReajustes(indiceReajusteValoresFixo, dataFixoCorrente, 'Devido'),
+    //     ganho_economico: this.formatMoney(beneficioFixoComIndice, moedaDataFixoCorrente.sigla),
+    //     correcao_monetaria: correcaoMonetaria,
+    //     ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigido, moedaDataFixoCorrente.sigla),
+    //     honorarios_sucumbencia: this.formatMoney(honorariosFixo, moedaDataFixoCorrente.sigla),
+    //   };
 
-      this.resultadosFixoAntecipadaList.push(lineFixo);
+    //   this.resultadosFixoAntecipadaList.push(lineFixo);
 
-      // abono Fixo
+    //   // abono Fixo
 
-      if (dataFixoCorrente.month() == 11) {
+    //   if (dataFixoCorrente.month() == 11) {
 
-        let beneficioFixoAbono = beneficioFixoComIndice;
-        let honorariosFixoAbono = honorariosFixo;
-        let ganhoEconomicoCorrigidoAbono = ganhoEconomicoCorrigido;
-        const abonoProporcionalFixo = this.verificaAbonoProporcionalTutela(fixoInicio.clone());
+    //     let beneficioFixoAbono = beneficioFixoComIndice;
+    //     let honorariosFixoAbono = honorariosFixo;
+    //     let ganhoEconomicoCorrigidoAbono = ganhoEconomicoCorrigido;
+    //     const abonoProporcionalFixo = this.verificaAbonoProporcionalTutela(fixoInicio.clone());
 
-        // abono proporcional
-        if (dataFixoCorrente.isSame(fixoInicio, 'year') && abonoProporcionalFixo < 1) {
+    //     // abono proporcional
+    //     if (dataFixoCorrente.isSame(fixoInicio, 'year') && abonoProporcionalFixo < 1) {
 
-          beneficioFixoAbono *= abonoProporcionalFixo;
-          ganhoEconomicoCorrigidoAbono *= abonoProporcionalFixo;
-          honorariosFixoAbono = ganhoEconomicoCorrigidoAbono * this.calculo.percentual_taxa_advogado;
-          // console.log(abonoProporcionalTutela);
-        }
+    //       beneficioFixoAbono *= abonoProporcionalFixo;
+    //       ganhoEconomicoCorrigidoAbono *= abonoProporcionalFixo;
+    //       honorariosFixoAbono = ganhoEconomicoCorrigidoAbono * this.calculo.percentual_taxa_advogado;
+    //       // console.log(abonoProporcionalTutela);
+    //     }
 
-        this.resultadosFixoAntecipadaList.push(
-          {
-            competencia: '<strong>' + stringCompetencia + ' - abono <strong>',
-            indice_fixo: this.formatIndicesReajustes(indiceReajusteValoresFixo, dataFixoCorrente, 'Devido'),
-            ganho_economico: this.formatMoney(beneficioFixoAbono, moedaDataFixoCorrente.sigla),
-            correcao_monetaria: correcaoMonetaria,
-            ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigidoAbono, moedaDataFixoCorrente.sigla),
-            honorarios_sucumbencia: this.formatMoney(honorariosFixoAbono, moedaDataFixoCorrente.sigla),
-          }
-        );
+    //     this.resultadosFixoAntecipadaList.push(
+    //       {
+    //         competencia: '<strong>' + stringCompetencia + ' - abono <strong>',
+    //         indice_fixo: this.formatIndicesReajustes(indiceReajusteValoresFixo, dataFixoCorrente, 'Devido'),
+    //         ganho_economico: this.formatMoney(beneficioFixoAbono, moedaDataFixoCorrente.sigla),
+    //         correcao_monetaria: correcaoMonetaria,
+    //         ganho_economico_corrigido: this.formatMoney(ganhoEconomicoCorrigidoAbono, moedaDataFixoCorrente.sigla),
+    //         honorarios_sucumbencia: this.formatMoney(honorariosFixoAbono, moedaDataFixoCorrente.sigla),
+    //       }
+    //     );
 
-        somaHonorariosFixo += honorariosFixoAbono;
+    //     somaHonorariosFixo += honorariosFixoAbono;
 
-      }
-    }
+    //   }
+    // }
 
     // console.log(this.resultadosFixoAntecipadaList);
     // console.log(somaHonorariosFixo);

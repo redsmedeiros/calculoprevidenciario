@@ -28,7 +28,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public styleTheme: string = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
-  
+
   public isEdit = false;
 
   public chkNotGranted = false;
@@ -454,7 +454,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     if (this.isExits(this.taxaAdvogadoAplicacaoSobre) && this.taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
-      this.taxaAdvogadoAplicacaoSobre !== 'CPC85' &&
+      this.taxaAdvogadoAplicacaoSobre !== 'CPC85' && this.taxaAdvogadoAplicacaoSobre !== 'fixo' &&
       (!this.isEmptyInput(this.dataHonorariosDe) || !this.isEmptyInput(this.dataHonorariosAte))) {
       // if (!this.isValidDate(this.dataHonorariosDe)) {
       //   this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
@@ -677,8 +677,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.percentual_taxa_advogado = 0;
       }
       // Intervalo de Honorarios DE
-      this.dataHonorariosDe = this.dibValoresDevidos;
-      this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
+      if (!this.dataHonorariosDe) {
+        this.dataHonorariosDe = this.dibValoresDevidos;
+      }
+
+      if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
+        this.formData.taxa_advogado_inicio = moment(this.dataHonorariosDe, 'MM/YYYY').startOf('month').format('DD/MM/YYYY');
+      } else {
+        this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
+      }
+
       // Intervalo de Honorarios ATE
       this.formData.taxa_advogado_final = (this.isExits(this.dataHonorariosAte)) ?
         this.dataHonorariosAte : this.formData.data_calculo_pedido;
@@ -912,6 +920,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     // Intervalo de Honorarios DE
     this.dataHonorariosDe = this.formatReceivedDate(this.formData.taxa_advogado_inicio);
+
     // Intervalo de Honorarios ATE
     this.dataHonorariosAte = this.formatReceivedDate(this.formData.taxa_advogado_final);
 
@@ -923,6 +932,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // Aplicação dos honorários sobre a diferença ou sobre o devido
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
       this.formData.taxa_advogado_aplicacao_sobre : '';
+
+    if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
+      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('MM/YYYY');
+    }
 
     // Calcular Mais (Vincendos)
     this.maturidade = this.formData.maturidade;

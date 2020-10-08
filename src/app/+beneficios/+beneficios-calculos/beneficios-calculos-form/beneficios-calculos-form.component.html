@@ -644,12 +644,12 @@
                     </div>
                     <div class="col-md-2" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
                       <input name='taxaAdvogadoValorFixoHonorarios' currencyMask [(ngModel)]="taxaAdvogadoValorFixoHonorarios"  class="form-control"  
-                        type="text" maxlength="14" title="Digite o valor fixo para os honorários" placeholder="Digite o valor"  >
+                        type="text" maxlength="14" title="Digite o valor fixo para os honorários" placeholder="Digite o Valor"  >
                         <small *ngIf="errors.has('taxaAdvogadoValorFixoHonorarios')" class="text-danger">{{ errors.get('taxaAdvogadoValorFixoHonorarios') }}</small>
                     </div>
-                    <div class="col-md-3" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
-                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" 
-                      class="form-control" placeholder="data da inicial honorário fixo" tooltip="data da inicial honorário fixo" type="text">
+                    <div class="col-md-3" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" >
+                      <input name="dataHonorariosDe" [(ngModel)]="dataHonorariosDe"  [textMask]="{mask: dateMaskCompetencia}" 
+                      class="form-control" placeholder="Mês da Condenação dos Honorários" tooltip="Mês da Condenação dos Honorários" type="text">
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
                   </div>
@@ -718,7 +718,7 @@
                       <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
                     </div>
                   </div> -->
-                  <div class="form-group"  *ngIf="taxaAdvogadoAplicacaoSobre !== 'nao_calc'">
+                  <div class="form-group"  *ngIf="taxaAdvogadoAplicacaoSobre !== 'nao_calc' && taxaAdvogadoAplicacaoSobre !== 'fixo'">
                     <label class="col-md-3 control-label">Calcular Honorários Até:</label>
                     <div class="col-md-2">
                       <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">

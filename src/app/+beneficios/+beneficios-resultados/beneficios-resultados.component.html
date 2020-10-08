@@ -812,7 +812,7 @@
                 <ul
                   class="list-unstyled"
                 >
-                  <li>
+                  <li *ngIf="!exibirHonorariosValorFixo" >
                     <b>Honorários:</b>
                     {{ formatDate(calculo.taxa_advogado_inicio) }} a
                     {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
@@ -826,7 +826,7 @@
                     <b>Percentual dos Honorários:</b>
                     {{ formatPercent(calculo.percentual_taxa_advogado) }}
                   </li>
-                  <li *ngIf="!exibirHonorarioscpc85">
+                  <li *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo">
                     <b>{{ getTipoHonorario(calculo.taxa_advogado_aplicacao_sobre) }}</b>
                   </li>
                   <!-- <li>
@@ -865,6 +865,10 @@
                   <li>
                     <b>Honorários Valor Fixo: </b>
                     {{ somaHonorariosFixoString }}
+                  </li>
+                  <li>
+                    <b>Mês da Condenação dos Honorários: </b>
+                    {{ formatDateCompetencia(calculo.taxa_advogado_inicio) }}
                   </li>
                 </ul>
 
@@ -1000,6 +1004,14 @@
                       </td>
                       <td width="50%">
                         {{ somaHonorariosFixoString }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right;">
+                        <b>Mês da Condenação dos Honorários:</b>
+                      </td>
+                      <td width="50%">
+                        {{ formatDateCompetencia(calculo.taxa_advogado_inicio) }}
                       </td>
                     </tr>
                   </tbody>
