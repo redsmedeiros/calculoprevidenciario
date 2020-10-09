@@ -2196,7 +2196,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     // let indiceReajusteValoresFixo = { reajuste: 0.0, reajusteOs: 0.0 };
     const correcaoMonetaria = this.getCorrecaoMonetaria(fixoInicio) ;
     let somaHonorariosFixo = this.somaHonorariosValorFixo;
-    somaHonorariosFixo *= correcaoMonetaria;
+    if (correcaoMonetaria > 0) {
+      somaHonorariosFixo *= correcaoMonetaria;
+    }
 
     // for (const dataCorrenteFixoString of competenciasFixo) {
     //   let lineFixo: any = {};

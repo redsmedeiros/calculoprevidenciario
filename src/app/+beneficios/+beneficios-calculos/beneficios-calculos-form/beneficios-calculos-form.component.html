@@ -649,7 +649,7 @@
                     </div>
                     <div class="col-md-3" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" >
                       <input name="dataHonorariosDe" [(ngModel)]="dataHonorariosDe"  [textMask]="{mask: dateMaskCompetencia}" 
-                      class="form-control" placeholder="Mês da Condenação dos Honorários" tooltip="Mês da Condenação dos Honorários" type="text">
+                      class="form-control" placeholder="Mês da Condenação dos Honorários (MM/AAAA)" tooltip="Mês da Condenação dos Honorários (MM/AAAA)" type="text">
                       <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
                     </div>
                   </div>

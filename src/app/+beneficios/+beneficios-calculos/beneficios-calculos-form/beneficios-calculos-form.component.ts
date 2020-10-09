@@ -427,7 +427,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (!this.isExits(this.dataHonorariosDe) ||
         !moment(this.dataHonorariosDe, 'MM/YYYY').isValid() ||
         moment(this.dataHonorariosDe, 'MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
+        this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida. Formato correto MM/AAAA'] });
         valid = false;
       }
     }
