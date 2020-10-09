@@ -423,30 +423,31 @@ export class BeneficiosResultadosComponent implements OnInit {
     //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
     let func_beneficioDevido = this.getBeneficioDevido;
     let func_beneficioRecebido = this.getBeneficioRecebido;
-    let abonoProporcionalDevidos = 0;
-    let abonoProporcionalRecebidos = 0;
+    let abonoProporcionalDevidos = 1;
+    let abonoProporcionalRecebidos = 1;
 
-    if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
-      let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
-      if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
-        abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
-      } else {
-        abonoProporcionalDevidos = 1;
-      }
-    } else {
+    // if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
+    //   let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+    //   if (previaDataPedidoBeneficioEsperado.isSame(dataPedidoBeneficioEsperado, 'year')) {
+    //     abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(previaDataPedidoBeneficioEsperado);
+    //   } else {
+    //     abonoProporcionalDevidos = 1;
+    //   }
+    // } else {
       abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
-    }
+   // }
 
-    if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
-      let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
-      if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
-        abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
-      } else {
-        abonoProporcionalRecebidos = 1;
-      }
-    } else {
+    // if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
+    //   let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
+    //   if (previaDataPedidoBeneficio.isSame(dataPedidoBeneficio, 'year')) {
+    //     abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(previaDataPedidoBeneficio);
+    //   } else {
+    //     abonoProporcionalRecebidos = 1;
+    //   }
+    // } else {
       abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
-    }
+    // }
+
     let chkNotGranted = this.calculo;
 
 
