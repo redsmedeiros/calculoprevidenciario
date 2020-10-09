@@ -424,6 +424,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         valid = false;
       }
 
+      if (!this.isExits(this.dataHonorariosDe) ||
+        !moment(this.dataHonorariosDe, 'MM/YYYY').isValid() ||
+        moment(this.dataHonorariosDe, 'MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'dataHonorariosDe': ['Insira uma data válida.'] });
+        valid = false;
+      }
     }
 
     //  if (!this.isEmptyInput(this.cessacaoValoresDevidos)) { }
