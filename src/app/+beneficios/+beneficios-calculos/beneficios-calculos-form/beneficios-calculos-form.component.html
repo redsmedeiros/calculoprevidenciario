@@ -343,33 +343,18 @@
 
       <article class="col-sm-12 col-md-6 col-lg-6">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+        <!-- <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-money"></i>
             </span>
             <h2>Valores Recebidos</h2>
-            <!-- <app-beneficios-calculos-form-recebidos
-                [formData]="form" 
-                [type] = "calculoType"
-            ></app-beneficios-calculos-form-recebidos> -->
+
           </header>
-          <!-- widget div-->
           <div>
-            <!-- widget content -->
             <div class="widget-body fix-painel-devido-recebido">
               <form class="form-horizontal">
                 <fieldset>
-                  <!-- <div class="form-group mt-3 mb-3">
-                    <div class="col-md-11 col-sm-offset-1">
-                      <div class="checkbox">
-                        <label>
-                          <input name="chkPrecedidoRecebidos" [(ngModel)]='chkPrecedidoRecebidos' type="checkbox"  class="checkbox {{styleTheme}}">
-                          <span>Caso queira calcular benefício precedido com DIB anterior </span>
-                        </label>
-                      </div>
-                    </div>
-                  </div> -->
                   <div class="form-group">
                     <label class=" control-label" for="especieRecebidoSelect" [ngClass]="(true)?  'col-md-2' : 'col-md-4'">Espécie:</label>
                     <div class="" [ngClass]="(true)? 'col-md-9' : 'col-md-6 col-lg-6'" >
@@ -433,7 +418,7 @@
                       <input name="rmiValoresRecebidosBuracoNegro" [(ngModel)]="rmiValoresRecebidosBuracoNegro" currencyMask class="form-control" type="text">
                     </div>
                   </div>
-                  <div  class="form-group"> <!--*ngIf="recebidosPosBuracoNegro"-->
+                  <div  class="form-group"> 
                     <label class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
                       Índice de Limitação no Teto (se houver):
                       <i title="Índice de Reajuste de Teto (IRT) só existe para beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
@@ -472,15 +457,28 @@
               </form>
             </div>
           </div>
-        </sa-widget>
+        </sa-widget> -->
       </article>
-       <article class="col-sm-12 col-md-12 col-lg-12">
+      <app-beneficios-calculos-form-recebidos
+      [formData]="form" 
+      [errors] = "errors"
+      [isEdit] = "isEdit"
+      [listRecebidos] = "listRecebidos"
+      [isUpdatingRecebido] = "isUpdatingRecebido"
+      ></app-beneficios-calculos-form-recebidos>
+
+       <!-- <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
             <h2> Lista de Perídos Recebidos</h2>
+            <app-beneficios-calculos-form-recebidos
+                [formData]="form" 
+                [type] = "calculoType"
+                [errors] = "errors"
+             ></app-beneficios-calculos-form-recebidos>
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom">
@@ -536,7 +534,7 @@
             </div>
           </div>
         </sa-widget>
-      </article>
+      </article> -->
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">

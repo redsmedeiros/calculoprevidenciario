@@ -1,6 +1,6 @@
-
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ModalDirective } from "ngx-bootstrap";
+import { BeneficiosCalculosFormComponent } from './../beneficios-calculos-form/beneficios-calculos-form.component';
 import { ErrorService } from '../../../services/error.service';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
@@ -13,80 +13,31 @@ import * as moment from 'moment';
     ErrorService
   ]
 })
-export class BeneficiosCalculosFormRecebidosComponent  implements OnInit  {
+export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculosFormComponent implements OnInit  {
 
 
   @Input() formData;
-  @Input() type;
+  @Input() errors;
+  @Input() isEdit;
+  @Input() listRecebidos;
+  @Input() isUpdatingRecebido;
 
   @ViewChild('recebidosModal') public recebidosModal: ModalDirective;
 
 
 
-  public especieValoresRecebidosChild = null;
+  // constructor(
+  //  // protected errors: ErrorService,
+  // ) { }
 
-  
-  public especieValoresOptionsChild = [
-    {
-      name: '- Selecione uma opção -',
-      value: ''
-    }, {
-      name: 'Auxílio Doença',
-      value: 0
-    }, {
-      name: 'Aposentadoria por Invalidez ',
-      value: 1
-    }, {
-      name: 'Pensão por Morte',
-      value: 22
-    }, {
-      name: 'Aposentadoria por Idade - Trabalhador Urbano',
-      value: 2
-    }, {
-      name: 'Aposentadoria por Idade - Trabalhador Rural',
-      value: 7
-    }, {
-      name: 'Aposentadoria por Tempo de Contribuição',
-      value: 3
-    }, {
-      name: 'Aposentadoria Especial',
-      value: 4
-    }, {
-      name: 'Aposentadoria por Tempo de Contribuição Professor',
-      value: 5
-    }, {
-      name: 'Auxílio Acidente - 30%',
-      value: 8
-    }, {
-      name: 'Auxílio Acidente - 40%',
-      value: 9
-    }, {
-      name: 'Auxílio Acidente - 50%',
-      value: 6
-    }, {
-      name: 'Auxílio Acidente - 60%',
-      value: 10
-    }, {
-      name: 'Abono de Permanência em Serviço',
-      value: 11
-    }, {
-      name: 'Benefício de Prestação Continuada - BPC ', // (salário mínimo)
-      value: 12
-    }, {
-      name: 'Aposentadoria Pessoa com Deficiência',
-      value: 13
-    }, {
-      name: 'Aposentadoria por Idade da Pessoa com Deficiência',
-      value: 16
-    }
-  ];
-
-
-  constructor(
-    protected errors: ErrorService,
-  ) { }
+  constructor(  ) {
+    super( null, null, null);
+  }
 
   ngOnInit() {
+    console.log( this.errors);
+    console.log( this.formData);
+    console.log( this.type);
   }
 
 

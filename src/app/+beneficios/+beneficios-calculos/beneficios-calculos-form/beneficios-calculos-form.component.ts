@@ -193,8 +193,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   ];
 
   // Multiplos recebidos
-  private listRecebidos = [];
-  private rowRecebidosEdit;
+  public listRecebidos = [];
+  public rowRecebidosEdit;
+  public isUpdatingRecebido = true;
 
 
   @Input() formData;
@@ -232,6 +233,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.route.snapshot.params['id_calculo'] !== undefined) {
       this.isEdit = true;
       this.loadCalculo();
+      this.isUpdatingRecebido = false;
     } else {
       // Initialize variables for a new calculo
       // this.jurosAntes2003 = '0,5';
@@ -510,8 +512,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
       if (this.taxaAdvogadoAplicacaoSobre !== 'nao_calc'
-          && this.taxaAdvogadoAplicacaoSobre !== 'CPC85'
-          && this.taxaAdvogadoAplicacaoSobre !== 'fixo') {
+        && this.taxaAdvogadoAplicacaoSobre !== 'CPC85'
+        && this.taxaAdvogadoAplicacaoSobre !== 'fixo') {
 
         if (this.isEmptyInput(this.percentualHonorarios)) {
           this.errors.add({ 'percentualHonorarios': ['Insira o percentual dos Honorários.'] });
@@ -822,6 +824,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Data de Cessação de valores devidos
       this.formData.data_prevista_cessacao = this.cessacaoValoresDevidos;
 
+      // dip devidos
+      this.formData.dip_valores_devidos = this.dipValoresDevidos;
+
       // Espécie valores recebidos
       if (!this.isEmptyInput(this.especieValoresRecebidos)) {
         this.formData.tipo_aposentadoria_recebida = this.especieValoresRecebidos;
@@ -844,12 +849,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_ajuste_maxima_concedida = 0.0;
       }
 
+      this.formData.list_recebidos = null;
+      if (this.listRecebidos.length > 0) {
+        this.formData.list_recebidos = JSON.stringify(this.listRecebidos);
+      }
 
       this.onSubmit.emit(this.formData);
 
     } else {
-      // console.log(this.errors.all())
-      // swal('Erro', 'Confira os dados digitados','error');
       swal({
         position: 'top-end',
         type: 'error',
@@ -858,14 +865,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         timer: 2000
       });
 
-      // .then(() => {
-      //   setTimeout(() => {
-      //     this.scroll('inicioForm');
-      //   }, 1000)
-      // });
-
     }
-
 
   }
 
@@ -993,6 +993,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // Data de Cessação de valores devidos
     this.cessacaoValoresDevidos = this.formatReceivedDate(this.formData.data_prevista_cessacao);
 
+    this.dipValoresDevidos = this.formatReceivedDate(this.formData.dip_valores_devidos);
+
     // Espécie valores recebidos
     // this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
     if (this.isExits(this.formData.valor_beneficio_concedido)) {
@@ -1067,6 +1069,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       this.taxaAdvogadoPerc100000SM = (this.isExits(this.formData.taxa_advogado_perc_100000_SM)) ?
         this.formData.taxa_advogado_perc_100000_SM : 0;
+    }
+
+
+    if (this.formData.list_recebidos && this.formData.list_recebidos.length > 0) {
+       this.listRecebidos = JSON.parse(this.formData.list_recebidos);
     }
 
     this.dibValoresDevidosChanged();
