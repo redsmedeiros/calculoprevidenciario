@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from 'ngx-bootstrap';
 import { BeneficiosCalculosFormComponent } from './../beneficios-calculos-form/beneficios-calculos-form.component';
 import { ErrorService } from '../../../services/error.service';
 import swal from 'sweetalert2';
@@ -52,11 +52,11 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     return valid;
   }
 
-  public showChildModal(): void {
+  public showChildModalRecebidos(): void {
     this.recebidosModal.show();
   }
 
-  public hideChildModal(): void {
+  public hideChildModalRecebidos(): void {
     this.recebidosModal.hide();
   }
 

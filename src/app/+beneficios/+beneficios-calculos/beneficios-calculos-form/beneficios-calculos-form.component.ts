@@ -5,7 +5,7 @@ import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
-import { Recebidos } from './../Recebidos.model';
+import { Recebidos } from '../beneficios-calculos-form-recebidos/Recebidos.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { validateConfig } from '@angular/router/src/config';
@@ -117,6 +117,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public afastarPrescricao = false;
   public calcularAbono13UltimoMes = false;
+  public calcularAbono13UltimoMesRecebidos = false;
 
   public especieValoresDevidos;
   public especieValoresRecebidos;
@@ -192,10 +193,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: 'Desejo definir manualmente', value: 'manual' }
   ];
 
-  // Multiplos recebidos
+  // Multiplos Recebidos
   public listRecebidos = [];
   public rowRecebidosEdit;
   public isUpdatingRecebido = true;
+
+  // Multiplos Devidos
+  public listDevidos = [];
+  public rowDevidosEdit;
+  public isUpdatingDevidos = true;
 
 
   @Input() formData;
@@ -1073,7 +1079,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
 
     if (this.formData.list_recebidos && this.formData.list_recebidos.length > 0) {
-       this.listRecebidos = JSON.parse(this.formData.list_recebidos);
+      this.listRecebidos = JSON.parse(this.formData.list_recebidos);
     }
 
     this.dibValoresDevidosChanged();
@@ -1427,9 +1433,38 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.taxaAjusteMaximaConcedida,
       this.naoAplicarSMBeneficioConcedido);
 
+    let statusInput = true;
+
     console.log(recebidoMultiplo);
 
-    if (this.validRecebidos() && this.validatePeriodoRecebidos(recebidoMultiplo)) {
+    if (!this.validRecebidos()) {
+
+      statusInput = false;
+
+      swal({
+        position: 'bottom-end',
+        type: 'error',
+        title: 'Verifique as informações do período recebido.',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+
+    if (!this.validatePeriodoRecebidos(recebidoMultiplo) && statusInput) {
+
+      statusInput = false;
+
+      swal({
+        position: 'bottom-end',
+        type: 'error',
+        title: 'O perído de Benefício Recebido não deve ser concomitante.',
+        showConfirmButton: false,
+        timer: 4000
+      });
+    }
+
+
+    if (statusInput) {
 
       this.updateDatatableRecebidos(recebidoMultiplo);
       this.clearFormRecebido();
@@ -1438,16 +1473,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         position: 'bottom-end',
         type: 'success',
         title: 'Lista de Períodos Atualizada',
-        showConfirmButton: false,
-        timer: 1000
-      });
-
-    } else {
-
-      swal({
-        position: 'bottom-end',
-        type: 'error',
-        title: 'Verifique as informações do período recebido.',
         showConfirmButton: false,
         timer: 1000
       });

@@ -5,8 +5,8 @@
       <span class="widget-icon">
         <i class="fa fa-table"></i>
       </span>
-      <h2> Lista de Perídos Recebidos</h2>
-      <button
+      <h2> Lista dos Benefícios Recebidos</h2>
+      <!-- <button
       type="button"
       (click)="recebidosModal.show()"
       class="btn btn-labeled btn-info pull-right"
@@ -14,7 +14,7 @@
       <span class="btn-label">
         <i class="fa fa-plus"></i> </span
       >Adicionar Recebidos
-    </button>
+    </button> -->
     </header>
     <div>
       <div class="widget-body no-padding widget-body-custom">
@@ -25,8 +25,8 @@
             <tr>
               <th>Espécie / Número Benefício</th>
               <th>DIB / DIP</th>
-              <th>Final</th>
               <th class="text-center">DIB Anterior</th>
+              <th>Final</th>
               <th class="text-center">RMI</th>
               <th class="text-center">IRT</th>
               <th class="text-center">Inferior ao Mínimo</th>
@@ -41,8 +41,8 @@
               <td>DIB: {{recebidoLine.dib}}  
                 <span *ngIf="recebidoLine.dip"><br>DIP: {{recebidoLine.dip}}</span>
               </td>
-              <td>{{recebidoLine.cessacao}}</td>
               <td>{{recebidoLine.dibAnterior}}</td>
+              <td>{{recebidoLine.cessacao}}</td>
               <td class="text-center">
                 {{definicaoMoeda.formatMoney(recebidoLine.rmi)}}
                 <span *ngIf="recebidoLine.rmiBuracoNegro" >
@@ -72,29 +72,7 @@
   </sa-widget>
 </article>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- 
 <div
   bsModal
   #recebidosModal="bs-modal"
@@ -106,17 +84,6 @@
 >
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <!-- <div class="modal-header">
-        <button
-          type="button"
-          class="close"
-          (click)="recebidosModal.hide()"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title"></h4>
-      </div> -->
       <div class="modal-body p-0 m-0">
         <div class="row">
           <article class="col-sm-12 col-md-12 col-lg-12">
@@ -130,7 +97,7 @@
                 <span class="widget-icon">
                   <i class="fa fa-plus"></i>
                 </span>
-                <h2>Valores Recebidos</h2>
+                <h2>Beneficio Recebidos</h2>
                 <button
                   type="button"
                   class="btn btn-xs pull-right btn-danger"
@@ -340,7 +307,6 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <!--*ngIf="recebidosPosBuracoNegro"-->
                         <label class="control-label col-md-7">
                           Índice de Limitação no Teto (se houver):
                           <i
@@ -381,10 +347,20 @@
                           </div>
                         </div>
                       </div>
+                      <div class="form-group">
+                        <div class="col-md-8 col-sm-offset-3">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="calcularAbono13UltimoMesRecebidos" [(ngModel)]="calcularAbono13UltimoMesRecebidos" class="checkbox" checked="checked">
+                              <span>Cacular o 13º no Último Ano do Cálculo.</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </fieldset>
-                    <p class="pull-right no-margin">* Campo Obrigatório</p>
                     <div class="form-group">
                       <div class="col-md-12">
+                        <p class="pull-left no-margin">* Campo Obrigatório</p>
                         <button
                           *ngIf="!rowRecebidosEdit"
                           id="adicionarRecebido"
@@ -412,9 +388,6 @@
                       </div>
                     </div>
                   </form>
-                 
-      
-                  
                 </div>
               </div>
             </sa-widget>
@@ -424,6 +397,6 @@
     </div>
   </div>
 </div>
-
+ -->
 
 

@@ -1,0 +1,235 @@
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-table"></i>
+      </span>
+      <h2> Lista de Benefícios Devidos</h2>
+      <!-- <button
+      type="button"
+      (click)="devidosModal.show()"
+      class="btn btn-labeled btn-info pull-right"
+    >
+      <span class="btn-label">
+        <i class="fa fa-plus"></i> </span
+      >Adicionar Devido
+    </button> -->
+    </header>
+    <div>
+      <div class="widget-body no-padding widget-body-custom">
+        <div class="well well-light" *ngIf="listRecebidos.length === 0"><strong>Não há itens na lista</strong></div>
+        <table class="table table-striped table-bordered table-hover table-responsive table-condensed" 
+        *ngIf="!isUpdating && listRecebidos.length > 0">
+          <thead>
+            <tr>
+              <th>Espécie / Número Benefício</th>
+              <th>DIB / DIP</th>
+              <th>Final</th>
+              <th class="text-center">DIB Anterior</th>
+              <th class="text-center">RMI</th>
+              <th class="text-center">IRT</th>
+              <th class="text-center">Inferior ao Mínimo</th>
+              <th class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let recebidoLine of listRecebidos">
+              <td>{{getTipoAposentadoria(recebidoLine.especie)}} 
+                <span *ngIf="recebidoLine.numeroBeneficio"><br> {{recebidoLine.numeroBeneficio}}</span>
+              </td>
+              <td>DIB: {{recebidoLine.dib}}  
+                <span *ngIf="recebidoLine.dip"><br>DIP: {{recebidoLine.dip}}</span>
+              </td>
+              <td>{{recebidoLine.cessacao}}</td>
+              <td>{{recebidoLine.dibAnterior}}</td>
+              <td class="text-center">
+                {{definicaoMoeda.formatMoney(recebidoLine.rmi)}}
+                <span *ngIf="recebidoLine.rmiBuracoNegro" >
+                  <br>{{definicaoMoeda.formatMoney(recebidoLine.rmiBuracoNegro)}}
+                </span>
+              </td>
+              <td class="text-center">{{recebidoLine.irt}}</td>
+              <td class="text-center">{{(recebidoLine.reajuesteMinimo) ? 'Sim': 'Não'}}</td>
+              <td class="text-center" width="auto">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-xs btn-warning" id="editar{{recebidoLine.id}}" (click)='getupdatePeriodoRecebidoList(recebidoLine.id)' title='Editar' >
+                    <i class='fa fa-edit fa-1-7x'></i>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-danger" id="deletar{{recebidoLine.id}}" (click)='deletePeriodoRecebidoList(recebidoLine.id)' title='Excluir'>
+                    <i class='fa fa-times fa-1-7x'></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="isUpdating" class="alert alert-info text-align-center">
+          <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+        </div>
+      </div>
+    </div>
+  </sa-widget>
+</article>
+
+<!-- 
+<div
+  bsModal
+  #devidosModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-body p-0 m-0">
+        <div class="row">
+          <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+              <header>
+                <span class="widget-icon">
+                  <i class="fa fa-money"></i>
+                </span>
+                <h2>Beneficio Devidos</h2>
+              </header>
+              <div>
+                <div class="widget-body"  [ngClass]="(false)? '' : 'fix-painel-devido-recebido'">
+                  <form class="form-horizontal">
+                    <fieldset>
+                      <div class="form-group">
+                        <label class="control-label" for="select-1" [ngClass]="(true)?  'col-md-2' : 'col-md-4'">Espécie:</label>
+                        <div class="" [ngClass]="(true)? 'col-md-9' : 'col-md-6 col-lg-6'" >
+                          <select name="especieValoresDevidos" [(ngModel)]="especieValoresDevidos" class="form-control" id="select-1">
+                            <option *ngFor="let option of especieValoresOptions" value="{{option.value}}">{{option.name}}</option>
+                          </select>
+                          <small *ngIf="errors.has('especieValoresDevidos')" class="text-danger">{{ errors.get('especieValoresDevidos') }}</small>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-7 control-label">Número do Benefício:</label>
+                        <div class="col-md-4">
+                          <input [(ngModel)]="numeroBeneficioDevido" [textMask]="{mask: numBenefMask}" name="numeroBeneficioDevido" class="form-control" type="text" maxlength="200">
+                          <small *ngIf="errors.has('numeroBeneficioDevido')" class="text-danger">{{ errors.get('numeroBeneficioDevido') }}</small>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início de Benefício - DIB*:</label>
+                        <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                          <input name='dibValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();setCheckRevisao();'
+                           class="form-control"  type="text">
+                          <small *ngIf="errors.has('dibValoresDevidos')" class="text-danger">{{ errors.get('dibValoresDevidos') }}</small>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Pagamento - DIP*:</label>
+                        <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                          <input name='dipValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dipValoresDevidos" (blur)='dibValoresDevidosChanged();useSameDIBChanged();setCheckRevisao();'
+                           class="form-control"  type="text">
+                          <small *ngIf="errors.has('dipValoresDevidos')" class="text-danger">{{ errors.get('dipValoresDevidos') }}</small>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label  class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data Final dos Atrasados*:</label>
+                        <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                          <input name="cessacaoValoresDevidos" [textMask]="{mask: dateMask}" [(ngModel)]="cessacaoValoresDevidos" class="form-control " type="text">
+                          <small *ngIf="errors.has('cessacaoValoresDevidos')" class="text-danger">{{ errors.get('cessacaoValoresDevidos') }}</small>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div >
+                          <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Benefício Anterior:  </label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input name='dibAnteriorValoresDevidos' [textMask]="{mask: dateMask}" [(ngModel)]="dibAnteriorValoresDevidos" (blur)="setCcheckBoxdibAnterior()"  class="form-control" type="text">
+                            <small *ngIf="errors.has('dibAnteriorValoresDevidos')" class="text-danger">{{ errors.get('dibAnteriorValoresDevidos') }}</small>
+                          </div>
+                      </div>
+                      </div>
+                      <div *ngIf="chkNotGranted" class="form-group">
+                          <label *ngIf="!devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda Mensal Inicial - RMI*:</label>
+                          <label *ngIf="devidosBuracoNegro" class=" control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda mensal Inicial - RMI antes da revisão (Buraco Negro)*:</label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                            <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
+                          </div>
+                      </div>
+                      <div *ngIf="!chkNotGranted" class="form-group">
+                          <label *ngIf="!devidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Renda Mensal Inicial -RMI*:</label>
+                          <label *ngIf="devidosBuracoNegro" class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">RMI Antes da Revisão (Buraco Negro):</label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input name="rmiValoresDevidos" currencyMask [(ngModel)]="rmiValoresDevidos" class="form-control" type="text">
+                            <small *ngIf="errors.has('rmiValoresDevidos')" class="text-danger">{{ errors.get('rmiValoresDevidos') }}</small>
+                          </div>
+                      </div>
+                      <div *ngIf="devidosBuracoNegro" class="form-group">
+                        <label class=" control-label"  [ngClass]="(true)?  'col-md-7' : 'col-md-4'">RMI Depois da Revisão (Buraco Negro):</label>
+                        <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                          <input name="rmiValoresDevidosBuracoNegro" [(ngModel)]="rmiValoresDevidosBuracoNegro" currencyMask class="form-control" type="text">
+                          <small *ngIf="errors.has('rmiValoresDevidosBuracoNegro')" class="text-danger">{{ errors.get('rmiValoresDevidosBuracoNegro') }}</small>
+                        </div>
+                      </div>
+                       <div  class="form-group"> 
+                        <label class=" control-label"  [ngClass]="(true)?  'col-md-7' : 'col-md-4'">
+                          Índice de Limitação no Teto:
+                          <i title="Índice de Reajuste de Teto (IRT) só existepara beneficios com limitação ao teto." class="fa fa-question-circle fa-lg text-info"></i> 
+                          </label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input name="taxaAjusteMaximaEsperada" class="form-control" [textMask]="{mask: IndiceMask, guide: false}"  [(ngModel)]="taxaAjusteMaximaEsperada" type="text">
+                            <small *ngIf="errors.has('taxaAjusteMaximaEsperada')" class="text-danger">{{ errors.get('taxaAjusteMaximaEsperada') }}</small>
+                          </div>
+                      </div>
+                      <div  class="form-group" *ngIf="especieValoresDevidos == 22">
+                        <label class=" control-label" [ngClass]="(true)? 'col-md-7' : 'col-md-4'">
+                          Número de Dependentes:
+                          <i title="Rateio da Pensão por Morte" class="fa fa-question-circle fa-lg text-info"></i> 
+                          </label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input [(ngModel)]="numDependentes" (change)="errors.clear('numDependentes')"  [ngModelOptions]="{standalone: true}" class="form-control" type="number" min="0" max="20" step="1">
+                            <small *ngIf="errors.has('numDependentes')" class="text-danger">{{ errors.get('numDependentes') | i18n}}</small>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-8 col-sm-offset-3">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="naoAplicarSMBeneficioEsperado" [(ngModel)]="naoAplicarSMBeneficioEsperado" class="checkbox" checked="checked">
+                              <span>Valor da RMI inferior ao Salário Mínimo.</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-8 col-sm-offset-3">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="calcularAbono13UltimoMes" [(ngModel)]="calcularAbono13UltimoMes" class="checkbox" checked="checked">
+                              <span>Cacular o 13º no Último Ano do Cálculo.</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-8 col-sm-offset-3">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" name="chkDemandasJudiciais" [(ngModel)]="chkDemandasJudiciais" class="checkbox {{styleTheme}}">
+                              <span>Não Limitar ao Teto para Demandas Judiciais.</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <p class="pull-right no-margin">* Campo obrigatório</p>
+                  </form>
+                </div>
+              </div>
+            </sa-widget>
+          </article>          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ -->
