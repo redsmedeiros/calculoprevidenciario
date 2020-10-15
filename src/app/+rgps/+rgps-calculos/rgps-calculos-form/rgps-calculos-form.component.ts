@@ -820,9 +820,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
 
-      this.primariaAtualanos = periodos.total.years;
-      this.primariaAtualmeses = periodos.total.months;
-      this.primariaAtualdias = periodos.total.days;
+       // Até a EC nº 103/2019
+       this.primariaAtualanos = periodos.total19.years;
+       this.primariaAtualmeses = periodos.total19.months;
+       this.primariaAtualdias = periodos.total19.days;
+       // Até a EC nº 103/2019
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
