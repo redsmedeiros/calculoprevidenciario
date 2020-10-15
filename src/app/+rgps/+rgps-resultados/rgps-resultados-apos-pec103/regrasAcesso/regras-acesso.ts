@@ -97,7 +97,8 @@ export class RegrasAcesso {
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
-            let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
+            // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
+            let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
 
            if ((this.numeroDeContribuicoes < 180) ) {
 
