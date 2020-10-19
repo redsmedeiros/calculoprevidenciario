@@ -47,7 +47,6 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.errors.clear();
 
     let valid = true;
-    
 
     return valid;
   }

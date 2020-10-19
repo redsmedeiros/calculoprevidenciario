@@ -93,7 +93,7 @@
           </div>
         </sa-widget>
       </article>
-      
+<!--       
       <article class="col-xs-12 col-sm-12" [ngClass]="(false)? 'col-md-12 col-lg-12' : 'col-md-6 col-lg-6'" >
          <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
@@ -212,7 +212,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" name="calcularAbono13UltimoMes" [(ngModel)]="calcularAbono13UltimoMes" class="checkbox" checked="checked">
-                          <span>Cacular o 13º no Último Ano do Cálculo.</span>
+                          <span>Calcular o 13º no Último Ano do Cálculo.</span>
                         </label>
                       </div>
                     </div>
@@ -351,7 +351,7 @@
                       <div class="checkbox">
                         <label>
                           <input type="checkbox" name="calcularAbono13UltimoMesRecebidos" [(ngModel)]="calcularAbono13UltimoMesRecebidos" class="checkbox" checked="checked">
-                          <span>Cacular o 13º no Último Ano do Cálculo.</span>
+                          <span>Calcular o 13º no Último Ano do Cálculo.</span>
                         </label>
                       </div>
                     </div>
@@ -378,24 +378,10 @@
             </div>
           </div>
         </sa-widget> 
-      </article>
-
-      <!-- <app-beneficios-calculos-form-devidos
-      [formData]="form" 
-      [errors] = "errors"
-      [isEdit] = "isEdit"
-      [listDevidos] = "listDevido"
-      [isUpdatingDevidos] = "isUpdatingDevido"
-      ></app-beneficios-calculos-form-devidos> -->
-<!-- 
-      <app-beneficios-calculos-form-recebidos
-      [formData]="form" 
-      [errors] = "errors"
-      [isEdit] = "isEdit"
-      [listRecebidos] = "listRecebidos"
-      [isUpdatingRecebido] = "isUpdatingRecebido"
-      ></app-beneficios-calculos-form-recebidos> -->
-
+      </article> 
+    
+    
+    
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
           <header>
@@ -524,6 +510,24 @@
           </div>
         </sa-widget>
       </article>
+    -->
+
+      <app-beneficios-calculos-form-devidos
+      [formData]="form" 
+      [errors] = "errors"
+      [isEdit] = "isEdit"
+      [listDevidos] = "listDevidos"
+      [isUpdatingDevidos] = "isUpdatingDevido"
+      ></app-beneficios-calculos-form-devidos>
+
+      <app-beneficios-calculos-form-recebidos
+      [formData]="form" 
+      [errors] = "errors"
+      [isEdit] = "isEdit"
+      [listRecebidos] = "listRecebidos"
+      [isUpdatingRecebido] = "isUpdatingRecebido"
+      ></app-beneficios-calculos-form-recebidos>
+
 
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">

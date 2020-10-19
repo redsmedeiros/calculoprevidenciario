@@ -6,7 +6,7 @@
         <i class="fa fa-table"></i>
       </span>
       <h2> Lista dos Benefícios Recebidos</h2>
-      <!-- <button
+       <button
       type="button"
       (click)="recebidosModal.show()"
       class="btn btn-labeled btn-info pull-right"
@@ -14,7 +14,7 @@
       <span class="btn-label">
         <i class="fa fa-plus"></i> </span
       >Adicionar Recebidos
-    </button> -->
+    </button> 
     </header>
     <div>
       <div class="widget-body no-padding widget-body-custom">
@@ -72,7 +72,7 @@
   </sa-widget>
 </article>
 
-<!-- 
+
 <div
   bsModal
   #recebidosModal="bs-modal"
@@ -292,6 +292,29 @@
                           >
                         </div>
                       </div>
+                      <div class="form-group">
+                        <label class="col-md-7 control-label">Aplicar Adicional de 25%: </label>
+                        <div class="col-md-4">
+                          <label class="radio radio-inline">
+                            <input [(ngModel)]="adicional25Recebido" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('adicional25Recebido')" type="radio" value="0"> Não </label>
+                          <label class="radio radio-inline">
+                            <input [(ngModel)]="adicional25Recebido" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('adicional25Recebido')" type="radio" value="1"> Sim </label>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <small *ngIf="errors.has('adicional25Recebido')" class="text-danger">{{ errors.get('adicional25Recebido')| i18n }}</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="adicional25Recebido == 1" >
+                        <div >
+                          <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Adicional de 25%:  </label>
+                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
+                            <input name='dataInicialadicional2Recebido' [textMask]="{mask: dateMask}" [(ngModel)]="dataInicialadicional2Recebido"  class="form-control" type="text">
+                            <small *ngIf="errors.has('dataInicialadicional2Recebido')" class="text-danger">{{ errors.get('dataInicialadicional2Recebido') }}</small>
+                          </div>
+                      </div>
+                      </div>
                       <div *ngIf="recebidosBuracoNegro" class="form-group">
                         <label class="control-label col-md-7"
                           >RMI depois da revisão (Buraco Negro):</label
@@ -308,7 +331,7 @@
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-7">
-                          Índice de Limitação no Teto (se houver):
+                          Índice de Limitação no Teto:
                           <i
                             title="Índice de Reajuste de Teto (IRT) só existe para beneficios com limitação ao teto."
                             class="fa fa-question-circle fa-lg text-info"
@@ -352,7 +375,7 @@
                           <div class="checkbox">
                             <label>
                               <input type="checkbox" name="calcularAbono13UltimoMesRecebidos" [(ngModel)]="calcularAbono13UltimoMesRecebidos" class="checkbox" checked="checked">
-                              <span>Cacular o 13º no Último Ano do Cálculo.</span>
+                              <span>Calcular o 13º no Último Ano do Cálculo.</span>
                             </label>
                           </div>
                         </div>
@@ -397,6 +420,3 @@
     </div>
   </div>
 </div>
- -->
-
-

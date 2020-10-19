@@ -203,6 +203,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public rowDevidosEdit;
   public isUpdatingDevidos = true;
 
+  public adicional25Devido = 0;
+  public dataInicialadicional25Devido;
+  public adicional25Recebido = 0;
+  public dataInicialadicional2Recebido;
+
 
   @Input() formData;
   @Input() errors: ErrorService;
