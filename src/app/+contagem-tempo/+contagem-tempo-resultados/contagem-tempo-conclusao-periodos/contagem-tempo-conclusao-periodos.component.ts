@@ -302,9 +302,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     if (
       (Number(a.format('DD')) <= 30
-        || (Number(b.format('DD')) < Number(a.format('DD'))))
-      && !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
-      && !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
+      || (Number(b.format('DD')) < Number(a.format('DD'))))
+      || !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
+      || !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
     ) {
 
 

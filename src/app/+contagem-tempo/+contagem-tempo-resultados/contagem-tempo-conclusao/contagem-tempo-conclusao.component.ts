@@ -153,18 +153,30 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       if (
         (Number(fimVinculo.format('DD')) <= 30
         || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
-        && !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
-        && !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
+        || !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
+        || !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
       ) {
 
-        if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-          fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // }
+
+        if (moment(auxiliarDate).isBetween(
+          moment(inicioVinculo),
+          moment(fimVinculo), undefined, '[]')) {
+            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
         }
 
       } else {
 
-        if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
-          fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // }
+
+        if (moment(auxiliarDate).isBetween(
+          moment(inicioVinculo),
+          moment(fimVinculo), undefined, '[]')) {
+            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
         }
 
       }
@@ -193,13 +205,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(limitesDoVinculo)
       // console.log(fimContador)
 
-      let count = 0;
-      let count88 = 0;
-      let count91 = 0;
-      let count98 = 0;
-      let count99 = 0;
-      let count03 = 0;
-      let count19 = 0;
+      let count = 1;
+      let count88 = 1;
+      let count91 = 1;
+      let count98 = 1;
+      let count99 = 1;
+      let count03 = 1;
+      let count19 = 1;
       let fator = 0;
 
       do {
@@ -210,19 +222,19 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
           count += fator;
 
-          if (auxiliarDate < this.fimContador88) {
+          if (auxiliarDate <= this.fimContador88) {
             count88 += fator;
           };
 
-          if (auxiliarDate < this.fimContador91) {
+          if (auxiliarDate <= this.fimContador91) {
             count91 += fator;
           };
 
-          if (auxiliarDate < this.fimContador98) {
+          if (auxiliarDate <= this.fimContador98) {
             count98 += fator;
           };
 
-          if (auxiliarDate < this.fimContador99) {
+          if (auxiliarDate <= this.fimContador99) {
             count99 += fator;
           };
 
@@ -230,7 +242,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count03 += fator;
           };
 
-          if (auxiliarDate < this.fimContador19) {
+          if (auxiliarDate <= this.fimContador19) {
             count19 += fator;
           };
 
@@ -420,9 +432,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       let fimVinculo = this.toMomentCarencia(vinculo.data_termino);
 
+      // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
+      //   carencia = true;
+      // }
 
-      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
-        carencia = true;
+      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
+        moment(inicioVinculo),
+        moment(fimVinculo), undefined, '[]'))) {
+          carencia = true;
       }
 
     }
@@ -438,8 +455,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
       const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
 
-      auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
-      fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
+      // auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
+      // fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
 
       let count = 0;
       let count88 = 0;
@@ -488,7 +505,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
-      } while (auxiliarDate <= fimContador);
+      } while ( fimContador.isSameOrAfter(auxiliarDate));
+
+      // auxiliarDate <= fimContador
 
       this.carencia = count;
       this.carencia88 = count88;
