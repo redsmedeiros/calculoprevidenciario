@@ -1990,16 +1990,19 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 4.2
   calcularVincendas() {
-    let somaVincendos = this.ultimaDiferencaMensal;
+    let somaVincendas = this.ultimaDiferencaMensal;
+    let valorVincendas = 0;
+    let maturidade = this.calculo.maturidade;
+    /*
     let data = moment(this.calculo.data_citacao_reu);
     let dataDoCalculo = moment(this.calculo.data_calculo_pedido);
-    let maturidade = this.calculo.maturidade;
+    
     let jurosVincendos = 0.0;
 
     let chkBoxTaxaSelic = this.calculo.aplicar_juros_poupanca;
     let chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
 
-    /*
+
         if (this.dataInicioCalculo > data) {
           data = this.dataInicioCalculo;
         }
@@ -2053,32 +2056,23 @@ export class BeneficiosResultadosComponent implements OnInit {
             }
           }
         }
-    
+
         if (chkboxBenefitNotGranted) {
           somaVincendos = (somaVincendos * this.ultimaCorrecaoMonetaria) + (jurosVincendos * somaVincendos);
         }
     */
+
     if (maturidade != 0) {
-      if (this.calculo.data_cessacao != '0000-00-00') { // verifica se o calculo possui data de cessacao
-        //somaVincendos = this.ultimoBeneficioDevidoAntesProporcionalidade * maturidade; //Beneficio Devido da ultima linha antes da aplicação da proporcionalidade.
-        somaVincendos = parseFloat(this.ultimaDiferencaMensal.toFixed(2)) * maturidade; //Diferneça mensal da ultima linha antes da aplicação da proporcionalidade.
 
-      } else {
-
-        if (somaVincendos < 0) {
-          somaVincendos = parseFloat(this.ultimaDiferencaMensal.toFixed(2)) * maturidade;
-
-        } else {
-
-          somaVincendos = parseFloat(somaVincendos.toFixed(2)) * maturidade;
-
-        }
+      if (somaVincendas === 0) {
+        somaVincendas = this.ultimaRenda;
       }
-    } else {
-      somaVincendos = 0;
+
+      valorVincendas = parseFloat(somaVincendas.toFixed(2)) * maturidade;
+
     }
 
-    return somaVincendos;
+    return valorVincendas;
   }
 
   // Seção 4.3
