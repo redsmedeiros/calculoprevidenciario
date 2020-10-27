@@ -432,15 +432,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       let fimVinculo = this.toMomentCarencia(vinculo.data_termino);
 
-      // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
-      //   carencia = true;
-      // }
-
-      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
-        moment(inicioVinculo),
-        moment(fimVinculo), undefined, '[]'))) {
-          carencia = true;
+      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
+        carencia = true;
       }
+
+      // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
+      //   moment(inicioVinculo),
+      //   moment(fimVinculo), undefined, '[]'))) {
+      //     carencia = true;
+      // }
 
     }
 
@@ -455,8 +455,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
       const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
 
-      // auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
-      // fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
+      auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
+      fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
 
       let count = 0;
       let count88 = 0;

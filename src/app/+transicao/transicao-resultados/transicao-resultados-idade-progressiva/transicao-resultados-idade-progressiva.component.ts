@@ -189,13 +189,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     do {
 
 
-      fimContador = this.requisitosRegra2(
-        auxiliarDate.year(),
-        sexo,
-        idade,
-        tempoContribuicao,
-        this.seguradoTransicao.redutorProfessorDias);
-
 
       // console.log('P - ' + count + ' - data =' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade =' + idade + '|'
@@ -223,15 +216,20 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
+      fimContador = this.requisitosRegra2(
+        auxiliarDate.year(),
+        sexo,
+        idade,
+        tempoContribuicao,
+        this.seguradoTransicao.redutorProfessorDias);
+
 
     } while (!fimContador.status && idade <= 54750);
 
-   // console.log(idade);
-
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento,
-      auxiliarDate
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento,
+    //   auxiliarDate
+    // );
 
     // if (correcaoAnoBissexto > 0) {
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');

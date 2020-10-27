@@ -111,21 +111,38 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '3';
 
 
-    // this.nome = 'Celia - 24-03-2020';
+    // this.nome = 'Andre - 26-10-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '01/10/1955';
+    // this.dataNascimento = '19/12/1979';
     // this.dataFiliacao = '01/01/1980';
     // this.sexo = 'm';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '12';
-    // this.contribuicaoMesesAteEC103 = '5';
-    // this.contribuicaoDiasAteEC103 = '11';
+    // this.contribuicaoAnosAteEC103 = '24';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '0';
 
-    // this.contribuicaoAnos = '15';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '0';
+    // this.contribuicaoAnos = '24';
+    // this.contribuicaoMeses = '04';
+    // this.contribuicaoDias = '12';
+
+
+    // this.nome = 'TANIA - 26-10-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '12/09/1969';
+    // this.dataFiliacao = '01/01/1980';
+    // this.sexo = 'f';
+    // this.professor = true;
+
+    // this.contribuicaoAnosAteEC103 = '27';
+    // this.contribuicaoMesesAteEC103 = '6';
+    // this.contribuicaoDiasAteEC103 = '3';
+
+    // this.contribuicaoAnos = '28';
+    // this.contribuicaoMeses = '05';
+    // this.contribuicaoDias = '22';
 
   }
 

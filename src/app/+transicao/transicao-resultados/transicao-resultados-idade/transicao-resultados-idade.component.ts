@@ -271,10 +271,10 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       if (fimContador.status) {
 
-        console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-          + '|' + 'idade -' + idade + '|'
-          + '|' + 'Tempo - ' + tempoContribuicao + '|'
-          + '|');
+        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+        //   + '|' + 'idade -' + idade + '|'
+        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+        //   + '|');
 
       }
 
