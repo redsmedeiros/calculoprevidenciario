@@ -126,7 +126,9 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
   }
 
-
+  /**
+     * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+     */
   public conclusaoRegra1Pontos() {
     this.isUpdating = true;
 
@@ -328,13 +330,13 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     idadeDibMoment = this.calcularIdade(auxiliarDate);
 
-     const dibCorigida  = this.dataAtual.clone();
+    const dibCorigida = this.dataAtual.clone();
     dibCorigida.add(1, 'day');
     dibCorigida.add(count, 'days');
 
 
     //  console.log(dibCorigida.add(count, 'days'));
-     
+
 
     // tempoContribuicao += correcaoAnoBissexto;
 
@@ -364,7 +366,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
     return {
-     // dataDib: auxiliarDate,
+      // dataDib: auxiliarDate,
       dataDib: dibCorigida,
       idadeMoment: idadeDibMoment,
       tempoContribuicaoDibMoment: moment.duration(tempoContribuicao, 'days'),

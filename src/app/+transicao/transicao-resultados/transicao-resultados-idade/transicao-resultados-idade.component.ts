@@ -98,7 +98,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
 
 
-
+/**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   public conclusaoRegra5Idade() {
 
     this.isUpdating = true;

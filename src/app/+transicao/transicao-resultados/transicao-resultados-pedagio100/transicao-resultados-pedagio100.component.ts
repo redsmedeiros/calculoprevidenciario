@@ -126,7 +126,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
   }
 
 
-
+  /**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra4pedagio100() {
 
     try {
@@ -206,11 +208,11 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       // dataDib.add(tempoDePedagioTotal, 'years');
     }
 
-    console.log(tempoDePedagio);
-    console.log(contribuicaoDiff);
-    console.log(this.pedagioEmDias);
-    console.log(tempoDePedagioTotal);
-    console.log(contribuicaoDiff + tempoDePedagio);
+    // console.log(tempoDePedagio);
+    // console.log(contribuicaoDiff);
+    // console.log(this.pedagioEmDias);
+    // console.log(tempoDePedagioTotal);
+    // console.log(contribuicaoDiff + tempoDePedagio);
 
 
     const VeificarRequisitoHoje = this.requisitosRegra4(
@@ -292,8 +294,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   public contadorRegra4() {
 
-    console.log(this.dataAtual);
-
     let auxiliarDate = this.dataAtual.clone();
    // let auxiliarDate = moment('2019-11-13');
 
@@ -313,7 +313,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
 
-    console.log(this.seguradoTransicao);
+    // console.log(this.seguradoTransicao);
 
     const sexo = this.seguradoTransicao.sexo + 'd';
 
@@ -384,11 +384,11 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
     // console.log(teste.asDays());
-    console.log('---');
-    console.log((moment()).add(count, 'days'));
-    console.log(this.converterTempoDias(tempoContribuicao));
-    console.log(moment.duration(tempoContribuicao, 'days'));
-    console.log('---');
+    // console.log('---');
+    // console.log((moment()).add(count, 'days'));
+    // console.log(this.converterTempoDias(tempoContribuicao));
+    // console.log(moment.duration(tempoContribuicao, 'days'));
+    // console.log('---');
     
     
     return {

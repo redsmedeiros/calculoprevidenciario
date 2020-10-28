@@ -63,6 +63,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   }
 
+  /**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra2IdadeProgressiva() {
 
     try {

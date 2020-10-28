@@ -70,7 +70,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     //   });
   }
 
-
+/**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra3pedagio50() {
 
     try {
