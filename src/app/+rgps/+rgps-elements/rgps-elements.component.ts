@@ -37,6 +37,9 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
   public resultadosFacultativo = []
   public resultadosDescontadoSlario = [];
 
+  public boxId;
+  public sexoSegurado;
+
   public idadeExpectativa;
   public tableData = [];
   public tableOptions = {
@@ -47,7 +50,11 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     bInfo : false,
     data: this.tableData,
     columns: [
-      {data: 'id'},
+      {data: 'data_calculo',
+      render: (data) => {
+        return this.formatReceivedDate(data);
+        }
+      },
       {data: 'especie'},
       {data: 'dib'},
       {data: 'beneficio'},
@@ -62,8 +69,10 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 
   ngOnInit() {
   	this.isUpdating = true;
-  	this.idSegurado = this.route.snapshot.params['id_segurado'];
-  	this.Segurado.find(this.idSegurado)
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+    this.boxId = this.generateBoxId(this.calculo.id, 'comparar');
+
+   	this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
         this.dataNascimentoSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
@@ -72,17 +81,18 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
        		.then((calculo:CalculoModel) => {
        			this.calculo1 = calculo;
        			let data = [];
-       			data.push({id:calculo.id,
-       								especie: calculo.tipo_aposentadoria,
+       			data.push({data_calculo:calculo.data_calculo,
+       								especie: calculo.tipo_seguro,
        								dib: calculo.data_pedido_beneficio,
                        beneficio: calculo.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
                     });
 
+
        			this.CalculoRgps.find(this.route.snapshot.params['id_calculo2'])
        				.then((calculo2:CalculoModel) => {
        					this.calculo2 = calculo2;
-       					data.push({id:calculo2.id,
-       										 especie: calculo2.tipo_aposentadoria,
+       					data.push({data_calculo:calculo2.data_calculo,
+       										 especie: calculo2.tipo_seguro,
        										 dib: calculo2.data_pedido_beneficio,
                             beneficio: calculo2.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
                           });
@@ -98,7 +108,8 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
          					...this.tableOptions,
          					data: this.tableData,
        					}
-       					let idadeExpectativa = Math.abs(this.dataNascimentoSegurado.diff(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY'), 'years'));
+                 let idadeExpectativa = Math.abs(this.dataNascimentoSegurado.diff(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY'), 'years'));
+                 
        					this.ExpectativaVida.getByIdade(idadeExpectativa)
        						.then(expvida =>{
        							this.expvida = expvida;
@@ -129,6 +140,7 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 	compare_calculations(calculo1, calculo2){
     this.resultadosFacultativo = [];
     this.resultadosDescontadoSlario = [];
+    this.sexoSegurado = this.segurado.sexo;
 console.log(calculo1);
 //console.log(calculo2);
 
@@ -172,6 +184,7 @@ console.log(calculo1);
     let expectativaDIB = this.projetarExpectativa(idadeSeguradoDIB, dataInicioBeneficio2);
 
     let expectativaSegurado = expectativaDIB + idadeSeguradoDIB;
+    
 
     let expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo1)) * 13);
     if (expectativaTotalMeses < 0){
@@ -251,7 +264,7 @@ console.log(calculo1);
 
   projetarExpectativa(idadeFracionada, dib) {
     let expectativa = 0;
-
+    let sexoSelecionado = this.sexoSegurado;
     let dataInicio = moment('2000-11-30');
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
@@ -284,21 +297,67 @@ console.log(calculo1);
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     let dataAgora = moment();
     let expectativaVida;
+    let sexo = this.sexoSegurado;
     if (idadeFracionada > 80){
       idadeFracionada = 80;
     }    
-
+  
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
+
+
     }else{
       // expectativaVida = this.ExpectativaVida.getByDates(dataInicio, dataFim);
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
+
+    if(this.sexoSegurado === 'm'){
+       expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
+       
+    }else{
+      expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
+    }
+
     return expectativaVida;
   }
 
   updateDatatable(){
   	
+  }
+
+  imprimirBox(event, boxId) {
+    event.stopPropagation();
+
+    const css = `
+    <style>
+          body{font-family: Arial, Helvetica, sans-serif;}
+          h1, h2{font-size:0.9rem;}
+          i.fa, .not-print{ display: none; }
+          table{margin-top: 10px;}
+          footer,div,p,td,th{font-size:10px !important;}
+          .list-inline{ display:inline; }
+          .table>tbody>tr>td, .table>tbody>tr>th,
+           .table>tfoot>tr>td, .table>tfoot>tr>th,
+           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+           footer{text-align: center; margin-top: 50px;}
+           .list-inline-print{ display:inline !important;}
+    </style>`;
+
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML
+    const boxContent = document.getElementById(boxId).innerHTML;
+    
+
+                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
+                          + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
+                          + boxContent +'<br><br><br>'+ rodape + '</body></html>';
+    printableString = printableString.replace(/<table/g,
+         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
+
+    popupWin.document.open();
+    popupWin.document.write(printableString);
+    popupWin.document.close();
   }
 
 }

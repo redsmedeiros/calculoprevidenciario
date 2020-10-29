@@ -80,6 +80,7 @@ export class ExpectativaVidaService extends ControllerService {
         });
       }
     }
+     
     if(resultado){
       return resultado['valor'];
     }else{
@@ -88,6 +89,51 @@ export class ExpectativaVidaService extends ControllerService {
     
   }
 
+  public getPlanejamento(dataInicio, dataFim,sexo){
+    let resultado = {};
+    if (dataInicio != null){
+      if (dataFim != null) {
+         //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e startDate <= dataInicio e endData >= dataFim
+        resultado = this.list.find((expectativa) => {
+          return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && moment(expectativa.data_final).isSameOrAfter(dataFim);
+        });
+      } else {
+        //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e  startDate <= dataInicio e endData == null;
+        resultado = this.list.find((expectativa) => {
+          return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && expectativa.data_final == null;
+        });
+        if(!resultado){
+          resultado = this.list.find((expectativa) => {
+            return moment(expectativa.data_inicial).isSameOrBefore(dataInicio) && moment(expectativa.data_final).isSameOrAfter(dataInicio);
+          });
+        }
+      }
+    } else {
+      if (dataFim != null) {
+        //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e startDate == null e endData >= dataFim
+        resultado = this.list.find((expectativa) => {
+          return expectativa.data_inicial == null && moment(expectativa.data_final).isSameOrAfter(dataFim);
+        });
+      } else {
+        //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e  startDate == null e endData == null;
+        resultado = this.list.find((expectativa) => {
+          return expectativa.data_inicial == null && expectativa.data_final == null;
+        });
+      }
+    }
+     
+    if(resultado){
+       if(sexo === 'm'){
+         console.log('sexo: ',sexo)
+        return resultado['m'];
+       }
+       return resultado['f'];
+     
+    }else{
+      return -1
+    }
+    
+  }
 
   public getByAno(ano){
   	for(let expectativa of this.list){

@@ -14,6 +14,7 @@ import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec
 import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103/rgps-resultados-apos-pec103.component';
 import { ListaCompetenciasComponent } from './rgps-resultados-apos-pec103/calculoMedia/lista-competencias/lista-competencias.component';
 import { ConclusoesRmiComponent } from './rgps-resultados-apos-pec103/conclusoes/conclusoes-rmi/conclusoes-rmi.component';
+import { RgpsPlanejamentoComponent } from '../rgps-planejamento/rgps-planejamento.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { ConclusoesRmiComponent } from './rgps-resultados-apos-pec103/conclusoes
                 // RgpsResultadosAposPec062019Component,
                 RgpsResultadosAposPec103Component,
                 ListaCompetenciasComponent,
-                ConclusoesRmiComponent]
+                ConclusoesRmiComponent,
+                RgpsPlanejamentoComponent]
 })
 export class RgpsResultadosModule { }
