@@ -123,8 +123,7 @@ export class ExpectativaVidaService extends ControllerService {
     }
      
     if(resultado){
-       if(sexo === 'm'){
-         console.log('sexo: ',sexo)
+       if(sexo === 'm'){        
         return resultado['m'];
        }
        return resultado['f'];

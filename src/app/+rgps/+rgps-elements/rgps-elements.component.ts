@@ -264,7 +264,6 @@ console.log(calculo1);
 
   projetarExpectativa(idadeFracionada, dib) {
     let expectativa = 0;
-    let sexoSelecionado = this.sexoSegurado;
     let dataInicio = moment('2000-11-30');
     let dataFim = moment('2016-12-01');
     let dataHoje = moment();
