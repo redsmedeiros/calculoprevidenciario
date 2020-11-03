@@ -1338,6 +1338,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
       beneficioDevidoString += '/M';
       minimoAplicado = true;
+
+      if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
+        this.isMinimoInicialDevido = true;
+      }
     }
 
     if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
