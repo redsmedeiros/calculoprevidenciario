@@ -42,6 +42,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     idadeDibMoment: '',
   };
 
+  private tempoContribMinimoIdadeProgressiva = 0;
   public isUpdating;
 
 
@@ -128,6 +129,8 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     let percentualR1 = 60;
 
+    this.tempoContribMinimoIdadeProgressiva = contribuicao_min[this.seguradoTransicao.sexo];
+
     // console.log(regraIdade);
     // console.log(this.seguradoTransicao.idadeFracionada);
     // console.log(this.seguradoTransicao.redutorProfessor);
@@ -197,15 +200,15 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       //   + '|' + 'idade =' + idade + '|'
       //   + '|' + 'Tempo = ' + tempoContribuicao + '|');
 
-      if (fimContador.status) {
+      // if (fimContador.status) {
 
 
-        // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        //   + '|' + 'idade -' + idade + '|'
-        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-        //   + '|');
+      // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade -' + idade + '|'
+      //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+      //   + '|');
 
-      }
+      // }
 
       // if (this.addBissexto(auxiliarDate) > 0) {
       //   count += 1;
@@ -238,6 +241,21 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');
     //   tempoContribuicao += correcaoAnoBissexto;
     // }
+
+    const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
+                            this.seguradoTransicao.contribuicaoFracionadoAnos)
+                            <=
+                            (this.requisitoIdadeProgressivaRegra2[moment().year()][this.seguradoTransicao.sexo] -
+                              this.seguradoTransicao.idadeFracionada)
+                          );
+
+    if (verificacao) {
+      auxiliarDate = moment({
+        year: auxiliarDate.year(),
+        month: this.seguradoTransicao.dataNascimento.month(),
+        day: this.seguradoTransicao.dataNascimento.date()
+      });
+    }
 
 
     idadeMoment = this.calcularIdade(auxiliarDate);
