@@ -754,7 +754,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorNumericoDiferencaCorrigidaJurosObj);
 
 
-        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+       // valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + valorJuros;
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
@@ -3195,6 +3196,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns.push({ data: 'diferenca_corrigida' });
     columns.push({ data: 'juros' });
     columns.push({ data: 'valor_juros', width: '10rem' });
+   // columns.push({ data: 'honorarios', width: '10rem' }); // teste
 
     if (this.debugMode) {
       columns = [
