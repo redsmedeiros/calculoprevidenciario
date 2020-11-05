@@ -2069,9 +2069,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (maturidade != 0) {
 
-      if (somaVincendas === 0) {
-        somaVincendas = this.ultimaRenda;
-      }
+      // if (somaVincendas === 0) {
+      //   somaVincendas = this.ultimaRenda;
+      // }
+      // console.log(somaVincendas);
+
+      somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
 
       valorVincendas = parseFloat(somaVincendas.toFixed(2)) * maturidade;
 
