@@ -1127,10 +1127,20 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       if (!dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado)) {
+
         beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
+
+        if (this.beneficioDevidoTetosSemLimite < beneficioDevido) {
+          this.beneficioDevidoTetosSemLimite = beneficioDevido;
+        }
+
+
         this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
+
       } else {
+
         reajusteObj.reajuste = 1.0;
+
       }
 
       // regra proporcional 08/2006
@@ -1149,6 +1159,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
+
+
 
     // algortimo buracoNegro definida na seção de algortimos úteis.
     if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
@@ -1178,14 +1190,20 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    // console.log(dataCorrente.format('DD/MM/YYYY'));
-    // console.log(this.beneficioDevidoAposRevisao);
-    // console.log(this.beneficioDevidoAposRevisaoTetos);
-    // console.log(beneficioDevido);
-    // console.log(this.beneficioDevidoOs);
+    // console.log('teste-01 - I');
+    // console.log('data: ' + dataCorrente.format('MM/YYYY'));
+    // console.log('Devido sem teto: ' + this.beneficioDevidoTetosSemLimite);
+    // console.log('Devido: ' + beneficioDevido);
     // console.log('-----');
 
-
+    // if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) {
+    //   console.log('teste-01 - I');
+    //   console.log(this.beneficioDevidoAposRevisaoTetos);
+    //   console.log(this.beneficioDevidoTetosSemLimite);
+    //   console.log(beneficioDevido);
+    //   console.log(this.isTetos);
+    //   console.log('teste-01 - F');
+    // }
 
     if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
       dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
@@ -1223,8 +1241,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) {
 
-    //   console.log( this.beneficioDevidoAposRevisaoTetos);
-    //   console.log( this.beneficioDevidoTetosSemLimite);
+    //   console.log(this.beneficioDevidoAposRevisaoTetos);
+    //   console.log(this.beneficioDevidoTetosSemLimite);
     //   console.log(beneficioDevido);
     //   console.log(this.isTetos);
     // }
@@ -1254,7 +1272,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // line.beneficio_devido_sem_limites = this.formatMoney(beneficioDevido);
 
     if (this.isTetos) { // qaundo o tipo é AJ 28/07/2020
-      this.beneficioDevidoTetosSemLimite = beneficioDevido;
+      //  this.beneficioDevidoTetosSemLimite = beneficioDevido;
     }
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
@@ -1364,7 +1382,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioDevidoString += '/T';
 
-      if ( reajusteObj.reajuste > 1 && !this.isTetoInicialDevido) { //
+      if (reajusteObj.reajuste > 1 && !this.isTetoInicialDevido) { //
         this.isTetoInicialDevido = true;
       }
 
@@ -3012,7 +3030,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if ((this.isTetoInicialDevido && tipo === 'Devido')
-    || (this.isTetoInicialRecebido && tipo === 'Recebido')
+      || (this.isTetoInicialRecebido && tipo === 'Recebido')
       && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
@@ -3068,7 +3086,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if ((this.isTetoInicialDevido && tipo === 'Devido')
-    || (this.isTetoInicialRecebido && tipo === 'Recebido')
+      || (this.isTetoInicialRecebido && tipo === 'Recebido')
       && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return tetoSalarial;
@@ -3188,7 +3206,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     const dib = dataCorrente;
 
     if (dib.isAfter(moment('1994-07-01'))) {
-     // return (Math.floor(value * 100) / 100);
+      // return (Math.floor(value * 100) / 100);
       return (Math.round(value * 100) / 100);
     } else {
       return (Math.round(value * 100) / 100);
