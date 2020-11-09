@@ -82,7 +82,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
    */
   public requisitosRegra5(ano, sexo, idade, tempo_contribuicao) {
 
-    const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5475 : 15;
+    const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5478 : 15;
     const regra5 = this.getparametrosRegra5(ano, sexo);
 
     // console.log(regra5);
@@ -241,9 +241,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       );
 
 
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade -' + idade + '|'
-      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
+      console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
+        + '|' + 'idade -' + idade + '|'
+        + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
       count++;
       idade += 1;
@@ -252,15 +252,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
-
-      if (fimContador.status) {
-
-        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        //   + '|' + 'idade -' + idade + '|'
-        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-        //   + '|');
-
-      }
 
     } while (!fimContador.status && idade <= 54750);
 
@@ -276,9 +267,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // }
 
 
-    // console.log(auxiliarDate);
-
-
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
       auxiliarDate = moment({
         year: auxiliarDate.year(),
@@ -291,7 +279,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     } else {
 
       idadeMoment = this.calcularIdade(auxiliarDate);
-      idadeMoment.add(-1, 'day');
+      //idadeMoment.add(-1, 'day');
 
     }
 
