@@ -2132,7 +2132,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       // }
       // console.log(somaVincendas);
 
-      somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
+      // somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
+      somaVincendas =  this.ultimaRenda;
 
       valorVincendas = parseFloat(somaVincendas.toFixed(2)) * maturidade;
 
