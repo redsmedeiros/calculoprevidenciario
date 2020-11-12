@@ -66,6 +66,7 @@ export class CalculoAtrasado extends Model {
     num_dependentes: '',
     dip_valores_devidos: '',
     list_recebidos: '',
+    list_devidos: '',
     list_acrescimos_deducoes: '',
     data_adicional_25: '',
   };
@@ -131,6 +132,7 @@ export class CalculoAtrasado extends Model {
   public num_dependentes;
   public dip_valores_devidos;
   public list_recebidos;
+  public list_devidos;
   public list_acrescimos_deducoes;
   public data_adicional_25;
 

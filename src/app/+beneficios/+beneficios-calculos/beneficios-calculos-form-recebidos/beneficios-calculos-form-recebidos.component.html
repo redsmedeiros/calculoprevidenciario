@@ -1,26 +1,28 @@
-
 <article class="col-sm-12 col-md-12 col-lg-12">
   <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
     <header>
       <span class="widget-icon">
         <i class="fa fa-table"></i>
       </span>
-      <h2> Lista dos Benefícios Recebidos</h2>
-       <button
-      type="button"
-      (click)="recebidosModal.show()"
-      class="btn btn-labeled btn-info pull-right"
-    >
-      <span class="btn-label">
-        <i class="fa fa-plus"></i> </span
-      >Adicionar Recebidos
-    </button> 
+      <h2>Lista dos Benefícios Recebidos</h2>
+      <button
+        type="button"
+        (click)="recebidosModal.show()"
+        class="btn btn-labeled btn-info pull-right"
+      >
+        <span class="btn-label"> <i class="fa fa-plus"></i> </span>Adicionar
+        Recebidos
+      </button>
     </header>
     <div>
       <div class="widget-body no-padding widget-body-custom">
-        <div class="well well-light" *ngIf="listRecebidos.length === 0"><strong>Não há itens na lista</strong></div>
-        <table class="table table-striped table-bordered table-hover table-responsive table-condensed" 
-        *ngIf="!isUpdating && listRecebidos.length > 0">
+        <div class="well well-light" *ngIf="listRecebidos.length === 0">
+          <strong>Não há itens na lista</strong>
+        </div>
+        <table
+          class="table table-striped table-bordered table-hover table-responsive table-condensed"
+          *ngIf="!isUpdating && listRecebidos.length > 0"
+        >
           <thead>
             <tr>
               <th>Espécie / Número Benefício</th>
@@ -30,34 +32,58 @@
               <th class="text-center">RMI</th>
               <th class="text-center">IRT</th>
               <th class="text-center">Inferior ao Mínimo</th>
-              <th class="text-center">Ações</th>
+              <th class="text-center" width="75px">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let recebidoLine of listRecebidos">
-              <td>{{getTipoAposentadoria(recebidoLine.especie)}} 
-                <span *ngIf="recebidoLine.numeroBeneficio"><br> {{recebidoLine.numeroBeneficio}}</span>
+              <td>
+                {{ getTipoAposentadoria(recebidoLine.especie) }}
+                <span *ngIf="recebidoLine.numeroBeneficio"
+                  ><br />
+                  {{ recebidoLine.numeroBeneficio }}</span
+                >
               </td>
-              <td>DIB: {{recebidoLine.dib}}  
-                <span *ngIf="recebidoLine.dip"><br>DIP: {{recebidoLine.dip}}</span>
+              <td>
+                {{ recebidoLine.dib }}
+                <span *ngIf="recebidoLine.dip"
+                  ><br />
+                  {{ recebidoLine.dip }}</span
+                >
               </td>
-              <td>{{recebidoLine.dibAnterior}}</td>
-              <td>{{recebidoLine.cessacao}}</td>
+              <td>{{ recebidoLine.dibAnterior }}</td>
+              <td>{{ recebidoLine.cessacao }}</td>
               <td class="text-center">
-                {{definicaoMoeda.formatMoney(recebidoLine.rmi)}}
-                <span *ngIf="recebidoLine.rmiBuracoNegro" >
-                  <br>{{definicaoMoeda.formatMoney(recebidoLine.rmiBuracoNegro)}}
+                {{ definicaoMoeda.formatMoney(recebidoLine.rmi) }}
+                <span *ngIf="recebidoLine.rmiBuracoNegro">
+                  <br />{{
+                    definicaoMoeda.formatMoney(recebidoLine.rmiBuracoNegro)
+                  }}
                 </span>
               </td>
-              <td class="text-center">{{recebidoLine.irt}}</td>
-              <td class="text-center">{{(recebidoLine.reajuesteMinimo) ? 'Sim': 'Não'}}</td>
+              <td class="text-center">{{ recebidoLine.irt }}</td>
+              <td class="text-center">
+                {{ recebidoLine.reajuesteMinimo ? "Sim" : "Não" }}
+              </td>
               <td class="text-center" width="auto">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-xs btn-warning" id="editar{{recebidoLine.id}}" (click)='getupdatePeriodoRecebidoList(recebidoLine.id)' title='Editar' >
-                    <i class='fa fa-edit fa-1-7x'></i>
+                  <button
+                    type="button"
+                    class="btn btn-xs btn-warning"
+                    id="editar{{ recebidoLine.id }}"
+                    (click)="getupdatePeriodoRecebidoList(recebidoLine.id)"
+                    title="Editar"
+                  >
+                    <i class="fa fa-edit fa-1-7x"></i>
                   </button>
-                  <button type="button" class="btn btn-xs btn-danger" id="deletar{{recebidoLine.id}}" (click)='deletePeriodoRecebidoList(recebidoLine.id)' title='Excluir'>
-                    <i class='fa fa-times fa-1-7x'></i>
+                  <button
+                    type="button"
+                    class="btn btn-xs btn-danger"
+                    id="deletar{{ recebidoLine.id }}"
+                    (click)="deletePeriodoRecebidoList(recebidoLine.id)"
+                    title="Excluir"
+                  >
+                    <i class="fa fa-times fa-1-7x"></i>
                   </button>
                 </div>
               </td>
@@ -65,13 +91,12 @@
           </tbody>
         </table>
         <div *ngIf="isUpdating" class="alert alert-info text-align-center">
-          <h3> <i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+          <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
         </div>
       </div>
     </div>
   </sa-widget>
 </article>
-
 
 <div
   bsModal
@@ -119,9 +144,7 @@
                           for="especieRecebidoSelect"
                           >Espécie:</label
                         >
-                        <div
-                          class="col-md-9"
-                        >
+                        <div class="col-md-9">
                           <select
                             name="especieValoresRecebidos"
                             [(ngModel)]="especieValoresRecebidos"
@@ -164,18 +187,17 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class=" col-md-7 control-label"
+                        <label class="col-md-7 control-label"
                           >Data de Início de Benefício - DIB*:</label
                         >
-                        <div
-                          class="col-md-4"
-                          
-                        >
+                        <div class="col-md-4">
                           <input
                             class="form-control"
                             [textMask]="{ mask: dateMask }"
                             name="dibValoresRecebidos"
-                            (blur)="dibValoresRecebidosChanged(); setCheckRevisao()"
+                            (blur)="
+                              dibValoresRecebidosChanged(); setCheckRevisao()
+                            "
                             (change)="validRecebidos()"
                             [(ngModel)]="dibValoresRecebidos"
                             type="text"
@@ -191,10 +213,7 @@
                         <label class="control-label col-md-7"
                           >Data de Início do Pagamento - DIP*:</label
                         >
-                        <div
-                          class="col-md-4"
-                          
-                        >
+                        <div class="col-md-4">
                           <input
                             class="form-control"
                             [textMask]="{ mask: dateMask }"
@@ -211,11 +230,33 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-7">Data Final Recebidos:</label>
-                        <div
-                          class="col-md-4"
-                          
+                        <label class="control-label col-md-7"
+                          >Data de Início do Benefício Anterior (Se
+                          houver):</label
                         >
+                        <div class="col-md-4">
+                          <input
+                            name="dibAnteriorValoresRecebidos"
+                            [(ngModel)]="dibAnteriorValoresRecebidos"
+                            (blur)="setCcheckBoxdibAnterior()"
+                            class="form-control"
+                            [textMask]="{ mask: dateMask }"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('dibAnteriorValoresRecebidos')"
+                            class="text-danger"
+                            >{{
+                              errors.get("dibAnteriorValoresRecebidos")
+                            }}</small
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-7"
+                          >Data Final Recebidos:</label
+                        >
+                        <div class="col-md-4">
                           <input
                             name="cessacaoValoresRecebidos"
                             [(ngModel)]="cessacaoValoresRecebidos"
@@ -230,29 +271,7 @@
                           >
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-7"
-                          >Data de Início do Benefício Anterior (Se houver):</label
-                        >
-                        <div
-                          class="col-md-4"
-                          
-                        >
-                          <input
-                            name="dibAnteriorValoresRecebidos"
-                            [(ngModel)]="dibAnteriorValoresRecebidos"
-                            (blur)="setCcheckBoxdibAnterior()"
-                            class="form-control"
-                            [textMask]="{ mask: dateMask }"
-                            type="text"
-                          />
-                          <small
-                            *ngIf="errors.has('dibAnteriorValoresRecebidos')"
-                            class="text-danger"
-                            >{{ errors.get("dibAnteriorValoresRecebidos") }}</small
-                          >
-                        </div>
-                      </div>
+
                       <div class="form-group">
                         <label
                           *ngIf="recebidosBuracoNegro"
@@ -274,9 +293,7 @@
                           ></i
                           >Renda Mensal Inicial - RMI*:</label
                         >
-                        <div
-                          class="col-md-4"
-                          >
+                        <div class="col-md-4">
                           <input
                             name="rmiValoresRecebidos"
                             currencyMask
@@ -293,33 +310,78 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="col-md-7 control-label">Aplicar Adicional de 25%: </label>
+                        <label class="col-md-7 control-label"
+                          >Aplicar Adicional de 25%:
+                        </label>
                         <div class="col-md-4">
                           <label class="radio radio-inline">
-                            <input [(ngModel)]="adicional25Recebido" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('adicional25Recebido')" type="radio" value="0"> Não </label>
+                            <input
+                              [(ngModel)]="adicional25Recebido"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('adicional25Recebido')"
+                              type="radio"
+                              value="0"
+                            />
+                            Não
+                          </label>
                           <label class="radio radio-inline">
-                            <input [(ngModel)]="adicional25Recebido" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('adicional25Recebido')" type="radio" value="1"> Sim </label>
+                            <input
+                              [(ngModel)]="adicional25Recebido"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('adicional25Recebido')"
+                              type="radio"
+                              value="1"
+                            />
+                            Sim
+                          </label>
                           <div class="row">
                             <div class="col-md-12">
-                              <small *ngIf="errors.has('adicional25Recebido')" class="text-danger">{{ errors.get('adicional25Recebido')| i18n }}</small>
+                              <small
+                                *ngIf="errors.has('adicional25Recebido')"
+                                class="text-danger"
+                                >{{
+                                  errors.get("adicional25Recebido") | i18n
+                                }}</small
+                              >
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" *ngIf="adicional25Recebido == 1" >
-                        <div >
-                          <label class="control-label" [ngClass]="(true)?  'col-md-7' : 'col-md-4'">Data de Início do Adicional de 25%:  </label>
-                          <div class="col-md-4" [ngClass]="(true)?  'col-md-4' : 'col-md-2'">
-                            <input name='dataInicialadicional2Recebido' [textMask]="{mask: dateMask}" [(ngModel)]="dataInicialadicional2Recebido"  class="form-control" type="text">
-                            <small *ngIf="errors.has('dataInicialadicional2Recebido')" class="text-danger">{{ errors.get('dataInicialadicional2Recebido') }}</small>
+                      <div class="form-group" *ngIf="adicional25Recebido == 1">
+                        <div>
+                          <label
+                            class="control-label"
+                            [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                            >Data de Início do Adicional de 25%:
+                          </label>
+                          <div
+                            class="col-md-4"
+                            [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                          >
+                            <input
+                              name="dataInicialadicional2Recebido"
+                              [textMask]="{ mask: dateMask }"
+                              [(ngModel)]="dataInicialadicional2Recebido"
+                              class="form-control"
+                              type="text"
+                            />
+                            <small
+                              *ngIf="
+                                errors.has('dataInicialadicional2Recebido')
+                              "
+                              class="text-danger"
+                              >{{
+                                errors.get("dataInicialadicional2Recebido")
+                              }}</small
+                            >
                           </div>
-                      </div>
+                        </div>
                       </div>
                       <div *ngIf="recebidosBuracoNegro" class="form-group">
                         <label class="control-label col-md-7"
                           >RMI depois da revisão (Buraco Negro):</label
                         >
-                        <div class="col-md-4" >
+                        <div class="col-md-4">
                           <input
                             name="rmiValoresRecebidosBuracoNegro"
                             [(ngModel)]="rmiValoresRecebidosBuracoNegro"
@@ -337,9 +399,7 @@
                             class="fa fa-question-circle fa-lg text-info"
                           ></i>
                         </label>
-                        <div
-                          class="col-md-4"
-                        >
+                        <div class="col-md-4">
                           <input
                             name="taxaAjusteMaximaConcedida"
                             class="form-control"
@@ -350,7 +410,9 @@
                           <small
                             *ngIf="errors.has('taxaAjusteMaximaConcedida')"
                             class="text-danger"
-                            >{{ errors.get("taxaAjusteMaximaConcedida") }}</small
+                            >{{
+                              errors.get("taxaAjusteMaximaConcedida")
+                            }}</small
                           >
                         </div>
                       </div>
@@ -365,7 +427,9 @@
                                 class="checkbox"
                                 checked="checked"
                               />
-                              <span>Valor da RMI inferior ao Salário Mínimo</span>
+                              <span
+                                >Valor da RMI inferior ao Salário Mínimo</span
+                              >
                             </label>
                           </div>
                         </div>
@@ -374,8 +438,16 @@
                         <div class="col-md-8 col-sm-offset-3">
                           <div class="checkbox">
                             <label>
-                              <input type="checkbox" name="calcularAbono13UltimoMesRecebidos" [(ngModel)]="calcularAbono13UltimoMesRecebidos" class="checkbox" checked="checked">
-                              <span>Calcular o 13º no Último Ano do Cálculo.</span>
+                              <input
+                                type="checkbox"
+                                name="calcularAbono13UltimoMesRecebidos"
+                                [(ngModel)]="calcularAbono13UltimoMesRecebidos"
+                                class="checkbox"
+                                checked="checked"
+                              />
+                              <span
+                                >Calcular o 13º no Último Ano do Cálculo.</span
+                              >
                             </label>
                           </div>
                         </div>
@@ -394,7 +466,10 @@
                           <span class="btn-label">
                             <i class="fa fa-plus"></i>
                           </span>
-                          <span>&nbsp;&nbsp;&nbsp;Adicionar Período&nbsp;&nbsp;&nbsp;</span>
+                          <span
+                            >&nbsp;&nbsp;&nbsp;Adicionar
+                            Período&nbsp;&nbsp;&nbsp;</span
+                          >
                         </button>
                         <button
                           *ngIf="rowRecebidosEdit"
@@ -406,7 +481,10 @@
                           <span class="btn-label">
                             <i class="fa fa-edit"></i>
                           </span>
-                          <span>&nbsp;&nbsp;&nbsp;Atualizar Período&nbsp;&nbsp;&nbsp;</span>
+                          <span
+                            >&nbsp;&nbsp;&nbsp;Atualizar
+                            Período&nbsp;&nbsp;&nbsp;</span
+                          >
                         </button>
                       </div>
                     </div>

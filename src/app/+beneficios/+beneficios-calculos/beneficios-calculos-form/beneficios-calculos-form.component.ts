@@ -5,7 +5,8 @@ import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoAtrasado } from '../CalculoAtrasado.model';
 import { CalculoAtrasadoService } from '../CalculoAtrasado.service';
-import { Recebidos } from '../beneficios-calculos-form-recebidos/Recebidos.model';
+import { Recebidos } from './../beneficios-calculos-form-recebidos/Recebidos.model';
+import { Devidos } from './../beneficios-calculos-form-devidos/Devidos.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { validateConfig } from '@angular/router/src/config';
@@ -627,8 +628,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.errors.add({ 'numDependentes': ['O valor deve ser nenor que 20'] });
     }
 
-    console.log(this.errors);
-
     return valid;
   }
 
@@ -860,12 +859,20 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_ajuste_maxima_concedida = 0.0;
       }
 
+      this.formData.list_devidos = null;
+      if (this.listDevidos.length > 0) {
+        this.formData.list_devidos = JSON.stringify(this.listDevidos);
+      }
+
       this.formData.list_recebidos = null;
       if (this.listRecebidos.length > 0) {
         this.formData.list_recebidos = JSON.stringify(this.listRecebidos);
       }
 
-      this.onSubmit.emit(this.formData);
+      console.log(this.formData);
+      console.log(this.rmiValoresDevidos);
+
+       this.onSubmit.emit(this.formData);
 
     } else {
       swal({
@@ -903,7 +910,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     // console.log(this.chkNotGranted);
   }
 
+  reciverFeedbackDevidos(rstDevidos) {
+    console.log(rstDevidos);
+    this.listDevidos = rstDevidos;
+  }
 
+  reciverFeedbackRecebidos(rstRecebido) {
+    console.log(rstRecebido);
+    this.listRecebidos = rstRecebido;
+  }
 
 
   setCcheckBoxdibAnterior() {
@@ -1086,6 +1101,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.list_recebidos && this.formData.list_recebidos.length > 0) {
       this.listRecebidos = JSON.parse(this.formData.list_recebidos);
     }
+    this.addLoadRecebidoList();
+
+    // this.formData.list_devidos = this.addDevidosList(this.formData);
+
+    if ((this.formData.list_devidos && this.formData.list_devidos.length > 0)) {
+      this.listDevidos = JSON.parse(this.formData.list_devidos);
+    } else {
+      this.addLoadDevidosList();
+    }
 
     this.dibValoresDevidosChanged();
     this.dibValoresRecebidosChanged();
@@ -1093,11 +1117,58 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
 
+  private addLoadDevidosList() {
+
+    const devidoMultiplo = new Devidos(
+      this.listDevidos.length + 1,
+      this.especieValoresDevidos,
+      this.numeroBeneficioDevido,
+      this.dibValoresDevidos,
+      this.dipValoresDevidos,
+      this.cessacaoValoresDevidos,
+      this.dibAnteriorValoresDevidos,
+      this.rmiValoresDevidos,
+      this.rmiValoresDevidosBuracoNegro,
+      this.taxaAjusteMaximaEsperada,
+      this.naoAplicarSMBeneficioEsperado);
+
+    this.listDevidos.push(devidoMultiplo);
+    this.rowDevidosEdit = (this.listDevidos.length > 0);
+  }
+
+  private addLoadRecebidoList() {
+
+    if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
+
+      const recebidoMultiplo = new Recebidos(
+        this.listRecebidos.length + 1,
+        this.especieValoresRecebidos,
+        this.numeroBeneficioRecebido,
+        this.dibValoresRecebidos,
+        this.dipValoresRecebidos,
+        this.cessacaoValoresRecebidos,
+        this.dibAnteriorValoresRecebidos,
+        this.rmiValoresRecebidos,
+        this.rmiValoresRecebidosBuracoNegro,
+        this.taxaAjusteMaximaConcedida,
+        this.naoAplicarSMBeneficioConcedido);
+
+      const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
+
+      if (isExistRecebido.length === 0) {
+        this.listRecebidos.push(recebidoMultiplo);
+      }
+
+    }
+
+  }
+
+
   dibValoresRecebidosChanged() {
 
     if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
       this.dipValoresRecebidos = this.dibValoresRecebidos;
-      this.validRecebidos();
+      // this.validRecebidos();
     }
 
     if (this.chkUseSameDib) {
@@ -1403,248 +1474,250 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   }
 
+  // inicio Recebidos
 
-  private validatePeriodoRecebidos(recebidoMultiplo) {
+  // private validatePeriodoRecebidos(recebidoMultiplo) {
 
-    if (this.listRecebidos.length === 0) {
-      return true;
-    }
+  //   if (this.listRecebidos.length === 0) {
+  //     return true;
+  //   }
 
-    const isExistConcomitante = this.listRecebidos.find(Obj => (
-      (moment(recebidoMultiplo.dib, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
-        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
-      ||
-      (moment(recebidoMultiplo.cessacao, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
-        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
-    ));
+  //   const isExistConcomitante = this.listRecebidos.find(Obj => (
+  //     (moment(recebidoMultiplo.dib, 'DD/MM/YYYY')).isBetween(
+  //       moment(Obj.dib, 'DD/MM/YYYY'),
+  //       moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+  //     ||
+  //     (moment(recebidoMultiplo.cessacao, 'DD/MM/YYYY')).isBetween(
+  //       moment(Obj.dib, 'DD/MM/YYYY'),
+  //       moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+  //   ));
 
-    return (isExistConcomitante === undefined);
-  }
+  //   return (isExistConcomitante === undefined);
+  // }
 
-  private inserirRecebidoList(event = null) {
+  // private inserirRecebidoList(event = null) {
 
-    const recebidoMultiplo = new Recebidos(
-      this.listRecebidos.length + 1,
-      this.especieValoresRecebidos,
-      this.numeroBeneficioRecebido,
-      this.dibValoresRecebidos,
-      this.dipValoresRecebidos,
-      this.cessacaoValoresRecebidos,
-      this.dibAnteriorValoresRecebidos,
-      this.rmiValoresRecebidos,
-      this.rmiValoresRecebidosBuracoNegro,
-      this.taxaAjusteMaximaConcedida,
-      this.naoAplicarSMBeneficioConcedido);
+  //   const recebidoMultiplo = new Recebidos(
+  //     this.listRecebidos.length + 1,
+  //     this.especieValoresRecebidos,
+  //     this.numeroBeneficioRecebido,
+  //     this.dibValoresRecebidos,
+  //     this.dipValoresRecebidos,
+  //     this.cessacaoValoresRecebidos,
+  //     this.dibAnteriorValoresRecebidos,
+  //     this.rmiValoresRecebidos,
+  //     this.rmiValoresRecebidosBuracoNegro,
+  //     this.taxaAjusteMaximaConcedida,
+  //     this.naoAplicarSMBeneficioConcedido);
 
-    let statusInput = true;
+  //   let statusInput = true;
 
-    console.log(recebidoMultiplo);
+  //   console.log(recebidoMultiplo);
 
-    if (!this.validRecebidos()) {
+  //   if (!this.validRecebidos()) {
 
-      statusInput = false;
+  //     statusInput = false;
 
-      swal({
-        position: 'bottom-end',
-        type: 'error',
-        title: 'Verifique as informações do período recebido.',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }
+  //     swal({
+  //       position: 'bottom-end',
+  //       type: 'error',
+  //       title: 'Verifique as informações do período recebido.',
+  //       showConfirmButton: false,
+  //       timer: 1000
+  //     });
+  //   }
 
-    if (!this.validatePeriodoRecebidos(recebidoMultiplo) && statusInput) {
+  //   if (!this.validatePeriodoRecebidos(recebidoMultiplo) && statusInput) {
 
-      statusInput = false;
+  //     statusInput = false;
 
-      swal({
-        position: 'bottom-end',
-        type: 'error',
-        title: 'O perído de Benefício Recebido não deve ser concomitante.',
-        showConfirmButton: false,
-        timer: 4000
-      });
-    }
-
-
-    if (statusInput) {
-
-      this.updateDatatableRecebidos(recebidoMultiplo);
-      this.clearFormRecebido();
-
-      swal({
-        position: 'bottom-end',
-        type: 'success',
-        title: 'Lista de Períodos Atualizada',
-        showConfirmButton: false,
-        timer: 1000
-      });
-
-    }
-
-  }
-
-  private deletePeriodoRecebidoList(id) {
-
-    this.listRecebidos = this.listRecebidos.filter(row => row.id !== id);
-
-    swal({
-      position: 'bottom-end',
-      type: 'success',
-      title: 'Lista de Períodos Atualizada',
-      showConfirmButton: false,
-      timer: 1000
-    });
-  }
+  //     swal({
+  //       position: 'bottom-end',
+  //       type: 'error',
+  //       title: 'O perído de Benefício Recebido não deve ser concomitante.',
+  //       showConfirmButton: false,
+  //       timer: 4000
+  //     });
+  //   }
 
 
-  private updateRecebidoList(event, rowRecebidosEdit) {
-    this.listRecebidos = this.listRecebidos.filter(row => row.id !== rowRecebidosEdit);
-    this.inserirRecebidoList();
-    this.rowRecebidosEdit = null;
-  }
+  //   if (statusInput) {
 
-  private getupdatePeriodoRecebidoList(id) {
-    const rowEdit = (this.listRecebidos.filter(row => row.id === id))[0];
-    this.seTFormRecebido(rowEdit);
-  }
+  //     this.updateDatatableRecebidos(recebidoMultiplo);
+  //     this.clearFormRecebido();
 
-  private seTFormRecebido(rowEdit) {
-    this.rowRecebidosEdit = rowEdit.id;
-    this.especieValoresRecebidos = rowEdit.especie;
-    this.numeroBeneficioRecebido = rowEdit.numeroBeneficio;
-    this.dibValoresRecebidos = rowEdit.dib;
-    this.dipValoresRecebidos = rowEdit.dip;
-    this.cessacaoValoresRecebidos = rowEdit.cessacao;
-    this.dibAnteriorValoresRecebidos = rowEdit.dibAnterior;
-    this.rmiValoresRecebidos = rowEdit.rmi;
-    this.rmiValoresRecebidosBuracoNegro = rowEdit.rmiBuracoNegro;
-    this.taxaAjusteMaximaConcedida = rowEdit.irt;
-    this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
-  }
+  //     swal({
+  //       position: 'bottom-end',
+  //       type: 'success',
+  //       title: 'Lista de Períodos Atualizada',
+  //       showConfirmButton: false,
+  //       timer: 1000
+  //     });
 
+  //   }
 
-  private clearFormRecebido() {
-    this.especieValoresRecebidos = '';
-    this.numeroBeneficioRecebido = '';
-    this.dibValoresRecebidos = '';
-    this.dipValoresRecebidos = '';
-    this.cessacaoValoresRecebidos = '';
-    this.dibAnteriorValoresRecebidos = '';
-    this.rmiValoresRecebidos = '';
-    this.rmiValoresRecebidosBuracoNegro = '';
-    this.taxaAjusteMaximaConcedida = '';
-    this.naoAplicarSMBeneficioConcedido = false;
-  }
+  // }
+
+  // private deletePeriodoRecebidoList(id) {
+
+  //   this.listRecebidos = this.listRecebidos.filter(row => row.id !== id);
+
+  //   swal({
+  //     position: 'bottom-end',
+  //     type: 'success',
+  //     title: 'Lista de Períodos Atualizada',
+  //     showConfirmButton: false,
+  //     timer: 1000
+  //   });
+  // }
 
 
-  private updateDatatableRecebidos(recebidos) {
+  // private updateRecebidoList(event, rowRecebidosEdit) {
+  //   this.listRecebidos = this.listRecebidos.filter(row => row.id !== rowRecebidosEdit);
+  //   this.inserirRecebidoList();
+  //   this.rowRecebidosEdit = null;
+  // }
 
-    if (typeof recebidos === 'object') {
-      this.listRecebidos.push(recebidos);
+  // private getupdatePeriodoRecebidoList(id) {
+  //   const rowEdit = (this.listRecebidos.filter(row => row.id === id))[0];
+  //   this.seTFormRecebido(rowEdit);
+  // }
 
-      this.listRecebidos.sort((a, b) => {
-        if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
-          return -1;
-        }
-      });
-    }
-  }
-
-  validRecebidos() {
-
-    let valid = true;
-    this.errors.clear();
-
-    // Check if its necessary to validate the box of 'Valores Recebidos'
-    // if (!this.isEmptyInput(this.especieValoresRecebidos) ||
-    //   !this.isEmptyInput(this.dibValoresRecebidos) ||
-    //   !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
-    //   !this.isEmptyInput(this.rmiValoresRecebidos) ||
-    //   !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
-
-    if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
-      this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
-      valid = false;
-    }
-
-    if (this.isEmptyInput(this.dibValoresRecebidos)) {
-      this.errors.add({ 'dibValoresRecebidos': ['A DIB é obrigatoria.'] });
-      valid = false;
-    } else {
-
-      if (!this.isValidDate(this.dibValoresRecebidos)) {
-        this.errors.add({ 'dibValoresRecebidos': ['Insira uma data Válida.'] });
-        valid = false;
-      } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-        valid = false;
-      }
-
-    }
-
-    if (this.isEmptyInput(this.dipValoresRecebidos)) {
-      this.errors.add({ 'dipValoresRecebidos': ['A DIP é obrigatoria.'] });
-      valid = false;
-    } else {
-
-      if (!this.isValidDate(this.dipValoresRecebidos)) {
-        this.errors.add({ 'dipValoresRecebidos': ['Insira uma data Válida.'] });
-        valid = false;
-      } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-        valid = false;
-      }
-
-    }
-
-    if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
-      !this.isValidDate(this.cessacaoValoresRecebidos) &&
-      !this.isEmptyInput(this.dibValoresDevidos) &&
-      !this.isValidDate(this.dibValoresDevidos) &&
-      !this.compareDates(this.dibValoresDevidos, this.cessacaoValoresRecebidos)) {
-
-      this.errors.add({ 'cessacaoValoresRecebidos': ['A Cessação de valores recebidos deve ser maior que a DIB de valores devidos.'] });
-      valid = false;
-    }
-
-    if (this.isEmptyInput(this.rmiValoresRecebidos)) {
-      this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos é Necessária.'] });
-      valid = false;
-    } else if (this.rmiValoresRecebidos == 0) {
-      this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos deve ser maior que zero.'] });
-      valid = false;
-    }
-
-    if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
-
-      if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
-        this.errors.add({ 'dibAnteriorValoresRecebidos': ['Insira uma data válida.'] });
-        valid = false;
-      } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-        valid = false;
-      }
-    }
+  // private seTFormRecebido(rowEdit) {
+  //   this.rowRecebidosEdit = rowEdit.id;
+  //   this.especieValoresRecebidos = rowEdit.especie;
+  //   this.numeroBeneficioRecebido = rowEdit.numeroBeneficio;
+  //   this.dibValoresRecebidos = rowEdit.dib;
+  //   this.dipValoresRecebidos = rowEdit.dip;
+  //   this.cessacaoValoresRecebidos = rowEdit.cessacao;
+  //   this.dibAnteriorValoresRecebidos = rowEdit.dibAnterior;
+  //   this.rmiValoresRecebidos = rowEdit.rmi;
+  //   this.rmiValoresRecebidosBuracoNegro = rowEdit.rmiBuracoNegro;
+  //   this.taxaAjusteMaximaConcedida = rowEdit.irt;
+  //   this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
+  // }
 
 
-    if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+  // private clearFormRecebido() {
+  //   this.especieValoresRecebidos = '';
+  //   this.numeroBeneficioRecebido = '';
+  //   this.dibValoresRecebidos = '';
+  //   this.dipValoresRecebidos = '';
+  //   this.cessacaoValoresRecebidos = '';
+  //   this.dibAnteriorValoresRecebidos = '';
+  //   this.rmiValoresRecebidos = '';
+  //   this.rmiValoresRecebidosBuracoNegro = '';
+  //   this.taxaAjusteMaximaConcedida = '';
+  //   this.naoAplicarSMBeneficioConcedido = false;
+  // }
 
-      if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
-        this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
-        valid = false;
-      } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-        valid = false;
-      }
-    }
-    // }
 
-    return valid;
-  }
+  // private updateDatatableRecebidos(recebidos) {
 
+  //   if (typeof recebidos === 'object') {
+  //     this.listRecebidos.push(recebidos);
+
+  //     this.listRecebidos.sort((a, b) => {
+  //       if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
+  //         return -1;
+  //       }
+  //     });
+  //   }
+  // }
+
+  // validRecebidos() {
+
+  //   let valid = true;
+  //   this.errors.clear();
+
+  //   // Check if its necessary to validate the box of 'Valores Recebidos'
+  //   // if (!this.isEmptyInput(this.especieValoresRecebidos) ||
+  //   //   !this.isEmptyInput(this.dibValoresRecebidos) ||
+  //   //   !this.isEmptyInput(this.cessacaoValoresRecebidos) ||
+  //   //   !this.isEmptyInput(this.rmiValoresRecebidos) ||
+  //   //   !this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+  //   if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
+  //     this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
+  //     valid = false;
+  //   }
+
+  //   if (this.isEmptyInput(this.dibValoresRecebidos)) {
+  //     this.errors.add({ 'dibValoresRecebidos': ['A DIB é obrigatoria.'] });
+  //     valid = false;
+  //   } else {
+
+  //     if (!this.isValidDate(this.dibValoresRecebidos)) {
+  //       this.errors.add({ 'dibValoresRecebidos': ['Insira uma data Válida.'] });
+  //       valid = false;
+  //     } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+  //       this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+  //       valid = false;
+  //     }
+
+  //   }
+
+  //   if (this.isEmptyInput(this.dipValoresRecebidos)) {
+  //     this.errors.add({ 'dipValoresRecebidos': ['A DIP é obrigatoria.'] });
+  //     valid = false;
+  //   } else {
+
+  //     if (!this.isValidDate(this.dipValoresRecebidos)) {
+  //       this.errors.add({ 'dipValoresRecebidos': ['Insira uma data Válida.'] });
+  //       valid = false;
+  //     } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+  //       this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+  //       valid = false;
+  //     }
+
+  //   }
+
+  //   if (!this.isEmptyInput(this.cessacaoValoresRecebidos) &&
+  //     !this.isValidDate(this.cessacaoValoresRecebidos) &&
+  //     !this.isEmptyInput(this.dibValoresDevidos) &&
+  //     !this.isValidDate(this.dibValoresDevidos) &&
+  //     !this.compareDates(this.dibValoresDevidos, this.cessacaoValoresRecebidos)) {
+
+  //     this.errors.add({ 'cessacaoValoresRecebidos': ['A Cessação de valores recebidos deve ser maior que a DIB de valores devidos.'] });
+  //     valid = false;
+  //   }
+
+  //   if (this.isEmptyInput(this.rmiValoresRecebidos)) {
+  //     this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos é Necessária.'] });
+  //     valid = false;
+  //   } else if (this.rmiValoresRecebidos == 0) {
+  //     this.errors.add({ 'rmiValoresRecebidos': ['A RMI de Valores Recebidos deve ser maior que zero.'] });
+  //     valid = false;
+  //   }
+
+  //   if (!this.isEmptyInput(this.dibAnteriorValoresRecebidos)) {
+
+  //     if (!this.isValidDate(this.dibAnteriorValoresRecebidos)) {
+  //       this.errors.add({ 'dibAnteriorValoresRecebidos': ['Insira uma data válida.'] });
+  //       valid = false;
+  //     } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+  //       this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+  //       valid = false;
+  //     }
+  //   }
+
+
+  //   if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+
+  //     if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
+  //       this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
+  //       valid = false;
+  //     } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+  //       this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+  //       valid = false;
+  //     }
+  //   }
+  //   // }
+
+  //   return valid;
+  // }
+
+  // Recebidos
 
 
   getTipoAposentadoria(value) {
