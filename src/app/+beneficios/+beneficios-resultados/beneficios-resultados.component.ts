@@ -1391,9 +1391,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoString += '/M';
       minimoAplicado = true;
 
-      if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
+      // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
         this.isMinimoInicialDevido = true;
-      }
+     //  }
     }
 
     if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
@@ -1687,9 +1687,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioRecebidoString += '/M';
       minimoAplicado = true;
 
-      if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
+      // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
         this.isMinimoInicialRecebido = true;
-      }
+      // }
 
     }
 
@@ -1698,10 +1698,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     this.aplicarReajusteUltimoRecebido = false;
-    //a condição abaixo só é executada quando o valor aplicado é o salario minimo
+    // a condição abaixo só é executada quando o valor aplicado é o salario minimo
     if (minimoAplicado) {
-      //aplicarReajusteUltimoRecebido somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
-      //esse valor sera usado na proxima chamada da função
+      // aplicarReajusteUltimoRecebido somente quando, no mes anterior, 
+      // houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+      // esse valor sera usado na proxima chamada da função
       if (this.ultimoSalarioMinimoRecebido != beneficioRecebidoAjustado) {
         this.aplicarReajusteUltimoRecebido = true;
       }
