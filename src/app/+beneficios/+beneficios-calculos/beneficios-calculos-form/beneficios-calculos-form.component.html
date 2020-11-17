@@ -1,72 +1,136 @@
+<article class="col-sm-12 col-md-12 col-lg-12" id="inicioForm">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+    [collapsed]="false"
+    [sortable]="false"
+  >
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-calendar"></i>
+      </span>
+      <h2>Dados do Processo</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-4 control-label">Número do Processo:</label>
+              <div class="col-md-3">
+                <input
+                  [(ngModel)]="numeroProcesso"
+                  [textMask]="{ mask: NumProcessoMask }"
+                  name="numeroProcesso"
+                  class="form-control"
+                  type="text"
+                  maxlength="200"
+                />
+                <small
+                  *ngIf="errors.has('numeroProcesso')"
+                  class="text-danger"
+                  >{{ errors.get("numeroProcesso") }}</small
+                >
+              </div>
+            </div>
+            <div
+              class="form-group"
+              [ngClass]="{ ' has-error ': errors.has('dataAcaoJudicial') }"
+            >
+              <label class="col-md-4 control-label"
+                >Data do Ajuizamento da Ação*:</label
+              >
+              <div class="col-md-2">
+                <input
+                  [(ngModel)]="dataAcaoJudicial"
+                  [textMask]="{ mask: dateMask }"
+                  name="dataAcaoJudicial"
+                  class="form-control"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('dataAcaoJudicial')"
+                  class="text-danger"
+                  >{{ errors.get("dataAcaoJudicial") }}</small
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4 control-label">Data da Citação:</label>
+              <div class="col-md-2">
+                <input
+                  [(ngModel)]="dataCitacaoReu"
+                  [textMask]="{ mask: dateMask }"
+                  (blur)="setCompetenciaInicioJurosIsNull()"
+                  name="dataCitacaoReu"
+                  class="form-control"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('dataCitacaoReu')"
+                  class="text-danger"
+                  >{{ errors.get("dataCitacaoReu") }}</small
+                >
+              </div>
+            </div>
+            <div
+              class="form-group"
+              [ngClass]="{ 'has-error': errors.has('dataCalculo') }"
+            >
+              <label class="col-md-4 control-label">Atualizar até*:</label>
+              <div class="col-md-2">
+                <input
+                  [(ngModel)]="dataCalculo"
+                  [textMask]="{ mask: dateMaskCompetencia }"
+                  name="dataCalculo"
+                  class="form-control"
+                  type="text"
+                />
+                <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{
+                  errors.get("dataCalculo")
+                }}</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-8 col-sm-offset-4">
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="maturidade"
+                      [(ngModel)]="maturidade"
+                      class="checkbox"
+                    />
+                    <span>Calcular 12 Vincendas.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-8 col-sm-offset-4">
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="afastarPrescricao"
+                      [(ngModel)]="afastarPrescricao"
+                      class="checkbox"
+                    />
+                    <span>Afastar Prescrição.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
 
-
-      <article class="col-sm-12 col-md-12 col-lg-12" id='inicioForm'>
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-calendar"></i>
-            </span>
-            <h2>Dados do Processo</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body">
-              <form class="form-horizontal">
-
-                <fieldset>
-                  <div class="form-group">
-                    <label class="col-md-4 control-label">Número do Processo:</label>
-                    <div class="col-md-3">
-                      <input [(ngModel)]="numeroProcesso" [textMask]="{mask: NumProcessoMask}" name="numeroProcesso" class="form-control" type="text" maxlength="200">
-                      <small *ngIf="errors.has('numeroProcesso')" class="text-danger">{{ errors.get('numeroProcesso') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group" [ngClass]="{' has-error ': errors.has('dataAcaoJudicial')}">
-                    <label class="col-md-4 control-label">Data do Ajuizamento da Ação*:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="dataAcaoJudicial" [textMask]="{mask: dateMask}" name="dataAcaoJudicial" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataAcaoJudicial')" class="text-danger">{{ errors.get('dataAcaoJudicial') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-md-4 control-label">Data da Citação:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="dataCitacaoReu" [textMask]="{mask: dateMask}" (blur)="setCompetenciaInicioJurosIsNull()"  name="dataCitacaoReu" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataCitacaoReu')" class="text-danger">{{ errors.get('dataCitacaoReu') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group" [ngClass]="{'has-error': errors.has('dataCalculo')}">
-                    <label class="col-md-4 control-label">Atualizar até*:</label>
-                    <div class="col-md-2">
-                      <input [(ngModel)]="dataCalculo"  [textMask]="{mask: dateMaskCompetencia}" name="dataCalculo" class="form-control" type="text">
-                      <small *ngIf="errors.has('dataCalculo')" class="text-danger">{{ errors.get('dataCalculo') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-md-8 col-sm-offset-4">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" name="maturidade" [(ngModel)]="maturidade" class="checkbox" >
-                          <span>Calcular 12 Vincendas.</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-md-8 col-sm-offset-4">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" name="afastarPrescricao" [(ngModel)]="afastarPrescricao" class="checkbox" >
-                          <span>Afastar Prescrição.</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-
-                <!-- <fieldset>
+          <!-- <fieldset>
                   <div class="form-group">
                     <label class="col-md-2 control-label">Data do cálculo*:</label>
                     <div class="col-md-2">
@@ -87,12 +151,12 @@
                     </div>
                   </div>
                 </fieldset> -->
-                <p class="pull-right no-margin">* Campo Obrigatório</p>
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
+          <p class="pull-right no-margin">* Campo Obrigatório</p>
+        </form>
+      </div>
+    </div>
+  </sa-widget>
+</article>
 <!--       
       <article class="col-xs-12 col-sm-12" [ngClass]="(false)? 'col-md-12 col-lg-12' : 'col-md-6 col-lg-6'" >
          <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
@@ -512,49 +576,74 @@
       </article>
     -->
 
-      <app-beneficios-calculos-form-devidos
-      [formData]="form" 
-      [errors] = "errors"
-      [isEdit] = "isEdit"
-      [listDevidos] = "listDevidos"
-      [isUpdatingDevidos] = "isUpdatingDevido"
-      (devidosAtributes)="reciverFeedbackDevidos($event)"
-      ></app-beneficios-calculos-form-devidos>
+<app-beneficios-calculos-form-devidos
+  [formData]="form"
+  [errors]="errors"
+  [isEdit]="isEdit"
+  [listDevidos]="listDevidos"
+  [isUpdatingDevidos]="isUpdatingDevido"
+  (devidosAtributes)="reciverFeedbackDevidos($event)"
+></app-beneficios-calculos-form-devidos>
 
-      <app-beneficios-calculos-form-recebidos
-      [formData]="form" 
-      [errors] = "errors"
-      [isEdit] = "isEdit"
-      [listRecebidos] = "listRecebidos"
-      [isUpdatingRecebido] = "isUpdatingRecebido"
-      (recebidosAtributes)="reciverFeedbackRecebidos($event)"
-      ></app-beneficios-calculos-form-recebidos>
+<app-beneficios-calculos-form-recebidos
+  [formData]="form"
+  [errors]="errors"
+  [isEdit]="isEdit"
+  [listRecebidos]="listRecebidos"
+  [isUpdatingRecebido]="isUpdatingRecebido"
+  (recebidosAtributes)="reciverFeedbackRecebidos($event)"
+></app-beneficios-calculos-form-recebidos>
 
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-list"></i>
-            </span>
-            <h2>Correção Monetária</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body widget-body-custom">
-              <form class="form-horizontal">
-                <div class="form-group" [ngClass]="{'has-error': errors.has('tipoCorrecaoMonetaria')}">
-                  <label class="col-md-3 control-label">Selecione a opção *:</label>
-                  <div class="col-md-7 ">
-                    <select name="tipoCorrecaoMonetaria" [(ngModel)]="tipoCorrecaoMonetaria" class="form-control" id="tipoCorrecaoMonetariaSelect">
-                      <option *ngFor="let correcao of correcaoOptions" value="{{correcao.value}}">{{correcao.text}}</option>
-                    </select>
-                    <small *ngIf="errors.has('tipoCorrecaoMonetaria')" class="text-danger">{{ errors.get('tipoCorrecaoMonetaria')| i18n }}</small>
-                  </div>
-                </div>
-              </form>
-                <!-- <div class="form-group" >
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+    [collapsed]="false"
+    [sortable]="false"
+  >
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-list"></i>
+      </span>
+      <h2>Correção Monetária</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body widget-body-custom">
+        <form class="form-horizontal">
+          <div
+            class="form-group"
+            [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
+          >
+            <label class="col-md-3 control-label">Selecione a opção *:</label>
+            <div class="col-md-7">
+              <select
+                name="tipoCorrecaoMonetaria"
+                [(ngModel)]="tipoCorrecaoMonetaria"
+                class="form-control"
+                id="tipoCorrecaoMonetariaSelect"
+              >
+                <option
+                  *ngFor="let correcao of correcaoOptions"
+                  value="{{ correcao.value }}"
+                >
+                  {{ correcao.text }}
+                </option>
+              </select>
+              <small
+                *ngIf="errors.has('tipoCorrecaoMonetaria')"
+                class="text-danger"
+                >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small
+              >
+            </div>
+          </div>
+        </form>
+        <!-- <div class="form-group" >
                   <div class="col-md-8 col-sm-offset-2">
                     <div class="checkbox">
                       <label>
@@ -564,14 +653,23 @@
                     </div>
                   </div>
                 </div> -->
-            </div>
-          </div>
-        </sa-widget>
-      </article>
+      </div>
+    </div>
+  </sa-widget>
+</article>
 
 <article class="col-sm-12 col-md-12 col-lg-12">
   <!-- Widget ID (each widget will need unique ID)-->
-  <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+    [collapsed]="false"
+    [sortable]="false"
+  >
     <header>
       <span class="widget-icon">
         <i class="fa fa-percent"></i>
@@ -584,77 +682,187 @@
       <div class="widget-body">
         <form class="form-horizontal">
           <fieldset>
-              <div class="form-group" [ngClass]="{'has-error': errors.has('tipoDejurosSelecionado')}">
-                <label class="col-md-3 control-label">Selecione a opção *:</label>
-                <div class="col-md-6">
-                  <select name="tipoDejurosSelecionado" [(ngModel)]="tipoDejurosSelecionado" (change)="setJurosAnualParaMensal()" class="form-control" id="tipoDejurosSelecionadoSelect">
-                    <option *ngFor="let tipoJuros of tipoJurosOptions" value="{{tipoJuros.value}}">{{tipoJuros.text}}</option>
-                  </select>
-                  <small *ngIf="errors.has('tipoDejurosSelecionado')" class="text-danger">{{ errors.get('tipoDejurosSelecionado')| i18n }}</small>
-                </div>
-              </div>
-             <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'" >
-              <div class="col-md-5 col-sm-offset-3">
-                <div class="checkbox">
-                  <label>
-                  <input type="checkbox" name="chkBoxTaxaSelic" [(ngModel)]="chkBoxTaxaSelic" class="checkbox {{styleTheme}}" checked>
-                  <span>Desmarque para não aplicar os juros da poupança</span>
-                </label>
-                </div>
-              </div>
-            </div> 
-             <div class="form-group" *ngIf="tipoDejurosSelecionado !== 'sem_juros'" >
-              <div class="col-md-5 col-sm-offset-3">
-                <div class="checkbox">
-                  <label>
-                  <input type="checkbox" name="naoAplicarJurosSobreNegativo" [(ngModel)]="naoAplicarJurosSobreNegativo" class="checkbox {{styleTheme}}" checked>
-                  <span>Marque para não aplicar os juros sobre o valor negativo.</span>
-                </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'" >
-              <label class="col-md-3 control-label">Juros anterior a janeiro 2003 (%):</label>
-              <div class="col-md-2">
-                <input name="jurosAntes2003" [(ngModel)]="jurosAntes2003" currencyMask class="form-control" placeholder="0,5%" type="text" maxlength="5">
-                <small *ngIf="errors.has('jurosAntes2003')" class="text-danger">{{ errors.get('jurosAntes2003') }}</small>
-              </div>
-              <label class="col-md-3 control-label">Juros posterior a janeiro 2003 (%):</label>
-              <div class="col-md-2">
-                <input name="jurosDepois2003" [(ngModel)]="jurosDepois2003"  currencyMask class="form-control" placeholder="1.0%" type="text" maxlength="5">
-                <small *ngIf="errors.has('jurosDepois2003')" class="text-danger">{{ errors.get('jurosDepois2003') }}</small>
+            <div
+              class="form-group"
+              [ngClass]="{ 'has-error': errors.has('tipoDejurosSelecionado') }"
+            >
+              <label class="col-md-3 control-label">Selecione a opção *:</label>
+              <div class="col-md-6">
+                <select
+                  name="tipoDejurosSelecionado"
+                  [(ngModel)]="tipoDejurosSelecionado"
+                  (change)="setJurosAnualParaMensal()"
+                  class="form-control"
+                  id="tipoDejurosSelecionadoSelect"
+                >
+                  <option
+                    *ngFor="let tipoJuros of tipoJurosOptions"
+                    value="{{ tipoJuros.value }}"
+                  >
+                    {{ tipoJuros.text }}
+                  </option>
+                </select>
+                <small
+                  *ngIf="errors.has('tipoDejurosSelecionado')"
+                  class="text-danger"
+                  >{{ errors.get("tipoDejurosSelecionado") | i18n }}</small
+                >
               </div>
             </div>
             <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
-              <label class="col-md-3 control-label">Juros posterior a julho 2009 (%):</label>
-              <div class="col-md-2">
-                <input name="jurosDepois2009" [(ngModel)]="jurosDepois2009"  currencyMask class="form-control" placeholder="0,5%" type="text" maxlength="5">
-                <small *ngIf="errors.has('jurosDepois2009')" class="text-danger">{{ errors.get('jurosDepois2009') }}</small>
+              <div class="col-md-5 col-sm-offset-3">
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="chkBoxTaxaSelic"
+                      [(ngModel)]="chkBoxTaxaSelic"
+                      class="checkbox {{ styleTheme }}"
+                      checked
+                    />
+                    <span>Desmarque para não aplicar os juros da poupança</span>
+                  </label>
+                </div>
               </div>
-             </div>
-             <div class="form-group" *ngIf="tipoDejurosSelecionado !== 'sem_juros'" >
-              <label class="col-md-3 control-label">Competência inicial dos juros:</label>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="tipoDejurosSelecionado !== 'sem_juros'"
+            >
+              <div class="col-md-5 col-sm-offset-3">
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="naoAplicarJurosSobreNegativo"
+                      [(ngModel)]="naoAplicarJurosSobreNegativo"
+                      class="checkbox {{ styleTheme }}"
+                      checked
+                    />
+                    <span
+                      >Marque para não aplicar os juros sobre o valor
+                      negativo.</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
+              <label class="col-md-3 control-label"
+                >Juros anterior a janeiro 2003 (%):</label
+              >
               <div class="col-md-2">
-                <input class="form-control" [textMask]="{mask: dateMaskCompetencia}" name="competenciaInicioJuros"  [(ngModel)]="competenciaInicioJuros" type="text">
-                <small *ngIf="errors.has('competenciaInicioJuros')" class="text-danger">{{ errors.get('competenciaInicioJuros') }}</small>
+                <input
+                  name="jurosAntes2003"
+                  [(ngModel)]="jurosAntes2003"
+                  currencyMask
+                  class="form-control"
+                  placeholder="0,5%"
+                  type="text"
+                  maxlength="5"
+                />
+                <small
+                  *ngIf="errors.has('jurosAntes2003')"
+                  class="text-danger"
+                  >{{ errors.get("jurosAntes2003") }}</small
+                >
+              </div>
+              <label class="col-md-3 control-label"
+                >Juros posterior a janeiro 2003 (%):</label
+              >
+              <div class="col-md-2">
+                <input
+                  name="jurosDepois2003"
+                  [(ngModel)]="jurosDepois2003"
+                  currencyMask
+                  class="form-control"
+                  placeholder="1.0%"
+                  type="text"
+                  maxlength="5"
+                />
+                <small
+                  *ngIf="errors.has('jurosDepois2003')"
+                  class="text-danger"
+                  >{{ errors.get("jurosDepois2003") }}</small
+                >
+              </div>
+            </div>
+            <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
+              <label class="col-md-3 control-label"
+                >Juros posterior a julho 2009 (%):</label
+              >
+              <div class="col-md-2">
+                <input
+                  name="jurosDepois2009"
+                  [(ngModel)]="jurosDepois2009"
+                  currencyMask
+                  class="form-control"
+                  placeholder="0,5%"
+                  type="text"
+                  maxlength="5"
+                />
+                <small
+                  *ngIf="errors.has('jurosDepois2009')"
+                  class="text-danger"
+                  >{{ errors.get("jurosDepois2009") }}</small
+                >
+              </div>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="tipoDejurosSelecionado !== 'sem_juros'"
+            >
+              <label class="col-md-3 control-label"
+                >Competência inicial dos juros:</label
+              >
+              <div class="col-md-2">
+                <input
+                  class="form-control"
+                  [textMask]="{ mask: dateMaskCompetencia }"
+                  name="competenciaInicioJuros"
+                  [(ngModel)]="competenciaInicioJuros"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('competenciaInicioJuros')"
+                  class="text-danger"
+                  >{{ errors.get("competenciaInicioJuros") }}</small
+                >
               </div>
             </div>
 
-            <div *ngIf="(type=='AJ' && tipoDejurosSelecionado !== 'sem_juros')">
-                <div class="col-md-8 col-sm-offset-2">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" [(ngModel)]="chkIndice" class="checkbox {{styleTheme}}">
-                      <span>Para calcular aplicando os índices de 2,28% em 06/1999 e 1,75% em 05/2004 marque a caixa.</span>
-                    </label>
-                  </div>
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" [(ngModel)]="chkAjusteMaximo" name="chkAjusteMaximo" disabled class="checkbox {{styleTheme}}" checked="checked">
-                      <span>Para usar tetos judiciais em 12/1998 e em 12/2003 marque a caixa</span>
-                    </label>
-                  </div>
+            <div *ngIf="type == 'AJ' && tipoDejurosSelecionado !== 'sem_juros'">
+              <div class="col-md-8 col-sm-offset-2">
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      [(ngModel)]="chkIndice"
+                      class="checkbox {{ styleTheme }}"
+                    />
+                    <span
+                      >Para calcular aplicando os índices de 2,28% em 06/1999 e
+                      1,75% em 05/2004 marque a caixa.</span
+                    >
+                  </label>
                 </div>
+                <div class="checkbox">
+                  <label>
+                    <input
+                      type="checkbox"
+                      [(ngModel)]="chkAjusteMaximo"
+                      name="chkAjusteMaximo"
+                      disabled
+                      class="checkbox {{ styleTheme }}"
+                      checked="checked"
+                    />
+                    <span
+                      >Para usar tetos judiciais em 12/1998 e em 12/2003 marque
+                      a caixa</span
+                    >
+                  </label>
+                </div>
+              </div>
             </div>
           </fieldset>
         </form>
@@ -663,22 +871,31 @@
   </sa-widget>
 </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-money"></i>
-            </span>
-            <h2>Honorários</h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body">
-              <form class="form-horizontal">
-                <fieldset>
-                  <!-- <div class="form-group" >
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+    [collapsed]="false"
+    [sortable]="false"
+  >
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-money"></i>
+      </span>
+      <h2>Honorários</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <!-- <div class="form-group" >
                     <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre !== 'fixo'" >
                       <div class="col-md-10 col-md-offset-2">
                         <div class="checkbox">
@@ -690,81 +907,232 @@
                       </div>
                     </div>
                   </div> -->
-                  <div class="form-group" [ngClass]="{'has-error': errors.has('taxaAdvogadoAplicacaoSobre')}" >
-                    <label class="col-md-3 control-label" for="taxaAdvogadoAplicacaoSobre">Percentual de Honorário Sobre*:</label>
-                    <div class="" [ngClass]="(taxaAdvogadoAplicacaoSobre === 'fixo')? 'col-md-4' : 'col-md-7'">
-                      <select name="taxaAdvogadoAplicacaoSobre" [(ngModel)]="taxaAdvogadoAplicacaoSobre" class="form-control" id="taxaAdvogadoAplicacaoSobre" 
-                      >
-                        <option *ngFor="let option of tipoHonorariosOptions" value="{{option.value}}">{{option.text}}</option>
-                      </select>
-                      <small *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')" class="text-danger">{{ errors.get('taxaAdvogadoAplicacaoSobre')| i18n }}</small>
-                    </div>
-                    <div class="col-md-2" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
-                      <input name='taxaAdvogadoValorFixoHonorarios' currencyMask [(ngModel)]="taxaAdvogadoValorFixoHonorarios"  class="form-control"  
-                        type="text" maxlength="14" title="Digite o valor fixo para os honorários" placeholder="Digite o valor"  >
-                        <small *ngIf="errors.has('taxaAdvogadoValorFixoHonorarios')" class="text-danger">{{ errors.get('taxaAdvogadoValorFixoHonorarios') }}</small>
-                    </div>
-                    <div class="col-md-3" *ngIf="(taxaAdvogadoAplicacaoSobre === 'fixo')" > 
-                      <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" 
-                      class="form-control" placeholder="data da inicial honorário fixo" tooltip="data da inicial honorário fixo" type="text">
-                      <small *ngIf="errors.has('dataHonorariosDe')" class="text-danger">{{ errors.get('dataHonorariosDe') }}</small>
-                    </div>
+            <div
+              class="form-group"
+              [ngClass]="{
+                'has-error': errors.has('taxaAdvogadoAplicacaoSobre')
+              }"
+            >
+              <label
+                class="col-md-3 control-label"
+                for="taxaAdvogadoAplicacaoSobre"
+                >Percentual de Honorário Sobre*:</label
+              >
+              <div
+                class=""
+                [ngClass]="
+                  taxaAdvogadoAplicacaoSobre === 'fixo'
+                    ? 'col-md-4'
+                    : 'col-md-7'
+                "
+              >
+                <select
+                  name="taxaAdvogadoAplicacaoSobre"
+                  [(ngModel)]="taxaAdvogadoAplicacaoSobre"
+                  class="form-control"
+                  id="taxaAdvogadoAplicacaoSobre"
+                >
+                  <option
+                    *ngFor="let option of tipoHonorariosOptions"
+                    value="{{ option.value }}"
+                  >
+                    {{ option.text }}
+                  </option>
+                </select>
+                <small
+                  *ngIf="errors.has('taxaAdvogadoAplicacaoSobre')"
+                  class="text-danger"
+                  >{{ errors.get("taxaAdvogadoAplicacaoSobre") | i18n }}</small
+                >
+              </div>
+              <div
+                class="col-md-2"
+                *ngIf="taxaAdvogadoAplicacaoSobre === 'fixo'"
+              >
+                <input
+                  name="taxaAdvogadoValorFixoHonorarios"
+                  currencyMask
+                  [(ngModel)]="taxaAdvogadoValorFixoHonorarios"
+                  class="form-control"
+                  type="text"
+                  maxlength="14"
+                  title="Digite o valor fixo para os honorários"
+                  placeholder="Digite o valor"
+                />
+                <small
+                  *ngIf="errors.has('taxaAdvogadoValorFixoHonorarios')"
+                  class="text-danger"
+                  >{{ errors.get("taxaAdvogadoValorFixoHonorarios") }}</small
+                >
+              </div>
+              <div
+                class="col-md-3"
+                *ngIf="taxaAdvogadoAplicacaoSobre === 'fixo'"
+              >
+                <input
+                  name="dataHonorariosDe"
+                  [textMask]="{ mask: dateMask }"
+                  [(ngModel)]="dataHonorariosDe"
+                  class="form-control"
+                  placeholder="data da inicial honorário fixo"
+                  tooltip="data da inicial honorário fixo"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('dataHonorariosDe')"
+                  class="text-danger"
+                  >{{ errors.get("dataHonorariosDe") }}</small
+                >
+              </div>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'"
+            >
+              <label class="col-md-3 control-label"
+                >Aplicar Percentuais Sobre:</label
+              >
+              <div class="col-md-7">
+                <select
+                  name="taxaAdvogadoAplicarCPCArt85"
+                  [(ngModel)]="taxaAdvogadoAplicarCPCArt85"
+                  class="form-control"
+                  id="taxaAdvogadoAplicarCPCArt85"
+                >
+                  <option value="">- Selecione -</option>
+                  <option value="1">
+                    Percentual sobre o Valor Total do Benefício Devido
+                  </option>
+                  <option value="0">
+                    Percentual Sobre o Valor da Diferença entre os Benefícios
+                    Devido e Recebido
+                  </option>
+                </select>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('taxaAdvogadoAplicarCPCArt85')"
+                      class="text-danger"
+                      >{{
+                        errors.get("taxaAdvogadoAplicarCPCArt85") | i18n
+                      }}</small
+                    >
                   </div>
-                  <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'">
-                    <label class="col-md-3 control-label">Aplicar Percentuais Sobre:</label>
-                    <div class="col-md-7">
-                        <select name="taxaAdvogadoAplicarCPCArt85" [(ngModel)]="taxaAdvogadoAplicarCPCArt85"  class="form-control" id="taxaAdvogadoAplicarCPCArt85">
-                          <option value="">- Selecione -</option>
-                          <option value="1">Percentual sobre o Valor Total do Benefício Devido</option>
-                          <option value="0">Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido</option>
-                        </select>
-                        <div class="row">
-                        <div class="col-md-12">
-                          <small *ngIf="errors.has('taxaAdvogadoAplicarCPCArt85')" class="text-danger">{{ errors.get('taxaAdvogadoAplicarCPCArt85')| i18n }}</small>
-                        </div>
-                      </div>
-                    </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'"
+            >
+              <div class="col-md-offset-1">
+                <div class="form-group">
+                  <label class="col-md-5 control-label"
+                    >Percentual Sobre o Valor até 200 Salários Mínimos
+                    (SM):</label
+                  >
+                  <div class="col-md-2 col-sm-2">
+                    <input
+                      name="taxaAdvogadoPercateAte200SM"
+                      [(ngModel)]="taxaAdvogadoPercateAte200SM"
+                      class="form-control text-center"
+                      type="text"
+                      currencyMask
+                      maxlength="5"
+                    />
                   </div>
-                  <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'CPC85'">
-                    <div  class="col-md-offset-1">
-                      <div class="form-group" >
-                        <label class="col-md-5 control-label">Percentual Sobre o Valor até 200 Salários Mínimos (SM):</label>
-                        <div class="col-md-2 col-sm-2">
-                          <input name="taxaAdvogadoPercateAte200SM"  [(ngModel)]="taxaAdvogadoPercateAte200SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
-                        </div>
-                        <small *ngIf="errors.has('taxaAdvogadoPercateAte200SM')" class="text-danger">{{ errors.get('taxaAdvogadoPercateAte200SM') }}</small>
-                      </div>
-                      <div class="form-group" >
-                        <label class="col-md-5 control-label">Percentual Sobre o Valor Acima de 200 SM até 2.000 SM:</label>
-                        <div class="col-md-2 col-sm-2">
-                          <input name="taxaAdvogadoPerc200A2000SM"  [(ngModel)]="taxaAdvogadoPerc200A2000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
-                        </div>
-                        <small *ngIf="errors.has('taxaAdvogadoPerc200A2000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc200A2000SM') }}</small>
-                      </div>
-                      <div class="form-group" >
-                        <label class="col-md-5 control-label">Percentual Sobre o Valor Acima de 2.000 SM até 20.000 SM:</label>
-                        <div class="col-md-2 col-sm-2">
-                          <input name="taxaAdvogadoPerc2000A20000SM"  [(ngModel)]="taxaAdvogadoPerc2000A20000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
-                        </div>
-                        <small *ngIf="errors.has('taxaAdvogadoPerc2000A20000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc2000A20000SM') }}</small>
-                      </div>
-                      <div class="form-group" >
-                        <label class="col-md-5 control-label">Percentual Sobre o Valor Acima de 20.000 SM até 100.000 SM:</label>
-                        <div class="col-md-2 col-sm-2">
-                          <input name="taxaAdvogadoPerc20000A100000SM"  [(ngModel)]="taxaAdvogadoPerc20000A100000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
-                        </div>
-                        <small *ngIf="errors.has('taxaAdvogadoPerc20000A100000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc20000A100000SM') }}</small>
-                      </div>
-                      <div class="form-group" >
-                        <label class="col-md-5 control-label">Percentual Sobre o Valor Acima de 100.000 SM:</label>
-                        <div class="col-md-2 col-sm-2">
-                          <input name="taxaAdvogadoPerc100000SM"  [(ngModel)]="taxaAdvogadoPerc100000SM" class="form-control text-center"  type="text" currencyMask maxlength="5"> 
-                        </div>
-                        <small *ngIf="errors.has('taxaAdvogadoPerc100000SM')" class="text-danger">{{ errors.get('taxaAdvogadoPerc100000SM') }}</small>
-                      </div>
-                    </div>
+                  <small
+                    *ngIf="errors.has('taxaAdvogadoPercateAte200SM')"
+                    class="text-danger"
+                    >{{ errors.get("taxaAdvogadoPercateAte200SM") }}</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label class="col-md-5 control-label"
+                    >Percentual Sobre o Valor Acima de 200 SM até 2.000
+                    SM:</label
+                  >
+                  <div class="col-md-2 col-sm-2">
+                    <input
+                      name="taxaAdvogadoPerc200A2000SM"
+                      [(ngModel)]="taxaAdvogadoPerc200A2000SM"
+                      class="form-control text-center"
+                      type="text"
+                      currencyMask
+                      maxlength="5"
+                    />
                   </div>
-                  <!-- <div class="form-group"  *ngIf="taxaAdvogadoAplicacaoSobre !== 'CPC85' && taxaAdvogadoAplicacaoSobre !== 'nao_calc' && taxaAdvogadoAplicacaoSobre !== 'fixo'">
+                  <small
+                    *ngIf="errors.has('taxaAdvogadoPerc200A2000SM')"
+                    class="text-danger"
+                    >{{ errors.get("taxaAdvogadoPerc200A2000SM") }}</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label class="col-md-5 control-label"
+                    >Percentual Sobre o Valor Acima de 2.000 SM até 20.000
+                    SM:</label
+                  >
+                  <div class="col-md-2 col-sm-2">
+                    <input
+                      name="taxaAdvogadoPerc2000A20000SM"
+                      [(ngModel)]="taxaAdvogadoPerc2000A20000SM"
+                      class="form-control text-center"
+                      type="text"
+                      currencyMask
+                      maxlength="5"
+                    />
+                  </div>
+                  <small
+                    *ngIf="errors.has('taxaAdvogadoPerc2000A20000SM')"
+                    class="text-danger"
+                    >{{ errors.get("taxaAdvogadoPerc2000A20000SM") }}</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label class="col-md-5 control-label"
+                    >Percentual Sobre o Valor Acima de 20.000 SM até 100.000
+                    SM:</label
+                  >
+                  <div class="col-md-2 col-sm-2">
+                    <input
+                      name="taxaAdvogadoPerc20000A100000SM"
+                      [(ngModel)]="taxaAdvogadoPerc20000A100000SM"
+                      class="form-control text-center"
+                      type="text"
+                      currencyMask
+                      maxlength="5"
+                    />
+                  </div>
+                  <small
+                    *ngIf="errors.has('taxaAdvogadoPerc20000A100000SM')"
+                    class="text-danger"
+                    >{{ errors.get("taxaAdvogadoPerc20000A100000SM") }}</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label class="col-md-5 control-label"
+                    >Percentual Sobre o Valor Acima de 100.000 SM:</label
+                  >
+                  <div class="col-md-2 col-sm-2">
+                    <input
+                      name="taxaAdvogadoPerc100000SM"
+                      [(ngModel)]="taxaAdvogadoPerc100000SM"
+                      class="form-control text-center"
+                      type="text"
+                      currencyMask
+                      maxlength="5"
+                    />
+                  </div>
+                  <small
+                    *ngIf="errors.has('taxaAdvogadoPerc100000SM')"
+                    class="text-danger"
+                    >{{ errors.get("taxaAdvogadoPerc100000SM") }}</small
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-group"  *ngIf="taxaAdvogadoAplicacaoSobre !== 'CPC85' && taxaAdvogadoAplicacaoSobre !== 'nao_calc' && taxaAdvogadoAplicacaoSobre !== 'fixo'">
                     <label class="col-md-2 control-label">Intervalo de Honorários:</label>
                     <div class="col-md-2">
                       <input name="dataHonorariosDe" [textMask]="{mask: dateMask}" [(ngModel)]="dataHonorariosDe" class="form-control" placeholder="De" type="text">
@@ -775,72 +1143,128 @@
                       <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
                     </div>
                   </div> -->
-                  <div class="form-group"  *ngIf="taxaAdvogadoAplicacaoSobre !== 'nao_calc'">
-                    <label class="col-md-3 control-label">Calcular Honorários Até:</label>
-                    <div class="col-md-2">
-                      <input name="dataHonorariosAte" [(ngModel)]="dataHonorariosAte" [textMask]="{mask: dateMask}" class="form-control" placeholder="Até" type="text">
-                      <small *ngIf="errors.has('dataHonorariosAte')" class="text-danger">{{ errors.get('dataHonorariosAte') }}</small>
-                    </div>
-                  </div>
-                  <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre !== 'CPC85' && taxaAdvogadoAplicacaoSobre !== 'nao_calc' && taxaAdvogadoAplicacaoSobre !== 'fixo'">
-                    <label class="col-md-3 control-label">Percentual dos Honorários:</label>
-                    <div class="col-md-2">
-                      <input name="percentualHonorarios"  [(ngModel)]="percentualHonorarios" class="form-control text-center"  type="number" step="1" max="99"> <!--  placeholder="(Ex: 0,2 p/ 20%)" -->
-                      <small *ngIf="errors.has('percentualHonorarios')" class="text-danger">{{ errors.get('percentualHonorarios') }}</small>
-                    </div>
-                    <!-- <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre !== 'nao_calc'"
+            >
+              <label class="col-md-3 control-label"
+                >Calcular Honorários Até:</label
+              >
+              <div class="col-md-2">
+                <input
+                  name="dataHonorariosAte"
+                  [(ngModel)]="dataHonorariosAte"
+                  [textMask]="{ mask: dateMask }"
+                  class="form-control"
+                  placeholder="Até"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('dataHonorariosAte')"
+                  class="text-danger"
+                  >{{ errors.get("dataHonorariosAte") }}</small
+                >
+              </div>
+            </div>
+            <div
+              class="form-group"
+              *ngIf="
+                taxaAdvogadoAplicacaoSobre !== 'CPC85' &&
+                taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+                taxaAdvogadoAplicacaoSobre !== 'fixo'
+              "
+            >
+              <label class="col-md-3 control-label"
+                >Percentual dos Honorários:</label
+              >
+              <div class="col-md-2">
+                <input
+                  name="percentualHonorarios"
+                  [(ngModel)]="percentualHonorarios"
+                  class="form-control text-center"
+                  type="number"
+                  step="1"
+                  max="99"
+                />
+                <!--  placeholder="(Ex: 0,2 p/ 20%)" -->
+                <small
+                  *ngIf="errors.has('percentualHonorarios')"
+                  class="text-danger"
+                  >{{ errors.get("percentualHonorarios") }}</small
+                >
+              </div>
+              <!-- <label class="col-md-2 control-label">Percentual do Acordo Judicial:</label>
                     <div class="col-md-2">
                       <input name="acordoJudicial" [(ngModel)]="acordoJudicial"  class="form-control text-center" type="text" currencyMask maxlength="5">
                       <small *ngIf="errors.has('acordoJudicial')" class="text-danger">{{ errors.get('acordoJudicial') }}</small>
                     </div> -->
-                  </div>
-                </fieldset>
-              </form>
             </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </sa-widget>
+</article>
+
+<app-beneficios-calculos-form-custas-processo
+  [isEdit]="isEdit"
+  [errors]="errors"
+  [isUpdating]="isUpdating"
+  [listAcrescimosDeducoes]="listAcrescimosDeducoes"
+  (custasProcessolistOut)="reciverFeedbackCustasProcesso($event)"
+>
+</app-beneficios-calculos-form-custas-processo>
+
+<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+  >
+    <header>
+      <h2></h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body" style="min-height: auto">
+        <div class="row">
+          <div class="col-md-2 pull-left">
+            <button
+              (click)="voltar()"
+              type="submit"
+              class="btn btn-labeled btn-info"
+            >
+              <span class="btn-label">
+                <i class="fa fa-arrow-circle-left"></i>
+              </span>
+              Voltar para cálculos
+            </button>
           </div>
-        </sa-widget>
-      </article>
-
-  <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false">
-          <header>
-            <h2></h2>
-          </header>
-          <!-- widget div-->
-          <div>
-            <!-- widget content -->
-            <div class="widget-body" style="min-height: auto;">
-              <div class="row">
-                <div class="col-md-2 pull-left">
-                  <button (click)="voltar()" type="submit" class="btn btn-labeled btn-info">
-                    <span class="btn-label">
-                      <i class="fa fa-arrow-circle-left"></i>
-                    </span> Voltar para cálculos
-                  </button>
-                </div>
-                <div class="col-md-3  pull-right">
-                  <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-success btn-block">
-                        <span class="btn-label">
-                          <i class="fa fa-save"></i>
-                        </span> <span *ngIf="!isEdit">Calcular</span><span *ngIf="isEdit">Salvar e Calcular</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-3 pull-right">
+            <button
+              (click)="submit($event)"
+              type="submit"
+              class="btn btn-labeled btn-success btn-block"
+            >
+              <span class="btn-label">
+                <i class="fa fa-save"></i>
+              </span>
+              <span *ngIf="!isEdit">Calcular</span
+              ><span *ngIf="isEdit">Salvar e Calcular</span>
+            </button>
           </div>
-        </sa-widget>
-      </article>
+        </div>
+      </div>
+    </div>
+  </sa-widget>
+</article>
 
-
-
-
-            <!-- <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="false" >
+<!-- <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="false" >
         <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [collapsed]="false" [sortable]="false">
           <header>
             <span class="widget-icon">
@@ -925,5 +1349,3 @@
           </div>
         </sa-widget>
       </article> -->
-
-     

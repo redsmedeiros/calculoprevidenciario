@@ -309,9 +309,9 @@
                           >
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group"  >
                         <label class="col-md-7 control-label"
-                          >Aplicar Adicional de 25%:
+                          >Aplicar Adicional de 25%:{{ especieValoresRecebidos }} {{ [4,7,2,16,1,'3',5,13,18].includes(especieValoresRecebidos) }}
                         </label>
                         <div class="col-md-4">
                           <label class="radio radio-inline">
@@ -320,7 +320,7 @@
                               [ngModelOptions]="{ standalone: true }"
                               (change)="errors.clear('adicional25Recebido')"
                               type="radio"
-                              value="0"
+                              [value]="false"
                             />
                             Não
                           </label>
@@ -330,7 +330,7 @@
                               [ngModelOptions]="{ standalone: true }"
                               (change)="errors.clear('adicional25Recebido')"
                               type="radio"
-                              value="1"
+                              [value]="true"
                             />
                             Sim
                           </label>

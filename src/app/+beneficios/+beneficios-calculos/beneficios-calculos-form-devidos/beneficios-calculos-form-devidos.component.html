@@ -115,12 +115,8 @@
             <sa-widget
               [colorbutton]="false"
               [editbutton]="false"
-              [togglebutton]="false"
               [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [collapsed]="false"
-              [sortable]="false"
+              class="mb-0"
             >
               <header>
                 <span class="widget-icon">
@@ -140,7 +136,7 @@
               </header>
               <div>
                 <div
-                  class="widget-body"
+                  class="widget-body "
                   [ngClass]="false ? '' : 'fix-painel-devido-recebido'"
                 >
                   <form class="form-horizontal">
@@ -370,7 +366,7 @@
                           >
                         </div>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group" *ngIf="[4,7,2,16,1,3,5, 13,18].includes(especieValoresDevidos)" >
                         <label class="col-md-7 control-label"
                           >Aplicar Adicional de 25%:
                         </label>
@@ -382,7 +378,7 @@
                               (change)="errors.clear('adicional25Devido')"
                               type="radio"
                               name="adicional25Devido"
-                              value="0"
+                              [value]="false"
                             />
                             Não
                           </label>
@@ -393,7 +389,7 @@
                               (change)="errors.clear('adicional25Devido')"
                               type="radio"
                               name="adicional25Devido"
-                              value="1"
+                              [value]="true"
                             />
                             Sim
                           </label>
@@ -410,7 +406,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" *ngIf="adicional25Devido == 1">
+                      <div class="form-group" *ngIf="adicional25Devido">
                         <div>
                           <label
                             class="control-label"

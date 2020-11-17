@@ -12,6 +12,7 @@ export class Devidos {
   public rmiBuracoNegro;
   public irt;
   public reajusteMinimo;
+  public dataAdicional25;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -35,7 +36,8 @@ export class Devidos {
     rmi,
     rmiBuracoNegro,
     irt,
-    reajusteMinimo
+    reajusteMinimo,
+    dataAdicional25
   ) {
     this.id = id;
     this.especie = especie;
@@ -48,6 +50,7 @@ export class Devidos {
     this.rmiBuracoNegro = rmiBuracoNegro;
     this.irt = irt;
     this.reajusteMinimo = reajusteMinimo;
+    this.dataAdicional25 = dataAdicional25;
   }
 
 

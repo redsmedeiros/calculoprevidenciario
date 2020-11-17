@@ -14,7 +14,7 @@ import * as moment from 'moment';
     ErrorService
   ]
 })
-export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculosFormComponent implements OnInit  {
+export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculosFormComponent implements OnInit {
 
 
   @Input() formData;
@@ -32,8 +32,8 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
   //  // protected errors: ErrorService,
   // ) { }
 
-  constructor(  ) {
-    super( null, null, null);
+  constructor() {
+    super(null, null, null);
   }
 
   ngOnInit() {
@@ -78,7 +78,8 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.rmiValoresRecebidos,
       this.rmiValoresRecebidosBuracoNegro,
       this.taxaAjusteMaximaConcedida,
-      this.naoAplicarSMBeneficioConcedido);
+      this.naoAplicarSMBeneficioConcedido,
+      this.dataInicialadicional2Recebido);
 
     let statusInput = true;
 
@@ -108,6 +109,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
         showConfirmButton: false,
         timer: 4000
       });
+
     }
 
 
@@ -168,6 +170,11 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.rmiValoresRecebidosBuracoNegro = rowEdit.rmiBuracoNegro;
     this.taxaAjusteMaximaConcedida = rowEdit.irt;
     this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
+    this.dataInicialadicional2Recebido = rowEdit.dataAdicional25;
+
+    if(rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != ''){
+      this.adicional25Recebido = true;
+    }
   }
 
 
@@ -182,6 +189,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.rmiValoresRecebidosBuracoNegro = '';
     this.taxaAjusteMaximaConcedida = '';
     this.naoAplicarSMBeneficioConcedido = false;
+    this.dataInicialadicional2Recebido = '';
   }
 
 
@@ -296,7 +304,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
     if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
       this.dipValoresRecebidos = this.dibValoresRecebidos;
-     // this.validRecebidos();
+      // this.validRecebidos();
     }
 
     if (this.chkUseSameDib) {
@@ -330,7 +338,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
 
 
- public isExits(value) {
+  public isExits(value) {
     return (typeof value !== 'undefined' &&
       value != null && value != 'null' &&
       value !== undefined && value != '')

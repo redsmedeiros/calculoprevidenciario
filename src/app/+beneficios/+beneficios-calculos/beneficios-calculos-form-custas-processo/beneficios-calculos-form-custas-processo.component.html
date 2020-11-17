@@ -1,0 +1,276 @@
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-table"></i>
+      </span>
+      <h2>Custos adicionais com Processo</h2>
+      <button
+        type="button"
+        (click)="custasProcessoModal.show()"
+        class="btn btn-labeled btn-info pull-right"
+      >
+        <span class="btn-label"> <i class="fa fa-plus"></i> </span
+        >&nbsp;&nbsp;Adicionar &nbsp;&nbsp;
+      </button>
+    </header>
+    <div>
+      <div class="widget-body no-padding widget-body-custom">
+        <div class="well well-light" *ngIf="listAcrescimosDeducoes.length === 0">
+          <strong>Não há itens na lista</strong>
+        </div>
+        <table
+          class="table table-striped table-bordered table-hover table-responsive table-condensed"
+          *ngIf="!isUpdatingCustasProcesso && listAcrescimosDeducoes.length > 0"
+        >
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th class="text-center">Data</th>
+              <th class="text-center">Valor</th>
+              <th class="text-center">Aplicar Juros</th>
+              <th class="text-center" width="75px">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let acrescimoDeducaoLine of listAcrescimosDeducoes">
+              <td>
+                {{ acrescimoDeducaoLine.descricao }}
+               </td>
+              <td class="text-center">
+                 {{ acrescimoDeducaoLine.data }}
+              </td>
+              <td class="text-center">
+                {{ definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor) }}
+              </td>
+              <td class="text-center">
+                {{ acrescimoDeducaoLine.reajuesteMinimo ? "Sim" : "Não" }}
+              </td>
+              <td class="text-center" width="auto">
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-xs btn-warning"
+                    id="editar{{ acrescimoDeducaoLine.id }}"
+                    (click)="getupdateAcrescimoDeducaoList(acrescimoDeducaoLine.id)"
+                    title="Editar"
+                  >
+                    <i class="fa fa-edit fa-1-7x"></i>
+                  </button>
+                   <button
+                    type="button"
+                    class="btn btn-xs btn-danger"
+                    id="deletar{{ acrescimoDeducaoLine.id }}"
+                    (click)="deleteAcrescimoDeducaoList(acrescimoDeducaoLine.id)"
+                    title="Excluir"
+                  >
+                    <i class="fa fa-times fa-1-7x"></i>
+                  </button> 
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="isUpdating" class="alert alert-info text-align-center">
+          <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+        </div>
+      </div>
+    </div>
+  </sa-widget>
+</article>
+
+<div
+  bsModal
+  #custasProcessoModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="custasProcessoModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-body p-0 m-0">
+        <div class="row">
+          <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <sa-widget
+              [colorbutton]="false"
+              [editbutton]="false"
+              [deletebutton]="false"
+              class="mb-0"
+            >
+              <header>
+                <span class="widget-icon">
+                  <i class="fa fa-money"></i>
+                </span>
+                <h2>Custo Adicional</h2>
+                <button
+                  type="button"
+                  class="btn btn-xs pull-right btn-danger"
+                  (click)="custasProcessoModal.hide()"
+                  aria-hidden="true"
+                >
+                  <i
+                    class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"
+                  ></i>
+                </button>
+              </header>
+              <div>
+                <div
+                  class="widget-body"
+                  [ngClass]="false ? '' : 'fix-painel-devido-recebido'"
+                >
+                  <form class="form-horizontal">
+                    <fieldset>
+                      <div class="form-group">
+                        <label
+                          class="control-label"
+                          for="select-1"
+                          [ngClass]="true ? 'col-md-2' : 'col-md-4'"
+                          >Descrição*:</label
+                        >
+                        <div
+                          class="col-md-9"
+                        >
+                        <input type="text"
+                          class="form-control"
+                          type="text"
+                          maxlength="200"
+                        name="custasFormDescricao"
+                        [(ngModel)]="custasFormDescricao"
+                        >
+                          <small
+                            *ngIf="errors.has('custasFormDescricao')"
+                            class="text-danger"
+                            >{{ errors.get("custasFormDescricao") }}</small
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label
+                          class="control-label col-md-7"
+                          >Data*:</label
+                        >
+                        <div
+                          class="col-md-4"
+                        >
+                          <input
+                            name="custasFormData"
+                            [textMask]="{ mask: dateMask }"
+                            [(ngModel)]="custasFormData"
+                            class="form-control"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('custasFormData')"
+                            class="text-danger"
+                            >{{ errors.get("custasFormData") }}</small
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label
+                          class="control-label col-md-7 "
+                          >Valor*:</label>
+                        <div
+                          class="col-md-4"
+                        >
+                          <input
+                            name="custasFormValor"
+                            currencyMask
+                            [options]="{ thousands: '.', decimal: ',', allowNegative: true }"
+                            [(ngModel)]="custasFormValor"
+                            class="form-control"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('custasFormValor')"
+                            class="text-danger"
+                            >{{ errors.get("custasFormValor") }}</small
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-7 control-label"
+                          >Aplicar Juros:
+                        </label>
+                        <div class="col-md-4">
+                          <label class="radio radio-inline">
+                            <input
+                              [(ngModel)]="custasFormAplicarJuros"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('custasFormAplicarJuros')"
+                              type="radio"
+                              name="custasFormAplicarJuros"
+                              [value]="false"
+                            />
+                            Não
+                          </label>
+                          <label class="radio radio-inline">
+                            <input
+                              [(ngModel)]="custasFormAplicarJuros"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('custasFormAplicarJuros')"
+                              type="radio"
+                              name="custasFormAplicarJuros"
+                              [value]="true"
+                            />
+                            Sim
+                          </label>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <small
+                                *ngIf="errors.has('custasFormAplicarJuros')"
+                                class="text-danger"
+                                >{{
+                                  errors.get("custasFormAplicarJuros") | i18n
+                                }}</small
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <p class="pull-left no-margin">* Campo Obrigatório</p>
+                        <button
+                          *ngIf="!custasFormId"
+                          id="adicionarCustasProcesso"
+                          (click)="addCustasProcessoList()"
+                          type="button"
+                          class="btn-labeled btn-info pull-right"
+                        >
+                          <span class="btn-label">
+                            <i class="fa fa-plus"></i>
+                          </span>
+                          <span
+                            >&nbsp;&nbsp;&nbsp;Adicionar&nbsp;&nbsp;&nbsp;</span
+                          >
+                        </button>
+                        <button
+                          *ngIf="custasFormId"
+                          id="replaceCustasProcesso"
+                          (click)="updateCustasProcessoList($event, custasFormId)"
+                          type="button"
+                          class="btn-labeled btn-info pull-right"
+                        >
+                          <span class="btn-label">
+                            <i class="fa fa-edit"></i>
+                          </span>
+                          <span
+                            >&nbsp;&nbsp;&nbsp;Atualizar&nbsp;&nbsp;&nbsp;</span
+                          >
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </sa-widget>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

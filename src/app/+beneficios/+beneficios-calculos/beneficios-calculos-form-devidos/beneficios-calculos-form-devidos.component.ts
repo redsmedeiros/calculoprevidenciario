@@ -45,11 +45,69 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     let valid = true;
     this.errors.clear();
 
+    if (this.isEmptyInput(this.especieValoresDevidos)) {
+      this.errors.add({ 'especieValoresDevidos': ['Selecione uma opção.'] });
+      valid = false;
+    }
 
+    if (this.isEmptyInput(this.dibValoresDevidos)) {
+      this.errors.add({ 'dibValoresDevidos': ['A DIB de Valores Devidos é Necessária.'] });
+      valid = false;
+    } else if (!this.isValidDate(this.dibValoresDevidos)) {
+      this.errors.add({ 'dibValoresDevidos': ['Insira uma data Válida.'] });
+      valid = false;
+    } else if (moment(this.dibValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
+      this.errors.add({ 'dibValoresDevidos': ['A data deve ser maior que 01/1970'] });
+      valid = false;
+    }
 
+    if (this.isEmptyInput(this.dipValoresDevidos)) {
+      this.errors.add({ 'dipValoresDevidos': ['A DIP é obrigatoria.'] });
+      valid = false;
+    } else {
 
+      if (!this.isValidDate(this.dipValoresDevidos)) {
+        this.errors.add({ 'dipValoresDevidos': ['Insira uma data Válida.'] });
+        valid = false;
+      } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a dib'] });
+        valid = false;
+      }
+    }
 
+    if (this.isEmptyInput(this.rmiValoresDevidos)) {
+      this.errors.add({ 'rmiValoresDevidos': ['A RMI de Valores Devidos é Necessária.'] });
+      valid = false;
+    } else if (this.rmiValoresDevidos == 0) {
+      this.errors.add({ 'rmiValoresDevidos': ['A RMI de Valores Devidos deve ser maior que zero.'] });
+      valid = false;
+    }
 
+    if (!this.isEmptyInput(this.dibAnteriorValoresDevidos)) {
+
+      if (!this.isValidDate(this.dibAnteriorValoresDevidos)) {
+        this.errors.add({ 'dibAnteriorValoresDevidos': ['Insira uma data válida.'] });
+        valid = false;
+      } else if (moment(this.dibAnteriorValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
+        this.errors.add({ 'dibAnteriorValoresDevidos': ['A data deve ser maior que 01/1970.'] });
+        valid = false;
+      }
+    }
+
+    if (this.isEmptyInput(this.cessacaoValoresDevidos)) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['A Data Final dos Atrasados é Necessária.'] });
+      valid = false;
+    } if (!this.isValidDate(this.cessacaoValoresDevidos)) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['Insira uma data válida.'] });
+      valid = false;
+    } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
+      valid = false;
+    }
+
+    if (this.especieValoresDevidos === 22 && this.numDependentes >= 20) {
+      this.errors.add({ 'numDependentes': ['O valor deve ser nenor que 20'] });
+    }
 
     return valid;
 
@@ -68,22 +126,35 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.rmiValoresDevidos,
       this.rmiValoresDevidosBuracoNegro,
       this.taxaAjusteMaximaEsperada,
-      this.naoAplicarSMBeneficioEsperado);
+      this.naoAplicarSMBeneficioEsperado,
+      this.dataInicialadicional25Devido
+      );
 
 
     if (this.validDevido()) {
 
+      this.listDevidos = [];
       this.listDevidos.push(devidoMultiplo);
-      this.devidosAtributes.emit(this.listDevidos)
+      this.devidosAtributes.emit(this.listDevidos);
+      this.hideChildModalDevidos();
+
+    }else{
+
+      swal({
+        position: 'bottom-end',
+        type: 'error',
+        title: 'O perído de Benefício Recebido não deve ser concomitante.',
+        showConfirmButton: false,
+        timer: 4000
+      });
+
     }
 
   }
 
 
   public updateDevidoList(event, rowDevidosEdit) {
-    this.listDevidos = [];
     this.addDevidosList();
-    this.hideChildModalDevidos();
   }
 
 
@@ -105,6 +176,11 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.rmiValoresDevidosBuracoNegro = rowEdit.rmiBuracoNegro;
     this.taxaAjusteMaximaEsperada = rowEdit.irt;
     this.naoAplicarSMBeneficioEsperado = rowEdit.reajusteMinimo;
+    this.dataInicialadicional25Devido = rowEdit.dataAdicional25;
+
+    if(rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != ''){
+      this.adicional25Devido = true;
+    }
   }
 
   public showChildModalDevidos(): void {
