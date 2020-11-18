@@ -1678,9 +1678,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       // Ajustado para o teto. Adicionar subindice ‘T’ no valor do beneficio
       beneficioRecebidoString += '/T';
 
-      if (reajusteObj.reajuste > 1 && !this.isTetoInicialRecebido) {
-        this.isTetoInicialRecebido = true;
-      }
+      // if (reajusteObj.reajuste > 1 && !this.isTetoInicialRecebido) {
+      //   this.isTetoInicialRecebido = true;
+      // }
 
     } else if (beneficioRecebidoAjustado == moedaDataCorrente.salario_minimo) {
       // Ajustado para o salario minimo. Adicionar subindice ‘M’ no valor do beneficio
