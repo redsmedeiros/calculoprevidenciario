@@ -463,7 +463,7 @@ export class conclusoesFinais {
 
         const aliquota = 100;
         const formula = '100% média salarial aplicando o Fator previdenciario';
-        const valueString = aliquota + '%'
+        const valueString = aliquota + '%';
 
         return this.setAliquota(
             aliquota,
@@ -476,16 +476,20 @@ export class conclusoesFinais {
 
     private defineAliquotaAposentadoriaEspecial(elementPossibilidade, elementRegraEspecie) {
 
-        const tempoParaPercentual = (elementRegraEspecie.requisitos.tempo === 15) ? 15 : 20;
+        let tempoParaPercentual = (elementRegraEspecie.requisitos.tempo === 15) ? 15 : 20;
+
+        if(this.segurado.sexo === 'f') {
+            tempoParaPercentual = 15;
+        }
 
         let aliquota = 60;
-        let formula = '60'
-        let valueString = aliquota + '%'
+        let formula = '60';
+        let valueString = aliquota + '%';
 
         if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual) {
             aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual) * 2);
             formula = `60 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual}) * 2)`;
-            valueString = aliquota + '%'
+            valueString = aliquota + '%';
         }
 
         return this.setAliquota(

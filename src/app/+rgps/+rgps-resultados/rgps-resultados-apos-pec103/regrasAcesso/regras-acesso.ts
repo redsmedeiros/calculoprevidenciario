@@ -14,7 +14,7 @@ export class RegrasAcesso {
 
     private arrayEspecial = [1915, 1920, 1925];
     private arrayEspecialDeficiente = [25, 26, 27, 28];
-    private arrayIdade = [3, 16];
+    private arrayIdade = [3, 16, 31];
 
     public listaConclusaoAcesso = [];
     public conclusaoAcesso = {};
@@ -95,8 +95,27 @@ export class RegrasAcesso {
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
-            const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
-            maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+            // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
+
+            // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
+            let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
+
+           if ((this.numeroDeContribuicoes < 180) ) {
+
+                // console.log(this.calculo.carencia_apos_ec103)
+                // console.log(this.numeroDeContribuicoes)
+
+                maxDescarteCarencia = this.calculo.carencia_apos_ec103 - 180;
+
+                if (maxDescarteCarencia >= this.numeroDeContribuicoes ) {
+
+                    maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
+
+                }
+
+            }
+
+            maximoDescarte.meses = maxDescarteCarencia;
             maximoDescarte.anos = (maximoDescarte.meses / 12);
 
         }
@@ -105,7 +124,7 @@ export class RegrasAcesso {
         if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
 
             const maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
-           // maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
+            // maximoDescarte.meses = (maximoDescarte.meses > maxDescarteCarencia) ? maxDescarteCarencia : maximoDescarte.meses;
             maximoDescarte.meses = maxDescarteCarencia;
             maximoDescarte.anos = maximoDescarte.meses / 12;
 
@@ -114,7 +133,9 @@ export class RegrasAcesso {
         // evitar que o numero de contribuicoes seja negativo
         if (this.numeroDeContribuicoes < maximoDescarte.meses) {
 
-            const tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            let tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            tempAjusteMaximoDescarte = (tempAjusteMaximoDescarte < 0) ? 0 : tempAjusteMaximoDescarte;
+
             maximoDescarte.meses = tempAjusteMaximoDescarte;
             maximoDescarte.anos = maximoDescarte.meses / 12;
         }
@@ -492,7 +513,6 @@ export class RegrasAcesso {
         this.moedaDib = moedaDib;
         this.numeroDeContribuicoes = numeroDeContribuicoes;
 
-
         // aplicação default false
         if (this.arrayEspecial.includes(tipoBeneficio)) {
 
@@ -557,14 +577,17 @@ export class RegrasAcesso {
 
         } else if (this.arrayIdade.includes(tipoBeneficio)) {
 
-            if (isRegraTransitoria) {
+            if (isRegraTransitoria
+                || tipoBeneficio === 16
+                || tipoBeneficio === 31) {
 
                 this.regraAcessoIdadeTransitoria(
                     idadeFracionada,
                     ano,
                     sexo,
                     this.contribuicaoTotal,
-                    tipoBeneficio);
+                    tipoBeneficio,
+                    redutorProfessor);
 
             } else {
 
@@ -572,7 +595,8 @@ export class RegrasAcesso {
                     idadeFracionada,
                     ano,
                     sexo,
-                    this.contribuicaoTotal);
+                    this.contribuicaoTotal,
+                    redutorProfessor);
 
             }
 
@@ -670,7 +694,7 @@ export class RegrasAcesso {
                 2033: { m: 105, f: 100 }
             };
 
-            pontosRequeridos = (ano >= 2033)? regra1[2033][sexo] : regra1[ano][sexo];
+            pontosRequeridos = (ano >= 2033) ? regra1[2033][sexo] : regra1[ano][sexo];
             status = (((ano >= 2019) && pontos >= pontosRequeridos)
                 && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
 
@@ -693,7 +717,7 @@ export class RegrasAcesso {
                 2030: { m: 100, f: 92 }
             };
 
-            pontosRequeridos = (ano >= 2030)? regra1[2033][sexo] : regra1[ano][sexo];
+            pontosRequeridos = (ano >= 2030) ? regra1[2033][sexo] : regra1[ano][sexo];
             status = (((ano >= 2019) && pontos >= pontosRequeridos)
                 && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
         }
@@ -761,7 +785,7 @@ export class RegrasAcesso {
         };
 
 
-        const ajusteRegraAcessso = (ano >= 2031 ) ? regra2[2031][sexo] : regra2[ano][sexo];
+        const ajusteRegraAcessso = (ano >= 2031) ? regra2[2031][sexo] : regra2[ano][sexo];
 
         status = (((ano >= 2019) && idade >= (ajusteRegraAcessso - redutorProfessor))
             && tempo_contribuicao >= contribuicao_min[sexo]) ? true : false;
@@ -821,11 +845,10 @@ export class RegrasAcesso {
             f: 30 - redutorProfessor
         };
 
-        let tempoDePedagio;
+        let tempoDePedagio = 0;
         let contribuicaoDiff = 0;
         let tempoFinalContrib = contribuicao_min[sexo];
         let tempoDePedagioTotal = 0;
-
 
         if (idade >= contribuicao_idade_min[sexo] && tempoContribuicaoTotalAtePec.anos > 0) {
 
@@ -908,8 +931,9 @@ export class RegrasAcesso {
             tempoDePedagioTotal = (contribuicaoDiff + tempoDePedagio);
             //  tempoDePedagioTotal = (tempoDePedagioTotal <= 0) ? 0 : tempoDePedagioTotal;
             // status = (tempoDePedagioTotal > 0.00273973) ? false : true;
+            /// status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
 
-            status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
+            status = ((tempoFinalContrib - tempo_contribuicao) < 0.002737850787132) ? true : false;
 
         }
 
@@ -941,7 +965,7 @@ export class RegrasAcesso {
      * @param  {} sexo
      * @param  {} tempo_contribuicao
      */
-    public regraAcessoIdade(idade, ano, sexo, tempo_contribuicao) {
+    public regraAcessoIdade(idade, ano, sexo, tempo_contribuicao, redutorProfessor) {
 
         let status = false;
         const contribuicao_min = 15;
@@ -1009,26 +1033,37 @@ export class RegrasAcesso {
             ano,
             sexo,
             tempo_contribuicao,
-            tipoBeneficio
+            tipoBeneficio,
+            redutorProfessor
         ) {
 
+        const contribuicao_mins = {
+            3: { m: 20, f: 15 },
+            16: { m: 15, f: 15 },
+            31: { m: 25, f: 25 }
+        };
 
-        let contribuicao_min = { m: 20, f: 15 };
-        let idade_min = { m: 65, f: 62 };
-        let status = false;
-        let label = 'Aposentadoria por Idade - Trabalhador Urbano - Regra Transitória';
-
-        if (tipoBeneficio === 16) {
-            contribuicao_min = { m: 15, f: 15 };
-            idade_min = { m: 60, f: 55 };
-            label = 'Aposentadoria por Idade - Trabalhador Rural - Regra Transitória'
+        const idade_mins = {
+            3: { m: 65, f: 62 },
+            16: { m: 50, f: 55 },
+            31: { m: 60, f: 57 }
         }
+
+        const labelsIdade = {
+            3: 'Aposentadoria por Idade - Trabalhador Urbano - Regra Transitória',
+            16: 'Aposentadoria por Idade - Trabalhador Rural',
+            31: 'Aposentadoria Programada - alinea II do  § 1º art. 19 da EC nº 103/2019'
+        };
+
+        const label = labelsIdade[tipoBeneficio];
+        const idade_min = idade_mins[tipoBeneficio];
+        const contribuicao_min = contribuicao_mins[tipoBeneficio];
+        let status = false;
+
 
         if (tempo_contribuicao >= contribuicao_min[sexo] && idade >= idade_min[sexo]) {
             status = true;
         }
-
-
 
         this.setConclusaoAcesso(
             'idadeTransitoria',

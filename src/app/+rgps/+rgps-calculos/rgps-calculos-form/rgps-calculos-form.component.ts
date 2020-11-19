@@ -2,9 +2,12 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
+import { SeguradoService } from 'app/+rgps/+rgps-segurados/SeguradoRgps.service';
 // import swal from 'sweetalert2';
 import swal from 'sweetalert';
 import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
+
 
 @Component({
   selector: 'app-rgps-calculos-form',
@@ -92,13 +95,25 @@ export class RgpsCalculosFormComponent implements OnInit {
   public periodoOptions: string[] = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
+  private segurado;
+  private isTransitoria = false;
+
+  private inputFunctions = InputFunctions;
+
   @Input() formData;
   @Input() errors: ErrorService;
   @Input() isEdit: boolean;
   @Output() onSubmit = new EventEmitter;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    protected Segurado: SeguradoService
+  ) { }
+
   ngOnInit() {
+
+    this.getSegurado();
+
     if (this.isEdit) {
       this.dataInicioBeneficio = this.formData.data_pedido_beneficio;
 
@@ -160,6 +175,23 @@ export class RgpsCalculosFormComponent implements OnInit {
 
 
   }
+
+
+  private getSegurado() {
+
+    this.Segurado.find(this.route.snapshot.params['id'])
+      .then(segurado => {
+        this.segurado = segurado;
+
+        if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY').isAfter('2019-11-13')) {
+          this.isTransitoria = true;
+        }
+
+      });
+
+  }
+
+
   public submit(e) {
     e.preventDefault();
     this.validate();
@@ -475,7 +507,8 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     }
 
-    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')) {
+    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')
+      && this.getEspecieBeneficio(this.especieBeneficio) != 31) {
       this.errors.add({ 'carencia': ['Campo obrigatório.'] });
     }
 
@@ -529,7 +562,9 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por Idade - Trabalhador Rural',
       'Aposentadoria por Idade da PcD',
       'Auxílio Doença',
-      'Auxílio por Incapacidade Temporária'
+      'Auxílio por Incapacidade Temporária',
+      'Aposentadoria Programada',
+      'Aposentadoria Programada - Professor'
     ].includes(this.especieBeneficio)) {
       tipoIdade = true;
     }
@@ -558,6 +593,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       'Aposentadoria por idade - Trabalhador Rural',
       'Aposentadoria por Idade - Trabalhador Urbano',
       'Aposentadoria por Idade - Trabalhador Rural',
+      'Aposentadoria Programada',
+      'Aposentadoria Programada - Professor',
       'Aposentadoria especial - 15 anos de exposição',
       'Aposentadoria especial - 20 anos de exposição',
       'Aposentadoria especial - 25 anos de exposição',
@@ -713,6 +750,14 @@ export class RgpsCalculosFormComponent implements OnInit {
         this.has19 = true;
       }
 
+      if (this.getEspecieBeneficio(this.especieBeneficio) === 31) {
+        this.hasAnterior = false;
+        this.has98 = false;
+        this.has99 = false;
+        this.hasAtual = false;
+        this.has19 = true;
+      }
+
     } else {
       this.hasAnterior = false;
       this.has98 = false;
@@ -775,9 +820,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
 
-      this.primariaAtualanos = periodos.total.years;
-      this.primariaAtualmeses = periodos.total.months;
-      this.primariaAtualdias = periodos.total.days;
+       // Até a EC nº 103/2019
+       this.primariaAtualanos = periodos.total19.years;
+       this.primariaAtualmeses = periodos.total19.months;
+       this.primariaAtualdias = periodos.total19.days;
+       // Até a EC nº 103/2019
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -856,7 +903,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         closeOnClickOutside: true,
         closeOnEsc: true,
         button: false,
-        timer: 120000,
+        timer: 5000,
         // content: {
         //   element: 'label',
         //   attributes: {
@@ -929,7 +976,9 @@ export class RgpsCalculosFormComponent implements OnInit {
     if (this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Rural'
       || this.especieBeneficio === 'Aposentadoria por idade - Trabalhador Urbano'
       || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano'
-      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural') {
+      || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural'
+      || this.especieBeneficio === 'Aposentadoria Programada'
+      || this.especieBeneficio === 'Aposentadoria Programada - Professor') {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;
@@ -1194,7 +1243,11 @@ export class RgpsCalculosFormComponent implements OnInit {
         break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
       case 'Aposentadoria por idade - Trabalhador Urbano':
+      case 'Aposentadoria Programada':
         numeroEspecie = 3;
+        break;
+      case 'Aposentadoria Programada - Professor':
+        numeroEspecie = 31;
         break;
       case 'Aposentadoria por Tempo de Contribuição':
       case 'Aposentadoria por tempo de contribuição':
@@ -1277,7 +1330,6 @@ export class RgpsCalculosFormComponent implements OnInit {
     }
     return numeroEspecie;
   }
-
 
 
 }

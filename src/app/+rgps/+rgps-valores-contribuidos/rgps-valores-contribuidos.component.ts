@@ -58,6 +58,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public salarioContribuicao = undefined;
   public tipoContribuicao = 'Primaria';
 
+  public exibirCampoAnteriorLei13846 = false;
+  public somarSecundaria = "0";
+
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -89,8 +92,11 @@ export class RgpsValoresContribuidosComponent implements OnInit {
           if (this.idsCalculos.length == 1) {
             this.CalculoRgps.find(this.idsCalculos[0])
               .then(calculo => {
+
                 this.calculo = calculo;
                 this.updateDatatable(calculo);
+                this.isSomarSecundariaCheck();
+
                 this.ValorContribuidoService.getByCalculoId(this.idsCalculos[0], null, null, 0, this.idSegurado)
                   .then((valorescontribuidos: ValorContribuido[]) => {
                     this.initializeMatrix(valorescontribuidos);
@@ -111,6 +117,37 @@ export class RgpsValoresContribuidosComponent implements OnInit {
           }
         }
       });
+  }
+
+
+  private isSomarSecundariaCheck() {
+
+    //console.log(this.calculo.somar_contribuicao_secundaria)
+    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
+      this.somarSecundaria = "" + this.calculo.somar_contribuicao_secundaria;
+      this.exibirCampoAnteriorLei13846 = true;
+    }
+
+  }
+
+  private somarSecundariaUpdate() {
+
+    this.calculo.somar_contribuicao_secundaria = Number(this.somarSecundaria);
+
+    this.CalculoRgps
+      .update(this.calculo)
+      .then(model => {
+
+        swal({
+          type: 'success',
+          title: 'Cálculo atualizado',
+          allowOutsideClick: false,
+          timer: 1500,
+          showConfirmButton: false
+        })
+
+      })
+      .catch(errors => this.errors.add(errors));
   }
 
   contribsChanged(event, tipo_contrib) {

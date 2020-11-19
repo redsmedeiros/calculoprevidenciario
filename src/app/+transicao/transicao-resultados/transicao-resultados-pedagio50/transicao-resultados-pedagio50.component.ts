@@ -70,7 +70,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     //   });
   }
 
-
+/**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra3pedagio50() {
 
     try {
@@ -134,7 +136,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     const contribuicao_min = this.tempoDeContribuicao50Regra3[this.seguradoTransicao.sexo + 'd'];
 
     let rstRegraPedagio50: any;
-    let dataDib = this.dataAtual.clone().add(1, 'day');
+    let dataDib = (this.dataAtual.clone()).add(1, 'day');
     // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;

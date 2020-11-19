@@ -1,18 +1,36 @@
 <div id="content" *ngIf="!isUpdating">
-
   <!-- widget grid -->
   <sa-widgets-grid>
-
     <!-- row -->
-    <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo: Benefícios Atrasados</h1>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h1>Benefícios Atrasados</h1>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/beneficios/beneficios-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item active">Lista dos cálculos de Atrasados realizados </li>
+          <li class="breadcrumb-item">
+            <a href="#/beneficios/beneficios-segurados">
+              Criar/Buscar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item active">
+            Lista dos Cálculos de Atrasados Realizados
+          </li>
         </ol>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+          class="mb-4"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
@@ -22,153 +40,167 @@
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <ul class="list-unstyled">
-                <li><b>Nome:</b>  {{segurado.nome}} </li>
-                <li *ngIf="segurado.id_documento==1"><b>PIS:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==2"><b>PASEP:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==3"><b>CPF:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==4"><b>NIT:</b>   {{segurado.numero_documento}}</li>
-                <li *ngIf="segurado.id_documento==5"><b>RG:</b>   {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b>  {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.data_filiacao" ><b>Data de filiação:</b>  {{segurado.data_filiacao}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
+            <div class="widget-body p-0 widget-body-custom">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+                <li  class="px-5" *ngIf="segurado.numero_documento" >
+                  <strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}
+                </li>
+                <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
               </ul>
-              <div class="form-actions no-padding">
+              <div class="form-actions p-0 mt-3">
                 <div class="row">
                   <div class="col-md-12">
-
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
+                    <button
+                      type="submit"
+                      (click)="editSegurado()"
+                      class="btn btn-labeled btn-info pull-right"
+                    >
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
+                      </span>
+                      Editar
                     </button>
 
                     <!--<button type="submit" class="btn btn-labeled btn-primary">
-                      <span class="btn-label">
-                        <i class="fa fa-percent"></i>
-                      </span> Novo cálculo
-                    </button> -->
+               <span class="btn-label">
+                 <i class="fa fa-percent"></i>
+               </span> Novo cálculo
+             </button> -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </sa-widget>
-      </article>
+      </div>
+    </div>
 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-12">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Sistema</th>
-                  <th>Descrição</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <button type="submit" (click)="createNewCalculo()" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Simulador de Benefícios Atrasados
-                    </button>
-                    <!-- <br>
-                    <br>
-                    <br>
-                    <button type="submit" (click)="createNewCalculo('R')" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Revisão de beneficios 
-                    </button> -->
-                  </td>
-                  <td>
-                    <p>Diferenças entre valores de rendas mensais de benefícios devidos e recebidos bem como correção monetária, juros de mora e honorários.
-                       (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/1439/t/calculo-de-beneficios-atrasados">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS.pdf">manual em PDF</a>, <a target="_blank"href="https://vimeo.com/209445770">videoaula</a>, <a target="_blank"href="http://www.youtube.com/watch?v=WS0Hn-MJWZc&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt">videoaula da simulaçao para Buraco Negro</a>)</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <button type="submit" (click)="createNewCalculoJudicial()" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Simulador de Benefícios Atrasados (EC 20/1998 e EC 41/2003)
-                    </button>
-                  </td>
-                  <td>
-                    <p>Simula diferenças devidas referente aos tetos legais de R$1200,00 para 12/1998 e R$2400,00 para 12/2003 quando no cálculo de seu salário de benefício houve limitação ao teto do salário de contribuição vigente no momento da concessão, fazendo jus, portanto, a revisão judicial. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/22868/t/beneficio-atrasados-tetos">manual</a>, <a target="_blank"href="http://www.youtube.com/watch?v=SHWS5Z945d8">videoaula</a>)</p>
-                  </td>
-                </tr>
-                <!-- <tr>
-                  <td>
-                    <button type="submit" (click)="createNewCalculoIndices()" class="btn btn-labeled btn-default pull-left">
-                      <span class="btn-label">
-                        <i class="fa fa-arrow-right"></i>
-                      </span> Benefícios Atrasados - Índices 06/1999 e 05/2004
-                    </button>
-                  </td>
-                  <td>
-                    <p>Simula revisão com acréscimo dos índices de 2,28% em 06/1999 e 1,75% em 05/2004. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/34152/t/beneficio-atrasados---indices-06-99-e-05-04">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS%2099-04.pdf">manual em PDF</a>, <a target="_blank"href="https://www.youtube.com/watch?v=v-GFKdUxwYE&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt&index=9">videoaula</a>)</p>
-                  </td>
-                </tr> -->
-              </tbody>
-            </table>
+    <div class="row md-4">
+      <div class="col-md-12 col-sm-12 col-lg-12">
+        <table class="table table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  type="submit"
+                  (click)="createNewCalculo()"
+                  class="btn btn-labeled btn-info mt-2"
+                  style="width: 325px;"
+                >
+                  <span class="btn-label pull-left">
+                    <i class="fa fa-plus"></i>
+                  </span>
+                 <p class="m-2">Criar Novo Cálculo</p>
+                </a>
+                <!-- <br>
+                <br>
+                <br>
+                <button type="submit" (click)="createNewCalculo('R')" class="btn btn-labeled btn-info pull-left">
+                  <span class="btn-label">
+                    <i class="fa fa-arrow-right"></i>
+                  </span> Revisão de beneficios 
+                </button> -->
+              </td>
+              <td>
+                <p>
+                  Diferenças entre valores de rendas
+                    mensais de benefícios devidos e recebidos, com a aplicação de
+                    correção monetária, juros de mora e honorários advocatícios.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  type="submit"
+                  (click)="createNewCalculoJudicial()"
+                  class="btn btn-labeled btn-info mt-4"
+                  style="width: 325px;"
+                >
+                  <span class="btn-label pull-left">
+                    <i class="fa fa-plus"></i>
+                  </span>
+                  <p class="m-2"> Criar Novo Cálculo 
+                  EC 20/1998 e EC 41/2003</p>
+                </a>
+              </td>
+              <td>
+                <p>
+                  Diferenças devidas (com juros, correção monetária e honorários advocatícios) referente à readequação aos Tetos Constitucionais (Revisão do Teto) previstos nas EC’s 20/98 e 41/03 (R$ 1.200,00 e R$ 2.400,00), decorrente da limitação do Salário de Benefício ao teto do Salário de Contribuição vigente na Data de Início do Benefício – DIB.
+                </p>
+              </td>
+            </tr>
+            <!-- <tr>
+              <td>
+                <button type="submit" (click)="createNewCalculoIndices()" class="btn btn-labeled btn-default pull-left">
+                  <span class="btn-label">
+                    <i class="fa fa-arrow-right"></i>
+                  </span> Benefícios Atrasados - Índices 06/1999 e 05/2004
+                </button>
+              </td>
+              <td>
+                <p>Simula revisão com acréscimo dos índices de 2,28% em 06/1999 e 1,75% em 05/2004. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/34152/t/beneficio-atrasados---indices-06-99-e-05-04">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS%2099-04.pdf">manual em PDF</a>, <a target="_blank"href="https://www.youtube.com/watch?v=v-GFKdUxwYE&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt&index=9">videoaula</a>)</p>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <app-beneficios-calculos-index
+          [list]="calculosList"
+          [datatableOptions]="calculoTableOptions"
+        ></app-beneficios-calculos-index>
+      </article>
+    </div>
+
+    <div class="row mb-0">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-2">
+            <ul class="list-inline m-0 p-0">
+              <li>
+                <i
+                  class="fa fa-calculator btn-primary fa-1-9x txt-color-white p-0 pull-left"
+                  title="Mostra o resultado do cálculo do item relacionado."
+                ></i>
+                Calcular RMI
+              </li>
+              <li>
+                <i
+                  class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"
+                  title="Editar o item relacionado."
+                ></i>
+                Editar
+              </li>
+              <li>
+                <i
+                  class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"
+                  title="Remove definitivamente do sistema o item relacionado."
+                ></i>
+                Remover
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-beneficios-calculos-index [list]="calculosList" [datatableOptions]="calculoTableOptions"></app-beneficios-calculos-index>
-      </article>
-
-
-      <div class="row row-fix-width">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-center">
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar o item relacionado.</td>
-              </tr>
-              <tr>
-                <td class="text-center">
-                  <i class="fa fa-times"></i>
-                </td>
-                <td>Remove definitivamente do sistema o item relacionado.</td>
-              </tr>
-              <tr>
-                <td class="text-center">
-                  <i class="fa fa-calculator"></i>
-                </td>
-                <td>Mostra o resultado do cálculo do item relacionado.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
     </div>
 
     <!-- end row -->
-
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>

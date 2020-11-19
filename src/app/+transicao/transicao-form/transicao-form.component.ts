@@ -8,7 +8,9 @@ import { ErrorService } from '../../services/error.service';
 import { environment } from '../../../environments/environment';
 import swal from 'sweetalert';
 import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
 import { TransicaoResultadosComponent } from '../transicao-resultados/transicao-resultados.component';
+
 
 
 @Component({
@@ -26,6 +28,9 @@ export class TransicaoFormComponent implements OnInit {
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public number2Mask = [/\d/, /\d/];
+
+  private inputFunctions = InputFunctions;
 
 
   @ViewChild(TransicaoResultadosComponent) transicaoResultadosComponent: TransicaoResultadosComponent;
@@ -105,25 +110,41 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoMeses = '6';
     // this.contribuicaoDias = '3';
 
-
-    // this.nome = 'Robson - 24-03-2020';
+    
+    // this.nome = 'IVONETE - 09-11-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '04/01/1966';
+    // this.dataNascimento = '01/10/1959';
     // this.dataFiliacao = '01/01/1980';
     // this.sexo = 'f';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '3';
-    // this.contribuicaoDiasAteEC103 = '16';
+    // this.contribuicaoAnosAteEC103 = '11';
+    // this.contribuicaoMesesAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '18';
 
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '7';
-    // this.contribuicaoDias = '26';
+    // this.contribuicaoAnos = '11';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '18';
+
+
+    // this.nome = 'Andre - 29-10-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '19/12/1979';
+    // this.dataFiliacao = '01/01/1990';
+    // this.sexo = 'm';
+    // this.professor = true;
+
+    // this.contribuicaoAnosAteEC103 = '23';
+    // this.contribuicaoMesesAteEC103 = '2';
+    // this.contribuicaoDiasAteEC103 = '24';
+
+    // this.contribuicaoAnos = '24';
+    // this.contribuicaoMeses = '02';
+    // this.contribuicaoDias = '12';
 
   }
-
 
   // ngAfterContentInit() {
   //   // setTimeout(() => {

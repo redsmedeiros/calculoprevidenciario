@@ -2,49 +2,88 @@
   <sa-widgets-grid>
     <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <h1>Cálculo: Contribuições Atrasadas - Lei complementar n. 128/08 </h1>
+        <h1>Contribuições Atrasadas - Lei complementar n. 128/08</h1>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}/{{idCalculo}}/edit"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item">
+            <a href="#/contribuicoes/contribuicoes-segurados">
+              Criar/Buscar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#/contribuicoes/contribuicoes-calculos/{{ idSegurado }}">
+              Lista de Cálculos</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/contribuicoes/contribuicoes-calculos/{{ idSegurado }}/{{
+                idCalculo
+              }}/edit"
+            >
+              Informações para o Cálculo</a
+            >
+          </li>
           <li class="breadcrumb-item active">Resultados</li>
         </ol>
+      </article>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false"
-              [editbutton]="false"
-              [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false"
-              [custombutton]="false"
-              [sortable]="false">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [sortable]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado selecionado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <ul class="list-unstyled">
-                <li><b>Nome:</b> {{segurado.nome}}</li>
-                <li *ngIf="segurado.numero_documento" ><b>Pis:</b> {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
-                <li><b>Idade atual:</b>  {{segurado.idade}} anos</li>
+            <div class="widget-body widget-body-custom">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
+                <li class="px-5" *ngIf="segurado.numero_documento">
+                  <strong
+                    >{{
+                      segurado.getDocumentType(segurado.id_documento)
+                    }}:</strong
+                  >
+                  {{ segurado.numero_documento }}
+                </li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong>
+                  {{ segurado.data_nascimento }}
+                </li>
+                <li class="px-5">
+                  <strong>Sexo:</strong>
+                  {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                </li>
+                <li class="px-5">
+                  <strong>Idade atual:</strong> {{ segurado.idade }} anos
+                </li>
               </ul>
               <div id="printableSegurado" hidden>
-                <h1>Cálculo: Contribuições Atrasadas - Lei complementar n. 128/08 </h1>
+                <h1>Contribuições Atrasadas - Lei complementar n. 128/08</h1>
                 <table class="table table-bordered table-hover">
-                  <caption><h2>Dados do Segurado</h2></caption>
+                  <caption>
+                    <h2>Dados do Segurado</h2>
+                  </caption>
                   <tr>
                     <td width="50%">
                       <b>Nome:</b>
                     </td>
                     <td width="50%">
-                      {{segurado.nome}}
+                      {{ segurado.nome }}
                     </td>
                   </tr>
                   <tr>
@@ -52,7 +91,7 @@
                       <b>PIS:</b>
                     </td>
                     <td width="50%">
-                      {{segurado.numero_documento}}
+                      {{ segurado.numero_documento }}
                     </td>
                   </tr>
                   <tr>
@@ -60,7 +99,7 @@
                       <b>Data de nascimento:</b>
                     </td>
                     <td width="50%">
-                       {{segurado.data_nascimento}}
+                      {{ segurado.data_nascimento }}
                     </td>
                   </tr>
                   <tr>
@@ -68,18 +107,24 @@
                       <b>Sexo:</b>
                     </td>
                     <td width="50%">
-                      <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                      <span *ngIf="segurado.sexo == 'm'">Masculino</span
+                      ><span *ngIf="segurado.sexo == 'f'">Feminino</span>
                     </td>
                   </tr>
                 </table>
               </div>
-              <div class="form-actions">
+              <div class="form-actions p-0 mt-3">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button
+                      type="submit"
+                      (click)="editSegurado()"
+                      class="btn btn-labeled btn-info pull-right"
+                    >
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
-                      </span> Editar
+                      </span>
+                      Editar
                     </button>
                   </div>
                 </div>
@@ -87,13 +132,18 @@
             </div>
           </div>
         </sa-widget>
-      </article>
+      </div>
     </div>
+
     <div class="row">
-    	<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false"
-              [deletebutton]="false"
-              [fullscreenbutton]="false">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-calculator"></i>
@@ -101,30 +151,47 @@
             <h2>Dados do cálculo</h2>
           </header>
           <div>
-            <div class="widget-body">
+            <div class="widget-body ">
               <ul class="list-unstyled">
-                <li><b>Número de contribuições consideradas:</b> {{calculoComplementar.numero_contribuicoes}} </li>
-                <li><b>Valor total das 80% maiores contribuições corrigidas:</b> {{formatMoney(calculoComplementar.total_contribuicao)}}</li>
-                <li><b>Valor médio final:</b> {{formatMoney(calculoComplementar.media_salarial)}}</li>
-                <li><b>Valor base para recolhimento de aliquota:</b> {{formatMoney(baseAliquota)}}</li>
+                <li>
+                  <b>Número de contribuições consideradas:</b>
+                  {{ calculoComplementar.numero_contribuicoes }}
+                </li>
+                <li>
+                  <b>Valor total das 80% maiores contribuições corrigidas:</b>
+                  {{ formatMoney(calculoComplementar.total_contribuicao) }}
+                </li>
+                <li>
+                  <b>Valor médio final:</b>
+                  {{ formatMoney(calculoComplementar.media_salarial) }}
+                </li>
+                <li>
+                  <b>Valor base para recolhimento de aliquota:</b>
+                  {{ formatMoney(baseAliquota) }}
+                </li>
               </ul>
               <div id="printableDadosCalculo" hidden>
-                <table class="table table-bordered table-hover">
-                  <caption><h2>Dados do cálculo</h2></caption>
+                <table class="table table-bordered table-hover table-condensed">
+                  <caption>
+                    <h2>Dados do cálculo</h2>
+                  </caption>
                   <tr>
                     <td width="50%">
                       <b>Número de contribuições consideradas:</b>
                     </td>
                     <td width="50%">
-                      {{calculoComplementar.numero_contribuicoes}}
+                      {{ calculoComplementar.numero_contribuicoes }}
                     </td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <b>Valor total das 80% maiores contribuições corrigidas:</b>
+                      <b
+                        >Valor total das 80% maiores contribuições
+                        corrigidas:</b
+                      >
                     </td>
                     <td width="50%">
-                      {{formatMoney(calculoComplementar.total_contribuicao)}}
+                      {{ formatMoney(calculoComplementar.total_contribuicao) }}
                     </td>
                   </tr>
                   <tr>
@@ -132,7 +199,7 @@
                       <b>Valor médio final:</b>
                     </td>
                     <td width="50%">
-                       {{formatMoney(calculoComplementar.media_salarial)}}
+                      {{ formatMoney(calculoComplementar.media_salarial) }}
                     </td>
                   </tr>
                   <tr>
@@ -140,7 +207,7 @@
                       <b>Valor base para recolhimento de aliquota:</b>
                     </td>
                     <td width="50%">
-                      {{formatMoney(baseAliquota)}}
+                      {{ formatMoney(baseAliquota) }}
                     </td>
                   </tr>
                 </table>
@@ -150,8 +217,16 @@
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating" id="detalhamentoCalculo">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+      <article
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="!isUpdating"
+        id="detalhamentoCalculo"
+      >
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
@@ -161,12 +236,23 @@
           <div>
             <div class="col-sm-12" *ngIf="!hasDetalhe">
               <div class="well">
-                <p><b>Detalhamento do cálculo disponível apenas no ato de geração do valor.</b></p>
+                <p>
+                  <b
+                    >Detalhamento do cálculo disponível apenas no ato de geração
+                    do valor.</b
+                  >
+                </p>
               </div>
             </div>
-            <div class="widget-body no-padding" *ngIf="hasDetalhe" >
-              <sa-datatable *ngIf="hasDetalhe" [options]="detalhesTableOptions" [responsive]="false"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+            <div class="widget-body no-padding hidden-dt" *ngIf="hasDetalhe">
+              <sa-datatable
+                *ngIf="hasDetalhe"
+                [options]="detalhesTableOptions"
+                [responsive]="false"
+                paginationLength="true"
+                tableClass="table table-striped table-bordered table-hover"
+                width="100%"
+              >
                 <thead>
                   <tr>
                     <th>#</th>
@@ -177,14 +263,24 @@
                   </tr>
                 </thead>
               </sa-datatable>
-              <small style="padding-left: 10px " class="text-danger"><b>Valores em vermelho correspondem a contribuições descartadas.</b></small>
-            </div> 
+              <small style="padding-left: 10px" class="text-danger"
+                ><b
+                  >Valores em vermelho correspondem a contribuições
+                  descartadas.</b
+                ></small
+              >
+            </div>
           </div>
         </sa-widget>
       </article>
 
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating" >
-        <sa-widget [colorbutton]="false" [editbutton]="false" id="resultadosCalculo" [deletebutton]="false">
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          id="resultadosCalculo"
+          [deletebutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
@@ -192,9 +288,14 @@
             <h2>Resultados</h2>
           </header>
           <div>
-            <div class="widget-body no-padding" >
-              <sa-datatable [options]="resultadosTableOptions" [responsive]="false"
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
+            <div class="widget-body no-padding hidden-dt">
+              <sa-datatable
+                [options]="resultadosTableOptions"
+                [responsive]="false"
+                paginationLength="true"
+                tableClass="table table-striped table-bordered table-hover table-condensed"
+                width="100%"
+              >
                 <thead>
                   <tr>
                     <th>Competência</th>
@@ -205,20 +306,30 @@
                   </tr>
                 </thead>
               </sa-datatable>
-            </div> 
+            </div>
           </div>
           <div class="col-sm-12">
             <div class="well">
               <p>
-                O cálculo dos valores apresentados acima foram realizados com base na recente Lei Complementar nº. 128, de dezembro de 2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91. Competências posteriores ao período já decadente devem ser calculados de acordo com o sistema disponibilizado no site da Previdência Social. <a href="https://www.inss.gov.br/servicos-do-inss/calculo-da-guia-da-previdencia-social-gps/"  target="_blank">https://www.inss.gov.br/servicos-do-inss/calculo-da-guia-da-previdencia-social-gps/</a>.
+                O cálculo dos valores apresentados acima foram realizados com
+                base na recente Lei Complementar nº. 128, de dezembro de 2008,
+                que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
+                Competências posteriores ao período já decadente devem ser
+                calculados de acordo com o sistema disponibilizado no site da
+                Previdência Social.
+                <a
+                  href="https://www.inss.gov.br/servicos-do-inss/calculo-da-guia-da-previdencia-social-gps/"
+                  target="_blank"
+                  >https://www.inss.gov.br/servicos-do-inss/calculo-da-guia-da-previdencia-social-gps/</a
+                >.
               </p>
             </div>
           </div>
         </sa-widget>
         <div class="form-actions">
-            <div class="row">
-              <div class="col-md-12">
-                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-arrow-circle-left"></i>
                   </span> Voltar
@@ -227,15 +338,20 @@
                   <span class="btn-label">
                     <i class="fa fa-list"></i>
                   </span> Listagem de segurados 
-                </button>
-                <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-success margin-bottom-10">
-                  <span class="btn-label">
-                    <i class="fa fa-print"></i>
-                  </span> Imprimir
-                </button>
-              </div>
+                </button> -->
+              <button
+                (click)="imprimirPagina()"
+                type="submit"
+                class="btn btn-labeled btn-info margin-bottom-10"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-print"></i>
+                </span>
+                Imprimir
+              </button>
             </div>
           </div>
+        </div>
       </article>
     </div>
   </sa-widgets-grid>

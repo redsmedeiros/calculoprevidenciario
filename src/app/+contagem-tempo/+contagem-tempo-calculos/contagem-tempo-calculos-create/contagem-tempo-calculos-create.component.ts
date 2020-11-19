@@ -3,7 +3,7 @@ import { CalculoContagemTempoService } from '../CalculoContagemTempo.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoContagemTempo as CalculoModel } from '../CalculoContagemTempo.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contagem-tempo-calculos-create',
@@ -31,9 +31,20 @@ export class ContagemTempoCalculosCreateComponent implements OnDestroy {
     this.Calculo
       .save(data)
       .then((model: CalculoModel) => {
-        this.resetForm();
-        this.onSubmit.emit();
-        window.location.href = '#/contagem-tempo/contagem-tempo-periodos/' + this.route.snapshot.params['id'] + '/' + model.id;
+        swal(
+          {
+            type: 'success',
+            title: 'Cálculo salvo com sucesso',
+            text: '',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            timer: 2000
+          }
+        ).then(() => {
+          this.resetForm();
+          this.onSubmit.emit();
+          window.location.href = '#/contagem-tempo/contagem-tempo-periodos/' + this.route.snapshot.params['id'] + '/' + model.id;
+        });
       })
       .catch(errors => this.Errors.add(errors));
   }

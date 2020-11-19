@@ -7,11 +7,11 @@
     <div class="row">
       <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <h1>Cálculo: Contribuições Atrasadas - Jurisprudencial</h1>
+        <h2>Contribuições Atrasadas - Jurisprudencial</h2>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
           <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/contribuicoes/{{idSegurado}}/novo-jurisprudencial/{{idCalculo}}"> Informações para o cálculo</a></li>
+          <li class="breadcrumb-item"><a href="#/contribuicoes/{{idSegurado}}/novo-jurisprudencial/{{idCalculo}}"> Informações para o Cálculo</a></li>
           <li class="breadcrumb-item active">Resultados</li>
         </ol>
         <!-- Widget ID (each widget will need unique ID)-->
@@ -24,24 +24,22 @@
               [sortable]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-edit"></i>
+              <i class="fa fa-user"></i>
             </span>
-            <h2>Dados do segurado selecionado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
           <!-- widget div-->
           <div>
             <!-- widget content -->
-            <div class="widget-body">
-              <ul class="list-unstyled">
-                <li><b>Nome:</b> {{segurado.nome}}</li>
-                <li *ngIf="segurado.numero_documento" ><b>Pis:</b> {{segurado.numero_documento}}</li>
-                <li><b>Data de nascimento:</b> {{segurado.data_nascimento}}</li>
-                <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-                <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>
-                <li><b>Idade atual:</b>  {{segurado.idade}} anos</li>
+            <div class="widget-body widget-body-custom">
+              <ul class="list-inline m-0">
+                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
+                <li  class="px-5" *ngIf="segurado.numero_documento" ><strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}</li>
+                <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
+                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
               </ul>
               <div id="printableSegurado" hidden>
-                <h1>Cálculo: Contribuições Atrasadas - Jurisprudencial</h1>
+                <h2>Contribuições Atrasadas - Jurisprudencial</h2>
                 <table class="table table-bordered table-hover">
                   <caption><h2>Dados do Segurado</h2></caption>
                   <tr>
@@ -78,10 +76,10 @@
                   </tr>
                 </table>
               </div>
-              <div class="form-actions">
+              <div class="form-actions p-0 mt-3">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
+                    <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right">
                       <span class="btn-label">
                         <i class="fa fa-pencil-square-o"></i>
                       </span> Editar
@@ -107,7 +105,7 @@
               <h2>Resultados</h2>
             </header>
             <div>
-              <div class="widget-body no-padding" >
+              <div class="widget-body no-padding hidden-dt" >
                 <sa-datatable [options]="tableOptions"
                   paginationLength="true" tableClass="table table-striped table-bordered table-hover" [responsive] = "false" width="100%">
                   <thead>
@@ -122,8 +120,8 @@
                 </sa-datatable>
               </div>
             </div>
-            <div class="col-sm-12">
-              <div class="well">
+            <div class="col-sm-12 no-padding">
+              <div class="well mb-0">
                 <p>
                   O recolhimento em atraso somente é possível caso haja a efetiva comprovação do exercício da atividade remunerada. No caso
                   do autônomo (atualmente contribuinte individual) é preciso que haja a prova do exercício dessa atividade,
@@ -150,7 +148,7 @@
         <div class="form-actions">
             <div class="row">
               <div class="col-md-12">
-                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
+                <!-- <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-arrow-circle-left"></i>
                   </span> Voltar
@@ -160,9 +158,9 @@
                   <span class="btn-label">
                     <i class="fa fa-list"></i>
                   </span> Listagem de segurados 
-                </button>
+                </button> -->
 
-                <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-success margin-bottom-10">
+                <button (click)="imprimirPagina()" type="submit" class="btn btn-labeled btn-info margin-bottom-10">
                   <span class="btn-label">
                     <i class="fa fa-print"></i>
                   </span> Imprimir

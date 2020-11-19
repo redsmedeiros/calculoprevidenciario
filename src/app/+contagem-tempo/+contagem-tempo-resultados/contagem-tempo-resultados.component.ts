@@ -179,7 +179,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
                     //     background-color: #831721 !important;
                     //     border-color: #CCC !important;
                     //     color: #fafafa !important;
-                    //   }
+					//   }
+					footer{text-align: center; margin-top: 50px;}
                       </style>`;
 
 		const popupWin = window.open('', '_blank', 'width=640,height=480');
@@ -191,11 +192,8 @@ export class ContagemTempoResultadosComponent implements OnInit {
                                   <title>Contagem Tempo - ${this.segurado.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
-								   <footer style="color: #c5c7c8 !important; margin-top: 80px;">
-                                    <img src="assets/img/logo-IEPREV.png" 
-                                    style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                                    <p style="text-align: center; color: #c5c7c8 !important;">
-                                    Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
+								   <footer>
+								   <img src='./assets/img/rodapesimulador.png' alt='Logo'>
                                   </footer>
                                   </body>
                                 </html>`);

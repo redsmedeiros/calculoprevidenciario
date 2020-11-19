@@ -42,6 +42,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     idadeDibMoment: '',
   };
 
+  private tempoContribMinimoIdadeProgressiva = 0;
   public isUpdating;
 
 
@@ -63,6 +64,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   }
 
+  /**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra2IdadeProgressiva() {
 
     try {
@@ -124,6 +128,8 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     let rstRegraIdadeProgressiva: any;
 
     let percentualR1 = 60;
+
+    this.tempoContribMinimoIdadeProgressiva = contribuicao_min[this.seguradoTransicao.sexo];
 
     // console.log(regraIdade);
     // console.log(this.seguradoTransicao.idadeFracionada);
@@ -189,27 +195,20 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     do {
 
 
-      fimContador = this.requisitosRegra2(
-        auxiliarDate.year(),
-        sexo,
-        idade,
-        tempoContribuicao,
-        this.seguradoTransicao.redutorProfessorDias);
-
 
       // console.log('P - ' + count + ' - data =' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade =' + idade + '|'
       //   + '|' + 'Tempo = ' + tempoContribuicao + '|');
 
-      if (fimContador.status) {
+      // if (fimContador.status) {
 
 
-        // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        //   + '|' + 'idade -' + idade + '|'
-        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-        //   + '|');
+      // console.log('F - ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade -' + idade + '|'
+      //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+      //   + '|');
 
-      }
+      // }
 
       // if (this.addBissexto(auxiliarDate) > 0) {
       //   count += 1;
@@ -223,20 +222,40 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
+      fimContador = this.requisitosRegra2(
+        auxiliarDate.year(),
+        sexo,
+        idade,
+        tempoContribuicao,
+        this.seguradoTransicao.redutorProfessorDias);
+
 
     } while (!fimContador.status && idade <= 54750);
 
-   // console.log(idade);
-
-    const correcaoAnoBissexto = this.contarBissextosEntre(
-      this.seguradoTransicao.dataNascimento,
-      auxiliarDate
-    );
+    // const correcaoAnoBissexto = this.contarBissextosEntre(
+    //   this.seguradoTransicao.dataNascimento,
+    //   auxiliarDate
+    // );
 
     // if (correcaoAnoBissexto > 0) {
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');
     //   tempoContribuicao += correcaoAnoBissexto;
     // }
+
+    const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
+                            this.seguradoTransicao.contribuicaoFracionadoAnos)
+                            <=
+                            (this.requisitoIdadeProgressivaRegra2[moment().year()][this.seguradoTransicao.sexo] -
+                              this.seguradoTransicao.idadeFracionada)
+                          );
+
+    if (verificacao) {
+      auxiliarDate = moment({
+        year: auxiliarDate.year(),
+        month: this.seguradoTransicao.dataNascimento.month(),
+        day: this.seguradoTransicao.dataNascimento.date()
+      });
+    }
 
 
     idadeMoment = this.calcularIdade(auxiliarDate);

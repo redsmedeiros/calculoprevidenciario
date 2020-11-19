@@ -32,22 +32,39 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
 
+  // public contribuicaoIdadeMin = {
+  //   m: 60,
+  //   md: 21915,
+  //   f: 57,
+  //   fd: 20819.25,
+  // };
+
+  // public contribuicaoMin = {
+  //   m: 35,
+  //   md: 12783.75,
+  //   f: 30,
+  //   fd: 10957.5,
+  // };
+
+
+  
   public contribuicaoIdadeMin = {
     m: 60,
     md: 21915,
     f: 57,
-    fd: 20819.5,
+    fd: 20819,
   };
 
   public contribuicaoMin = {
     m: 35,
-    md: 12783.75,
+    md: 12783,
     f: 30,
-    fd: 10957.5,
+    fd: 10957,
   };
 
   public pedagioEmDias = 0;
   public pedagioEmAnos = 0;
+  public pedagioEmAnosRequisito = 0;
 
 
 
@@ -96,21 +113,23 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
         m: (60 - this.seguradoTransicao.redutorProfessor),
         md: (21915 - this.seguradoTransicao.redutorProfessorDias),
         f: (57 - this.seguradoTransicao.redutorProfessor),
-        fd: (20819.5 - this.seguradoTransicao.redutorProfessorDias),
+        fd: (20819 - this.seguradoTransicao.redutorProfessorDias),
       };
 
       this.contribuicaoMin = {
         m: (35 - this.seguradoTransicao.redutorProfessor),
-        md: (12783.75 - this.seguradoTransicao.redutorProfessorDias),
+        md: (12783 - this.seguradoTransicao.redutorProfessorDias),
         f: (30 - this.seguradoTransicao.redutorProfessor),
-        fd: (10957.5 - this.seguradoTransicao.redutorProfessorDias),
+        fd: (10957 - this.seguradoTransicao.redutorProfessorDias),
       };
     }
 
   }
 
 
-
+  /**
+   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+   */
   conclusaoRegra4pedagio100() {
 
     try {
@@ -159,8 +178,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
   public calcularRegra4() {
 
     let rstRegraPedagio100: any;
-    let dataDib = this.dataAtual.clone();
-    let idadeDib = this.seguradoTransicao.idadeFracionada;
+    const dataDib = this.dataAtual.clone();
+    const idadeDib = this.seguradoTransicao.idadeFracionada;
+
     let tempoDePedagio = 0;
     let contribuicaoDiff = 0;
     let tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoAnos;
@@ -177,7 +197,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
       this.pedagioEmAnos = tempoDePedagio;
-      // this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes; 
+      // this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes;
       this.pedagioEmDias = this.converterTempoAnosParaDias(this.pedagioEmAnos);
 
       tempoFinalContrib = regra4TempoContrib + this.pedagioEmAnos;
@@ -186,8 +206,14 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
       // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
       // idadeDib = idadeDib + tempoDePedagioTotal
-      //  dataDib.add(tempoDePedagioTotal, 'years');
+      // dataDib.add(tempoDePedagioTotal, 'years');
     }
+
+    // console.log(tempoDePedagio);
+    // console.log(contribuicaoDiff);
+    // console.log(this.pedagioEmDias);
+    // console.log(tempoDePedagioTotal);
+    // console.log(contribuicaoDiff + tempoDePedagio);
 
 
     const VeificarRequisitoHoje = this.requisitosRegra4(
@@ -239,8 +265,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     const regra4Idade = this.contribuicaoIdadeMin[sexo];
     let regra4TempoContrib = this.contribuicaoMin[sexo];
-
     regra4TempoContrib += (sexo === 'md' || sexo === 'fd') ? this.pedagioEmDias : this.pedagioEmAnos;
+    this.pedagioEmAnosRequisito = this.contribuicaoMin[this.seguradoTransicao.sexo] + this.pedagioEmAnos;
 
     if ((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade)) {
       return {
@@ -270,7 +296,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   public contadorRegra4() {
 
-    let auxiliarDate = this.dataAtual;
+    let auxiliarDate = this.dataAtual.clone();
+   // let auxiliarDate = moment('2019-11-13');
+
     let fimContador = {
       status: false,
       ano: 0,
@@ -285,46 +313,39 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
+
+    // console.log(this.seguradoTransicao);
+
     const sexo = this.seguradoTransicao.sexo + 'd';
 
     do {
-
 
       // console.log('P ' + count + ' - data - ' + auxiliarDate.format('DD/MM/YYYY')
       //   + '|' + 'idade -' + idade + '|'
       //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
-      if (fimContador.status) {
+     // if (fimContador.status) {
 
         // console.log('F -' + count + ' data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
 
-      }
+      // }
 
-    //   if (this.addBissexto(auxiliarDate) > 0) {
-    //     count += 1;
-    //  //   idade += 1;
-    //     tempoContribuicao += 1;
-    //   }
+        count++;
+        idade += 1;
+        tempoContribuicao += 1;
 
-   
-
-    //  console.log(auxiliarDateClone);
+        auxiliarDateClone = auxiliarDate.clone();
+        auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
       fimContador = this.requisitosRegra4(
         auxiliarDate.year(),
         sexo,
         idade,
         tempoContribuicao);
-
-        count++;
-        idade += 1;
-        tempoContribuicao += 1;
-  
-        auxiliarDateClone = auxiliarDate.clone();
-        auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
     } while (!fimContador.status && idade <= 54750);
 
@@ -340,20 +361,27 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');
     // }
 
-    //tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias + count;
+    // tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias + count;
 
    // idade = this.seguradoTransicao.idadeFracionadaDias + count;
 
-    // console.log(this.converterTempoDias(idade));
-    // console.log(tempoContribuicao);
+    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= this.pedagioEmAnosRequisito) {
+      auxiliarDate = moment({
+        year: auxiliarDate.year(),
+        month: this.seguradoTransicao.dataNascimento.month(),
+        day: this.seguradoTransicao.dataNascimento.date()
+      });
 
-    idadeDibMoment = this.calcularIdade(auxiliarDate);
+      idadeDibMoment = this.calcularIdade(auxiliarDate);
 
-    // //console.log(auxiliarDate)
-    // //console.log(correcaoAnoBissexto)
-    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias)
-    // console.log(tempoContribuicao)
+    } else {
 
+      idadeDibMoment = this.calcularIdade(auxiliarDate);
+      idadeDibMoment.add(-1, 'day');
+
+    }
+
+    // idadeDibMoment = this.calcularIdade(auxiliarDate);
 
     // let testeAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
     // let teste = moment.duration(auxiliarDate.diff(testeAtual));
@@ -365,15 +393,13 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
 
     // console.log(teste.asDays());
-    // console.log(teste);
-    // console.log(tempoContribuicao);
+    // console.log('---');
+    // console.log((moment()).add(count, 'days'));
     // console.log(this.converterTempoDias(tempoContribuicao));
-    //  console.log((tempoContribuicao));
-    //  console.log(this.converterTempoDias(tempoContribuicao));
-    //  console.log(moment.duration(tempoContribuicao));
-      // console.log(tempoContribuicao);
+    // console.log(moment.duration(tempoContribuicao, 'days'));
+    // console.log('---');
     
-
+    
     return {
       dataDib: auxiliarDate,
       idadeMoment: idadeDibMoment,

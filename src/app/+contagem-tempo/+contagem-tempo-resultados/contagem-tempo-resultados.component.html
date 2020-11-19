@@ -1,14 +1,23 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-      <div class="row">
-          <article class="col-sm-12 col-md-12 col-lg-12">
-            <div class="well">
-              <h3 class="no-margin">
-                <span class="semi-bold">Cálculo de contagem de Tempo</span>
-              </h3>
-            </div>
-          </article>
+    <div class="row mb-4">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="no-margin">
+          <span class="semi-bold">Contagem de Tempo de Contribuição</span>
+        </h3>
+      </div>
+    </div>
+        <div class="row mb-3 not-print">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados"> Criar/Buscar Segurado</a></li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados/{{idSegurado}}/editar"> Editar Segurado</a></li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-calculos/{{idSegurado}}/{{this.idsCalculos[0]}}/editar"> Editar Cálculo</a></li>
+              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-periodos/{{idSegurado}}/{{this.idsCalculos[0]}}"> Editar Períodos</a></li>
+              <li class="breadcrumb-item active">Resultado</li>
+            </ol>
+          </div>
         </div>
     <!-- row -->
     <div class="row">
@@ -70,21 +79,21 @@
       </article>
 
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false">
-          <header>
+        <!-- <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
+          [fullscreenbutton]="false" [custombutton]="false"> -->
+          <!-- <header>
             <span class="widget-icon">
               <i class="fa fa-list-ul"></i>
             </span>
             <h2><strong>Opções</strong></h2>
-          </header>
-          <div *ngIf="!getPeriodosList">
-            <div class="widget-body no-padding heigth-auto">
-              <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info no-margin btn-block" id="btn-imprimir-pagina"
+          </header> -->
+          <div >
+            <!-- <div class="widget-body no-padding heigth-auto"> -->
+              <button *ngIf="!getPeriodosList" type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info no-margin pull-right" id="btn-imprimir-pagina"
                 data-placement="top" tooltip="Clique aqui para imprimir">
                 <span class="btn-label">
                   <i class="fa fa-print"></i>
-                </span> Imprimir
+                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Imprimir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               </button>
                <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"
                 data-placement="top" tooltip="Clique para exportar PDF">
@@ -93,8 +102,8 @@
                 </span> Exportar
               </button> -->
             </div>
-          </div>
-        </sa-widget>
+          <!-- </div>
+        </sa-widget> -->
       </article>
     </div>
     <!-- end row -->

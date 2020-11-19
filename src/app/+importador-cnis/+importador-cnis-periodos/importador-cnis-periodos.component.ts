@@ -86,6 +86,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public updateDatatablePeriodos(vinculo) {
     // && !(/(Benefício)/i).test(vinculo.origemVinculo) adicionados os benefícios (luis 06-02-2018)
+
     if (typeof vinculo === 'object') {
 
       const line = {
@@ -206,6 +207,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         fator_condicao_especial: this.fator_condicao_especial,
         condicao_especial: this.boolToLiteral(this.condicao_especial),
         carencia: this.boolToLiteral(this.carencia),
+        index:(this.vinculosList.length + 2)
       }
 
       this.vinculosList.push(line);
@@ -322,8 +324,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         this.errors.add({ 'data_termino': ['Insira uma data válida'] });
       } else {
 
-        if (dateFinalPeriodo <= dateInicioPeriodo) {
-          this.errors.add({ 'data_termino': ['Insira uma data posterior a data inicial'] });
+        if (dateFinalPeriodo < dateInicioPeriodo) {
+          this.errors.add({ 'data_termino': ['Insira uma data posterior ou igual a data inicial'] });
         }
 
         if (Math.abs(dateInicioPeriodo.diff(dateFinalPeriodo, 'years')) >= 50) {

@@ -639,3 +639,7 @@ a[class*="action-"]:hover {
   font-weight: 800;
   font-size: 1.4 rem;  
 }
+
+.not-wrap{
+  white-space: nowrap;
+}

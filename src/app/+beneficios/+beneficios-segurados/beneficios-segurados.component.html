@@ -1,94 +1,59 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row">
+    <div class="row mb-3">
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Cálculo: Benefícios Atrasados</h1>
-        <div class="well">
-          <h2 class="margin-top-0">
-            <span class="semi-bold">Instrução do cálculo</span>
-          </h2>
-        <ul class="list-unstyled">
-          <li><a routerLink="/tutorial" target="_blank">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
-        </ul>
-          <!-- <ul class="list-unstyled">
-            <li><a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/1439/t/calculo-de-beneficios-atrasados">Veja aqui</a> Manual do Simulador de Benefícios Atrasados</li>
-            <li><a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS.pdf">Veja aqui</a> Manual do Simulador de Benefícios Atrasados - PDF</li>
-            <li><a target="_blank"href="https://vimeo.com/333388947">Veja aqui</a> Videoaula de utilização do Simulador de Benefícios Atrasados</li>
-            <li><a target="_blank"href="http://www.youtube.com/watch?v=WS0Hn-MJWZc&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt">Veja aqui</a> Videoaula de utilização do Simulador de Benefícios Atrasados - Buraco Negro </li>
-          </ul>
-          <p class="margin-lg-top">Simula em qualquer data, diferenças entre valores de rendas mensais de benefícios devidos e recebidos, bem como calcula a correção monetária, os juros de mora e os honorários advocatícios.</p>
-          <br><br>
-          <ul class="list-unstyled">
-            <li><a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/22868/t/beneficio-atrasados-tetos">Veja aqui</a> Manual do Simulador de Benefícios Atrasados - Teto 12/98 e 12/2003</li>
-            <li><a target="_blank"href="http://www.youtube.com/watch?v=SHWS5Z945d8">Veja aqui</a> Videoaula de utilização do Simulador de Benefícios Atrasados - Teto 12/98 e 12/2003</li>
-          </ul>
-          <p class="margin-lg-top">Simula diferenças devidas referente aos tetos legais de R$1200,00 para 12/1998 e R$2400,00 para 12/2003 quando no cálculo de seu salário de benefício houve limitação ao teto do salário de contribuição vigente no momento da concessão, fazendo jus, portanto a revisão judicial.</p>
-          <br><br>
-          <ul class="list-unstyled">
-            <li><a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/34152/t/beneficio-atrasados---indices-06-99-e-05-04">Veja aqui</a> Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004.</li>
-            <li><a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS%2099-04.pdf">Veja aqui</a> Manual do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004 - PDF</li>
-            <li><a target="_blank"href="http://www.youtube.com/watch?v=SHWS5Z945d8">Veja aqui</a> Videoaula de utilização do Simulador de Benefícios Atrasados - Índices 06/1999 e 05/2004</li>
-          </ul>
-          <p class="margin-lg-top">Simula revisão com acréscimo dos índices de 2,28% em 06/1999 e 1,75% em 05/2004.</p> -->
-        </div>
+        <h1>Benefícios Atrasados</h1>
       </article>
     </div>
     <!-- row -->
-    <div *ngIf="!isEdit" class="row">
-      <app-beneficios-segurados-create (onSubmit)="onCreate($event)"></app-beneficios-segurados-create>
+    <div *ngIf="!isEdit" class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-0 pb-0">
+        <app-beneficios-segurados-create (onSubmit)="onCreate($event)"></app-beneficios-segurados-create>
+      </div>
     </div>
-    <div *ngIf="isEdit" class="row">
-      <app-beneficios-segurados-edit (onSubmit)="onCreate($event)"></app-beneficios-segurados-edit>
+    <div *ngIf="isEdit" class="row mb-3">
+      <div class="col-sm-12 col-md-12 col-lg-12 mb-0 pb-0">
+        <app-beneficios-segurados-edit (onSubmit)="onCreate($event)"></app-beneficios-segurados-edit>
+      </div>
     </div>
     <br>
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <app-beneficios-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-beneficios-segurados-index>
       </article>
+    </div>
 
-
-      <div class="row row-fix-width">
-        <div class="col-sm-4 col-sm-offset-4">
-          <table class="table table-bordered table-hover table-condensed">
-            <thead>
-              <tr>
-                <th colspan="2" class="text-align-center">LEGENDA</th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th>Símbolo</th>
-                <th>Descrição</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <i class="fa fa-edit"></i>
-                </td>
-                <td>Editar</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-times"></i>
-                </td>
-                <td>Remover</td>
-              </tr>
-              <tr>
-                <td>
-                  <i class="fa fa-list"></i>
-                </td>
-                <td>Ver a lista de cálculos para o segurado</td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-inline">
+              <li><i class="fa fa-list fa-1-7x bg-color-blue txt-color-white p-1"></i>Ver a lista de cálculos para o segurado</li>
+              <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> Editar</li>
+              <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> Remover</li>
+            </ul>
+          </div>
         </div>
       </div>
-
-
-
-    </div>
+  </div>
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Instrução do cálculo</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-unstyled">
+              <li><a routerLink="/tutorial" target="_blank">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  </div>
 
     <!-- end row -->
 

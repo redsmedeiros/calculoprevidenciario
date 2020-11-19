@@ -36,6 +36,9 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   public dataEC1032019 = moment('13/11/2019', 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
   public dataAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0).subtract(1, 'day');
+  // public dataEC1032019 = moment('13/11/2019', 'DD/MM/YYYY').startOf('day');
+  // public dataAtual = moment(moment(), 'DD/MM/YYYY').startOf('day');
+
   public isRegraTransitoria = false;
   public seguradoInformacoes = [];
   public aliquota = 0.31;
@@ -226,7 +229,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     const idade = moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 
-    if(idade.days() === 30){
+    if (idade.days() === 30) {
       idade.add(1, 'day');
     }
 
@@ -247,7 +250,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       (dataDiffAtual.months() * 30)
       + dataDiffAtual.days();
 
-    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal /  365.25;
+    return (type === 'days' || type === 'd') ? Math.floor(dataDiffAtual.asDays()) : contribuicaoTotal / 365.25;
 
   }
 
@@ -271,11 +274,26 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     meses = this.isFormatInt(meses);
     dias = this.isFormatInt(dias);
 
-    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
+   // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
 
     return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
   }
 
+
+
+  // public converterTempoContribuicao(anos, meses, dias, type) {
+
+  //   const contribuicaoTotal = moment.duration({
+  //     years: anos,
+  //     months: meses,
+  //     days: dias
+  //   });
+
+  //   console.log(contribuicaoTotal);
+
+  //   return (type === 'days' || type === 'd') ? contribuicaoTotal.asDays() : contribuicaoTotal.asDays() / 365;
+  // }
 
   // public converterTempoContribuicao(anos, meses, dias, type) {
 
@@ -372,11 +390,8 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
   public converterTempoAnosParaDias(fullYears) {
-
-    return fullYears * 365.25;
-
+    return Math.round(fullYears * 365.25);
   }
-
 
   public converterTempoAnos(fullYears) {
 
@@ -393,6 +408,29 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
+
+  // public converterTempoAnos(d) {
+
+
+  //   let months = 0, years = 0, days = 0, weeks = 0;
+  //   while (d) {
+  //     if (d >= 365) {
+  //       years++;
+  //       d -= 365;
+  //     } else if (d >= 30) {
+  //       months++;
+  //       d -= 30;
+  //     } else if (d >= 7) {
+  //       weeks++;
+  //       d -= 7;
+  //     } else {
+  //       days++;
+  //       d--;
+  //     }
+  //   };
+  //   return { years: years, months: months, days: days, fullYears: d };
+  // }
+
 
 
 
@@ -574,6 +612,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                 </style>`;
 
     const popupWin = window.open('', '_blank', 'width=640,height=480');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
     popupWin.document.open();
     popupWin.document.write(`<!doctype html>
@@ -582,12 +621,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                                   <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
-                                  <footer style="color: #c5c7c8 !important; margin-top: 80px;">
-                                    <img src="assets/img/logo-IEPREV.png"
-                                    style="display:block; margin-left: auto; margin-right: auto;opacity: 0.4;">
-                                    <p style="text-align: center; color: #c5c7c8 !important;">
-                                    Simulador de Cálculos do Instituto de Estudos Previdenciários - IEPREV.</p>
-                                  </footer>
+                                   <footer class="mt-5">${rodape}</footer>
                                   </body>
                                 </html>`);
     popupWin.document.close();

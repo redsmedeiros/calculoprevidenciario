@@ -141,8 +141,44 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       inicioVinculo = this.toMoment(vinculo.data_inicio);
       fimVinculo = this.toMoment(vinculo.data_termino);
 
-      if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-        fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+      //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // }
+
+      // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+      //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      // }
+
+      // if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
+      if (
+        (Number(fimVinculo.format('DD')) <= 30
+        || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
+        || !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
+        || !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
+      ) {
+
+        // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // }
+
+        if (moment(auxiliarDate).isBetween(
+          moment(inicioVinculo),
+          moment(fimVinculo), undefined, '[]')) {
+            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        }
+
+      } else {
+
+        // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        // }
+
+        if (moment(auxiliarDate).isBetween(
+          moment(inicioVinculo),
+          moment(fimVinculo), undefined, '[]')) {
+            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+        }
+
       }
 
     }
@@ -159,21 +195,23 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
       const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
-      const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+      // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
+      const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
 
 
       //  console.log(teste.add(1, 'days'));
       // console.log(this.toDateString(teste.add(1, 'days')))
       //   console.log(moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY'));
+      // console.log(limitesDoVinculo)
       // console.log(fimContador)
 
-      let count = 0;
-      let count88 = 0;
-      let count91 = 0;
-      let count98 = 0;
-      let count99 = 0;
-      let count03 = 0;
-      let count19 = 0;
+      let count = 1;
+      let count88 = 1;
+      let count91 = 1;
+      let count98 = 1;
+      let count99 = 1;
+      let count03 = 1;
+      let count19 = 1;
       let fator = 0;
 
       do {
@@ -217,8 +255,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
 
 
-      } while (auxiliarDate <= fimContador);
+        // } while (auxiliarDate < fimContador);
+      } while (fimContador.isSameOrAfter(auxiliarDate));
 
+
+      // console.log(auxiliarDate);
+      // console.log(count);
       // console.log(this.yearMonthDaysToFormate(count));
       // console.log(moment.duration(count, 'days').humanize());
       // console.log(count88)
@@ -228,12 +270,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(count19)
 
 
-      this.tempoTotalConFator = moment.duration(count, 'days');
-      this.tempoTotalConFator88 = moment.duration(count88, 'days');
-      this.tempoTotalConFator91 = moment.duration(count91, 'days');
-      this.tempoTotalConFator98 = moment.duration(count98, 'days');
-      this.tempoTotalConFator99 = moment.duration(count99, 'days');
-      this.tempoTotalConFator19 = moment.duration(count19, 'days');
+      this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
+      this.tempoTotalConFator88 = moment.duration(Math.floor(count88), 'days');
+      this.tempoTotalConFator91 = moment.duration(Math.floor(count91), 'days');
+      this.tempoTotalConFator98 = moment.duration(Math.floor(count98), 'days');
+      this.tempoTotalConFator99 = moment.duration(Math.floor(count99), 'days');
+      this.tempoTotalConFator19 = moment.duration(Math.floor(count19), 'days');
+
+      // console.log(count);
+      // console.log(this.tempoTotalConFator);
+      // console.log(moment.duration(9067, 'days'));
 
       this.ajusteHumanizadoDateINSS();
 
@@ -274,6 +320,23 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           });
 
       }
+
+
+      // if (this['tempoTotalConFator' + label].months() >= 12) {
+
+      //   this['tempoTotalConFator' + label] = moment.duration(
+      //     {
+      //       years: this['tempoTotalConFator' + label].years() + 1,
+      //       months: (this['tempoTotalConFator' + label].months() - 12),
+      //       days: 0,
+      //       seconds: 0,
+      //       hours: 0,
+      //       milliseconds: 0,
+      //       minutes: 0
+      //     });
+
+      // }
+
     });
 
   }
@@ -369,10 +432,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       let fimVinculo = this.toMomentCarencia(vinculo.data_termino);
 
-
       if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
         carencia = true;
       }
+
+      // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
+      //   moment(inicioVinculo),
+      //   moment(fimVinculo), undefined, '[]'))) {
+      //     carencia = true;
+      // }
 
     }
 
@@ -437,7 +505,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
-      } while (auxiliarDate <= fimContador);
+      } while ( fimContador.isSameOrAfter(auxiliarDate));
+
+      // auxiliarDate <= fimContador
 
       this.carencia = count;
       this.carencia88 = count88;

@@ -131,15 +131,15 @@
                           <div  class="form-group">
                               <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoAnosAteEC103" (change)="errors.clear('contribuicaoAnosAteEC103')" [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Anos" >
+                                <input [(ngModel)]="contribuicaoAnosAteEC103"  id="contribuicaoAnosAteEC103" (keyup)="inputFunctions.moveNextInput($event, 2, 'contribuicaoMesesAteEC103')"  (change)="errors.clear('contribuicaoAnosAteEC103')" [ngModelOptions]="{standalone: true}" type="text" maxlength="2"  class="form-control text-center" placeholder="Anos" >
                                 <small *ngIf="errors.has('contribuicaoAnosAteEC103')" class="text-danger">{{ errors.get('contribuicaoAnosAteEC103') | i18n}}</small>
                               </div>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoMesesAteEC103" (change)="errors.clear('contribuicaoMesesAteEC103')"  [ngModelOptions]="{standalone: true}"  type="text"class="form-control text-center" placeholder="Meses" >
+                                <input [(ngModel)]="contribuicaoMesesAteEC103"  id="contribuicaoMesesAteEC103" (keyup)="inputFunctions.moveNextInput($event, 2, 'contribuicaoDiasAteEC103')" (change)="errors.clear('contribuicaoMesesAteEC103')"  [ngModelOptions]="{standalone: true}"  type="text" maxlength="2"  class="form-control text-center" placeholder="Meses" >
                                 <small *ngIf="errors.has('contribuicaoMesesAteEC103')" class="text-danger">{{ errors.get('contribuicaoMesesAteEC103') | i18n}}</small>
                               </div>
                               <div class="col-md-1">
-                                <input [(ngModel)]="contribuicaoDiasAteEC103" (change)="errors.clear('contribuicaoDiasAteEC103')"  [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Dias" >
+                                <input [(ngModel)]="contribuicaoDiasAteEC103" id="contribuicaoDiasAteEC103" (keyup)="inputFunctions.moveNextInput($event, 2, 'contribuicaoAnos')" (change)="errors.clear('contribuicaoDiasAteEC103')"  [ngModelOptions]="{standalone: true}" type="text" maxlength="2"  class="form-control text-center" placeholder="Dias" >
                                 <small *ngIf="errors.has('contribuicaoDiasAteEC103')" class="text-danger">{{ errors.get('contribuicaoDiasAteEC103') | i18n}}</small>
                               </div>
                             </div>
@@ -149,25 +149,26 @@
                             <div  class="form-group">
                                 <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoAnos" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Anos" >
+                                  <input [(ngModel)]="contribuicaoAnos" id="contribuicaoAnos" (keyup)="inputFunctions.moveNextInput($event, 2, 'contribuicaoMeses')" (change)="errors.clear('contribuicaoAnos')" [ngModelOptions]="{standalone: true}" type="text" maxlength="2"  class="form-control text-center" placeholder="Anos" >
                                   <small *ngIf="errors.has('contribuicaoAnos')" class="text-danger">{{ errors.get('contribuicaoAnos') | i18n}}</small>
                                 </div>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoMeses" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}"  type="text"class="form-control text-center" placeholder="Meses" >
+                                  <input [(ngModel)]="contribuicaoMeses" id="contribuicaoMeses" (keyup)="inputFunctions.moveNextInput($event, 2, 'contribuicaoDias')" (change)="errors.clear('contribuicaoMeses')"  [ngModelOptions]="{standalone: true}"  type="text" maxlength="2"  class="form-control text-center" placeholder="Meses" >
                                   <small *ngIf="errors.has('contribuicaoMeses')" class="text-danger">{{ errors.get('contribuicaoMeses') | i18n}}</small>
                                 </div>
                                 <div class="col-md-1">
-                                  <input [(ngModel)]="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" type="text" class="form-control text-center" placeholder="Dias" >
+                                  <input [(ngModel)]="contribuicaoDias" id="contribuicaoDias" (change)="errors.clear('contribuicaoDias')"  [ngModelOptions]="{standalone: true}" type="text" maxlength="2" class="form-control text-center" placeholder="Dias" >
                                   <small *ngIf="errors.has('contribuicaoDias')" class="text-danger">{{ errors.get('contribuicaoDias') | i18n}}</small>
                                 </div>
                               </div>
                         </fieldset>
-                        <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
-                        <div class="form-actions">
+                        
+                        <div class="form-actions p-0 mt-3">
                           <div class="row">
-                            <div class="col-md-3 pull-right">
-                              <button (click)="submit($event)" type="submit" class="btn btn-success btn-block font-md" id="prosseguirResultado">
-                                Calcular    <i class="fa fa-arrow-right"></i>
+                            <div class="col-md-12 ">
+                              <p class="pull-left px-3">(*) Preenchimento Obrigatório.</p>
+                              <button (click)="submit($event)" type="submit" class="btn btn-info pull-right" id="prosseguirResultado">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Calcular &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <i class="fa fa-calculator"></i>
                               </button>
                             </div>
                           </div>

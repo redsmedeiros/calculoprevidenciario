@@ -220,7 +220,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.calculo.redutorProfessor = redutorProfessor;
     this.calculo.redutorSexo = redutorSexo;
     this.calculo.tipoBeneficio = this.tipoBeneficio;
-    
+
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
@@ -231,10 +231,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     this.moedaDib = this.getMoedaDib();
 
-    if (this.verificarRegrasIniciais(
-      redutorProfessor,
-      redutorSexo
-    )) {
+    if (this.verificarRegrasIniciais()) {
 
       this.listaConclusaoAcesso = this.regrasAcesso.getVerificacaoRegras(
         this.dataInicioBeneficio,
@@ -316,10 +313,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
 
-  private verificarRegrasIniciais(redutorProfessor, redutorSexo) {
+  private verificarRegrasIniciais() {
 
     let status = false;
-    status = this.verificarCarencia(redutorProfessor, redutorSexo);
+    status = this.verificarCarencia();
     return status;
 
   }
@@ -396,7 +393,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
 
-        if (elementEspecie.status && 
+        if (elementEspecie.status &&
           (this.isExits(melhorCalculo) && this.isExits(melhorCalculo.rmi) && this.isExits(melhorCalculo.rmi.value))) {
           melhorValorRMI = melhorCalculo.rmi.value;
           melhorSoma = melhorCalculo.somaContribuicoes.value;
@@ -433,23 +430,28 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    */
   private updateResultadoCalculo() {
 
-    this.setMelhorValorRMI();
+    if (this.errosArray.length === 0) {
 
-    setTimeout(() => {
+      this.setMelhorValorRMI();
 
-      // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-      this.calculo.soma_contribuicao = this.melhorSoma;
-      this.calculo.valor_beneficio = this.melhorValorRMI;
-      this.CalculoRgpsService.update(this.calculo);
+      setTimeout(() => {
 
-    }, 2000);
+        // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+        this.calculo.soma_contribuicao = this.melhorSoma;
+        this.calculo.valor_beneficio = this.melhorValorRMI;
+        this.CalculoRgpsService.update(this.calculo);
+
+      }, 2000);
+
+    }
 
   }
 
 
 
   getIdadeFracionada() {
-    return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
+    // return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
+    return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'years', true)
   }
 
   limitarTetosEMinimos(valor, data) {
@@ -476,9 +478,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   private calcularDivisorMinimo(numeroDeContribuicoes, especie) {
 
-    if ([25, 26, 27, 28].includes(especie) 
-    && !this.calculo.calcular_descarte_deficiente_ec103
-    && !this.calculo.divisor_minimo) {
+    if ([25, 26, 27, 28].includes(especie)
+      && !this.calculo.calcular_descarte_deficiente_ec103
+      && !this.calculo.divisor_minimo) {
 
       let perc60Competencias = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
 
@@ -525,7 +527,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const valueString = this.formatDecimal(fatorPrevidenciario, 4);
     const valueMelhorString = this.formatDecimal(fatorPrevidenciario, 4);
-   // const valueMelhorString = (fatorPrevidenciario > 1) ? this.formatDecimal(fatorPrevidenciario, 4) : this.formatDecimal(1, 4);
+    // const valueMelhorString = (fatorPrevidenciario > 1) ? this.formatDecimal(fatorPrevidenciario, 4) : this.formatDecimal(1, 4);
 
     return {
       value: fatorPrevidenciario,
@@ -603,34 +605,21 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   /**
    * Na especie idade verifica se o segurado possui carrencia mínima para acesso a regra
-   * @param  {} redutorProfessor
-   * @param  {} redutorSexo
    * @param  {} errorArray
    */
-  private verificarCarencia(redutorProfessor, redutorSexo) {
+  private verificarCarencia() {
 
-    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16) {
+
+    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16  || this.tipoBeneficio === 31) {
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 
-      let mesesCarencia = 180;
-      if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY') < this.dataLei8213) { // Verificar se a data de filiação existe
-
-        const anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
-        const carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
-
-        if (carenciaProgressiva != 0) {
-          mesesCarencia = carenciaProgressiva;
-        } else if (anoNecessario < 1991) {
-          mesesCarencia = 60;
-        }
-
-      }
-
+      const mesesCarencia = 180;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
+
       if (this.calculo.carencia_apos_ec103 < mesesCarencia) {
-       //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
+        //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
         const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia_apos_ec103) + ' mês(es) para a carência necessária.';
         this.errosArray.push(erroCarencia);
         // this.erroCarenciaMinima = true;

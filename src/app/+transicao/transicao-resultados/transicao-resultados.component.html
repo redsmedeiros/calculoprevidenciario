@@ -61,16 +61,14 @@
   </div>
 </sa-widget>
       <div class="row margin-bottom-5"  *ngIf="!seguradoTransicao.isRegraTransitoria">
-          <div class="col-lg-4 col-md-4 ">
-              <button type="button" (click)="scroll('formTransicao')" class="btn btn-warning no-margin btn-block font-md"
+          <div class="col-lg-4 col-md-4 pull-right">
+              <button type="button" (click)="scroll('formTransicao')" class="btn btn-labeled btn-info pull-right"
               data-placement="top" tooltip="Retornar ao formulario">
               <span class="btn-label">
                 <i class="fa fa-edit"></i>
               </span> Alterar
             </button>
-          </div>
-        <div class="col-lg-4 col-md-4 pull-right">
-            <button type="submit" (click)="imprimirPagina()" class="btn btn-primary no-margin btn-block font-md" id="btn-imprimir-pagina"
+            <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info pull-right" id="btn-imprimir-pagina"
             data-placement="top" tooltip="Clique aqui para imprimir">
             <span class="btn-label">
               <i class="fa fa-print"></i>

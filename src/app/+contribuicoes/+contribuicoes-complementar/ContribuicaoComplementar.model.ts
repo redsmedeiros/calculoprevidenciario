@@ -43,7 +43,7 @@ export class ContribuicaoComplementar extends Model {
 
   public actions = `
   <div class="btn-group ">
-    <a href="#/contribuicoes/${this.id_segurado}/contribuicoes-resultados-complementar/${this.id}" class="btn btn-primary btn-xs" title="Ver Cálculo">&nbsp;&nbsp;<i class="fa fa-search fa-1-7x"></i>&nbsp;&nbsp;</a>
+    <a href="#/contribuicoes/${this.id_segurado}/contribuicoes-resultados-complementar/${this.id}" class="btn btn-primary btn-xs" title="Ver Cálculo">&nbsp;&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;&nbsp;</a>
     <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="btn btn-warning btn-xs"  title="Editar">&nbsp;&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;&nbsp;</a>
     <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar">&nbsp;&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;&nbsp;</a>
   </div>
