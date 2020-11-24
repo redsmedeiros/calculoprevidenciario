@@ -132,6 +132,29 @@ export class DefinicaoMoeda {
         return sigla + ' ' + numeroPadronizado;
     }
 
+     /**
+     * Formatar para moeda 
+     * @param  {} value
+     * @param  {} sigla='R$'
+     */
+    static formatMoneyB(value, exibirSigla = false, sigla = 'R$') {
+
+        if (value === undefined || value == '' || value === null) {
+            return '';
+        }
+
+        value = parseFloat(value);
+        const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+
+        if (exibirSigla) {
+            return sigla + ' ' + numeroPadronizado;
+        }
+
+        return numeroPadronizado;
+
+    }
+
+
     /**
      * 
      * @param  {} value
@@ -192,6 +215,5 @@ export class DefinicaoMoeda {
     }
 
 
-
-
+   
 }

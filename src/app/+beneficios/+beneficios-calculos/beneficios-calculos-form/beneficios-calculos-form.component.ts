@@ -10,7 +10,7 @@ import { Devidos } from './../beneficios-calculos-form-devidos/Devidos.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { validateConfig } from '@angular/router/src/config';
-import { DefinicaoMoeda } from '../../shared-beneficios-atrasados/definicao-moeda';
+import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
 
 @Component({
   selector: 'app-beneficios-calculos-form',
@@ -265,8 +265,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // this.especieValoresDevidos = 3;
       // this.especieValoresRecebidos = 3;
 
-      this.especieValoresDevidos = '';
-      this.especieValoresRecebidos = '';
+      this.especieValoresDevidos = 0;
+      this.especieValoresRecebidos = 0;
     }
 
     this.checkImportBeneficioAtrasado();
@@ -898,8 +898,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.list_acrescimos_deducoes = JSON.stringify(this.listAcrescimosDeducoes);
       }
 
-      console.log(this.formData);
-      console.log(this.rmiValoresDevidos);
+      // console.log(this.formData);
+      // console.log(this.rmiValoresDevidos);
 
        this.onSubmit.emit(this.formData);
 
@@ -957,18 +957,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-    console.log(rstDevidos);
+   // console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }
 
   reciverFeedbackRecebidos(rstRecebido) {
-    console.log(rstRecebido);
+   // console.log(rstRecebido);
     this.listRecebidos = rstRecebido;
   }
 
   reciverFeedbackCustasProcesso(rstAcrescimosDeducoes) {
-    console.log(rstAcrescimosDeducoes);
+   // console.log(rstAcrescimosDeducoes);
     this.listAcrescimosDeducoes = rstAcrescimosDeducoes;
   }
 

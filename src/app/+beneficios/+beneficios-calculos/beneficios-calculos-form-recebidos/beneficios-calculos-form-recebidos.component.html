@@ -54,10 +54,10 @@
               <td>{{ recebidoLine.dibAnterior }}</td>
               <td>{{ recebidoLine.cessacao }}</td>
               <td class="text-center">
-                {{ definicaoMoeda.formatMoney(recebidoLine.rmi) }}
+                {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
                 <span *ngIf="recebidoLine.rmiBuracoNegro">
                   <br />{{
-                    definicaoMoeda.formatMoney(recebidoLine.rmiBuracoNegro)
+                    definicaoMoeda.formatMoneyB(recebidoLine.rmiBuracoNegro)
                   }}
                 </span>
               </td>
@@ -309,9 +309,9 @@
                           >
                         </div>
                       </div>
-                      <div class="form-group"  >
+                      <div class="form-group"  *ngIf="['4','7','2','16','1','3','5','13','18'].includes(especieValoresRecebidos)"  >
                         <label class="col-md-7 control-label"
-                          >Aplicar Adicional de 25%:{{ especieValoresRecebidos }} {{ [4,7,2,16,1,'3',5,13,18].includes(especieValoresRecebidos) }}
+                          >Aplicar Adicional de 25%:
                         </label>
                         <div class="col-md-4">
                           <label class="radio radio-inline">
@@ -347,7 +347,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" *ngIf="adicional25Recebido == 1">
+                      <div class="form-group" *ngIf="adicional25Recebido == 1 && ['4','7','2','16','1','3','5','13','18'].includes(especieValoresRecebidos)">
                         <div>
                           <label
                             class="control-label"

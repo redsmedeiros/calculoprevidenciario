@@ -13,6 +13,7 @@ import { IndicesService } from '../../services/Indices.service';
 import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
+import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
 
 @FadeInTop()
 @Component({
@@ -22,6 +23,8 @@ import swal from 'sweetalert2';
 })
 export class BeneficiosResultadosComponent implements OnInit {
 
+
+  public definicaoMoeda = DefinicaoMoeda;
   public styleTheme: string = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -225,8 +228,17 @@ export class BeneficiosResultadosComponent implements OnInit {
   public somaHonorariosFixoString = '';
   public resultadosFixoAntecipadaList = [];
   public indicesFixo = [];
-
   private dataFinalPrescricao;
+
+
+  // listas de periodos
+  private listDevidos = [];
+  private listRecebidos = [];
+  private listAcrescimosDeducoes = [];
+
+  private recebidosListInicio;
+  private recebidosListFim;
+
 
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
@@ -273,7 +285,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     // if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
     //   this.debugMode = true;
     // }
-
     this.seguradoId = this.route.snapshot.params['id'];
     this.Segurado.find(this.seguradoId)
       .then(segurado => {
@@ -290,79 +301,178 @@ export class BeneficiosResultadosComponent implements OnInit {
             window.location.href = '/#/beneficios/beneficios-segurados/'
           });
         } else {
+
           this.calculoId = this.route.snapshot.params['id_calculo'];
           this.CalculoAtrasado.find(this.calculoId)
             .then(calculo => {
+
               this.calculo = calculo;
               this.calculo.data = moment().format();
+              this.setListas();
 
               this.setInicioRecebidosEDevidos();
-              //console.log(this.calculo);
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
               if (this.calculo.aplicar_ajuste_maximo_98_2003 == '1') {
                 this.isTetos = true;
                 this.calculoType = 'AJ'
               }
 
-              this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
+              const rstMoeda = this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
+                });
 
-                  // se ouver dib anterior considerar como a primeira data para o indice de correção
-                  const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
-                    this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+              const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
+                this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
 
-                  // Indice devido
-                  this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
-                    this.dataFinal.format('YYYY-MM-DD'))
-                    .then((indicesDevido: Indices) => {
 
-                      for (const i_devido of this.IndiceDevido.list) {
-                        this.indiceDevido.push(i_devido);
-                      }
+              const indiceDevidoRST = this.IndiceDevido.getByDateRange(
+                moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+                this.dataFinal.format('YYYY-MM-DD'))
+                .then((indicesDevido: Indices) => {
 
-                      // se ouver dib anterior considerar como a primeira data para o indice de correção
-                      let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-                        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+                  for (const i_devido of this.IndiceDevido.list) {
+                    this.indiceDevido.push(i_devido);
+                  }
+                });
 
-                      date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
-                      if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
-                        this.dataFinal = (moment(this.calculo.data_calculo_pedido));
-                      }
-                      // indice recebido
-                      this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
-                        this.dataFinal.format('YYYY-MM-DD'))
-                        .then(indicesRecebido => {
+              // se ouver dib anterior considerar como a primeira data para o indice de correção
+              let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+                this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
-                          for (const i_recebido of this.IndiceDevido.list) {
-                            this.indiceRecebido.push(i_recebido);
-                          }
+              date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+              if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+                this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+              }
 
-                          this.jurosCorrente = this.calcularJurosCorrente();
-                          this.resultadosList = this.generateTabelaResultados();
-                          this.getNameSelectJurosAnualParaMensal();
-                          this.calcularHonorariosCPC85();
-                          this.calcularHonorariosFixo();
-                          this.calcularTutelaAntecipada();
-                          this.updateResultadosDatatable();
-                          this.isUpdating = false;
+              const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
+                moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+                this.dataFinal.format('YYYY-MM-DD'))
+                .then((indicesRecebido: Indices) => {
 
-                        });
-                    });
+                  for (const i_recebido of this.IndiceRecebido.list) {
+                    this.indiceRecebido.push(i_recebido);
+                  }
 
-                  // this.Indice.getByDateRange(this.primeiraDataArrayMoeda.clone().startOf('month').format('YYYY-MM-DD'), this.dataFinal.format('YYYY-MM-DD'))
-                  //   .then(indices => {
-                  //     this.indices = indices;
-                  //     // this.jurosCorrente = this.calcularJurosCorrente();
-                  //     // this.resultadosList = this.generateTabelaResultados();
-                  //     // this.updateResultadosDatatable();
-                  //     // this.isUpdating = false;
-                  //   });
+                });
 
-                })
+              const indicesrecebidosMPromisses = this.getIndicesReajusteListRecebidos();
+              const allPromissesCalc = [rstMoeda, indiceDevidoRST, indiceRecebidoRST];
+
+              allPromissesCalc.concat(indicesrecebidosMPromisses);
+
+              Promise.all(allPromissesCalc).then((values) => {
+
+                this.jurosCorrente = this.calcularJurosCorrente();
+                this.resultadosList = this.generateTabelaResultados();
+                this.getNameSelectJurosAnualParaMensal();
+                this.calcularHonorariosCPC85();
+                this.calcularHonorariosFixo();
+                this.calcularTutelaAntecipada();
+                this.updateResultadosDatatable();
+                this.isUpdating = false;
+
+              });
+
+
             });
         }
       });
+  }
+
+  /**
+   * converter as listas de String JSON para JSON
+   */
+  private setListas() {
+
+    if (this.calculo.list_devidos) {
+      this.listDevidos = JSON.parse(this.calculo.list_devidos);
+    }
+
+    if (this.calculo.list_recebidos) {
+      this.listRecebidos = JSON.parse(this.calculo.list_recebidos);
+    }
+
+    if (this.calculo.list_acrescimos_deducoes) {
+      this.listAcrescimosDeducoes = JSON.parse(this.calculo.list_acrescimos_deducoes);
+    }
+
+    console.log(this.listRecebidos);
+    this.defineInicioFimRecebidosMultiplos();
+  }
+
+
+  private defineInicioFimRecebidosMultiplos() {
+
+    if (this.listRecebidos.length > 0) {
+
+      const list = this.listRecebidos;
+      this.recebidosListInicio = moment(this.listRecebidos[0].dib, 'DD/MM/YYYY');
+      this.recebidosListFim = moment(this.listRecebidos[0].cessacao, 'DD/MM/YYYY');
+      let di;
+      let df;
+
+      for (const row of list) {
+
+        di = moment(row.dib, 'DD/MM/YYYY');
+        df = moment(row.cessacao, 'DD/MM/YYYY');
+
+        if (di.isBefore(this.recebidosListInicio)) {
+          this.recebidosListInicio = di;
+        }
+
+        if (df.isAfter(this.recebidosListFim)) {
+          this.recebidosListFim = df;
+        }
+
+      }
+
+    }
+
+  }
+
+  /**
+   * 
+   */
+  private getIndicesReajusteListRecebidos() {
+
+    let PromRecebidoRow;
+    const indicesrecebidosMPromisses = [];
+
+    const formatDateIsnotNull = (data) => {
+      if (this.isExits(data) && moment(data, 'DD/MM/YYYY').isValid()) {
+        return moment(data, 'DD/MM/YYYY');
+      } else {
+        return null;
+      }
+    }
+
+    if (this.listRecebidos != null && this.listRecebidos.length > 0) {
+
+      for (const recebidoRow of this.listRecebidos) {
+
+        recebidoRow.IndiceInps = [];
+        recebidoRow.dib = formatDateIsnotNull(recebidoRow.dib);
+        recebidoRow.dip = formatDateIsnotNull(recebidoRow.dip);
+        recebidoRow.cessacao = formatDateIsnotNull(recebidoRow.cessacao);
+        recebidoRow.dibAnterior = formatDateIsnotNull(recebidoRow.dibAnterior);
+
+        PromRecebidoRow = this.IndiceRecebido.getByDateRangeDirectResult(
+          recebidoRow.dib.clone().startOf('month').format('YYYY-MM-DD'),
+          recebidoRow.cessacao.format('YYYY-MM-DD'))
+          .then((indicesRecebido: Indices[]) => {
+            for (const i_recebido of indicesRecebido) {
+              recebidoRow.IndiceInps.push(i_recebido);
+            }
+          });
+
+      }
+
+      indicesrecebidosMPromisses.push(PromRecebidoRow);
+
+    }
+    return indicesrecebidosMPromisses;
+
   }
 
 
@@ -1392,8 +1502,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
 
       // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
-        this.isMinimoInicialDevido = true;
-     //  }
+      this.isMinimoInicialDevido = true;
+      //  }
     }
 
     if (diasProporcionais != 1 || this.proporcionalidadeUltimaLinha) {
@@ -1688,7 +1798,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
 
       // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
-        this.isMinimoInicialRecebido = true;
+      this.isMinimoInicialRecebido = true;
       // }
 
     }
@@ -2134,7 +2244,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // console.log(somaVincendas);
 
       // somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
-      somaVincendas =  this.ultimaRenda;
+      somaVincendas = this.ultimaRenda;
 
       valorVincendas = parseFloat(somaVincendas.toFixed(2)) * maturidade;
 
@@ -2874,7 +2984,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 1
   setInicioRecebidosEDevidos() {
+
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
+    if (this.isExits(this.recebidosListInicio)
+        && this.recebidosListInicio < this.dataInicioRecebidos) {
+      this.dataInicioRecebidos = this.recebidosListInicio;
+    }
+
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
 
@@ -3150,6 +3266,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     return Math.round(difference);
   }
 
+  private formatDateIsnotNullMoment(data) {
+    if (this.isExits(data) && data.isValid()) {
+      return data.format('DD/MM/YYYY');
+    } else {
+      return '';
+    }
+  }
+
+
   formatDatetimeToDate(dataString) {
     let date = dataString.split(' ')[0];
     let splited_date = date.split('-');
@@ -3339,6 +3464,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   getTipoAposentadoria(value) {
 
+    value = Number(value);
     const tipos_aposentadoria = [
       { name: '', value: '' },
       { name: 'Abono de Permanência em Serviço', value: 11 },
@@ -3440,26 +3566,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   getStringTabelaCorrecaoMonetaria() {
-    // if (this.calculo.tipo_correcao == 'ipca')
-    //   return 'IPCA-e a partir de 07/2009';
-    // if (this.calculo.tipo_correcao == 'tr')
-    //   return 'da TR após 07/2009';
-    // if (this.calculo.tipo_correcao == 'cam')
-    //   return 'manual de cálculos SICOM da Justiça Federal';
-    // if (this.calculo.tipo_correcao == 'tr032015_ipcae')
-    //   return 'TR até 03/2015 e IPCA-e';
-    // if (this.calculo.tipo_correcao == 'ipca_todo_periodo')
-    //   return 'IPCA-e todo período';
-    // if (this.calculo.tipo_correcao == 'tr_todo_periodo')
-    //   return 'TR todo período';
-    // if (this.calculo.tipo_correcao == 'cam_art_175_3048')
-    //   return 'administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994';
-    // if (this.calculo.tipo_correcao == 'igpdi_012004_inpc062009_tr032015_inpc')
-    //   return 'IGPDI até 01/2004 e INPC até 06/2009 e TR até 03/2015 e INPC';
-    // if (this.calculo.tipo_correcao == 'igpdi_2006_inpc062009_tr032015_ipcae')
-    //   return 'IGPDI até 2006 e INPC até 06/2009 e TR até 03/2015 e ipcae';
-
-
     const correcaoOptions = [
       { text: 'Não Aplicar', value: '' },
       { text: 'Sem correção', value: 'sem_correcao' },
@@ -4211,3 +4317,58 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 }
+
+
+
+
+
+
+
+
+              // this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
+              //   .then((moeda: Moeda[]) => {
+              //     this.moeda = moeda;
+
+              //     // se ouver dib anterior considerar como a primeira data para o indice de correção
+              //     const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
+              //       this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+
+              //     // Indice devido
+              //     this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+              //       this.dataFinal.format('YYYY-MM-DD'))
+              //       .then((indicesDevido: Indices) => {
+
+              //         for (const i_devido of this.IndiceDevido.list) {
+              //           this.indiceDevido.push(i_devido);
+              //         }
+
+              //         // se ouver dib anterior considerar como a primeira data para o indice de correção
+              //         let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+              //           this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+
+              //         date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+              //         if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+              //           this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+              //         }
+              //         // indice recebido
+              //         this.IndiceRecebido.getByDateRange(moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+              //           this.dataFinal.format('YYYY-MM-DD'))
+              //           .then(indicesRecebido => {
+
+              //             for (const i_recebido of this.IndiceDevido.list) {
+              //               this.indiceRecebido.push(i_recebido);
+              //             }
+
+              //             this.jurosCorrente = this.calcularJurosCorrente();
+              //             this.resultadosList = this.generateTabelaResultados();
+              //             this.getNameSelectJurosAnualParaMensal();
+              //             this.calcularHonorariosCPC85();
+              //             this.calcularHonorariosFixo();
+              //             this.calcularTutelaAntecipada();
+              //             this.updateResultadosDatatable();
+              //             this.isUpdating = false;
+
+              //           });
+              //       });
+
+              //   });

@@ -68,7 +68,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
   private inserirRecebidoList(event = null) {
 
     const recebidoMultiplo = new Recebidos(
-      this.listRecebidos.length + 1,
+      ((this.isEdit) ? this.rowRecebidosEdit : this.listRecebidos.length + 1),
       this.especieValoresRecebidos,
       this.numeroBeneficioRecebido,
       this.dibValoresRecebidos,
@@ -82,8 +82,6 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.dataInicialadicional2Recebido);
 
     let statusInput = true;
-
-    console.log(recebidoMultiplo);
 
     if (!this.validRecebidos()) {
 
@@ -172,7 +170,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
     this.dataInicialadicional2Recebido = rowEdit.dataAdicional25;
 
-    if(rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != ''){
+    if (rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
     }
   }

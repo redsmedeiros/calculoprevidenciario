@@ -205,13 +205,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(limitesDoVinculo)
       // console.log(fimContador)
 
-      let count = 1;
-      let count88 = 1;
-      let count91 = 1;
-      let count98 = 1;
-      let count99 = 1;
-      let count03 = 1;
-      let count19 = 1;
+      let count = 0;
+      let count88 = 0;
+      let count91 = 0;
+      let count98 = 0;
+      let count99 = 0;
+      let count03 = 0;
+      let count19 = 0;
       let fator = 0;
 
       do {
@@ -259,15 +259,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       } while (fimContador.isSameOrAfter(auxiliarDate));
 
 
-      // console.log(auxiliarDate);
-      // console.log(count);
-      // console.log(this.yearMonthDaysToFormate(count));
-      // console.log(moment.duration(count, 'days').humanize());
-      // console.log(count88)
-      // console.log(count91)
-      // console.log(count98)
-      // console.log(count99)
-      // console.log(count19)
+      console.log(auxiliarDate);
+      console.log(count);
+      console.log(this.yearMonthDaysToFormate(count));
+      console.log(moment.duration(count, 'days').humanize());
+      console.log(count88)
+      console.log(count91)
+      console.log(count98)
+      console.log(count99)
+      console.log(count19)
 
 
       this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
