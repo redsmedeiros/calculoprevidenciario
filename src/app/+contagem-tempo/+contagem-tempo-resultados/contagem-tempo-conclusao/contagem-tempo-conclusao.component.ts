@@ -163,7 +163,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         if (moment(auxiliarDate).isBetween(
           moment(inicioVinculo),
-          moment(fimVinculo), undefined, '[]')) {
+         // moment(fimVinculo), undefined, '[]')) {
+          moment(fimVinculo), undefined)) {
             fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
         }
 
