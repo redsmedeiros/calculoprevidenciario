@@ -230,7 +230,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   public indicesFixo = [];
   private dataFinalPrescricao;
 
-
+//
+  private allPromissesCalc = [];
   // listas de periodos
   private listDevidos = [];
   private listRecebidos = [];
@@ -356,12 +357,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
                 });
 
-              const indicesrecebidosMPromisses = this.getIndicesReajusteListRecebidos();
-              const allPromissesCalc = [rstMoeda, indiceDevidoRST, indiceRecebidoRST];
+              this.getIndicesReajusteListRecebidos();
 
-              allPromissesCalc.concat(indicesrecebidosMPromisses);
+              this.allPromissesCalc.push(rstMoeda);
+              this.allPromissesCalc.push(indiceDevidoRST);
+              this.allPromissesCalc.push(indiceRecebidoRST);
 
-              Promise.all(allPromissesCalc).then((values) => {
+              Promise.all(this.allPromissesCalc).then((values) => {
 
                 this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
@@ -436,7 +438,7 @@ export class BeneficiosResultadosComponent implements OnInit {
    */
   private getIndicesReajusteListRecebidos() {
 
-    let PromRecebidoRow;
+    let promRecebidoRow;
     const indicesrecebidosMPromisses = [];
 
     const formatDateIsnotNull = (data) => {
@@ -451,26 +453,25 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       for (const recebidoRow of this.listRecebidos) {
 
-        recebidoRow.IndiceInps = [];
+        recebidoRow.indiceInps = [];
         recebidoRow.dib = formatDateIsnotNull(recebidoRow.dib);
         recebidoRow.dip = formatDateIsnotNull(recebidoRow.dip);
         recebidoRow.cessacao = formatDateIsnotNull(recebidoRow.cessacao);
         recebidoRow.dibAnterior = formatDateIsnotNull(recebidoRow.dibAnterior);
 
-        PromRecebidoRow = this.IndiceRecebido.getByDateRangeDirectResult(
+        promRecebidoRow = this.IndiceRecebido.getByDateRangeDirectResult(
           recebidoRow.dib.clone().startOf('month').format('YYYY-MM-DD'),
           recebidoRow.cessacao.format('YYYY-MM-DD'))
           .then((indicesRecebido: Indices[]) => {
             for (const i_recebido of indicesRecebido) {
-              recebidoRow.IndiceInps.push(i_recebido);
+              recebidoRow.indiceInps.push(i_recebido);
             }
           });
-
+          this.allPromissesCalc.push(promRecebidoRow);
       }
 
-      indicesrecebidosMPromisses.push(PromRecebidoRow);
-
     }
+
     return indicesrecebidosMPromisses;
 
   }
@@ -1540,11 +1541,45 @@ export class BeneficiosResultadosComponent implements OnInit {
     return beneficioDevidoFinal;
   }
 
+    private getPeriodoRecebidoList(dataCorrente){
+      let recebidoRow;
+      let indiceInpsdataCorrente;
+
+      recebidoRow =  this.listRecebidos.find(row => (dataCorrente.isBetween(row.dib, row.cessacao, 'month', '[]')));
+
+      console.log(dataCorrente);
+      if (recebidoRow && this.isExits(recebidoRow)) {
+        console.log(recebidoRow['id']);
+      console.log(recebidoRow['indiceInps']);
+
+      indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
+      }
+      
+    
+      // if (this.isExits(recebidoRow.indiceInps)) {
+      //   const indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
+      // }
+    
+
+       console.log(indiceInpsdataCorrente);
+
+        // row.dib.clone().startOf('month').format('YYYY-MM-DD');
+        // row.cessacao.format('YYYY-MM-DD');
+
+
+
+    }
+
   //Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj, line) {
     let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     let siglaDataCorrente = moedaDataCorrente.sigla;
     let irtRecebidoSimplificado89 = 1;
+
+
+
+    const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
+
 
     if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);

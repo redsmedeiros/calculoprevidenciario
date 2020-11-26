@@ -259,15 +259,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       } while (fimContador.isSameOrAfter(auxiliarDate));
 
 
-      console.log(auxiliarDate);
-      console.log(count);
-      console.log(this.yearMonthDaysToFormate(count));
-      console.log(moment.duration(count, 'days').humanize());
-      console.log(count88)
-      console.log(count91)
-      console.log(count98)
-      console.log(count99)
-      console.log(count19)
+      // console.log(auxiliarDate);
+      // console.log(count);
+      // console.log(this.yearMonthDaysToFormate(count));
+      // console.log(moment.duration(count, 'days').humanize());
+      // console.log(count88)
+      // console.log(count91)
+      // console.log(count98)
+      // console.log(count99)
+      // console.log(count19)
 
 
       this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
