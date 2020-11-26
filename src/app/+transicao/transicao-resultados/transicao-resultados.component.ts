@@ -274,11 +274,26 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     meses = this.isFormatInt(meses);
     dias = this.isFormatInt(dias);
 
-    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
+   // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
 
     return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
   }
 
+
+
+  // public converterTempoContribuicao(anos, meses, dias, type) {
+
+  //   const contribuicaoTotal = moment.duration({
+  //     years: anos,
+  //     months: meses,
+  //     days: dias
+  //   });
+
+  //   console.log(contribuicaoTotal);
+
+  //   return (type === 'days' || type === 'd') ? contribuicaoTotal.asDays() : contribuicaoTotal.asDays() / 365;
+  // }
 
   // public converterTempoContribuicao(anos, meses, dias, type) {
 

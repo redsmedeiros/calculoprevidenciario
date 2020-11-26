@@ -64,6 +64,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   public pedagioEmDias = 0;
   public pedagioEmAnos = 0;
+  public pedagioEmAnosRequisito = 0;
 
 
 
@@ -265,6 +266,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     const regra4Idade = this.contribuicaoIdadeMin[sexo];
     let regra4TempoContrib = this.contribuicaoMin[sexo];
     regra4TempoContrib += (sexo === 'md' || sexo === 'fd') ? this.pedagioEmDias : this.pedagioEmAnos;
+    this.pedagioEmAnosRequisito = this.contribuicaoMin[this.seguradoTransicao.sexo] + this.pedagioEmAnos;
 
     if ((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade)) {
       return {
@@ -323,14 +325,14 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       //   + '|' + 'idade -' + idade + '|'
       //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
-      if (fimContador.status) {
+     // if (fimContador.status) {
 
         // console.log('F -' + count + ' data - ' + auxiliarDate.format('DD/MM/YYYY')
         //   + '|' + 'idade -' + idade + '|'
         //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
         //   + '|');
 
-      }
+      // }
 
         count++;
         idade += 1;
@@ -363,16 +365,23 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
    // idade = this.seguradoTransicao.idadeFracionadaDias + count;
 
-    // console.log(this.converterTempoDias(idade));
-    // console.log(tempoContribuicao);
+    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= this.pedagioEmAnosRequisito) {
+      auxiliarDate = moment({
+        year: auxiliarDate.year(),
+        month: this.seguradoTransicao.dataNascimento.month(),
+        day: this.seguradoTransicao.dataNascimento.date()
+      });
 
-    idadeDibMoment = this.calcularIdade(auxiliarDate);
+      idadeDibMoment = this.calcularIdade(auxiliarDate);
 
-    // //console.log(auxiliarDate)
-    // //console.log(correcaoAnoBissexto)
-    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias)
-    // console.log(tempoContribuicao)
+    } else {
 
+      idadeDibMoment = this.calcularIdade(auxiliarDate);
+      idadeDibMoment.add(-1, 'day');
+
+    }
+
+    // idadeDibMoment = this.calcularIdade(auxiliarDate);
 
     // let testeAtual = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
     // let teste = moment.duration(auxiliarDate.diff(testeAtual));
