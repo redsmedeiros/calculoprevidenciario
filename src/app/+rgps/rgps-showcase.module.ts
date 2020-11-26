@@ -4,8 +4,7 @@ import {routing} from "./rgps-showcase.routing";
 
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     routing,
   ],

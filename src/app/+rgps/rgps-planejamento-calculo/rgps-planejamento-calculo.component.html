@@ -1,0 +1,93 @@
+<div id="box-dados-segurado">
+  <article class="col-sm-12 col-md-12 col-lg-12">
+    <sa-widget [colorbutton]="false" [editbutton]="false">
+      <header>
+        <span class="widget-icon">
+          <i class="fa fa-list"></i>
+        </span>
+        <h2>Lista de Benefícios do Segurado para Comparativo</h2>
+      </header>
+
+      <accordion class="smart-accordion-red panel-group" [closeOthers]="true" data-toggle="modal" data-target="#planejamento">
+        <accordion-group [isOpen]="false" #grupoPlanejamento>
+          <h4 class="panel-title" accordion-heading>
+            <a>
+
+              <strong id='tituloCalculo' style="color: #f5f5f5;"> Informações</strong>
+              <i class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right" *ngIf="isUpdating"></i>
+              <button 
+              *ngIf="!isUpdating" 
+              class="btn btn-labeled btn-info pull-right" 
+              (click)="verificaPlano()"
+              type="button"
+              title="Planejamento Previdenciário."
+              style="height: 25px">
+                &nbsp;&nbsp;
+                <span class="widget-icon">
+                  <i class="fa fa-list"></i>
+                </span>
+                
+                <i *ngIf="!isUpdating" class="pull-right fa fa-lg p-1" [ngClass]="{
+                    'fa-angle-down': grupoPlanejamento?.isOpen,
+                    'fa-angle-up': !grupoPlanejamento?.isOpen
+                    }"></i>&nbsp;&nbsp;Planejamento
+              </button>
+            </a>
+          </h4>
+
+          <div class="no-padding no-margin" *ngIf="userCheck">
+            <div id="{{boxId}}" class="boxCalculo row">
+              <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+                <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
+                  <div>
+                    <div class="widget-body no-padding">
+                      <sa-datatable [options]="calculoTableOptions" paginationLength="true"
+                      tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
+                      <thead>
+                        <tr>
+                          <th>Ações</th>
+                          <th>Espécie</th>
+                          <th>Período para início de benefício</th>
+                          <th>Contribuição Primária (Ano/Mês/Dia)</th>
+                          <th>DIB</th>
+                          <th>RMI</th>
+                          <th>Data de Criação</th>
+                          <th>Selecionar</th>
+                        </tr>
+                      </thead>
+                    </sa-datatable>
+                    </div>
+                  </div>
+                </sa-widget>
+              </article>
+
+            </div> <!-- final RMI-->
+            <div class="row">
+              <div class="col-md-12">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row not-print no-padding" >
+                  <div class="col-md-12">
+                   <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-warning pull-right">
+                       <span class="btn-label">
+                         <i class="fa fa-calculator"></i>
+                       </span> Comparar
+                   </button>
+                 </div>
+               </div>
+              </div>                    
+            </div>   
+          </div>
+
+       
+     
+        </accordion-group>
+      </accordion>
+      <!-- widget div-->
+   
+
+    </sa-widget>
+  </article>
+</div>

@@ -32,7 +32,9 @@ import { Indices } from './Indices.model';
 import { SeguradoContagemTempo } from '../+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { CalculoContagemTempo } from '../+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.model';
 import { PeriodosContagemTempo } from '../+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
+import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import { AuthResponse } from './Auth/AuthResponse.model';
+
 
 @Injectable()
 export class StoreService {
@@ -57,6 +59,7 @@ export class StoreService {
     seguradoContagemTempo: SeguradoContagemTempo[]
     calculoContagemTempo: CalculoContagemTempo[],
     periodosContagemTempo: PeriodosContagemTempo[],
+    planejamentoRgps: PlanejamentoRgps[],
     authResponse: AuthResponse[],
   } = {
     segurados: [],
@@ -78,6 +81,7 @@ export class StoreService {
     seguradoContagemTempo: [],
     calculoContagemTempo: [],
     periodosContagemTempo: [],
+    planejamentoRgps: [],
     authResponse: [],
   };
 

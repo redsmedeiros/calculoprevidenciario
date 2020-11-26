@@ -9,6 +9,8 @@ import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model';
 import { RgpsResultadosComponent } from '../+rgps-resultados/rgps-resultados.component';
 import * as moment from 'moment';
+import { Moeda } from '../../services/Moeda.model';
+import { MoedaService } from '../../services/Moeda.service';
 
 @FadeInTop()
 @Component({
@@ -63,7 +65,8 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
   constructor(protected Segurado: SeguradoService,
   						private ExpectativaVida: ExpectativaVidaService,
   						protected CalculoRgps:CalculoRgpsService,
-  						protected router: Router,
+              protected router: Router,
+              private Moeda: MoedaService,
     					protected route: ActivatedRoute,) 
   {super(null,null,null,null,null,null);}
 
@@ -76,6 +79,12 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
       .then(segurado => {
         this.segurado = segurado;
         this.dataNascimentoSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+
+        this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
+        .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+      //  console.log( this.moeda );
+        });
 
        	this.CalculoRgps.find(this.route.snapshot.params['id_calculo1'])
        		.then((calculo:CalculoModel) => {
@@ -115,7 +124,9 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
        							this.expvida = expvida;
        							this.compare_calculations(this.calculo1, this.calculo2);
        							this.isUpdating = false;
-       					});
+                 });
+                 
+                
        			});
        	});
     });
@@ -130,6 +141,7 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     this.compare_calculations(this.calculo1, this.calculo2);
     
   }
+  
 
   //na página de listagem de cálculos ha um checkbox para cada cálculos. Quando clicado em realizar cálculos, 
   //deverão ser realizados todos os cálculos selecionas normalmente. Podem ser selecionados 1 ou mais cálculos.
@@ -141,28 +153,44 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     this.resultadosFacultativo = [];
     this.resultadosDescontadoSlario = [];
     this.sexoSegurado = this.segurado.sexo;
-console.log(calculo1);
+//console.log(calculo1);
 //console.log(calculo2);
 
-		let dateFormat = ('DD/MM/YYYY');
+    let dateFormat = ('DD/MM/YYYY');
 		let dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, dateFormat);
     let dataInicioBeneficio2 = moment(calculo2.data_pedido_beneficio, dateFormat);
+    let valor = this.Moeda.getByDate(moment());
+    let salMinimo = valor.salario_minimo * 0.05;
+    
 
 	//	let dataComparacao = (dataInicioBeneficio2.clone()).startOf('month');
 
 		let totalEntreDatas = 0;
 		let tempoMinimo1 = 0;
-		let tempoMinimo2 = 0;
+    let tempoMinimo2 = 0;
 
     // Veriricar se os valores para soma de contribuicoes existem, caso não existam considerar 0.
-		let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.soma_contribuicao);
-       
-    investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
-    let aliquota = this.aliquota/100;
+    let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.soma_contribuicao);
 
-    investimentoEntreDatas *= aliquota;
+    investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
+   
+    let aliquota = this.aliquota/100;
+   
+    switch(aliquota){
+      case (0.05) : investimentoEntreDatas*=aliquota;
+      break;
+      case (0.2) : investimentoEntreDatas *= aliquota;
+      break;
+      case (0.11) :investimentoEntreDatas *= aliquota;
+      break;
+      case (0.31) :investimentoEntreDatas *= aliquota;
+      break;
+    }
+    
+   // investimentoEntreDatas *= aliquota;
+ // console.log("valor :",investimentoEntreDatas); 
     let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2); 
-        
+      
     // Variável que guarda o Total que deixou de receber caso tivesse se aposentado na primeira data
    
     let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
@@ -198,6 +226,12 @@ console.log(calculo1);
 
     // No Box:
     // Hipótese em que o segurado contribuía como segurado facultativo ou contribuinte individual cuja alíquota é de 'Aliquota Selecionada:
+    this.resultadosFacultativo.push({string: 'Espécie:',  value:calculo1.tipo_seguro });
+
+    this.resultadosFacultativo.push({string: 'DIB:',  value:calculo1.data_pedido_beneficio });
+
+    this.resultadosFacultativo.push({string: 'Benefício:',  value:calculo1.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2}) });
+
     this.resultadosFacultativo.push({string: 'Total investido em contribuições ao INSS entre as duas datas:', 
     														value:this.formatMoney(investimentoEntreDatas, currency.acronimo)});
     
@@ -232,6 +266,12 @@ console.log(calculo1);
 
     // No Box:
     // Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário;
+    this.resultadosDescontadoSlario.push({string: 'Espécie:',  value:calculo2.tipo_seguro });
+
+    this.resultadosDescontadoSlario.push({string: 'DIB:',  value:calculo2.data_pedido_beneficio });
+
+    this.resultadosDescontadoSlario.push({string: 'Benefício:',  value:calculo2.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2}) });
+
     this.resultadosDescontadoSlario.push({string:'Total que deixou de receber caso tivesse se aposentado na primeira data:',
     																			value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
     let tempoMinimo2Meses = Math.floor((tempoMinimo2 - Math.floor(tempoMinimo2)) * 12);
@@ -261,6 +301,7 @@ console.log(calculo1);
     difference = Math.abs(difference);
     return Math.floor(difference);
   }
+
 
   projetarExpectativa(idadeFracionada, dib) {
     let expectativa = 0;

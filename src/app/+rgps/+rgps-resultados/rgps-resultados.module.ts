@@ -14,17 +14,37 @@ import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec
 import { RgpsResultadosAposPec103Component } from './rgps-resultados-apos-pec103/rgps-resultados-apos-pec103.component';
 import { ListaCompetenciasComponent } from './rgps-resultados-apos-pec103/calculoMedia/lista-competencias/lista-competencias.component';
 import { ConclusoesRmiComponent } from './rgps-resultados-apos-pec103/conclusoes/conclusoes-rmi/conclusoes-rmi.component';
-import { RgpsPlanejamentoComponent } from '../rgps-planejamento/rgps-planejamento.component';
+import { RgpsPlanejamentoIndexComponent } from '../rgps-planejamento/rgps-planejamento-index/rgps-planejamento-index.component';
+import { RgpsPlanejamentoCalculoComponent } from '../rgps-planejamento-calculo/rgps-planejamento-calculo.component';
+import { TextMaskModule } from 'angular2-text-mask';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
+
+
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ",",
+  precision: 2,
+  prefix: "",
+  suffix: "",
+  thousands: "."
+};
 
 @NgModule({
   imports: [
     CommonModule,
     rgpsResultadosRouting,
     SmartadminModule,
+    TextMaskModule,
+    CurrencyMaskModule,
     SmartadminDatatableModule,
     AccordionModule.forRoot(),
   ],
-  providers: [WINDOW_PROVIDERS],
+  providers: [WINDOW_PROVIDERS,
+              { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+            ],
   declarations: [RgpsResultadosComponent,
                 RgpsResultadosAnterior88Component,
                 RgpsResultadosEntre91e98Component,
@@ -34,6 +54,8 @@ import { RgpsPlanejamentoComponent } from '../rgps-planejamento/rgps-planejament
                 RgpsResultadosAposPec103Component,
                 ListaCompetenciasComponent,
                 ConclusoesRmiComponent,
-                RgpsPlanejamentoComponent]
+                RgpsPlanejamentoCalculoComponent,
+                RgpsPlanejamentoIndexComponent
+              ]
 })
 export class RgpsResultadosModule { }

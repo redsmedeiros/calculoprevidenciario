@@ -34,6 +34,11 @@ export const routes:Routes = [
     loadChildren: 'app/+rgps/+rgps-resultados/rgps-resultados.module#RgpsResultadosModule',
     data: {pageTitle: 'RGPS Resultados'}
   },
+  { 
+    path: 'rgps-planejamento',
+    loadChildren: 'app/+rgps/rgps-planejamento/rgps-planejamento.module#RgpsPlanejamentoModule',
+    data: {pageTitle: 'RGPS Planejamento'}
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);

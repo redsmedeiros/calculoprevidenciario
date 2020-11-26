@@ -303,7 +303,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     }
 
-    console.log(this.listaConclusaoAcesso);
+  //  console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
 
