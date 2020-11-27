@@ -1,0 +1,197 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="p-1 m-1 no-print">Planejamento Previdenciário</h3>
+      </div>
+    </div>
+
+
+    <div class="well mt-5">
+      <!-- <h3 class="margin-top-0">
+       <span class="semi-bold">
+         <p class="margin-lg-top">Siga as Instruções</p>
+       </span>
+     </h3> -->
+
+     <div class="row mt-5">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <form novalidate="novalidate">
+          <div class="col-sm-12">
+            <div class="form-bootstrapWizard clearfix">
+              <ul class="bootstrapWizard">
+                <li
+                  *ngFor="let pane of steps; let i = index"
+                  [class.active]="activeStep == pane"
+                >
+                  <a (click)="setActiveStep(pane)">
+                    <span class="step">
+                      <span *ngIf="!pane.checked">{{ i + 1 }}</span>
+                      <i class="fa fa-check" *ngIf="pane.checked"></i>
+                    </span>
+                    <span class="title">{{ pane.title }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane" [class.active]="activeStep.key == 'step1'">
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h3><strong>Passo 1 </strong> - Objetivo deste simulador</h3>
+                  </div>
+                </div>
+                <p style="font-size: large">
+                  O planejamento previdenciário tem o objetivo de verificar qual melhor possíbilidade entre duas opções de data íniciais de benefício distintas para verificar qual a melhor opção.
+                </p>
+              </div>
+              <div class="tab-pane" [class.active]="activeStep.key == 'step2'">
+               
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h3><strong>Passo 2</strong> - O segurado</h3>
+                  </div>
+                </div>
+                <p style="font-size: large">
+                  Selecione o segurado.
+                  Caso seja um novo segurado você deve criar o segurado e prosseguir até o final do calculo de Renda Mensal Inicial
+                  utilize o botão abaixo para prosseguir.
+                </p>
+             <div class="row">
+               <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <button (click)="redirecionarSeguradoRMI()" type="submit" class="btn btn-info btn-block pull-left">
+                  Clique aqui para ser direcionado ao Cálculo de Renda Mensal Inicial<i class="fa fa-arrow-circle-right"></i>
+                </button>
+               </div>
+             </div>
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                    <app-rgps-planejamento-segurados-list
+                    (seguradoSelecionadoEvent)="setSeguradoSelecionado($event)">
+                  </app-rgps-planejamento-segurados-list>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" [class.active]="activeStep.key == 'step3'">
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h3><strong>Passo 3</strong> - Cálculos RMI do Segurado</h3>
+                  </div>
+                </div>             
+                <div class="row">
+                  <app-rgps-planejamento-calculos-planejados
+                  *ngIf="isSeguradoSelecionado" 
+                  [seguradoSelecionado]="seguradoSelecionado"
+                  [isSeguradoSelecionado]="isSeguradoSelecionado"
+                  >
+                  </app-rgps-planejamento-calculos-planejados>
+                </div>
+              </div>
+              <div class="tab-pane" [class.active]="activeStep.key == 'step4'">
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h3><strong>Passo 4</strong> - Finalizar</h3>
+                  </div>
+                </div>
+
+
+                <h1 class="text-center text-success">
+                  <strong><i class="fa fa-check fa-lg"></i> Completo</strong>
+                </h1>
+                <h4 class="text-center">Click next para finalizar.</h4>
+                <br />
+                <br />
+              </div>
+
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="pager wizard no-margin">
+                      <li class="previous">
+                        <a
+                          (click)="prevStep()"
+                          [class.disabled]="steps.indexOf(activeStep) == 0"
+                          class="btn btn-lg btn-default"
+                          >Passo Anterior
+                        </a>
+                      </li>
+                      <li class="next">
+                        <a
+                          (click)="nextStep()"
+                          [class.disabled]="
+                            activeStep.submitted && !activeStep.valid
+                          "
+                          class="btn btn-lg txt-color-darken"
+                        >
+                          Próximo Passo
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+     
+   </div>
+
+    
+  </sa-widgets-grid>
+</div>
+
+<!-- 
+
+
+    
+
+
+<div class="row mb-4">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item active"></li>
+    </ol>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+    <app-rgps-planejamento-segurados-list></app-rgps-planejamento-segurados-list>
+  </div>
+</div>
+
+<div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-inline">
+              <li><i class="fa fa-calculator fa-1-7x bg-color-blue txt-color-white p-1"></i> Calculos do Segurado</li>
+              <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> Editar</li>
+              <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> Remover</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+</div>
+<div class="row mb-3">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading m-0 p-1">
+        <strong>Instrução do cálculo</strong>
+      </div>
+      <div class="panel-body m-1 p-1">
+        <ul class="list-unstyled">
+          <li><a routerlink="/tutorial" target="_blank" href="#/tutorial">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
+        </ul>
+        <p class="margin-lg-top">
+          fjskdjfkjsdkfjhskdjhf 
+        </p>
+      </div>
+    </div>
+  </div>
+</div> -->

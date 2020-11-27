@@ -1,0 +1,59 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget
+  [colorbutton]="false"
+  [editbutton]="false"
+  [deletebutton]="false"
+  class="mb-5"
+>
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Listagem de Segurados</h2>
+  </header>
+  <div>
+    <div class="widget-body no-padding" *ngIf="!isUpdatingListSeg">
+      <sa-datatable
+        [options]="datatableOptions"
+        paginationLength="true"
+        (selectedRowEvent)="getRow($event)"
+        tableClass="table table-striped table-bordered table-hover table-condensed"
+        width="100%"
+      >
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Identificação</th>
+            <th>Data de Nascimento</th>
+            <th>Data de filiação</th>
+            <th><i class="fa fa-user"></i></th>
+            <!-- <th>Ações</th> -->
+          </tr>
+        </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>
+
+<div class="well mt-5" *ngIf="isSeguradoSelecionado" >
+  <h4 class="margin-top-0">
+    <span class="semi-bold">
+      <p class="margin-lg-top">Segurado Selecionado</p>
+    </span>
+  </h4>
+  <ul class="list-inline m-0">
+    <li class="px-5"><strong>Nome:</strong> {{ seguradoSelecionado.nome }}</li>
+    <li class="px-5" *ngIf="seguradoSelecionado.numero_documento">
+      <strong>{{ seguradoSelecionado.getDocumentType(seguradoSelecionado.id_documento) }}:</strong>
+      {{ seguradoSelecionado.numero_documento }}
+    </li>
+    <li class="px-5">
+      <strong>Data de Nascimento:</strong> {{ seguradoSelecionado.data_nascimento }}
+    </li>
+    <li class="px-5">
+      <strong>Sexo:</strong>
+      {{ seguradoSelecionado.sexo == "m" ? "Masculino" : "Feminino" }}
+    </li>
+  </ul>
+</div>

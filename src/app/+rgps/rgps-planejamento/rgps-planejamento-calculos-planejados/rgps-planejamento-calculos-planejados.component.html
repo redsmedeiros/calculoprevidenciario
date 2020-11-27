@@ -1,0 +1,55 @@
+<div class="well mt-5" *ngIf="isSeguradoSelecionado" >
+  <h4 class="margin-top-0">
+    <span class="semi-bold">
+      <p class="margin-lg-top">Segurado</p>
+    </span>
+  </h4>
+  <ul class="list-inline m-0">
+    <li class="px-5"><strong>Nome:</strong> {{ seguradoSelecionado.nome }}</li>
+    <li class="px-5" *ngIf="seguradoSelecionado.numero_documento">
+      <strong>{{ seguradoSelecionado.getDocumentType(seguradoSelecionado.id_documento) }}:</strong>
+      {{ seguradoSelecionado.numero_documento }}
+    </li>
+    <li class="px-5">
+      <strong>Data de Nascimento:</strong> {{ seguradoSelecionado.data_nascimento }}
+    </li>
+    <li class="px-5">
+      <strong>Sexo:</strong>
+      {{ seguradoSelecionado.sexo == "m" ? "Masculino" : "Feminino" }}
+    </li>
+  </ul>
+</div>
+
+
+
+<sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span> 
+    <h2>Cálculos</h2>
+  </header>
+  <div>
+    <div class="widget-body no-padding">
+      <sa-datatable *ngIf="!isUpdatingCalc" 
+      [options]="calculoTableOptions"
+      (selectedRowEvent)="getRow($event)"
+        paginationLength="true" 
+        tableClass="table table-striped table-bordered table-hover table-condensed"
+        width="100%">
+        <thead>
+          <tr>
+            <th>Ações</th>
+            <th>Espécie</th>
+            <th>Período para início de benefício</th>
+            <th>Contribuição Primária (Ano/Mês/Dia)</th>
+            <th>DIB</th>
+            <th>RMI</th>
+            <th>Data de Criação</th>
+            <th>Selecionar</th> 
+          </tr>
+        </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>

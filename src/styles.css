@@ -132,7 +132,7 @@ a[class*="action-"]:hover {
   }
 
   .img-icone-custom {
-    height: 30rem !important;
+    height: 25rem !important;
   }
   .img-icone-custom-t {
     height: 12rem !important;
@@ -146,6 +146,12 @@ a[class*="action-"]:hover {
   .not-print {
     display: none !important;
   }
+}
+
+
+.smart-style-7 #left-panel {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
 }
 
 .font-0-1x {

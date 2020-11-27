@@ -7919,7 +7919,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 .price-features {
   background: #FAFAFA;
   padding: 20px 15px;
-  min-height: 230px;
+  min-height: 240px;
   font-size: 13.5px
 }
 
@@ -7956,7 +7956,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 .pricing-big table {
   background: #FAFAFA;
   padding: 20px 15px;
-  height: 230px;
+  height: 240px;
   text-align: left
 }
 
@@ -11749,7 +11749,7 @@ aside {
 }
 
 #header>:first-child, aside {
-  width: 220px
+  width: 240px
 }
 
 #left-panel {
@@ -11761,7 +11761,8 @@ aside {
 }
 
 #main {
-  margin-left: 220px;
+  margin-left: 240px;
+  /* margin-left: 220px; */
   padding: 0;
   padding-bottom: 52px;
   min-height: 500px;
@@ -11795,7 +11796,7 @@ aside {
 .fixed-ribbon #ribbon {
   position: fixed;
   right: 0;
-  left: 220px;
+  left: 240px;
   top: 49px;
   z-index: 901
 }
@@ -13818,7 +13819,7 @@ img.away {
 
 .chart {
   overflow: hidden;
-  height: 220px;
+  height: 240px;
   margin: 20px 5px 10px 10px
 }
 
@@ -13848,7 +13849,7 @@ img.away {
 }
 
 .hidden-menu #left-panel {
-  left: -210px;
+  left: -240px;
   z-index: 903
 }
 
@@ -16524,9 +16525,9 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 
 .page-footer {
-  height: 52px;
+  height: 40px;
   padding: 15px 13px 0;
-  padding-left: 233px;
+  padding-left: 248px;
   border-top: 1px solid #CECECE;
   background: #2a2725;
   width: 100%;
@@ -16644,7 +16645,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     margin-left: 0
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .minified #left-panel {
     left: 0
@@ -16675,7 +16676,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16698,7 +16699,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .no-content-padding {
     margin: 0 -14px !important
@@ -16749,7 +16750,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16775,7 +16776,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -16847,7 +16848,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16911,7 +16912,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -16997,7 +16998,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -17076,7 +17077,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -17177,7 +17178,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
