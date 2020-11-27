@@ -3,12 +3,12 @@
     <sa-widget [colorbutton]="false" [editbutton]="false">
       <header>
         <span class="widget-icon">
-          <i class="fa fa-table"></i>
+          <i class="fa fa-building"></i>
         </span>
         <h2>Planejamento de Benefícios do Segurado</h2>
 
-        <button class="btn btn-labeled btn-warning pull-right" (click)="verificaPlano()" type="button"
-          title="Planejamento Previdenciário." (click)="modalCreate.show()">
+        <button class="btn btn-labeled btn-warning pull-right" type="button"
+          title="Planejamento Previdenciário." (click)="novoPlanejamento()">
 
           <span class="btn-label">
             <i class="fa fa-plus"></i>
@@ -64,10 +64,14 @@
                               {{ formatMoeda(planRow.valor_beneficio) }}
                             </td>
                             <td class="text-center">{{ planRow.aliquota }} %</td>
-                            <td class="text-center" width="auto">
+                            <td class="text-center" width="120px">
                               <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-primary" id="planejar{{ planRow.id }}"
+                                (click)="planejar(planRow.id)"  title="Planejar">
+                                <i class="fa fa-share-square fa-1-7x"></i>
+                              </button>
                                 <button type="button" class="btn btn-xs btn-warning" id="editar{{ planRow.id }}"
-                                  (click)="getupdatePlananejamentoList(planRow.id)"  title="Editar">
+                                  (click)="getupdatePlananejamentoList(planRow.id)" title="Editar">
                                   <i class="fa fa-edit fa-1-7x"></i>
                                 </button>
                                 <button type="button" class="btn btn-xs btn-danger" id="deletar{{ planRow.id }}"
@@ -104,9 +108,7 @@
 </div>
 
 
-
-
-<div bsModal #modalCreate="bs-modal" class="modal fade" id="create-planejamento">
+<div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body p-0 m-0">
@@ -118,7 +120,7 @@
                   <i class="fa fa-plus"></i>
                 </span>
                 <h2>Adicionar informações para planejamento</h2>
-                <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCreate.hide()"
+                <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCreatePlan.hide()"
                   aria-hidden="true">
                   <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"></i>
                 </button>
@@ -154,7 +156,8 @@
                               <p style="font-size: large;">O planejamento previdenciário é um serviço oferecido pelo
                                 IEPREV que visa trazer agilidade e segurança para o segurado no momento da sua
                                 aposentadoria, pois possibilita minimizar erros no processo administrativo da
-                                aposentadoria, sempre em busca do melhor benefício. As alterações legislativas no
+                                aposentadoria, sempre em busca do melhor benefício. </p>
+                                <p style="font-size: large;">As alterações legislativas no
                                 Direito Previdenciário são inúmeras e constantes, além disso, os históricos
                                 contributivos dos segurados são, via de regra, muito falhos nos bancos de dados do INSS.
                               </p>
@@ -164,11 +167,7 @@
                               <br>
 
                               <h3><strong>Passo 2</strong> - Planejamento</h3>
-                              <alert type="info" dismissible="true">
-                                <i class="fa-fw fa fa-info"></i>
-                                <strong>Importante!</strong>&nbsp; As vantagens de se fazer o planejamento
-                                previdenciário.
-                              </alert>
+   
                               <div class="form-group">
                                 <label style="font-size: large;"><strong> Alguns exemplos:</strong> </label>
                                 <p style="font-size: large;">- Aposentar-se no momento certo;</p>
@@ -190,39 +189,28 @@
                               <h3><strong>Passo 3</strong> - Formulário</h3>
                               <div class="row">
 
-                                <!-- <div class="col-sm-12">
-                                  <div class="form-group" [ngClass]="{
-                                    'has-success':email.valid && activeStep.submitted,
-                                    'has-error':!email.valid && activeStep.submitted
-                                    }">
-                                    <div class="input-group">
-                                      <span class="input-group-addon"><i class="fa fa-envelope fa-lg fa-fw"></i></span>
-                                      <input class="form-control input-lg" placeholder="email@address.com" type="email"
-                                             name="email" #email="ngModel"
-                                             required [(ngModel)]="model.email">
-                                    </div>
-                                    <span [class.hidden]="email.valid || !activeStep.submitted" class="help-block">
-                                        We need your email address to contact you
-                                      </span>
-                                  </div>
-              
-                                </div> -->
-
                               </div>
 
                               <div class="row">
                                 <div class="col-sm-4">
                                   <div class="form-group" [ngClass]="{
                                     'has-success':dataFutura.valid && activeStep.submitted,
-                                    'has-error':!dataFutura.valid && activeStep.submitted
-                                    }">
+                                    'has-error':!dataFutura.valid && activeStep.submitted,
+                                    'has-error': errors.has('dataFutura')
+                                    }"
+                                    >
                                     <div class="input-group">
                                       <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
-                                      <input class="form-control input-lg" [textMask]="{mask: dateMaskdiB}"
-                                        placeholder="DIB Futura" type="text" name="dataFutura" #dataFutura="ngModel"
-                                        required [(ngModel)]="model.data_futura">
+                                      <input class="form-control input-lg" 
+                                      [textMask]="{mask: dateMaskdiB}"
+                                        placeholder="DIB Futura" 
+                                        type="text" name="dataFutura" 
+                                        #dataFutura="ngModel" 
+                                        required [(ngModel)]="model.data_futura" >
                                     </div>
-                                    <span [class.hidden]="dataFutura.valid || !activeStep.submitted" class="help-block">
+                                    <span [class.hidden]="dataFutura.valid || !activeStep.submitted" 
+                                    class="help-block"
+                                    *ngIf="errors.has('dataFutura')" class="text-danger">{{ errors.get('dataFutura') }}>
                                       Favor entrar com uma data válida.
                                     </span>
                                   </div>
@@ -255,10 +243,10 @@
                                       <select class="form-control input-lg" required [(ngModel)]="model.aliquota"
                                         #aliquota="ngModel" name="aliquota">
                                         <option value="" selected="selected">Selecione Aliquota</option>
-                                        <option value="7">7,5%</option>
-                                        <option value="9">9%</option>
-                                        <option value="12">12%</option>
-                                        <option value="14">14%</option>
+                                        <option [value]="5">Fixo - 5%</option>
+                                        <option [value]="11">Fixo - 11%</option>
+                                        <option [value]="20">Fixo - 20%</option>
+                                        <option [value]="99">Cumulativo - 7,5% a 14%</option>
                                       </select>
                                     </div>
                                   </div>
@@ -275,7 +263,7 @@
 
                               <h1 class="text-center text-success"><strong><i class="fa fa-check fa-lg"></i>
                                   Completo</strong></h1>
-                              <h4 class="text-center">Click next para finalizar.</h4>
+                              <h4 class="text-center">Click Próximo para finalizar.</h4>
                               <br>
                               <br>
                             </div>
@@ -286,14 +274,18 @@
                                   <ul class="pager wizard no-margin">
                                     <li class="previous">
                                       <a (click)="prevStep()" [class.disabled]="steps.indexOf(activeStep) == 0"
-                                        class="btn btn-lg btn-default"> Previous
+                                        class="btn btn-lg btn-default"> Anterior
                                       </a>
                                     </li>
                                     <li class="next">
-                                      <a (click)="nextStep()" *ngIf="!isEdit"
+                                      <a (click)="nextStep()" *ngIf="!isEdit" 
                                         [class.disabled]="activeStep.submitted && !activeStep.valid"
-                                        class="btn btn-lg txt-color-darken"> Next
+                                        class="btn btn-lg txt-color-darken"> Próximo 
                                       </a>
+                                      <a (click)="updatePlan()" *ngIf="isEdit" 
+                                      [class.disabled]="activeStep.submitted && !activeStep.valid"
+                                      class="btn btn-lg txt-color-darken"> Atualizar  
+                                    </a>
                                     </li>
                                   </ul>
                                 </div>
