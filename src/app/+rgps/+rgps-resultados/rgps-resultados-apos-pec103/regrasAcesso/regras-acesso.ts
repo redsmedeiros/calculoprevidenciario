@@ -99,9 +99,6 @@ export class RegrasAcesso {
 
             // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
 
-            // this.carenciaConformDataFiliacao = 190;
-            // this.calculo.carencia = 190;
-            // this.numeroDeContribuicoes = 205;
 
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
 

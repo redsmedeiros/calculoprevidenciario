@@ -35,6 +35,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   @Input() segurado;
   @Input() isPlanejamento;
   @Input() planejamento;
+  @Input() planejamentoContribuicoesAdicionais;
 
 
   public boxId;
@@ -127,7 +128,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     // indices de correção pbc da vida toda
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
+
         this.listaValoresContribuidos = valorescontribuidos;
+
+        if (this.isPlanejamento) {
+          this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
+        }
+
         if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
 
           // Exibir MSG de erro e encerrar Cálculo.
@@ -306,7 +313,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     }
 
-  //  console.log(this.listaConclusaoAcesso);
+    //  console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
 
@@ -445,6 +452,20 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.CalculoRgpsService.update(this.calculo);
 
       }, 2000);
+
+    } else if(this.isPlanejamento) {
+
+      this.setMelhorValorRMI();
+
+      setTimeout(() => {
+
+        // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
+        // this.calculo.soma_contribuicao = this.melhorSoma;
+        // this.calculo.valor_beneficio = this.melhorValorRMI;
+       // this.CalculoRgpsService.update(this.calculo);
+
+      }, 2000);
+
 
     }
 
@@ -613,7 +634,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   private verificarCarencia() {
 
 
-    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16  || this.tipoBeneficio === 31) {
+    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16 || this.tipoBeneficio === 31) {
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 

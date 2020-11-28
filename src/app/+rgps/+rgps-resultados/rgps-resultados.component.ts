@@ -18,6 +18,7 @@ import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
+import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
 
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import * as moment from 'moment';
@@ -274,6 +275,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   public planejamento;
   public isPlanejamento = false;
+  public planejamentoContribuicoesAdicionais = [];
 
 
   //pbc parametro get
@@ -1279,6 +1281,7 @@ export class RgpsResultadosComponent implements OnInit {
     return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
   }
 
+  // planejamento adicionais RMI
 
   public getIsPlanejamento() {
     return (this.route.snapshot.params['pbc'] === 'plan');
@@ -1333,10 +1336,34 @@ export class RgpsResultadosComponent implements OnInit {
 
   }
 
-  
   private addCarencia(calculo, tempoDiff) {
 
     calculo.carencia_apos_ec103 += tempoDiff.totalMonths;
+
+  }
+
+  private createListPlanContribuicoesAdicionais() {
+
+    this.planejamentoContribuicoesAdicionais = []
+    let auxiliarDate = this.dataInicioBeneficio.clone();
+    const fimContador = this.dataInicioBeneficioOld.clone(); 
+    let count = 0;
+    const valorSalContrib = Number();
+    let ObjValContribuicao;
+    // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
+
+    while (fimContador.isSameOrBefore(auxiliarDate, 'month')) {
+      count++;
+      auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+
+      ObjValContribuicao = new ValorContribuido({
+        data: auxiliarDate.format('YYYY-MM-DD'),
+        valor_primaria: this.planejamento.valor_beneficio,
+        valor_secundaria: 0,
+      });
+
+      this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+    };
 
   }
 
@@ -1344,27 +1371,16 @@ export class RgpsResultadosComponent implements OnInit {
 
     calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
     calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
-
-
     const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
 
     this.addTempoContribuicao(calculo, diffTempo);
     this.addCarencia(calculo, diffTempo);
-
-    console.log(calculo);
-    console.log(diffTempo);
-
-    //  calculo.contribuicao_primaria_19;
-
-    //this.getContribuicaoObj()
-
-
+    this.createListPlanContribuicoesAdicionais();
   }
 
 
   private setInfoPLanejamentoTempoDib(calculo, calcClone) {
     if (this.isExits(this.planejamento) && calculo.id === this.planejamento.id_calculo) {
-
 
       calculo.data_pedido_beneficio_old = calcClone.data_pedido_beneficio;
       this.dataInicioBeneficioOld = moment(calculo.data_pedido_beneficio_old, 'DD/MM/YYYY');
@@ -1381,6 +1397,7 @@ export class RgpsResultadosComponent implements OnInit {
 
     }
   }
+
 
   public getPlanejamento(calculo) {
     console.log(this.route.snapshot.params['correcao_pbc']);
@@ -1410,7 +1427,7 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
   }
-
+  // planejamento adicionais RMI
 
 
   public calcularPBCIndices(indice) {
