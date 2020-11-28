@@ -13,15 +13,17 @@ import * as moment from 'moment';
   selector: 'app-rgps-planejamento-index',
   templateUrl: './rgps-planejamento-index.component.html',
   styleUrls: ['./rgps-planejamento-index.component.css'],
-  providers: [ErrorService],
-
+  providers: [
+    ErrorService
+  ],
 })
 export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   @Output() onSubmit = new EventEmitter();
   @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
-  @Input() errors: ErrorService;
+  //@Input() errors: ErrorService;
   @Input() segurado;
   @Input() calculo;
+  
 
   public form = { ...PlanejamentoRgps.form };
   public isEdit = false;
@@ -35,8 +37,6 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   public aliquota;
   public id_calculo;
   public planejamentoList = [];
-
-
   public userCheck = false;
 
   public model = {
@@ -83,7 +83,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   public activeStep = this.steps[0];
 
   constructor(
-    private Errors: ErrorService,
+    private errors: ErrorService,
     protected rgpsPlanejamentoService: RgpsPlanejamentoService,
     private route: ActivatedRoute,
     protected router: Router,
@@ -95,17 +95,22 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
     // console.log(this.calculo);
 
     // console.log(this.planejamentoTableOptions);
+    // console.log(this.calculo);
 
     this.id_calculo = this.calculo.id;
-
+    this.model.id_calculo = this.calculo.id;
     this.isUpdatePlan = true;
-    this.getInfoCalculos();
 
- 
+    // console.log(this.route.snapshot.params['correcao_pbc'])
+    // console.log(this.route.snapshot.params['pbc'])
+
+
+    this.getInfoCalculos();
   }
 
   private getInfoCalculos() {
 
+    this.isUpdatePlan = true;
     this.rgpsPlanejamentoService
       .getPlanejamentoByCalculoId(this.id_calculo)
       .then((planejamentoRst: PlanejamentoRgps[]) => {
@@ -169,9 +174,9 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
     return this.userCheck;
   }
 
-  
+
   novoPlanejamento() {
-    this.verificaPlano();   
+    this.verificaPlano();
     this.isEdit = false;
     this.resetForm();
     this.showChildModal();
@@ -181,7 +186,6 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   private deletarPlananejamentoList(id) {
 
     const objPlan = this.planejamentoList.find(row => row.id === id);
-    console.log(objPlan);
 
     if (objPlan && this.isExits(objPlan)) {
       this.rgpsPlanejamentoService
@@ -195,7 +199,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
             showConfirmButton: false,
             timer: 1000
           });
-          
+
           this.getInfoCalculos();
         })
         .catch((err) => {
@@ -224,7 +228,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
     this.steps.find(it => it.key == 'step4').checked = true;
     this.activeStep = this.steps[2];
     this.model.data_futura = this.formatReceivedDate(this.model.data_futura);
-   console.log(this.model);
+    console.log(this.model);
 
     this.showChildModal();
   }
@@ -249,7 +253,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
       })
       .catch((errors) => {
 
-        this.Errors.add(errors);
+        this.errors.add(errors);
 
       });
   }
@@ -308,6 +312,20 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
 
 
+
+  private planejar(id){
+
+    const objPlan = this.planejamentoList.find(row => row.id === id);
+    const objExport = JSON.stringify(objPlan);
+    sessionStorage.setItem('exportPlanejamento', objExport);
+
+    //window.location.href 
+    const urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + objPlan.id;
+    this.router.navigate([urlpbcNew]);
+
+  }
+
+
   // custom change detection
   ngDoCheck() {
 
@@ -329,11 +347,11 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
           this.model.valor_beneficio &&
           this.model.aliquota
         );
-          
+
         this.lastModel = Object.assign({}, this.model);
       }
     }
-    
+
   }
 
   private isExits(value) {
@@ -353,9 +371,6 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
     return sigla + ' ' + numeroPadronizado;
   }
 
-
-
-
   public showChildModal(): void {
     this.modalCreatePlan.show();
   }
@@ -363,7 +378,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   public hideChildModal(): void {
     this.modalCreatePlan.hide();
   }
-  
+
   resetForm() {
     this.model.data_futura = '';
     this.model.valor_beneficio = '';
@@ -371,9 +386,12 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   }
 
   validate() {
+
+    this.errors.clear();
+
     let dataHoje = moment();
     const dataFutura = moment(this.model.data_futura, 'DD/MM/YYYY');
-    
+
     if (this.model.data_futura === undefined || this.model.data_futura === '') {
       swal({
         position: 'top-end',
@@ -382,43 +400,42 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
         showConfirmButton: false,
         timer: 1000
       });
-    } 
-      if (dataFutura < dataHoje )
-       {
-         this.model.data_futura =  '';
-        swal({
-          position: 'top-end',
-          type: 'error',
-          title: 'Data não pode ser menor que '+ this.formatReceivedDate(moment()) + '.',
-          showConfirmButton: false,
-          timer: 2000
-        });
-      }
+    }
+    if (dataFutura < dataHoje) {
+      this.model.data_futura = '';
+      swal({
+        position: 'top-end',
+        type: 'error',
+        title: 'Data não pode ser menor que ' + this.formatReceivedDate(moment()) + '.',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }
   }
 
-validateInputs() {
-  
+  validateInputs() {
 
-  let valid = true;
 
-  if(this.isEmptyInput(this.model.data_futura)){
-    this.errors.add({'dataFutura':['Data do planejamento necessária']});
-    valid = false;
-  }else if(!moment(this.model.data_futura, 'MM/YYYY').isValid()){
-    this.errors.add({'dataFutura': ['Insira uma data válida']});
-    valid = false;
-  }else if(moment(this.model.data_futura, 'DD/MM/YYYY') < this.dataHoje){
-    this.errors.add({'dataFutura':['A data deve ser superior a data do dia.']});
-    valid = false;
+    let valid = true;
+
+    if (this.isEmptyInput(this.model.data_futura)) {
+      this.errors.add({ 'dataFutura': ['Data do planejamento necessária'] });
+      valid = false;
+    } else if (!moment(this.model.data_futura, 'MM/YYYY').isValid()) {
+      this.errors.add({ 'dataFutura': ['Insira uma data válida'] });
+      valid = false;
+    } else if (moment(this.model.data_futura, 'DD/MM/YYYY') < this.dataHoje) {
+      this.errors.add({ 'dataFutura': ['A data deve ser superior a data do dia.'] });
+      valid = false;
+    }
   }
-}
 
-isEmptyInput(input) {
-  if (input === '' || input === undefined || input === null) {
-    return true;
+  isEmptyInput(input) {
+    if (input === '' || input === undefined || input === null) {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
 
 }

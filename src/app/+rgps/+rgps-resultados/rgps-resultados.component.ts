@@ -18,6 +18,8 @@ import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
+
+import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
@@ -124,6 +126,7 @@ export class RgpsResultadosComponent implements OnInit {
   public salarioMinimoMaximo;
   public primeiraDataTabela;
   public dataInicioBeneficio;
+  public dataInicioBeneficioOld;
   public dataFiliacao;
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
@@ -269,6 +272,8 @@ export class RgpsResultadosComponent implements OnInit {
   public dataDecreto6939_2009 = moment('2009-08-18');
   public dataPec062019 = moment('2019-11-13');
 
+  public planejamento;
+  public isPlanejamento = false;
 
 
   //pbc parametro get
@@ -291,6 +296,10 @@ export class RgpsResultadosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    this.isPlanejamento = this.getIsPlanejamento();
+
+
 
     this.isUpdating = true;
 
@@ -315,6 +324,9 @@ export class RgpsResultadosComponent implements OnInit {
           for (const idCalculo of this.idsCalculo) {
             this.CalculoRgps.find(idCalculo)
               .then((calculo: CalculoModel) => {
+
+                this.getPlanejamento(calculo);
+
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
@@ -983,6 +995,9 @@ export class RgpsResultadosComponent implements OnInit {
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
 
+    // verificar e setar os parametros para novo calculo;
+
+
     const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
     const verificaIdade = this.verificaEspecieDeBeneficioIdade(calculo.tipo_seguro);
 
@@ -1059,6 +1074,14 @@ export class RgpsResultadosComponent implements OnInit {
       }
 
 
+      calculo.mostrarCalculoApos19 = true;
+    }
+
+
+    if (this.planejamento) {
+      calculo.mostrarCalculo91_98 = false;
+      calculo.mostrarCalculo98_99 = false;
+      calculo.mostrarCalculoApos99 = false;
       calculo.mostrarCalculoApos19 = true;
     }
 
@@ -1178,14 +1201,14 @@ export class RgpsResultadosComponent implements OnInit {
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
     printContents = printContents.replace(/<table/g,
-    '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
-    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-                            + this.segurado.nome + '</title></head><body onload="window.print()">' 
-                            + printContents +'<br><br><br>'+ rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">'
+      + printContents + '<br><br><br>' + rodape + '</body></html>');
     popupWin.document.close();
   }
 
@@ -1210,12 +1233,12 @@ export class RgpsResultadosComponent implements OnInit {
     const boxContent = document.getElementById(boxId).innerHTML;
 
 
-                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-                          + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
-                          + boxContent +'<br><br><br>'+ rodape + '</body></html>';
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
+      + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
-         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
@@ -1254,6 +1277,138 @@ export class RgpsResultadosComponent implements OnInit {
 
   public getPbcCompletoIndices() {
     return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
+  }
+
+
+  public getIsPlanejamento() {
+    return (this.route.snapshot.params['pbc'] === 'plan');
+  }
+
+
+  private calcDiffContribuicao(a, b) {
+
+    const total = { years: 0, months: 0, days: 0, totalDays: 0, totalMonths: 0, totalYears: 0 };
+    let diff: any;
+
+    total.totalYears = a.diff(b, 'years', true);
+    total.totalMonths = a.diff(b, 'months', true);
+    total.totalDays = a.diff(b, 'days', true);
+
+    diff = a.diff(b, 'years');
+    b.add(diff, 'years');
+    total.years = diff;
+
+    diff = a.diff(b, 'months');
+    b.add(diff, 'months');
+    total.months = diff;
+
+    diff = a.diff(b, 'days');
+    b.add(diff, 'days');
+    total.days = diff;
+
+    return total;
+  }
+
+
+  private addTempoContribuicao(calculo, diffTempo) {
+
+    const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+
+    objTempo.anos += diffTempo.years;
+    objTempo.meses += diffTempo.months;
+    objTempo.dias += diffTempo.days;
+
+    if (objTempo.dias >= 30) {
+      objTempo.dias -= 30;
+      objTempo.meses += 1;
+    }
+
+
+    if (objTempo.dias >= 11) {
+      objTempo.meses = 1;
+      objTempo.anos += 1;
+    }
+
+    calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
+
+  }
+
+  
+  private addCarencia(calculo, tempoDiff) {
+
+    calculo.carencia_apos_ec103 += tempoDiff.totalMonths;
+
+  }
+
+  private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
+
+    calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
+    calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+
+
+    const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
+
+    this.addTempoContribuicao(calculo, diffTempo);
+    this.addCarencia(calculo, diffTempo);
+
+    console.log(calculo);
+    console.log(diffTempo);
+
+    //  calculo.contribuicao_primaria_19;
+
+    //this.getContribuicaoObj()
+
+
+  }
+
+
+  private setInfoPLanejamentoTempoDib(calculo, calcClone) {
+    if (this.isExits(this.planejamento) && calculo.id === this.planejamento.id_calculo) {
+
+
+      calculo.data_pedido_beneficio_old = calcClone.data_pedido_beneficio;
+      this.dataInicioBeneficioOld = moment(calculo.data_pedido_beneficio_old, 'DD/MM/YYYY');
+
+      calculo.data_pedido_beneficio = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
+      this.dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+
+      this.setTempoContribuicao(
+        calculo,
+        calcClone,
+        this.dataInicioBeneficioOld.clone(),
+        this.dataInicioBeneficio.clone()
+      );
+
+    }
+  }
+
+  public getPlanejamento(calculo) {
+    console.log(this.route.snapshot.params['correcao_pbc']);
+    console.log(this.route.snapshot.params['pbc']);
+
+    if (this.isPlanejamento) {
+
+
+      const calcClone = Object.assign({}, calculo);
+
+      const exportObjPlanejamento = JSON.parse(sessionStorage.exportPlanejamento);
+
+      this.planejamento = new PlanejamentoRgps(exportObjPlanejamento);
+
+      this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+
+      console.log(this.planejamento);
+
+      // this.dataInicioBeneficio = exportDados.dib;
+
+      // this.changePeriodoOptions();
+
+      // const dib = moment(exportDados.dib, 'DD/MM/YYYY');
+
+
+      // PlanejamentoRgps
+    }
+
   }
 
 
@@ -1339,7 +1494,6 @@ export class RgpsResultadosComponent implements OnInit {
 
     return especie;
   }
-
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

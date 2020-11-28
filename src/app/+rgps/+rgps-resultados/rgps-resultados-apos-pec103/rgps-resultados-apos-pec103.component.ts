@@ -33,6 +33,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   @Input() calculo;
   @Input() segurado;
+  @Input() isPlanejamento;
+  @Input() planejamento;
+
 
   public boxId;
   public dataFiliacao;
@@ -430,7 +433,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    */
   private updateResultadoCalculo() {
 
-    if (this.errosArray.length === 0) {
+    if (this.errosArray.length === 0 && !this.isPlanejamento) {
 
       this.setMelhorValorRMI();
 

@@ -94,25 +94,22 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-            // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
+          // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
             // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
+
+            // this.carenciaConformDataFiliacao = 190;
+            // this.calculo.carencia = 190;
+            // this.numeroDeContribuicoes = 205;
+
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
 
-           if ((this.numeroDeContribuicoes < 180) ) {
-
-                // console.log(this.calculo.carencia_apos_ec103)
-                // console.log(this.numeroDeContribuicoes)
-
-                maxDescarteCarencia = this.calculo.carencia_apos_ec103 - 180;
-
-                if (maxDescarteCarencia >= this.numeroDeContribuicoes ) {
-
-                    maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
-
-                }
-
+            // deve restar 12 após 1994, pois são os valores base para pós EC103
+            if (
+                (maxDescarteCarencia >= this.numeroDeContribuicoes)
+            ) {
+                maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
             }
 
             maximoDescarte.meses = maxDescarteCarencia;

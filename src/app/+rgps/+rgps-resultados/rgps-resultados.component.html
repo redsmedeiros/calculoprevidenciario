@@ -1,21 +1,42 @@
 <div id="content" *ngIf="!isUpdating" style="min-width: 895px">
-
   <!-- widget grid -->
   <sa-widgets-grid>
     <div class="row mb-3">
-      <div class=" col-sm-12 col-md-12 col-lg-12">
-        <h3 class="p-1 m-1 no-print">Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h3 class="p-1 m-1 no-print">
+          Cálculo dos Benefícios do Regime Geral de Previdência Social
+        </h3>
       </div>
     </div>
     <div class="row mb-3">
-      <div class=" col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-12 col-md-12 col-lg-12">
         <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}/{{idsCalculo[0]}}/edit"> Informações
-              para o Cálculo</a></li>
-          <li class="breadcrumb-item"><a href="#/rgps/rgps-valores-contribuidos/{{idSegurado}}/{{idsCalculo[0]}}">
-              Valores de Contribuição</a></li>
+          <li class="breadcrumb-item">
+            <a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#/rgps/rgps-calculos/{{ idSegurado }}">
+              Lista de Cálculos</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/rgps/rgps-calculos/{{ idSegurado }}/{{
+                idsCalculo[0]
+              }}/edit"
+            >
+              Informações para o Cálculo</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/rgps/rgps-valores-contribuidos/{{ idSegurado }}/{{
+                idsCalculo[0]
+              }}"
+            >
+              Valores de Contribuição</a
+            >
+          </li>
           <li class="breadcrumb-item active">Resultados dos Cálculos</li>
         </ol>
       </div>
@@ -63,50 +84,67 @@
             <!-- widget div-->
             <div>
               <!-- widget content -->
-              <div class="widget-body widget-body-custom m-0 p-0 ">
+              <div class="widget-body widget-body-custom m-0 p-0">
                 <ul class="list-inline m-0">
-                  <li class="px-5"><strong>Nome:</strong> {{segurado.nome}} </li>
-                  <li class="px-5" *ngIf="segurado.numero_documento">
-                    <strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong> {{segurado.numero_documento}}
+                  <li class="px-5">
+                    <strong>Nome:</strong> {{ segurado.nome }}
                   </li>
-                  <li class="px-5"><strong>Data de Nascimento:</strong> {{segurado.data_nascimento}}</li>
-                  <li class="px-5"><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
-                  <li class="px-5"><strong>Idade atual:</strong> {{this.idadeSegurado}} anos</li>
+                  <li class="px-5" *ngIf="segurado.numero_documento">
+                    <strong
+                      >{{
+                        segurado.getDocumentType(segurado.id_documento)
+                      }}:</strong
+                    >
+                    {{ segurado.numero_documento }}
+                  </li>
+                  <li class="px-5">
+                    <strong>Data de Nascimento:</strong>
+                    {{ segurado.data_nascimento }}
+                  </li>
+                  <li class="px-5">
+                    <strong>Sexo:</strong>
+                    {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                  </li>
+                  <li class="px-5">
+                    <strong>Idade atual:</strong> {{ this.idadeSegurado }} anos
+                  </li>
                 </ul>
                 <div id="printableSegurado" hidden>
                   <table class="table table-bordered table-hover">
                     <!-- <caption><h2>Dados do Segurado</h2></caption> -->
                     <tr>
-                      <td width="50%" style="text-align: right;">
+                      <td width="50%" style="text-align: right">
                         <b>Nome:</b>
                       </td>
                       <td width="50%">
-                        {{segurado.nome}}
+                        {{ segurado.nome }}
                       </td>
                     </tr>
                     <tr *ngIf="segurado.numero_documento">
-                      <td width="50%" style="text-align: right;">
-                        <b>{{segurado.getDocumentType(segurado.id_documento)}}</b>
+                      <td width="50%" style="text-align: right">
+                        <b>{{
+                          segurado.getDocumentType(segurado.id_documento)
+                        }}</b>
                       </td>
                       <td width="50%">
-                        {{segurado.numero_documento}}
+                        {{ segurado.numero_documento }}
                       </td>
                     </tr>
                     <tr>
-                      <td width="50%" style="text-align: right;">
+                      <td width="50%" style="text-align: right">
                         <b>Data de nascimento:</b>
                       </td>
                       <td width="50%">
-                        {{segurado.data_nascimento}}
+                        {{ segurado.data_nascimento }}
                       </td>
                     </tr>
                     <tr>
-                      <td width="50%" style="text-align: right;">
+                      <td width="50%" style="text-align: right">
                         <b>Sexo:</b>
                       </td>
                       <td width="50%">
-                        <span *ngIf="segurado.sexo=='m'">Masculino</span><span
-                          *ngIf="segurado.sexo=='f'">Feminino</span>
+                        <span *ngIf="segurado.sexo == 'm'">Masculino</span
+                        ><span *ngIf="segurado.sexo == 'f'">Feminino</span>
                       </td>
                     </tr>
                   </table>
@@ -114,11 +152,16 @@
                 <div class="form-actions no-padding mt-3">
                   <div class="row">
                     <div class="col-md-12">
-                      <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right"
-                        title="Editar o segurado.">
+                      <button
+                        type="submit"
+                        (click)="editSegurado()"
+                        class="btn btn-labeled btn-info pull-right"
+                        title="Editar o segurado."
+                      >
                         <span class="btn-label">
                           <i class="fa fa-pencil"></i>
-                        </span> Editar
+                        </span>
+                        Editar
                       </button>
                     </div>
                   </div>
@@ -130,9 +173,17 @@
       </div>
 
       <!-- tabela com o grupo de cálculos -->
-      <article class="col-sm-12 col-md-12 col-lg-12" id='boxGrupoCalculos'>
-        <sa-widget [colorbutton]="false" [editbutton]="false" [colorbutton]="false" [editbutton]="false"
-          [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false">
+      <article class="col-sm-12 col-md-12 col-lg-12" id="boxGrupoCalculos">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-table"></i>
@@ -142,8 +193,13 @@
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom hidden-dt">
-              <sa-datatable [options]="grupoCalculosTableOptions" *ngIf="!isUpdating" paginationLength="false"
-                tableClass="table table-condensed table-bordered no-padding" width="100%">
+              <sa-datatable
+                [options]="grupoCalculosTableOptions"
+                *ngIf="!isUpdating"
+                paginationLength="false"
+                tableClass="table table-condensed table-bordered no-padding"
+                width="100%"
+              >
                 <thead>
                   <tr>
                     <th>Espécie</th>
@@ -152,7 +208,9 @@
                     <th>Contribuição Secundária (Ano/Mês/Dia)</th> -->
                     <th>DIB</th>
                     <!-- <th>Data de Criação</th> -->
-                    <th class="not-print" *ngIf="!mostrarCalculoApos19">Comparar</th>
+                    <th class="not-print" *ngIf="!mostrarCalculoApos19">
+                      Comparar
+                    </th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -170,11 +228,18 @@
         </sa-widget>
       </article>
       <div class="container-fluid">
-
         <!-- opções de correção pbc completo -->
         <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="pbcCompleto">
-          <sa-widget [colorbutton]="false" [editbutton]="false" [colorbutton]="false" [editbutton]="false"
-            [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false">
+          <sa-widget
+            [colorbutton]="false"
+            [editbutton]="false"
+            [colorbutton]="false"
+            [editbutton]="false"
+            [togglebutton]="false"
+            [deletebutton]="false"
+            [fullscreenbutton]="false"
+            [custombutton]="false"
+          >
             <header>
               <span class="widget-icon">
                 <i class="fa fa-gear"></i>
@@ -184,23 +249,44 @@
             <!-- widget div-->
             <div>
               <!-- widget content -->
-              <div class="widget-body" style="min-height: auto;">
-                <div class="row" id='opcoes_indices_pbc'>
+              <div class="widget-body" style="min-height: auto">
+                <div class="row" id="opcoes_indices_pbc">
                   <div class="col-md-12">
-                    <div class="btn-group ">
-                      <button type="button" (click)="calcularPBCIndices('inpc1084')" class="btn  btn-default"
+                    <div class="btn-group">
+                      <button
+                        type="button"
+                        (click)="calcularPBCIndices('inpc1084')"
+                        class="btn btn-default"
                         title="ORTN OTN BTN /INPC a partir de 10/1984/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
-                        [ngClass]="{'active btn-primary':( getPbcCompletoIndices() === 'inpc1084')}">
+                        [ngClass]="{
+                          'active btn-primary':
+                            getPbcCompletoIndices() === 'inpc1084'
+                        }"
+                      >
                         INPC desde 10/1984
                       </button>
-                      <button type="button" (click)="calcularPBCIndices('inpc1085')" class="btn btn-default"
+                      <button
+                        type="button"
+                        (click)="calcularPBCIndices('inpc1085')"
+                        class="btn btn-default"
                         title="ORTN OTN BTN /INPC a partir de 10/1985/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
-                        [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1085')}">
+                        [ngClass]="{
+                          'active btn-primary':
+                            getPbcCompletoIndices() === 'inpc1085'
+                        }"
+                      >
                         INPC desde 10/1985
                       </button>
-                      <button type="button" (click)="calcularPBCIndices('inpc1088')" class="btn btn-default"
+                      <button
+                        type="button"
+                        (click)="calcularPBCIndices('inpc1088')"
+                        class="btn btn-default"
                         title="ORTN OTN BTN /INPC a partir de 10/1988/IRSM/URV/ tabela Art. 33 do Decreto 3048/99 a partir de 07/1994"
-                        [ngClass]="{'active btn-primary': (getPbcCompletoIndices() === 'inpc1088')}">
+                        [ngClass]="{
+                          'active btn-primary':
+                            getPbcCompletoIndices() === 'inpc1088'
+                        }"
+                      >
                         INPC desde 10/1988
                       </button>
                     </div>
@@ -213,20 +299,40 @@
       </div>
 
       <div *ngFor="let calculo of calculosList">
+        <app-rgps-resultados-anterior88
+          [calculo]="calculo"
+          [segurado]="segurado"
+          [isBlackHole]="calculo.isBlackHole"
+          *ngIf="calculo.mostrarCalculoAnterior88"
+        ></app-rgps-resultados-anterior88>
 
-        <app-rgps-resultados-anterior88 [calculo]="calculo" [segurado]="segurado" [isBlackHole]="calculo.isBlackHole"
-          *ngIf="calculo.mostrarCalculoAnterior88"></app-rgps-resultados-anterior88>
+        <app-rgps-resultados-entre88e91
+          [calculo]="calculo"
+          [segurado]="segurado"
+          [isBlackHole]="calculo.isBlackHole"
+          [tipoCalculo]="'91_98'"
+          *ngIf="calculo.mostrarCalculo88_91"
+        ></app-rgps-resultados-entre88e91>
 
-        <app-rgps-resultados-entre88e91 [calculo]="calculo" [segurado]="segurado" [isBlackHole]="calculo.isBlackHole"
-          [tipoCalculo]="'91_98'" *ngIf="calculo.mostrarCalculo88_91"></app-rgps-resultados-entre88e91>
+        <app-rgps-resultados-entre91e98
+          [calculo]="calculo"
+          [segurado]="segurado"
+          [tipoCalculo]="'91_98'"
+          *ngIf="calculo.mostrarCalculo91_98"
+        ></app-rgps-resultados-entre91e98>
 
-        <app-rgps-resultados-entre91e98 [calculo]="calculo" [segurado]="segurado" [tipoCalculo]="'91_98'"
-          *ngIf="calculo.mostrarCalculo91_98"></app-rgps-resultados-entre91e98>
+        <app-rgps-resultados-entre91e98
+          [calculo]="calculo"
+          [segurado]="segurado"
+          [tipoCalculo]="'98_99'"
+          *ngIf="calculo.mostrarCalculo98_99"
+        ></app-rgps-resultados-entre91e98>
 
-        <app-rgps-resultados-entre91e98 [calculo]="calculo" [segurado]="segurado" [tipoCalculo]="'98_99'"
-          *ngIf="calculo.mostrarCalculo98_99"></app-rgps-resultados-entre91e98>
-
-        <app-rgps-resultados-apos99 [calculo]="calculo" [segurado]="segurado" *ngIf="calculo.mostrarCalculoApos99">
+        <app-rgps-resultados-apos99
+          [calculo]="calculo"
+          [segurado]="segurado"
+          *ngIf="calculo.mostrarCalculoApos99"
+        >
         </app-rgps-resultados-apos99>
 
         <!-- <app-rgps-resultados-apos-pec062019 
@@ -234,16 +340,21 @@
         [calculo]="calculo"
         *ngIf="calculo.mostrarCalculoApos19"></app-rgps-resultados-apos-pec062019>  -->
 
-
-        <app-rgps-resultados-apos-pec103 [segurado]="segurado" [calculo]="calculo" *ngIf="calculo.mostrarCalculoApos19">
+        <app-rgps-resultados-apos-pec103
+          [segurado]="segurado"
+          [calculo]="calculo"
+          *ngIf="calculo.mostrarCalculoApos19"
+          [isPlanejamento]="isPlanejamento"
+          [planejamento]="planejamento"
+        >
         </app-rgps-resultados-apos-pec103>
       </div>
 
       <!-- Planejamento -->
       <app-rgps-planejamento-index
-      *ngIf="!isUpdating"
-      [calculo]="calculosList[0]" 
-      [segurado]="segurado"
+        *ngIf="!isUpdating"
+        [calculo]="calculosList[0]"
+        [segurado]="segurado"
       ></app-rgps-planejamento-index>
 
       <!-- Planejamento Comparativo não deletar-->
@@ -293,9 +404,7 @@
     </div>
 
     <!-- end row -->
-
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>
