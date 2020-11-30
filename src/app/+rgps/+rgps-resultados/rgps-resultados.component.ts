@@ -19,7 +19,6 @@ import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
-
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';

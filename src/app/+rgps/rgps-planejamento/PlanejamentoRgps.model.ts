@@ -11,6 +11,7 @@ export class PlanejamentoRgps extends Model {
     valor_beneficio: '',
     aliquota: '',
     novo_rmi: '',
+    nova_soma_contribuicoes: '',
     resultado_rmi_original: '',
     resultado_rmi_novo: '',
   };
@@ -21,6 +22,7 @@ export class PlanejamentoRgps extends Model {
   public valor_beneficio;
   public aliquota;
   public novo_rmi;
+  public nova_soma_contribuicoes;
   public resultado_rmi_original;
   public resultado_rmi_novo;
 //   public actions = `

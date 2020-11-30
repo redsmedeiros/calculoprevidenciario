@@ -1,11 +1,11 @@
-import { ControllerService } from "../../contracts/Controller.service";
+import { ControllerService } from '../../contracts/Controller.service';
 
 import { PlanejamentoRgps } from "./PlanejamentoRgps.model";
 
 export class RgpsPlanejamentoService extends ControllerService {
   public model = PlanejamentoRgps;
-  public name = "planejamentoRgps";
-  public list: PlanejamentoRgps[] = this.store.data["planejamentoRgps"];
+  public name = 'planejamentoRgps';
+  public list: PlanejamentoRgps[] = this.store.data['planejamentoRgps'];
 
   public getPlanejamentoByCalculoId(id_calculo) {
     return new Promise((resolve, reject) => {

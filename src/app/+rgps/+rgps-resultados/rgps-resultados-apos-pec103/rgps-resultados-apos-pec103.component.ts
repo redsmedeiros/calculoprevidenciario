@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ExpectativaVida } from '../ExpectativaVida.model';
@@ -17,6 +18,8 @@ import { RegrasAcesso } from './regrasAcesso/regras-acesso';
 import { CalcularListaContribuicoes } from './calculoMedia/calcular-lista-contribuicoes';
 import { conclusoesFinais } from './conclusoes/conclusoes-finais';
 
+import { RgpsPlanejamentoService } from './../../rgps-planejamento/rgps-planejamento.service';
+import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 
 
 @Component({
@@ -78,16 +81,17 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   constructor(
 
-    private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
-    private ReajusteAutomatico: ReajusteAutomaticoService,
     protected ValoresContribuidos: ValorContribuidoService,
-    private CarenciaProgressiva: CarenciaProgressivaService,
-    private CalculoRgpsService: CalculoRgpsService,
-    private Moeda: MoedaService,
+    protected Moeda: MoedaService,
+    protected ExpectativaVida: ExpectativaVidaService,
+    protected ReajusteAutomatico: ReajusteAutomaticoService,
+    protected CarenciaProgressiva: CarenciaProgressivaService,
+    protected CalculoRgpsService: CalculoRgpsService,
+    protected RgpsPlanejamentoService: RgpsPlanejamentoService,
     private regrasAcesso: RegrasAcesso,
     private calcularListaContribuicoes: CalcularListaContribuicoes,
-    private conclusoesFinais: conclusoesFinais
+    private conclusoesFinais: conclusoesFinais,
   ) {
     super(null, route, null, null, null, null);
   }
@@ -131,7 +135,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         this.listaValoresContribuidos = valorescontribuidos;
 
-        if (this.isPlanejamento) {
+        if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
           this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
         }
 
@@ -313,7 +317,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     }
 
-    //  console.log(this.listaConclusaoAcesso);
+    console.log(this.listaConclusaoAcesso);
 
     this.isUpdating = false;
 
@@ -451,26 +455,41 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo.valor_beneficio = this.melhorValorRMI;
         this.CalculoRgpsService.update(this.calculo);
 
-      }, 2000);
+      }, 1500);
 
-    } else if(this.isPlanejamento) {
+    } else if (this.isPlanejamento) {
 
       this.setMelhorValorRMI();
 
       setTimeout(() => {
-
-        // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-        // this.calculo.soma_contribuicao = this.melhorSoma;
-        // this.calculo.valor_beneficio = this.melhorValorRMI;
-       // this.CalculoRgpsService.update(this.calculo);
-
-      }, 2000);
-
+          this.updateResultPlanejamento();
+      }, 1500);
 
     }
 
   }
 
+  private updateResultPlanejamento() {
+    console.log(this.planejamento);
+    console.log(this.listaConclusaoAcesso);
+
+    // console.log(JSON.stringify(this.listaConclusaoAcesso))
+    // console.log(JSON.stringify(this.listaConclusaoAcesso).length)
+
+    this.planejamento.novo_rmi = Math.round(this.melhorValorRMI * 100) / 100;
+    this.planejamento.nova_soma_contribuicoes = Math.round(this.melhorSoma * 100) / 100;
+    //this.planejamento.resultado_rmi_novo =  JSON.stringify(this.listaConclusaoAcesso);
+    //this.planejamento.resultado_rmi_original = Math.round(this.calculo.valor_beneficio * 100) / 100;
+
+    this.RgpsPlanejamentoService
+      .update(this.planejamento)
+      .then(model => {
+        console.log(model);
+      })
+      .catch((errors) => {
+          console.log(errors);
+      });
+  }
 
 
   getIdadeFracionada() {

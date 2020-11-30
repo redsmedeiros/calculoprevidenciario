@@ -5,7 +5,7 @@
         <span class="widget-icon">
           <i class="fa fa-list"></i>
         </span>
-        <h2>Lista de Benefícios do Segurado para Comparativo</h2>
+        <h2>Lista de cálculos de RMI para comparação </h2>
       </header>
 
       <accordion class="smart-accordion-red panel-group" [closeOthers]="true" data-toggle="modal" data-target="#planejamento">
@@ -30,7 +30,7 @@
                 <i *ngIf="!isUpdating" class="pull-right fa fa-lg p-1" [ngClass]="{
                     'fa-angle-down': grupoPlanejamento?.isOpen,
                     'fa-angle-up': !grupoPlanejamento?.isOpen
-                    }"></i>&nbsp;&nbsp;Planejamento
+                    }"></i>&nbsp;&nbsp;Exibir Lista de Cáculos para Comparar com atual
               </button>
             </a>
           </h4>
@@ -73,7 +73,7 @@
                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-warning pull-right">
                        <span class="btn-label">
                          <i class="fa fa-calculator"></i>
-                       </span> Comparar
+                       </span> Comparar o calculo Atual com o cálculo selecionado.
                    </button>
                  </div>
                </div>
