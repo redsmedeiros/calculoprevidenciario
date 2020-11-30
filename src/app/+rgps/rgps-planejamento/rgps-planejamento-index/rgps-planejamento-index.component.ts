@@ -223,9 +223,9 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
     this.isEdit = true;
     this.model = this.planejamentoList.find(row => row.id === id);
 
-    this.steps.find(it => it.key == 'step1').checked = true;
-    this.steps.find(it => it.key == 'step2').checked = true;
-    this.steps.find(it => it.key == 'step4').checked = true;
+    this.steps.find(it => it.key === 'step1').checked = true;
+    this.steps.find(it => it.key === 'step2').checked = true;
+    this.steps.find(it => it.key === 'step4').checked = true;
     this.activeStep = this.steps[2];
     this.model.data_futura = this.formatReceivedDate(this.model.data_futura);
     console.log(this.model);
@@ -273,6 +273,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   nextStep() {
     this.activeStep.submitted = true;
+    
     if (!this.activeStep.valid) {
       return;
     }
@@ -294,9 +295,8 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   onWizardComplete(data) {
     console.log('Dados completo', data);
-
+    this.validate();
     this.rgpsPlanejamentoService.save(data).then((model) => {
-      this.validateInputs();
       this.hideChildModal();
       this.getInfoCalculos();
       swal({
@@ -389,7 +389,6 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
     this.errors.clear();
 
-    let dataHoje = moment();
     const dataFutura = moment(this.model.data_futura, 'DD/MM/YYYY');
 
     if (this.model.data_futura === undefined || this.model.data_futura === '') {
@@ -401,42 +400,19 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
         timer: 1000
       });
     }
-    if (dataFutura < dataHoje) {
+    if (dataFutura < this.dataHoje) {
       this.model.data_futura = '';
       swal({
         position: 'top-end',
         type: 'error',
         title: 'Data não pode ser menor que ' + this.formatReceivedDate(moment()) + '.',
         showConfirmButton: false,
-        timer: 2000
+        timer: 3000
       });
+      this.activeStep = this.steps[2];
     }
+    this.errors.clear();
   }
-
-  validateInputs() {
-
-
-    let valid = true;
-
-    if (this.isEmptyInput(this.model.data_futura)) {
-      this.errors.add({ 'dataFutura': ['Data do planejamento necessária'] });
-      valid = false;
-    } else if (!moment(this.model.data_futura, 'MM/YYYY').isValid()) {
-      this.errors.add({ 'dataFutura': ['Insira uma data válida'] });
-      valid = false;
-    } else if (moment(this.model.data_futura, 'DD/MM/YYYY') < this.dataHoje) {
-      this.errors.add({ 'dataFutura': ['A data deve ser superior a data do dia.'] });
-      valid = false;
-    }
-  }
-
-  isEmptyInput(input) {
-    if (input === '' || input === undefined || input === null) {
-      return true;
-    }
-    return false;
-  }
-
 
 }
 

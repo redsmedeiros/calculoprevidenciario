@@ -195,8 +195,8 @@
                                 <div class="col-sm-4">
                                   <div class="form-group" [ngClass]="{
                                     'has-success':dataFutura.valid && activeStep.submitted,
-                                    'has-error':!dataFutura.valid && activeStep.submitted,
-                                    'has-error': errors.has('dataFutura')
+                                    'has-error':!dataFutura.valid && activeStep.submitted
+                                    
                                     }"
                                     >
                                     <div class="input-group">
@@ -210,7 +210,7 @@
                                     </div>
                                     <span [class.hidden]="dataFutura.valid || !activeStep.submitted" 
                                     class="help-block"
-                                    *ngIf="errors.has('dataFutura')" class="text-danger">{{ errors.get('dataFutura') }}>
+                                    >
                                       Favor entrar com uma data válida.
                                     </span>
                                   </div>
