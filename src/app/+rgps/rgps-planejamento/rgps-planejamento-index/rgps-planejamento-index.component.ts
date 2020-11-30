@@ -20,10 +20,9 @@ import * as moment from 'moment';
 export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
   @Output() onSubmit = new EventEmitter();
   @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
-  //@Input() errors: ErrorService;
   @Input() segurado;
   @Input() calculo;
-  
+
 
   public form = { ...PlanejamentoRgps.form };
   public isEdit = false;
@@ -156,7 +155,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   verificaPlano() {
     const basico = window.localStorage.getItem('product');
-
+   // console.log(this.userCheck);
     if (basico === '9dwtctrm') {
       this.userCheck = false;
       swal(
@@ -177,9 +176,15 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   novoPlanejamento() {
     this.verificaPlano();
-    this.isEdit = false;
-    this.resetForm();
-    this.showChildModal();
+    if (this.userCheck === false) {
+      this.hideChildModal();
+    } else {
+      this.userCheck = true;
+      this.isEdit = false;
+      this.resetForm();
+      this.showChildModal();
+    }
+
   }
 
 
@@ -273,7 +278,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   nextStep() {
     this.activeStep.submitted = true;
-    
+
     if (!this.activeStep.valid) {
       return;
     }
@@ -313,7 +318,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
 
 
-  private planejar(id){
+  private planejar(id) {
 
     const objPlan = this.planejamentoList.find(row => row.id === id);
     const objExport = JSON.stringify(objPlan);
@@ -340,9 +345,9 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
         )
       ) {
         // change detected
-        this.steps.find(it => it.key == 'step1').valid = this.activeStep.checked = true;
-        this.steps.find(it => it.key == 'step2').valid = this.activeStep.checked = true;
-        this.steps.find((it) => it.key == 'step3').valid = !!(
+        this.steps.find(it => it.key === 'step1').valid = this.activeStep.checked = true;
+        this.steps.find(it => it.key === 'step2').valid = this.activeStep.checked = true;
+        this.steps.find((it) => it.key === 'step3').valid = !!(
           this.model.data_futura &&
           this.model.valor_beneficio &&
           this.model.aliquota
@@ -405,7 +410,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
       swal({
         position: 'top-end',
         type: 'error',
-        title: 'Data não pode ser menor que ' + this.formatReceivedDate(moment()) + '.',
+        title: 'Data não pode ser inferior que ' + this.formatReceivedDate(moment()) + '.',
         showConfirmButton: false,
         timer: 3000
       });
