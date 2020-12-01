@@ -85,7 +85,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5478 : 15;
     const regra5 = this.getparametrosRegra5(ano, sexo);
 
-    // console.log(regra5);
+     console.log(regra5);
     // console.log(contribuicao_min);
 
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
@@ -232,6 +232,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     do {
 
+      count++;
+      idade += 1;
+      tempoContribuicao += 1;
 
       fimContador = this.requisitosRegra5(
         auxiliarDate.year(),
@@ -245,9 +248,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         + '|' + 'idade -' + idade + '|'
         + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
-      count++;
-      idade += 1;
-      tempoContribuicao += 1;
 
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
@@ -266,8 +266,12 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');
     // }
 
+    console.log(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date())
+    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15
+        && (this.seguradoTransicao.dataNascimento.month() === auxiliarDate.month()
+        && (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 2) ))
+    {
 
-    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
       auxiliarDate = moment({
         year: auxiliarDate.year(),
         month: this.seguradoTransicao.dataNascimento.month(),
