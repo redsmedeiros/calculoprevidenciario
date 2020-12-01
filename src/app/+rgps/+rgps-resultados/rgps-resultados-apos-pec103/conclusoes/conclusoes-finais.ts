@@ -72,8 +72,8 @@ export class conclusoesFinais {
      */
     private conclusaoPossibilidadeNaoAtenteRequisitos(elementRegraEspecie) {
 
+        moment.locale('pt-br');
         const requisitosNaoAtendidos = [];
-
 
         if (elementRegraEspecie.requisitos.tempo > 0 && elementRegraEspecie.tempoTotalAposEC103 < elementRegraEspecie.requisitos.tempo) {
 
@@ -108,9 +108,16 @@ export class conclusoesFinais {
 
         if (elementRegraEspecie.requisitos.pontos > 0 && elementRegraEspecie.pontos < elementRegraEspecie.requisitos.pontos) {
 
-            const diferenca = Math.floor(elementRegraEspecie.requisitos.pontos - elementRegraEspecie.pontos);
-            const diferencaString = `Faltam ${diferenca} pontos.`;
+            const diferenca = elementRegraEspecie.requisitos.pontos - elementRegraEspecie.pontos;
 
+            let inicioTexo = 'Faltam';
+            let fimTexo =  'pontos';
+            if (diferenca <= 1 ) {
+                 inicioTexo = 'Falta';
+                 fimTexo =   'ponto';
+            }
+
+            const diferencaString = `${inicioTexo} ${diferenca.toFixed(4)} ${fimTexo}. `;
             requisitosNaoAtendidos.push({ tipo: 'pontos', value: diferenca, valueString: diferencaString });
         }
 

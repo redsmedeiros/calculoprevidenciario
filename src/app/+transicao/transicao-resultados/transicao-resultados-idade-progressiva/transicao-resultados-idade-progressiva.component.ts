@@ -234,26 +234,26 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     //     this.seguradoTransicao.idadeFracionada)
     // );
 
-    if ( // verificacao &&
-       (this.seguradoTransicao.dataNascimento.month() === auxiliarDate.month() &&
-       (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 2) )) {
-      auxiliarDate = moment({
-        year: auxiliarDate.year(),
-        month: this.seguradoTransicao.dataNascimento.month(),
-        day: this.seguradoTransicao.dataNascimento.date()
-      });
-    }
+  //   if ( // verificacao &&
+  //      (this.seguradoTransicao.dataNascimento.month() === auxiliarDate.month() &&
+  //      (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 2) )) {
+  //     auxiliarDate = moment({
+  //       year: auxiliarDate.year(),
+  //       month: this.seguradoTransicao.dataNascimento.month(),
+  //       day: this.seguradoTransicao.dataNascimento.date()
+  //     });
+  //   }
 
-    if ( // verificacao &&
-      ([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) &&
-      (Math.abs(this.seguradoTransicao.dataNascimento.month() - auxiliarDate.month()) === 6)  &&
-      (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 1) )) {
-     auxiliarDate = moment({
-       year: auxiliarDate.year(),
-       month: this.seguradoTransicao.dataNascimento.month(),
-       day: this.seguradoTransicao.dataNascimento.date()
-     });
-   }
+  //   if ( // verificacao &&
+  //     ([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) &&
+  //     (Math.abs(this.seguradoTransicao.dataNascimento.month() - auxiliarDate.month()) === 6)  &&
+  //     (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 1) )) {
+  //    auxiliarDate = moment({
+  //      year: auxiliarDate.year(),
+  //      month: this.seguradoTransicao.dataNascimento.month(),
+  //      day: this.seguradoTransicao.dataNascimento.date()
+  //    });
+  //  }
 
 
     idadeMoment = this.calcularIdade(auxiliarDate);
