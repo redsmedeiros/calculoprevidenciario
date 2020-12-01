@@ -127,15 +127,16 @@ export class RgpsPlanejamentoSeguradosListComponent implements OnInit {
     this.seguradoSelecionado = {};
     this.seguradoSelecionado = this.list.find(row => row.id === Number(idSelecionado));
 
-    console.log(idSelecionado);
-    console.log(this.seguradoSelecionado);
+    // console.log(idSelecionado);
+    // console.log(this.seguradoSelecionado);
 
     if (this.isExits(this.seguradoSelecionado)) {
+
       this.seguradoSelecionadoEvent.emit(this.seguradoSelecionado);
+  
     } else {
 
     }
-
 
   }
 
@@ -159,13 +160,13 @@ export class RgpsPlanejamentoSeguradosListComponent implements OnInit {
 
   public getBtnSelecionarSegurado(id) {
 
-    return `<button  type="button" class="btn btn-xs btn-info select-btn">
-              Selecionar <i class="fa fa-arrow-circle-right"></i>
-          </button>`;
+    // return `<button  type="button" class="btn btn-xs btn-info select-btn">
+    //           Selecionar <i class="fa fa-arrow-circle-right"></i>
+    //       </button>`;
 
-    // return `<div class="checkbox checkboxSegurado"><label>
-    //              <input type="checkbox" id='${id}-checkbox' class="checkbox {{styleTheme}}" value="${id}"><span> </span></label>
-    //       </div>`;
+    return `<div class="checkbox checkboxSegurado"><label>
+                 <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox {{styleTheme}}" value="${id}"><span> </span></label>
+          </div>`;
   }
 
   private isExits(value) {

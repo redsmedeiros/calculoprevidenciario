@@ -7,18 +7,147 @@
         </span>
         <h2>Planejamento de Benefícios do Segurado</h2>
 
-        <button class="btn btn-labeled btn-warning pull-right" type="button"
+        <!-- <button class="btn btn-labeled btn-warning pull-right" type="button"
           title="Planejamento Previdenciário." (click)="novoPlanejamento()">
 
           <span class="btn-label">
             <i class="fa fa-plus"></i>
           </span>
           Criar novo Planejamento
-        </button>
+        </button> -->
 
       </header>
       <!-- widget div-->
 
+
+      
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group" [ngClass]="{
+                'has-success':dataFutura.valid && activeStep.submitted,
+                'has-error':!dataFutura.valid && activeStep.submitted,
+                'has-error': errors.has('dataFutura')
+                }"
+                >
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
+                  <input class="form-control input-lg" 
+                  [textMask]="{mask: dateMaskdiB}"
+                    placeholder="DIB Futura" 
+                    type="text" name="dataFutura" 
+                    #dataFutura="ngModel" 
+                    required [(ngModel)]="model.data_futura" >
+                </div>
+                <span [class.hidden]="dataFutura.valid || !activeStep.submitted" 
+                class="help-block"
+                *ngIf="errors.has('dataFutura')" class="text-danger">{{ errors.get('dataFutura') }}>
+                  Favor entrar com uma data válida.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group" [ngClass]="{
+                'has-success':valorBeneficio.valid && activeStep.submitted,
+                'has-error':!valorBeneficio.valid && activeStep.submitted
+                }">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-money fa-lg fa-fw"></i></span>
+                  <input class="form-control input-lg" placeholder="Valor Benefício" type="text"
+                    name="valorBeneficio" #valorBeneficio="ngModel" currencyMask maxlength="20"
+                    required [(ngModel)]="model.valor_beneficio">
+                </div>
+                <span [class.hidden]="valorBeneficio.valid || !activeStep.submitted"
+                  class="help-block">
+                  Favor entrar com dados válidos.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="input-group" [ngClass]="{
+                'has-success':aliquota.valid && activeStep.submitted,
+                'has-error':!aliquota.valid && activeStep.submitted
+                }">
+                  <span class="input-group-addon"><i
+                      class="fa fa-external-link-square fa-lg fa-fw"></i></span>
+                  <select class="form-control input-lg" required [(ngModel)]="model.aliquota"
+                    #aliquota="ngModel" name="aliquota">
+                    <option value="" selected="selected">Selecione Aliquota</option>
+                    <option [value]="5">Fixo - 5%</option>
+                    <option [value]="11">Fixo - 11%</option>
+                    <option [value]="20">Fixo - 20%</option>
+                    <option [value]="99">Cumulativo - 7,5% a 14%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <button type="button" class="btn btn-primary btn-block" (click)="salvarPlanejamento()" >Adicionar</button>
+            </div>
+            
+
+          </div>
+        </div>
+      </div>
+      <!-- form fim -->
+      <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatePlan">
+          <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
+            <div>
+              <div class="widget-body no-padding widget-body-custom hidden-dt">
+                <table class="table table-striped table-bordered table-hover table-responsive table-condensed"
+                  *ngIf="!isUpdatePlan && planejamentoList.length > 0">
+                  <thead>
+                    <tr>
+                      <th>Data Futura</th>
+                      <th>Valor Benefício</th>
+                      <th>Alíquota</th>
+                      <th class="text-center" width="75px">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let planRow of planejamentoList">
+                      <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
+                      <td class="text-center">
+                        {{ formatMoeda(planRow.valor_beneficio) }}
+                      </td>
+                      <td class="text-center">{{ planRow.aliquota }} %</td>
+                      <td class="text-center" width="120px">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-xs btn-primary" id="planejar{{ planRow.id }}"
+                          (click)="planejar(planRow.id)"  title="Planejar">
+                          <i class="fa fa-share-square fa-1-7x"></i>
+                        </button>
+                          <button type="button" class="btn btn-xs btn-warning" id="editar{{ planRow.id }}"
+                            (click)="getupdatePlananejamentoList(planRow.id)" title="Editar">
+                            <i class="fa fa-edit fa-1-7x"></i>
+                          </button>
+                          <button type="button" class="btn btn-xs btn-danger" id="deletar{{ planRow.id }}"
+                            (click)="deletarPlananejamentoList(planRow.id)" title="Excluir">
+                            <i class="fa fa-times fa-1-7x"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </sa-widget>
+        </article>
+      </div>
+    <!-- fim da lista -->
+
+   
+
+
+
+      
+<!-- 
       <accordion class="smart-accordion-red panel-group" [closeOthers]="true" data-toggle="modal"
         data-target="#planejamento">
         <accordion-group [isOpen]="false" #grupoPlanejamento>
@@ -43,53 +172,9 @@
 
           <div class="no-padding no-margin">
             <div id="panejamentoList0001" class="boxCalculo row">
-              <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatePlan">
-                <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
-                  <div>
-                    <div class="widget-body no-padding widget-body-custom hidden-dt">
-                      <table class="table table-striped table-bordered table-hover table-responsive table-condensed"
-                        *ngIf="!isUpdatePlan && planejamentoList.length > 0">
-                        <thead>
-                          <tr>
-                            <th>Data Futura</th>
-                            <th>Valor Benefício</th>
-                            <th>Alíquota</th>
-                            <th class="text-center" width="75px">Ações</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let planRow of planejamentoList">
-                            <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
-                            <td class="text-center">
-                              {{ formatMoeda(planRow.valor_beneficio) }}
-                            </td>
-                            <td class="text-center">{{ planRow.aliquota }} %</td>
-                            <td class="text-center" width="120px">
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-xs btn-primary" id="planejar{{ planRow.id }}"
-                                (click)="planejar(planRow.id)"  title="Planejar">
-                                <i class="fa fa-share-square fa-1-7x"></i>
-                              </button>
-                                <button type="button" class="btn btn-xs btn-warning" id="editar{{ planRow.id }}"
-                                  (click)="getupdatePlananejamentoList(planRow.id)" title="Editar">
-                                  <i class="fa fa-edit fa-1-7x"></i>
-                                </button>
-                                <button type="button" class="btn btn-xs btn-danger" id="deletar{{ planRow.id }}"
-                                  (click)="deletarPlananejamentoList(planRow.id)" title="Excluir">
-                                  <i class="fa fa-times fa-1-7x"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+              
 
-                    </div>
-                  </div>
-                </sa-widget>
-              </article>
-
-            </div> <!-- final RMI-->
+            </div> 
             <div class="row">
               <div class="col-md-12">
               </div>
@@ -99,7 +184,7 @@
 
 
         </accordion-group>
-      </accordion>
+      </accordion> -->
 
 
 
@@ -108,7 +193,7 @@
 </div>
 
 
-<div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento">
+<!-- <div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body p-0 m-0">
@@ -127,10 +212,8 @@
               </header>
 
               <sa-widget [editbutton]="false" [deletebutton]="false" color="darken">
-                <!-- widget div-->
                 <div>
 
-                  <!-- widget content -->
                   <div class="widget-body">
 
                     <div class="row">
@@ -298,10 +381,8 @@
                     </div>
 
                   </div>
-                  <!-- end widget content -->
 
                 </div>
-                <!-- end widget div -->
 
               </sa-widget>
 
@@ -314,4 +395,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

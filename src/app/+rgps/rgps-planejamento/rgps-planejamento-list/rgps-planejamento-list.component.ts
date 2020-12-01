@@ -18,7 +18,7 @@ import * as moment from 'moment';
   ],
 })
 export class RgpsPlanejamentoListComponent implements OnInit {
-  @Output() onSubmit = new EventEmitter();
+ //  @Output() onSubmit = new EventEmitter();
   @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
   //@Input() errors: ErrorService;
   @Input() segurado;
@@ -295,9 +295,27 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   onWizardComplete(data) {
     console.log('Dados completo', data);
 
-    this.rgpsPlanejamentoService.save(data).then((model) => {
+    // this.rgpsPlanejamentoService.save(data).then((model) => {
+    //   this.validateInputs();
+    //   this.hideChildModal();
+    //   this.getInfoCalculos();
+    //   swal({
+    //     position: 'top-end',
+    //     type: 'success',
+    //     title: 'Dados salvo com sucesso.',
+    //     showConfirmButton: false,
+    //     timer: 1000
+    //   });
+    //   this.resetForm();
+    // });
+  }
+
+
+  salvarPlanejamento(){
+
+    this.rgpsPlanejamentoService.save(this.model).then((model) => {
       this.validateInputs();
-      this.hideChildModal();
+    //  this.hideChildModal();
       this.getInfoCalculos();
       swal({
         position: 'top-end',
@@ -309,7 +327,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       this.resetForm();
     });
   }
-
 
 
 

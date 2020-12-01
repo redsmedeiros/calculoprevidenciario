@@ -26,6 +26,8 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
   @Input() seguradoSelecionado;
   @Input() isSeguradoSelecionado;
 
+  @Output() calculoSelecionadoEvent = new EventEmitter();
+
 
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -171,11 +173,13 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
 
   private getRow(dataRow) {
 
-    console.log(dataRow);
+    //console.log(dataRow);
 
     if (this.isExits(dataRow)) {
       this.calculosSelecionado = dataRow;
       this.isCalculosSelecionado = true;
+
+      this.calculoSelecionadoEvent.emit(this.calculosSelecionado);
       this.getPlanejamentosCalculo(this.calculosSelecionado.id);
     }
   }
@@ -183,9 +187,13 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
 
   public getBtnSelecionarCalculo(id) {
 
-    return `<button  type="button" class="btn btn-xs btn-info select-btn">
-              Selecionar <i class="fa fa-arrow-circle-right"></i>
-          </button>`;
+    // return `<button  type="button" class="btn btn-xs btn-info select-btn">
+    //           Selecionar <i class="fa fa-arrow-circle-right"></i>
+    //       </button>`;
+
+    return `<div class="checkbox checkboxSegurado"><label>
+          <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox {{styleTheme}}" value="${id}"><span> </span></label>
+   </div>`;
   }
 
 

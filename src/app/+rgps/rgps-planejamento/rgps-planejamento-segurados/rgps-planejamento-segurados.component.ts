@@ -3,6 +3,7 @@ import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 
+import { DomSanitizer} from '@angular/platform-browser';
 @Component({
   selector: 'app-rgps-planejamento-segurados',
   templateUrl: './rgps-planejamento-segurados.component.html',
@@ -11,34 +12,48 @@ import swal from 'sweetalert2';
 export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   private seguradoSelecionado;
-  private isSeguradoSelecionado;
+  private isSeguradoSelecionado = false;
+
+
+  private calculoSelecionado;
+  private isCalculoSelecionado;
+  private isUpdatingCalculo = true;
+
+  private planejamentoSelecionado;
+  private isPlanejamentoSelecionado;
+  private isUpdatingPlan = true;
+
+  private isPaginaInicial = true;
+
+
+  private url;
 
   public steps = [
     {
       key: 'step1',
-      title: 'Bem vindo ao Planejamento Previdenciário',
-      valid: true,
-      checked: false,
-      submitted: false,
-    },
-    {
-      key: 'step2',
       title: 'Selecione o Segurado',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
-      key: 'step3',
-      title: 'Selecione o Cálculo do segurado',
+      key: 'step2',
+      title: 'Selecione o Cálculo',
       valid: false,
+      checked: false,
+      submitted: false,
+    },
+    {
+      key: 'step3',
+      title: 'Benefícios Futuros',
+      valid: true,
       checked: false,
       submitted: false,
     },
     {
       key: 'step4',
       title: 'Executar o cálculo e planejamento',
-      valid: false,
+      valid: true,
       checked: false,
       submitted: false,
     },
@@ -51,11 +66,22 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
 
+    this.isSeguradoSelecionado = false;
+    this.isPaginaInicial = true;
+
   }
+
+
+
+  setIsPaginaInicial() {
+    this.isPaginaInicial = false;
+  }
+
 
 
 
@@ -124,22 +150,76 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   public setSeguradoSelecionado(dataSegurado) {
 
     this.seguradoSelecionado = dataSegurado;
+
+
+
     const stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
-    this.setStepValidate('step2', stepStatus);
+
+    console.log(stepStatus);
+
+    this.setStepValidate('step1', stepStatus);
     this.isSeguradoSelecionado = stepStatus;
 
   }
 
 
+  public setCalculoSelecionado(dataCalculo) {
+
+    console.log('teste');
+    console.log(dataCalculo);
+
+    this.calculoSelecionado = dataCalculo;
+
+    const stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+
+    console.log(stepStatus);
+
+    this.setStepValidate('step2', stepStatus);
+    this.isCalculoSelecionado = true;
+    this.isUpdatingPlan = false;
+
+    this.getURL();
+  }
+
+
+  public setPlanejamentoSelecionado(dataplanejamento) {
+
+    this.planejamentoSelecionado = dataplanejamento;
+
+    const stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
+
+    console.log(stepStatus);
+
+    this.setStepValidate('step3', stepStatus);
+
+    
+
+  }
+
+  getURL(){
+
+    let value = `http://localhost:4200/#/rgps/rgps-resultados/${this.seguradoSelecionado.id}/${this.calculoSelecionado.id}/plan/4`;
+
+    console.log(value);
+    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(value);
+
+
+   
+    console.log(this.url);
+
+    return this.url;
+  }
+
+
   redirecionarSeguradoRMI() {
 
-      swal({
-        position: 'top-end',
-        type: 'success',
-        title: 'Crie o segurado e execute um cálculo de RMI em que o segurado atenda os requisitos.',
-        showConfirmButton: false,
-        timer: 3000
-      });
+    swal({
+      position: 'top-end',
+      type: 'success',
+      title: 'Crie o segurado e execute um cálculo de RMI em que o segurado atenda os requisitos.',
+      showConfirmButton: false,
+      timer: 3000
+    });
 
 
     this.router.navigate(['/rgps/rgps-segurados']);
