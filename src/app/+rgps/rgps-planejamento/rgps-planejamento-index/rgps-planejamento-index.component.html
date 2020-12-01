@@ -41,7 +41,7 @@
             </a>
           </h4>
 
-          <div class="no-padding no-margin">
+          <div class="no-padding no-margin" *ngIf="userCheck">
             <div id="panejamentoList0001" class="boxCalculo row">
               <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatePlan">
                 <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
@@ -108,7 +108,7 @@
 </div>
 
 
-<div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento">
+<div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body p-0 m-0">
@@ -195,10 +195,8 @@
                                 <div class="col-sm-4">
                                   <div class="form-group" [ngClass]="{
                                     'has-success':dataFutura.valid && activeStep.submitted,
-                                    'has-error':!dataFutura.valid && activeStep.submitted,
-                                    'has-error': errors.has('dataFutura')
-                                    }"
-                                    >
+                                    'has-error':!dataFutura.valid && activeStep.submitted                                    
+                                    }">
                                     <div class="input-group">
                                       <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
                                       <input class="form-control input-lg" 
@@ -210,7 +208,7 @@
                                     </div>
                                     <span [class.hidden]="dataFutura.valid || !activeStep.submitted" 
                                     class="help-block"
-                                    *ngIf="errors.has('dataFutura')" class="text-danger">{{ errors.get('dataFutura') }}>
+                                    >
                                       Favor entrar com uma data válida.
                                     </span>
                                   </div>
