@@ -75,59 +75,6 @@ export class TransicaoFormComponent implements OnInit {
     }
 
 
-    // this.nome = 'Segurado teste teste ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // // this.dataNascimento = '09/12/1959';
-    // this.dataNascimento = '01/01/1960';
-    // this.dataFiliacao = '01/01/1991';
-    // this.sexo = 'f';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '16';
-    // this.contribuicaoMesesAteEC103 = '3';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '16';
-    // this.contribuicaoMeses = '3';
-    // this.contribuicaoDias = '0';
-
-
-
-    // this.nome = 'Segurado teste teste ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '10/07/1957';
-    // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '35';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '36';
-    // this.contribuicaoMeses = '6';
-    // this.contribuicaoDias = '3';
-
-    
-    // this.nome = 'IVONETE - 09-11-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '01/10/1959';
-    // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'f';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '11';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '18';
-
-    // this.contribuicaoAnos = '11';
-    // this.contribuicaoMeses = '0';
-    // this.contribuicaoDias = '18';
-
-
     // this.nome = 'rita - 01-12-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
@@ -144,6 +91,23 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoMeses = '11';
     // this.contribuicaoDias = '5';
 
+
+    // this.nome = 'antonio - 01-12-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '19/03/1960';
+    // this.dataFiliacao = '01/01/1980';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '33';
+    // this.contribuicaoMesesAteEC103 = '05';
+    // this.contribuicaoDiasAteEC103 = '14';
+
+    // this.contribuicaoAnos = '34';
+    // this.contribuicaoMeses = '06';
+    // this.contribuicaoDias = '1';
+
   }
 
   // ngAfterContentInit() {
@@ -157,12 +121,11 @@ export class TransicaoFormComponent implements OnInit {
   validate() {
     this.errors.clear();
 
-
     const datanascimentoMoment = moment(this.dataNascimento, 'DD/MM/YYYY');
     const dataFiliacaoMoment = moment(this.dataFiliacao, 'DD/MM/YYYY');
 
     if (this.nome == undefined || this.nome == '') {
-      this.errors.add({ 'nome': ["O Nome é obrigatório."] });
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
     }
 
     if (this.dataNascimento === undefined || this.dataNascimento === '') {
