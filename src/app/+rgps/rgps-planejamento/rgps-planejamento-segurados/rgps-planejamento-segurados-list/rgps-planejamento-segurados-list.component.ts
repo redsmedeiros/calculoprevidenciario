@@ -25,7 +25,7 @@ export class RgpsPlanejamentoSeguradosListComponent implements OnInit {
   public styleTheme = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
-  public isUpdatingListSeg = false;
+  public isUpdatingListSeg = true;
   public userId;
   public list = this.Segurado.list;
   public seguradoSelecionado;
@@ -164,9 +164,20 @@ export class RgpsPlanejamentoSeguradosListComponent implements OnInit {
     //           Selecionar <i class="fa fa-arrow-circle-right"></i>
     //       </button>`;
 
+  //   <span class="onoffswitch">
+  //   <input  class="onoffswitch-checkbox checked-row-one" name="empresaAtiva" type="checkbox">
+  //   <label class="onoffswitch-label" for="st3">
+  //     <span class="onoffswitch-inner" data-swchoff-text="NÃO" data-swchon-text="SIM"></span>
+  //     <span class="onoffswitch-switch"></span>
+  //   </label>
+  // </span>
+
     return `<div class="checkbox checkboxSegurado"><label>
-                 <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox {{styleTheme}}" value="${id}"><span> </span></label>
-          </div>`;
+                 <input type="checkbox" id='${id}-checkbox' 
+                 class="checked-row-one checkbox {{styleTheme}}" 
+                 value="${id}"><span> </span></label>
+          </div>
+          `;
   }
 
   private isExits(value) {

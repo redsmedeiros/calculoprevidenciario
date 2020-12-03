@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,6 +7,7 @@ import { PlanejamentoRgps } from './../PlanejamentoRgps.model';
 import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
 import { ModalDirective } from 'ngx-bootstrap';
+import { RgpsPlanejamentoListTableComponent } from './rgps-planejamento-list-table/rgps-planejamento-list-table.component';
 
 import * as moment from 'moment';
 
@@ -14,29 +16,33 @@ import * as moment from 'moment';
   templateUrl: './rgps-planejamento-list.component.html',
   styleUrls: ['./rgps-planejamento-list.component.css'],
   providers: [
-    ErrorService
+    ErrorService,
   ],
 })
 export class RgpsPlanejamentoListComponent implements OnInit {
- //  @Output() onSubmit = new EventEmitter();
+
+  private planejamentoSelecionado;
+  private isPlanejamentoSelecionado = false;
+
   @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
-  //@Input() errors: ErrorService;
   @Input() segurado;
   @Input() calculo;
-  
+
+  @Output() planejamentoSelecionadoEvent = new EventEmitter();
 
   public form = { ...PlanejamentoRgps.form };
+  public planejamentoListData = [];
   public isEdit = false;
   public isCreate = false;
   public checkboxIdList = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/,];
   public dataFutura;
   public dataHoje = moment();
-  public isUpdatePlan = false;
+  public isUpdatePlan = true;
   public valorBeneficio;
   public aliquota;
   public id_calculo;
-  public planejamentoList = [];
+  
   public userCheck = false;
 
   public model = {
@@ -45,6 +51,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     data_futura: '',
     valor_beneficio: '',
     aliquota: '',
+    especie: '',
   };
 
   public steps = [
@@ -82,6 +89,46 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
   public activeStep = this.steps[0];
 
+
+  public datatableOptionsPlan = {
+    colReorder: true,
+    data: this.planejamentoListData,
+    order: [[0, 'desc']],
+    columns: [
+      { data: 'id', visible: false },
+      {
+        data: 'data_futura',
+        render: (data) => {
+          return this.formatData(data);
+        }
+      },
+      {data: 'especie'},
+      {
+        data: 'valor_beneficio',
+        render: (data) => {
+          return this.formatMoeda(data);
+        }
+      },
+      {
+        data: 'aliquota',
+        render: (data) => {
+          return this.formatAliquota(data);
+        }
+      },
+      { data: 'actions',
+        render: (data, type, row) => {
+          return this.getAcoesPlanejamento(row.id);
+        }, width: '6rem', class: 'p-0' 
+      },
+      {
+        data: 'selecionarPlanejamento',
+        render: (data, type, row) => {
+          return this.getBtnSelecionarPlanejamento(row.id);
+        }, width: '6rem', class: 'p-0'
+      },
+    ]
+  };
+
   constructor(
     private errors: ErrorService,
     protected rgpsPlanejamentoService: RgpsPlanejamentoService,
@@ -99,28 +146,43 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
     this.id_calculo = this.calculo.id;
     this.model.id_calculo = this.calculo.id;
-    this.isUpdatePlan = true;
 
     // console.log(this.route.snapshot.params['correcao_pbc'])
     // console.log(this.route.snapshot.params['pbc'])
 
-
     this.getInfoCalculos();
   }
 
+
+  private updateDatatable() {
+
+    this.datatableOptionsPlan = {
+      ...this.datatableOptionsPlan,
+      data: this.planejamentoListData,
+    }
+  }
+
   private getInfoCalculos() {
+    
+    console.log(this.rgpsPlanejamentoService.list);
 
     this.isUpdatePlan = true;
+    this.planejamentoListData = [];
     this.rgpsPlanejamentoService
       .getPlanejamentoByCalculoId(this.id_calculo)
       .then((planejamentoRst: PlanejamentoRgps[]) => {
-        this.planejamentoList = [];
+
         for (const plan of planejamentoRst) {
-          this.planejamentoList.push(plan);
+          this.planejamentoListData.push(plan);
         }
+        console.log(this.planejamentoListData);
+        this.updateDatatable();
         this.isUpdatePlan = false;
       });
+
   }
+
+
 
   // private setForm(
   //   dataFutura,
@@ -136,6 +198,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
   formatReceivedDate(inputDate) {
+
     var date = new Date(inputDate);
     date.setTime(date.getTime() + 5 * 60 * 60 * 1000);
     if (!isNaN(date.getTime())) {
@@ -149,6 +212,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       );
     }
     return '';
+
   }
 
 
@@ -183,9 +247,10 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
+  //private deletarPlananejamentoList(rowPlan) {
   private deletarPlananejamentoList(id) {
 
-    const objPlan = this.planejamentoList.find(row => row.id === id);
+    const objPlan = this.planejamentoListData.find(row => row.id === id);
 
     if (objPlan && this.isExits(objPlan)) {
       this.rgpsPlanejamentoService
@@ -218,23 +283,21 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
 
+  // getupdatePlananejamentoList(rowPlan) {
   getupdatePlananejamentoList(id) {
 
     this.isEdit = true;
-    this.model = this.planejamentoList.find(row => row.id === id);
+    this.model = this.planejamentoListData.find(row => row.id === id);
 
-    this.steps.find(it => it.key == 'step1').checked = true;
-    this.steps.find(it => it.key == 'step2').checked = true;
-    this.steps.find(it => it.key == 'step4').checked = true;
-    this.activeStep = this.steps[2];
-    this.model.data_futura = this.formatReceivedDate(this.model.data_futura);
     console.log(this.model);
 
-    this.showChildModal();
+
+    this.model.data_futura = this.formatReceivedDate(this.model.data_futura);
+
   }
 
 
-  public updatePlan(id) {
+  public updatePlan() {
     this.validate();
     this.rgpsPlanejamentoService
       .update(this.model)
@@ -248,7 +311,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
           timer: 1000
         });
         this.getInfoCalculos();
-        this.hideChildModal();
         this.resetForm();
       })
       .catch((errors) => {
@@ -311,11 +373,11 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-  salvarPlanejamento(){
+  salvarPlanejamento() {
 
     this.rgpsPlanejamentoService.save(this.model).then((model) => {
       this.validateInputs();
-    //  this.hideChildModal();
+      //  this.hideChildModal();
       this.getInfoCalculos();
       swal({
         position: 'top-end',
@@ -327,12 +389,12 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       this.resetForm();
     });
   }
+  //planejamentoSelecionadoEvent
 
 
+  private planejar(id) {
 
-  private planejar(id){
-
-    const objPlan = this.planejamentoList.find(row => row.id === id);
+    const objPlan = this.planejamentoListData.find(row => row.id === id);
     const objExport = JSON.stringify(objPlan);
     sessionStorage.setItem('exportPlanejamento', objExport);
 
@@ -340,6 +402,24 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     const urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + objPlan.id;
     this.router.navigate([urlpbcNew]);
 
+  }
+
+
+  //private getRow(dataRow) {
+  private getRow(id) {
+
+    if (this.isExits(id)) {
+
+      const objPlan = this.planejamentoListData.find(row => row.id === id);
+      this.planejamentoSelecionado = objPlan;
+
+      const objExport = JSON.stringify(objPlan);
+      sessionStorage.setItem('exportPlanejamento', objExport);
+      
+      this.isPlanejamentoSelecionado = true;
+      this.planejamentoSelecionadoEvent.emit(this.planejamentoSelecionado);
+
+    }
   }
 
 
@@ -380,6 +460,31 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
 
+
+  public getBtnSelecionarPlanejamento(id) {
+
+    // return `<button  type="button" class="btn btn-xs btn-info select-btn">
+    //           Selecionar <i class="fa fa-arrow-circle-right"></i>
+    //       </button>`;
+
+    return `<input type="checkbox" id='${id}-checkbox'
+                 class="checked-row-one checkbox m-0"
+                 value="${id}">`;
+  }
+
+  private getAcoesPlanejamento(id){
+    return `
+        <div class="btn-group">
+          <button type="button" id='${id}-edit' class="btn btn-xs btn-warning update-btn" title='Editar'>
+            <i class='fa fa-edit fa-1-7x'></i>
+          </button>
+          <button type="button" id='${id}-delete' class="btn btn-xs btn-danger delete-btn" title='Excluir'>
+            <i class='fa fa-times fa-1-7x'></i>
+          </button>
+        </div>
+     `;
+  }
+
   formatMoeda(value, sigla = 'R$') {
 
     value = parseFloat(value);
@@ -387,6 +492,21 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
     return sigla + ' ' + numeroPadronizado;
   }
+
+  formatData(value) {
+    return moment(value).format('DD/MM/YYYY');
+    // return value;
+  }
+
+
+  formatAliquota(value) {
+
+    return value + '%';
+  }
+
+
+
+
 
   public showChildModal(): void {
     this.modalCreatePlan.show();
@@ -400,6 +520,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.model.data_futura = '';
     this.model.valor_beneficio = '';
     this.model.aliquota = '';
+    this.model.especie = '';
   }
 
   validate() {

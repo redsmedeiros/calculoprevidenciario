@@ -27,10 +27,12 @@ export class DatatableComponent implements OnInit {
   @Input() public width: string = '100%';
 
   @Output() selectedRowEvent = new EventEmitter();
+  @Output() updateRowEvent = new EventEmitter();
+  @Output() deleteRowEvent = new EventEmitter();
 
   constructor(
     private el: ElementRef
-    ) {
+  ) {
   }
 
   ngOnInit() {
@@ -46,7 +48,9 @@ export class DatatableComponent implements OnInit {
     let element = $(this.el.nativeElement.children[0]);
     let options = this.options || {}
 
-    let selectedRowEvent = this.selectedRowEvent;
+    const selectedRowEvent = this.selectedRowEvent;
+    const updateRowEvent = this.updateRowEvent;
+    const deleteRowEvent = this.deleteRowEvent;
 
 
     let toolbar = '';
@@ -159,10 +163,39 @@ export class DatatableComponent implements OnInit {
     });
 
     element.on('click', '.checked-row', function () {
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
-
       selectedRowEvent.emit(row.data());
+
+    });
+
+    element.on('click', '.checked-row-one', function () {
+
+      $('.checked-row-one').removeAttr('checked');
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      selectedRowEvent.emit(row.data());
+
+      $(this).attr('checked', 'checked');
+
+    });
+
+    element.on('click', '.update-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      updateRowEvent.emit(row.data());
+
+    });
+
+    element.on('click', '.delete-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      deleteRowEvent.emit(row.data());
+
     });
 
   }

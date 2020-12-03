@@ -14,6 +14,7 @@ export class PlanejamentoRgps extends Model {
     nova_soma_contribuicoes: '',
     resultado_rmi_original: '',
     resultado_rmi_novo: '',
+    especie: '',
   };
 
   public id;
@@ -25,6 +26,7 @@ export class PlanejamentoRgps extends Model {
   public nova_soma_contribuicoes;
   public resultado_rmi_original;
   public resultado_rmi_novo;
+  public especie;
 //   public actions = `
 //     <div class="btn-group">
 //       <button type="button" class="btn btn-xs btn-warning" (click)='updatePlananejamentoList(${this.id})' title='Editar Referência'>

@@ -41,7 +41,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
   public calculosSelecionado;
   public isCalculosSelecionado;
   public calculosList = [];
-  public planejamentoList = [];
+  // public planejamentoList = [];
 
   public calculo: any = {};
 
@@ -152,22 +152,22 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
 
 
 
-  private getPlanejamentosCalculo(idCalculo) {
-    this.planejamentoList = [];
-    this.idCalculo = idCalculo;
-    this.isUpdatingPlan = true;
-    this.rgpsPlanejamentoService
-      .getPlanejamentoByCalculoId(this.idCalculo)
-      .then((planejamentoRst: PlanejamentoRgps[]) => {
+  // private getPlanejamentosCalculo(idCalculo) {
+  //   this.planejamentoList = [];
+  //   this.idCalculo = idCalculo;
+  //   this.isUpdatingPlan = true;
+  //   this.rgpsPlanejamentoService
+  //     .getPlanejamentoByCalculoId(this.idCalculo)
+  //     .then((planejamentoRst: PlanejamentoRgps[]) => {
 
-        console.log(planejamentoRst);
-        for (const plan of planejamentoRst) {
-          this.planejamentoList.push(plan);
-        }
-        this.isUpdatingPlan = false;
-      });
+  //       console.log(planejamentoRst);
+  //       for (const plan of planejamentoRst) {
+  //         this.planejamentoList.push(plan);
+  //       }
+  //       this.isUpdatingPlan = false;
+  //     });
 
-  }
+  // }
 
 
 
@@ -180,7 +180,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
       this.isCalculosSelecionado = true;
 
       this.calculoSelecionadoEvent.emit(this.calculosSelecionado);
-      this.getPlanejamentosCalculo(this.calculosSelecionado.id);
+      // this.getPlanejamentosCalculo(this.calculosSelecionado.id);
     }
   }
 

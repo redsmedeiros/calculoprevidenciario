@@ -463,7 +463,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       setTimeout(() => {
           this.updateResultPlanejamento();
-      }, 1500);
+      }, 500);
 
     }
 

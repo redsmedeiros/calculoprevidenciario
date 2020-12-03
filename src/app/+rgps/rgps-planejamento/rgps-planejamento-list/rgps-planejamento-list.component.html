@@ -1,11 +1,291 @@
-<div id="box-dados-segurado">
+<div class="row my-4">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+          class="mb-3"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Segurado Selecionado</h2>
+          </header>
+          <div>
+            <div
+              *ngIf="segurado.nome"
+              class="widget-body p-0 widget-body-custom"
+            >
+              <ul class="list-inline m-0">
+                <li class="px-5">
+                  <strong>Nome:</strong> {{ segurado.nome }}
+                </li>
+                <li class="px-5" *ngIf="segurado.numero_documento">
+                  <strong
+                    >{{
+                      segurado.getDocumentType(
+                        segurado.id_documento
+                      )
+                    }}:</strong
+                  >
+                  {{ segurado.numero_documento }}
+                </li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong>
+                  {{ segurado.data_nascimento }}
+                </li>
+                <li class="px-5">
+                  <strong>Sexo:</strong>
+                  {{
+                    segurado.sexo == "m" ? "Masculino" : "Feminino"
+                  }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+  </div>
+</div>
+<!-- 
+<div class="row my-4">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+          class="mb-3"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Cáculo Selecionado</h2>
+          </header>
+          <div>
+            <div
+              *ngIf="calculo.data_pedido_beneficio"
+              class="widget-body p-0 widget-body-custom"
+            >
+              <ul class="list-inline m-0">
+                <li class="px-5">
+                  <strong>Data de início do Beneficío:</strong> {{ calculo.data_pedido_beneficio }}
+                </li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong> {{ calculo.tipo_seguro }}
+                </li>
+                 <li class="px-5">
+                  <strong>RMI Atual:</strong> {{ formatMoeda(calculo.valor_beneficio) }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+  </div>
+</div> -->
+
+
+
+<div id="box-form-planejamento">
+  <div class="col-xs-12 col-sm-12">
+    <sa-widget
+      [colorbutton]="false"
+      [editbutton]="false"
+      [togglebutton]="false"
+      [deletebutton]="false"
+      [fullscreenbutton]="false"
+      [custombutton]="false"
+      [collapsed]="false"
+      [sortable]="false"
+    >
+      <header>
+        <span class="widget-icon">
+          <i class="fa fa-money"></i>
+        </span>
+        <h2>Informações do Benefício Fututo</h2>
+      </header>
+      <div>
+        <div class="widget-body">
+          <form class="form-horizontal">
+            <fieldset>
+              <div class="row">
+                <div class="col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-6"
+                      >Data de Início de Benefício - DIB*:</label
+                    >
+                    <div class="col-md-3">
+                      <input
+                        class="form-control"
+                        [textMask]="{ mask: dateMaskdiB }"
+                        placeholder="DIB Futura"
+                        type="text"
+                        required
+                        [(ngModel)]="model.data_futura"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <small
+                        *ngIf="errors.has('dataFutura')"
+                        class="text-danger"
+                        >{{ errors.get("dataFutura") }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-2" for="especiePlan"
+                      >Espécie:</label
+                    >
+                    <div class="col-md-10">
+                      <select
+                        name="especie"
+                        [(ngModel)]="model.especie"
+                        [ngModelOptions]="{ standalone: true }"
+                        class="form-control"
+                        id="especiePlan"
+                      >
+                        <option selected disabled>
+                          - Selecione uma espécie -
+                        </option>
+                        <option>Aposentadoria Especial - 15 anos</option>
+                        <option>Aposentadoria Especial - 20 anos</option>
+                        <option>Aposentadoria Especial - 25 anos</option>
+                        <option>Aposentadoria por Idade da PcD</option>
+                        <option>
+                          Aposentadoria por Idade - Trabalhador Rural
+                        </option>
+                        <option>
+                          Aposentadoria por Idade - Trabalhador Urbano
+                        </option>
+                        <option>
+                          Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Grave)
+                        </option>
+                        <option>
+                          Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Moderada)
+                        </option>
+                        <option>
+                          Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Leve)
+                        </option>
+                        <option>
+                          Aposentadoria por Tempo de Contribuição do(a)
+                          Professor(a)
+                        </option>
+                        <option>Aposentadoria Programada</option>
+                        <option>Aposentadoria Programada - Professor</option>
+                      </select>
+                      <small
+                        *ngIf="errors.has('especie')"
+                        class="text-danger"
+                        >{{ errors.get("especie") }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-6"
+                      >Renda Mensal Inicial - RMI*:</label
+                    >
+                    <div class="col-md-3">
+                      <input
+                        class="form-control"
+                        placeholder="Valor Benefício"
+                        type="text"
+                        currencyMask
+                        maxlength="20"
+                        required
+                        [(ngModel)]="model.valor_beneficio"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                      <small
+                        *ngIf="errors.has('valorBeneficio')"
+                        class="text-danger"
+                        >{{ errors.get("valorBeneficio") }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label class="control-label col-md-2" for="especiePlan"
+                      >Aliquota:</label
+                    >
+                    <div class="col-md-10">
+                      <select
+                        class="form-control"
+                        required
+                        [(ngModel)]="model.aliquota"
+                        [ngModelOptions]="{ standalone: true }"
+                        name="aliquota"
+                      >
+                        <option value="" selected="selected">
+                          Selecione Aliquota
+                        </option>
+                        <option [value]="5">Contribuinte Individual - 5%</option>
+                        <option [value]="5">Contribuinte Facultativo - 5%</option>
+                        <option [value]="8">Cooperativa - 8%</option>
+                        <option [value]="11">Contribuinte Individual Prestador de Serviço - 11%</option> sem limitar ao 
+                        <option [value]="11">Regime Simplificado - 11%</option>
+                        <option [value]="20">Fixo - 20%</option>
+                        <option [value]="99">Cumulativo - 7,5% a 14%</option>
+                      </select>
+                      <small
+                        *ngIf="errors.has('aliquota')"
+                        class="text-danger"
+                        >{{ errors.get("aliquota") }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-actions row p-0 mt-0">
+              <div class="col-md-6">
+                <span class="pull-left p-2"
+                  >(*) Preenchimento Obrigatório.</span
+                >
+              </div>
+              <div class="col-md-6">
+                <button
+                  (click)="salvarPlanejamento($event)"
+                  type="button"
+                  class="btn btn-labeled btn-success pull-right"
+                  *ngIf="!isEdit"
+                >
+                  <span class="btn-label"> <i class="fa fa-save"></i> </span
+                  >&nbsp;&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <button
+                  (click)="updatePlan($event)"
+                  type="button"
+                  class="btn btn-labeled btn-success pull-right"
+                  *ngIf="isEdit"
+                >
+                  <span class="btn-label"> <i class="fa fa-save"></i> </span
+                  >&nbsp;&nbsp;Atualizar&nbsp;&nbsp;
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </sa-widget>
+  </div>
+
   <article class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget [colorbutton]="false" [editbutton]="false">
       <header>
         <span class="widget-icon">
           <i class="fa fa-building"></i>
         </span>
-        <h2>Planejamento de Benefícios do Segurado</h2>
+        <h2>Lista de Benefícios Futuros</h2>
 
         <!-- <button class="btn btn-labeled btn-warning pull-right" type="button"
           title="Planejamento Previdenciário." (click)="novoPlanejamento()">
@@ -15,138 +295,223 @@
           </span>
           Criar novo Planejamento
         </button> -->
-
       </header>
-      <!-- widget div-->
 
-
-      
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="form-group" [ngClass]="{
-                'has-success':dataFutura.valid && activeStep.submitted,
-                'has-error':!dataFutura.valid && activeStep.submitted,
-                'has-error': errors.has('dataFutura')
-                }"
-                >
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar fa-lg fa-fw"></i></span>
-                  <input class="form-control input-lg" 
-                  [textMask]="{mask: dateMaskdiB}"
-                    placeholder="DIB Futura" 
-                    type="text" name="dataFutura" 
-                    #dataFutura="ngModel" 
-                    required [(ngModel)]="model.data_futura" >
-                </div>
-                <span [class.hidden]="dataFutura.valid || !activeStep.submitted" 
-                class="help-block"
-                *ngIf="errors.has('dataFutura')" class="text-danger">{{ errors.get('dataFutura') }}>
-                  Favor entrar com uma data válida.
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group" [ngClass]="{
-                'has-success':valorBeneficio.valid && activeStep.submitted,
-                'has-error':!valorBeneficio.valid && activeStep.submitted
-                }">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-money fa-lg fa-fw"></i></span>
-                  <input class="form-control input-lg" placeholder="Valor Benefício" type="text"
-                    name="valorBeneficio" #valorBeneficio="ngModel" currencyMask maxlength="20"
-                    required [(ngModel)]="model.valor_beneficio">
-                </div>
-                <span [class.hidden]="valorBeneficio.valid || !activeStep.submitted"
-                  class="help-block">
-                  Favor entrar com dados válidos.
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <div class="input-group" [ngClass]="{
-                'has-success':aliquota.valid && activeStep.submitted,
-                'has-error':!aliquota.valid && activeStep.submitted
-                }">
-                  <span class="input-group-addon"><i
-                      class="fa fa-external-link-square fa-lg fa-fw"></i></span>
-                  <select class="form-control input-lg" required [(ngModel)]="model.aliquota"
-                    #aliquota="ngModel" name="aliquota">
-                    <option value="" selected="selected">Selecione Aliquota</option>
-                    <option [value]="5">Fixo - 5%</option>
-                    <option [value]="11">Fixo - 11%</option>
-                    <option [value]="20">Fixo - 20%</option>
-                    <option [value]="99">Cumulativo - 7,5% a 14%</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+      <!-- form fim -->
+      <sa-widget
+        [colorbutton]="false"
+        [editbutton]="false"
+        class="no-margin"
+        *ngIf="!isUpdatePlan"
+      >
+        <div>
+          <div class="widget-body no-padding widget-body-custom hidden-dt">
+            <!-- <sa-datatable
+              [options]="datatableOptionsPlan"
+              paginationLength="true"
+              (selectedRowEvent)="getRow($event)"
+              (updateRowEvent)="getupdatePlananejamentoList($event)"
+              (deleteRowEvent)="deletarPlananejamentoList($event)"
+              tableClass="table table-striped table-bordered table-hover table-condensed"
+              width="100%"
+            >
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Data Futura</th>
+                  <th>Espécie</th>
+                  <th>Valor Benefício</th>
+                  <th>Alíquota</th>
+                  <th class="text-center" width="75px">Ações</th>
+                  <th class="text-center" width="75px">selecionar</th>
+                </tr>
+              </thead>
+            </sa-datatable> -->
+            <table
+            *ngIf="!isUpdatePlan && planejamentoListData.length > 0"
+            class="table table-striped table-bordered table-hover table-condensed"
             
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary btn-block" (click)="salvarPlanejamento()" >Adicionar</button>
-            </div>
-            
+          >
+            <thead>
+              <tr>
+                <th>Data Futura</th>
+                <th>Valor Benefício</th>
+                <th>Alíquota</th>
+                <th class="text-center" width="75px">Ações</th>
+                <th class="text-center" width="75px">seleconar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let planRow of planejamentoListData">
+                <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
+                <td class="text-center">
+                  {{ formatMoeda(planRow.valor_beneficio) }}
+                </td>
+                <td class="text-center">{{ planRow.aliquota }} %</td>
+                <td class="text-center" width="120px">
+                  <div class="btn-group">
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-primary"
+                      id="planejar{{ planRow.id }}"
+                      (click)="planejar(planRow.id)"
+                      title="Planejar"
+                    >
+                      <i class="fa fa-share-square fa-1-7x"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-warning"
+                      id="editar{{ planRow.id }}"
+                      (click)="getupdatePlananejamentoList(planRow.id)"
+                      title="Editar"
+                    >
+                      <i class="fa fa-edit fa-1-7x"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-danger"
+                      id="deletar{{ planRow.id }}"
+                      (click)="deletarPlananejamentoList(planRow.id)"
+                      title="Excluir"
+                    >
+                      <i class="fa fa-times fa-1-7x"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="align-center">
+                      <input
+                        (click)="getRow(planRow.id)" 
+                        type="checkbox"
+                        id="{{planRow.id}}-checkbox"
+                        class="checked-row-one "
+                        [value]="planRow.id" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </sa-widget>
+      <!-- fim da lista -->
+    </sa-widget>
+  </article>
+</div>
 
+<!-- 
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row">
+      <div class="col-sm-4">
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-success': dataFutura.valid && activeStep.submitted,
+            'has-error': !dataFutura.valid && activeStep.submitted,
+            'has-error': errors.has('dataFutura')
+          }"
+        >
+          <div class="input-group">
+            <span class="input-group-addon"
+              ><i class="fa fa-calendar fa-lg fa-fw"></i
+            ></span>
+            <input
+              class="form-control input-lg"
+              [textMask]="{ mask: dateMaskdiB }"
+              placeholder="DIB Futura"
+              type="text"
+              name="dataFutura"
+              #dataFutura="ngModel"
+              required
+              [(ngModel)]="model.data_futura"
+            />
+          </div>
+          <span
+            [class.hidden]="dataFutura.valid || !activeStep.submitted"
+            class="help-block"
+            *ngIf="errors.has('dataFutura')"
+            class="text-danger"
+            >{{ errors.get("dataFutura") }}> Favor entrar com uma data
+            válida.
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div
+          class="form-group"
+          [ngClass]="{
+            'has-success': valorBeneficio.valid && activeStep.submitted,
+            'has-error': !valorBeneficio.valid && activeStep.submitted
+          }"
+        >
+          <div class="input-group">
+            <span class="input-group-addon"
+              ><i class="fa fa-money fa-lg fa-fw"></i
+            ></span>
+            <input
+              class="form-control input-lg"
+              placeholder="Valor Benefício"
+              type="text"
+              name="valorBeneficio"
+              #valorBeneficio="ngModel"
+              currencyMask
+              maxlength="20"
+              required
+              [(ngModel)]="model.valor_beneficio"
+            />
+          </div>
+          <span
+            [class.hidden]="valorBeneficio.valid || !activeStep.submitted"
+            class="help-block"
+          >
+            Favor entrar com dados válidos.
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <div
+            class="input-group"
+            [ngClass]="{
+              'has-success': aliquota.valid && activeStep.submitted,
+              'has-error': !aliquota.valid && activeStep.submitted
+            }"
+          >
+            <span class="input-group-addon"
+              ><i class="fa fa-external-link-square fa-lg fa-fw"></i
+            ></span>
+            <select
+              class="form-control input-lg"
+              required
+              [(ngModel)]="model.aliquota"
+              #aliquota="ngModel"
+              name="aliquota"
+            >
+              <option value="" selected="selected">
+                Selecione Aliquota
+              </option>
+              <option [value]="5">Fixo - 5%</option>
+              <option [value]="11">Fixo - 11%</option>
+              <option [value]="20">Fixo - 20%</option>
+              <option [value]="99">Cumulativo - 7,5% a 14%</option>
+            </select>
           </div>
         </div>
       </div>
-      <!-- form fim -->
-      <div class="row">
-        <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatePlan">
-          <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
-            <div>
-              <div class="widget-body no-padding widget-body-custom hidden-dt">
-                <table class="table table-striped table-bordered table-hover table-responsive table-condensed"
-                  *ngIf="!isUpdatePlan && planejamentoList.length > 0">
-                  <thead>
-                    <tr>
-                      <th>Data Futura</th>
-                      <th>Valor Benefício</th>
-                      <th>Alíquota</th>
-                      <th class="text-center" width="75px">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let planRow of planejamentoList">
-                      <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
-                      <td class="text-center">
-                        {{ formatMoeda(planRow.valor_beneficio) }}
-                      </td>
-                      <td class="text-center">{{ planRow.aliquota }} %</td>
-                      <td class="text-center" width="120px">
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-xs btn-primary" id="planejar{{ planRow.id }}"
-                          (click)="planejar(planRow.id)"  title="Planejar">
-                          <i class="fa fa-share-square fa-1-7x"></i>
-                        </button>
-                          <button type="button" class="btn btn-xs btn-warning" id="editar{{ planRow.id }}"
-                            (click)="getupdatePlananejamentoList(planRow.id)" title="Editar">
-                            <i class="fa fa-edit fa-1-7x"></i>
-                          </button>
-                          <button type="button" class="btn btn-xs btn-danger" id="deletar{{ planRow.id }}"
-                            (click)="deletarPlananejamentoList(planRow.id)" title="Excluir">
-                            <i class="fa fa-times fa-1-7x"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
 
-              </div>
-            </div>
-          </sa-widget>
-        </article>
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <button
+          type="button"
+          class="btn btn-primary btn-block"
+          (click)="salvarPlanejamento()"
+        >
+          Adicionar
+        </button>
       </div>
-    <!-- fim da lista -->
+    </div>
+  </div>
+</div> -->
 
-   
-
-
-
-      
 <!-- 
       <accordion class="smart-accordion-red panel-group" [closeOthers]="true" data-toggle="modal"
         data-target="#planejamento">
@@ -186,12 +551,50 @@
         </accordion-group>
       </accordion> -->
 
-
-
-    </sa-widget>
-  </article>
-</div>
-
+<!-- <table class="table table-striped table-bordered table-hover table-responsive table-condensed"
+                  *ngIf="!isUpdatePlan && planejamentoList.length > 0">
+                  <thead>
+                    <tr>
+                      <th>Data Futura</th>
+                      <th>Valor Benefício</th>
+                      <th>Alíquota</th>
+                      <th class="text-center" width="75px">Ações</th>
+                      <th class="text-center" width="75px">seleconar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let planRow of planejamentoList">
+                      <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
+                      <td class="text-center">
+                        {{ formatMoeda(planRow.valor_beneficio) }}
+                      </td>
+                      <td class="text-center">{{ planRow.aliquota }} %</td>
+                      <td class="text-center" width="120px">
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-xs btn-primary" id="planejar{{ planRow.id }}"
+                          (click)="planejar(planRow.id)"  title="Planejar">
+                          <i class="fa fa-share-square fa-1-7x"></i>
+                        </button>
+                          <button type="button" class="btn btn-xs btn-warning" id="editar{{ planRow.id }}"
+                            (click)="getupdatePlananejamentoList(planRow.id)" title="Editar">
+                            <i class="fa fa-edit fa-1-7x"></i>
+                          </button>
+                          <button type="button" class="btn btn-xs btn-danger" id="deletar{{ planRow.id }}"
+                            (click)="deletarPlananejamentoList(planRow.id)" title="Excluir">
+                            <i class="fa fa-times fa-1-7x"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="checkbox checkboxSegurado"><label>
+                          <input type="checkbox" id='${planRow.id}-checkbox' 
+                          class="checked-row-one checkbox {{styleTheme}}" 
+                          [value]="planRow.id"><span> </span></label>
+                   </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table> -->
 
 <!-- <div bsModal #modalCreatePlan="bs-modal" class="modal fade" id="create-planejamento">
   <div class="modal-dialog modal-lg">

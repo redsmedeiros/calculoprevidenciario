@@ -1,9 +1,11 @@
+
 import { Component, OnInit } from '@angular/core';
 import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import { DomSanitizer} from '@angular/platform-browser';
+
 @Component({
   selector: 'app-rgps-planejamento-segurados',
   templateUrl: './rgps-planejamento-segurados.component.html',
@@ -46,7 +48,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     {
       key: 'step3',
       title: 'Benefícios Futuros',
-      valid: true,
+      valid: false,
       checked: false,
       submitted: false,
     },
@@ -79,14 +81,18 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
 
   setIsPaginaInicial() {
+
     this.isPaginaInicial = false;
+
   }
 
 
 
 
   setActiveStep(steo) {
+
     this.activeStep = steo;
+
   }
 
   prevStep() {
@@ -97,10 +103,15 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   }
 
   nextStep() {
+
+    console.log(this.activeStep.valid);
+
     this.activeStep.submitted = true;
+
     if (!this.activeStep.valid) {
       return;
     }
+
     this.activeStep.checked = true;
     if (this.steps.every((it) => it.valid && it.checked)) {
 
@@ -178,7 +189,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.isCalculoSelecionado = true;
     this.isUpdatingPlan = false;
 
-    this.getURL();
+
   }
 
 
@@ -188,23 +199,30 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
     const stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
 
+    this.isPlanejamentoSelecionado = stepStatus;
+
     console.log(stepStatus);
+    console.log(this.planejamentoSelecionado);
+    console.log(this.isPlanejamentoSelecionado);
 
     this.setStepValidate('step3', stepStatus);
 
-    
-
+    //this.getURL();
   }
 
-  getURL(){
 
-    let value = `http://localhost:4200/#/rgps/rgps-resultados/${this.seguradoSelecionado.id}/${this.calculoSelecionado.id}/plan/4`;
+  loadCalculoFuturo() {
+    console.log('calculo futuro')
+  }
+
+  getURL() {
+
+    let value = `http://localhost:4200/#/rgps/rgps-resultados/`;
+    value += `${this.seguradoSelecionado.id}/${this.calculoSelecionado.id}/plan/${this.planejamentoSelecionado.id}`;
 
     console.log(value);
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(value);
 
-
-   
     console.log(this.url);
 
     return this.url;
@@ -223,6 +241,20 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
 
     this.router.navigate(['/rgps/rgps-segurados']);
+  }
+
+  redirecionarSeguradoCalculosRMI() {
+
+    swal({
+      position: 'top-end',
+      type: 'success',
+      title: 'Crie o segurado e execute um cálculo de RMI em que o segurado atenda os requisitos.',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+    this.router.navigate([`/rgps/rgps-calculos/${this.seguradoSelecionado.id}`]);
+
   }
 
   private isExits(value) {
