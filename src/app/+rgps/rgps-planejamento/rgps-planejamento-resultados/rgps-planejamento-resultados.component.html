@@ -102,29 +102,29 @@
   </div>
 
   <div id="box-dados-calculo" class="row">
-    <article class="col-sm-12 col-md-6 col-lg-6" *ngIf="isCalculo">
+    <article class="col-sm-12 col-md-6 col-lg-12" *ngIf="isCalculo">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
           <span class="widget-icon">
             <i class="fa fa-table"></i>
           </span>
-          <h2>Cálculo</h2>
+          <h2>Benefício Atual</h2>
         </header>
         <div>
           <div class="widget-body no-padding">
             <table class="table table-hover table-bordered">
               <tbody>
                 <tr>
-                  <td><strong>Data do Início do Benefício</strong></td>
-                  <td>{{ calculo.data_pedido_beneficio }}</td>
+                  <td width="50%" style="text-align: left;"><strong>Data do Início do Benefício</strong></td>
+                  <td width="50%">{{ calculo.data_pedido_beneficio }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Espécie</strong></td>
-                  <td>{{ calculo.tipo_seguro }}</td>
+                  <td width="50%" style="text-align: left;"><strong>Espécie do Benefíco</strong></td>
+                  <td width="50%">{{ calculo.tipo_seguro }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Renda Mensal Inicial</strong></td>
-                  <td>
+                  <td width="50%" style="text-align: left;"><strong>Renda Mensal Inicial</strong></td>
+                  <td width="50%">
                     {{ definicaoMoeda.formatMoney(calculo.valor_beneficio) }}
                   </td>
                 </tr>
@@ -135,30 +135,38 @@
       </sa-widget>
     </article>
 
-
-    <article class="col-sm-12 col-md-6 col-lg-6" *ngIf="isPlanejamento">
+    
+    <article class="col-sm-12 col-md-0 col-lg-12" *ngIf="isPlanejamento">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
           <span class="widget-icon">
             <i class="fa fa-table"></i>
           </span>
-          <h2>Planejamento</h2>
+          <h2>Benefício Futuro</h2>
         </header>
         <div>
           <div class="widget-body no-padding">
             <table class="table table-hover table-bordered">
               <tbody>
                 <tr>
-                  <td><strong>Data do Início do Benefício</strong></td>
-                  <td>{{ planejamento.dataDibFutura }}</td>
+                  <td width="50%" style="text-align: left;"><strong>Data do Início do Benefício</strong></td>
+                  <td width="50%">{{ planejamento.dataDibFutura }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Salário de Contribuição</strong></td>
+                  <td width="50%" style="text-align: left;"><strong>Espécie do Benefíco</strong></td>
+                  <td width="50%"></td>
+                </tr>
+                <tr>
+                  <td width="50%" style="text-align: left;"><strong>Salário de Contribuição</strong></td>
                   <td>{{ definicaoMoeda.formatMoney(planejamento.valor_beneficio) }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Renda Mensal Inicial</strong></td>
-                  <td>
+                  <td width="50%" style="text-align: left;"><strong>Alíquota Contributiva</strong></td>
+                  <td width="50%">{{ planejamento.aliquota }}%</td>
+                </tr>
+                <tr>
+                  <td width="50%" style="text-align: left;"><strong>Renda Mensal Inicial</strong></td>
+                  <td width="50%">
                     {{ definicaoMoeda.formatMoney(planejamento.novo_rmi) }}
                   </td>
                 </tr>
@@ -186,15 +194,15 @@
             <table class="table table-hover table-bordered">
               <thead>
                 <tr>
-                  <th>Descrição</th>
-                  <th>Cálculo com data de início Atual</th>
-                  <th>Cálculo com data de início Futura</th>
+                  <th width="50%" style="text-align: left;">Descrição</th>
+                  <!-- <th>Cálculo com data de início Atual</th> -->
+                  <th width="50%">Cálculo com data de início Futura</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let row of resultadosGeral" >
                   <td><strong>{{ row.label }}</strong></td>
-                  <td>{{ row.value1 }}</td>
+                  <!-- <td>{{ row.value1 }}</td> -->
                   <td>{{ row.value2 }}</td>
                 </tr>
               </tbody>
