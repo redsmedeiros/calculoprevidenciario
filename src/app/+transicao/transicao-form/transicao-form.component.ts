@@ -74,39 +74,37 @@ export class TransicaoFormComponent implements OnInit {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
-
-    // this.nome = 'rita - 01-12-2020';
+    // this.nome = 'sergio - 04-12-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '29/06/1960';
-    // this.dataFiliacao = '01/01/1990';
-    // this.sexo = 'f';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '17';
-    // this.contribuicaoMesesAteEC103 = '10';
-    // this.contribuicaoDiasAteEC103 = '19';
-
-    // this.contribuicaoAnos = '18';
-    // this.contribuicaoMeses = '11';
-    // this.contribuicaoDias = '5';
-
-
-    // this.nome = 'antonio - 01-12-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '19/03/1960';
+    // this.dataNascimento = '05/09/1959';
     // this.dataFiliacao = '01/01/1980';
     // this.sexo = 'm';
     // this.professor = false;
 
     // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '05';
-    // this.contribuicaoDiasAteEC103 = '14';
+    // this.contribuicaoMesesAteEC103 = '00';
+    // this.contribuicaoDiasAteEC103 = '00';
 
-    // this.contribuicaoAnos = '34';
-    // this.contribuicaoMeses = '06';
-    // this.contribuicaoDias = '1';
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '00';
+    // this.contribuicaoDias = '00';
+
+    // this.nome = 'sergio - 04-12-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '05/09/1959';
+    // this.dataFiliacao = '01/01/1980';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '26';
+    // this.contribuicaoMesesAteEC103 = '05';
+    // this.contribuicaoDiasAteEC103 = '06';
+
+    // this.contribuicaoAnos = '27';
+    // this.contribuicaoMeses = '11';
+    // this.contribuicaoDias = '00';
 
   }
 

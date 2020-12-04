@@ -112,6 +112,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
 
+
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     // pbc da vida toda

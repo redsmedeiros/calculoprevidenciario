@@ -185,24 +185,30 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let contribuicaoDiff = 0;
     let tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoAnos;
     let diffEntreContribuicoes = this.seguradoTransicao.contribuicaoFracionadoAnos -
-      this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103;
+                                  this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103;
 
     let tempoDePedagioTotal = 0;
     const regra4TempoContrib = this.contribuicaoMin[this.seguradoTransicao.sexo];
     let tempoFinalContribAteDib = regra4TempoContrib;
 
     if (this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 < regra4TempoContrib) {
+      // console.log(this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103);
+      // console.log(regra4TempoContrib);
+
       tempoDePedagio = ((regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103));
-      contribuicaoDiff = (regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnos);
-
-
+    //  contribuicaoDiff = (regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnos);
+     // contribuicaoDiff = (regra4TempoContrib - this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103);
+     
       this.pedagioEmAnos = tempoDePedagio;
       // this.pedagioEmAnos = tempoDePedagio - diffEntreContribuicoes;
       this.pedagioEmDias = this.converterTempoAnosParaDias(this.pedagioEmAnos);
 
-      tempoFinalContrib = regra4TempoContrib + this.pedagioEmAnos;
-      tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+      // console.log(this.pedagioEmAnos);
+      // console.log(this.pedagioEmAnos);
 
+      tempoFinalContrib = regra4TempoContrib + this.pedagioEmAnos;
+    //  tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+      tempoDePedagioTotal =  tempoDePedagio * 2;
 
       // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
       // idadeDib = idadeDib + tempoDePedagioTotal
@@ -213,15 +219,15 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     // console.log(contribuicaoDiff);
     // console.log(this.pedagioEmDias);
     // console.log(tempoDePedagioTotal);
-    // console.log(contribuicaoDiff + tempoDePedagio);
+    //console.log(contribuicaoDiff + tempoDePedagio);
 
 
     const VeificarRequisitoHoje = this.requisitosRegra4(
-      this.dataAtual.format('YYYY'),
-      this.seguradoTransicao.sexo,
-      this.seguradoTransicao.idadeFracionada,
-      this.seguradoTransicao.contribuicaoFracionadoAnos
-    );
+                                            this.dataAtual.format('YYYY'),
+                                            this.seguradoTransicao.sexo,
+                                            this.seguradoTransicao.idadeFracionada,
+                                            this.seguradoTransicao.contribuicaoFracionadoAnos
+                                          );
 
     let rstContadorRegra4: any;
     if (VeificarRequisitoHoje.status) {
@@ -268,6 +274,12 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     regra4TempoContrib += (sexo === 'md' || sexo === 'fd') ? this.pedagioEmDias : this.pedagioEmAnos;
     this.pedagioEmAnosRequisito = this.contribuicaoMin[this.seguradoTransicao.sexo] + this.pedagioEmAnos;
 
+
+    // console.log(this.contribuicaoMin[sexo]);
+    // console.log(this.pedagioEmDias);
+    // console.log(regra4TempoContrib);
+    // console.log(this.pedagioEmAnosRequisito);
+
     if ((tempo_contribuicao >= regra4TempoContrib) && (idade >= regra4Idade)) {
       return {
         status: true,
@@ -296,7 +308,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
   public contadorRegra4() {
 
-    let auxiliarDate = this.dataAtual.clone();
+    // let auxiliarDate = this.dataAtual.clone();
+    let auxiliarDate = (this.dataAtual.clone()).add(1, 'day');
+   // let auxiliarDate = (moment('2019-11-13')).add(1, 'day');
    // let auxiliarDate = moment('2019-11-13');
 
     let fimContador = {
@@ -313,8 +327,9 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
-    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
+    tempoContribuicao += 1;
 
+    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
     // console.log(this.seguradoTransicao);
 
     const sexo = this.seguradoTransicao.sexo + 'd';
@@ -334,18 +349,21 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
       // }
 
-        count++;
-        idade += 1;
-        tempoContribuicao += 1;
 
-        auxiliarDateClone = auxiliarDate.clone();
-        auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
       fimContador = this.requisitosRegra4(
         auxiliarDate.year(),
         sexo,
         idade,
         tempoContribuicao);
+
+
+        count++;
+        idade += 1;
+        tempoContribuicao += 1;
+
+        auxiliarDateClone = auxiliarDate.clone();
+        auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
     } while (!fimContador.status && idade <= 54750);
 
@@ -376,8 +394,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
 
     } else {
 
-      idadeDibMoment = this.calcularIdade(auxiliarDate);
-      idadeDibMoment.add(-1, 'day');
+       idadeDibMoment = this.calcularIdade(auxiliarDate);
+      // idadeDibMoment.add(-1, 'day');
 
     }
 
@@ -399,6 +417,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     // console.log(moment.duration(tempoContribuicao, 'days'));
     // console.log('---');
     
+    // console.log(moment.duration(tempoContribuicao, 'days'));
+    // console.log(tempoContribuicao);
     
     return {
       dataDib: auxiliarDate,

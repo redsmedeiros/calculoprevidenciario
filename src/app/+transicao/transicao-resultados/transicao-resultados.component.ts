@@ -157,7 +157,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
         this.seguradoTransicao.dataFiliacao,
         this.dataEC1032019
       )
-      this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
+      //this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
     }
 
 
@@ -277,8 +277,23 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
    // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
 
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   }
+
+
+
+  
+  // public converterTempoContribuicao(anos, meses, dias, type) {
+
+  //   anos = this.isFormatInt(anos);
+  //   meses = this.isFormatInt(meses);
+  //   dias = this.isFormatInt(dias);
+
+  //   const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
+  //  // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+
+  //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
+  // }
 
 
 

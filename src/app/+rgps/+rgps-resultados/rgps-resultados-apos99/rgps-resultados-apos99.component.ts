@@ -429,8 +429,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     let label;
-
-    console.log(this.tipoBeneficio);
     switch (this.tipoBeneficio) {
       case 1: // Auxilio Doença Previdenciario
 

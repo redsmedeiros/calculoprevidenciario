@@ -18,7 +18,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
   // public requisitoPedagio50Regra3 = { m: 33, md: 12045, f: 28, fd: 10220 };
   // public tempoDeContribuicao50Regra3 = { m: 35, md: 12775, f: 30, fd: 10950 };
 
-
   public requisitoPedagio50Regra3 = { m: 33, md: 12053.25, f: 28, fd: 10227 };
   public tempoDeContribuicao50Regra3 = { m: 35, md: 12783.75, f: 30, fd: 10957.5 };
 
@@ -35,8 +34,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     formulaFator: '',
     fatorNaDib: '',
   };
-
-
 
 
 
@@ -140,9 +137,14 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
+
     const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDias;
+   // const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
+
     const tempoFinalContribAteEC103 = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
     const contribuicaoDiffAteEC103EAtual = tempoFinalContrib - tempoFinalContribAteEC103;
+
+
     let contribuicaoDiff = 0;
     let tempoDePedagio = 0;
     let tempoDePedagioTotal = 0;
@@ -154,9 +156,10 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
       contribuicaoDiff = (contribuicao_min - tempoFinalContrib);
       tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
+
       tempoFinalContribfinalComPedagio = contribuicao_min + tempoDePedagio;
 
-      // tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
+      ///  tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
 
@@ -216,9 +219,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       this.converterTempoDiasParaAnosFator(idadeDib),
       this.converterTempoDiasParaAnosFator(tempoFinalContribfinalComPedagio)
     );
-
-
-
 
 
     rstRegraPedagio50 = {
