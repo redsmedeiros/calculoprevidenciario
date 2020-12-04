@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 
 
 
+
 @Component({
   selector: 'app-rgps-planejamento-calculo-futuro',
   templateUrl: './rgps-planejamento-calculo-futuro.component.html',
@@ -19,7 +20,9 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
 
   @ViewChild('iframe') iframe: ElementRef;
 
+  private baseUrl = window.location.origin;
   private url;
+  private isResultRMIFutura;
 
   constructor(
     protected router: Router,
@@ -41,25 +44,46 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   }
 
 
+  private habilitarResultadoPlanejamento() {
+
+
+    setTimeout(() => {
+      this.isResultRMIFutura = true;
+    }, 2000);
+
+  }
+
+
   onLoad(e) {
+
+    console.log(' ---- onLoad executed ---- ');
     console.log('onLoad executed', e);
     console.log(this.iframe.nativeElement);
-    console.log( typeof this.iframe.nativeElement);
+    console.log(typeof this.iframe.nativeElement);
     console.log(this.iframe.nativeElement.querySelector('div'));
 
-    let doc =  this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
-    console.log(doc);
+    let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
+    console.log(doc.document.querySelector('#header'));
+    console.log(this.iframe.nativeElement.contentWindow.document.querySelector('#header'));
     console.log(doc.header);
+
+    console.log(' ---- onLoad executed ---- ');
 
     // var iframe = document.getElementById("myFrame");
     // var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];
     // elmnt.style.display = "none";
 
+
+    this.habilitarResultadoPlanejamento();
   }
 
   getURL() {
 
-    let value = `http://localhost:4200/#/rgps/rgps-resultados/`;
+    //let value = `http://localhost:4200/#/rgps/rgps-resultados/`;
+
+    console.log(this.router)
+
+    let value = `${this.baseUrl}/#/rgps/rgps-resultados/`;
     value += `${this.segurado.id}/${this.calculo.id}/plan/${this.planejamento.id}`;
 
     console.log(value);
@@ -72,8 +96,8 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
 
 
   seguirParaResultados() {
-    '/rgps/rgps-planejamento/resultados/275/228/2';
 
+    // let value = `${this.baseUrl}/#/rgps/rgps-planejamento/resultados/`;
     let value = `/rgps/rgps-planejamento/resultados/`;
     value += `${this.segurado.id}/${this.calculo.id}/${this.planejamento.id}`;
 
@@ -86,7 +110,7 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
     });
 
 
-    this.router.navigate(['/rgps/rgps-segurados']);
+    this.router.navigate([value]);
   }
 
 
