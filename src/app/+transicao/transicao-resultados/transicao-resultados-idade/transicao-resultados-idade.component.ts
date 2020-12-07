@@ -53,11 +53,11 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // };
 
     const regra5 = {
-      2019: { m: 65, md: 23741, f: 60, fd: 21915 },
-      2020: { m: 65, md: 23741, f: 60.5, fd: 22098 },
-      2021: { m: 65, md: 23741, f: 61, fd: 22280 },
-      2022: { m: 65, md: 23741, f: 61.5, fd: 22463 },
-      2023: { m: 65, md: 23741, f: 62, fd: 22645 },
+      2019: { m: 65, md: 23741.25, f: 60, fd: 21915 },
+      2020: { m: 65, md: 23741.25, f: 60.5, fd: 22098 },
+      2021: { m: 65, md: 23741.25, f: 61, fd: 22280 },
+      2022: { m: 65, md: 23741.25, f: 61.5, fd: 22463 },
+      2023: { m: 65, md: 23741.25, f: 62, fd: 22645 },
     };
 
     if (ano <= 2019) {
@@ -75,17 +75,15 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   }
 
 
-
-
   /**
    * regra 5 - idade
    */
   public requisitosRegra5(ano, sexo, idade, tempo_contribuicao) {
 
-    const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5478 : 15;
+    const contribuicao_min = (sexo === 'md' || sexo === 'fd') ? 5478.75 : 15;
     const regra5 = this.getparametrosRegra5(ano, sexo);
 
-     // console.log(regra5);
+    // console.log(regra5);
     // console.log(contribuicao_min);
 
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
@@ -221,7 +219,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
   public contadorRegra5() {
 
 
-    let auxiliarDate = (this.dataAtual.clone()).add(1, 'day');
+    let auxiliarDate = this.dataAtual.clone();
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
     let count = 0;
     let auxiliarDateClone;
@@ -266,11 +264,12 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //   auxiliarDate.add(correcaoAnoBissexto, 'days');
     // }
 
-   // console.log(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date())
+    // console.log(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date())
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15
-        && (this.seguradoTransicao.dataNascimento.month() === auxiliarDate.month()
-        && (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) < 1) ))
-    {
+      && (this.seguradoTransicao.dataNascimento.month() === auxiliarDate.month()
+        && (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) < 2)
+      )
+      || (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) < 2)) {
 
       auxiliarDate = moment({
         year: auxiliarDate.year(),
@@ -279,13 +278,20 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       });
 
       idadeMoment = this.calcularIdade(auxiliarDate);
-     
+
+      console.log(idadeMoment);
+
+      if (this.seguradoTransicao.sexo === 'm' &&
+        idadeMoment.days() === 1) {
+        idadeMoment.add(-1, 'day');
+      }
+
+      //idadeMoment.add(-1, 'day');
     } else {
 
       idadeMoment = this.calcularIdade(auxiliarDate);
       // idadeMoment.add(-1, 'day');
     }
-
 
     if (idadeMoment.days() === 30) {
       idadeMoment.add(1, 'day');
@@ -301,6 +307,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // console.log(count);
 
     //  tempoContribuicao += correcaoAnoBissexto;
+
+
+    console.log(tempoContribuicao);
 
     return {
       dataDib: auxiliarDate,
