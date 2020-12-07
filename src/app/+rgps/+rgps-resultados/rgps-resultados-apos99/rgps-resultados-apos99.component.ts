@@ -114,7 +114,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService) {
-    super(null, route, null, null, null, null);
+      super(null, route, null, null, null, null, null);
   }
 
   ngOnInit() {

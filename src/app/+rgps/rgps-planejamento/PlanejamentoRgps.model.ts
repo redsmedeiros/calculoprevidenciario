@@ -19,7 +19,7 @@ export class PlanejamentoRgps extends Model {
 
   public id;
   public id_calculo;
-  public data_fatura;
+  public data_futura;
   public valor_beneficio;
   public aliquota;
   public novo_rmi;

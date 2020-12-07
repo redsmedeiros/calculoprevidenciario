@@ -18,11 +18,11 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
 
   private calculoSelecionado;
-  private isCalculoSelecionado;
+  private isCalculoSelecionado = false;
   private isUpdatingCalculo = true;
 
   private planejamentoSelecionado;
-  private isPlanejamentoSelecionado;
+  private isPlanejamentoSelecionado =  false;
   private isUpdatingPlan = true;
 
   private isPaginaInicial = true;
@@ -186,7 +186,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     console.log(stepStatus);
 
     this.setStepValidate('step2', stepStatus);
-    this.isCalculoSelecionado = true;
+    this.isCalculoSelecionado = stepStatus;
     this.isUpdatingPlan = false;
 
 

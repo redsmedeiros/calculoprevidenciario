@@ -74,6 +74,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado = {};
   public rmiFinalCustom;
 
+  private numeroDeContribuicoesAux = 0;
+
 
 
 
@@ -93,7 +95,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private calcularListaContribuicoes: CalcularListaContribuicoes,
     private conclusoesFinais: conclusoesFinais,
   ) {
-    super(null, route, null, null, null, null);
+    super(null, route, null, null, null, null, null);
   }
 
 
@@ -136,7 +138,11 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.listaValoresContribuidos = valorescontribuidos;
 
         if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+
           this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
+          //this.calculo.tipo_seguro = this.planejamento.especie;
+          this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+
         }
 
         if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
@@ -236,6 +242,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.calculo.tipoBeneficio = this.tipoBeneficio;
 
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
+    this.numeroDeContribuicoesAux = numeroDeContribuicoes;
+
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
     this.fatorPrevidenciario = this.calcularFatorPrevidenciario(tempoContribuicaoTotal.anos,
@@ -462,7 +470,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       this.setMelhorValorRMI();
 
       setTimeout(() => {
-          this.updateResultPlanejamento();
+        this.updateResultPlanejamento();
       }, 500);
 
     }
@@ -481,13 +489,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     //this.planejamento.resultado_rmi_novo =  JSON.stringify(this.listaConclusaoAcesso);
     //this.planejamento.resultado_rmi_original = Math.round(this.calculo.valor_beneficio * 100) / 100;
 
+    const objExport = JSON.stringify(this.planejamento);
+    sessionStorage.setItem('exportPlanejamentoRSTRMI', objExport);
+
     this.RgpsPlanejamentoService
       .update(this.planejamento)
       .then(model => {
         console.log(model);
       })
       .catch((errors) => {
-          console.log(errors);
+        console.log(errors);
       });
   }
 
@@ -659,6 +670,14 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       const mesesCarencia = 180;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
+
+      if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+
+        ///criar carencia auxiliar
+        this.calculo.carencia = this.numeroDeContribuicoesAux;
+        this.calculo.carencia_apos_ec103 = this.numeroDeContribuicoesAux;
+        this.carenciaConformDataFiliacao = this.numeroDeContribuicoesAux;
+      }
 
 
       if (this.calculo.carencia_apos_ec103 < mesesCarencia) {

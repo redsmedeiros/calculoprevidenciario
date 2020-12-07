@@ -1,9 +1,10 @@
 
-import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, } from '@angular/core';
-import { ErrorService } from '../../../services/error.service';
+import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, SimpleChange, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 import { RgpsPlanejamentoService } from './../rgps-planejamento.service';
 import { PlanejamentoRgps } from './../PlanejamentoRgps.model';
+import { ErrorService } from '../../../services/error.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -27,6 +28,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
   @Input() segurado;
   @Input() calculo;
+  @Input() isCalculoSelecionado;
 
   @Output() planejamentoSelecionadoEvent = new EventEmitter();
 
@@ -36,16 +38,22 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   public isCreate = false;
   public checkboxIdList = [];
   public dateMaskdiB = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/,];
-  public dataFutura;
-  public dataHoje = moment();
   public isUpdatePlan = true;
-  public valorBeneficio;
-  public aliquota;
-  public id_calculo;
-  
+  public userId;
+
   public userCheck = false;
 
-  public model = {
+  /// form
+
+  private id;
+  private id_calculo;
+  private data_futura;
+  private valor_beneficio;
+  private aliquota;
+  private especie;
+  /// form
+
+  public plan = {
     id: '',
     id_calculo: '',
     data_futura: '',
@@ -102,7 +110,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
           return this.formatData(data);
         }
       },
-      {data: 'especie'},
+      { data: 'especie' },
       {
         data: 'valor_beneficio',
         render: (data) => {
@@ -115,10 +123,11 @@ export class RgpsPlanejamentoListComponent implements OnInit {
           return this.formatAliquota(data);
         }
       },
-      { data: 'actions',
+      {
+        data: 'actions',
         render: (data, type, row) => {
           return this.getAcoesPlanejamento(row.id);
-        }, width: '6rem', class: 'p-0' 
+        }, width: '6rem', class: 'p-0'
       },
       {
         data: 'selecionarPlanejamento',
@@ -138,19 +147,26 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // console.log(this.segurado);
-    // console.log(this.calculo);
 
-    // console.log(this.planejamentoTableOptions);
-    // console.log(this.calculo);
+    this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
 
-    this.id_calculo = this.calculo.id;
-    this.model.id_calculo = this.calculo.id;
+    if (this.userId) {
+      localStorage.setItem('user_id', this.userId);
+    } else {
+      window.location.href = environment.loginPageUrl;
+    }
 
-    // console.log(this.route.snapshot.params['correcao_pbc'])
-    // console.log(this.route.snapshot.params['pbc'])
+  }
 
-    this.getInfoCalculos();
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+
+    const changedCalculo = changes['calculo'];
+    const changedSegurado = changes['segurado'];
+
+    if (changedCalculo.currentValue) {
+      this.getInfoCalculos();
+    }
+
   }
 
 
@@ -163,7 +179,8 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
   private getInfoCalculos() {
-    
+
+    this.id_calculo = this.calculo.id;
     console.log(this.rgpsPlanejamentoService.list);
 
     this.isUpdatePlan = true;
@@ -183,37 +200,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-
-  // private setForm(
-  //   dataFutura,
-  //   valorBeneficio,
-  //   aliquota,
-  // ) {
-  //   this.model.data_futura = this.formatReceivedDate(dataFutura);
-  //   this.model.valor_beneficio = valorBeneficio;
-  //   this.model.aliquota = aliquota;
-  //   this.model.aliquota = aliquota;
-
-  // }
-
-
-  formatReceivedDate(inputDate) {
-
-    var date = new Date(inputDate);
-    date.setTime(date.getTime() + 5 * 60 * 60 * 1000);
-    if (!isNaN(date.getTime())) {
-      // Months use 0 index.
-      return (
-        ('0' + date.getDate()).slice(-2) +
-        '/' +
-        ('0' + (date.getMonth() + 1)).slice(-2) +
-        '/' +
-        date.getFullYear()
-      );
-    }
-    return '';
-
-  }
 
 
   changeAliquota() { }
@@ -239,13 +225,27 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-  novoPlanejamento() {
-    this.verificaPlano();
-    this.isEdit = false;
-    this.resetForm();
-    this.showChildModal();
-  }
+  // novoPlanejamento() {
+  //   this.verificaPlano();
+  //   this.isEdit = false;
+  //   this.resetForm();
+  //   this.showChildModal();
+  // }
 
+
+  private setPlan() {
+
+    if (this.isExits(this.id)) {
+      this.plan.id = this.id;
+    }
+
+    this.plan.id_calculo = this.id_calculo;
+    this.plan.data_futura = this.formatReceivedDate(this.data_futura);
+    this.plan.valor_beneficio = this.valor_beneficio;
+    this.plan.aliquota = this.aliquota;
+    this.plan.especie = this.especie;
+
+  }
 
   //private deletarPlananejamentoList(rowPlan) {
   private deletarPlananejamentoList(id) {
@@ -282,116 +282,103 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-
   // getupdatePlananejamentoList(rowPlan) {
   getupdatePlananejamentoList(id) {
 
     this.isEdit = true;
-    this.model = this.planejamentoListData.find(row => row.id === id);
+    this.plan = this.planejamentoListData.find(row => row.id === id);
 
-    console.log(this.model);
+    this.id = this.plan.id;
+    this.data_futura = this.plan.data_futura;
+    this.valor_beneficio = this.plan.valor_beneficio;
+    this.aliquota = this.plan.aliquota;
+    this.especie = this.plan.especie;
 
-
-    this.model.data_futura = this.formatReceivedDate(this.model.data_futura);
+    this.data_futura = this.formatReceivedDate(this.plan.data_futura);
 
   }
 
 
-  public updatePlan() {
-    this.validate();
-    this.rgpsPlanejamentoService
-      .update(this.model)
-      .then(model => {
+  resetForm() {
 
-        swal({
-          position: 'top-end',
-          type: 'success',
-          title: 'Dados alterado com sucesso.',
-          showConfirmButton: false,
-          timer: 1000
+    this.id = '';
+    this.data_futura = '';
+    this.valor_beneficio = '';
+    this.aliquota = '';
+    this.especie = '';
+
+  }
+
+
+  public updatePlan(event) {
+    if (this.valid()) {
+
+      this.setPlan();
+
+      this.rgpsPlanejamentoService
+        .update(this.plan)
+        .then(model => {
+
+          swal({
+            position: 'top-end',
+            type: 'success',
+            title: 'Dados alterado com sucesso.',
+            showConfirmButton: false,
+            timer: 1000
+          });
+
+          this.getInfoCalculos();
+          this.resetForm();
+
+        })
+        .catch((errors) => {
+
+          // this.errors.add(errors);
+
         });
-        this.getInfoCalculos();
-        this.resetForm();
-      })
-      .catch((errors) => {
-
-        this.errors.add(errors);
-
-      });
-  }
-
-
-  setActiveStep(steo) {
-    this.activeStep = steo;
-
-  }
-
-  prevStep() {
-    let idx = this.steps.indexOf(this.activeStep);
-    if (idx > 0) {
-      this.activeStep = this.steps[idx - 1];
     }
   }
 
-  nextStep() {
-    this.activeStep.submitted = true;
-    if (!this.activeStep.valid) {
-      return;
+
+
+
+  salvarPlanejamento(event) {
+
+    console.log(this.valid());
+
+    if (this.valid()) {
+
+      this.setPlan();
+
+      // const planejamentoObj = new PlanejamentoRgps;
+      // this.plan
+
+      console.log(this.plan);
+
+      this.rgpsPlanejamentoService
+        .save(this.plan)
+        .then((model) => {
+          this.getInfoCalculos();
+          swal({
+            position: 'top-end',
+            type: 'success',
+            title: 'Dados salvo com sucesso.',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.resetForm();
+        }).catch((errors) => {
+
+          // this.errors.add(errors);
+
+        });
     }
-    this.activeStep.checked = true;
-    if (this.steps.every((it) => it.valid && it.checked)) {
-      this.onWizardComplete(this.model);
-    } else {
-      let idx = this.steps.indexOf(this.activeStep);
-      this.activeStep = null;
 
-      while (!this.activeStep) {
-        idx = idx === this.steps.length - 1 ? 0 : idx + 1;
-        if (!this.steps[idx].valid || !this.steps[idx].checked) {
-          this.activeStep = this.steps[idx];
-        }
-      }
-    }
-  }
-
-  onWizardComplete(data) {
-    console.log('Dados completo', data);
-
-    // this.rgpsPlanejamentoService.save(data).then((model) => {
-    //   this.validateInputs();
-    //   this.hideChildModal();
-    //   this.getInfoCalculos();
-    //   swal({
-    //     position: 'top-end',
-    //     type: 'success',
-    //     title: 'Dados salvo com sucesso.',
-    //     showConfirmButton: false,
-    //     timer: 1000
-    //   });
-    //   this.resetForm();
-    // });
   }
 
 
-  salvarPlanejamento() {
 
-    this.rgpsPlanejamentoService.save(this.model).then((model) => {
-      this.validateInputs();
-      //  this.hideChildModal();
-      this.getInfoCalculos();
-      swal({
-        position: 'top-end',
-        type: 'success',
-        title: 'Dados salvo com sucesso.',
-        showConfirmButton: false,
-        timer: 1000
-      });
-      this.resetForm();
-    });
-  }
   //planejamentoSelecionadoEvent
-
-
   private planejar(id) {
 
     const objPlan = this.planejamentoListData.find(row => row.id === id);
@@ -415,49 +402,12 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
       const objExport = JSON.stringify(objPlan);
       sessionStorage.setItem('exportPlanejamento', objExport);
-      
+
       this.isPlanejamentoSelecionado = true;
       this.planejamentoSelecionadoEvent.emit(this.planejamentoSelecionado);
 
     }
   }
-
-
-  // custom change detection
-  ngDoCheck() {
-
-    this.model.id_calculo = this.id_calculo;
-    if (!this.lastModel) {
-      // backup model to compare further with
-      this.lastModel = Object.assign({}, this.model);
-    } else {
-      if (
-        Object.keys(this.model).some(
-          (it) => this.model[it] != this.lastModel[it]
-        )
-      ) {
-        // change detected
-        this.steps.find(it => it.key == 'step1').valid = this.activeStep.checked = true;
-        this.steps.find(it => it.key == 'step2').valid = this.activeStep.checked = true;
-        this.steps.find((it) => it.key == 'step3').valid = !!(
-          this.model.data_futura &&
-          this.model.valor_beneficio &&
-          this.model.aliquota
-        );
-
-        this.lastModel = Object.assign({}, this.model);
-      }
-    }
-
-  }
-
-  private isExits(value) {
-    return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
-      value !== undefined && value != '')
-      ? true : false;
-  }
-
 
 
 
@@ -467,12 +417,12 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     //           Selecionar <i class="fa fa-arrow-circle-right"></i>
     //       </button>`;
 
-    return `<input type="checkbox" id='${id}-checkbox'
-                 class="checked-row-one checkbox m-0"
-                 value="${id}">`;
+    return `<div class="checkbox"><label>
+                 <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox checkboxCalculos" value="${id}"><span></span></label>
+          </div>`;
   }
 
-  private getAcoesPlanejamento(id){
+  private getAcoesPlanejamento(id) {
     return `
         <div class="btn-group">
           <button type="button" id='${id}-edit' class="btn btn-xs btn-warning update-btn" title='Editar'>
@@ -504,10 +454,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     return value + '%';
   }
 
-
-
-
-
   public showChildModal(): void {
     this.modalCreatePlan.show();
   }
@@ -516,64 +462,75 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.modalCreatePlan.hide();
   }
 
-  resetForm() {
-    this.model.data_futura = '';
-    this.model.valor_beneficio = '';
-    this.model.aliquota = '';
-    this.model.especie = '';
+
+
+  private isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value != 'null' &&
+      value !== undefined && value != '')
+      ? true : false;
   }
 
-  validate() {
+
+
+
+  valid() {
 
     this.errors.clear();
-
-    let dataHoje = moment();
-    const dataFutura = moment(this.model.data_futura, 'DD/MM/YYYY');
-
-    if (this.model.data_futura === undefined || this.model.data_futura === '') {
-      swal({
-        position: 'top-end',
-        type: 'error',
-        title: 'Data inválida.',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }
-    if (dataFutura < dataHoje) {
-      this.model.data_futura = '';
-      swal({
-        position: 'top-end',
-        type: 'error',
-        title: 'Data não pode ser menor que ' + this.formatReceivedDate(moment()) + '.',
-        showConfirmButton: false,
-        timer: 2000
-      });
-    }
-  }
-
-  validateInputs() {
-
-
     let valid = true;
 
-    if (this.isEmptyInput(this.model.data_futura)) {
-      this.errors.add({ 'dataFutura': ['Data do planejamento necessária'] });
-      valid = false;
-    } else if (!moment(this.model.data_futura, 'MM/YYYY').isValid()) {
-      this.errors.add({ 'dataFutura': ['Insira uma data válida'] });
-      valid = false;
-    } else if (moment(this.model.data_futura, 'DD/MM/YYYY') < this.dataHoje) {
-      this.errors.add({ 'dataFutura': ['A data deve ser superior a data do dia.'] });
+
+    if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
+      this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
       valid = false;
     }
-  }
 
-  isEmptyInput(input) {
-    if (input === '' || input === undefined || input === null) {
-      return true;
+
+    if (this.aliquota == undefined || this.aliquota == '') {
+      this.errors.add({ 'sexo': ['O campo é obrigatório.'] });
+      valid = false;
     }
-    return false;
+
+
+    if (this.especie == undefined || this.especie == '') {
+      this.errors.add({ 'sexo': ['O campo é obrigatório.'] });
+      valid = false;
+
+    }
+
+    const dataHoje = moment();
+
+    if (!this.isExits(this.data_futura)) {
+      this.errors.add({ 'data_futura': ['Data do planejamento necessária'] });
+      valid = false;
+
+    } else if (moment(this.data_futura, 'DD/MM/YYYY') < dataHoje) {
+      this.errors.add({ 'data_futura': ['A data deve ser superior a data do dia.'] });
+      valid = false;
+    }
+
+
+    return valid;
   }
 
+
+
+  formatReceivedDate(inputDate) {
+
+    const date = new Date(inputDate);
+    date.setTime(date.getTime() + 5 * 60 * 60 * 1000);
+    if (!isNaN(date.getTime())) {
+      // Months use 0 index.
+      return (
+        ('0' + date.getDate()).slice(-2) +
+        '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2) +
+        '/' +
+        date.getFullYear()
+      );
+    }
+    return '';
+
+  }
 
 }

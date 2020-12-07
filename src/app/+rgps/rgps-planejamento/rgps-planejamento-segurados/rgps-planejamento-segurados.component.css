@@ -1,0 +1,19 @@
+@media screen and (max-width: 768px) {
+  .jumbotrom-custom-plan {
+    min-height: 780px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+    .jumbotrom-custom-plan {
+      min-height: 825px;
+    }
+  } 
+
+/* 
+@media screen and (max-width: 1500px) {
+  .jumbotrom-custom-plan {
+    min-height: 825px;
+  }
+}
+*/

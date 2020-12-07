@@ -1,6 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { RgpsPlanejamentoService } from './../rgps-planejamento.service';
+import { PlanejamentoRgps } from './../PlanejamentoRgps.model';
 import swal from 'sweetalert2';
 
 
@@ -27,7 +30,8 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    protected planejamentoService: RgpsPlanejamentoService,
   ) { }
 
   ngOnInit() {
@@ -44,30 +48,46 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   }
 
 
-  private habilitarResultadoPlanejamento() {
+  private getValueRMIFutura() {
 
 
-    setTimeout(() => {
-      this.isResultRMIFutura = true;
-    }, 2000);
+      const planejamentoP = this.planejamentoService.find(this.planejamento.id)
+      .then((planejamentoRMIRST: PlanejamentoRgps) => {
+
+        console.log('fim')
+        console.log(planejamentoRMIRST);
+
+      }).catch(errors => console.log(errors));
 
   }
 
 
+  private habilitarResultadoPlanejamento() {
+
+
+    setTimeout(() => {
+
+      this.getValueRMIFutura();
+      this.isResultRMIFutura = true;
+
+    }, 2000);
+
+  }
+
   onLoad(e) {
 
-    console.log(' ---- onLoad executed ---- ');
-    console.log('onLoad executed', e);
-    console.log(this.iframe.nativeElement);
-    console.log(typeof this.iframe.nativeElement);
-    console.log(this.iframe.nativeElement.querySelector('div'));
+    // console.log(' ---- onLoad executed ---- ');
+    // console.log('onLoad executed', e);
+    // console.log(this.iframe.nativeElement);
+    // console.log(typeof this.iframe.nativeElement);
+    // console.log(this.iframe.nativeElement.querySelector('div'));
 
-    let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
-    console.log(doc.document.querySelector('#header'));
-    console.log(this.iframe.nativeElement.contentWindow.document.querySelector('#header'));
-    console.log(doc.header);
+    // let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
+    // console.log(doc.document.querySelector('#header'));
+    // console.log(this.iframe.nativeElement.contentWindow.document.querySelector('#header'));
+    // console.log(doc.header);
 
-    console.log(' ---- onLoad executed ---- ');
+    // console.log(' ---- onLoad executed ---- ');
 
     // var iframe = document.getElementById("myFrame");
     // var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];

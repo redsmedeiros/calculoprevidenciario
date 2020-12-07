@@ -1,3 +1,4 @@
+
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
@@ -19,6 +20,7 @@ import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
+import { RgpsPlanejamentoService } from 'app/+rgps/rgps-planejamento/rgps-planejamento.service';
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
@@ -287,6 +289,7 @@ export class RgpsResultadosComponent implements OnInit {
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoRgps: CalculoRgpsService,
+    protected planejamentoService: RgpsPlanejamentoService,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
@@ -299,8 +302,6 @@ export class RgpsResultadosComponent implements OnInit {
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
 
     this.isPlanejamento = this.getIsPlanejamento();
-
-
 
     this.isUpdating = true;
 
@@ -358,7 +359,7 @@ export class RgpsResultadosComponent implements OnInit {
                 counter++;
               });
           }
-
+          
         }
       });
   }
@@ -1079,7 +1080,7 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
 
-    if (this.planejamento) {
+    if (this.isPlanejamento) {
       calculo.mostrarCalculo91_98 = false;
       calculo.mostrarCalculo98_99 = false;
       calculo.mostrarCalculoApos99 = false;
@@ -1345,7 +1346,7 @@ export class RgpsResultadosComponent implements OnInit {
 
     this.planejamentoContribuicoesAdicionais = []
     let auxiliarDate = this.dataInicioBeneficio.clone();
-    const fimContador = this.dataInicioBeneficioOld.clone(); 
+    const fimContador = this.dataInicioBeneficioOld.clone();
     let count = 0;
     const valorSalContrib = Number();
     let ObjValContribuicao;
@@ -1381,11 +1382,15 @@ export class RgpsResultadosComponent implements OnInit {
   private setInfoPLanejamentoTempoDib(calculo, calcClone) {
     if (this.isExits(this.planejamento) && calculo.id === this.planejamento.id_calculo) {
 
+      // set valores originais para atrib old
       calculo.data_pedido_beneficio_old = calcClone.data_pedido_beneficio;
+      calculo.especie_old = calcClone.especie;
       this.dataInicioBeneficioOld = moment(calculo.data_pedido_beneficio_old, 'DD/MM/YYYY');
 
+      // set atrib conformeplanejamento
       calculo.data_pedido_beneficio = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
       this.dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+      calculo.tipo_seguro = this.planejamento.especie;
 
       this.setTempoContribuicao(
         calculo,
@@ -1402,26 +1407,40 @@ export class RgpsResultadosComponent implements OnInit {
     console.log(this.route.snapshot.params['correcao_pbc']);
     console.log(this.route.snapshot.params['pbc']);
 
+    const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
+
     if (this.isPlanejamento) {
 
+      if (sessionStorage.exportPlanejamento) {
 
-      const calcClone = Object.assign({}, calculo);
+        const exportObjPlanejamento = JSON.parse(sessionStorage.exportPlanejamento);
+        this.planejamento = new PlanejamentoRgps(exportObjPlanejamento);
+        const calcClone = Object.assign({}, calculo);
+        this.setInfoPLanejamentoTempoDib(calculo, calcClone);
 
-      const exportObjPlanejamento = JSON.parse(sessionStorage.exportPlanejamento);
+      } else {
+        this.isUpdating = true;
+        const planejamentoP = this.planejamentoService.find(idPlanejamento)
+          .then((planejamento: PlanejamentoRgps) => {
 
-      this.planejamento = new PlanejamentoRgps(exportObjPlanejamento);
 
-      this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+            console.log(planejamento);
+            this.planejamento = planejamento;
 
-      console.log(this.planejamento);
+            const calcClone = Object.assign({}, calculo);
+            this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+
+            this.isUpdating = false;
+          }).catch(errors => console.log(errors));
+
+      }
+
+
+
 
       // this.dataInicioBeneficio = exportDados.dib;
-
       // this.changePeriodoOptions();
-
       // const dib = moment(exportDados.dib, 'DD/MM/YYYY');
-
-
       // PlanejamentoRgps
     }
 

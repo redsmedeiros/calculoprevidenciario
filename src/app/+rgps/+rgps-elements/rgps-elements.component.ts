@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FadeInTop} from '../../shared/animations/fade-in-top.decorator';
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { ExpectativaVida } from '../+rgps-resultados/ExpectativaVida.model';
@@ -48,160 +48,162 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     colReorder: false,
     paging: false,
     searching: false,
-    ordering:  false,
-    bInfo : false,
+    ordering: false,
+    bInfo: false,
     data: this.tableData,
     columns: [
-      {data: 'data_calculo',
-      render: (data) => {
-        return this.formatReceivedDate(data);
+      {
+        data: 'data_calculo',
+        render: (data) => {
+          return this.formatReceivedDate(data);
         }
       },
-      {data: 'especie'},
-      {data: 'dib'},
-      {data: 'beneficio'},
-    ] 
+      { data: 'especie' },
+      { data: 'dib' },
+      { data: 'beneficio' },
+    ]
   };
   constructor(protected Segurado: SeguradoService,
-  						private ExpectativaVida: ExpectativaVidaService,
-  						protected CalculoRgps:CalculoRgpsService,
-              protected router: Router,
-              private Moeda: MoedaService,
-    					protected route: ActivatedRoute,) 
-  {super(null,null,null,null,null,null);}
+    private ExpectativaVida: ExpectativaVidaService,
+    protected CalculoRgps: CalculoRgpsService,
+    protected router: Router,
+    private Moeda: MoedaService,
+    protected route: ActivatedRoute,) { super(null, null, null, null, null, null, null); }
 
   ngOnInit() {
-  	this.isUpdating = true;
+    this.isUpdating = true;
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.boxId = this.generateBoxId(this.calculo.id, 'comparar');
 
-   	this.Segurado.find(this.idSegurado)
+    this.Segurado.find(this.idSegurado)
       .then(segurado => {
         this.segurado = segurado;
         this.dataNascimentoSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
 
         this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
-        .then((moeda: Moeda[]) => {
-        this.moeda = moeda;
-      //  console.log( this.moeda );
-        });
+          .then((moeda: Moeda[]) => {
+            this.moeda = moeda;
+            //  console.log( this.moeda );
+          });
 
-       	this.CalculoRgps.find(this.route.snapshot.params['id_calculo1'])
-       		.then((calculo:CalculoModel) => {
-       			this.calculo1 = calculo;
-       			let data = [];
-       			data.push({data_calculo:calculo.data_calculo,
-       								especie: calculo.tipo_seguro,
-       								dib: calculo.data_pedido_beneficio,
-                       beneficio: calculo.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
-                    });
+        this.CalculoRgps.find(this.route.snapshot.params['id_calculo1'])
+          .then((calculo: CalculoModel) => {
+            this.calculo1 = calculo;
+            let data = [];
+            data.push({
+              data_calculo: calculo.data_calculo,
+              especie: calculo.tipo_seguro,
+              dib: calculo.data_pedido_beneficio,
+              beneficio: calculo.valor_beneficio.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+            });
 
 
-       			this.CalculoRgps.find(this.route.snapshot.params['id_calculo2'])
-       				.then((calculo2:CalculoModel) => {
-       					this.calculo2 = calculo2;
-       					data.push({data_calculo:calculo2.data_calculo,
-       										 especie: calculo2.tipo_seguro,
-       										 dib: calculo2.data_pedido_beneficio,
-                            beneficio: calculo2.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2})
-                          });
-       					if(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY') < 
-       					moment(this.calculo1.data_pedido_beneficio, 'DD/MM/YYYY')){
-       						let aux = this.calculo1;
-       						this.calculo1 = this.calculo2;
-       						this.calculo2 = aux;
-       					}
+            this.CalculoRgps.find(this.route.snapshot.params['id_calculo2'])
+              .then((calculo2: CalculoModel) => {
+                this.calculo2 = calculo2;
+                data.push({
+                  data_calculo: calculo2.data_calculo,
+                  especie: calculo2.tipo_seguro,
+                  dib: calculo2.data_pedido_beneficio,
+                  beneficio: calculo2.valor_beneficio.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })
+                });
+                if (moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY') <
+                  moment(this.calculo1.data_pedido_beneficio, 'DD/MM/YYYY')) {
+                  let aux = this.calculo1;
+                  this.calculo1 = this.calculo2;
+                  this.calculo2 = aux;
+                }
 
-       					this.tableData = data;
-       					this.tableOptions = {
-         					...this.tableOptions,
-         					data: this.tableData,
-       					}
-                 let idadeExpectativa = Math.abs(this.dataNascimentoSegurado.diff(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY'), 'years'));
-                 
-       					this.ExpectativaVida.getByIdade(idadeExpectativa)
-       						.then(expvida =>{
-       							this.expvida = expvida;
-       							this.compare_calculations(this.calculo1, this.calculo2);
-       							this.isUpdating = false;
-                 });
-                 
-                
-       			});
-       	});
-    });
+                this.tableData = data;
+                this.tableOptions = {
+                  ...this.tableOptions,
+                  data: this.tableData,
+                }
+                let idadeExpectativa = Math.abs(this.dataNascimentoSegurado.diff(moment(this.calculo2.data_pedido_beneficio, 'DD/MM/YYYY'), 'years'));
+
+                this.ExpectativaVida.getByIdade(idadeExpectativa)
+                  .then(expvida => {
+                    this.expvida = expvida;
+                    this.compare_calculations(this.calculo1, this.calculo2);
+                    this.isUpdating = false;
+                  });
+
+
+              });
+          });
+      });
   }
 
-  changeAliquota(){
+  changeAliquota() {
 
   }
 
-  recalcular(){
-    
+  recalcular() {
+
     this.compare_calculations(this.calculo1, this.calculo2);
-    
+
   }
-  
+
 
   //na página de listagem de cálculos ha um checkbox para cada cálculos. Quando clicado em realizar cálculos, 
   //deverão ser realizados todos os cálculos selecionas normalmente. Podem ser selecionados 1 ou mais cálculos.
-	//na página de resultado de cálculos, há a listagem de cálculos cujos resultados estão sendo exibidos. 
-	//Tal listagem também possui checkbox. Nesta listagem é possivel fazer a comparação.
-	//a comparação sempre deve ser feita com exatamente 2 cálculos da forma como mostrado abaixo.
+  //na página de resultado de cálculos, há a listagem de cálculos cujos resultados estão sendo exibidos. 
+  //Tal listagem também possui checkbox. Nesta listagem é possivel fazer a comparação.
+  //a comparação sempre deve ser feita com exatamente 2 cálculos da forma como mostrado abaixo.
 
-	compare_calculations(calculo1, calculo2){
+  compare_calculations(calculo1, calculo2) {
     this.resultadosFacultativo = [];
     this.resultadosDescontadoSlario = [];
     this.sexoSegurado = this.segurado.sexo;
-//console.log(calculo1);
-//console.log(calculo2);
+    //console.log(calculo1);
+    //console.log(calculo2);
 
     let dateFormat = ('DD/MM/YYYY');
-		let dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, dateFormat);
+    let dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, dateFormat);
     let dataInicioBeneficio2 = moment(calculo2.data_pedido_beneficio, dateFormat);
     let valor = this.Moeda.getByDate(moment());
     let salMinimo = valor.salario_minimo * 0.05;
-    
 
-	//	let dataComparacao = (dataInicioBeneficio2.clone()).startOf('month');
 
-		let totalEntreDatas = 0;
-		let tempoMinimo1 = 0;
+    //	let dataComparacao = (dataInicioBeneficio2.clone()).startOf('month');
+
+    let totalEntreDatas = 0;
+    let tempoMinimo1 = 0;
     let tempoMinimo2 = 0;
 
     // Veriricar se os valores para soma de contribuicoes existem, caso não existam considerar 0.
     let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.soma_contribuicao);
 
     investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
-   
-    let aliquota = this.aliquota/100;
-   
-    switch(aliquota){
-      case (0.05) : investimentoEntreDatas*=aliquota;
-      break;
-      case (0.2) : investimentoEntreDatas *= aliquota;
-      break;
-      case (0.11) :investimentoEntreDatas *= aliquota;
-      break;
-      case (0.31) :investimentoEntreDatas *= aliquota;
-      break;
+
+    let aliquota = this.aliquota / 100;
+
+    switch (aliquota) {
+      case (0.05): investimentoEntreDatas *= aliquota;
+        break;
+      case (0.2): investimentoEntreDatas *= aliquota;
+        break;
+      case (0.11): investimentoEntreDatas *= aliquota;
+        break;
+      case (0.31): investimentoEntreDatas *= aliquota;
+        break;
     }
-    
-   // investimentoEntreDatas *= aliquota;
- // console.log("valor :",investimentoEntreDatas); 
-    let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2); 
-      
+
+    // investimentoEntreDatas *= aliquota;
+    // console.log("valor :",investimentoEntreDatas); 
+    let mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+
     // Variável que guarda o Total que deixou de receber caso tivesse se aposentado na primeira data
-   
+
     let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
-    let diferencaRmi = Math.abs(calculo2.valor_beneficio-calculo1.valor_beneficio);
+    let diferencaRmi = Math.abs(calculo2.valor_beneficio - calculo1.valor_beneficio);
 
     if (diferencaRmi != 0) {
-			tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
-			tempoMinimo2 = (totalPerdidoEntreData / diferencaRmi) / 13;
+      tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
+      tempoMinimo2 = (totalPerdidoEntreData / diferencaRmi) / 13;
     }
-   
-    
+
+
     let tempoMinimo1Meses = Math.floor((tempoMinimo1 - Math.floor(tempoMinimo1)) * 12);
 
     let idadeSegurado = Math.abs(this.dataNascimentoSegurado.diff(moment(), 'years'));
@@ -212,91 +214,121 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     let expectativaDIB = this.projetarExpectativa(idadeSeguradoDIB, dataInicioBeneficio2);
 
     let expectativaSegurado = expectativaDIB + idadeSeguradoDIB;
-    
+
 
     let expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo1)) * 13);
-    if (expectativaTotalMeses < 0){
-    	expectativaTotalMeses = 0;
+    if (expectativaTotalMeses < 0) {
+      expectativaTotalMeses = 0;
     }
     expectativaTotalMeses *= diferencaRmi;
 
-      let currency = this.loadCurrency(dataInicioBeneficio2);
+    let currency = this.loadCurrency(dataInicioBeneficio2);
 
     this.idadeUltimaDib = idadeSeguradoDIB;
 
     // No Box:
     // Hipótese em que o segurado contribuía como segurado facultativo ou contribuinte individual cuja alíquota é de 'Aliquota Selecionada:
-    this.resultadosFacultativo.push({string: 'Espécie:',  value:calculo1.tipo_seguro });
+    this.resultadosFacultativo.push({ string: 'Espécie:', value: calculo1.tipo_seguro });
 
-    this.resultadosFacultativo.push({string: 'DIB:',  value:calculo1.data_pedido_beneficio });
+    this.resultadosFacultativo.push({ string: 'DIB:', value: calculo1.data_pedido_beneficio });
 
-    this.resultadosFacultativo.push({string: 'Benefício:',  value:calculo1.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2}) });
+    this.resultadosFacultativo.push({ string: 'Benefício:', value: calculo1.valor_beneficio.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) });
 
-    this.resultadosFacultativo.push({string: 'Total investido em contribuições ao INSS entre as duas datas:', 
-    														value:this.formatMoney(investimentoEntreDatas, currency.acronimo)});
-    
-    this.resultadosFacultativo.push({string: 'Total que deixou de receber caso tivesse se aposentado na primeira data: ', 
-    														value:this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
-   	
-   	this.resultadosFacultativo.push({string: 'Total perdido: ', 
-    														value:this.formatMoney((investimentoEntreDatas + totalPerdidoEntreData), currency.acronimo)});
-    
-    this.resultadosFacultativo.push({string: 'Diferença entre os dois benefícios: ', 
-    														value:this.formatMoney(diferencaRmi, currency.acronimo)});
-    
-    this.resultadosFacultativo.push({string: 'Tempo mínimo necessário para recuperar as perdas:  ', 
-    														value:Math.floor(tempoMinimo1) + " ano(s) e " + tempoMinimo1Meses + " mes(es)"});
-    
-    this.resultadosFacultativo.push({string: 'Idade do segurado quando recuperar as perdas: ', 
-    														value: Math.floor(idadeSeguradoDIB + tempoMinimo1) + " ano(s) " + tempoMinimo1Meses + " mes(es)"});
-    
-    this.resultadosFacultativo.push({string: 'Idade do segurado de acordo com a expectativa de sobrevida (IBGE): ', 
-    														value:Math.floor(expectativaSegurado) + " anos " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"});
-    
-    this.resultadosFacultativo.push({string: 'Total de ganhos até atingir a idade esperada (incluindo 13º salário): ', 
-    														value:this.formatMoney(expectativaTotalMeses, currency.acronimo)});
+    this.resultadosFacultativo.push({
+      string: 'Total investido em contribuições ao INSS entre as duas datas:',
+      value: this.formatMoney(investimentoEntreDatas, currency.acronimo)
+    });
 
-		expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo2)) * 13);
+    this.resultadosFacultativo.push({
+      string: 'Total que deixou de receber caso tivesse se aposentado na primeira data: ',
+      value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)
+    });
 
-		if (expectativaTotalMeses < 0){
-			expectativaTotalMeses = 0;
-		}
+    this.resultadosFacultativo.push({
+      string: 'Total perdido: ',
+      value: this.formatMoney((investimentoEntreDatas + totalPerdidoEntreData), currency.acronimo)
+    });
+
+    this.resultadosFacultativo.push({
+      string: 'Diferença entre os dois benefícios: ',
+      value: this.formatMoney(diferencaRmi, currency.acronimo)
+    });
+
+    this.resultadosFacultativo.push({
+      string: 'Tempo mínimo necessário para recuperar as perdas:  ',
+      value: Math.floor(tempoMinimo1) + " ano(s) e " + tempoMinimo1Meses + " mes(es)"
+    });
+
+    this.resultadosFacultativo.push({
+      string: 'Idade do segurado quando recuperar as perdas: ',
+      value: Math.floor(idadeSeguradoDIB + tempoMinimo1) + " ano(s) " + tempoMinimo1Meses + " mes(es)"
+    });
+
+    this.resultadosFacultativo.push({
+      string: 'Idade do segurado de acordo com a expectativa de sobrevida (IBGE): ',
+      value: Math.floor(expectativaSegurado) + " anos " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"
+    });
+
+    this.resultadosFacultativo.push({
+      string: 'Total de ganhos até atingir a idade esperada (incluindo 13º salário): ',
+      value: this.formatMoney(expectativaTotalMeses, currency.acronimo)
+    });
+
+    expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo2)) * 13);
+
+    if (expectativaTotalMeses < 0) {
+      expectativaTotalMeses = 0;
+    }
 
     expectativaTotalMeses *= diferencaRmi;
 
     // No Box:
     // Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário;
-    this.resultadosDescontadoSlario.push({string: 'Espécie:',  value:calculo2.tipo_seguro });
+    this.resultadosDescontadoSlario.push({ string: 'Espécie:', value: calculo2.tipo_seguro });
 
-    this.resultadosDescontadoSlario.push({string: 'DIB:',  value:calculo2.data_pedido_beneficio });
+    this.resultadosDescontadoSlario.push({ string: 'DIB:', value: calculo2.data_pedido_beneficio });
 
-    this.resultadosDescontadoSlario.push({string: 'Benefício:',  value:calculo2.valor_beneficio.toLocaleString('pt-BR', {maximumFractionDigits: 2, minimumFractionDigits: 2}) });
+    this.resultadosDescontadoSlario.push({ string: 'Benefício:', value: calculo2.valor_beneficio.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) });
 
-    this.resultadosDescontadoSlario.push({string:'Total que deixou de receber caso tivesse se aposentado na primeira data:',
-    																			value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
+    this.resultadosDescontadoSlario.push({
+      string: 'Total que deixou de receber caso tivesse se aposentado na primeira data:',
+      value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)
+    });
     let tempoMinimo2Meses = Math.floor((tempoMinimo2 - Math.floor(tempoMinimo2)) * 12);
 
 
-    this.resultadosDescontadoSlario.push({string:'Total perdido:',
-    																			value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)});
+    this.resultadosDescontadoSlario.push({
+      string: 'Total perdido:',
+      value: this.formatMoney(totalPerdidoEntreData, currency.acronimo)
+    });
 
-    this.resultadosDescontadoSlario.push({string:'Diferença entre os dois benefícios:',
-    																			value: this.formatMoney(diferencaRmi, currency.acronimo)});
-    
-    this.resultadosDescontadoSlario.push({string:'Tempo mínimo necessário para recuperar as perdas:',
-    																			value: Math.floor(tempoMinimo2) + " ano(s) " + tempoMinimo2Meses + " mes(es)"});
-    
-    this.resultadosDescontadoSlario.push({string:'Idade do segurado quando recuperar as perdas:',
-    																			value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2)) + " ano(s) " + tempoMinimo2Meses + " mes(es)"});
-    
-    this.resultadosDescontadoSlario.push({string:'Idade do segurado de acordo com a expectativa de sobrevida (IBGE):',
-    																			value: Math.floor(expectativaSegurado) + " ano(s) " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"});
-    
-    this.resultadosDescontadoSlario.push({string:'Total de ganhos até atingir a idade esperada (incluindo 13º salário):',
-    																			value: this.formatMoney(expectativaTotalMeses, currency.acronimo)});
-	}
+    this.resultadosDescontadoSlario.push({
+      string: 'Diferença entre os dois benefícios:',
+      value: this.formatMoney(diferencaRmi, currency.acronimo)
+    });
 
-	getDifferenceInMonths(date1, date2 = moment()) {
+    this.resultadosDescontadoSlario.push({
+      string: 'Tempo mínimo necessário para recuperar as perdas:',
+      value: Math.floor(tempoMinimo2) + " ano(s) " + tempoMinimo2Meses + " mes(es)"
+    });
+
+    this.resultadosDescontadoSlario.push({
+      string: 'Idade do segurado quando recuperar as perdas:',
+      value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2)) + " ano(s) " + tempoMinimo2Meses + " mes(es)"
+    });
+
+    this.resultadosDescontadoSlario.push({
+      string: 'Idade do segurado de acordo com a expectativa de sobrevida (IBGE):',
+      value: Math.floor(expectativaSegurado) + " ano(s) " + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + " mes(es)"
+    });
+
+    this.resultadosDescontadoSlario.push({
+      string: 'Total de ganhos até atingir a idade esperada (incluindo 13º salário):',
+      value: this.formatMoney(expectativaTotalMeses, currency.acronimo)
+    });
+  }
+
+  getDifferenceInMonths(date1, date2 = moment()) {
     let difference = date1.diff(date2, 'months', true);
     difference = Math.abs(difference);
     return Math.floor(difference);
@@ -338,31 +370,31 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
     let dataAgora = moment();
     let expectativaVida;
     let sexo = this.sexoSegurado;
-    if (idadeFracionada > 80){
+    if (idadeFracionada > 80) {
       idadeFracionada = 80;
-    }    
-  
+    }
+
     if (ano != null) {
       expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
 
 
-    }else{
+    } else {
       // expectativaVida = this.ExpectativaVida.getByDates(dataInicio, dataFim);
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
 
-    if(this.sexoSegurado === 'm'){
-       expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
-       
-    }else{
-      expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
+    if (this.sexoSegurado === 'm') {
+      expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio, dataFim, sexo);
+
+    } else {
+      expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio, dataFim, sexo);
     }
 
     return expectativaVida;
   }
 
-  updateDatatable(){
-  	
+  updateDatatable() {
+
   }
 
   imprimirBox(event, boxId) {
@@ -385,14 +417,14 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
-    
 
-                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-                          + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
-                          + boxContent +'<br><br><br>'+ rodape + '</body></html>';
+
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
+      + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
-         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();

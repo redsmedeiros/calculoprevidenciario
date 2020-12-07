@@ -191,7 +191,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
     //           Selecionar <i class="fa fa-arrow-circle-right"></i>
     //       </button>`;
 
-    return `<div class="checkbox checkboxSegurado"><label>
+    return `<div class="checkbox checkboxCalculos"><label>
           <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox {{styleTheme}}" value="${id}"><span> </span></label>
    </div>`;
   }
