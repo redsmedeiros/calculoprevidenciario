@@ -351,12 +351,12 @@ export class RgpsElementsComponent extends RgpsResultadosComponent implements On
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
 
-    if(this.sexoSegurado === 'm'){
-       expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
+    // if(this.sexoSegurado === 'm'){
+    //    expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
        
-    }else{
-      expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
-    }
+    // }else{
+    //   expectativaVida = this.ExpectativaVida.getPlanejamento(dataInicio,dataFim,sexo);
+    // }
 
     return expectativaVida;
   }

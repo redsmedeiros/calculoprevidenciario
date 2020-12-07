@@ -154,14 +154,14 @@
                 </tr>
                 <tr>
                   <td width="50%" style="text-align: left;"><strong>Espécie do Benefíco</strong></td>
-                  <td width="50%"></td>
+                  <td width="50%">{{ planejamento.tipo_seguro }}</td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Salário de Contribuição</strong></td>
+                  <td width="50%" style="text-align: left;"><strong>Salários de Contribuição Futuros</strong></td>
                   <td>{{ definicaoMoeda.formatMoney(planejamento.valor_beneficio) }}</td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Alíquota Contributiva</strong></td>
+                  <td width="50%" style="text-align: left;"><strong>Alíquota Contributiva Efetiva</strong></td>
                   <td width="50%">{{ planejamento.aliquota }}%</td>
                 </tr>
                 <tr>
@@ -187,7 +187,7 @@
           <span class="widget-icon">
             <i class="fa fa-table"></i>
           </span>
-          <h2>Resultado</h2>
+          <h2>Resultados</h2>
         </header>
         <div>
           <div class="widget-body no-padding">
@@ -196,7 +196,7 @@
                 <tr>
                   <th width="50%" style="text-align: left;">Descrição</th>
                   <!-- <th>Cálculo com data de início Atual</th> -->
-                  <th width="50%">Cálculo com data de início Futura</th>
+                  <th width="50%">Conclusão</th>
                 </tr>
               </thead>
               <tbody>

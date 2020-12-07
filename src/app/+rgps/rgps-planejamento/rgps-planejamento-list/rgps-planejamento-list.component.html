@@ -228,13 +228,15 @@
                         <option value="" selected="selected">
                           Selecione Aliquota
                         </option>
-                        <option [value]="5">Contribuinte Individual - 5%</option>
-                        <option [value]="5">Contribuinte Facultativo - 5%</option>
-                        <option [value]="8">Cooperativa - 8%</option>
-                        <option [value]="11">Contribuinte Individual Prestador de Serviço - 11%</option> sem limitar ao 
-                        <option [value]="11">Regime Simplificado - 11%</option>
-                        <option [value]="20">Fixo - 20%</option>
-                        <option [value]="99">Cumulativo - 7,5% a 14%</option>
+                        <option [value]="5">Contribuinte Individual - 5% - MEI</option>
+                        <option  [value]="5">Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda</option>
+                        <option [value]="8">Trabalhador Rural a Serviço de Produtor Rural PF - 8%</option>
+                        <option [value]="11">Contribuinte Individual - Prestador de Serviço para PJ - 11%</option> 
+                        <option [value]="11">Contribuinte Individual - Autônomo - 11% - Regime Simplicado</option>
+                        <option [value]="11">Contribuinte Facultativo - 11% - Regime Simplicado</option>
+                        <option [value]="20">Contribuinte Individual- Autônomo - 20% </option>
+                        <option [value]="20">Contribuinte Facultativo - 20%</option>
+                        <option [value]="99">Contribuinte Empregado, Avulso e Doméstico - Progressiva e Cumulativa - 7,5% a 14%</option>
                       </select>
                       <small
                         *ngIf="errors.has('aliquota')"

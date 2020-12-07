@@ -1,9 +1,12 @@
+
+import { ValorContribuido } from './../../+rgps-valores-contribuidos/ValorContribuido.model';
+import { DefinicaoAliquotaEfetiva } from './../../../shared/functions/definicao-aliquota-efetiva';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../../+rgps-segurados/SeguradoRgps.model';
-import { ExpectativaVida } from '../+rgps-resultados/ExpectativaVida.model';
+import { ExpectativaVida } from './../../+rgps-resultados/ExpectativaVida.model';
 import { ExpectativaVidaService } from '../../+rgps-resultados/ExpectativaVida.service';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
 import { CalculoRgps as CalculoModel } from '../../+rgps-calculos/CalculoRgps.model';
@@ -14,6 +17,8 @@ import * as moment from 'moment';
 import { Moeda } from 'app/services/Moeda.model';
 import { MoedaService } from 'app/services/Moeda.service';
 import { DefinicaoMoeda } from 'app/+rgps/+rgps-resultados/rgps-resultados-apos-pec103/share-rmi/definicao-moeda';
+import { validateConfig } from '@angular/router/src/config';
+
 
 @Component({
   selector: 'app-rgps-planejamento-resultados',
@@ -44,11 +49,12 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   private sexoSegurado;
-  private expectativaVida;
+  private expectativaVidaList = [];
+  private expectativaVidaR;
+  // public expvida;
   private dataNascimentoSeguradoM;
   private idadeNaDiBPlanejamento;
-
-  private idadeUltimaDib;
+  private idadeNaDiBRmi;
 
 
   private definicaoMoeda = DefinicaoMoeda;
@@ -59,7 +65,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       protected SeguradoService: SeguradoService,
       protected CalculoRgps: CalculoRgpsService,
       protected planejamentoService: RgpsPlanejamentoService,
-      private ExpectativaVida: ExpectativaVidaService,
+      private ExpectativaVidaService: ExpectativaVidaService,
       protected router: Router,
       private Moeda: MoedaService,
       protected route: ActivatedRoute,
@@ -68,6 +74,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   ngOnInit() {
 
     this.calculoInit();
+
   }
 
   private calculoInit() {
@@ -96,45 +103,66 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }).catch(errors => console.log(errors));
 
 
-    const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
+      const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
       .then((planejamento: PlanejamentoRgps) => {
 
-        console.log(planejamento);
+      //  console.log(planejamento);
         this.planejamento = planejamento;
         this.idadeNaDiBPlanejamento = Math.abs(
           this.dataNascimentoSeguradoM.diff(
             moment(this.planejamento.data_futura),
             'years'));
 
+        this.idadeNaDiBRmi = Math.abs(
+          this.dataNascimentoSeguradoM.diff(
+            moment(this.calculo.dib),
+            'years'));
+
         this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
         this.isPlanejamento = true;
 
+
+        this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
+          .then((expvida: ExpectativaVida[]) => {
+            this.expectativaVidaList = [];
+            this.expectativaVidaList = expvida;
+
+            const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+            const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
+
+            if(expectativaObj[this.sexoSegurado]){
+              this.expectativaVidaR = expectativaObj[this.sexoSegurado];
+            }else{
+              this.expectativaVidaR = 80;
+            }
+
+ 
+          });
+
+
       }).catch(errors => console.log(errors));
 
-    const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
+   
+    // const expectativaVidaP = this.ExpectativaVida.getByIdade(this.idadeNaDiBRmi)
+    //   .then(expvida => {
+
+    //     this.expectativaVida = expvida;
+    //     const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+    //     if (this.sexoSegurado === 'm') {
+    //       this.expectativaVidaR = this.expectativaVida.find(row => row.data_inicial === inicial).m
+    //     } else {
+    //       this.expectativaVidaR = this.expectativaVida.find(row => row.data_inicial === inicial).f
+    //     }
+
+    //   });
+
+      const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
       .then((moeda: Moeda[]) => {
 
         this.moeda = moeda;
 
       });
-
-    const expectativaVidaP = this.ExpectativaVida.getByIdade(this.idadeNaDiBPlanejamento)
-      .then(expvida => {
-
-        this.expectativaVida = expvida;
-
-      });
-
-    Promise.all([seguradoP, calculoP, planejamentoP, expectativaVidaP]).then((values) => {
-
-      // const dataInicioBeneficio
-      // const dataInicioBeneficioPlan
-
-
-      console.log(this.segurado)
-      console.log(this.calculo)
-      console.log(this.planejamento)
-      //console.log(this.expectativaVida)
+    Promise.all([seguradoP, calculoP, planejamentoP, MoedaP , ]).then((values) => {
 
       this.calcularPlanejamento();
       this.isUpdatingRst = false;
@@ -144,17 +172,46 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   }
 
-  private getAliquota() {
+  private getAliquota(aliquotaP, rmi) {
 
-    if (this.planejamento.aliquota !== 99) {
-      return Number(this.planejamento.aliquota) / 100;
+    // console.log(DefinicaoAliquotaEfetiva.calcular(1045))
+    // console.log(DefinicaoAliquotaEfetiva.calcular(10405))
+    // console.log(DefinicaoAliquotaEfetiva.calcular(3405))
+    // console.log(DefinicaoAliquotaEfetiva.calcular(2405))
+    // console.log(DefinicaoAliquotaEfetiva.calcular(4000))
+
+    switch (aliquotaP) {
+
+      case 51:
+
+        return {
+          aliquota: aliquotaP,
+          valor: (rmi * Number(aliquotaP) / 100)
+        };
+      case 112:
+
+        return {
+          aliquota: aliquotaP,
+          valor: (rmi * Number(aliquotaP) / 100)
+        };
+      case 201:
+
+        return {
+          aliquota: aliquotaP,
+          valor: (rmi * Number(aliquotaP) / 100)
+        };
+
+      case 99:
+
+        return DefinicaoAliquotaEfetiva.calcular(rmi);
+      default:
+
+        return {
+          aliquota: aliquotaP,
+          valor: (rmi * Number(aliquotaP) / 100)
+        };
     }
 
-    if (
-      this.planejamento.aliquota === 99
-    ) {
-      return this.calcularAliquotaCumulativa();
-    }
   }
 
 
@@ -163,156 +220,113 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     const calculo1 = this.calculo;
     const calculo2 = this.planejamento;
-
+    const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
     const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
     const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
     const valor = this.Moeda.getByDate(moment());
     const salMinimo = valor.salario_minimo * 0.05;
-    const aliquota = this.getAliquota();
-
+    const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+  
     let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
-
 
     // Não sei o motivo deste item
     // investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
 
-
-    let totalEntreDatas = 0;
+  //  console.log("E", this.ExpectativaVida)
+ 
     let tempoMinimo1 = 0;
     let tempoMinimo2 = 0;
+    let tempoMinimo2Mes = 0;
+    let tempoMinimo2Ano = 0;
 
+    investimentoEntreDatas *= aliquotaRst.aliquota;
 
-    investimentoEntreDatas *= aliquota;
+    const mesesEntreDatas = (this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2) / 12
+                            + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
 
-    const mesesEntreDatas = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+    const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+
 
     let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+
     let diferencaRmi = Math.abs(calculo2.novo_rmi - calculo1.valor_beneficio);
+
+    let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
 
     if (diferencaRmi != 0) {
       tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
-      tempoMinimo2 = (totalPerdidoEntreData / diferencaRmi) / 13;
+
+      tempoMinimo2 = (((totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+      tempoMinimo2Mes = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+      tempoMinimo2Ano = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11);
+
     }
 
-
-    let tempoMinimo1Meses = Math.floor((tempoMinimo1 - Math.floor(tempoMinimo1)) * 12);
 
     let idadeSegurado = Math.abs(this.dataNascimentoSeguradoM.diff(moment(), 'years'));
 
     let idadeSeguradoDIB = Math.abs(this.dataNascimentoSeguradoM.diff(dataInicioBeneficio2, 'years'));
 
-    let expectativaDIB = this.projetarExpectativa(idadeSeguradoDIB, dataInicioBeneficio2);
+console.log("--",this.expectativaVidaR)
+    let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
 
-    let expectativaSegurado = expectativaDIB.expectativa + idadeSeguradoDIB;
-
-
-    let expectativaTotalMeses = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo1)) * 13);
-    if (expectativaTotalMeses < 0) {
-      expectativaTotalMeses = 0;
-    }
-    expectativaTotalMeses *= diferencaRmi;
-
-    let currency = this.definicaoMoeda.loadCurrency(dataInicioBeneficio2);
-
-    this.idadeUltimaDib = idadeSeguradoDIB;
-
-
-    let expectativaTotalMeses2 = Math.floor((expectativaSegurado - (idadeSeguradoDIB + tempoMinimo2)) * 13);
-
-    if (expectativaTotalMeses2 < 0) {
-      expectativaTotalMeses2 = 0;
-    }
-
-    expectativaTotalMeses2 *= diferencaRmi;
-
-    let tempoMinimo2Meses = Math.floor((tempoMinimo2 - Math.floor(tempoMinimo2)) * 12);
+    let resultSubtracao = (moment.duration(expectativaIbgeSegurado, "years"))
+      .subtract(moment.duration(dataInicioBeneficio2.diff(this.dataNascimentoSeguradoM)));
+    let resultConversao = resultSubtracao.years() + (resultSubtracao.months() / 12) + (resultSubtracao.days() * 365.25);
 
 
 
-    // this.resultadosGeral.push({string: 'Espécie:',  value:calculo1.tipo_seguro });
+    let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+
+
+    let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
+
 
     this.resultadosGeral.push({
-      label: 'Data inicial do Benefício:',
-      value1: calculo1.data_pedido_beneficio,
-      value2: calculo2.dataDibFutura
+      label: 'A) Valor Investido em Contribuições entre as Duas Datas',
+      value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
     });
 
     this.resultadosGeral.push({
-      label: 'Benefício:',
-      value1: this.definicaoMoeda.formatMoney(calculo1.valor_beneficio, currency.acronimo),
-      value2: this.definicaoMoeda.formatMoney(calculo2.novo_rmi, currency.acronimo),
+      label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',      
+      value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
     });
 
     this.resultadosGeral.push({
-      label: 'Total investido em contribuições ao INSS entre as duas datas:',
-      value1: this.definicaoMoeda.formatMoney(investimentoEntreDatas, currency.acronimo),
-      value2: '',
+      label: 'Total Investido (A + B) ',
+      value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
     });
 
     this.resultadosGeral.push({
-      label: 'Total que deixou de receber caso tivesse se aposentado na primeira data: ',
-      value1: this.definicaoMoeda.formatMoney(totalPerdidoEntreData, currency.acronimo),
-      value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData, currency.acronimo),
+      label: 'Valor da Diferença Entre os Benefícios ',
+      value2: this.definicaoMoeda.formatMoney(diferencaRmi),
     });
 
     this.resultadosGeral.push({
-      label: 'Total perdido: ',
-      value1: this.definicaoMoeda.formatMoney((investimentoEntreDatas + totalPerdidoEntreData), currency.acronimo),
-      value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData, currency.acronimo),
+      label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
+      // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+      value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
     });
 
     this.resultadosGeral.push({
-      label: 'Diferença entre os dois benefícios: ',
-      value1: this.definicaoMoeda.formatMoney(diferencaRmi, currency.acronimo),
-      value2: this.definicaoMoeda.formatMoney(diferencaRmi, currency.acronimo),
+      label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
+      value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+
     });
 
     this.resultadosGeral.push({
-      label: 'Tempo mínimo necessário para recuperar as perdas:  ',
-      value1: Math.floor(tempoMinimo1) + ' ano(s) e ' + tempoMinimo1Meses + ' mes(es)',
-      value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+      label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
+      value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
+        + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
     });
 
     this.resultadosGeral.push({
-      label: 'Idade do segurado quando recuperar as perdas: ',
-      value1: Math.floor(idadeSeguradoDIB + tempoMinimo1) + ' ano(s) ' + tempoMinimo1Meses + ' mes(es)',
-      value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2)) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+      label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+      value2: this.definicaoMoeda.formatMoney(totalEsperado),
     });
-
-    this.resultadosGeral.push({
-      label: 'Idade do segurado de acordo com a expectativa de sobrevida (IBGE): ',
-      value1: Math.floor(expectativaSegurado) + ' anos ' + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + ' mes(es)',
-      value2: Math.floor(expectativaSegurado) + ' ano(s) ' + Math.floor((expectativaSegurado - Math.floor(expectativaSegurado)) * 12) + ' mes(es)',
-    });
-
-    this.resultadosGeral.push({
-      label: 'Total de ganhos até atingir a idade esperada (incluindo 13º salário): ',
-      value1: this.definicaoMoeda.formatMoney(expectativaTotalMeses, currency.acronimo),
-      value2: this.definicaoMoeda.formatMoney(expectativaTotalMeses, currency.acronimo),
-    });
-
-
-
-
-
-    console.log(totalPerdidoEntreData);
-    console.log(diferencaRmi);
-    console.log(investimentoEntreDatas);
-    console.log(mesesEntreDatas);
-    console.log(this.resultadosGeral);
-
 
     this.isResultado = true;
   }
-
-
-  private calcularAliquotaCumulativa() {
-
-    return 0.075;
-  }
-
-
-
 
   private getDifferenceInMonths(date1, date2 = moment()) {
     let difference = date1.diff(date2, 'months', true);
@@ -320,71 +334,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     return Math.floor(difference);
   }
 
-  private procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
-    // let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    // let dataAgora = moment();
-    let expectativaVida;
-    if (idadeFracionada > 80) {
-      idadeFracionada = 80;
-    }
-
-    if (ano != null) {
-      expectativaVida = this.ExpectativaVida.getByAno(ano);
-      //Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
-    } else {
-      expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
-    }
-    return expectativaVida;
-  }
-
-  private projetarExpectativa(idadeFracionada, dib) {
-
-    let expectativa = 0;
-    const dataInicio = moment('2000-11-30');
-    const dataFim = moment((moment().year() - 1) + '-12-01');
-    const dataHoje = moment();
-    let formula_expectativa_sobrevida = '';
-
-    if (dib > dataHoje) {
-      let anos = Math.abs(dataHoje.diff(dib, 'years', true));
-
-      if (anos < 1) {
-        anos = Math.round(anos);
-      } else {
-        anos = Math.trunc(anos);
-      }
-
-      const tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
-      const tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
-      const tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
-
-      expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
-
-      formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
-
-    } else if (dib.isSameOrBefore(dataInicio)) {
-      expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
-    } else if (dib.isSameOrAfter(dataFim)) {
-      expectativa = this.procurarExpectativa(idadeFracionada, null, dib, null);
-    } else {
-      expectativa = this.procurarExpectativa(idadeFracionada, null, dib, dib);
-    }
-
-    if (expectativa <= 0) {
-      expectativa = 6;
-    }
-
-    return {
-      expectativa: expectativa,
-      formula_expectativa_sobrevida: formula_expectativa_sobrevida
-    };
-  }
-
 
   private isExits(value) {
     return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
-      value !== undefined && value != '')
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
       ? true : false;
   }
 
