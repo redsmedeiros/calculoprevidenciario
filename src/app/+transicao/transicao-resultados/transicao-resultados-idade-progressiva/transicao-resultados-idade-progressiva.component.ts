@@ -191,7 +191,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
-
     do {
 
 
@@ -227,12 +226,21 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     //   tempoContribuicao += correcaoAnoBissexto;
     // }
 
-    const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
-      this.seguradoTransicao.contribuicaoFracionadoAnos)
-      <=
-      (this.requisitoIdadeProgressivaRegra2[auxiliarDate.year()][this.seguradoTransicao.sexo] -
-        this.seguradoTransicao.idadeFracionada)
-    );
+
+    // let requisitoAux = 0;
+
+    // if (auxiliarDate.year() > 2027 && this.seguradoTransicao.sexo === 'm') {
+    //   requisitoAux = this.requisitoIdadeProgressivaRegra2[2027]['m']
+    // }else if (auxiliarDate.year() > 2031 && this.seguradoTransicao.sexo === 'f') {
+    //   requisitoAux = this.requisitoIdadeProgressivaRegra2[2031]['f']
+    // }else{
+    //   requisitoAux = this.requisitoIdadeProgressivaRegra2[auxiliarDate.year()][this.seguradoTransicao.sexo]
+    // }
+
+
+    // const verificacao = ((this.tempoContribMinimoIdadeProgressiva - this.seguradoTransicao.contribuicaoFracionadoAnos)
+    //   <=
+    //   (requisitoAux - this.seguradoTransicao.idadeFracionada));
 
     //console.log(verificacao);
 
@@ -244,7 +252,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         month: this.seguradoTransicao.dataNascimento.month(),
         day: this.seguradoTransicao.dataNascimento.date()
       });
-    }else if ( verificacao &&
+    }else if ( //verificacao &&
       ([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) &&
       (Math.abs(this.seguradoTransicao.dataNascimento.month() - auxiliarDate.month()) === 6)  &&
       (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) <= 1) )) {
