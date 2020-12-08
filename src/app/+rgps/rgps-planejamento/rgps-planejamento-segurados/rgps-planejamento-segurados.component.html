@@ -7,14 +7,16 @@
       </div>
     </div> -->
 
-    <div id="inicialPlanejamento" *ngIf="isPaginaInicial" class="">
-      <div class="col-sm-12 col-md-12 col-lg-12 ">
-        <div class="jumbotron background-inicial jumbotrom-custom-plan" >
+    <div id="inicialPlanejamento" *ngIf="isPaginaInicial" class="pt-5">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="jumbotron background-inicial jumbotrom-custom-plan">
           <div class="container">
-            <h1  style="color: white; font-weight: 500;" class="py-4">Planejamento Previdenciário</h1>
-            <p style="color: white; font-weight: 500;text-align: justify">
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto 
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto 
+            <h1 style="color: white; font-weight: 500" class="py-4">
+              Planejamento Previdenciário
+            </h1>
+            <p style="color: white; font-weight: 500; text-align: justify">
+              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
+              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
               Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
               Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
               Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
@@ -41,7 +43,7 @@
                   type="button"
                   (click)="setIsPaginaInicial()"
                   class="btn btn-lg btn-block"
-                  style="background-color: #ffc107; font-weight: bolder;"
+                  style="background-color: #ffc107; font-weight: bolder"
                 >
                   Iniciar
                 </button>
@@ -96,12 +98,16 @@
                     </div>
                   </div>
                   <p style="font-size: large">
-                    Selecione o segurado. Caso seja um novo segurado você deve 
-                    criar o segurado e prosseguir até o final
-                     do calculo de
-                    Renda Mensal Inicial <a (click)="redirecionarSeguradoCalculosRMI()" style="color: #831721 !important;">
-                      <strong >Clique Aqui para criar o segurado</strong></a
-                    > .
+                    Selecione o segurado. Caso seja um novo segurado você deve
+                    criar o segurado e prosseguir até o final do calculo de
+                    Renda Mensal Inicial
+                    <a
+                      (click)="redirecionarSeguradoCalculosRMI()"
+                      style="color: #831721 !important"
+                    >
+                      <strong>Clique Aqui para criar o segurado</strong></a
+                    >
+                    .
                   </p>
                   <!-- <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -138,8 +144,11 @@
                       <p style="font-size: large">
                         Selecione o cálculo. Caso o segurado não possua um
                         calculo de Renda Mensal Inicial
-                        <a (click)="redirecionarSeguradoCalculosRMI()" style="color: #831721 !important;">
-                          <strong > Clique Aqui </strong></a
+                        <a
+                          (click)="redirecionarSeguradoCalculosRMI()"
+                          style="color: #831721 !important"
+                        >
+                          <strong> Clique Aqui </strong></a
                         >
                         para ser direcionado para criar um calculo para o
                         segurado. Observação siga até a conclusão.
@@ -187,7 +196,7 @@
                       [segurado]="seguradoSelecionado"
                       [isCalculoSelecionado]="isCalculoSelecionado"
                       (planejamentoSelecionadoEvent)="
-                      setPlanejamentoSelecionado($event)
+                        setPlanejamentoSelecionado($event)
                       "
                     ></app-rgps-planejamento-list>
                   </div>
@@ -216,11 +225,11 @@
                     ></iframe> -->
 
                     <app-rgps-planejamento-calculo-futuro
-                    *ngIf="isPlanejamentoSelecionado"
-                    [calculo]="calculoSelecionado"
-                    [segurado]="seguradoSelecionado"
-                    [planejamento]="planejamentoSelecionado"
-                    [isPlanejamentoSelecionado]="isPlanejamentoSelecionado"
+                      *ngIf="isPlanejamentoSelecionado"
+                      [calculo]="calculoSelecionado"
+                      [segurado]="seguradoSelecionado"
+                      [planejamento]="planejamentoSelecionado"
+                      [isPlanejamentoSelecionado]="isPlanejamentoSelecionado"
                     >
                     </app-rgps-planejamento-calculo-futuro>
                   </div>
@@ -266,11 +275,7 @@
     </div>
   </sa-widgets-grid>
 </div>
-
-<!-- 
-
-
-    
+<!--  
 
 
 <div class="row mb-4">

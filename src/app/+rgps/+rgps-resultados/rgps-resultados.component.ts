@@ -1404,8 +1404,8 @@ export class RgpsResultadosComponent implements OnInit {
 
 
   public getPlanejamento(calculo) {
-    console.log(this.route.snapshot.params['correcao_pbc']);
-    console.log(this.route.snapshot.params['pbc']);
+    // console.log(this.route.snapshot.params['correcao_pbc']);
+    // console.log(this.route.snapshot.params['pbc']);
 
     const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
 

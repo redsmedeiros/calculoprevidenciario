@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RgpsPlanejamentoService } from './../rgps-planejamento.service';
 import { PlanejamentoRgps } from './../PlanejamentoRgps.model';
 import swal from 'sweetalert2';
-
+import * as moment from 'moment';
 
 
 
@@ -21,11 +21,11 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   @Input() planejamento;
   @Input() isPlanejamentoSelecionado;
 
-  @ViewChild('iframe') iframe: ElementRef;
+  //@ViewChild('iframe') iframe: ElementRef;
 
   private baseUrl = window.location.origin;
   private url;
-  private isResultRMIFutura;
+  private isResultRMIFutura = false;
 
   constructor(
     protected router: Router,
@@ -37,21 +37,46 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   ngOnInit() {
 
 
-    this.getURL();
+    //this.getURL();
     // this.iframe.nativeElement.addEventListener('load', this.onLoad.bind(this));
-    console.log('teste')
-
+    //console.log('teste');
+    
   }
 
   ngAfterViewInit() {
-    this.iframe.nativeElement.addEventListener('load', this.onLoad.bind(this));
+    /// this.iframe.nativeElement.addEventListener('load', this.onLoad.bind(this));
+
+    setTimeout(() => {
+
+      this.planejar();
+
+    }, 5000);
+
   }
+
+
+
+  private planejar() {
+
+    //window.location.href 
+    const urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + this.planejamento.id;
+    this.router.navigate([urlpbcNew]);
+
+  }
+
+
 
 
   private getValueRMIFutura() {
 
 
-      const planejamentoP = this.planejamentoService.find(this.planejamento.id)
+    // exportPlanejamentoRSTRMI
+
+    const exportObjPlanejamento = JSON.parse(sessionStorage.exportPlanejamentoRSTRMI);
+
+    console.log(exportObjPlanejamento);
+
+    const planejamentoP = this.planejamentoService.find(this.planejamento.id)
       .then((planejamentoRMIRST: PlanejamentoRgps) => {
 
         console.log('fim')
@@ -62,27 +87,80 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   }
 
 
+
+
   private habilitarResultadoPlanejamento() {
 
 
-    setTimeout(() => {
+    //   const asyncLocalStorage = {
+    //     setItem: function (key, value) {
+    //       return Promise.resolve().then(function () {
+    //         sessionStorage.setItem(key, value);
+    //       });
+    //     },
+    //     getItem: function (key) {
+    //       return Promise.resolve().then(function () {
+    //         return sessionStorage.getItem(key);
+    //       });
+    //     }
+    //   };
 
-      this.getValueRMIFutura();
-      this.isResultRMIFutura = true;
+    // //   const asyncLocalStorage = {
+    // //     setItem: async function (key, value) {
+    // //       //  await null;
+    // //         return localStorage.setItem(key, value);
+    // //     },
+    // //     getItem: async function (key) {
+    // //       //  await null;
+    // //         return localStorage.getItem(key);
+    // //     }
+    // // };
 
-    }, 2000);
+    //   const data = Date.now() % 10000;
+    //   const promisseFrame = asyncLocalStorage.setItem('exportPlanejamentoRSTRMI', data).then(function () {
+    //     return asyncLocalStorage.getItem('exportPlanejamentoRSTRMI');
+    //   }).then(function (value) {
+    //     console.log('Value has been set to:', value);
+    //   });
+    //   console.log('waiting for value to become ' + data +
+    //     '. Current value: ', sessionStorage.getItem('exportPlanejamentoRSTRMI'));
+
+
+    //   Promise.all([promisseFrame]).then((values) => {
+
+    //     console.log('fim');
+    //     console.log(sessionStorage.exportPlanejamentoRSTRMI);
+
+    //   });
+
+
+
+    // setTimeout(() => {
+
+    //   this.getValueRMIFutura();
+    //   this.isResultRMIFutura = true;
+
+    //   const doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
+    //   console.log(doc);
+
+
+    //   console.log(sessionStorage.exportPlanejamentoRSTRMI);
+
+    // }, 5000);
 
   }
 
   onLoad(e) {
 
+    console.log('onLoad executed', e);
+
+
     // console.log(' ---- onLoad executed ---- ');
     // console.log('onLoad executed', e);
     // console.log(this.iframe.nativeElement);
+    // console.log(this.iframe.nativeElement.contentWindow.document.body);
     // console.log(typeof this.iframe.nativeElement);
     // console.log(this.iframe.nativeElement.querySelector('div'));
-
-    // let doc = this.iframe.nativeElement.contentDocument || this.iframe.nativeElement.contentWindow;
     // console.log(doc.document.querySelector('#header'));
     // console.log(this.iframe.nativeElement.contentWindow.document.querySelector('#header'));
     // console.log(doc.header);
@@ -98,18 +176,9 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
   }
 
   getURL() {
-
-    //let value = `http://localhost:4200/#/rgps/rgps-resultados/`;
-
-    console.log(this.router)
-
     let value = `${this.baseUrl}/#/rgps/rgps-resultados/`;
     value += `${this.segurado.id}/${this.calculo.id}/plan/${this.planejamento.id}`;
-
-    console.log(value);
     this.url = this.sanitizer.bypassSecurityTrustResourceUrl(value);
-
-    console.log(this.url);
 
     return this.url;
   }
@@ -142,5 +211,8 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
     return sigla + ' ' + numeroPadronizado;
   }
 
+  formatDate(date: string) {
+    return moment(date).format('DD/MM/YYYY');
+  }
 
 }

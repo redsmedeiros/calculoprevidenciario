@@ -20,6 +20,7 @@ import { conclusoesFinais } from './conclusoes/conclusoes-finais';
 
 import { RgpsPlanejamentoService } from './../../rgps-planejamento/rgps-planejamento.service';
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
+import swal from 'sweetalert2';
 
 
 @Component({
@@ -82,8 +83,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public listaConclusaoAcesso = [];
 
   constructor(
-
     protected route: ActivatedRoute,
+    protected router: Router,
     protected ValoresContribuidos: ValorContribuidoService,
     protected Moeda: MoedaService,
     protected ExpectativaVida: ExpectativaVidaService,
@@ -471,15 +472,51 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       setTimeout(() => {
         this.updateResultPlanejamento();
-      }, 500);
+      }, 200);
 
     }
 
   }
 
+
+  private navegarParaResultados() {
+    // const baseUrl = window.location.origin;
+    // window.location.href = `${baseUrl}/#/rgps/rgps-planejamento/resultados/${this.segurado.id}/${this.calculo.id}/${this.planejamento.id}`;
+    const urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.calculo.id + '/' + this.planejamento.id;
+    this.router.navigate([urlpbcNew]);
+
+    // swal({
+    //   title: 'Tem certeza?',
+    //   text: "Essa ação é irreversível!",
+    //   type: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: 'Deletar',
+    //   cancelButtonText: 'Cancelar'
+    // }).then((result) => {
+    //   if (result.value) {
+    //     this.Segurado.find(this.route.snapshot.params['id'])
+    //     .then(segurado => {
+    //       this.Segurado.destroy(segurado)
+    //           .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
+    //           swal(
+    //   'Sucesso',
+    //   'Segurado excluído',
+    //   'success'
+    // )
+    //     })
+    //   }else if (result.dismiss === swal.DismissReason.cancel){
+    //     this.router.navigate(['/beneficios/beneficios-segurados'])
+    //   }
+    // });
+  }
+
   private updateResultPlanejamento() {
-    console.log(this.planejamento);
-    console.log(this.listaConclusaoAcesso);
+
+    sessionStorage.removeItem('exportPlanejamentoRSTRMI');
+    // console.log(this.planejamento);
+    // console.log(this.listaConclusaoAcesso);
 
     // console.log(JSON.stringify(this.listaConclusaoAcesso))
     // console.log(JSON.stringify(this.listaConclusaoAcesso).length)
@@ -496,6 +533,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       .update(this.planejamento)
       .then(model => {
         console.log(model);
+
+        this.navegarParaResultados();
       })
       .catch((errors) => {
         console.log(errors);

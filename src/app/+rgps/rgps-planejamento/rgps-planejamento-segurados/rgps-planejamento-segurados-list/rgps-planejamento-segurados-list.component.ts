@@ -172,9 +172,9 @@ export class RgpsPlanejamentoSeguradosListComponent implements OnInit {
   //   </label>
   // </span>
 
-    return `<div class="checkbox checkboxSegurado"><label>
-                 <input type="checkbox" id='${id}-checkbox' 
-                 class="checked-row-one checkbox {{styleTheme}}" 
+    return `<div class="checkbox "><label>
+                 <input type="checkbox" id='${id}-checkbox-segurado'
+                 class="checked-row-one checkbox {{styleTheme}} checkboxSegurado"
                  value="${id}"><span> </span></label>
           </div>
           `;

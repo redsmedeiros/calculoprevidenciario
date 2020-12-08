@@ -1,14 +1,24 @@
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 1024px) {
   .jumbotrom-custom-plan {
-    min-height: 780px;
+    /* min-height: 600px !important;; */
+     height: 600px; 
+  }
+
+  #inicialPlanejamento{
+    padding-top: 3rem;
   }
 }
 
 @media screen and (min-width: 1500px) {
-    .jumbotrom-custom-plan {
-      min-height: 825px;
-    }
-  } 
+  .jumbotrom-custom-plan {
+    min-height: 770px;
+  }
+
+  #inicialPlanejamento{
+    padding-top: 5rem;
+  }
+
+}
 
 /* 
 @media screen and (max-width: 1500px) {

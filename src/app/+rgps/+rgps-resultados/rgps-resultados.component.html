@@ -3,13 +3,16 @@
   <sa-widgets-grid>
     <div class="row mb-3">
       <div class="col-sm-12 col-md-12 col-lg-12">
-        <h3 class="p-1 m-1 no-print">
+        <h3 class="p-1 m-1 no-print" *ngIf="!isPlanejamento">
           Cálculo dos Benefícios do Regime Geral de Previdência Social
+        </h3>
+        <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
+          Cálculo de RMI Futuro
         </h3>
       </div>
     </div>
     <div class="row mb-3">
-      <div class="col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isPlanejamento">
         <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item">
             <a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a>
@@ -149,7 +152,7 @@
                     </tr>
                   </table>
                 </div>
-                <div class="form-actions no-padding mt-3">
+                <div class="form-actions no-padding mt-3" *ngIf="!isPlanejamento">
                   <div class="row">
                     <div class="col-md-12">
                       <button
@@ -353,7 +356,7 @@
 
       <!-- Planejamento -->
       <app-rgps-planejamento-index
-        *ngIf="!isUpdating"
+        *ngIf="isUpdating"
         [calculo]="calculosList[0]"
         [segurado]="segurado"
       ></app-rgps-planejamento-index>
@@ -361,7 +364,9 @@
       
 
       <!-- Planejamento Comparativo não deletar-->
-      <app-rgps-planejamento-calculo></app-rgps-planejamento-calculo>
+      <app-rgps-planejamento-calculo
+      *ngIf="!isPlanejamento && !isUpdating"
+      ></app-rgps-planejamento-calculo>
 
       <!-- opções do calculo -->
       <!-- <article class="col-sm-12 col-md-12 col-lg-12">

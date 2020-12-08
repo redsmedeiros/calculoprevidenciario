@@ -95,7 +95,7 @@
         <div class="widget-body no-padding widget-body-custom">
           <form class="form-horizontal">
             <fieldset>
-              <div class="row">
+              <div class="row mt-3">
                 <div class="col-md-6 col-lg-6">
                   <div class="form-group">
                     <label class="control-label col-md-6"
@@ -408,14 +408,13 @@
                         </div>
                       </td>
                       <td class="align-center">
-                        <div class="checkbox checkboxPlan m-1 ml-4">
+                        <div class="checkbox  m-1 ml-4">
                           <label>
                             <input
                               type="checkbox"
-                              class="select-btn checkbox {{
-                                styleTheme
-                              }} checkboxPlan"
-                              id="{{ planRow.id }}-checkbox"
+                              class="checkboxPlanejamento select-btn checkbox 
+                              {{ styleTheme }}"
+                              id="{{ planRow.id }}-checkbox-planejamento"
                               (click)="getRow(planRow.id)"
                               [value]="planRow.id" /><span> </span
                           ></label>

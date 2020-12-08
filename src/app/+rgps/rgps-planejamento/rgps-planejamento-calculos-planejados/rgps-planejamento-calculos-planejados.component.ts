@@ -51,7 +51,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
     data: this.calculosList,
     // order: [[6, 'desc']],
     columns: [
-      { data: 'actions', width: '22rem', class: 'text-center' },
+      { data: 'actions', width: '22rem', class: 'text-center', visible: false },
       { data: 'tipo_seguro' },
       { data: 'tipo_aposentadoria', visible: false },
       {
@@ -118,7 +118,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
     // let changedCalculo = changes['calculo'];
     // let changedisUpdating = changes['isUpdatingPlanCalc'];
 
-    console.log(changedsegurado);
+    // console.log(changedsegurado);
     // console.log(changedisUpdating);
 
     if (changedsegurado.currentValue) {
@@ -135,7 +135,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
       data: this.calculosList,
     }
 
-    console.log(this.calculoTableOptions);
+    // console.log(this.calculoTableOptions);
   }
 
   private getCalculosSegurado() {
@@ -191,8 +191,10 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
     //           Selecionar <i class="fa fa-arrow-circle-right"></i>
     //       </button>`;
 
-    return `<div class="checkbox checkboxCalculos"><label>
-          <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox {{styleTheme}}" value="${id}"><span> </span></label>
+    return `<div class="checkbox "><label>
+          <input type="checkbox" id='${id}-checkbox-calculos'
+          class="select-btn checkbox {{styleTheme}} checkboxCalculos"
+          value="${id}"><span> </span></label>
    </div>`;
   }
 

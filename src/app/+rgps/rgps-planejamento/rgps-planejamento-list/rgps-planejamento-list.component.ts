@@ -9,7 +9,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
 import { ModalDirective } from 'ngx-bootstrap';
 import { RgpsPlanejamentoListTableComponent } from './rgps-planejamento-list-table/rgps-planejamento-list-table.component';
-
+import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 
 @Component({
@@ -42,6 +42,10 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   public userId;
 
   public userCheck = false;
+
+  private baseUrl = window.location.origin;
+  private url;
+  private isResultRMIFutura;
 
   /// form
 
@@ -143,6 +147,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     protected rgpsPlanejamentoService: RgpsPlanejamentoService,
     private route: ActivatedRoute,
     protected router: Router,
+    private sanitizer: DomSanitizer,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -409,8 +414,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     }
   }
 
-
-
+ 
   public getBtnSelecionarPlanejamento(id) {
 
     // return `<button  type="button" class="btn btn-xs btn-info select-btn">
