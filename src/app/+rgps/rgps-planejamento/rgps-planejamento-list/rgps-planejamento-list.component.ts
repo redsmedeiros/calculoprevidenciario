@@ -186,7 +186,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private getInfoCalculos() {
 
     this.id_calculo = this.calculo.id;
-    console.log(this.rgpsPlanejamentoService.list);
+    //console.log(this.rgpsPlanejamentoService.list);
 
     this.isUpdatePlan = true;
     this.planejamentoListData = [];
@@ -197,7 +197,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
         for (const plan of planejamentoRst) {
           this.planejamentoListData.push(plan);
         }
-        console.log(this.planejamentoListData);
+        //console.log(this.planejamentoListData);
         this.updateDatatable();
         this.isUpdatePlan = false;
       });

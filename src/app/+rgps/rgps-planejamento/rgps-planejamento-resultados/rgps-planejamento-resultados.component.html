@@ -15,7 +15,7 @@
 </strong> -->
 
 <div id="content">
-  <div class="row mb-2">
+  <div id="box-dados-title" class="row mb-2">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <h3 class="p-1 m-1 no-print">
         Planejamento do Cálculo dos Benefícios do Regime Geral de Previdência
@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div id="box-dados-segurado" class="row" *ngIf="isSegurado">
+  <div class="row" *ngIf="isSegurado">
     <article class="col-sm-12 col-md-12 col-lg-12">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
@@ -37,7 +37,7 @@
         <div>
           <!-- widget content -->
           <div class="widget-body widget-body-custom mb-4 p-0">
-            <ul class="list-inline mt-2">
+            <ul class="list-inline mt-2 not-print">
               <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
               <li class="px-5" *ngIf="isExits(segurado.numero_documento)">
                 <strong
@@ -57,14 +57,34 @@
               </li>
               <!-- <li class="px-5"><strong>Idade atual:</strong> {{idadeUltimaDib}} anos</li> -->
             </ul>
-            <div id="printableSegurado" hidden>
+           </div>
+        </div>
+      </sa-widget>
+    </article>
+    <article
+      id="box-dados-segurado"
+      class="col-sm-12 col-md-12 col-lg-12"
+      hidden
+    >
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Segurado</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget content -->
+          <div class="widget-body widget-body-custom mb-4 p-0">
+            <div id="printableSegurado">
               <table class="table table-bordered table-hover">
-                <!-- <caption><h2>Dados do Segurado</h2></caption> -->
+                <!-- <caption><h2>Segurado</h2></caption> -->
                 <tr>
                   <td width="50%" style="text-align: right">
                     <b>Nome:</b>
                   </td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: center">
                     {{ segurado.nome }}
                   </td>
                 </tr>
@@ -80,7 +100,7 @@
                   <td width="50%" style="text-align: right">
                     <b>Data de nascimento:</b>
                   </td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: center">
                     {{ segurado.data_nascimento }}
                   </td>
                 </tr>
@@ -88,7 +108,7 @@
                   <td width="50%" style="text-align: right">
                     <b>Sexo:</b>
                   </td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: center">
                     <span *ngIf="segurado.sexo == 'm'">Masculino</span
                     ><span *ngIf="segurado.sexo == 'f'">Feminino</span>
                   </td>
@@ -102,7 +122,7 @@
   </div>
 
   <div id="box-dados-calculo" class="row">
-    <article class="col-sm-12 col-md-6 col-lg-12" *ngIf="isCalculo">
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isCalculo">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
           <span class="widget-icon">
@@ -111,20 +131,30 @@
           <h2>Benefício Atual</h2>
         </header>
         <div>
-          <div class="widget-body no-padding">
+          <div class="widget-body no-padding widget-body-custom">
             <table class="table table-hover table-bordered">
               <tbody>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Data do Início do Benefício</strong></td>
-                  <td width="50%">{{ calculo.data_pedido_beneficio }}</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Data do Início do Benefício</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
+                    {{ calculo.data_pedido_beneficio }}
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Espécie do Benefíco</strong></td>
-                  <td width="50%">{{ calculo.tipo_seguro }}</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Espécie do Benefíco</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
+                    {{ calculo.tipo_seguro }}
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Renda Mensal Inicial</strong></td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: left">
+                    <strong>Renda Mensal Inicial</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
                     {{ definicaoMoeda.formatMoney(calculo.valor_beneficio) }}
                   </td>
                 </tr>
@@ -134,9 +164,10 @@
         </div>
       </sa-widget>
     </article>
+  </div>
 
-    
-    <article class="col-sm-12 col-md-0 col-lg-12" *ngIf="isPlanejamento">
+  <div id="box-dados-planejamento" class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isPlanejamento">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
           <span class="widget-icon">
@@ -149,24 +180,44 @@
             <table class="table table-hover table-bordered">
               <tbody>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Data do Início do Benefício</strong></td>
-                  <td width="50%">{{ planejamento.dataDibFutura }}</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Data do Início do Benefício</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
+                    {{ planejamento.dataDibFutura }}
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Espécie do Benefíco</strong></td>
-                  <td width="50%">{{ planejamento.tipo_seguro }}</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Espécie do Benefíco</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
+                    {{ planejamento.especie }}
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Salários de Contribuição Futuros</strong></td>
-                  <td>{{ definicaoMoeda.formatMoney(planejamento.valor_beneficio) }}</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Salários de Contribuição Futuros</strong>
+                  </td>
+                  <td style="text-align: center">
+                    {{
+                      definicaoMoeda.formatMoney(planejamento.valor_beneficio)
+                    }}
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Alíquota Contributiva Efetiva</strong></td>
-                  <td width="50%">{{ planejamento.aliquota }}%</td>
+                  <td width="50%" style="text-align: left">
+                    <strong>Alíquota Contributiva Efetiva</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
+                    {{ planejamento.aliquota }}%
+                  </td>
                 </tr>
                 <tr>
-                  <td width="50%" style="text-align: left;"><strong>Renda Mensal Inicial</strong></td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: left">
+                    <strong>Renda Mensal Inicial</strong>
+                  </td>
+                  <td width="50%" style="text-align: center">
                     {{ definicaoMoeda.formatMoney(planejamento.novo_rmi) }}
                   </td>
                 </tr>
@@ -178,9 +229,7 @@
     </article>
   </div>
 
-
   <div id="box-dados-resultados" class="row">
-
     <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isResultado">
       <sa-widget [colorbutton]="false" [editbutton]="false">
         <header>
@@ -194,16 +243,17 @@
             <table class="table table-hover table-bordered">
               <thead>
                 <tr>
-                  <th width="50%" style="text-align: left;">Descrição</th>
-                  <!-- <th>Cálculo com data de início Atual</th> -->
-                  <th width="50%">Conclusão</th>
+                  <th width="50%" style="text-align: center">Descrição</th>
+                  <th width="50%" style="text-align: center">Conclusão</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of resultadosGeral" >
-                  <td><strong>{{ row.label }}</strong></td>
+                <tr *ngFor="let row of resultadosGeral">
+                  <td>
+                    <strong>{{ row.label }}</strong>
+                  </td>
                   <!-- <td>{{ row.value1 }}</td> -->
-                  <td>{{ row.value2 }}</td>
+                  <td style="text-align: center">{{ row.value2 }}</td>
                 </tr>
               </tbody>
             </table>
@@ -211,7 +261,34 @@
         </div>
       </sa-widget>
     </article>
-
   </div>
-
+  <div class="row margin-bottom-5" *ngIf="isResultado">
+    <div class="col-lg-6 col-md-6 pull-right">
+      <button
+        type="button"
+        (click)="imprimirPagina()"
+        class="btn btn-labeled btn-info pull-right"
+        id="btn-imprimir-pagina"
+        data-placement="top"
+        tooltip="Clique aqui para imprimir"
+      >
+        <span class="btn-label">
+          <i class="fa fa-print"></i>
+        </span>
+        Imprimir
+      </button>
+      <button
+        type="button"
+        (click)="retornarParaplanejamento()"
+        class="btn btn-labeled btn-info pull-right"
+        data-placement="top"
+        tooltip="Retornar ao formulario"
+      >
+        <span class="btn-label">
+          <i class="fa fa-arrow-left"></i>
+        </span>
+        Retornar ao início do planejamento
+      </button>
+    </div>
+  </div>
 </div>

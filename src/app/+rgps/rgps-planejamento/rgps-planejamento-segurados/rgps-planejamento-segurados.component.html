@@ -123,7 +123,7 @@
                       </button>
                     </div>
                   </div> -->
-                  <div class="row mt-5">
+                  <div class="row mt-5 body-step-component">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <app-rgps-planejamento-segurados-list
                         (seguradoSelecionadoEvent)="
@@ -170,7 +170,7 @@
                       </div> -->
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row body-step-component">
                     <app-rgps-planejamento-calculos-planejados
                       *ngIf="isSeguradoSelecionado"
                       [seguradoSelecionado]="seguradoSelecionado"
@@ -189,7 +189,7 @@
                       <h3><strong>Passo 3</strong> - Seleção o Planejamento</h3>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row body-step-component">
                     <app-rgps-planejamento-list
                       *ngIf="!isUpdatingPlan"
                       [calculo]="calculoSelecionado"
@@ -211,19 +211,14 @@
                     </div>
                   </div>
 
-                  <div
+                  <div class="body-step-component"
                     *ngIf="
                       activeStep.key == 'step4' &&
                       isSeguradoSelecionado &&
                       isCalculoSelecionado
                     "
                   >
-                    <!-- <iframe
-                      [src]="url"
-                      frameborder="0"
-                      width="1080"
-                    ></iframe> -->
-
+    
                     <app-rgps-planejamento-calculo-futuro
                       *ngIf="isPlanejamentoSelecionado"
                       [calculo]="calculoSelecionado"

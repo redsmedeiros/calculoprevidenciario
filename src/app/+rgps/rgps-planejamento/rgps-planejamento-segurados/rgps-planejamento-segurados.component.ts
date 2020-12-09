@@ -116,7 +116,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   nextStep() {
 
-    console.log(this.activeStep.valid);
+    // console.log(this.activeStep.valid);
 
     this.activeStep.submitted = true;
 

@@ -103,10 +103,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }).catch(errors => console.log(errors));
 
 
-      const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
+    const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
       .then((planejamento: PlanejamentoRgps) => {
 
-      //  console.log(planejamento);
+        //  console.log(planejamento);
         this.planejamento = planejamento;
         this.idadeNaDiBPlanejamento = Math.abs(
           this.dataNascimentoSeguradoM.diff(
@@ -122,27 +122,28 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         this.isPlanejamento = true;
 
 
-        this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
-          .then((expvida: ExpectativaVida[]) => {
-            this.expectativaVidaList = [];
-            this.expectativaVidaList = expvida;
-
-            const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
-            const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
-
-            if(expectativaObj[this.sexoSegurado]){
-              this.expectativaVidaR = expectativaObj[this.sexoSegurado];
-            }else{
-              this.expectativaVidaR = 80;
-            }
-
- 
-          });
-
-
       }).catch(errors => console.log(errors));
 
-   
+
+
+    const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
+      .then((expvida: ExpectativaVida[]) => {
+        this.expectativaVidaList = [];
+        this.expectativaVidaList = expvida;
+
+        const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+        const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
+
+        if (expectativaObj[this.sexoSegurado]) {
+          this.expectativaVidaR = expectativaObj[this.sexoSegurado];
+        } else {
+          this.expectativaVidaR = 80;
+        }
+
+      });
+
+
+
     // const expectativaVidaP = this.ExpectativaVida.getByIdade(this.idadeNaDiBRmi)
     //   .then(expvida => {
 
@@ -156,13 +157,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     //   });
 
-      const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
+    const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
       .then((moeda: Moeda[]) => {
 
         this.moeda = moeda;
 
       });
-    Promise.all([seguradoP, calculoP, planejamentoP, MoedaP , ]).then((values) => {
+
+
+    Promise.all([seguradoP, calculoP, planejamentoP, MoedaP, expectativaVidaP]).then((values) => {
 
       this.calcularPlanejamento();
       this.isUpdatingRst = false;
@@ -170,20 +173,25 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     });
 
 
+    // Promise.resolve()
+    //   .then(seguradoP => console.log(seguradoP))
+    //   .then(calculoP => console.log(calculoP))
+    //   .then(planejamentoP => console.log(planejamentoP))
+    //   .then(MoedaP => console.log(MoedaP))
+    //   .then(expectativaVidaP => {
+    //     this.calcularPlanejamento();
+    //     this.isUpdatingRst = false;
+    //   })
+    // // .then(() => { })
+    // //.catch(err => responseError(err));
+
   }
 
   private getAliquota(aliquotaP, rmi) {
 
-    // console.log(DefinicaoAliquotaEfetiva.calcular(1045))
-    // console.log(DefinicaoAliquotaEfetiva.calcular(10405))
-    // console.log(DefinicaoAliquotaEfetiva.calcular(3405))
-    // console.log(DefinicaoAliquotaEfetiva.calcular(2405))
-    // console.log(DefinicaoAliquotaEfetiva.calcular(4000))
-
     switch (aliquotaP) {
 
       case 51:
-
         return {
           aliquota: aliquotaP,
           valor: (rmi * Number(aliquotaP) / 100)
@@ -226,14 +234,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     const valor = this.Moeda.getByDate(moment());
     const salMinimo = valor.salario_minimo * 0.05;
     const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
-  
+
     let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
 
     // Não sei o motivo deste item
     // investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
 
-  //  console.log("E", this.ExpectativaVida)
- 
+    //  console.log("E", this.ExpectativaVida)
+
     let tempoMinimo1 = 0;
     let tempoMinimo2 = 0;
     let tempoMinimo2Mes = 0;
@@ -242,7 +250,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     investimentoEntreDatas *= aliquotaRst.aliquota;
 
     const mesesEntreDatas = (this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2) / 12
-                            + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
+      + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
 
     const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
 
@@ -267,7 +275,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     let idadeSeguradoDIB = Math.abs(this.dataNascimentoSeguradoM.diff(dataInicioBeneficio2, 'years'));
 
-console.log("--",this.expectativaVidaR)
+    // console.log("--", this.expectativaVidaR)
     let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
 
     let resultSubtracao = (moment.duration(expectativaIbgeSegurado, "years"))
@@ -288,7 +296,7 @@ console.log("--",this.expectativaVidaR)
     });
 
     this.resultadosGeral.push({
-      label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',      
+      label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
       value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
     });
 
@@ -341,6 +349,57 @@ console.log("--",this.expectativaVidaR)
       value !== undefined && value !== '')
       ? true : false;
   }
+
+
+  retornarParaplanejamento() {
+    this.router.navigate(['/rgps/rgps-planejamento']);
+  }
+
+
+  imprimirPagina() {
+
+    let printContents = document.getElementById('box-dados-title').innerHTML;
+    printContents = document.getElementById('box-dados-segurado').innerHTML;
+    printContents += document.getElementById('box-dados-calculo').innerHTML;
+    printContents += document.getElementById('box-dados-planejamento').innerHTML;
+    printContents += document.getElementById('box-dados-resultados').innerHTML;
+
+    const css = `
+    <style>
+          body{font-family: Arial, Helvetica, sans-serif;}
+          h1, h2{font-size:0.9rem;}
+          i.fa, .not-print{ display: none; }
+          table{margin-top: 10px;}
+          footer,div,p,td,th{font-size:10px !important;}
+          .list-inline{ display:inline; }
+          .table>tbody>tr>td, .table>tbody>tr>th,
+           .table>tfoot>tr>td, .table>tfoot>tr>th,
+           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+           footer{text-align: center; margin-top: 50px;}
+           .list-inline-print{ display:inline !important;}
+    </style>`;
+
+
+    const popupWin = window.open('', '_blank', 'width=640,height=480');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+
+
+    printContents = printContents.replace(/<table/g,
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    popupWin.document.open();
+    popupWin.document.write(`<!doctype html>
+                                <html>
+                                  <head>${css}</head>
+                                  <title>Planejamento futuro - ${this.segurado.nome}</title>
+                                  <body onload="window.print()">
+                                   <article>${printContents}</article>
+                                   <footer class="mt-5">${rodape}</footer>
+                                  </body>
+                                </html>`);
+    popupWin.document.close();
+  }
+
 
 
 }
