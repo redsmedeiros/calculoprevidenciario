@@ -1435,9 +1435,6 @@ export class RgpsResultadosComponent implements OnInit {
 
       }
 
-
-
-
       // this.dataInicioBeneficio = exportDados.dib;
       // this.changePeriodoOptions();
       // const dib = moment(exportDados.dib, 'DD/MM/YYYY');
@@ -1445,6 +1442,38 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
   }
+
+  private navegarParaResultados() {
+    const urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.idsCalculo[0] + '/' + this.planejamento.id;
+    this.router.navigate([urlpbcNew]);
+
+    // swal({
+    //   title: 'Tem certeza?',
+    //   text: "Essa ação é irreversível!",
+    //   type: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: 'Deletar',
+    //   cancelButtonText: 'Cancelar'
+    // }).then((result) => {
+    //   if (result.value) {
+    //     this.Segurado.find(this.route.snapshot.params['id'])
+    //     .then(segurado => {
+    //       this.Segurado.destroy(segurado)
+    //           .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
+    //           swal(
+    //   'Sucesso',
+    //   'Segurado excluído',
+    //   'success'
+    // )
+    //     })
+    //   }else if (result.dismiss === swal.DismissReason.cancel){
+    //     this.router.navigate(['/beneficios/beneficios-segurados'])
+    //   }
+    // });
+  }
+
   // planejamento adicionais RMI
 
 

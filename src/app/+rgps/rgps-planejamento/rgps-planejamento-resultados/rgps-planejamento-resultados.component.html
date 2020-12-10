@@ -23,6 +23,17 @@
       </h3>
     </div>
   </div>
+  
+<div class="row" *ngIf="isUpdatingRst" style="margin-top: 25%;">
+  <div class="col-md-offset-3 col-md-6 col-lg-6">
+  <div class="text-align-center">
+    <i class="fa fa-cog fa-spin fa-5x " aria-hidden="true"></i>
+    <h4>Aguarde alguns instantes...</h4>
+  </div>
+  </div>
+</div>
+
+<div *ngIf="!isUpdatingRst">
 
   <div class="row" *ngIf="isSegurado">
     <article class="col-sm-12 col-md-12 col-lg-12">
@@ -92,7 +103,7 @@
                   <td width="50%" style="text-align: right">
                     <b>{{ segurado.getDocumentType(segurado.id_documento) }}</b>
                   </td>
-                  <td width="50%">
+                  <td width="50%" style="text-align: center">
                     {{ segurado.numero_documento }}
                   </td>
                 </tr>
@@ -262,7 +273,13 @@
       </sa-widget>
     </article>
   </div>
-  <div class="row margin-bottom-5" *ngIf="isResultado">
+  
+</div>
+
+
+
+
+  <div class="row margin-bottom-5" *ngIf="!isUpdatingRst">
     <div class="col-lg-6 col-md-6 pull-right">
       <button
         type="button"

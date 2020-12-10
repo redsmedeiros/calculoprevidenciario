@@ -13,7 +13,10 @@
         <h2>Segurado Selecionado</h2>
       </header>
       <div>
-        <div *ngIf="segurado.nome" class="widget-body p-0 pb-4 widget-body-custom">
+        <div
+          *ngIf="segurado.nome"
+          class="widget-body p-0 pb-4 widget-body-custom"
+        >
           <ul class="list-inline m-0">
             <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
             <li class="px-5" *ngIf="segurado.numero_documento">
@@ -96,12 +99,12 @@
           <form class="form-horizontal">
             <fieldset>
               <div class="row mt-3">
-                <div class="col-md-6 col-lg-6">
+                <div class="col-md-5 col-lg-5">
                   <div class="form-group">
-                    <label class="control-label col-md-6"
+                    <label class="control-label col-md-7"
                       >Data de Início de Benefício - DIB*:</label
                     >
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                       <input
                         class="form-control"
                         [textMask]="{ mask: dateMaskdiB }"
@@ -118,12 +121,12 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 col-lg-6">
+                <div class="col-md-7 col-lg-7">
                   <div class="form-group">
                     <label class="control-label col-md-2" for="especiePlan"
                       >Espécie:</label
                     >
-                    <div class="col-md-10">
+                    <div class="col-md-10 pr-5">
                       <select
                         name="especie"
                         [(ngModel)]="especie"
@@ -138,28 +141,17 @@
                         <option>Aposentadoria Especial - 20 anos</option>
                         <option>Aposentadoria Especial - 25 anos</option>
                         <option>Aposentadoria por Idade da PcD</option>
-                        <option>
-                          Aposentadoria por Idade - Trabalhador Rural
-                        </option>
-                        <option>
-                          Aposentadoria por Idade - Trabalhador Urbano
-                        </option>
-                        <option>
-                          Aposentadoria por Tempo de Contribuição da PcD
-                          (Deficiência Grave)
-                        </option>
-                        <option>
-                          Aposentadoria por Tempo de Contribuição da PcD
-                          (Deficiência Moderada)
-                        </option>
-                        <option>
-                          Aposentadoria por Tempo de Contribuição da PcD
-                          (Deficiência Leve)
-                        </option>
+                        <option>Aposentadoria por Idade - Trabalhador Rural</option>
+                        <option>Aposentadoria por Idade - Trabalhador Urbano</option>
+                        <option>Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Grave)</option>
+                        <option>Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Moderada)</option>
+                        <option>Aposentadoria por Tempo de Contribuição da PcD
+                          (Deficiência Leve)</option>
                         <option>
                           Aposentadoria por Tempo de Contribuição do(a)
-                          Professor(a)
-                        </option>
+                          Professor(a)</option>
                         <option>Aposentadoria Programada</option>
                         <option>Aposentadoria Programada - Professor</option>
                       </select>
@@ -174,12 +166,12 @@
               </div>
 
               <div class="row">
-                <div class="col-md-6 col-lg-6">
+                <div class="col-md-5 col-lg-5">
                   <div class="form-group">
-                    <label class="control-label col-md-6"
+                    <label class="control-label col-md-7"
                       >Renda Mensal Inicial - RMI*:</label
                     >
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                       <input
                         class="form-control"
                         placeholder="Valor Benefício"
@@ -196,12 +188,12 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 col-lg-6">
+                <div class="col-md-7 col-lg-7">
                   <div class="form-group">
                     <label class="control-label col-md-2" for="especiePlan"
                       >Aliquota:</label
                     >
-                    <div class="col-md-10">
+                    <div class="col-md-10 pr-5">
                       <select
                         class="form-control"
                         required
@@ -209,7 +201,7 @@
                         [ngModelOptions]="{ standalone: true }"
                         name="aliquota"
                       >
-                        <option value="" disabled selected selected="selected">
+                        <option value="" selected disabled>
                           - Selecione Aliquota -
                         </option>
                         <option [value]="5">
@@ -218,15 +210,37 @@
                         <option [value]="5">
                           Contribuinte Facultativo - 5%
                         </option>
-                        <option [value]="5">Contribuinte Individual - 5% - MEI</option>
-                        <option [value]="51">Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda</option>
-                        <option [value]="8">Trabalhador Rural a Serviço de Produtor Rural PF - 8%</option>
-                        <option [value]="11">Contribuinte Individual - Prestador de Serviço para PJ - 11%</option> 
-                        <option [value]="112">Contribuinte Individual - Autônomo - 11% - Regime Simplicado</option>
-                        <option [value]="11">Contribuinte Facultativo - 11% - Regime Simplicado</option>
-                        <option [value]="20">Contribuinte Individual- Autônomo - 20% </option>
-                        <option [value]="201">Contribuinte Facultativo - 20%</option>
-                        <option [value]="99">Contribuinte Empregado, Avulso e Doméstico - Progressiva e Cumulativa - 7,5% a 14%</option>
+                        <option [value]="5">
+                          Contribuinte Individual - 5% - MEI
+                        </option>
+                        <option [value]="51">
+                          Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa
+                          Renda
+                        </option>
+                        <option [value]="8">
+                          Trabalhador Rural a Serviço de Produtor Rural PF - 8%
+                        </option>
+                        <option [value]="11">
+                          Contribuinte Individual - Prestador de Serviço para PJ
+                          - 11%
+                        </option>
+                        <option [value]="112">
+                          Contribuinte Individual - Autônomo - 11% - Regime
+                          Simplicado
+                        </option>
+                        <option [value]="11">
+                          Contribuinte Facultativo - 11% - Regime Simplicado
+                        </option>
+                        <option [value]="20">
+                          Contribuinte Individual- Autônomo - 20%
+                        </option>
+                        <option [value]="201">
+                          Contribuinte Facultativo - 20%
+                        </option>
+                        <option [value]="99">
+                          Contribuinte Empregado, Avulso e Doméstico -
+                          Progressiva e Cumulativa - 7,5% a 14%
+                        </option>
                       </select>
                       <small
                         *ngIf="errors.has('aliquota')"
@@ -274,7 +288,7 @@
                       >(*) Preenchimento Obrigatório.</span
                     >
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 pr-0">
                     <button
                       (click)="salvarPlanejamento($event)"
                       type="button"
@@ -304,17 +318,17 @@
   </div>
 </div>
 
-  <div class="row my-4" *ngIf="!isUpdatePlan">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-      <!-- <article class="col-sm-12 col-md-12 col-lg-12"> -->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-building"></i>
-            </span>
-            <h2>Lista de Benefícios Futuros</h2>
+<div class="row my-4" *ngIf="!isUpdatePlan">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <!-- <article class="col-sm-12 col-md-12 col-lg-12"> -->
+    <sa-widget [colorbutton]="false" [editbutton]="false">
+      <header>
+        <span class="widget-icon">
+          <i class="fa fa-building"></i>
+        </span>
+        <h2>Lista de Benefícios Futuros</h2>
 
-            <!-- <button class="btn btn-labeled btn-warning pull-right" type="button"
+        <!-- <button class="btn btn-labeled btn-warning pull-right" type="button"
           title="Planejamento Previdenciário." (click)="novoPlanejamento()">
 
           <span class="btn-label">
@@ -322,18 +336,18 @@
           </span>
           Criar novo Planejamento
         </button> -->
-          </header>
+      </header>
 
-          <!-- form fim -->
-          <sa-widget
-            [colorbutton]="false"
-            [editbutton]="false"
-            class="no-margin"
-            *ngIf="!isUpdatePlan"
-          >
-            <div>
-              <div class="widget-body no-padding widget-body-custom hidden-dt">
-                <!-- <sa-datatable
+      <!-- form fim -->
+      <sa-widget
+        [colorbutton]="false"
+        [editbutton]="false"
+        class="no-margin"
+        *ngIf="!isUpdatePlan"
+      >
+        <div>
+          <div class="widget-body no-padding widget-body-custom hidden-dt">
+            <!-- <sa-datatable
               [options]="datatableOptionsPlan"
               paginationLength="true"
               (selectedRowEvent)="getRow($event)"
@@ -356,29 +370,29 @@
             </sa-datatable> 
            
           -->
-                <table
-                  *ngIf="!isUpdatePlan && planejamentoListData.length > 0"
-                  class="table table-striped table-bordered table-hover table-condensed"
-                >
-                  <thead>
-                    <tr>
-                      <th>Data Futura</th>
-                      <th>Valor Benefício</th>
-                      <th>Alíquota</th>
-                      <th class="text-center" width="75px">Ações</th>
-                      <th class="text-center" width="75px">seleconar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let planRow of planejamentoListData">
-                      <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
-                      <td class="text-center">
-                        {{ formatMoeda(planRow.valor_beneficio) }}
-                      </td>
-                      <td class="text-center">{{ planRow.aliquota }} %</td>
-                      <td class="text-center" width="120px">
-                        <div class="btn-group">
-                          <button
+            <table
+              *ngIf="!isUpdatePlan && planejamentoListData.length > 0"
+              class="table table-striped table-bordered table-hover table-condensed"
+            >
+              <thead>
+                <tr>
+                  <th>Data Futura</th>
+                  <th>Valor Benefício</th>
+                  <th>Alíquota</th>
+                  <th class="text-center" width="75px">Ações</th>
+                  <th class="text-center" width="75px">seleconar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let planRow of planejamentoListData">
+                  <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
+                  <td class="text-center">
+                    {{ formatMoeda(planRow.valor_beneficio) }}
+                  </td>
+                  <td class="text-center">{{ planRow.aliquota }} %</td>
+                  <td class="text-center" width="120px">
+                    <div class="btn-group">
+                      <!-- <button
                             type="button"
                             class="btn btn-xs btn-primary"
                             id="planejar{{ planRow.id }}"
@@ -386,51 +400,51 @@
                             title="Planejar"
                           >
                             <i class="fa fa-share-square fa-1-7x"></i>
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-xs btn-warning"
-                            id="editar{{ planRow.id }}"
-                            (click)="getupdatePlananejamentoList(planRow.id)"
-                            title="Editar"
-                          >
-                            <i class="fa fa-edit fa-1-7x"></i>
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-xs btn-danger"
-                            id="deletar{{ planRow.id }}"
-                            (click)="deletarPlananejamentoList(planRow.id)"
-                            title="Excluir"
-                          >
-                            <i class="fa fa-times fa-1-7x"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td class="align-center">
-                        <div class="checkbox  m-1 ml-4">
-                          <label>
-                            <input
-                              type="checkbox"
-                              class="checkboxPlanejamento select-btn checkbox 
+                          </button> -->
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-warning"
+                        id="editar{{ planRow.id }}"
+                        (click)="getupdatePlananejamentoList(planRow.id)"
+                        title="Editar"
+                      >
+                        <i class="fa fa-edit fa-1-7x"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-danger"
+                        id="deletar{{ planRow.id }}"
+                        (click)="deletarPlananejamentoList(planRow.id)"
+                        title="Excluir"
+                      >
+                        <i class="fa fa-times fa-1-7x"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="align-center">
+                    <div class="checkbox m-1 ml-4">
+                      <label>
+                        <input
+                          type="checkbox"
+                          class="checkboxPlanejamento select-btn checkbox 
                               {{ styleTheme }}"
-                              id="{{ planRow.id }}-checkbox-planejamento"
-                              (click)="getRow(planRow.id)"
-                              [value]="planRow.id" /><span> </span
-                          ></label>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </sa-widget>
-          <!-- fim da lista -->
-        </sa-widget>
-      <!-- </article> -->
-    </div>
+                          id="{{ planRow.id }}-checkbox-planejamento"
+                          (click)="getRow(planRow.id)"
+                          [value]="planRow.id" /><span> </span
+                      ></label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </sa-widget>
+      <!-- fim da lista -->
+    </sa-widget>
+    <!-- </article> -->
   </div>
+</div>
 
 <!-- 
 <div class="row">

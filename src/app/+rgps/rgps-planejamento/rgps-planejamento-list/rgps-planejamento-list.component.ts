@@ -53,8 +53,8 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private id_calculo;
   private data_futura;
   private valor_beneficio;
-  private aliquota;
-  private especie;
+  private aliquota  = '';
+  private especie = '';
   /// form
 
   public plan = {
@@ -152,6 +152,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.resetForm();
 
     this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
 
@@ -203,10 +204,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       });
 
   }
-
-
-
-
   changeAliquota() { }
 
   verificaPlano() {
@@ -230,14 +227,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-  // novoPlanejamento() {
-  //   this.verificaPlano();
-  //   this.isEdit = false;
-  //   this.resetForm();
-  //   this.showChildModal();
-  // }
-
-
   private setPlan() {
 
     if (this.isExits(this.id)) {
@@ -245,7 +234,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     }
 
     this.plan.id_calculo = this.id_calculo;
-    this.plan.data_futura = this.formatReceivedDate(this.data_futura);
+    this.plan.data_futura = this.data_futura;
     this.plan.valor_beneficio = this.valor_beneficio;
     this.plan.aliquota = this.aliquota;
     this.plan.especie = this.especie;
@@ -294,7 +283,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.plan = this.planejamentoListData.find(row => row.id === id);
 
     this.id = this.plan.id;
-    this.data_futura = this.plan.data_futura;
+    //this.data_futura = this.plan.data_futura;
     this.valor_beneficio = this.plan.valor_beneficio;
     this.aliquota = this.plan.aliquota;
     this.especie = this.plan.especie;
@@ -316,9 +305,18 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
   public updatePlan(event) {
+
+    console.log('Atualizar');
+
     if (this.valid()) {
 
+      this.isEdit = false;
       this.setPlan();
+
+      console.log(typeof this.plan.data_futura === 'string');
+      console.log(this.plan.data_futura);
+
+      console.log('Atualizar - f');
 
       this.rgpsPlanejamentoService
         .update(this.plan)
@@ -349,21 +347,25 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
   salvarPlanejamento(event) {
 
-    console.log(this.valid());
+    console.log('Novo');
 
     if (this.valid()) {
 
       this.setPlan();
 
-      // const planejamentoObj = new PlanejamentoRgps;
-      // this.plan
+      console.log(typeof this.plan.data_futura);
+      console.log(this.plan.data_futura);
 
-      console.log(this.plan);
+      console.log(typeof this.plan.data_futura === 'string');
+
+      console.log('Novo-f');
 
       this.rgpsPlanejamentoService
         .save(this.plan)
         .then((model) => {
+
           this.getInfoCalculos();
+
           swal({
             position: 'top-end',
             type: 'success',
@@ -371,7 +373,9 @@ export class RgpsPlanejamentoListComponent implements OnInit {
             showConfirmButton: false,
             timer: 1000
           });
+
           this.resetForm();
+
         }).catch((errors) => {
 
           // this.errors.add(errors);
@@ -414,7 +418,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     }
   }
 
- 
+
   public getBtnSelecionarPlanejamento(id) {
 
     // return `<button  type="button" class="btn btn-xs btn-info select-btn">
@@ -491,31 +495,31 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
     if (this.aliquota == undefined || this.aliquota == '') {
-      this.errors.add({ 'sexo': ['O campo é obrigatório.'] });
+      this.errors.add({ 'aliquota': ['O campo é obrigatório.'] });
       valid = false;
     }
 
 
     if (this.especie == undefined || this.especie == '') {
-      this.errors.add({ 'sexo': ['O campo é obrigatório.'] });
+      this.errors.add({ 'especie': ['O campo é obrigatório.'] });
       valid = false;
-
     }
 
     const dataHoje = moment();
-
+    const dataFutura = this.data_futura;
     if (!this.isExits(this.data_futura)) {
-      this.errors.add({ 'data_futura': ['Data do planejamento necessária'] });
+      this.errors.add({ 'data_futura': ['O campo é obrigatório.'] });
       valid = false;
 
-    } else if (moment(this.data_futura, 'DD/MM/YYYY') < dataHoje) {
+    } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do dia.'] });
       valid = false;
     }
 
-
     return valid;
   }
+
+
 
 
 

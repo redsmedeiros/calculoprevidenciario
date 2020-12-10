@@ -84,64 +84,106 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.idCalculo = this.route.snapshot.params['id_calculo'];
     this.idPlanejamento = this.route.snapshot.params['id_planejamento'];
 
+
+
+
+
     const seguradoP = this.SeguradoService.find(this.idSegurado)
       .then((segurado: SeguradoModel) => {
 
         this.segurado = segurado;
         this.dataNascimentoSeguradoM = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
         this.sexoSegurado = this.segurado.sexo;
-        this.isSegurado = true;
+
+
+        const calculoP = this.CalculoRgps.find(this.idCalculo)
+          .then((calculo: CalculoModel) => {
+
+            this.calculo = calculo;
+
+
+
+            const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
+              .then((planejamento: PlanejamentoRgps) => {
+
+                //  console.log(planejamento);
+                this.planejamento = planejamento;
+                this.idadeNaDiBPlanejamento = Math.abs(
+                  this.dataNascimentoSeguradoM.diff(
+                    moment(this.planejamento.data_futura),
+                    'years'));
+
+                this.idadeNaDiBRmi = Math.abs(
+                  this.dataNascimentoSeguradoM.diff(
+                    moment(this.calculo.dib),
+                    'years'));
+
+                this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
+
+
+
+                const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
+                  .then((expvida: ExpectativaVida[]) => {
+                    this.expectativaVidaList = [];
+                    this.expectativaVidaList = expvida;
+
+                    const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+                    const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
+
+                    if (expectativaObj[this.sexoSegurado]) {
+                      this.expectativaVidaR = expectativaObj[this.sexoSegurado];
+                    } else {
+                      this.expectativaVidaR = 80;
+                    }
+
+                    const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
+                      .then((moeda: Moeda[]) => {
+
+                        this.moeda = moeda;
+
+                        this.calcularPlanejamento();
+
+                        setTimeout(() => {
+
+                          this.isSegurado = true;
+                          this.isCalculo = true;
+                          this.isPlanejamento = true;
+
+                        }, 1000);
+
+                        setTimeout(() => {
+                          this.isUpdatingRst = false;
+                        }, 2000);
+
+                      });
+
+                  });
+
+
+              }).catch(errors => console.log(errors));
+
+
+
+          }).catch(errors => console.log(errors));
 
       }).catch(errors => console.log(errors));
 
-    const calculoP = this.CalculoRgps.find(this.idCalculo)
-      .then((calculo: CalculoModel) => {
 
-        this.calculo = calculo;
-        this.isCalculo = true;
+    // const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
+    //   .then((expvida: ExpectativaVida[]) => {
+    //     this.expectativaVidaList = [];
+    //     this.expectativaVidaList = expvida;
 
-      }).catch(errors => console.log(errors));
+    //     const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+    //     const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
 
+    //     if (expectativaObj[this.sexoSegurado]) {
+    //       this.expectativaVidaR = expectativaObj[this.sexoSegurado];
+    //     } else {
+    //       this.expectativaVidaR = 80;
+    //     }
 
-    const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
-      .then((planejamento: PlanejamentoRgps) => {
-
-        //  console.log(planejamento);
-        this.planejamento = planejamento;
-        this.idadeNaDiBPlanejamento = Math.abs(
-          this.dataNascimentoSeguradoM.diff(
-            moment(this.planejamento.data_futura),
-            'years'));
-
-        this.idadeNaDiBRmi = Math.abs(
-          this.dataNascimentoSeguradoM.diff(
-            moment(this.calculo.dib),
-            'years'));
-
-        this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
-        this.isPlanejamento = true;
-
-
-      }).catch(errors => console.log(errors));
-
-
-
-    const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
-      .then((expvida: ExpectativaVida[]) => {
-        this.expectativaVidaList = [];
-        this.expectativaVidaList = expvida;
-
-        const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
-        const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
-
-        if (expectativaObj[this.sexoSegurado]) {
-          this.expectativaVidaR = expectativaObj[this.sexoSegurado];
-        } else {
-          this.expectativaVidaR = 80;
-        }
-
-      });
-
+    //   });
 
 
     // const expectativaVidaP = this.ExpectativaVida.getByIdade(this.idadeNaDiBRmi)
@@ -157,33 +199,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     //   });
 
-    const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
-      .then((moeda: Moeda[]) => {
 
-        this.moeda = moeda;
-
-      });
-
-
-    Promise.all([seguradoP, calculoP, planejamentoP, MoedaP, expectativaVidaP]).then((values) => {
-
-      this.calcularPlanejamento();
-      this.isUpdatingRst = false;
-
-    });
-
-
-    // Promise.resolve()
-    //   .then(seguradoP => console.log(seguradoP))
-    //   .then(calculoP => console.log(calculoP))
-    //   .then(planejamentoP => console.log(planejamentoP))
-    //   .then(MoedaP => console.log(MoedaP))
-    //   .then(expectativaVidaP => {
-    //     this.calcularPlanejamento();
-    //     this.isUpdatingRst = false;
-    //   })
-    // // .then(() => { })
-    // //.catch(err => responseError(err));
 
   }
 

@@ -8,8 +8,12 @@ import { RgpsPlanejamentoSeguradosComponent } from './rgps-planejamento-segurado
 
 export const rgpsPlanejamentoRoutes: Routes = [
 	{
+		path: ':step',
+		component: RgpsPlanejamentoSeguradosComponent,
+	},
+	{
 		path: '',
-		component: RgpsPlanejamentoSeguradosComponent
+		component: RgpsPlanejamentoSeguradosComponent,
 	},
 	{
 		path: 'planejados/:id_segurado/:id',

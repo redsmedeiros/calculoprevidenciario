@@ -479,39 +479,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   }
 
 
-  private navegarParaResultados() {
-    // const baseUrl = window.location.origin;
-    // window.location.href = `${baseUrl}/#/rgps/rgps-planejamento/resultados/${this.segurado.id}/${this.calculo.id}/${this.planejamento.id}`;
-    const urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.calculo.id + '/' + this.planejamento.id;
-    this.router.navigate([urlpbcNew]);
-
-    // swal({
-    //   title: 'Tem certeza?',
-    //   text: "Essa ação é irreversível!",
-    //   type: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#d33',
-    //   cancelButtonColor: '#3085d6',
-    //   confirmButtonText: 'Deletar',
-    //   cancelButtonText: 'Cancelar'
-    // }).then((result) => {
-    //   if (result.value) {
-    //     this.Segurado.find(this.route.snapshot.params['id'])
-    //     .then(segurado => {
-    //       this.Segurado.destroy(segurado)
-    //           .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
-    //           swal(
-    //   'Sucesso',
-    //   'Segurado excluído',
-    //   'success'
-    // )
-    //     })
-    //   }else if (result.dismiss === swal.DismissReason.cancel){
-    //     this.router.navigate(['/beneficios/beneficios-segurados'])
-    //   }
-    // });
-  }
-
   private updateResultPlanejamento() {
 
     sessionStorage.removeItem('exportPlanejamentoRSTRMI');
@@ -532,9 +499,9 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.RgpsPlanejamentoService
       .update(this.planejamento)
       .then(model => {
-        console.log(model);
+       // console.log(model);
 
-        this.navegarParaResultados();
+        // this.navegarParaResultados();
       })
       .catch((errors) => {
         console.log(errors);
