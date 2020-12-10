@@ -49,76 +49,76 @@ export class RgpsResultadosComponent implements OnInit {
   public calculosList = [];
   public erroAnterior88;
   public currencyList = [
-    {
-      'startDate': '1000-01-01',
-      'endDate': '1942-10-31',
-      'acronimo': 'MR$',
-      'nome': 'Mil-Réis',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1942-11-01',
-      'endDate': '1967-02-12',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1967-02-13',
-      'endDate': '1970-05-15',
-      'acronimo': 'NCR$',
-      'nome': 'Cruzeiro Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1970-05-15',
-      'endDate': '1986-02-28',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1986-03-01',
-      'endDate': '1988-12-31',
-      'acronimo': 'CZ$',
-      'nome': 'Cruzado',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1989-01-01',
-      'endDate': '1990-03-15',
-      'acronimo': 'NCZ$',
-      'nome': 'Cruzado Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1990-03-16',
-      'endDate': '1993-07-31',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1993-08-01',
-      'endDate': '1994-02-28',
-      'acronimo': 'CR$',
-      'nome': 'Cruzeiro Real',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1994-03-01',
-      'endDate': '1994-06-30',
-      'acronimo': 'URV',
-      'nome': 'Unidade Real de Valor',
-      'indiceCorrecaoAnterior': 637.639978027344
-    },
-    {
-      'startDate': '1994-07-01',
-      'endDate': '9999-12-31',
-      'acronimo': 'R$',
-      'nome': 'Real',
-      'indiceCorrecaoAnterior': 1
-    }
+  {
+    'startDate': '1000-01-01',
+    'endDate': '1942-10-31',
+    'acronimo': 'MR$',
+    'nome': 'Mil-Réis',
+    'indiceCorrecaoAnterior': 1
+  },
+  {
+    'startDate': '1942-11-01',
+    'endDate': '1967-02-12',
+    'acronimo': 'Cr$',
+    'nome': 'Cruzeiro',
+    'indiceCorrecaoAnterior': 1000
+  },
+  {
+    'startDate': '1967-02-13',
+    'endDate': '1970-05-15',
+    'acronimo': 'NCR$',
+    'nome': 'Cruzeiro Novo',
+    'indiceCorrecaoAnterior': 1000
+  },
+  {
+    'startDate': '1970-05-15',
+    'endDate': '1986-02-28',
+    'acronimo': 'Cr$',
+    'nome': 'Cruzeiro',
+    'indiceCorrecaoAnterior': 1
+  },
+  {
+    'startDate': '1986-03-01',
+    'endDate': '1988-12-31',
+    'acronimo': 'CZ$',
+    'nome': 'Cruzado',
+    'indiceCorrecaoAnterior': 1000
+  },
+  {
+    'startDate': '1989-01-01',
+    'endDate': '1990-03-15',
+    'acronimo': 'NCZ$',
+    'nome': 'Cruzado Novo',
+    'indiceCorrecaoAnterior': 1000
+  },
+  {
+    'startDate': '1990-03-16',
+    'endDate': '1993-07-31',
+    'acronimo': 'Cr$',
+    'nome': 'Cruzeiro',
+    'indiceCorrecaoAnterior': 1
+  },
+  {
+    'startDate': '1993-08-01',
+    'endDate': '1994-02-28',
+    'acronimo': 'CR$',
+    'nome': 'Cruzeiro Real',
+    'indiceCorrecaoAnterior': 1000
+  },
+  {
+    'startDate': '1994-03-01',
+    'endDate': '1994-06-30',
+    'acronimo': 'URV',
+    'nome': 'Unidade Real de Valor',
+    'indiceCorrecaoAnterior': 637.639978027344
+  },
+  {
+    'startDate': '1994-07-01',
+    'endDate': '9999-12-31',
+    'acronimo': 'R$',
+    'nome': 'Real',
+    'indiceCorrecaoAnterior': 1
+  }
   ];
 
   public segurado: any = {};
@@ -150,54 +150,54 @@ export class RgpsResultadosComponent implements OnInit {
     bInfo: false,
     data: this.calculoList,
     columns: [
-      { data: 'especie' },
+    { data: 'especie' },
       // { data: 'periodoInicioBeneficio' },
       // { data: 'contribuicaoPrimaria' },
       // { data: 'contribuicaoSecundaria' },
       { data: 'dib' },
       // { data: 'dataCriacao' },
       { data: 'checkbox', class: 'not-print', visible: (this.mostrarCalculoApos19) },
-    ]
-  };
+      ]
+    };
 
-  public inpsList;
-  public conclusoesAnterior88 = {};
-  public calculoAnterior88TableData = [];
-  public contribuicaoPrimariaAnterior88 = { anos: 0, meses: 0, dias: 0 };
-  public contribuicaoSecundariaAnterior88 = { anos: 0, meses: 0, dias: 0 };
-  public calculoAnterior88TableOptions = {
-    colReorder: false,
-    paging: false,
-    searching: false,
-    ordering: false,
-    bInfo: false,
-    data: this.calculoAnterior88TableData,
-    columns: [
+    public inpsList;
+    public conclusoesAnterior88 = {};
+    public calculoAnterior88TableData = [];
+    public contribuicaoPrimariaAnterior88 = { anos: 0, meses: 0, dias: 0 };
+    public contribuicaoSecundariaAnterior88 = { anos: 0, meses: 0, dias: 0 };
+    public calculoAnterior88TableOptions = {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: this.calculoAnterior88TableData,
+      columns: [
       { data: 'competencia' },
       { data: 'contribuicao_primaria' },
       { data: 'contribuicao_secundaria' },
       { data: 'inps' },
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
-    ]
-  };
+      ]
+    };
 
-  public conclusoes91_98 = {};
-  public calculo91_98TableData = [];
-  public carenciasProgressivas;
-  public reajustesAutomaticos;
-  public contribuicaoPrimaria91_98 = { anos: 0, meses: 0, dias: 0 };
-  public contribuicaoSecundaria91_98 = { anos: 0, meses: 0, dias: 0 };
-  public coeficiente;
-  public errosCalculo91_98 = [];
-  public calculo91_98TableOptions = {
-    colReorder: false,
-    paging: false,
-    searching: false,
-    ordering: false,
-    bInfo: false,
-    data: this.calculo91_98TableData,
-    columns: [
+    public conclusoes91_98 = {};
+    public calculo91_98TableData = [];
+    public carenciasProgressivas;
+    public reajustesAutomaticos;
+    public contribuicaoPrimaria91_98 = { anos: 0, meses: 0, dias: 0 };
+    public contribuicaoSecundaria91_98 = { anos: 0, meses: 0, dias: 0 };
+    public coeficiente;
+    public errosCalculo91_98 = [];
+    public calculo91_98TableOptions = {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: this.calculo91_98TableData,
+      columns: [
       { data: 'competencia' },
       { data: 'fator' },
       { data: 'contribuicao_primaria' },
@@ -205,20 +205,20 @@ export class RgpsResultadosComponent implements OnInit {
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
       { data: 'limite' },
-    ]
-  };
+      ]
+    };
 
-  public conclusoes98_99 = [];
-  public calculo98_99TableData = [];
-  public errosCalculo98_99 = [];
-  public calculo98_99TableOptions = {
-    colReorder: false,
-    paging: false,
-    searching: false,
-    ordering: false,
-    bInfo: false,
-    data: this.calculo98_99TableData,
-    columns: [
+    public conclusoes98_99 = [];
+    public calculo98_99TableData = [];
+    public errosCalculo98_99 = [];
+    public calculo98_99TableOptions = {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: this.calculo98_99TableData,
+      columns: [
       { data: 'competencia' },
       { data: 'fator' },
       { data: 'contribuicao_primaria' },
@@ -226,30 +226,30 @@ export class RgpsResultadosComponent implements OnInit {
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
       { data: 'limite' },
-    ]
-  };
+      ]
+    };
 
 
-  public contribuicaoTotal;
-  public conclusoesApos99 = [];
-  public limited;
-  public isProportional = false;
-  public idadeFracionada;
-  public expectativasVida;
-  public calculoApos99TableData = [];
-  public contribuicaoPrimaria99 = { anos: 0, meses: 0, dias: 0 };
-  public contribuicaoSecundaria99 = { anos: 0, meses: 0, dias: 0 };
-  public errosCalculoApos99 = [];
-  public withMemo = false;
-  public withIN45 = true;
-  public calculoApos99TableOptions = {
-    colReorder: false,
-    paging: false,
-    searching: false,
-    ordering: false,
-    bInfo: false,
-    data: this.calculoApos99TableData,
-    columns: [
+    public contribuicaoTotal;
+    public conclusoesApos99 = [];
+    public limited;
+    public isProportional = false;
+    public idadeFracionada;
+    public expectativasVida;
+    public calculoApos99TableData = [];
+    public contribuicaoPrimaria99 = { anos: 0, meses: 0, dias: 0 };
+    public contribuicaoSecundaria99 = { anos: 0, meses: 0, dias: 0 };
+    public errosCalculoApos99 = [];
+    public withMemo = false;
+    public withIN45 = true;
+    public calculoApos99TableOptions = {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: this.calculoApos99TableData,
+      columns: [
       { data: 'id' },
       { data: 'competencia' },
       { data: 'indice_corrigido' },
@@ -258,11 +258,11 @@ export class RgpsResultadosComponent implements OnInit {
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
       { data: 'limite' },
-    ]
-  };
+      ]
+    };
 
-  public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
-  public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
+    public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
+    public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
 
   // Datas
   public dataLei9032 = moment('1995-04-28');
@@ -285,6 +285,15 @@ export class RgpsResultadosComponent implements OnInit {
   // pbc indices de correção
   public pbcCompletoIndices = 'inpc1084';
 
+  public steps = [];
+  public activeStep = {
+    key: 'step4',
+    title: 'Executar o cálculo e planejamento',
+    valid: false,
+    checked: false,
+    submitted: false,
+  };
+
   constructor(protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
@@ -292,7 +301,7 @@ export class RgpsResultadosComponent implements OnInit {
     protected planejamentoService: RgpsPlanejamentoService,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
-  ) { }
+    ) { }
 
 
   ngOnInit() {
@@ -306,10 +315,10 @@ export class RgpsResultadosComponent implements OnInit {
     this.isUpdating = true;
 
     this.Segurado.find(this.idSegurado)
-      .then(segurado => {
-        this.segurado = segurado;
+    .then(segurado => {
+      this.segurado = segurado;
 
-        if (localStorage.getItem('user_id') !== this.segurado.user_id) {
+      if (localStorage.getItem('user_id') !== this.segurado.user_id) {
           // redirecionar para pagina de segurados
           swal({
             type: 'error',
@@ -325,41 +334,41 @@ export class RgpsResultadosComponent implements OnInit {
           let counter = 0;
           for (const idCalculo of this.idsCalculo) {
             this.CalculoRgps.find(idCalculo)
-              .then((calculo: CalculoModel) => {
+            .then((calculo: CalculoModel) => {
 
-                this.getPlanejamento(calculo);
+              this.getPlanejamento(calculo);
 
-                this.controleExibicao(calculo);
-                this.calculosList.push(calculo);
-                const checkBox = `<div class="checkbox not-print"><label>
-                                  <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
-                                  <span> </span></label></div>`;
-                this.checkboxIdList.push(`${calculo.id}-checkbox`);
+              this.controleExibicao(calculo);
+              this.calculosList.push(calculo);
+              const checkBox = `<div class="checkbox not-print"><label>
+              <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
+              <span> </span></label></div>`;
+              this.checkboxIdList.push(`${calculo.id}-checkbox`);
 
-                calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
+              calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
 
-                const line = {
-                  especie: calculo.tipo_seguro,
-                  periodoInicioBeneficio: calculo.tipo_aposentadoria,
-                  contribuicaoPrimaria: this.getTempoDeContribuicaoPrimaria(calculo),
-                  contribuicaoSecundaria: this.getTempoDeContribuicaoSecundaria(calculo),
-                  dib: calculo.data_pedido_beneficio,
-                  dataCriacao: this.formatReceivedDate(calculo.data_calculo),
-                  checkbox: checkBox
-                }
+              const line = {
+                especie: calculo.tipo_seguro,
+                periodoInicioBeneficio: calculo.tipo_aposentadoria,
+                contribuicaoPrimaria: this.getTempoDeContribuicaoPrimaria(calculo),
+                contribuicaoSecundaria: this.getTempoDeContribuicaoSecundaria(calculo),
+                dib: calculo.data_pedido_beneficio,
+                dataCriacao: this.formatReceivedDate(calculo.data_calculo),
+                checkbox: checkBox
+              }
 
-                this.calculoList.push(line);
-                this.grupoCalculosTableOptions = {
-                  ...this.grupoCalculosTableOptions,
-                  data: this.calculoList,
-                }
+              this.calculoList.push(line);
+              this.grupoCalculosTableOptions = {
+                ...this.grupoCalculosTableOptions,
+                data: this.calculoList,
+              }
 
-                if ((counter + 1) === this.idsCalculo.length)
-                  this.isUpdating = false;
-                counter++;
-              });
+              if ((counter + 1) === this.idsCalculo.length)
+                this.isUpdating = false;
+              counter++;
+            });
           }
-          
+
         }
       });
   }
@@ -390,78 +399,78 @@ export class RgpsResultadosComponent implements OnInit {
     switch (this.tipoBeneficio) {
       // Auxílio Doença Previdenciário
       case 1:
-        if (dib >= this.dataLei9032)
-          coeficienteAux = 91;
-        else if (dib >= this.dataLei8213) {
-          coeficienteAux = 80 + anosContribuicao;
-          if (coeficienteAux > 92)
-            coeficienteAux = 92;
-        } else {
-          coeficienteAux = 80 + anosContribuicao;
-        }
-        break;
+      if (dib >= this.dataLei9032)
+        coeficienteAux = 91;
+      else if (dib >= this.dataLei8213) {
+        coeficienteAux = 80 + anosContribuicao;
+        if (coeficienteAux > 92)
+          coeficienteAux = 92;
+      } else {
+        coeficienteAux = 80 + anosContribuicao;
+      }
+      break;
       // Aposentadoria por invalidez previdênciária
       case 2:
-        if (dib >= this.dataLei9032)
-          coeficienteAux = 100;
-        else
-          coeficienteAux = 80 + anosContribuicao;
-        break;
+      if (dib >= this.dataLei9032)
+        coeficienteAux = 100;
+      else
+        coeficienteAux = 80 + anosContribuicao;
+      break;
       // Aponsentadoria por idade trabalhador Urbano ou Rural
       case 3:
-        coeficienteAux = 70 + anosContribuicao;
-        break;
+      coeficienteAux = 70 + anosContribuicao;
+      break;
       // Aposentadoria por tempo de contribuição
       case 4:
-        coeficienteAux = coeficienteAux2;
-        break;
+      coeficienteAux = coeficienteAux2;
+      break;
       // Aposentadoria Especial
       case 5:
-        if (dib >= this.dataLei9032)
-          coeficienteAux = 100;
-        else
-          coeficienteAux = 85 + anosContribuicao;
-        break;
+      if (dib >= this.dataLei9032)
+        coeficienteAux = 100;
+      else
+        coeficienteAux = 85 + anosContribuicao;
+      break;
       // Aposentadoria por tempo de serviço de professor
       case 6:
-        coeficienteAux = coeficienteAux2;
-        break;
+      coeficienteAux = coeficienteAux2;
+      break;
       // Auxílio Acidente Previdenciário 50%
       case 7:
-        coeficienteAux = 50;
-        break;
+      coeficienteAux = 50;
+      break;
       // Aponsentadoria por idade trabalhador Rural
       case 16:
-        coeficienteAux = 70 + anosContribuicao;
-        break;
+      coeficienteAux = 70 + anosContribuicao;
+      break;
       // Auxílio Acidente Previdenciário 30%
       case 17:
-        coeficienteAux = 30;
-        break;
+      coeficienteAux = 30;
+      break;
       // Auxílio Acidente Previdenciário 40%
       case 18:
-        coeficienteAux = 40;
-        break;
+      coeficienteAux = 40;
+      break;
       // Auxílio Acidente Previdenciário 60%
       case 19:
-        coeficienteAux = 60;
-        break;
+      coeficienteAux = 60;
+      break;
       // Pessoa com deficiencia Grave 100%
       case 25:
-        coeficienteAux = 100;
-        break;
+      coeficienteAux = 100;
+      break;
       // Pessoa com deficiencia Moderada 100%
       case 26:
-        coeficienteAux = 100;
-        break;
+      coeficienteAux = 100;
+      break;
       // Pessoa com deficiencia Leve 100%
       case 27:
-        coeficienteAux = 100;
-        break;
+      coeficienteAux = 100;
+      break;
       // Pessoa com deficiencia por Idade 70%
       case 28:
-        coeficienteAux = 70 + anosContribuicao;
-        break;
+      coeficienteAux = 70 + anosContribuicao;
+      break;
     }
     coeficienteAux = (coeficienteAux > 100) ? 100 : coeficienteAux;
     return coeficienteAux;
@@ -704,97 +713,97 @@ export class RgpsResultadosComponent implements OnInit {
     switch (calculo.tipo_seguro) {
       case 'Auxílio Doença':
       case 'Auxílio por Incapacidade Temporária':
-        numeroEspecie = 1;
-        break;
+      numeroEspecie = 1;
+      break;
       case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
-        numeroEspecie = 2;
-        break;
+      numeroEspecie = 2;
+      break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
       case 'Aposentadoria por idade - Trabalhador Urbano':
       case 'Aposentadoria Programada':
-        numeroEspecie = 3;
-        break;
+      numeroEspecie = 3;
+      break;
       case 'Aposentadoria Programada - Professor':
-        numeroEspecie = 31;
-        break;
+      numeroEspecie = 31;
+      break;
       case 'Aposentadoria por Tempo de Contribuição':
       case 'Aposentadoria por tempo de contribuição':
       case 'Aposentadoria por tempo de serviço':
-        numeroEspecie = 4;
-        break;
+      numeroEspecie = 4;
+      break;
       case 'Aposentadoria especial':
-        numeroEspecie = 5;
-        break;
+      numeroEspecie = 5;
+      break;
       case 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)':
       case 'Aposentadoria por tempo de serviço de professor':
-        numeroEspecie = 6;
-        break;
+      numeroEspecie = 6;
+      break;
       case 'Auxílio Acidente previdenciário - 50%':
-        numeroEspecie = 7;
-        break;
+      numeroEspecie = 7;
+      break;
       case 'Aposentadoria por Idade - Trabalhador Rural':
       case 'Aposentadoria por idade - Trabalhador Rural':
-        numeroEspecie = 16;
-        break;
+      numeroEspecie = 16;
+      break;
       case 'Auxílio Acidente - 30%':
-        numeroEspecie = 17;
-        break;
+      numeroEspecie = 17;
+      break;
       case 'Auxílio Acidente - 40%':
-        numeroEspecie = 18;
-        break;
+      numeroEspecie = 18;
+      break;
       case 'Auxílio Acidente - 60%':
-        numeroEspecie = 19;
-        break;
+      numeroEspecie = 19;
+      break;
       case 'Abono de Permanência em Serviço':
-        numeroEspecie = 20;
-        break;
+      numeroEspecie = 20;
+      break;
       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)':
       case 'Aposentadoria especial da Pessoa com Deficiência Grave':
-        numeroEspecie = 25;
-        break;
+      numeroEspecie = 25;
+      break;
       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)':
       case 'Aposentadoria especial da Pessoa com Deficiência Moderada':
-        numeroEspecie = 26;
-        break;
+      numeroEspecie = 26;
+      break;
       case 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)':
       case 'Aposentadoria especial da Pessoa com Deficiência Leve':
-        numeroEspecie = 27;
-        break;
+      numeroEspecie = 27;
+      break;
       case 'Aposentadoria por Idade da PcD':
       case 'Aposentadoria especial por Idade da Pessoa com Deficiência':
-        numeroEspecie = 28;
-        break;
+      numeroEspecie = 28;
+      break;
       // Reforma  inicio 2019
       case 'Aposentadoria Especial - 15 anos':
       case 'Aposentadoria especial - 15 anos de exposição':
-        numeroEspecie = 1915;
-        break;
+      numeroEspecie = 1915;
+      break;
       case 'Aposentadoria Especial - 20 anos':
       case 'Aposentadoria especial - 20 anos de exposição':
-        numeroEspecie = 1920;
-        break;
+      numeroEspecie = 1920;
+      break;
       case 'Aposentadoria Especial - 25 anos':
       case 'Aposentadoria especial - 25 anos de exposição':
-        numeroEspecie = 1925;
-        break;
+      numeroEspecie = 1925;
+      break;
       case 'Pensão por Morte - Instituidor Aposentado na Data do Óbito':
       case 'Pensão por Morte instituidor aposentado na data óbito':
-        numeroEspecie = 1900;
-        break;
+      numeroEspecie = 1900;
+      break;
       case 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito':
       case 'Pensão por Morte instituidor não é aposentado na data óbito':
-        numeroEspecie = 1901;
-        break;
+      numeroEspecie = 1901;
+      break;
       case 'Aposentadoria por Incapacidade Permanente':
       case 'Aposentadoria por incapacidade permanente':
-        numeroEspecie = 1903;
-        break;
+      numeroEspecie = 1903;
+      break;
       case 'Auxílio Acidente':
       case 'Auxílio Acidente - 50%':
-        numeroEspecie = 1905;
-        break;
+      numeroEspecie = 1905;
+      break;
       default:
-        break;
+      break;
     }
     return numeroEspecie;
   }
@@ -804,12 +813,12 @@ export class RgpsResultadosComponent implements OnInit {
    * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
    * @param especieBeneficio
    */
-  verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
+   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
     //25, 26, 27,
 
     const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
-      'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
+    'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
       // 'Aposentadoria por idade - Trabalhador Urbano',
       // 'Aposentadoria por idade - Trabalhador Rural',
       'Auxílio Doença',
@@ -827,82 +836,82 @@ export class RgpsResultadosComponent implements OnInit {
       'Auxílio por Incapacidade Temporária',
       'Auxílio Acidente',
       'Aposentadoria por Idade da PcD',
-    ];
+      ];
 
-    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
-      return true;
+      if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+        return true;
+      }
+      return false;
+
     }
-    return false;
-
-  }
 
 
   /**
  * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 2,3
  * @param especieBeneficio
  */
-  verificaEspecieDeBeneficioIdade(especieBeneficio) {
-    const arrayTypeNum = [3, 16, 31];
-    const arrayTypeText = [
-      'Aposentadoria por idade - Trabalhador Urbano',
-      'Aposentadoria por idade - Trabalhador Rural',
-      'Aposentadoria por Idade - Trabalhador Urbano',
-      'Aposentadoria por Idade - Trabalhador Rural',
-      'Aposentadoria Programada',
-      'Aposentadoria Programada - Professor'
-    ];
+ verificaEspecieDeBeneficioIdade(especieBeneficio) {
+  const arrayTypeNum = [3, 16, 31];
+  const arrayTypeText = [
+  'Aposentadoria por idade - Trabalhador Urbano',
+  'Aposentadoria por idade - Trabalhador Rural',
+  'Aposentadoria por Idade - Trabalhador Urbano',
+  'Aposentadoria por Idade - Trabalhador Rural',
+  'Aposentadoria Programada',
+  'Aposentadoria Programada - Professor'
+  ];
 
-    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
-      return true;
-    }
-    return false;
+  if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+    return true;
+  }
+  return false;
 
+}
+
+
+formatMoney(value, sigla = 'R$') {
+
+  value = parseFloat(value);
+  const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  return sigla + ' ' + numeroPadronizado;
+
+}
+
+formatDecimal(value, n_of_decimal_digits) {
+
+  value = parseFloat(value);
+  return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+
+}
+
+public convertDecimalValue(valor) {
+
+  if (!isNaN(valor)) {
+    return valor;
   }
 
-
-  formatMoney(value, sigla = 'R$') {
-
-    value = parseFloat(value);
-    const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-    return sigla + ' ' + numeroPadronizado;
-
+  if ((/\,/).test(valor)) {
+    valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
+  } else {
+    valor = valor.replace('R$', '');
   }
 
-  formatDecimal(value, n_of_decimal_digits) {
+  return isNaN(valor) ? 0 : parseFloat(valor);
 
-    value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+}
 
-  }
+formatDecimalIdade(value, n_of_decimal_digits) {
+  return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+}
 
-  public convertDecimalValue(valor) {
-
-    if (!isNaN(valor)) {
-      return valor;
-    }
-
-    if ((/\,/).test(valor)) {
-      valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
-    } else {
-      valor = valor.replace('R$', '');
-    }
-
-    return isNaN(valor) ? 0 : parseFloat(valor);
-
-  }
-
-  formatDecimalIdade(value, n_of_decimal_digits) {
-    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
-  }
-
-  formatReceivedDate(inputDate) {
-    const date = new Date(inputDate);
-    date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
-    if (!isNaN(date.getTime())) {
+formatReceivedDate(inputDate) {
+  const date = new Date(inputDate);
+  date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
+  if (!isNaN(date.getTime())) {
       // Months use 0 index.
       return ('0' + (date.getDate())).slice(-2) + '/' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-        date.getFullYear();
+      ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+      date.getFullYear();
     }
     return '';
   }
@@ -920,19 +929,19 @@ export class RgpsResultadosComponent implements OnInit {
     let str = '';
     if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined') {
       str += '<tr><td class="no-padding">Até EC 20/98</td><td class="no-padding">'
-        + data.contribuicao_primaria_98.replace(/-/g, '/') + '</td></tr>';
+      + data.contribuicao_primaria_98.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined') {
       str += '<tr><td class="no-padding">Até EC 9.876/99</td><td class="no-padding">'
-        + data.contribuicao_primaria_99.replace(/-/g, '/') + '</td></tr>';
+      + data.contribuicao_primaria_99.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined') {
       str += '<tr><td class="no-padding">Até EC 103/2019</td><td class="no-padding">'
-        + data.contribuicao_primaria_atual.replace(/-/g, '/') + '</td></tr>';
+      + data.contribuicao_primaria_atual.replace(/-/g, '/') + '</td></tr>';
     }
     if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
       str += '<tr><td class="no-padding">Após 103/2019</td><td class="no-padding">'
-        + data.contribuicao_primaria_19.replace(/-/g, '/') + '</td></tr>';
+      + data.contribuicao_primaria_19.replace(/-/g, '/') + '</td></tr>';
     }
 
     return '<table class="table  no-padding no-margin">' + str + '</table>';
@@ -1035,32 +1044,32 @@ export class RgpsResultadosComponent implements OnInit {
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 após 99     (tempo de contribuicao após a lei 99)
-      (cálculos em box separados)*/
+                (cálculos em box separados)*/
 
-      if (!verificaInvalidezObito) {
-        calculo.mostrarCalculo91_98 = true;
-        calculo.mostrarCalculo98_99 = true;
-      }
+                if (!verificaInvalidezObito) {
+                  calculo.mostrarCalculo91_98 = true;
+                  calculo.mostrarCalculo98_99 = true;
+                }
 
-      if (verificaIdade) {
-        calculo.mostrarCalculo91_98 = false;
-        calculo.mostrarCalculo98_99 = false;
-      }
+                if (verificaIdade) {
+                  calculo.mostrarCalculo91_98 = false;
+                  calculo.mostrarCalculo98_99 = false;
+                }
 
-      calculo.mostrarCalculoApos99 = true;
+                calculo.mostrarCalculoApos99 = true;
 
-    } else if (dataInicioBeneficio >= data19) {
+              } else if (dataInicioBeneficio >= data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 entre 99 e 19 (tempo de contribuicao até 103/2019)
                 após 19     (tempo de contribuicao após 103/2019)
-      (cálculos em box separados)*/
-      if (!verificaInvalidezObito) {
-        calculo.mostrarCalculo91_98 = true;
-        calculo.mostrarCalculo98_99 = true;
-        calculo.mostrarCalculoApos99 = true;
-      }
+                (cálculos em box separados)*/
+                if (!verificaInvalidezObito) {
+                  calculo.mostrarCalculo91_98 = true;
+                  calculo.mostrarCalculo98_99 = true;
+                  calculo.mostrarCalculoApos99 = true;
+                }
 
       // idade deve calcular de 1999 ate 11/2019 para direito adquirido
       if (verificaIdade) {
@@ -1081,6 +1090,7 @@ export class RgpsResultadosComponent implements OnInit {
 
 
     if (this.isPlanejamento) {
+      this.getStepRGPSPlanejamento();
       calculo.mostrarCalculo91_98 = false;
       calculo.mostrarCalculo98_99 = false;
       calculo.mostrarCalculoApos99 = false;
@@ -1187,18 +1197,18 @@ export class RgpsResultadosComponent implements OnInit {
 
 
     const css = `
-                <style>
-                      body{font-family: Arial, Helvetica, sans-serif;}
-                      h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
-                      i.fa, .not-print{ display: none; }
-                      table{margin-top: 10px;padding-top: 10px;}
-                      footer,div,p,td,th{font-size:11px !important;}
-                      .list-inline{ display:inline; }
-                      .table>tbody>tr>td, .table>tbody>tr>th,
-                       .table>tfoot>tr>td, .table>tfoot>tr>th,
-                       .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-                       footer{text-align: center; margin-top: 50px;}
-                </style>`;
+    <style>
+    body{font-family: Arial, Helvetica, sans-serif;}
+    h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
+    i.fa, .not-print{ display: none; }
+    table{margin-top: 10px;padding-top: 10px;}
+    footer,div,p,td,th{font-size:11px !important;}
+    .list-inline{ display:inline; }
+    .table>tbody>tr>td, .table>tbody>tr>th,
+    .table>tfoot>tr>td, .table>tfoot>tr>th,
+    .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+    footer{text-align: center; margin-top: 50px;}
+    </style>`;
 
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
@@ -1218,17 +1228,17 @@ export class RgpsResultadosComponent implements OnInit {
     event.stopPropagation();
     const css = `
     <style>
-          body{font-family: Arial, Helvetica, sans-serif;}
-          h1, h2{font-size:0.9rem;}
-          i.fa, .not-print{ display: none; }
-          table{margin-top: 10px;}
-          footer,div,p,td,th{font-size:10px !important;}
-          .list-inline{ display:inline; }
-          .table>tbody>tr>td, .table>tbody>tr>th,
-           .table>tfoot>tr>td, .table>tfoot>tr>th,
-           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-           footer{text-align: center; margin-top: 50px;}
-           .list-inline-print{ display:inline !important;}
+    body{font-family: Arial, Helvetica, sans-serif;}
+    h1, h2{font-size:0.9rem;}
+    i.fa, .not-print{ display: none; }
+    table{margin-top: 10px;}
+    footer,div,p,td,th{font-size:10px !important;}
+    .list-inline{ display:inline; }
+    .table>tbody>tr>td, .table>tbody>tr>th,
+    .table>tfoot>tr>td, .table>tfoot>tr>th,
+    .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+    footer{text-align: center; margin-top: 50px;}
+    .list-inline-print{ display:inline !important;}
     </style>`;
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
@@ -1237,8 +1247,8 @@ export class RgpsResultadosComponent implements OnInit {
 
     const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
-      + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
-      + boxContent + '<br><br><br>' + rodape + '</body></html>';
+    + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
+    + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
@@ -1267,7 +1277,7 @@ export class RgpsResultadosComponent implements OnInit {
       swal('Erro', 'Só é possível comparar 2 cálculos', 'error');
     } else {
       window.location.href = '/#/rgps/rgps-elements/' +
-        this.route.snapshot.params['id_segurado'] + '/' + idList[0] + '/' + idList[1];
+      this.route.snapshot.params['id_segurado'] + '/' + idList[0] + '/' + idList[1];
 
     }
   }
@@ -1397,7 +1407,7 @@ export class RgpsResultadosComponent implements OnInit {
         calcClone,
         this.dataInicioBeneficioOld.clone(),
         this.dataInicioBeneficio.clone()
-      );
+        );
 
     }
   }
@@ -1421,17 +1431,17 @@ export class RgpsResultadosComponent implements OnInit {
       } else {
         this.isUpdating = true;
         const planejamentoP = this.planejamentoService.find(idPlanejamento)
-          .then((planejamento: PlanejamentoRgps) => {
+        .then((planejamento: PlanejamentoRgps) => {
 
 
-            console.log(planejamento);
-            this.planejamento = planejamento;
+          console.log(planejamento);
+          this.planejamento = planejamento;
 
-            const calcClone = Object.assign({}, calculo);
-            this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+          const calcClone = Object.assign({}, calculo);
+          this.setInfoPLanejamentoTempoDib(calculo, calcClone);
 
-            this.isUpdating = false;
-          }).catch(errors => console.log(errors));
+          this.isUpdating = false;
+        }).catch(errors => console.log(errors));
 
       }
 
@@ -1443,39 +1453,95 @@ export class RgpsResultadosComponent implements OnInit {
 
   }
 
-  private navegarParaResultados() {
-    const urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.idsCalculo[0] + '/' + this.planejamento.id;
+  private navegarPlanejamento(type) {
+    let urlpbcNew = '';
+
+    switch (type) {
+      case 'inicio':
+      urlpbcNew = '/rgps/rgps-planejamento/1';
+      break;
+      case 'selectSegurado':
+      urlpbcNew = '/rgps/rgps-planejamento/2/' + this.segurado.id;
+      break;
+      case 'selectCalc':
+      urlpbcNew = '/rgps/rgps-planejamento/3/' + this.segurado.id + '/' + this.idsCalculo[0];
+      break;
+      case 'resultado':
+      urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.idsCalculo[0] + '/' + this.planejamento.id;
+      break;
+
+    }
+
     this.router.navigate([urlpbcNew]);
 
-    // swal({
-    //   title: 'Tem certeza?',
-    //   text: "Essa ação é irreversível!",
-    //   type: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#d33',
-    //   cancelButtonColor: '#3085d6',
-    //   confirmButtonText: 'Deletar',
-    //   cancelButtonText: 'Cancelar'
-    // }).then((result) => {
-    //   if (result.value) {
-    //     this.Segurado.find(this.route.snapshot.params['id'])
-    //     .then(segurado => {
-    //       this.Segurado.destroy(segurado)
-    //           .then(() => this.router.navigate(['/beneficios/beneficios-segurados']));
-    //           swal(
-    //   'Sucesso',
-    //   'Segurado excluído',
-    //   'success'
-    // )
-    //     })
-    //   }else if (result.dismiss === swal.DismissReason.cancel){
-    //     this.router.navigate(['/beneficios/beneficios-segurados'])
-    //   }
-    // });
+  }
+
+  public setStepPlanejamento(status){
+    this.activeStep.valid = true;
+  }
+
+  private setActiveStep(pane) {
+
+    switch (pane.key) {
+      case 'step1':
+      this.navegarPlanejamento('inicio');
+      break;
+      case 'step2':
+      this.navegarPlanejamento('selectSegurado');
+      break;
+      case 'step3':
+      this.navegarPlanejamento('selectCalc');
+      break;
+      case 'step5':
+      this.navegarPlanejamento('resultado');
+      break;
+    }
+
+  }
+
+  private getStepRGPSPlanejamento() {
+
+    this.steps = [
+    {
+      key: 'step1',
+      title: 'Selecione o Segurado',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step2',
+      title: 'Selecione o Cálculo',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step3',
+      title: 'Benefícios Futuros',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step4',
+      title: 'Executar o cálculo e planejamento',
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+    {
+      key: 'step5',
+      title: 'Resultado Final',
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+    ];
+
   }
 
   // planejamento adicionais RMI
-
 
   public calcularPBCIndices(indice) {
 
@@ -1487,7 +1553,7 @@ export class RgpsResultadosComponent implements OnInit {
       const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
       this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
         this.router.navigate([urlpbcNew])
-      );
+        );
     }
 
     if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
@@ -1496,7 +1562,7 @@ export class RgpsResultadosComponent implements OnInit {
       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
       this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
         this.router.navigate([urlpbcNew])
-      );
+        );
 
       // this.router.navigate([urlpbcNew]);
       // this.ngOnInit();
@@ -1512,68 +1578,68 @@ export class RgpsResultadosComponent implements OnInit {
 
     if (this.mostrarCalculoApos19 &&
       [
-        'Auxílio Doença',
-        'Auxílio Acidente - 50%',
-        'Aposentadoria Especial da Pessoa com Deficiência grave',
-        'Aposentadoria Especial da Pessoa com Deficiência Moderada',
-        'Aposentadoria Especial da Pessoa com Deficiência Leve',
-        'Aposentadoria por Idade da Pessoa com Deficiência',
-        'Aposentadoria por tempo de serviço de professor'
+      'Auxílio Doença',
+      'Auxílio Acidente - 50%',
+      'Aposentadoria Especial da Pessoa com Deficiência grave',
+      'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+      'Aposentadoria Especial da Pessoa com Deficiência Leve',
+      'Aposentadoria por Idade da Pessoa com Deficiência',
+      'Aposentadoria por tempo de serviço de professor'
       ].includes(especie)) {
 
       const novasEspecies = [
-        {
-          antigo: 'Auxílio Doença',
-          novo: 'Auxílio por Incapacidade Temporária'
-        },
-        {
-          antigo: 'Auxílio Acidente - 50%',
-          novo: 'Auxílio Acidente'
-        },
-        {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência grave',
-          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
-        },
-        {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Moderada',
-          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
-        },
-        {
-          antigo: 'Aposentadoria Especial da Pessoa com Deficiência Leve',
-          novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
-        },
-        {
-          antigo: 'Aposentadoria por Idade da Pessoa com Deficiência',
-          novo: 'Aposentadoria por Idade da PcD'
-        },
-        {
-          antigo: 'Aposentadoria por tempo de serviço de professor',
-          novo: 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
-        }
-      ];
-
-      return (novasEspecies.find((element) => element.antigo === especie)).novo;
-
+    {
+      antigo: 'Auxílio Doença',
+      novo: 'Auxílio por Incapacidade Temporária'
+    },
+    {
+      antigo: 'Auxílio Acidente - 50%',
+      novo: 'Auxílio Acidente'
+    },
+    {
+      antigo: 'Aposentadoria Especial da Pessoa com Deficiência grave',
+      novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
+    },
+    {
+      antigo: 'Aposentadoria Especial da Pessoa com Deficiência Moderada',
+      novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
+    },
+    {
+      antigo: 'Aposentadoria Especial da Pessoa com Deficiência Leve',
+      novo: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
+    },
+    {
+      antigo: 'Aposentadoria por Idade da Pessoa com Deficiência',
+      novo: 'Aposentadoria por Idade da PcD'
+    },
+    {
+      antigo: 'Aposentadoria por tempo de serviço de professor',
+      novo: 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
     }
+    ];
 
-    return especie;
+    return (novasEspecies.find((element) => element.antigo === especie)).novo;
+
   }
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.caixaOpcoes = document.getElementById('containerOpcoes');
-    const navbar = document.getElementById('navbar');
+  return especie;
+}
+
+@HostListener('window:scroll', [])
+onWindowScroll() {
+  this.caixaOpcoes = document.getElementById('containerOpcoes');
+  const navbar = document.getElementById('navbar');
     // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
     if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined) ||
       (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
       || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
-    ) {
+      ) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
-      if (offset > this.offset(this.caixaOpcoes)) {
-        this.navIsFixed = true;
+    if (offset > this.offset(this.caixaOpcoes)) {
+      this.navIsFixed = true;
         //  navbar.classList.add("sticky")
       } else if (this.navIsFixed) {
         this.navIsFixed = false;
@@ -1591,7 +1657,7 @@ export class RgpsResultadosComponent implements OnInit {
   offset(el = undefined) {
     if (this.isExits(el) && this.isExits(el.getBoundingClientRect())) {
       const rect = el.getBoundingClientRect(),
-        scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
+      scrollTop = this.window.pageYOffset || this.document.documentElement.scrollTop;
       return rect.top + scrollTop;
     }
   }

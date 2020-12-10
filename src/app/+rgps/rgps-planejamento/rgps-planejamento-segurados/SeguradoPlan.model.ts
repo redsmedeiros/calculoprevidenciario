@@ -1,7 +1,7 @@
-import { Model } from '../../contracts/Model';
-import { environment } from '../../../environments/environment';
+import { Model } from '../../../contracts/Model';
+import { environment } from '../../../../environments/environment';
 
-export class SeguradoRgps extends Model {
+export class SeguradoPlan extends Model {
 
   static url = environment.apiUrl + 'rgps/segurados';
   static form = {

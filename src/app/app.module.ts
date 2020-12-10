@@ -41,6 +41,7 @@ import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-c
 import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { RgpsPlanejamentoService } from './+rgps/rgps-planejamento/rgps-planejamento.service';
+import { SeguradoPlanService } from './+rgps/rgps-planejamento/rgps-planejamento-segurados/SeguradoPlan.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { Auth } from './services/Auth/Auth.service';
 
@@ -71,12 +72,9 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
-
     CoreModule,
     SmartadminLayoutModule,
     FileDropModule,
-
-
     routing
   ],
   exports: [
@@ -106,6 +104,7 @@ type StoreType = {
     CalculoContagemTempoService,
     PeriodosContagemTempoService,
     RgpsPlanejamentoService,
+    SeguradoPlanService,
     Auth,
     OnlyLoggedInUsersGuard
   ]

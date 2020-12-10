@@ -12,6 +12,7 @@ import { CalculoRgps } from './CalculoRgpsPlan.model';
 import { RgpsPlanejamentoService } from './../rgps-planejamento.service';
 import { PlanejamentoRgps } from '../PlanejamentoRgps.model'
 
+
 @Component({
   selector: 'app-rgps-planejamento-calculos-planejados',
   templateUrl: './rgps-planejamento-calculos-planejados.component.html',

@@ -1,10 +1,14 @@
 
+
 import { Component, OnInit } from '@angular/core';
 import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { CalculoRgps } from '../rgps-planejamento-calculos-planejados/CalculoRgpsPlan.model';
+import { SeguradoPlan } from './SeguradoPlan.model';
+import { SeguradoPlanService } from './SeguradoPlan.service';
+import { CalculoRgpsService } from 'app/+rgps/+rgps-calculos/CalculoRgps.service';
 
 @Component({
   selector: 'app-rgps-planejamento-segurados',
@@ -51,7 +55,14 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     {
       key: 'step4',
       title: 'Executar o cálculo e planejamento',
-      valid: true,
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+    {
+      key: 'step5',
+      title: 'Resultado Final',
+      valid: false,
       checked: false,
       submitted: false,
     },
@@ -59,9 +70,13 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   public activeStep = this.steps[0];
 
-
+  private stepUrl = null;
+  private stepUrlSegurado = null;
+  private stepUrlCalculo = null;
 
   constructor(
+    protected seguradoService: SeguradoPlanService,
+    protected calculoRgpsService: CalculoRgpsService,
     protected router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
@@ -72,7 +87,57 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.isSeguradoSelecionado = false;
     this.isPaginaInicial = true;
 
+    this.checkStepURL();
   }
+
+
+  public checkStepURL() {
+
+    this.stepUrl = this.route.snapshot.params['step'];
+    this.stepUrlSegurado = this.route.snapshot.params['id_segurado'];
+    this.stepUrlCalculo = this.route.snapshot.params['id_calculo'];
+
+    if (this.stepUrl !== undefined) {
+      this.isPaginaInicial = false;
+
+      const keyStepUrl = `step${this.stepUrl}`;
+      const step = this.steps.find((item) => keyStepUrl === item.key);
+      this.activeStep = step;
+
+
+      this.getSeguradoCalculoURL(); 
+    }
+
+  }
+
+
+
+  getSeguradoCalculoURL() {
+
+    const seguradoP = this.seguradoService.find(this.stepUrlSegurado)
+      .then((segurado: SeguradoPlan) => {
+
+         this.seguradoSelecionado = segurado;
+         this.isSeguradoSelecionado = true;
+        console.log(segurado);
+        // console.log(this.segurado);
+
+        const calculoP = this.calculoRgpsService.find(this.stepUrlCalculo)
+          .then((calculo: CalculoRgps) => {
+
+             this.calculoSelecionado = calculo;
+             this.isCalculoSelecionado = true;
+             this.isUpdatingPlan = false;
+            console.log(calculo);
+            //console.log(this.calculo);
+
+          }).catch(errors => console.log(errors));
+
+      }).catch(errors => console.log(errors));
+
+  }
+
+
 
   setIsPaginaInicial() {
 
@@ -82,7 +147,10 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   setActiveStep(steo) {
 
-    this.activeStep = steo;
+    const step = this.steps.find((item) => steo.key === item.key);
+   // if (step.valid) {
+      this.activeStep = steo;
+   // }
 
   }
 

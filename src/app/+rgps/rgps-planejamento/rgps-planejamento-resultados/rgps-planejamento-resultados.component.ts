@@ -56,6 +56,51 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private idadeNaDiBPlanejamento;
   private idadeNaDiBRmi;
 
+  public steps = [
+    {
+      key: 'step1',
+      title: 'Selecione o Segurado',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step2',
+      title: 'Selecione o Cálculo',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step3',
+      title: 'Benefícios Futuros',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step4',
+      title: 'Executar o cálculo e planejamento',
+      valid: false,
+      checked: true,
+      submitted: false,
+    },
+    {
+      key: 'step5',
+      title: 'Resultado Final',
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+  ];
+  public activeStep = {
+    key: 'step5',
+    title: 'Resultado Final',
+    valid: false,
+    checked: false,
+    submitted: false,
+  };
+
 
   private definicaoMoeda = DefinicaoMoeda;
 
@@ -83,9 +128,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idCalculo = this.route.snapshot.params['id_calculo'];
     this.idPlanejamento = this.route.snapshot.params['id_planejamento'];
-
-
-
 
 
     const seguradoP = this.SeguradoService.find(this.idSegurado)
@@ -167,38 +209,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           }).catch(errors => console.log(errors));
 
       }).catch(errors => console.log(errors));
-
-
-    // const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
-    //   .then((expvida: ExpectativaVida[]) => {
-    //     this.expectativaVidaList = [];
-    //     this.expectativaVidaList = expvida;
-
-    //     const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
-    //     const expectativaObj = this.expectativaVidaList.find(row => moment(row.data_inicial).isSame(inicial));
-
-    //     if (expectativaObj[this.sexoSegurado]) {
-    //       this.expectativaVidaR = expectativaObj[this.sexoSegurado];
-    //     } else {
-    //       this.expectativaVidaR = 80;
-    //     }
-
-    //   });
-
-
-    // const expectativaVidaP = this.ExpectativaVida.getByIdade(this.idadeNaDiBRmi)
-    //   .then(expvida => {
-
-    //     this.expectativaVida = expvida;
-    //     const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
-    //     if (this.sexoSegurado === 'm') {
-    //       this.expectativaVidaR = this.expectativaVida.find(row => row.data_inicial === inicial).m
-    //     } else {
-    //       this.expectativaVidaR = this.expectativaVida.find(row => row.data_inicial === inicial).f
-    //     }
-
-    //   });
-
 
 
   }
@@ -371,6 +381,48 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.router.navigate(['/rgps/rgps-planejamento']);
   }
 
+
+  private navegarPlanejamento(type) {
+    let urlpbcNew = '';
+
+    switch (type) {
+      case 'inicio':
+        urlpbcNew = '/rgps/rgps-planejamento/1';
+        break;
+      case 'selectSegurado':
+        urlpbcNew = '/rgps/rgps-planejamento/2/' + this.segurado.id;
+        break;
+      case 'selectCalc':
+        urlpbcNew = '/rgps/rgps-planejamento/3/' + this.segurado.id + '/' + this.calculo.id;
+        break;
+      case 'selectCalcResult':
+        urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + this.planejamento.id;
+        break;
+    }
+
+    this.router.navigate([urlpbcNew]);
+
+  }
+
+
+  private setActiveStep(pane) {
+
+    switch (pane.key) {
+      case 'step1':
+        this.navegarPlanejamento('inicio');
+        break;
+      case 'step2':
+        this.navegarPlanejamento('selectSegurado');
+        break;
+      case 'step3':
+        this.navegarPlanejamento('selectCalc');
+        break;
+      case 'step4':
+        this.navegarPlanejamento('selectCalcResult');
+        break;
+    }
+
+  }
 
   imprimirPagina() {
 

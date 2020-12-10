@@ -44,6 +44,33 @@
         </ol>
       </div>
     </div>
+
+    <div id="passoPlanejamentoRGPS" class="well mt-5" *ngIf="isPlanejamento">
+      <div class="row my-5">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <form novalidate="novalidate" >
+            <div class="col-sm-12">
+              <div class="form-bootstrapWizard clearfix">
+                <ul class="bootstrapWizard">
+                  <li
+                    *ngFor="let pane of steps; let i = index"
+                    [class.active]="activeStep.key == pane.key"
+                  >
+                    <a (click)="setActiveStep(pane)">
+                      <span class="step">
+                        <span *ngIf="!pane.checked">{{ i + 1 }}</span>
+                        <i class="fa fa-check" *ngIf="pane.checked"></i>
+                      </span>
+                      <span class="title">{{ pane.title }}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- row -->
     <div class="row">
       <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
@@ -152,7 +179,10 @@
                     </tr>
                   </table>
                 </div>
-                <div class="form-actions no-padding mt-3" *ngIf="!isPlanejamento">
+                <div
+                  class="form-actions no-padding mt-3"
+                  *ngIf="!isPlanejamento"
+                >
                   <div class="row">
                     <div class="col-md-12">
                       <button
@@ -349,13 +379,16 @@
           *ngIf="calculo.mostrarCalculoApos19"
           [isPlanejamento]="isPlanejamento"
           [planejamento]="planejamento"
-          [planejamentoContribuicoesAdicionais]="planejamentoContribuicoesAdicionais"
+          [planejamentoContribuicoesAdicionais]="
+            planejamentoContribuicoesAdicionais
+          "
+          (planejamentoResultEvent)="
+          setStepPlanejamento($event)
+                      "
         >
         </app-rgps-resultados-apos-pec103>
       </div>
 
-
-      
       <!-- Planejamento -->
       <app-rgps-planejamento-index
         *ngIf="isUpdating"
@@ -363,8 +396,8 @@
         [segurado]="segurado"
       ></app-rgps-planejamento-index>
 
-       <!-- Planejamento  -->
-       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isPlanejamento">
+      <!-- Planejamento  -->
+      <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"
@@ -385,31 +418,42 @@
           <div>
             <!-- widget content -->
             <div class="widget-body" style="min-height: auto">
+              <div class="form-actions" *ngIf="isPlanejamento">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="pager wizard no-margin">
+                      <li class="previous">
+                        <a
+                        (click)="navegarPlanejamento('selectCalc')"
+                         class="btn btn-lg btn-default"
+                         >Retornar
+                        </a>
+                      </li>
+                      <li class="next">
+                        <a
+                        (click)="navegarPlanejamento('resultado')"
+                          [class.disabled]="!activeStep.valid"
+                          class="btn btn-lg txt-color-darken"
+                        >
+                          Continuar
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
               <div class="row" id="rst-final-planejamento">
-                <div class="col-md-12">
-                  <div class="btn-group pull-left">
+                <div class="col-md-offset-4 col-md-4">
                     <button
+                      *ngIf="!isPlanejamento"
                       type="button"
-                      (click)="navegarParaResultados()"
-                      class="btn btn-info pull-right"
+                      (click)="navegarPlanejamento('selectCalc')"
+                      class="btn btn-info"
                       title="Continuar para o resultado do Planejamento"
                     >
-                    <i class="fa fa-arrow-circle-left fa-1-8x"></i>&nbsp;&nbsp;&nbsp;
-                      Retornar para o início
-                      
+                      <i class="fa fa-calculator fa-1-8x"></i>&nbsp;&nbsp;&nbsp;
+                      Selecionar este Cáculo Para Planejamento&nbsp;&nbsp;&nbsp;
                     </button>
-                  </div>
-                  <div class="btn-group pull-right">
-                    <button
-                      type="button"
-                      (click)="navegarParaResultados()"
-                      class="btn btn-info pull-right"
-                      title="Continuar para o resultado do Planejamento"
-                    >
-                      Continuar para o Resultado Final do Planejamento&nbsp;&nbsp;&nbsp;
-                      <i class="fa fa-arrow-circle-right fa-1-8x"></i>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -417,12 +461,10 @@
         </sa-widget>
       </article>
 
-      
-
       <!-- Planejamento Comparativo não deletar-->
-      <app-rgps-planejamento-calculo
-      *ngIf="!isPlanejamento && !isUpdating"
-      ></app-rgps-planejamento-calculo>
+      <!-- <app-rgps-planejamento-calculo
+      *ngIf="false && !isPlanejamento && !isUpdating"
+      ></app-rgps-planejamento-calculo> -->
 
       <!-- opções do calculo -->
       <!-- <article class="col-sm-12 col-md-12 col-lg-12">

@@ -2,14 +2,14 @@
 import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, SimpleChange, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { ModalDirective } from 'ngx-bootstrap';
 import { RgpsPlanejamentoService } from './../rgps-planejamento.service';
 import { PlanejamentoRgps } from './../PlanejamentoRgps.model';
+import { RgpsPlanejamentoListTableComponent } from './rgps-planejamento-list-table/rgps-planejamento-list-table.component';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ErrorService } from '../../../services/error.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
-import { ModalDirective } from 'ngx-bootstrap';
-import { RgpsPlanejamentoListTableComponent } from './rgps-planejamento-list-table/rgps-planejamento-list-table.component';
-import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
 
 @Component({
@@ -53,7 +53,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private id_calculo;
   private data_futura;
   private valor_beneficio;
-  private aliquota  = '';
+  private aliquota = '';
   private especie = '';
   /// form
 
@@ -66,40 +66,41 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     especie: '',
   };
 
-  public steps = [
-    {
-      key: 'step1',
-      title: 'Planejamento',
-      valid: true,
-      checked: false,
-      submitted: false,
-    },
-    {
-      key: 'step2',
-      title: 'Informações',
-      valid: true,
-      checked: false,
-      submitted: false,
-    },
-    {
-      key: 'step3',
-      title: 'Formulário',
-      valid: false,
-      checked: false,
-      submitted: false,
-    },
-    {
-      key: 'step4',
-      title: 'Finalizar',
-      valid: true,
-      checked: false,
-      submitted: false,
-    },
-  ];
+  // public steps = [
+  //   {
+  //     key: 'step1',
+  //     title: 'Planejamento',
+  //     valid: true,
+  //     checked: false,
+  //     submitted: false,
+  //   },
+  //   {
+  //     key: 'step2',
+  //     title: 'Informações',
+  //     valid: true,
+  //     checked: false,
+  //     submitted: false,
+  //   },
+  //   {
+  //     key: 'step3',
+  //     title: 'Formulário',
+  //     valid: false,
+  //     checked: false,
+  //     submitted: false,
+  //   },
+  //   {
+  //     key: 'step4',
+  //     title: 'Finalizar',
+  //     valid: true,
+  //     checked: false,
+  //     submitted: false,
+  //   },
+  // ];
 
   private lastModel;
 
-  public activeStep = this.steps[0];
+
+  //public activeStep = this.steps[0];
 
 
   public datatableOptionsPlan = {
@@ -153,6 +154,10 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
   ngOnInit() {
     this.resetForm();
+    this.verificacoesAcesso();
+  }
+
+  verificacoesAcesso() {
 
     this.userId = localStorage.getItem('user_id') || this.route.snapshot.queryParams['user_id'];
 

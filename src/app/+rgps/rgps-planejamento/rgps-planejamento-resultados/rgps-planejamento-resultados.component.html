@@ -23,6 +23,33 @@
       </h3>
     </div>
   </div>
+
+  <div id="passoPlanejamentoRGPS" class="well mt-5" *ngIf="isPlanejamento">
+    <div class="row my-5">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <form novalidate="novalidate" >
+          <div class="col-sm-12">
+            <div class="form-bootstrapWizard clearfix">
+              <ul class="bootstrapWizard">
+                <li
+                  *ngFor="let pane of steps; let i = index"
+                  [class.active]="activeStep.key == pane.key"
+                >
+                  <a (click)="setActiveStep(pane)">
+                    <span class="step">
+                      <span *ngIf="!pane.checked">{{ i + 1 }}</span>
+                      <i class="fa fa-check" *ngIf="pane.checked"></i>
+                    </span>
+                    <span class="title">{{ pane.title }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   
 <div class="row" *ngIf="isUpdatingRst" style="margin-top: 25%;">
   <div class="col-md-offset-3 col-md-6 col-lg-6">
