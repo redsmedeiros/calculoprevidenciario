@@ -67,9 +67,9 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     //   });
   }
 
-/**
-   * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
-   */
+  /**
+     * A projeção é baseada no dia atual e no tempo de contribuição após a EC103/2019
+     */
   conclusaoRegra3pedagio50() {
 
     try {
@@ -139,7 +139,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let idadeDibMoment;
 
     const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDias;
-   // const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
+    // const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
 
     const tempoFinalContribAteEC103 = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
     const contribuicaoDiffAteEC103EAtual = tempoFinalContrib - tempoFinalContribAteEC103;
@@ -402,30 +402,33 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
 
 
-  public getFatorPrevidenciario(dataInicioBeneficio, idadeFracionada, tempoTotalContribuicao) {
+  private getExpectativaSobrevida() {
+    const dataHoje = moment().subtract(2, 'y');
+    const objEspect = this.expectativasVida.find(expec => expec.ano == dataHoje.year());
 
+    return (objEspect !== undefined)? objEspect : {valor: 6, ano: dataHoje.year()};
+  }
+
+  public getFatorPrevidenciario(dataInicioBeneficio, idadeFracionada, tempoTotalContribuicao) {
 
     let fatorSeguranca = 1;
     let formula_fator = '';
-
-
 
     this.ExpectativaVida.getByIdade(Math.floor(idadeFracionada))
       .then(expectativas => {
         this.isUpdating = true;
         this.expectativasVida = expectativas;
-        this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
+        // this.expectativa = this.projetarExpectativa(idadeFracionada, dataInicioBeneficio);
+        this.expectativa = this.getExpectativaSobrevida().valor;
         this.isUpdating = false;
 
         tempoTotalContribuicao += this.seguradoTransicao.redutorProfessor;
         tempoTotalContribuicao += (this.seguradoTransicao.sexo === 'f') ? 5 : 0;
 
-
         fatorSeguranca = ((tempoTotalContribuicao * this.aliquota) / this.expectativa) *
           (1 + (idadeFracionada + (tempoTotalContribuicao * this.aliquota)) / 100);
 
         fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
-
 
         formula_fator = '((' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * '
           + this.formatDecimal(this.aliquota, 2) + ') / ' + this.formatDecimal(this.expectativa, 2) + ') * (1 + ('

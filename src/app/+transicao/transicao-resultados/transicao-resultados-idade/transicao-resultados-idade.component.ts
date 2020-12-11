@@ -279,7 +279,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       idadeMoment = this.calcularIdade(auxiliarDate);
 
-      console.log(idadeMoment);
+      //console.log(idadeMoment);
 
       if (this.seguradoTransicao.sexo === 'm' &&
         idadeMoment.days() === 1) {
@@ -309,7 +309,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //  tempoContribuicao += correcaoAnoBissexto;
 
 
-    console.log(tempoContribuicao);
+   // console.log(tempoContribuicao);
 
     return {
       dataDib: auxiliarDate,
