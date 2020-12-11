@@ -119,14 +119,14 @@
                   <li class="px-5">
                     <strong>Nome:</strong> {{ segurado.nome }}
                   </li>
-                  <li class="px-5" *ngIf="segurado.numero_documento">
+                  <!-- <li class="px-5" *ngIf="segurado.numero_documento">
                     <strong
                       >{{
                         segurado.getDocumentType(segurado.id_documento)
                       }}:</strong
                     >
                     {{ segurado.numero_documento }}
-                  </li>
+                  </li> -->
                   <li class="px-5">
                     <strong>Data de Nascimento:</strong>
                     {{ segurado.data_nascimento }}
@@ -241,7 +241,7 @@
                     <th>Contribuição Secundária (Ano/Mês/Dia)</th> -->
                     <th>DIB</th>
                     <!-- <th>Data de Criação</th> -->
-                    <th class="not-print" *ngIf="!mostrarCalculoApos19">
+                    <th class="not-print" *ngIf="!mostrarCalculoApos19" disply:none>
                       Comparar
                     </th>
                   </tr>
@@ -427,6 +427,7 @@
                         <a
                           (click)="navegarPlanejamento('selectCalc')"
                           class="btn btn-lg btn-default"
+                          tooltip="Retornar ao passo anterior"
                           >Retornar
                         </a>
                       </li>
@@ -434,7 +435,8 @@
                         <a
                           (click)="navegarPlanejamento('resultado')"
                           [class.disabled]="!activeStep.valid"
-                          class="btn btn-lg txt-color-darken"
+                          class="btn btn-lg btn-default"
+                          tooltip="Clique aqui para imprimir"
                         >
                           Continuar
                         </a>

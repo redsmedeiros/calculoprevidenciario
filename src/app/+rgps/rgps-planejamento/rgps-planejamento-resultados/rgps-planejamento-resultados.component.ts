@@ -120,7 +120,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   ngOnInit() {
 
     this.calculoInit();
-
+    moment.locale('pt-br');
   }
 
 
@@ -169,13 +169,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                 this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
 
 
-                const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
-                  .then((moeda: Moeda[]) => {
-
-                    this.moeda = moeda;
-
-                  });
-
 
                 const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
                   .then((expvida: ExpectativaVida[]) => {
@@ -191,6 +184,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                       this.expectativaVidaR = 80;
                     }
 
+
+
+                    const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
+                      .then((moeda: Moeda[]) => {
+
+                        this.moeda = moeda;
+                        this.calcularPlanejamento();
+                      });
+
                     // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
                     // .then((moeda: Moeda[]) => {
                     //   console.log(moeda)
@@ -199,7 +201,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                     //const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
 
 
-                    this.calcularPlanejamento();
+
 
 
                   });
@@ -307,20 +309,27 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     // console.log("--", this.expectativaVidaR)
     let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
 
-    let resultSubtracao = (moment.duration(expectativaIbgeSegurado, "years"))
+    let resultSubtracao = (moment.duration(expectativaIbgeSegurado, 'years'))
       .subtract(moment.duration(dataInicioBeneficio2.diff(this.dataNascimentoSeguradoM)));
     let resultConversao = resultSubtracao.years() + (resultSubtracao.months() / 12) + (resultSubtracao.days() * 365.25);
-
-
-
-    let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
-
 
     let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
 
 
+    let totalEsperado = 0;
+    // se a aliquota é de empregado cumulativa tem abono, 13º
+    if (this.planejamento.aliquota === 99) {
+      totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+    } else {
+      totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
+    }
+    // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+
+
+    const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment(this.planejamento.data_futura));
     this.resultadosGeral.push({
-      label: 'A) Valor Investido em Contribuições entre as Duas Datas',
+      label: 'A) Valor Investido em Contribuições Futuras',
       value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
     });
 
@@ -346,9 +355,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     });
 
     this.resultadosGeral.push({
-      label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
-      value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+      label: 'Idade do Segurado na DIB Futura',
+      value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+    });
 
+    this.resultadosGeral.push({
+      label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
+      // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+      value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
     });
 
     this.resultadosGeral.push({
@@ -357,11 +371,22 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
     });
 
-    this.resultadosGeral.push({
-      label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
-      value2: this.definicaoMoeda.formatMoney(totalEsperado),
-    });
+    // se a aliquota é de empregado cumulativa tem abono, 13º
+    if (this.planejamento.aliquota === 99) {
 
+      this.resultadosGeral.push({
+        label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+        value2: this.definicaoMoeda.formatMoney(totalEsperado),
+      });
+
+    } else {
+
+      this.resultadosGeral.push({
+        label: 'Valor Acumulado ao Atingir a Idade',
+        value2: this.definicaoMoeda.formatMoney(totalEsperado),
+      });
+
+    }
 
 
     setTimeout(() => {
@@ -372,6 +397,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       this.isUpdatingRst = false;
     }, 2000);
+  }
+
+
+  private diferencaDatas(inicio, fim) {
+
+    return moment.duration(fim.diff(inicio));
+
   }
 
   private getDifferenceInMonths(date1, date2 = moment()) {

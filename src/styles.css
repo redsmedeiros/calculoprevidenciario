@@ -598,9 +598,13 @@ a[class*="action-"]:hover {
 }
 
 .bg-ieprev {
-  border-color: #831721 !important;
-  background: #831721 !important;
+  border-color: #4A4D4F !important;
+  background: #4A4D4F !important;
   color: #fff !important;
+}
+
+.color-ieprev {
+  color:  #4A4D4F !important;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
@@ -676,8 +680,8 @@ a[class*="action-"]:hover {
 .pager li > span {
   display: inline-block;
   padding: 5px 20px;
-  background-color: #831721;
-  border: 1px solid#831721;
+  background-color: #4A4D4F;
+  border: 1px solid#4A4D4F;
   border-radius: 15px;
   color: #fff !important;
   font-weight: 600;
@@ -687,21 +691,21 @@ a[class*="action-"]:hover {
 .pager li > a {
   text-decoration: none;
   color: #ffffff;
-  background-color: #831721;
+  background-color: #4A4D4F;
 }
 
 .pager li > a:focus,
 .pager li > a:hover {
   text-decoration: none;
   color: #000000;
-  background-color: #831721;
+  background-color: #4A4D4F;
   filter: brightness(1.5);
 }
 
 .pager li > a:focus,
 .pager li > a.disabled {
   text-decoration: none;
-  color: #831721;
+  color: #4A4D4F;
   background-color: #c5c5c5;
   cursor: no-drop !important;
 }

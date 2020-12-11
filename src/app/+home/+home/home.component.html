@@ -1,13 +1,73 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <!-- row -->
+    <div class="row" style="margin-top: 8rem; margin-bottom: 8rem">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h1 class="fa-2-8x text-align-center" style="font-weight: 700">
+          Seja Bem-vindo(a) ao simulador de cálculos do IEPREV
+        </h1>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 8rem">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <ul class="list-inline text-align-center color-ieprev">
+          <li class="px-4 mx-2" *ngFor="let menuHome of textosSimuladoresMenu">
+            <a
+              routerLink="{{ menuHome.link }}"
+              class="color-ieprev"
+              (mouseover)="over(menuHome.value)"
+              (mouseout)="out(menuHome.value)"
+            >
+              <div class="home-box text-align-center">
+                <i class="{{ menuHome.icon }} fa-5x "></i>
+                <h3 class="" [innerHTML]="menuHome.title"></h3>
+                <p class="home-desc"></p>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-offset-1 col-md-10">
+        <h3><strong>Descrição do Simulador</strong></h3>
+        <div class="well well-lg well-light">
+          <p class="color-ieprev fa-1-8x" style="min-height: 5rem">
+            {{ textDescricao }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row">
+      <div
+        *ngFor="let menuHome of textosSimuladoresMenu"
+        class="col-xs-2 col-sm-2 col-md-3 col-lg-3"
+      >
+        <a routerLink="{{ menuHome.link }}">
+          <div class="home-box">
+            <i class="{{ menuHome.icon }} fa-5x"></i>
+            <h3 class="" [innerHTML]="menuHome.title"></h3>
+            <p class="home-desc"></p>
+          </div>
+        </a>
+      </div>
+    </div> -->
+    <!-- end row -->
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>
+
+<!-- 
+<div id="content">
+  <sa-widgets-grid>
     <div class="row">
       <div class="col-xs-12 col-md-5 col-md-offset-1">
         <a routerLink="/transicao">
           <div class="home-box">
             <p class="home-title">Regras de Transição</p>
-            <!-- <img src="../../../assets/img/simulador-transicao.jpg" /> -->
             <img
               src="../../../assets/img/home/simulador-transicao.png"
               class="img-responsive img-icone-custom"
@@ -23,7 +83,6 @@
         <a routerLink="/rgps/rgps-planejamento">
           <div class="home-box">
             <p class="home-title">Planejamento Previdenciário</p>
-            <!-- <img src="../../../assets/img/simulador-transicao.jpg" /> -->
             <img
               src="../../../assets/img/home/simulador-planejamento.png"
               class="img-responsive img-icone-custom"
@@ -38,7 +97,6 @@
         <a routerLink="/contagem-tempo/contagem-tempo-segurados">
           <div class="home-box">
             <p class="home-title pull-left">Contagem de Tempo</p>
-            <!-- <img src="../../../assets/img/contagem-tempo.jpg"/> -->
             <img
               src="../../../assets/img/home/contagem-tempo.png"
               class="img-responsive img-icone-custom"
@@ -54,7 +112,6 @@
         <a routerLink="/rgps/rgps-segurados">
           <div class="home-box">
             <p class="home-title pull-left">RMI do RGPS</p>
-            <!-- <img src="../../../assets/img/rgps-img.jpeg" /> -->
             <img
               src="../../../assets/img/home/rgps-img.png"
               class="img-responsive img-icone-custom"
@@ -72,7 +129,6 @@
         <a routerLink="/beneficios/beneficios-segurados">
           <div class="home-box">
             <p class="home-title pull-left">Benefícios Atrasados</p>
-            <!-- <img src="../../../assets/img/atrasados.jpeg" /> -->
             <img
               src="../../../assets/img/home/atrasados.png"
               class="img-responsive img-icone-custom"
@@ -92,7 +148,6 @@
               Contribuições<br />
               Previdenciárias em Atraso
             </p>
-            <!-- <img src="../../../assets/img/contribuicoes.jpeg" /> -->
             <img
               src="../../../assets/img/home/contribuicoes.png"
               class="img-responsive img-icone-custom"
@@ -106,7 +161,5 @@
         </a>
       </div>
     </div>
-    <!-- end row -->
   </sa-widgets-grid>
-  <!-- end widget grid -->
-</div>
+</div> -->
