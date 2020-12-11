@@ -11,6 +11,7 @@ import { ErrorService } from '../../../services/error.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
+import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
 
 @Component({
   selector: 'app-rgps-planejamento-list',
@@ -66,36 +67,8 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     especie: '',
   };
 
-  // public steps = [
-  //   {
-  //     key: 'step1',
-  //     title: 'Planejamento',
-  //     valid: true,
-  //     checked: false,
-  //     submitted: false,
-  //   },
-  //   {
-  //     key: 'step2',
-  //     title: 'Informações',
-  //     valid: true,
-  //     checked: false,
-  //     submitted: false,
-  //   },
-  //   {
-  //     key: 'step3',
-  //     title: 'Formulário',
-  //     valid: false,
-  //     checked: false,
-  //     submitted: false,
-  //   },
-  //   {
-  //     key: 'step4',
-  //     title: 'Finalizar',
-  //     valid: true,
-  //     checked: false,
-  //     submitted: false,
-  //   },
-  // ];
+  private listAliquotas = [];
+  private listEspecies = [];
 
   private lastModel;
 
@@ -125,7 +98,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       {
         data: 'aliquota',
         render: (data) => {
-          return this.formatAliquota(data);
+          return this.getAliquotasLabel(data);
         }
       },
       {
@@ -155,6 +128,8 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   ngOnInit() {
     this.resetForm();
     this.verificacoesAcesso();
+    this.getAliquotas();
+    this.getEspecies();
   }
 
   verificacoesAcesso() {
@@ -167,6 +142,18 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       window.location.href = environment.loginPageUrl;
     }
 
+  }
+
+  private getAliquotas() {
+    this.listAliquotas = DefinicoesPlanejamento.aliquotasList;
+  }
+
+  private getAliquotasLabel(value) {
+    return DefinicoesPlanejamento.getAliquota(value).label;
+  }
+
+  private getEspecies() {
+    this.listEspecies = DefinicoesPlanejamento.especiesPlanejamento;
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {

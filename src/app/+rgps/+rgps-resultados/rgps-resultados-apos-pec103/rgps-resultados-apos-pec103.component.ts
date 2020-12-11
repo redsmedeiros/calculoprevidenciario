@@ -142,8 +142,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
 
-          this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
-          //this.calculo.tipo_seguro = this.planejamento.especie;
+
+          this.getContribuicoesAdicionais();
+
+
           this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
 
         }
@@ -502,6 +504,19 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       });
   }
 
+  /**
+   * 
+   */
+  private getContribuicoesAdicionais() {
+
+    this.listaValoresContribuidos = this.listaValoresContribuidos.filter(contrib => (moment().isSameOrAfter(contrib.data)));
+    this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
+
+    // console.log(this.listaValoresContribuidos);
+    // console.log(this.planejamentoContribuicoesAdicionais);
+
+  }
+
 
   getIdadeFracionada() {
     // return this.dataInicioBeneficio.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'days') / 365.25;
@@ -670,13 +685,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       const mesesCarencia = 180;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
+      // console.log(this.calculo.carencia_apos_ec103);
+
       if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
 
-        if (this.calculo.carencia < 0 || this.calculo.carencia_apos_ec103 < 0) {
+        if (this.calculo.carencia <= 0 || this.calculo.carencia_apos_ec103 <= 0) {
           // criar carencia auxiliar
           this.calculo.carencia = this.numeroDeContribuicoesAux;
           this.calculo.carencia_apos_ec103 = this.numeroDeContribuicoesAux;
           this.carenciaConformDataFiliacao = this.numeroDeContribuicoesAux;
+
         }
 
         if (this.planejamentoContribuicoesAdicionais.length > 0) {
@@ -687,6 +705,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         }
 
+        //console.log(this.calculo.carencia_apos_ec103);
       }
 
       if (this.calculo.carencia_apos_ec103 < mesesCarencia) {

@@ -7,7 +7,7 @@
           Cálculo dos Benefícios do Regime Geral de Previdência Social
         </h3>
         <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
-          Cálculo de RMI Futuro
+          RMI do Benefício Futuro
         </h3>
       </div>
     </div>
@@ -48,7 +48,7 @@
     <div id="passoPlanejamentoRGPS" class="well mt-5" *ngIf="isPlanejamento">
       <div class="row my-5">
         <div class="col-sm-12 col-md-12 col-lg-12">
-          <form novalidate="novalidate" >
+          <form novalidate="novalidate">
             <div class="col-sm-12">
               <div class="form-bootstrapWizard clearfix">
                 <ul class="bootstrapWizard">
@@ -382,9 +382,7 @@
           [planejamentoContribuicoesAdicionais]="
             planejamentoContribuicoesAdicionais
           "
-          (planejamentoResultEvent)="
-          setStepPlanejamento($event)
-                      "
+          (planejamentoResultEvent)="setStepPlanejamento($event)"
         >
         </app-rgps-resultados-apos-pec103>
       </div>
@@ -415,23 +413,26 @@
             <h2>Planejamento Previdenciário</h2>
           </header>
           <!-- widget div-->
-          <div>
+          <div class="pt-0">
             <!-- widget content -->
-            <div class="widget-body" style="min-height: auto">
-              <div class="form-actions" *ngIf="isPlanejamento">
+            <div
+              class="widget-body widget-body-custom"
+              style="min-height: auto"
+            >
+              <div class="form-actions mt-0" *ngIf="isPlanejamento">
                 <div class="row">
                   <div class="col-sm-12">
                     <ul class="pager wizard no-margin">
                       <li class="previous">
                         <a
-                        (click)="navegarPlanejamento('selectCalc')"
-                         class="btn btn-lg btn-default"
-                         >Retornar
+                          (click)="navegarPlanejamento('selectCalc')"
+                          class="btn btn-lg btn-default"
+                          >Retornar
                         </a>
                       </li>
                       <li class="next">
                         <a
-                        (click)="navegarPlanejamento('resultado')"
+                          (click)="navegarPlanejamento('resultado')"
                           [class.disabled]="!activeStep.valid"
                           class="btn btn-lg txt-color-darken"
                         >
@@ -444,16 +445,16 @@
               </div>
               <div class="row" id="rst-final-planejamento">
                 <div class="col-md-offset-4 col-md-4">
-                    <button
-                      *ngIf="!isPlanejamento"
-                      type="button"
-                      (click)="navegarPlanejamento('selectCalc')"
-                      class="btn btn-info"
-                      title="Continuar para o resultado do Planejamento"
-                    >
-                      <i class="fa fa-calculator fa-1-8x"></i>&nbsp;&nbsp;&nbsp;
-                      Selecionar este Cáculo Para Planejamento&nbsp;&nbsp;&nbsp;
-                    </button>
+                  <button
+                    *ngIf="!isPlanejamento"
+                    type="button"
+                    (click)="navegarPlanejamento('selectCalc')"
+                    class="btn btn-info"
+                    title="Continuar para o resultado do Planejamento"
+                  >
+                    <i class="fa fa-calculator fa-1-8x"></i>&nbsp;&nbsp;&nbsp;
+                    Selecionar este Cáculo Para Planejamento&nbsp;&nbsp;&nbsp;
+                  </button>
                 </div>
               </div>
             </div>

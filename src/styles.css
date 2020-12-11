@@ -148,7 +148,6 @@ a[class*="action-"]:hover {
   }
 }
 
-
 .smart-style-7 #left-panel {
   padding-right: 5px !important;
   padding-left: 5px !important;
@@ -610,7 +609,7 @@ a[class*="action-"]:hover {
 }
 
 .hidden-dt .dt-toolbar {
- display: none !important;
+  display: none !important;
 }
 
 .hidden-dt .dt-toolbar-footer {
@@ -630,26 +629,23 @@ a[class*="action-"]:hover {
   min-height: 20px !important;
 }
 
-
 .popover {
   max-width: 600px !important;
 }
-
 
 .swal-text {
   padding: 17px;
   display: block;
   margin: 22px;
   text-align: center;
-  color: red ;
+  color: red;
   font-weight: 800;
-  font-size: 1.4 rem;  
+  font-size: 1.4 rem;
 }
 
-.not-wrap{
+.not-wrap {
   white-space: nowrap;
 }
-
 
 .background-inicial {
   background-image: url("./assets/img/planejamento/inicial-planejamento.png") !important; /* The image used */
@@ -657,8 +653,6 @@ a[class*="action-"]:hover {
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
 }
-
-
 
 .container-iframe {
   position: relative;
@@ -676,4 +670,38 @@ a[class*="action-"]:hover {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 20px;
+  background-color: #831721;
+  border: 1px solid#831721;
+  border-radius: 15px;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.pager li > a:focus,
+.pager li > a {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #831721;
+}
+
+.pager li > a:focus,
+.pager li > a:hover {
+  text-decoration: none;
+  color: #000000;
+  background-color: #831721;
+  filter: brightness(1.5);
+}
+
+.pager li > a:focus,
+.pager li > a.disabled {
+  text-decoration: none;
+  color: #831721;
+  background-color: #c5c5c5;
+  cursor: no-drop !important;
 }

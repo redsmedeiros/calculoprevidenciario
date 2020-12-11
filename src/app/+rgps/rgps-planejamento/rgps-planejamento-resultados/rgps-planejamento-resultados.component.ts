@@ -18,6 +18,7 @@ import { Moeda } from 'app/services/Moeda.model';
 import { MoedaService } from 'app/services/Moeda.service';
 import { DefinicaoMoeda } from 'app/+rgps/+rgps-resultados/rgps-resultados-apos-pec103/share-rmi/definicao-moeda';
 import { validateConfig } from '@angular/router/src/config';
+import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
 
 
 @Component({
@@ -59,35 +60,35 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   public steps = [
     {
       key: 'step1',
-      title: 'Selecione o Segurado',
+      title: ' Dados do Segurado',
       valid: false,
-      checked: true,
+      checked: false,
       submitted: false,
     },
     {
       key: 'step2',
-      title: 'Selecione o Cálculo',
+      title: 'RMI do Benefício Atual',
       valid: false,
-      checked: true,
+      checked: false,
       submitted: false,
     },
     {
       key: 'step3',
-      title: 'Benefícios Futuros',
+      title: 'Dados do Benefício Futuro',
       valid: false,
-      checked: true,
+      checked: false,
       submitted: false,
     },
     {
       key: 'step4',
-      title: 'Executar o cálculo e planejamento',
+      title: 'RMI do Benefício Futuro',
       valid: false,
-      checked: true,
+      checked: false,
       submitted: false,
     },
     {
       key: 'step5',
-      title: 'Resultado Final',
+      title: 'Planejamento Previdenciário',
       valid: false,
       checked: false,
       submitted: false,
@@ -95,7 +96,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   ];
   public activeStep = {
     key: 'step5',
-    title: 'Resultado Final',
+    title: 'Planejamento Previdenciário',
     valid: false,
     checked: false,
     submitted: false,
@@ -120,6 +121,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     this.calculoInit();
 
+  }
+
+
+  private getAliquotasLabel(value) {
+    return DefinicoesPlanejamento.getAliquota(value).label;
   }
 
   private calculoInit() {
@@ -163,6 +169,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                 this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
 
 
+                const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
+                  .then((moeda: Moeda[]) => {
+
+                    this.moeda = moeda;
+
+                  });
+
 
                 const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
                   .then((expvida: ExpectativaVida[]) => {
@@ -178,37 +191,27 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                       this.expectativaVidaR = 80;
                     }
 
-                    const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
-                      .then((moeda: Moeda[]) => {
+                    // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
+                    // .then((moeda: Moeda[]) => {
+                    //   console.log(moeda)
+                    // });
 
-                        this.moeda = moeda;
+                    //const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
 
-                        this.calcularPlanejamento();
 
-                        setTimeout(() => {
+                    this.calcularPlanejamento();
 
-                          this.isSegurado = true;
-                          this.isCalculo = true;
-                          this.isPlanejamento = true;
-
-                        }, 1000);
-
-                        setTimeout(() => {
-                          this.isUpdatingRst = false;
-                        }, 2000);
-
-                      });
 
                   });
 
 
               }).catch(errors => console.log(errors));
 
-
-
           }).catch(errors => console.log(errors));
 
       }).catch(errors => console.log(errors));
+
+
 
 
   }
@@ -359,7 +362,16 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       value2: this.definicaoMoeda.formatMoney(totalEsperado),
     });
 
-    this.isResultado = true;
+
+
+    setTimeout(() => {
+      this.isSegurado = true;
+      this.isCalculo = true;
+      this.isPlanejamento = true;
+      this.isResultado = true;
+
+      this.isUpdatingRst = false;
+    }, 2000);
   }
 
   private getDifferenceInMonths(date1, date2 = moment()) {
