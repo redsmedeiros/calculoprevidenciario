@@ -61,7 +61,7 @@
   </div>
 
   <div *ngIf="!isUpdatingRst" style="margin-top: 3rem;" >
-    <div class="row" *ngIf="isSegurado">
+    <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -162,7 +162,7 @@
     </div>
 
     <div id="box-dados-calculo" class="row"  *ngIf="!isUpdatingRst" >
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isCalculo">
+      <article class="col-sm-12 col-md-12 col-lg-12" >
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -327,7 +327,7 @@
         <div class="pt-0">
           <!-- widget content -->
           <div class="widget-body widget-body-custom" style="min-height: auto">
-            <div class="form-actions mt-0" *ngIf="isPlanejamento">
+            <div class="form-actions mt-0" >
               <div class="row">
                 <div class="col-sm-12">
                   <ul class="pager wizard no-margin">

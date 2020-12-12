@@ -136,7 +136,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.idPlanejamento = this.route.snapshot.params['id_planejamento'];
 
 
-    const seguradoP = this.SeguradoService.find(this.idSegurado)
+    this.SeguradoService.find(this.idSegurado)
       .then((segurado: SeguradoModel) => {
 
         this.segurado = segurado;
@@ -144,14 +144,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         this.sexoSegurado = this.segurado.sexo;
 
 
-        const calculoP = this.CalculoRgps.find(this.idCalculo)
+        this.CalculoRgps.find(this.idCalculo)
           .then((calculo: CalculoModel) => {
 
             this.calculo = calculo;
 
 
 
-            const planejamentoP = this.planejamentoService.find(this.idPlanejamento)
+            this.planejamentoService.find(this.idPlanejamento)
               .then((planejamento: PlanejamentoRgps) => {
 
                 //  console.log(planejamento);
@@ -170,7 +170,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
                 const anoTabela = (moment().year() - 2);
-                const expectativaVidaP = this.ExpectativaVidaService.getByAnoIdade(this.idadeNaDiBRmi, anoTabela )
+                this.ExpectativaVidaService.getByAnoIdade(this.idadeNaDiBRmi, anoTabela)
                   .then((expvida: ExpectativaVida[]) => {
                     this.expectativaVidaList = [];
                     this.expectativaVidaList = expvida;
@@ -185,34 +185,26 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                     }
 
 
-
-                    // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
-                    //   .then((moeda: Moeda[]) => {
-
-                    //     this.moeda = moeda;
-                    //     this.calcularPlanejamento();
-                    //   });
-
-
-                      const MoedaPDTeste = this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
+                    this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
                       .then((moeda: Moeda[]) => {
 
                         this.moeda = moeda;
-                       console.log(moeda);
+                        console.log(moeda);
 
-                       this.calcularPlanejamento();
+                        // this.calcularPlanejamento();
+
+                        this.calcularPlanejamento().then(result => {
+
+                          console.log(result);
+
+                          setTimeout(() => {
+                            this.isUpdatingRst = false;
+                          }, 2000);
+                          
+                        }).catch((error) => {
+                          console.log(error);
+                        });
                       });
-
-                    // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
-                    // .then((moeda: Moeda[]) => {
-                    //   console.log(moeda)
-                    // });
-
-                    //const MoedaP = this.Moeda.getByDateRange(moment().subtract(1, 'months'), moment())
-
-
-
-
 
                   });
 
@@ -264,147 +256,291 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
-
-  private calcularPlanejamento() {
-
-    this.isUpdatingRst = true;
-
-    const calculo1 = this.calculo;
-    const calculo2 = this.planejamento;
-    const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
-    const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
-    const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
-    const valor = this.Moeda.getByDate(moment());
-    const salMinimo = valor.salario_minimo * 0.05;
-    const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
-
-    let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
-
-    // Não sei o motivo deste item
-    // investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
-
-    //  console.log("E", this.ExpectativaVida)
-
-    let tempoMinimo1 = 0;
-    let tempoMinimo2 = 0;
-    let tempoMinimo2Mes = 0;
-    let tempoMinimo2Ano = 0;
-
-    investimentoEntreDatas *= aliquotaRst.aliquota;
-
-    const mesesEntreDatas = (this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2) / 12
-      + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
-
-    const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+  public calcularPlanejamento() {
 
 
-    let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+    return new Promise((resolve, reject) => {
 
-    let diferencaRmi = Math.abs(calculo2.novo_rmi - calculo1.valor_beneficio);
+      this.isUpdatingRst = true;
 
-    let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
 
-    if (diferencaRmi != 0) {
+      const calculo1 = this.calculo;
+      const calculo2 = this.planejamento;
+      const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+      const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
+      const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
+      const valor = this.Moeda.getByDate(moment());
+      const salMinimo = valor.salario_minimo * 0.05;
+      const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+
+      let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
+      let tempoMinimo1 = 0;
+      let tempoMinimo2 = 0;
+      let tempoMinimo2Mes = 0;
+      let tempoMinimo2Ano = 0;
+
+
+      const mesesEntreDatas = (this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2) / 12
+        + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
+
+      const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+
+
+      let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+
+      let diferencaRmi = Math.abs(calculo2.novo_rmi - calculo1.valor_beneficio);
+
+      let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+
+      //if (diferencaRmi != 0) {
       tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
 
       tempoMinimo2 = (((totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
       tempoMinimo2Mes = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
       tempoMinimo2Ano = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11);
 
-    }
+      //      }
 
 
-    let idadeSegurado = Math.abs(this.dataNascimentoSeguradoM.diff(moment(), 'years'));
+      let idadeSegurado = Math.abs(this.dataNascimentoSeguradoM.diff(moment(), 'years'));
 
-    let idadeSeguradoDIB = Math.abs(this.dataNascimentoSeguradoM.diff(dataInicioBeneficio2, 'years'));
+      let idadeSeguradoDIB = Math.abs(this.dataNascimentoSeguradoM.diff(dataInicioBeneficio2, 'years'));
 
-    // console.log("--", this.expectativaVidaR)
-    let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
+      // console.log("--", this.expectativaVidaR)
+      let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
 
-    let resultSubtracao = (moment.duration(expectativaIbgeSegurado, 'years'))
-      .subtract(moment.duration(dataInicioBeneficio2.diff(this.dataNascimentoSeguradoM)));
-    let resultConversao = resultSubtracao.years() + (resultSubtracao.months() / 12) + (resultSubtracao.days() * 365.25);
+      let resultSubtracao = (moment.duration(expectativaIbgeSegurado, 'years'))
+        .subtract(moment.duration(dataInicioBeneficio2.diff(this.dataNascimentoSeguradoM)));
+      let resultConversao = resultSubtracao.years() + (resultSubtracao.months() / 12) + (resultSubtracao.days() * 365.25);
 
-    let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
+      let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
 
 
-    let totalEsperado = 0;
-    // se a aliquota é de empregado cumulativa tem abono, 13º
-    if (this.planejamento.aliquota === 99) {
-      totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
-    } else {
-      totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
-    }
-    // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+      let totalEsperado = 0;
+      // se a aliquota é de empregado cumulativa tem abono, 13º
+      if (this.planejamento.aliquota === 99) {
+        totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+      } else {
+        totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
+      }
+      // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
 
-    setTimeout(() => {
-    const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
-      moment(this.planejamento.data_futura));
-    this.resultadosGeral.push({
-      label: 'A) Valor Investido em Contribuições Futuras',
-      value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
-    });
 
-    this.resultadosGeral.push({
-      label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
-      value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
-    });
-
-    this.resultadosGeral.push({
-      label: 'Total Investido (A + B) ',
-      value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
-    });
-
-    this.resultadosGeral.push({
-      label: 'Valor da Diferença Entre os Benefícios ',
-      value2: this.definicaoMoeda.formatMoney(diferencaRmi),
-    });
-
-    this.resultadosGeral.push({
-      label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
-      // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
-      value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
-    });
-
-    this.resultadosGeral.push({
-      label: 'Idade do Segurado na DIB Futura',
-      value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
-    });
-
-    this.resultadosGeral.push({
-      label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
-      // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-      value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-    });
-
-    this.resultadosGeral.push({
-      label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
-      value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
-        + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
-    });
-
-    // se a aliquota é de empregado cumulativa tem abono, 13º
-    if (this.planejamento.aliquota === 99) {
-
+      const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+        moment(this.planejamento.data_futura));
       this.resultadosGeral.push({
-        label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
-        value2: this.definicaoMoeda.formatMoney(totalEsperado),
+        label: 'A) Valor Investido em Contribuições Futuras',
+        value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
       });
 
-    } else {
-
       this.resultadosGeral.push({
-        label: 'Valor Acumulado ao Atingir a Idade',
-        value2: this.definicaoMoeda.formatMoney(totalEsperado),
+        label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
+        value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
       });
 
-    }
+      this.resultadosGeral.push({
+        label: 'Total Investido (A + B) ',
+        value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
+      });
+
+      this.resultadosGeral.push({
+        label: 'Valor da Diferença Entre os Benefícios ',
+        value2: this.definicaoMoeda.formatMoney(diferencaRmi),
+      });
+
+      this.resultadosGeral.push({
+        label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
+        // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+        value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
+      });
+
+      this.resultadosGeral.push({
+        label: 'Idade do Segurado na DIB Futura',
+        value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+      });
+
+      this.resultadosGeral.push({
+        label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
+        // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+        value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+      });
+
+      this.resultadosGeral.push({
+        label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
+        value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
+          + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
+      });
+
+      // se a aliquota é de empregado cumulativa tem abono, 13º
+      if (this.planejamento.aliquota === 99) {
+
+        this.resultadosGeral.push({
+          label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+          value2: this.definicaoMoeda.formatMoney(totalEsperado),
+        });
+
+      } else {
+
+        this.resultadosGeral.push({
+          label: 'Valor Acumulado ao Atingir a Idade',
+          value2: this.definicaoMoeda.formatMoney(totalEsperado),
+        });
+
+      }
 
 
-    
-      this.isUpdatingRst = false;
-    }, 5000);
+      if (this.resultadosGeral.length >= 7) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+
+
   }
+
+
+
+  // private calcularPlanejamento2() {
+
+  //   this.isUpdatingRst = true;
+
+  //   const calculo1 = this.calculo;
+  //   const calculo2 = this.planejamento;
+  //   const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
+  //   const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
+  //   const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
+  //   const valor = this.Moeda.getByDate(moment());
+  //   const salMinimo = valor.salario_minimo * 0.05;
+  //   const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+
+  //   let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
+
+  //   // Não sei o motivo deste item
+  //   // investimentoEntreDatas += this.contribEmAtraso;// contribuicao em atraso no forms na pŕópria página
+
+  //   //  console.log("E", this.ExpectativaVida)
+
+  //   let tempoMinimo1 = 0;
+  //   let tempoMinimo2 = 0;
+  //   let tempoMinimo2Mes = 0;
+  //   let tempoMinimo2Ano = 0;
+
+  //   investimentoEntreDatas *= aliquotaRst.aliquota;
+
+  //   const mesesEntreDatas = (this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2) / 12
+  //     + this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2));
+
+  //   const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
+
+
+  //   let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+
+  //   let diferencaRmi = Math.abs(calculo2.novo_rmi - calculo1.valor_beneficio);
+
+  //   let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+
+  //   if (diferencaRmi != 0) {
+  //     tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
+
+  //     tempoMinimo2 = (((totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+  //     tempoMinimo2Mes = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+  //     tempoMinimo2Ano = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11);
+
+  //   }
+
+
+  //   let idadeSegurado = Math.abs(this.dataNascimentoSeguradoM.diff(moment(), 'years'));
+
+  //   let idadeSeguradoDIB = Math.abs(this.dataNascimentoSeguradoM.diff(dataInicioBeneficio2, 'years'));
+
+  //   // console.log("--", this.expectativaVidaR)
+  //   let expectativaIbgeSegurado = this.expectativaVidaR + idadeSegurado;
+
+  //   let resultSubtracao = (moment.duration(expectativaIbgeSegurado, 'years'))
+  //     .subtract(moment.duration(dataInicioBeneficio2.diff(this.dataNascimentoSeguradoM)));
+  //   let resultConversao = resultSubtracao.years() + (resultSubtracao.months() / 12) + (resultSubtracao.days() * 365.25);
+
+  //   let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
+
+
+  //   let totalEsperado = 0;
+  //   // se a aliquota é de empregado cumulativa tem abono, 13º
+  //   if (this.planejamento.aliquota === 99) {
+  //     totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+  //   } else {
+  //     totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
+  //   }
+  //   // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+
+  //   setTimeout(() => {
+  //     const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+  //       moment(this.planejamento.data_futura));
+  //     this.resultadosGeral.push({
+  //       label: 'A) Valor Investido em Contribuições Futuras',
+  //       value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
+  //       value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Total Investido (A + B) ',
+  //       value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Valor da Diferença Entre os Benefícios ',
+  //       value2: this.definicaoMoeda.formatMoney(diferencaRmi),
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
+  //       // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+  //       value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Idade do Segurado na DIB Futura',
+  //       value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
+  //       // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+  //       value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+  //     });
+
+  //     this.resultadosGeral.push({
+  //       label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
+  //       value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
+  //         + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
+  //     });
+
+  //     // se a aliquota é de empregado cumulativa tem abono, 13º
+  //     if (this.planejamento.aliquota === 99) {
+
+  //       this.resultadosGeral.push({
+  //         label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+  //         value2: this.definicaoMoeda.formatMoney(totalEsperado),
+  //       });
+
+  //     } else {
+
+  //       this.resultadosGeral.push({
+  //         label: 'Valor Acumulado ao Atingir a Idade',
+  //         value2: this.definicaoMoeda.formatMoney(totalEsperado),
+  //       });
+
+  //     }
+
+
+
+
+  //   }, 5000);
+  // }
 
 
   private diferencaDatas(inicio, fim) {
