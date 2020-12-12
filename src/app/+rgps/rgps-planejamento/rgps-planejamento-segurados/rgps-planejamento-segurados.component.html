@@ -301,7 +301,7 @@
                             (click)="prevStep()"
                             [class.disabled]="steps.indexOf(activeStep) == 0"
                             class="btn btn-lg btn-default"
-                            tooltip="Retornar ao passo anterior"
+                            title="Retornar ao passo anterior"
                             >Retornar
                           </a>
                         </li>
@@ -310,7 +310,7 @@
                             (click)="nextStep()"
                             [class.disabled]="!activeStep.valid"
                             class="btn btn-lg txt-color-darken"
-                            tooltip="Continuar para próximo passo"
+                            title="Continuar para próximo passo"
                           >
                             Continuar
                           </a>
