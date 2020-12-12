@@ -11616,7 +11616,8 @@ aside {
 }
 
 #logo img {
-  width: 110px;
+  /* width: 130px; */
+  width: 220px;
   height: auto;
   padding-left: 3px
 }
@@ -11644,9 +11645,15 @@ aside {
   background: #006fa6 !important
 }
 
-#project-context, .project-context {
+/* #project-context, .project-context {
   display: inline-block;
   padding: 7px 13px 0;
+  position: relative
+} */
+
+#project-context, .project-context {
+  display: inline-block;
+  padding: 15px 0px;
   position: relative
 }
 

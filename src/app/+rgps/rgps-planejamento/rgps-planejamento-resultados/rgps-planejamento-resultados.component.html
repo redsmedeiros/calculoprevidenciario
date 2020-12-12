@@ -15,7 +15,7 @@
 </strong> -->
 
 <div id="content">
-  <div id="box-dados-title" class="row mb-2">
+  <div id="box-dados-title" class="row mb-2 mt-4">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <h3 class="p-1 m-1 no-print">
         Planejamento do Cálculo dos Benefícios do Regime Geral de Previdência
@@ -40,7 +40,7 @@
                       <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                       <i class="fa fa-check" *ngIf="pane.checked"></i>
                     </span>
-                    <span class="title">{{ pane.title }}</span>
+                    <span class="title" style="padding-bottom: 0.9rem;">{{ pane.title }}</span>
                   </a>
                 </li>
               </ul>
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <div *ngIf="!isUpdatingRst">
+  <div *ngIf="!isUpdatingRst" style="margin-top: 3rem;" >
     <div class="row" *ngIf="isSegurado">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget [colorbutton]="false" [editbutton]="false">

@@ -1533,7 +1533,7 @@ export class RgpsResultadosComponent implements OnInit {
       },
       {
         key: 'step5',
-        title: 'Planejamento Previdenciário',
+        title: 'Relatório',
         valid: false,
         checked: false,
         submitted: false,

@@ -30,6 +30,26 @@ export class ExpectativaVidaService extends ControllerService {
     });
   }
 
+
+  public getByAnoIdade(idadeFracionada, ano) {
+    if (idadeFracionada > 80) {
+      idadeFracionada = 80;
+    }
+    return new Promise((resolve, reject) => {
+      const parameters = [
+          'idade', idadeFracionada,
+          'ano', ano
+        ];
+      this.getWithParameters(parameters).then(() => {
+        const list = this.list;
+        resolve(list);
+      }).catch(error => {
+        console.error(error);
+        reject(error);
+      })
+    });
+  }
+
   public getByDates(dataInicio, dataFim) {
     // console.log(dataInicio, dataFim)
     for (let expectativa of this.list) {

@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div id="passoPlanejamentoRGPS" class="well mt-5" *ngIf="isPlanejamento">
+    <div id="passoPlanejamentoRGPS" class="well my-5" *ngIf="isPlanejamento">
       <div class="row my-5">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <form novalidate="novalidate">
@@ -61,7 +61,7 @@
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
                       </span>
-                      <span class="title">{{ pane.title }}</span>
+                      <span class="title" style="padding-bottom: 0.9rem;">{{ pane.title }}</span>
                     </a>
                   </li>
                 </ul>
@@ -114,7 +114,7 @@
             <!-- widget div-->
             <div>
               <!-- widget content -->
-              <div class="widget-body widget-body-custom m-0 p-0">
+              <div class="widget-body widget-body-custom m-0 pb-4">
                 <ul class="list-inline m-0">
                   <li class="px-5">
                     <strong>Nome:</strong> {{ segurado.nome }}
@@ -388,14 +388,14 @@
       </div>
 
       <!-- Planejamento -->
-      <app-rgps-planejamento-index
+      <!-- <app-rgps-planejamento-index
         *ngIf="isUpdating"
         [calculo]="calculosList[0]"
         [segurado]="segurado"
-      ></app-rgps-planejamento-index>
+      ></app-rgps-planejamento-index> -->
 
       <!-- Planejamento  -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
+      <article class="col-sm-12 col-md-12 col-lg-12 mt-1" >
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"

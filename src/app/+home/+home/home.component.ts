@@ -16,29 +16,6 @@ export class HomeComponent implements OnInit {
 
   private textosSimuladoresMenu = [
     {
-      value: 'trasicao',
-      link: '/transicao',
-      icon: `fa fa-lg fa-fw fa-list-ul`,
-      title: 'Regras  <br>de Transição',
-      label: `Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição da EC nº 103/2019.`
-    },
-    {
-      value: 'plan',
-      link: '/rgps/rgps-planejamento',
-      icon: `fa fa-lg fa-fw fa-files-o`,
-      title: `Planejamento  <br> Previdenciário`,
-      label: `Planejamento Previdenciário`
-    },
-    {
-
-      value: 'contagem',
-      link: '/contagem-tempo/contagem-tempo-segurados',
-      icon: `fa fa-lg fa-fw fa-calendar-check-o`,
-      title: `Contagem  <br>de Tempo`,
-      label: `Simula contagem do tempo de contribuição para períodos especial e
-               comum e de atividade como contribuinte individual.`
-    },
-    {
       value: 'RMI',
       link: '/rgps/rgps-segurados',
       icon: `fa fa-lg fa-fw fa-calculator`,
@@ -65,6 +42,29 @@ export class HomeComponent implements OnInit {
       12/2008.`
     },
     {
+
+      value: 'contagem',
+      link: '/contagem-tempo/contagem-tempo-segurados',
+      icon: `fa fa-lg fa-fw fa-calendar-check-o`,
+      title: `Contagem  <br>de Tempo`,
+      label: `Simula contagem do tempo de contribuição para períodos especial e
+               comum e de atividade como contribuinte individual.`
+    },
+    {
+      value: 'trasicao',
+      link: '/transicao',
+      icon: `fa fa-lg fa-fw fa-list-ul`,
+      title: 'Regras  <br>de Transição',
+      label: `Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição da EC nº 103/2019.`
+    },
+    {
+      value: 'plan',
+      link: '/rgps/rgps-planejamento',
+      icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
+      title: `Planejamento  <br> Previdenciário`,
+      label: `Planejamento Previdenciário`
+    },
+    {
       value: 'tutorial',
       link: '/tutorial',
       icon: `fa fa-lg fa-fw fa-question-circle `,
@@ -77,7 +77,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private Auth: Auth) { }
+    private Auth: Auth
+    ) { }
 
 
 
@@ -88,15 +89,11 @@ export class HomeComponent implements OnInit {
 
 
   over(value) {
-    //console.log('Mouseover called');
-    
     this.textDescricao = this.textosSimuladoresMenu.find(item => item.value === value).label;
-  // console.log(this.textDescricao)
   }
 
   out(value) {
-   // console.log('Mouseout called');
-    this.textDescricao = '';
+   // this.textDescricao = '';
   }
 
 }

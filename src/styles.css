@@ -598,13 +598,30 @@ a[class*="action-"]:hover {
 }
 
 .bg-ieprev {
-  border-color: #4A4D4F !important;
-  background: #4A4D4F !important;
+  border-color: #4a4d4f !important;
+  background: #4a4d4f !important;
   color: #fff !important;
 }
 
 .color-ieprev {
-  color:  #4A4D4F !important;
+  color: #4a4d4f !important;
+}
+
+.btn-ieprev {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+}
+
+.btn-ieprev:hover {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(1.2);
+}
+
+.btn-ieprev:disabled {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  cursor: not-allowed;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
@@ -680,32 +697,43 @@ a[class*="action-"]:hover {
 .pager li > span {
   display: inline-block;
   padding: 5px 20px;
-  background-color: #4A4D4F;
-  border: 1px solid#4A4D4F;
+  background-color: #ffaa21;
+  border: 1px solid #ffaa21;
   border-radius: 15px;
-  color: #fff !important;
+  color: #0d0d0d;
   font-weight: 600;
 }
 
 .pager li > a:focus,
 .pager li > a {
   text-decoration: none;
-  color: #ffffff;
-  background-color: #4A4D4F;
+  color: #0d0d0d;
+  background-color: #ffaa21;
 }
 
 .pager li > a:focus,
 .pager li > a:hover {
   text-decoration: none;
-  color: #000000;
-  background-color: #4A4D4F;
-  filter: brightness(1.5);
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(1.2);
 }
 
 .pager li > a:focus,
-.pager li > a.disabled {
+.pager li > a:disabled {
   text-decoration: none;
-  color: #4A4D4F;
-  background-color: #c5c5c5;
-  cursor: no-drop !important;
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  cursor: not-allowed;
+}
+
+.bootstrapWizard li.active .step,
+.bootstrapWizard li.active.complete .step {
+  background: #ffaa21;
+  color: #0d0d0d;
+  font-weight: 700;
+  padding: 7px 13px;
+  font-size: 15px;
+  border-radius: 50%;
+  border: 3px solid #55606e;
 }

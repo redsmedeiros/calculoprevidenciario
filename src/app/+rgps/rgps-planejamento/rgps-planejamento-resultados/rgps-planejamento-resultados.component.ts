@@ -88,7 +88,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     },
     {
       key: 'step5',
-      title: 'Planejamento Previdenciário',
+      title: 'Relatório',
       valid: false,
       checked: false,
       submitted: false,
@@ -96,7 +96,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   ];
   public activeStep = {
     key: 'step5',
-    title: 'Planejamento Previdenciário',
+    title: 'Relatório',
     valid: false,
     checked: false,
     submitted: false,
@@ -169,8 +169,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                 this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
 
 
-
-                const expectativaVidaP = this.ExpectativaVidaService.getByIdade(this.idadeNaDiBRmi)
+                const anoTabela = (moment().year() - 2);
+                const expectativaVidaP = this.ExpectativaVidaService.getByAnoIdade(this.idadeNaDiBRmi, anoTabela )
                   .then((expvida: ExpectativaVida[]) => {
                     this.expectativaVidaList = [];
                     this.expectativaVidaList = expvida;
@@ -186,11 +186,21 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
 
-                    const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
+                    // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())
+                    //   .then((moeda: Moeda[]) => {
+
+                    //     this.moeda = moeda;
+                    //     this.calcularPlanejamento();
+                    //   });
+
+
+                      const MoedaPDTeste = this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
                       .then((moeda: Moeda[]) => {
 
                         this.moeda = moeda;
-                        this.calcularPlanejamento();
+                       console.log(moeda);
+
+                       this.calcularPlanejamento();
                       });
 
                     // const MoedaPD = this.Moeda.getByDateRangeMoment(moment().subtract(1, 'months'), moment())

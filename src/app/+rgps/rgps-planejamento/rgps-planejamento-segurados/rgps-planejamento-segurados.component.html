@@ -42,8 +42,8 @@
                 <button
                   type="button"
                   (click)="setIsPaginaInicial()"
-                  class="btn btn-lg btn-block"
-                  style="background-color: #ffc107; font-weight: bolder"
+                  class="btn btn-lg btn-block btn-ieprev"
+                  style=" font-weight: bolder"
                 >
                   Iniciar
                 </button>
@@ -75,7 +75,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="tab-content">
+              <div class="tab-content " style="margin-top: 5rem;">
                 <div
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step1'"
@@ -92,9 +92,17 @@
                     qual melhor possíbilidade entre duas opções de data íniciais
                     de benefício distintas para verificar qual a melhor opção.
                   </p> -->
-                  <div class="row mt-5">
+                  <div class="row my-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                      <h3><strong>Passo 1</strong> - Dados do Segurado</h3>
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard">
+                          <li class="active" data-target="#step1">
+                            <a data-toggle="tab"> <span class="step">1</span></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                     </div>
                   </div>
                   <p style="font-size: large">
@@ -103,7 +111,7 @@
                     Renda Mensal Inicial
                     <a
                       (click)="redirecionarSeguradoRMI()"
-                      style="color: #831721 !important"
+                      style="color: #ffaa21 !important"
                     >
                       <strong>Clique Aqui para criar o segurado</strong></a
                     >
@@ -140,7 +148,32 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step2'"
                 >
-                  <div class="row mt-5">
+                <div class="row my-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step2">
+                          <a data-toggle="tab"> <span class="step">2</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                    <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
+                  </div>
+                </div>
+                <p style="font-size: large">
+                  Selecione o cálculo. Caso o segurado não possua um
+                  calculo de Renda Mensal Inicial
+                  <a
+                    (click)="redirecionarSeguradoCalculosRMI()"
+                    style="color: #ffaa21 !important"
+                  >
+                    <strong> Clique Aqui </strong></a
+                  >
+                  para ser direcionado para criar um calculo para o
+                  segurado. Observação siga até a conclusão.
+                </p>
+                  <!-- <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <h3><strong>Passo 2</strong> RMI do Benefício Atual</h3>
                       <p style="font-size: large">
@@ -148,7 +181,7 @@
                         calculo de Renda Mensal Inicial
                         <a
                           (click)="redirecionarSeguradoCalculosRMI()"
-                          style="color: #831721 !important"
+                          style="color: #ffaa21 !important"
                         >
                           <strong> Clique Aqui </strong></a
                         >
@@ -156,22 +189,9 @@
                         segurado. Observação siga até a conclusão.
                       </p>
 
-                      <!-- <div class="row">
-                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                          <button
-                            (click)="redirecionarSeguradoCalculosRMI()"
-                            type="submit"
-                            class="btn btn-info pull-left"
-                          >
-                            Clique aqui para ser direcionado ao Cálculo de Renda
-                            Mensal Inicial&nbsp;&nbsp;&nbsp;<i
-                              class="fa fa-arrow-circle-right"
-                            ></i>
-                          </button>
-                        </div>
-                      </div> -->
+                   
                     </div>
-                  </div>
+                  </div> -->
                   <div class="row body-step-component">
                     <app-rgps-planejamento-calculos-planejados
                       *ngIf="isSeguradoSelecionado"
@@ -186,12 +206,29 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step3'"
                 >
-                  <div class="row mt-5">
+                  <!-- <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <h3><strong>Passo 3</strong> Dados do Benefício Futuro</h3>
                     </div>
+                  </div> -->
+
+                  <div class="row my-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard">
+                          <li class="active" data-target="#step3">
+                            <a data-toggle="tab"> <span class="step">3</span></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
+                    </div>
                   </div>
-                  <div class="row body-step-component">
+                  <p style="font-size: large">
+                    Selecione o cálculo de Benefício futuro ou adicione no formulário abaixo.
+                  </p>
+                  <div class="row pt-4 body-step-component">
                     <app-rgps-planejamento-list
                       *ngIf="!isUpdatingPlan"
                       [calculo]="calculoSelecionado"
@@ -207,13 +244,29 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step4'"
                 >
-                  <div class="row mt-5">
+                  <!-- <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <h3><strong>Passo 4</strong> RMI do Benefício Futuro</h3>
                     </div>
+                  </div> -->
+                  <div class="row my-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard">
+                          <li class="active" data-target="#step4">
+                            <a data-toggle="tab"> <span class="step">4</span></a>
+                          </li>
+                        </ul>
+                      </div>
+                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
+                    </div>
                   </div>
+                  <p style="font-size: large" >
+                   Processando as informações selecionadas do segurado.
+                  </p>
 
-                  <div class="body-step-component"
+                  <div class="body-step-component  my-4"
                     *ngIf="
                       activeStep.key == 'step4' &&
                       isSeguradoSelecionado &&
@@ -239,7 +292,7 @@
                   <br />
                 </div>
 
-                <div class="form-actions">
+                <div class="form-actions mt-0">
                   <div class="row">
                     <div class="col-sm-12">
                       <ul class="pager wizard no-margin">
