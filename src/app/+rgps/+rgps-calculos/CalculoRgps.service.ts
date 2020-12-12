@@ -24,4 +24,20 @@ export class CalculoRgpsService extends ControllerService {
         });
     });
   }
+
+
+  public getCalculoById(id) {
+    return new Promise((resolve, reject) => {
+      const parameters = ['id_calculo', id];
+      this.getWithParameters(parameters)
+        .then(() => {
+          let list = this.list[0];
+          resolve(list);
+        })
+        .catch((error) => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
 }

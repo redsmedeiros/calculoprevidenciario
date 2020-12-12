@@ -21,4 +21,19 @@ export class RgpsPlanejamentoService extends ControllerService {
         });
     });
   }
+
+  public getPlanejamentoByPlanId(id) {
+    return new Promise((resolve, reject) => {
+      const parameters = ['id_planejamento', id];
+      this.getWithParameters(parameters)
+        .then(() => {
+          let list = this.list[0];
+          resolve(list);
+        })
+        .catch((error) => {
+          console.error(error);
+          reject(error);
+        });
+    });
+  }
 }

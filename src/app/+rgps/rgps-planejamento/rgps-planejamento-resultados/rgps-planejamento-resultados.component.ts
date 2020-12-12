@@ -104,6 +104,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   private definicaoMoeda = DefinicaoMoeda;
+  //private definicaoAliquotaEfetiva = DefinicaoAliquotaEfetiva;
 
 
   constructor
@@ -125,7 +126,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   private getAliquotasLabel(value) {
-    return DefinicoesPlanejamento.getAliquota(value).label;
+    if (value > 0) {
+      return DefinicoesPlanejamento.getAliquota(value).label;
+    }
   }
 
   private calculoInit() {
@@ -136,25 +139,27 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.idPlanejamento = this.route.snapshot.params['id_planejamento'];
 
 
-    this.SeguradoService.find(this.idSegurado)
+    this.SeguradoService.getByIdSegurado(this.idSegurado) //getByIdSegurado
       .then((segurado: SeguradoModel) => {
+
+        console.log(segurado)
 
         this.segurado = segurado;
         this.dataNascimentoSeguradoM = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
         this.sexoSegurado = this.segurado.sexo;
 
 
-        this.CalculoRgps.find(this.idCalculo)
+        this.CalculoRgps.getCalculoById(this.idCalculo)
           .then((calculo: CalculoModel) => {
 
+            console.log(calculo)
             this.calculo = calculo;
 
-
-
-            this.planejamentoService.find(this.idPlanejamento)
+            this.planejamentoService.getPlanejamentoByPlanId(this.idPlanejamento)
               .then((planejamento: PlanejamentoRgps) => {
 
-                //  console.log(planejamento);
+                  console.log(planejamento);
+
                 this.planejamento = planejamento;
                 this.idadeNaDiBPlanejamento = Math.abs(
                   this.dataNascimentoSeguradoM.diff(
@@ -200,7 +205,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                           setTimeout(() => {
                             this.isUpdatingRst = false;
                           }, 2000);
-                          
+
                         }).catch((error) => {
                           console.log(error);
                         });
