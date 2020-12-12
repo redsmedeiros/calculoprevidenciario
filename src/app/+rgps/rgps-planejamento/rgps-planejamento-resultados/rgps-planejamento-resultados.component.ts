@@ -267,6 +267,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private calcularPlanejamento() {
 
+    this.isUpdatingRst = true;
+
     const calculo1 = this.calculo;
     const calculo2 = this.planejamento;
     const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
@@ -335,7 +337,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     }
     // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
 
-
+    setTimeout(() => {
     const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
       moment(this.planejamento.data_futura));
     this.resultadosGeral.push({
@@ -399,14 +401,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     }
 
 
-    setTimeout(() => {
+    
       this.isSegurado = true;
       this.isCalculo = true;
       this.isPlanejamento = true;
       this.isResultado = true;
 
       this.isUpdatingRst = false;
-    }, 2000);
+    }, 5000);
   }
 
 
