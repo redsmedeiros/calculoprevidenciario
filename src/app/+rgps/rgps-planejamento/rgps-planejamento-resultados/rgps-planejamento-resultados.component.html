@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div id="passoPlanejamentoRGPS" class="well mt-5" *ngIf="isPlanejamento">
+  <div id="passoPlanejamentoRGPS" class="well mt-5">
     <div class="row my-5">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <form novalidate="novalidate">
@@ -99,6 +99,7 @@
         </sa-widget>
       </article>
       <article
+      *ngIf="!isUpdatingRst" 
         id="box-dados-segurado"
         class="col-sm-12 col-md-12 col-lg-12"
         hidden
@@ -160,7 +161,7 @@
       </article>
     </div>
 
-    <div id="box-dados-calculo" class="row">
+    <div id="box-dados-calculo" class="row"  *ngIf="!isUpdatingRst" >
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isCalculo">
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
@@ -205,8 +206,8 @@
       </article>
     </div>
 
-    <div id="box-dados-planejamento" class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isPlanejamento">
+    <div id="box-dados-planejamento" class="row"  *ngIf="!isUpdatingRst" >
+      <article class="col-sm-12 col-md-12 col-lg-12" >
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
@@ -268,8 +269,8 @@
       </article>
     </div>
 
-    <div id="box-dados-resultados" class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isResultado">
+    <div id="box-dados-resultados" class="row"  *ngIf="!isUpdatingRst" >
+      <article class="col-sm-12 col-md-12 col-lg-12" >
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">

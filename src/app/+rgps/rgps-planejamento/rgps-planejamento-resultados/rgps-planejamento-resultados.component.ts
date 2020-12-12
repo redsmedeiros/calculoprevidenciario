@@ -402,11 +402,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
     
-      this.isSegurado = true;
-      this.isCalculo = true;
-      this.isPlanejamento = true;
-      this.isResultado = true;
-
       this.isUpdatingRst = false;
     }, 5000);
   }
