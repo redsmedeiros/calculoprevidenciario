@@ -309,10 +309,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                   this.moeda = moeda;
 
                   // se ouver dib anterior considerar como a primeira data para o indice de correção
-                  // const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
-                  //   this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
-
-                    const date_inicio_devido =  this.calculo.data_pedido_beneficio_esperado;
+                  const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
+                    this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
 
                   // Indice devido
                   this.IndiceDevido.getByDateRange(moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
@@ -324,10 +322,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                       }
 
                       // se ouver dib anterior considerar como a primeira data para o indice de correção
-                      // let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-                      //   this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
-
-                      let date_inicio_recebido = this.calculo.data_pedido_beneficio;
+                      let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+                        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
                       date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
                       if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
