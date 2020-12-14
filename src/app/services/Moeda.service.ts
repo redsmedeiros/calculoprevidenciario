@@ -15,7 +15,8 @@ export class MoedaService extends ControllerService {
 
 			let fromDate = Date.parse(from);
 			let toDate = Date.parse(to);
-			if (this.list.length == 0) {
+			console.log(this.list);
+			if (this.list.length <= 12) {
 				this.get().then(() => {
 					let list = this.list.filter((moeda) => {
 						let moedaDate = Date.parse(moeda.data_moeda + 'T02:00:00.000Z');
@@ -72,6 +73,7 @@ export class MoedaService extends ControllerService {
 			this.getWithParameters(parameters).then(() => {
 				let list = this.list;
 				this.firstMonth = moment(this.list[0].data_moeda);
+				//this.list = [];
 				resolve(list);
 			}).catch(error => {
 				console.error(error);

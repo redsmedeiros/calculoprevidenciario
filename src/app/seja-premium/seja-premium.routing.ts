@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [
+const routesSejaPremium: Routes = [
   {
     path: '',
-    loadChildren: 'app/+transicao/transicao-form/transicao-form.module#TransicaoFormModule',
-    data: {pageTitle: 'Seja Premium'}
-  },
+    loadChildren: 'app/seja-premium/seja-premium-index/seja-premium-index.module#SejaPremiumIndexModule',
+    data: {pageTitle: 'Todos os tutoriais'}
+  }
 ];
 
-export const routing = RouterModule.forChild(routes);
+export const routingSejaPremium = RouterModule.forChild(routesSejaPremium);
+

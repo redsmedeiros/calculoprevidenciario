@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { SejaPremiumRoutingModule } from './seja-premium-routing.module';
-import { SejaPremiumIndexComponent } from './seja-premium-index/seja-premium-index.component';
+import { routingSejaPremium } from './seja-premium.routing';
 
 @NgModule({
   imports: [
     CommonModule,
-    SejaPremiumRoutingModule
+    routingSejaPremium
   ],
-  declarations: [SejaPremiumIndexComponent]
+  declarations: []
 })
 export class SejaPremiumModule { }

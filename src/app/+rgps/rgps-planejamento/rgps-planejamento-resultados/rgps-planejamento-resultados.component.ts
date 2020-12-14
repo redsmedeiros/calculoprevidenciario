@@ -43,6 +43,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private calculo;
   private planejamento;
   private moeda;
+  private aliquotaRst;
+  private isDiffAeBNegativa = false;
+
 
   private resultadosFacultativo = []
   private resultadosDescontadoSalario = [];
@@ -52,7 +55,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private sexoSegurado;
   private expectativaVidaList = [];
   private expectativaVidaR;
-  // public expvida;
+
   private dataNascimentoSeguradoM;
   private idadeNaDiBPlanejamento;
   private idadeNaDiBRmi;
@@ -158,7 +161,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
             this.planejamentoService.getPlanejamentoByPlanId(this.idPlanejamento)
               .then((planejamento: PlanejamentoRgps) => {
 
-                  console.log(planejamento);
+                console.log(planejamento);
 
                 this.planejamento = planejamento;
                 this.idadeNaDiBPlanejamento = Math.abs(
@@ -193,8 +196,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                     this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
                       .then((moeda: Moeda[]) => {
 
-                        this.moeda = moeda;
-                        console.log(moeda);
+
+                        this.moeda = moeda[1];
+                        if (moeda[1].salario_minimo == undefined) {
+                          this.moeda = moeda[0];
+                        }
+
+
+
+                        // console.log(moeda);
 
                         // this.calcularPlanejamento();
 
@@ -274,9 +284,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
       const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
       const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
-      const valor = this.Moeda.getByDate(moment());
+      const valor = this.moeda;
       const salMinimo = valor.salario_minimo * 0.05;
-      const aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+      this.aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+
+      // console.log(this.aliquotaRst);
 
       let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
       let tempoMinimo1 = 0;
@@ -293,18 +305,27 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
 
-      let diferencaRmi = Math.abs(calculo2.novo_rmi - calculo1.valor_beneficio);
+      let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
 
-      let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+      let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
 
-      //if (diferencaRmi != 0) {
-      tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
+      if (diferencaRmi >= 0) {
 
-      tempoMinimo2 = (((totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
-      tempoMinimo2Mes = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
-      tempoMinimo2Ano = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11);
+        if (this.planejamento.aliquota === 99) {
+          tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;
+        } else {
+          tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 12;
+        }
 
-      //      }
+        tempoMinimo2 = (((totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+        tempoMinimo2Mes = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11) * 12;
+        tempoMinimo2Ano = (((investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi) / 11);
+
+      } else {
+
+        this.isDiffAeBNegativa = true;
+
+      }
 
 
       let idadeSegurado = Math.abs(this.dataNascimentoSeguradoM.diff(moment(), 'years'));
@@ -348,53 +369,61 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
       });
 
-      this.resultadosGeral.push({
-        label: 'Valor da Diferença Entre os Benefícios ',
-        value2: this.definicaoMoeda.formatMoney(diferencaRmi),
-      });
 
-      this.resultadosGeral.push({
-        label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
-        // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
-        value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
-      });
-
-      this.resultadosGeral.push({
-        label: 'Idade do Segurado na DIB Futura',
-        value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
-      });
-
-      this.resultadosGeral.push({
-        label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
-        // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-        value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-      });
-
-      this.resultadosGeral.push({
-        label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
-        value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
-          + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
-      });
-
-      // se a aliquota é de empregado cumulativa tem abono, 13º
-      if (this.planejamento.aliquota === 99) {
+      if (!this.isDiffAeBNegativa) {
 
         this.resultadosGeral.push({
-          label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
-          value2: this.definicaoMoeda.formatMoney(totalEsperado),
+          label: 'Valor da Diferença Entre os Benefícios ',
+          value2: this.definicaoMoeda.formatMoney(diferencaRmi),
         });
-
-      } else {
 
         this.resultadosGeral.push({
-          label: 'Valor Acumulado ao Atingir a Idade',
-          value2: this.definicaoMoeda.formatMoney(totalEsperado),
+          label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
+          // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+          value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
         });
+
+        this.resultadosGeral.push({
+          label: 'Idade do Segurado na DIB Futura',
+          value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+        });
+
+        this.resultadosGeral.push({
+          label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
+          // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+          value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+        });
+
+        this.resultadosGeral.push({
+          label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
+          value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
+            + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
+        });
+
+        // se a aliquota é de empregado cumulativa tem abono, 13º
+        if (this.planejamento.aliquota === 99) {
+
+          this.resultadosGeral.push({
+            label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+            value2: this.definicaoMoeda.formatMoney(totalEsperado),
+          });
+
+        } else {
+
+          this.resultadosGeral.push({
+            label: 'Valor Acumulado ao Atingir a Idade',
+            value2: this.definicaoMoeda.formatMoney(totalEsperado),
+          });
+
+        }
+
 
       }
 
 
-      if (this.resultadosGeral.length >= 7) {
+
+      if (this.resultadosGeral.length >= 7
+        || (this.resultadosGeral.length >= 3 && this.isDiffAeBNegativa)) {
         resolve(true);
       } else {
         reject(false);
@@ -540,10 +569,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   //       });
 
   //     }
-
-
-
-
   //   }, 5000);
   // }
 

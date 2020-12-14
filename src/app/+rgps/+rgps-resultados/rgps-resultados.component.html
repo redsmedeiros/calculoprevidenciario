@@ -82,21 +82,18 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <ul class="list-unstyled text-justify" style="font-size: large">
+                        <ul class="text-justify" style="font-size: 14px">
                           <li>
-                            <i class="fa fa-check"></i> O Simulador realizará o
-                            cálculo da renda mensal inicial do benefício futuro,
-                            com a inclusão dos salários de contribuição
-                            informados no Passo 3;
+                            O Simulador realizará o cálculo da renda mensal
+                            inicial do benefício futuro, com a inclusão dos
+                            salários de contribuição informados no Passo 3;
                           </li>
 
                           <li>
-                            <i class="fa fa-check"></i>
                             Clique em Abrir para acessar o cálculo ou em
                             Imprimir, onde poderá salvar o cálculo, inclusive;
                           </li>
                           <li>
-                            <i class="fa fa-check"></i>
                             Clique em continuar para acessar o relatório com as
                             informações do Planejamento Previdenciário.
                           </li>
@@ -489,10 +486,13 @@
                   </div>
                 </div>
               </div>
-              <div class="row" id="rst-final-planejamento">
+              <div
+                class="row pt-3"
+                id="rst-final-planejamento"
+                *ngIf="!isPlanejamento"
+              >
                 <div class="col-md-offset-4 col-md-4">
                   <button
-                    *ngIf="!isPlanejamento"
                     type="button"
                     (click)="navegarPlanejamento('selectCalc')"
                     class="btn btn-info"

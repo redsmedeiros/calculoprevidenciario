@@ -25,7 +25,7 @@
   </div>
 
   <div id="passoPlanejamentoRGPS" class="well mt-5">
-    <div class="row my-5">
+    <div class="row mt-5">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <form novalidate="novalidate">
           <div class="col-sm-12">
@@ -59,9 +59,9 @@
                       </ul>
                     </div>
                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                      <ul class="list-unstyled text-justify" style="font-size: large">
+                      <ul class="text-justify" style="font-size: 14px;">
                         <li>
-                          <i class="fa fa-check"></i>Planejamento Previdenciário
+                          Planejamento Previdenciário
                           realizado com a indicação do valor investido em
                           contribuições, entre as datas de início do benefício
                           atual (caso haja direito adquirido) e benefício
@@ -71,7 +71,6 @@
                         </li>
 
                         <li>
-                          <i class="fa fa-check"></i>
                           Apura ainda, a diferença entre os dois benefícios
                           (atual - caso haja direito adquirido - e futuro),
                           apontando o tempo mínimo necessário que o segurado
@@ -82,7 +81,6 @@
                           construída pelo IBGE;
                         </li>
                         <li>
-                          <i class="fa fa-check"></i>
                           O resultado do Planejamento Previdenciário é obtido a
                           partir das informações indicadas pelo usuário nos
                           passos anteriores e a renda mensal inicial do
@@ -277,7 +275,7 @@
                     <td width="50%" style="text-align: left">
                       <strong>Data do Início do Benefício</strong>
                     </td>
-                    <td width="50%" style="text-align: center">
+                    <td width="50%" style="text-align: center" colspan="2">
                       {{ planejamento.dataDibFutura }}
                     </td>
                   </tr>
@@ -285,7 +283,7 @@
                     <td width="50%" style="text-align: left">
                       <strong>Espécie do Benefíco</strong>
                     </td>
-                    <td width="50%" style="text-align: center">
+                    <td width="50%" style="text-align: center" colspan="2">
                       {{ planejamento.especie }}
                     </td>
                   </tr>
@@ -293,7 +291,7 @@
                     <td width="50%" style="text-align: left">
                       <strong>Salários de Contribuição Futuros</strong>
                     </td>
-                    <td style="text-align: center">
+                    <td style="text-align: center" colspan="2">
                       {{
                         definicaoMoeda.formatMoney(planejamento.valor_beneficio)
                       }}
@@ -303,15 +301,20 @@
                     <td width="50%" style="text-align: left">
                       <strong>Alíquota Contributiva Efetiva</strong>
                     </td>
-                    <td width="50%" style="text-align: center">
-                      {{ getAliquotasLabel(planejamento.aliquota) }}
+                    <td width="25%" style="text-align: center">
+                      <!-- {{ getAliquotasLabel(planejamento.aliquota) }} -->
+                      {{ aliquotaRst.aliquota }} % 
+                    </td>
+                    <td width="25%" style="text-align: center">
+                      <!-- {{ getAliquotasLabel(planejamento.aliquota) }} -->
+                      {{ definicaoMoeda.formatMoney(aliquotaRst.valor) }}
                     </td>
                   </tr>
                   <tr>
                     <td width="50%" style="text-align: left">
                       <strong>Renda Mensal Inicial</strong>
                     </td>
-                    <td width="50%" style="text-align: center">
+                    <td width="50%" style="text-align: center" colspan="2">
                       {{ definicaoMoeda.formatMoney(planejamento.novo_rmi) }}
                     </td>
                   </tr>
@@ -348,6 +351,11 @@
                     </td>
                     <!-- <td>{{ row.value1 }}</td> -->
                     <td style="text-align: center">{{ row.value2 }}</td>
+                  </tr>
+                  <tr *ngIf="isDiffAeBNegativa" >
+                    <td colspan="2" class="text-align-center">
+                      <strong >O Benefício atual é mais vantajoso que o Benefício Futuro.</strong>
+                    </td>
                   </tr>
                 </tbody>
               </table>
