@@ -239,17 +239,23 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     switch (aliquotaP) {
 
+      case 5:
+      case 52:
       case 51:
         return {
           aliquota: aliquotaP,
           valor: (rmi * Number(aliquotaP) / 100)
         };
+
+      case 113:
       case 112:
 
         return {
           aliquota: aliquotaP,
           valor: (rmi * Number(aliquotaP) / 100)
         };
+
+      case 20:
       case 201:
 
         return {
@@ -260,6 +266,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       case 99:
 
         return DefinicaoAliquotaEfetiva.calcular(rmi);
+
       default:
 
         return {
@@ -286,7 +293,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
       const valor = this.moeda;
       const salMinimo = valor.salario_minimo * 0.05;
-      this.aliquotaRst = this.getAliquota(calculo2.aliquota, Number(calculo2.novo_rmi));
+      this.aliquotaRst = this.getAliquota(Number(calculo2.aliquota), Number(calculo2.novo_rmi));
 
       // console.log(this.aliquotaRst);
 
@@ -309,7 +316,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
 
-      if (diferencaRmi >= 0) {
+      if (diferencaRmi > 0) {
 
         if (this.planejamento.aliquota === 99) {
           tempoMinimo1 = ((investimentoEntreDatas + totalPerdidoEntreData) / diferencaRmi) / 13;

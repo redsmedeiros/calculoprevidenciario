@@ -498,6 +498,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     }
 
     const dataHoje = moment();
+    const datadibAtual = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     const dataFutura = this.data_futura;
     if (!this.isExits(this.data_futura)) {
       this.errors.add({ 'data_futura': ['O campo é obrigatório.'] });
@@ -505,6 +506,9 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do dia.'] });
+      valid = false;
+    }else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
+      this.errors.add({ 'data_futura': ['A data deve ser superior a data do cálculo atual.'] });
       valid = false;
     }
 
