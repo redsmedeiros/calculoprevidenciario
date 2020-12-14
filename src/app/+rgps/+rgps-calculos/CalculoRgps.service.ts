@@ -10,7 +10,7 @@ export class CalculoRgpsService extends ControllerService {
 
 
 
-  public getPlanejamentoBySeguradoId(idSegurado) {
+  public getCalculoBySeguradoId(idSegurado) {
     return new Promise((resolve, reject) => {
       const parameters = ['id_segurado', idSegurado];
       this.getWithParameters(parameters)

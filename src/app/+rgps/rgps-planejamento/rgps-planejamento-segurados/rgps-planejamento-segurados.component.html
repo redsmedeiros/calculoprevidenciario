@@ -11,39 +11,34 @@
       <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="jumbotron background-inicial jumbotrom-custom-plan">
           <div class="container">
-            <h1 style="color: white; font-weight: 500" class="py-4">
+            <h1 style="color: white; font-weight: 500" class="py-4 pl-5">
               Planejamento Previdenciário
             </h1>
-            <p style="color: white; font-weight: 500; text-align: justify">
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto
-              Texto Texto Texto Texto Texto
+            <p
+              style="color: white; font-weight: 500; text-align: justify"
+              class="p-5"
+            >
+              O Planejamento Previdenciário é a maior ferramenta a disposição
+              dos segurados da Previdência Social. Com a finalidade de encontrar
+              o benefício de aposentadoria mais vantajoso, deve ser aplicado a
+              partir da análise de todas as regras existentes, a fim de
+              identificar o melhor momento para requerimento do benefício
+              previdenciário. Preocupado com isso, o Instituto de Estudos
+              Previdenciários – IEPREV, criou importante ferramenta, um
+              Simulador de Cálculos que irá revolucionar a forma de construção
+              do Planejamento Previdenciário. Baseado em passo a passo,
+              auxiliará o operador do Direito Previdenciário, permitindo, de
+              forma ágil e eficaz, a análise, elaboração e conclusão do
+              planejamento, facilitando a identificação e escolha do melhor
+              momento para a aposentação.
             </p>
-            <div class="row">
+            <div class="row pt-5">
               <div class="col-md-3 col-lg-3 col-md-offset-9">
                 <button
                   type="button"
                   (click)="setIsPaginaInicial()"
                   class="btn btn-lg btn-block btn-ieprev"
-                  style=" font-weight: bolder"
+                  style="font-weight: bolder"
                 >
                   Iniciar
                 </button>
@@ -75,7 +70,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="tab-content " style="margin-top: 5rem;">
+              <div class="tab-content" style="margin-top: 5rem">
                 <div
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step1'"
@@ -92,31 +87,61 @@
                     qual melhor possíbilidade entre duas opções de data íniciais
                     de benefício distintas para verificar qual a melhor opção.
                   </p> -->
-                  <div class="row my-5">
+                  <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                        <ul class="bootstrapWizard form-wizard">
+                        <ul class="bootstrapWizard form-wizard mt-3">
                           <li class="active" data-target="#step1">
-                            <a data-toggle="tab"> <span class="step">1</span></a>
+                            <a data-toggle="tab">
+                              <span class="step">1</span></a
+                            >
                           </li>
                         </ul>
                       </div>
-                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="list-unstyled text-justify" style="font-size: large">
+                          <li>
+                            <i class="fa fa-check"></i> Selecione segurado
+                            cadastrado para iniciar o Planejamento
+                            Previdenciário;
+                          </li>
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Caso não tenha segurado cadastrado
+                            <a
+                              (click)="redirecionarSeguradoRMI()"
+                              style="color: #ffaa21 !important"
+                            >
+                              <strong>Clique Aqui </strong></a
+                            >
+                            para Criar Novo segurado.
+                          </li>
+                        </ul>
+                      </div>
                       <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                     </div>
                   </div>
-                  <p style="font-size: large">
-                    Selecione o segurado. Caso seja um novo segurado você deve
-                    criar o segurado e prosseguir até o final do calculo de
-                    Renda Mensal Inicial
+                  <!-- <ul class="list-unstyled" style="font-size: large">
+                    <li><i class="fa fa-check"></i> 
+                      Selecione segurado cadastrado para iniciar o Planejamento Previdenciário;</li>
+                    <li><i class="fa fa-check"></i> 
+                      <a
+                      (click)="redirecionarSeguradoRMI()"
+                      style="color: #ffaa21 !important"
+                    >
+                      <strong>Caso não tenha segurado cadastrado Clique Aqui para Criar Novo segurado.</strong></a
+                    >
+                    </li>
+                  </ul> -->
+                  <!-- <p style="font-size: large">
+                    Selecione segurado cadastrado para iniciar o Planejamento Previdenciário;<br>
                     <a
                       (click)="redirecionarSeguradoRMI()"
                       style="color: #ffaa21 !important"
                     >
-                      <strong>Clique Aqui para criar o segurado</strong></a
+                      <strong>Caso não tenha segurado cadastrado Clique Aqui para Criar Novo segurado.</strong></a
                     >
-                    .
-                  </p>
+                  </p> -->
                   <!-- <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                       <button
@@ -132,9 +157,8 @@
                     </div>
                   </div> -->
 
-
-                  <div class="row mt-5 body-step-component">
-                   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="row mt-4 body-step-component">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <app-rgps-planejamento-segurados-list
                         (seguradoSelecionadoEvent)="
                           setSeguradoSelecionado($event)
@@ -148,31 +172,61 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step2'"
                 >
-                <div class="row my-5">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                      <ul class="bootstrapWizard form-wizard">
-                        <li class="active" data-target="#step2">
-                          <a data-toggle="tab"> <span class="step">2</span></a>
-                        </li>
-                      </ul>
+                  <div class="row mt-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard mt-3">
+                          <li class="active" data-target="#step2">
+                            <a data-toggle="tab">
+                              <span class="step">2</span></a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="list-unstyled text-justify" style="font-size: large">
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Selecione cálculo cadastrado para prosseguir com o
+                            Planejamento Previdenciário;
+                          </li>
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Caso não tenha cálculo cadastrado
+                            <a
+                              (click)="redirecionarSeguradoCalculosRMI()"
+                              style="color: #ffaa21 !important"
+                            >
+                              <strong>Clique Aqui </strong></a
+                            >
+                            para criar novo cálculo;
+                          </li>
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Caso o segurado selecionado não possua direito
+                            adquirido a nenhum benefício até a data atual, será
+                            possível prosseguir com o Planejamento
+                            Previdenciário, programando a melhor data futura
+                            para requerimento do benefício.
+                          </li>
+                        </ul>
+                      </div>
+
+                      <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                     </div>
-                    <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
-                    <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                   </div>
-                </div>
-                <p style="font-size: large">
-                  Selecione o cálculo. Caso o segurado não possua um
-                  calculo de Renda Mensal Inicial
-                  <a
-                    (click)="redirecionarSeguradoCalculosRMI()"
-                    style="color: #ffaa21 !important"
-                  >
-                    <strong> Clique Aqui </strong></a
-                  >
-                  para ser direcionado para criar um calculo para o
-                  segurado. Observação siga até a conclusão.
-                </p>
+                  <!-- <p style="font-size: large">
+                    Selecione o cálculo. Caso o segurado não possua um calculo
+                    de Renda Mensal Inicial
+                    <a
+                      (click)="redirecionarSeguradoCalculosRMI()"
+                      style="color: #ffaa21 !important"
+                    >
+                      <strong> Clique Aqui </strong></a
+                    >
+                    para ser direcionado para criar um calculo para o segurado.
+                    Observação siga até a conclusão.
+                  </p> -->
                   <!-- <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <h3><strong>Passo 2</strong> RMI do Benefício Atual</h3>
@@ -212,22 +266,43 @@
                     </div>
                   </div> -->
 
-                  <div class="row my-5">
+                  <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                        <ul class="bootstrapWizard form-wizard">
+                        <ul class="bootstrapWizard form-wizard mt-3">
                           <li class="active" data-target="#step3">
-                            <a data-toggle="tab"> <span class="step">3</span></a>
+                            <a data-toggle="tab">
+                              <span class="step">3</span></a
+                            >
                           </li>
                         </ul>
                       </div>
-                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="list-unstyled text-justify" style="font-size: large">
+                          <li>
+                            <i class="fa fa-check"></i> Selecione benefício
+                            futuro cadastrado para prosseguir com o Planejamento
+                            Previdenciário;
+                          </li>
+
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Caso não tenha benefício futuro cadastrado, insira
+                            as informações no formulário para criar novo
+                            benefício futuro.
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- <strong
+                        >Texto Texto Texto Texto Texto Texto Texto
+                      </strong> -->
                       <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                     </div>
                   </div>
-                  <p style="font-size: large">
-                    Selecione o cálculo de Benefício futuro ou adicione no formulário abaixo.
-                  </p>
+                  <!-- <p style="font-size: large">
+                    Selecione o cálculo de Benefício futuro ou adicione no
+                    formulário abaixo.
+                  </p> -->
                   <div class="row pt-4 body-step-component">
                     <app-rgps-planejamento-list
                       *ngIf="!isUpdatingPlan"
@@ -252,28 +327,53 @@
                   <div class="row my-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                        <ul class="bootstrapWizard form-wizard">
+                        <ul class="bootstrapWizard form-wizard mt-3">
                           <li class="active" data-target="#step4">
-                            <a data-toggle="tab"> <span class="step">4</span></a>
+                            <a data-toggle="tab">
+                              <span class="step">4</span></a
+                            >
                           </li>
                         </ul>
                       </div>
-                      <strong>Texto Texto Texto Texto Texto Texto Texto </strong>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="list-unstyled text-justify" style="font-size: large">
+                          <li>
+                            <i class="fa fa-check"></i> O Simulador realizará o
+                            cálculo da renda mensal inicial do benefício futuro,
+                            com a inclusão dos salários de contribuição
+                            informados no Passo 3;
+                          </li>
+
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Clique em Abrir para acessar o cálculo ou em
+                            Imprimir, onde poderá salvar o cálculo, inclusive;
+                          </li>
+                          <li>
+                            <i class="fa fa-check"></i>
+                            Clique em continuar para acessar o relatório com as
+                            informações do Planejamento Previdenciário.
+                          </li>
+                        </ul>
+                      </div>
+                      <!-- <strong
+                        >Texto Texto Texto Texto Texto Texto Texto
+                      </strong> -->
                       <!-- <h3><strong>Passo 1</strong> - Dados do Segurado</h3> -->
                     </div>
                   </div>
-                  <p style="font-size: large" >
-                   Processando as informações selecionadas do segurado.
-                  </p>
+                  <!-- <p style="font-size: large">
+                    Processando as informações selecionadas do segurado.
+                  </p> -->
 
-                  <div class="body-step-component  my-4"
+                  <div
+                    class="body-step-component my-4"
                     *ngIf="
                       activeStep.key == 'step4' &&
                       isSeguradoSelecionado &&
                       isCalculoSelecionado
                     "
                   >
-    
                     <app-rgps-planejamento-calculo-futuro
                       *ngIf="isPlanejamentoSelecionado"
                       [calculo]="calculoSelecionado"

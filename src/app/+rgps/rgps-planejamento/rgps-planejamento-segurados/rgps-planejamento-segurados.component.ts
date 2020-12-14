@@ -33,7 +33,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   public steps = [
     {
       key: 'step1',
-      title: ' Dados do Segurado',
+      title: 'Dados do Segurado',
       valid: false,
       checked: false,
       submitted: false,

@@ -25,6 +25,7 @@ export class DefinicoesPlanejamento {
     { value: 'Aposentadoria por Idade da PcD' },
     { value: 'Aposentadoria por Idade - Trabalhador Rural' },
     { value: 'Aposentadoria por Idade - Trabalhador Urbano' },
+    { value: 'Aposentadoria por Tempo de Contribuição' },
     { value: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)' },
     { value: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)' },
     { value: 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)' },

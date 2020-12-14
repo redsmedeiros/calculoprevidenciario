@@ -143,7 +143,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
     this.isUpdatingCalc = true;
     this.idSegurado = this.seguradoSelecionado.id
 
-    this.calculoRgps.getPlanejamentoBySeguradoId(this.idSegurado)
+    this.calculoRgps.getCalculoBySeguradoId(this.idSegurado)
       .then((calculosRst: CalculoRgps[]) => {
         this.calculosList = calculosRst;
         this.isUpdatingCalc = false;
