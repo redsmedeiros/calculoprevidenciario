@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit {
   }
 
   out(value) {
-   // this.textDescricao = '';
+   this.textDescricao = '';
   }
 
 }
