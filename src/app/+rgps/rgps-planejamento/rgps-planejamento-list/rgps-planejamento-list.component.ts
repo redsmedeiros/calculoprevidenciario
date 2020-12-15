@@ -483,7 +483,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       valid = false;
     } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
       && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
-      this.errors.add({ 'valor_beneficio': ['O valor não deve ser superior ao mínimo.'] });
+      this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo.'] });
       valid = false;
     }
 
@@ -516,7 +516,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       valid = false;
 
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
-      this.errors.add({ 'data_futura': ['A data deve ser superior a data atual.'] });
+      this.errors.add({ 'data_futura': ['A DIB futura deve ser superior a DIB atual.'] });
       valid = false;
     }else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do cálculo atual.'] });

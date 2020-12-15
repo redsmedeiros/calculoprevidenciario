@@ -231,19 +231,18 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private getAliquota(aliquotaP, contribuicao) {
 
-    switch (aliquotaP) {
+
+    switch (Number(aliquotaP)) {
 
       case 5:
-      case 52:
       case 51:
         return {
-          aliquota: aliquotaP,
+          aliquota: 5,
           valor: (contribuicao * (5 / 100))
         };
-
       case 8:
         return {
-          aliquota: aliquotaP,
+          aliquota: 8,
           valor: (contribuicao * (8 / 100))
         };
 
@@ -265,11 +264,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       case 99:
         return DefinicaoAliquotaEfetiva.calcular(contribuicao);
 
-      default:
-        return {
-          aliquota: aliquotaP,
-          valor: (contribuicao * (aliquotaP / 100))
-        };
+      // default:
+      //   return {
+      //     aliquota: aliquotaP,
+      //     valor: (contribuicao * (aliquotaP / 100))
+      //   };
     }
 
   }
