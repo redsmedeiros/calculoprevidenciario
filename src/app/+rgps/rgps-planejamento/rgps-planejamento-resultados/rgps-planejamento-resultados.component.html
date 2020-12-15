@@ -51,7 +51,7 @@
               <div class="tab-pane" [class.active]="true">
                 <div class="row mt-5">
                   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-top: 6rem;">
                       <ul class="bootstrapWizard form-wizard mt-3">
                         <li class="active" data-target="#step5">
                           <a data-toggle="tab"> <span class="step">5</span></a>
@@ -299,14 +299,25 @@
                   </tr>
                   <tr>
                     <td width="50%" style="text-align: left">
+                      <strong>Espécie de Segurado</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ getAliquotasLabel(planejamento.aliquota) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
                       <strong>Alíquota Contributiva Efetiva</strong>
                     </td>
-                    <td width="25%" style="text-align: center">
-                      <!-- {{ getAliquotasLabel(planejamento.aliquota) }} -->
+                    <td width="50%" style="text-align: center">
                       {{ aliquotaRst.aliquota }} % 
                     </td>
-                    <td width="25%" style="text-align: center">
-                      <!-- {{ getAliquotasLabel(planejamento.aliquota) }} -->
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Valor da Contribuição</strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
                       {{ definicaoMoeda.formatMoney(aliquotaRst.valor) }}
                     </td>
                   </tr>

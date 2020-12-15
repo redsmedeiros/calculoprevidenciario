@@ -489,6 +489,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     this.planejamento.novo_rmi = Math.round(this.melhorValorRMI * 100) / 100;
     this.planejamento.nova_soma_contribuicoes = Math.round(this.melhorSoma * 100) / 100;
+
+    this.planejamento.resultado_rmi_novo = JSON.stringify({
+      numero_contribuicoes_adicionais: this.planejamentoContribuicoesAdicionais.length,
+      numero_contribuicoes_total: this.listaValoresContribuidos.length
+    });
+
     const objExport = JSON.stringify(this.planejamento);
     sessionStorage.setItem('exportPlanejamentoRSTRMI', objExport);
 

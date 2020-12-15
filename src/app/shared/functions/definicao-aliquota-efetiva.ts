@@ -55,7 +55,7 @@ export class DefinicaoAliquotaEfetiva {
 
 
     static calcular(valor: number) {
-        console.log(valor);
+
         // Até faixa 1
         if (valor <= this.aliquotasParametros.faixa1.max) {
 

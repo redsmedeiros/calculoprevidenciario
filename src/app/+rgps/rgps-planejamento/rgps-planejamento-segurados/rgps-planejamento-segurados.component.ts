@@ -97,7 +97,8 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.stepUrlSegurado = this.route.snapshot.params['id_segurado'];
     this.stepUrlCalculo = this.route.snapshot.params['id_calculo'];
 
-    if (this.stepUrl !== undefined) {
+    if (this.stepUrl !== undefined 
+      && this.stepUrlSegurado !== undefined) {
       this.isPaginaInicial = false;
 
       const keyStepUrl = `step${this.stepUrl}`;
@@ -105,7 +106,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
       this.activeStep = step;
 
 
-      this.getSeguradoCalculoURL(); 
+      this.getSeguradoCalculoURL();
     }
 
   }
@@ -114,26 +115,24 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   getSeguradoCalculoURL() {
 
-    const seguradoP = this.seguradoService.find(this.stepUrlSegurado)
+    const seguradoP = this.seguradoService.getByIdSegurado(this.stepUrlSegurado)
       .then((segurado: SeguradoPlan) => {
 
-         this.seguradoSelecionado = segurado;
-         this.isSeguradoSelecionado = true;
-        console.log(segurado);
-        // console.log(this.segurado);
+        this.seguradoSelecionado = segurado;
+        this.isSeguradoSelecionado = true;
 
-        const calculoP = this.calculoRgpsService.find(this.stepUrlCalculo)
+        const calculoP = this.calculoRgpsService.getCalculoById(this.stepUrlCalculo)
           .then((calculo: CalculoRgps) => {
 
-             this.calculoSelecionado = calculo;
-             this.isCalculoSelecionado = true;
-             this.isUpdatingPlan = false;
-            console.log(calculo);
-            //console.log(this.calculo);
+            this.calculoSelecionado = calculo;
+            this.isCalculoSelecionado = true;
+            this.isUpdatingPlan = false;
+
 
           }).catch(errors => console.log(errors));
 
       }).catch(errors => console.log(errors));
+
 
   }
 
@@ -148,9 +147,9 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   setActiveStep(steo) {
 
     const step = this.steps.find((item) => steo.key === item.key);
-   // if (step.valid) {
-      this.activeStep = steo;
-   // }
+    // if (step.valid) {
+    this.activeStep = steo;
+    // }
 
   }
 

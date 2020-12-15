@@ -15,7 +15,7 @@ export class MoedaService extends ControllerService {
 
 			let fromDate = Date.parse(from);
 			let toDate = Date.parse(to);
-			console.log(this.list);
+			// console.log(this.list);
 			if (this.list.length <= 12) {
 				this.get().then(() => {
 					let list = this.list.filter((moeda) => {

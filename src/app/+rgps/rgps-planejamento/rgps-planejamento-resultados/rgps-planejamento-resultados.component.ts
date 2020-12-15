@@ -45,6 +45,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private moeda;
   private aliquotaRst;
   private isDiffAeBNegativa = false;
+  private numeroContribuicoesAdicionais = 0;
+  private numeroContribuicoesTotal = 0;
 
 
   private resultadosFacultativo = []
@@ -117,7 +119,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       protected planejamentoService: RgpsPlanejamentoService,
       private ExpectativaVidaService: ExpectativaVidaService,
       protected router: Router,
-      private Moeda: MoedaService,
+      protected Moeda: MoedaService,
       protected route: ActivatedRoute,
   ) { }
 
@@ -145,8 +147,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     this.SeguradoService.getByIdSegurado(this.idSegurado) //getByIdSegurado
       .then((segurado: SeguradoModel) => {
 
-        console.log(segurado)
-
         this.segurado = segurado;
         this.dataNascimentoSeguradoM = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
         this.sexoSegurado = this.segurado.sexo;
@@ -155,13 +155,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         this.CalculoRgps.getCalculoById(this.idCalculo)
           .then((calculo: CalculoModel) => {
 
-            console.log(calculo)
             this.calculo = calculo;
 
             this.planejamentoService.getPlanejamentoByPlanId(this.idPlanejamento)
               .then((planejamento: PlanejamentoRgps) => {
-
-                console.log(planejamento);
 
                 this.planejamento = planejamento;
                 this.idadeNaDiBPlanejamento = Math.abs(
@@ -202,15 +199,12 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                           this.moeda = moeda[0];
                         }
 
-
-
                         // console.log(moeda);
-
                         // this.calcularPlanejamento();
 
                         this.calcularPlanejamento().then(result => {
 
-                          console.log(result);
+                         // console.log(result);
 
                           setTimeout(() => {
                             this.isUpdatingRst = false;
@@ -235,7 +229,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   }
 
-  private getAliquota(aliquotaP, rmi) {
+  private getAliquota(aliquotaP, contribuicao) {
 
     switch (aliquotaP) {
 
@@ -244,34 +238,37 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       case 51:
         return {
           aliquota: aliquotaP,
-          valor: (rmi * Number(aliquotaP) / 100)
+          valor: (contribuicao * (5 / 100))
         };
 
-      case 113:
-      case 112:
-
+      case 8:
         return {
           aliquota: aliquotaP,
-          valor: (rmi * Number(aliquotaP) / 100)
+          valor: (contribuicao * (8 / 100))
+        };
+
+      case 11:
+      case 113:
+      case 112:
+        return {
+          aliquota: 11,
+          valor: (contribuicao * (11 / 100))
         };
 
       case 20:
       case 201:
-
         return {
-          aliquota: aliquotaP,
-          valor: (rmi * Number(aliquotaP) / 100)
+          aliquota: 20,
+          valor: (contribuicao * (20 / 100))
         };
 
       case 99:
-
-        return DefinicaoAliquotaEfetiva.calcular(rmi);
+        return DefinicaoAliquotaEfetiva.calcular(contribuicao);
 
       default:
-
         return {
           aliquota: aliquotaP,
-          valor: (rmi * Number(aliquotaP) / 100)
+          valor: (contribuicao * (aliquotaP / 100))
         };
     }
 
@@ -288,14 +285,23 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       const calculo1 = this.calculo;
       const calculo2 = this.planejamento;
+
+      console.log(calculo1);
+      console.log(calculo2);
+
       const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
       const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
       const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
       const valor = this.moeda;
       const salMinimo = valor.salario_minimo * 0.05;
-      this.aliquotaRst = this.getAliquota(Number(calculo2.aliquota), Number(calculo2.novo_rmi));
+      this.aliquotaRst = this.getAliquota(Number(calculo2.aliquota), Number(calculo2.valor_beneficio));
 
-      // console.log(this.aliquotaRst);
+      const resultadoRmiNovo = JSON.parse(calculo2.resultado_rmi_novo);
+      this.numeroContribuicoesAdicionais = resultadoRmiNovo.numero_contribuicoes_adicionais;
+      this.numeroContribuicoesTotal = resultadoRmiNovo.numero_contribuicoes_adicionais;
+
+      console.log(this.numeroContribuicoesAdicionais);
+      console.log(this.numeroContribuicoesTotal);
 
       let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
       let tempoMinimo1 = 0;
@@ -309,12 +315,33 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       const mesesEntreDatas2 = this.getDifferenceInMonths(dataInicioBeneficio1, dataInicioBeneficio2);
 
+      // const dataInicioBeneficio1Start = (dataInicioBeneficio1.clone()).startOf('month')
+      // const dataInicioBeneficio2Start = (dataInicioBeneficio2.clone()).startOf('month')
+     
+      // console.log(moment.duration(dataInicioBeneficio2Start.diff(dataInicioBeneficio1Start)));
+      // console.log(moment.duration(dataInicioBeneficio2Start.diff(dataInicioBeneficio1Start)).asMonths());
+      // console.log(mesesEntreDatas);
 
-      let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+     
 
-      let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
 
-      let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+      
+
+
+
+      // A) Valor Investido em Contribuições Futuras
+      // let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+      const investimentoContribuicaoINSS = (this.aliquotaRst.valor * this.numeroContribuicoesAdicionais);
+
+
+       // B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data
+      // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
+      const totalPerdidoEntreData =  this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
+
+      // Total Investido (A + B)
+     // let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
+      const diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
+
 
       if (diferencaRmi > 0) {
 

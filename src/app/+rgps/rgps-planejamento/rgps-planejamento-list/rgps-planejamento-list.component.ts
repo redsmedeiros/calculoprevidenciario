@@ -12,6 +12,8 @@ import { DOCUMENT } from '@angular/platform-browser';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
+import { MoedaService } from 'app/services/Moeda.service';
+import { Moeda } from 'app/services/Moeda.model';
 
 @Component({
   selector: 'app-rgps-planejamento-list',
@@ -71,6 +73,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private listEspecies = [];
 
   private lastModel;
+  private moeda;
 
 
   //public activeStep = this.steps[0];
@@ -120,6 +123,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     private errors: ErrorService,
     protected rgpsPlanejamentoService: RgpsPlanejamentoService,
     private route: ActivatedRoute,
+    protected Moeda: MoedaService,
     protected router: Router,
     private sanitizer: DomSanitizer,
     @Inject(DOCUMENT) private document: Document
@@ -149,7 +153,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
   private getAliquotasLabel(value) {
-    return DefinicoesPlanejamento.getAliquota(value).label;
+    return DefinicoesPlanejamento.getAliquota(Number(value)).label;
   }
 
   private getEspecies() {
@@ -195,8 +199,18 @@ export class RgpsPlanejamentoListComponent implements OnInit {
         this.isUpdatePlan = false;
       });
 
+
+    this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
+      .then((moeda: Moeda[]) => {
+
+        this.moeda = moeda[1];
+        if (moeda[1].salario_minimo == undefined) {
+          this.moeda = moeda[0];
+        }
+
+      });
+
   }
-  changeAliquota() { }
 
   verificaPlano() {
     const basico = window.localStorage.getItem('product');
@@ -298,17 +312,10 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
   public updatePlan(event) {
 
-    console.log('Atualizar');
-
     if (this.valid()) {
 
       this.isEdit = false;
       this.setPlan();
-
-      console.log(typeof this.plan.data_futura === 'string');
-      console.log(this.plan.data_futura);
-
-      console.log('Atualizar - f');
 
       this.rgpsPlanejamentoService
         .update(this.plan)
@@ -339,18 +346,9 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
   salvarPlanejamento(event) {
 
-    console.log('Novo');
-
     if (this.valid()) {
 
       this.setPlan();
-
-      console.log(typeof this.plan.data_futura);
-      console.log(this.plan.data_futura);
-
-      console.log(typeof this.plan.data_futura === 'string');
-
-      console.log('Novo-f');
 
       this.rgpsPlanejamentoService
         .save(this.plan)
@@ -483,8 +481,21 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
       this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
       valid = false;
+    } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
+      && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
+      this.errors.add({ 'valor_beneficio': ['O valor não deve ser superior ao mínimo.'] });
+      valid = false;
     }
 
+    // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))
+    // && (Number(this.valor_beneficio) >= Number(this.moeda.minimo))))
+
+    // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))))
+    // console.log((Number(this.valor_beneficio) >= Number(this.moeda.salario_minimo)))
+    // console.log(this.aliquota)
+    // console.log(this.valor_beneficio)
+    // console.log(this.moeda.salario_minimo)
+    // console.log(this.moeda)
 
     if (this.aliquota == undefined || this.aliquota == '') {
       this.errors.add({ 'aliquota': ['O campo é obrigatório.'] });
@@ -507,7 +518,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do dia.'] });
       valid = false;
-    }else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
+    } else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do cálculo atual.'] });
       valid = false;
     }

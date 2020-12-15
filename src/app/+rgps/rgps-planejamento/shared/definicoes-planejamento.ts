@@ -16,10 +16,6 @@ export class DefinicoesPlanejamento {
     { value: 99, label: 'Contribuinte Empregado, Avulso e Doméstico - Progressiva e Cumulativa - 7,5% a 14%' },
   ];
 
-//    { value: 5, label: 'Contribuinte Facultativo - 5%' },
-//    { value: 51, label: 'Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda' },
-
-
   static especiesPlanejamento = [
     { value: 'Aposentadoria Especial - 15 anos' },
     { value: 'Aposentadoria Especial - 20 anos' },

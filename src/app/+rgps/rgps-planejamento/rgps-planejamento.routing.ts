@@ -71,8 +71,8 @@ if (UserFunctions.userCheCkPremium()) {
 	];
 }
 
-console.log(UserFunctions.userCheCkPremium());
-console.log(RouteUser);
+// console.log(UserFunctions.userCheCkPremium());
+// console.log(RouteUser);
 
 
 export const rgpsPlanejamentoRoutes: Routes = RouteUser;
