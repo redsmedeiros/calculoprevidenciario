@@ -259,7 +259,8 @@
               <i class="fa fa-table"></i>
             </span>
             <!-- <h2>Grupo de Cálculos para os valores de contribuição</h2> -->
-            <h2>Informações do Cálculo</h2>
+            <h2 *ngIf="!isPlanejamento" >Informações do Cálculo</h2>
+            <h2 *ngIf="isPlanejamento">Informações do Benefício Futuro</h2>
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom hidden-dt">

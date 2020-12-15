@@ -516,9 +516,9 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       valid = false;
 
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
-      this.errors.add({ 'data_futura': ['A data deve ser superior a data do dia.'] });
+      this.errors.add({ 'data_futura': ['A data deve ser superior a data atual.'] });
       valid = false;
-    } else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
+    }else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do cálculo atual.'] });
       valid = false;
     }

@@ -4,9 +4,8 @@ import * as moment from 'moment';
 export class DefinicoesPlanejamento {
 
   static aliquotasList = [
-    { value: 5, label: 'Contribuinte Individual - 5%' },
+    { value: 5, label: 'Contribuinte Individual - 5% - MEI' },
     { value: 51, label: 'Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda' },
-    { value: 52, label: 'Contribuinte Individual - 5% - MEI' },
     { value: 8, label: 'Trabalhador Rural a Serviço de Produtor Rural PF - 8%' },
     { value: 11, label: 'Contribuinte Individual - Prestador de Serviço para PJ - 11% ' },
     { value: 112, label: 'Contribuinte Individual - Autônomo - 11% - Regime Simplicado' },

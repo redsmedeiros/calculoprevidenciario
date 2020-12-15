@@ -79,8 +79,8 @@ export class RgpsPlanejamentoCalculoFuturoComponent implements OnInit {
     const planejamentoP = this.planejamentoService.find(this.planejamento.id)
       .then((planejamentoRMIRST: PlanejamentoRgps) => {
 
-        console.log('fim')
-        console.log(planejamentoRMIRST);
+        // console.log('fim')
+        // console.log(planejamentoRMIRST);
 
       }).catch(errors => console.log(errors));
 
