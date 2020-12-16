@@ -687,7 +687,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         tipo: 'M'
       };
 
-      somaContribuicoes += valor;
+      somaContribuicoes += valorContribM;
       planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
 
       if (auxiliarDate.month() === 11 || fimContador.isSame(auxiliarDate, 'month')) {
@@ -735,7 +735,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   verificaProporcional(data, valorContrib, type) {
 
-    const diffdays = (type === 'Fim' ) ? (data.date()) : 31 - (data.date());
+    const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
     // console.log('-----______________________-')
     // console.log(data)
     // console.log(valorContrib)
