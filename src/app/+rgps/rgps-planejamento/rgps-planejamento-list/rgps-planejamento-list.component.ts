@@ -483,7 +483,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       valid = false;
     } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
       && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
-      this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo.'] });
+      this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.'] });
       valid = false;
     }
 
@@ -508,7 +508,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
       valid = false;
     }
 
-    const dataHoje = moment();
+    const dataHoje = moment().add(-1, 'day');
     const datadibAtual = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     const dataFutura = this.data_futura;
     if (!this.isExits(this.data_futura)) {

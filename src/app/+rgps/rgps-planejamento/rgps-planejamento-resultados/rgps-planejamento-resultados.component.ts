@@ -370,7 +370,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
 
       let totalPerdidoEntreData = 0;
-      if (Number(calculo2.aliquota) === 99) {
+    //  if (Number(calculo2.aliquota) === 99) {
 
         //totalPerdidoEntreData = this.createListPlanContribuicoesEntreDibs(calculo1.valor_beneficio);
         const totalPerdidoEntreDataRST = this.createListPlanContribuicoesEntreDibs(
@@ -379,11 +379,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           calculo1.valor_beneficio);
 
         totalPerdidoEntreData = totalPerdidoEntreDataRST.value
-      } else {
+      // } else {
 
-        totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
+      //   totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
 
-      }
+      // }
 
 
       const diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
@@ -711,9 +711,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   verificaProporcional(data, valorContrib, type) {
-    const diffdays = (type === 'I') ? 30 - (data.day() + 1) : (data.day() + 1);
+    const diffdays = (type === 'F') ? 30 - (data.day() + 1) : (data.day() + 1);
     const valorProp = (valorContrib / 30) * diffdays
-    return ((Math.round(valorProp) * 100) / 100);
+    // return ((Math.round(valorProp) * 100) / 100);
+    return Math.round(valorProp * 100) / 100;
   }
 
   /**
@@ -726,7 +727,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     const diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
     const valorProp = (valorContrib / 12) * diffMes
-    return (Math.round((valorProp) * 100) / 100);
+   // return (Math.round((valorProp) * 100) / 100);
+    return  Math.round(valorProp * 100) / 100;
   }
 
 
