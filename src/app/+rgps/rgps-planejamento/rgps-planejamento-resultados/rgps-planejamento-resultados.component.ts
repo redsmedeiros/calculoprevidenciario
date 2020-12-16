@@ -62,6 +62,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private idadeNaDiBPlanejamento;
   private idadeNaDiBRmi;
 
+
+  private idadeAtual;
+  private idadeDibAtual;
+  private idadeDibFutura;
+  private idadeDibFuturaExpectativaIBGE;
+  private idadeDibFuturaExpectativaIBGEDiffDibFutura;
+
+
   public steps = [
     {
       key: 'step1',
@@ -291,6 +299,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       console.log(calculo1);
       console.log(calculo2);
 
+      this.calcularIdades();
+
       const inicial = moment((moment().year() - 1) + '-12-01').format('YYYY-MM-DD');
       const dataInicioBeneficio1 = moment(calculo1.data_pedido_beneficio, 'DD/MM/YYYY');
       const dataInicioBeneficio2 = moment(calculo2.dataDibFutura, 'DD/MM/YYYY');
@@ -333,8 +343,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       let investimentoContribuicaoINSS = 0;
       if (Number(calculo2.aliquota) === 99) {
 
-        investimentoContribuicaoINSS = this.aliquotaRst.valor * mesesEntreDatas2;
-        mesesEntreDib = mesesEntreDatas2;
+        //  investimentoContribuicaoINSS = this.createListPlanContribuicoesEntreDibs(this.aliquotaRst.valor);
+        const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
+          this.calculo.data_pedido_beneficio,
+          this.planejamento.dataDibFutura,
+          this.aliquotaRst.valor);
+
+          investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
 
       } else {
 
@@ -343,8 +358,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       }
 
-
-      this.calcularSomaEntreContribuicoes();
 
       console.log(mesesEntreDatas)
       console.log(mesesEntreDatas2)
@@ -355,12 +368,25 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       // B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data
       // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
-      const totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
 
-      // 
-      // let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
+      let totalPerdidoEntreData = 0;
+      if (Number(calculo2.aliquota) === 99) {
+
+        //totalPerdidoEntreData = this.createListPlanContribuicoesEntreDibs(calculo1.valor_beneficio);
+        const totalPerdidoEntreDataRST = this.createListPlanContribuicoesEntreDibs(
+          this.calculo.data_pedido_beneficio,
+          this.planejamento.dataDibFutura,
+          calculo1.valor_beneficio);
+
+        totalPerdidoEntreData = totalPerdidoEntreDataRST.value
+      } else {
+
+        totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
+
+      }
+
+
       const diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
-
 
       if (diferencaRmi > 0) {
 
@@ -409,22 +435,24 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
       // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
 
+      this.calcularValorAcumulado();
+
 
       const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
         moment(this.planejamento.data_futura));
       this.resultadosGeral.push({
         label: 'A) Valor Investido em Contribuições Futuras',
-        value2: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
+        value: this.definicaoMoeda.formatMoney(investimentoContribuicaoINSS),
       });
 
       this.resultadosGeral.push({
         label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
-        value2: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
+        value: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
       });
 
       this.resultadosGeral.push({
         label: 'Total Investido (A + B) ',
-        value2: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
+        value: this.definicaoMoeda.formatMoney((investimentoContribuicaoINSS + totalPerdidoEntreData)),
       });
 
 
@@ -432,30 +460,32 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         this.resultadosGeral.push({
           label: 'Valor da Diferença Entre os Benefícios ',
-          value2: this.definicaoMoeda.formatMoney(diferencaRmi),
+          value: this.definicaoMoeda.formatMoney(diferencaRmi),
         });
 
         this.resultadosGeral.push({
           label: 'Tempo Mínimo para Recuperar os Valores Investidos',
-          // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
-          value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
+          // value: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
+          value: Math.floor(tempoMinimo2Mes) + ' mês(es)',
         });
 
         this.resultadosGeral.push({
           label: 'Idade do Segurado na DIB Futura',
-          value2: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+          // value: idadeDibFutura.years() + ' ano(s) ' + idadeDibFutura.months() + ' mês(es)'
+          value: this.formateObjToStringAnosMesesDias(this.idadeDibFutura)
         });
 
         this.resultadosGeral.push({
           label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
-          // value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-          value2: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+          // value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+          value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
         });
 
         this.resultadosGeral.push({
           label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
-          value2: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
-            + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
+          // value: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
+          //   + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
+          value: this.formateObjToStringAnosMesesDias(this.idadeDibFuturaExpectativaIBGE)
         });
 
         // se a aliquota é de empregado cumulativa tem abono, 13º
@@ -463,14 +493,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
           this.resultadosGeral.push({
             label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
-            value2: this.definicaoMoeda.formatMoney(totalEsperado),
+            value: this.definicaoMoeda.formatMoney(totalEsperado),
           });
 
         } else {
 
           this.resultadosGeral.push({
             label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
-            value2: this.definicaoMoeda.formatMoney(totalEsperado),
+            value: this.definicaoMoeda.formatMoney(totalEsperado),
           });
 
         }
@@ -492,49 +522,166 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
-  private calcularSomaEntreContribuicoes() {
 
 
-    this.createListPlanContribuicoesEntreDibs();
+  public formateObjToStringAnosMesesDias(tempoObj, notDays = true) {
+
+    if (notDays) {
+      return ` ${tempoObj.years()} ano(s), ${Math.floor(tempoObj.months())} mes(es)`;
+    }
+
+    // if (tempoObj.anos < 0) {
+    //   return ` ${tempoObj.months()} mes(es) e ${Math.floor(tempoObj.days)} dia(s)`;
+    // }
+
+    return `${tempoObj.years()} ano(s), ${tempoObj.months()} mes(es) e ${Math.floor(tempoObj.days())} dia(s)`;
 
   }
 
 
-  private createListPlanContribuicoesEntreDibs() {
 
+  private getDiffDate(dataI, dataF) {
+    return moment.duration(dataF.diff(moment(dataI)));
+  }
+
+
+  private calcularIdades() {
+
+    this.idadeAtual = this.getDiffDate(
+      moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment()
+    );
+
+    this.idadeDibAtual = this.getDiffDate(
+      moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY')
+    );
+
+    this.idadeDibFutura = this.getDiffDate(
+      moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment(this.planejamento.data_futura)
+    );
+
+    console.log(this.expectativaVidaR);
+
+    this.idadeDibFuturaExpectativaIBGE = this.getDiffDate(
+      moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment()
+    ).add(this.expectativaVidaR, 'years');
+
+    this.idadeDibFuturaExpectativaIBGEDiffDibFutura = this.getDiffDate(
+      moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      moment()
+    ).add(this.expectativaVidaR, 'years')
+      .subtract(this.idadeDibFutura);
+  }
+
+
+  private calcularValorAcumulado() {
+
+    console.log('valor esperado')
+    console.log('idade atual')
+    console.log(this.idadeAtual)
+    console.log('idade dib atual')
+    console.log(this.idadeDibAtual)
+    console.log('idade futura atual')
+    console.log(this.idadeDibFutura)
+    console.log('idade idade atual + IBGE atual')
+    console.log(this.idadeDibFuturaExpectativaIBGE)
+    console.log('idade idade futura atual - IBGE atual')
+    console.log(this.idadeDibFuturaExpectativaIBGEDiffDibFutura);
+
+    const diffTempoIBGESubIDFutura = this.idadeDibFuturaExpectativaIBGEDiffDibFutura.asYears();
+
+    if (this.planejamento.aliquota === 99) {
+
+      const valueDataAtual = moment();
+      const valueDataExpectativaFutura = moment().add(diffTempoIBGESubIDFutura, 'years');
+
+      const valorComAbono = this.createListPlanContribuicoesEntreDibs(
+          valueDataAtual.format('DD/MM/YYYY'),
+          valueDataExpectativaFutura.format('DD/MM/YYYY')
+          , this.planejamento.novo_rmi)
+
+    } else {
+
+      console.log(Number(this.planejamento.novo_rmi) * diffTempoIBGESubIDFutura)
+      //return 
+
+    }
+
+  }
+
+
+  private calcularSomaEntreContribuicoes() {
+
+
+    // this.createListPlanContribuicoesEntreDibs(this.calculo.data_pedido_beneficio,
+    //   this.planejamento.dataDibFutura,
+    //   this.aliquotaRst.valor);
+    // this.createListPlanContribuicoesEntreDibs(this.calculo.data_pedido_beneficio,
+    //   this.planejamento.dataDibFutura,
+    //   this.planejamento.valor_beneficio);
+
+  }
+
+
+  private createListPlanContribuicoesEntreDibs(inicioPeriodo, fimPeriodo, valor) {
+
+    valor = Number(valor);
     const planejamentoContribuicoesEntreDibs = []
-    let somaContrinuicoes = 0;
-    let auxiliarDate = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').clone();
-    const fimContador = moment(this.planejamento.dataDibFutura, 'DD/MM/YYYY').clone();
+    let somaContribuicoes = 0;
+    const inicio = moment(inicioPeriodo, 'DD/MM/YYYY').clone();
+    let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'month');
+    const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone();
+
+    
+
     let count = 0;
     let ObjValContribuicao;
-
-    console.log(fimContador.isBefore(auxiliarDate, 'month'));
 
     while (fimContador.isAfter(auxiliarDate, 'month')) {
       count++;
       auxiliarDate = (auxiliarDate.clone()).add(1, 'month');
 
+      let valorContribM = valor;
+
+      if (inicio.isSame(auxiliarDate, 'month')) {
+
+        valorContribM = this.verificaProporcional(inicio, valorContribM, 'I');
+
+      }
+
+      if (fimContador.isSame(auxiliarDate, 'month')) {
+
+        valorContribM = this.verificaProporcional(fimContador, valorContribM, 'F');
+
+      }
+
       ObjValContribuicao = {
         data: auxiliarDate.format('YYYY-MM-DD'),
-        valor_contribuicao: this.aliquotaRst.valor,
+        valor_contribuicao: valorContribM,
         tipo: 'M'
       };
 
-      somaContrinuicoes += this.aliquotaRst.valor;
+      somaContribuicoes += valor;
       planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
 
-      console.log(auxiliarDate.month());
       if (auxiliarDate.month() === 11 || fimContador.isSame(auxiliarDate, 'month')) {
-        count++;
 
-        let valorContrib = this.aliquotaRst.valor;
+        count++;
+        let valorContrib = valor;
+
+        if (inicio.isSame(auxiliarDate, 'year')) {
+
+          valorContrib = this.verificaAbonoProporcional(inicio, valorContrib, 'I');
+
+        }
 
         if (fimContador.isSame(auxiliarDate, 'month')) {
-          //valorContrib = this.verificaAbonoProporcional(fimContador)
-          console.log();
 
-          valorContrib *= this.verificaAbonoProporcional(fimContador);
+          valorContrib = this.verificaAbonoProporcional(fimContador, valorContrib, 'F');
+
         }
 
         ObjValContribuicao = {
@@ -543,24 +690,170 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           tipo: 'A'
         };
 
-        somaContrinuicoes += valorContrib;
+        somaContribuicoes += valorContrib;
         planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
       }
 
     };
 
-    console.log(count)
-    console.log(somaContrinuicoes)
+
+    console.log('-- inicio -- contador com abono')
+    console.log('inicio = ' + inicioPeriodo)
+    console.log('fim = '+ fimPeriodo)
+    console.log('num-contrib = ' + count)
+    console.log('soma-contrib = ' + somaContribuicoes)
     console.log(planejamentoContribuicoesEntreDibs)
+    console.log('-- fim -- contador com abono')
+
+    return { value: somaContribuicoes, count: count };
 
   }
 
-  verificaAbonoProporcional(dib) {
-    let dibMonth = dib.month() + 1;
 
-
-    return  (1 - dibMonth / 12);
+  verificaProporcional(data, valorContrib, type) {
+    const diffdays = (type === 'I') ? 30 - (data.day() + 1) : (data.day() + 1);
+    const valorProp = (valorContrib / 30) * diffdays
+    return ((Math.round(valorProp) * 100) / 100);
   }
+
+  /**
+   * 
+   * @param data data
+   * @param valorContrib valor
+   * @param type inicio / final do periodo
+   */
+  verificaAbonoProporcional(data, valorContrib, type) {
+
+    const diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
+    const valorProp = (valorContrib / 12) * diffMes
+    return (Math.round((valorProp) * 100) / 100);
+  }
+
+
+
+  private diferencaDatas(inicio, fim) {
+
+    return moment.duration(fim.diff(inicio));
+
+  }
+
+  private getDifferenceInMonths(date1, date2 = moment()) {
+    let difference = date1.diff(date2, 'months', true);
+    difference = Math.abs(difference);
+    return Math.floor(difference);
+  }
+
+
+  private isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
+  }
+
+
+  retornarParaplanejamento() {
+    this.router.navigate(['/rgps/rgps-planejamento']);
+  }
+
+
+  private navegarPlanejamento(type) {
+    let urlpbcNew = '';
+
+    switch (type) {
+      case 'inicio':
+        urlpbcNew = '/rgps/rgps-planejamento/1';
+        break;
+      case 'selectSegurado':
+        urlpbcNew = '/rgps/rgps-planejamento/2/' + this.segurado.id;
+        break;
+      case 'selectCalc':
+        urlpbcNew = '/rgps/rgps-planejamento/3/' + this.segurado.id + '/' + this.calculo.id;
+        break;
+      case 'selectCalcResult':
+        urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + this.planejamento.id;
+        break;
+    }
+
+    this.router.navigate([urlpbcNew]);
+
+  }
+
+
+  private setActiveStep(pane) {
+
+    switch (pane.key) {
+      case 'step1':
+        this.navegarPlanejamento('inicio');
+        break;
+      case 'step2':
+        this.navegarPlanejamento('selectSegurado');
+        break;
+      case 'step3':
+        this.navegarPlanejamento('selectCalc');
+        break;
+      case 'step4':
+        this.navegarPlanejamento('selectCalcResult');
+        break;
+    }
+
+  }
+
+  imprimirPagina() {
+
+    let printContents = document.getElementById('box-dados-title').innerHTML;
+    printContents += document.getElementById('box-dados-segurado').innerHTML;
+    printContents += document.getElementById('box-dados-calculo').innerHTML;
+    printContents += document.getElementById('box-dados-planejamento').innerHTML;
+    printContents += document.getElementById('box-dados-resultados').innerHTML;
+    printContents += document.getElementById('texto-inicial').innerHTML;
+
+    const css = `
+    <style>
+          body{-webkit-print-color-adjust: exact;
+            font-family: Arial, Helvetica, sans-serif;}
+          h1, h2{font-size:0.8rem; margin: 6px !important;}
+          h3{margin: 5px !important;}
+          i.fa, .not-print{ display: none; }
+          table{margin-top: 25px; !important}
+          thead{background-color: #f1f1f1;}
+          footer,div,p,td,th{font-size:10px !important;}
+          .list-inline{ display:inline; }
+          .table>tbody>tr>td, .table>tbody>tr>th,
+           .table>tfoot>tr>td, .table>tfoot>tr>th,
+           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+           footer{text-align: center; margin-top: 50px;}
+           .list-inline-print{ display:inline !important;}
+           #texto-inicial-text{
+            font-size: 12px !important;
+            margin: 25px;
+            line-height: 1.5;}
+    </style>`;
+
+
+    const popupWin = window.open('', '_blank', 'width=640,height=480');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+
+    printContents = printContents.replace(/<table/g,
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+
+    popupWin.document.open();
+    popupWin.document.write(`<!doctype html>
+                                <html>
+                                  <head>${css}</head>
+                                  <title>Planejamento futuro - ${this.segurado.nome}</title>
+                                  <body onload="window.print()">
+                                   <article>${printContents}</article>
+                                   <footer class="mt-5">${rodape}</footer>
+                                  </body>
+                                </html>`);
+    popupWin.document.close();
+  }
+
+
+
+}
+
 
 
   // private calcularPlanejamento2() {
@@ -699,127 +992,3 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   //     }
   //   }, 5000);
   // }
-
-
-  private diferencaDatas(inicio, fim) {
-
-    return moment.duration(fim.diff(inicio));
-
-  }
-
-  private getDifferenceInMonths(date1, date2 = moment()) {
-    let difference = date1.diff(date2, 'months', true);
-    difference = Math.abs(difference);
-    return Math.floor(difference);
-  }
-
-
-  private isExits(value) {
-    return (typeof value !== 'undefined' &&
-      value != null && value !== 'null' &&
-      value !== undefined && value !== '')
-      ? true : false;
-  }
-
-
-  retornarParaplanejamento() {
-    this.router.navigate(['/rgps/rgps-planejamento']);
-  }
-
-
-  private navegarPlanejamento(type) {
-    let urlpbcNew = '';
-
-    switch (type) {
-      case 'inicio':
-        urlpbcNew = '/rgps/rgps-planejamento/1';
-        break;
-      case 'selectSegurado':
-        urlpbcNew = '/rgps/rgps-planejamento/2/' + this.segurado.id;
-        break;
-      case 'selectCalc':
-        urlpbcNew = '/rgps/rgps-planejamento/3/' + this.segurado.id + '/' + this.calculo.id;
-        break;
-      case 'selectCalcResult':
-        urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + this.planejamento.id;
-        break;
-    }
-
-    this.router.navigate([urlpbcNew]);
-
-  }
-
-
-  private setActiveStep(pane) {
-
-    switch (pane.key) {
-      case 'step1':
-        this.navegarPlanejamento('inicio');
-        break;
-      case 'step2':
-        this.navegarPlanejamento('selectSegurado');
-        break;
-      case 'step3':
-        this.navegarPlanejamento('selectCalc');
-        break;
-      case 'step4':
-        this.navegarPlanejamento('selectCalcResult');
-        break;
-    }
-
-  }
-
-  imprimirPagina() {
-
-    let printContents = document.getElementById('box-dados-title').innerHTML;
-    printContents += document.getElementById('box-dados-segurado').innerHTML;
-    printContents += document.getElementById('box-dados-calculo').innerHTML;
-    printContents += document.getElementById('box-dados-planejamento').innerHTML;
-    printContents += document.getElementById('box-dados-resultados').innerHTML;
-    printContents += document.getElementById('texto-inicial').innerHTML;
-
-    const css = `
-    <style>
-          body{-webkit-print-color-adjust: exact;
-            font-family: Arial, Helvetica, sans-serif;}
-          h1, h2{font-size:0.8rem; margin: 6px !important;}
-          h3{margin: 5px !important;}
-          i.fa, .not-print{ display: none; }
-          table{margin-top: 25px; !important}
-          thead{background-color: #f1f1f1;}
-          footer,div,p,td,th{font-size:10px !important;}
-          .list-inline{ display:inline; }
-          .table>tbody>tr>td, .table>tbody>tr>th,
-           .table>tfoot>tr>td, .table>tfoot>tr>th,
-           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-           footer{text-align: center; margin-top: 50px;}
-           .list-inline-print{ display:inline !important;}
-           #texto-inicial-text{
-            font-size: 12px !important;
-            margin: 25px;
-            line-height: 1.5;}
-    </style>`;
-
-
-    const popupWin = window.open('', '_blank', 'width=640,height=480');
-    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-
-    printContents = printContents.replace(/<table/g,
-      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-
-    popupWin.document.open();
-    popupWin.document.write(`<!doctype html>
-                                <html>
-                                  <head>${css}</head>
-                                  <title>Planejamento futuro - ${this.segurado.nome}</title>
-                                  <body onload="window.print()">
-                                   <article>${printContents}</article>
-                                   <footer class="mt-5">${rodape}</footer>
-                                  </body>
-                                </html>`);
-    popupWin.document.close();
-  }
-
-
-
-}
