@@ -204,7 +204,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
                         this.calcularPlanejamento().then(result => {
 
-                         // console.log(result);
+                          // console.log(result);
 
                           setTimeout(() => {
                             this.isUpdatingRst = false;
@@ -274,6 +274,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
+
+
+
   public calcularPlanejamento() {
 
 
@@ -316,29 +319,46 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       // const dataInicioBeneficio1Start = (dataInicioBeneficio1.clone()).startOf('month')
       // const dataInicioBeneficio2Start = (dataInicioBeneficio2.clone()).startOf('month')
-     
+
       // console.log(moment.duration(dataInicioBeneficio2Start.diff(dataInicioBeneficio1Start)));
       // console.log(moment.duration(dataInicioBeneficio2Start.diff(dataInicioBeneficio1Start)).asMonths());
       // console.log(mesesEntreDatas);
 
-     
-
-
-      
 
 
 
       // A) Valor Investido em Contribuições Futuras
-      // let investimentoContribuicaoINSS = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
-      const investimentoContribuicaoINSS = (this.aliquotaRst.valor * this.numeroContribuicoesAdicionais);
+      //const investimentoContribuicaoINSS2 = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
+      let mesesEntreDib = 0;
+      let investimentoContribuicaoINSS = 0;
+      if (Number(calculo2.aliquota) === 99) {
+
+        investimentoContribuicaoINSS = this.aliquotaRst.valor * mesesEntreDatas2;
+        mesesEntreDib = mesesEntreDatas2;
+
+      } else {
+
+        investimentoContribuicaoINSS = (this.aliquotaRst.valor * this.numeroContribuicoesAdicionais);
+        mesesEntreDib = this.numeroContribuicoesAdicionais;
+
+      }
 
 
-       // B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data
+      this.calcularSomaEntreContribuicoes();
+
+      console.log(mesesEntreDatas)
+      console.log(mesesEntreDatas2)
+      console.log(investimentoContribuicaoINSS)
+      console.log(mesesEntreDatas2)
+
+
+
+      // B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data
       // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
-      const totalPerdidoEntreData =  this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
+      const totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
 
-      // Total Investido (A + B)
-     // let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
+      // 
+      // let diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
       const diferencaRmi = calculo2.novo_rmi - calculo1.valor_beneficio;
 
 
@@ -374,6 +394,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let tempoMinimo2Meses2 = Math.floor((tempoMinimo2Mes - Math.floor(tempoMinimo2Mes)) * 12);
 
+
+      // const TempoMinimoRecuperarValoresInvestidos = (investimentoContribuicaoINSS + totalPerdidoEntreData) / diferencaRmi;
+
+      // console.log((investimentoContribuicaoINSS + totalPerdidoEntreData));
+      // console.log(TempoMinimoRecuperarValoresInvestidos);
 
       let totalEsperado = 0;
       // se a aliquota é de empregado cumulativa tem abono, 13º
@@ -411,7 +436,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         });
 
         this.resultadosGeral.push({
-          label: 'Tempo Mínimo para Recuperar os Valores Investidos ',
+          label: 'Tempo Mínimo para Recuperar os Valores Investidos',
           // value2: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
           value2: Math.floor(tempoMinimo2Mes) + ' mês(es)',
         });
@@ -444,7 +469,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         } else {
 
           this.resultadosGeral.push({
-            label: 'Valor Acumulado ao Atingir a Idade',
+            label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
             value2: this.definicaoMoeda.formatMoney(totalEsperado),
           });
 
@@ -466,6 +491,76 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   }
 
+
+  private calcularSomaEntreContribuicoes() {
+
+
+    this.createListPlanContribuicoesEntreDibs();
+
+  }
+
+
+  private createListPlanContribuicoesEntreDibs() {
+
+    const planejamentoContribuicoesEntreDibs = []
+    let somaContrinuicoes = 0;
+    let auxiliarDate = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').clone();
+    const fimContador = moment(this.planejamento.dataDibFutura, 'DD/MM/YYYY').clone();
+    let count = 0;
+    let ObjValContribuicao;
+
+    console.log(fimContador.isBefore(auxiliarDate, 'month'));
+
+    while (fimContador.isAfter(auxiliarDate, 'month')) {
+      count++;
+      auxiliarDate = (auxiliarDate.clone()).add(1, 'month');
+
+      ObjValContribuicao = {
+        data: auxiliarDate.format('YYYY-MM-DD'),
+        valor_contribuicao: this.aliquotaRst.valor,
+        tipo: 'M'
+      };
+
+      somaContrinuicoes += this.aliquotaRst.valor;
+      planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
+
+      console.log(auxiliarDate.month());
+      if (auxiliarDate.month() === 11 || fimContador.isSame(auxiliarDate, 'month')) {
+        count++;
+
+        let valorContrib = this.aliquotaRst.valor;
+
+        if (fimContador.isSame(auxiliarDate, 'month')) {
+          //valorContrib = this.verificaAbonoProporcional(fimContador)
+          console.log();
+
+          valorContrib *= this.verificaAbonoProporcional(fimContador);
+        }
+
+        ObjValContribuicao = {
+          data: auxiliarDate.format('YYYY-MM-DD'),
+          valor_contribuicao: valorContrib,
+          tipo: 'A'
+        };
+
+        somaContrinuicoes += valorContrib;
+        planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
+      }
+
+    };
+
+    console.log(count)
+    console.log(somaContrinuicoes)
+    console.log(planejamentoContribuicoesEntreDibs)
+
+  }
+
+  verificaAbonoProporcional(dib) {
+    let dibMonth = dib.month() + 1;
+
+
+    return  (1 - dibMonth / 12);
+  }
 
 
   // private calcularPlanejamento2() {
@@ -677,17 +772,21 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   imprimirPagina() {
 
     let printContents = document.getElementById('box-dados-title').innerHTML;
-    printContents = document.getElementById('box-dados-segurado').innerHTML;
+    printContents += document.getElementById('box-dados-segurado').innerHTML;
     printContents += document.getElementById('box-dados-calculo').innerHTML;
     printContents += document.getElementById('box-dados-planejamento').innerHTML;
     printContents += document.getElementById('box-dados-resultados').innerHTML;
+    printContents += document.getElementById('texto-inicial').innerHTML;
 
     const css = `
     <style>
-          body{font-family: Arial, Helvetica, sans-serif;}
-          h1, h2{font-size:0.9rem;}
+          body{-webkit-print-color-adjust: exact;
+            font-family: Arial, Helvetica, sans-serif;}
+          h1, h2{font-size:0.8rem; margin: 6px !important;}
+          h3{margin: 5px !important;}
           i.fa, .not-print{ display: none; }
-          table{margin-top: 10px;}
+          table{margin-top: 25px; !important}
+          thead{background-color: #f1f1f1;}
           footer,div,p,td,th{font-size:10px !important;}
           .list-inline{ display:inline; }
           .table>tbody>tr>td, .table>tbody>tr>th,
@@ -695,12 +794,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
            .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
            footer{text-align: center; margin-top: 50px;}
            .list-inline-print{ display:inline !important;}
+           #texto-inicial-text{
+            font-size: 12px !important;
+            margin: 25px;
+            line-height: 1.5;}
     </style>`;
 
 
     const popupWin = window.open('', '_blank', 'width=640,height=480');
     const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-
 
     printContents = printContents.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');

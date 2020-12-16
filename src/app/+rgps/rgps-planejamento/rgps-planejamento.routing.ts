@@ -38,36 +38,30 @@ if (UserFunctions.userCheCkPremium()) {
 	];
 } else {
 	RouteUser = [
-		// {
-		// 	path: ':step/:id_segurado/:id_calculo',
-		// 	loadChildren: '/app/seja-premium/seja-premium.module#SejaPremiumIndexComponent',
-		// 	//component: RgpsPlanejamentoSeguradosComponent,
-		// },
-		// {
-		// 	path: ':step/:id_segurado',
-		// 	loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumIndexComponent',
-		// 	///component: RgpsPlanejamentoSeguradosComponent,
-		// },
-		// {
-		// 	path: ':step',
-		// 	loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumIndexComponent',
-		// 	///component: RgpsPlanejamentoSeguradosComponent,
-		// },
+		{
+			path: ':step/:id_segurado/:id_calculo',
+			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
+		},
+		{
+			path: ':step/:id_segurado',
+			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
+		},
+		{
+			path: ':step',
+			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
+		},
 		{
 			path: '',
 			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
-			//component: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
 		},
-		// {
-		// 	path: 'planejados/:id_segurado/:id',
-		// 	loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumIndexComponent',
-		// 	///component: RgpsPlanejamentoCalculosPlanejadosComponent
-		// },
-		// {
-		// 	path: 'resultados/:id_segurado/:id_calculo/:id_planejamento',
-		// 	loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumIndexComponent',
-		// 	///component: RgpsPlanejamentoResultadosComponent
-		// },
+		{
+			path: 'planejados/:id_segurado/:id',
+			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
+		},
+		{
+			path: 'resultados/:id_segurado/:id_calculo/:id_planejamento',
+			loadChildren: 'app/seja-premium/seja-premium.module#SejaPremiumModule',
+		},
 	];
 }
 

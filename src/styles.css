@@ -148,6 +148,12 @@ a[class*="action-"]:hover {
   }
 }
 
+@media screen {
+  .not-screen {
+    display: none !important;
+  }
+}
+
 .smart-style-7 #left-panel {
   padding-right: 5px !important;
   padding-left: 5px !important;

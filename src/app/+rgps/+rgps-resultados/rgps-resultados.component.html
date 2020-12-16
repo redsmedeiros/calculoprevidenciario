@@ -6,9 +6,9 @@
         <h3 class="p-1 m-1 no-print" *ngIf="!isPlanejamento">
           Cálculo dos Benefícios do Regime Geral de Previdência Social
         </h3>
-        <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
+        <!-- <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
           RMI do Benefício Futuro
-        </h3>
+        </h3> -->
       </div>
     </div>
     <div class="row mb-3">
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div id="passoPlanejamentoRGPS" class="well my-5" *ngIf="isPlanejamento">
+    <div id="passoPlanejamentoRGPS" class="well mb-5" *ngIf="isPlanejamento">
       <div class="row mt-5">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <form novalidate="novalidate">
@@ -437,7 +437,7 @@
       ></app-rgps-planejamento-index> -->
 
       <!-- Planejamento  -->
-      <article class="col-sm-12 col-md-12 col-lg-12 mt-1">
+      <article class="col-sm-12 col-md-12 col-lg-12 mt-3">
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"
