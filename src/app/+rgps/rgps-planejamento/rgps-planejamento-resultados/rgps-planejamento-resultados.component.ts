@@ -514,7 +514,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         this.resultadosGeral.push({
           // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
-          label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
+          label: 'Valor (≈) Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
           value: this.definicaoMoeda.formatMoney(totalEsperado),
         });
 
