@@ -312,6 +312,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       this.numeroContribuicoesAdicionais = resultadoRmiNovo.numero_contribuicoes_adicionais;
       this.numeroContribuicoesTotal = resultadoRmiNovo.numero_contribuicoes_adicionais;
 
+     
+      const dataContribuicoesAdicionaisInicial  = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisInicio);
+      const planejamentoContribuicoesAdicionaisFim  = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisFim);
+
+      console.log(resultadoRmiNovo);
       console.log(this.numeroContribuicoesAdicionais);
       console.log(this.numeroContribuicoesTotal);
 
@@ -344,10 +349,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       if (Number(calculo2.aliquota) === 99) {
 
         //  investimentoContribuicaoINSS = this.createListPlanContribuicoesEntreDibs(this.aliquotaRst.valor);
-        const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
-          this.calculo.data_pedido_beneficio,
-          this.planejamento.dataDibFutura,
-          this.aliquotaRst.valor);
+        // const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
+        //   this.calculo.data_pedido_beneficio,
+        //   this.planejamento.dataDibFutura,
+        //   this.aliquotaRst.valor);
+
+          const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
+            dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
+            planejamentoContribuicoesAdicionaisFim.format('DD/MM/YYYY'),
+            this.aliquotaRst.valor);
 
         investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
 
@@ -514,7 +524,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         this.resultadosGeral.push({
           // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
-          label: 'Valor (≈) Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
+          label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
           value: this.definicaoMoeda.formatMoney(totalEsperado),
         });
 
