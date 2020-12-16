@@ -349,7 +349,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           this.planejamento.dataDibFutura,
           this.aliquotaRst.valor);
 
-          investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
+        investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
 
       } else {
 
@@ -370,15 +370,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
 
       let totalPerdidoEntreData = 0;
-    //  if (Number(calculo2.aliquota) === 99) {
+      //  if (Number(calculo2.aliquota) === 99) {
 
-        //totalPerdidoEntreData = this.createListPlanContribuicoesEntreDibs(calculo1.valor_beneficio);
-        const totalPerdidoEntreDataRST = this.createListPlanContribuicoesEntreDibs(
-          this.calculo.data_pedido_beneficio,
-          this.planejamento.dataDibFutura,
-          calculo1.valor_beneficio);
+      //totalPerdidoEntreData = this.createListPlanContribuicoesEntreDibs(calculo1.valor_beneficio);
+      const totalPerdidoEntreDataRST = this.createListPlanContribuicoesEntreDibs(
+        this.calculo.data_pedido_beneficio,
+        this.planejamento.dataDibFutura,
+        calculo1.valor_beneficio);
 
-        totalPerdidoEntreData = totalPerdidoEntreDataRST.value
+      totalPerdidoEntreData = totalPerdidoEntreDataRST.value
       // } else {
 
       //   totalPerdidoEntreData = this.numeroContribuicoesAdicionais * calculo1.valor_beneficio;
@@ -426,16 +426,21 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       // console.log((investimentoContribuicaoINSS + totalPerdidoEntreData));
       // console.log(TempoMinimoRecuperarValoresInvestidos);
 
-      let totalEsperado = 0;
+      // let totalEsperado = 0;
       // se a aliquota é de empregado cumulativa tem abono, 13º
-      if (this.planejamento.aliquota === 99) {
-        totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
-      } else {
-        totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
-      }
+      // if (this.planejamento.aliquota === 99) {
+      //   totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
+      // } else {
+      //   totalEsperado = (resultConversao * 12) * this.planejamento.novo_rmi;
+      // }
       // let totalEsperado = (resultConversao * 13) * this.planejamento.novo_rmi;
 
-      this.calcularValorAcumulado();
+      const totalEsperado = this.calcularValorAcumulado();
+
+      const tempoMínimoRecuperarValoresInvestidosRST = this.tempoMínimoRecuperarValoresInvestidos(
+        (investimentoContribuicaoINSS + totalPerdidoEntreData),
+        diferencaRmi
+      );
 
 
       const idadeDibFutura = this.diferencaDatas(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
@@ -466,7 +471,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         this.resultadosGeral.push({
           label: 'Tempo Mínimo para Recuperar os Valores Investidos',
           // value: Math.floor(tempoMinimo2) + ' ano(s) ' + tempoMinimo2Meses + ' mes(es)',
-          value: Math.floor(tempoMinimo2Mes) + ' mês(es)',
+          // value: Math.floor(tempoMinimo2Mes) + ' mês(es)' ,
+          value: tempoMínimoRecuperarValoresInvestidosRST + ' mês(es)',
         });
 
         this.resultadosGeral.push({
@@ -489,21 +495,28 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         });
 
         // se a aliquota é de empregado cumulativa tem abono, 13º
-        if (this.planejamento.aliquota === 99) {
+        // if (this.planejamento.aliquota === 99) {
 
-          this.resultadosGeral.push({
-            label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
-            value: this.definicaoMoeda.formatMoney(totalEsperado),
-          });
+        //   this.resultadosGeral.push({
+        //     label: 'Valor Acumulado ao Atingir a Idade (incluindo 13º salário) ',
+        //     value: this.definicaoMoeda.formatMoney(totalEsperado),
+        //   });
 
-        } else {
+        // } else {
 
-          this.resultadosGeral.push({
-            label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
-            value: this.definicaoMoeda.formatMoney(totalEsperado),
-          });
+        //   this.resultadosGeral.push({
+        //     // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
+        //     label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida (IBGE) (incluindo 13º salário)',
+        //     value: this.definicaoMoeda.formatMoney(totalEsperado),
+        //   });
 
-        }
+        // }
+
+        this.resultadosGeral.push({
+          // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
+          label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida (IBGE) (incluindo 13º salário)',
+          value: this.definicaoMoeda.formatMoney(totalEsperado),
+        });
 
 
       }
@@ -593,23 +606,33 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     const diffTempoIBGESubIDFutura = this.idadeDibFuturaExpectativaIBGEDiffDibFutura.asYears();
 
-    if (this.planejamento.aliquota === 99) {
+    let finalvalorComAbono = 0;
+    // if (this.planejamento.aliquota === 99) {
 
-      const valueDataAtual = moment();
-      const valueDataExpectativaFutura = moment().add(diffTempoIBGESubIDFutura, 'years');
+    const valueDataAtual = moment();
+    const valueDataExpectativaFutura = moment().add(diffTempoIBGESubIDFutura, 'years');
 
-      const valorComAbono = this.createListPlanContribuicoesEntreDibs(
-          valueDataAtual.format('DD/MM/YYYY'),
-          valueDataExpectativaFutura.format('DD/MM/YYYY')
-          , this.planejamento.novo_rmi)
+    const valorComAbono = this.createListPlanContribuicoesEntreDibs(
+      valueDataAtual.format('DD/MM/YYYY'),
+      valueDataExpectativaFutura.format('DD/MM/YYYY')
+      , this.planejamento.novo_rmi)
 
-    } else {
+    finalvalorComAbono = valorComAbono.value;
 
-      console.log(Number(this.planejamento.novo_rmi) * diffTempoIBGESubIDFutura)
-      //return 
+    // } else {
 
-    }
+    //   console.log(Number(this.planejamento.novo_rmi) * diffTempoIBGESubIDFutura)
+    //   //return 
 
+    // }
+
+    return valorComAbono.value;
+  }
+
+
+  private tempoMínimoRecuperarValoresInvestidos(totaAB, Diferenca) {
+    const rst = totaAB / Diferenca;
+    return Math.round(rst * 100) / 100;
   }
 
 
@@ -635,7 +658,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'month');
     const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone();
 
-    
+
 
     let count = 0;
     let ObjValContribuicao;
@@ -699,7 +722,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     console.log('-- inicio -- contador com abono')
     console.log('inicio = ' + inicioPeriodo)
-    console.log('fim = '+ fimPeriodo)
+    console.log('fim = ' + fimPeriodo)
     console.log('num-contrib = ' + count)
     console.log('soma-contrib = ' + somaContribuicoes)
     console.log(planejamentoContribuicoesEntreDibs)
@@ -727,8 +750,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     const diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
     const valorProp = (valorContrib / 12) * diffMes
-   // return (Math.round((valorProp) * 100) / 100);
-    return  Math.round(valorProp * 100) / 100;
+    // return (Math.round((valorProp) * 100) / 100);
+    return Math.round(valorProp * 100) / 100;
   }
 
 
