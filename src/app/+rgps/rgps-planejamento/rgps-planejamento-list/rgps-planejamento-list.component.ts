@@ -481,10 +481,23 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
       this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
       valid = false;
+
+    } else if ((Number(this.valor_beneficio) < Number(this.moeda.salario_minimo))) {
+
+      this.errors.add({ 'valor_beneficio': ['SC inferior ao limite mínimo'] });
+      valid = false;
+
+    } else if ((Number(this.valor_beneficio) > Number(this.moeda.teto))) {
+
+      this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
+      valid = false;
+
     } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
       && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
+
       this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.'] });
       valid = false;
+
     }
 
     // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))
@@ -518,7 +531,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
       this.errors.add({ 'data_futura': ['A DIB futura deve ser superior a DIB atual.'] });
       valid = false;
-    }else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
+    } else if (moment(dataFutura, 'DD/MM/YYYY').isSameOrBefore(datadibAtual)) {
       this.errors.add({ 'data_futura': ['A data deve ser superior a data do cálculo atual.'] });
       valid = false;
     }

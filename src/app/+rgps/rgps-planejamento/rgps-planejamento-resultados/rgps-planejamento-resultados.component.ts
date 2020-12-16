@@ -359,7 +359,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
           const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
             dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
-            dataContribuicoesAdicionaisfim.format('DD/MM/YYYY'),
+            dataContribuicoesAdicionaisfim.add(1, 'month').format('DD/MM/YYYY'),
             this.aliquotaRst.valor);
 
         investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
@@ -779,9 +779,16 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     let diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
 
-    if (data.day() > 15) {
+    if (data.day() > 15 || ((data.month() + 1) === 12 && data.date() === 1)) {
       diffMes += 1;
     }
+
+
+    // console.log('_______________________Abono_____________________')
+    // console.log(data.month())
+    // console.log(data.day())
+    // console.log(data.date())
+    // console.log('_______________________Abono_____________________')
 
     const valorProp = (valorContrib / 12) * diffMes
     return Math.round(valorProp * 100) / 100;
