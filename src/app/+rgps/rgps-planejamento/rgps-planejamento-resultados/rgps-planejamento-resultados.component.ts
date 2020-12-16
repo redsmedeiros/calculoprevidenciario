@@ -661,7 +661,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
     let count = 0;
-    let ObjValContribuicao;
+    let ObjValContribuicao = {};
 
     while (fimContador.isAfter(auxiliarDate, 'month')) {
       count++;
@@ -671,13 +671,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       if (inicio.isSame(auxiliarDate, 'month')) {
 
-        valorContribM = this.verificaProporcional(inicio, valorContribM, 'I');
+        valorContribM = this.verificaProporcional(inicio.clone(), valorContribM, 'Inicio');
 
       }
 
       if (fimContador.isSame(auxiliarDate, 'month')) {
 
-        valorContribM = this.verificaProporcional(fimContador, valorContribM, 'F');
+        valorContribM = this.verificaProporcional(fimContador.clone(), valorContribM, 'Fim');
 
       }
 
@@ -734,11 +734,19 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   verificaProporcional(data, valorContrib, type) {
-    const diffdays = (type === 'F') ? 30 - (data.date()) : (data.date());
-
-    const valorProp = (valorContrib / 30) * (diffdays - 1 )
-    // return ((Math.round(valorProp) * 100) / 100);
+    const diffdays = (type === 'Fim') ? 30 - (data.date()) : (data.date());
+    const valorProp = (valorContrib / 30)* diffdays
     return Math.round(valorProp * 100) / 100;
+
+    // if (type === 'fim') {
+    //   return valorContrib * (30 - data.date()) / 30;
+    // }
+
+
+    // if (type === 'fim') {
+    //   return valorContrib * (30 - data.date()) / 30;
+    // }
+
   }
 
   /**
