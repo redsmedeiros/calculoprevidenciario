@@ -451,7 +451,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       });
 
       this.resultadosGeral.push({
-        label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data ',
+        label: 'B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data (incluindo 13º salário)',
         value: this.definicaoMoeda.formatMoney(totalPerdidoEntreData),
       });
 
@@ -488,7 +488,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         });
 
         this.resultadosGeral.push({
-          label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida (IBGE) ',
+          label: 'Idade Máxima do Segurado de Acordo com a Expectativa de Sobrevida - IBGE',
           // value: Math.floor(expectativaIbgeSegurado) + ' ano(s) '
           //   + Math.floor((expectativaIbgeSegurado - Math.floor(expectativaIbgeSegurado)) * 12) + ' mês(es)',
           value: this.formateObjToStringAnosMesesDias(this.idadeDibFuturaExpectativaIBGE)
@@ -514,7 +514,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         this.resultadosGeral.push({
           // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
-          label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida (IBGE) (incluindo 13º salário)',
+          label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
           value: this.definicaoMoeda.formatMoney(totalEsperado),
         });
 
@@ -632,7 +632,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private tempoMínimoRecuperarValoresInvestidos(totaAB, Diferenca) {
     const rst = totaAB / Diferenca;
-    return Math.round(rst * 100) / 100;
+    return Math.round(rst);
   }
 
 
@@ -655,7 +655,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     const planejamentoContribuicoesEntreDibs = []
     let somaContribuicoes = 0;
     const inicio = moment(inicioPeriodo, 'DD/MM/YYYY').clone();
-    let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'month');
+    let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().startOf('month').subtract(1, 'month');
     const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone();
 
 
@@ -734,7 +734,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   verificaProporcional(data, valorContrib, type) {
-    const diffdays = (type === 'F') ? 30 - (data.day() + 1) : (data.day() + 1);
+    const diffdays = (type === 'F') ? 30 - (data.date()) : (data.date());
+
     const valorProp = (valorContrib / 30) * diffdays
     // return ((Math.round(valorProp) * 100) / 100);
     return Math.round(valorProp * 100) / 100;
@@ -748,9 +749,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
    */
   verificaAbonoProporcional(data, valorContrib, type) {
 
-    const diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
+    let diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
+
+    if(data.day() > 15){
+      diffMes += 1;
+    }
+
     const valorProp = (valorContrib / 12) * diffMes
-    // return (Math.round((valorProp) * 100) / 100);
     return Math.round(valorProp * 100) / 100;
   }
 
@@ -851,8 +856,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
            .list-inline-print{ display:inline !important;}
            #texto-inicial-text{
             font-size: 12px !important;
-            margin: 25px;
-            line-height: 1.5;}
+            line-height: 1.2 !important;}
     </style>`;
 
 

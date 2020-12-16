@@ -17,9 +17,18 @@
 <div id="content">
   <div id="box-dados-title" class="row mb-2 mt-4 not-screen">
     <div class="col-sm-12 col-md-12 col-lg-12">
-      <h2 class="p-1 m-1 ">
-        Planejamento Previdenciário
-      </h2>
+      <!-- <h2 class="p-1 m-1">Planejamento Previdenciário</h2> -->
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <h2 class="p-1 m-1">Planejamento Previdenciário</h2>
+            </th>
+          </tr>
+        </thead>
+      </table>
+      
     </div>
   </div>
 
@@ -60,11 +69,11 @@
                         </li>
                       </ul>
                     </div>
-                    <div
-                      id="texto-inicial"
-                      class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
-                    >
-                      <ul  id="texto-inicial-text" style="font-size: 14px; text-align: justify">
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul
+                        id="texto-inicial-text"
+                        style="font-size: 14px; text-align: justify"
+                      >
                         <li>
                           Planejamento Previdenciário realizado com a indicação
                           do valor investido em contribuições, entre as datas de
@@ -122,7 +131,7 @@
         <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
-              <i class="fa fa-edit"></i>
+              <i class="fa fa-user"></i>
             </span>
             <h2>Segurado</h2>
           </header>
@@ -427,7 +436,7 @@
       >
         <header>
           <span class="widget-icon">
-            <i class="fa fa-copy"></i>
+            <i class="fa fa-history fa-flip-horizontal"></i>
           </span>
           <h2>Planejamento Previdenciário</h2>
         </header>
@@ -479,4 +488,42 @@
       </sa-widget>
     </article>
   </div>
+<div class="not-screen">
+  <div
+  id="texto-inicial"
+  class=" row "
+  class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
+>
+  <table id="texto-inicial-text" class="table table-hover">
+    <tbody>
+      <tr>
+        <td>
+          Planejamento Previdenciário realizado com a indicação do valor
+          investido em contribuições, entre as datas de início do benefício
+          atual (caso haja direito adquirido) e benefício futuro, além de
+          identificar o valor que o segurado deixará de receber, caso opte
+          pelo direito ao benefício em data futura;
+          <br />
+          <br />
+          Apura ainda, a diferença entre os dois benefícios (atual - caso haja
+          direito adquirido - e futuro), apontando o tempo mínimo necessário
+          que o segurado levará para recuperar os valores investidos para
+          obtenção do direito ao melhor benefício, bem como o valor total que
+          conseguirá acumular até a idade limite indicada na Tabela de
+          Expectativa de Sobrevida construída pelo IBGE;
+          <br />
+          <br />
+          O resultado do Planejamento Previdenciário é obtido a partir das
+          informações indicadas pelo usuário nos passos anteriores e a renda
+          mensal inicial do benefício futuro consiste em valor estimado,
+          apurado com base em valores atuais (limites mínimo e máximo), pois o
+          valor dos salários de contribuição futuros é fixo, sem incidência de
+          correção monetária entres as datas atual e futura, pois ausente a
+          publicação dos índices oficiais.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
 </div>
