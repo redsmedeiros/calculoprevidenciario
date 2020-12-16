@@ -314,7 +314,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
      
       const dataContribuicoesAdicionaisInicial  = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisInicio);
-      const planejamentoContribuicoesAdicionaisFim  = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisFim);
+      const dataContribuicoesAdicionaisfim = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisFim);
 
       console.log(resultadoRmiNovo);
       console.log(this.numeroContribuicoesAdicionais);
@@ -354,9 +354,12 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         //   this.planejamento.dataDibFutura,
         //   this.aliquotaRst.valor);
 
+        console.log(dataContribuicoesAdicionaisInicial)
+        console.log(dataContribuicoesAdicionaisfim)
+
           const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
             dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
-            planejamentoContribuicoesAdicionaisFim.format('DD/MM/YYYY'),
+            dataContribuicoesAdicionaisfim.format('DD/MM/YYYY'),
             this.aliquotaRst.valor);
 
         investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
