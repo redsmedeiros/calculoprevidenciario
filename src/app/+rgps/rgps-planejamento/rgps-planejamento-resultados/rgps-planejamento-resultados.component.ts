@@ -607,10 +607,12 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     const diffTempoIBGESubIDFutura = this.idadeDibFuturaExpectativaIBGEDiffDibFutura.asYears();
 
     let finalvalorComAbono = 0;
-    // if (this.planejamento.aliquota === 99) {
 
-    const valueDataAtual = moment();
-    const valueDataExpectativaFutura = moment().add(diffTempoIBGESubIDFutura, 'years');
+    // const valueDataAtual = moment();
+    // const valueDataExpectativaFutura = moment().add(diffTempoIBGESubIDFutura, 'years');
+
+    const valueDataAtual = moment(this.planejamento.data_futura);
+    const valueDataExpectativaFutura = moment(this.planejamento.data_futura).add(diffTempoIBGESubIDFutura, 'years');
 
     const valorComAbono = this.createListPlanContribuicoesEntreDibs(
       valueDataAtual.format('DD/MM/YYYY'),
@@ -618,13 +620,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       , this.planejamento.novo_rmi)
 
     finalvalorComAbono = valorComAbono.value;
-
-    // } else {
-
-    //   console.log(Number(this.planejamento.novo_rmi) * diffTempoIBGESubIDFutura)
-    //   //return 
-
-    // }
 
     return valorComAbono.value;
   }
