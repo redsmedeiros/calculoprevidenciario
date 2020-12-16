@@ -736,7 +736,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   verificaProporcional(data, valorContrib, type) {
     const diffdays = (type === 'F') ? 30 - (data.date()) : (data.date());
 
-    const valorProp = (valorContrib / 30) * diffdays
+    const valorProp = (valorContrib / 30) * (diffdays - 1 )
     // return ((Math.round(valorProp) * 100) / 100);
     return Math.round(valorProp * 100) / 100;
   }
