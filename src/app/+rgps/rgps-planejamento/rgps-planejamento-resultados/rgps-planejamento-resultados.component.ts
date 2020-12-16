@@ -359,10 +359,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
 
 
-      console.log(mesesEntreDatas)
-      console.log(mesesEntreDatas2)
-      console.log(investimentoContribuicaoINSS)
-      console.log(mesesEntreDatas2)
+      // console.log(mesesEntreDatas)
+      // console.log(mesesEntreDatas2)
+      // console.log(investimentoContribuicaoINSS)
+      // console.log(mesesEntreDatas2)
 
 
 
@@ -651,7 +651,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     let somaContribuicoes = 0;
     const inicio = moment(inicioPeriodo, 'DD/MM/YYYY').clone();
     let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().startOf('month').subtract(1, 'month');
-    const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone();
+    const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'day');
 
 
 
@@ -730,14 +730,20 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   verificaProporcional(data, valorContrib, type) {
 
-    const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
-    // console.log('-----______________________-')
-    // console.log(data)
-    // console.log(valorContrib)
-    // console.log(diffdays)
-    // console.log('------_______________________')
-    const valorProp = (valorContrib / 30) * diffdays
-    return Math.round(valorProp * 100) / 100;
+
+    if (data.date() < 30) {
+      const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
+      // console.log('-----______________________-')
+      // console.log(data)
+      // console.log(valorContrib)
+      // console.log(diffdays)
+      // console.log('------_______________________')
+      const valorProp = (valorContrib / 30) * diffdays
+      return Math.round(valorProp * 100) / 100;
+    } else {
+      return valorContrib;
+    }
+
 
     // if (type === 'fim') {
     //   return valorContrib * (30 - data.date()) / 30;
@@ -760,7 +766,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     let diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
 
-    if(data.day() > 15){
+    if (data.day() > 15) {
       diffMes += 1;
     }
 
