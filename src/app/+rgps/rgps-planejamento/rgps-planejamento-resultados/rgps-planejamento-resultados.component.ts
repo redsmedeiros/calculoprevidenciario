@@ -461,7 +461,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       const tempoMínimoRecuperarValoresInvestidosRST = this.tempoMínimoRecuperarValoresInvestidos(
         (investimentoContribuicaoINSS + totalPerdidoEntreData),
-        diferencaRmi
+        Number(this.planejamento.novo_rmi)
       );
 
 
@@ -685,9 +685,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let valorContribM = valor;
 
-      if (UltimoValorReajustado > 0) {
-        valorContribM = UltimoValorReajustado;
-      }
+      // if (UltimoValorReajustado > 0) {
+      //   valorContribM = UltimoValorReajustado;
+      // }
 
 
       if (inicio.isSame(auxiliarDate, 'month')) {
@@ -702,10 +702,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       }
 
-      if (aplicarReajuste) {
-        valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
-        UltimoValorReajustado = valorContribM;
-      }
+      // if (aplicarReajuste) {
+      //   valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
+      //   UltimoValorReajustado = valorContribM;
+      // }
 
       ObjValContribuicao = {
         data: auxiliarDate.format('YYYY-MM-DD'),
@@ -721,9 +721,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         count++;
         let valorContrib = valor;
 
-        if (UltimoValorReajustado > 0) {
-          valorContribM = UltimoValorReajustado;
-        }
+        // if (UltimoValorReajustado > 0) {
+        //   valorContrib = UltimoValorReajustado;
+        // }
 
         if (inicio.isSame(auxiliarDate, 'year') && inicio.month() !== 0) {
 
@@ -746,6 +746,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         somaContribuicoes += valorContrib;
         planejamentoContribuicoesEntreDibs.push(ObjValContribuicao);
       }
+
 
     };
 
@@ -781,11 +782,19 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   verificaProporcional(data, valorContrib, type) {
 
+    console.log('----dias1----')
+    console.log(data)
+    console.log(data.date())
+    console.log(data.date() < 30)
+    console.log('----dias2----')
 
     if (data.date() < 30) {
 
       const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
       const valorProp = (valorContrib / 30) * diffdays
+
+      console.log(valorContrib);
+      console.log(valorProp);
       return Math.round(valorProp * 100) / 100;
 
     } else {
@@ -814,10 +823,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
    */
   verificaAbonoProporcional(dataProp, valorContrib, valorFull, type) {
 
-    // console.log('-------asasasasasasa------')
+    // console.log('---------inicio--------')
     // console.log((dataProp));
     // console.log((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31));
-    // console.log('-------asasasasasasa------')
+    // console.log('-----------fim----------')
 
     if (((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31))) {
       return Math.round(valorFull * 100) / 100;
@@ -825,7 +834,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     let diffMes = (type === 'I') ? 12 - (dataProp.month() + 1) : (dataProp.month() + 1);
 
-    if (dataProp.day() > 15 || ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
+    if ((dataProp.day() > 15 && type === 'F') || (dataProp.day() <= 15 && type === 'I') ||
+    ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
       diffMes += 1;
     }
 
