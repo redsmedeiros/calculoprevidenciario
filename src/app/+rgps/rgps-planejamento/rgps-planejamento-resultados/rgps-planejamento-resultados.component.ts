@@ -823,18 +823,24 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
    */
   verificaAbonoProporcional(dataProp, valorContrib, valorFull, type) {
 
-    // console.log('---------inicio--------')
-    // console.log((dataProp));
-    // console.log((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31));
-    // console.log('-----------fim----------')
+    console.log('---------inicio MMMMMM--------')
+
+    console.log((dataProp.date()));
+    console.log((dataProp.day()));
+    console.log((dataProp.date() + 1 ));
+    console.log(type === 'F');
+    console.log(type);
+
+    console.log('-----------fim MMMMM----------')
 
     if (((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31))) {
       return Math.round(valorFull * 100) / 100;
     }
 
-    let diffMes = (type === 'I') ? 12 - (dataProp.month() + 1) : (dataProp.month() + 1);
+    let diffMes = (type === 'I') ? 12 - (dataProp.month() ) : (dataProp.month() );
+    
 
-    if ((dataProp.date() > 15 && type === 'F') || (dataProp.date() <= 15 && type === 'I') ||
+    if (((dataProp.date() + 1) >= 15 && type === 'F') || ((dataProp.date() + 1) <= 15 && type === 'I') ||
     ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
       diffMes += 1;
     }
