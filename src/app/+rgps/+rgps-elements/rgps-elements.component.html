@@ -1,189 +1,245 @@
-<div id="content">
+<div id="content" style="min-width: 895px">
+  <div class="row mb-2">
+    <div class=" col-sm-12 col-md-12 col-lg-12">
+      <h3 class="p-1 m-1 no-print">Planejamento do Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class=" col-sm-12 col-md-12 col-lg-12">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a></li>
+        <li class="breadcrumb-item"><a href="#/rgps/rgps-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
+      </ol>
+    </div>
+  </div>
 
   <!-- informações do segurado -->
-  <article class="col-sm-12 col-md-12 col-lg-12">
-    <sa-widget [colorbutton]="false" [editbutton]="false">
-      <header>
-        <span class="widget-icon">
-          <i class="fa fa-edit"></i>
-        </span>
-        <h2>Dados do Segurado</h2>
-      </header>
-      <!-- widget div-->
-      <div>
-        <!-- widget content -->
-        <div class="widget-body">
-          <ul class="list-unstyled">
-            <li><b>Nome:</b>  {{segurado.nome}} </li>
-            <li><b>PIS:</b>   {{segurado.numero_documento}}</li>
-            <li><b>Data de Nascimento:</b>  {{segurado.data_nascimento}}</li>
-            <li *ngIf="segurado.sexo=='m'"><b>Sexo:</b>  Masculino</li>
-            <li *ngIf="segurado.sexo=='f'"><b>Sexo:</b>  Feminino</li>           
-          </ul>
-          <div class="form-actions">
-            <div class="row">
-              <div class="col-md-12">
-                <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-left">
-                  <span class="btn-label">
-                    <i class="fa fa-pencil"></i>
-                  </span> Editar
-                </button>
+
+  <div id="box-dados-segurado"  class="row">
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Dados do Segurado</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget content -->
+          <div class="widget-body widget-body-custom m-0 p-0 ">
+            <ul class="list-inline m-0">
+              <li class="px-5"><strong>Nome:</strong> {{segurado.nome}} </li>
+              <li class="px-5" *ngIf="segurado.numero_documento">
+                <strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong> {{segurado.numero_documento}}</li>
+              <li class="px-5"><strong>Data de Nascimento:</strong> {{segurado.data_nascimento}}</li>
+              <li class="px-5"><strong>Sexo:</strong> {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+              <li class="px-5"><strong>Idade atual:</strong> {{idadeUltimaDib}} anos</li>
+            </ul>
+            <div id="printableSegurado" hidden>
+              <table class="table table-bordered table-hover">
+                <!-- <caption><h2>Dados do Segurado</h2></caption> -->
+                <tr>
+                  <td width="50%" style="text-align: right;">
+                    <b>Nome:</b>
+                  </td>
+                  <td width="50%">
+                    {{segurado.nome}}
+                  </td>
+                </tr>
+                <tr *ngIf="segurado.numero_documento">
+                  <td width="50%" style="text-align: right;">
+                    <b>{{segurado.getDocumentType(segurado.id_documento)}}</b>
+                  </td>
+                  <td width="50%">
+                    {{segurado.numero_documento}}
+                  </td>
+                </tr>
+                <tr>
+                  <td width="50%" style="text-align: right;">
+                    <b>Data de nascimento:</b>
+                  </td>
+                  <td width="50%">
+                    {{segurado.data_nascimento}}
+                  </td>
+                </tr>
+                <tr>
+                  <td width="50%" style="text-align: right;">
+                    <b>Sexo:</b>
+                  </td>
+                  <td width="50%">
+                    <span *ngIf="segurado.sexo=='m'">Masculino</span><span *ngIf="segurado.sexo=='f'">Feminino</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="form-actions no-padding mt-3">
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="submit" (click)="editSegurado()" class="btn btn-labeled btn-info pull-right"
+                    title="Editar o segurado.">
+                    <span class="btn-label">
+                      <i class="fa fa-pencil"></i>
+                    </span> Editar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </sa-widget>
-  </article>
+      </sa-widget>
+    </article>
 
-
-  <!-- widget grid -->
-  <sa-widgets-grid>
-
-    <!-- row -->
-    <div class="row">
-
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
+ 
+      
+    <article  class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
             <i class="fa fa-calculator"></i>
-            </span>
-            <h2>Informações para comparação</h2>
-          </header>
-          <div>
-            <div class="widget-body">
-              <form class="form-horizontal">
-                <fieldset>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-2">Alíquota:</label>
-                    <div class="col-md-8">
-                      <select [(ngModel)]="aliquota" (change)="changeAliquota()" [ngModelOptions]="{standalone: true}" class="form-control" id="select-1">
-                        <option value="11">11% (Simples/Nacional)</option>
-                        <option value="20">20%</option>
-                        <option value="31">31% (20% da Empresa e 11% do Segurado)</option>
-                      </select>
-                    </div>
+          </span>
+          <h2>Informações para comparação</h2>
+        </header>
+        <div>
+          <div class="widget-body">
+            <form class="form-horizontal">
+              <fieldset>
+                <div class="form-group">
+                  <label class="col-md-2 control-label" for="select-2">Alíquota:</label>
+                  <div class="col-md-2">
+                    <select [(ngModel)]="aliquota" (change)="changeAliquota()" [ngModelOptions]="{standalone: true}"
+                      class="form-control" id="select-1">
+                      <option value="5"> 5% (do Salário Mínimo)</option>
+                      <option value="11">11% (Simples/Nacional)</option>
+                      <option value="20">20%</option>
+                      <option value="31">31% (20% da Empresa e 11% do Segurado)</option>
+                    </select>
                   </div>
-                  <div class="form-group">
-                    <label class="col-md-2 control-label" for="select-1">Valor da contribuição em atraso:</label>
-                    <div class="col-md-8">
-                      <input [(ngModel)]="contribEmAtraso" currencyMask maxlength="20" [ngModelOptions]="{standalone: true}" class="form-control" type="text">
-                    </div>
-                  </div>
-                </fieldset>
-                <div class="form-actions">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <button (click)="recalcular()" type="submit" class="btn btn-labeled btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-calculator"></i>
-                        </span> Recalcular
-                      </button>
-                    </div>
+                  <label class="col-md-2 control-label" for="select-1">Valor da contribuição em atraso:</label>
+                  <div class="col-md-2">
+                    <input [(ngModel)]="contribEmAtraso" currencyMask maxlength="20"
+                      [ngModelOptions]="{standalone: true}" class="form-control" type="text">
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
+              </fieldset>
+              <div class="form-actions">
+                <div class="row">
+                  <div class="col-md-12">
 
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Cálculos a serem comparados</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding" *ngIf="!isUpdating">
-              <sa-datatable [options]="tableOptions" 
-                paginationLength="true" tableClass="table table-striped table-bordered table-hover" width="100%">
-                <thead>
-                  <tr>
-                    <th>Nº do Cálculo</th>
-                    <th>Espécie</th>
-                    <th>DIB</th>
-                    <th>Benefício</th>
-                  </tr>
-                </thead>
-              </sa-datatable>
-              <table class="table table-bordered table-hover">
+                    <button (click)="imprimirBox($event, boxId)" type="submit" class="btn btn-labeled btn-primary">
+                      <span  class="btn-label">
+                        <i  class=" fa fa-print"></i>
+                      </span> Imprimir
+                    </button>
+
+                    <button (click)="recalcular()" type="submit" class="btn btn-labeled btn-primary">
+                      <span class="btn-label">
+                        <i class="fa fa-calculator"></i>
+                      </span> Recalcular
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </sa-widget>
+    </article>
+
+    <div id="{{boxId}}">
+
+    <article  class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span>
+          <h2>Cálculos a serem comparados</h2>
+        </header>
+        <div>
+          <div class="widget-body no-padding" *ngIf="!isUpdating">
+            <sa-datatable [options]="tableOptions" paginationLength="true"
+              tableClass="table table-striped table-bordered table-hover" width="100%">
+              <thead>
                 <tr>
-                  <td width="50%">
-                    <span class="pull-right font-bold">Idade na última DIB:</span>
-                  </td>
-                  <td>
-                    {{idadeUltimaDib}} anos
-                  </td>
+                  <th>Data de Criação</th>
+                  <th>Espécie</th>
+                  <th>DIB</th>
+                  <th>Benefício</th>
                 </tr>
-              </table>
-            </div>
+              </thead>
+            </sa-datatable>
+            <table class="table table-bordered table-hover">
+              <tr>
+                <td width="50%">
+                  <span class="pull-right font-bold">Idade na última DIB:</span>
+                </td>
+                <td>
+                  {{idadeUltimaDib}} anos
+                </td>
+              </tr>
+            </table>
           </div>
-        </sa-widget>
-      </article>
+        </div>
+      </sa-widget>
+    </article>
 
-      <!-- Resultados hipotese seguro facultativa -->
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-edit"></i>
-            </span>
-            <h2>Hipótese em que o segurado contribuía como segurado facultativo ou contribuinte individual cuja alíquota é de {{aliquota}}%</h2>
-          </header>
-          <div>
-            <div class="widget-body">
-              <table class="table table-bordered table-hover">
-                <tr *ngFor="let resultado of resultadosFacultativo">
-                  <td width="50%">
-                    <span class="pull-right font-bold">{{resultado.string}}</span>
-                  </td>
-                  <td>
-                    {{resultado.value}}
-                  </td>
-                </tr>
-              </table>
-            </div>
+    <!-- Resultados hipotese seguro facultativa -->
+    <article  class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Hipótese em que o segurado contribuía como segurado facultativo ou contribuinte individual cuja alíquota
+            é de {{aliquota}}%</h2>
+        </header>
+        <div>
+          <div class="widget-body">
+            <table class="table table-bordered table-hover">
+              <tr *ngFor="let resultado of resultadosFacultativo">
+                <td width="50%">
+                  <span class="pull-right font-bold">{{resultado.string}}</span>
+                </td>
+                <td>
+                  {{resultado.value}}
+                </td>
+              </tr>
+            </table>
           </div>
-        </sa-widget>
-      </article>
+        </div>
+      </sa-widget>
+    </article>
 
-      <!-- Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário -->
-      <article class="col-sm-12 col-md-12 col-lg-12"> 
-        <sa-widget [colorbutton]="false" [editbutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-edit"></i>
-            </span>
-            <h2>Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário</h2>
-          </header>
-          <div>
-            <div class="widget-body">
-              <table class="table table-bordered table-hover">
-                <tr *ngFor="let resultado of resultadosDescontadoSlario">
-                  <td width="50%">
-                    <span class="pull-right font-bold">{{resultado.string}}</span>
-                  </td>
-                  <td>
-                    {{resultado.value}}
-                  </td>
-                </tr>
-              </table>
-            </div>
+    <!-- Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário -->
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget [colorbutton]="false" [editbutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-edit"></i>
+          </span>
+          <h2>Hipóteses em que o Segurado(a) teve contribuição descontada diretamente de seu salário</h2>
+        </header>
+        <div>
+          <div class="widget-body">
+            <table class="table table-bordered table-hover">
+              <tr *ngFor="let resultado of resultadosDescontadoSlario">
+                <td width="50%">
+                  <span class="pull-right font-bold">{{resultado.string}}</span>
+                </td>
+                <td>
+                  {{resultado.value}}
+                </td>
+              </tr>
+            </table>
           </div>
-        </sa-widget>
-      </article>
-
+        </div>
+      </sa-widget>
+    </article>
     </div>
 
-    <!-- end row -->
 
-  </sa-widgets-grid>
-
-  <!-- end widget grid -->
+  </div>
 
 </div>

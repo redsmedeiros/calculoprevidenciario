@@ -7547,9 +7547,9 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
   font-weight: 700;
   border-top-width: 0 !important;
   margin-top: 1px !important;
-  -webkit-box-shadow: 0 -2px 0 #831721;
-  -moz-box-shadow: 0 -2px 0 #831721;
-  box-shadow: 0 -2px 0 #831721
+  -webkit-box-shadow: 0 -2px 0 #4A4D4F;
+  -moz-box-shadow: 0 -2px 0 #4A4D4F;
+  box-shadow: 0 -2px 0 #4A4D4F
 }
 
 .ui-tabs .ui-tabs-panel {
@@ -7919,7 +7919,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 .price-features {
   background: #FAFAFA;
   padding: 20px 15px;
-  min-height: 230px;
+  min-height: 240px;
   font-size: 13.5px
 }
 
@@ -7956,7 +7956,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
 .pricing-big table {
   background: #FAFAFA;
   padding: 20px 15px;
-  height: 230px;
+  height: 240px;
   text-align: left
 }
 
@@ -11000,7 +11000,7 @@ time.icon span {
 }
 
 .product-wrap .product-image span.sale {
-  background-color: #831721
+  background-color: #4A4D4F
 }
 
 .product-wrap .product-image span.hot {
@@ -11174,7 +11174,7 @@ time.icon span {
 }
 
 .status .who .name b {
-  color: #831721
+  color: #4A4D4F
 }
 
 .status .who .from {
@@ -11616,7 +11616,8 @@ aside {
 }
 
 #logo img {
-  width: 110px;
+  /* width: 130px; */
+  width: 220px;
   height: auto;
   padding-left: 3px
 }
@@ -11644,9 +11645,15 @@ aside {
   background: #006fa6 !important
 }
 
-#project-context, .project-context {
+/* #project-context, .project-context {
   display: inline-block;
   padding: 7px 13px 0;
+  position: relative
+} */
+
+#project-context, .project-context {
+  display: inline-block;
+  padding: 15px 0px;
   position: relative
 }
 
@@ -11749,7 +11756,7 @@ aside {
 }
 
 #header>:first-child, aside {
-  width: 220px
+  width: 240px
 }
 
 #left-panel {
@@ -11761,7 +11768,8 @@ aside {
 }
 
 #main {
-  margin-left: 220px;
+  margin-left: 240px;
+  /* margin-left: 220px; */
   padding: 0;
   padding-bottom: 52px;
   min-height: 500px;
@@ -11795,7 +11803,7 @@ aside {
 .fixed-ribbon #ribbon {
   position: fixed;
   right: 0;
-  left: 220px;
+  left: 240px;
   top: 49px;
   z-index: 901
 }
@@ -12273,7 +12281,7 @@ nav ul ul>li:hover b {
 
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch:before {
   content: "\f00c";
-  color: #831721
+  color: #4A4D4F
 }
 
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
@@ -12712,18 +12720,18 @@ input[type=color].ui-autocomplete-loading, input[type=date].ui-autocomplete-load
 }
 
 .nav-tabs>li.active>a {
-  -webkit-box-shadow: 0 -2px 0 #831721;
-  -moz-box-shadow: 0 -2px 0 #831721;
-  box-shadow: 0 -2px 0 #831721;
+  -webkit-box-shadow: 0 -2px 0 #4A4D4F;
+  -moz-box-shadow: 0 -2px 0 #4A4D4F;
+  box-shadow: 0 -2px 0 #4A4D4F;
   border-top-width: 0 !important;
   margin-top: 1px !important;
   font-weight: 700
 }
 
 .tabs-left .nav-tabs>li.active>a {
-  -webkit-box-shadow: -2px 0 0 #831721;
-  -moz-box-shadow: -2px 0 0 #831721;
-  box-shadow: -2px 0 0 #831721;
+  -webkit-box-shadow: -2px 0 0 #4A4D4F;
+  -moz-box-shadow: -2px 0 0 #4A4D4F;
+  box-shadow: -2px 0 0 #4A4D4F;
   border-top-width: 1px !important;
   border-left: none !important;
   margin-left: 1px !important
@@ -12737,18 +12745,18 @@ input[type=color].ui-autocomplete-loading, input[type=date].ui-autocomplete-load
 }
 
 .tabs-right .nav-tabs>li.active>a {
-  -webkit-box-shadow: 2px 0 0 #831721;
-  -moz-box-shadow: 2px 0 0 #831721;
-  box-shadow: 2px 0 0 #831721;
+  -webkit-box-shadow: 2px 0 0 #4A4D4F;
+  -moz-box-shadow: 2px 0 0 #4A4D4F;
+  box-shadow: 2px 0 0 #4A4D4F;
   border-top-width: 1px !important;
   border-right: none !important;
   margin-right: 1px !important
 }
 
 .tabs-below .nav-tabs>li.active>a {
-  -webkit-box-shadow: 0 2px 0 #831721;
-  -moz-box-shadow: 0 2px 0 #831721;
-  box-shadow: 0 2px 0 #831721;
+  -webkit-box-shadow: 0 2px 0 #4A4D4F;
+  -moz-box-shadow: 0 2px 0 #4A4D4F;
+  box-shadow: 0 2px 0 #4A4D4F;
   border-bottom-width: 0 !important;
   border-top: none !important;
   margin-top: 0 !important
@@ -13617,13 +13625,13 @@ img.away {
 }
 
 .panel-blue {
-  border-color: #831721
+  border-color: #4A4D4F
 }
 
 .panel-blue>.panel-heading {
   color: #fff;
-  background-color: #831721;
-  border-color: #831721
+  background-color: #4A4D4F;
+  border-color: #4A4D4F
 }
 
 .panel-footer>.btn-block {
@@ -13818,7 +13826,7 @@ img.away {
 
 .chart {
   overflow: hidden;
-  height: 220px;
+  height: 240px;
   margin: 20px 5px 10px 10px
 }
 
@@ -13848,7 +13856,7 @@ img.away {
 }
 
 .hidden-menu #left-panel {
-  left: -210px;
+  left: -240px;
   z-index: 903
 }
 
@@ -14249,7 +14257,7 @@ img.away {
 .bootstrapWizard li {
   display: block;
   float: left;
-  width: 25%;
+  width: 20%;
   text-align: center;
   padding-left: 0
 }
@@ -15067,7 +15075,7 @@ img.away {
   font-size: 11px;
   color: #fff;
   text-align: center;
-  background-color: #831721;
+  background-color: #4A4D4F;
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
   font-weight: 700;
@@ -15125,7 +15133,7 @@ img.away {
 }
 
 .progress-bar-info {
-  background-color: #831721
+  background-color: #4A4D4F
 }
 
 .progress-striped .progress-bar-info {
@@ -15136,7 +15144,7 @@ img.away {
 }
 
 .progress .bar-info, .progress-info .bar {
-  background: #831721
+  background: #4A4D4F
 }
 
 .vertical-bars {
@@ -16298,7 +16306,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 
 .txt-color-blue {
-  color: #831721 !important
+  color: #4A4D4F !important
 }
 
 .txt-color-blueLight {
@@ -16378,7 +16386,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 
 .bg-color-blue {
-  background-color: #831721 !important
+  background-color: #4A4D4F !important
 }
 
 .bg-color-blueLight {
@@ -16524,9 +16532,9 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
 }
 
 .page-footer {
-  height: 52px;
+  height: 40px;
   padding: 15px 13px 0;
-  padding-left: 233px;
+  padding-left: 248px;
   border-top: 1px solid #CECECE;
   background: #2a2725;
   width: 100%;
@@ -16644,7 +16652,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     margin-left: 0
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .minified #left-panel {
     left: 0
@@ -16675,7 +16683,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16698,7 +16706,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .no-content-padding {
     margin: 0 -14px !important
@@ -16749,7 +16757,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16775,7 +16783,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -16847,7 +16855,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -16911,7 +16919,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -16997,7 +17005,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {
@@ -17076,7 +17084,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     overflow-x: hidden
   }
   #left-panel {
-    left: -220px
+    left: -240px
   }
   .show-stat-microcharts>div {
     margin-top: 0 !important;
@@ -17177,7 +17185,7 @@ label input[type=checkbox][disabled].checkbox+span:before, label input[type=chec
     left: 210px
   }
   .hidden-menu.fixed-ribbon #ribbon {
-    left: 220px;
+    left: 240px;
     width: 100%
   }
   .fixed-ribbon #ribbon {

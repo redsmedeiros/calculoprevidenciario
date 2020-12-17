@@ -22,7 +22,7 @@ export class RgpsSeguradosDestroyComponent implements OnInit {
   ) {
     swal({
       title: 'Tem certeza?',
-      text: "Essa ação é irreversível!",
+      text: 'Essa ação é irreversível!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -31,21 +31,25 @@ export class RgpsSeguradosDestroyComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
-  	    this.Segurado.find(this.route.snapshot.params['id'])
-        .then(segurado => {
-          this.Segurado.destroy(segurado).then(() => {
-          
-            this.router.navigate(['/rgps/rgps-segurados']);
-            
-            swal('Sucesso', 'Segurado excluído', 'success');
-          }).catch((err) => {
-            swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
-          });
-        })
-      }else if (result.dismiss === swal.DismissReason.cancel){
+        this.Segurado.find(this.route.snapshot.params['id'])
+          .then(segurado => {
+
+            this.Segurado.destroy(segurado).then(() => {
+
+              this.router.navigate(['/rgps/rgps-segurados']);
+
+              swal('Sucesso', 'Segurado excluído', 'success');
+
+            }).catch((err) => {
+
+              swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+
+            });
+          })
+      } else if (result.dismiss === swal.DismissReason.cancel) {
         this.router.navigate(['/rgps/rgps-segurados']);
       }
-    })	
+    })
   }
 
   ngOnInit() {

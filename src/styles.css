@@ -132,7 +132,7 @@ a[class*="action-"]:hover {
   }
 
   .img-icone-custom {
-    height: 30rem !important;
+    height: 25rem !important;
   }
   .img-icone-custom-t {
     height: 12rem !important;
@@ -146,6 +146,17 @@ a[class*="action-"]:hover {
   .not-print {
     display: none !important;
   }
+}
+
+@media screen {
+  .not-screen {
+    display: none !important;
+  }
+}
+
+.smart-style-7 #left-panel {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
 }
 
 .font-0-1x {
@@ -593,9 +604,30 @@ a[class*="action-"]:hover {
 }
 
 .bg-ieprev {
-  border-color: #831721 !important;
-  background: #831721 !important;
+  border-color: #4a4d4f !important;
+  background: #4a4d4f !important;
   color: #fff !important;
+}
+
+.color-ieprev {
+  color: #4a4d4f !important;
+}
+
+.btn-ieprev {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+}
+
+.btn-ieprev:hover {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(1.2);
+}
+
+.btn-ieprev:disabled {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  cursor: not-allowed;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
@@ -604,7 +636,7 @@ a[class*="action-"]:hover {
 }
 
 .hidden-dt .dt-toolbar {
- display: none !important;
+  display: none !important;
 }
 
 .hidden-dt .dt-toolbar-footer {
@@ -624,22 +656,114 @@ a[class*="action-"]:hover {
   min-height: 20px !important;
 }
 
-
 .popover {
   max-width: 600px !important;
 }
-
 
 .swal-text {
   padding: 17px;
   display: block;
   margin: 22px;
   text-align: center;
-  color: red ;
+  color: red;
   font-weight: 800;
-  font-size: 1.4 rem;  
+  font-size: 1.4 rem;
 }
 
-.not-wrap{
+.not-wrap {
   white-space: nowrap;
+}
+
+.background-inicial {
+  background-image: url("./assets/img/planejamento/inicial-planejamento.png") !important; /* The image used */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+}
+
+.container-iframe {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 20px;
+  background-color: #ffaa21;
+  border: 1px solid #ffaa21;
+  border-radius: 15px;
+  color: #0d0d0d;
+  font-weight: 600;
+}
+
+.pager li > a:focus,
+.pager li > a {
+  text-decoration: none;
+  color: #0d0d0d;
+  background-color: #ffaa21;
+}
+
+.pager li > a:focus,
+.pager li > a:hover {
+  text-decoration: none;
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(1.2);
+}
+
+.pager li > a:focus,
+.pager li > a:disabled {
+  text-decoration: none;
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  cursor: not-allowed;
+}
+
+.bootstrapWizard li.active .step,
+.bootstrapWizard li.active.complete .step {
+  background: #ffaa21;
+  color: #0d0d0d;
+  font-weight: 700;
+  padding: 7px 13px;
+  font-size: 15px;
+  border-radius: 50%;
+  border: 3px solid #55606e;
+}
+.menu-home,
+.descricao-home {
+  margin-top: 7rem;
+  margin-bottom: 7rem;
+}
+.header-title-home {
+  margin-top: 7rem;
+  margin-bottom: 8rem;
+}
+
+@media screen and (max-height: 786px) {
+  .menu-home {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+  }
+  .descricao-home {
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+  }
+  .header-title-home {
+    margin-top: 4rem;
+    margin-bottom: 5rem;
+  }
 }

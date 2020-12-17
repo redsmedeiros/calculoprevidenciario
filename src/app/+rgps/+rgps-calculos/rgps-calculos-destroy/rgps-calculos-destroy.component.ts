@@ -20,8 +20,10 @@ export class RgpsCalculosDestroyComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
+
     let calculo = this.route.snapshot.params['id_calculo'];
     let user = this.route.snapshot.params['id'];
+
     swal({
       title: 'Tem certeza?',
       text: "Essa ação é irreversível!",
@@ -48,6 +50,7 @@ export class RgpsCalculosDestroyComponent {
         this.router.navigate(['/rgps/rgps-calculos/'+user]);
       }
     });
+    
   }
 
 

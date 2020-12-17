@@ -1,8 +1,22 @@
 <header id="header">
   <div id="logo-group">
-
+    <a href="./">
+      <img
+      src="assets/img/logo-head.png"
+      class="img-responsive"
+      style="height: 45px; width: 160px; padding-left: 4rem;"
+      alt="Logo IEPREV"
+    />
+    </a>
     <!-- PLACE YOUR LOGO HERE -->
-    <span id="logo"> <img src="assets/img/logo2.png" alt="SmartAdmin"> </span>
+    <span id="logo">
+      <!-- <img
+    src="assets/img/logo-head.png"
+    class="img-responsive"
+    style="height: 40px;"
+    alt="Logo IEPREV"
+  /> -->
+    </span>
     <!-- END LOGO PLACEHOLDER -->
 
     <!-- Note: The activity badge color changes when clicked and resets the number to 0
@@ -10,51 +24,78 @@
     <!-- <sa-activities></sa-activities> -->
   </div>
 
-
   <sa-recent-projects></sa-recent-projects>
-
 
   <!-- pulled right: nav area -->
   <div class="pull-right">
-
     <!-- <sa-collapse-menu></sa-collapse-menu> -->
 
     <!-- #MOBILE -->
     <!-- Top menu profile link : this shows only when top menu is active -->
-    <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+    <!-- <ul
+      id="mobile-profile-img"
+      class="header-dropdown-list hidden-xs padding-5"
+    >
       <li class="">
-        <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
-          <img src="assets/img/avatars/sunny.png" alt="John Doe" class="online"/>
+        <a
+          href="#"
+          class="dropdown-toggle no-margin userdropdown"
+          data-toggle="dropdown"
+        >
+          <img
+            src="assets/img/avatars/sunny.png"
+            alt="John Doe"
+            class="online"
+          />
         </a>
         <ul class="dropdown-menu pull-right">
           <li>
-            <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0"><i
-              class="fa fa-cog"></i> Setting</a>
+            <a
+              (click)="(null)"
+              class="padding-10 padding-top-0 padding-bottom-0"
+              ><i class="fa fa-cog"></i> Setting</a
+            >
           </li>
           <li class="divider"></li>
           <li>
-            <a routerLink="/app-views/profile" class="padding-10 padding-top-0 padding-bottom-0"> <i
-              class="fa fa-user"></i>
-              <u>P</u>rofile</a>
+            <a
+              routerLink="/app-views/profile"
+              class="padding-10 padding-top-0 padding-bottom-0"
+            >
+              <i class="fa fa-user"></i> <u>P</u>rofile</a
+            >
           </li>
           <li class="divider"></li>
           <li>
-            <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0"
-               data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>
+            <a
+              (click)="(null)"
+              class="padding-10 padding-top-0 padding-bottom-0"
+              data-action="toggleShortcut"
+              ><i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a
+            >
           </li>
           <li class="divider"></li>
           <li>
-            <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0"
-               data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a>
+            <a
+              (click)="(null)"
+              class="padding-10 padding-top-0 padding-bottom-0"
+              data-action="launchFullscreen"
+              ><i class="fa fa-arrows-alt"></i> Full <u>S</u>creen</a
+            >
           </li>
           <li class="divider"></li>
           <li>
-            <a routerLink="/auth/login" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i
-              class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>
+            <a
+              routerLink="/auth/login"
+              class="padding-10 padding-top-5 padding-bottom-5"
+              data-action="userLogout"
+              ><i class="fa fa-sign-out fa-lg"></i>
+              <strong><u>L</u>ogout</strong></a
+            >
           </li>
         </ul>
       </li>
-    </ul>
+    </ul> -->
 
     <!-- logout button -->
     <sa-logout></sa-logout>
@@ -85,14 +126,9 @@
     <!-- <sa-speech-button></sa-speech-button> -->
     <!-- end voice command -->
 
-
     <!-- multiple lang dropdown : find all flags in the flags page -->
     <!-- <sa-language-selector></sa-language-selector> -->
     <!-- end multiple lang -->
-
-
-
   </div>
   <!-- end pulled right: nav area -->
-
 </header>

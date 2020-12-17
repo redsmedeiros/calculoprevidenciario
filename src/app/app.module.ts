@@ -1,7 +1,7 @@
+
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
@@ -40,8 +40,11 @@ import { CalculoRgpsService } from './+rgps/+rgps-calculos/CalculoRgps.service';
 import { CalculoContagemTempoService } from './+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.service';
 import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
 import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { RgpsPlanejamentoService } from './+rgps/rgps-planejamento/rgps-planejamento.service';
+import { SeguradoPlanService } from './+rgps/rgps-planejamento/rgps-planejamento-segurados/SeguradoPlan.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { Auth } from './services/Auth/Auth.service';
+
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -69,12 +72,9 @@ type StoreType = {
     FormsModule,
     HttpModule,
     TextMaskModule,
-
     CoreModule,
     SmartadminLayoutModule,
     FileDropModule,
-
-
     routing
   ],
   exports: [
@@ -103,6 +103,8 @@ type StoreType = {
     SeguradoContagemTempoService,
     CalculoContagemTempoService,
     PeriodosContagemTempoService,
+    RgpsPlanejamentoService,
+    SeguradoPlanService,
     Auth,
     OnlyLoggedInUsersGuard
   ]

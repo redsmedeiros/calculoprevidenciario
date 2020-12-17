@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ExpectativaVida } from '../ExpectativaVida.model';
 import { ExpectativaVidaService } from '../ExpectativaVida.service';
@@ -17,6 +18,9 @@ import { RegrasAcesso } from './regrasAcesso/regras-acesso';
 import { CalcularListaContribuicoes } from './calculoMedia/calcular-lista-contribuicoes';
 import { conclusoesFinais } from './conclusoes/conclusoes-finais';
 
+import { RgpsPlanejamentoService } from './../../rgps-planejamento/rgps-planejamento.service';
+import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
+import swal from 'sweetalert2';
 
 
 @Component({
@@ -33,6 +37,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   @Input() calculo;
   @Input() segurado;
+  @Input() isPlanejamento;
+  @Input() planejamento;
+  @Input() planejamentoContribuicoesAdicionais;
+
+  @Output() planejamentoResultEvent = new EventEmitter();
+
 
   public boxId;
   public dataFiliacao;
@@ -67,25 +77,28 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado = {};
   public rmiFinalCustom;
 
+  private numeroDeContribuicoesAux = 0;
+
 
 
 
   public listaConclusaoAcesso = [];
 
   constructor(
-
-    private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
-    private ReajusteAutomatico: ReajusteAutomaticoService,
+    protected router: Router,
     protected ValoresContribuidos: ValorContribuidoService,
-    private CarenciaProgressiva: CarenciaProgressivaService,
-    private CalculoRgpsService: CalculoRgpsService,
-    private Moeda: MoedaService,
+    protected Moeda: MoedaService,
+    protected ExpectativaVida: ExpectativaVidaService,
+    protected ReajusteAutomatico: ReajusteAutomaticoService,
+    protected CarenciaProgressiva: CarenciaProgressivaService,
+    protected CalculoRgpsService: CalculoRgpsService,
+    protected RgpsPlanejamentoService: RgpsPlanejamentoService,
     private regrasAcesso: RegrasAcesso,
     private calcularListaContribuicoes: CalcularListaContribuicoes,
-    private conclusoesFinais: conclusoesFinais
+    private conclusoesFinais: conclusoesFinais,
   ) {
-    super(null, route, null, null, null, null);
+    super(null, route, null, null, null, null, null);
   }
 
 
@@ -125,7 +138,19 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     // indices de correção pbc da vida toda
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
       .then(valorescontribuidos => {
+
         this.listaValoresContribuidos = valorescontribuidos;
+
+        if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+
+
+          this.getContribuicoesAdicionais();
+
+
+          this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+
+        }
+
         if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
 
           // Exibir MSG de erro e encerrar Cálculo.
@@ -223,6 +248,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.calculo.tipoBeneficio = this.tipoBeneficio;
 
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
+    this.numeroDeContribuicoesAux = numeroDeContribuicoes;
+
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
     this.fatorPrevidenciario = this.calcularFatorPrevidenciario(tempoContribuicaoTotal.anos,
@@ -431,7 +458,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    */
   private updateResultadoCalculo() {
 
-    if (this.errosArray.length === 0) {
+    if (this.errosArray.length === 0 && !this.isPlanejamento) {
 
       this.setMelhorValorRMI();
 
@@ -442,12 +469,67 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo.valor_beneficio = this.melhorValorRMI;
         this.CalculoRgpsService.update(this.calculo);
 
-      }, 2000);
+      }, 1500);
+
+    } else if (this.isPlanejamento) {
+
+      this.setMelhorValorRMI();
+
+      setTimeout(() => {
+        this.updateResultPlanejamento();
+      }, 200);
 
     }
 
   }
 
+
+  private updateResultPlanejamento() {
+
+    sessionStorage.removeItem('exportPlanejamentoRSTRMI');
+
+    this.planejamento.novo_rmi = Math.round(this.melhorValorRMI * 100) / 100;
+    this.planejamento.nova_soma_contribuicoes = Math.round(this.melhorSoma * 100) / 100;
+    
+    const planejamentoContribuicoesAdicionaisInicio =
+      this.planejamentoContribuicoesAdicionais[this.planejamentoContribuicoesAdicionais.length - 1];
+      const planejamentoContribuicoesAdicionaisFim = this.planejamentoContribuicoesAdicionais[0];
+
+    this.planejamento.resultado_rmi_novo = JSON.stringify({
+      numero_contribuicoes_adicionais: this.planejamentoContribuicoesAdicionais.length,
+      numero_contribuicoes_total: this.listaValoresContribuidos.length,
+      planejamentoContribuicoesAdicionaisInicio: planejamentoContribuicoesAdicionaisInicio.data,
+      planejamentoContribuicoesAdicionaisFim: planejamentoContribuicoesAdicionaisFim.data,
+    });
+
+    const objExport = JSON.stringify(this.planejamento);
+    sessionStorage.setItem('exportPlanejamentoRSTRMI', objExport);
+
+
+    this.RgpsPlanejamentoService
+      .update(this.planejamento)
+      .then(model => {
+        // console.log(model);
+        this.planejamentoResultEvent.emit(true);
+        // this.navegarParaResultados();
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
+  }
+
+  /**
+   * 
+   */
+  private getContribuicoesAdicionais() {
+
+    this.listaValoresContribuidos = this.listaValoresContribuidos.filter(contrib => (moment().isSameOrAfter(contrib.data)));
+    this.listaValoresContribuidos = this.planejamentoContribuicoesAdicionais.concat(this.listaValoresContribuidos);
+
+    // console.log(this.listaValoresContribuidos);
+    // console.log(this.planejamentoContribuicoesAdicionais);
+
+  }
 
 
   getIdadeFracionada() {
@@ -610,14 +692,35 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    */
   private verificarCarencia() {
 
-
-    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16  || this.tipoBeneficio === 31) {
+    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16 || this.tipoBeneficio === 31) {
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 
       const mesesCarencia = 180;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
+      // console.log(this.calculo.carencia_apos_ec103);
+
+      if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+
+        if (this.calculo.carencia <= 0 || this.calculo.carencia_apos_ec103 <= 0) {
+          // criar carencia auxiliar
+          this.calculo.carencia = this.numeroDeContribuicoesAux;
+          this.calculo.carencia_apos_ec103 = this.numeroDeContribuicoesAux;
+          this.carenciaConformDataFiliacao = this.numeroDeContribuicoesAux;
+
+        }
+
+        if (this.planejamentoContribuicoesAdicionais.length > 0) {
+
+          this.calculo.carencia += this.planejamentoContribuicoesAdicionais.length;
+          this.calculo.carencia_apos_ec103 += this.planejamentoContribuicoesAdicionais.length;
+          this.carenciaConformDataFiliacao += this.planejamentoContribuicoesAdicionais.length;
+
+        }
+
+        //console.log(this.calculo.carencia_apos_ec103);
+      }
 
       if (this.calculo.carencia_apos_ec103 < mesesCarencia) {
         //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';

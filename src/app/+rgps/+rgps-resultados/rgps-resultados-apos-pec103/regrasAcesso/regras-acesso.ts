@@ -94,14 +94,11 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-            // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
+          // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
             // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
 
-            // this.carenciaConformDataFiliacao = 190;
-            // this.calculo.carencia = 190;
-            // this.numeroDeContribuicoes = 205;
 
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
 
