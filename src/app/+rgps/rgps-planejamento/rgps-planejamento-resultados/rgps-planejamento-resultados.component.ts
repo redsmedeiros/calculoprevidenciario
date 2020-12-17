@@ -648,7 +648,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private tempoMínimoRecuperarValoresInvestidos(totaAB, Diferenca) {
     const rst = totaAB / Diferenca;
-    return Math.round(rst);
+    return Math.ceil(rst);
   }
 
 
@@ -834,7 +834,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     let diffMes = (type === 'I') ? 12 - (dataProp.month() + 1) : (dataProp.month() + 1);
 
-    if ((dataProp.day() > 15 && type === 'F') || (dataProp.day() <= 15 && type === 'I') ||
+    if ((dataProp.date() > 15 && type === 'F') || (dataProp.date() <= 15 && type === 'I') ||
     ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
       diffMes += 1;
     }
