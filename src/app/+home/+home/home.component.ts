@@ -55,14 +55,16 @@ export class HomeComponent implements OnInit {
       link: '/transicao',
       icon: `fa fa-lg fa-fw fa-list-ul`,
       title: 'Regras  <br>de Transição',
-      label: `Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição da EC nº 103/2019.`
+      label: `Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição da
+       EC nº 103/2019.`
     },
     {
       value: 'plan',
       link: '/rgps/rgps-planejamento',
       icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
       title: `Planejamento  <br> Previdenciário`,
-      label: `Planejamento Previdenciário`
+      label: `Possibilita a realização de cálculos, comparando o valor do benefício em diferentes datas (atual e/ou futura),
+       a fim de identificar o melhor momento para o requerimento da aposentadoria.`
     },
     {
       value: 'tutorial',

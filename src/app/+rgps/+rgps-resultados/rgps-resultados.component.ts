@@ -1380,8 +1380,19 @@ export class RgpsResultadosComponent implements OnInit {
 
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
-    calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
-    calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+    if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--') {
+
+      calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
+      calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+
+    } else {
+
+      calculo.contribuicao_primaria_19 = calculo.contribuicao_primaria_atual;
+      calculo.carencia_apos_ec103 = calculo.carencia;
+      calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
+      calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+    }
+
     const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
 
     this.addTempoContribuicao(calculo, diffTempo);

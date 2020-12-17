@@ -312,8 +312,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       this.numeroContribuicoesAdicionais = resultadoRmiNovo.numero_contribuicoes_adicionais;
       this.numeroContribuicoesTotal = resultadoRmiNovo.numero_contribuicoes_adicionais;
 
-     
-      const dataContribuicoesAdicionaisInicial  = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisInicio);
+
+      const dataContribuicoesAdicionaisInicial = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisInicio);
       const dataContribuicoesAdicionaisfim = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisFim);
 
       console.log(resultadoRmiNovo);
@@ -357,10 +357,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         console.log(dataContribuicoesAdicionaisInicial)
         console.log(dataContribuicoesAdicionaisfim)
 
-          const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
-            dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
-            dataContribuicoesAdicionaisfim.add(1, 'month').format('DD/MM/YYYY'),
-            this.aliquotaRst.valor);
+        const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
+          dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
+          dataContribuicoesAdicionaisfim.add(1, 'month').format('DD/MM/YYYY'),
+          this.aliquotaRst.valor);
 
         investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
 
@@ -705,13 +705,13 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         if (inicio.isSame(auxiliarDate, 'year')) {
 
-          valorContrib = this.verificaAbonoProporcional(inicio, valorContrib, 'I');
+          valorContrib = this.verificaAbonoProporcional(inicio.clone(), valorContrib, valor, 'I');
 
         }
 
         if (fimContador.isSame(auxiliarDate, 'month')) {
 
-          valorContrib = this.verificaAbonoProporcional(fimContador, valorContrib, 'F');
+          valorContrib = this.verificaAbonoProporcional(fimContador.clone(), valorContrib, valor, 'F');
 
         }
 
@@ -745,6 +745,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
     if (data.date() < 30) {
+
+      //   console.log('--------')
+      // console.log(data.date())
+      // console.log('--------')
       const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
       // console.log('-----______________________-')
       // console.log(data)
@@ -753,8 +757,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       // console.log('------_______________________')
       const valorProp = (valorContrib / 30) * diffdays
       return Math.round(valorProp * 100) / 100;
+
     } else {
+
       return valorContrib;
+
     }
 
 
@@ -770,25 +777,22 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
   /**
-   * 
-   * @param data data
+   *
+   * @param dataProp dataProp
    * @param valorContrib valor
    * @param type inicio / final do periodo
    */
-  verificaAbonoProporcional(data, valorContrib, type) {
+  verificaAbonoProporcional(dataProp, valorContrib, valorFull, type) {
 
-    let diffMes = (type === 'I') ? 12 - (data.month() + 1) : (data.month() + 1);
-
-    if (data.day() > 15 || ((data.month() + 1) === 12 && data.date() === 1)) {
-      diffMes += 1;
+    if (((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31))) {
+      return Math.round(valorFull * 100) / 100;
     }
 
+    let diffMes = (type === 'I') ? 12 - (dataProp.month() + 1) : (dataProp.month() + 1);
 
-    // console.log('_______________________Abono_____________________')
-    // console.log(data.month())
-    // console.log(data.day())
-    // console.log(data.date())
-    // console.log('_______________________Abono_____________________')
+    if (dataProp.day() > 15 || ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
+      diffMes += 1;
+    }
 
     const valorProp = (valorContrib / 12) * diffMes
     return Math.round(valorProp * 100) / 100;

@@ -743,3 +743,27 @@ a[class*="action-"]:hover {
   border-radius: 50%;
   border: 3px solid #55606e;
 }
+.menu-home,
+.descricao-home {
+  margin-top: 7rem;
+  margin-bottom: 7rem;
+}
+.header-title-home {
+  margin-top: 7rem;
+  margin-bottom: 8rem;
+}
+
+@media screen and (max-height: 786px) {
+  .menu-home {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+  }
+  .descricao-home {
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+  }
+  .header-title-home {
+    margin-top: 4rem;
+    margin-bottom: 5rem;
+  }
+}
