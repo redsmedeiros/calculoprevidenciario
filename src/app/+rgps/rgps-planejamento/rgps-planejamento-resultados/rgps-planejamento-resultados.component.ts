@@ -19,6 +19,7 @@ import { MoedaService } from 'app/services/Moeda.service';
 import { DefinicaoMoeda } from 'app/+rgps/+rgps-resultados/rgps-resultados-apos-pec103/share-rmi/definicao-moeda';
 import { validateConfig } from '@angular/router/src/config';
 import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
+import { ReajusteAutomaticoService } from 'app/+rgps/+rgps-resultados/ReajusteAutomatico.service';
 
 
 @Component({
@@ -52,6 +53,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private resultadosFacultativo = []
   private resultadosDescontadoSalario = [];
   private resultadosGeral = [];
+  private reajustesAutomaticos;
+
 
 
   private sexoSegurado;
@@ -126,6 +129,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       protected CalculoRgps: CalculoRgpsService,
       protected planejamentoService: RgpsPlanejamentoService,
       private ExpectativaVidaService: ExpectativaVidaService,
+      private ReajusteAutomatico: ReajusteAutomaticoService,
       protected router: Router,
       protected Moeda: MoedaService,
       protected route: ActivatedRoute,
@@ -207,20 +211,23 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                           this.moeda = moeda[0];
                         }
 
-                        // console.log(moeda);
-                        // this.calcularPlanejamento();
+                        const dataReajustesAutomaticosI = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+                        const dataReajustesAutomaticosF = moment(this.planejamento.data_futura);
+                        this.ReajusteAutomatico.getByDate(dataReajustesAutomaticosI.clone(), dataReajustesAutomaticosF)
+                          .then(reajustes => {
+                            this.reajustesAutomaticos = reajustes;
 
-                        this.calcularPlanejamento().then(result => {
+                            this.calcularPlanejamento().then(result => {
 
-                          // console.log(result);
+                              setTimeout(() => {
+                                this.isUpdatingRst = false;
+                              }, 2000);
 
-                          setTimeout(() => {
-                            this.isUpdatingRst = false;
-                          }, 2000);
+                            }).catch((error) => {
+                              console.log(error);
+                            });
+                          });
 
-                        }).catch((error) => {
-                          console.log(error);
-                        });
                       });
 
                   });
@@ -360,7 +367,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
           dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
           dataContribuicoesAdicionaisfim.add(1, 'month').format('DD/MM/YYYY'),
-          this.aliquotaRst.valor);
+          this.aliquotaRst.valor,
+          false);
 
         investimentoContribuicaoINSS = investimentoContribuicaoINSSRST.value;
 
@@ -389,7 +397,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const totalPerdidoEntreDataRST = this.createListPlanContribuicoesEntreDibs(
         this.calculo.data_pedido_beneficio,
         this.planejamento.dataDibFutura,
-        calculo1.valor_beneficio);
+        calculo1.valor_beneficio,
+        true);
 
       totalPerdidoEntreData = totalPerdidoEntreDataRST.value
       // } else {
@@ -548,8 +557,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
-
-
   public formateObjToStringAnosMesesDias(tempoObj, notDays = true) {
 
     if (notDays) {
@@ -630,7 +637,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     const valorComAbono = this.createListPlanContribuicoesEntreDibs(
       valueDataAtual.format('DD/MM/YYYY'),
       valueDataExpectativaFutura.format('DD/MM/YYYY')
-      , this.planejamento.novo_rmi)
+      , this.planejamento.novo_rmi,
+      true)
 
     finalvalorComAbono = valorComAbono.value;
 
@@ -657,15 +665,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
-  private createListPlanContribuicoesEntreDibs(inicioPeriodo, fimPeriodo, valor) {
+  private createListPlanContribuicoesEntreDibs(inicioPeriodo, fimPeriodo, valor, aplicarReajuste) {
 
     valor = Number(valor);
+    let UltimoValorReajustado = 0;
     const planejamentoContribuicoesEntreDibs = []
     let somaContribuicoes = 0;
     const inicio = moment(inicioPeriodo, 'DD/MM/YYYY').clone();
     let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().startOf('month').subtract(1, 'month');
     const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'day');
-
 
 
     let count = 0;
@@ -677,6 +685,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let valorContribM = valor;
 
+      if (UltimoValorReajustado > 0) {
+        valorContribM = UltimoValorReajustado;
+      }
+
+
       if (inicio.isSame(auxiliarDate, 'month')) {
 
         valorContribM = this.verificaProporcional(inicio.clone(), valorContribM, 'Inicio');
@@ -687,6 +700,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         valorContribM = this.verificaProporcional(fimContador.clone(), valorContribM, 'Fim');
 
+      }
+
+      if (aplicarReajuste) {
+        valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
+        UltimoValorReajustado = valorContribM;
       }
 
       ObjValContribuicao = {
@@ -703,7 +721,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         count++;
         let valorContrib = valor;
 
-        if (inicio.isSame(auxiliarDate, 'year')) {
+        if (UltimoValorReajustado > 0) {
+          valorContribM = UltimoValorReajustado;
+        }
+
+        if (inicio.isSame(auxiliarDate, 'year') && inicio.month() !== 0) {
 
           valorContrib = this.verificaAbonoProporcional(inicio.clone(), valorContrib, valor, 'I');
 
@@ -733,6 +755,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     console.log('fim = ' + fimPeriodo)
     console.log('num-contrib = ' + count)
     console.log('soma-contrib = ' + somaContribuicoes)
+    console.log(this.reajustesAutomaticos);
     console.log(planejamentoContribuicoesEntreDibs)
     console.log('-- fim -- contador com abono')
 
@@ -741,20 +764,27 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   }
 
 
+  public aplicarAjusteAdministrativo(dataCorrente, valor) {
+
+    const rowReajuste = this.reajustesAutomaticos.find(itemReajuste => (dataCorrente.isSame(itemReajuste.data_reajuste, 'month')))
+
+    if (dataCorrente.year() === 2006 && dataCorrente.month() === 7) {
+      rowReajuste.indice = 1.000096;
+    }
+
+    if (rowReajuste !== undefined && rowReajuste['indice'] > 1) {
+      valor *= rowReajuste.indice;
+    }
+
+    return Math.round(valor * 100) / 100;
+  }
+
   verificaProporcional(data, valorContrib, type) {
 
 
     if (data.date() < 30) {
 
-      //   console.log('--------')
-      // console.log(data.date())
-      // console.log('--------')
       const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
-      // console.log('-----______________________-')
-      // console.log(data)
-      // console.log(valorContrib)
-      // console.log(diffdays)
-      // console.log('------_______________________')
       const valorProp = (valorContrib / 30) * diffdays
       return Math.round(valorProp * 100) / 100;
 
@@ -783,6 +813,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
    * @param type inicio / final do periodo
    */
   verificaAbonoProporcional(dataProp, valorContrib, valorFull, type) {
+
+    // console.log('-------asasasasasasa------')
+    // console.log((dataProp));
+    // console.log((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31));
+    // console.log('-------asasasasasasa------')
 
     if (((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31))) {
       return Math.round(valorFull * 100) / 100;
