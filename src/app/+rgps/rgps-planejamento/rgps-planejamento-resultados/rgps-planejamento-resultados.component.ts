@@ -791,7 +791,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       //  const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
 
-      let diffdays = (type === 'Fim') ? (data.date()) : 30 - (data.date());
+      let diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date() + 1);
 
       if (type === 'Inicio' && data.date() === 1) {
         diffdays = 30;
@@ -852,7 +852,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     }
 
     let mes = dataProp.month();
-    if (((dataProp.date()) <= 15 && type === 'F') || ((dataProp.date()) >= 15 && type === 'I')) {
+    if (((dataProp.date() + 1 ) >= 15 && type === 'F') || ((dataProp.date() + 1) >= 15 && type === 'I')) {
       mes = dataProp.month() + 1;
     }
 
