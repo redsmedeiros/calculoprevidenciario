@@ -54,6 +54,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
   private resultadosDescontadoSalario = [];
   private resultadosGeral = [];
   private reajustesAutomaticos;
+  private valorContribComRejuste;
 
 
 
@@ -675,7 +676,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     let auxiliarDate = moment(inicioPeriodo, 'DD/MM/YYYY').clone().startOf('month').subtract(1, 'month');
     const fimContador = moment(fimPeriodo, 'DD/MM/YYYY').clone().subtract(1, 'day');
 
-
+    this.valorContribComRejuste = 0;
     let count = 0;
     let ObjValContribuicao = {};
 
@@ -685,9 +686,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       let valorContribM = valor;
 
-      // if (UltimoValorReajustado > 0) {
-      //   valorContribM = UltimoValorReajustado;
-      // }
+      if (aplicarReajuste && this.valorContribComRejuste > 0) {
+        valorContribM = this.valorContribComRejuste;
+     }
+
+     if (aplicarReajuste) {
+        valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
+        this.valorContribComRejuste = valorContribM;
+      }
 
 
       if (inicio.isSame(auxiliarDate, 'month')) {
@@ -701,11 +707,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         valorContribM = this.verificaProporcional(fimContador.clone(), valorContribM, 'Fim');
 
       }
-
-      // if (aplicarReajuste) {
-      //   valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
-      //   UltimoValorReajustado = valorContribM;
-      // }
 
       ObjValContribuicao = {
         data: auxiliarDate.format('YYYY-MM-DD'),
@@ -721,9 +722,11 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         count++;
         let valorContrib = valor;
 
-        // if (UltimoValorReajustado > 0) {
-        //   valorContrib = UltimoValorReajustado;
-        // }
+         if (aplicarReajuste && this.valorContribComRejuste > 0) {
+          valorContrib = this.valorContribComRejuste;
+       }
+
+
 
         if (inicio.isSame(auxiliarDate, 'year') && inicio.month() !== 0) {
 
@@ -782,19 +785,29 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   verificaProporcional(data, valorContrib, type) {
 
-    console.log('----dias1----')
-    console.log(data)
-    console.log(data.date())
-    console.log(data.date() < 30)
-    console.log('----dias2----')
+
 
     if (data.date() < 30) {
 
-      const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
+      //  const diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date());
+
+      let diffdays = (type === 'Fim') ? (data.date()) : 31 - (data.date() + 1);
+
+      if (type === 'Inicio' && data.date() === 1) {
+        diffdays = 30;
+      }
+
       const valorProp = (valorContrib / 30) * diffdays
 
+      console.log('----dias1----')
+      console.log(data)
+      console.log(data.date())
+      console.log(data.date() < 30)
+      console.log(diffdays)
+      console.log('----dias2----')
       console.log(valorContrib);
       console.log(valorProp);
+
       return Math.round(valorProp * 100) / 100;
 
     } else {
@@ -802,6 +815,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       return valorContrib;
 
     }
+
 
 
     // if (type === 'fim') {
@@ -825,10 +839,10 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
     console.log('---------inicio MMMMMM--------')
 
+    console.log((dataProp.format('DD/MM/YYYY')));
     console.log((dataProp.date()));
-    console.log((dataProp.day()));
-    console.log((dataProp.date() + 1 ));
     console.log(type === 'F');
+    console.log(dataProp.month());
     console.log(type);
 
     console.log('-----------fim MMMMM----------')
@@ -837,13 +851,12 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       return Math.round(valorFull * 100) / 100;
     }
 
-    let diffMes = (type === 'I') ? 12 - (dataProp.month() ) : (dataProp.month() );
-    
-
-    if (((dataProp.date() + 1) >= 15 && type === 'F') || ((dataProp.date() + 1) <= 15 && type === 'I') ||
-    ((dataProp.month() + 1) === 12 && dataProp.date() === 1)) {
-      diffMes += 1;
+    let mes = dataProp.month();
+    if (((dataProp.date() + 1 ) >= 15 && type === 'F') || ((dataProp.date() + 1) >= 15 && type === 'I')) {
+      mes = dataProp.month() + 1;
     }
+
+    let diffMes = (type === 'I') ? 12 - (mes) : (mes);
 
     const valorProp = (valorContrib / 12) * diffMes
     return Math.round(valorProp * 100) / 100;
