@@ -8,7 +8,7 @@ import axios from 'axios';
 
 //axios.defaults.headers.common['Content-Type'] = 'application/json'
 //axios.defaults.headers.common['Authorization'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
-//axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
 
 // axios.defaults.headers.common["X-CSRF-k"] = "test";
 @Injectable()
