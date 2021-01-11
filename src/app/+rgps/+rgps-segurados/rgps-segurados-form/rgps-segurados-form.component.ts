@@ -14,6 +14,7 @@ export class RgpsSeguradosFormComponent {
 
   public docMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
 
+  @Input() isEditForm;
   @Input() formData;
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
@@ -59,9 +60,7 @@ export class RgpsSeguradosFormComponent {
   }
 
   ngAfterContentInit() {
-    // setTimeout(() => {
-    //   this.changeDocumentMask();
-    // },200)
+   
   }
 
   validate() {
@@ -90,6 +89,7 @@ export class RgpsSeguradosFormComponent {
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
       this.errors.add({ "sexo": ["O campo sexo é obrigatório."] });
     }
+
 
     // if(this.formData.id_documento == undefined || this.formData.id_documento == '') {
     //   this.errors.add({"id_documento":["O Tipo de Documento é obrigatório."]});
@@ -130,8 +130,6 @@ export class RgpsSeguradosFormComponent {
     //     break;
     // }
     //}
-
-
   }
 
   changeDocumentMask() {
@@ -252,5 +250,6 @@ export class RgpsSeguradosFormComponent {
   //     return false;
   //   return true;
   // }
+
 
 }

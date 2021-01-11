@@ -434,7 +434,17 @@
                       <small *ngIf="errors.has('grupoDos12')" class="text-danger">{{ errors.get('grupoDos12') | i18n}}</small>
                     </div>
                   </div>
-                  
+
+                  <div class="form-group mb-4" *ngIf="alertCarenciaAposEc103 && hasCarencia">
+                    
+                    <div class="col-md-offset-1 col-sm-10 col-md-10 col-lg-10">
+                      <div class="alert alert-danger fade in"  style="line-height: 25px; margin-bottom: 5px;" >
+                        <i class="fa-fw fa fa-info"></i>
+                        Atenção! Toda vez que o tempo de contribuição for alterado manualmente a carência deverá ser inserida pelo usuário, para confirmação e segurança da simulação.
+                      </div>
+                    </div>
+                  </div>
+
                 </fieldset>
                 <div class="form-actions p-0">
                   <div class="row">

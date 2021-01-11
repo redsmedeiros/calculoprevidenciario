@@ -56,6 +56,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public grupoDos12;
   public carencia;
   public carenciaAposEc103;
+  public alertCarenciaAposEc103 = false;
 
   //reforma EC 103/2019
   public numDependentes;
@@ -914,7 +915,9 @@ export class RgpsCalculosFormComponent implements OnInit {
         // },
       };
 
-      swal(errorCarencia);
+      // swal(errorCarencia);
+
+      this.alertCarenciaAposEc103 = true
 
     }
 

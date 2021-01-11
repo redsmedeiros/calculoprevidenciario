@@ -1,0 +1,529 @@
+<!-- <strong>
+  Segurado
+</strong>
+<br>
+<strong>
+  calculo
+</strong>
+<br>
+<strong>
+  planejamento
+</strong>
+<br>
+<strong>
+  conclusão
+</strong> -->
+
+<div id="content">
+  <div id="box-dados-title" class="row mb-2 mt-4 not-screen">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <!-- <h2 class="p-1 m-1">Planejamento Previdenciário</h2> -->
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <h2 class="p-1 m-1">Planejamento Previdenciário</h2>
+            </th>
+          </tr>
+        </thead>
+      </table>
+      
+    </div>
+  </div>
+
+  <div id="passoPlanejamentoRGPS" class="well mt-4">
+    <div class="row mt-5">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <form novalidate="novalidate">
+          <div class="col-sm-12">
+            <div class="form-bootstrapWizard clearfix">
+              <ul class="bootstrapWizard">
+                <li
+                  *ngFor="let pane of steps; let i = index"
+                  [class.active]="activeStep.key == pane.key"
+                >
+                  <a (click)="setActiveStep(pane)">
+                    <span class="step">
+                      <span *ngIf="!pane.checked">{{ i + 1 }}</span>
+                      <i class="fa fa-check" *ngIf="pane.checked"></i>
+                    </span>
+                    <span class="title" style="padding-bottom: 0.9rem">{{
+                      pane.title
+                    }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content" style="margin-top: 5rem">
+              <div class="tab-pane" [class.active]="true">
+                <div class="row mt-5">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div
+                      class="col-xs-1 col-sm-1 col-md-1 col-lg-1"
+                      style="margin-top: 6rem"
+                    >
+                      <ul class="bootstrapWizard form-wizard mt-3">
+                        <li class="active" data-target="#step5">
+                          <a data-toggle="tab"> <span class="step">5</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul
+                        id="texto-inicial-text"
+                        style="font-size: 14px; text-align: justify"
+                      >
+                        <li>
+                          Planejamento Previdenciário realizado com a indicação
+                          do valor investido em contribuições, entre as datas de
+                          início do benefício atual (caso haja direito
+                          adquirido) e benefício futuro, além de identificar o
+                          valor que o segurado deixará de receber, caso opte
+                          pelo direito ao benefício em data futura;
+                        </li>
+
+                        <li>
+                          Apura ainda, a diferença entre os dois benefícios
+                          (atual - caso haja direito adquirido - e futuro),
+                          apontando o tempo mínimo necessário que o segurado
+                          levará para recuperar os valores investidos para
+                          obtenção do direito ao melhor benefício, bem como o
+                          valor total que conseguirá acumular até a idade limite
+                          indicada na Tabela de Expectativa de Sobrevida
+                          construída pelo IBGE;
+                        </li>
+                        <li>
+                          O resultado do Planejamento Previdenciário é obtido a
+                          partir das informações indicadas pelo usuário nos
+                          passos anteriores e a renda mensal inicial do
+                          benefício futuro consiste em valor estimado, apurado
+                          com base em valores atuais (limites mínimo e máximo),
+                          pois o valor dos salários de contribuição futuros é
+                          fixo, sem incidência de correção monetária entres as
+                          datas atual e futura, pois ausente a publicação dos
+                          índices oficiais.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="isUpdatingRst" style="margin-top: 25%">
+    <div class="col-md-offset-3 col-md-6 col-lg-6">
+      <div class="text-align-center">
+        <i class="fa fa-cog fa-spin fa-5x" aria-hidden="true"></i>
+        <h4>Aguarde alguns instantes...</h4>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isUpdatingRst" style="margin-top: 3rem">
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-user"></i>
+            </span>
+            <h2>Segurado</h2>
+          </header>
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom mb-4 p-0">
+              <ul class="list-inline mt-2 not-print">
+                <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
+                <li class="px-5" *ngIf="isExits(segurado.numero_documento)">
+                  <strong
+                    >{{
+                      segurado.getDocumentType(segurado.id_documento)
+                    }}:</strong
+                  >
+                  {{ segurado.numero_documento }}
+                </li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong>
+                  {{ segurado.data_nascimento }}
+                </li>
+                <li class="px-5">
+                  <strong>Sexo:</strong>
+                  {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                </li>
+                <!-- <li class="px-5"><strong>Idade atual:</strong> {{idadeUltimaDib}} anos</li> -->
+              </ul>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+      <article
+        *ngIf="!isUpdatingRst"
+        id="box-dados-segurado"
+        class="col-sm-12 col-md-12 col-lg-12"
+        hidden
+      >
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <!-- <header class="not-print">
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Segurado</h2>
+          </header> -->
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom mb-4 p-0">
+              <div id="printableSegurado">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th colspan="2"><h2>Segurado</h2></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td width="50%" style="text-align: left">
+                        <b>Nome</b>
+                      </td>
+                      <td width="50%" style="text-align: center">
+                        {{ segurado.nome }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="isExits(segurado.numero_documento)">
+                      <td width="50%" style="text-align: left">
+                        <b>{{
+                          segurado.getDocumentType(segurado.id_documento)
+                        }}</b>
+                      </td>
+                      <td width="50%" style="text-align: center">
+                        {{ segurado.numero_documento }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: left">
+                        <b>Data de nascimento</b>
+                      </td>
+                      <td width="50%" style="text-align: center">
+                        {{ segurado.data_nascimento }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: left">
+                        <b>Sexo</b>
+                      </td>
+                      <td width="50%" style="text-align: center">
+                        <span *ngIf="segurado.sexo == 'm'">Masculino</span
+                        ><span *ngIf="segurado.sexo == 'f'">Feminino</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <div id="box-dados-calculo" class="row" *ngIf="!isUpdatingRst">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header class="not-print">
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Benefício Atual</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding widget-body-custom">
+              <table class="table table-hover table-bordered">
+                <thead class="not-screen">
+                  <tr>
+                    <th colspan="2"><h2>Benefício Atual</h2></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Data do Início do Benefício</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ calculo.data_pedido_beneficio }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Espécie do Benefíco</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ calculo.tipo_seguro }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Renda Mensal Inicial</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ definicaoMoeda.formatMoney(calculo.valor_beneficio) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <div id="box-dados-planejamento" class="row" *ngIf="!isUpdatingRst">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header class="not-print">
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Benefício Futuro</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-hover table-bordered">
+                <thead class="not-screen">
+                  <tr>
+                    <th colspan="2"><h2>Benefício Futuro</h2></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Data do Início do Benefício</strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
+                      {{ planejamento.dataDibFutura }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Espécie do Benefíco</strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
+                      {{ planejamento.especie }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Salários de Contribuição Futuros</strong>
+                    </td>
+                    <td style="text-align: center" colspan="2">
+                      {{
+                        definicaoMoeda.formatMoney(planejamento.valor_beneficio)
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Espécie de Segurado</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ getAliquotasLabel(planejamento.aliquota) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Alíquota Contributiva Efetiva</strong>
+                    </td>
+                    <td width="50%" style="text-align: center">
+                      {{ aliquotaRst.aliquota }} %
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Valor da Contribuição</strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
+                      {{ definicaoMoeda.formatMoney(aliquotaRst.valor) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong
+                        >Quantidade de Salários de Contribuição Futuros
+                      </strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
+                      {{ numeroContribuicoesAdicionais }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%" style="text-align: left">
+                      <strong>Renda Mensal Inicial</strong>
+                    </td>
+                    <td width="50%" style="text-align: center" colspan="2">
+                      {{ definicaoMoeda.formatMoney(planejamento.novo_rmi) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <div id="box-dados-resultados" class="row" *ngIf="!isUpdatingRst">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
+          <header class="not-print">
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Resultados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <tr class="not-screen">
+                    <th colspan="2"><h2>Resultados</h2></th>
+                  </tr>
+                  <tr>
+                    <th width="50%" style="text-align: center">Descrição</th>
+                    <th width="50%" style="text-align: center">Conclusão</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of resultadosGeral">
+                    <td>
+                      <strong>{{ row.label }}</strong>
+                    </td>
+                    <td style="text-align: center">{{ row.value }}</td>
+                  </tr>
+                  <tr *ngIf="isDiffAeBNegativa">
+                    <td colspan="2" class="text-align-center">
+                      <strong
+                        >O valor do Benefício atual é igual ou maior que o valor
+                        do Benefício Futuro.</strong
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+  </div>
+
+  <div class="row margin-bottom-5" *ngIf="!isUpdatingRst">
+    <!-- Planejamento  -->
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      <sa-widget
+        [colorbutton]="false"
+        [editbutton]="false"
+        [colorbutton]="false"
+        [editbutton]="false"
+        [togglebutton]="false"
+        [deletebutton]="false"
+        [fullscreenbutton]="false"
+        [custombutton]="false"
+      >
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-history fa-flip-horizontal"></i>
+          </span>
+          <h2>Planejamento Previdenciário</h2>
+        </header>
+        <!-- widget div-->
+        <div class="pt-0">
+          <!-- widget content -->
+          <div class="widget-body widget-body-custom" style="min-height: auto">
+            <div class="form-actions mt-0">
+              <div class="row">
+                <div class="col-sm-12">
+                  <ul class="pager wizard no-margin">
+                    <li class="previous">
+                      <a
+                        (click)="navegarPlanejamento('selectCalcResult')"
+                        class="btn btn-lg btn-default"
+                        title="Retornar ao passo anterior"
+                      >
+                        Retornar
+                      </a>
+                    </li>
+                    <li class="next">
+                      <a
+                        (click)="imprimirPagina()"
+                        class="btn btn-lg btn-default"
+                        title="Clique aqui para imprimir"
+                      >
+                        Imprimir
+                      </a>
+                      <!-- <button
+                        type="button"
+                        (click)="imprimirPagina()"
+                        class="btn btn-labeled btn-info pull-right"
+                        id="btn-imprimir-pagina"
+                        data-placement="top"
+                        tooltip="Clique aqui para imprimir"
+                      >
+                        <span class="btn-label">
+                          <i class="fa fa-print"></i>
+                        </span>
+                        Imprimir
+                      </button> -->
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sa-widget>
+    </article>
+  </div>
+<div class="not-screen">
+  <div
+  id="texto-inicial"
+  class=" row "
+  class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
+>
+  <table id="texto-inicial-text" class="table table-hover">
+    <tbody>
+      <tr>
+        <td>
+          Planejamento Previdenciário realizado com a indicação do valor
+          investido em contribuições, entre as datas de início do benefício
+          atual (caso haja direito adquirido) e benefício futuro, além de
+          identificar o valor que o segurado deixará de receber, caso opte
+          pelo direito ao benefício em data futura;
+          <br />
+          <br />
+          Apura ainda, a diferença entre os dois benefícios (atual - caso haja
+          direito adquirido - e futuro), apontando o tempo mínimo necessário
+          que o segurado levará para recuperar os valores investidos para
+          obtenção do direito ao melhor benefício, bem como o valor total que
+          conseguirá acumular até a idade limite indicada na Tabela de
+          Expectativa de Sobrevida construída pelo IBGE;
+          <br />
+          <br />
+          O resultado do Planejamento Previdenciário é obtido a partir das
+          informações indicadas pelo usuário nos passos anteriores e a renda
+          mensal inicial do benefício futuro consiste em valor estimado,
+          apurado com base em valores atuais (limites mínimo e máximo), pois o
+          valor dos salários de contribuição futuros é fixo, sem incidência de
+          correção monetária entres as datas atual e futura, pois ausente a
+          publicação dos índices oficiais.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>

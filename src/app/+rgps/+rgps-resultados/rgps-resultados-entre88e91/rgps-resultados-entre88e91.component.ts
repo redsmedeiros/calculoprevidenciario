@@ -99,7 +99,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     private CalculoRgpsService:CalculoRgpsService,
     protected rt: ActivatedRoute,
     private IndiceInps: IndiceInpsService,
-    private SalarioMinimoMaximo: SalarioMinimoMaximoService,) { super(null, route, null, null,null,null);}
+    private SalarioMinimoMaximo: SalarioMinimoMaximoService,) { 
+      super(null, route, null, null, null,null,null);
+    }
 
   ngOnInit() {
     this.boxId = this.generateBoxId(this.calculo.id, '91');

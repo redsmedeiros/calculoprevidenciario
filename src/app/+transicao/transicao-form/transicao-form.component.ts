@@ -127,6 +127,7 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '00';
 
     // this.nome = 'divaldo - 04-12-2020';
+    // this.nome = 'Andre - 29-10-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
     // this.dataNascimento = '05/07/1964';
