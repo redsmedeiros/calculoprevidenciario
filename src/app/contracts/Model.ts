@@ -26,23 +26,34 @@ export abstract class Model {
 
   public actions;
 
+  // private static getKey(){
+  //   return 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+  // }
+
+  // static getKey = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+
   public static all() {
+    //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}`);
   }
 
   public static allFromUser(userId) {
+   
     return axios.get(`${this.url}/${userId}`);
   }
 
   public static store(data) {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.post(`${this.url}`, data);
   }
 
   public static find(id) {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}/${id}`);
   }
 
   public static getWithParameters(params) {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     if (params.length > 2) {
       return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]+'&'+params[2]+'='+params[3]);
     } else {
@@ -51,14 +62,17 @@ export abstract class Model {
   }
 
   public static getWithParameter(params) {
+    //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]);
   }
 
   public static getWithParametersObj(params) {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}`, {params: params});
   }  
 
   public update() {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     const data = {};
     for (const field in this.form) {
       if (this.hasOwnProperty(field)) {
@@ -69,6 +83,7 @@ export abstract class Model {
   }
 
   public destroy() {
+   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.delete(`${this.url}/${this.id}`);
   }
 
