@@ -78,22 +78,22 @@ export class TransicaoFormComponent implements OnInit {
     // this.nome = 'Segurado teste teste ';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // // this.dataNascimento = '09/12/1959';
-    // this.dataNascimento = '01/01/1960';
+    // this.dataNascimento = '09/12/1959';
+    // // this.dataNascimento = '01/01/1960';
     // this.dataFiliacao = '01/01/1991';
-    // this.sexo = 'f';
+    // this.sexo = 'm';
     // this.professor = false;
 
     // this.contribuicaoAnosAteEC103 = '16';
     // this.contribuicaoMesesAteEC103 = '3';
-    // this.contribuicaoDiasAteEC103 = '0';
+    // this.contribuicaoDiasAteEC103 = '23';
 
     // this.contribuicaoAnos = '16';
     // this.contribuicaoMeses = '3';
-    // this.contribuicaoDias = '0';
+    // this.contribuicaoDias = '25';
 
 
-
+    // ok regra 100
     // this.nome = 'Segurado teste teste ';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
@@ -102,30 +102,30 @@ export class TransicaoFormComponent implements OnInit {
     // this.sexo = 'm';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '35';
+    // this.contribuicaoAnosAteEC103 = '34';
     // this.contribuicaoMesesAteEC103 = '0';
     // this.contribuicaoDiasAteEC103 = '0';
 
-    // this.contribuicaoAnos = '36';
-    // this.contribuicaoMeses = '6';
-    // this.contribuicaoDias = '3';
+    // this.contribuicaoAnos = '35';
+    // this.contribuicaoMeses = '0';
+    // this.contribuicaoDias = '0';
 
+  //   // ok
+  //   this.nome = 'Andre - 29-10-2020';
+  //   this.idDocumento = '';
+  //   this.numeroDocumento = '';
+  //   this.dataNascimento = '19/12/1979';
+  //   this.dataFiliacao = '01/01/1990';
+  //   this.sexo = 'm';
+  //   this.professor = false;
 
-    // this.nome = 'Andre - 29-10-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '19/12/1979';
-    // this.dataFiliacao = '01/01/1990';
-    // this.sexo = 'm';
-    // this.professor = true;
+  //  this.contribuicaoAnosAteEC103 = '34';
+  //   this.contribuicaoMesesAteEC103 = '0';
+  //   this.contribuicaoDiasAteEC103 = '0';
 
-    // this.contribuicaoAnosAteEC103 = '23';
-    // this.contribuicaoMesesAteEC103 = '2';
-    // this.contribuicaoDiasAteEC103 = '24';
-
-    // this.contribuicaoAnos = '24';
-    // this.contribuicaoMeses = '02';
-    // this.contribuicaoDias = '12';
+  //   this.contribuicaoAnos = '35';
+  //   this.contribuicaoMeses = '0';
+  //   this.contribuicaoDias = '0';
 
   }
 

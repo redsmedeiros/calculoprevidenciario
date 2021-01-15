@@ -219,19 +219,21 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const tempo = this.contribuicaoPrimaria;
     const tempoContribuicaoTotal = {
-      dias: (tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias,
-      anos: ((tempo.anos * 365.25) + (tempo.meses * 30.4375) + tempo.dias) / 365.25
+      dias: (tempo.anos * 365.25) + (tempo.meses * 30.436875) + tempo.dias,
+      anos: ((tempo.anos * 365.25) + (tempo.meses * 30.436875) + tempo.dias) / 365.25,
     };
+
     const tempoContribuicaoTotalMoment = moment.duration({
       years: tempo.anos,
       months: tempo.meses,
       days: tempo.dias
     });
 
+    
     const tempoAtePec = this.contribuicaoPrimariaAtePec;
     const tempoContribuicaoTotalAtePec = {
-      dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias,
-      anos: ((tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.4375) + tempoAtePec.dias) / 365.25
+      dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.436875) + tempoAtePec.dias,
+      anos: ((tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.436875) + tempoAtePec.dias) / 365.25
     };
 
     const tempoContribuicaoTotalAtePecMoment = moment.duration({
@@ -239,6 +241,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       months: tempoAtePec.meses,
       days: tempoAtePec.dias
     });
+
     const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
 

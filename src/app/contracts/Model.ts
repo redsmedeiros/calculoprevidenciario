@@ -26,19 +26,13 @@ export abstract class Model {
 
   public actions;
 
-  // private static getKey(){
-  //   return 'da91377af82e4445dbbf4f772cbea39206f9abe0';
-  // }
-
-  // static getKey = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
-
   public static all() {
     //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}`);
   }
 
   public static allFromUser(userId) {
-   
+   //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}/${userId}`);
   }
 

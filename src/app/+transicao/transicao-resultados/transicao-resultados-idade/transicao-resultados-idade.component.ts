@@ -241,9 +241,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       );
 
 
-      console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        + '|' + 'idade -' + idade + '|'
-        + '|' + 'Tempo - ' + tempoContribuicao + '|');
+      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade -' + idade + '|'
+      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
 
       count++;
       idade += 1;
@@ -296,7 +296,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // console.log(idade);
     // console.log(tempoContribuicao);
     // console.log(count);
-
+    // console.log(idadeMoment);
     //  tempoContribuicao += correcaoAnoBissexto;
 
     return {
