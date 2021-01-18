@@ -7,18 +7,25 @@ import { Console } from 'console';
  */
 export class DefinicaoAliquotaEfetiva {
 
+    // static maximoValor = [
+    //     { f: 'faixa1', v: 78.38 },
+    //     { f: 'faixa2', v: 94.01 },
+    //     { f: 'faixa3', v: 125.38 },
+    //     { f: 'faixa4', v: 415.33 },
+    // ];
+
     static maximoValor = [
-        { f: 'faixa1', v: 78.38 },
-        { f: 'faixa2', v: 94.01 },
-        { f: 'faixa3', v: 125.38 },
-        { f: 'faixa4', v: 415.33 },
+        { f: 'faixa1', v: 82.50},
+        { f: 'faixa2', v: 99.31 },
+        { f: 'faixa3', v: 132.21 },
+        { f: 'faixa4', v: 437.97 },
     ];
 
     static aliquotasParametros = {
-        faixa1: { percentual: 7.50, min: 1045.00, max: 1045.00, valor_maximo: 78.38 },
-        faixa2: { percentual: 9, min: 1045.01, max: 2089.60, valor_maximo: 94.01 },
-        faixa3: { percentual: 12, min: 2089.61, max: 3134.40, valor_maximo: 125.38 },
-        faixa4: { percentual: 14, min: 3134.41, max: 6101.06, valor_maximo: 415.33 },
+        faixa1: { percentual: 7.50, min: 1100.00, max: 1100.00, valor_maximo:  82.50 },
+        faixa2: { percentual: 9, min: 1100.01, max: 2203.48, valor_maximo: 99.31 },
+        faixa3: { percentual: 12, min: 2203.49, max: 3305.22, valor_maximo: 132.21 },
+        faixa4: { percentual: 14, min: 3305.22, max: 6433.57, valor_maximo: 437.97 },
     };
 
 
@@ -60,7 +67,7 @@ export class DefinicaoAliquotaEfetiva {
         if (valor <= this.aliquotasParametros.faixa1.max) {
 
             this.resultadoF.aliquota = this.aliquotasParametros.faixa1.percentual;
-            this.resultadoF.valor = this.formatValorDecimal(1045.00 * (7.5 / 100));
+            this.resultadoF.valor = this.formatValorDecimal(1100.00 * (7.5 / 100));
             return this.resultadoF;
 
         }

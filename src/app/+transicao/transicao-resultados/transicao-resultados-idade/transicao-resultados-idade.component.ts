@@ -305,7 +305,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // console.log(idade);
     // console.log(tempoContribuicao);
     // console.log(count);
-
+    // console.log(idadeMoment);
     //  tempoContribuicao += correcaoAnoBissexto;
 
 
