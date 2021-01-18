@@ -143,6 +143,22 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '18';
 
 
+//   this.nome = 'sandro - 29-10-2020';
+//   this.idDocumento = '';
+//   this.numeroDocumento = '';
+//   this.dataNascimento = '06/11/1964';
+//   this.dataFiliacao = '01/01/1990';
+//   this.sexo = 'm';
+//   this.professor = false;
+
+//  this.contribuicaoAnosAteEC103 = '33';
+//   this.contribuicaoMesesAteEC103 = '04';
+//   this.contribuicaoDiasAteEC103 = '10';
+
+//   this.contribuicaoAnos = '33';
+//   this.contribuicaoMeses = '04';
+//   this.contribuicaoDias = '10';
+
   }
 
   // ngAfterContentInit() {
