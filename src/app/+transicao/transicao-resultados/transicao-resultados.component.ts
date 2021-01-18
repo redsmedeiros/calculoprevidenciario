@@ -233,7 +233,22 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       idade.add(1, 'day');
     }
 
-    return idade;
+    const d1 = moment(dataFinal.format('DD/MM/YYYY'), 'DD/MM/YYYY');
+    const d2 = moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY');
+
+    if (d1.date() === d2.date() && d1.month() === d2.month()) {
+
+     return moment.duration({
+            days: 0,
+            months: idade.months(),
+            years: idade.years(),
+          });
+
+    }else{
+
+      return idade;
+
+    }
 
   }
 
@@ -389,7 +404,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     totalFator.years = Math.floor(xValor);
     const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
-    const dttDias = (xVarMes - totalFator.months) * 30;
+    const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.floor(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
@@ -397,7 +412,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
   public converterTempoDiasParaAnos(fullDays) {
-    return ((fullDays) / 365);
+    return ((fullDays) / 365.25);
   }
 
   public converterTempoDiasParaAnosFator(fullDays) {
@@ -418,6 +433,23 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
     const dttDias = (xVarMes - totalFator.months) * 30;
+    totalFator.days = Math.floor(dttDias);
+
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+  }
+
+
+  public converterTempoAnosP(fullYears) {
+
+    const totalFator = { years: 0, months: 0, days: 0, fullYears: fullYears };
+
+    const xValor = fullYears;
+
+    totalFator.years = Math.floor(xValor);
+    const xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.floor(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);

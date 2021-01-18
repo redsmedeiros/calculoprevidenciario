@@ -62,6 +62,9 @@ export class TutorialListComponent implements OnInit {
     }, {
       label: 'Pensão por Morte de Segurado Aposentado na Data do Óbito',
       value: '374977398'
+    },{
+      label: 'Planejamento Previdenciário - Plataforma IEPREV Premium',
+      value: '499277891'
     },
     ];
 
