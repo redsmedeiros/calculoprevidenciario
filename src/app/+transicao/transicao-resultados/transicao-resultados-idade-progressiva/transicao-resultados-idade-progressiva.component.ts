@@ -27,7 +27,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     2029: { m: 65, md: 23741, f: 61, fd: 22280 },
     2030: { m: 65, md: 23741, f: 61.5, fd: 22462 },
     2031: { m: 65, md: 23741, f: 62, fd: 22645 },
-
   }
 
 
@@ -243,18 +242,41 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     // }
 
     const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
-                            this.seguradoTransicao.contribuicaoFracionadoAnos)
-                            <=
-                            (this.requisitoIdadeProgressivaRegra2[moment().year()][this.seguradoTransicao.sexo] -
-                              this.seguradoTransicao.idadeFracionada)
-                          );
+      this.seguradoTransicao.contribuicaoFracionadoAnos)
+      <=
+      (this.requisitoIdadeProgressivaRegra2[moment().year()][this.seguradoTransicao.sexo] -
+        this.seguradoTransicao.idadeFracionada)
+    );
 
     if (verificacao) {
-      auxiliarDate = moment({
-        year: auxiliarDate.year(),
-        month: this.seguradoTransicao.dataNascimento.month(),
-        day: this.seguradoTransicao.dataNascimento.date()
-      });
+      // auxiliarDate = moment({
+      //   year: auxiliarDate.year(),
+      //   month: this.seguradoTransicao.dataNascimento.month(),
+      //   day: this.seguradoTransicao.dataNascimento.date()
+      // });
+
+
+      if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
+       ||
+        ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
+
+        auxiliarDate = moment({
+          year: auxiliarDate.year(),
+          month: auxiliarDate.month(),
+          day: this.seguradoTransicao.dataNascimento.date()
+        });
+
+      } else {
+
+        auxiliarDate = moment({
+          year: auxiliarDate.year(),
+          month: this.seguradoTransicao.dataNascimento.month(),
+          day: this.seguradoTransicao.dataNascimento.date()
+        });
+
+      }
+
+
     }
 
 
@@ -262,6 +284,34 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     if (idadeMoment.days() === 30) {
       idadeMoment.add(1, 'day');
     }
+
+
+
+    if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
+
+
+      if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
+       ||
+        ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
+
+        idadeMoment = moment.duration({
+          days: 0,
+          months: 6,
+          years: idadeMoment.years(),
+        });
+
+      } else {
+
+        idadeMoment = moment.duration({
+          days: 0,
+          months: idadeMoment.months(),
+          years: idadeMoment.years(),
+        });
+
+      }
+
+    }
+
 
 
     // console.log('-- regra 2');
