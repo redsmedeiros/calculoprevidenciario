@@ -267,7 +267,15 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // }
 
 
-    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+    const testContrib = (this.seguradoTransicao.contribuicaoFracionadoAnos - 15);
+    const testeIdade = ( this.getparametrosRegra5(auxiliarDate.year(), this.seguradoTransicao.sexo) -
+                        this.seguradoTransicao.idadeFracionada );
+
+                        // console.log(testContrib);
+                        // console.log(testeIdade);
+
+  //  if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+    if (testContrib < testeIdade) {
       auxiliarDate = moment({
         year: auxiliarDate.year(),
         month: this.seguradoTransicao.dataNascimento.month(),
@@ -279,7 +287,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     } else {
 
       idadeMoment = this.calcularIdade(auxiliarDate);
-      //idadeMoment.add(-1, 'day');
+      idadeMoment.add(-1, 'day');
 
     }
 
