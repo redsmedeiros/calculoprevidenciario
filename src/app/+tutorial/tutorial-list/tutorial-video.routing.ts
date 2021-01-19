@@ -6,6 +6,10 @@ const routesTutorialList: Routes = [
   {
     path: '',
     component: TutorialListComponent
+  },
+  {
+    path: 'video/:id',
+    component: TutorialListComponent
   }
 ];
 

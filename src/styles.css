@@ -608,6 +608,11 @@ a[class*="action-"]:hover {
   background: #4a4d4f !important;
   color: #fff !important;
 }
+.bg-ieprev-red {
+  border-color: #832121 !important;
+  background: #832121 !important;
+  color: #fff !important;
+}
 
 .color-ieprev {
   color: #4a4d4f !important;
@@ -767,3 +772,4 @@ a[class*="action-"]:hover {
     margin-bottom: 5rem;
   }
 }
+

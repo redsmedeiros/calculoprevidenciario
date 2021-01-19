@@ -1,3 +1,9 @@
 .control-label{
     font-weight: 600;
 }
+
+.btn-info-custom-plan {
+    color: #0d0d0d !important;
+    background-color: #ffaa21 !important;
+    border-color: #ffaa21 !important;
+  }

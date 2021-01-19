@@ -14,7 +14,7 @@
       </header>
       <div>
         <div
-          *ngIf="segurado.nome"
+          *ngIf="segurado"
           class="widget-body p-0 pb-4 widget-body-custom"
         >
           <ul class="list-inline m-0">
@@ -54,9 +54,9 @@
         </span>
         <h2>Benefício Atual Selecionado</h2>
       </header>
-      <div>
+      <div >
         <div
-          *ngIf="calculo.data_pedido_beneficio"
+          *ngIf="calculo"
           class="widget-body p-0 pb-3 widget-body-custom"
         >
           <ul class="list-inline m-0">
@@ -160,7 +160,8 @@
                       >Salário de Contribuição - SC*:</label
                     >
                     <div class="col-md-5">
-                      <input
+                      <div class="input-group">
+                        <input
                         class="form-control"
                         placeholder="Valor Benefício"
                         type="text"
@@ -173,9 +174,26 @@
                         class="text-danger"
                         >{{ errors.get("valor_beneficio") }}</small
                       >
+                      <span class="input-group-addon btn-info-custom-plan"
+                      popoverPlacement="left" 
+                      [popoverOnHover]="true"
+                      [popover]="avisoValorContrib"
+                      >
+                      <popover-content #avisoValorContrib
+                        [closeOnClickOutside]="true"
+                        >
+                        <div class="alert alert-danger bg-ieprev fade in bold" 
+                         >
+                         O valor dos Salário de Contribuição é fixo em todas as competência futuras.
+                        </div>
+                        </popover-content>
+                        <i class="fa fa-question-circle fa-1-6x"></i>
+                      </span>
+                      </div>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-7 col-lg-7">
                   <div class="form-group">
                     <label class="control-label col-md-2" for="especiePlan"
