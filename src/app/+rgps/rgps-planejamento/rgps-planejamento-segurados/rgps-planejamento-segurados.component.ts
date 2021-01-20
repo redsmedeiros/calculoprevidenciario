@@ -302,6 +302,28 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   }
 
+  /**
+   * Selecionar somente umm checkBox De acordo com a Classe e Id
+   * @param idRow id do elemeto unico
+   * @param className classe de todos os checkbox
+   */
+  public checkedUniqueCount(idRow: string, className: string) {
+
+    // const teste2 = <HTMLInputElement>document.getElementById(idRow);
+    // const teste2 = <HTMLInputElement>document.querySelector('.checkboxSegurado:checked');
+    let count = 0
+    const listCheckBox = Array.from(document.querySelectorAll(className));
+    listCheckBox.forEach((rowCheck) => {
+
+      if ((<HTMLInputElement>rowCheck).id === idRow && (<HTMLInputElement>rowCheck).checked) {
+        count++;
+      }
+
+    });
+
+    return count;
+  }
+
 
   // private setStepDefaultRetorno(stepNumber) {
 
@@ -317,12 +339,26 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
 
   public setSeguradoSelecionado(dataSegurado) {
-    
-    this.seguradoSelecionado = dataSegurado;
 
+    let stepStatus = false;
+    this.seguradoSelecionado = {};
+
+    this.seguradoSelecionado = dataSegurado;
     this.checkedUnique(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado');
-    let stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
-    stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
+    stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
+    //stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado') === 0) {
+       stepStatus = false;
+      this.seguradoSelecionado = {};
+    }
+
+    // if ((dataSegurado.id === this.seguradoSelecionado.id)) {
+    //   stepStatus = false;
+    //   this.seguradoSelecionado = {};
+    // }else{
+
+    // }
 
     this.setStepValidate('step1', stepStatus);
     this.isSeguradoSelecionado = stepStatus;
@@ -332,11 +368,18 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   public setCalculoSelecionado(dataCalculo) {
 
-    this.calculoSelecionado = dataCalculo;
+    let stepStatus = false;
+    this.calculoSelecionado = {};
 
+    this.calculoSelecionado = dataCalculo;
     this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
-    let stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
-    stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
+    stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+    // stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
+      stepStatus = false;
+      this.calculoSelecionado = {};
+   }
 
     this.setStepValidate('step2', stepStatus);
     this.isCalculoSelecionado = stepStatus;
@@ -346,11 +389,18 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   public setPlanejamentoSelecionado(dataplanejamento) {
 
-    this.planejamentoSelecionado = dataplanejamento;
+    let stepStatus = false;
+    this.planejamentoSelecionado = {};
 
+    this.planejamentoSelecionado = dataplanejamento;
     this.checkedUnique(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento');
-    let stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
-    stepStatus = (this.isPlanejamentoSelecionado && dataplanejamento.id === this.planejamentoSelecionado.id) ? false : true;
+    stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
+    // stepStatus = (this.isPlanejamentoSelecionado && dataplanejamento.id === this.planejamentoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento') === 0) {
+      stepStatus = false;
+      this.planejamentoSelecionado = {};
+   }
 
     this.isPlanejamentoSelecionado = stepStatus;
     this.setStepValidate('step3', stepStatus);
