@@ -335,8 +335,8 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.calculoSelecionado = dataCalculo;
 
     this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
-    const stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
-    ///stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
+    let stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+    stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
 
     this.setStepValidate('step2', stepStatus);
     this.isCalculoSelecionado = stepStatus;
@@ -349,8 +349,8 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.planejamentoSelecionado = dataplanejamento;
 
     this.checkedUnique(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento');
-    const stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
- //   stepStatus = (this.isPlanejamentoSelecionado && dataplanejamento.id === this.planejamentoSelecionado.id) ? false : true;
+    let stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
+    stepStatus = (this.isPlanejamentoSelecionado && dataplanejamento.id === this.planejamentoSelecionado.id) ? false : true;
 
     this.isPlanejamentoSelecionado = stepStatus;
     this.setStepValidate('step3', stepStatus);
