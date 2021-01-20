@@ -230,7 +230,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       days: tempo.dias
     });
 
-    
+
     const tempoAtePec = this.contribuicaoPrimariaAtePec;
     const tempoContribuicaoTotalAtePec = {
       dias: (tempoAtePec.anos * 365.25) + (tempoAtePec.meses * 30.436875) + tempoAtePec.dias,
@@ -422,12 +422,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       for (const elementEspecie of this.listaConclusaoAcesso) {
 
-        melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI))
+        melhorCalculo = elementEspecie.calculosPossiveis.find((element) => (element.destaqueMelhorValorRMI));
 
         if (elementEspecie.status &&
-          (this.isExits(melhorCalculo) && this.isExits(melhorCalculo.rmi) && this.isExits(melhorCalculo.rmi.value))) {
+          (this.isExits(melhorCalculo) && this.isExits(melhorCalculo.rmi) && this.isExits(melhorCalculo.rmi.value))
+          && (melhorValorRMI < melhorCalculo.rmi.value)
+        ) {
+
           melhorValorRMI = melhorCalculo.rmi.value;
           melhorSoma = melhorCalculo.somaContribuicoes.value;
+
         }
 
       }
@@ -472,7 +476,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo.valor_beneficio = this.melhorValorRMI;
         this.CalculoRgpsService.update(this.calculo);
 
-      }, 1500);
+      }, 500);
 
     } else if (this.isPlanejamento) {
 
@@ -493,10 +497,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     this.planejamento.novo_rmi = Math.round(this.melhorValorRMI * 100) / 100;
     this.planejamento.nova_soma_contribuicoes = Math.round(this.melhorSoma * 100) / 100;
-    
+
     const planejamentoContribuicoesAdicionaisInicio =
       this.planejamentoContribuicoesAdicionais[this.planejamentoContribuicoesAdicionais.length - 1];
-      const planejamentoContribuicoesAdicionaisFim = this.planejamentoContribuicoesAdicionais[0];
+    const planejamentoContribuicoesAdicionaisFim = this.planejamentoContribuicoesAdicionais[0];
 
     this.planejamento.resultado_rmi_novo = JSON.stringify({
       numero_contribuicoes_adicionais: this.planejamentoContribuicoesAdicionais.length,

@@ -535,10 +535,19 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
         // }
 
+
+        let ValorAcumuladoAtingirIdadeIBGE = this.definicaoMoeda.formatMoney(totalEsperado);
+        
+        if(totalEsperado === 0){
+          ValorAcumuladoAtingirIdadeIBGE = 'Idade na DIB Futura maior que a Idade Máxima de Acordo com a Expectativa de Sobrevida - IBGE';
+        }
+
+
+
         this.resultadosGeral.push({
           // label: 'Valor Acumulado ao Atingir a Idade Acordo com a Expectativa de Sobrevida (IBGE)',
           label: 'Valor Acumulado ao Atingir a Idade de Acordo com a Expectativa de Sobrevida - IBGE (incluindo 13º salário)',
-          value: this.definicaoMoeda.formatMoney(totalEsperado),
+          value: ValorAcumuladoAtingirIdadeIBGE,
         });
 
 

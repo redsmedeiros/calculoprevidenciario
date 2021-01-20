@@ -97,14 +97,19 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.stepUrlSegurado = this.route.snapshot.params['id_segurado'];
     this.stepUrlCalculo = this.route.snapshot.params['id_calculo'];
 
-    if (this.stepUrl !== undefined 
+    if (this.stepUrl !== undefined) {
+      this.isPaginaInicial = false;
+      this.isUpdatingPlan = false;
+    }
+
+    if (this.stepUrl !== undefined
       && this.stepUrlSegurado !== undefined) {
+
       this.isPaginaInicial = false;
 
       const keyStepUrl = `step${this.stepUrl}`;
       const step = this.steps.find((item) => keyStepUrl === item.key);
       this.activeStep = step;
-
 
       this.getSeguradoCalculoURL();
     }
@@ -147,9 +152,23 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
   setActiveStep(steo) {
 
     const step = this.steps.find((item) => steo.key === item.key);
-    // if (step.valid) {
-    this.activeStep = steo;
-    // }
+
+    //console.log(this.steps);
+
+    if (step.valid || this.stepUrl !== undefined) {
+      this.activeStep = steo;
+      this.clearDataSelected(this.activeStep);
+    }
+
+    //  console.log(steo);
+    //  console.log(this.activeStep);
+    //this.setStepDefaultRetorno(stepNumber)
+
+
+    if (steo.key === 'step1' || steo.key === 'step2' || steo.key === 'step3') {
+      this.isUpdatingPlan = false;
+    }
+
 
   }
 
@@ -158,13 +177,22 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     this.setStepValidate(step.key, false);
     switch (step.key) {
       case 'step1':
-        this.unCheckedAll('.checkboxSegurado')
+        this.isSeguradoSelecionado = false;
+        this.seguradoSelecionado = {}
+        this.unCheckedAll('.checkboxSegurado');
+
         break;
       case 'step2':
-        this.unCheckedAll('.checkboxCalculos')
+        this.isCalculoSelecionado = false;
+        this.calculoSelecionado = {}
+        this.unCheckedAll('.checkboxCalculos');
+
         break;
       case 'step3':
-        this.unCheckedAll('.checkboxPlanejamento')
+        this.isPlanejamentoSelecionado = false;
+        this.planejamentoSelecionado = {}
+        this.unCheckedAll('.checkboxPlanejamento');
+
         break;
       // case 'step4':
       // this.setStepValidate('step4', false);
@@ -274,14 +302,63 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   }
 
+  /**
+   * Selecionar somente umm checkBox De acordo com a Classe e Id
+   * @param idRow id do elemeto unico
+   * @param className classe de todos os checkbox
+   */
+  public checkedUniqueCount(idRow: string, className: string) {
+
+    // const teste2 = <HTMLInputElement>document.getElementById(idRow);
+    // const teste2 = <HTMLInputElement>document.querySelector('.checkboxSegurado:checked');
+    let count = 0
+    const listCheckBox = Array.from(document.querySelectorAll(className));
+    listCheckBox.forEach((rowCheck) => {
+
+      if ((<HTMLInputElement>rowCheck).id === idRow && (<HTMLInputElement>rowCheck).checked) {
+        count++;
+      }
+
+    });
+
+    return count;
+  }
+
+
+  // private setStepDefaultRetorno(stepNumber) {
+
+  //   for (let i = 1; i <= stepNumber; i++) {
+
+  //     let step = 'step' + i;
+  //     this.setStepValidate(step, false);
+  //   }
+
+  //   this.isUpdatingPlan = false;
+
+  // }
+
+
   public setSeguradoSelecionado(dataSegurado) {
 
+    let stepStatus = false;
+    this.seguradoSelecionado = {};
+
     this.seguradoSelecionado = dataSegurado;
-
     this.checkedUnique(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado');
-    const stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
+    stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
+    //stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
 
-    // console.log(stepStatus);
+    if (this.checkedUniqueCount(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado') === 0) {
+       stepStatus = false;
+      this.seguradoSelecionado = {};
+    }
+
+    // if ((dataSegurado.id === this.seguradoSelecionado.id)) {
+    //   stepStatus = false;
+    //   this.seguradoSelecionado = {};
+    // }else{
+
+    // }
 
     this.setStepValidate('step1', stepStatus);
     this.isSeguradoSelecionado = stepStatus;
@@ -291,23 +368,39 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   public setCalculoSelecionado(dataCalculo) {
 
-    this.calculoSelecionado = dataCalculo;
+    let stepStatus = false;
+    this.calculoSelecionado = {};
 
+    this.calculoSelecionado = dataCalculo;
     this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
-    const stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+    stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+    // stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
+      stepStatus = false;
+      this.calculoSelecionado = {};
+   }
 
     this.setStepValidate('step2', stepStatus);
     this.isCalculoSelecionado = stepStatus;
-    this.isUpdatingPlan = false;
+    this.isUpdatingPlan = !stepStatus;
   }
 
 
   public setPlanejamentoSelecionado(dataplanejamento) {
 
-    this.planejamentoSelecionado = dataplanejamento;
+    let stepStatus = false;
+    this.planejamentoSelecionado = {};
 
+    this.planejamentoSelecionado = dataplanejamento;
     this.checkedUnique(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento');
-    const stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
+    stepStatus = (this.isExits(this.planejamentoSelecionado) && isObject(this.planejamentoSelecionado));
+    // stepStatus = (this.isPlanejamentoSelecionado && dataplanejamento.id === this.planejamentoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento') === 0) {
+      stepStatus = false;
+      this.planejamentoSelecionado = {};
+   }
 
     this.isPlanejamentoSelecionado = stepStatus;
     this.setStepValidate('step3', stepStatus);
@@ -326,7 +419,8 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     });
 
 
-    this.router.navigate(['/rgps/rgps-segurados']);
+    // this.router.navigate(['/rgps/rgps-segurados']);
+    this.router.navigate(['/contagem-tempo/contagem-tempo-segurados']);
   }
 
   redirecionarSeguradoCalculosRMI() {
@@ -339,7 +433,8 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
       timer: 3000
     });
 
-    this.router.navigate([`/rgps/rgps-calculos/${this.seguradoSelecionado.id}`]);
+    //this.router.navigate([`/rgps/rgps-calculos/${this.seguradoSelecionado.id}`]);
+    this.router.navigate([`/contagem-tempo/contagem-tempo-calculos/${this.seguradoSelecionado.id}`]);
 
   }
 
