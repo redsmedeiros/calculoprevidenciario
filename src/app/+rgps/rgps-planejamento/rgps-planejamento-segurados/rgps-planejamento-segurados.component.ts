@@ -153,8 +153,6 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
     const step = this.steps.find((item) => steo.key === item.key);
 
-    //console.log(this.steps);
-
     if (step.valid || this.stepUrl !== undefined) {
       this.activeStep = steo;
       this.clearDataSelected(this.activeStep);
@@ -174,18 +172,29 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
 
   private clearDataSelected(step) {
 
-    this.setStepValidate(step.key, false);
+    // this.setStepValidate(step.key, false);
+    this.setStepValidateClear(false);
     switch (step.key) {
       case 'step1':
+
         this.isSeguradoSelecionado = false;
         this.seguradoSelecionado = {}
         this.unCheckedAll('.checkboxSegurado');
 
-        break;
-      case 'step2':
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
+
+        break;
+      case 'step2':
+
+        this.isCalculoSelecionado = false;
+        this.calculoSelecionado = {}
+        this.unCheckedAll('.checkboxCalculos');
+
+        this.isPlanejamentoSelecionado = false;
+        this.planejamentoSelecionado = {}
+        this.unCheckedAll('.checkboxPlanejamento');
 
         break;
       case 'step3':
@@ -255,6 +264,14 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     // });
   }
 
+
+
+  private setStepValidateClear(status) {
+    this.steps.map((step) => {
+      step.valid = status;
+      step.checked = status;
+    });
+  }
 
   private setStepValidate(stepKey, status) {
     this.steps.map((step) => {
@@ -349,7 +366,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     //stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
 
     if (this.checkedUniqueCount(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado') === 0) {
-       stepStatus = false;
+      stepStatus = false;
       this.seguradoSelecionado = {};
     }
 
@@ -379,7 +396,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     if (this.checkedUniqueCount(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
       stepStatus = false;
       this.calculoSelecionado = {};
-   }
+    }
 
     this.setStepValidate('step2', stepStatus);
     this.isCalculoSelecionado = stepStatus;
@@ -400,7 +417,7 @@ export class RgpsPlanejamentoSeguradosComponent implements OnInit {
     if (this.checkedUniqueCount(`${dataplanejamento.id}-checkbox-planejamento`, '.checkboxPlanejamento') === 0) {
       stepStatus = false;
       this.planejamentoSelecionado = {};
-   }
+    }
 
     this.isPlanejamentoSelecionado = stepStatus;
     this.setStepValidate('step3', stepStatus);
