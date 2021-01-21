@@ -1039,7 +1039,7 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       // }
-    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio < data19) {
+    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio <= data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
@@ -1058,7 +1058,7 @@ export class RgpsResultadosComponent implements OnInit {
 
       calculo.mostrarCalculoApos99 = true;
 
-    } else if (dataInicioBeneficio >= data19) {
+    } else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
