@@ -280,10 +280,74 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   //   return { semFator: countSemFator, comFator: count };
   // }
 
+
+  private diffYearMonthDay(dt1, dt2) {
+
+    dt1 = new Date(dt1);
+    dt2 = new Date(dt2);
+
+    let dy = dt1.getYear() - dt2.getYear();
+    let dm = dt1.getMonth() - dt2.getMonth();
+    let dd = dt1.getDate() - dt2.getDate();
+
+    if (dd < 0 && dt2.getDate() <= 30) { dm -= 1; dd += 30; }
+    if (dd < 0 && dt2.getDate() === 31) { dm -= 1; dd += 31; }
+    if (dm < 0) { dy -= 1; dm += 12; }
+
+    console.log(dy, 'Year(s),', dm, 'Month(s), and', dd, 'Days.');
+
+    let time = (dt2.getTime() - dt1.getTime()) / 1000;
+    let year = Math.abs(Math.round((time / (60 * 60 * 24)) / 365.25));
+    let month = Math.abs(Math.round(time / (60 * 60 * 24 * 7 * 4)));
+
+    let days = Math.abs(Math.round(time / (3600 * 24)));
+    return 'Year :- ' + year + ' Month :- ' + month + ' Days :-' + days;
+
+  }
+
+  private dateDiff(startdate, enddate) {
+    // define moments for the startdate and enddate
+    let startdateMoment = moment(startdate);
+    let enddateMoment = moment(enddate);
+
+    // getting the difference in years
+    let years = enddateMoment.diff(startdateMoment, 'years');
+
+    // moment returns the total months between the two dates, subtracting the years
+    let months = enddateMoment.diff(startdateMoment, 'months') - (years * 12);
+
+    // to calculate the days, first get the previous month and then subtract it
+    startdateMoment.add(years, 'years').add(months, 'months');
+    let days = enddateMoment.diff(startdateMoment, 'days')
+
+    return {
+      years: years,
+      months: months,
+      days: days
+    };
+
+  }
+
+
+  private leapYear(year) {
+    return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+  }
+
+  private verificarIntevaloContemBissextos(anoInicio: number, anoFim: number) {
+    for (let i = anoInicio; i < anoFim; i++) {
+      if (this.leapYear(i)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public dataDiffDateToDate(date1, date2, fator) {
-    let b = moment(date1);
+    let b = moment(date1).hour(0).minute(0).second(0).millisecond(0);
     // let a = moment(date2).add(1, 'd');
-    let a = moment(date2);
+    let a = moment(date2).hour(0).minute(0).second(0).millisecond(0);
+
+
 
     // console.log(a);
     // console.log(b);
@@ -300,17 +364,25 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     // ) {
 
+    console.log('---- ' + b.format('DD/MM/YYYY') + '- Ate - ' + a.format('DD/MM/YYYY'))
+    console.log(Number(a.format('DD')) <= 30);
+    console.log((Number(b.format('DD')) < Number(a.format('DD'))));
+    console.log(!(b.daysInMonth() === 31 && a.daysInMonth() === 30));
+    console.log((b.daysInMonth() === 30 && a.daysInMonth() === 30));
+    console.log('----')
+
+
+    // if (
+    //   (Number(a.format('DD')) <= 30
+    //     && (Number(b.format('DD')) < Number(a.format('DD'))))
+    //   || !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
+    //   || !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
+    // ) {
+
     if (
-      (Number(a.format('DD')) <= 30
-      || (Number(b.format('DD')) < Number(a.format('DD'))))
-      || !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
-      || !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
+      (Number(a.format('DD')) <= 30 && (Number(b.format('DD')) < Number(a.format('DD'))))
+      || (Number(a.format('DD')) <= 30 &&  !this.verificarIntevaloContemBissextos(b.year(), a.year()))
     ) {
-
-
-      // console.log(b.daysInMonth());
-      // console.log(a.daysInMonth());
-
       a = a.add(1, 'd');
     }
 
@@ -329,6 +401,10 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     // console.log(totalGeralEmDias);
     // console.log(totalGeraldiff);
+
+    console.log(totalGeraldiff);
+    console.log(this.diffYearMonthDay(a.format('YYYY-MM-DD'), b.format('YYYY-MM-DD')));
+    console.log(this.dateDiff(date1, date2));
 
     diff = a.diff(b, 'years');
     b.add(diff, 'years');

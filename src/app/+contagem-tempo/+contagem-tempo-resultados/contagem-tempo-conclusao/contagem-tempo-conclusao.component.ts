@@ -131,10 +131,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+
+  private leapYear(year) {
+    return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+  }
+
   private defineMelhorFator(auxiliarDate) {
     let fator = 0;
     let inicioVinculo: any;
     let fimVinculo: any;
+
 
     for (const vinculo of this.periodosList) {
 
@@ -149,17 +155,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      // if (Number(fimVinculo.format('DD')) <= 30 && (Number(fimVinculo.format('DD')) < Number(inicioVinculo.format('DD')))) {
       if (
         (Number(fimVinculo.format('DD')) <= 30
         || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
         || !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
         || !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
       ) {
-
-        // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-        // }
 
         if (moment(auxiliarDate).isBetween(
           moment(inicioVinculo),
@@ -170,9 +171,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       } else {
 
-        // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
-        //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-        // }
 
         if (moment(auxiliarDate).isBetween(
           moment(inicioVinculo),
@@ -180,7 +178,36 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
         }
 
-      }
+       }
+
+      // if (
+      //   (Number(fimVinculo.format('DD')) <= 30 && (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
+      //   || (Number(fimVinculo.format('DD')) <= 30 && !this.leapYear(auxiliarDate.year()))
+      // ) {
+
+
+      //   if (moment(auxiliarDate).isBetween(
+      //     moment(inicioVinculo),
+      //     moment(fimVinculo), undefined, '(]')) {
+      //     fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      //   }
+
+      //   // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+      //   //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      //   // }
+
+
+      // } else {
+
+      //   if (moment(auxiliarDate).isBetween(
+      //     moment(inicioVinculo),
+      //     // moment(fimVinculo), undefined, '[]')) {
+      //     moment(fimVinculo), undefined)) {
+      //     fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      //   }
+
+
+      // }
 
     }
     return Number(fator);
@@ -199,6 +226,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
       const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
 
+      
 
       //  console.log(teste.add(1, 'days'));
       // console.log(this.toDateString(teste.add(1, 'days')))
@@ -260,15 +288,17 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       } while (fimContador.isSameOrAfter(auxiliarDate));
 
 
-      // console.log(auxiliarDate);
-      // console.log(count);
-      // console.log(this.yearMonthDaysToFormate(count));
-      // console.log(moment.duration(count, 'days').humanize());
-      // console.log(count88)
-      // console.log(count91)
-      // console.log(count98)
-      // console.log(count99)
-      // console.log(count19)
+      console.log('--Tempo Final----');
+      console.log(auxiliarDate);
+      console.log(count);
+      console.log(this.yearMonthDaysToFormate(count));
+      console.log(moment.duration(count, 'days').humanize());
+      console.log(count88)
+      console.log(count91)
+      console.log(count98)
+      console.log(count99)
+      console.log(count19)
+      console.log('------');
 
 
       this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
@@ -506,7 +536,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
-      } while ( fimContador.isSameOrAfter(auxiliarDate));
+      } while (fimContador.isSameOrAfter(auxiliarDate));
 
       // auxiliarDate <= fimContador
 
@@ -845,7 +875,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
   toMoment(dateString) {
-    return moment(dateString, 'DD/MM/YYYY');
+    return moment(dateString, 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
   }
 
   toMomentTempo(dateString) {
