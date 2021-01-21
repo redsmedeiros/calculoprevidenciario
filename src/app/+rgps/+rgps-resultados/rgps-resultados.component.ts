@@ -1381,7 +1381,7 @@ export class RgpsResultadosComponent implements OnInit {
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
     if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
-     && !calculo.contribuicao_primaria_19.search(/undefined/)) {
+     && calculo.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
 
       calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
       calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
