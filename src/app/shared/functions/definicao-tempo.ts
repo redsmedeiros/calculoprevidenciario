@@ -6,6 +6,102 @@ import { Console } from 'console';
 export class DefinicaoTempo {
 
 
+
+    static toDateStringYYYY(date) {
+        return moment(date).format('YYYY-MM-DD');
+    }
+
+
+    
+
+    static monthsDiff(d1, d2) {
+        let date1 = new Date(d1);
+        let date2 = new Date(d2);
+        let years = date2.getFullYear() - date1.getFullYear();
+        let months = (years * 12) + (date2.getMonth() - date1.getMonth());
+        return months;
+    }
+
+
+    static dataDiffDateToDateCustom(dataInicio, dataFim) {
+
+        const dataInicioString = this.toDateStringYYYY(dataInicio.clone());
+        const dataFimString = this.toDateStringYYYY(dataFim.clone());
+
+        const compareDataInicioStartM = this.toDateStringYYYY(moment(dataInicioString, 'YYYY-MM-DD').startOf('month'));
+        const compareDataFimStartM = this.toDateStringYYYY(moment(dataFimString, 'YYYY-MM-DD').endOf('month'));
+
+        let totalDias = 0;
+        let totalMeses = 0;
+
+        let diasInicio = 0
+        let diasFim = 0
+        // console.log(dataInicioString);
+        // console.log(dataFimString);
+
+
+        //  let teste = dataInicio.clone().hour(0).minute(0).second(0).millisecond(0);
+        //  let dataInicioString = moment(this.toDateStringYYYY(teste), 'YYYY-MM-DD');
+
+
+        console.log('------')
+        totalMeses = this.monthsDiff(compareDataInicioStartM, compareDataFimStartM);
+
+        console.log(totalMeses);
+
+        if (dataInicio.isSame(compareDataInicioStartM) && dataFim.isSame(compareDataFimStartM)) {
+
+            totalDias = (totalMeses * 30)
+
+        } else {
+
+            totalDias = (totalMeses * 30)
+
+
+            if (dataInicio.isSame(compareDataInicioStartM)) {
+
+
+            } else {
+
+                totalDias -= 30;
+                diasInicio = (30 - dataInicio.date()) + 1;
+                totalDias += diasInicio;
+
+            }
+
+
+            if (dataFim.isSame(compareDataFimStartM)) {
+
+                //console.log(compareDataFimStartM);
+
+            } else {
+
+                totalDias -= 30;
+                diasFim = dataFim.date();
+                totalDias += diasFim;
+
+            }
+
+
+
+        }
+
+
+        console.log(totalDias);
+
+
+    }
+
+
+    //
+
+
+
+
+
+
+
+
     static formateStringAnosMesesDias(anos, meses, dias, notDays = false) {
 
         if (notDays) {

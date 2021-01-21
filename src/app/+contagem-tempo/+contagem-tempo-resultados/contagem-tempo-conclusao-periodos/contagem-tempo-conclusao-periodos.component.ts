@@ -331,8 +331,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private ajusteFimPeriodo28dias(calculoDataFim) {
 
-    console.log(calculoDataFim);
-    console.log(((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2));
+    // console.log(calculoDataFim);
+    // console.log(((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2));
 
     if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
       // const adicional = (calculoDataFim.date() === 28) ? 3 : 2
@@ -362,7 +362,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     let a = moment(date2).hour(0).minute(0).second(0).millisecond(0);
     let aRegra = moment(date2).hour(0).minute(0).second(0).millisecond(0);
 
-
+    this.dataDiffDateToDateCustom(moment(date1).hour(0).minute(0).second(0).millisecond(0),
+      moment(date2).hour(0).minute(0).second(0).millisecond(0));
 
     // console.log(a);
     // console.log(b);
@@ -480,6 +481,156 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     return { semFator: total, comFator: totalFator };
   };
+
+
+  private convertDiasToYMD(totalDias30){
+
+    let total = { years: 0, months: 0, days: 0, fullDays: totalDias30};
+
+    return total;
+  }
+
+
+
+
+  public dataDiffDateToDateCustom(dataInicio, dataFim) {
+
+    const dataInicioString = this.toDateStringYYYY(dataInicio.clone());
+    const dataFimString = this.toDateStringYYYY(dataFim.clone());
+
+    const compareDataInicioStartM = this.toDateStringYYYY(moment(dataInicioString, 'YYYY-MM-DD').startOf('month'));
+    const compareDataFimStartM = this.toDateStringYYYY(moment(dataFimString, 'YYYY-MM-DD').endOf('month'));
+
+    let totalDias = 0;
+    let totalMeses = 0;
+
+    let diasInicio = 0
+    let diasFim = 0
+    // console.log(dataInicioString);
+    // console.log(dataFimString);
+
+
+    //  let teste = dataInicio.clone().hour(0).minute(0).second(0).millisecond(0);
+    //  let dataInicioString = moment(this.toDateStringYYYY(teste), 'YYYY-MM-DD');
+
+
+    console.log('------')
+    totalMeses = this.monthsDiff(compareDataInicioStartM, compareDataFimStartM);
+
+    console.log(totalMeses);
+
+    if (dataInicio.isSame(compareDataInicioStartM) && dataFim.isSame(compareDataFimStartM)) {
+
+      totalDias = (totalMeses * 30)
+
+    } else {
+
+      totalDias = (totalMeses * 30)
+
+
+      if (dataInicio.isSame(compareDataInicioStartM)) {
+
+
+      }else{
+
+        totalDias -= 30;
+        diasInicio = (30 - dataInicio.date()) + 1 ;
+        totalDias += diasInicio;
+
+      }
+
+
+      if (dataFim.isSame(compareDataFimStartM)) {
+
+        //console.log(compareDataFimStartM);
+
+      }else{
+
+        totalDias -= 30;
+        diasFim = dataFim.date();
+        totalDias += diasFim;
+
+      }
+
+
+
+    }
+
+
+    console.log(totalDias);
+
+
+  }
+
+
+  private monthsDiff(d1, d2) {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+    let years = date2.getFullYear() - date1.getFullYear();
+    let months = (years * 12) + (date2.getMonth() - date1.getMonth());
+    return months;
+  }
+
+  //
+
+  private ajusteFimPeriodo28dias2(calculoDataFim) {
+
+    if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
+      const adicional = (calculoDataFim.date() === 28) ? 2 : 1
+      return calculoDataFim.add(adicional, 'd');
+    }
+
+    return calculoDataFim;
+  }
+
+
+  private dataDiffCustom(dataInicio, dataFim) {
+
+    let auxiliarDate = dataInicio
+    const limitesDoVinculoClone = dataFim.clone();
+    //this.ajusteFimPeriodo28dias2(limitesDoVinculoClone)
+    const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
+
+    let count = 0;
+
+    do {
+
+      count++;
+      auxiliarDate = auxiliarDate.clone().add(1, 'days').hour(0).minute(0).second(0).millisecond(0);
+
+    } while (auxiliarDate < fimContador);
+    //} while (fimContador.isSameOrAfter(auxiliarDate));
+
+    count += this.ajusteFimPeriodo28dias(dataFim.clone());
+
+    console.log(count);
+  }
+
+
+
+  private dataDiffCustomM(dataInicio, dataFim) {
+
+    let auxiliarDate = moment(this.toDateString(dataInicio), 'DD/MM/YYYY');
+    const fimContador = moment(this.toDateString(dataFim), 'DD/MM/YYYY');
+
+    auxiliarDate.date(1).hour(1).minute(1).second(1).millisecond(1);
+    fimContador.date(1).hour(1).minute(1).second(1).millisecond(1).add(1, 'M');
+
+    let count = 0;
+
+    do {
+      count++;
+
+      auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
+
+    } while (fimContador.isSameOrAfter(auxiliarDate));
+
+    // auxiliarDate <= fimContador
+
+    console.log(count);
+
+  }
+
 
 
   /**
