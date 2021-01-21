@@ -329,6 +329,20 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
+  private ajusteFimPeriodo28dias(calculoDataFim) {
+
+    console.log(calculoDataFim);
+    console.log(((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2));
+
+    if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
+      // const adicional = (calculoDataFim.date() === 28) ? 3 : 2
+      // return calculoDataFim.add(adicional, 'd');
+      return (calculoDataFim.date() === 28) ? 2 : 1;
+    }
+
+    return 0;
+  }
+
   private leapYear(year) {
     return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
   }
@@ -346,6 +360,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     let b = moment(date1).hour(0).minute(0).second(0).millisecond(0);
     // let a = moment(date2).add(1, 'd');
     let a = moment(date2).hour(0).minute(0).second(0).millisecond(0);
+    let aRegra = moment(date2).hour(0).minute(0).second(0).millisecond(0);
 
 
 
@@ -364,12 +379,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     // ) {
 
-    console.log('---- ' + b.format('DD/MM/YYYY') + '- Ate - ' + a.format('DD/MM/YYYY'))
-    console.log(Number(a.format('DD')) <= 30);
-    console.log((Number(b.format('DD')) < Number(a.format('DD'))));
-    console.log(!(b.daysInMonth() === 31 && a.daysInMonth() === 30));
-    console.log((b.daysInMonth() === 30 && a.daysInMonth() === 30));
-    console.log('----')
+    // console.log('---- ' + b.format('DD/MM/YYYY') + '- Ate - ' + a.format('DD/MM/YYYY'))
+    // console.log(Number(a.format('DD')) <= 30);
+    // console.log((Number(b.format('DD')) < Number(a.format('DD'))));
+    // console.log(!(b.daysInMonth() === 31 && a.daysInMonth() === 30));
+    // console.log((b.daysInMonth() === 30 && a.daysInMonth() === 30));
+    // console.log('----')
 
 
     // if (
@@ -381,7 +396,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     if (
       (Number(a.format('DD')) <= 30 && (Number(b.format('DD')) < Number(a.format('DD'))))
-      || (Number(a.format('DD')) <= 30 &&  !this.verificarIntevaloContemBissextos(b.year(), a.year()))
+      || (Number(a.format('DD')) <= 30 && !this.verificarIntevaloContemBissextos(b.year(), a.year()))
     ) {
       a = a.add(1, 'd');
     }
@@ -402,9 +417,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     // console.log(totalGeralEmDias);
     // console.log(totalGeraldiff);
 
-    console.log(totalGeraldiff);
-    console.log(this.diffYearMonthDay(a.format('YYYY-MM-DD'), b.format('YYYY-MM-DD')));
-    console.log(this.dateDiff(date1, date2));
+    // console.log(totalGeraldiff);
+    // console.log(this.diffYearMonthDay(a.format('YYYY-MM-DD'), b.format('YYYY-MM-DD')));
+    // console.log(this.dateDiff(date1, date2));
 
     diff = a.diff(b, 'years');
     b.add(diff, 'years');
@@ -438,6 +453,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       // let xDias = ((total.days / 30) / 12);
       // let xMeses = (total.months / 12);
       // let xValor = ((total.years + xDias + xMeses) * fator);
+
+      totalGeralEmDias += this.ajusteFimPeriodo28dias(aRegra);
 
       let xValor = (this.Math.floor(totalGeralEmDias) * fator / 365.25); //  365.25
 

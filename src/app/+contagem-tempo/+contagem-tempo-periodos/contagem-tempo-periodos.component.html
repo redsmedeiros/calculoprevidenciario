@@ -190,6 +190,7 @@
                         maxlength="255"
                         [(ngModel)]="empresa"
                         placeholder="Nome da empresa"
+                        id="empresa"
                         name="empresa"
                         (change)="errors.clear('empresa')"
                         type="text"
@@ -215,11 +216,13 @@
                         class="form-control"
                         placeholder="DD/MM/AAAA"
                         [(ngModel)]="data_inicio"
+                        id="data_inicio"
                         name="data_inicio"
                         [textMask]="{ mask: dateMask }"
                         type="text"
                         (change)="errors.clear('data_inicio')"
                         autocomplete="on"
+                        (keyup)="moveNext($event, 7, 'data_termino')"
                       />
                       <small
                         *ngIf="errors.has('data_inicio')"
@@ -241,6 +244,7 @@
                         class="form-control"
                         placeholder="DD/MM/AAAA"
                         [(ngModel)]="data_termino"
+                        id="data_termino"
                         name="data_termino"
                         [textMask]="{ mask: dateMask }"
                         type="text"
@@ -352,6 +356,7 @@
                           type="radio"
                           name="carencia"
                           [value]="1"
+                         
                         />
                         Sim
                       </label>

@@ -147,62 +147,66 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       inicioVinculo = this.toMoment(vinculo.data_inicio);
       fimVinculo = this.toMoment(vinculo.data_termino);
 
+      fimVinculo = this.ajusteFimPeriodo28dias(fimVinculo);
+
       // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
+      // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
       //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       // }
 
-      if (
-        (Number(fimVinculo.format('DD')) <= 30
-        || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
-        || !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
-        || !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
-      ) {
+      // if (
+      //   (Number(fimVinculo.format('DD')) <= 30
+      //   || (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
+      //   || !(inicioVinculo.daysInMonth() === 31 && fimVinculo.daysInMonth() === 30)
+      //   || !(inicioVinculo.daysInMonth() === 30 && fimVinculo.daysInMonth() === 30)
+      // ) {
 
-        if (moment(auxiliarDate).isBetween(
-          moment(inicioVinculo),
-         // moment(fimVinculo), undefined, '[]')) {
-          moment(fimVinculo), undefined)) {
-            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-        }
+      //   if (moment(auxiliarDate).isBetween(
+      //     moment(inicioVinculo),
+      //    // moment(fimVinculo), undefined, '[]')) {
+      //     moment(fimVinculo), undefined)) {
+      //       fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      //   }
 
-      } else {
+      // } else {
 
 
-        if (moment(auxiliarDate).isBetween(
-          moment(inicioVinculo),
-          moment(fimVinculo), undefined, '[]')) {
-            fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-        }
+      //   if (moment(auxiliarDate).isBetween(
+      //     moment(inicioVinculo),
+      //     moment(fimVinculo), undefined, '[]')) {
+      //       fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      //   }
 
-       }
+      //  }
+
+
+      if (moment(auxiliarDate).isBetween(
+        moment(inicioVinculo),
+        moment(fimVinculo), undefined, '[]')) {
+        fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+      }
 
       // if (
       //   (Number(fimVinculo.format('DD')) <= 30 && (Number(inicioVinculo.format('DD')) < Number(fimVinculo.format('DD'))))
-      //   || (Number(fimVinculo.format('DD')) <= 30 && !this.leapYear(auxiliarDate.year()))
+      //   || (Number(auxiliarDate.format('DD')) <= 30 && !this.leapYear(auxiliarDate.year()))
       // ) {
 
 
       //   if (moment(auxiliarDate).isBetween(
       //     moment(inicioVinculo),
-      //     moment(fimVinculo), undefined, '(]')) {
+      //     moment(fimVinculo), undefined, '[]')) {
       //     fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       //   }
-
-      //   // if (auxiliarDate > inicioVinculo && auxiliarDate <= fimVinculo) {
-      //   //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-      //   // }
-
 
       // } else {
 
       //   if (moment(auxiliarDate).isBetween(
       //     moment(inicioVinculo),
       //     // moment(fimVinculo), undefined, '[]')) {
-      //     moment(fimVinculo), undefined)) {
+      //     moment(fimVinculo), undefined, '[]')) {
       //     fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
       //   }
 
@@ -214,6 +218,51 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+  // private countdown(targetDate) {
+  //   let nowMillis = new Date().getTime();
+  //   let targetMillis = targetDate.getTime();
+  //   let duration = targetMillis - nowMillis;
+  //   let years = Math.floor(duration / 3.154e+10);
+  //   let durationMinusYears = duration - (years * 3.154e+10);
+  //   let months = Math.floor(duration / 2.628e+9) % 12;
+  //   let durationMinusMonths = durationMinusYears - (months * 2.628e+9);
+  //   let days = Math.floor(durationMinusMonths / 8.64e+7);
+  //   let hours = Math.floor(duration / 3.6e+6 ) % 24;
+  //   let mins = Math.floor(duration / 60000 ) % 60;
+  //   let secs = Math.floor(duration / 1000 ) % 60;
+
+  //   return [ years, months, days, hours, mins, secs ];
+  // }
+
+
+
+
+  private yearMonthDaysToFormate(fullDays) {
+
+    const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+
+    const xValor = (Math.ceil(fullDays) / 365.25);
+
+    totalFator.years = Math.floor(xValor);
+    let xVarMes = (xValor - totalFator.years) * 12;
+    totalFator.months = Math.floor(xVarMes);
+    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    totalFator.days = Math.round(dttDias);
+
+    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+    return totalFator;
+  }
+
+  private ajusteFimPeriodo28dias(calculoDataFim) {
+
+    if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
+      const adicional = (calculoDataFim.date() === 28) ? 3 : 2
+      return calculoDataFim.add(adicional, 'd');
+    }
+
+    return calculoDataFim;
+  }
+
   private tempoTotal(limitesDoVinculo) {
 
     return new Promise((resolve, reject) => {
@@ -222,11 +271,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY').add(1, 'd');
 
 
-      const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
+    const limitesDoVinculoClone = limitesDoVinculo.fim.clone();
+    this.ajusteFimPeriodo28dias(limitesDoVinculoClone)
+    //  const limitesDoVinculoClone = this.ajusteFimPeriodo28dias(limitesDoVinculo.fim.clone());
+
+     // console.log(this.ajusteFimPeriodo28dias(limitesDoVinculoClone));
       // const fimContador = moment(this.toDateString(limitesDoVinculoClone.add(1, 'days')), 'DD/MM/YYYY');
       const fimContador = moment(this.toDateString(limitesDoVinculoClone), 'DD/MM/YYYY');
-
-      
 
       //  console.log(teste.add(1, 'days'));
       // console.log(this.toDateString(teste.add(1, 'days')))
@@ -280,25 +331,31 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         // console.log(count + ' -- ' + auxiliarDate.format('DD/MM/YYYY'));
         //auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'd');
 
-        let teste = auxiliarDate.clone();
-        auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
+        // let teste = auxiliarDate.clone().hour(0).minute(0).second(0).millisecond(0);
+        // auxiliarDate = moment(this.toDateString(teste.add(1, 'days')), 'DD/MM/YYYY');
+
+        auxiliarDate = auxiliarDate.clone().add(1, 'days').hour(0).minute(0).second(0).millisecond(0);
 
 
         // } while (auxiliarDate < fimContador);
       } while (fimContador.isSameOrAfter(auxiliarDate));
 
-
-      console.log('--Tempo Final----');
-      console.log(auxiliarDate);
-      console.log(count);
-      console.log(this.yearMonthDaysToFormate(count));
-      console.log(moment.duration(count, 'days').humanize());
-      console.log(count88)
-      console.log(count91)
-      console.log(count98)
-      console.log(count99)
-      console.log(count19)
-      console.log('------');
+      // console.log('---------------------------------------------------------------------');
+      // console.log(limitesDoVinculo.inicio)
+      // console.log(limitesDoVinculo.fim)
+      // console.log(auxiliarDate)
+      // console.log(fimContador)
+      // console.log('--Tempo Final---');
+      // console.log(auxiliarDate);
+      // console.log(count);
+      // console.log(this.yearMonthDaysToFormate(count));
+      // console.log(moment.duration(count, 'days').humanize());
+      // console.log(count88)
+      // console.log(count91)
+      // console.log(count98)
+      // console.log(count99)
+      // console.log(count19)
+      // console.log('------');
 
 
       this.tempoTotalConFator = moment.duration(Math.floor(count), 'days');
@@ -307,6 +364,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator98 = moment.duration(Math.floor(count98), 'days');
       this.tempoTotalConFator99 = moment.duration(Math.floor(count99), 'days');
       this.tempoTotalConFator19 = moment.duration(Math.floor(count19), 'days');
+
+
+
 
       // console.log(count);
       // console.log(this.tempoTotalConFator);
@@ -437,23 +497,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   //   //    return rst;
   // }
 
-
-
-  private yearMonthDaysToFormate(fullDays) {
-
-    const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
-
-    const xValor = (Math.ceil(fullDays) / 365.25);
-
-    totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
-    totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.436875;
-    totalFator.days = Math.round(dttDias);
-
-    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
-    return totalFator;
-  }
 
 
   private defineCarenciaData(auxiliarDate) {
