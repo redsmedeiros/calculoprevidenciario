@@ -217,15 +217,15 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
   }
 
 
-//   formatarTempoContrib(dataText){
+  //   formatarTempoContrib(dataText){
 
-//     let arrayText = dataText;
+  //     let arrayText = dataText;
 
-// console.log( typeof arrayText);
-// console.log(arrayText);
+  // console.log( typeof arrayText);
+  // console.log(arrayText);
 
-//     return
-//   }
+  //     return
+  //   }
 
   getTempoDeContribuicao(data, type, dataToSet) {
     let str = '';
@@ -235,14 +235,14 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
 
       // this.formatarTempoContrib(data.contribuicao_primaria_19);
 
-      str = str + 'Até a EC 103/2019 = ' + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
-    
+      str = str + 'Até a Data Atual = ' + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+
     } else {
 
       if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined' && data.contribuicao_primaria_atual !== '--') {
 
-        str = str + 'Até a Data Atual = ' + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
-      
+        str = str + 'Até a EC 103/2019 = ' + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
+
       }
 
     }
