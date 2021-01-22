@@ -15,6 +15,11 @@ export class DefinicaoTempo {
         return moment(dateString, 'YYYY-MM-DD');
     }
 
+    /**
+     * Diferenca entre meses
+     * @param d1 
+     * @param d2 
+     */
     static monthsDiff(d1, d2) {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
@@ -23,6 +28,11 @@ export class DefinicaoTempo {
         return months;
     }
 
+    /**
+     * Aplicar fator se houver
+     * @param daysY360 
+     * @param fator 
+     */
     static aplicarFator(daysY360, fator) {
 
         if (fator !== 1 && fator > 0) {
@@ -32,6 +42,10 @@ export class DefinicaoTempo {
         return daysY360;
     }
 
+    /**
+     * Conversão usando ano 360 e dia 30
+     * @param daysY360 total em dias
+     */
     static convertD360ToDMY(daysY360) {
         const total = { years: 0, months: 0, days: 0, fullDays: daysY360 };
 
@@ -83,7 +97,6 @@ export class DefinicaoTempo {
 
             }
 
-
             if (!dataFim.isSame(compareDataFimStartM)) {
 
                 totalDias -= 30;
@@ -94,16 +107,8 @@ export class DefinicaoTempo {
 
         }
 
-        return totalDias;
+        return{dias: totalDias, meses: totalMeses};
     }
-
-
-    //
-
-
-
-
-
 
 
 
