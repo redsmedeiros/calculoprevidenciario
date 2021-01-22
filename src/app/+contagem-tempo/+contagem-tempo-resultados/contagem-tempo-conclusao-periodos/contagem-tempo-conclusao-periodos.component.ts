@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 
 import { PeriodosContagemTempo } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import { PeriodosContagemTempoService } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @Component({
   selector: 'app-contagem-tempo-conclusao-periodos',
@@ -357,138 +358,18 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
   public dataDiffDateToDate(date1, date2, fator) {
-    let b = moment(date1).hour(0).minute(0).second(0).millisecond(0);
-    // let a = moment(date2).add(1, 'd');
-    let a = moment(date2).hour(0).minute(0).second(0).millisecond(0);
-    let aRegra = moment(date2).hour(0).minute(0).second(0).millisecond(0);
 
-    this.dataDiffDateToDateCustom(moment(date1).hour(0).minute(0).second(0).millisecond(0),
-      moment(date2).hour(0).minute(0).second(0).millisecond(0));
+    const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustom(
+      moment(date1).format('YYYY-MM-DD'),
+      moment(date2).format('YYYY-MM-DD')
+    );
 
-    // console.log(a);
-    // console.log(b);
+    const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalDay360, fator);
+    const totalDMY = DefinicaoTempo.convertD360ToDMY(totalDay360);
+    const totalFatorDMY = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
 
-    // console.log(b.format('DD/MM/YYYY') + "|" + a.format('DD/MM/YYYY'));
-
-
-    // console.log(b.format('DD/MM/YYYY') + "|" + a.format('DD/MM/YYYY'));
-
-    // if (
-    //     Number(a.daysInMonth()) <= 30 || (Number(b.format('DD')) < Number(a.format('DD')))
-    //     || (b.daysInMonth() === 30 && a.daysInMonth() === 30)
-    //     || (b.daysInMonth() === 31 && a.daysInMonth() === 30)
-
-    // ) {
-
-    // console.log('---- ' + b.format('DD/MM/YYYY') + '- Ate - ' + a.format('DD/MM/YYYY'))
-    // console.log(Number(a.format('DD')) <= 30);
-    // console.log((Number(b.format('DD')) < Number(a.format('DD'))));
-    // console.log(!(b.daysInMonth() === 31 && a.daysInMonth() === 30));
-    // console.log((b.daysInMonth() === 30 && a.daysInMonth() === 30));
-    // console.log('----')
-
-
-    // if (
-    //   (Number(a.format('DD')) <= 30
-    //     && (Number(b.format('DD')) < Number(a.format('DD'))))
-    //   || !(b.daysInMonth() === 31 && a.daysInMonth() === 30)
-    //   || !(b.daysInMonth() === 30 && a.daysInMonth() === 30)
-    // ) {
-
-    if (
-      (Number(a.format('DD')) <= 30 && (Number(b.format('DD')) < Number(a.format('DD'))))
-      || (Number(a.format('DD')) <= 30 && !this.verificarIntevaloContemBissextos(b.year(), a.year()))
-    ) {
-      a = a.add(1, 'd');
-    }
-
-    // if ((b.daysInMonth() === 31 && a.daysInMonth() === 31)) {
-    //   a = a.add(- 1, 'd');
-    // }
-
-    let total = { years: 0, months: 0, days: 0 };
-    let totalFator = { years: 0, months: 0, days: 0 };
-    let totalGeralEmDias = 0;
-    let diff: any;
-    let totalGeraldiff;
-
-    totalGeraldiff = moment.duration(a.diff(b));
-    totalGeralEmDias = moment.duration(a.diff(b)).asDays();
-
-    // console.log(totalGeralEmDias);
-    // console.log(totalGeraldiff);
-
-    // console.log(totalGeraldiff);
-    // console.log(this.diffYearMonthDay(a.format('YYYY-MM-DD'), b.format('YYYY-MM-DD')));
-    // console.log(this.dateDiff(date1, date2));
-
-    diff = a.diff(b, 'years');
-    b.add(diff, 'years');
-    total.years = diff;
-
-    diff = a.diff(b, 'months');
-    b.add(diff, 'months');
-    total.months = diff;
-
-    diff = a.diff(b, 'days');
-    b.add(diff, 'days');
-    total.days = diff;
-
-    if (a.isSame(b) && totalGeralEmDias <= 0) {
-      total.days = 1;
-    }
-
-    let xValor = (this.Math.floor(totalGeralEmDias) / 365.25); // 365.25
-    // console.log(totalGeralEmDias * fator);
-
-    totalFator.years = this.Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
-    totalFator.months = this.Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.4375; // 30.4375
-    totalFator.days = this.Math.floor(dttDias);
-
-    //   console.log(totalFator);
-
-
-    if (fator !== 1 && fator > 0) {
-      // let xDias = ((total.days / 30) / 12);
-      // let xMeses = (total.months / 12);
-      // let xValor = ((total.years + xDias + xMeses) * fator);
-
-      totalGeralEmDias += this.ajusteFimPeriodo28dias(aRegra);
-
-      let xValor = (this.Math.floor(totalGeralEmDias) * fator / 365.25); //  365.25
-
-      // console.log(totalGeralEmDias * fator);
-      // console.log(xValor);
-
-
-      totalFator.years = this.Math.floor(xValor);
-      let xVarMes = (xValor - totalFator.years) * 12;
-      totalFator.months = this.Math.floor(xVarMes);
-      let dttDias = (xVarMes - totalFator.months) * 30.4375; // 30.4375
-      totalFator.days = this.Math.floor(dttDias);
-
-      //  console.log(totalFator);
-
-    } else {
-      totalFator = total;
-    }
-
-    total = this.ajusteHumanizadoDateINSS(total);
-    totalFator = this.ajusteHumanizadoDateINSS(totalFator);
-    // console.log(total);
-
-    return { semFator: total, comFator: totalFator };
+    return { semFator: totalDMY, comFator: totalFatorDMY };
   };
-
-
-  private convertDiasToYMD(totalDias30){
-
-    let total = { years: 0, months: 0, days: 0, fullDays: totalDias30};
-
-    return total;
-  }
 
 
 
@@ -531,10 +412,10 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       if (dataInicio.isSame(compareDataInicioStartM)) {
 
 
-      }else{
+      } else {
 
         totalDias -= 30;
-        diasInicio = (30 - dataInicio.date()) + 1 ;
+        diasInicio = (30 - dataInicio.date()) + 1;
         totalDias += diasInicio;
 
       }
@@ -544,7 +425,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
         //console.log(compareDataFimStartM);
 
-      }else{
+      } else {
 
         totalDias -= 30;
         diasFim = dataFim.date();
