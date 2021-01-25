@@ -121,7 +121,7 @@
       <td>Tempo total de contribuição até a data fim do último período</td>
       <td class="text-center">{{ tempoTotalConFator.years }}</td>
       <td class="text-center">{{ tempoTotalConFator.months }}</td>
-      <td class="text-center">{{tempoTotalConFator.days }}</td>
+      <td class="text-center">{{ tempoTotalConFator.days }}</td>
       <td class="text-center">{{ carencia }}</td>
       <td class="text-center no-padding not-print">
         <span *ngIf="tempoTotalConFator.fullDays > 0">
@@ -134,87 +134,84 @@
         </span>
       </td>
     </tr>
-
-    <div *ngIf="false">
-      <tr>
-        <td>
-          Tempo de Pedágio para Aposentadoria Proporcional Emenda nº 20/98 -
-          (16/12/1998)
-        </td>
-        <td class="text-center">{{ tempoDePedApProp.years() }}</td>
-        <td class="text-center">{{ tempoDePedApProp.months() }}</td>
-        <td class="text-center">
-          {{ this.Math.ceil(tempoDePedApProp.days()) }}
-        </td>
-        <td rowspan="7" colspan="2"></td>
-      </tr>
-      <tr>
-        <td>
-          Tempo Mínimo para Aposentadoria Proporcional com Pedágio Emenda nº
-          20/98 - (16/12/1998)
-        </td>
-        <td class="text-center">{{ tempoDePedApPropComPedagio.years() }}</td>
-        <td class="text-center">{{ tempoDePedApPropComPedagio.months() }}</td>
-        <td class="text-center">
-          {{ this.Math.ceil(tempoDePedApPropComPedagio.days()) }}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Tempo a cumprir para aposentadoria proporcional Emenda nº 20/98 -
-          (16/12/1998)
-        </td>
-        <td class="text-center">{{ tempoParaAposProp.years() }}</td>
-        <td class="text-center">{{ tempoParaAposProp.months() }}</td>
-        <td class="text-center">
-          {{ this.Math.ceil(tempoParaAposProp.days()) }}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Tempo a cumprir para Aposentadoria Integral Lei nº 9876/99 -
-          (29/11/1999)
-        </td>
-        <td class="text-center">{{ tempoCumprirAposItentegal.years() }}</td>
-        <td class="text-center">{{ tempoCumprirAposItentegal.months() }}</td>
-        <td class="text-center">
-          {{ this.Math.ceil(tempoCumprirAposItentegal.days()) }}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Idade mínima exigida para aposentadoria proporcional Emenda nº 20/98 -
-          (16/12/1998)
-        </td>
-        <td colspan="3" class="text-center">{{ idadeMinimaAposProp }}</td>
-      </tr>
-      <tr *ngIf="!isUpdateTotalTempoIdadeA">
-        <td>
-          Somatória do tempo de contribuição e idade Lei 13.183/2015 -
-          (04/11/2015)
-        </td>
-        <td class="text-center">{{ somatoriaTempoContribIdade.years() }}</td>
-        <td class="text-center">{{ somatoriaTempoContribIdade.months() }}</td>
-        <td class="text-center">
-          {{ this.Math.ceil(somatoriaTempoContribIdade.days()) }}
-        </td>
-      </tr>
-      <tr *ngIf="!isUpdateTotalTempoIdadeB">
-        <td>
-          Somatória do tempo de contribuição e idade atual Lei 13.183/2015 -
-          (04/11/2015)
-        </td>
-        <td class="text-center">
-          {{ somatoriaTempoContribIdadeAtual.years() }}
-        </td>
-        <td class="text-center">
-          {{ somatoriaTempoContribIdadeAtual.months() }}
-        </td>
-        <td class="text-center">
-          {{ this.Math.ceil(somatoriaTempoContribIdadeAtual.days()) }}
-        </td>
-      </tr>
-    </div>
+    <tr *ngIf="isPeridoAposReforma">
+      <td>
+        Tempo de Pedágio para Aposentadoria Proporcional Emenda nº 20/98 -
+        (16/12/1998)
+      </td>
+      <td class="text-center">{{ tempoDePedApProp.years() }}</td>
+      <td class="text-center">{{ tempoDePedApProp.months() }}</td>
+      <td class="text-center">
+        {{ this.Math.ceil(tempoDePedApProp.days()) }}
+      </td>
+      <td rowspan="7" colspan="2"></td>
+    </tr>
+    <tr *ngIf="isPeridoAposReforma">
+      <td>
+        Tempo Mínimo para Aposentadoria Proporcional com Pedágio Emenda nº 20/98
+        - (16/12/1998)
+      </td>
+      <td class="text-center">{{ tempoDePedApPropComPedagio.years() }}</td>
+      <td class="text-center">{{ tempoDePedApPropComPedagio.months() }}</td>
+      <td class="text-center">
+        {{ this.Math.ceil(tempoDePedApPropComPedagio.days()) }}
+      </td>
+    </tr>
+    <tr *ngIf="isPeridoAposReforma">
+      <td>
+        Tempo a cumprir para aposentadoria proporcional Emenda nº 20/98 -
+        (16/12/1998)
+      </td>
+      <td class="text-center">{{ tempoParaAposProp.years() }}</td>
+      <td class="text-center">{{ tempoParaAposProp.months() }}</td>
+      <td class="text-center">
+        {{ this.Math.ceil(tempoParaAposProp.days()) }}
+      </td>
+    </tr>
+    <tr *ngIf="isPeridoAposReforma">
+      <td>
+        Tempo a cumprir para Aposentadoria Integral Lei nº 9876/99 -
+        (29/11/1999)
+      </td>
+      <td class="text-center">{{ tempoCumprirAposItentegal.years() }}</td>
+      <td class="text-center">{{ tempoCumprirAposItentegal.months() }}</td>
+      <td class="text-center">
+        {{ this.Math.ceil(tempoCumprirAposItentegal.days()) }}
+      </td>
+    </tr>
+    <tr *ngIf="isPeridoAposReforma">
+      <td>
+        Idade mínima exigida para aposentadoria proporcional Emenda nº 20/98 -
+        (16/12/1998)
+      </td>
+      <td colspan="3" class="text-center">{{ idadeMinimaAposProp }}</td>
+    </tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeA">
+      <td>
+        Somatória do tempo de contribuição e idade Lei 13.183/2015 -
+        (04/11/2015)
+      </td>
+      <td class="text-center">{{ somatoriaTempoContribIdade.years() }}</td>
+      <td class="text-center">{{ somatoriaTempoContribIdade.months() }}</td>
+      <td class="text-center">
+        {{ this.Math.ceil(somatoriaTempoContribIdade.days()) }}
+      </td>
+    </tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeB">
+      <td>
+        Somatória do tempo de contribuição e idade atual Lei 13.183/2015 -
+        (04/11/2015)
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeAtual.years() }}
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeAtual.months() }}
+      </td>
+      <td class="text-center">
+        {{ this.Math.ceil(somatoriaTempoContribIdadeAtual.days()) }}
+      </td>
+    </tr>
   </tbody>
 </table>
 

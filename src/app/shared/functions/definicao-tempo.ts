@@ -176,4 +176,25 @@ export class DefinicaoTempo {
     }
 
 
+    private leapYear(year) {
+        return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+      }
+
+
+      
+  // private countdown(targetDate) {
+  //   let nowMillis = new Date().getTime();
+  //   let targetMillis = targetDate.getTime();
+  //   let duration = targetMillis - nowMillis;
+  //   let years = Math.floor(duration / 3.154e+10);
+  //   let durationMinusYears = duration - (years * 3.154e+10);
+  //   let months = Math.floor(duration / 2.628e+9) % 12;
+  //   let durationMinusMonths = durationMinusYears - (months * 2.628e+9);
+  //   let days = Math.floor(durationMinusMonths / 8.64e+7);
+  //   let hours = Math.floor(duration / 3.6e+6 ) % 24;
+  //   let mins = Math.floor(duration / 60000 ) % 60;
+  //   let secs = Math.floor(duration / 1000 ) % 60;
+
+  //   return [ years, months, days, hours, mins, secs ];
+  // }
 }
