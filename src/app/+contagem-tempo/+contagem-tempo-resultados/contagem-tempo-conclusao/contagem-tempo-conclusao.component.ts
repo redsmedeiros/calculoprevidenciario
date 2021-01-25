@@ -62,14 +62,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idadeFinal: any;
 
   public idadeMasculinaProporcional = 19357.853;
-  public idadeLimiteDias = 10957.5; // dias
+  // public idadeLimiteDias = 10957.5; // dias
+  public idadeLimiteDias = 10800; // dias
+
   public redutorSexoDias: any; // dias
 
   public isUpdateTotalTempoIdadeA = true;
   public isUpdateTotalTempoIdadeB = true;
 
   // parametros EC nº 103/2019
-  public isPeridoAposReforma = true;
+  public isPeridoAposReforma = false;
   // parametros EC nº 103/2019 END
 
   public tempoDePedApProp = moment.duration({
@@ -97,12 +99,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     days: 0,
     months: 0,
     years: 0
-}); // Somatória do tempo de contribuição e idade
+  }); // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdadeAtual = moment.duration({
     days: 0,
     months: 0,
     years: 0
-}); // Somatória do tempo de contribuição e idade atual
+  }); // Somatória do tempo de contribuição e idade atual
 
   public dadosParaExportar: any; // dados para calcular RGPS
 
@@ -116,7 +118,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
-    this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
+    //this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
+    this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1800; // dias
 
     if (this.periodosList.length > 0) {
       this.createConclusaoFinal();
@@ -192,7 +195,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     }
 
-    console.log(melhorTempo);
+    //console.log(melhorTempo);
 
     return melhorTempo;
   }
@@ -263,14 +266,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
 
-      console.log(this.tempoTotalConFator);
-      console.log(this.tempoTotalConFator88);
-      console.log(this.tempoTotalConFator91);
-      console.log(this.tempoTotalConFator98);
-      console.log(this.tempoTotalConFator99);
-      console.log(this.tempoTotalConFator19);
-
-
+      // console.log(this.tempoTotalConFator);
+      // console.log(this.tempoTotalConFator88);
+      // console.log(this.tempoTotalConFator91);
+      // console.log(this.tempoTotalConFator98);
+      // console.log(this.tempoTotalConFator99);
+      // console.log(this.tempoTotalConFator19);
 
       if (this.tempoTotalConFator) {
 
@@ -295,14 +296,17 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const inicioVinculo = this.toMoment(vinculo.data_inicio);
       const fimVinculo = this.toMoment(vinculo.data_termino);
 
-      if (moment(dataReforma).isSameOrAfter(inicioVinculo)
+      if ((moment(inicioVinculo).isSameOrAfter(dataReforma)
         ||
-        moment(dataReforma).isSameOrAfter(fimVinculo)) {
+        moment(fimVinculo).isSameOrAfter(dataReforma)) && !this.isPeridoAposReforma) {
         this.isPeridoAposReforma = true;
+        console.log(this.isPeridoAposReforma)
       }
 
     }
 
+
+    console.log(this.isPeridoAposReforma)
   }
 
 
@@ -670,7 +674,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private subTotais() {
 
-    if (this.isPeridoAposReforma) {
+    if (!this.isPeridoAposReforma) {
 
       this.tempoPedagioAposentadoriaProporcional();
 
@@ -727,13 +731,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       console.log(error);
     });
 
-    this.isUpdateTotal = false;
+    // this.isUpdateTotal = false;
 
-
+    this.isUpdateTotal = true;
     Promise.all([p1, p2]).then((values) => {
       this.verificaPeriodoAposReforma();
+
+      
       this.subTotais();
       this.isUpdateTotal = false;
+
       console.log(values);
     });
 

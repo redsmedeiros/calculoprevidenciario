@@ -134,7 +134,7 @@
         </span>
       </td>
     </tr>
-    <tr *ngIf="isPeridoAposReforma">
+    <tr *ngIf="!isPeridoAposReforma">
       <td>
         Tempo de Pedágio para Aposentadoria Proporcional Emenda nº 20/98 -
         (16/12/1998)
@@ -146,7 +146,7 @@
       </td>
       <td rowspan="7" colspan="2"></td>
     </tr>
-    <tr *ngIf="isPeridoAposReforma">
+    <tr *ngIf="!isPeridoAposReforma">
       <td>
         Tempo Mínimo para Aposentadoria Proporcional com Pedágio Emenda nº 20/98
         - (16/12/1998)
@@ -157,7 +157,7 @@
         {{ this.Math.ceil(tempoDePedApPropComPedagio.days()) }}
       </td>
     </tr>
-    <tr *ngIf="isPeridoAposReforma">
+    <tr *ngIf="!isPeridoAposReforma">
       <td>
         Tempo a cumprir para aposentadoria proporcional Emenda nº 20/98 -
         (16/12/1998)
@@ -168,7 +168,7 @@
         {{ this.Math.ceil(tempoParaAposProp.days()) }}
       </td>
     </tr>
-    <tr *ngIf="isPeridoAposReforma">
+    <tr *ngIf="!isPeridoAposReforma">
       <td>
         Tempo a cumprir para Aposentadoria Integral Lei nº 9876/99 -
         (29/11/1999)
@@ -179,7 +179,7 @@
         {{ this.Math.ceil(tempoCumprirAposItentegal.days()) }}
       </td>
     </tr>
-    <tr *ngIf="isPeridoAposReforma">
+    <tr *ngIf="!isPeridoAposReforma">
       <td>
         Idade mínima exigida para aposentadoria proporcional Emenda nº 20/98 -
         (16/12/1998)
@@ -196,6 +196,7 @@
       <td class="text-center">
         {{ this.Math.ceil(somatoriaTempoContribIdade.days()) }}
       </td>
+      <td *ngIf="isPeridoAposReforma"  rowspan="2" colspan="2"></td>
     </tr>
     <tr *ngIf="!isUpdateTotalTempoIdadeB">
       <td>

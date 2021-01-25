@@ -92,6 +92,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   public id;
   public atualizarPeriodo = 0;
 
+  public isVinculoAposReformaEspecial = false;
+
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
@@ -464,6 +466,17 @@ moveNext(event, maxLength, nextElementId) {
 moveNextID(nextElementId) {
     let nextID = <HTMLInputElement>document.getElementById(nextElementId);
     nextID.focus();
+}
+
+
+changeCondicaoEspecial(){
+  
+  this.errors.clear('condicao_especial')
+
+  if (!this.condicao_especial) {
+    this.fator_condicao_especial = 1.00;
+  }
+
 }
 
 boolToLiteral(value) {
