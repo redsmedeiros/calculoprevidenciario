@@ -195,6 +195,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     }
 
+    melhorTempo = Math.floor(melhorTempo);
+    //console.log('tempo = ' + melhorTempo + ' / ' + auxiliarDate.format('DD/MM/YYYY'))
     //console.log(melhorTempo);
 
     return melhorTempo;
@@ -300,13 +302,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         ||
         moment(fimVinculo).isSameOrAfter(dataReforma)) && !this.isPeridoAposReforma) {
         this.isPeridoAposReforma = true;
-        console.log(this.isPeridoAposReforma)
       }
 
     }
-
-
-    console.log(this.isPeridoAposReforma)
   }
 
 
@@ -737,7 +735,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     Promise.all([p1, p2]).then((values) => {
       this.verificaPeriodoAposReforma();
 
-      
+
       this.subTotais();
       this.isUpdateTotal = false;
 
