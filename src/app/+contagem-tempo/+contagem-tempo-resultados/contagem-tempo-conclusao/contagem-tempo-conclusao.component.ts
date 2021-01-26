@@ -583,7 +583,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
       let rstTemp = 0;
 
-      rstTemp = (this.tempoTotalConFator.days + this.idade360Atual.fullDays);
+      rstTemp = (this.tempoTotalConFator.fullDays + this.idade360Atual.fullDays);
       this.somatoriaTempoContribIdadeAtual = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
       if (this.somatoriaTempoContribIdadeAtual.fullDays > 0) {
