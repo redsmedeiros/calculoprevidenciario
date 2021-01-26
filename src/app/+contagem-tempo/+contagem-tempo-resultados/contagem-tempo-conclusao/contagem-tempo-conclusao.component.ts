@@ -503,31 +503,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   public tempoPedagioAposentadoriaProporcional() {
 
-
-
-    // let rstTemp = 0;
-
-    // rstTemp = this.tempoTotalConFator98.days - (this.idadeLimiteDias - this.redutorSexoDias);
-    // rstTemp = rstTemp * 0.4;
-    // rstTemp = (rstTemp < 0) ? rstTemp * -1 : rstTemp;
-
-    // this.tempoDePedApProp = moment.duration(rstTemp, 'days');
-
-
     let rstTemp = 0;
-
     rstTemp = (this.tempoMinimoProporcionalEmenda20 - this.redutorSexoDias) - this.tempoTotalConFator98.fullDays;
-
 
     rstTemp = rstTemp * 0.4;
     rstTemp = (rstTemp < 0) ? 0 : rstTemp;
-
-
-    console.log(this.redutorSexoDias)
-    console.log(this.tempoMinimoProporcionalEmenda20)
-    console.log(this.tempoTotalConFator98)
-    console.log(rstTemp)
-    console.log()
 
     this.tempoDePedApProp = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
@@ -555,7 +535,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoCumprirAposentadoriaItentegal() {
 
     let rstTemp = 0;
-
     rstTemp = this.tempoTotalConFator.fullDays - (this.tempoMinimoIntegralEmenda20 - this.redutorSexoDias);
 
     rstTemp = (rstTemp < 0) ? rstTemp * -1 : 0;
@@ -623,11 +602,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     const dataNasc = moment(this.segurado.data_nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const ultimoVinculo = this.limitesDoVinculo.fim.format('YYYY-MM-DD');
-
-    console.log(DefinicaoTempo.daysDiff(dataNasc, ultimoVinculo));
-    console.log(DefinicaoTempo.calcularTempo360(dataNasc, ultimoVinculo));
-    console.log();
-
 
     this.idade360Final = DefinicaoTempo.calcularTempo360(dataNasc, ultimoVinculo);
     this.limitesTempoTotal.emit(this.idade360Final);
