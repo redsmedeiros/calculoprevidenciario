@@ -280,87 +280,26 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private verificaPeriodoAposReforma() {
 
-    const dataReforma = this.fimContador19.clone();
+    // const dataReforma = this.fimContador19.clone();
 
-    for (const vinculo of this.periodosList) {
+    // for (const vinculo of this.periodosList) {
 
-      const inicioVinculo = this.toMoment(vinculo.data_inicio);
-      const fimVinculo = this.toMoment(vinculo.data_termino);
+    //   const inicioVinculo = this.toMoment(vinculo.data_inicio);
+    //   const fimVinculo = this.toMoment(vinculo.data_termino);
 
-      if ((moment(inicioVinculo).isSameOrAfter(dataReforma)
-        ||
-        moment(fimVinculo).isSameOrAfter(dataReforma)) && !this.isPeridoAposReforma) {
-        this.isPeridoAposReforma = true;
-      }
+    //   if ((moment(inicioVinculo).isSameOrAfter(dataReforma)
+    //     ||
+    //     moment(fimVinculo).isSameOrAfter(dataReforma)) && !this.isPeridoAposReforma) {
+    //     this.isPeridoAposReforma = true;
+    //   }
 
-    }
+    // }
   }
 
 
   private leapYear(year) {
     return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
   }
-
-  // private defineMelhorFator(auxiliarDate) {
-  //   let fator = 0;
-  //   let inicioVinculo: any;
-  //   let fimVinculo: any;
-
-
-  //   for (const vinculo of this.periodosList) {
-
-  //     inicioVinculo = this.toMoment(vinculo.data_inicio);
-  //     fimVinculo = this.toMoment(vinculo.data_termino);
-
-  //     fimVinculo = this.ajusteFimPeriodo28dias(fimVinculo);
-
-  //     // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-  //     //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-  //     // }
-
-
-
-  //     if (moment(auxiliarDate).isBetween(
-  //       moment(inicioVinculo),
-  //       moment(fimVinculo), undefined, '[]')) {
-  //       fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-  //     }
-
-
-  //   }
-  //   return Number(fator);
-  // }
-
-
-
-
-
-
-  // private yearMonthDaysToFormate(fullDays) {
-
-  //   const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
-
-  //   const xValor = (Math.ceil(fullDays) / 365.25);
-
-  //   totalFator.years = Math.floor(xValor);
-  //   let xVarMes = (xValor - totalFator.years) * 12;
-  //   totalFator.months = Math.floor(xVarMes);
-  //   let dttDias = (xVarMes - totalFator.months) * 30.436875;
-  //   totalFator.days = Math.round(dttDias);
-
-  //   // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
-  //   return totalFator;
-  // }
-
-  // private ajusteFimPeriodo28dias(calculoDataFim) {
-
-  //   if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
-  //     const adicional = (calculoDataFim.date() === 28) ? 3 : 2
-  //     return calculoDataFim.add(adicional, 'd');
-  //   }
-
-  //   return calculoDataFim;
-  // }
 
 
   /**
@@ -719,7 +658,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.isUpdateTotal = true;
     Promise.all([p1, p2]).then((values) => {
 
-      this.verificaPeriodoAposReforma();
+     // this.verificaPeriodoAposReforma();
       this.subTotais();
       this.isUpdateTotal = false;
 
@@ -860,6 +799,67 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+
+  // private defineMelhorFator(auxiliarDate) {
+  //   let fator = 0;
+  //   let inicioVinculo: any;
+  //   let fimVinculo: any;
+
+
+  //   for (const vinculo of this.periodosList) {
+
+  //     inicioVinculo = this.toMoment(vinculo.data_inicio);
+  //     fimVinculo = this.toMoment(vinculo.data_termino);
+
+  //     fimVinculo = this.ajusteFimPeriodo28dias(fimVinculo);
+
+  //     // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+  //     //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+  //     // }
+
+
+
+  //     if (moment(auxiliarDate).isBetween(
+  //       moment(inicioVinculo),
+  //       moment(fimVinculo), undefined, '[]')) {
+  //       fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+  //     }
+
+
+  //   }
+  //   return Number(fator);
+  // }
+
+
+
+
+
+
+  // private yearMonthDaysToFormate(fullDays) {
+
+  //   const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
+
+  //   const xValor = (Math.ceil(fullDays) / 365.25);
+
+  //   totalFator.years = Math.floor(xValor);
+  //   let xVarMes = (xValor - totalFator.years) * 12;
+  //   totalFator.months = Math.floor(xVarMes);
+  //   let dttDias = (xVarMes - totalFator.months) * 30.436875;
+  //   totalFator.days = Math.round(dttDias);
+
+  //   // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+  //   return totalFator;
+  // }
+
+  // private ajusteFimPeriodo28dias(calculoDataFim) {
+
+  //   if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
+  //     const adicional = (calculoDataFim.date() === 28) ? 3 : 2
+  //     return calculoDataFim.add(adicional, 'd');
+  //   }
+
+  //   return calculoDataFim;
+  // }
 
   // private updateCalculo() {
 
