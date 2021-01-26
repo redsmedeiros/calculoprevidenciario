@@ -17,6 +17,7 @@ import { CalculoContagemTempoService } from '../+contagem-tempo-calculos/Calculo
 
 import { Auth } from '../../services/Auth/Auth.service';
 import { AuthResponse } from '../../services/Auth/AuthResponse.model';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @FadeInTop()
 @Component({
@@ -41,7 +42,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 	public periodo: any = {};
 	public periodosList = [];
 
-	public lastdateNascimento = moment.duration();
+	public lastdateNascimento = { years: 0, months: 0, days: 0, fullDays: 0 };
 
 	public getPeriodosList = false;
 
@@ -119,7 +120,14 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
 
 	reciverFeedbackLastdate(lastdate) {
-		this.lastdateNascimento.add(lastdate.asDays(), 'days');
+
+		const idadeUltimoPeriodo = DefinicaoTempo.formateStringAnosMesesDias(
+			lastdate.years,
+			lastdate.months,
+			lastdate.days);
+
+		this.lastdateNascimento = lastdate;
+
 	}
 
 	calculoSetView(calculo) {
@@ -129,7 +137,17 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
 	seguradoView(segurado) {
 		segurado.id_documento = segurado.getDocumentType(segurado.id_documento);
-		segurado.idade = segurado.getIdadeAtual(segurado.data_nascimento, 1);
+		//	segurado.idade = segurado.getIdadeAtual(segurado.data_nascimento, 1);
+
+		const dataNasc = moment(segurado.data_nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+		const idadeAtual360 = DefinicaoTempo.calcularTempo360(dataNasc, null);
+		segurado.idade = DefinicaoTempo.formateStringAnosMesesDias(
+			idadeAtual360.years,
+			idadeAtual360.months,
+			idadeAtual360.days)
+
+
 		this.segurado = segurado;
 	}
 

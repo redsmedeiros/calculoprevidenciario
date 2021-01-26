@@ -20,6 +20,21 @@ export class ContagemTempoConclusaoSeguradoComponent implements OnInit {
 
   ngOnInit() { }
 
+  
+  private formateStringAnosMesesDias(anos, meses, dias, notDays = false) {
+
+    if (notDays) {
+        return ` ${anos} ano(s), ${meses} mes(es)`;
+    }
+
+    if (anos < 0) {
+        return ` ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+    }
+
+    return ` ${anos} ano(s), ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+
+}
+
   editSegurado() {
     sessionStorage.setItem('last_url', '/contagem-tempo/contagem-tempo-resultados/' + this.segurado.id + '/' + this.calculo.id);
     window.location.href = '/#/contagem-tempo/contagem-tempo-segurados/' + this.segurado.id + '/editar';

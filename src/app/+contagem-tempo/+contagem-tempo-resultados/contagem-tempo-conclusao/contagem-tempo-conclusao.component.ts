@@ -28,23 +28,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
+  public fimContador15 = this.toMoment('05/11/2015');
   public fimContador19 = this.toMoment('13/11/2019'); // Data EC nº 103/2019
-
-
-  // public fimContadorObj = {
-  //   1988: '1988-10-05',
-  //   1991: '1991-04-04',
-  //   1998: '1998-12-16',
-  //   1999: '1999-11-29',
-  //   2003: '2003-12-31',
-  //   2019: '2019-11-13'
-  // };
 
   public tempoTotalConFator: any;
   public tempoTotalConFator88: any;
   public tempoTotalConFator91: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
+  public tempoTotalConFator15: any;
   public tempoTotalConFator19: any; // Data EC nº 103/2019
 
   public carencia = 0;
@@ -60,56 +52,45 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public Math = Math;
 
   public idadeFinal: any;
+  public idade360Final: any;
+  public idade360Atual: any;
+  public idade360EC103: any;
+  public idade360AteEC20: any;
 
-  public idadeMasculinaProporcional = 19357.853;
-  // public idadeLimiteDias = 10957.5; // dias
-  public idadeLimiteDias = 10800; // dias
+
+
+  public idadeMasculinaProporcional = 19080;
+  public tempoMinimoProporcionalEmenda20 = 10800; // dias 30 anos
+  public tempoMinimoIntegralEmenda20 = 12600; // dias 30 anos
 
   public redutorSexoDias: any; // dias
 
   public isUpdateTotalTempoIdadeA = true;
   public isUpdateTotalTempoIdadeB = true;
+  public isUpdateTotalTempoIdadeEC103 = true;
 
   // parametros EC nº 103/2019
   public isPeridoAposReforma = false;
   // parametros EC nº 103/2019 END
 
-  public tempoDePedApProp = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Tempo de Pedágio para Aposentadoria Proporcional
-  public tempoDePedApPropComPedagio = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Tempo Mínimo para Aposentadoria Proporcional com Pedágio
-  public tempoParaAposProp = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Tempo a cumprir para aposentadoria proporcional
+  public tempoDePedApProp: any; // Tempo de Pedágio para Aposentadoria Proporcional
+  public tempoDePedApPropComPedagio: any; // Tempo Mínimo para Aposentadoria Proporcional com Pedágio
+  public tempoParaAposProp: any; // Tempo a cumprir para aposentadoria proporcional
   public idadeMinimaAposProp: any; // idadeMinimaExigidaParaAposentadoriaProporcional
-  public tempoCumprirAposItentegal = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Tempo a cumprir para Aposentadoria Integral
-  public somatoriaTempoContribIdade = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Somatória do tempo de contribuição e idade
-  public somatoriaTempoContribIdadeAtual = moment.duration({
-    days: 0,
-    months: 0,
-    years: 0
-  }); // Somatória do tempo de contribuição e idade atual
+  public tempoCumprirAposItentegal: any; // Tempo a cumprir para Aposentadoria Integral
+  public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
+  public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
+  public somatoriaTempoContribIdadeEC103: any; // Somatória do tempo de contribuição e idade atual
 
   public dadosParaExportar: any; // dados para calcular RGPS
 
   private isCompleteCarencia = false;
   private isCompleteTempoTotal = false;
+
+  //public idadeMasculinaProporcional = 19357.853;
+  //public idadeLimiteDias = 10957.5; // dias
+  // public idadeLimiteDias = 10800; // dias 30 anos
+  //public idadeLimiteDias = 10957.5; // dias
 
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
@@ -218,12 +199,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let count91 = 0;
       let count98 = 0;
       let count99 = 0;
+      let count15 = 0;
       let count19 = 0;
 
       const fimContador88 = this.momentCarenciaEnd(this.fimContador88);
       const fimContador91 = this.momentCarenciaEnd(this.fimContador91);
       const fimContador98 = this.momentCarenciaEnd(this.fimContador98);
       const fimContador99 = this.momentCarenciaEnd(this.fimContador99);
+      const fimContador15 = this.momentCarenciaEnd(this.fimContador15);
       const fimContador19 = this.momentCarenciaEnd(this.fimContador19);
 
       let melhorTempo = 0;
@@ -245,11 +228,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           };
 
           if (auxiliarDate.isSameOrBefore(fimContador98, 'month')) {
-            count98 += (auxiliarDate.isSame(fimContador98, 'month')) ? 16 : melhorTempo;
+            count98 += (auxiliarDate.isSame(fimContador98, 'month')) ? 15 : melhorTempo;
           };
 
           if (auxiliarDate.isSameOrBefore(fimContador99, 'month')) {
             count99 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
+          };
+
+          if (auxiliarDate.isSameOrBefore(fimContador15, 'month')) {
+            count15 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
           };
 
           if (auxiliarDate.isSameOrBefore(fimContador19, 'month')) {
@@ -266,6 +253,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
       this.tempoTotalConFator98 = DefinicaoTempo.convertD360ToDMY(count98);
       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
+      this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
 
       // console.log(this.tempoTotalConFator);
@@ -273,6 +261,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(this.tempoTotalConFator91);
       // console.log(this.tempoTotalConFator98);
       // console.log(this.tempoTotalConFator99);
+      // console.log(this.tempoTotalConFator15);
       // console.log(this.tempoTotalConFator19);
 
       if (this.tempoTotalConFator) {
@@ -312,66 +301,66 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
   }
 
-  private defineMelhorFator(auxiliarDate) {
-    let fator = 0;
-    let inicioVinculo: any;
-    let fimVinculo: any;
+  // private defineMelhorFator(auxiliarDate) {
+  //   let fator = 0;
+  //   let inicioVinculo: any;
+  //   let fimVinculo: any;
 
 
-    for (const vinculo of this.periodosList) {
+  //   for (const vinculo of this.periodosList) {
 
-      inicioVinculo = this.toMoment(vinculo.data_inicio);
-      fimVinculo = this.toMoment(vinculo.data_termino);
+  //     inicioVinculo = this.toMoment(vinculo.data_inicio);
+  //     fimVinculo = this.toMoment(vinculo.data_termino);
 
-      fimVinculo = this.ajusteFimPeriodo28dias(fimVinculo);
+  //     fimVinculo = this.ajusteFimPeriodo28dias(fimVinculo);
 
-      // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
-      //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-      // }
-
-
-
-      if (moment(auxiliarDate).isBetween(
-        moment(inicioVinculo),
-        moment(fimVinculo), undefined, '[]')) {
-        fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
-      }
-
-
-    }
-    return Number(fator);
-  }
+  //     // if (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo) {
+  //     //   fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+  //     // }
 
 
 
+  //     if (moment(auxiliarDate).isBetween(
+  //       moment(inicioVinculo),
+  //       moment(fimVinculo), undefined, '[]')) {
+  //       fator = (Number(vinculo.fator_condicao_especial) > fator) ? Number(vinculo.fator_condicao_especial) : fator;
+  //     }
+
+
+  //   }
+  //   return Number(fator);
+  // }
 
 
 
-  private yearMonthDaysToFormate(fullDays) {
 
-    const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-    const xValor = (Math.ceil(fullDays) / 365.25);
 
-    totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
-    totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.436875;
-    totalFator.days = Math.round(dttDias);
+  // private yearMonthDaysToFormate(fullDays) {
 
-    // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
-    return totalFator;
-  }
+  //   const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-  private ajusteFimPeriodo28dias(calculoDataFim) {
+  //   const xValor = (Math.ceil(fullDays) / 365.25);
 
-    if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
-      const adicional = (calculoDataFim.date() === 28) ? 3 : 2
-      return calculoDataFim.add(adicional, 'd');
-    }
+  //   totalFator.years = Math.floor(xValor);
+  //   let xVarMes = (xValor - totalFator.years) * 12;
+  //   totalFator.months = Math.floor(xVarMes);
+  //   let dttDias = (xVarMes - totalFator.months) * 30.436875;
+  //   totalFator.days = Math.round(dttDias);
 
-    return calculoDataFim;
-  }
+  //   // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
+  //   return totalFator;
+  // }
+
+  // private ajusteFimPeriodo28dias(calculoDataFim) {
+
+  //   if ((calculoDataFim.date() === 28 || calculoDataFim.date() === 29) && (calculoDataFim.month() + 1) === 2) {
+  //     const adicional = (calculoDataFim.date() === 28) ? 3 : 2
+  //     return calculoDataFim.add(adicional, 'd');
+  //   }
+
+  //   return calculoDataFim;
+  // }
 
 
   /**
@@ -529,44 +518,42 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoPedagioAposentadoriaProporcional() {
 
     let rstTemp = 0;
+    rstTemp = (this.tempoMinimoProporcionalEmenda20 - this.redutorSexoDias) - this.tempoTotalConFator98.fullDays;
 
-    rstTemp = this.tempoTotalConFator98.days - (this.idadeLimiteDias - this.redutorSexoDias);
     rstTemp = rstTemp * 0.4;
-    rstTemp = (rstTemp < 0) ? rstTemp * -1 : rstTemp;
+    rstTemp = (rstTemp < 0) ? 0 : rstTemp;
 
-    this.tempoDePedApProp = moment.duration(rstTemp, 'days');
+    this.tempoDePedApProp = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
   }
 
   public tempoMinimoParaAposentadoriaProporcionalComPedagio() {
 
     let rstTemp = 0;
+    rstTemp = this.tempoDePedApProp.fullDays + (this.tempoMinimoProporcionalEmenda20 - this.redutorSexoDias);
 
-    rstTemp = this.tempoDePedApProp.days() + (this.idadeLimiteDias - this.redutorSexoDias);
+    this.tempoDePedApPropComPedagio = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
-    this.tempoDePedApPropComPedagio = moment.duration(rstTemp, 'days');
   }
 
   public tempoCumprirAposentadoriaProporcional() {
 
     let rstTemp = 0;
-
-    rstTemp = this.tempoTotalConFator.days - this.tempoDePedApPropComPedagio.days();
+    rstTemp = this.tempoTotalConFator.fullDays - this.tempoDePedApPropComPedagio.fullDays;
     rstTemp = (rstTemp < 0) ? rstTemp * -1 : 0;
 
-    this.tempoParaAposProp = moment.duration(rstTemp, 'days');
+    this.tempoParaAposProp = DefinicaoTempo.convertD360ToDMY(rstTemp);
   }
 
 
   public tempoCumprirAposentadoriaItentegal() {
 
     let rstTemp = 0;
-
-    rstTemp = this.tempoTotalConFator.days - (this.idadeLimiteDias + 1826.25 - this.redutorSexoDias);
+    rstTemp = this.tempoTotalConFator.fullDays - (this.tempoMinimoIntegralEmenda20 - this.redutorSexoDias);
 
     rstTemp = (rstTemp < 0) ? rstTemp * -1 : 0;
 
-    this.tempoCumprirAposItentegal = moment.duration(rstTemp, 'days');
+    this.tempoCumprirAposItentegal = DefinicaoTempo.convertD360ToDMY(rstTemp);
   }
 
 
@@ -575,41 +562,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     let rstTemp = 'Idade Mínima Atingida';
     let exigeIdadeMinimaProporcional = false;
 
-    if (this.tempoTotalConFator88.days < (this.idadeLimiteDias - this.redutorSexoDias)) {
+    if (this.tempoTotalConFator88.fullDays < (this.tempoMinimoIntegralEmenda20 - this.redutorSexoDias)) {
       exigeIdadeMinimaProporcional = true;
     }
 
-    if (exigeIdadeMinimaProporcional && (this.idadeFinal.asDays() < (this.idadeMasculinaProporcional - this.redutorSexoDias))) {
+    if (exigeIdadeMinimaProporcional && (this.idade360Final.fullDays < (this.idadeMasculinaProporcional - this.redutorSexoDias))) {
       rstTemp = 'Idade Mínima não Atingida';
     }
 
     this.idadeMinimaAposProp = rstTemp;
   }
-
-  // public somatoriaTempoContribuicaoIdade() {
-  //   let rstTemp = 0;
-
-  //   rstTemp = (this.tempoTotalConFator.asDays() + this.idadeFinal.asDays());
-
-  //   this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
-  // }
-
-  // public somatoriaTempoContribuicaoIdadeAtual() {
-  //   let rstTemp = 0;
-
-  //   const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
-
-  //   rstTemp = (this.tempoTotalConFator.asDays() + idadeDias.asDays());
-
-  //   if (moment().isBefore(this.limitesDoVinculo.fim)) {
-  //     const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
-  //     rstTemp -= diffTempoTotal.asDays();
-  //   }
-
-  //   this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
-  // }
-
-
 
 
   public somatoriaTempoContribuicaoIdadeP() {
@@ -617,43 +579,49 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
 
       let rstTemp = 0;
+      rstTemp = (this.tempoTotalConFator15.fullDays + this.idade360AteEC20.fullDays);
 
-      const fimDosPeriodos = this.limitesDoVinculo.fim.clone();
+      this.somatoriaTempoContribIdade = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
-      const idadeDias = moment.duration(fimDosPeriodos.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
-
-      // rstTemp = (this.tempoTotalConFator.days + this.idadeFinal.asDays());
-      rstTemp = (this.tempoTotalConFator.days + idadeDias.asDays());
-
-      this.somatoriaTempoContribIdade = moment.duration(Math.floor(rstTemp), 'days');
-
-      if (this.somatoriaTempoContribIdade.asDays() > 0) {
+      if (this.somatoriaTempoContribIdade.fullDays > 0) {
         resolve(true);
       } else {
         reject(false);
       }
     });
   }
+
+
+  public somatoriaTempoContribuicaoIdadeAteEC103() {
+
+
+    return new Promise((resolve, reject) => {
+      let rstTemp = 0;
+
+      rstTemp = (this.tempoTotalConFator19.fullDays + this.idade360EC103.fullDays);
+      this.somatoriaTempoContribIdadeEC103 = DefinicaoTempo.convertD360ToDMY(rstTemp);
+
+      if (this.somatoriaTempoContribIdadeEC103.fullDays > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+
+
+  }
+
 
   public somatoriaTempoContribuicaoIdadeAtualP() {
 
 
     return new Promise((resolve, reject) => {
-
       let rstTemp = 0;
 
-      const idadeDias = moment.duration(moment().diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
+      rstTemp = (this.tempoTotalConFator.fullDays + this.idade360Atual.fullDays);
+      this.somatoriaTempoContribIdadeAtual = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
-      rstTemp = (this.tempoTotalConFator.days + idadeDias.asDays());
-
-      if (moment().isBefore(this.limitesDoVinculo.fim)) {
-        const diffTempoTotal = moment.duration(moment(this.limitesDoVinculo.fim, 'DD/MM/YYYY').diff(moment()));
-        rstTemp -= diffTempoTotal.asDays();
-      }
-
-      this.somatoriaTempoContribIdadeAtual = moment.duration(Math.floor(rstTemp), 'days');
-
-      if (this.somatoriaTempoContribIdadeAtual.asDays() > 0) {
+      if (this.somatoriaTempoContribIdadeAtual.fullDays > 0) {
         resolve(true);
       } else {
         reject(false);
@@ -665,10 +633,21 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
 
-  private defineIdadeFinal() {
-    this.idadeFinal = moment.duration(this.limitesDoVinculo.fim.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY')));
-    this.limitesTempoTotal.emit(this.idadeFinal);
+  private calculaIdades360Mes30() {
+
+    const dataNasc = moment(this.segurado.data_nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const ultimoVinculo = this.limitesDoVinculo.fim.format('YYYY-MM-DD');
+
+    this.idade360Final = DefinicaoTempo.calcularTempo360(dataNasc, ultimoVinculo);
+    this.limitesTempoTotal.emit(this.idade360Final);
+
+    this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
+
+    this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
+    this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
+
   }
+
 
   private subTotais() {
 
@@ -700,14 +679,20 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       console.log(error);
     });
 
+    this.somatoriaTempoContribuicaoIdadeAteEC103().then(result => {
+      // console.log(result);
+      this.isUpdateTotalTempoIdadeEC103 = false;
+    }).catch((error) => {
+      console.log(error);
+    });
+
   }
 
 
   private createConclusaoFinal() {
 
     this.limitesDoVinculo = this.defineInicioFim();
-
-    this.defineIdadeFinal();
+    this.calculaIdades360Mes30();
 
     const p1 = this.tempoTotal360(this.limitesDoVinculo).then(result => {
 
@@ -733,13 +718,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.isUpdateTotal = true;
     Promise.all([p1, p2]).then((values) => {
+
       this.verificaPeriodoAposReforma();
-
-
       this.subTotais();
       this.isUpdateTotal = false;
 
-      console.log(values);
+      // console.log(values);
     });
 
 
