@@ -54,6 +54,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idadeFinal: any;
   public idade360Final: any;
   public idade360Atual: any;
+  public idade360EC103: any;
   public idade360AteEC20: any;
 
 
@@ -66,6 +67,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   public isUpdateTotalTempoIdadeA = true;
   public isUpdateTotalTempoIdadeB = true;
+  public isUpdateTotalTempoIdadeEC103 = true;
 
   // parametros EC nº 103/2019
   public isPeridoAposReforma = false;
@@ -78,6 +80,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoCumprirAposItentegal: any; // Tempo a cumprir para Aposentadoria Integral
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
+  public somatoriaTempoContribIdadeEC103: any; // Somatória do tempo de contribuição e idade atual
 
   public dadosParaExportar: any; // dados para calcular RGPS
 
@@ -588,6 +591,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     });
   }
 
+
+  public somatoriaTempoContribuicaoIdadeAteEC103() {
+
+
+    return new Promise((resolve, reject) => {
+      let rstTemp = 0;
+
+      rstTemp = (this.tempoTotalConFator19.fullDays + this.idade360EC103.fullDays);
+      this.somatoriaTempoContribIdadeEC103 = DefinicaoTempo.convertD360ToDMY(rstTemp);
+
+      if (this.somatoriaTempoContribIdadeEC103.fullDays > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+
+
+  }
+
+
   public somatoriaTempoContribuicaoIdadeAtualP() {
 
 
@@ -619,8 +643,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
 
-
     this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
+    this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
 
   }
 
@@ -651,6 +675,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.somatoriaTempoContribuicaoIdadeAtualP().then(result => {
       // console.log(result);
       this.isUpdateTotalTempoIdadeB = false;
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    this.somatoriaTempoContribuicaoIdadeAteEC103().then(result => {
+      // console.log(result);
+      this.isUpdateTotalTempoIdadeEC103 = false;
     }).catch((error) => {
       console.log(error);
     });

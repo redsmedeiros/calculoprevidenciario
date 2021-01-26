@@ -144,7 +144,7 @@
       <td class="text-center">
         {{ tempoDePedApProp.days }}
       </td>
-      <td rowspan="7" colspan="2"></td>
+      <td rowspan="8" colspan="2"></td>
     </tr>
     <tr *ngIf="!isPeridoAposReforma">
       <td>
@@ -195,11 +195,25 @@
       <td class="text-center">
         {{ somatoriaTempoContribIdade.days }}
       </td>
-      <td *ngIf="isPeridoAposReforma"  rowspan="2" colspan="2"></td>
+      <td *ngIf="isPeridoAposReforma"  rowspan="3" colspan="2"></td>
+    </tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeEC103">
+      <td>
+        Somatório do Tempo de Contribuição e Idade na EC 103/2019 (13/11/2019)
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeEC103.years }}
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeEC103.months }}
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeEC103.days }}
+      </td>
     </tr>
     <tr *ngIf="!isUpdateTotalTempoIdadeB">
       <td>
-        Somatório do Tempo de Contribuição e Idade na Data Atual (Lei 13.183/2015)
+        Somatório do Tempo de Contribuição e Idade na Data Atual (EC 103/2019)
       </td>
       <td class="text-center">
         {{ somatoriaTempoContribIdadeAtual.years }}
