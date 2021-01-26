@@ -28,6 +28,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
+  public fimContador15 = this.toMoment('05/11/2015');
   public fimContador19 = this.toMoment('13/11/2019'); // Data EC nº 103/2019
 
   public tempoTotalConFator: any;
@@ -35,6 +36,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoTotalConFator91: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
+  public tempoTotalConFator15: any;
   public tempoTotalConFator19: any; // Data EC nº 103/2019
 
   public carencia = 0;
@@ -52,6 +54,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idadeFinal: any;
   public idade360Final: any;
   public idade360Atual: any;
+  public idade360AteEC20: any;
 
 
 
@@ -193,12 +196,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let count91 = 0;
       let count98 = 0;
       let count99 = 0;
+      let count15 = 0;
       let count19 = 0;
 
       const fimContador88 = this.momentCarenciaEnd(this.fimContador88);
       const fimContador91 = this.momentCarenciaEnd(this.fimContador91);
       const fimContador98 = this.momentCarenciaEnd(this.fimContador98);
       const fimContador99 = this.momentCarenciaEnd(this.fimContador99);
+      const fimContador15 = this.momentCarenciaEnd(this.fimContador15);
       const fimContador19 = this.momentCarenciaEnd(this.fimContador19);
 
       let melhorTempo = 0;
@@ -227,6 +232,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count99 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
           };
 
+          if (auxiliarDate.isSameOrBefore(fimContador15, 'month')) {
+            count15 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
+          };
+
           if (auxiliarDate.isSameOrBefore(fimContador19, 'month')) {
             count19 += (auxiliarDate.isSame(fimContador19, 'month')) ? 13 : melhorTempo;
           };
@@ -241,6 +250,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
       this.tempoTotalConFator98 = DefinicaoTempo.convertD360ToDMY(count98);
       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
+      this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
 
       // console.log(this.tempoTotalConFator);
@@ -248,6 +258,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // console.log(this.tempoTotalConFator91);
       // console.log(this.tempoTotalConFator98);
       // console.log(this.tempoTotalConFator99);
+      // console.log(this.tempoTotalConFator15);
       // console.log(this.tempoTotalConFator19);
 
       if (this.tempoTotalConFator) {
@@ -565,7 +576,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
 
       let rstTemp = 0;
-      rstTemp = (this.tempoTotalConFator.fullDays + this.idade360Final.fullDays);
+      rstTemp = (this.tempoTotalConFator15.fullDays + this.idade360AteEC20.fullDays);
 
       this.somatoriaTempoContribIdade = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
@@ -607,6 +618,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.limitesTempoTotal.emit(this.idade360Final);
 
     this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
+
+
+    this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
 
   }
 

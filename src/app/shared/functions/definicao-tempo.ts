@@ -211,123 +211,131 @@ export class DefinicaoTempo {
 
 
 
-    //   private defineMelhorTempo(auxiliarDate) {
+    // private defineMelhorTempo(auxiliarDate) {
 
     //     let melhorTempo = 0;
     //     let dataFull = false;
-
+    
     //     for (const vinculo of this.periodosList) {
-
+    
     //       const inicioVinculo = this.toMoment(vinculo.data_inicio);
     //       const fimVinculo = this.toMoment(vinculo.data_termino);
     //       const fator = vinculo.fator_condicao_especialN;
-
+    
     //       if (moment(auxiliarDate).isBetween(
     //         moment(inicioVinculo),
     //         moment(fimVinculo), 'month')) {
     //         melhorTempo = (30 * fator);
     //         dataFull = true;
     //       }
-
+    
     //       if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
     //         melhorTempo = ((30 - inicioVinculo.date()) + 1) * fator;
     //       }
-
+    
     //       if (moment(auxiliarDate).isSame(fimVinculo, 'month') && !dataFull) {
-
+    
     //         let tempo = fimVinculo.date();
     //         if (((fimVinculo.month() + 1) === 2) && (fimVinculo.date() === 28 || fimVinculo.date() === 29)
     //           || fimVinculo.date() === 31) {
     //           tempo = 30;
     //         }
-
+    
     //         melhorTempo = (tempo * fator);
-
+    
     //       }
-
+    
     //     }
-
+    
+    //     melhorTempo = Math.floor(melhorTempo);
+    //     //console.log('tempo = ' + melhorTempo + ' / ' + auxiliarDate.format('DD/MM/YYYY'))
     //     //console.log(melhorTempo);
-
+    
     //     return melhorTempo;
     //   }
-
-
-
-    // private tempoTotal360(limitesDoVinculo) {
-
+    
+    
+    //   private tempoTotal360(limitesDoVinculo) {
+    
     //     return new Promise((resolve, reject) => {
-
+    
     //       let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
     //       const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
-
+    
     //       auxiliarDate.startOf('month');
     //       fimContador.endOf('month')
-
+    
     //       let count = 0;
     //       let count88 = 0;
     //       let count91 = 0;
     //       let count98 = 0;
     //       let count99 = 0;
+    //       let count15 = 0;
     //       let count19 = 0;
-
+    
     //       const fimContador88 = this.momentCarenciaEnd(this.fimContador88);
     //       const fimContador91 = this.momentCarenciaEnd(this.fimContador91);
     //       const fimContador98 = this.momentCarenciaEnd(this.fimContador98);
     //       const fimContador99 = this.momentCarenciaEnd(this.fimContador99);
+    //       const fimContador15 = this.momentCarenciaEnd(this.fimContador15);
     //       const fimContador19 = this.momentCarenciaEnd(this.fimContador19);
-
+    
     //       let melhorTempo = 0;
-
+    
     //       do {
-
+    
     //         melhorTempo = this.defineMelhorTempo(auxiliarDate)
-
+    
     //         if (melhorTempo > 0) {
-
+    
     //           count += melhorTempo;
-
+    
     //           if (auxiliarDate.isSameOrBefore(fimContador88, 'month')) {
     //             count88 += (auxiliarDate.isSame(fimContador88, 'month')) ? 5 : melhorTempo;
     //           };
-
+    
     //           if (auxiliarDate.isSameOrBefore(fimContador91, 'month')) {
     //             count91 += (auxiliarDate.isSame(fimContador91, 'month')) ? 4 : melhorTempo;
     //           };
-
+    
     //           if (auxiliarDate.isSameOrBefore(fimContador98, 'month')) {
-    //             count98 += (auxiliarDate.isSame(fimContador98, 'month')) ? 16 : melhorTempo;
+    //             count98 += (auxiliarDate.isSame(fimContador98, 'month')) ? 15 : melhorTempo;
     //           };
-
+    
     //           if (auxiliarDate.isSameOrBefore(fimContador99, 'month')) {
     //             count99 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
     //           };
-
+    
+    //           if (auxiliarDate.isSameOrBefore(fimContador15, 'month')) {
+    //             count15 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
+    //           };
+    
     //           if (auxiliarDate.isSameOrBefore(fimContador19, 'month')) {
     //             count19 += (auxiliarDate.isSame(fimContador19, 'month')) ? 13 : melhorTempo;
     //           };
     //         }
-
+    
     //         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
-
+    
     //       } while (fimContador.isSameOrAfter(auxiliarDate));
-
+    
     //       this.tempoTotalConFator = DefinicaoTempo.convertD360ToDMY(count);
     //       this.tempoTotalConFator88 = DefinicaoTempo.convertD360ToDMY(count88);
     //       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
     //       this.tempoTotalConFator98 = DefinicaoTempo.convertD360ToDMY(count98);
     //       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
+    //       this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
     //       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
-
+    
     //       // console.log(this.tempoTotalConFator);
     //       // console.log(this.tempoTotalConFator88);
     //       // console.log(this.tempoTotalConFator91);
     //       // console.log(this.tempoTotalConFator98);
     //       // console.log(this.tempoTotalConFator99);
     //       // console.log(this.tempoTotalConFator19);
-
+    
     //       if (this.tempoTotalConFator) {
-
+    
     //         // this.verificaPeriodoAposReforma();
     //         // this.subTotais();
     //         resolve(true);
@@ -335,8 +343,9 @@ export class DefinicaoTempo {
     //         reject(false);
     //       }
     //     });
-
+    
     //   }
+    
 
 
     // private countdown(targetDate) {
