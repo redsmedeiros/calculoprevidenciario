@@ -504,10 +504,17 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           value: this.formateObjToStringAnosMesesDias(this.idadeDibFutura)
         });
 
+        console.log(this.idadeDibFutura);
+        console.log(tempoMinimo2Ano);
+        console.log(idadeSeguradoDIB);
+
+
+        const idadeParaRecuperarPerdas = this.idadeDibFutura.clone();
+        idadeParaRecuperarPerdas.add(tempoMínimoRecuperarValoresInvestidosRST, 'months')
         this.resultadosGeral.push({
           label: 'Idade do Segurado ao Recuperar os Valores Investidos ',
           // value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
-          value: Math.floor(idadeSeguradoDIB + Math.floor(tempoMinimo2Ano)) + ' ano(s) ' + tempoMinimo2Meses2 + ' mês(es)',
+          value: this.formateObjToStringAnosMesesDias(idadeParaRecuperarPerdas),
         });
 
         this.resultadosGeral.push({
@@ -537,8 +544,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
         let ValorAcumuladoAtingirIdadeIBGE = this.definicaoMoeda.formatMoney(totalEsperado);
-        
-        if(totalEsperado === 0){
+
+        if (totalEsperado === 0) {
           ValorAcumuladoAtingirIdadeIBGE = 'Idade na DIB Futura maior que a Idade Máxima de Acordo com a Expectativa de Sobrevida - IBGE';
         }
 
@@ -697,9 +704,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       if (aplicarReajuste && this.valorContribComRejuste > 0) {
         valorContribM = this.valorContribComRejuste;
-     }
+      }
 
-     if (aplicarReajuste) {
+      if (aplicarReajuste) {
         valorContribM = this.aplicarAjusteAdministrativo(auxiliarDate.clone(), valorContribM);
         this.valorContribComRejuste = valorContribM;
       }
@@ -731,9 +738,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         count++;
         let valorContrib = valor;
 
-         if (aplicarReajuste && this.valorContribComRejuste > 0) {
+        if (aplicarReajuste && this.valorContribComRejuste > 0) {
           valorContrib = this.valorContribComRejuste;
-       }
+        }
 
 
 
@@ -861,7 +868,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     }
 
     let mes = dataProp.month();
-    if (((dataProp.date() + 1 ) >= 15 && type === 'F') || ((dataProp.date() + 1) >= 15 && type === 'I')) {
+    if (((dataProp.date() + 1) >= 15 && type === 'F') || ((dataProp.date() + 1) >= 15 && type === 'I')) {
       mes = dataProp.month() + 1;
     }
 
