@@ -437,7 +437,8 @@
       ></app-rgps-planejamento-index> -->
 
       <!-- Planejamento  -->
-      <article class="col-sm-12 col-md-12 col-lg-12 mt-3">
+      <article class="col-sm-12 col-md-12 col-lg-12 mt-3"
+      *ngIf="(this.mostrarCalculoApos99 || this.mostrarCalculoApos19)" >
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"
