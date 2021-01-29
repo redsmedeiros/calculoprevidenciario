@@ -2058,10 +2058,12 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Seção 4.2
   calcularVincendas() {
    
-    // console.log( this.ultimaRenda);
-    // console.log( this.ultimoBeneficioDevidoAntesProporcionalidade);
+    //  console.log( this.ultimaRenda);
+    //  console.log( this.ultimoBeneficioDevidoAntesProporcionalidade);
+    //  console.log( this.ultimoBeneficioDevidoAntesProporcionalidade * 12);
 
-    const somaVincendas = this.ultimaDiferencaMensal;
+    // const somaVincendas = this.ultimaDiferencaMensal;
+    const somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
     const maturidade = this.calculo.maturidade;
     let valorVincendas = 0;
 
@@ -2075,7 +2077,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
      // somaVincendas =  this.ultimaRenda;
 
-      valorVincendas = (Math.round(somaVincendas * 100) / 100) * maturidade;
+      valorVincendas = (Math.round(somaVincendas * 100) / 100) * 12;
 
     }
 
@@ -2578,7 +2580,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     const competenciasTutela = this.monthsBetween(tutelaInicio, tutelaFim);
 
     this.percentualTaxaAdvogado = this.calculo.percentual_taxa_advogado * 100;
-    let beneficioTutelaComIndice = this.ultimoBeneficioDevidoAntesProporcionalidade;;
+    let beneficioTutelaComIndice = this.ultimoBeneficioDevidoAntesProporcionalidade;
     let moedaDataTutelaCorrente;
 
     for (const dataCorrenteTutelaString of competenciasTutela) {
