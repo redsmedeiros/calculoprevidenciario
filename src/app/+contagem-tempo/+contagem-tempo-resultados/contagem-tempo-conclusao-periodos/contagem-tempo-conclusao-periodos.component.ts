@@ -193,11 +193,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       }
     }
 
-    if (inicio < inicioAux && fim > inicioAux && fim < fimAux) {
+    if (inicio < inicioAux && fim >= inicioAux && fim <= fimAux) {
       checkConcomitante = true;
     }
 
-    if (inicio > inicioAux && inicio < fimAux && fim > fimAux) {
+    if (inicio > inicioAux && inicio <= fimAux && fim >= fimAux) {
       checkConcomitante = true;
     }
 

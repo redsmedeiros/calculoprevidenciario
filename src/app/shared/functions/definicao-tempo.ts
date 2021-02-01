@@ -50,7 +50,14 @@ export class DefinicaoTempo {
     static aplicarFator(daysY360, fator) {
 
         if (fator !== 1 && fator > 0) {
-            return daysY360 * fator;
+            let rstFator = (daysY360 * fator);
+            const testDecimal99 = rstFator - Math.floor(rstFator);
+
+            if ((Math.floor(testDecimal99 * 100) / 100) === 0.99) {
+                rstFator =  Math.round(rstFator);
+            }
+
+            return Math.floor(rstFator);
         }
 
         return daysY360;
