@@ -213,12 +213,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         tempoFim *= lastFator;
 
-        console.log('I----');
-        console.log(auxiliarDate.format('DD/MM/YYYY'));
-        console.log(tempoIni);
-        console.log(tempoFim);
-        console.log(tempoIni + tempoFim);
-        console.log(tempoFim - tempoIni);
+        // console.log('I----');
+        // console.log(auxiliarDate.format('DD/MM/YYYY'));
+        // console.log(tempoIni);
+        // console.log(tempoFim);
+        // console.log(tempoIni + tempoFim);
+        // console.log(tempoFim - tempoIni);
 
         melhorTempo = (tempoFim + tempoIni);
 
@@ -234,16 +234,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           melhorTempo -= diffAnterior;
         }
 
-        if ((moment(inicioVinculo).isSame(lastFim, 'month'))) {
-          console.log('ok')
-        }
+        // if ((moment(inicioVinculo).isSame(lastFim, 'month'))) {
+        //   console.log('ok')
+        // }
 
 
        //  melhorTempo *= fator;
 
-        console.log(melhorTempo);
-        console.log(diffAnterior);
-        console.log('F----');
+        // console.log(melhorTempo);
+        // console.log(diffAnterior);
+        // console.log('F----');
       }
 
       lastIni = this.toMoment(vinculo.data_inicio);
@@ -262,9 +262,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     melhorTempo = Math.floor(melhorTempo);
 
-    console.log('FT----');
-    console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- ' + melhorTempo);
-    console.log('FT----');
+    // console.log('FT----');
+    // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- ' + melhorTempo);
+    // console.log('FT----');
 
     return melhorTempo;
   }
@@ -334,7 +334,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       } while (fimContador.isSameOrAfter(auxiliarDate, 'month'));
 
-
       count = Math.floor(count);
       count88 = Math.floor(count88);
       count91 = Math.floor(count91);
@@ -351,9 +350,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
 
-
-      console.log(this.periodosList);
-
       let somatesteF = 0
       let somateste = 0
       for (const iterator of this.periodosList) {
@@ -362,9 +358,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         somateste += Number(iterator.totalSemFator.fullDays);
       }
 
-      console.log(somateste);
-      console.log(somatesteF);
-      console.log(this.tempoTotalConFator);
+      // console.log(this.periodosList);
+      // console.log(somateste);
+      // console.log(somatesteF);
+      // console.log(this.tempoTotalConFator);
       // console.log(this.tempoTotalConFator88);
       // console.log(this.tempoTotalConFator91);
       // console.log(this.tempoTotalConFator98);
