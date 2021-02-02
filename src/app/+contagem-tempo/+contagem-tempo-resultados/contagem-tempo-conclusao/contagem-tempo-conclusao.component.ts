@@ -141,6 +141,21 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
 
+  private aplicarFator(daysY360, fator) {
+
+    if (daysY360 > 0 && fator !== 1 && fator > 0) {
+      let rstFator = (daysY360 * fator);
+      const testDecimal99 = rstFator - Math.floor(rstFator);
+
+      if ((Math.floor(testDecimal99 * 100) / 100) === 0.99) {
+        rstFator = Math.round(rstFator);
+      }
+
+      return Math.floor(rstFator);
+    }
+
+    return daysY360;
+  }
 
 
   private defineMelhorTempo(auxiliarDate) {
@@ -160,12 +175,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       if (moment(auxiliarDate).isBetween(
         moment(inicioVinculo),
         moment(fimVinculo), 'month')) {
-        melhorTempo = (30 * fator);
+        // melhorTempo = (30 * fator);
+        melhorTempo = this.aplicarFator(30, fator);
         dataFull = true;
       }
 
       if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
-        melhorTempo = ((30 - inicioVinculo.date()) + 1) * fator;
+
+        melhorTempo = ((30 - inicioVinculo.date()) + 1);
+        melhorTempo = this.aplicarFator(melhorTempo, fator)
+
       }
 
       if (moment(auxiliarDate).isSame(fimVinculo, 'month') && !dataFull) {
@@ -176,7 +195,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           tempo = 30;
         }
 
-        melhorTempo = (tempo * fator);
+        //melhorTempo = (tempo * fator);
+        melhorTempo = this.aplicarFator(tempo, fator);
       }
 
 
@@ -193,8 +213,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           diffIgualIF = (diffIgualIF > 0) ? (diffIgualIF * fator) : 0;
         }
 
-        melhorTempo = diffIgualIF;
-
+        // melhorTempo = diffIgualIF;
+        melhorTempo = this.aplicarFator(diffIgualIF, fator);
       }
 
 
@@ -207,7 +227,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         melhorTempo = 0;
 
         let diffAnterior = 0;
-        let tempoIni = ((30 - inicioVinculo.date()) + 1) * fator;
+        // let tempoIni = ((30 - inicioVinculo.date()) + 1) * fator;
+        let tempoIni = ((30 - inicioVinculo.date()) + 1);
+        tempoIni = this.aplicarFator(tempoIni, fator);
 
         let tempoFim = lastFim.date();
         if (((lastFim.month() + 1) === 2 && (lastFim.date() === 28 || lastFim.date() === 29))
@@ -215,7 +237,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           tempoFim = 30;
         }
 
-        tempoFim *= lastFator;
+        // tempoFim *= lastFator;
+        tempoFim = this.aplicarFator(tempoFim, fator);
 
         // console.log('I----');
         // console.log(auxiliarDate.format('DD/MM/YYYY'));
@@ -235,6 +258,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         if ((moment(lastIni).isSame(lastFim, 'month'))) {
           diffAnterior = (lastFim.date() - lastIni.date()) + 1;
           diffAnterior = (diffAnterior > 0) ? diffAnterior : 0;
+          diffAnterior = this.aplicarFator(diffAnterior, lastFator);
           melhorTempo -= diffAnterior;
         }
 
@@ -243,7 +267,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         // }
 
 
-        melhorTempo *= fator;
+        // melhorTempo *= fator;
 
         // console.log(melhorTempo);
         // console.log(diffAnterior);
@@ -260,13 +284,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     // console.log(auxiliarDate.format('DD/MM/YYYY'))
     // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- ' + melhorTempo);
 
-    //console.log('tempo = ' + melhorTempo + ' / ' + auxiliarDate.format('DD/MM/YYYY'))
-    //console.log(melhorTempo);
+    // console.log('tempo = ' + melhorTempo + ' / ' + auxiliarDate.format('DD/MM/YYYY'))
+    // console.log(melhorTempo);
 
     melhorTempo = Math.floor(melhorTempo);
 
     // console.log('FT----');
-    // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- atual = ' + melhorTempo + ' --- last =  ' + melhorTempoLast);
+    // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- atual = ' + melhorTempo + ' --- last =  ' + melhorTempoLast + 'f1=' + lastFator);
     // console.log('FT----');
 
     return melhorTempo;
@@ -337,13 +361,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       } while (fimContador.isSameOrAfter(auxiliarDate, 'month'));
 
-      count = Math.floor(count);
-      count88 = Math.floor(count88);
-      count91 = Math.floor(count91);
-      count98 = Math.floor(count98);
-      count99 = Math.floor(count99);
-      count15 = Math.floor(count15);
-      count19 = Math.floor(count19);
+      // count = Math.floor(count);
+      // count88 = Math.floor(count88);
+      // count91 = Math.floor(count91);
+      // count98 = Math.floor(count98);
+      // count99 = Math.floor(count99);
+      // count15 = Math.floor(count15);
+      // count19 = Math.floor(count19);
 
       this.tempoTotalConFator = DefinicaoTempo.convertD360ToDMY(count);
       this.tempoTotalConFator88 = DefinicaoTempo.convertD360ToDMY(count88);
@@ -356,7 +380,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let somatesteF = 0
       let somateste = 0
       for (const iterator of this.periodosList) {
-        // console.log(iterator.totalComFator.fullDay);
         somatesteF += Number(iterator.totalComFator.fullDays);
         somateste += Number(iterator.totalSemFator.fullDays);
       }
