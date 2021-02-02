@@ -140,9 +140,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+
+
+
   private defineMelhorTempo(auxiliarDate) {
 
     let melhorTempo = 0;
+    let melhorTempoLast = 0;
     let dataFull = false;
     let lastFim;
     let lastIni;
@@ -239,7 +243,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         // }
 
 
-       //  melhorTempo *= fator;
+        melhorTempo *= fator;
 
         // console.log(melhorTempo);
         // console.log(diffAnterior);
@@ -249,10 +253,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       lastIni = this.toMoment(vinculo.data_inicio);
       lastFim = this.toMoment(vinculo.data_termino);
       lastFator = vinculo.fator_condicao_especialN;
+      melhorTempoLast = (melhorTempo > melhorTempoLast) ? melhorTempo : melhorTempoLast;
 
     }
-
-
 
     // console.log(auxiliarDate.format('DD/MM/YYYY'))
     // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- ' + melhorTempo);
@@ -263,7 +266,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     melhorTempo = Math.floor(melhorTempo);
 
     // console.log('FT----');
-    // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- ' + melhorTempo);
+    // console.log(auxiliarDate.format('DD/MM/YYYY') + ' --- atual = ' + melhorTempo + ' --- last =  ' + melhorTempoLast);
     // console.log('FT----');
 
     return melhorTempo;
