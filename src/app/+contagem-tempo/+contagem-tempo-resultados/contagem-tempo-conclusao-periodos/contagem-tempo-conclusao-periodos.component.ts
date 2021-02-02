@@ -99,8 +99,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     if (typeof periodo === 'object' && this.idsCalculos[0] == periodo.id_contagem_tempo) {
 
-      const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1
-
+      const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
       const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
 
       const line = {

@@ -49,7 +49,7 @@ export class DefinicaoTempo {
      */
     static aplicarFator(daysY360, fator) {
 
-        if (fator !== 1 && fator > 0) {
+        if (daysY360 > 0 && fator !== 1 && fator > 0) {
             let rstFator = (daysY360 * fator);
             const testDecimal99 = rstFator - Math.floor(rstFator);
 
@@ -216,6 +216,7 @@ export class DefinicaoTempo {
         return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
     }
 
+   
 
 
     // private defineMelhorTempo(auxiliarDate) {
