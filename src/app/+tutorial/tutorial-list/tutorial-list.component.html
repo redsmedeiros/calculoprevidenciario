@@ -7,11 +7,12 @@
         <h1>Tutoriais dos simuladores</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/home/home"> Home </a></li>
-          <li class="breadcrumb-item active">Tutoriais</li>
+          <li class="breadcrumb-item active">Tutoriais </li>
         </ol>
       </article>
-      <div class="col-sm-12 col-md-6 col-lg-6" *ngFor="let video of listVideos" >
+      <div  class="col-sm-12 col-md-6 col-lg-6"  *ngFor="let video of listVideos" >
         <app-tutorial-video
+          *ngIf="listVideos.length > 0" 
           [title]="video.label"
           [idVimeo]="video.value"
         ></app-tutorial-video> 

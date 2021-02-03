@@ -92,6 +92,8 @@ export class ContagemTempoPeriodosComponent implements OnInit {
   public id;
   public atualizarPeriodo = 0;
 
+  public isVinculoAposReformaEspecial = false;
+
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
@@ -305,7 +307,7 @@ setupdatePeriodo() {
     //         this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
     //       });
 
-
+    this.moveNextID('empresa')
   } else {
     this.toastAlert('error', 'Confira os dados digitados', null);
   }
@@ -325,6 +327,7 @@ insertPeriodo(periodoObj) {
       this.resetForm();
     })
     .catch(errors => this.errors.add(errors));
+    this.moveNextID('empresa')
 }
 
 
@@ -359,7 +362,8 @@ submit() {
    //console.log(periodoObj);
 
     this.insertPeriodo(periodoObj);
-
+    
+    
   } else {
     this.toastAlert('error', 'Confira os dados digitados', null);
   }
@@ -447,6 +451,31 @@ toastAlert(type, title, position) {
     showConfirmButton: false,
     timer: 1500
   });
+
+}
+
+
+moveNext(event, maxLength, nextElementId) {
+  let value = event.srcElement.value;
+  if (value.indexOf('_') < 0 && value != '') {
+    let next = <HTMLInputElement>document.getElementById(nextElementId);
+    next.focus();
+  }
+}
+
+moveNextID(nextElementId) {
+    let nextID = <HTMLInputElement>document.getElementById(nextElementId);
+    nextID.focus();
+}
+
+
+changeCondicaoEspecial(){
+  
+  this.errors.clear('condicao_especial')
+
+  if (!this.condicao_especial) {
+    this.fator_condicao_especial = 1.00;
+  }
 
 }
 

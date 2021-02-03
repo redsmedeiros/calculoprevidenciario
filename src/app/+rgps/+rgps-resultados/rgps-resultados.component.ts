@@ -1,3 +1,4 @@
+
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
@@ -18,6 +19,9 @@ import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
+import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
+import { RgpsPlanejamentoService } from 'app/+rgps/rgps-planejamento/rgps-planejamento.service';
+import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
@@ -124,6 +128,7 @@ export class RgpsResultadosComponent implements OnInit {
   public salarioMinimoMaximo;
   public primeiraDataTabela;
   public dataInicioBeneficio;
+  public dataInicioBeneficioOld;
   public dataFiliacao;
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
@@ -269,6 +274,9 @@ export class RgpsResultadosComponent implements OnInit {
   public dataDecreto6939_2009 = moment('2009-08-18');
   public dataPec062019 = moment('2019-11-13');
 
+  public planejamento;
+  public isPlanejamento = false;
+  public planejamentoContribuicoesAdicionais = [];
 
 
   //pbc parametro get
@@ -277,10 +285,20 @@ export class RgpsResultadosComponent implements OnInit {
   // pbc indices de correção
   public pbcCompletoIndices = 'inpc1084';
 
+  public steps = [];
+  public activeStep = {
+    key: 'step4',
+    title: 'RMI do Benefício Futuro',
+    valid: false,
+    checked: false,
+    submitted: false,
+  };
+
   constructor(protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoRgps: CalculoRgpsService,
+    protected planejamentoService: RgpsPlanejamentoService,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
@@ -291,6 +309,8 @@ export class RgpsResultadosComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
     this.idsCalculo = this.route.snapshot.params['id'].split(',');
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    this.isPlanejamento = this.getIsPlanejamento();
 
     this.isUpdating = true;
 
@@ -315,11 +335,14 @@ export class RgpsResultadosComponent implements OnInit {
           for (const idCalculo of this.idsCalculo) {
             this.CalculoRgps.find(idCalculo)
               .then((calculo: CalculoModel) => {
+
+                this.getPlanejamento(calculo);
+
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
-                                  <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
-                                  <span> </span></label></div>`;
+              <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
+              <span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
 
                 calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
@@ -983,6 +1006,9 @@ export class RgpsResultadosComponent implements OnInit {
     const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     calculo.isBlackHole = false;
 
+    // verificar e setar os parametros para novo calculo;
+
+
     const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
     const verificaIdade = this.verificaEspecieDeBeneficioIdade(calculo.tipo_seguro);
 
@@ -1013,12 +1039,12 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       // }
-    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio < data19) {
+    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio <= data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 após 99     (tempo de contribuicao após a lei 99)
-      (cálculos em box separados)*/
+                (cálculos em box separados)*/
 
       if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
@@ -1032,13 +1058,13 @@ export class RgpsResultadosComponent implements OnInit {
 
       calculo.mostrarCalculoApos99 = true;
 
-    } else if (dataInicioBeneficio >= data19) {
+    } else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
                 entre 99 e 19 (tempo de contribuicao até 103/2019)
                 após 19     (tempo de contribuicao após 103/2019)
-      (cálculos em box separados)*/
+                (cálculos em box separados)*/
       if (!verificaInvalidezObito) {
         calculo.mostrarCalculo91_98 = true;
         calculo.mostrarCalculo98_99 = true;
@@ -1059,6 +1085,15 @@ export class RgpsResultadosComponent implements OnInit {
       }
 
 
+      calculo.mostrarCalculoApos19 = true;
+    }
+
+
+    if (this.isPlanejamento) {
+      this.getStepRGPSPlanejamento();
+      calculo.mostrarCalculo91_98 = false;
+      calculo.mostrarCalculo98_99 = false;
+      calculo.mostrarCalculoApos99 = false;
       calculo.mostrarCalculoApos19 = true;
     }
 
@@ -1162,30 +1197,30 @@ export class RgpsResultadosComponent implements OnInit {
 
 
     const css = `
-                <style>
-                      body{font-family: Arial, Helvetica, sans-serif;}
-                      h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
-                      i.fa, .not-print{ display: none; }
-                      table{margin-top: 10px;padding-top: 10px;}
-                      footer,div,p,td,th{font-size:11px !important;}
-                      .list-inline{ display:inline; }
-                      .table>tbody>tr>td, .table>tbody>tr>th,
-                       .table>tfoot>tr>td, .table>tfoot>tr>th,
-                       .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-                       footer{text-align: center; margin-top: 50px;}
-                </style>`;
+    <style>
+    body{font-family: Arial, Helvetica, sans-serif;}
+    h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
+    i.fa, .not-print{ display: none; }
+    table{margin-top: 10px;padding-top: 10px;}
+    footer,div,p,td,th{font-size:11px !important;}
+    .list-inline{ display:inline; }
+    .table>tbody>tr>td, .table>tbody>tr>th,
+    .table>tfoot>tr>td, .table>tfoot>tr>th,
+    .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+    footer{text-align: center; margin-top: 50px;}
+    </style>`;
 
     // let printContents = document.getElementById('content').innerHTML;
     let printContents = seguradoBox + grupoCalculos + allCalcBoxText;
     printContents = printContents.replace(/<table/g,
-    '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
-                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
-    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-                            + this.segurado.nome + '</title></head><body onload="window.print()">' 
-                            + printContents +'<br><br><br>'+ rodape + '</body></html>');
+    popupWin.document.write('<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">'
+      + printContents + '<br><br><br>' + rodape + '</body></html>');
     popupWin.document.close();
   }
 
@@ -1193,29 +1228,29 @@ export class RgpsResultadosComponent implements OnInit {
     event.stopPropagation();
     const css = `
     <style>
-          body{font-family: Arial, Helvetica, sans-serif;}
-          h1, h2{font-size:0.9rem;}
-          i.fa, .not-print{ display: none; }
-          table{margin-top: 10px;}
-          footer,div,p,td,th{font-size:10px !important;}
-          .list-inline{ display:inline; }
-          .table>tbody>tr>td, .table>tbody>tr>th,
-           .table>tfoot>tr>td, .table>tfoot>tr>th,
-           .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
-           footer{text-align: center; margin-top: 50px;}
-           .list-inline-print{ display:inline !important;}
+    body{font-family: Arial, Helvetica, sans-serif;}
+    h1, h2{font-size:0.9rem;}
+    i.fa, .not-print{ display: none; }
+    table{margin-top: 10px;}
+    footer,div,p,td,th{font-size:10px !important;}
+    .list-inline{ display:inline; }
+    .table>tbody>tr>td, .table>tbody>tr>th,
+    .table>tfoot>tr>td, .table>tfoot>tr>th,
+    .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+    footer{text-align: center; margin-top: 50px;}
+    .list-inline-print{ display:inline !important;}
     </style>`;
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML
     const boxContent = document.getElementById(boxId).innerHTML;
 
 
-                    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
-    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - ' 
-                          + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> ' 
-                          + boxContent +'<br><br><br>'+ rodape + '</body></html>';
+    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
+      + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
+      + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
-         '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
+      '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
     popupWin.document.open();
@@ -1256,7 +1291,270 @@ export class RgpsResultadosComponent implements OnInit {
     return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
   }
 
+  // planejamento adicionais RMI
 
+  public getIsPlanejamento() {
+    return (this.route.snapshot.params['pbc'] === 'plan');
+  }
+
+
+  private calcDiffContribuicao(a, b) {
+
+    const total = { years: 0, months: 0, days: 0, totalDays: 0, totalMonths: 0, totalYears: 0 };
+    let diff: any;
+
+    total.totalYears = a.diff(b, 'years', true);
+    total.totalMonths = a.diff(b, 'months', true);
+    total.totalDays = a.diff(b, 'days', true);
+
+    diff = a.diff(b, 'years');
+    b.add(diff, 'years');
+    total.years = diff;
+
+    diff = a.diff(b, 'months');
+    b.add(diff, 'months');
+    total.months = diff;
+
+    diff = a.diff(b, 'days');
+    b.add(diff, 'days');
+    total.days = diff;
+
+    return total;
+  }
+
+
+  private addTempoContribuicao(calculo, diffTempo) {
+
+    const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+
+    objTempo.anos += diffTempo.years;
+    objTempo.meses += diffTempo.months;
+    objTempo.dias += diffTempo.days;
+
+    if (objTempo.dias >= 30) {
+      objTempo.dias -= 30;
+      objTempo.meses += 1;
+    }
+
+
+    if (objTempo.dias >= 11) {
+      objTempo.meses = 1;
+      objTempo.anos += 1;
+    }
+
+    calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
+
+  }
+
+  private addCarencia(calculo, tempoDiff) {
+
+    calculo.carencia_apos_ec103 += tempoDiff.totalMonths;
+
+  }
+
+  private createListPlanContribuicoesAdicionais() {
+
+    this.planejamentoContribuicoesAdicionais = []
+    let auxiliarDate = this.dataInicioBeneficio.clone();
+    // const fimContador = this.dataInicioBeneficioOld.clone();
+    const fimContador = moment();
+    let count = 0;
+    const valorSalContrib = Number();
+    let ObjValContribuicao;
+    // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
+
+    while (fimContador.isBefore(auxiliarDate, 'month')) {
+      count++;
+      auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+
+      ObjValContribuicao = new ValorContribuido({
+        data: auxiliarDate.format('YYYY-MM-DD'),
+        valor_primaria: this.planejamento.valor_beneficio,
+        valor_secundaria: 0,
+      });
+
+      this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+    };
+
+  }
+
+  private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
+
+    if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
+     && calculo.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
+
+      calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
+      calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+
+    } else {
+
+      calculo.contribuicao_primaria_19 = calculo.contribuicao_primaria_atual;
+      calculo.carencia_apos_ec103 = calculo.carencia;
+      calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
+      calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+    }
+
+    const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
+
+    this.addTempoContribuicao(calculo, diffTempo);
+    // this.addCarencia(calculo, diffTempo);
+    this.createListPlanContribuicoesAdicionais();
+  }
+
+
+  private setInfoPLanejamentoTempoDib(calculo, calcClone) {
+    if (this.isExits(this.planejamento) && calculo.id === this.planejamento.id_calculo) {
+
+      // set valores originais para atrib old
+      calculo.data_pedido_beneficio_old = calcClone.data_pedido_beneficio;
+      calculo.especie_old = calcClone.especie;
+      this.dataInicioBeneficioOld = moment(calculo.data_pedido_beneficio_old, 'DD/MM/YYYY');
+
+      // set atrib conformeplanejamento
+      calculo.data_pedido_beneficio = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
+      this.dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+      calculo.tipo_seguro = this.planejamento.especie;
+
+      this.setTempoContribuicao(
+        calculo,
+        calcClone,
+        this.dataInicioBeneficioOld.clone(),
+        this.dataInicioBeneficio.clone()
+      );
+
+    }
+  }
+
+
+  public getPlanejamento(calculo) {
+    // console.log(this.route.snapshot.params['correcao_pbc']);
+    // console.log(this.route.snapshot.params['pbc']);
+
+    const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
+
+    if (this.isPlanejamento) {
+
+      if (sessionStorage.exportPlanejamento) {
+
+        const exportObjPlanejamento = JSON.parse(sessionStorage.exportPlanejamento);
+        this.planejamento = new PlanejamentoRgps(exportObjPlanejamento);
+        const calcClone = Object.assign({}, calculo);
+        this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+
+      } else {
+        this.isUpdating = true;
+        const planejamentoP = this.planejamentoService.find(idPlanejamento)
+          .then((planejamento: PlanejamentoRgps) => {
+
+
+            console.log(planejamento);
+            this.planejamento = planejamento;
+
+            const calcClone = Object.assign({}, calculo);
+            this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+
+            this.isUpdating = false;
+          }).catch(errors => console.log(errors));
+
+      }
+
+      // this.dataInicioBeneficio = exportDados.dib;
+      // this.changePeriodoOptions();
+      // const dib = moment(exportDados.dib, 'DD/MM/YYYY');
+      // PlanejamentoRgps
+    }
+
+  }
+
+  private navegarPlanejamento(type) {
+    let urlpbcNew = '';
+
+    switch (type) {
+      case 'inicio':
+        urlpbcNew = '/rgps/rgps-planejamento/1';
+        break;
+      case 'selectSegurado':
+        urlpbcNew = '/rgps/rgps-planejamento/2/' + this.segurado.id;
+        break;
+      case 'selectCalc':
+        urlpbcNew = '/rgps/rgps-planejamento/3/' + this.segurado.id + '/' + this.idsCalculo[0];
+        break;
+      case 'resultado':
+        urlpbcNew = '/rgps/rgps-planejamento/resultados/' + this.segurado.id + '/' + this.idsCalculo[0] + '/' + this.planejamento.id;
+        break;
+
+    }
+
+    this.router.navigate([urlpbcNew]);
+
+  }
+
+  public setStepPlanejamento(status) {
+    this.activeStep.valid = true;
+  }
+
+  private setActiveStep(pane) {
+
+    switch (pane.key) {
+      case 'step1':
+        this.navegarPlanejamento('inicio');
+        break;
+      case 'step2':
+        this.navegarPlanejamento('selectSegurado');
+        break;
+      case 'step3':
+        this.navegarPlanejamento('selectCalc');
+        break;
+      case 'step5':
+        this.navegarPlanejamento('resultado');
+        break;
+    }
+
+  }
+
+  private getStepRGPSPlanejamento() {
+
+    this.steps = [
+      {
+        key: 'step1',
+        title: ' Dados do Segurado',
+        valid: false,
+        checked: false,
+        submitted: false,
+      },
+      {
+        key: 'step2',
+        title: 'RMI do Benefício Atual',
+        valid: false,
+        checked: false,
+        submitted: false,
+      },
+      {
+        key: 'step3',
+        title: 'Dados do Benefício Futuro',
+        valid: false,
+        checked: false,
+        submitted: false,
+      },
+      {
+        key: 'step4',
+        title: 'RMI do Benefício Futuro',
+        valid: false,
+        checked: false,
+        submitted: false,
+      },
+      {
+        key: 'step5',
+        title: 'Relatório',
+        valid: false,
+        checked: false,
+        submitted: false,
+      },
+    ];
+
+  }
+
+  // planejamento adicionais RMI
 
   public calcularPBCIndices(indice) {
 
@@ -1339,7 +1637,6 @@ export class RgpsResultadosComponent implements OnInit {
 
     return especie;
   }
-
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

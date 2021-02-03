@@ -190,6 +190,7 @@
                         maxlength="255"
                         [(ngModel)]="empresa"
                         placeholder="Nome da empresa"
+                        id="empresa"
                         name="empresa"
                         (change)="errors.clear('empresa')"
                         type="text"
@@ -215,11 +216,13 @@
                         class="form-control"
                         placeholder="DD/MM/AAAA"
                         [(ngModel)]="data_inicio"
+                        id="data_inicio"
                         name="data_inicio"
                         [textMask]="{ mask: dateMask }"
                         type="text"
                         (change)="errors.clear('data_inicio')"
                         autocomplete="on"
+                        (keyup)="moveNext($event, 7, 'data_termino')"
                       />
                       <small
                         *ngIf="errors.has('data_inicio')"
@@ -241,6 +244,7 @@
                         class="form-control"
                         placeholder="DD/MM/AAAA"
                         [(ngModel)]="data_termino"
+                        id="data_termino"
                         name="data_termino"
                         [textMask]="{ mask: dateMask }"
                         type="text"
@@ -258,7 +262,7 @@
                     <label class="col-md-2 control-label"
                       >Laborou em Condições Especiais?</label
                     >
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                       <label class="radio radio-inline">
                         <input
                           [(ngModel)]="condicao_especial"
@@ -274,7 +278,7 @@
                         <input
                           [(ngModel)]="condicao_especial"
                           [ngModelOptions]="{ standalone: true }"
-                          (change)="errors.clear('condicao_especial')"
+                          (change)="changeCondicaoEspecial()"
                           type="radio"
                           name="condicao_especial"
                           [value]="0"
@@ -290,6 +294,26 @@
                           >
                         </div>
                       </div>
+                    </div>
+                    <div class="col-md-6">
+                     
+
+                      <popover-content #avisoFator
+                      [closeOnClickOutside]="true"
+                      >
+                      <div class="alert alert-danger bg-ieprev fade in bold">
+                     A EC 103/2019 veda a conversão de tempo especial em comum para período cumprido após 13/11/2019. Entretanto, o Simulador de Cálculo do 
+                     IEPREV possibilita a conversão de tempo para todos os períodos. Caso o usuário pretenda converter tempo especial em comum somente até 13/11/2019,
+                      deverá desmembrar o(s) vínculo(s) em dois períodos (antes e depois da EC 103/2019).
+                      </div>
+                      </popover-content>
+                        <button type="button" class="btn btn-small btn-info" 
+                        popoverPlacement="right" 
+                        [popoverOnHover]="true"
+                        [popover]="avisoFator"
+                        >
+                            <i class="fa fa-question-circle fa-1-6x"></i>
+                        </button>
                     </div>
                   </div>
                   <div class="form-group">
@@ -352,6 +376,7 @@
                           type="radio"
                           name="carencia"
                           [value]="1"
+                         
                         />
                         Sim
                       </label>

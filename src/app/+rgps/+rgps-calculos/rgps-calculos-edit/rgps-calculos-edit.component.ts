@@ -3,6 +3,8 @@ import { CalculoRgpsService } from '../CalculoRgps.service';
 import { ErrorService } from '../../../services/error.service';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import swal from 'sweetalert';
+
 
 @Component({
   selector: 'app-rgps-calculos-edit',
@@ -63,13 +65,15 @@ export class RgpsCalculosEditComponent implements OnInit, OnDestroy {
         };
 
         swal(teste).then(() => {
-          this.CalculoRgps.get()
-           // .then(() => this.router.navigate(['/rgps/rgps-calculos/' + this.route.snapshot.params['id']]));
-            .then(() => this.router.navigate(['/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo]));
+
+          this.router.navigate(['/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo]);
+          // this.CalculoRgps.get()
+          //  // .then(() => this.router.navigate(['/rgps/rgps-calculos/' + this.route.snapshot.params['id']]));
+          //   .then(() => this.router.navigate(['/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idCalculo]));
         });
 
       })
-      .catch(errors => this.Errors.add(errors));
+      .catch(errors => {this.Errors.add(errors); console.log(errors)});
   }
 
   ngOnDestroy() {

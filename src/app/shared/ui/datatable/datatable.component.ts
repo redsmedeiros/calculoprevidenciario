@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterContentInit, OnInit } from '@angular/core';
+import { Component, Input, ElementRef, AfterContentInit, OnInit, Output, EventEmitter } from '@angular/core';
 
 declare var $: any;
 
@@ -26,7 +26,13 @@ export class DatatableComponent implements OnInit {
   @Input() public tableClass: string;
   @Input() public width: string = '100%';
 
-  constructor(private el: ElementRef) {
+  @Output() selectedRowEvent = new EventEmitter();
+  @Output() updateRowEvent = new EventEmitter();
+  @Output() deleteRowEvent = new EventEmitter();
+
+  constructor(
+    private el: ElementRef
+  ) {
   }
 
   ngOnInit() {
@@ -41,6 +47,10 @@ export class DatatableComponent implements OnInit {
   render() {
     let element = $(this.el.nativeElement.children[0]);
     let options = this.options || {}
+
+    const selectedRowEvent = this.selectedRowEvent;
+    const updateRowEvent = this.updateRowEvent;
+    const deleteRowEvent = this.deleteRowEvent;
 
 
     let toolbar = '';
@@ -143,6 +153,50 @@ export class DatatableComponent implements OnInit {
       })
     }
 
+
+    element.on('click', '.select-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      selectedRowEvent.emit(row.data());
+
+    });
+
+    element.on('click', '.checked-row', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      selectedRowEvent.emit(row.data());
+
+    });
+
+    element.on('click', '.checked-row-one', function () {
+
+      $('.checked-row-one').removeAttr('checked');
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      selectedRowEvent.emit(row.data());
+
+      $(this).attr('checked', 'checked');
+
+    });
+
+    element.on('click', '.update-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      updateRowEvent.emit(row.data());
+
+    });
+
+    element.on('click', '.delete-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      deleteRowEvent.emit(row.data());
+
+    });
 
   }
 

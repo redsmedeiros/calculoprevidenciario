@@ -256,12 +256,12 @@
 }
 
 .smart-style-1 .jarviswidget-color-red>header {
-  background: #831721;
-  border-color: #831721 !important
+  background: #4A4D4F;
+  border-color: #4A4D4F !important
 }
 
 .smart-style-1 .jarviswidget .bg-color-red {
-  background: #831721 !important
+  background: #4A4D4F !important
 }
 
 .smart-style-1 .ui-chatbox-titlebar {
@@ -4170,7 +4170,7 @@ body.smart-style-7 {
 
 .smart-style-7 #header, .smart-style-7 .page-footer, .smart-style-7 .superbox-show {
   background-image: none;
-  background-color: #831721;
+  background-color: #4A4D4F;
 }
 
 .smart-style-7 #hide-menu a>i, .smart-style-7 .btn-header>:first-child>a {
@@ -4249,8 +4249,15 @@ body.smart-style-7 {
   border-color: #C09844
 }
 
+.pagination>li>a, .pagination>li>span{
+  color: #0d0d0d !important;
+}
+
 .smart-style-7 .pagination>.active>a, .smart-style-7 .pagination>.active>a:focus, .smart-style-7 .pagination>.active>a:hover, .smart-style-7 .pagination>.active>span, .smart-style-7 .pagination>.active>span:focus, .smart-style-7 .pagination>.active>span:hover {
-  background-color: #3b9ff3
+  background-color:#ffaa21!important;
+  border-color: #ffaa21!important;
+  color: #0d0d0d!important;
+  /* background-color: #3b9ff3 */
 }
 
 .smart-style-7.minified .login-info {

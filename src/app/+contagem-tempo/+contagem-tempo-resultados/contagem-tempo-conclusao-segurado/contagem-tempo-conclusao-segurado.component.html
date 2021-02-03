@@ -1,6 +1,12 @@
 <!-- Widget ID (each widget will need unique ID)-->
-<sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false"
-  [custombutton]="false">
+<sa-widget
+  [colorbutton]="false"
+  [editbutton]="false"
+  [togglebutton]="false"
+  [deletebutton]="false"
+  [fullscreenbutton]="false"
+  [custombutton]="false"
+>
   <header>
     <span class="widget-icon">
       <i class="fa fa-edit"></i>
@@ -9,43 +15,50 @@
   </header>
   <!-- widget div-->
   <div *ngIf="!isUpdating">
-
     <!-- widget content -->
     <div class="widget-body no-padding">
-      <table class="table table-condensed  table-responsive">
+      <table class="table table-condensed table-responsive">
         <tbody>
           <tr>
             <td><strong class="pull-right">Nome:</strong></td>
-            <td>{{segurado.nome}} </td>
+            <td>{{ segurado.nome }}</td>
           </tr>
           <tr *ngIf="segurado.documento">
-            <td><strong class="pull-right">{{segurado.id_documento}}:</strong></td>
-            <td>{{segurado.documento}} </td>
+            <td>
+              <strong class="pull-right">{{ segurado.id_documento }}:</strong>
+            </td>
+            <td>{{ segurado.documento }}</td>
           </tr>
           <tr>
             <td><strong class="pull-right">Data de nascimento:</strong></td>
-            <td>{{segurado.data_nascimento}}</td>
+            <td>{{ segurado.data_nascimento }}</td>
           </tr>
           <tr>
             <td><strong class="pull-right">Idade:</strong></td>
-            <td>{{segurado.idade}}</td>
+            <td>{{ segurado.idade }}</td>
           </tr>
           <tr>
             <td><strong class="pull-right">Idade após última data:</strong></td>
-            <td>{{ lastdateNascimento.years() }} anos 
-              {{ lastdateNascimento.months() }} meses
-              {{this.Math.ceil(lastdateNascimento.days())}} dias</td>
+            <td>
+              {{
+                formateStringAnosMesesDias(
+                  lastdateNascimento.years,
+                  lastdateNascimento.months,
+                  lastdateNascimento.days
+                )
+              }}
+            </td>
           </tr>
           <tr>
             <td><strong class="pull-right">Sexo:</strong></td>
             <td>
-              <span *ngIf="segurado.sexo=='m'">Masculino</span>
-              <span *ngIf="segurado.sexo=='f'">Feminino</span>
+              <span *ngIf="segurado.sexo == 'm'">Masculino</span>
+              <span *ngIf="segurado.sexo == 'f'">Feminino</span>
             </td>
           </tr>
           <tr>
             <td><strong class="pull-right">Referência:</strong></td>
-            <td>{{calculo.referencia_calculo}}</td>
+            <td>{{ calculo.referencia_calculo }}</td>
           </tr>
         </tbody>
       </table>

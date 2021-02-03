@@ -114,7 +114,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService) {
-    super(null, route, null, null, null, null);
+      super(null, route, null, null, null, null, null);
   }
 
   ngOnInit() {
@@ -481,6 +481,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           break;
         case 3: // Aposentadoria Idade Trabalhador Urbano
         case 4: // Aposentadoria Tempo de Contribuicao
+        case 5: // Aposentadoria Especial antiga
+        case 1915: // Aposentadoria Especial 15
+        case 1920: // Aposentadoria Especial 20
+        case 1925: // Aposentadoria Especial 25
         case 16: // Aposentadoria Idade Trabalhafor Rural
         case 25: // Deficiencia Grave
         case 27: // Deficiencia Leva
@@ -491,9 +495,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           break;
       }
     } else if (this.dataFiliacao < this.dataDib99) {
-      if (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 || this.tipoBeneficio == 5 || this.tipoBeneficio == 6 ||
-        this.tipoBeneficio == 16 || this.tipoBeneficio == 25 || this.tipoBeneficio == 27 || this.tipoBeneficio == 26 ||
-        this.tipoBeneficio == 28) {
+      if (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 || 
+        (this.tipoBeneficio == 5 ||  this.tipoBeneficio == 1915 ||  this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925)
+        || this.tipoBeneficio == 6 || this.tipoBeneficio == 16 || this.tipoBeneficio == 25 || this.tipoBeneficio == 27 
+        || this.tipoBeneficio == 26 || this.tipoBeneficio == 28) {
         // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
         // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
         //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);

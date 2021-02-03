@@ -74,75 +74,90 @@ export class TransicaoFormComponent implements OnInit {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
-
-    // this.nome = 'Segurado teste teste ';
+    // this.nome = 'sergio - 04-12-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // // this.dataNascimento = '09/12/1959';
-    // this.dataNascimento = '01/01/1960';
-    // this.dataFiliacao = '01/01/1991';
-    // this.sexo = 'f';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '16';
-    // this.contribuicaoMesesAteEC103 = '3';
-    // this.contribuicaoDiasAteEC103 = '0';
-
-    // this.contribuicaoAnos = '16';
-    // this.contribuicaoMeses = '3';
-    // this.contribuicaoDias = '0';
-
-
-
-    // this.nome = 'Segurado teste teste ';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '10/07/1957';
+    // this.dataNascimento = '05/09/1959';
     // this.dataFiliacao = '01/01/1980';
     // this.sexo = 'm';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '35';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '0';
+    // this.contribuicaoAnosAteEC103 = '33';
+    // this.contribuicaoMesesAteEC103 = '00';
+    // this.contribuicaoDiasAteEC103 = '00';
 
-    // this.contribuicaoAnos = '36';
-    // this.contribuicaoMeses = '6';
-    // this.contribuicaoDias = '3';
+    // this.contribuicaoAnos = '33';
+    // this.contribuicaoMeses = '00';
+    // this.contribuicaoDias = '00';
 
-    
-    // this.nome = 'IVONETE - 09-11-2020';
+    // this.nome = 'sergio - 04-12-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
-    // this.dataNascimento = '01/10/1959';
+    // this.dataNascimento = '05/09/1959';
     // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'f';
+    // this.sexo = 'm';
     // this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '11';
-    // this.contribuicaoMesesAteEC103 = '0';
-    // this.contribuicaoDiasAteEC103 = '18';
+    // this.contribuicaoAnosAteEC103 = '26';
+    // this.contribuicaoMesesAteEC103 = '05';
+    // this.contribuicaoDiasAteEC103 = '06';
 
-    // this.contribuicaoAnos = '11';
-    // this.contribuicaoMeses = '0';
+    // this.contribuicaoAnos = '27';
+    // this.contribuicaoMeses = '11';
+    // this.contribuicaoDias = '00';
+
+    // this.nome = 'sergio - 04-12-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '23/06/1967';
+    // this.dataFiliacao = '01/01/1985';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '13';
+    // this.contribuicaoMesesAteEC103 = '00';
+    // this.contribuicaoDiasAteEC103 = '21';
+
+    // this.contribuicaoAnos = '14';
+    // this.contribuicaoMeses = '00';
+    // this.contribuicaoDias = '09';
+
+    //     this.contribuicaoAnos = '27';
+    // this.contribuicaoMeses = '11';
+    // this.contribuicaoDias = '00';
+
+    // this.nome = 'divaldo - 04-12-2020';
+    // this.idDocumento = '';
+    // this.numeroDocumento = '';
+    // this.dataNascimento = '05/07/1964';
+    // this.dataFiliacao = '01/01/1980';
+    // this.sexo = 'm';
+    // this.professor = false;
+
+    // this.contribuicaoAnosAteEC103 = '34';
+    // this.contribuicaoMesesAteEC103 = '08';
+    // this.contribuicaoDiasAteEC103 = '24';
+
+    // this.contribuicaoAnos = '35';
+    // this.contribuicaoMeses = '09';
     // this.contribuicaoDias = '18';
 
 
-    // this.nome = 'Andre - 29-10-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '19/12/1979';
-    // this.dataFiliacao = '01/01/1990';
-    // this.sexo = 'm';
-    // this.professor = true;
+//   this.nome = 'sandro - 29-10-2020';
+//   this.idDocumento = '';
+//   this.numeroDocumento = '';
+//   this.dataNascimento = '06/11/1964';
+//   this.dataFiliacao = '01/01/1990';
+//   this.sexo = 'm';
+//   this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '23';
-    // this.contribuicaoMesesAteEC103 = '2';
-    // this.contribuicaoDiasAteEC103 = '24';
+//  this.contribuicaoAnosAteEC103 = '33';
+//   this.contribuicaoMesesAteEC103 = '04';
+//   this.contribuicaoDiasAteEC103 = '10';
 
-    // this.contribuicaoAnos = '24';
-    // this.contribuicaoMeses = '02';
-    // this.contribuicaoDias = '12';
+//   this.contribuicaoAnos = '33';
+//   this.contribuicaoMeses = '04';
+//   this.contribuicaoDias = '10';
 
   }
 
@@ -157,12 +172,11 @@ export class TransicaoFormComponent implements OnInit {
   validate() {
     this.errors.clear();
 
-
     const datanascimentoMoment = moment(this.dataNascimento, 'DD/MM/YYYY');
     const dataFiliacaoMoment = moment(this.dataFiliacao, 'DD/MM/YYYY');
 
     if (this.nome == undefined || this.nome == '') {
-      this.errors.add({ 'nome': ["O Nome é obrigatório."] });
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
     }
 
     if (this.dataNascimento === undefined || this.dataNascimento === '') {

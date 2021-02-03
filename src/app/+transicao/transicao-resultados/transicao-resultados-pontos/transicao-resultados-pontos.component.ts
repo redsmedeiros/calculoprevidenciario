@@ -243,7 +243,8 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     //  console.log(this.dataAtual);
 
-    let auxiliarDate = this.dataAtual;
+   // let auxiliarDate = this.dataAtual;
+    let auxiliarDate = (this.dataAtual).clone().add(1,'d');
     let idadeDibMoment;
     let fimContador = { status: false, ano: 0, pontos: 0 };
     let count = 1;
@@ -261,16 +262,16 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     //   tempoContribuicao,
     //   this.seguradoTransicao.professor));
 
-
+    // console.log('-- Antes --');
+    // console.log((this.dataAtual).clone().format('DD/MM/YYYY'))
     // console.log(pontos);
     // console.log(auxiliarDate.year());
     // console.log(sexo);
     // console.log(tempoContribuicao);
     // console.log(this.seguradoTransicao.professor);
+    // console.log('-- Antes --');
 
     do {
-
-
 
 
       // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
@@ -278,17 +279,15 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
       //   + '|' + 'pontos - ' + pontos);
 
-      if (fimContador.status) {
+      // if (fimContador.status) {
 
-        // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-        //   + '|' + 'idade -' + idade + '|'
-        //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-        //   + '|' + 'pontos - ' + pontos + '|'
-        //   + '|');
+      //   // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
+      //   //   + '|' + 'idade -' + idade + '|'
+      //   //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+      //   //   + '|' + 'pontos - ' + pontos + '|'
+      //   //   + '|');
 
-      }
-
-
+      // }
 
       // if (this.addBissexto(auxiliarDate) > 0) {
       //   count += 1;
@@ -318,6 +317,20 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
     } while (!fimContador.status && pontos <= 76650);
+
+
+    // console.log('-- fim --');
+    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias);
+    // console.log(idade);
+    // console.log(this.converterTempoDias(idade));
+    // console.log(tempoContribuicao);
+    // console.log(this.converterTempoDias(tempoContribuicao));
+    // console.log(pontos);
+    // console.log(count);
+    // console.log('-- fim --');
+
+
+    tempoContribuicao = (count + this.seguradoTransicao.contribuicaoFracionadoDias);
 
     // const correcaoAnoBissexto = this.contarBissextosEntre(
     //   this.seguradoTransicao.dataNascimento,
