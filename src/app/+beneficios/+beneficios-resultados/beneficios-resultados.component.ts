@@ -1394,8 +1394,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
 
       // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
-        this.isMinimoInicialDevido = true;
-     //  }
+      this.isMinimoInicialDevido = true;
+      //  }
     }
 
 
@@ -1691,7 +1691,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       minimoAplicado = true;
 
       // if (dataCorrente.isSame(this.calculo.data_pedido_beneficio, 'month')) {
-        this.isMinimoInicialRecebido = true;
+      this.isMinimoInicialRecebido = true;
       // }
 
     }
@@ -2057,25 +2057,18 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 4.2
   calcularVincendas() {
-   
-    //  console.log( this.ultimaRenda);
-    //  console.log( this.ultimoBeneficioDevidoAntesProporcionalidade);
-    //  console.log( this.ultimoBeneficioDevidoAntesProporcionalidade * 12);
 
-    // const somaVincendas = this.ultimaDiferencaMensal;
-    const somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
+    //  const somaVincendas = this.ultimaDiferencaMensal;
+
     const maturidade = this.calculo.maturidade;
     let valorVincendas = 0;
+    let somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
+
+    if (this.ultimoBeneficioRecebidoAntesProporcionalidade > 0) {
+      somaVincendas = this.ultimaDiferencaMensal;
+    }
 
     if (maturidade != 0) {
-
-      // if (somaVincendas === 0) {
-      //   somaVincendas = this.ultimaRenda;
-      // }
-      // console.log(somaVincendas);
-
-      // somaVincendas = this.ultimoBeneficioDevidoAntesProporcionalidade;
-     // somaVincendas =  this.ultimaRenda;
 
       valorVincendas = (Math.round(somaVincendas * 100) / 100) * 12;
 
