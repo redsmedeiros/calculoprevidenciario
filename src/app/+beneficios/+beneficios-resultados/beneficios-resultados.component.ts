@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
@@ -14,6 +15,7 @@ import { Indices } from '../../services/Indices.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
+import { Recebidos } from './../+beneficios-calculos/beneficios-calculos-form-recebidos/Recebidos.model';
 
 @FadeInTop()
 @Component({
@@ -42,7 +44,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public isUpdating = false;
   public soma = 0;
   private debugMode = false;
-  public resultadosList;
+  public resultadosList = [];
   public resultadosDatatableOptions = {
     paging: false,
     ordering: false,
@@ -230,7 +232,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   public indicesFixo = [];
   private dataFinalPrescricao;
 
-//
+  //
   private allPromissesCalc = [];
   // listas de periodos
   private listDevidos = [];
@@ -451,23 +453,26 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (this.listRecebidos != null && this.listRecebidos.length > 0) {
 
+      console.log(this.listRecebidos);
+
       for (const recebidoRow of this.listRecebidos) {
 
-        recebidoRow.indiceInps = [];
+        
         recebidoRow.dib = formatDateIsnotNull(recebidoRow.dib);
         recebidoRow.dip = formatDateIsnotNull(recebidoRow.dip);
         recebidoRow.cessacao = formatDateIsnotNull(recebidoRow.cessacao);
         recebidoRow.dibAnterior = formatDateIsnotNull(recebidoRow.dibAnterior);
 
-        promRecebidoRow = this.IndiceRecebido.getByDateRangeDirectResult(
-          recebidoRow.dib.clone().startOf('month').format('YYYY-MM-DD'),
-          recebidoRow.cessacao.format('YYYY-MM-DD'))
-          .then((indicesRecebido: Indices[]) => {
-            for (const i_recebido of indicesRecebido) {
-              recebidoRow.indiceInps.push(i_recebido);
-            }
-          });
-          this.allPromissesCalc.push(promRecebidoRow);
+        // recebidoRow.indiceInps = [];
+        // promRecebidoRow = this.IndiceRecebido.getByDateRangeDirectResult(
+        //   recebidoRow.dib.clone().startOf('month').format('YYYY-MM-DD'),
+        //   recebidoRow.cessacao.format('YYYY-MM-DD'))
+        //   .then((indicesRecebido: Indices[]) => {
+        //     for (const i_recebido of indicesRecebido) {
+        //       recebidoRow.indiceInps.push(i_recebido);
+        //     }
+        //   });
+        // this.allPromissesCalc.push(promRecebidoRow);
       }
 
     }
@@ -739,13 +744,25 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.esmaecerLinhas(dataCorrente, line);
       }
 
+      // console.log(indiceReajusteValoresDevidos.reajuste > 1 || indiceReajusteValoresRecebidos.reajuste > 1);
+      // console.log((
+      //   !isPrescricao
+      //   || (dataCorrente.isSame('2004-01-01', 'month')
+      //   || dataCorrente.isSame('1998-12-01', 'month'))
+      //   || (indiceReajusteValoresDevidos.reajuste > 1
+      //   || indiceReajusteValoresRecebidos.reajuste > 1)
+      // ));
 
       if (
-        !isPrescricao
-        || dataCorrente.isSame('2004-01-01', 'month')
-        || dataCorrente.isSame('1998-12-01', 'month')
-        || (indiceReajusteValoresDevidos.reajuste !== 1.00
-          || indiceReajusteValoresRecebidos.reajuste !== 1.00)
+        (!isPrescricao
+          || (dataCorrente.isSame('2004-01-01', 'month')
+            || dataCorrente.isSame('1998-12-01', 'month'))
+          || (indiceReajusteValoresDevidos.reajuste > 1
+            || indiceReajusteValoresRecebidos.reajuste > 1))
+        // &&  ((dataCorrente.isSame('2004-01-01', 'month')
+        //   || dataCorrente.isSame('1998-12-01', 'month'))
+        //   || (indiceReajusteValoresDevidos.reajuste > 1
+        //   || indiceReajusteValoresRecebidos.reajuste > 1))
       ) {
         tableData.push(line);
       }
@@ -804,7 +821,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
 
-        if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
+        if (beneficioRecebido <= 0 || (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
           beneficioRecebidoAbono = 0.0;
         } else {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
@@ -1544,54 +1561,68 @@ export class BeneficiosResultadosComponent implements OnInit {
     return beneficioDevidoFinal;
   }
 
-    private getPeriodoRecebidoList(dataCorrente){
-      let recebidoRow;
-      let indiceInpsdataCorrente;
+  private getPeriodoRecebidoList(dataCorrente) {
 
-      recebidoRow =  this.listRecebidos.find(row => (dataCorrente.isBetween(row.dib, row.cessacao, 'month', '[]')));
+    let recebidoRow: Recebidos;
+    let status = false;
+    let indiceInpsdataCorrente;
 
-      console.log(dataCorrente);
-      if (recebidoRow && this.isExits(recebidoRow)) {
-        console.log(recebidoRow['id']);
-      console.log(recebidoRow['indiceInps']);
+    recebidoRow = this.listRecebidos.find(row => (dataCorrente.isBetween(row.dib, row.cessacao, 'month', '[]')));
 
-      indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
-      }
-      
-    
-      // if (this.isExits(recebidoRow.indiceInps)) {
-      //   const indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
-      // }
-    
+    //console.log(dataCorrente);
 
-       console.log(indiceInpsdataCorrente);
+    // if (recebidoRow && this.isExits(recebidoRow)) {
+    //   console.log(recebidoRow['id']);
+    // console.log(recebidoRow['indiceInps']);
 
-        // row.dib.clone().startOf('month').format('YYYY-MM-DD');
-        // row.cessacao.format('YYYY-MM-DD');
+    // indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
+    // }
 
+    // if (this.isExits(recebidoRow.indiceInps)) {
+    //   const indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
+    // }
 
+    // row.dib.clone().startOf('month').format('YYYY-MM-DD');
+    // row.cessacao.format('YYYY-MM-DD');
 
+    if (recebidoRow != undefined && recebidoRow['id'] !== undefined) {
+      status = true;
     }
+
+
+    return { status: status, value: recebidoRow };
+  }
 
   //Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj, line) {
+
     let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     let siglaDataCorrente = moedaDataCorrente.sigla;
     let irtRecebidoSimplificado89 = 1;
 
-
-
     const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
 
+    console.log(recebidoRow);
 
-    if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
+    if (!recebidoRow.status || (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
       return 0.0;
     }
 
+
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
     let beneficioRecebido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio);
+
+    if (recebidoRow.status) {
+
+      console.log(recebidoRow.value.dib);
+
+      rmiRecebidos = parseFloat(recebidoRow.value.rmi);
+      beneficioRecebido = 0.0;
+      dib = recebidoRow.value.dib.clone();
+    }
+
     let dibMoeda = this.Moeda.getByDate(dib);
     let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
@@ -2956,7 +2987,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.dataInicioRecebidos = moment(this.calculo.data_pedido_beneficio);
     if (this.isExits(this.recebidosListInicio)
-        && this.recebidosListInicio < this.dataInicioRecebidos) {
+      && this.recebidosListInicio < this.dataInicioRecebidos) {
       this.dataInicioRecebidos = this.recebidosListInicio;
     }
 

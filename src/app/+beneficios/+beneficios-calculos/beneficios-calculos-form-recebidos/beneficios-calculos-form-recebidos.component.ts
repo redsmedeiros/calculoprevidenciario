@@ -68,7 +68,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
   private inserirRecebidoList(event = null) {
 
     const recebidoMultiplo = new Recebidos(
-      ((this.isEdit) ? this.rowRecebidosEdit : this.listRecebidos.length + 1),
+      ((this.isExits(this.rowRecebidosEdit)) ? this.rowRecebidosEdit : this.listRecebidos.length + 1),
       this.especieValoresRecebidos,
       this.numeroBeneficioRecebido,
       this.dibValoresRecebidos,

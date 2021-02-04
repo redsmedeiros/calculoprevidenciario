@@ -75,7 +75,7 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
   private inserirAcrescimosDeducoesList(event = null) {
 
     const acrescimoDeducaoMultiplo = new CustasProcesso(
-      ((this.isEdit) ? this.custasFormId : this.listAcrescimosDeducoes.length + 1),
+      ((this.isExits(this.custasFormId)) ? this.custasFormId : this.listAcrescimosDeducoes.length + 1),
       this.custasFormDescricao,
       this.custasFormData,
       this.custasFormValor,
