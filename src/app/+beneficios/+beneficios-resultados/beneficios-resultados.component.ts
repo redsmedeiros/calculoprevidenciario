@@ -457,7 +457,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       for (const recebidoRow of this.listRecebidos) {
 
-        
+
         recebidoRow.dib = formatDateIsnotNull(recebidoRow.dib);
         recebidoRow.dip = formatDateIsnotNull(recebidoRow.dip);
         recebidoRow.cessacao = formatDateIsnotNull(recebidoRow.cessacao);
@@ -1609,29 +1609,42 @@ export class BeneficiosResultadosComponent implements OnInit {
       return 0.0;
     }
 
+    console.log(this.recebidosListInicio);
+    console.log(this.recebidosListFim);
 
+    let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
+    let taxa_ajuste_maxima_concedida = this.calculo.taxa_ajuste_maxima_concedida;
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    let dataCessacaoRecebido = this.dataCessacaoRecebido.clone();
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
     let beneficioRecebido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio);
 
     if (recebidoRow.status) {
 
-      console.log(recebidoRow.value.dib);
+      // console.log(recebidoRow.value.dib);
 
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
       beneficioRecebido = 0.0;
-      dib = recebidoRow.value.dib.clone();
+      dataPedidoBeneficio = recebidoRow.value.dib.clone();
+      dataCessacaoRecebido = recebidoRow.value.cessacao.clone();
+      dib = this.recebidosListFim.clone();
+      tipo_aposentadoria_recebida = recebidoRow.value.especie;
+      taxa_ajuste_maxima_concedida = this.calculo.irt;
+      ///dib = recebidoRow.value.dib.clone();
+
     }
 
-    let dibMoeda = this.Moeda.getByDate(dib);
-    let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
+    const dibMoeda = this.Moeda.getByDate(dib);
+    const equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
     if (dib < this.dataInicioBuracoNegro) {
       irtRecebidoSimplificado89 = rmiRecebidos / dibMoeda.salario_minimo;
       rmiRecebidos = irtRecebidoSimplificado89 * equivalencia89Moeda.salario_minimo;
     }
 
-    if (dataCorrente > this.dataInicioRecebidos) {
+    if (dataCorrente > dataPedidoBeneficio) {
+      // if (dataCorrente > this.dataInicioRecebidos) {
       beneficioRecebido = (this.ultimoBeneficioRecebidoAntesProporcionalidade);
     } else {
       beneficioRecebido = (rmiRecebidos);
@@ -1659,12 +1672,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
-    if ((this.calculo.tipo_aposentadoria_recebida == '12' || this.calculo.tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
+    if ((tipo_aposentadoria_recebida == '12'
+      || tipo_aposentadoria_recebida == '17') && !this.isTetos) { //12 , 17 : LOAS - beneficio salario minimo'
+
       beneficioRecebido = moedaDataCorrente.salario_minimo;
-    } else if (this.calculo.tipo_aposentadoria_recebida != '12' && this.calculo.tipo_aposentadoria_recebida != '17') {
+
+    } else if (tipo_aposentadoria_recebida != '12' && tipo_aposentadoria_recebida != '17') {
 
 
-      if (!dataCorrente.isSame(this.dataInicioRecebidos)) {
+      ///if (!dataCorrente.isSame(this.dataInicioRecebidos)) {
+      if (!dataCorrente.isSame(dataPedidoBeneficio)) {
         beneficioRecebido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
       } else {
         reajusteObj.reajuste = 1.0;
@@ -1681,7 +1698,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.beneficioRecebidoOs = this.beneficioRecebidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
-    if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio))) {
+
+    if (this.isBuracoNegro(dataPedidoBeneficio)) {
       if (dataCorrente.isSame(this.dataEfeitoFinanceiro, 'month')) {
 
         // INSERIR ÍNDICE SUPERIOR ‘*’
@@ -1710,7 +1728,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioRecebido /= 1000;
       this.beneficioRecebidoOs /= 1000;
       this.beneficioRecebidoAposRevisao /= 1000;
@@ -1719,19 +1739,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     line.beneficio_recebido_apos_revisao_sem_limites = this.formatMoney(this.beneficioRecebidoAposRevisaoTetos);
 
-    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
 
-
-
-    if (this.calculo.taxa_ajuste_maxima_concedida != undefined && this.calculo.taxa_ajuste_maxima_concedida > 1) {
+    if (taxa_ajuste_maxima_concedida != undefined && taxa_ajuste_maxima_concedida > 1) {
       if (this.dataComecoLei8870 <= dataPedidoBeneficio &&
         dataPedidoBeneficio <= this.dataFimLei8870 &&
         dataCorrente.isSame(this.dataAplicacao8870, 'month')) {
-        beneficioRecebido *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
+        beneficioRecebido *= parseFloat(taxa_ajuste_maxima_concedida);
       }
 
       if (dataPedidoBeneficio >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
-        beneficioRecebido *= parseFloat(this.calculo.taxa_ajuste_maxima_concedida);
+        beneficioRecebido *= parseFloat(taxa_ajuste_maxima_concedida);
         this.primeiroReajusteRecebidos = 0;
       }
     }
@@ -1747,7 +1764,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
         tetoRecebidos = 1081.50;
-        if (this.isBuracoNegro(moment(this.calculo.data_pedido_beneficio_esperado))) {
+        if (this.isBuracoNegro(dataPedidoBeneficio)) {
           beneficioRecebido = this.beneficioRecebidoAposRevisaoTetos;
         }
       }
@@ -1760,13 +1777,19 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     line.beneficio_recebido_sem_limites = this.formatMoney(beneficioRecebido);
 
-
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
     if (this.isTetos) {
-      beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido', tetoRecebidos);
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido,
+                                                                 dataCorrente, 
+                                                                 dataPedidoBeneficio, 
+                                                                 'Recebido', 
+                                                                 tetoRecebidos);
     } else {
-      beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, dataCorrente, dataPedidoBeneficio, 'Recebido');
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, 
+                                                              dataCorrente, 
+                                                              dataPedidoBeneficio, 
+                                                              'Recebido');
     }
 
 
@@ -1791,7 +1814,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
 
     // Calcular proporcional no final recebido
-    if (dataCorrente.isSame(this.dataFinal, 'month') && this.dataCessacaoRecebido == null) {
+    if (dataCorrente.isSame(this.dataFinal, 'month') && dataCessacaoRecebido == null) {
       // 03/07/2020 || this.dataFinal.isSame(this.dataCessacaoRecebido)
 
       let diasConsiderados = this.dataFinal.date();
@@ -1807,14 +1830,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.proporcionalidadeUltimaLinha = true;
       }
 
-    } else if (this.dataCessacaoRecebido != null && dataCorrente.isSame(this.dataCessacaoRecebido, 'month')) {
+    } else if (dataCessacaoRecebido != null && dataCorrente.isSame(dataCessacaoRecebido, 'month')) {
 
-      let diasConsiderados = this.dataCessacaoRecebido.date();
-      if ((this.dataCessacaoRecebido.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
+      let diasConsiderados = dataCessacaoRecebido.date();
+      if ((dataCessacaoRecebido.month() + 1) === 2 && (diasConsiderados === 28 || diasConsiderados === 29)) {
         diasConsiderados = 30;
       }
 
-      // let proporcionalidade = this.dataCessacaoRecebido.date() / this.dataCessacaoRecebido.daysInMonth();
+      // let proporcionalidade = dataCessacaoRecebido.date() / dataCessacaoRecebido.daysInMonth();
       let proporcionalidade = ((diasConsiderados >= 30) ? 30 : diasConsiderados) / 30;
       beneficioRecebidoFinal *= proporcionalidade;
 
