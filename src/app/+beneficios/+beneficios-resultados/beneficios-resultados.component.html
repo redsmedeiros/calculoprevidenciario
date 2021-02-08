@@ -168,9 +168,9 @@
             <!-- widget div-->
             <div>
               <!-- widget content -->
-              <div class="widget-body">
+              <div class="widget-body widget-body-custom">
                 <ul class="list-unstyled">
-                  <li>
+                  <li *ngIf="calculo.numero_processo != ''">
                     <b>Número do Processo:</b>
                     {{ calculo.numero_processo }}
                   </li>
@@ -258,7 +258,8 @@
         <article
           class="col-xs-12 col-sm-12"
           [ngClass]="
-            !this.calculo.beneficio_nao_concedido && this.listRecebidos.length == 0
+            !this.calculo.beneficio_nao_concedido &&
+            this.listRecebidos.length == 0
               ? 'col-md-6 col-lg-6'
               : 'col-md-12 col-lg-12'
           "
@@ -346,6 +347,10 @@
                       >Renda Mensal Inicial - RMI não Limitada ao Teto para
                       Demandas Judiciais.</b
                     >
+                  </li>
+                  <li *ngIf="adicional25Devido">
+                    <b>Data de Início do Adicional de 25%: </b
+                    >{{ dataInicialadicional25DevidoString }}
                   </li>
                 </ul>
                 <div id="printableValoresDevidos" hidden>
@@ -480,7 +485,10 @@
       <div class="row" > -->
         <article
           class="col-xs-12 col-sm-12 col-md-6 col-lg-6"
-          *ngIf="!this.calculo.beneficio_nao_concedido && this.listRecebidos.length == 0"
+          *ngIf="
+            !this.calculo.beneficio_nao_concedido &&
+            this.listRecebidos.length == 0
+          "
         >
           <sa-widget
             [colorbutton]="false"
@@ -730,11 +738,19 @@
                         {{ formatDateIsnotNullMoment(recebidoLine.dib) }}
                         <span *ngIf="recebidoLine.dip"
                           ><br />
-                          {{ formatDateIsnotNullMoment(recebidoLine.dip) }}</span
+                          {{
+                            formatDateIsnotNullMoment(recebidoLine.dip)
+                          }}</span
                         >
                       </td>
-                      <td>{{ formatDateIsnotNullMoment(recebidoLine.dibAnterior) }}</td>
-                      <td>{{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}</td>
+                      <td>
+                        {{
+                          formatDateIsnotNullMoment(recebidoLine.dibAnterior)
+                        }}
+                      </td>
+                      <td>
+                        {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}
+                      </td>
                       <td class="text-center">
                         {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
                         <span *ngIf="recebidoLine.rmiBuracoNegro">
@@ -745,7 +761,9 @@
                           }}
                         </span>
                       </td>
-                      <td class="text-center">{{ recebidoLine.irt ? recebidoLine.irt : 0  }}</td>
+                      <td class="text-center">
+                        {{ recebidoLine.irt ? recebidoLine.irt : 0 }}
+                      </td>
                       <td class="text-center">
                         {{ recebidoLine.reajuesteMinimo ? "Sim" : "Não" }}
                       </td>
@@ -1327,15 +1345,17 @@
           <!-- widget content -->
           <div class="widget-body widget-body-custom no-margin no-padding">
             <div id="printableRRA" class="no-margin no-padding">
-              <caption class="text-center" hidden>
-                <h2>
-                  RENDIMENTOS RECEBIDOS ACUMULADAMENTE - RRA (12.350/2010)
-                </h2>
-              </caption>
               <table
                 class="table table-bordered table-hover no-margin no-padding"
               >
                 <thead>
+                  <tr class="not-screen">
+                    <th class="text-center" colspan="4">
+                      <h2>
+                        RENDIMENTOS RECEBIDOS ACUMULADAMENTE - RRA (12.350/2010)
+                      </h2>
+                    </th>
+                  </tr>
                   <tr>
                     <th class="text-center" colspan="2">
                       Exercícios Anteriores
@@ -1366,6 +1386,90 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
+    <div
+      class="row"
+      *ngIf="!isUpdatingCustasProcesso && listAcrescimosDeducoes.length > 0"
+    >
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Custos adicionais com Processo</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding widget-body-custom">
+              <div
+                class="well well-light"
+                *ngIf="listAcrescimosDeducoes.length === 0"
+              >
+                <strong>Não há itens na lista</strong>
+              </div>
+              <div id="printableCustosAdicionais">
+                <table
+                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
+                  *ngIf="
+                    !isUpdatingCustasProcesso &&
+                    listAcrescimosDeducoes.length > 0
+                  "
+                >
+                  <thead>
+                    <tr class="not-screen">
+                      <th class="text-center" colspan="4">
+                        <h2>Custos adicionais com Processo</h2>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Descrição</th>
+                      <th class="text-center">Data</th>
+                      <th class="text-center">Valor</th>
+                      <th class="text-center">Aplicar Juros</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let acrescimoDeducaoLine of listAcrescimosDeducoes
+                      "
+                    >
+                      <td>
+                        {{ acrescimoDeducaoLine.descricao }}
+                      </td>
+                      <td class="text-center">
+                        {{ acrescimoDeducaoLine.data }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor)
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          acrescimoDeducaoLine.reajuesteMinimo ? "Sim" : "Não"
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                *ngIf="isUpdating"
+                class="alert alert-info text-align-center"
+              >
+                <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+              </div>
             </div>
           </div>
         </sa-widget>
@@ -2199,59 +2303,6 @@
         </sa-widget>
       </article>
     </div>
-
-    <div class="row">
-      <article class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
-          <header>
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Custos adicionais com Processo</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding widget-body-custom">
-              <div class="well well-light" *ngIf="listAcrescimosDeducoes.length === 0">
-                <strong>Não há itens na lista</strong>
-              </div>
-              <table
-                class="table table-striped table-bordered table-hover table-responsive table-condensed"
-                *ngIf="!isUpdatingCustasProcesso && listAcrescimosDeducoes.length > 0"
-              >
-                <thead>
-                  <tr>
-                    <th>Descrição</th>
-                    <th class="text-center">Data</th>
-                    <th class="text-center">Valor</th>
-                    <th class="text-center">Aplicar Juros</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let acrescimoDeducaoLine of listAcrescimosDeducoes">
-                    <td>
-                      {{ acrescimoDeducaoLine.descricao }}
-                     </td>
-                    <td class="text-center">
-                       {{ acrescimoDeducaoLine.data }}
-                    </td>
-                    <td class="text-center">
-                      {{ definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor) }}
-                    </td>
-                    <td class="text-center">
-                      {{ acrescimoDeducaoLine.reajuesteMinimo ? "Sim" : "Não" }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div *ngIf="isUpdating" class="alert alert-info text-align-center">
-                <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
-              </div>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
-    </div>
- 
 
     <div class="row">
       <article

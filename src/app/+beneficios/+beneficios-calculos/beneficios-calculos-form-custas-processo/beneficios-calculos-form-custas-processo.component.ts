@@ -121,7 +121,7 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
     if (typeof acrescimoDeducao === 'object') {
       this.listAcrescimosDeducoes.push(acrescimoDeducao);
       this.listAcrescimosDeducoes.sort((a, b) => {
-        if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
+        if (moment(a.data, 'DD/MM/YYYY') < moment(b.data, 'DD/MM/YYYY')) {
           return -1;
         }
       });

@@ -109,11 +109,22 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.errors.add({ 'numDependentes': ['O valor deve ser nenor que 20'] });
     }
 
+    if (this.adicional25Devido) {
+      if (!this.isValidDate(this.dataInicialadicional25Devido)) {
+        this.errors.add({ 'dataInicialadicional25Devido': ['Insira uma data válida.'] });
+        valid = false;
+      }
+    }
+
     return valid;
 
   }
 
   public addDevidosList() {
+
+    if (!this.adicional25Devido) {
+      this.dataInicialadicional25Devido = '';
+    }
 
     const devidoMultiplo = new Devidos(
       this.listDevidos.length + 1,
@@ -128,7 +139,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.taxaAjusteMaximaEsperada,
       this.naoAplicarSMBeneficioEsperado,
       this.dataInicialadicional25Devido
-      );
+    );
 
 
     if (this.validDevido()) {
@@ -138,12 +149,12 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.devidosAtributes.emit(this.listDevidos);
       this.hideChildModalDevidos();
 
-    }else{
+    } else {
 
       swal({
         position: 'bottom-end',
         type: 'error',
-        title: 'O perído de Benefício Recebido não deve ser concomitante.',
+        title: 'Verifique as informações do formulário',
         showConfirmButton: false,
         timer: 4000
       });
@@ -178,7 +189,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.naoAplicarSMBeneficioEsperado = rowEdit.reajusteMinimo;
     this.dataInicialadicional25Devido = rowEdit.dataAdicional25;
 
-    if(rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != ''){
+    if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;
     }
   }

@@ -241,6 +241,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private recebidosListInicio;
   private recebidosListFim;
+  private adicional25Devido;
+  private dataInicialadicional25Devido;
+  private dataInicialadicional25DevidoString;
 
 
   public resultadosTutelaAntecipadaList = [];
@@ -528,21 +531,39 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
+  private checkAdicionl25Devido() {
+    console.log(this.listDevidos);
+    this.adicional25Devido = false;
+    if (this.listDevidos.length > 0
+      && this.listDevidos[0].dataAdicional25 !== undefined
+      && this.listDevidos[0].dataAdicional25 != ''
+      && [4, 7, 2, 16, 1, 3, 5, 13, 18].includes(this.listDevidos[0].especie)) {
+
+      this.adicional25Devido = true;
+      this.dataInicialadicional25Devido = moment(this.listDevidos[0].dataAdicional25, 'DD/MM/YYYY');
+      this.dataInicialadicional25DevidoString = this.listDevidos[0].dataAdicional25;
+
+    }
+  }
+
 
   // opção 2
   generateTabelaResultados() {
+
     this.jurosCorrente = 0.00000;
-    let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
-    let tableData = [];
-    let dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
-    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    const competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
+    const tableData = [];
+    const dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
+    const dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
     this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years');
 
-    //Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
-    let func_beneficioDevido = this.getBeneficioDevido;
-    let func_beneficioRecebido = this.getBeneficioRecebido;
+    // Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
+    const func_beneficioDevido = this.getBeneficioDevido;
+    const func_beneficioRecebido = this.getBeneficioRecebido;
     let abonoProporcionalDevidos = 1;
     let abonoProporcionalRecebidos = 1;
+
+    this.checkAdicionl25Devido();
 
     // if (this.calculo.previa_data_pedido_beneficio_esperado != '0000-00-00') {
     //   let previaDataPedidoBeneficioEsperado = moment(this.calculo.previa_data_pedido_beneficio_esperado);
@@ -623,23 +644,22 @@ export class BeneficiosResultadosComponent implements OnInit {
       let beneficioDevidoAntesRateio = beneficioDevido;
       let beneficio_devido_quota_dependente = 0;
 
-      let beneficioDevidoString = { resultString: this.formatMoney(beneficioDevidoAntesRateio, siglaDataCorrente) };
-      let beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
+      const beneficioDevidoString = { resultString: this.formatMoney(beneficioDevidoAntesRateio, siglaDataCorrente) };
+      const beneficioRecebidoString = { resultString: this.formatMoney(beneficioRecebido, siglaDataCorrente) };
 
 
       // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
       if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
+
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         beneficioDevidoAntesRateio = beneficioDevido;
-
         beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
         beneficioDevido = beneficio_devido_quota_dependente;
-
         diferencaMensal = beneficioDevido;
 
-
       } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
+
         // Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
         beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente, indiceReajusteValoresRecebidos, beneficioRecebidoString, line);
@@ -647,17 +667,15 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month')
         && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
+
         // Quando a dataCorrente for maior que ambas, definido na seção 1.3.
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
-
         // teste 02/06
         // console.log(dataCorrente);
         // console.log(indiceReajusteValoresDevidos);
 
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
-
-        // console.log(beneficioDevido);
 
         const chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
         if (chkboxBenefitNotGranted === 1) {
@@ -671,14 +689,17 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaMensal = beneficioDevido - beneficioRecebido;
 
         } else {
+
           beneficioRecebido = func_beneficioRecebido.call(this, dataCorrente,
             indiceReajusteValoresRecebidos,
             beneficioRecebidoString, line);
 
           if (isPensaoPorMorte) {
+
             beneficioDevidoAntesRateio = beneficioDevido;
             beneficio_devido_quota_dependente = defineBeneficioDevidoQuotaDependente(beneficioDevido);
             beneficioDevido = beneficio_devido_quota_dependente;
+
           }
 
 
@@ -710,7 +731,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
       if (diferencaCorrigidaJuros.indexOf('prescrita') != -1 && this.considerarPrescricao) {
-        //Se houver o marcador, a data é prescrita
+        // Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
 
@@ -753,20 +774,21 @@ export class BeneficiosResultadosComponent implements OnInit {
       //   || indiceReajusteValoresRecebidos.reajuste > 1)
       // ));
 
-      if (
-        (!isPrescricao
-          || (dataCorrente.isSame('2004-01-01', 'month')
-            || dataCorrente.isSame('1998-12-01', 'month'))
-          || (indiceReajusteValoresDevidos.reajuste > 1
-            || indiceReajusteValoresRecebidos.reajuste > 1))
-        // &&  ((dataCorrente.isSame('2004-01-01', 'month')
-        //   || dataCorrente.isSame('1998-12-01', 'month'))
-        //   || (indiceReajusteValoresDevidos.reajuste > 1
-        //   || indiceReajusteValoresRecebidos.reajuste > 1))
-      ) {
-        tableData.push(line);
-      }
+      // if (
+      //   (!isPrescricao
+      //     || (dataCorrente.isSame('2004-01-01', 'month')
+      //       || dataCorrente.isSame('1998-12-01', 'month'))
+      //     || (indiceReajusteValoresDevidos.reajuste > 1
+      //       || indiceReajusteValoresRecebidos.reajuste > 1))
+      //   // &&  ((dataCorrente.isSame('2004-01-01', 'month')
+      //   //   || dataCorrente.isSame('1998-12-01', 'month'))
+      //   //   || (indiceReajusteValoresDevidos.reajuste > 1
+      //   //   || indiceReajusteValoresRecebidos.reajuste > 1))
+      // ) {
+      //   tableData.push(line);
+      // }
 
+      tableData.push(line);
 
       this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
       this.somaRecebidosCorrigido += Math.round(beneficioRecebido * 100) / 100;
@@ -1194,17 +1216,47 @@ export class BeneficiosResultadosComponent implements OnInit {
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
 
+  /**
+   * Aplicar o adicional de 25%
+   * @param dataCorrente 
+   * @param beneficioDevido 
+   */
+  private aplicarAdicional25(dataCorrente, beneficioDevido) {
+
+    if (beneficioDevido > 0
+      && this.adicional25Devido
+      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Devido)
+    ) {
+      console.log(beneficioDevido);
+      console.log((Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100));
+      return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
+    }
+
+    return beneficioDevido;
+  }
+
+
+  private getPeriodoDevidoList() {
+    let status = false;
+
+    if (this.listDevidos.length > 0 && this.listDevidos[0] != undefined && this.listDevidos[0]['id'] !== undefined) {
+      status = true;
+    }
+
+    return { status: status, value: this.listDevidos[0] };
+  }
+
   //Seção 3.3
   getBeneficioDevido(dataCorrente, reajusteObj, resultsObj, line) {
-    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-    let siglaDataCorrente = moedaDataCorrente.sigla;
+    const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    const siglaDataCorrente = moedaDataCorrente.sigla;
     let irtDevidoSimplificado89 = 1;
 
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = 0.0;
-    let dib = moment(this.calculo.data_pedido_beneficio_esperado);
-    let dibMoeda = this.Moeda.getByDate(dib);
-    let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
+    const dib = moment(this.calculo.data_pedido_beneficio_esperado);
+    const dibMoeda = this.Moeda.getByDate(dib);
+    const equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
     if (dib < this.dataInicioBuracoNegro) {
       irtDevidoSimplificado89 = rmiDevidos / dibMoeda.salario_minimo;
@@ -1284,10 +1336,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-
     this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
-
 
 
     // algortimo buracoNegro definida na seção de algortimos úteis.
@@ -1406,6 +1456,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = 0;
 
+    beneficioDevido = this.aplicarAdicional25(dataCorrente, beneficioDevido);
 
     if (this.isTetos) {
       beneficioDevidoAjustado = this.aplicarTetosEMinimosTetos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido', tetoDevidos);
@@ -1565,30 +1616,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let recebidoRow: Recebidos;
     let status = false;
-    let indiceInpsdataCorrente;
 
     recebidoRow = this.listRecebidos.find(row => (dataCorrente.isBetween(row.dib, row.cessacao, 'month', '[]')));
-
-    //console.log(dataCorrente);
-
-    // if (recebidoRow && this.isExits(recebidoRow)) {
-    //   console.log(recebidoRow['id']);
-    // console.log(recebidoRow['indiceInps']);
-
-    // indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
-    // }
-
-    // if (this.isExits(recebidoRow.indiceInps)) {
-    //   const indiceInpsdataCorrente = recebidoRow.indiceInps.find(row => (dataCorrente.isSame(row.dib, 'month')));
-    // }
-
-    // row.dib.clone().startOf('month').format('YYYY-MM-DD');
-    // row.cessacao.format('YYYY-MM-DD');
 
     if (recebidoRow != undefined && recebidoRow['id'] !== undefined) {
       status = true;
     }
-
 
     return { status: status, value: recebidoRow };
   }
@@ -1596,8 +1629,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj, line) {
 
-    let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-    let siglaDataCorrente = moedaDataCorrente.sigla;
+    const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    const siglaDataCorrente = moedaDataCorrente.sigla;
     let irtRecebidoSimplificado89 = 1;
 
     const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
@@ -1617,6 +1650,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
     let dataCessacaoRecebido = this.dataCessacaoRecebido.clone();
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
+    let rmiBuracoNegro = 0.0;
     let beneficioRecebido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio);
 
@@ -1625,6 +1659,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // console.log(recebidoRow.value.dib);
 
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
+      rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
       beneficioRecebido = 0.0;
       dataPedidoBeneficio = recebidoRow.value.dib.clone();
       dataCessacaoRecebido = recebidoRow.value.cessacao.clone();
@@ -1632,7 +1667,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       tipo_aposentadoria_recebida = recebidoRow.value.especie;
       taxa_ajuste_maxima_concedida = this.calculo.irt;
       ///dib = recebidoRow.value.dib.clone();
-
     }
 
     const dibMoeda = this.Moeda.getByDate(dib);
@@ -1781,21 +1815,25 @@ export class BeneficiosResultadosComponent implements OnInit {
     let beneficioRecebidoAjustado = 0;
     if (this.isTetos) {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido,
-                                                                 dataCorrente, 
-                                                                 dataPedidoBeneficio, 
-                                                                 'Recebido', 
-                                                                 tetoRecebidos);
+        dataCorrente,
+        dataPedidoBeneficio,
+        'Recebido',
+        tetoRecebidos);
     } else {
-      beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido, 
-                                                              dataCorrente, 
-                                                              dataPedidoBeneficio, 
-                                                              'Recebido');
+      beneficioRecebidoAjustado = this.aplicarTetosEMinimos(beneficioRecebido,
+        dataCorrente,
+        dataPedidoBeneficio,
+        'Recebido');
     }
 
 
     beneficioRecebidoAjustado = this.roundMoeda(beneficioRecebidoAjustado, dataCorrente, 'recebido');
 
-    this.beneficioRecebidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioRecebidoAposRevisao, dataCorrente, dataPedidoBeneficio, 'Recebido');
+    this.beneficioRecebidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioRecebidoAposRevisao,
+      dataCorrente,
+      dataPedidoBeneficio,
+      'Recebido');
+
     line.beneficio_recebido_apos_revisao = this.formatMoney(this.beneficioRecebidoAposRevisao);
     this.ultimoBeneficioRecebidoAntesProporcionalidade = beneficioRecebidoAjustado;
 
@@ -3569,11 +3607,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     const conclusoes = document.getElementById('printableConclusoes').innerHTML;
     const resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
     const printableRRA = document.getElementById('printableRRA').innerHTML;
+    const printableCustosAdicionais = document.getElementById('printableCustosAdicionais').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo +
       valoresDevidos + valoresRecebdios
       + correcao + juros + honorarios
-      + resultadoCalculo + printableRRA + conclusoes;
+      + resultadoCalculo + printableRRA 
+      + printableCustosAdicionais + conclusoes;
 
     printContents = printContents.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');

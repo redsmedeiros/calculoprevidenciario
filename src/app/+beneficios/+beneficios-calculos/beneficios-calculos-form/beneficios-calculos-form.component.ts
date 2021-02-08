@@ -466,7 +466,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     //   this.errors.add({ 'numDependentes': ['O valor deve ser nenor que 20'] });
     // }
 
-      //  if (!this.isEmptyInput(this.cessacaoValoresDevidos)) { }
+    //  if (!this.isEmptyInput(this.cessacaoValoresDevidos)) { }
 
     // if (this.isEmptyInput(this.cessacaoValoresDevidos)) {
     //   this.errors.add({ 'cessacaoValoresDevidos': ['A Data Final dos Atrasados é Necessária.'] });
@@ -880,7 +880,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_ajuste_maxima_concedida = 0.0;
       }
 
-      this.formData.dip_valores_devidos  = this.dipValoresDevidos;
+      this.formData.dip_valores_devidos = this.dipValoresDevidos;
       this.formData.data_adicional_25 = this.dataInicialadicional25Devido;
 
       this.formData.list_devidos = null;
@@ -901,7 +901,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // console.log(this.formData);
       // console.log(this.rmiValoresDevidos);
 
-       this.onSubmit.emit(this.formData);
+      this.onSubmit.emit(this.formData);
 
     } else {
       swal({
@@ -940,7 +940,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
 
-  private setVarDevidos(rstDevidos){
+  private setVarDevidos(rstDevidos) {
 
     this.especieValoresDevidos = rstDevidos.especie;
     this.numeroBeneficioDevido = rstDevidos.numeroBeneficio;
@@ -957,18 +957,32 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-   // console.log(rstDevidos);
+    // console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }
 
   reciverFeedbackRecebidos(rstRecebido) {
-   // console.log(rstRecebido);
+    // console.log(rstRecebido);
+
+    rstRecebido.sort((a, b) => {
+      if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
+        return -1;
+      }
+    });
+
     this.listRecebidos = rstRecebido;
   }
 
   reciverFeedbackCustasProcesso(rstAcrescimosDeducoes) {
-   // console.log(rstAcrescimosDeducoes);
+    // console.log(rstAcrescimosDeducoes);
+
+    rstAcrescimosDeducoes.sort((a, b) => {
+      if (moment(a.data, 'DD/MM/YYYY') < moment(b.data, 'DD/MM/YYYY')) {
+        return -1;
+      }
+    });
+
     this.listAcrescimosDeducoes = rstAcrescimosDeducoes;
   }
 
