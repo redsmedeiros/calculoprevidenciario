@@ -1433,8 +1433,10 @@
                     <tr>
                       <th>Descrição</th>
                       <th class="text-center">Data</th>
-                      <th class="text-center">Valor</th>
                       <th class="text-center">Aplicar Juros</th>
+                      <th class="text-center">Valor</th>
+                      <th class="text-center">Valor dos Juros</th>
+                      <th class="text-center">Valor mais Juros</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1451,16 +1453,34 @@
                       </td>
                       <td class="text-center">
                         {{
+                          (acrescimoDeducaoLine.aplicarJuros) ? "Sim" : "Não"
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
                           definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor)
                         }}
                       </td>
                       <td class="text-center">
                         {{
-                          acrescimoDeducaoLine.reajuesteMinimo ? "Sim" : "Não"
+                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valorJuros)
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valorMaisJuros)
                         }}
                       </td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" ><strong class="pull-right">Totais</strong> </td>
+                      <td class="text-center">{{ somaAcrescimosDeducoes.valor }}</td>
+                      <td class="text-center">{{ somaAcrescimosDeducoes.valorJuros }}</td>
+                      <td class="text-center">{{ somaAcrescimosDeducoes.valorMaisJuros }}</td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
 

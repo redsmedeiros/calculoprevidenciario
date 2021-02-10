@@ -244,7 +244,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private adicional25Devido;
   private dataInicialadicional25Devido;
   private dataInicialadicional25DevidoString;
-
+  private somaAcrescimosDeducoes;
 
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
@@ -375,7 +375,8 @@ export class BeneficiosResultadosComponent implements OnInit {
                 this.getNameSelectJurosAnualParaMensal();
                 this.calcularHonorariosCPC85();
                 this.calcularHonorariosFixo();
-                this.calcularTutelaAntecipada();
+                // this.calcularTutelaAntecipada();
+                this.calcularCustosProcesso();
                 this.updateResultadosDatatable();
                 this.isUpdating = false;
 
@@ -1227,8 +1228,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       && this.adicional25Devido
       && dataCorrente.isSameOrAfter(this.dataInicialadicional25Devido)
     ) {
-      console.log(beneficioDevido);
-      console.log((Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100));
+      // console.log(beneficioDevido);
+      // console.log((Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100));
       return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
     }
 
@@ -1635,28 +1636,29 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
 
-    console.log(recebidoRow);
+    // console.log(recebidoRow);
 
     if (!recebidoRow.status || (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
       return 0.0;
     }
 
-    console.log(this.recebidosListInicio);
-    console.log(this.recebidosListFim);
+    // console.log(this.recebidosListInicio);
+    // console.log(this.recebidosListFim);
+    // console.log(this.dataCessacaoRecebido);
+    // console.log(this.dataCessacaoRecebido);
 
-    let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
-    let taxa_ajuste_maxima_concedida = this.calculo.taxa_ajuste_maxima_concedida;
-    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    let dataCessacaoRecebido = this.dataCessacaoRecebido.clone();
-    let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
+
     let rmiBuracoNegro = 0.0;
     let beneficioRecebido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio);
+    let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
+    let taxa_ajuste_maxima_concedida = this.calculo.taxa_ajuste_maxima_concedida;
+    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    let dataCessacaoRecebido = this.dataCessacaoRecebido;
+    let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
 
     if (recebidoRow.status) {
-
-      // console.log(recebidoRow.value.dib);
 
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
       rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
@@ -1665,9 +1667,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCessacaoRecebido = recebidoRow.value.cessacao.clone();
       dib = this.recebidosListFim.clone();
       tipo_aposentadoria_recebida = recebidoRow.value.especie;
-      taxa_ajuste_maxima_concedida = this.calculo.irt;
-      ///dib = recebidoRow.value.dib.clone();
+      taxa_ajuste_maxima_concedida = recebidoRow.value.irt;
+
     }
+
+
+
 
     const dibMoeda = this.Moeda.getByDate(dib);
     const equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
@@ -2419,6 +2424,71 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
+
+  }
+
+
+  public calcularCustosProcesso() {
+
+    console.log(this.listAcrescimosDeducoes);
+
+    const getJurosCustos = (aplicar, data, valor) => {
+
+      let jurosD = 0;
+      let valorMaisJuros = valor;
+      let valorJuros = 0;
+      if (aplicar && valor !== 0) {
+
+        jurosD = this.getJuros(moment(data, 'DD/MM/YYYY'));
+        valorJuros = (valorMaisJuros * jurosD);
+        valorMaisJuros += valorJuros;
+
+      }
+
+      return {
+        valor: valor,
+        juros: jurosD,
+        valorJuros: valorJuros,
+        valorMaisJuros: valorMaisJuros
+      };
+
+    };
+
+
+    let soma = 0;
+    let somaJuros = 0;
+    let somaMaisJuros = 0;
+    let valorMaisJurosD = {
+      valor: 0,
+      juros: 0,
+      valorJuros: 0,
+      valorMaisJuros: 0
+    };
+
+    if (this.listAcrescimosDeducoes.length > 0) {
+
+      for (const rowDeducoes of this.listAcrescimosDeducoes) {
+
+        valorMaisJurosD = getJurosCustos(rowDeducoes.aplicarJuros, rowDeducoes.data, rowDeducoes.valor);
+        rowDeducoes.rstValores = valorMaisJurosD;
+        rowDeducoes.valorJuros = valorMaisJurosD.valorJuros;
+        rowDeducoes.valorMaisJuros = valorMaisJurosD.valorMaisJuros;
+
+        soma += rowDeducoes.valor;
+        somaJuros += rowDeducoes.valorJuros;
+        somaMaisJuros += valorMaisJurosD.valorMaisJuros;
+
+        console.log(valorMaisJurosD);
+      }
+
+    }
+
+    console.log(this.listAcrescimosDeducoes);
+
+    this.somaAcrescimosDeducoes = { valor: this.formatMoney(soma), 
+                                  valorJuros: this.formatMoney(somaJuros),
+                                  valorMaisJuros: this.formatMoney(somaMaisJuros)
+                                };
 
   }
 
@@ -3612,7 +3682,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let printContents = seguradoBox + dadosCalculo +
       valoresDevidos + valoresRecebdios
       + correcao + juros + honorarios
-      + resultadoCalculo + printableRRA 
+      + resultadoCalculo + printableRRA
       + printableCustosAdicionais + conclusoes;
 
     printContents = printContents.replace(/<table/g,
