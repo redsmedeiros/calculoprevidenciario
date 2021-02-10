@@ -126,18 +126,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
-    { text: 'Não Aplicar correção', value: 'sem_correcao' },
-    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-e a partir de 07/2009 (Tema 810 STF)', value: 'ipca' },
-    { text: 'IPCA-e todo período', value: 'ipca_todo_periodo' },
-    { text: 'Manual de Cálculos da Justiça Federal', value: 'cam' },
-    { text: 'TR após 07/2009', value: 'tr' },
-    { text: 'TR todo período', value: 'tr_todo_periodo' },
-    { text: 'TR até 03/2015 - IPCA-e', value: 'tr032015_ipcae' },
-    { text: 'Administrativa Art.175, Decreto No 3.048/99 a partir de 07/1994', value: 'cam_art_175_3048' },
-    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
-    { text: 'IGPDI até 2006 - INPC até 06/2009 - TR até 03/2015 - IPCA-e', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
-    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - INPC', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
-    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - IPCA-e', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
+    { text: 'IGPDI até 01/2004 - INPC (Manual de Cálculos da Justiça Federal) ', value: 'cam' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC a partir de 04/2015', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
+    { text: 'IGPDI até 2006 - INPC até 06/2009 - TR até 03/2015 - IPCA-E a partir de 04/2015', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - INPC a partir de 10/2017', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - IPCA-E a partir de 10/2017', value: 'igpdi_012004_inpc062009_tr092017_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - IPCA-E a partir de 04/2015 ', value: 'tr032015_ipcae' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR a partir de 07/2009', value: 'tr' },
+    { text: 'Índices Administrativos - INSS (Art.175 do Decreto n. 3.048/99)', value: 'cam_art_175_3048' },
+    { text: 'IPCA-E em todo período', value: 'ipca_todo_periodo' },
+    { text: 'TR em todo período', value: 'tr_todo_periodo' },
   ];
 
   public especieValoresOptions = [
