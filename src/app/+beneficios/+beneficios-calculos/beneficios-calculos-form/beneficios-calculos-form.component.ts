@@ -212,6 +212,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataInicialadicional25Devido;
   public adicional25Recebido = false;
   public dataInicialadicional2Recebido;
+  public limit60SC = false;
 
 
   @Input() formData;
@@ -898,6 +899,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.list_acrescimos_deducoes = JSON.stringify(this.listAcrescimosDeducoes);
       }
 
+      this.formData.limit_60_sc = this.limit60SC;
+
       // console.log(this.formData);
       // console.log(this.rmiValoresDevidos);
 
@@ -953,6 +956,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.taxaAjusteMaximaEsperada = rstDevidos.irt;
     this.naoAplicarSMBeneficioEsperado = rstDevidos.reajusteMinimo;
     this.dataInicialadicional25Devido = rstDevidos.dataInicialadicional25Devido;
+    this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
 
   }
 
@@ -1182,6 +1186,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.listAcrescimosDeducoes = JSON.parse(this.formData.list_acrescimos_deducoes);
     }
 
+    this.limit60SC = this.formData.limit_60_sc;
+
     this.dibValoresDevidosChanged();
     this.dibValoresRecebidosChanged();
     this.tipoDejurosSelecionado = this.getValueSelectJurosAnualParaMensal();
@@ -1201,7 +1207,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.rmiValoresDevidosBuracoNegro,
       this.taxaAjusteMaximaEsperada,
       this.naoAplicarSMBeneficioEsperado,
-      this.dataInicialadicional25Devido);
+      this.dataInicialadicional25Devido,
+      this.chkDemandasJudiciais
+      );
 
     this.listDevidos.push(devidoMultiplo);
     this.rowDevidosEdit = (this.listDevidos.length > 0);

@@ -138,7 +138,8 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.rmiValoresDevidosBuracoNegro,
       this.taxaAjusteMaximaEsperada,
       this.naoAplicarSMBeneficioEsperado,
-      this.dataInicialadicional25Devido
+      this.dataInicialadicional25Devido,
+      this.chkDemandasJudiciais
     );
 
 

@@ -189,6 +189,9 @@
                   <li *ngIf="calculo.maturidade > 0">
                     <b>Vincendas:</b> {{ calculo.maturidade }}
                   </li>
+                  <li *ngIf="calculo.limit_60_sc">
+                    <b> O valor da causa está Limitado a 60 salários Mínimos.</b>
+                  </li>
                 </ul>
                 <div id="printableDatasCalculo" hidden>
                   <table class="table table-bordered table-hover">
@@ -1554,14 +1557,20 @@
                     {{ formatMoney(somaHonorarios) }}</span
                   >
                 </li>
+                <li *ngIf="listAcrescimosDeducoes.length > 0">
+                  <strong>Custos Adicionais: </strong>
+                  <span class="{{ tratarConclusao(somaAcrescimosDeducoes.valorMaisJuros) }}">
+                    {{ somaAcrescimosDeducoes.valorMaisJuros }}</span
+                  >
+                </li>
                 <li>
                   <strong>Total Geral: </strong>
                   <span
                     class="{{
-                      tratarConclusao(somaTotalSegurado + somaHonorarios)
+                      tratarConclusao(somaTotalSegurado + somaHonorarios + somaAcrescimosDeducoes.valorMaisJurosN)
                     }}"
                   >
-                    {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
+                    {{ formatMoney(somaTotalSegurado + somaHonorarios + somaAcrescimosDeducoes.valorMaisJurosN) }}
                   </span>
                 </li>
               </ul>
@@ -1626,6 +1635,16 @@
                       >
                     </td>
                   </tr>
+                  <tr *ngIf="listAcrescimosDeducoes.length > 0" >
+                    <td width="50%" style="text-align: right">
+                      <b>Custos Adicionais: </b>
+                    </td>
+                    <td width="50%">
+                      <span class="{{ tratarConclusao(somaAcrescimosDeducoes.valorMaisJuros) }}">
+                        {{ somaAcrescimosDeducoes.valorMaisJuros }}</span
+                      >
+                    </td>
+                  </tr>
                   <tr>
                     <td width="50%" style="text-align: right">
                       <b>Total Geral: </b>
@@ -1633,10 +1652,10 @@
                     <td width="50%">
                       <span
                         class="{{
-                          tratarConclusao(somaTotalSegurado + somaHonorarios)
+                          tratarConclusao(somaTotalSegurado + somaHonorarios + somaAcrescimosDeducoes.valorMaisJurosN)
                         }}"
                       >
-                        {{ formatMoney(somaTotalSegurado + somaHonorarios) }}
+                        {{ formatMoney(somaTotalSegurado + somaHonorarios + somaAcrescimosDeducoes.valorMaisJurosN) }}
                       </span>
                     </td>
                   </tr>
