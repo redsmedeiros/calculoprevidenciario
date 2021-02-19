@@ -777,9 +777,17 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     this.dataInicioBeneficio = exportDados.dib;
 
+    console.log(exportDados)
+
     this.changePeriodoOptions();
 
     const dib = moment(exportDados.dib, 'DD/MM/YYYY');
+
+     // posterior a EC nº 103/2019
+     this.primaria19anos = '';
+     this.primaria19meses = '';
+     this.primaria19dias = '';
+     // posterior a EC nº 103/2019
 
     if (dib < moment('1988-10-05')) {
 
@@ -807,7 +815,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.carencia = periodos.total98.carencia;
 
     } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
-
+      
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
       this.primaria98dias = periodos.total98.days;

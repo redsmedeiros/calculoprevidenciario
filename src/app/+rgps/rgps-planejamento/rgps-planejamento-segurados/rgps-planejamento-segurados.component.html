@@ -35,8 +35,8 @@
               forma ágil e eficaz, a análise, elaboração e conclusão do
               planejamento, facilitando a identificação e escolha do melhor
               momento para a aposentação. Atendendo assim os anseios daqueles
-              que defendem o direito social e buscam aliar ao seu trabalho diário a
-              entrega de melhores condições aos segurados do sistema.
+              que defendem o direito social e buscam aliar ao seu trabalho
+              diário a entrega de melhores condições aos segurados do sistema.
             </p>
             <div class="row pt-5">
               <div class="col-md-3 col-lg-3 col-md-offset-9">
@@ -107,7 +107,8 @@
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify pt-1" style="font-size: 14px">
                           <li>
-                            Selecione um segurado cadastrado para iniciar o Planejamento Previdenciário;
+                            Selecione um segurado cadastrado para iniciar o
+                            Planejamento Previdenciário;
                           </li>
                           <li>
                             Caso não tenha segurado cadastrado
@@ -189,7 +190,8 @@
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify" style="font-size: 14px">
                           <li>
-                            Selecione um cálculo cadastrado para prosseguir com o Planejamento Previdenciário;
+                            Selecione um cálculo cadastrado para prosseguir com
+                            o Planejamento Previdenciário;
                           </li>
                           <li>
                             Caso não tenha cálculo cadastrado
@@ -387,6 +389,29 @@
                   <br />
                 </div>
 
+                <div
+                  id="tutorial-plan"
+                  class="modal fade"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="tutorial-plan-title"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-custom" role="document">
+                    <div class="modal-content modal-lg">
+                      <div class="embed-responsive embed-responsive-16by9">
+                        <iframe
+                          src="https://player.vimeo.com/video/499277891?color=ffffff"
+                          class="embed-responsive-item"
+                          frameborder="0"
+                          allow="autoplay; fullscreen"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-actions mt-0">
                   <div class="row">
                     <div class="col-sm-12">
@@ -397,8 +422,16 @@
                             [class.disabled]="steps.indexOf(activeStep) == 0"
                             class="btn btn-lg btn-default"
                             title="Retornar ao passo anterior"
-                            >Retornar
-                          </a>
+                            >Retornar&nbsp;</a>
+                        </li>
+                        <li class="pull-center">
+                          <a
+                            data-toggle="modal"
+                            data-target="#tutorial-plan"
+                            class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                            title="Tutorial Planejamento Previdenciário"
+                            >Tutorial</a
+                          >
                         </li>
                         <li class="next">
                           <a
@@ -406,9 +439,7 @@
                             [class.disabled]="!activeStep.valid"
                             class="btn btn-lg txt-color-darken"
                             title="Continuar para próximo passo"
-                          >
-                            Continuar
-                          </a>
+                          >Continuar</a>
                         </li>
                       </ul>
                     </div>

@@ -862,8 +862,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let dataFimRegra89_99 = moment('30/12/2026', dateFormat);
     let dataFimRegra90_100 = moment('30/12/2052', dateFormat);
 
-    //let dataBeneficio = this.dataInicioBeneficio; // correção data da dib e não o inicio do mes 21-01-2020
-    let dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    let dataBeneficio = this.dataInicioBeneficio; // correção data da dib e não o inicio do mes 21-01-2020
+    //let dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
 
 
     // let teto = moedaDib.teto;

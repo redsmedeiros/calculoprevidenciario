@@ -165,7 +165,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     const changedCalculo = changes['calculo'];
     const changedSegurado = changes['segurado'];
 
-    if (changedCalculo.currentValue) {
+    if (changedCalculo !== undefined && changedCalculo.currentValue) {
       this.getInfoCalculos();
     }
 

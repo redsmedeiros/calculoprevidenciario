@@ -21,7 +21,7 @@
         </div>
     <!-- row -->
     <div class="row">
-      <article id='article-segurado' class="col-sm-12 col-md-12 col-lg-12" >
+      <article id='article-segurado' class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatingSegurado" >
         <app-contagem-tempo-conclusao-segurado [calculo]="calculo" [segurado]="segurado" [isUpdating]=isUpdating
           [lastdateNascimento]=lastdateNascimento></app-contagem-tempo-conclusao-segurado>
       </article>

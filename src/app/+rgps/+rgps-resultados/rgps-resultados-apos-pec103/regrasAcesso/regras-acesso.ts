@@ -862,9 +862,9 @@ export class RegrasAcesso {
             tempoDePedagioTotal = (contribuicaoDiff + tempoDePedagio);
             status = (tempo_contribuicao >= tempoFinalContrib) ? true : false;
 
-            if ((tempo_contribuicao - tempoFinalContrib) < 0.002737850787132) {
+            if ((tempoFinalContrib - tempo_contribuicao) < 0.002737850787132) {
                 status = true;
-            }
+            } 
 
         }
 

@@ -58,7 +58,7 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
       {
         data: (data, type, dataToSet) => {
           return this.getTempoDeContribuicao(data, type, dataToSet);
-        }, visible: false
+        }, visible: true
       },
       { data: 'data_pedido_beneficio' },
       {
@@ -217,21 +217,34 @@ export class RgpsPlanejamentoCalculosPlanejadosComponent implements OnInit {
   }
 
 
+  //   formatarTempoContrib(dataText){
+
+  //     let arrayText = dataText;
+
+  // console.log( typeof arrayText);
+  // console.log(arrayText);
+
+  //     return
+  //   }
 
   getTempoDeContribuicao(data, type, dataToSet) {
     let str = '';
 
-    if (data.contribuicao_primaria_98 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_98 !== '--') {
-      str = str + data.contribuicao_primaria_98.replace(/-/g, '/') + '<br>';
-    }
-    if (data.contribuicao_primaria_99 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_99 !== '--') {
-      str = str + data.contribuicao_primaria_99.replace(/-/g, '/') + '<br>';
-    }
-    if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined' && data.contribuicao_primaria_atual !== '--') {
-      str = str + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
-    }
+
     if (data.contribuicao_primaria_19 !== 'undefined-undefined-undefined' && data.contribuicao_primaria_19 !== '--') {
-      str = str + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+
+      // this.formatarTempoContrib(data.contribuicao_primaria_19);
+
+      str = str + 'Até a Data Atual = ' + data.contribuicao_primaria_19.replace(/-/g, '/') + '<br>';
+
+    } else {
+
+      if (data.contribuicao_primaria_atual !== 'undefined-undefined-undefined' && data.contribuicao_primaria_atual !== '--') {
+
+        str = str + 'Até a EC 103/2019 = ' + data.contribuicao_primaria_atual.replace(/-/g, '/') + '<br>';
+
+      }
+
     }
 
     return str;

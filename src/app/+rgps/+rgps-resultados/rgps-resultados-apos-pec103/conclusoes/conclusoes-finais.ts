@@ -393,6 +393,10 @@ export class conclusoesFinais {
                 return 0;
             });
 
+        }else{
+
+            elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
+            
         }
 
     }

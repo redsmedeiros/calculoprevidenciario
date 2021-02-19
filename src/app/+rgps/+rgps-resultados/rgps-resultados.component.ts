@@ -1039,7 +1039,7 @@ export class RgpsResultadosComponent implements OnInit {
       calculo.mostrarCalculo91_98 = true;
       calculo.mostrarCalculo98_99 = true;
       // }
-    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio < data19) {
+    } else if (dataInicioBeneficio > data99 && dataInicioBeneficio <= data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
@@ -1058,7 +1058,7 @@ export class RgpsResultadosComponent implements OnInit {
 
       calculo.mostrarCalculoApos99 = true;
 
-    } else if (dataInicioBeneficio >= data19) {
+    } else if (dataInicioBeneficio > data19) {
       /*Todos os periodos de contribuicao (entre 91 e 98, entre 98 e 99, após 99)
       Cálculos: entre 91 e 98 (tempo de contribuicao até ementa 98)
                 entre 98 e 99 (tempo de contribuicao até lei 99)
@@ -1381,7 +1381,7 @@ export class RgpsResultadosComponent implements OnInit {
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
     if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
-     && !calculo.contribuicao_primaria_19.search(/undefined/)) {
+     && calculo.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
 
       calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
       calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;

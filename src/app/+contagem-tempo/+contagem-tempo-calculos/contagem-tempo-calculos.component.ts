@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { Auth } from '../../services/Auth/Auth.service';
 import { AuthResponse } from '../../services/Auth/AuthResponse.model';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @FadeInTop()
 @Component({
@@ -175,8 +176,6 @@ export class ContagemTempoCalculosComponent implements OnInit {
 
   formatAnosMesesDias(dias) {
 
-    let totalFator = { years: 0, months: 0, days: 0 };
-
     // let xValor = (this.Math.floor(dias) / 365.25);
 
     // totalFator.years = this.Math.floor(xValor);
@@ -186,10 +185,13 @@ export class ContagemTempoCalculosComponent implements OnInit {
     // totalFator.days = this.Math.round(dttDias);
 
     // console.log(moment.duration(dias, 'days'));
-    let conversao_tempo = moment.duration(parseFloat(dias), 'days');
 
-    totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: Math.ceil(conversao_tempo.days()) };
 
+    let totalFator = { years: 0, months: 0, days: 0 };
+    // let conversao_tempo = moment.duration(parseFloat(dias), 'days');
+    // totalFator = { years: conversao_tempo.years(), months: conversao_tempo.months(), days: Math.ceil(conversao_tempo.days()) };
+
+    totalFator = DefinicaoTempo.convertD360ToDMY(dias);
     return totalFator.years + ' anos ' + totalFator.months + ' meses ' + totalFator.days + ' dias';
   }
 
