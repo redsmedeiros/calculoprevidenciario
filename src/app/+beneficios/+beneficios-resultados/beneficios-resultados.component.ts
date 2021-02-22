@@ -95,6 +95,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private dataInicioRecebidos;
   private dataInicioDevidos;
+
+  private dataInicioRecebidosDip;
+  private dataInicioDevidosDip;
+
   private primeiraDataArrayMoeda;
   private beneficioDevidoAposRevisao;
   private beneficioRecebidoAposRevisao;
@@ -240,6 +244,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   private listAcrescimosDeducoes = [];
 
   private recebidosListInicio;
+  private recebidosListInicioDIP;
+  private recebidosListInicioAnterior;
   private recebidosListFim;
   private adicional25Devido;
   private dataInicialadicional25Devido;
@@ -325,8 +331,9 @@ export class BeneficiosResultadosComponent implements OnInit {
               this.calculo = calculo;
               this.calculo.data = moment().format();
               this.setListas();
-
               this.setInicioRecebidosEDevidos();
+              this.setInicioRecebidosEDevidosIndices();
+
               this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
               if (this.calculo.aplicar_ajuste_maximo_98_2003 == '1') {
                 this.isTetos = true;
@@ -415,7 +422,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.listAcrescimosDeducoes = JSON.parse(this.calculo.list_acrescimos_deducoes);
     }
 
-    //console.log(this.listRecebidos);
+    console.log(this.listRecebidos);
     this.defineInicioFimRecebidosMultiplos();
   }
 
@@ -426,21 +433,35 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       const list = this.listRecebidos;
       this.recebidosListInicio = moment(this.listRecebidos[0].dib, 'DD/MM/YYYY');
+      this.recebidosListInicioDIP = moment(this.listRecebidos[0].dip, 'DD/MM/YYYY');
+      this.recebidosListInicioAnterior = moment(this.listRecebidos[0].dibAnterior, 'DD/MM/YYYY');
       this.recebidosListFim = moment(this.listRecebidos[0].cessacao, 'DD/MM/YYYY');
       let di;
+      let dip;
+      let dibAnterior;
       let df;
 
       for (const row of list) {
 
         di = moment(row.dib, 'DD/MM/YYYY');
+        dip = moment(row.dip, 'DD/MM/YYYY');
+        dibAnterior = moment(row.dibAnterior, 'DD/MM/YYYY');
         df = moment(row.cessacao, 'DD/MM/YYYY');
 
         if (di.isBefore(this.recebidosListInicio)) {
           this.recebidosListInicio = di;
         }
 
+        if (dip.isBefore(this.recebidosListInicioDIP)) {
+          this.recebidosListInicioDIP = dip;
+        }
+
         if (df.isAfter(this.recebidosListFim)) {
           this.recebidosListFim = df;
+        }
+
+        if (dibAnterior.isAfter(this.recebidosListInicioAnterior)) {
+          this.recebidosListInicioAnterior = dibAnterior;
         }
 
       }
@@ -448,6 +469,36 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
   }
+
+
+
+  private setInicioRecebidosEDevidosIndices() {
+
+
+    console.log(this.recebidosListInicio);
+    console.log(this.recebidosListInicioDIP);
+    console.log(this.recebidosListInicioAnterior);
+    console.log(this.recebidosListFim);
+
+
+    const date_inicio_devido = (this.isExits(this.calculo.previa_data_pedido_beneficio_esperado)) ?
+      this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+
+
+    let date_inicio_recebido = (this.isExits(this.calculo.data_anterior_pedido_beneficio)) ?
+      this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+
+
+    date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+    if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+      this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+    }
+
+
+      return {date_inicio_devido: date_inicio_devido, date_inicio_recebido: date_inicio_recebido};
+
+  }
+
 
   /**
    * 
@@ -1071,7 +1122,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private aplicarLimit60SC(tableData) {
 
-    if(this.islimit60SC) {
+    if (this.islimit60SC) {
 
       let diferencaCorrigida = 0;
       let valorJuros = 0;
@@ -3245,6 +3296,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.dataInicioRecebidos = this.recebidosListInicio;
     }
 
+    this.dataInicioDevidosDip = moment(this.calculo.dip_valores_devidos);
     this.dataInicioDevidos = moment(this.calculo.data_pedido_beneficio_esperado);
     this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
 
@@ -3313,6 +3365,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.jurosDepois2003 = this.calculo.pos_interesse_2003 / 100;
     this.jurosDepois2009 = this.calculo.pos_interesse_2009 / 100;
   }
+
 
   //Verifica se uma data esta no periodo do buraco negro
   isBuracoNegro(date) {
@@ -3806,7 +3859,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       valoresDevidos + valoresRecebdios
       + correcao + juros + honorarios
       + resultadoCalculo + printableRRA
-      + printableCustosAdicionais + conclusoes;
+      + printableCustosAdicionais
+      + conclusoes;
 
     printContents = printContents.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');

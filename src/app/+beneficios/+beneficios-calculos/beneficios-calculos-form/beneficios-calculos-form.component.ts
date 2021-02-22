@@ -1353,12 +1353,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   setCompetenciaInicioJurosIsNull() {
 
-    if (!moment(this.competenciaInicioJuros, 'MM/YYYY').isSame(moment(this.dataCitacaoReu, 'DD/MM/YYYY'), 'month')) {
-      this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
-    }
-
     if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
-      this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
+
+      if (!this.dataCitacaoReu) {
+        this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
+      } else {
+        this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
+      }
+
     }
 
   }
