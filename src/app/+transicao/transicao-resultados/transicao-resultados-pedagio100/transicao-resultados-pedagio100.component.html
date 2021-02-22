@@ -6,7 +6,7 @@ class="table table-bordered table-hover"
 <thead>
   <tr>
     <th colspan="2">
-      Regra de Transição do art. 20 da EC nº 103/2019 (pedágio de 100%)
+      Regra de Transição do art. 20 da EC nº 103/2019 (Pedágio de 100%)
     </th>
   </tr>
   <tr *ngIf="conclusoesRegra4.status">
@@ -26,32 +26,32 @@ class="table table-bordered table-hover"
   <ng-template #regra3Aplica>
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Data de início do benefício</span>
+        <span class="pull-right font-bold">Data de Início do Benefício</span>
       </td>
       <td>{{ conclusoesRegra4.dataDib }}</td>
     </tr>
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Idade na data de início do benefício</span>
+        <span class="pull-right font-bold">Idade na Data de Início do Benefício</span>
       </td>
       <!-- <td>{{ conclusoesRegra4.idadeDib }}</td> -->
       <td>{{ conclusoesRegra4.idadeDibMoment }}</td>
     </tr>
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Tempo de Contribuição necessário</span>
+        <span class="pull-right font-bold">Tempo de Contribuição Necessário</span>
       </td>
       <td>{{ conclusoesRegra4.tempoCompedagio }}</td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td width="50%">
         <span class="pull-right font-bold">Tempo de Contribuição na data de início do benefício </span>
       </td>
       <td>{{ conclusoesRegra4.tempoDib }}</td>
-    </tr>
+    </tr> -->
     <tr>
       <td width="50%">
-        <span class="pull-right font-bold">Percentual da média salarial</span>
+        <span class="pull-right font-bold">Percentual da Média Salarial</span>
       </td>
       <td>100%</td>
     </tr>

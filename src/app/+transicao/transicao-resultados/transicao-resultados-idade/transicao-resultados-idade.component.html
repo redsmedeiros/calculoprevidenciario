@@ -5,7 +5,7 @@ class="table table-bordered table-hover"
 <thead>
   <tr>
     <th colspan="2">
-      Regra de Transição do art. 18 da EC nº 103/2019 (aposentadoria por idade)
+      Regra de Transição do art. 18 da EC nº 103/2019 (Aposentadoria por Idade)
     </th>
   </tr>
   <tr *ngIf="conclusoesRegra5.status">
@@ -20,26 +20,26 @@ class="table table-bordered table-hover"
 <tbody *ngIf="conclusoesRegra5.status">
   <tr>
     <td width="50%">
-      <span class="pull-right font-bold">Data de início do benefício</span>
+      <span class="pull-right font-bold">Data de Início do Benefício</span>
     </td>
     <td>{{ conclusoesRegra5.dataDib }}</td>
   </tr>
   <tr>
     <td width="50%">
-      <span class="pull-right font-bold">Idade na data de início do benefício </span>
+      <span class="pull-right font-bold">Idade na data de Início do Benefício </span>
     </td>
     <!-- <td>{{ conclusoesRegra5.idadeDib }}</td> -->
     <td>{{ conclusoesRegra5.idadeMoment }}</td>
   </tr>
   <tr>
     <td width="50%">
-      <span class="pull-right font-bold">Tempo de Contribuição na data de início do benefício</span>
+      <span class="pull-right font-bold">Tempo de Contribuição Necessário</span>
     </td>
     <td>{{ conclusoesRegra5.tempoDib }}</td>
   </tr>
   <tr>
     <td width="50%">
-      <span class="pull-right font-bold">Percentual da média salarial</span>
+      <span class="pull-right font-bold">Percentual da Média Salarial</span>
     </td>
     <td>{{ conclusoesRegra5.formula }}</td>
   </tr>
