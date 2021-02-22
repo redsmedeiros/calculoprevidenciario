@@ -111,10 +111,10 @@ export class conclusoesFinais {
             const diferenca = elementRegraEspecie.requisitos.pontos - elementRegraEspecie.pontos;
 
             let inicioTexo = 'Faltam';
-            let fimTexo =  'pontos';
-            if (diferenca <= 1 ) {
-                 inicioTexo = 'Falta';
-                 fimTexo =   'ponto';
+            let fimTexo = 'pontos';
+            if (diferenca <= 1) {
+                inicioTexo = 'Falta';
+                fimTexo = 'ponto';
             }
 
             const diferencaString = `${inicioTexo} ${diferenca.toFixed(4)} ${fimTexo}. `;
@@ -393,10 +393,10 @@ export class conclusoesFinais {
                 return 0;
             });
 
-        }else{
+        } else {
 
             elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
-            
+
         }
 
     }
@@ -442,7 +442,37 @@ export class conclusoesFinais {
         );
     }
 
+    private defineAliquotaIdadeRural(elementPossibilidade) {
+
+        const tempoParaPercentual = {
+            m: 20,
+            f: 15
+        };
+
+        let aliquota = 70;
+        let formula = '70'
+        let valueString = aliquota + '%'
+
+        if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual[this.segurado.sexo]) {
+            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual[this.segurado.sexo]));
+            formula = `70 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual[this.segurado.sexo]}))`;
+            valueString = aliquota + '%'
+        }
+
+        return this.setAliquota(
+            aliquota,
+            valueString,
+            formula,
+        );
+    }
+
     private defineAliquotaIdadeTransitoria(elementPossibilidade) {
+
+        if (this.calculo.tipoBeneficio !== undefined
+            && this.calculo.tipoBeneficio === 16) {
+            // Rural 16
+            return this.defineAliquotaIdadeRural(elementPossibilidade);
+        }
 
         return this.defineAliquotaIdade(elementPossibilidade);
     }
@@ -489,7 +519,7 @@ export class conclusoesFinais {
 
         let tempoParaPercentual = (elementRegraEspecie.requisitos.tempo === 15) ? 15 : 20;
 
-        if(this.segurado.sexo === 'f') {
+        if (this.segurado.sexo === 'f') {
             tempoParaPercentual = 15;
         }
 

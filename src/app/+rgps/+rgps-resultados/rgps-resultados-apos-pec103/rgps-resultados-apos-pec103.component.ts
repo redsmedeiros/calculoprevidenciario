@@ -122,6 +122,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.contribuicaoPrimariaAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
 
@@ -143,13 +144,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
 
-
           this.getContribuicoesAdicionais();
-
-
           this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
 
         }
+
+        this.calculo.tipoBeneficio = this.tipoBeneficio;
 
         if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
 
