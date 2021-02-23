@@ -79,7 +79,8 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.rmiValoresRecebidosBuracoNegro,
       this.taxaAjusteMaximaConcedida,
       this.naoAplicarSMBeneficioConcedido,
-      this.dataInicialadicional2Recebido);
+      this.dataInicialadicional2Recebido,
+      this.calcularAbono13UltimoMesRecebidos);
 
     let statusInput = true;
 
@@ -169,6 +170,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.taxaAjusteMaximaConcedida = rowEdit.irt;
     this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
     this.dataInicialadicional2Recebido = rowEdit.dataAdicional25;
+    this.calcularAbono13UltimoMesRecebidos = rowEdit.abono13Ultimo;
 
     if (rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
@@ -188,6 +190,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.taxaAjusteMaximaConcedida = '';
     this.naoAplicarSMBeneficioConcedido = false;
     this.dataInicialadicional2Recebido = '';
+    this.calcularAbono13UltimoMesRecebidos = false;
   }
 
 

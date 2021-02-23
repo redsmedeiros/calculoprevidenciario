@@ -707,6 +707,11 @@
           </sa-widget>
         </article>
 
+      </div>
+      <div class="row"
+      id="printableValoresRecebidosList"
+      >
+        
         <article
           class="col-sm-12 col-md-12 col-lg-12"
           *ngIf="this.listRecebidos.length > 0"
@@ -728,10 +733,16 @@
                   <strong>Não há itens na lista</strong>
                 </div>
                 <table
+                   
                   class="table table-striped table-bordered table-hover table-responsive table-condensed"
                   *ngIf="!isUpdating && listRecebidos.length > 0"
                 >
                   <thead>
+                    <tr class="not-screen">
+                      <th class="text-center" colspan="7">
+                        <h2>Lista dos Benefícios Recebidos</h2>
+                      </th>
+                    </tr>
                     <tr>
                       <th>Espécie / Número Benefício</th>
                       <th>DIB / DIP</th>

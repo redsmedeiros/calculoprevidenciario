@@ -1231,7 +1231,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.rmiValoresRecebidosBuracoNegro,
         this.taxaAjusteMaximaConcedida,
         this.naoAplicarSMBeneficioConcedido,
-        this.dataInicialadicional2Recebido);
+        this.dataInicialadicional2Recebido,
+        this.calcularAbono13UltimoMesRecebidos,
+        );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
 

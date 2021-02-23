@@ -13,6 +13,7 @@ export class Recebidos {
   public irt;
   public reajusteMinimo;
   public dataAdicional25;
+  public abono13Ultimo;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -37,7 +38,8 @@ export class Recebidos {
     rmiBuracoNegro,
     irt,
     reajusteMinimo,
-    dataAdicional25
+    dataAdicional25,
+    abono13Ultimo,
   ) {
     this.id = id;
     this.especie = especie;
@@ -51,6 +53,7 @@ export class Recebidos {
     this.irt = irt;
     this.reajusteMinimo = reajusteMinimo;
     this.dataAdicional25 = dataAdicional25;
+    this.abono13Ultimo = abono13Ultimo;
   }
 
 
