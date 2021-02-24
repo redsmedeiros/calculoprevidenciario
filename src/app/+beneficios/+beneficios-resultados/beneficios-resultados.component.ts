@@ -256,7 +256,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     valorJuros: '0',
     valorMaisJuros: '0',
     valorMaisJurosN: 0
-  };;
+  };
 
   public resultadosTutelaAntecipadaList = [];
   public resultadosTutelaAntecipadaDatatableOptions = {
@@ -290,6 +290,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     percentualString: '0'
   };
   private limit60SCValor = { valor: 0, valorString: '0' };
+
+  private isBuracoNegroLeg = false;
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -1182,20 +1184,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       let valorJuros = 0;
       let diferencaCorrigidaJuros = 0;
 
-      console.log(this.somaDiferencaMensal);
 
-      this.limit60SCPercDescartado.valor = (this.somaDiferencaMensal - this.limit60SCValor.valor);
-      this.limit60SCPercDescartado.valorString = this.formatMoney(this.limit60SCPercDescartado.valor, 'R$', true);
-
-      this.limit60SCPercDescartado.percentual = (this.limit60SCPercDescartado.valor / this.somaDiferencaMensal);
-      this.limit60SCPercDescartado.percentualString = this.formatPercent(this.limit60SCPercDescartado.percentual, 2)
-
-      console.log(this.limit60SCPercDescartado);
-
-      console.log(tableData);
-
-
-
+      const somaDiferencaMensalValorAnterior = this.somaDiferencaMensal;
 
       for (const rowRST of tableData) {
 
@@ -1216,15 +1206,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         } else if (moment(this.calculo.data_acao_judicial).isSame(competencia, 'month')) {
 
-          // rowRST.competencia = stringCompetencia;
-          // rowRST.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
-          // rowRST.beneficio_devido = beneficioDevidoString.resultString;
-          // rowRST.beneficio_devido_quota_dependente = this.formatMoney(beneficio_devido_quota_dependente, siglaDataCorrente, true);
-          // rowRST.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
-          // rowRST.beneficio_recebido = beneficioRecebidoString.resultString;
-          // rowRST.juros = this.formatPercent(juros, 4);
-          // rowRST.correcao_monetaria = this.formatDecimal(correcaoMonetaria, 8);
-
           diferencaMensal = this.limit60SCValor.valor;
           rowRST.diferenca_mensal = this.limit60SCValor.valorString;
 
@@ -1240,19 +1221,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         } else if (moment(this.calculo.data_acao_judicial).isBefore(competencia, 'month')) {
 
-          // rowRST.competencia = stringCompetencia;
-          // rowRST.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
-          // rowRST.beneficio_devido = beneficioDevidoString.resultString;
-          // rowRST.beneficio_devido_quota_dependente = this.formatMoney(beneficio_devido_quota_dependente, siglaDataCorrente, true);
-          // rowRST.indice_recebidos = this.formatIndicesReajustes(indiceReajusteValoresRecebidos, dataCorrente, 'Recebido');
-          // rowRST.beneficio_recebido = beneficioRecebidoString.resultString;
-          // rowRST.diferenca_mensal = 'Limitado';
-          // rowRST.correcao_monetaria = this.formatDecimal(0, 8);
-          // rowRST.diferenca_corrigida = this.formatMoney(0, 'R$', true);
-          // // rowRST.juros = this.formatPercent(juros, 4);
-          // rowRST.valor_juros = this.formatMoney(0, 'R$', true);
-          // rowRST.diferenca_juros = this.formatMoney(0, 'R$', true);
-
           diferencaMensal += rowRST.diferenca_mensalN;
           diferencaCorrigida += rowRST.diferenca_corrigidaN;
           valorJuros += (rowRST.diferenca_corrigidaN * rowRST.jurosN);
@@ -1260,23 +1228,26 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         }
 
-        this.somaDiferencaMensal = Math.round(diferencaMensal * 100) / 100;
-        this.somaJuros = Math.round(valorJuros * 100) / 100;
-        this.somaDiferencaCorrigida = Math.round(diferencaCorrigida * 100) / 100;
-        this.somaDiferencaCorrigidaJuros = Math.round(diferencaCorrigidaJuros * 100) / 100;
-        this.somaTotalSegurado = diferencaCorrigidaJuros + this.somaVincendas;
-
       }
 
+      this.somaDiferencaMensal = Math.round(diferencaMensal * 100) / 100;
+      this.somaJuros = Math.round(valorJuros * 100) / 100;
+      this.somaDiferencaCorrigida = Math.round(diferencaCorrigida * 100) / 100;
+      this.somaDiferencaCorrigidaJuros = Math.round(diferencaCorrigidaJuros * 100) / 100;
+      this.somaTotalSegurado = diferencaCorrigidaJuros + this.somaVincendas;
 
 
+      if (somaDiferencaMensalValorAnterior > this.somaDiferencaMensal) {
 
+        this.limit60SCPercDescartado.valor = (somaDiferencaMensalValorAnterior - this.somaDiferencaMensal);
+        this.limit60SCPercDescartado.valorString = this.formatMoney(this.limit60SCPercDescartado.valor, 'R$', true);
 
+        this.limit60SCPercDescartado.percentual = (this.limit60SCPercDescartado.valor / this.somaDiferencaMensal);
+        this.limit60SCPercDescartado.percentualString = this.formatPercent(this.limit60SCPercDescartado.percentual, 2);
 
+        //  console.log(this.limit60SCPercDescartado)
 
-      // this.somaHonorarios += Math.round(honorarios * 100) / 100;
-      // this.somaJuros += Math.round(valorJuros * 100) / 100;
-      // this.somaDiferencaCorrigidaJuros += Math.round(valorNumericoDiferencaCorrigidaJurosObj.numeric * 100) / 100;
+      }
 
     }
 
@@ -1514,9 +1485,18 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 3.3
   getBeneficioDevido(dataCorrente, reajusteObj, resultsObj, line) {
+
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     const siglaDataCorrente = moedaDataCorrente.sigla;
     let irtDevidoSimplificado89 = 1;
+
+    // DIP
+    const dataPagamentoBeneficioDevido = moment(this.calculo.dip_valores_devidos);
+
+    if (dataPagamentoBeneficioDevido.isValid() && dataCorrente.isBefore(dataPagamentoBeneficioDevido)) {
+      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
+      return 0.0;
+    }
 
     let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     let beneficioDevido = 0.0;
@@ -1918,8 +1898,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
     let taxa_ajuste_maxima_concedida = this.calculo.taxa_ajuste_maxima_concedida;
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+    let dataPagamentoBeneficio = moment(this.calculo.data_pedido_beneficio);
     let dataCessacaoRecebido = this.dataCessacaoRecebido;
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
+
 
     // console.log(recebidoRow);
     if (recebidoRow.status) {
@@ -1928,14 +1910,19 @@ export class BeneficiosResultadosComponent implements OnInit {
       rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
       beneficioRecebido = 0.0;
       dataPedidoBeneficio = recebidoRow.value.dib.clone();
+      dataPagamentoBeneficio = recebidoRow.value.dip.clone();
       dataCessacaoRecebido = recebidoRow.value.cessacao.clone();
       dib = this.recebidosListFim.clone();
       tipo_aposentadoria_recebida = recebidoRow.value.especie;
       taxa_ajuste_maxima_concedida = recebidoRow.value.irt;
 
+
+      if (dataCorrente.isBefore(dataPagamentoBeneficio)) {
+        resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
+        return 0.0;
+      }
+
     }
-
-
 
 
     const dibMoeda = this.Moeda.getByDate(dib);
@@ -3471,6 +3458,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   //Verifica se uma data esta no periodo do buraco negro
   isBuracoNegro(date) {
     if (date >= this.dataInicioBuracoNegro && date <= this.dataFimBuracoNegro) {
+      this.isBuracoNegroLeg = true;
       return true;
     }
     return false;
@@ -3938,6 +3926,24 @@ export class BeneficiosResultadosComponent implements OnInit {
             .text-center{ text-align: center; }
             footer{text-align: center; margin-top: 50px;}
             title{color: #ffffff !important; background-color:White !important;}
+            .well {
+              background-color: #fbfbfb;
+              border: 1px solid #ddd;
+              box-shadow: 0 1px 1px #ececec;
+              -webkit-box-shadow: 0 1px 1px #ececec;
+              -moz-box-shadow: 0 1px 1px #ececec;
+              position: relative;
+          }
+          .well {
+              min-height: 20px;
+              padding: 19px;
+              margin-top: 40px;
+              background-color: #f5f5f5;
+              border: 1px solid #e3e3e3;
+              border-radius: 2px;
+              -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+              box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+          }
       </style>`;
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML;
@@ -3960,13 +3966,14 @@ export class BeneficiosResultadosComponent implements OnInit {
     const resultadoCalculo = document.getElementById('resultadoCalculo').innerHTML;
     const printableRRA = document.getElementById('printableRRA').innerHTML;
     const printableCustosAdicionais = document.getElementById('printableCustosAdicionais').innerHTML;
+    const observacoesprint = document.getElementById('observacoesprint').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo +
       valoresDevidos + valoresRecebdios
       + correcao + juros + honorarios
       + resultadoCalculo + printableRRA
       + printableCustosAdicionais
-      + conclusoes;
+      + conclusoes + observacoesprint;
 
     printContents = printContents.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
