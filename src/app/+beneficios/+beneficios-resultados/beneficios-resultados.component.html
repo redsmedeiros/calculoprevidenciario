@@ -110,7 +110,7 @@
                     </tr>
                     <tr>
                       <td width="30%" style="text-align: left">
-                        <b>Data de nascimento:</b>
+                        <b>Data de Nascimento:</b>
                       </td>
                       <td >
                         {{ segurado.data_nascimento }}
@@ -254,6 +254,19 @@
                         </td>
                         <td >
                           {{ calculo.maturidade }}
+                        </td>
+                      </tr>
+                      <tr *ngIf="calculo.limit_60_sc">
+                        <td width="30%" style="text-align: left" colspan="2" >
+                          <b>O valor da Causa está Limitado a 60 Salários Mínimos.</b>
+                        </td>
+                      </tr>
+                      <tr *ngIf="calculo.limit_60_sc">
+                        <td width="30%" style="text-align: left">
+                          <b>Percentual de Limitação:</b>
+                        </td>
+                        <td >
+                          {{ this.limit60SCPercDescartado.percentualString }}
                         </td>
                       </tr>
                     </tbody>
