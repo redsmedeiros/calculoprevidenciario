@@ -608,6 +608,24 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
     }
 
+    // 25-02-2020 media 80 secundaria
+    tableData.sort((entry1, entry2) => {
+      if (entry1.valor_secundario > entry2.valor_secundario) {
+        return 1;
+      }
+      if (entry1.valor_secundario < entry2.valor_secundario) {
+        return -1;
+      }
+      return 0;
+    });
+
+    totalContribuicaoSecundaria = 0
+      for (let i = 0; i < tableData.length; i++) {
+        if (i >= tableData.length - divisorSecundario) {
+          totalContribuicaoSecundaria += tableData[i].valor_secundario;
+        } 
+      }
+
 
     tableData.sort((entry1, entry2) => {
       if (entry1.valor_primario > entry2.valor_primario) {
