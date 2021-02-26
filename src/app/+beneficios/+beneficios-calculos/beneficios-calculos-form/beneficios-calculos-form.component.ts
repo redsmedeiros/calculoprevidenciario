@@ -213,6 +213,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public adicional25Recebido = false;
   public dataInicialadicional2Recebido;
   public limit60SC = false;
+  public RRASemJuros = false;
 
 
   @Input() formData;
@@ -900,6 +901,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
       this.formData.limit_60_sc = this.limit60SC;
+      this.formData.rra_sem_juros = this.RRASemJuros;
 
       // console.log(this.formData);
       // console.log(this.rmiValoresDevidos);
@@ -1187,6 +1189,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     this.limit60SC = this.formData.limit_60_sc;
+    this.RRASemJuros = this.formData.rra_sem_juros;
 
     this.dibValoresDevidosChanged();
     this.dibValoresRecebidosChanged();

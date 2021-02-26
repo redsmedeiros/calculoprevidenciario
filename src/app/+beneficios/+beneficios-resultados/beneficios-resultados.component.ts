@@ -290,6 +290,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     percentualString: '0'
   };
   private limit60SCValor = { valor: 0, valorString: '0' };
+  private RRASemJuros = false;
 
   private isBuracoNegroLeg = false;
 
@@ -803,7 +804,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
 
         // Quando a dataCorrente for menor que a ‘dataInicioDevidos, definido na seção 1.2
-        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente, recebidoRow);
         beneficioRecebido = func_beneficioRecebido.call(this,
           dataCorrente,
           indiceReajusteValoresRecebidos,
@@ -822,7 +823,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         // console.log(indiceReajusteValoresDevidos);
 
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
-        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente);
+        indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente, recebidoRow);
 
         const chkboxBenefitNotGranted = this.calculo.beneficio_nao_concedido;
         if (chkboxBenefitNotGranted === 1) {
@@ -861,7 +862,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevidoString.resultString = this.formatMoney(0.0, siglaDataCorrente);
       }
 
-      if (dataPagamentoBeneficioRecebido.isValid() && dataCorrente.isBefore(dataPagamentoBeneficioRecebido, 'month')) {
+      if ((!recebidoRow.status && this.listRecebidos.length > 0) ||
+        (dataPagamentoBeneficioRecebido.isValid() && dataCorrente.isBefore(dataPagamentoBeneficioRecebido, 'month'))) {
         beneficioRecebido = 0;
         beneficioRecebidoString.resultString = this.formatMoney(0.0, siglaDataCorrente);
       }
@@ -993,7 +995,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
         // 
-        this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida);
+        this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida, (valorJuros + diferencaCorrigida) );
         this.checkLimit60SC(dataCorrente, this.somaDiferencaCorrigida);
 
       }
@@ -1178,14 +1180,13 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
 
           // soma tutela antecipada
-          if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) &&
-            (dataCorrente.isSameOrAfter(this.calculo.data_cessacao, 'month')
-              && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
-            this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
-          }
+          // if ((moment(this.calculo.data_cessacao).isValid() && moment(this.calculo.taxa_advogado_final).isValid()) &&
+          //   (dataCorrente.isSameOrAfter(this.calculo.data_cessacao, 'month')
+          //     && dataCorrente.isSameOrBefore(this.calculo.taxa_advogado_final))) {
+          //   this.somaHonorariosTutelaAntecipada += Math.round(beneficioDevido * 100) / 100;
+          // }
 
-
-          this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida);
+          this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida, (valorJuros + diferencaCorrigida));
           this.checkLimit60SC(dataCorrente, this.somaDiferencaCorrigida);
         }
 
@@ -1294,17 +1295,22 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-  public calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida) {
+  public calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida, diferencaCorrigidaComJuros) {
+
+    this.RRASemJuros = this.calculo.rra_sem_juros;
+
+    const valor = (!this.RRASemJuros) ? diferencaCorrigidaComJuros : diferencaCorrigida;
+
 
     if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
 
       this.somaNumeroCompetenciasAtual += 1;
-      this.somaDiferencaCorrigidaAtual += diferencaCorrigida;
+      this.somaDiferencaCorrigidaAtual += valor;
 
     } else {
 
       this.somaNumeroCompetenciasAnterior += 1;
-      this.somaDiferencaCorrigidaAnterior += diferencaCorrigida;
+      this.somaDiferencaCorrigidaAnterior += valor;
 
     }
 
@@ -1411,14 +1417,42 @@ export class BeneficiosResultadosComponent implements OnInit {
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
 
+  private getByDateToTypeRecebidosList(date, recebidoRow) {
+
+    const listTypeReceb = recebidoRow.value.indiceInps;
+    const firstMonth = listTypeReceb[0].data_moeda;
+
+    date = date.startOf('month');
+    let difference = date.diff(firstMonth, 'months', true);
+    difference = Math.abs(difference);
+    difference = Math.floor(difference);
+
+    return listTypeReceb[difference];
+  }
+
   //Seção 3.2
-  getIndiceReajusteValoresRecebidos(dataCorrente) {
-    if (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido) {
+  getIndiceReajusteValoresRecebidos(dataCorrente, recebidoRow) {
+
+    let dataPedidoBeneficioInd = moment(this.calculo.data_pedido_beneficio);
+    let dataCessacaoRecebidoInd = this.dataCessacaoRecebido;
+
+    if (recebidoRow.status) {
+
+      dataPedidoBeneficioInd = recebidoRow.value.dib.clone();
+      dataCessacaoRecebidoInd = recebidoRow.value.cessacao.clone();
+    }
+
+    if (dataCessacaoRecebidoInd == null || (dataCessacaoRecebidoInd != null && dataCorrente > dataCessacaoRecebidoInd)) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
 
+
     let reajuste = 0.0;
     let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
+
+    if (recebidoRow.status) {
+      indiceObjCorrente = this.getByDateToTypeRecebidosList(dataCorrente, recebidoRow)
+    }
 
 
     let indiceReajuste = 0;
@@ -1433,10 +1467,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (dataCorrente <= this.dataSimplificada &&
-      moment(this.calculo.data_pedido_beneficio) < this.dataInicioBuracoNegro) {
+      dataPedidoBeneficioInd < this.dataInicioBuracoNegro) {
       reajuste = 1;
     }
-    else if (moment(this.calculo.data_pedido_beneficio) <= this.dataInicioBuracoNegro &&
+    else if (dataPedidoBeneficioInd <= this.dataInicioBuracoNegro &&
       dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
       reajuste = 2.198234;
     }
@@ -1445,36 +1479,34 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.primeiroReajusteRecebidos = 1;
     }
 
-    if (dataCorrente == moment(this.calculo.data_pedido_beneficio)
-      && moment(this.calculo.data_pedido_beneficio) == this.dataInicioCalculo) {
+    if (dataCorrente == dataPedidoBeneficioInd
+      && dataPedidoBeneficioInd == this.dataInicioCalculo) {
       reajuste = 1;
     }
 
     if (dataCorrente.isSame('1994-03-01', 'month')) {
       reajuste = 1 / 661.0052;
-      if (dataCorrente == moment(this.calculo.data_pedido_beneficio)) {
+      if (dataCorrente == dataPedidoBeneficioInd) {
         reajuste = 1;
       }
     }
 
     let reajusteOS = 0.0;
-    let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    if (this.isBuracoNegro(dataPedidoBeneficio) && dataCorrente < this.dataEfeitoFinanceiro) {
+
+    if (this.isBuracoNegro(dataPedidoBeneficioInd) && dataCorrente < this.dataEfeitoFinanceiro) {
       if (dataCorrente < moment('1991-09-01')) {
         if (indiceObjCorrente == undefined) {
           reajusteOS = 0;
         } else {
           reajusteOS = indiceReajusteOs;
         }
-      }
-      else if (indiceObjCorrente.indice) {
+      } else if (indiceObjCorrente.indice) {
         if (indiceObjCorrente == undefined) {
           reajusteOS = 0;
         } else {
           reajusteOS = indiceReajuste;
         }
-      }
-      else {
+      } else {
         reajusteOS = 1;
       }
     }
@@ -1913,17 +1945,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     const siglaDataCorrente = moedaDataCorrente.sigla;
     let irtRecebidoSimplificado89 = 1;
 
-    if (!recebidoRow.status || (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
-      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
-      return 0.0;
-    }
-
-    // console.log(this.recebidosListInicio);
-    // console.log(this.recebidosListFim);
-    // console.log(this.dataCessacaoRecebido);
-    // console.log(this.dataCessacaoRecebido);
-
-
     let rmiBuracoNegro = 0.0;
     let beneficioRecebido = 0.0;
     let dib = moment(this.calculo.data_pedido_beneficio);
@@ -1949,6 +1970,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
+    if ((this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
+      resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
+      return 0.0;
+    }
 
     const dibMoeda = this.Moeda.getByDate(dib);
     const equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);

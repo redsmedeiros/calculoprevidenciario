@@ -70,6 +70,7 @@ export class CalculoAtrasado extends Model {
     list_acrescimos_deducoes: '',
     data_adicional_25: '',
     limit_60_sc: '',
+    rra_sem_juros: '',
   };
 
   public id: number;
@@ -137,6 +138,7 @@ export class CalculoAtrasado extends Model {
   public list_acrescimos_deducoes;
   public data_adicional_25;
   public limit_60_sc;
+  public rra_sem_juros;
 
 
   public actions = `
