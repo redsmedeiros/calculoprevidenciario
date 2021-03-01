@@ -14,6 +14,7 @@ export class Devidos {
   public reajusteMinimo;
   public dataAdicional25;
   public chkDemandasJudiciais;
+  public calcularAbono13UltimoMes
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -40,6 +41,7 @@ export class Devidos {
     reajusteMinimo,
     dataAdicional25,
     chkDemandasJudiciais,
+    calcularAbono13UltimoMes,
   ) {
     this.id = id;
     this.especie = especie;
@@ -54,6 +56,7 @@ export class Devidos {
     this.reajusteMinimo = reajusteMinimo;
     this.dataAdicional25 = dataAdicional25;
     this.chkDemandasJudiciais = chkDemandasJudiciais;
+    this.calcularAbono13UltimoMes = calcularAbono13UltimoMes;
   }
 
 

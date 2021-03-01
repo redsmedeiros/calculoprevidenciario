@@ -903,9 +903,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.limit_60_sc = this.limit60SC;
       this.formData.rra_sem_juros = this.RRASemJuros;
 
-      // console.log(this.formData);
-      // console.log(this.rmiValoresDevidos);
-
       this.onSubmit.emit(this.formData);
 
     } else {
@@ -958,6 +955,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.taxaAjusteMaximaEsperada = rstDevidos.irt;
     this.naoAplicarSMBeneficioEsperado = rstDevidos.reajusteMinimo;
     this.dataInicialadicional25Devido = rstDevidos.dataInicialadicional25Devido;
+    this.calcularAbono13UltimoMes = rstDevidos.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
 
   }
@@ -1148,6 +1146,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     this.numeroProcesso = this.formData.numero_processo;
     this.afastarPrescricao = this.formData.afastar_prescricao;
+    console.log(this.formData.calcular_abono_13_ultimo_mes)
     this.calcularAbono13UltimoMes = this.formData.calcular_abono_13_ultimo_mes;
     this.taxaAdvogadoAplicarCPCArt85 = this.formData.taxa_advogado_aplicar_CPCArt85;
 
@@ -1211,7 +1210,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.taxaAjusteMaximaEsperada,
       this.naoAplicarSMBeneficioEsperado,
       this.dataInicialadicional25Devido,
-      this.chkDemandasJudiciais
+      this.chkDemandasJudiciais,
+      this.calcularAbono13UltimoMes,
       );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1468,7 +1468,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     switch (tipoDejurosSelecionado) {
       case '12_6':
         // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
-        this.jurosAntes2003 = 1.00;
+        this.jurosAntes2003 = 0.50;
+        // this.jurosAntes2003 = 1.00;
         this.jurosDepois2003 = 1.00;
         this.jurosDepois2009 = 0.50;
         this.chkBoxTaxaSelic = true;

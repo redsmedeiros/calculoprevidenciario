@@ -784,11 +784,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
       let dataPagamentoBeneficioRecebido = dataPedidoBeneficio.clone();
+      let cessaBeneficioRecebido = dataPedidoBeneficio.clone();
+      let abono13UltimoRecebido = false;
+      let datacessacaoBeneficioRecebido = this.dataCessacaoRecebido;
 
       if (recebidoRow.status) {
         dataPedidoBeneficio = moment(recebidoRow.value.dib);
         abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio);
         dataPagamentoBeneficioRecebido = moment(recebidoRow.value.dip);
+        datacessacaoBeneficioRecebido = recebidoRow.value.cessacao.clone();
+        abono13UltimoRecebido = recebidoRow.value.abono13Ultimo;
       }
 
       // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
@@ -960,7 +965,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       //   tableData.push(line);
       // }
 
-      tableData.push(line);
+      if (dataCorrente.isSameOrAfter(dataPagamentoBeneficioDevido, 'month')) {
+        tableData.push(line);
+      }
 
       this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
       this.somaRecebidosCorrigido += Math.round(beneficioRecebido * 100) / 100;
@@ -995,7 +1002,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
         // 
-        this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida, (valorJuros + diferencaCorrigida) );
+        this.calcularSomaCompetenciasMes(dataCorrente, diferencaCorrigida, (valorJuros + diferencaCorrigida));
         this.checkLimit60SC(dataCorrente, this.somaDiferencaCorrigida);
 
       }
@@ -1005,18 +1012,20 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
       this.ultimaCorrecaoMonetaria = correcaoMonetaria;
 
-      //  console.log(this.calculo.tipo_aposentadoria_recebida);
-      //  console.log(this.calculo.tipo_aposentadoria);
+      // Calcular Abono
       if ((dataCorrente.month() === 11 && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
         || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
-          && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
+          && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12)
+          || (abono13UltimoRecebido && dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
+            && (this.calculo.tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
+        )
       ) {
 
 
         let beneficioRecebidoAbono;
         let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
 
-        if (beneficioRecebido <= 0 || (this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
+        if (beneficioRecebido <= 0 || (datacessacaoBeneficioRecebido != null && dataCorrente > datacessacaoBeneficioRecebido)) {
           beneficioRecebidoAbono = 0.0;
         } else {
           beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
@@ -1062,6 +1071,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           beneficioRecebidoAbono = 0;
         }
 
+
+        if ((abono13UltimoRecebido && dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')) &&
+          !(this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month'))) {
+            beneficioDevidoAbono = 0;
+        }
 
         const beneficioDevidoAbonoAntesRateio = beneficioDevidoAbono;
         let beneficio_devido_quota_dependente_abono = 0;
@@ -1140,7 +1154,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           this.esmaecerLinhas(dataCorrente, line);
         }
 
-        if (!isPrescricao) {
+        if (!isPrescricao && dataCorrente.isAfter(dataPagamentoBeneficioDevido, 'month')) {
           tableData.push(line);
         }
 
@@ -3969,12 +3983,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const css = `
       <style>
-      body {-webkit-print-color-adjust: exact;}
+      body {
+            -webkit-print-color-adjust: exact;}
             body{font-family: Arial, Helvetica, sans-serif;}
             h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
             i.fa, .not-print{ display: none; }
-            table{margin-top: 20px;}
-            .table{margin-top: 35px;}
+            .table{margin-top: 30px;}
+            .table-print-no-margin { margin-top: 2px !important;}
             footer,div,p,th{font-size:10px;}
             .table>thead>tr>th{ background-color: #e6e6e6 !important;}
             .table>tbody>tr>td, .table>tbody>tr>th,
@@ -3983,24 +3998,15 @@ export class BeneficiosResultadosComponent implements OnInit {
               .table>tbody>tr>td { white-space: nowrap !important; font-size:12px !important;}
               footer{text-align: center;}
             .text-center{ text-align: center; }
+            h1{ text-align: center; }
             footer{text-align: center; margin-top: 50px;}
             title{color: #ffffff !important; background-color:White !important;}
-            .well {
-              background-color: #fbfbfb;
-              border: 1px solid #ddd;
-              box-shadow: 0 1px 1px #ececec;
-              -webkit-box-shadow: 0 1px 1px #ececec;
-              -moz-box-shadow: 0 1px 1px #ececec;
-              position: relative;
+            .well {background-color: #fbfbfb; border: 1px solid #ddd; box-shadow: 0 1px 1px #ececec;
+              -webkit-box-shadow: 0 1px 1px #ececec; -moz-box-shadow: 0 1px 1px #ececec;position: relative;
           }
           .well {
-              min-height: 20px;
-              padding: 19px;
-              margin-top: 40px;
-              background-color: #f5f5f5;
-              border: 1px solid #e3e3e3;
-              border-radius: 2px;
-              -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+              min-height: 20px; padding: 19px; margin-top: 40px; background-color: #f5f5f5;
+              border: 1px solid #e3e3e3; border-radius: 2px; -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
               box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
           }
       </style>`;
@@ -4008,15 +4014,32 @@ export class BeneficiosResultadosComponent implements OnInit {
     const seguradoBox = document.getElementById('printableSegurado').innerHTML;
     const dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     const valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
-    let valoresRecebdios = '';
+
+
+    let valoresRecebidos = '';
     if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined'
       && document.getElementById('printableValoresRecebidos') != null) {
-      valoresRecebdios = document.getElementById('printableValoresRecebidos').innerHTML;
+      valoresRecebidos = document.getElementById('printableValoresRecebidos').innerHTML;
     }
 
     if (this.listRecebidos.length > 0) {
-      valoresRecebdios = document.getElementById('printableValoresRecebidosList').innerHTML;
+      valoresRecebidos = document.getElementById('printableValoresRecebidosList').innerHTML;
     }
+
+    const recebidosTable = `<table class="table table-bordered table-hover no-padding no-margin">
+    <thead >
+      <tr>
+        <th colspan="2">
+          <h2>Benefícios Recebidos</h2>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td colspan="2">${valoresRecebidos}</td>
+    </tr>
+    </tbody>
+  </table>`;
 
     const honorarios = document.getElementById('printableHonorarios').innerHTML;
     const juros = document.getElementById('printableJuros').innerHTML;
@@ -4028,19 +4051,28 @@ export class BeneficiosResultadosComponent implements OnInit {
     const observacoesprint = document.getElementById('observacoesprint').innerHTML;
 
     let printContents = seguradoBox + dadosCalculo +
-      valoresDevidos + valoresRecebdios
+      valoresDevidos + valoresRecebidos
       + correcao + juros + honorarios
       + resultadoCalculo + printableRRA
       + printableCustosAdicionais
       + conclusoes + observacoesprint;
 
+    if (this.listRecebidos.length > 0) {
+      printContents = seguradoBox + dadosCalculo +
+        valoresDevidos + recebidosTable
+        + correcao + juros + honorarios
+        + resultadoCalculo + printableRRA
+        + printableCustosAdicionais
+        + conclusoes + observacoesprint;
+    }
+
     printContents = printContents.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
-    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    const rodape = `<img src='./assets/img/rodape/TIMBRADO_SIMULADORES1080.jpg' alt='Logo' style="width: 100%;">`;
     const title = `<title> Benefícios Atrasados - ${this.segurado.nome}</title>`;
 
-    const popupWin = window.open('', '_blank', 'width=300,height=300');
+    const popupWin = window.open('', '_blank', 'width=400,height=400');
     popupWin.document.open();
     popupWin.document.write('<html><head>' + css + title + '</head><body onload="window.print()">'
       + printContents + '<footer >' + rodape + '</footer></body></html>');
@@ -4088,8 +4120,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.jurosEmFormatoAnual = ''; // Manual
 
     const opcoesMensalParaAnual = [
+      // {
+      //   jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5,
+      //   value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
+      // },
       {
-        jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5,
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5,
         value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
       },
       // {

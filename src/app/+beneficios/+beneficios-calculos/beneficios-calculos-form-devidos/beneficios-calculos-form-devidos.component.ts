@@ -139,7 +139,8 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.taxaAjusteMaximaEsperada,
       this.naoAplicarSMBeneficioEsperado,
       this.dataInicialadicional25Devido,
-      this.chkDemandasJudiciais
+      this.chkDemandasJudiciais,
+      this.calcularAbono13UltimoMes,
     );
 
 
@@ -189,6 +190,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.taxaAjusteMaximaEsperada = rowEdit.irt;
     this.naoAplicarSMBeneficioEsperado = rowEdit.reajusteMinimo;
     this.dataInicialadicional25Devido = rowEdit.dataAdicional25;
+    this.calcularAbono13UltimoMes = rowEdit.calcularAbono13UltimoMes;
 
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;

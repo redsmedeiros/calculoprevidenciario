@@ -4,8 +4,8 @@
     <!-- row -->
     <div class="row" *ngIf="!isUpdating">
       <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <h1 *ngIf="!isTetos">Demonstrativo de Cálculo</h1>
-        <h1 *ngIf="isTetos">Demonstrativo de Cálculo - Revisão do Teto</h1>
+        <h1 *ngIf="!isTetos" class="title-pdf">Demonstrativo de Cálculo</h1>
+        <h1 *ngIf="isTetos" class="title-pdf">Demonstrativo de Cálculo - Revisão do Teto</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="#/beneficios/beneficios-segurados">
@@ -139,7 +139,7 @@
             [custombutton]="false"
           >
             <header>
-              <span class="widget-icon">
+              <span class="widget-icon" >
                 <i class="fa fa-calendar"></i>
               </span>
               <h2>Dados do Processo</h2>
@@ -563,7 +563,7 @@
               <div class="widget-body no-padding widget-body-custom no-margin no-padding">
                 
                 <div *ngFor="let recebidoLine of listRecebidos" >
-                  <table class="table table-bordered table-hover no-padding no-margin">
+                  <table class="table table-print-no-margin table-bordered table-hover no-padding no-margin" style="margin-top: 0px !important;">
                     <thead >
                       <tr>
                         <th colspan="2">
@@ -765,7 +765,7 @@
               <span class="widget-icon">
                 <i class="fa fa-percent"></i>
               </span>
-              <h2>Juros(%)</h2>
+              <h2>Juros (%)</h2>
             </header>
 
             <!-- widget div-->
@@ -797,14 +797,14 @@
                     <thead class="not-screen">
                       <tr>
                         <th colspan="2">
-                          <h2>Juros</h2>
+                          <h2>Juros (%)</h2>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td width="30%" style="text-align: left">
-                          <b>Juros Anterior a Janeiro de 2003:</b>
+                          <b>Até a Dezembro de 2002:</b>
                         </td>
                         <td>
                           {{ calculo.previo_interesse_2003 }}%
@@ -812,21 +812,21 @@
                       </tr>
                       <tr>
                         <td width="30%" style="text-align: left">
-                          <b>Juros Posterior a Janeiro de 2003:</b>
+                          <b>A partir de Janeiro de 2003:</b>
                         </td>
                         <td>{{ calculo.pos_interesse_2003 }}%</td>
                       </tr>
                       <tr>
                         <td width="30%" style="text-align: left">
-                          <b>Juros Posterior a Julho de 2009:</b>
+                          <b>A partir de Julho de 2009:</b>
                         </td>
-                        <td>{{ calculo.pos_interesse_2009 }}%</td>
+                        <td>{{ calculo.pos_interesse_2009 }}% ao mês, caso a taxa selic ao ano seja superior à 8,5%, ou 70% da taxa Selic ao ano, mensalizada, nos demais casos</td>
                       </tr>
-                      <tr *ngIf="jurosEmFormatoAnual != ''">
+                      <!-- <tr *ngIf="jurosEmFormatoAnual != ''">
                         <td  style="text-align: center" colspan="2">
                           <b>{{ jurosEmFormatoAnual }}</b>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
                 </div>
@@ -1833,13 +1833,12 @@
         </p>
         <p><strong>c) </strong> Juros de mora:</p>
         <p>
-          - Taxa de {{ calculo.previo_interesse_2003 }}% até 12/2002 , taxa de
-          {{ calculo.pos_interesse_2003 }}% de 01/2003 até 06/2009 , taxa de
-          {{ calculo.pos_interesse_2009 }}% de 07/2009 até
-          {{ formatDateCompetencia(calculo.data_calculo_pedido) }}. Quando a
-          sentença determinar a utilização de juros pelo critério da poupança
-          será adotado o conteúdo ditado pela Lei 12703/2012 a partir de
-          07/2012.
+          - 
+          Percentual de {{ calculo.previo_interesse_2003 }}% ao mês até 12/2002; 
+          Percentual de {{ calculo.pos_interesse_2003 }}% ao mês de 01/2003 até 06/2009; e 
+          Percentual de {{ formatDateCompetencia(calculo.data_calculo_pedido) }} ao mês,
+           caso a taxa Selic ao ano seja superior à 8,5%, ou 70% da taxa Selic ao ano, mensalizada, 
+          nos demais casos - A partir de jul/2009.
         </p>
         </div>
       </article>
