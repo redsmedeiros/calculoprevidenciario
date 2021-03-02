@@ -112,8 +112,13 @@ export class RegrasAcesso {
                 maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
             }
 
-            maximoDescarte.meses = maxDescarteCarencia;
-            maximoDescarte.anos = (maximoDescarte.meses / 12);
+
+            if (maxDescarteCarencia < maximoDescarte.meses) {
+
+                maximoDescarte.meses = maxDescarteCarencia;
+                maximoDescarte.anos = (maximoDescarte.meses / 12);
+
+            }
 
         }
 

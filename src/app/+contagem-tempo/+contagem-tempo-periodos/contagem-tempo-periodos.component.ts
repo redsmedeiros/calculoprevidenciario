@@ -409,6 +409,11 @@ isValid() {
 
     }
 
+
+    if (this.condicao_especial === 0) {
+      this.fator_condicao_especial = 1.0;
+    }
+
   }
 
   // empresa

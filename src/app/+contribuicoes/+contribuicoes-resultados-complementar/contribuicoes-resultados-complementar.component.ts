@@ -110,11 +110,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
 
-
               this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
                 .then((moedaAtual: Moeda[]) => {
-
-                  console.log(moedaAtual);
 
                   this.moedaAtual = moedaAtual[1];
                   if (moedaAtual[1].salario_minimo == undefined) {
