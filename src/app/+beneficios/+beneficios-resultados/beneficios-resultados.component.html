@@ -530,7 +530,6 @@
                           }}
                         </td>
                       </tr>
-
                       <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
                         <td width="30%" style="text-align: left">
                           <b>Índice de Limitação no Teto:</b>
@@ -666,6 +665,14 @@
                       </td>
                       <td>
                         {{ recebidoLine.irt ? recebidoLine.irt : 0 }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="recebidoLine.dataAdicional25">
+                      <td width="30%" style="text-align: left">
+                        <b> Data de Início do Adicional de 25%:</b>
+                      </td>
+                      <td>
+                        {{formatDateIsnotNullMoment(recebidoLine.dataAdicional25) }}
                       </td>
                     </tr>
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">

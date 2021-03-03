@@ -786,7 +786,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
       // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
-      this.setCompetenciaInicioJurosIsNull();
+      
       if (this.isExits(this.competenciaInicioJuros)) {
         this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
       }
@@ -1358,7 +1358,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   setCompetenciaInicioJurosIsNull() {
 
-    if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
+    // if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
+    if (this.competenciaInicioJuros != this.dataCitacaoReu) {
 
       if (!this.dataCitacaoReu) {
         this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');

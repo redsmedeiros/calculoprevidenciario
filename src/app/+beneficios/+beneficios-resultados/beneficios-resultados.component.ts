@@ -248,9 +248,13 @@ export class BeneficiosResultadosComponent implements OnInit {
   private recebidosListInicioDIP;
   private recebidosListInicioAnterior;
   private recebidosListFim;
+
   private adicional25Devido;
+  private adicional25Recebido;
   private dataInicialadicional25Devido;
+  private dataInicialadicional25Recebido;
   private dataInicialadicional25DevidoString;
+
   private somaAcrescimosDeducoes = {
     valor: '0',
     valorJuros: '0',
@@ -511,14 +515,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       date_fim_recebido = this.recebidosListInicioAnterior;
     }
 
-    console.log('---------- indices ---- inicio fim');
-
-    console.log({
-      date_inicio_devido: (date_inicio_devido),
-      date_fim_devido: (date_fim_devido),
-      date_inicio_recebido: (date_inicio_recebido),
-      date_fim_recebido: (date_fim_recebido)
-    });
+    // console.log({
+    //   date_inicio_devido: (date_inicio_devido),
+    //   date_fim_devido: (date_fim_devido),
+    //   date_inicio_recebido: (date_inicio_recebido),
+    //   date_fim_recebido: (date_fim_recebido)
+    // });
 
     return {
       date_inicio_devido: (date_inicio_devido),
@@ -546,6 +548,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
+    console.log(this.listRecebidos);
     if (this.listRecebidos != null && this.listRecebidos.length > 0) {
 
       for (const recebidoRow of this.listRecebidos) {
@@ -554,6 +557,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         recebidoRow.dip = formatDateIsnotNull(recebidoRow.dip);
         recebidoRow.cessacao = formatDateIsnotNull(recebidoRow.cessacao);
         recebidoRow.dibAnterior = formatDateIsnotNull(recebidoRow.dibAnterior);
+        recebidoRow.dataAdicional25 = formatDateIsnotNull(recebidoRow.dataAdicional25);
         recebidoRow.indiceInps = [];
 
         let inicioRecebido = recebidoRow.dib;
@@ -622,6 +626,24 @@ export class BeneficiosResultadosComponent implements OnInit {
         line[index] = '<div style="opacity:0.7;">' + line[index] + '</div>';
       }
     }
+  }
+
+
+
+  private checkAdicionl25Recebido(recebidoRow) {
+
+    this.adicional25Recebido = false;
+    this.dataInicialadicional25Recebido = null;
+    if (this.listRecebidos.length > 0
+      && recebidoRow.value.dataAdicional25 !== undefined
+      && recebidoRow.value.dataAdicional25 != ''
+      && ['4', '7', '2', '16', '1', '3', '5', '13', '18'].includes(recebidoRow.value.especie)) {
+
+      this.adicional25Recebido = true;
+      this.dataInicialadicional25Recebido = moment(recebidoRow.value.dataAdicional25, 'DD/MM/YYYY');
+
+    }
+
   }
 
 
@@ -788,6 +810,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         dataPagamentoBeneficioRecebido = moment(recebidoRow.value.dip);
         datacessacaoBeneficioRecebido = recebidoRow.value.cessacao.clone();
         abono13UltimoRecebido = recebidoRow.value.abono13Ultimo;
+        this.checkAdicionl25Recebido(recebidoRow);
       }
 
       // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
@@ -1535,16 +1558,32 @@ export class BeneficiosResultadosComponent implements OnInit {
   /**
    * Aplicar o adicional de 25%
    * @param dataCorrente 
+   * @param beneficioRecebido 
+   */
+  private aplicarAdicional25Recebido(dataCorrente, beneficioRecebido) {
+
+    if (beneficioRecebido > 0
+      && this.adicional25Recebido
+      && dataCorrente.isSame(this.dataInicialadicional25Recebido)
+    ) {
+      return (Math.round((beneficioRecebido + (beneficioRecebido * 0.25)) * 100) / 100);
+    }
+
+    return beneficioRecebido;
+  }
+
+
+  /**
+   * Aplicar o adicional de 25%
+   * @param dataCorrente 
    * @param beneficioDevido 
    */
   private aplicarAdicional25(dataCorrente, beneficioDevido) {
 
     if (beneficioDevido > 0
       && this.adicional25Devido
-      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Devido)
+      && dataCorrente.isSame(this.dataInicialadicional25Devido)
     ) {
-      // console.log(beneficioDevido);
-      // console.log((Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100));
       return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
     }
 
@@ -1754,6 +1793,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let beneficioDevidoAjustado = 0;
 
     beneficioDevido = this.aplicarAdicional25(dataCorrente, beneficioDevido);
+
 
     if (this.isTetos) {
       beneficioDevidoAjustado = this.aplicarTetosEMinimosTetos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido', tetoDevidos);
@@ -2089,6 +2129,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioRecebidoAjustado = 0;
+
+    // Aplicar adicional 25 Recebido
+    beneficioRecebido = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebido);
+
     if (this.isTetos) {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido,
         dataCorrente,
@@ -2127,7 +2171,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let beneficioRecebidoFinal = beneficioRecebidoAjustado * diasProporcionais;
-
 
 
     // Calcular proporcional no final recebido
@@ -2680,11 +2723,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       let valorC = 0;
       let valorMaisJuros = valor;
       let valorJuros = 0;
+
+      correcao = this.getCorrecaoMonetaria(moment(data, 'DD/MM/YYYY'))
+      valorC = (valorMaisJuros * correcao);
+      valorMaisJuros = valorC;
+
       if (aplicar && valor !== 0) {
 
-        correcao = this.getCorrecaoMonetaria(moment(data, 'DD/MM/YYYY'))
-        valorC =  (valorMaisJuros * correcao);
-        valorMaisJuros = valorC;
         jurosD = this.getJuros(moment(data, 'DD/MM/YYYY'));
         valorJuros = (valorMaisJuros * jurosD);
         valorMaisJuros += valorJuros;
@@ -2718,7 +2763,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       for (const rowDeducoes of this.listAcrescimosDeducoes) {
 
         valorMaisJurosD = getJurosCustos(rowDeducoes.aplicarJuros, rowDeducoes.data, rowDeducoes.valor);
-        
+
         rowDeducoes.rstValores = valorMaisJurosD;
         rowDeducoes.valorC = valorMaisJurosD.valorC;
         rowDeducoes.valorJuros = valorMaisJurosD.valorJuros;
