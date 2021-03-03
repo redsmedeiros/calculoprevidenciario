@@ -127,8 +127,6 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
         }
       });
 
-      console.log(this.listAcrescimosDeducoes);
-
       this.custasProcessolistOut.emit(this.listAcrescimosDeducoes);
     }
   }

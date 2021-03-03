@@ -138,7 +138,7 @@
                       [(ngModel)]="RRASemJuros"
                       class="checkbox"
                     />
-                    <span>Utilizar o Valor da Diferença corrigida Sem Juros para Rendimentos Recebidos Acumuladamente. </span>
+                    <span>Calcular Rendimentos Recebidos Acumuladamente Somente com Correção. </span>
                   </label>
                 </div>
               </div>
@@ -704,7 +704,7 @@
       <span class="widget-icon">
         <i class="fa fa-percent"></i>
       </span>
-      <h2>Juros</h2>
+      <h2>Juros (%)</h2>
     </header>
     <!-- widget div-->
     <div>
@@ -779,7 +779,7 @@
             </div>
             <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
               <label class="col-md-3 control-label"
-                >Juros anterior a janeiro 2003 (%):</label
+                >Até a Dezembro de 2002 2003 (%):</label
               >
               <div class="col-md-2">
                 <input
@@ -798,7 +798,7 @@
                 >
               </div>
               <label class="col-md-3 control-label"
-                >Juros posterior a janeiro 2003 (%):</label
+                >A partir de Janeiro de 2003 (%):</label
               >
               <div class="col-md-2">
                 <input
@@ -819,7 +819,7 @@
             </div>
             <div class="form-group" *ngIf="tipoDejurosSelecionado === 'manual'">
               <label class="col-md-3 control-label"
-                >Juros posterior a julho 2009 (%):</label
+                >A partir de Julho de 2009 (%):</label
               >
               <div class="col-md-2">
                 <input
@@ -917,7 +917,7 @@
       <span class="widget-icon">
         <i class="fa fa-money"></i>
       </span>
-      <h2>Honorários</h2>
+      <h2>Honorários Advocatícios</h2>
     </header>
     <!-- widget div-->
     <div>

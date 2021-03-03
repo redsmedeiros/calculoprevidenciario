@@ -882,9 +882,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.formData.taxa_ajuste_maxima_concedida = 0.0;
       }
 
-      this.formData.dip_valores_devidos = this.dipValoresDevidos;
-      this.formData.data_adicional_25 = this.dataInicialadicional25Devido;
-
       this.formData.list_devidos = null;
       if (this.listDevidos.length > 0) {
         this.formData.list_devidos = JSON.stringify(this.listDevidos);
@@ -899,6 +896,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (this.listAcrescimosDeducoes.length > 0) {
         this.formData.list_acrescimos_deducoes = JSON.stringify(this.listAcrescimosDeducoes);
       }
+
+      this.formData.data_adicional_25 = this.dataInicialadicional25Devido;
 
       this.formData.limit_60_sc = this.limit60SC;
       this.formData.rra_sem_juros = this.RRASemJuros;
@@ -954,14 +953,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.rmiValoresDevidosBuracoNegro = rstDevidos.rmiBuracoNegro;
     this.taxaAjusteMaximaEsperada = rstDevidos.irt;
     this.naoAplicarSMBeneficioEsperado = rstDevidos.reajusteMinimo;
-    this.dataInicialadicional25Devido = rstDevidos.dataInicialadicional25Devido;
+    this.dataInicialadicional25Devido = rstDevidos.dataAdicional25;
     this.calcularAbono13UltimoMes = rstDevidos.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
 
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-    // console.log(rstDevidos);
+     console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }
@@ -1094,6 +1093,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.cessacaoValoresDevidos = this.formatReceivedDate(this.formData.data_prevista_cessacao);
 
     this.dipValoresDevidos = this.formatReceivedDate(this.formData.dip_valores_devidos);
+    this.dataInicialadicional25Devido = this.formatReceivedDate(this.formData.data_adicional_25);
 
     // Espécie valores recebidos
     // this.especieValoresRecebidos = this.formData.tipo_aposentadoria_recebida;
@@ -1146,7 +1146,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
     this.numeroProcesso = this.formData.numero_processo;
     this.afastarPrescricao = this.formData.afastar_prescricao;
-    console.log(this.formData.calcular_abono_13_ultimo_mes)
+
     this.calcularAbono13UltimoMes = this.formData.calcular_abono_13_ultimo_mes;
     this.taxaAdvogadoAplicarCPCArt85 = this.formData.taxa_advogado_aplicar_CPCArt85;
 
@@ -1529,8 +1529,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public getValueSelectJurosAnualParaMensal() {
 
+
     const opcoesMensalParaAnual = [
-      { jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 1, value: '12_6' },
+      { jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, poupancaSelic: 1, value: '12_6' },
       // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
       { jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, poupancaSelic: 1, value: '6_selic' },
       // 6% ao ano (observando a SELIC - Poupança)
