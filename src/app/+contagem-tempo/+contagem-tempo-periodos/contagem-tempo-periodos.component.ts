@@ -414,6 +414,7 @@ isValid() {
       this.fator_condicao_especial = 1.0;
     }
 
+
   }
 
   // empresa
@@ -424,7 +425,7 @@ isValid() {
   }
 
   // fator_condicao_especial
-  if (this.isEmpty(this.fator_condicao_especial)) {
+  if (this.isEmpty(this.fator_condicao_especial) || (Number(this.fator_condicao_especial) == 1 && this.condicao_especial == 1)) {
     this.errors.add({ 'fator_condicao_especial': ['Insira um fator válido.'] });
   } else {
     this.errors.clear('fator_condicao_especial');
