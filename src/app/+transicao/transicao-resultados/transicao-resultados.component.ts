@@ -665,7 +665,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     popupWin.document.write(`<!doctype html>
                                 <html>
                                   <head>${css}</head>
-                                  <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
+                                  <title><b>Relatório de Análise das Regras de Transição - EC 103/2019 - ${this.seguradoTransicao.nome}</b></title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
                                    <footer class="mt-5">${rodape}</footer>
