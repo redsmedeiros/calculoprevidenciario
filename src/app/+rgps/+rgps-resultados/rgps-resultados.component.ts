@@ -488,6 +488,21 @@ export class RgpsResultadosComponent implements OnInit {
     return true;
   }
 
+  verificarTempoDeServicoProporcional(anosContribuicao, redutorProfessor, sexoSegurado, toll) {
+
+
+    const tempoNecessarioPropSexo = { 'm': 30, 'f': 25 }
+    const tempoNecessarioProporcional = (tempoNecessarioPropSexo[sexoSegurado] + toll) - redutorProfessor;
+
+    if (anosContribuicao < tempoNecessarioProporcional 
+        && (tempoNecessarioProporcional - anosContribuicao) > 0.0033333333333303017) {
+      return false;
+    }
+
+    return true;
+  }
+
+
   coeficienteProporcional(extra, porcentagem, toll) {
     let coeficienteProporcional = 0.7 + (Math.trunc(extra - toll) * porcentagem);
     coeficienteProporcional = (coeficienteProporcional > 1) ? 1 : coeficienteProporcional;
@@ -592,6 +607,7 @@ export class RgpsResultadosComponent implements OnInit {
     return valorBeneficio;
   }
 
+
   calcularExtra(tempoServico, redutorSexo) {
     let extra;
     if (this.tipoBeneficio === 6) {
@@ -602,7 +618,9 @@ export class RgpsResultadosComponent implements OnInit {
     return extra;
   }
 
+  // Pedagio
   calcularToll(tempoDeServico, porcentagem, proporcional, redutorSexo) {
+
     let toll = ((35 - proporcional - redutorSexo) - tempoDeServico) * porcentagem;
     toll = (toll < 0 || tempoDeServico == 'NaN') ? 0 : toll;
     //return 0;
@@ -1381,7 +1399,7 @@ export class RgpsResultadosComponent implements OnInit {
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
     if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
-     && calculo.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
+      && calculo.contribuicao_primaria_19 !== 'undefined-undefined-undefined') {
 
       calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
       calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
