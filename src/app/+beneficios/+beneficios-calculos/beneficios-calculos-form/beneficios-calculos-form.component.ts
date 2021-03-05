@@ -786,7 +786,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
       // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
-      
+
       if (this.isExits(this.competenciaInicioJuros)) {
         this.formData.competencia_inicio_juros = moment(this.competenciaInicioJuros, 'MM/YYYY').format('01/MM/YYYY');
       }
@@ -960,7 +960,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-     console.log(rstDevidos);
+    console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }
@@ -1212,7 +1212,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.dataInicialadicional25Devido,
       this.chkDemandasJudiciais,
       this.calcularAbono13UltimoMes,
-      );
+    );
 
     this.listDevidos.push(devidoMultiplo);
     this.rowDevidosEdit = (this.listDevidos.length > 0);
@@ -1236,7 +1236,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.naoAplicarSMBeneficioConcedido,
         this.dataInicialadicional2Recebido,
         this.calcularAbono13UltimoMesRecebidos,
-        );
+      );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
 
@@ -1251,10 +1251,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   dibValoresRecebidosChanged() {
 
-    if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
-      this.dipValoresRecebidos = this.dibValoresRecebidos;
-      // this.validRecebidos();
-    }
+    // if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
+    this.dipValoresRecebidos = this.dibValoresRecebidos;
+    this.dataInicialadicional2Recebido = '';
+    // this.validRecebidos();
+    // }
 
     if (this.chkUseSameDib) {
       if (this.dibValoresRecebidos !== undefined && this.dibValoresDevidos !== null) {
@@ -1266,9 +1267,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   dibValoresDevidosChanged() {
 
-    if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
-      this.dipValoresDevidos = this.dibValoresDevidos;
-    }
+    // if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
+
+    this.dipValoresDevidos = this.dibValoresDevidos;
+    this.dataInicialadicional25Devido = '';
+    //  }
 
     this.checkDevidosBuracoNegro();
   }

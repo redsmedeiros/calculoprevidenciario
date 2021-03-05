@@ -13008,6 +13008,10 @@ input[type=color].ui-autocomplete-loading, input[type=date].ui-autocomplete-load
   padding: 5px 10px !important
 }
 
+.table-condensed-fit.table>tbody>tr>td, .table-condensed-fit.table>tbody>tr>th, .table-condensed-fit.table>tfoot>tr>td, .table-condensed-fit.table>tfoot>tr>th, .table-condensed-fit.table>thead>tr>td, .table-condensed-fit.table>thead>tr>th {
+  padding: 3px 5px !important
+}
+
 .show-stats .progress {
   height: 7px;
   border-radius: 0;

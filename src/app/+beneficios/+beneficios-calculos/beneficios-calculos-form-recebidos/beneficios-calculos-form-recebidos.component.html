@@ -195,10 +195,10 @@
                             class="form-control"
                             [textMask]="{ mask: dateMask }"
                             name="dibValoresRecebidos"
-                            (blur)="
-                              dibValoresRecebidosChanged(); setCheckRevisao()
+                            (blur)="setCheckRevisao()"
+                            (change)="
+                              dibValoresRecebidosChanged(); validRecebidos()
                             "
-                            (change)="validRecebidos()"
                             [(ngModel)]="dibValoresRecebidos"
                             type="text"
                           />
@@ -309,7 +309,22 @@
                           >
                         </div>
                       </div>
-                      <div class="form-group"  *ngIf="['4','7','2','16','1','3','5','13','18'].includes(especieValoresRecebidos)"  >
+                      <div
+                        class="form-group"
+                        *ngIf="
+                          [
+                            '4',
+                            '7',
+                            '2',
+                            '16',
+                            '1',
+                            '3',
+                            '5',
+                            '13',
+                            '18'
+                          ].includes(especieValoresRecebidos)
+                        "
+                      >
                         <label class="col-md-7 control-label"
                           >Aplicar Adicional de 25%:
                         </label>
@@ -347,7 +362,23 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" *ngIf="adicional25Recebido == 1 && ['4','7','2','16','1','3','5','13','18'].includes(especieValoresRecebidos)">
+                      <div
+                        class="form-group"
+                        *ngIf="
+                          adicional25Recebido == 1 &&
+                          [
+                            '4',
+                            '7',
+                            '2',
+                            '16',
+                            '1',
+                            '3',
+                            '5',
+                            '13',
+                            '18'
+                          ].includes(especieValoresRecebidos)
+                        "
+                      >
                         <div>
                           <label
                             class="control-label"
