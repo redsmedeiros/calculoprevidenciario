@@ -1163,6 +1163,126 @@
       </article>
     </div>
 
+    <div class="row" id="printableCustosAdicionais">
+      <article
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="!isUpdatingCustasProcesso && listAcrescimosDeducoes.length > 0"
+      >
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [deletebutton]="false"
+        >
+          <header class="not-print">
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Crédito/Débito Adicional</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding widget-body-custom">
+              <div
+                class="well well-light"
+                *ngIf="listAcrescimosDeducoes.length === 0"
+              >
+                <strong>Não há itens na lista</strong>
+              </div>
+              <div>
+                <table
+                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
+                  *ngIf="
+                    !isUpdatingCustasProcesso &&
+                    listAcrescimosDeducoes.length > 0
+                  "
+                >
+                  <thead>
+                    <tr class="not-screen">
+                      <th class="text-center" colspan="7">
+                        <h2>Crédito/Débito Adicional</h2>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>Descrição</th>
+                      <th class="text-center">Data</th>
+                      <th class="text-center">Aplicar Juros</th>
+                      <th class="text-center">Valor</th>
+                      <th class="text-center">Valor Corrigido</th>
+                      <th class="text-center">Valor dos Juros</th>
+                      <th class="text-center">Valor mais Juros</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let acrescimoDeducaoLine of listAcrescimosDeducoes
+                      "
+                    >
+                      <td>
+                        {{ acrescimoDeducaoLine.descricao }}
+                      </td>
+                      <td class="text-center">
+                        {{ acrescimoDeducaoLine.data }}
+                      </td>
+                      <td class="text-center">
+                        {{ acrescimoDeducaoLine.aplicarJuros ? "Sim" : "Não" }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor)
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valorC)
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(
+                            acrescimoDeducaoLine.valorJuros
+                          )
+                        }}
+                      </td>
+                      <td class="text-center">
+                        {{
+                          definicaoMoeda.formatMoney(
+                            acrescimoDeducaoLine.valorMaisJuros
+                          )
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="4" class="text-right">
+                        <strong class="pull-right">Totais</strong>
+                      </td>
+                      <td class="text-center">
+                        {{ somaAcrescimosDeducoes.valor }}
+                      </td>
+                      <td class="text-center">
+                        {{ somaAcrescimosDeducoes.valorJuros }}
+                      </td>
+                      <td class="text-center">
+                        {{ somaAcrescimosDeducoes.valorMaisJuros }}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <div
+                *ngIf="isUpdating"
+                class="alert alert-info text-align-center"
+              >
+                <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+    </div>
+
     <div class="row" *ngIf="!isUpdating">
       <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <sa-widget
@@ -1231,125 +1351,7 @@
       </article>
     </div>
 
-    <div class="row" id="printableCustosAdicionais">
-      <article
-        class="col-sm-12 col-md-12 col-lg-12"
-        *ngIf="!isUpdatingCustasProcesso && listAcrescimosDeducoes.length > 0"
-      >
-        <sa-widget
-          [colorbutton]="false"
-          [editbutton]="false"
-          [deletebutton]="false"
-        >
-          <header class="not-print">
-            <span class="widget-icon">
-              <i class="fa fa-table"></i>
-            </span>
-            <h2>Crédito/Débito Adicional</h2>
-          </header>
-          <div>
-            <div class="widget-body no-padding widget-body-custom">
-              <div
-                class="well well-light"
-                *ngIf="listAcrescimosDeducoes.length === 0"
-              >
-                <strong>Não há itens na lista</strong>
-              </div>
-              <div>
-                <table
-                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
-                  *ngIf="
-                    !isUpdatingCustasProcesso &&
-                    listAcrescimosDeducoes.length > 0
-                  "
-                >
-                  <thead>
-                    <tr class="not-screen">
-                      <th class="text-center" colspan="6">
-                        <h2>Custos adicionais com Processo</h2>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th>Descrição</th>
-                      <th class="text-center">Data</th>
-                      <th class="text-center">Aplicar Juros</th>
-                      <th class="text-center">Valor</th>
-                      <th class="text-center">Valor Corrigido</th>
-                      <th class="text-center">Valor dos Juros</th>
-                      <th class="text-center">Valor mais Juros</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="
-                        let acrescimoDeducaoLine of listAcrescimosDeducoes
-                      "
-                    >
-                      <td>
-                        {{ acrescimoDeducaoLine.descricao }}
-                      </td>
-                      <td class="text-center">
-                        {{ acrescimoDeducaoLine.data }}
-                      </td>
-                      <td class="text-center">
-                        {{ acrescimoDeducaoLine.aplicarJuros ? "Sim" : "Não" }}
-                      </td>
-                      <td class="text-center">
-                        {{
-                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valor)
-                        }}
-                      </td>
-                      <td class="text-center">
-                        {{
-                          definicaoMoeda.formatMoney(acrescimoDeducaoLine.valorC)
-                        }}
-                      </td>
-                      <td class="text-center">
-                        {{
-                          definicaoMoeda.formatMoney(
-                            acrescimoDeducaoLine.valorJuros
-                          )
-                        }}
-                      </td>
-                      <td class="text-center">
-                        {{
-                          definicaoMoeda.formatMoney(
-                            acrescimoDeducaoLine.valorMaisJuros
-                          )
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colspan="4">
-                        <strong class="pull-right">Totais</strong>
-                      </td>
-                      <td class="text-center">
-                        {{ somaAcrescimosDeducoes.valor }}
-                      </td>
-                      <td class="text-center">
-                        {{ somaAcrescimosDeducoes.valorJuros }}
-                      </td>
-                      <td class="text-center">
-                        {{ somaAcrescimosDeducoes.valorMaisJuros }}
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-
-              <div
-                *ngIf="isUpdating"
-                class="alert alert-info text-align-center"
-              >
-                <h3><i class="fa fa-gear fa-3x fa-spin"></i> Carregando...</h3>
-              </div>
-            </div>
-          </div>
-        </sa-widget>
-      </article>
-    </div>
+    
 
     <div class="row">
       <article

@@ -134,7 +134,7 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
   private clearFormCustasProcesso() {
     this.custasFormDescricao = '';
     this.custasFormData = '';
-    this.custasFormValor = '';
+    this.custasFormValor = '0.00';
     this.custasFormAplicarJuros = false;
   }
 

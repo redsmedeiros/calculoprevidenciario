@@ -46,7 +46,6 @@
     "@angular/platform-browser": "4.1.3",
     "@angular/platform-browser-dynamic": "4.1.3",
     "@angular/router": "4.1.3",
-    "@mvpproperties/ng2-currency-mask": "^5.4.1",
     "X-editable": "github:vitalets/x-editable",
     "angular-xeditable": "~0.8.1",
     "angular2-text-mask": "^9.0.0",

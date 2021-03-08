@@ -180,16 +180,26 @@
                             currencyMask
                             [options]="{ 
                               align: 'right',
-                              thousands: '.',
-                              decimal: ',', 
                               allowNegative: true,
-                              allowNegativeZero: true
+                              allowNegativeZero: true,
+                              decimal: ',',
+                              precision: 2,
+                              prefix: '',
+                              suffix: '',
+                              thousands: '.'
                             }"
                             [(ngModel)]="custasFormValor"
                             
                             class="form-control"
                             type="text"
                           />
+                          <input
+                          name="custasFormValor"
+                          [(ngModel)]="custasFormValor"                         
+                          class="form-control"
+                          step="0.01"
+                          type="number"
+                        />
                           <small
                             *ngIf="errors.has('custasFormValor')"
                             class="text-danger"

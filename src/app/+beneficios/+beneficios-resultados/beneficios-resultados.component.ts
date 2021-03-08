@@ -349,7 +349,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               //  this.setInicioRecebidosEDevidosIndices();
               //console.log(this.calculo);
 
-              this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
+
               if (this.calculo.aplicar_ajuste_maximo_98_2003 == '1') {
                 this.isTetos = true;
                 this.calculoType = 'AJ'
@@ -360,8 +360,12 @@ export class BeneficiosResultadosComponent implements OnInit {
                   this.moeda = moeda;
                 });
 
-              const date_inicio_devido = (this.calculo.previa_data_pedido_beneficio_esperado !== '0000-00-00') ?
-                this.calculo.previa_data_pedido_beneficio_esperado : this.calculo.data_pedido_beneficio_esperado;
+              let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
+
+              if (this.calculo.previa_data_pedido_beneficio_esperado &&
+                moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
+                date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+              }
 
               const indiceDevidoRST = this.IndiceDevido.getByDateRange(
                 moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
@@ -549,7 +553,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    console.log(this.listRecebidos);
     if (this.listRecebidos != null && this.listRecebidos.length > 0) {
 
       for (const recebidoRow of this.listRecebidos) {
@@ -562,7 +565,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         recebidoRow.indiceInps = [];
 
         let inicioRecebido = recebidoRow.dib;
-        if (recebidoRow.dib.isAfter(recebidoRow.dibAnterior)) {
+        if (recebidoRow.dibAnterior && recebidoRow.dib.isAfter(recebidoRow.dibAnterior)) {
           inicioRecebido = recebidoRow.dibAnterior;
         }
 
@@ -1276,7 +1279,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       const somaDiferencaMensalValorAnterior = this.somaDiferencaMensal;
 
-      console.log(tableData);
+      // console.log(tableData);
       for (const rowRST of tableData) {
 
         let competencia = moment(rowRST.competencia, 'MM/YYYY');
@@ -1311,11 +1314,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaCorrigidaJuros = (diferencaCorrigida + valorJuros);
           rowRST.diferenca_juros = diferencaCorrigidaJuros;
 
-          rowRST.diferenca_corrigida_juros = this.formatMoney(diferencaCorrigidaJuros, 'R$', true); ;
+          rowRST.diferenca_corrigida_juros = this.formatMoney(diferencaCorrigidaJuros, 'R$', true);
           rowRST.diferenca_corrigida_jurosN = diferencaCorrigidaJuros;
 
           honorarios = this.calculoHonorarios(competencia, valorJuros, diferencaCorrigida, rowRST.beneficio_devidoH);
-          this.calcularSomaCompetenciasMes(competencia, diferencaCorrigida, (valorJuros + diferencaCorrigida));
+          this.calcularSomaCompetenciasMes(competencia, diferencaCorrigida, diferencaCorrigidaJuros);
 
         } else if (moment(this.calculo.data_acao_judicial).isBefore(competencia, 'month')) {
 
@@ -1325,7 +1328,9 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaCorrigidaJuros += rowRST.diferenca_corrigidaN + (rowRST.diferenca_corrigidaN * rowRST.jurosN);
           honorarios += Math.round(rowRST.honorariosN * 100) / 100;
 
-          this.calcularSomaCompetenciasMes(competencia, rowRST.diferenca_corrigidaN, (rowRST.jurosN + rowRST.diferenca_corrigidaN));
+          this.calcularSomaCompetenciasMes(competencia,
+            rowRST.diferenca_corrigidaN,
+            (rowRST.diferenca_corrigidaN + (rowRST.diferenca_corrigidaN * rowRST.jurosN)));
 
         }
 
@@ -3437,6 +3442,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   // Seção 1
   setInicioRecebidosEDevidos() {
 
+    this.stringTabelaCorrecaoMonetaria = this.getStringTabelaCorrecaoMonetaria();
+
     // verificar se existe recebido
     this.calculo.beneficio_nao_concedido = (this.listRecebidos.length == 0 &&
       (this.calculo.data_pedido_beneficio == null || this.calculo.valor_beneficio_concedido <= 0));
@@ -3999,9 +4006,10 @@ export class BeneficiosResultadosComponent implements OnInit {
             .table>tbody>tr>td, .table>tbody>tr>th,
               .table>tfoot>tr>td, .table>tfoot>tr>th,
               .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
-              .table>tbody>tr>td { white-space: nowrap !important; font-size:12px !important;}
+              .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px !important;}
               footer{text-align: center;}
             .text-center{ text-align: center; }
+            .text-right{ text-align: right; }
             h1{ text-align: center; }
             footer{text-align: center; margin-top: 50px;}
             title{color: #ffffff !important; background-color:White !important;}
