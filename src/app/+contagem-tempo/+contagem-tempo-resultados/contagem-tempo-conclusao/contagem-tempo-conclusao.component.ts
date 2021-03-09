@@ -38,6 +38,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoTotalConFator99: any;
   public tempoTotalConFator15: any;
   public tempoTotalConFator19: any; // Data EC nº 103/2019
+  public tempoTotalConFatorUltimoVinculo: any; // Data EC nº 103/2019
 
   public carencia = 0;
   public carencia88 = 0;
@@ -56,6 +57,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idade360Atual: any;
   public idade360EC103: any;
   public idade360AteEC20: any;
+  public idade360AteUltimoVinculo: any;
 
 
 
@@ -68,6 +70,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public isUpdateTotalTempoIdadeA = true;
   public isUpdateTotalTempoIdadeB = true;
   public isUpdateTotalTempoIdadeEC103 = true;
+  public isUpdateTotalTempoIdadeUltimoVinculo = true;
 
   // parametros EC nº 103/2019
   public isPeridoAposReforma = false;
@@ -80,7 +83,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoCumprirAposItentegal: any; // Tempo a cumprir para Aposentadoria Integral
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
-  public somatoriaTempoContribIdadeEC103: any; // Somatória do tempo de contribuição e idade atual
+  public somatoriaTempoContribIdadeEC103: any; // Somatória do tempo de contribuição e idade ate EC103
+  public somatoriaTempoContribIdadeUltimoVinculo: any; // Somatória do tempo de contribuição e idade Ate o ultimo Vinculo
 
   public dadosParaExportar: any; // dados para calcular RGPS
 
@@ -374,6 +378,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let count99 = 0;
       let count15 = 0;
       let count19 = 0;
+      let countUltimoVinculo = 0;
 
       const fimContador88 = this.momentEndFaixaContador(this.fimContador88);
       const fimContador91 = this.momentEndFaixaContador(this.fimContador91);
@@ -381,6 +386,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const fimContador99 = this.momentEndFaixaContador(this.fimContador99);
       const fimContador15 = this.momentEndFaixaContador(this.fimContador15);
       const fimContador19 = this.momentEndFaixaContador(this.fimContador19);
+      const fimUltimoVinculo = this.momentEndFaixaContador(this.limitesDoVinculo.fim);
 
 
       let rstMelhorTempo = { melhorTempo: 0, finalVinculo: false };
@@ -421,6 +427,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count19 += (auxiliarDate.isSame(fimContador19, 'month')) ? fimContador19.date() : rstMelhorTempo.melhorTempo;
           };
 
+          if (auxiliarDate.isSameOrBefore(fimUltimoVinculo, 'month')) {
+            countUltimoVinculo += (auxiliarDate.isSame(fimUltimoVinculo, 'month')) ? fimUltimoVinculo.date() : rstMelhorTempo.melhorTempo;
+          };
+
         }
 
         auxiliarDate = moment(this.toDateString(auxiliarDate.clone()), 'DD/MM/YYYY').add(1, 'M');
@@ -432,6 +442,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         count = objSomaPeriodos.soma;
       }
 
+      countUltimoVinculo = this.checkFimPeriodoApliacarAjuste(countUltimoVinculo, count, fimUltimoVinculo, fimContadorDias);
       count19 = this.checkFimPeriodoApliacarAjuste(count19, count, fimContador19, fimContadorDias);
       count15 = this.checkFimPeriodoApliacarAjuste(count15, count, fimContador15, fimContadorDias);
       count99 = this.checkFimPeriodoApliacarAjuste(count99, count, fimContador99, fimContadorDias);
@@ -445,7 +456,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
       this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
+      this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
+
+      // console.log(this.tempoTotalConFatorUltimoVinculo);
       // console.log(this.periodosList);
       // console.log(somateste);
       // console.log(somatesteF);
@@ -767,6 +781,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+  public somatoriaTempoContribuicaoIdadeUltimoVinculo() {
+
+
+    return new Promise((resolve, reject) => {
+      let rstTemp = 0;
+
+      rstTemp = (this.tempoTotalConFatorUltimoVinculo.fullDays + this.idade360AteUltimoVinculo.fullDays);
+      this.somatoriaTempoContribIdadeUltimoVinculo = DefinicaoTempo.convertD360ToDMY(rstTemp);
+
+      if (this.somatoriaTempoContribIdadeUltimoVinculo.fullDays > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+
+
+  }
+
+
+
 
   private calculaIdades360Mes30() {
 
@@ -780,6 +815,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
     this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
+    this.idade360AteUltimoVinculo = DefinicaoTempo.calcularTempo360(dataNasc, this.limitesDoVinculo.fim.format('YYYY-MM-DD'));
 
   }
 
@@ -817,6 +853,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.somatoriaTempoContribuicaoIdadeAteEC103().then(result => {
       // console.log(result);
       this.isUpdateTotalTempoIdadeEC103 = false;
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    this.somatoriaTempoContribuicaoIdadeUltimoVinculo().then(result => {
+      // console.log(result);
+      this.isUpdateTotalTempoIdadeUltimoVinculo = false;
     }).catch((error) => {
       console.log(error);
     });
