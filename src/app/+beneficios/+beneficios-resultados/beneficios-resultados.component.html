@@ -905,12 +905,15 @@
                         </td>
                       </tr>
                       <tr *ngIf="!exibirHonorarioscpc85">
-                        <td  style="text-align: center" colspan="2">
-                          <b>{{
+                        <td width="30%" style="text-align: left">
+                          <b>Percentual de Honorário Sobre:</b>
+                        </td>
+                        <td  style="text-align: left">
+                          {{
                             getTipoHonorario(
                               calculo.taxa_advogado_aplicacao_sobre
                             )
-                          }}</b>
+                          }}
                         </td>
                       </tr>
                       <tr *ngIf="calculo.acordo_pedido != 0">
