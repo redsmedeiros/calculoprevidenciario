@@ -20,6 +20,7 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
   private custasFormDescricao: any;
   private custasFormData: any;
   private custasFormValor: any;
+  private custasFormValorLastValue: any;
   private custasFormAplicarJuros = false;
 
   @Input() errors;
@@ -134,7 +135,8 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
   private clearFormCustasProcesso() {
     this.custasFormDescricao = '';
     this.custasFormData = '';
-    this.custasFormValor = '0.00';
+    this.custasFormValor = '';
+    this.custasFormValorLastValue = '';
     this.custasFormAplicarJuros = false;
   }
 
@@ -173,14 +175,26 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
 
   }
 
-
   public showChildModalCustasProcesso(): void {
     this.custasProcessoModal.show();
   }
 
   public hideChildModalCustasProcesso(): void {
     this.custasProcessoModal.hide();
+    this.clearFormCustasProcesso();
   }
 
+  public remmoveNegative(ev) {
+
+    if (ev.keyCode === 8 && this.custasFormValor === -0.0) {
+      this.custasFormValor = '';
+    }
+
+    if (ev.keyCode === 189 && this.custasFormValorLastValue < 0) {
+      this.custasFormValor *= -1;
+    }
+
+    this.custasFormValorLastValue = this.custasFormValor;
+  }
 
 }

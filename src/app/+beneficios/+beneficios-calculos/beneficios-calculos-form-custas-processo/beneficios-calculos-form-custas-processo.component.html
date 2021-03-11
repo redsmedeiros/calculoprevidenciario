@@ -189,18 +189,12 @@
                               suffix: '',
                               thousands: '.'
                             }"
+                            (keyup)="remmoveNegative($event)" 
                             [(ngModel)]="custasFormValor"
                             
                             class="form-control"
                             type="text"
                           />
-                          <input
-                          name="custasFormValor"
-                          [(ngModel)]="custasFormValor"                         
-                          class="form-control"
-                          step="0.01"
-                          type="number"
-                        />
                           <small
                             *ngIf="errors.has('custasFormValor')"
                             class="text-danger"
