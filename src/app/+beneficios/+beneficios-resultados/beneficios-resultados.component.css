@@ -55,3 +55,11 @@ a.dcontexto:hover span{
           padding: 5px 6px !important;
           font-size: 0.95rem;
  }
+
+ .td-width-30{
+     width: 30% !important;
+ }
+
+ .td-width-40{
+     width: 40% !important;
+ }

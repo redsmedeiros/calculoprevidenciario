@@ -65,7 +65,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Nome:</b>
                       </td>
                       <td >
@@ -73,7 +73,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="segurado.numero_documento">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b *ngIf="segurado.id_documento == 1">PIS:</b>
                         <b *ngIf="segurado.id_documento == 2">PASEP:</b>
                         <b *ngIf="segurado.id_documento == 3">CPF:</b>
@@ -85,7 +85,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Data de Nascimento:</b>
                       </td>
                       <td >
@@ -93,7 +93,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Sexo:</b>
                       </td>
                       <td >
@@ -161,7 +161,7 @@
                     </thead>
                     <tbody>
                       <tr *ngIf="calculo.numero_processo != ''">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Número do Processo:</b>
                         </td>
                         <td >
@@ -169,7 +169,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Ajuizamento da Ação:</b>
                         </td>
                         <td >
@@ -177,7 +177,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data da Citação:</b>
                         </td>
                         <td >
@@ -185,7 +185,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Atualizado até:</b>
                         </td>
                         <td >
@@ -195,7 +195,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.maturidade != 0">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Vincendas:</b>
                         </td>
                         <td >
@@ -203,7 +203,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.limit_60_sc">
-                        <td width="30%" style="text-align: left" >
+                        <td class="td-width-30" style="text-align: left" >
                           <b>O Valor da Causa está Limitado a 60 SM:</b>
                         </td>
                         <td >
@@ -211,7 +211,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.limit_60_sc">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Percentual de Limitação:</b>
                         </td>
                         <td >
@@ -219,7 +219,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left" >
+                        <td class="td-width-30" style="text-align: left" >
                           <b>Rendimentos Recebidos Acumuladamente : </b>
                         </td>
                         <td >
@@ -270,7 +270,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Espécie:</b>
                         </td>
                         <td>
@@ -278,7 +278,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.numero_beneficio_devido">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Número do Benefício:</b>
                         </td>
                         <td>
@@ -286,7 +286,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Início de Benefício - DIB:</b>
                         </td>
                         <td>
@@ -296,7 +296,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Início de Pagamento - DIP:</b>
                         </td>
                         <td>
@@ -309,7 +309,7 @@
                           '0000-00-00'
                         "
                       >
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data Inicial do Benefício Anterior:</b>
                         </td>
                         <td>
@@ -321,7 +321,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data Final dos Atrasados:</b>
                         </td>
                         <td>
@@ -329,7 +329,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI:</b>
                         </td>
                         <td>
@@ -342,7 +342,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI antes da Revisão:</b>
                         </td>
                         <td>
@@ -355,7 +355,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                         </td>
                         <td>
@@ -369,15 +369,23 @@
                       </tr>
 
                       <tr *ngIf="calculo.taxa_ajuste_maxima_esperada">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Índice de Limitação no Teto:</b>
                         </td>
                         <td>
                           {{ calculo.taxa_ajuste_maxima_esperada }}
                         </td>
                       </tr>
+                      <tr>
+                        <td class="td-width-30" style="text-align: left">
+                          <b> Aplicar Adicional de 25%:</b>
+                        </td>
+                        <td>
+                          {{ (adicional25Devido)? "Sim" : "Não" }}
+                        </td>
+                      </tr>
                        <tr *ngIf="adicional25Devido">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b> Data de Início do Adicional de 25%:</b>
                         </td>
                         <td>
@@ -385,7 +393,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.tipo_aposentadoria == 22">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b> Número de Dependentes:</b>
                         </td>
                         <td>
@@ -441,7 +449,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Espécie:</b>
                         </td>
                         <td>
@@ -453,7 +461,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.numero_beneficio_recebido">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Número do Benefício:</b>
                         </td>
                         <td>
@@ -461,7 +469,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Início de Benefício - DIB:</b>
                         </td>
                         <td>
@@ -474,7 +482,7 @@
                           '0000-00-00'
                         "
                       >
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data Inicial do Benefício Anterior se Houver:</b>
                         </td>
                         <td>
@@ -484,7 +492,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data Final Recebidos:</b>
                         </td>
                         <td>
@@ -492,7 +500,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI:</b>
                         </td>
                         <td>
@@ -505,7 +513,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                         </td>
                         <td>
@@ -518,7 +526,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                         </td>
                         <td>
@@ -531,7 +539,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Índice de Limitação no Teto:</b>
                         </td>
                         <td>
@@ -574,7 +582,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Espécie:</b>
                         </td>
                         <td>
@@ -584,7 +592,7 @@
                         </td>
                       </tr>
                       <tr *ngIf=" recebidoLine.numeroBeneficio">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Número do Benefício:</b>
                         </td>
                         <td>
@@ -592,7 +600,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Início de Benefício - DIB:</b>
                         </td>
                         <td>
@@ -600,7 +608,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Data de Início de Pagamento - DIP:</b>
                         </td>
                         <td>
@@ -609,7 +617,7 @@
                       </tr>
                       <tr
                       *ngIf="recebidoLine.dibAnterior">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Data Inicial do Benefício Anterior se Houver:</b>
                       </td>
                       <td>
@@ -619,7 +627,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Data Final Recebidos:</b>
                       </td>
                       <td>
@@ -627,7 +635,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
                       <td>
@@ -637,7 +645,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                       </td>
                       <td>
@@ -647,7 +655,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
                       </td>
                       <td>
@@ -660,15 +668,23 @@
                     </tr>
                
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Índice de Limitação no Teto:</b>
                       </td>
                       <td>
                         {{ recebidoLine.irt ? recebidoLine.irt : 0 }}
                       </td>
                     </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b> Aplicar Adicional de 25%:</b>
+                      </td>
+                      <td>
+                        {{ (recebidoLine.dataAdicional25)? "Sim" : "Não" }}
+                      </td>
+                    </tr>
                     <tr *ngIf="recebidoLine.dataAdicional25">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b> Data de Início do Adicional de 25%:</b>
                       </td>
                       <td>
@@ -676,7 +692,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Permitir Inferior ao Mínimo:</b>
                       </td>
                       <td>
@@ -743,7 +759,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>
                             {{ stringTabelaCorrecaoMonetaria }}:
                           </b>
@@ -783,29 +799,8 @@
             <!-- widget div-->
               <!-- widget content -->
               <div class="widget-body widget-body-custom no-margin no-padding">
-                <!-- <ul class="list-unstyled">
-                  <li>
-                    <b>Juros Anterior a Janeiro de 2003:</b>
-                    {{ calculo.previo_interesse_2003 }}%
-                  </li>
-                  <li>
-                    <b>Juros Posterior a Janeiro de 2003:</b>
-                    {{ calculo.pos_interesse_2003 }}%
-                  </li>
-                  <li>
-                    <b>Juros Posterior a Julho de 2009:</b>
-                    {{ calculo.pos_interesse_2009 }}%
-                  </li>
-                  <li>
-                    <strong>{{ jurosEmFormatoAnual }}</strong>
-                  </li>
-                </ul> -->
                 <div id="printableJuros" class="no-margin no-padding">
                   <table class="table table-bordered table-hover">
-                    <!-- <caption>
-                      <h2>Juros</h2>
-                    </caption> -->
-
                     <thead class="not-screen">
                       <tr>
                         <th colspan="2">
@@ -815,7 +810,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Até a Dezembro de 2002:</b>
                         </td>
                         <td>
@@ -823,16 +818,16 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>A partir de Janeiro de 2003:</b>
                         </td>
                         <td>{{ calculo.pos_interesse_2003 }}% ao mês</td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>A partir de Julho de 2009:</b>
                         </td>
-                        <td>{{ calculo.pos_interesse_2009 }}% ao mês, caso a taxa selic ao ano seja superior à 8,5%, ou 70% da taxa Selic ao ano, mensalizada, nos demais casos</td>
+                        <td>{{ calculo.pos_interesse_2009 }}% ao mês, caso a taxa selic ao ano seja superior à 8,5%,<br class="not-screen"> ou 70% da taxa Selic ao ano, mensalizada, nos demais casos</td>
                       </tr>
                       <!-- <tr *ngIf="jurosEmFormatoAnual != ''">
                         <td  style="text-align: center" colspan="2">
@@ -886,7 +881,7 @@
                     </thead>
                     <tbody>
                       <tr *ngIf="calculo.percentual_taxa_advogado != 0">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Intervalo de Honorários:</b>
                         </td>
                         <td >
@@ -897,7 +892,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.percentual_taxa_advogado != 0">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Percentual dos Honorários:</b>
                         </td>
                         <td >
@@ -905,7 +900,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="!exibirHonorarioscpc85">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Percentual de Honorário Sobre:</b>
                         </td>
                         <td  style="text-align: left">
@@ -917,7 +912,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="calculo.acordo_pedido != 0">
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Percentual do Acordo Judicial:</b>
                         </td>
                         <td >
@@ -947,7 +942,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td  width="30%" style="text-align: left">
+                        <td  class="td-width-30" style="text-align: left">
                           <b>Intervalo de Honorários:</b>
                         </td>
                         <td>
@@ -958,7 +953,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td  width="30%" style="text-align: left">
+                        <td  class="td-width-30" style="text-align: left">
                           <b>Honorários Conforme § 3º, art. 85, do CPC/2015:</b>
                         </td>
                         <td>
@@ -974,7 +969,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td  width="30%" style="text-align: left">
+                        <td  class="td-width-30" style="text-align: left">
                           <b>Sálario Mínimo Considerado:</b>
                         </td>
                         <td>
@@ -982,7 +977,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td  width="30%" style="text-align: left">
+                        <td  class="td-width-30" style="text-align: left">
                           <b>Competência Sálario Mínimo:</b>
                         </td>
                         <td>
@@ -1005,7 +1000,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Honorários Valor Fixo:</b>
                         </td>
                         <td>
@@ -1013,7 +1008,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td width="30%" style="text-align: left">
+                        <td class="td-width-30" style="text-align: left">
                           <b>Mês da Condenação dos Honorários:</b>
                         </td>
                         <td>
@@ -1387,7 +1382,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Diferença Corrigida:</b>
                       </td>
                       <td >
@@ -1399,7 +1394,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Valor dos Juros: </b>
                       </td>
                       <td >
@@ -1409,7 +1404,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Sub Total (diferença corrigida + juros): </b>
                       </td>
                       <td >
@@ -1418,12 +1413,12 @@
                             tratarConclusao(somaDiferencaCorrigida + somaJuros)
                           }}"
                         >
-                          {{ formatMoney(somaDiferencaCorrigida + somaJuros) }}
+                          {{ formatMoney(somaTotalSegurado) }}
                         </span>
                       </td>
                     </tr>
                     <tr *ngIf="calculo.maturidade != 0">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Total Vincendas: </b>
                       </td>
                       <td >
@@ -1433,7 +1428,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Honorários Advocatícios: </b>
                       </td>
                       <td >
@@ -1443,7 +1438,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="listAcrescimosDeducoes.length > 0">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Custos Adicionais: </b>
                       </td>
                       <td >
@@ -1459,7 +1454,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Total Geral: </b>
                       </td>
                       <td >
@@ -1497,7 +1492,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Diferença Corrigida:</b>
                       </td>
                       <td>
@@ -1509,7 +1504,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Valor dos Juros: </b>
                       </td>
                       <td>
@@ -1519,7 +1514,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Sub Total (diferença corrigida + juros): </b>
                       </td>
                       <td>
@@ -1533,7 +1528,7 @@
                       </td>
                     </tr>
                     <tr *ngIf="calculo.maturidade != 0">
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Total Vincendas: </b>
                       </td>
                       <td>
@@ -1543,7 +1538,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Honorários Advocatícios: </b>
                       </td>
                       <td>
@@ -1553,7 +1548,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td width="30%" style="text-align: left">
+                      <td class="td-width-30" style="text-align: left">
                         <b>Total Geral: </b>
                       </td>
                       <td>

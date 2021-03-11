@@ -899,8 +899,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioRecebidoString.resultString = this.formatMoney(0.0, siglaDataCorrente);
       }
 
-      diferencaMensal = beneficioDevido - beneficioRecebido;
-      diferencaCorrigida = (correcaoMonetaria === 0) ? diferencaMensal : diferencaMensal * correcaoMonetaria;
+      diferencaMensal = this.roundMoeda(beneficioDevido - beneficioRecebido);
+      diferencaCorrigida = (correcaoMonetaria === 0) ? diferencaMensal : this.roundMoeda(diferencaMensal * correcaoMonetaria);
 
       if (juros > 0) {
         valorJuros = diferencaCorrigida * juros;
@@ -922,7 +922,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-      valorDevidohonorario = (beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
+      valorDevidohonorario = this.roundMoeda((beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros));
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
       if (diferencaCorrigidaJuros.string.indexOf('prescrita') != -1 && this.considerarPrescricao) {
@@ -1000,19 +1000,19 @@ export class BeneficiosResultadosComponent implements OnInit {
         tableData.push(line);
       }
 
-      this.somaDevidosCorrigido += Math.round(beneficioDevido * 100) / 100;
-      this.somaRecebidosCorrigido += Math.round(beneficioRecebido * 100) / 100;
+      this.somaDevidosCorrigido += this.roundMoeda(beneficioDevido);
+      this.somaRecebidosCorrigido += this.roundMoeda(beneficioRecebido);
 
 
 
       if (!isPrescricao) {
         // Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-        this.somaDiferencaMensal += Math.round(diferencaMensal * 100) / 100;
-        this.somaCorrecaoMonetaria += Math.round(correcaoMonetaria * 100) / 100;
-        this.somaDiferencaCorrigida += Math.round(diferencaCorrigida * 100) / 100;
-        this.somaDiferencaCorrigidaJuros += Math.round(valorNumericoDiferencaCorrigidaJurosObj.numeric * 100) / 100;
-        this.somaHonorarios += Math.round(honorarios * 100) / 100;
-        this.somaJuros += Math.round(valorJuros * 100) / 100;
+        this.somaDiferencaMensal += this.roundMoeda(diferencaMensal);
+        this.somaCorrecaoMonetaria += this.roundMoeda(correcaoMonetaria);
+        this.somaDiferencaCorrigida += this.roundMoeda(diferencaCorrigida);
+        this.somaDiferencaCorrigidaJuros += this.roundMoeda(valorNumericoDiferencaCorrigidaJurosObj.numeric);
+        this.somaHonorarios += this.roundMoeda(honorarios);
+        this.somaJuros += this.roundMoeda(valorJuros);
 
         // para calcular o homorario sobre a soma do devido
 
@@ -1055,18 +1055,18 @@ export class BeneficiosResultadosComponent implements OnInit {
       ) {
 
         let beneficioRecebidoAbono;
-        let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos;
+        let beneficioDevidoAbono = this.roundMoeda(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos);
 
         if (beneficioRecebido <= 0 || (datacessacaoBeneficioRecebido != null && dataCorrente > datacessacaoBeneficioRecebido)) {
           beneficioRecebidoAbono = 0.0;
         } else {
 
-          if (abono13UltimoRecebido && abonoProporcionalRecebidos == 0
-            && dataPedidoBeneficio.isBefore(datacessacaoBeneficioRecebido, 'year')) {
-            abonoProporcionalRecebidos = 1;
-          }
-
-          beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos;
+          // if (abono13UltimoRecebido && abonoProporcionalRecebidos == 0
+          //   && dataPedidoBeneficio.isBefore(datacessacaoBeneficioRecebido, 'year')) {
+          //   abonoProporcionalRecebidos = 1;
+          // }
+          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+          beneficioRecebidoAbono = this.roundMoeda(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
 
         }
 
@@ -1077,12 +1077,11 @@ export class BeneficiosResultadosComponent implements OnInit {
             && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) {
 
             abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
-            beneficioDevidoAbono = beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos;
+            beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos);
 
           }
 
         }
-
 
         if (abono13UltimoRecebido) {
 
@@ -1090,9 +1089,11 @@ export class BeneficiosResultadosComponent implements OnInit {
             this.isExits(datacessacaoBeneficioRecebido) && beneficioRecebidoAbono > 0 &&
             dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
           ) { // datacessacaoBeneficioRecebido
+            // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
 
+            beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade;
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
-            beneficioRecebidoAbono = beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos;
+            beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos);
 
           }
         }
@@ -1133,18 +1134,18 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
         if (dataCorrente.isBefore(this.dataInicioRecebidos, 'month')) {
-          diferencaMensal = beneficioDevidoAbono;
+          diferencaMensal = this.roundMoeda(beneficioDevidoAbono);
         } else if (dataCorrente.isBefore(this.dataInicioDevidos, 'month')) {
-          diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          diferencaMensal = this.roundMoeda(beneficioDevidoAbono - beneficioRecebidoAbono);
         } else if (dataCorrente.isSameOrAfter(this.dataInicioRecebidos, 'month')
           && dataCorrente.isSameOrAfter(this.dataInicioDevidos, 'month')) {
-          diferencaMensal = beneficioDevidoAbono - beneficioRecebidoAbono;
+          diferencaMensal = this.roundMoeda(beneficioDevidoAbono - beneficioRecebidoAbono);
         }
-       
 
-        diferencaCorrigida = (correcaoMonetaria === 0) ? diferencaMensal : diferencaMensal * correcaoMonetaria;
+
+        diferencaCorrigida = (correcaoMonetaria === 0) ? diferencaMensal : this.roundMoeda(diferencaMensal * correcaoMonetaria);
         // diferencaCorrigida = diferencaMensal * correcaoMonetaria;
-        valorJuros = diferencaCorrigida * juros;
+        valorJuros = this.roundMoeda(diferencaCorrigida * juros);
 
         diferencaCorrigidaJuros = this.getDiferencaCorrigidaJuros(dataCorrente,
           valorJuros,
@@ -1153,7 +1154,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
         // valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
-        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + valorJuros;
+        valorDevidohonorario = this.roundMoeda((beneficioDevidoAbono * correcaoMonetaria) + valorJuros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
@@ -1222,27 +1223,27 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
 
 
-        this.somaDevidosCorrigido += Math.round(beneficioDevidoAbono * 100) / 100;
-        this.somaRecebidosCorrigido += Math.round(beneficioRecebidoAbono * 100) / 100;
+        this.somaDevidosCorrigido += this.roundMoeda(beneficioDevidoAbono);
+        this.somaRecebidosCorrigido += this.roundMoeda(beneficioRecebidoAbono);
 
 
         if (!isPrescricao) {
           //Se a dataCorrente nao estiver prescrita, soma os valores para as variaveis da Tabela de Conclusões
-          this.somaDiferencaMensal += Math.round(diferencaMensal * 100) / 100;
-          this.somaCorrecaoMonetaria += Math.round(correcaoMonetaria * 100) / 100;
-          this.somaDiferencaCorrigida += Math.round(diferencaCorrigida * 100) / 100;
-          this.somaHonorarios += Math.round(honorarios * 100) / 100;
-          this.somaJuros += Math.round(valorJuros * 100) / 100;
-          this.somaDiferencaCorrigidaJuros += Math.round(valorNumericoDiferencaCorrigidaJurosObj.numeric * 100) / 100;
+          this.somaDiferencaMensal += this.roundMoeda(diferencaMensal);
+          this.somaCorrecaoMonetaria += this.roundMoeda(correcaoMonetaria);
+          this.somaDiferencaCorrigida += this.roundMoeda(diferencaCorrigida);
+          this.somaHonorarios += this.roundMoeda(honorarios);
+          this.somaJuros += this.roundMoeda(valorJuros);
+          this.somaDiferencaCorrigidaJuros += this.roundMoeda(valorNumericoDiferencaCorrigidaJurosObj.numeric);
 
           // para calcular o homorario sobre a soma do devido 
 
           if (dataCorrente.isSameOrBefore(dataFinalParaHonorarioDevido)) {
 
-            this.somaDevidosreajustadosAtefinalHonorario += (beneficioDevidoAbono * correcaoMonetaria) +
+            this.somaDevidosreajustadosAtefinalHonorario += this.roundMoeda(beneficioDevidoAbono * correcaoMonetaria) +
               (beneficioDevidoAbono * correcaoMonetaria * juros);
 
-            this.somaDiferencaReajustadosAtefinalHonorario += valorNumericoDiferencaCorrigidaJurosObj.numeric;
+            this.somaDiferencaReajustadosAtefinalHonorario += this.roundMoeda(valorNumericoDiferencaCorrigidaJurosObj.numeric);
 
           }
 
@@ -1328,21 +1329,26 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaMensal = this.limit60SCValor.valor;
           rowRST.diferenca_mensal = this.limit60SCValor.valorString;
 
-          diferencaCorrigida = this.limit60SCValor.valor * rowRST.correcao_monetariaN;
+          diferencaCorrigida = this.roundMoeda(this.limit60SCValor.valor * rowRST.correcao_monetariaN);
           rowRST.diferenca_corrigida = this.formatMoney(diferencaCorrigida, 'R$', true);
 
-          valorJuros = diferencaCorrigida * rowRST.jurosN;
+          valorJuros = this.roundMoeda(diferencaCorrigida * rowRST.jurosN);
           rowRST.valor_juros = this.formatMoney(valorJuros, 'R$', true);
 
-          diferencaCorrigidaJuros = (diferencaCorrigida + valorJuros);
+          diferencaCorrigidaJuros = this.roundMoeda(diferencaCorrigida + valorJuros);
           rowRST.diferenca_juros = diferencaCorrigidaJuros;
 
           rowRST.diferenca_corrigida_juros = this.formatMoney(diferencaCorrigidaJuros, 'R$', true);
           rowRST.diferenca_corrigida_jurosN = diferencaCorrigidaJuros;
 
-          const devidoLimitado = (this.limit60SCValor.valor * rowRST.correcao_monetariaN) + (this.limit60SCValor.valor * rowRST.jurosN);
+          const devidoLimitado = (this.limit60SCValor.valor * rowRST.correcao_monetariaN)
+            + ((this.limit60SCValor.valor * rowRST.correcao_monetariaN) * rowRST.jurosN);
+
           // honorarios = this.calculoHonorarios(competencia, valorJuros, diferencaCorrigida, rowRST.beneficio_devidoH);
           honorarios = this.calculoHonorarios(competencia, valorJuros, diferencaCorrigida, devidoLimitado);
+
+          /// console.log(honorarios);
+
           this.calcularSomaCompetenciasMes(competencia, diferencaCorrigida, diferencaCorrigidaJuros);
 
         } else if (moment(this.calculo.data_acao_judicial).isBefore(competencia, 'month')) {
@@ -1351,7 +1357,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           diferencaCorrigida += rowRST.diferenca_corrigidaN;
           valorJuros += (rowRST.diferenca_corrigidaN * rowRST.jurosN);
           diferencaCorrigidaJuros += rowRST.diferenca_corrigidaN + (rowRST.diferenca_corrigidaN * rowRST.jurosN);
-          honorarios += Math.round(rowRST.honorariosN * 100) / 100;
+          honorarios = (honorarios + rowRST.honorariosN);
 
           this.calcularSomaCompetenciasMes(competencia,
             rowRST.diferenca_corrigidaN,
@@ -1361,12 +1367,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
 
-      this.somaDiferencaMensal = Math.round(diferencaMensal * 100) / 100;
-      this.somaJuros = Math.round(valorJuros * 100) / 100;
-      this.somaDiferencaCorrigida = Math.round(diferencaCorrigida * 100) / 100;
-      this.somaDiferencaCorrigidaJuros = Math.round(diferencaCorrigidaJuros * 100) / 100;
+      this.somaDiferencaMensal = this.roundMoeda(diferencaMensal);
+      this.somaJuros = this.roundMoeda(valorJuros);
+      this.somaDiferencaCorrigida = this.roundMoeda(diferencaCorrigida);
+      this.somaDiferencaCorrigidaJuros = this.roundMoeda(diferencaCorrigidaJuros);
       this.somaTotalSegurado = diferencaCorrigidaJuros + this.somaVincendas;
-      this.somaHonorarios = Math.round(honorarios * 100) / 100;
+
+      this.somaHonorarios = this.roundMoeda(honorarios);
 
       if (somaDiferencaMensalValorAnterior > this.somaDiferencaMensal) {
 
@@ -1664,7 +1671,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let irtDevidoSimplificado89 = 1;
 
 
-    let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
+    let rmiDevidos = this.roundMoeda(parseFloat(this.calculo.valor_beneficio_esperado));
     let beneficioDevido = 0.0;
     const dib = moment(this.calculo.data_pedido_beneficio_esperado);
     const dibMoeda = this.Moeda.getByDate(dib);
@@ -1672,7 +1679,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (dib < this.dataInicioBuracoNegro) {
       irtDevidoSimplificado89 = rmiDevidos / dibMoeda.salario_minimo;
-      rmiDevidos = irtDevidoSimplificado89 * equivalencia89Moeda.salario_minimo;
+      rmiDevidos = this.roundMoeda(irtDevidoSimplificado89 * equivalencia89Moeda.salario_minimo);
     }
 
     if (dataCorrente > this.dataInicioDevidos) {
@@ -1723,11 +1730,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
 
         if (this.beneficioDevidoTetosSemLimite < beneficioDevido) {
-          this.beneficioDevidoTetosSemLimite = beneficioDevido;
+          this.beneficioDevidoTetosSemLimite = this.roundMoeda(beneficioDevido);
         }
 
-
-        this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
+        //        this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
+        this.beneficioDevidoTetosSemLimite = this.roundMoeda(this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste);;
 
       } else {
 
@@ -1748,7 +1755,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-    this.beneficioDevidoOs = this.beneficioDevidoOs * reajusteObj.reajuste;
+    this.beneficioDevidoOs = this.roundMoeda(this.beneficioDevidoOs * reajusteObj.reajuste);
     let indiceSuperior = false;
 
 
@@ -1858,7 +1865,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     }
 
-    beneficioDevidoAjustado = this.roundMoeda(beneficioDevidoAjustado, dataCorrente);
+    beneficioDevidoAjustado = this.roundMoeda(beneficioDevidoAjustado);
 
     this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
     line.beneficio_devido_apos_revisao = this.formatMoney(this.beneficioDevidoAposRevisao);
@@ -2203,7 +2210,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
-    beneficioRecebidoAjustado = this.roundMoeda(beneficioRecebidoAjustado, dataCorrente, 'recebido');
+    beneficioRecebidoAjustado = this.roundMoeda(beneficioRecebidoAjustado);
 
 
     this.beneficioRecebidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioRecebidoAposRevisao,
@@ -2701,7 +2708,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       diasInicio = (diasMesInicio - diasInicio) + 1;
 
       // honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasInicio / diasInicioCalculo;
-      honorarios = diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado);
+      honorarios = this.roundMoeda(diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado));
 
     } else if ((dataCorrente.isSame(taxaAdvogadoFinal, 'month')) ||
       (taxaAdvogadoInicio == null && taxaAdvogadoFinal == null)) {
@@ -2716,11 +2723,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if (dataFimCalculo.isSame(taxaAdvogadoFinal, 'month')) {
 
-        honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo;
+        honorarios = ((diferecaCorrigidaJuros
+          * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasFimCalculo);
 
       } else {
 
-        honorarios = (diferecaCorrigidaJuros * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasMesFinal;
+        honorarios = ((diferecaCorrigidaJuros
+          * parseFloat(this.calculo.percentual_taxa_advogado)) * diasFinal / diasMesFinal);
 
       }
 
@@ -2734,7 +2743,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       honorarios = 0;
     }
     // Somar o valor dos honorários de cada linha da tabela, menos da ultima linha.
-    return honorarios;
+    return (honorarios);
   }
 
 
@@ -2821,14 +2830,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         valorMaisJurosD = getJurosCustos(rowDeducoes.aplicarJuros, rowDeducoes.data, rowDeducoes.valor);
 
-        rowDeducoes.rstValores = valorMaisJurosD;
-        rowDeducoes.valorC = valorMaisJurosD.valorC;
-        rowDeducoes.valorJuros = valorMaisJurosD.valorJuros;
-        rowDeducoes.valorMaisJuros = valorMaisJurosD.valorMaisJuros;
+        rowDeducoes.rstValores = this.roundMoeda(valorMaisJurosD);
+        rowDeducoes.valorC = this.roundMoeda(valorMaisJurosD.valorC);
+        rowDeducoes.valorJuros = this.roundMoeda(valorMaisJurosD.valorJuros);
+        rowDeducoes.valorMaisJuros = this.roundMoeda(valorMaisJurosD.valorMaisJuros);
 
-        soma += rowDeducoes.valorC;
-        somaJuros += rowDeducoes.valorJuros;
-        somaMaisJuros += valorMaisJurosD.valorMaisJuros;
+        soma += this.roundMoeda(rowDeducoes.valorC);
+        somaJuros += this.roundMoeda(rowDeducoes.valorJuros);
+        somaMaisJuros += this.roundMoeda(valorMaisJurosD.valorMaisJuros);
 
       }
 
@@ -2838,7 +2847,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       valor: this.formatMoney(soma),
       valorJuros: this.formatMoney(somaJuros),
       valorMaisJuros: this.formatMoney(somaMaisJuros),
-      valorMaisJurosN: somaMaisJuros
+      valorMaisJurosN: this.roundMoeda(somaMaisJuros)
     };
 
   }
@@ -2940,7 +2949,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
-    this.somaHonorarios = somaHonorariosFixo;
+    this.somaHonorarios = this.roundMoeda(somaHonorariosFixo);
 
   }
 
@@ -2961,10 +2970,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   public getCalculoHonorariosCPC85() {
 
     const moedaAtualCPC = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
-    const salariosMinimos200 = moedaAtualCPC.salario_minimo * 200;
-    const salariosMinimos2000 = moedaAtualCPC.salario_minimo * 2000;
-    const salariosMinimos20000 = moedaAtualCPC.salario_minimo * 20000;
-    const salariosMinimos100000 = moedaAtualCPC.salario_minimo * 100000;
+    const salariosMinimos200 = this.roundMoeda(moedaAtualCPC.salario_minimo * 200);
+    const salariosMinimos2000 = this.roundMoeda(moedaAtualCPC.salario_minimo * 2000);
+    const salariosMinimos20000 = this.roundMoeda(moedaAtualCPC.salario_minimo * 20000);
+    const salariosMinimos100000 = this.roundMoeda(moedaAtualCPC.salario_minimo * 100000);
 
     const parametrosoHonorariosCPC85 = [
       {
@@ -3019,11 +3028,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (this.calculo.taxa_advogado_aplicar_CPCArt85) {
 
-      valorBaseParaCalculoAuxiliar = this.somaDevidosreajustadosAtefinalHonorario;
+      valorBaseParaCalculoAuxiliar = this.roundMoeda(this.somaDevidosreajustadosAtefinalHonorario);
 
     } else {
 
-      valorBaseParaCalculoAuxiliar = this.somaDiferencaReajustadosAtefinalHonorario;
+      valorBaseParaCalculoAuxiliar = this.roundMoeda(this.somaDiferencaReajustadosAtefinalHonorario);
 
     }
 
@@ -3054,7 +3063,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         linhaCPC85.resultadoString = this.formatMoney(linhaCPC85.resultado, moedaAtualCPC.sigla);
         this.faixaSalminimoHonorarioscpc85List.push(linhaCPC85);
-        this.somaHonorarioscpc85 += linhaCPC85.resultado;
+        this.somaHonorarioscpc85 += this.roundMoeda(linhaCPC85.resultado);
       }
 
     }
@@ -3379,8 +3388,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       percentualAcordo = 0.9;
     }
 
-    this.valorAcordo = totalDevido * percentualAcordo;
-    this.descontoAcordo = totalDevido - this.valorAcordo;
+    this.valorAcordo = this.roundMoeda(totalDevido * percentualAcordo);
+    this.descontoAcordo = this.roundMoeda(totalDevido - this.valorAcordo);
   }
 
   //Seção 4.6
@@ -3638,7 +3647,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         (this.isMinimoInicialDevido && tipo === 'Devido')
         || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
         // Adicionar subindice ‘M’ no valor do beneficio
-        return salMinimo;
+        return this.roundMoeda(salMinimo);
       }
 
     }
@@ -3647,7 +3656,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       || (this.isTetoInicialRecebido && tipo === 'Recebido')
       && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
-      return tetoSalarial;
+      return this.roundMoeda(tetoSalarial);
     }
 
 
@@ -3656,10 +3665,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
     ) {
       // Adicionar subindice ‘T’ no valor do beneficio.
-      return tetoSalarial;
+      return this.roundMoeda(tetoSalarial);
     }
 
-    return valorBeneficio;
+    return this.roundMoeda(valorBeneficio);
   }
 
   //Seção 5.4
@@ -3698,7 +3707,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         (this.isMinimoInicialDevido && tipo === 'Devido')
         || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
         // Adicionar subindice ‘M’ no valor do beneficio
-        return salMinimo;
+        return this.roundMoeda(salMinimo);
       }
 
     }
@@ -3707,15 +3716,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       || (this.isTetoInicialRecebido && tipo === 'Recebido')
       && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
-      return tetoSalarial;
+      return this.roundMoeda(tetoSalarial);
     }
 
     // removido && dib >= this.dataInicioBuracoNegro  removido 28/07/2020 - DR. Sergio
     if (valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
-      return tetoSalarial;
+      return this.roundMoeda(tetoSalarial);
     }
-    return valorBeneficio;
+    return this.roundMoeda(valorBeneficio);
   }
 
   verificaAbonoProporcionalDevidos(dib) {
@@ -3741,6 +3750,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (dib.date() < 15) {
       dibMonth -= 1;
     }
+
     let proporcional = 1 - dibMonth / 12;
 
     if (proporcional < 1) {
@@ -3751,6 +3761,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     return proporcional;
   }
+
 
   //Retorna a diferença em meses completos entre as datas passadas como parametro. Se nao passar dois argumentos, compara a data passada com a atual
   getDifferenceInMonths(date1, date2 = moment()) {
@@ -3823,23 +3834,26 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   }
 
-
-  roundMoeda(value, dataCorrente, tipo = 'devido') {
-    // let dib = moment(this.calculo.data_pedido_beneficio_esperado);
-
-    // if (tipo === 'recebido') {
-    //   dib = moment(this.calculo.data_pedido_beneficio);
-    // }
-    const dib = dataCorrente;
-
-    if (dib.isAfter(moment('1994-07-01'))) {
-      // return (Math.floor(value * 100) / 100);
-      return (Math.round(value * 100) / 100);
-    } else {
-      return (Math.round(value * 100) / 100);
-    }
-
+  roundMoeda(value) {
+    return (Math.round(value * 100) / 100);
   }
+
+  // roundMoeda(value, dataCorrente, tipo = 'devido') {
+  //   // let dib = moment(this.calculo.data_pedido_beneficio_esperado);
+
+  //   // if (tipo === 'recebido') {
+  //   //   dib = moment(this.calculo.data_pedido_beneficio);
+  //   // }
+  //   const dib = dataCorrente;
+
+  //   if (dib.isAfter(moment('1994-07-01'))) {
+  //     // return (Math.floor(value * 100) / 100);
+  //     return (Math.round(value * 100) / 100);
+  //   } else {
+  //     return (Math.round(value * 100) / 100);
+  //   }
+
+  // }
 
   formatRMI(value, type) {
     let sigla = '';
@@ -3930,7 +3944,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       data: this.resultadosList,
       columns: columns,
       columnDefs: [
-        { className: 'nowrapText notwrap text-center', targets: '_all' },
+        { className: 'nowrapText notwrap text-center td-condensed-fit', targets: '_all' },
       ]
     }
 
@@ -4020,15 +4034,17 @@ export class BeneficiosResultadosComponent implements OnInit {
             body{font-family: Arial, Helvetica, sans-serif;}
             h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
             i.fa, .not-print{ display: none; }
+            .td-width-30{ width: 38% !important;}
             .table{margin-top: 30px;}
             .table-print-no-margin { margin-top: 2px !important;}
             footer,div,p,th{font-size:10px;}
             .table>thead>tr>th{ background-color: #e6e6e6 !important;}
             .table>tbody>tr>td, .table>tbody>tr>th,
-              .table>tfoot>tr>td, .table>tfoot>tr>th,
-              .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
-              .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px !important;}
-              footer{text-align: center;}
+            .table>tfoot>tr>td, .table>tfoot>tr>th,
+            .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
+            .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px;}
+            .td-condensed-fit{ font-size:10px !important; }
+            footer{text-align: center;}
             .text-center{ text-align: center; }
             .text-right{ text-align: right; }
             h1{ text-align: center; }
