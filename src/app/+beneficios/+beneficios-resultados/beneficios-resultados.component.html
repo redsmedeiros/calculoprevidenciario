@@ -1410,20 +1410,30 @@
                       <td >
                         <span
                           class="{{
-                            tratarConclusao(somaDiferencaCorrigida + somaJuros)
+                            tratarConclusao(somaDiferencaCorrigidaJuros)
                           }}"
                         >
-                          {{ formatMoney(somaTotalSegurado) }}
+                          {{ formatMoney(somaDiferencaCorrigidaJuros) }}
                         </span>
                       </td>
                     </tr>
                     <tr *ngIf="calculo.maturidade != 0">
                       <td class="td-width-30" style="text-align: left">
-                        <b>Total Vincendas: </b>
+                        <b>Valor das Parcelas Vincendas: </b>
                       </td>
                       <td >
                         <span class="{{ tratarConclusao(somaVincendas) }}">
                           {{ formatMoney(somaVincendas) }}</span
+                        >
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.maturidade != 0">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Sub Total (diferença corrigida + juros + vincendas): </b>
+                      </td>
+                      <td >
+                        <span class="{{ tratarConclusao(somaVincendas) }}">
+                          {{ formatMoney(somaTotalSegurado) }}</span
                         >
                       </td>
                     </tr>

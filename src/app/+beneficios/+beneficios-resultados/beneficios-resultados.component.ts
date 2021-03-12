@@ -360,48 +360,51 @@ export class BeneficiosResultadosComponent implements OnInit {
                   this.moeda = moeda;
                 });
 
-              let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
+              this.getIndicesIniciais();
 
-              if (this.calculo.previa_data_pedido_beneficio_esperado &&
-                moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
-                date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
-              }
+              // let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
 
-              const indiceDevidoRST = this.IndiceDevido.getByDateRange(
-                moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
-                this.dataFinal.format('YYYY-MM-DD'))
-                .then((indicesDevido: Indices) => {
+              // if (this.calculo.previa_data_pedido_beneficio_esperado &&
+              //   moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
+              //   date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+              // }
 
-                  for (const i_devido of this.IndiceDevido.list) {
-                    this.indiceDevido.push(i_devido);
-                  }
-                });
+              // // se ouver dib anterior considerar como a primeira data para o indice de correção
+              // let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+              //   this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
 
-              // se ouver dib anterior considerar como a primeira data para o indice de correção
-              let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-                this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+              // date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+              // if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+              //   this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+              // }
 
-              date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
-              if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
-                this.dataFinal = (moment(this.calculo.data_calculo_pedido));
-              }
 
-              const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
-                moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
-                this.dataFinal.format('YYYY-MM-DD'))
-                .then((indicesRecebido: Indices) => {
+              // const indiceDevidoRST = this.IndiceDevido.getByDateRange(
+              //   moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+              //   this.dataFinal.format('YYYY-MM-DD'))
+              //   .then((indicesDevido: Indices) => {
 
-                  for (const i_recebido of this.IndiceRecebido.list) {
-                    this.indiceRecebido.push(i_recebido);
-                  }
+              //     for (const i_devido of this.IndiceDevido.list) {
+              //       this.indiceDevido.push(i_devido);
+              //     }
+              //   });
 
-                });
+              // const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
+              //   moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+              //   this.dataFinal.format('YYYY-MM-DD'))
+              //   .then((indicesRecebido: Indices) => {
+
+              //     for (const i_recebido of this.IndiceRecebido.list) {
+              //       this.indiceRecebido.push(i_recebido);
+              //     }
+
+              //   });
 
               this.getIndicesReajusteListRecebidos();
 
               this.allPromissesCalc.push(rstMoeda);
-              this.allPromissesCalc.push(indiceDevidoRST);
-              this.allPromissesCalc.push(indiceRecebidoRST);
+              // this.allPromissesCalc.push(indiceDevidoRST);
+              // this.allPromissesCalc.push(indiceRecebidoRST);
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
@@ -422,6 +425,53 @@ export class BeneficiosResultadosComponent implements OnInit {
         }
       });
   }
+
+
+  private getIndicesIniciais() {
+    let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
+
+    if (this.calculo.previa_data_pedido_beneficio_esperado &&
+      moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
+      date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+    }
+
+    // se ouver dib anterior considerar como a primeira data para o indice de correção
+    let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
+      this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+
+    date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+    if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+      this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+    }
+
+    const indiceDevidoRST = this.IndiceDevido.getByDateRange(
+      moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+      this.dataFinal.format('YYYY-MM-DD'))
+      .then((indicesDevido: Indices) => {
+
+        for (const i_devido of this.IndiceDevido.list) {
+          this.indiceDevido.push(i_devido);
+        }
+
+      });
+
+    const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
+      moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+      this.dataFinal.format('YYYY-MM-DD'))
+      .then((indicesRecebido: Indices) => {
+
+        for (const i_recebido of this.IndiceRecebido.list) {
+          this.indiceRecebido.push(i_recebido);
+        }
+
+      });
+
+    this.allPromissesCalc.push(indiceDevidoRST);
+    this.allPromissesCalc.push(indiceRecebidoRST);
+
+  }
+
+
 
   /**
    * converter as listas de String JSON para JSON
@@ -1065,7 +1115,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           //   && dataPedidoBeneficio.isBefore(datacessacaoBeneficioRecebido, 'year')) {
           //   abonoProporcionalRecebidos = 1;
           // }
-          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+          abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio.clone());
+          // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
           beneficioRecebidoAbono = this.roundMoeda(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
 
         }
@@ -1086,7 +1137,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         if (abono13UltimoRecebido) {
 
           if (
-            this.isExits(datacessacaoBeneficioRecebido) && beneficioRecebidoAbono > 0 &&
+            this.isExits(datacessacaoBeneficioRecebido) &&
             dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
           ) { // datacessacaoBeneficioRecebido
             // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
@@ -4063,7 +4114,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     const seguradoBox = document.getElementById('printableSegurado').innerHTML;
     const dadosCalculo = document.getElementById('printableDatasCalculo').innerHTML;
     const valoresDevidos = document.getElementById('printableValoresDevidos').innerHTML;
-
 
     let valoresRecebidos = '';
     if (typeof (document.getElementById('printableValoresRecebidos')) != 'undefined'
