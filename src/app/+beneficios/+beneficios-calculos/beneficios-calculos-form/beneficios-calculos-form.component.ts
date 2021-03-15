@@ -168,11 +168,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { name: 'Auxílio Acidente - 50%', value: 6 },
     { name: 'Auxílio Acidente - 60%', value: 10 },
     { name: 'Auxílio Doença', value: 0 },
+    { name: 'Auxílio Emergencial', value: 2021 },
     { name: 'Auxílio por Incapacidade Temporária', value: 20 },
     { name: 'Auxílio Reclusão', value: 23 },
     { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
-    { name: 'Pensão por Morte', value: 22 }
+    { name: 'Pensão por Morte', value: 22 },
+    { name: 'Seguro Desemprego', value: 24 }
   ];
+
+  public especieValoresOptionsDevido = this.especieValoresOptions.filter(especie => (especie.value !== 24 && especie.value !== 2021));
 
   public tipoHonorariosOptions = [
     { text: '- Selecione uma Opção -', value: '' },
@@ -344,6 +348,21 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
       // this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
       // valid = false;
+    }
+
+    // data honorario fixo verificar se a data está dentro do intervalo
+    if (this.taxaAdvogadoAplicacaoSobre === 'fixo' &&
+      this.isExits(this.dataHonorariosDe)
+      && moment(this.dataHonorariosDe, 'DD/MM/YYYY').isValid()) {
+
+      if (!moment(this.dataHonorariosDe, 'DD/MM/YYYY').isBetween(
+        moment(this.dibValoresDevidos, 'DD/MM/YYYY'),
+        moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY'),
+        'month', '[]')) {
+        this.errors.add({ 'dataHonorariosDe': ['A data deve estar entre o início e fim Devido'] })
+        valid = false;
+      }
+
     }
 
     // Check if its necessary to validate the box of 'Valores Recebidos'
@@ -1052,7 +1071,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.taxa_advogado_aplicacao_sobre : '';
 
     if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
-      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('MM/YYYY');
+      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY');
     }
 
     // Calcular Mais (Vincendos)

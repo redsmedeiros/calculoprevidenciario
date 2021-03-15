@@ -59,6 +59,9 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     } else if (moment(this.dibValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
       this.errors.add({ 'dibValoresDevidos': ['A data deve ser maior que 01/1970'] });
       valid = false;
+    } else if (moment(this.dibValoresDevidos, 'DD/MM/YYYY') > moment()) {
+      this.errors.add({ 'dibValoresDevidos': ['A data não deve ser maior data atual'] });
+      valid = false;
     }
 
     if (this.isEmptyInput(this.dipValoresDevidos)) {
@@ -72,7 +75,14 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
         this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a dib'] });
         valid = false;
+      } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a DIB'] });
+        valid = false;
+      } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') > moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dipValoresDevidos': ['A data não deve ser maior que a Cessação'] });
+        valid = false;
       }
+
     }
 
     if (this.isEmptyInput(this.rmiValoresDevidos)) {
@@ -102,6 +112,9 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       valid = false;
     } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
       this.errors.add({ 'cessacaoValoresDevidos': ['A data deve ser maior que 01/1970.'] });
+      valid = false;
+    } else if (moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY') > moment()) {
+      this.errors.add({ 'cessacaoValoresDevidos': ['A data não deve ser maior que a data atual'] });
       valid = false;
     }
 

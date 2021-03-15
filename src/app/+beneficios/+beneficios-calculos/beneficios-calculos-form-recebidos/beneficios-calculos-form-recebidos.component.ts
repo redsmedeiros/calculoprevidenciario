@@ -236,6 +236,9 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
+      } else if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY') > moment()) {
+        this.errors.add({ 'dibValoresRecebidos': ['A data não deve ser maior data atual'] });
+        valid = false;
       }
 
     }
@@ -251,7 +254,14 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
+      } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') < moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que a DIB'] });
+        valid = false;
+      } else if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY') > moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dipValoresRecebidos': ['A data não deve ser maior que a Cessação'] });
+        valid = false;
       }
+
 
     }
 
@@ -293,9 +303,11 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
+      } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') > moment()) {
+        this.errors.add({ 'cessacaoValoresRecebidos': ['A data não deve ser maior que a data atual'] });
+        valid = false;
       }
     }
-    // }
 
     return valid;
   }

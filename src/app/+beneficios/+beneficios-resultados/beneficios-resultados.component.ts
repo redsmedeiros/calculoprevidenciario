@@ -870,6 +870,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         abono13UltimoRecebido = recebidoRow.value.abono13Ultimo;
         tipo_aposentadoria_recebida = recebidoRow.value.especie;
         this.checkAdicionl25Recebido(recebidoRow);
+        this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
+        this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
       }
 
       // Quando a dataCorrente for menor que a ‘dataInicioRecebidos’, definido na secão 1.1
@@ -970,11 +972,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         valorNumericoDiferencaCorrigidaJurosObj);
 
 
-
-
       valorDevidohonorario = this.roundMoeda((beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros));
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
-
       if (diferencaCorrigidaJuros.string.indexOf('prescrita') != -1 && this.considerarPrescricao) {
         // Se houver o marcador, a data é prescrita
         isPrescricao = true;
@@ -2089,6 +2088,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       dib = dataPedidoBeneficio.clone();
       tipo_aposentadoria_recebida = recebidoRow.value.especie;
       taxa_ajuste_maxima_concedida = recebidoRow.value.irt;
+      this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
+      this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
 
     }
 
@@ -2737,6 +2738,12 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.calculo.taxa_advogado_inicio != '') {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
     }
+
+    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo'
+      || taxaAdvogadoInicio.isAfter(this.calculo.data_pedido_beneficio_esperado)) {
+      taxaAdvogadoInicio = moment(this.calculo.data_pedido_beneficio_esperado);
+    }
+
     if (this.calculo.taxa_advogado_final != '') {
       taxaAdvogadoFinal = moment(this.calculo.taxa_advogado_final);
     }
@@ -2794,7 +2801,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       honorarios = 0;
     }
     // Somar o valor dos honorários de cada linha da tabela, menos da ultima linha.
-    return (honorarios);
+    return honorarios;
   }
 
 
@@ -3675,11 +3682,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     let naoAplicarMinimo = false;
 
     if (tipo === 'Recebido') {
+
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
-      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+
     } else {
+
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+
     }
 
     if (!naoAplicarMinimo) {
@@ -3735,11 +3746,15 @@ export class BeneficiosResultadosComponent implements OnInit {
     let naoAplicarMinimo = false;
 
     if (tipo == 'Recebido') {
+
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+
     } else {
+
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+
     }
 
     if (!naoAplicarMinimo) {
@@ -4035,6 +4050,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       { name: '', value: '' },
       { name: 'Abono de Permanência em Serviço', value: 11 },
       { name: 'Aposentadoria Especial', value: 4 },
+      { name: 'Aposentadoria por Incapacidade Permanente', value: 19 },
       { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
       { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
       { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
@@ -4048,11 +4064,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       { name: 'Auxílio Acidente - 50%', value: 6 },
       { name: 'Auxílio Acidente - 60%', value: 10 },
       { name: 'Auxílio Doença', value: 0 },
-      { name: 'Auxílio por Incapacidade Permanente', value: 19 },
+      { name: 'Auxílio Emergencial', value: 2021 },
       { name: 'Auxílio por Incapacidade Temporária', value: 20 },
-      { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
       { name: 'Auxílio Reclusão', value: 23 },
-      { name: 'Pensão por Morte', value: 22 }
+      { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+      { name: 'Pensão por Morte', value: 22 },
+      { name: 'Seguro Desemprego', value: 24 }
     ];
 
     // return tipos_aposentadoria[value].name;
