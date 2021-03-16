@@ -1578,6 +1578,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let dataPedidoBeneficioInd = moment(this.calculo.data_pedido_beneficio);
     let dataCessacaoRecebidoInd = this.dataCessacaoRecebido;
+    let reajuste = 0.0;
+    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
+    let indiceReajuste = 0;
+    let indiceReajusteOs = 0;
+    let reajusteOS = 0.0;
 
     if (recebidoRow.status) {
 
@@ -1585,21 +1590,20 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCessacaoRecebidoInd = recebidoRow.value.cessacao.clone();
     }
 
-    if (dataCessacaoRecebidoInd == null || (dataCessacaoRecebidoInd != null && dataCorrente > dataCessacaoRecebidoInd)) {
+    if (dataCessacaoRecebidoInd == null
+      || (dataCessacaoRecebidoInd != null && dataCorrente > dataCessacaoRecebidoInd)
+      || (recebidoRow.status && (recebidoRow.value.especie === 24 || recebidoRow.value.especie === 2021 ||
+        recebidoRow.value.especie === '24' || recebidoRow.value.especie === '2021'))
+    ) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
 
-
-    let reajuste = 0.0;
-    let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
 
     if (recebidoRow.status) {
       indiceObjCorrente = this.getByDateToTypeRecebidosList(dataCorrente, recebidoRow)
     }
 
 
-    let indiceReajuste = 0;
-    let indiceReajusteOs = 0;
     if (indiceObjCorrente == undefined) {
       reajuste = 0;
     } else {
@@ -1633,8 +1637,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         reajuste = 1;
       }
     }
-
-    let reajusteOS = 0.0;
 
     if (this.isBuracoNegro(dataPedidoBeneficioInd) && dataCorrente < this.dataEfeitoFinanceiro) {
       if (dataCorrente < moment('1991-09-01')) {

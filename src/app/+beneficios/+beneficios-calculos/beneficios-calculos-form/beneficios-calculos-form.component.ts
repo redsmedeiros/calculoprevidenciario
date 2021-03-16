@@ -1591,29 +1591,33 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   getTipoAposentadoria(value) {
 
     value = parseInt(value, 10);
-    const tipos_aposentadoria = [
-      { name: '', value: '' },
-      { name: 'Abono de Permanência em Serviço', value: 11 },
-      { name: 'Aposentadoria Especial', value: 4 },
-      { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
-      { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
-      { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
-      { name: 'Aposentadoria por Invalidez ', value: 1 },
-      { name: 'Aposentadoria por Tempo de Contribuição', value: 3 },
-      { name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5 },
-      { name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13 },
-      { name: 'Aposentadoria por Tempo de Serviço', value: 18 },
-      { name: 'Auxílio Acidente - 30%', value: 8 },
-      { name: 'Auxílio Acidente - 40%', value: 9 },
-      { name: 'Auxílio Acidente - 50%', value: 6 },
-      { name: 'Auxílio Acidente - 60%', value: 10 },
-      { name: 'Auxílio Doença', value: 0 },
-      { name: 'Auxílio por Incapacidade Permanente', value: 19 },
-      { name: 'Auxílio por Incapacidade Temporária', value: 20 },
-      { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
-      { name: 'Auxílio Reclusão', value: 23 },
-      { name: 'Pensão por Morte', value: 22 }
-    ];
+    // const tipos_aposentadoria = [
+    //   { name: '- Selecione uma Opção -', value: '' },
+    //   { name: 'Abono de Permanência em Serviço', value: 11 },
+    //   { name: 'Aposentadoria Especial', value: 4 },
+    //   { name: 'Aposentadoria por Incapacidade Permanente', value: 19 },
+    //   { name: 'Aposentadoria por Idade - Trabalhador Rural', value: 7 },
+    //   { name: 'Aposentadoria por Idade - Trabalhador Urbano', value: 2 },
+    //   { name: 'Aposentadoria por Idade da Pessoa com Deficiência', value: 16 },
+    //   { name: 'Aposentadoria por Invalidez ', value: 1 },
+    //   { name: 'Aposentadoria por Tempo de Contribuição', value: 3 },
+    //   { name: 'Aposentadoria por Tempo de Contribuição Professor', value: 5 },
+    //   { name: 'Aposentadoria por Tempo de Contribuição da Pessoa com Deficiência', value: 13 },
+    //   { name: 'Aposentadoria por Tempo de Serviço', value: 18 },
+    //   { name: 'Auxílio Acidente - 30%', value: 8 },
+    //   { name: 'Auxílio Acidente - 40%', value: 9 },
+    //   { name: 'Auxílio Acidente - 50%', value: 6 },
+    //   { name: 'Auxílio Acidente - 60%', value: 10 },
+    //   { name: 'Auxílio Doença', value: 0 },
+    //   { name: 'Auxílio Emergencial', value: 2021 },
+    //   { name: 'Auxílio por Incapacidade Temporária', value: 20 },
+    //   { name: 'Auxílio Reclusão', value: 23 },
+    //   { name: 'Benefício de Prestação Continuada - BPC ', value: 12 },
+    //   { name: 'Pensão por Morte', value: 22 },
+    //   { name: 'Seguro Desemprego', value: 24 }
+    // ];
+
+    const tipos_aposentadoria = this.especieValoresOptions;
 
     // return tipos_aposentadoria[value].name;
     return (tipos_aposentadoria.filter(item => value === item.value))[0].name;
