@@ -114,7 +114,7 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="col-md-8 col-sm-offset-4">
+              <div class="col-md-6 col-sm-offset-4">
                 <div class="checkbox">
                   <label>
                     <input
@@ -124,12 +124,31 @@
                       class="checkbox"
                     />
                     <span>Limitar o Valor da Causa a 60 Salários Mínimos.</span>
+                  
                   </label>
+                  <span>
+                    <popover-content #avisoSM60
+                    title="Rendimentos Recebidos Acumuladamente"
+                    [closeOnClickOutside]="true"
+                    >
+                    <div class="alert alert-danger bg-ieprev fade in bold">
+                      A limitação do valor da causa a 60 salários-mínimos deve ser verificada no ajuizamento da Ação, para julgamento no Juizado Especial - JEF. Se o valor da causa superar este limite e ainda assim o segurado pretender que o julgamento ocorra no JEF deverá renunciar ao valor excedente. No Cumprimento de sentença, o limite de 60 salários-mínimos está relacionado à expedição de RPV. O valor que superar este limite será quitado através de Precatório.
+                    </div>
+                    </popover-content>
+                      <button type="button" class="btn btn-small btn-info pull-right" 
+                      popoverPlacement="left" 
+                      [popoverOnHover]="true"
+                      [popover]="avisoSM60"
+                       >
+                          <i class="fa fa-question-circle fa-1-6x"></i>
+                      </button>
+                  </span>
                 </div>
               </div>
+
             </div>
             <div class="form-group">
-              <div class="col-md-8 col-sm-offset-4">
+              <div class="col-md-6 col-sm-offset-4">
                 <div class="checkbox">
                   <label>
                     <input
@@ -140,6 +159,23 @@
                     />
                     <span>Calcular Rendimentos Recebidos Acumuladamente com Juros.</span>
                   </label>
+                  <span>
+                    <popover-content #avisoRRA
+                    title="Rendimentos Recebidos Acumuladamente"
+                    [closeOnClickOutside]="true"
+                    >
+                    <div class="alert alert-danger bg-ieprev fade in bold">
+                      Conforme decidido pelo STF no julgamento do Tema 808, "Não incide imposto de renda sobre os juros de mora devidos pelo atraso no pagamento de remuneração por exercício de emprego, cargo ou função". Entretanto, o Simulador IEPREV possibilita a elaboração do cálculo dos RRA com incidência de juros.
+                    </div>
+                    </popover-content>
+                      <button type="button" class="btn btn-small btn-info pull-right" 
+                      popoverPlacement="left" 
+                      [popoverOnHover]="true"
+                      [popover]="avisoRRA"
+                       >
+                          <i class="fa fa-question-circle fa-1-6x"></i>
+                      </button>
+                  </span>
                 </div>
               </div>
             </div>
