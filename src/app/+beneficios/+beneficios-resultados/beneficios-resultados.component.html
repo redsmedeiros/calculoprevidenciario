@@ -223,7 +223,7 @@
                           <b>Rendimentos Recebidos Acumuladamente : </b>
                         </td>
                         <td >
-                          {{ (RRASemJuros)? 'Diferença Corrigida': 'Diferença Corrigida mais Juros' }}
+                          {{ (!RRASemJuros)? 'Diferença Corrigida': 'Diferença Corrigida mais Juros' }}
                         </td>
                       </tr>
                     </tbody>

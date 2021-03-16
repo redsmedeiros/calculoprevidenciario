@@ -1095,11 +1095,15 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       // Calcular Abono
-      if ((dataCorrente.month() === 11 && (tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
+      const especiesSemAbono = [12, 24, 2021];
+      const verificacaoEspecieAbono = !(especiesSemAbono.includes(tipo_aposentadoria_recebida)
+                                      || especiesSemAbono.includes(this.calculo.tipo_aposentadoria));
+
+      if ((dataCorrente.month() === 11 && (verificacaoEspecieAbono))
         || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
-          && (tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12)
+          && (verificacaoEspecieAbono)
           || (abono13UltimoRecebido && dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
-            && (tipo_aposentadoria_recebida !== 12 || this.calculo.tipo_aposentadoria !== 12))
+            && (verificacaoEspecieAbono))
         )
       ) {
 
@@ -1203,8 +1207,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorNumericoDiferencaCorrigidaJurosObj);
 
 
-        // valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros);
-        valorDevidohonorario = this.roundMoeda((beneficioDevidoAbono * correcaoMonetaria) + valorJuros);
+         valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + ((beneficioDevido * correcaoMonetaria) * juros);
+        //valorDevidohonorario = this.roundMoeda((beneficioDevidoAbono * correcaoMonetaria) + valorJuros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
@@ -1444,7 +1448,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.RRASemJuros = this.calculo.rra_sem_juros;
 
-    const valor = (!this.RRASemJuros) ? diferencaCorrigidaComJuros : diferencaCorrigida;
+    const valor = (this.RRASemJuros) ? diferencaCorrigidaComJuros : diferencaCorrigida;
 
     if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
 
@@ -2741,9 +2745,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
     }
 
-    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo'
-      || taxaAdvogadoInicio.isAfter(this.calculo.data_pedido_beneficio_esperado)) {
+    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo') {
+
+      this.calculo.taxa_advogado_inicio = this.calculo.data_pedido_beneficio_esperado;
       taxaAdvogadoInicio = moment(this.calculo.data_pedido_beneficio_esperado);
+
     }
 
     if (this.calculo.taxa_advogado_final != '') {
