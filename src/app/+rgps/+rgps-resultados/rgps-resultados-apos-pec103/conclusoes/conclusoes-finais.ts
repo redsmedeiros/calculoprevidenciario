@@ -549,9 +549,22 @@ export class conclusoesFinais {
     private defineAliquotaDeficiente(elementPossibilidade, elementRegraEspecie) {
 
         let aliquota = 70;
-        let formula = '70'
-        let valueString = aliquota + '%'
+        let formula = '70';
+        let valueString = aliquota + '%';
 
+        // Se diferente de PCD Idade
+        if (this.calculo.tipoBeneficio != 28) {
+
+            aliquota = 100;
+            formula = '100% média salarial';
+            valueString = aliquota + '%';
+
+            return this.setAliquota(
+                aliquota,
+                valueString,
+                formula,
+            );
+        }
 
         aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo)) * 1);
         aliquota = (aliquota > 100) ? 100 : aliquota;
