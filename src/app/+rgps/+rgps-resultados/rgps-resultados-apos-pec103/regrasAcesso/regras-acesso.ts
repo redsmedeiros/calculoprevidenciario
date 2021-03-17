@@ -719,7 +719,7 @@ export class RegrasAcesso {
                 2030: { m: 100, f: 92 }
             };
 
-            pontosRequeridos = (ano >= 2030) ? regra1[2033][sexo] : regra1[ano][sexo];
+            pontosRequeridos = (ano >= 2030) ? regra1[2030][sexo] : regra1[ano][sexo];
             status = (((ano >= 2019) && pontos >= pontosRequeridos)
                 && tempo_contribuicao >= requisitoContribuicoes[sexo]) ? true : false;
         }

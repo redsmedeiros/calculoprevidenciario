@@ -177,8 +177,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.msgDivisorMinimo = '';
     //this.exibirIN77 = false;
 
-
-
+   
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     this.stringCabecalho = 'Entre  29/11/1999 a 13/11/2019'
 
@@ -506,6 +505,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
         //divisorMediaPrimaria = numeroContribuicoes;
 
+
+
+
         if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 
           divisorMediaPrimaria = mesesContribuicao60;
@@ -527,7 +529,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           }
 
-          if (this.naoAplicarIN77) {
+          if (this.naoAplicarIN77 && this.isDivisorMinimo) {
 
             divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
