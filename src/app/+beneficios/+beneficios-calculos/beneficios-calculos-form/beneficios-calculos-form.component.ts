@@ -1209,7 +1209,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.limit60SC = this.formData.limit_60_sc;
     this.RRASemJuros = this.formData.rra_sem_juros;
 
-    this.dibValoresDevidosChanged();
+    //this.dibValoresDevidosChanged();
+     if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
+      this.dibValoresDevidosChanged();
+    }
+
+
     this.dibValoresRecebidosChanged();
     this.tipoDejurosSelecionado = this.getValueSelectJurosAnualParaMensal();
   }

@@ -1097,7 +1097,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // Calcular Abono
       const especiesSemAbono = [12, 24, 2021];
       const verificacaoEspecieAbono = !(especiesSemAbono.includes(tipo_aposentadoria_recebida)
-                                      || especiesSemAbono.includes(this.calculo.tipo_aposentadoria));
+        || especiesSemAbono.includes(this.calculo.tipo_aposentadoria));
 
       if ((dataCorrente.month() === 11 && (verificacaoEspecieAbono))
         || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
@@ -1120,6 +1120,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           // }
           abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio.clone());
           // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+
+          if (dataPedidoBeneficio.isBefore(dataCorrente, 'year')) {
+            abonoProporcionalRecebidos = 1;
+          }
+
           beneficioRecebidoAbono = this.roundMoeda(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
 
         }
@@ -1207,8 +1212,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           valorNumericoDiferencaCorrigidaJurosObj);
 
 
-         valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + ((beneficioDevido * correcaoMonetaria) * juros);
-        //valorDevidohonorario = this.roundMoeda((beneficioDevidoAbono * correcaoMonetaria) + valorJuros);
+        valorDevidohonorario = (beneficioDevidoAbono * correcaoMonetaria) + ((beneficioDevido * correcaoMonetaria) * juros);
         honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
 
         // Não aplicar juros em valor negativo
@@ -1938,6 +1942,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (!line.dias_proporcionais) {
       line.dias_proporcionais = diasProporcionais;
     }
+
     let beneficioDevidoFinal = beneficioDevidoAjustado * diasProporcionais;
 
     if (dataCorrente.isSame(moment('2017-01-01'), 'year')) {
@@ -3559,10 +3564,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.dataInicioDevidosDip = moment(this.calculo.dip_valores_devidos);
 
-    // this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+    //  this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
     this.primeiraDataArrayMoeda = this.dataInicioDevidos;
 
-    //this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
+    // this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
     this.dataFinalAtual = moment();
 
@@ -3652,9 +3657,18 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   //Seção 5.1
   calcularDiasProporcionais(dataCorrente, dib) {
-    if (dataCorrente.isSame(dib, 'month')) //comparação de mês e ano
+
+    //comparação de mês e ano
+    if (dataCorrente.isSame(dib, 'month')) {
       //dib.date() é o dia do mês da dib
-      return (31 - dib.date()) / 30;
+
+      let diffDateMes = (31 - dib.date());
+
+      diffDateMes = (diffDateMes <= 0) ? 1 : diffDateMes;
+
+      return diffDateMes / 30;
+    }
+
     return 1;
   }
 
