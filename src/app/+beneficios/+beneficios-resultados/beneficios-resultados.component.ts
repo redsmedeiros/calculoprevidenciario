@@ -4133,7 +4133,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             .table>tfoot>tr>td, .table>tfoot>tr>th,
             .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
             .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px;}
-            .td-condensed-fit{ font-size:10px !important; }
+            .td-condensed-fit{ font-size:9px !important; }
             footer{text-align: center;}
             .text-center{ text-align: center; }
             .text-right{ text-align: right; }

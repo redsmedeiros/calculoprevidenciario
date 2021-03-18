@@ -31,7 +31,7 @@ export class ListaVideos {
     label: 'Revisão da Vida Toda - Dr. Sergio Geromes',
     value: '413680168'
   }, {
-    label: 'Benefícios Atrasados',
+    label: 'Liquidação de Sentença',
     value: '447520641'
   }, {
     label: 'Regras de Transição',

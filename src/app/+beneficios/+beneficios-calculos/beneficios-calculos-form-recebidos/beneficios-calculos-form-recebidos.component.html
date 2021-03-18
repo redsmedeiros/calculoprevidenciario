@@ -11,7 +11,7 @@
         class="btn btn-labeled btn-info pull-right"
       >
         <span class="btn-label"> <i class="fa fa-plus"></i> </span>Adicionar
-        Recebidos
+        Benefício
       </button>
     </header>
     <div>
@@ -25,34 +25,34 @@
         >
           <thead>
             <tr>
-              <th>Espécie / Número Benefício</th>
-              <th>DIB / DIP</th>
+              <th class="text-center">Espécie / Número Benefício</th>
+              <th class="text-center">DIB / DIP</th>
               <th class="text-center">DIB Anterior</th>
-              <th>Final</th>
+              <th class="text-center">Data Final do Período</th>
               <th class="text-center">RMI</th>
               <th class="text-center">IRT</th>
-              <th class="text-center">Inferior ao Mínimo</th>
+              <th class="text-center">RMI Inferior ao Mínimo</th>
               <th class="text-center" width="75px">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let recebidoLine of listRecebidos">
-              <td>
+              <td class="text-center">
                 {{ getTipoAposentadoria(recebidoLine.especie) }}
                 <span *ngIf="recebidoLine.numeroBeneficio"
                   ><br />
                   {{ recebidoLine.numeroBeneficio }}</span
                 >
               </td>
-              <td>
+              <td class="text-center">
                 {{ recebidoLine.dib }}
                 <span *ngIf="recebidoLine.dip"
                   ><br />
                   {{ recebidoLine.dip }}</span
                 >
               </td>
-              <td>{{ recebidoLine.dibAnterior }}</td>
-              <td>{{ recebidoLine.cessacao }}</td>
+              <td class="text-center">{{ recebidoLine.dibAnterior }}</td>
+              <td class="text-center">{{ recebidoLine.cessacao }}</td>
               <td class="text-center">
                 {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
                 <span *ngIf="recebidoLine.rmiBuracoNegro">
@@ -122,7 +122,7 @@
                 <span class="widget-icon">
                   <i class="fa fa-plus"></i>
                 </span>
-                <h2>Beneficio Recebidos</h2>
+                <h2>Beneficio Recebido</h2>
                 <button
                   type="button"
                   class="btn btn-xs pull-right btn-danger"
@@ -459,7 +459,7 @@
                                 checked="checked"
                               />
                               <span
-                                >Valor da RMI inferior ao Salário Mínimo</span
+                                >Valor da RMI Inferior ao Salário Mínimo</span
                               >
                             </label>
                           </div>
@@ -499,7 +499,7 @@
                           </span>
                           <span
                             >&nbsp;&nbsp;&nbsp;Adicionar
-                            Período&nbsp;&nbsp;&nbsp;</span
+                            Benefício&nbsp;&nbsp;&nbsp;</span
                           >
                         </button>
                         <button
@@ -514,7 +514,7 @@
                           </span>
                           <span
                             >&nbsp;&nbsp;&nbsp;Atualizar
-                            Período&nbsp;&nbsp;&nbsp;</span
+                            Benefício&nbsp;&nbsp;&nbsp;</span
                           >
                         </button>
                       </div>

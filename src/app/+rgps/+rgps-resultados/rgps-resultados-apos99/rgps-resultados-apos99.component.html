@@ -199,7 +199,7 @@
     <tbody>
       <tr *ngIf='!isUpdating'>
         <td>
-          <p>Exportar para o cálculo de Benefícios Atrasados</p>
+          <p>Exportar para o cálculo de Liquidação de Sentença</p>
         </td>
         <td>
           <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
@@ -216,7 +216,7 @@
       </tr>
       <tr *ngIf='!isUpdating'>
         <td>
-          <p>Exportar para o cálculo de Benefícios Atrasados - Teto 12/98 e 12/2003</p>
+          <p>Exportar para o cálculo de Liquidação de Sentença - Teto 12/98 e 12/2003</p>
         </td>
         <td>
           <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">

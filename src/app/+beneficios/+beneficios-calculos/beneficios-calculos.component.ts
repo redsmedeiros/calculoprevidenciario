@@ -40,13 +40,13 @@ export class BeneficiosCalculosComponent implements OnInit {
         }
       },
       {
-        data: 'data_citacao_reu',
+        data: 'data_acao_judicial',
         render: (data) => {
           return this.formatReceivedDate(data);
         }
       },
       {
-        data: 'data_acao_judicial',
+        data: 'data_citacao_reu',
         render: (data) => {
           return this.formatReceivedDate(data);
         }

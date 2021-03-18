@@ -12,7 +12,7 @@
         *ngIf="!this.isEdit"
       >
         <span class="btn-label"> <i class="fa fa-plus"></i> </span
-        >&nbsp;&nbsp;Adicionar Devido&nbsp;&nbsp;
+        >&nbsp;&nbsp;Adicionar Benefício&nbsp;&nbsp;
       </button>
     </header>
     <div>
@@ -26,34 +26,34 @@
         >
           <thead>
             <tr>
-              <th>Espécie / Número Benefício</th>
-              <th>DIB / DIP</th>
+              <th class="text-center">Espécie / Número Benefício</th>
+              <th class="text-center">DIB / DIP</th>
               <th class="text-center">DIB Anterior</th>
-              <th>Final</th>
+              <th class="text-center">Data Final do Período</th>
               <th class="text-center">RMI</th>
               <th class="text-center">IRT</th>
-              <th class="text-center">Inferior ao Mínimo</th>
+              <th class="text-center">RMI Inferior ao Mínimo</th>
               <th class="text-center" width="75px">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let devidosLine of listDevidos">
-              <td>
+              <td class="text-center">
                 {{ getTipoAposentadoria(devidosLine.especie) }}
                 <span *ngIf="devidosLine.numeroBeneficio"
                   ><br />
                   {{ devidosLine.numeroBeneficio }}</span
                 >
               </td>
-              <td>
+              <td class="text-center">
                 {{ devidosLine.dib }}
                 <span *ngIf="devidosLine.dip"
                   ><br />
                   {{ devidosLine.dip }}</span
                 >
               </td>
-              <td>{{ devidosLine.dibAnterior }}</td>
-              <td>{{ devidosLine.cessacao }}</td>
+              <td class="text-center">{{ devidosLine.dibAnterior }}</td>
+              <td class="text-center">{{ devidosLine.cessacao }}</td>
               <td class="text-center">
                 {{ definicaoMoeda.formatMoney(devidosLine.rmi) }}
                 <span *ngIf="devidosLine.rmiBuracoNegro">
@@ -340,7 +340,7 @@
                           *ngIf="!devidosBuracoNegro"
                           class="control-label"
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
-                          >Renda Mensal Inicial -RMI*:</label
+                          >Renda Mensal Inicial - RMI*:</label
                         >
                         <label
                           *ngIf="devidosBuracoNegro"
@@ -567,7 +567,7 @@
                                 checked="checked"
                               />
                               <span
-                                >Valor da RMI inferior ao Salário Mínimo.</span
+                                >Valor da RMI Inferior ao Salário Mínimo.</span
                               >
                             </label>
                           </div>
@@ -625,7 +625,7 @@
                           </span>
                           <span
                             >&nbsp;&nbsp;&nbsp;Adicionar
-                            Período&nbsp;&nbsp;&nbsp;</span
+                            Benefício&nbsp;&nbsp;&nbsp;</span
                           >
                         </button>
                         <button
@@ -640,7 +640,7 @@
                           </span>
                           <span
                             >&nbsp;&nbsp;&nbsp;Atualizar
-                            Período&nbsp;&nbsp;&nbsp;</span
+                            Benefício&nbsp;&nbsp;&nbsp;</span
                           >
                         </button>
                       </div>

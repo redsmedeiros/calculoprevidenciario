@@ -27,10 +27,10 @@ export class HomeComponent implements OnInit {
       value: 'benef-atrasados',
       link: '/beneficios/beneficios-segurados',
       icon: `fa fa-lg fa-fw fa-calendar`,
-      title: `Benefícios <br>Atrasados`,
-      label: `Simula em qualquer data, diferenças entre valores de rendas
-      mensais de benefícios devidos e recebidos, com a aplicação de
-      correção monetária, juros de mora e honorários advocatícios.`
+      title: `Liquidação <br> de Sentença`,
+      label: `Elabora demonstrativo de cálculo para Cumprimento de Sentença, calculando 
+      a diferença entre valores de benefícios devido e recebido, com aplicação de correção 
+      monetária, juros de mora e honorários advocatícios.`
     },
     {
       value: 'contrib-atrasadas',
@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private Auth: Auth
-    ) { }
+  ) { }
 
 
 
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit {
   }
 
   out(value) {
-   this.textDescricao = '';
+    this.textDescricao = '';
   }
 
 }
