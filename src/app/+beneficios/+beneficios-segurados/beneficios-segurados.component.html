@@ -9,20 +9,72 @@
     <!-- row -->
     <div *ngIf="!isEdit" class="row mb-3">
       <div class="col-sm-12 col-md-12 col-lg-12 mb-0 pb-0">
-        <app-beneficios-segurados-create (onSubmit)="onCreate($event)"></app-beneficios-segurados-create>
+        <app-beneficios-segurados-create
+          (onSubmit)="onCreate($event)"
+        ></app-beneficios-segurados-create>
       </div>
     </div>
     <div *ngIf="isEdit" class="row mb-3">
       <div class="col-sm-12 col-md-12 col-lg-12 mb-0 pb-0">
-        <app-beneficios-segurados-edit (onSubmit)="onCreate($event)"></app-beneficios-segurados-edit>
+        <app-beneficios-segurados-edit
+          (onSubmit)="onCreate($event)"
+        ></app-beneficios-segurados-edit>
       </div>
     </div>
-    <br>
+    <br />
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-beneficios-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-beneficios-segurados-index>
+        <app-beneficios-segurados-index
+          [list]="list"
+          [datatableOptions]="datatableOptions"
+        ></app-beneficios-segurados-index>
       </article>
     </div>
+
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <!-- <div class="panel-heading m-0 p-1">
+            <strong>Instrução do cálculo</strong>
+          </div> -->
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-center">
+                <a
+                  data-toggle="modal"
+                  data-target="#tutorial-liquidacao-sentenca"
+                  class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                  title="Tutorial Planejamento Previdenciário"
+                  >Tutorial</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+    id="tutorial-liquidacao-sentenca"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="tutorial-liquidacao-sentenca-title"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-custom" role="document">
+      <div class="modal-content modal-lg">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+            src="https://player.vimeo.com/video/447520641?color=ffffff"
+            class="embed-responsive-item"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <div class="row mb-3">
       <div class="col-md-12">
@@ -32,33 +84,35 @@
           </div>
           <div class="panel-body m-1 p-1">
             <ul class="list-inline">
-              <li><i class="fa fa-list fa-1-7x bg-color-blue txt-color-white p-1"></i>Ver a lista de cálculos para o segurado</li>
-              <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> Editar</li>
-              <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> Remover</li>
+              <li>
+                <i
+                  class="fa fa-list fa-1-7x bg-color-blue txt-color-white p-1"
+                ></i
+                >Ver a lista de cálculos para o segurado
+              </li>
+              <li>
+                <i
+                  class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"
+                ></i>
+                Editar
+              </li>
+              <li>
+                <i
+                  class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"
+                ></i>
+                Remover
+              </li>
             </ul>
           </div>
         </div>
       </div>
-  </div>
-    <div class="row mb-3">
-      <div class="col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-heading m-0 p-1">
-            <strong>Instrução do cálculo</strong>
-          </div>
-          <div class="panel-body m-1 p-1">
-            <ul class="list-unstyled">
-              <li><a routerLink="/tutorial" target="_blank">Clique aqui e veja os tutoriais e manuais dos simuladores</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-  </div>
+    </div>
+
+
+  
 
     <!-- end row -->
-
   </sa-widgets-grid>
 
   <!-- end widget grid -->
-
 </div>

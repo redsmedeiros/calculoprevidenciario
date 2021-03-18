@@ -1,13 +1,12 @@
 <!-- Widget ID (each widget will need unique ID)-->
-<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" class="mb-3">
   <header>
     <span class="widget-icon">
       <i class="fa fa-list"></i>
     </span>
     <h2>Lista de Cálculos</h2>
   </header>
-  <div>
-    <div class="widget-body no-padding">
+    <div class="widget-body no-padding no-margin">
       <sa-datatable paginationLength="true"
                 tableClass="table table-striped table-bordered table-hover table-condensed" [options]="datatableOptions" width="100%">
         <thead>
@@ -24,5 +23,4 @@
         </thead>
       </sa-datatable>
     </div>
-  </div>
 </sa-widget>

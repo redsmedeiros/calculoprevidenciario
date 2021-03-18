@@ -1707,17 +1707,17 @@
                     </td>
                   </tr>
                   <!-- <tr>
-    <td width="50%" style="text-align: right;">
-      <b>Soma das vincendas Tetos:</b>
-    </td>
-    <td width="50%">
-      <span
-        class="{{ tratarConclusao(somaVincendas) }}"
-      >
-        {{ formatMoney(somaVincendas) }}</span
-      >
-    </td>
-  </tr> -->
+                    <td width="50%" style="text-align: right;">
+                      <b>Soma das vincendas Tetos:</b>
+                    </td>
+                    <td width="50%">
+                      <span
+                        class="{{ tratarConclusao(somaVincendas) }}"
+                      >
+                        {{ formatMoney(somaVincendas) }}</span
+                      >
+                    </td>
+                  </tr> -->
                   <tr>
                     <td width="50%" style="text-align: right">
                       <b>Soma total devida ao segurado Tetos:</b>
@@ -1795,6 +1795,53 @@
         </sa-widget>
       </article>
     </div>
+
+    
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <!-- <div class="panel-heading m-0 p-1">
+            <strong>Instrução do cálculo</strong>
+          </div> -->
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-center">
+                <a
+                  data-toggle="modal"
+                  data-target="#tutorial-liquidacao-sentenca"
+                  class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                  title="Tutorial Planejamento Previdenciário"
+                  >Tutorial</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+    id="tutorial-liquidacao-sentenca"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="tutorial-liquidacao-sentenca-title"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-custom" role="document">
+      <div class="modal-content modal-lg">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+            src="https://player.vimeo.com/video/447520641?color=ffffff"
+            class="embed-responsive-item"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
     <div class="row" id="observacoesprint">
       <article
@@ -1974,6 +2021,8 @@
         </table>
       </div>
     </div>
+
+    
 
     <!-- end row -->
   </sa-widgets-grid>

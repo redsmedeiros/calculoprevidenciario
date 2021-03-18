@@ -8,14 +8,12 @@
   </header>
 
   <!-- widget div-->
-  <div>
     <!-- widget content -->
-    <div class="widget-body">
+    <div class="widget-body-custom no-padding no-margin">
       <app-beneficios-segurados-form
         [errors]="Errors"
         [formData]="form"
         (onSubmit)="submit($event)"
       ></app-beneficios-segurados-form>
     </div>
-  </div>
 </sa-widget>
