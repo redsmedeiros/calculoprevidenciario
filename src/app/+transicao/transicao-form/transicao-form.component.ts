@@ -127,6 +127,7 @@ export class TransicaoFormComponent implements OnInit {
     // this.contribuicaoDias = '00';
 
     // this.nome = 'divaldo - 04-12-2020';
+    // this.nome = 'Andre - 29-10-2020';
     // this.idDocumento = '';
     // this.numeroDocumento = '';
     // this.dataNascimento = '05/07/1964';
@@ -158,6 +159,23 @@ export class TransicaoFormComponent implements OnInit {
 //   this.contribuicaoAnos = '33';
 //   this.contribuicaoMeses = '04';
 //   this.contribuicaoDias = '10';
+
+
+  // this.nome = 'teste - 22-02-2021';
+  // this.idDocumento = '';
+  // this.numeroDocumento = '';
+  // this.dataNascimento = '05/09/1961';
+  // this.dataFiliacao = '01/01/1980';
+  // this.sexo = 'm';
+  // this.professor = false;
+
+  // this.contribuicaoAnosAteEC103 = '33';
+  // this.contribuicaoMesesAteEC103 = '05';
+  // this.contribuicaoDiasAteEC103 = '20';
+
+  // this.contribuicaoAnos = '33';
+  // this.contribuicaoMeses = '05';
+  // this.contribuicaoDias = '20';
 
   }
 

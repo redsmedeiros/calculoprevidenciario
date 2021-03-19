@@ -173,29 +173,29 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     rstTemp.push({ label: 'Nome', value: this.seguradoTransicao.nome });
     rstTemp.push({ label: 'Sexo', value: (this.seguradoTransicao.sexo === 'm') ? 'Masculino' : 'Feminino' });
     rstTemp.push({
-      label: 'Data de nascimento',
+      label: 'Data de Nascimento',
       value: this.isExits(this.seguradoTransicao.dataNascimento) ? this.seguradoTransicao.dataNascimento.format('DD/MM/YYYY') : null
     });
     rstTemp.push({
-      label: 'Idade atual',
+      label: 'Idade Atual',
       value: `${this.seguradoTransicao.idade.years()} anos`
     });
 
     rstTemp.push({
-      label: 'Tempo de contribuição até 13/11/2019 (EC103/2019)',
+      label: 'Tempo de Contribuição até 13/11/2019 (EC103/2019)',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnosAteEC103,
         this.seguradoTransicao.contribuicaoMesesAteEC103,
         this.seguradoTransicao.contribuicaoDiasAteEC103)
     });
 
     rstTemp.push({
-      label: 'Tempo Total de contribuição até a data atual',
+      label: 'Tempo Total de Contribuição até a Data Atual',
       value: this.formateStringAnosMesesDias(this.seguradoTransicao.contribuicaoAnos,
         this.seguradoTransicao.contribuicaoMeses,
         this.seguradoTransicao.contribuicaoDias)
     });
 
-    rstTemp.push({ label: 'Espécie de aposentadoria', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
+    rstTemp.push({ label: 'Espécie de Aposentadoria', value: (this.seguradoTransicao.professor) ? 'Professor' : null });
 
 
     if (this.isExits(this.seguradoTransicao.idDocumento) && this.isExits(this.seguradoTransicao.numeroDocumento)) {
@@ -665,7 +665,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     popupWin.document.write(`<!doctype html>
                                 <html>
                                   <head>${css}</head>
-                                  <title>Emenda Constitucional nº 103/2019 - ${this.seguradoTransicao.nome}</title>
+                                  <title><b>Relatório de Análise das Regras de Transição - EC 103/2019 - ${this.seguradoTransicao.nome}</b></title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
                                    <footer class="mt-5">${rodape}</footer>

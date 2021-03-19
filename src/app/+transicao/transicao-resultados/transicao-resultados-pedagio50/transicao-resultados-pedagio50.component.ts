@@ -131,41 +131,63 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     const contribuicao_minRequisito = this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo + 'd'];
     const contribuicao_min = this.tempoDeContribuicao50Regra3[this.seguradoTransicao.sexo + 'd'];
+    const contribuicao_min_anos = this.tempoDeContribuicao50Regra3[this.seguradoTransicao.sexo];
 
     let rstRegraPedagio50: any;
-    let dataDib = (this.dataAtual.clone()).add(1, 'day');
-    // const dataDib = moment('01/06/2020', 'DD/MM/YYYY');
+    let dataDib = (this.dataAtual.clone()).startOf('day'); // .subtract(1, 'd')
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
 
+    // console.log(dataDib);
+
+    const tempoFinalContribAnos = this.seguradoTransicao.contribuicaoFracionadoAnos;
     const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDias;
     // const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
 
     const tempoFinalContribAteEC103 = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
+    const tempoFinalContribAteEC103Anos = this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103;
     const contribuicaoDiffAteEC103EAtual = tempoFinalContrib - tempoFinalContribAteEC103;
 
 
     let contribuicaoDiff = 0;
     let tempoDePedagio = 0;
+    let tempoDePedagioAnos = 0;
     let tempoDePedagioTotal = 0;
     let tempoFinalContribfinalComPedagio = 0;
+    let tempoFinalContribfinalComPedagioAnos = 0;
     let tempoDePedagioTotalNecessario = 0;
+    let tempoDePedagioTotalNecessarioAnos = 0;
 
 
     if (tempoFinalContribAteEC103 <= contribuicao_min) {
 
       contribuicaoDiff = (contribuicao_min - tempoFinalContrib);
       tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
+      tempoDePedagioAnos = ((contribuicao_min_anos - tempoFinalContribAteEC103Anos) * 0.5);
+
 
       tempoFinalContribfinalComPedagio = contribuicao_min + tempoDePedagio;
+      tempoFinalContribfinalComPedagioAnos = contribuicao_min_anos + tempoDePedagioAnos;
 
       ///  tempoDePedagioTotal = contribuicaoDiff + tempoDePedagio;
 
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
+      tempoDePedagioTotalNecessarioAnos = (tempoFinalContribfinalComPedagioAnos - tempoFinalContribAnos);
 
       idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
 
-      dataDib.add(tempoDePedagioTotalNecessario, 'd');
+      // console.log(tempoDePedagioAnos);
+      // console.log(tempoFinalContribfinalComPedagio);
+      // console.log(tempoFinalContribfinalComPedagioAnos);
+      // console.log(tempoDePedagioTotalNecessario);
+      // console.log(tempoDePedagioTotalNecessarioAnos);
+      // console.log(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25));
+      // console.log(contribuicao_min_anos);
+      // console.log(tempoFinalContribAnos);
+      // dataDib.add(tempoDePedagioTotalNecessario, 'd');
+
+      dataDib.add(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25), 'd');
+
 
 
       // const correcaoAnoBissexto = this.contarBissextosEntre(
@@ -406,7 +428,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     const dataHoje = moment().subtract(2, 'y');
     const objEspect = this.expectativasVida.find(expec => expec.ano == dataHoje.year());
 
-    return (objEspect !== undefined)? objEspect : {valor: 6, ano: dataHoje.year()};
+    return (objEspect !== undefined) ? objEspect : { valor: 6, ano: dataHoje.year() };
   }
 
   public getFatorPrevidenciario(dataInicioBeneficio, idadeFracionada, tempoTotalContribuicao) {

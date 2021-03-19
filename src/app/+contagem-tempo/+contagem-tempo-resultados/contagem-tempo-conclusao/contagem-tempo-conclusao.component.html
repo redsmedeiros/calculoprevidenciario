@@ -144,7 +144,7 @@
       <td class="text-center">
         {{ tempoDePedApProp.days }}
       </td>
-      <td rowspan="8" colspan="2"></td>
+      <td rowspan="9" colspan="2"></td>
     </tr>
     <tr >
       <td>
@@ -223,6 +223,20 @@
       </td>
       <td class="text-center">
         {{ somatoriaTempoContribIdadeAtual.days }}
+      </td>
+    </tr>
+    <tr *ngIf="!isUpdateTotalTempoIdadeUltimoVinculo">
+      <td>
+        Somatório do Tempo de Contribuição e Idade na Data Fim do Último Período ({{ limitesDoVinculo.fim.format('DD/MM/YYYY') }})
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeUltimoVinculo.years }}
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeUltimoVinculo.months }}
+      </td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdadeUltimoVinculo.days }}
       </td>
     </tr>
   </tbody>

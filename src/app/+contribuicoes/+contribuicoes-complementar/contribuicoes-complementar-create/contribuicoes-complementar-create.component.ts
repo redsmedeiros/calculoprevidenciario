@@ -9,6 +9,7 @@ import { Moeda } from '../../../services/Moeda.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-contribuicoes-complementar-create',
   templateUrl: './contribuicoes-complementar-create.component.html',
@@ -32,12 +33,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   public form = { ...ContribuicaoModel.form };
 
+  private isUpdate = true;
+
 
   matriz = [{
-    "ano": 0,
-    "valores": []
-  }
-  ];
+    'ano': 0,
+    'valores': []
+  }];
 
   public anosConsiderados = [];
   public moeda: Moeda[];
@@ -59,12 +61,28 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.isUpdate = true;
+    this.getInformacoesIniciais();
+
+  }
+
+
+  getInformacoesIniciais() {
+
     this.idSegurado = this.route.snapshot.params['id'];
     let today = moment();
-    this.Moeda.getByDateRangeMoment(moment('1990-01-01'), moment())
+      
+    this.Moeda.getByDateRangeMomentParam(moment('1990-01-01'), moment().subtract(1, 'm'))
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
+        this.isUpdate = false;
       });
+
+    // this.Moeda.getByDateRangeMoment(moment('1990-01-01'), moment())
+    //   .then((moeda: Moeda[]) => {
+    //     this.moeda = moeda;
+    //   });
 
   }
 
@@ -175,15 +193,17 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   createCalculo(e) {
     e.preventDefault();
+
+
     this.generateTabelaDetalhes();
     this.form.contribuicao_calculada = this.calculateContribuicao();
 
     let novoCalculo = new ContribuicaoModel();
     novoCalculo.id_segurado = this.form.id_segurado;
-    novoCalculo.inicio_atraso = "01/" + this.form.inicio_atraso;
-    novoCalculo.final_atraso = "01/" + this.form.final_atraso
-    novoCalculo.contribuicao_basica_inicial = "01/" + this.contribuicao_basica_inicial_temp
-    novoCalculo.contribuicao_basica_final = "01/" + this.contribuicao_basica_final_temp
+    novoCalculo.inicio_atraso = '01/' + this.form.inicio_atraso;
+    novoCalculo.final_atraso = '01/' + this.form.final_atraso
+    novoCalculo.contribuicao_basica_inicial = '01/' + this.contribuicao_basica_inicial_temp
+    novoCalculo.contribuicao_basica_final = '01/' + this.contribuicao_basica_final_temp
     novoCalculo.salario = this.form.salario;
     novoCalculo.total_contribuicao = this.form.total_contribuicao;
     novoCalculo.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
@@ -234,30 +254,30 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
     let data_dict = [];
     for (let ano of unique_anos) {
-      let valor_jan = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("01-" + ano)).value);
-      data_dict.push("01/" + ano + '-' + valor_jan);
-      let valor_fev = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("02-" + ano)).value);
-      data_dict.push("02/" + ano + '-' + valor_fev);
-      let valor_mar = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("03-" + ano)).value);
-      data_dict.push("03/" + ano + '-' + valor_mar);
-      let valor_abr = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("04-" + ano)).value);
-      data_dict.push("04/" + ano + '-' + valor_abr);
-      let valor_mai = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("05-" + ano)).value);
-      data_dict.push("05/" + ano + '-' + valor_mai);
-      let valor_jun = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("06-" + ano)).value);
-      data_dict.push("06/" + ano + '-' + valor_jun);
-      let valor_jul = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("07-" + ano)).value);
-      data_dict.push("07/" + ano + '-' + valor_jul);
-      let valor_ago = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("08-" + ano)).value);
-      data_dict.push("08/" + ano + '-' + valor_ago);
-      let valor_set = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("09-" + ano)).value);
-      data_dict.push("09/" + ano + '-' + valor_set);
-      let valor_out = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("10-" + ano)).value);
-      data_dict.push("10/" + ano + '-' + valor_out);
-      let valor_nov = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("11-" + ano)).value);
-      data_dict.push("11/" + ano + '-' + valor_nov);
-      let valor_dez = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById("12-" + ano)).value);
-      data_dict.push("12/" + ano + '-' + valor_dez);
+      let valor_jan = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('01-' + ano)).value);
+      data_dict.push('01/' + ano + '-' + valor_jan);
+      let valor_fev = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('02-' + ano)).value);
+      data_dict.push('02/' + ano + '-' + valor_fev);
+      let valor_mar = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('03-' + ano)).value);
+      data_dict.push('03/' + ano + '-' + valor_mar);
+      let valor_abr = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('04-' + ano)).value);
+      data_dict.push('04/' + ano + '-' + valor_abr);
+      let valor_mai = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('05-' + ano)).value);
+      data_dict.push('05/' + ano + '-' + valor_mai);
+      let valor_jun = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('06-' + ano)).value);
+      data_dict.push('06/' + ano + '-' + valor_jun);
+      let valor_jul = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('07-' + ano)).value);
+      data_dict.push('07/' + ano + '-' + valor_jul);
+      let valor_ago = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('08-' + ano)).value);
+      data_dict.push('08/' + ano + '-' + valor_ago);
+      let valor_set = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('09-' + ano)).value);
+      data_dict.push('09/' + ano + '-' + valor_set);
+      let valor_out = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('10-' + ano)).value);
+      data_dict.push('10/' + ano + '-' + valor_out);
+      let valor_nov = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('11-' + ano)).value);
+      data_dict.push('11/' + ano + '-' + valor_nov);
+      let valor_dez = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('12-' + ano)).value);
+      data_dict.push('12/' + ano + '-' + valor_dez);
     }
     return data_dict;
   }
@@ -373,7 +393,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   public formatDecimalValue(value) {
 
-     // typeof value === 'string' || 
+    // typeof value === 'string' || 
     if (isNaN(value)) {
 
       return parseFloat(value.replace(/\./g, '').replace(',', '.'));
@@ -411,6 +431,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   getSalarioMinimo(dataString) {
     // let diff = this.getDifferenceInMonths('07/1994', dataString);
     // return parseFloat(this.moeda[diff].salario_minimo);
+
     let data = moment(dataString, 'MM/YYYY');
     if (data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda)
       console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
@@ -506,7 +527,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         return;
       }
     }
-    this.matriz.push({ "ano": ano, "valores": valores });
+    this.matriz.push({ 'ano': ano, 'valores': valores });
     this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
 
@@ -539,7 +560,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   //Retorna a diferença em anos completos entre a data passada como parametro e a data atual
   getDifferenceInYears(dateString) {
     let today = moment();
-    let pastDate = moment(dateString, "MM/YYYY");
+    let pastDate = moment(dateString, 'MM/YYYY');
     let duration = moment.duration(today.diff(pastDate));
     let years = duration.asYears();
     return Math.floor(years);
@@ -551,9 +572,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     if (dateString2 == '') {
       recent = moment();
     } else {
-      recent = moment(dateString2, "MM/YYYY");
+      recent = moment(dateString2, 'MM/YYYY');
     }
-    let pastDate = moment(dateString, "MM/YYYY");
+    let pastDate = moment(dateString, 'MM/YYYY');
     let duration = moment.duration(recent.diff(pastDate));
     let months = duration.asMonths();
     return Math.floor(months);

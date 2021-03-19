@@ -4,7 +4,7 @@
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12">
           <h2 class="margin-top-0">
-              <span class="semi-bold">Simulador para as regras de transição da Emenda Constitucional nº 103/2019</span>
+              <span class="semi-bold">Simulador para as Regras de Transição da Emenda Constitucional nº 103/2019</span>
             </h2>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/home/home"> Home </a></li>
@@ -50,7 +50,7 @@
                 <span class="widget-icon font-md">
                   <i class="fa fa-user"></i>
                 </span>
-                <h2>Insira os dados do(a) segurado(a)</h2>
+                <h2>Insira os Dados do(a) Segurado(a)</h2>
               </header>
               <!-- widget div-->
               <div>
@@ -69,7 +69,7 @@
                               <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
                             </div>
                       
-                            <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
+                            <label class="col-md-2 control-label" for="select-1">Tipo de Documento</label>
                             <div class="col-md-3">
                               <select class="form-control" id="select-1" [(ngModel)]="idDocumento" [ngModelOptions]="{standalone: true}" >
                                 <option value='1'>PIS</option>
@@ -83,13 +83,13 @@
                           </div>
                       
                           <div class="form-group">
-                            <label class="col-md-2 control-label">Data de nascimento*</label>
+                            <label class="col-md-2 control-label">Data de Nascimento*</label>
                             <div class="col-md-3">
                               <input [(ngModel)]="dataNascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('dataNascimento')" [textMask]="{mask: dateMask}" class="form-control" type="text" data-placement="bottom" tooltip="Define  a idade e assim estabelece direitos e condições de cálculos.">
                               <small *ngIf="errors.has('dataNascimento')" class="text-danger">{{ errors.get('dataNascimento') | i18n}}</small>
                             </div>
                             
-                            <label class="col-md-2 control-label">Número do documento</label>
+                            <label class="col-md-2 control-label">Número do Documento</label>
                             <div class="col-md-3">
                               <input [(ngModel)]="numeroDocumento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numeroDocumento')" class="form-control" type="text">
                               <small *ngIf="errors.has('numeroDocumento')" class="text-danger">{{ errors.get('numeroDocumento')| i18n }}</small>
@@ -97,7 +97,7 @@
                           </div>
                       
                           <div class="form-group" >
-                            <label class="col-md-2 control-label" >Data de filiação* </label>
+                            <label class="col-md-2 control-label" >Data de Filiação* </label>
                             <div class="col-md-3">
                               <input [(ngModel)]="dataFiliacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('dataFiliacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
                               <small *ngIf="errors.has('dataFiliacao')" class="text-danger">{{ errors.get('dataFiliacao') | i18n}}</small>
@@ -127,7 +127,7 @@
 
                         </fieldset>
                         <fieldset>
-                          <h3 >Tempo de contribuição até  13/11/2019 (EC103/2019)</h3>
+                          <h3 >Tempo de Contribuição até  13/11/2019 (EC103/2019)</h3>
                           <div  class="form-group">
                               <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                               <div class="col-md-1">
@@ -145,7 +145,7 @@
                             </div>
                       </fieldset>
                         <fieldset>
-                            <h3 >Tempo Total de contribuição até a data atual</h3>
+                            <h3 >Tempo Total de Contribuição até a Data Atual</h3>
                             <div  class="form-group">
                                 <label class="col-md-2 control-label" for="select-1">Contribuição *:</label>
                                 <div class="col-md-1">
