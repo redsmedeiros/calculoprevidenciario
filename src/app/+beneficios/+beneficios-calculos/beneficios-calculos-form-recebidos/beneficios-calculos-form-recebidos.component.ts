@@ -175,6 +175,8 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     if (rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
     }
+
+    this.checkRecebidosBuracoNegro();
   }
 
 

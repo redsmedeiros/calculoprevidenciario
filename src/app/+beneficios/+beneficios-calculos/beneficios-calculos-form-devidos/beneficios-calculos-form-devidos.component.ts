@@ -208,6 +208,8 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;
     }
+
+    this.checkDevidosBuracoNegro();
   }
 
   public showChildModalDevidos(): void {
