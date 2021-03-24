@@ -338,9 +338,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       valid = false;
     }
 
-    if (this.isEmptyInput(this.dataCitacaoReu)) {
+    if (!this.isEmptyInput(this.dataCitacaoReu)) {
       // this.errors.add({ 'dataCitacaoReu': ['A data da Citação do Réu é Necessária.'] });
       // valid = false;
+
+      if ( moment(this.dataCitacaoReu, 'DD/MM/YYYY') < moment(this.dataAcaoJudicial, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataCitacaoReu': ['A data da citação deve ser igual ou posterior ao ajuizamento da ação.'] })
+        valid = false;
+      }
+
     } else if (!this.isValidDate(this.dataCitacaoReu)) {
       this.errors.add({ 'dataCitacaoReu': ['Insira uma data Válida.'] });
       valid = false;

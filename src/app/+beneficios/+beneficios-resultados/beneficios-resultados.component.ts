@@ -759,6 +759,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
+
     this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years');
     if (this.calculo.data_citacao_reu) {
       this.dataFinalPrescricao = (moment(this.calculo.data_citacao_reu)).subtract(5, 'years').subtract(1, 'month');
@@ -974,7 +975,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       valorDevidohonorario = this.roundMoeda((beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros));
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
-      if (diferencaCorrigidaJuros.string.indexOf('prescrita') != -1 && this.considerarPrescricao) {
+      if (diferencaCorrigidaJuros.string.indexOf('Prescrita') != -1 && this.considerarPrescricao) {
         // Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
@@ -994,10 +995,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
       line.diferenca_juros = diferencaCorrigidaJuros.string;
       line.diferenca_corrigida_juros = diferencaCorrigidaJuros.string;
-      line.diferenca_corrigida_jurosN = (diferencaCorrigidaJuros.string != 'prescrita') ? diferencaCorrigidaJuros.value : 0;
+      line.diferenca_corrigida_jurosN = (diferencaCorrigidaJuros.string != 'Prescrita') ? diferencaCorrigidaJuros.value : 0;
 
-      line.honorarios = (diferencaCorrigidaJuros.string != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
-      line.honorariosN = (diferencaCorrigidaJuros.string != 'prescrita') ? honorarios : 0;
+      line.honorarios = (diferencaCorrigidaJuros.string != 'Prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
+      line.honorariosN = (diferencaCorrigidaJuros.string != 'Prescrita') ? honorarios : 0;
       line.beneficio_devidoH = valorDevidohonorario;
 
       line.correcao_monetariaN = correcaoMonetaria;
@@ -2668,7 +2669,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataFinalPrescricao);
     }
 
-
     // Não aplicar juros em valor negativo
     if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
       diferencaCorrigidaJuros = diferencaCorrigida;
@@ -2688,8 +2688,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       && this.considerarPrescricao) {
 
       if (this.considerarPrescricao && diasProporcionais === 1) {
-        // diferencaCorrigidaJurosString = 'prescrita';
-        diferencaCorrigidaJurosString = 'R$ 0,00';
+        diferencaCorrigidaJurosString = 'Prescrita';
+        // diferencaCorrigidaJurosString = 'R$ 0,00';
       } else {
         //  diferencaCorrigidaJurosString += '<br>(prescrita)';
       }
