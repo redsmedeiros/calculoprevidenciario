@@ -139,6 +139,11 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.dataInicialadicional25Devido = '';
     }
 
+    if (this.devidosBuracoNegro) {
+      this.rmiValoresDevidosBuracoNegro = this.rmiValoresDevidos;
+    }
+
+
     const devidoMultiplo = new Devidos(
       this.listDevidos.length + 1,
       this.especieValoresDevidos,

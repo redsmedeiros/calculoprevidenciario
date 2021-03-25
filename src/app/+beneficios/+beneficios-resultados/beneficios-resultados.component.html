@@ -1,3 +1,13 @@
+<div id="content" *ngIf="isUpdating" style="min-width: 895px">
+  <div class="row" style="margin-top: 25%">
+    <div class="col-md-offset-3 col-md-6 col-lg-6">
+      <div class="text-align-center">
+        <i class="fa fa-cog fa-spin fa-5x" aria-hidden="true"></i>
+        <h4>Aguarde alguns instantes...</h4>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="content" *ngIf="!isUpdating" style="min-width: 895px">
   <!-- widget grid -->
   <sa-widgets-grid>
@@ -1796,7 +1806,6 @@
       </article>
     </div>
 
-    
     <div class="row mb-3">
       <div class="col-md-12">
         <div class="panel panel-default">
@@ -1820,28 +1829,27 @@
       </div>
     </div>
     <div
-    id="tutorial-liquidacao-sentenca"
-    class="modal fade"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="tutorial-liquidacao-sentenca-title"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-custom" role="document">
-      <div class="modal-content modal-lg">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe
-            src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
-            class="embed-responsive-item"
-            frameborder="0"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-          ></iframe>
+      id="tutorial-liquidacao-sentenca"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="tutorial-liquidacao-sentenca-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-custom" role="document">
+        <div class="modal-content modal-lg">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe
+              src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
+              class="embed-responsive-item"
+              frameborder="0"
+              allow="autoplay; fullscreen"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
 
     <div class="row" id="observacoesprint">
       <article
@@ -1942,87 +1950,69 @@
         </div>
       </article>
     </div>
+
     <div class="row" *ngIf="isTetos || isBuracoNegroLeg">
-      <div class="col-sm-4 col-sm-offset-4">
-        <table class="table table-bordered table-hover table-condensed">
-          <thead>
-            <tr>
-              <th colspan="2" class="text-align-center">LEGENDA</th>
-            </tr>
-          </thead>
-          <thead>
-            <tr>
-              <th>Símbolo</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="isTetos">
-              <td>(os)</td>
-              <td>
-                <a class="dcontexto"
-                  >Índice de reajuste pela OS 121<span
-                    >Os valores dos indices de reajustes entre a DIB de
+      <article
+        class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+        *ngIf="!isUpdating"
+      >
+        <div class="well margin-top-10 margin-bottom-10">
+          <p>
+            <strong>Legenda:</strong>
+          </p>
+          <p *ngIf="isBuracoNegroLeg">
+              * -  Efeito financeiro da Revisão do Buraco Negro
+              <span>
+                <popover-content #avisoisBuracoNegroLeg
+                title="Efeito financeiro da Revisão do Buraco Negro"
+                [closeOnClickOutside]="true"
+                >
+                <div class="alert alert-danger bg-ieprev fade in bold text-justify">
+                  Conforme o art 144 da Lei 8.213/1991 os benefícios
+                    concedidos entre 05/10/1988 e 05/04/1991 tiveram suas rendas
+                    mensais iniciais revisadas, porém o efeito financeiro desta
+                    revisão não abrange o período entre a DIB e 05/1992 e se dá
+                    somente a partir de 06/1992.
+                </div>
+                </popover-content>
+                  <button type="button" class="btn btn-xs btn-info" 
+                  popoverPlacement="right" 
+                  [popoverOnHover]="true"
+                  [popover]="avisoisBuracoNegroLeg"
+                   >
+                      <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
+                  </button>
+              </span>
+          </p>
+          <p *ngIf="isTetos">
+              (os) - Índice de reajuste pela OS 121
+              <span>
+                <popover-content #avisoisTetos
+                title="Índice de reajuste pela OS 121"
+                [closeOnClickOutside]="true"
+                >
+                <div class="alert alert-danger bg-ieprev fade in bold text-justify">
+                  Os valores dos indices de reajustes entre a DIB de
                     benefícios concedidos entre 05/10/1988 e 05/04/1991 (buraco
                     negro), e 05/1992, foram alterados por esta OS 121/1992 e a
                     aplicação destes indices sobre a renda mensal inicial
                     revisada teve efeito financeiro a partir de 06/1992, não
                     sendo devidas diferenças para o período entre a DIB e
-                    05/1992.</span
-                  ></a
-                >
-              </td>
-            </tr>
-            <tr *ngIf="isBuracoNegroLeg">
-              <td>*</td>
-              <td>
-                <a class="dcontexto"
-                  >Efeito financeiro da Revisão do Buraco Negro<span
-                    >Conforme o art 144 da Lei 8.213/1991 os benefícios
-                    concedidos entre 05/10/1988 e 05/04/1991 tiveram suas rendas
-                    mensais iniciais revisadas, porém o efeito financeiro desta
-                    revisão não abrange o período entre a DIB e 05/1992 e se dá
-                    somente a partir de 06/1992.</span
-                  ></a
-                >
-              </td>
-            </tr>
-            <!--   
-             <tr>
-              <td>p</td>
-              <td>
-                <a class="dcontexto"
-                  >Benefício Proporcional<span
-                    >Valores proporcionais aos dias com base na DIB (data do
-                    inicio do benefício) de valores devidos ou recebidos ou
-                    ainda na data de cessação de valores devidos ou recebidos .
-                    Para apresentação de valores inteiros a DIB de valores
-                    devidos e recebidos deve sempre ser o primeiro dia do mês e
-                    a data de cessação deve estar zerada ou que seja o ultimo
-                    dia do mês de referência.</span
-                  ></a
-                >
-              </td>
-            </tr>
-            <tr>
-              <td>a</td>
-              <td>Abono Proporcional</td>
-            </tr>
-           
-              <tr>
-              <td>M</td>
-              <td>Limitado ao valor mínimo</td>
-            </tr>
-            <tr>
-              <td>T</td>
-              <td>Limitado ao valor teto</td>
-            </tr> -->
-          </tbody>
-        </table>
-      </div>
+                    05/1992.
+                </div>
+                </popover-content>
+                  <button type="button" class="btn btn-xs btn-info" 
+                  popoverPlacement="right" 
+                  [popoverOnHover]="true"
+                  [popover]="avisoisTetos"
+                   >
+                      <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
+                  </button>
+              </span>
+          </p>
+        </div>
+      </article>
     </div>
-
-    
 
     <!-- end row -->
   </sa-widgets-grid>

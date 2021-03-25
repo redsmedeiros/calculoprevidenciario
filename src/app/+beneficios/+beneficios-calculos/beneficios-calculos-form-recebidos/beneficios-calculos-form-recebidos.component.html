@@ -55,11 +55,11 @@
               <td class="text-center">{{ recebidoLine.cessacao }}</td>
               <td class="text-center">
                 {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
-                <span *ngIf="recebidoLine.rmiBuracoNegro">
+                <!-- <span *ngIf="recebidoLine.rmiBuracoNegro">
                   <br />{{
                     definicaoMoeda.formatMoneyB(recebidoLine.rmiBuracoNegro)
                   }}
-                </span>
+                </span> -->
               </td>
               <td class="text-center">{{ recebidoLine.irt }}</td>
               <td class="text-center">
@@ -197,7 +197,8 @@
                             name="dibValoresRecebidos"
                             (blur)="setCheckRevisao()"
                             (change)="
-                              dibValoresRecebidosChanged(); validRecebidos()
+                              dibValoresRecebidosChanged(); 
+                              validRecebidos();
                             "
                             [(ngModel)]="dibValoresRecebidos"
                             type="text"
@@ -273,7 +274,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label
+                        <!-- <label
                           *ngIf="recebidosBuracoNegro"
                           class="control-label col-md-7"
                         >
@@ -292,7 +293,20 @@
                             class="fa fa-question-circle fa-lg"
                           ></i
                           >Renda Mensal Inicial - RMI*:</label
-                        >
+                        > -->
+                      <label
+                        class="control-label col-md-7"
+                      >
+                        <i
+                          *ngIf="
+                            especieValoresRecebidos == '16' ||
+                            especieValoresRecebidos == '11'
+                          "
+                          title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo."
+                          class="fa fa-question-circle fa-lg"
+                        ></i
+                        >Renda Mensal Inicial - RMI*:</label
+                      >
                         <div class="col-md-4">
                           <input
                             name="rmiValoresRecebidos"
@@ -309,6 +323,20 @@
                           >
                         </div>
                       </div>
+                      <!-- <div *ngIf="recebidosBuracoNegro" class="form-group">
+                        <label class="control-label col-md-7"
+                          >RMI depois da revisão (Buraco Negro):</label
+                        >
+                        <div class="col-md-4">
+                          <input
+                            name="rmiValoresRecebidosBuracoNegro"
+                            [(ngModel)]="rmiValoresRecebidosBuracoNegro"
+                            currencyMask
+                            class="form-control"
+                            type="text"
+                          />
+                        </div>
+                      </div> -->
                       <div
                         class="form-group"
                         *ngIf="
@@ -408,20 +436,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="recebidosBuracoNegro" class="form-group">
-                        <label class="control-label col-md-7"
-                          >RMI depois da revisão (Buraco Negro):</label
-                        >
-                        <div class="col-md-4">
-                          <input
-                            name="rmiValoresRecebidosBuracoNegro"
-                            [(ngModel)]="rmiValoresRecebidosBuracoNegro"
-                            currencyMask
-                            class="form-control"
-                            type="text"
-                          />
-                        </div>
-                      </div>
+
                       <div class="form-group">
                         <label class="control-label col-md-7">
                           Índice de Limitação no Teto:

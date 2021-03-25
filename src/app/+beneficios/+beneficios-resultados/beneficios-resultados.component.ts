@@ -358,6 +358,8 @@ export class BeneficiosResultadosComponent implements OnInit {
               this.setInicioRecebidosEDevidos();
               //  this.setInicioRecebidosEDevidosIndices();
               // console.log(this.calculo);
+              this.getIndicesIniciais();
+              this.getIndicesReajusteListRecebidos();
 
 
               if (this.calculo.aplicar_ajuste_maximo_98_2003 == '1') {
@@ -368,17 +370,15 @@ export class BeneficiosResultadosComponent implements OnInit {
               const rstMoeda = this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
+                  return true;
                 });
 
-              this.getIndicesIniciais();
-
-              this.getIndicesReajusteListRecebidos();
 
               this.allPromissesCalc.push(rstMoeda);
-              // this.allPromissesCalc.push(indiceDevidoRST);
-              // this.allPromissesCalc.push(indiceRecebidoRST);
 
               Promise.all(this.allPromissesCalc).then((values) => {
+
+                //                console.log(values)
 
                 this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
@@ -400,57 +400,90 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
   private getIndicesIniciais() {
-    let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
 
-    if (this.calculo.previa_data_pedido_beneficio_esperado &&
-      moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
-      date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+
+    const refreshIfInvalidDate = (date) => {
+
+      if (!this.checkvalidDate(date)) {
+        throw new Error('dateInvalid');
+      }
+
+    };
+
+    try {
+
+
+      let date_inicio_devido = moment(this.calculo.data_pedido_beneficio_esperado);
+
+      if (this.calculo.previa_data_pedido_beneficio_esperado &&
+        moment(this.calculo.previa_data_pedido_beneficio_esperado).isValid()) {
+        date_inicio_devido = moment(this.calculo.previa_data_pedido_beneficio_esperado);
+      }
+
+      refreshIfInvalidDate(date_inicio_devido);
+
+      // se ouver dib anterior considerar como a primeira data para o indice de correção
+      let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00'
+        && moment(this.calculo.data_anterior_pedido_beneficio).isValid()) ?
+        this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
+
+
+      date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
+
+      refreshIfInvalidDate(date_inicio_recebido);
+
+      if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
+        this.dataFinal = (moment(this.calculo.data_calculo_pedido));
+      }
+
+      refreshIfInvalidDate(this.dataFinal);
+
+      const indiceDevidoRST = this.IndiceDevido.getByDateRange(
+        moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
+        this.dataFinal.format('YYYY-MM-DD'))
+        .then((indicesDevido: Indices) => {
+
+          for (const i_devido of this.IndiceDevido.list) {
+            this.indiceDevido.push(i_devido);
+          }
+          return true;
+        });
+
+      const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
+        moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
+        this.dataFinal.format('YYYY-MM-DD'))
+        .then((indicesRecebido: Indices) => {
+
+          for (const i_recebido of this.IndiceRecebido.list) {
+            this.indiceRecebido.push(i_recebido);
+          }
+          return true;
+        });
+
+      this.devidoBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio_esperado));
+      this.recebidosBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio));
+
+      if (this.devidoBuracoNegro) {
+        this.devidoIndiceBuracoNegro = this.getIndiceBuracoNegro.get(moment(this.calculo.data_pedido_beneficio_esperado).startOf('month'));
+      }
+
+      if (this.recebidosBuracoNegro) {
+        this.recebidosIndiceBuracoNegro = this.getIndiceBuracoNegro.get(moment(this.calculo.data_pedido_beneficio).startOf('month'));
+      }
+
+      this.allPromissesCalc.push(indiceDevidoRST);
+      this.allPromissesCalc.push(indiceRecebidoRST);
+
+    } catch (error) {
+
+      if (error.message === 'dateInvalid' && !sessionStorage.dateInvalid) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000)
+        sessionStorage.setItem('dateInvalid', 'true');
+      }
+
     }
-
-    // se ouver dib anterior considerar como a primeira data para o indice de correção
-    let date_inicio_recebido = (this.calculo.data_anterior_pedido_beneficio !== '0000-00-00') ?
-      this.calculo.data_anterior_pedido_beneficio : this.calculo.data_pedido_beneficio;
-
-    date_inicio_recebido = (moment(date_inicio_recebido).isValid()) ? date_inicio_recebido : date_inicio_devido;
-    if (!(moment(this.calculo.data_calculo_pedido).isValid())) {
-      this.dataFinal = (moment(this.calculo.data_calculo_pedido));
-    }
-
-    const indiceDevidoRST = this.IndiceDevido.getByDateRange(
-      moment(date_inicio_devido).clone().startOf('month').format('YYYY-MM-DD'),
-      this.dataFinal.format('YYYY-MM-DD'))
-      .then((indicesDevido: Indices) => {
-
-        for (const i_devido of this.IndiceDevido.list) {
-          this.indiceDevido.push(i_devido);
-        }
-
-      });
-
-    const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
-      moment(date_inicio_recebido).clone().startOf('month').format('YYYY-MM-DD'),
-      this.dataFinal.format('YYYY-MM-DD'))
-      .then((indicesRecebido: Indices) => {
-
-        for (const i_recebido of this.IndiceRecebido.list) {
-          this.indiceRecebido.push(i_recebido);
-        }
-
-      });
-
-    this.devidoBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio_esperado));
-    this.recebidosBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio));
-
-    if (this.devidoBuracoNegro) {
-      this.devidoIndiceBuracoNegro = this.getIndiceBuracoNegro.get(moment(this.calculo.data_pedido_beneficio_esperado).startOf('month'));
-    }
-
-    if (this.recebidosBuracoNegro) {
-      this.recebidosIndiceBuracoNegro = this.getIndiceBuracoNegro.get(moment(this.calculo.data_pedido_beneficio).startOf('month'));
-    }
-
-    this.allPromissesCalc.push(indiceDevidoRST);
-    this.allPromissesCalc.push(indiceRecebidoRST);
 
   }
 
@@ -609,6 +642,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             for (const i_recebido of indicesRecebido) {
               recebidoRow.indiceInps.push(i_recebido);
             }
+            return true;
           });
         this.allPromissesCalc.push(promRecebidoRow);
       }
@@ -742,10 +776,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
-    this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years');
-    if (this.calculo.data_citacao_reu) {
-      this.dataFinalPrescricao = (moment(this.calculo.data_citacao_reu)).subtract(5, 'years').subtract(1, 'month');
-    }
+    this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial).startOf('month')).subtract(5, 'years').subtract(1, 'month');
+    // if (this.calculo.data_citacao_reu) {
+    //   this.dataFinalPrescricao = (moment(this.calculo.data_citacao_reu).startOf('month')).subtract(5, 'years').subtract(1, 'month');
+    // }
 
     // Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
     const func_beneficioDevido = this.getBeneficioDevido;
@@ -766,6 +800,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     // } else {
     abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(dataPedidoBeneficioEsperado);
     // }
+
+    if (this.devidoBuracoNegro && dataPedidoBeneficioEsperado.isBefore('1992-01-01', 'year')) {
+      abonoProporcionalDevidos = 1;
+    }
 
     // if (this.calculo.data_anterior_pedido_beneficio != '0000-00-00') {
     //   let previaDataPedidoBeneficio = moment(this.calculo.data_anterior_pedido_beneficio);
@@ -873,7 +911,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
             this.beneficioRecebidoAposRevisao = parseFloat(recebidoRow.value.rmiBuracoNegro);
             this.beneficioRecebidoAposRevisaoTetos = parseFloat(recebidoRow.value.rmiBuracoNegro);
-         
+
           }
 
         } else {
@@ -991,6 +1029,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         isPrescricao = true;
       }
 
+
       line.competencia = stringCompetencia;
       line.competenciaD = stringCompetencia;
       line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
@@ -1017,6 +1056,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       line.diferenca_mensalN = diferencaMensal;
       line.diferenca_corrigidaN = diferencaCorrigida;
 
+
+      if (stringCompetencia === '6/1992' && this.devidoBuracoNegro) {
+        line.indice_devidos += '<br> OS 121/92';
+        line.indice_recebidos += '<br> OS 121/92';
+      }
+
       if (isPrescricao) {
         line.diferenca_mensal = 'Prescrita';
         line.correcao_monetaria = '-';
@@ -1031,36 +1076,13 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.esmaecerLinhas(dataCorrente, line);
       }
 
-      // console.log(indiceReajusteValoresDevidos.reajuste > 1 || indiceReajusteValoresRecebidos.reajuste > 1);
-      // console.log((
-      //   !isPrescricao
-      //   || (dataCorrente.isSame('2004-01-01', 'month')
-      //   || dataCorrente.isSame('1998-12-01', 'month'))
-      //   || (indiceReajusteValoresDevidos.reajuste > 1
-      //   || indiceReajusteValoresRecebidos.reajuste > 1)
-      // ));
 
-      // if (
-      //   (!isPrescricao
-      //     || (dataCorrente.isSame('2004-01-01', 'month')
-      //       || dataCorrente.isSame('1998-12-01', 'month'))
-      //     || (indiceReajusteValoresDevidos.reajuste > 1
-      //       || indiceReajusteValoresRecebidos.reajuste > 1))
-      //   &&  ((dataCorrente.isSame('2004-01-01', 'month')
-      //     || dataCorrente.isSame('1998-12-01', 'month'))
-      //     || (indiceReajusteValoresDevidos.reajuste > 1
-      //     || indiceReajusteValoresRecebidos.reajuste > 1))
-      // ) {
-      //   tableData.push(line);
-      // }
 
       const checkPrescricao = (!isPrescricao
-        || ((dataCorrente.isSame('2004-01-01', 'month')
-          || dataCorrente.isSame('1998-12-01', 'month'))
+        || ((['01/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
           || (indiceReajusteValoresDevidos.reajuste > 1
             || indiceReajusteValoresRecebidos.reajuste > 1))
-        && ((dataCorrente.isSame('2004-01-01', 'month')
-          || dataCorrente.isSame('1998-12-01', 'month'))
+        && ((['01/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
           || (indiceReajusteValoresDevidos.reajuste > 1
             || indiceReajusteValoresRecebidos.reajuste > 1)));
 
@@ -1135,6 +1157,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           //   && dataPedidoBeneficio.isBefore(datacessacaoBeneficioRecebido, 'year')) {
           //   abonoProporcionalRecebidos = 1;
           // }
+
+
           abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(dataPedidoBeneficio.clone());
           // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
 
@@ -2261,7 +2285,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioRecebidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    
+
 
 
     if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
@@ -2334,18 +2358,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         dataPedidoBeneficio,
         'Recebido');
 
-        
-      // if (dataCorrente.isSame(this.dataEfeitoFinanceiro, 'month')) {
-
-      //   console.log('--- inicio --- ')
-      //   console.log(reajusteObj);
-      //   console.log(this.beneficioRecebidoAposRevisao);
-      //   console.log(this.beneficioRecebidoAposRevisaoTetos);
-      //   console.log(beneficioRecebido);
-      //   console.log(beneficioRecebidoAjustado);
-      //   console.log('--- Fim --- ')
-  
-      // }
     }
 
 
@@ -2423,7 +2435,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    
+
     // let rmiDevidos = parseFloat(this.calculo.valor_beneficio_esperado);
     // rmiDevidos = this.aplicarTetosEMinimosDIB(rmiDevidos, moment(this.calculo.data_pedido_beneficio_esperado).startOf('month'));
 
@@ -2487,8 +2499,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
 
 
-    
-    
+
+
 
 
 
@@ -2944,13 +2956,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       let valorJuros = 0;
 
       correcao = this.getCorrecaoMonetaria(moment(data, 'DD/MM/YYYY'))
-      valorC = (valorMaisJuros * correcao);
+      valorC = (valor * correcao);
       valorMaisJuros = valorC;
 
       if (aplicar && valor !== 0) {
 
         jurosD = this.getJuros(moment(data, 'DD/MM/YYYY'));
-        valorJuros = (valorMaisJuros * jurosD);
+        valorJuros = (valorC * jurosD);
         valorMaisJuros += valorJuros;
 
       }
@@ -4328,6 +4340,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     return (typeof value !== 'undefined' &&
       value != null && value != 'null' &&
       value !== undefined && value != '')
+      ? true : false;
+  }
+
+
+  private checkvalidDate(date) {
+    return (typeof date !== 'undefined' &&
+      date != null && date != 'null' &&
+      date !== undefined && date != '' &&
+      date !== '0000-00-00' &&
+      (moment(date).isValid() || moment(date, 'DD/MM/YYYY').isValid()))
       ? true : false;
   }
 

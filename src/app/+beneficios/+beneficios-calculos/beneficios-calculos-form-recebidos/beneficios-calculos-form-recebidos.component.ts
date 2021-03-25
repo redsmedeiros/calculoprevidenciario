@@ -67,6 +67,11 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
   private inserirRecebidoList(event = null) {
 
+    
+    if (this.recebidosBuracoNegro) {
+      this.rmiValoresRecebidosBuracoNegro = this.rmiValoresRecebidos;
+    }
+
     const recebidoMultiplo = new Recebidos(
       ((this.isExits(this.rowRecebidosEdit)) ? this.rowRecebidosEdit : this.listRecebidos.length + 1),
       this.especieValoresRecebidos,
@@ -172,7 +177,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.dataInicialadicional2Recebido = rowEdit.dataAdicional25;
     this.calcularAbono13UltimoMesRecebidos = rowEdit.abono13Ultimo;
 
-    if (rowEdit.dataAdicional25 != undefined || rowEdit.dataAdicional25 != '') {
+    if (rowEdit.dataAdicional25 != undefined && rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
     }
 
@@ -317,10 +322,10 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
   dibValoresRecebidosChanged() {
 
-    if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
+  //  if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
       this.dipValoresRecebidos = this.dibValoresRecebidos;
       // this.validRecebidos();
-    }
+    //}
 
     if (this.chkUseSameDib) {
       if (this.dibValoresRecebidos !== undefined && this.dibValoresDevidos !== null) {

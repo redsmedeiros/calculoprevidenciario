@@ -56,11 +56,11 @@
               <td class="text-center">{{ devidosLine.cessacao }}</td>
               <td class="text-center">
                 {{ definicaoMoeda.formatMoney(devidosLine.rmi) }}
-                <span *ngIf="devidosLine.rmiBuracoNegro">
+                <!-- <span *ngIf="devidosLine.rmiBuracoNegro">
                   <br />{{
                     definicaoMoeda.formatMoney(devidosLine.rmiBuracoNegro)
                   }}
-                </span>
+                </span> -->
               </td>
               <td class="text-center">{{ devidosLine.irt }}</td>
               <td class="text-center">
@@ -337,6 +337,11 @@
                       </div>
                       <div *ngIf="!chkNotGranted" class="form-group">
                         <label
+                        class="control-label"
+                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                        >Renda Mensal Inicial - RMI*:</label
+                      >
+                        <!-- <label
                           *ngIf="!devidosBuracoNegro"
                           class="control-label"
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
@@ -347,7 +352,7 @@
                           class="control-label"
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
                           >RMI Antes da Revisão (Buraco Negro):</label
-                        >
+                        > -->
                         <div
                           class="col-md-4"
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
@@ -366,6 +371,32 @@
                           >
                         </div>
                       </div>
+                      <!-- <div *ngIf="devidosBuracoNegro" class="form-group">
+                        <label
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                          >RMI Depois da Revisão (Buraco Negro):</label
+                        >
+                        <div
+                          class="col-md-4"
+                          [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                        >
+                          <input
+                            name="rmiValoresDevidosBuracoNegro"
+                            [(ngModel)]="rmiValoresDevidosBuracoNegro"
+                            currencyMask
+                            class="form-control"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('rmiValoresDevidosBuracoNegro')"
+                            class="text-danger"
+                            >{{
+                              errors.get("rmiValoresDevidosBuracoNegro")
+                            }}</small
+                          >
+                        </div>
+                      </div> -->
                       <div
                         class="form-group"
                         *ngIf="
@@ -465,32 +496,7 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="devidosBuracoNegro" class="form-group">
-                        <label
-                          class="control-label"
-                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
-                          >RMI Depois da Revisão (Buraco Negro):</label
-                        >
-                        <div
-                          class="col-md-4"
-                          [ngClass]="true ? 'col-md-4' : 'col-md-2'"
-                        >
-                          <input
-                            name="rmiValoresDevidosBuracoNegro"
-                            [(ngModel)]="rmiValoresDevidosBuracoNegro"
-                            currencyMask
-                            class="form-control"
-                            type="text"
-                          />
-                          <small
-                            *ngIf="errors.has('rmiValoresDevidosBuracoNegro')"
-                            class="text-danger"
-                            >{{
-                              errors.get("rmiValoresDevidosBuracoNegro")
-                            }}</small
-                          >
-                        </div>
-                      </div>
+ 
                       <div class="form-group">
                         <label
                           class="control-label"
