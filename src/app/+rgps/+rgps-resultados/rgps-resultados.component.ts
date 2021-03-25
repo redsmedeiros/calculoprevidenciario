@@ -1167,6 +1167,7 @@ export class RgpsResultadosComponent implements OnInit {
       seguradoId: this.segurado.id,
       dib: data,
       valor: valor,
+      tipoCalculo: tipoCalculo,
     });
 
     sessionStorage.setItem('exportBeneficioAtrasado', objExport);

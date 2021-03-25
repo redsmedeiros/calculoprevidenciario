@@ -37,8 +37,31 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     // console.log(this.errors);
     // console.log(this.formData);
     // console.log(this.type);
+   
   }
 
+  ngAfterViewInit(){
+    this.checkImportBeneficioAtrasado();
+  }
+
+  checkImportBeneficioAtrasado() {
+
+    let rst;
+    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
+      // this.resetForm();
+      rst = this.importRGPS();
+
+      if (rst.tipoCalculo !== 'AJ') {
+        setTimeout(() => {
+          this.showChildModalDevidos();
+          sessionStorage.removeItem('exportBeneficioAtrasado');
+        }, 2000)
+
+      }
+     
+    }
+
+  }
 
   private validDevido() {
 

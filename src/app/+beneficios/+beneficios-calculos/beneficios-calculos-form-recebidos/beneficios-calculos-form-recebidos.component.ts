@@ -44,6 +44,37 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
 
 
+  ngAfterViewInit() {
+    this.checkImportBeneficioAtrasadoRecebidos();
+  }
+
+  checkImportBeneficioAtrasadoRecebidos() {
+
+
+    let rst = null;
+    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
+      // this.resetForm();
+      rst = this.importRGPS();
+
+      if (rst.tipoCalculo === 'AJ') {
+        setTimeout(() => {
+          this.dibValoresRecebidos = rst.dib;
+          this.dipValoresRecebidos = rst.dib;
+          this.rmiValoresRecebidos = rst.valorRgps;
+          this.showChildModalRecebidos();
+
+          sessionStorage.removeItem('exportBeneficioAtrasado');
+        }, 2000)
+
+
+      }
+
+
+    }
+
+  }
+
+
   // inicio
 
   private validatePeriodoRecebidos(recebidoMultiplo) {
