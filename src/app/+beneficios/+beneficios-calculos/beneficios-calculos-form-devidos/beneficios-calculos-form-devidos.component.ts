@@ -159,6 +159,8 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.dataInicialadicional25Devido,
       this.chkDemandasJudiciais,
       this.calcularAbono13UltimoMes,
+      this.SBSemLimitacao,
+      this.SBSemLimitacaoAliquota,
     );
 
 
@@ -215,7 +217,32 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.adicional25Devido = true;
     }
 
+    this.SBSemLimitacao = rowEdit.SBSemLimitacao;
+    this.SBSemLimitacaoAliquota = rowEdit.SBSemLimitacaoAliquota;
+
     this.checkDevidosBuracoNegro();
+  }
+
+
+  private calcularRMISemLimitacao() {
+
+    if (this.isExits(this.SBSemLimitacao) && this.isExits(this.SBSemLimitacaoAliquota)) {
+
+      const aliquota = Number(this.SBSemLimitacaoAliquota) || 0;
+      const valorSB = parseFloat(this.SBSemLimitacao) || 0.0;
+      this.rmiValoresDevidos = 0
+      if (aliquota > 0 && valorSB > 0) {
+
+        this.rmiValoresDevidos = valorSB * (aliquota / 100);
+      }
+
+    } else {
+
+      this.rmiValoresDevidos = 0
+
+    }
+
+
   }
 
   public showChildModalDevidos(): void {

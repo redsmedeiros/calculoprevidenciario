@@ -341,7 +341,7 @@
                         {{ formatDate(calculo.data_prevista_cessacao) }}
                       </td>
                     </tr>
-                    <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
+                    <tr >
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
@@ -351,7 +351,7 @@
                         }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
+                    <!-- *ngIf="!calculo.valor_beneficio_esperado_revisao"<tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI antes da Revisão:</b>
                       </td>
@@ -373,7 +373,7 @@
                           )
                         }}
                       </td>
-                    </tr>
+                    </tr> -->
 
                     <tr *ngIf="calculo.taxa_ajuste_maxima_esperada">
                       <td class="td-width-30" style="text-align: left">
@@ -518,7 +518,7 @@
                         {{ formatDate(calculo.data_cessacao) }}
                       </td>
                     </tr>
-                    <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
+                    <tr >
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
@@ -531,7 +531,7 @@
                         }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
+                    <!-- *ngIf="!calculo.valor_beneficio_esperado_revisao"<tr *ngIf="calculo.valor_beneficio_esperado_revisao">
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                       </td>
@@ -556,7 +556,7 @@
                           )
                         }}
                       </td>
-                    </tr>
+                    </tr> -->
                     <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
                       <td class="td-width-30" style="text-align: left">
                         <b>Índice de Limitação no Teto:</b>
@@ -654,7 +654,7 @@
                         {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}
                       </td>
                     </tr>
-                    <tr *ngIf="!calculo.valor_beneficio_esperado_revisao">
+                    <tr >
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
@@ -662,7 +662,7 @@
                         {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
                       </td>
                     </tr>
-                    <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">
+                    <!-- *ngIf="!recebidoLine.valor_beneficio_esperado_revisao" <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
                       </td>
@@ -681,7 +681,7 @@
                           )
                         }}
                       </td>
-                    </tr>
+                    </tr> -->
 
                     <tr *ngIf="recebidoLine.irt">
                       <td class="td-width-30" style="text-align: left">
@@ -1137,7 +1137,7 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <th>Benefício Devido Tetos</th>
+                    <th>Benefício Devido  <br /> Tetos</th>
                     <th *ngIf="debugMode">
                       Benefício Devido<br />Tetos Sem<br />Limites
                     </th>
@@ -1153,7 +1153,7 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <th>Benefício Recebido Tetos</th>
+                    <th>Benefício Recebido <br /> Tetos</th>
                     <th *ngIf="debugMode">
                       Benefício Recebido<br />Tetos Sem Limites
                     </th>
@@ -1165,7 +1165,7 @@
                       Benefício Recebido<br />Tetos Após Revisao
                     </th>
                     <!-- <th>Benefício Recebido</th> -->
-                    <th>Diferença Mensal Tetos</th>
+                    <th>Diferença Mensal <br /> Tetos</th>
                     <!-- <th>Diferença Mensal</th> -->
                     <th>Correção Monetária</th>
                     <!-- <th>Diferença Corrigida</th> -->
@@ -1176,7 +1176,7 @@
                     <th>Juros</th>
                     <th>Valor dos Juros</th>
                     <th *ngIf="debugMode">Valor dos Juros Tetos</th>
-                    <!-- <th>Diferença Corrigida + Juros</th> -->
+                    <th>Diferença Corrigida <br />+ Juros</th>
                     <th *ngIf="debugMode">Diferença Corrigida + Juros Tetos</th>
                     <th
                       *ngIf="calculo.percentual_taxa_advogado != 0 && debugMode"
@@ -1960,11 +1960,11 @@
           <p>
             <strong>Legenda:</strong>
           </p>
-          <p *ngIf="isBuracoNegroLeg">
-              * -  Efeito financeiro da Revisão do Buraco Negro
+           <p *ngIf="isBuracoNegroLeg">
+              * Efeito Financeiro da Revisão do Buraco Negro
               <span>
                 <popover-content #avisoisBuracoNegroLeg
-                title="Efeito financeiro da Revisão do Buraco Negro"
+                title="Efeito Financeiro da Revisão do Buraco Negro"
                 [closeOnClickOutside]="true"
                 >
                 <div class="alert alert-danger bg-ieprev fade in bold text-justify">
@@ -1983,9 +1983,9 @@
                       <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
                   </button>
               </span>
-          </p>
+          </p> 
           <p *ngIf="isTetos">
-              (os) - Índice de reajuste pela OS 121
+              (os) Índice de reajuste pela OS 121
               <span>
                 <popover-content #avisoisTetos
                 title="Índice de reajuste pela OS 121"

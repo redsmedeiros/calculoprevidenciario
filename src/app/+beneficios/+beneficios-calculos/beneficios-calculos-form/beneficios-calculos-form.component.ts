@@ -30,6 +30,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public numBenefMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/];
 
   public IndiceMask = [/\d/, ',', /\d/, /\d/, /\d/, /\d/];
+  public aliquotaMask = [/\d/, /\d/, /\d/];
 
   public styleTheme: string = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -217,6 +218,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataInicialadicional2Recebido;
   public limit60SC = false;
   public RRASemJuros = false;
+  public SBSemLimitacao;
+  public SBSemLimitacaoAliquota;
 
 
   @Input() formData;
@@ -920,6 +923,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.limit_60_sc = this.limit60SC;
       this.formData.rra_sem_juros = this.RRASemJuros;
 
+      this.formData.sb_sem_limitacao_devido = this.SBSemLimitacao;
+      this.formData.sb_sem_limitacao_aliquota_devido = this.SBSemLimitacaoAliquota;
+
       this.onSubmit.emit(this.formData);
 
     } else {
@@ -974,6 +980,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dataInicialadicional25Devido = rstDevidos.dataAdicional25;
     this.calcularAbono13UltimoMes = rstDevidos.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
+    this.SBSemLimitacao = rstDevidos.SBSemLimitacao;
+    this.SBSemLimitacaoAliquota = rstDevidos.SBSemLimitacaoAliquota;
 
   }
 
@@ -1209,9 +1217,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.RRASemJuros = this.formData.rra_sem_juros;
 
     //this.dibValoresDevidosChanged();
-     if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
+    if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
       this.dibValoresDevidosChanged();
     }
+
+    this.SBSemLimitacao = this.formData.sb_sem_limitacao_devido;
+    this.SBSemLimitacaoAliquota = this.formData.sb_sem_limitacao_aliquota_devido;
 
 
     this.dibValoresRecebidosChanged();
@@ -1235,6 +1246,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.dataInicialadicional25Devido,
       this.chkDemandasJudiciais,
       this.calcularAbono13UltimoMes,
+      this.SBSemLimitacao,
+      this.SBSemLimitacaoAliquota,
     );
 
     this.listDevidos.push(devidoMultiplo);

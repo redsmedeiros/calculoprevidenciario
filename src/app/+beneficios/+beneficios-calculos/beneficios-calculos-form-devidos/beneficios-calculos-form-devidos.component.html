@@ -182,6 +182,7 @@
                         >
                         <div class="col-md-4">
                           <input
+                            autocomplete="off"
                             [(ngModel)]="numeroBeneficioDevido"
                             [textMask]="{ mask: numBenefMask }"
                             name="numeroBeneficioDevido"
@@ -207,6 +208,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="dibValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="dibValoresDevidos"
@@ -233,6 +235,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="dipValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="dipValoresDevidos"
@@ -262,6 +265,7 @@
                             [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                           >
                             <input
+                            autocomplete="off"
                               name="dibAnteriorValoresDevidos"
                               [textMask]="{ mask: dateMask }"
                               [(ngModel)]="dibAnteriorValoresDevidos"
@@ -290,6 +294,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="cessacaoValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="cessacaoValoresDevidos"
@@ -303,8 +308,66 @@
                           >
                         </div>
                       </div>
+                      <div  class="form-group" *ngIf="devidosBuracoNegro">
+                        <label
+                        class="control-label"
+                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                        >Salário de Benfício Sem Limitação no Teto:</label
+                      >
+                        <div
+                          class="col-md-4"
+                          [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                        >
+                          <input
+                          autocomplete="off"
+                            name="SBSemLimitacao"
+                            currencyMask
+                            [(ngModel)]="SBSemLimitacao"
+                            (keyup)="calcularRMISemLimitacao();" 
+                            class="form-control"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('SBSemLimitacao')"
+                            class="text-danger"
+                            >{{ errors.get("SBSemLimitacao") }}</small
+                          >
+                        </div>
+                      </div>
+                      <div class="form-group" *ngIf="devidosBuracoNegro">
+                        <label
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                        >
+                          Alíquota(Percentual):
+                        </label>
+                        <div
+                          class="col-md-4"
+                          [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                        >
+                          <input
+                          autocomplete="off"
+                            name="SBSemLimitacaoAliquota"
+                            class="form-control text-right"
+                            [(ngModel)]="SBSemLimitacaoAliquota"
+                            (keyup)="calcularRMISemLimitacao();" 
+                            type="text"
+                            [textMask]="{ mask: aliquotaMask, guide: false }"
+                          />
+                          <small
+                            *ngIf="errors.has('SBSemLimitacaoAliquota')"
+                            class="text-danger"
+                            >{{ errors.get("SBSemLimitacaoAliquota") }}</small
+                          >
+                        </div>
+                      </div>
                       <div *ngIf="chkNotGranted" class="form-group">
                         <label
+                        class="control-label"
+                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                        >Renda Mensal Inicial - RMI*:</label
+                      >
+                        <!-- <label
                           *ngIf="!devidosBuracoNegro"
                           class="control-label"
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
@@ -316,12 +379,13 @@
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
                           >Renda mensal Inicial - RMI antes da revisão (Buraco
                           Negro)*:</label
-                        >
+                        > -->
                         <div
                           class="col-md-4"
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="rmiValoresDevidos"
                             currencyMask
                             [(ngModel)]="rmiValoresDevidos"
@@ -358,6 +422,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="rmiValoresDevidos"
                             currencyMask
                             [(ngModel)]="rmiValoresDevidos"
@@ -419,6 +484,7 @@
                         <div class="col-md-4">
                           <label class="radio radio-inline">
                             <input
+                            autocomplete="off"
                               [(ngModel)]="adicional25Devido"
                               [ngModelOptions]="{ standalone: true }"
                               (change)="errors.clear('adicional25Devido')"
@@ -480,6 +546,7 @@
                             [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                           >
                             <input
+                            autocomplete="off"
                               name="dataInicialadicional25Devido"
                               [textMask]="{ mask: dateMask }"
                               [(ngModel)]="dataInicialadicional25Devido"
@@ -513,6 +580,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             name="taxaAjusteMaximaEsperada"
                             class="form-control"
                             [textMask]="{ mask: IndiceMask, guide: false }"
@@ -545,6 +613,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
+                          autocomplete="off"
                             [(ngModel)]="numDependentes"
                             (change)="errors.clear('numDependentes')"
                             [ngModelOptions]="{ standalone: true }"
