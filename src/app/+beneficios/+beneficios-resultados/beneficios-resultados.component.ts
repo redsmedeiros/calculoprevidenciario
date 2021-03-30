@@ -370,7 +370,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               const rstMoeda = this.Moeda.getByDateRange(this.primeiraDataArrayMoeda.clone().subtract(1, 'months'), moment())
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
-                  return true;
+                //  return true;
                 });
 
 
@@ -378,7 +378,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
-                //                console.log(values)
+                console.log(values)
 
                 this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
@@ -446,7 +446,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_devido of this.IndiceDevido.list) {
             this.indiceDevido.push(i_devido);
           }
-          return true;
+         // return true;
         });
 
       const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
@@ -457,7 +457,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_recebido of this.IndiceRecebido.list) {
             this.indiceRecebido.push(i_recebido);
           }
-          return true;
+        //  return true;
         });
 
       this.devidoBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio_esperado));
@@ -477,9 +477,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     } catch (error) {
 
       if (error.message === 'dateInvalid' && !sessionStorage.dateInvalid) {
+        
         setTimeout(() => {
-          window.location.reload();
+
+          window.location.href = '/#/beneficios/beneficios-resultados/'
+            + this.route.snapshot.params['id'] + '/' + this.route.snapshot.params['id_calculo']
         }, 1000)
+
         sessionStorage.setItem('dateInvalid', 'true');
       }
 
@@ -642,8 +646,9 @@ export class BeneficiosResultadosComponent implements OnInit {
             for (const i_recebido of indicesRecebido) {
               recebidoRow.indiceInps.push(i_recebido);
             }
-            return true;
+            //return true;
           });
+
         this.allPromissesCalc.push(promRecebidoRow);
       }
 
@@ -3791,6 +3796,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   // Seção 5.3
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo) {
+
     let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tetoSalarial = dataCorrenteMoeda.teto;
@@ -3830,12 +3836,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if ((this.isTetoInicialDevido && tipo === 'Devido')
-      || (this.isTetoInicialRecebido && tipo === 'Recebido')
-      && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
-      // Adicionar subindice ‘T’ no valor do beneficio.
-      return this.roundMoeda(tetoSalarial);
-    }
+    // if ((this.isTetoInicialDevido && tipo === 'Devido')
+    //   || (this.isTetoInicialRecebido && tipo === 'Recebido')
+    //   && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+    //   // Adicionar subindice ‘T’ no valor do beneficio.
+    //   return this.roundMoeda(tetoSalarial);
+    // }
 
 
     // && dib >= this.dataInicioBuracoNegro removido 28/07/2020 - DR. Sergio
@@ -3894,12 +3900,12 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if ((this.isTetoInicialDevido && tipo === 'Devido')
-      || (this.isTetoInicialRecebido && tipo === 'Recebido')
-      && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
-      // Adicionar subindice ‘T’ no valor do beneficio.
-      return this.roundMoeda(tetoSalarial);
-    }
+    // if ((this.isTetoInicialDevido && tipo === 'Devido')
+    //   || (this.isTetoInicialRecebido && tipo === 'Recebido')
+    //   && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
+    //   // Adicionar subindice ‘T’ no valor do beneficio.
+    //   return this.roundMoeda(tetoSalarial);
+    // }
 
     // removido && dib >= this.dataInicioBuracoNegro  removido 28/07/2020 - DR. Sergio
     if (valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
