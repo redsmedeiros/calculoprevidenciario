@@ -341,7 +341,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.errors.add({ 'cessacaoValoresRecebidos': ['A data não deve ser maior que a data atual'] });
       valid = false;
     }
-   
+
 
     return valid;
   }

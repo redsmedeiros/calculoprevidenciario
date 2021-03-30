@@ -274,7 +274,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.especieValoresRecebidos = 0;
     }
 
-   // this.checkImportBeneficioAtrasado();
+    // this.checkImportBeneficioAtrasado();
   }
 
 
@@ -294,14 +294,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
       this.dibValoresDevidos = dataRgps.split('-')[2] + '/' +
-      dataRgps.split('-')[1] + '/' +
-      dataRgps.split('-')[0];
+        dataRgps.split('-')[1] + '/' +
+        dataRgps.split('-')[0];
 
       this.dipValoresDevidos = this.dibValoresDevidos;
 
 
     }
-     return {valorRgps: valorRgps, tipoCalculo: exportDados.tipoCalculo, dib: this.dibValoresDevidos};
+    return { valorRgps: valorRgps, tipoCalculo: exportDados.tipoCalculo, dib: this.dibValoresDevidos };
 
   }
 
@@ -342,10 +342,10 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < moment(this.dataAcaoJudicial, 'DD/MM/YYYY')) {
         this.errors.add({ 'dataCitacaoReu': ['A data da citação deve ser igual ou posterior ao ajuizamento da ação.'] })
         valid = false;
-      }else if (!this.isValidDate(this.dataCitacaoReu)) {
+      } else if (!this.isValidDate(this.dataCitacaoReu)) {
         this.errors.add({ 'dataCitacaoReu': ['Insira uma data Válida.'] });
         valid = false;
-      }else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
+      } else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
         // this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
         // valid = false;
       }
@@ -585,6 +585,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
 
+    if ( this.tipoDejurosSelecionado !== 'sem_juros') {
+      if (this.isEmptyInput(this.competenciaInicioJuros)) {
+        this.errors.add({ 'competenciaInicioJuros': ['A Competência Inicial dos Juros é obrigatoria'] });
+        valid = false;
+      }
+    }
+
     if (!this.isEmptyInput(this.jurosAntes2003) && this.tipoDejurosSelecionado == 'manual') {
       if (!this.isValidFloat(this.jurosAntes2003)) {
         this.errors.add({ 'jurosAntes2003': ['O valor deve ser um número com casas decimais separadas por vírgula.'] });
@@ -721,7 +728,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       }
 
-       // Data da ajuizamento da ação:
+      // Data da ajuizamento da ação:
       this.formData.data_acao_judicial = this.dataAcaoJudicial;
       // Data da citação do réu
       this.formData.data_citacao_reu = this.dataCitacaoReu
@@ -1387,15 +1394,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   setCompetenciaInicioJurosIsNull() {
 
     // if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
-    if (this.competenciaInicioJuros != this.dataCitacaoReu) {
 
-      if (!this.dataCitacaoReu) {
-        this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
-      } else {
-        this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
-      }
+    //if (this.competenciaInicioJuros != this.dataCitacaoReu) {
 
+    if (!this.dataCitacaoReu) {
+      //this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
+      this.competenciaInicioJuros = '';
+    } else {
+      this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
+
+    // }
 
   }
 
