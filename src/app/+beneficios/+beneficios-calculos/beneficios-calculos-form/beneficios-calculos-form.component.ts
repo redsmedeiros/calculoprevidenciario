@@ -828,6 +828,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
+
+      console.log(this.numDependentes);
       this.formData.num_dependentes = this.numDependentes;
 
       // Calcular Mais (Vincendos)
@@ -983,6 +985,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.dataInicialadicional25Devido = rstDevidos.dataAdicional25;
     this.calcularAbono13UltimoMes = rstDevidos.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
+    this.numDependentes = rstDevidos.numDependentes;
 
   }
 
@@ -1244,6 +1247,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.dataInicialadicional25Devido,
       this.chkDemandasJudiciais,
       this.calcularAbono13UltimoMes,
+      this.numDependentes
     );
 
     this.listDevidos.push(devidoMultiplo);

@@ -177,6 +177,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.dataInicialadicional25Devido,
       this.chkDemandasJudiciais,
       this.calcularAbono13UltimoMes,
+      this.numDependentes
     );
 
 
@@ -227,6 +228,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.naoAplicarSMBeneficioEsperado = rowEdit.reajusteMinimo;
     this.dataInicialadicional25Devido = rowEdit.dataAdicional25;
     this.calcularAbono13UltimoMes = rowEdit.calcularAbono13UltimoMes;
+    this.numDependentes = rowEdit.numDependentes;
 
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;

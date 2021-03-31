@@ -1455,15 +1455,19 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const valor = (this.RRASemJuros) ? diferencaCorrigidaComJuros : diferencaCorrigida;
 
-    if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
+    if (dataCorrente.isBetween(this.dataInicioDevidosDip, this.dataFinalAtual, 'month', '[]') && valor > 0) {
 
-      this.somaNumeroCompetenciasAtual += 1;
-      this.somaDiferencaCorrigidaAtual += valor;
+      if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
 
-    } else {
+        this.somaNumeroCompetenciasAtual += 1;
+        this.somaDiferencaCorrigidaAtual += valor;
 
-      this.somaNumeroCompetenciasAnterior += 1;
-      this.somaDiferencaCorrigidaAnterior += valor;
+      } else {
+
+        this.somaNumeroCompetenciasAnterior += 1;
+        this.somaDiferencaCorrigidaAnterior += valor;
+
+      }
 
     }
 

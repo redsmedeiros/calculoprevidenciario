@@ -409,6 +409,7 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     // console.log(requisitoIdadeT);
     // console.log(requisitoTempoContribT);
     // console.log(teste);
+    // console.log(this.pedagioEmAnos);
     // console.log(this.pedagioEmDias);
     // console.log(teste + this.pedagioEmDias);
     // console.log(requisitoTempoContribTD);
