@@ -655,6 +655,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
                       .table>tbody>tr>td, .table>tbody>tr>th,
                        .table>tfoot>tr>td, .table>tfoot>tr>th,
                        .table>thead>tr>td, .table>thead>tr>th {padding: 3.5px 10px;}
+                       title{ font-weight: bold;}
                        footer{}
                 </style>`;
 
@@ -665,7 +666,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     popupWin.document.write(`<!doctype html>
                                 <html>
                                   <head>${css}</head>
-                                  <title><b>Relatório de Análise das Regras de Transição - EC 103/2019 - ${this.seguradoTransicao.nome}</b></title>
+                                  <title>Relatório de Análise das Regras de Transição - EC 103/2019 - ${this.seguradoTransicao.nome}</title>
                                   <body onload="window.print()">
                                    <article>${printContents}</article>
                                    <footer class="mt-5">${rodape}</footer>

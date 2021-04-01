@@ -760,10 +760,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
 
-    this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years');
-    if (this.calculo.data_citacao_reu) {
-      this.dataFinalPrescricao = (moment(this.calculo.data_citacao_reu)).subtract(5, 'years').subtract(1, 'month');
-    }
+    this.dataFinalPrescricao = (moment(this.calculo.data_acao_judicial)).subtract(5, 'years').subtract(1, 'month');
+    // if (this.calculo.data_citacao_reu !== '0000-00-00' && moment(this.calculo.data_citacao_reu).isValid()) {
+    //   this.dataFinalPrescricao = (moment(this.calculo.data_citacao_reu)).subtract(5, 'years').subtract(1, 'month');
+    // }
 
     // Escolha de quais funçoes de beneficios devidos e recebidos serao utilizadas
     const func_beneficioDevido = this.getBeneficioDevido;

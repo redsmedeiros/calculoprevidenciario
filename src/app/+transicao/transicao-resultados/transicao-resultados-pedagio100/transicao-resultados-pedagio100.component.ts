@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 import * as moment from 'moment';
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @Component({
   selector: 'app-transicao-resultados-pedagio100',
@@ -416,6 +417,8 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     // console.log(this.pedagioEmDiasRequisito);
     // console.log(this.seguradoTransicao.contribuicaoFracionadoDias);
     // console.log(count);
+ 
+
 
 
     // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= this.pedagioEmAnosRequisito) {
@@ -432,12 +435,20 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
     } else {
 
       const dateInfo = (this.dataAtual.clone()).startOf('day'); /// .subtract(1, 'd');
-      auxiliarDate = dateInfo.add(Math.floor(requisitoTempoContribT * 365.25), 'd');
+      auxiliarDate = dateInfo.add(Math.round(requisitoTempoContribT * 365.25), 'd');
       idadeDibMoment = this.calcularIdade(auxiliarDate);
 
     }
+  
 
+    const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustom(
+      moment().format('YYYY-MM-DD'),
+      moment(auxiliarDate).format('YYYY-MM-DD')
+    );
 
+    // console.log(requisitoTempoContribT * 365.25);
+    // console.log(DefinicaoTempo.addDaysToDate(moment().format('YYYY-MM-DD'), (requisitoTempoContribT * 365.25)));
+    // console.log(totalDay360);
 
     // idadeDibMoment = this.calcularIdade(auxiliarDate);
 
