@@ -648,7 +648,7 @@ export class RgpsResultadosComponent implements OnInit {
       returnStr += ' e ';
     }
     if (month !== 0) {
-      returnStr += month + ' mes(es)';
+      returnStr += month + ' mês(es)';
     }
     if (month === 0 && year === 0) {
       returnStr = ' 0 ano(s) ';
@@ -663,14 +663,14 @@ export class RgpsResultadosComponent implements OnInit {
   public tratarTempoFracionadoMoment(anos, meses, dias, notDays = false) {
 
     if (notDays) {
-      return ` ${anos} ano(s), ${meses} mes(es)`;
+      return ` ${anos} ano(s), ${meses} mês(es)`;
     }
 
     if (anos < 0) {
-      return ` ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+      return ` ${meses} mês(es) e ${Math.floor(dias)} dia(s)`;
     }
 
-    return ` ${anos} ano(s), ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+    return ` ${anos} ano(s), ${meses} mês(es) e ${Math.floor(dias)} dia(s)`;
 
   }
 
@@ -687,7 +687,7 @@ export class RgpsResultadosComponent implements OnInit {
     let dttDias = (xVarMes - totalFator.months) * 30;
     totalFator.days = Math.floor(dttDias);
 
-    return totalFator.years + 'ano(s) e ' + totalFator.months + 'mes(es) e ' + totalFator.days + 'dia(s)';
+    return totalFator.years + 'ano(s) e ' + totalFator.months + 'mês(es) e ' + totalFator.days + 'dia(s)';
   }
 
 

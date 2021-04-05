@@ -105,6 +105,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public naoAplicarIN77 = true;
   public irtRejusteAdministrativo = 0;
   public msgProporcionalAteEC1032019 = '';
+  public msgIntegralAteEC1032019 = '';
 
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
@@ -177,7 +178,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.msgDivisorMinimo = '';
     //this.exibirIN77 = false;
 
-   
+
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     this.stringCabecalho = 'Entre  29/11/1999 a 13/11/2019'
 
@@ -425,34 +426,34 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     let label;
-   // switch (this.tipoBeneficio) {
+    // switch (this.tipoBeneficio) {
     //  case 1: // Auxilio Doença Previdenciario
 
-        // divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
-        //modificado dia 04-06-2019
-      //  divisorSecundario = contadorSecundario;
-     //   divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
+    // divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
+    //modificado dia 04-06-2019
+    //  divisorSecundario = contadorSecundario;
+    //   divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
 
 
-        // if (this.withMemo) {
-        //   // Exibir Label contendo o texto
-        //   label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .';
-        // }
-      //  break;
-      // case 2: // Aposentadoria Por Invalidez previdenciaria
-      //   if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
-      //     //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-      //    // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-      //     if (this.withMemo) {
-      //       // Exibir Label contendo o texto
-      //       label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.';
-      //     }
-      //   }
-      //   break;
-      // case 7: // Auxilio Doença Previdenciario 50%
-      //   //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-      //   divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-      //   break;
+    // if (this.withMemo) {
+    //   // Exibir Label contendo o texto
+    //   label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .';
+    // }
+    //  break;
+    // case 2: // Aposentadoria Por Invalidez previdenciaria
+    //   if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
+    //     //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //    // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     if (this.withMemo) {
+    //       // Exibir Label contendo o texto
+    //       label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.';
+    //     }
+    //   }
+    //   break;
+    // case 7: // Auxilio Doença Previdenciario 50%
+    //   //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //   divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //   break;
     //}
 
     ///   if (this.dataFiliacao >= this.dataDib99) {
@@ -498,8 +499,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // Quando a filiação for a partir de 29/11/1999 o cálculo se dará sempre pela m.a.s dos 80% > SC. Não aplica divisor mínimo!
     divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
-    console.log(this.dataFiliacao);
-    console.log(this.dataDib99);
+
     if (this.dataFiliacao < this.dataDib99 &&
       (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
         this.tipoBeneficio == 5 || this.tipoBeneficio == 1915 || this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925
@@ -565,7 +565,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       // }
 
       // // divisor 
-        // // divisor 
+      // // divisor 
       // // divisor 
       // if(this.getPbcDaVidatoda()){
       //   divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
@@ -1473,8 +1473,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           // errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
           //     + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
-          this.msgProporcionalAteEC1032019 = 'POSSUI direito ao benefício proporcional. Falta(m) '
-            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.';
+
+          this.msgIntegralAteEC1032019 = 'Falta(m) ' + tempoFracionado + ' para adquirir direito à Aposentadoria Integral.';
+          this.msgProporcionalAteEC1032019 = 'Possui direito à Aposentadoria Proporcional, conforme cálculo abaixo.';
+
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.

@@ -109,6 +109,9 @@
                 <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
                   <p>{{erro}}</p>
                 </div>
+                <div class="alert alert-warning margin-top-10" *ngIf="msgIntegralAteEC1032019 !== ''"  role="alert">
+                  <p>{{msgIntegralAteEC1032019}}</p>
+                </div>
                 <div class="alert alert-warning margin-top-10" *ngIf="msgProporcionalAteEC1032019 !== ''"  role="alert">
                   <p>{{msgProporcionalAteEC1032019}}</p>
                 </div>
