@@ -1102,6 +1102,7 @@
                     </th>
                     <!-- <th>Benefício Devido Tetos</th> -->
                     <th>Benefício Devido</th>
+                    <th *ngIf="(this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1))" >Benefício Devido sem teto</th>
                     <th *ngIf="calculo.tipo_aposentadoria == 22">
                       Valor da<br />
                       Quota do <br />Dependente
