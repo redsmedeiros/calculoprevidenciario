@@ -1084,10 +1084,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       const checkPrescricao = (!isPrescricao
-        || ((['01/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
+        || ((['1/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
           || (indiceReajusteValoresDevidos.reajuste > 1
             || indiceReajusteValoresRecebidos.reajuste > 1))
-        && ((['01/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
+        && ((['1/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
           || (indiceReajusteValoresDevidos.reajuste > 1
             || indiceReajusteValoresRecebidos.reajuste > 1)));
 
@@ -1981,24 +1981,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
     }
 
-    if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
-      if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-        tetoDevidos = 1200.00;
-        if (this.devidoBuracoNegro && beneficioDevido > tetoDevidos) {
-          beneficioDevido = tetoDevidos;
-
-        }
-      }
-
-      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
-        tetoDevidos = 2400.00;
-        if (this.devidoBuracoNegro && beneficioDevido > tetoDevidos) {
-          beneficioDevido = tetoDevidos;
-
-        }
-      }
-    }
-
     line.beneficio_devido_sem_limites = this.formatMoney(this.beneficioDevidoTetosSemLimite);
     // line.beneficio_devido_sem_limites = this.formatMoney(beneficioDevido);
 
@@ -2027,12 +2009,39 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
+    if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
+      if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+        tetoDevidos = 1200.00;
+        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+          beneficioDevidoAjustado = tetoDevidos;
+        } else {
+          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+        }
+      }
 
-    beneficioDevidoAjustado = this.roundMoeda(beneficioDevidoAjustado);
+      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+        tetoDevidos = 2400.00;
+        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+          beneficioDevidoAjustado = tetoDevidos;
 
-    this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
+        } else {
+
+          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+        }
+      }
+    }
+
+
+    // this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
+    this.beneficioDevidoAposRevisao = this.aplicarMinimos(this.beneficioDevidoAposRevisao,
+      dataCorrente,
+      dataPedidoBeneficioEsperado,
+      'Devido');
+
     line.beneficio_devido_apos_revisao = this.formatMoney(this.beneficioDevidoAposRevisao);
-    this.ultimoBeneficioDevidoAntesProporcionalidade = beneficioDevidoAjustado;
+
+    // beneficioDevidoAjustado = this.roundMoeda(beneficioDevidoAjustado);
+    this.ultimoBeneficioDevidoAntesProporcionalidade = this.roundMoeda(beneficioDevidoAjustado);
 
     // Caso diasProporcionais for diferente de 1, inserir subindice ‘p’. O algoritmo está definido na seção de algoritmos úteis.
     let diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataPagamentoBeneficioEsperado);
@@ -3863,7 +3872,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
     // && dib >= this.dataInicioBuracoNegro removido 28/07/2020 - DR. Sergio
-    if ((valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003)
+    // if ((valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003)
+    //   || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
+    // ) {
+      if ((valorBeneficio >= tetoSalarial )
       || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
     ) {
       // Adicionar subindice ‘T’ no valor do beneficio.
@@ -3932,6 +3944,51 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
     return this.roundMoeda(valorBeneficio);
   }
+
+  private aplicarMinimos(valorBeneficio, dataCorrente, dib, tipo) {
+
+
+    let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
+    let salMinimo = dataCorrenteMoeda.salario_minimo;
+    let tipoAposentadoria = '';
+    let naoAplicarMinimo = false;
+
+    if (tipo == 'Recebido') {
+
+      tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+
+    } else {
+
+      tipoAposentadoria = this.calculo.tipo_aposentadoria;
+      naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+
+    }
+
+    if (!naoAplicarMinimo) {
+
+      if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
+        salMinimo *= 0.3;
+      } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
+        salMinimo *= 0.4;
+      } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+        salMinimo *= 0.5;
+      } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
+        salMinimo *= 0.6;
+      }
+
+      if (valorBeneficio <= salMinimo ||
+        (this.isMinimoInicialDevido && tipo === 'Devido')
+        || (this.isMinimoInicialRecebido && tipo === 'Recebido')) {
+        // Adicionar subindice ‘M’ no valor do beneficio
+        return this.roundMoeda(salMinimo);
+      }
+
+    }
+
+    return this.roundMoeda(valorBeneficio);
+  }
+
 
   verificaAbonoProporcionalDevidos(dib) {
     let dibMonth = dib.month() + 1;
