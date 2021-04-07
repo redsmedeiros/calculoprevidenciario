@@ -1139,11 +1139,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
       // Calcular Abono
-      const especiesSemAbono = [12, 24, 2021];
+      const especiesSemAbono = ['12', '17', '24', '2021'];
       const verificacaoEspecieAbono = !(especiesSemAbono.includes(tipo_aposentadoria_recebida)
         || especiesSemAbono.includes(this.calculo.tipo_aposentadoria));
 
-      if ((dataCorrente.month() === 11 && (verificacaoEspecieAbono))
+      if ((dataCorrente.month() === 11 )
         || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
           && (verificacaoEspecieAbono)
           || (abono13UltimoRecebido && dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
@@ -1203,11 +1203,11 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
         }
 
-        if (this.calculo.tipo_aposentadoria == 12 || this.calculo.tipo_aposentadoria == 17) {
+        if ( especiesSemAbono.includes(this.calculo.tipo_aposentadoria) ) {
           beneficioDevidoAbono = 0.0;
         }
 
-        if (this.calculo.tipo_aposentadoria_recebida == 12 || this.calculo.tipo_aposentadoria_recebida == 17) {
+        if (especiesSemAbono.includes(tipo_aposentadoria_recebida)) {
           beneficioRecebidoAbono = 0.0;
         }
 
@@ -2410,6 +2410,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Final Prescrição
     if (dataCorrente.isSame(this.dataFinalPrescricao, 'month') && this.considerarPrescricao) {
       diasProporcionais = this.calcularDiasProporcionais(dataCorrente, this.dataFinalPrescricao.clone());
+    }
+
+    if (this.calculo.tipo_aposentadoria_recebida === '2021') {
+      diasProporcionais = 1;
     }
 
     if (!line.dias_proporcionais) {
@@ -4386,7 +4390,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     const rodape = `<img src='./assets/img/rodape/TIMBRADO_SIMULADORES1080.jpg' alt='Logo' style="width: 100%;">`;
     const title = `<title> Benefícios Atrasados - ${this.segurado.nome}</title>`;
 
-    const popupWin = window.open('', '_blank', 'width=400,height=400');
+    const popupWin = window.open('', '_blank', 'width=500,height=500');
     popupWin.document.open();
     popupWin.document.write('<html><head>' + css + title + '</head><body onload="window.print()">'
       + printContents + '<footer >' + rodape + '</footer></body></html>');
