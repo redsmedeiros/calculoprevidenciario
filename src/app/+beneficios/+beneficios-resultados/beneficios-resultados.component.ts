@@ -3842,15 +3842,15 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if (!naoAplicarMinimo) {
+    if (!naoAplicarMinimo && tipoAposentadoria !== '2021') {
 
-      if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
+      if (tipoAposentadoria === '8') { // ’Auxilio Acidente - 30%’
         salMinimo *= 0.3;
-      } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
+      } else if (tipoAposentadoria === '9') {// ‘Auxilio Acidente - 40%’
         salMinimo *= 0.4;
-      } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+      } else if (tipoAposentadoria === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
         salMinimo *= 0.5;
-      } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
+      } else if (tipoAposentadoria === '10') {// ‘Auxilio Acidente - 60%’
         salMinimo *= 0.6;
       }
 
@@ -4164,9 +4164,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns.push({ data: 'competencia', width: '9rem' });
     columns.push({ data: 'indice_devidos', width: '7rem' });
     columns.push({ data: 'beneficio_devido', width: '14rem' });
-    //columns.push({ data: 'beneficio_devido_sem_limites', width: '14rem' });
-    columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
-    // columns.push({ data: 'beneficio_devido_apos_revisao', width: '14rem' });
+   // teste regras buraco negro
+   // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
+
 
     if (this.calculo.tipo_aposentadoria === 22) {
       columns.push({ data: 'beneficio_devido_quota_dependente', width: '10rem' });

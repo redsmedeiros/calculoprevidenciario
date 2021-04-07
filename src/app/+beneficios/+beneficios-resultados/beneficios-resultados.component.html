@@ -1100,9 +1100,8 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <!-- <th>Benefício Devido Tetos</th> -->
                     <th>Benefício Devido</th>
-                    <th *ngIf="(this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1))" >Benefício Devido sem teto</th>
+                    <!-- <th *ngIf="(this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1))" >Benefício Devido sem teto</th> -->
                     <th *ngIf="calculo.tipo_aposentadoria == 22">
                       Valor da<br />
                       Quota do <br />Dependente
@@ -1111,24 +1110,17 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <!-- <th>Benefício Recebido Tetos</th> -->
                     <th>Benefício Recebido</th>
-                    <!-- <th>Diferença Mensal Tetos</th> -->
                     <th>Diferença Mensal</th>
                     <th>
                       Correção <br />
                       Monetária
                     </th>
                     <th>Diferença Corrigida</th>
-                    <!-- <th>Diferença Corrigida Tetos</th> -->
                     <th>Juros</th>
                     <th>Valor dos Juros</th>
-                    <!-- <th>Valor dos Juros Tetos</th> -->
                     <th>Diferença Corrigida <br />+ Juros</th>
-                    <!-- <th>Diferença Corrigida + Juros Tetos</th> -->
-                    <!-- <th  *ngIf="calculo.percentual_taxa_advogado != 0">
-                      Honorários
-                    </th> -->
+                    <!-- <th  *ngIf="calculo.percentual_taxa_advogado != 0">Honorários</th> -->
                   </tr>
                 </thead>
                 <thead *ngIf="isTetos">

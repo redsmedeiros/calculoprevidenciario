@@ -67,7 +67,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
   private inserirRecebidoList(event = null) {
 
-    
+
     if (this.recebidosBuracoNegro) {
       this.rmiValoresRecebidosBuracoNegro = this.rmiValoresRecebidos;
     }
@@ -230,6 +230,24 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     if (this.isEmptyInput(this.especieValoresRecebidos) && this.especieValoresRecebidos !== 0) {
       this.errors.add({ 'especieValoresRecebidos': ['Selecione uma opção.'] });
       valid = false;
+    } else if (this.especieValoresRecebidos === '2021' || this.especieValoresRecebidos === 2021) {
+
+
+      if (moment(this.dibValoresRecebidos, 'DD/MM/YYYY').isBefore('2020-01-01')) {
+        this.errors.add({ 'dibValoresRecebidos': ['A data deve ser maior que 01/01/2020'] });
+        valid = false;
+      }
+
+      if (moment(this.dipValoresRecebidos, 'DD/MM/YYYY').isBefore('2020-01-01')) {
+        this.errors.add({ 'dipValoresRecebidos': ['A data deve ser maior que 01/01/2020'] });
+        valid = false;
+      }
+
+      if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY').isBefore('2020-01-01')) {
+        this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/01/2020'] });
+        valid = false;
+      }
+
     }
 
     if (this.isEmptyInput(this.dibValoresRecebidos)) {
@@ -322,9 +340,9 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
   dibValoresRecebidosChanged() {
 
-  //  if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
-      this.dipValoresRecebidos = this.dibValoresRecebidos;
-      // this.validRecebidos();
+    //  if (!this.dipValoresRecebidos && (this.dibValoresRecebidos !== undefined && this.dibValoresRecebidos !== '')) {
+    this.dipValoresRecebidos = this.dibValoresRecebidos;
+    // this.validRecebidos();
     //}
 
     if (this.chkUseSameDib) {
