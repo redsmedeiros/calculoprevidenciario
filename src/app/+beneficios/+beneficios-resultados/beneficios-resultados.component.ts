@@ -1481,6 +1481,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
 
+    if (dataCorrente.isSameOrBefore(this.calculo.data_pedido_beneficio_esperado, 'year')) {
+      return { reajuste: 1.0, reajusteOs: 0.0 };
+    }
+
 
     let reajuste = 0.0;
     // let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
@@ -1792,7 +1796,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if (!dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado)) {
 
-        beneficioDevido *= reajusteObj.reajuste; //Reajuse de devidos, calculado na seção 2.1
+        beneficioDevido *= reajusteObj.reajuste; // Reajuse de devidos, calculado na seção 2.1
 
         if (this.beneficioDevidoTetosSemLimite < beneficioDevido) {
           this.beneficioDevidoTetosSemLimite = this.roundMoeda(beneficioDevido);
