@@ -13,57 +13,60 @@ import swal from 'sweetalert2';
     ErrorService
   ]
 })
-export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy { 
+export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
-  public form = {...CalculoModel.form};
+  public form = { ...CalculoModel.form };
   public calculo;
   private seguradoId = '';
   public isUpdating = false;
   public type;
   constructor(
-  	protected CalculoAtrasado: CalculoAtrasadoService,
+    protected CalculoAtrasado: CalculoAtrasadoService,
     protected Errors: ErrorService,
     protected router: Router,
     private route: ActivatedRoute
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.seguradoId = this.route.snapshot.params['id'];
     this.type = this.route.snapshot.params['type'];
-    
-  		this.isUpdating = true;
-  	    this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
-          .then(calculo => {
-            this.calculo = calculo;
-            this.form = this.calculo;
-            this.isUpdating = false;
-          });
+
+    this.isUpdating = true;
+    this.CalculoAtrasado.find(this.route.snapshot.params['id_calculo'])
+      .then(calculo => {
+        this.calculo = calculo;
+        this.form = this.calculo;
+        this.isUpdating = false;
+      });
   }
 
 
   submit(data) {
-    	this.CalculoAtrasado
-          .update(this.calculo)
-          .then(model => {
-            this.CalculoAtrasado.get()
-                .then(() => {
-                  this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']])
-                  swal({
-                    position: 'top-end',
-                    type: 'success',
-                    title: 'Cálculo salvo com sucesso',
-                    showConfirmButton: false,
-                    timer: 5000
-                  });
-                });
-          })
-          .catch(errors => this.Errors.add(errors));
+    this.CalculoAtrasado
+      .update(this.calculo)
+      .then(model => {
+        this.CalculoAtrasado.get()
+          .then(() => {
+            //this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']]);
+            window.location.href = '#/beneficios/beneficios-resultados/' 
+                                    + this.route.snapshot.params['id'] + '/' 
+                                    + this.route.snapshot.params['id_calculo'];
+            swal({
+              position: 'top-end',
+              type: 'success',
+              title: 'Cálculo salvo com sucesso',
+              showConfirmButton: false,
+              timer: 5000
+            });
+          });
+      })
+      .catch(errors => this.Errors.add(errors));
   }
 
-  ngOnDestroy(){
-  	this.resetForm();
+  ngOnDestroy() {
+    this.resetForm();
     if (!this.Errors.empty()) {
       Object.keys(this.Errors.all()).forEach(field => {
         this.calculo[field] = this.calculo['_data'][field];
@@ -74,7 +77,7 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    this.form = {...CalculoModel.form};
+    this.form = { ...CalculoModel.form };
   }
 
 }

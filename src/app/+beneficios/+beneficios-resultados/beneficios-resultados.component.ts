@@ -371,25 +371,30 @@ export class BeneficiosResultadosComponent implements OnInit {
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
                   //  return true;
+
+
+                  
                 });
+
+            
 
 
               this.allPromissesCalc.push(rstMoeda);
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
-                console.log(values)
+                   console.log(values)
 
-                this.jurosCorrente = this.calcularJurosCorrente();
-                this.resultadosList = this.generateTabelaResultados();
-                this.getNameSelectJurosAnualParaMensal();
-                this.calcularHonorariosCPC85();
-                this.calcularHonorariosFixo();
-                // this.calcularTutelaAntecipada();
-                this.calcularCustosProcesso();
-                this.updateResultadosDatatable();
-                this.isUpdating = false;
-
+                   this.jurosCorrente = this.calcularJurosCorrente();
+                   this.resultadosList = this.generateTabelaResultados();
+                   this.getNameSelectJurosAnualParaMensal();
+                   this.calcularHonorariosCPC85();
+                   this.calcularHonorariosFixo();
+                   
+                   this.calcularCustosProcesso();
+                   this.updateResultadosDatatable();
+                   this.isUpdating = false;
+                    // this.calcularTutelaAntecipada();
               });
 
 
