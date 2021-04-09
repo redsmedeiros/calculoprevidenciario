@@ -8,7 +8,7 @@ export class DefinicoesPlanejamento {
     { value: 51, label: 'Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda' },
     { value: 8, label: 'Trabalhador Rural a Serviço de Produtor Rural PF - 8%' },
     { value: 11, label: 'Contribuinte Individual - Prestador de Serviço para PJ - 11% ' },
-    { value: 113, label: 'Contribuinte Individual - Empresário - Pró-Labore - 11%' },
+    { value: 113, label: 'Contribuinte Individual - Prestador de Serviço para PJ e Equiparados - 11%' },
     { value: 112, label: 'Contribuinte Individual - Autônomo - 11% - Regime Simplicado' },
     { value: 20, label: 'Contribuinte Individual- Autônomo - 20%' },
     { value: 201, label: 'Contribuinte Facultativo - 20%' },
