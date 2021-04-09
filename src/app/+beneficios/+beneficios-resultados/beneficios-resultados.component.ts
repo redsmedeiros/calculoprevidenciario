@@ -90,7 +90,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   private dataJuros2009 = moment('2009-07-01');
   private dataEquivalenciaMinimo89 = moment('1989-04-01');
   private dataPrimeiroTetoJudicial = moment('1998-12-01');
-  private dataSegundoTetoJudicial = moment('2003-12-01');
+  // private dataSegundoTetoJudicial = moment('2003-12-01');
+  private dataSegundoTetoJudicial = moment('2004-01-01');
   private dataCorteCruzado = moment('1988-01-01');
   private dataCorteCruzadoNovo = moment('1989-01-01');
   private dataCorteCruzeiroReal = moment('1993-08-01');
@@ -487,9 +488,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           window.location.href = '/#/beneficios/beneficios-resultados/'
             + this.route.snapshot.params['id'] + '/' + this.route.snapshot.params['id_calculo']
-        }, 1000)
+        }, 1000);
 
-        sessionStorage.setItem('dateInvalid', 'true');
+        localStorage.setItem('dateInvalid', 'true');
       }
 
     }
@@ -1192,6 +1193,8 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
 
         }
+
+       
 
         if (abono13UltimoRecebido) {
 
@@ -2012,7 +2015,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
 
     }
-
 
     if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia

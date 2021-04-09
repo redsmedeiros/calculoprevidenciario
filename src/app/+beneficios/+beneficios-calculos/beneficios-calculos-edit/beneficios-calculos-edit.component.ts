@@ -49,10 +49,16 @@ export class BeneficiosCalculosEditComponent implements OnInit, OnDestroy {
       .then(model => {
         this.CalculoAtrasado.get()
           .then(() => {
-            //this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']]);
-            window.location.href = '#/beneficios/beneficios-resultados/' 
-                                    + this.route.snapshot.params['id'] + '/' 
-                                    + this.route.snapshot.params['id_calculo'];
+            // this.router.navigate(['/beneficios/beneficios-resultados/'+this.route.snapshot.params['id']+'/'+this.route.snapshot.params['id_calculo']]);
+
+            localStorage.removeItem('dateInvalid');
+
+            setTimeout(() => {
+              window.location.href = '#/beneficios/beneficios-resultados/'
+                + this.route.snapshot.params['id'] + '/'
+                + this.route.snapshot.params['id_calculo'];
+            }, 1000);
+
             swal({
               position: 'top-end',
               type: 'success',
