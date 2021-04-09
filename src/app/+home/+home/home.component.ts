@@ -29,8 +29,9 @@ export class HomeComponent implements OnInit {
       icon: `fa fa-lg fa-fw fa-calendar`,
       title: `Liquidação <br> de Sentença`,
       label: `Elabora demonstrativo de cálculo para Cumprimento de Sentença, calculando 
-      a diferença entre valores de benefícios devido e recebido, com aplicação de correção 
-      monetária, juros de mora e honorários advocatícios.`
+      a diferença entre os valores de benefícios devido e recebido, com aplicação de correção 
+      monetária, juros de mora e honorários advocatícios, incluindo, para os benefícios concedidos 
+      até 12/2003, a readequação aos Tetos Constitucionais previstos nas EC’s 20/98 e 41/03 (Revisão do Teto).`
     },
     {
       value: 'contrib-atrasadas',

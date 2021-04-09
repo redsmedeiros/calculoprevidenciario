@@ -1371,9 +1371,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (this.checkDateAfterBuracoNegro(dibDate)) {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = true;
+     // this.chkDemandasJudiciais = false;
     } else {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = false;
+     // this.chkDemandasJudiciais = false;
     }
   }
 
