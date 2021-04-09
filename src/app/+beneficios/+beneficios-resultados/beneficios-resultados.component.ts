@@ -1481,7 +1481,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
 
-    if (dataCorrente.isSameOrBefore(this.calculo.data_pedido_beneficio_esperado, 'year')) {
+    if (dataCorrente.isSameOrBefore(this.calculo.data_pedido_beneficio_esperado, 'month')) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
 
