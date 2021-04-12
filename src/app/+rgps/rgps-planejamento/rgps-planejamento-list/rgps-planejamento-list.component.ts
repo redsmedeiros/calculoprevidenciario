@@ -55,7 +55,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private id;
   private id_calculo;
   private data_futura;
-  private valor_beneficio;
+  private valor_beneficio = '0.00';
   private aliquota = '';
   private especie = '';
   /// form
@@ -64,7 +64,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     id: '',
     id_calculo: '',
     data_futura: '',
-    valor_beneficio: '',
+    valor_beneficio: '0.00',
     aliquota: '',
     especie: '',
   };
@@ -303,7 +303,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
     this.id = '';
     this.data_futura = '';
-    this.valor_beneficio = '';
+    this.valor_beneficio = '0.00';
     this.aliquota = '';
     this.especie = '';
 
@@ -477,7 +477,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.errors.clear();
     let valid = true;
 
-    if (this.valor_beneficio != 0) {
+    if (Number(this.valor_beneficio) != 0) {
 
       if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
         this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
