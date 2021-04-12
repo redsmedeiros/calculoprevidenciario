@@ -277,7 +277,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.especieValoresRecebidos = 0;
     }
 
-    this.checkImportBeneficioAtrasado();
+    // this.checkImportBeneficioAtrasado();
   }
 
 
@@ -289,28 +289,25 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     const valorRgps = parseFloat(exportDados.valor) || 0;
 
     if (dataRgps && valorRgps) {
-      if (this.type == 'AJ') {
+      if (exportDados.tipoCalculo == 'AJ') {
         this.chkUseSameDib = true;
-        this.rmiValoresRecebidos = valorRgps;
+        // this.rmiValoresRecebidos = valorRgps;
       } else {
         this.rmiValoresDevidos = valorRgps;
       }
+
       this.dibValoresDevidos = dataRgps.split('-')[2] + '/' +
         dataRgps.split('-')[1] + '/' +
         dataRgps.split('-')[0];
+
+      this.dipValoresDevidos = this.dibValoresDevidos;
+
+
     }
+    return { valorRgps: valorRgps, tipoCalculo: exportDados.tipoCalculo, dib: this.dibValoresDevidos };
 
   }
 
-  checkImportBeneficioAtrasado() {
-
-    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
-      // this.resetForm();
-      this.importRGPS();
-      sessionStorage.removeItem('exportBeneficioAtrasado');
-    }
-
-  }
 
 
   validateInputs() {
@@ -341,15 +338,20 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       valid = false;
     }
 
-    if (this.isEmptyInput(this.dataCitacaoReu)) {
+    if (!this.isEmptyInput(this.dataCitacaoReu)) {
       // this.errors.add({ 'dataCitacaoReu': ['A data da Citação do Réu é Necessária.'] });
       // valid = false;
-    } else if (!this.isValidDate(this.dataCitacaoReu)) {
-      this.errors.add({ 'dataCitacaoReu': ['Insira uma data Válida.'] });
-      valid = false;
-    } else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
-      // this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
-      // valid = false;
+
+      if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < moment(this.dataAcaoJudicial, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataCitacaoReu': ['A data da citação deve ser igual ou posterior ao ajuizamento da ação.'] })
+        valid = false;
+      } else if (!this.isValidDate(this.dataCitacaoReu)) {
+        this.errors.add({ 'dataCitacaoReu': ['Insira uma data Válida.'] });
+        valid = false;
+      } else if (moment(this.dataCitacaoReu, 'DD/MM/YYYY') < this.dataMinima) {
+        // this.errors.add({ 'dataCitacaoReu': ['A data deve ser maior que 01/01/1970'] });
+        // valid = false;
+      }
     }
 
     // data honorario fixo verificar se a data está dentro do intervalo
@@ -586,6 +588,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
 
+    if ( this.tipoDejurosSelecionado !== 'sem_juros') {
+      if (this.isEmptyInput(this.competenciaInicioJuros)) {
+        this.errors.add({ 'competenciaInicioJuros': ['A Competência Inicial dos Juros é obrigatoria'] });
+        valid = false;
+      }
+    }
+
     if (!this.isEmptyInput(this.jurosAntes2003) && this.tipoDejurosSelecionado == 'manual') {
       if (!this.isValidFloat(this.jurosAntes2003)) {
         this.errors.add({ 'jurosAntes2003': ['O valor deve ser um número com casas decimais separadas por vírgula.'] });
@@ -722,9 +731,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       }
 
-      // Data da citação do réu
-      this.formData.data_acao_judicial = this.dataAcaoJudicial;
       // Data da ajuizamento da ação:
+      this.formData.data_acao_judicial = this.dataAcaoJudicial;
+      // Data da citação do réu
       this.formData.data_citacao_reu = this.dataCitacaoReu
       // Tipo de Correçao monetária que será usada no calculo
       this.formData.tipo_correcao = this.tipoCorrecaoMonetaria;
@@ -822,6 +831,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
+
+      console.log(this.numDependentes);
       this.formData.num_dependentes = this.numDependentes;
 
       // Calcular Mais (Vincendos)
@@ -982,6 +993,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.chkDemandasJudiciais = rstDevidos.chkDemandasJudiciais;
     this.SBSemLimitacao = rstDevidos.SBSemLimitacao;
     this.SBSemLimitacaoAliquota = rstDevidos.SBSemLimitacaoAliquota;
+    this.numDependentes = rstDevidos.numDependentes;
 
   }
 
@@ -1248,6 +1260,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.calcularAbono13UltimoMes,
       this.SBSemLimitacao,
       this.SBSemLimitacaoAliquota,
+      this.numDependentes
     );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1400,15 +1413,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   setCompetenciaInicioJurosIsNull() {
 
     // if (!this.competenciaInicioJuros || this.competenciaInicioJuros === 'Invalid date') {
-    if (this.competenciaInicioJuros != this.dataCitacaoReu) {
 
-      if (!this.dataCitacaoReu) {
-        this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
-      } else {
-        this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
-      }
+    //if (this.competenciaInicioJuros != this.dataCitacaoReu) {
 
+    if (!this.dataCitacaoReu) {
+      //this.competenciaInicioJuros = moment(this.cessacaoValoresDevidos, 'DD/MM/YYYY').format('MM/YYYY');
+      this.competenciaInicioJuros = '';
+    } else {
+      this.competenciaInicioJuros = moment(this.dataCitacaoReu, 'DD/MM/YYYY').format('MM/YYYY');
     }
+
+    // }
 
   }
 

@@ -74,108 +74,22 @@ export class TransicaoFormComponent implements OnInit {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
-    // this.nome = 'sergio - 04-12-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '05/09/1959';
-    // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '33';
-    // this.contribuicaoMesesAteEC103 = '00';
-    // this.contribuicaoDiasAteEC103 = '00';
-
-    // this.contribuicaoAnos = '33';
-    // this.contribuicaoMeses = '00';
-    // this.contribuicaoDias = '00';
-
-    // this.nome = 'sergio - 04-12-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '05/09/1959';
-    // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '26';
-    // this.contribuicaoMesesAteEC103 = '05';
-    // this.contribuicaoDiasAteEC103 = '06';
-
-    // this.contribuicaoAnos = '27';
-    // this.contribuicaoMeses = '11';
-    // this.contribuicaoDias = '00';
-
-    // this.nome = 'sergio - 04-12-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '23/06/1967';
-    // this.dataFiliacao = '01/01/1985';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '13';
-    // this.contribuicaoMesesAteEC103 = '00';
-    // this.contribuicaoDiasAteEC103 = '21';
-
-    // this.contribuicaoAnos = '14';
-    // this.contribuicaoMeses = '00';
-    // this.contribuicaoDias = '09';
-
-    //     this.contribuicaoAnos = '27';
-    // this.contribuicaoMeses = '11';
-    // this.contribuicaoDias = '00';
-
-    // this.nome = 'divaldo - 04-12-2020';
-    // this.nome = 'Andre - 29-10-2020';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '05/07/1964';
-    // this.dataFiliacao = '01/01/1980';
-    // this.sexo = 'm';
-    // this.professor = false;
-
-    // this.contribuicaoAnosAteEC103 = '34';
-    // this.contribuicaoMesesAteEC103 = '08';
-    // this.contribuicaoDiasAteEC103 = '24';
-
-    // this.contribuicaoAnos = '35';
-    // this.contribuicaoMeses = '09';
-    // this.contribuicaoDias = '18';
-
-
-//   this.nome = 'sandro - 29-10-2020';
-//   this.idDocumento = '';
-//   this.numeroDocumento = '';
-//   this.dataNascimento = '06/11/1964';
-//   this.dataFiliacao = '01/01/1990';
-//   this.sexo = 'm';
-//   this.professor = false;
-
-//  this.contribuicaoAnosAteEC103 = '33';
-//   this.contribuicaoMesesAteEC103 = '04';
-//   this.contribuicaoDiasAteEC103 = '10';
-
-//   this.contribuicaoAnos = '33';
-//   this.contribuicaoMeses = '04';
-//   this.contribuicaoDias = '10';
-
 
   // this.nome = 'teste - 22-02-2021';
   // this.idDocumento = '';
   // this.numeroDocumento = '';
-  // this.dataNascimento = '05/09/1961';
-  // this.dataFiliacao = '01/01/1980';
-  // this.sexo = 'm';
+  // this.dataNascimento = '22/04/1982';
+  // this.dataFiliacao = '22/04/1982';
+  // this.sexo = 'f';
   // this.professor = false;
 
-  // this.contribuicaoAnosAteEC103 = '33';
-  // this.contribuicaoMesesAteEC103 = '05';
-  // this.contribuicaoDiasAteEC103 = '20';
+  // this.contribuicaoAnosAteEC103 = '19';
+  // this.contribuicaoMesesAteEC103 = '10';
+  // this.contribuicaoDiasAteEC103 = '07';
 
-  // this.contribuicaoAnos = '33';
-  // this.contribuicaoMeses = '05';
-  // this.contribuicaoDias = '20';
+  // this.contribuicaoAnos = '21';
+  // this.contribuicaoMeses = '02';
+  // this.contribuicaoDias = '24';
 
   }
 

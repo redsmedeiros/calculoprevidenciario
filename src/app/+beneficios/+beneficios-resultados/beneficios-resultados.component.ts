@@ -1035,7 +1035,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       valorDevidohonorario = this.roundMoeda((beneficioDevido * correcaoMonetaria) + (beneficioDevido * correcaoMonetaria * juros));
       honorarios = this.calculoHonorarios(dataCorrente, valorJuros, diferencaCorrigida, valorDevidohonorario);
-      if (diferencaCorrigidaJuros.string.indexOf('prescrita') != -1 && this.considerarPrescricao) {
+      if (diferencaCorrigidaJuros.string.indexOf('Prescrita') != -1 && this.considerarPrescricao) {
         // Se houver o marcador, a data é prescrita
         isPrescricao = true;
       }
@@ -1056,10 +1056,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       line.valor_juros = this.formatMoney(valorJuros, 'R$', true);
       line.diferenca_juros = diferencaCorrigidaJuros.string;
       line.diferenca_corrigida_juros = diferencaCorrigidaJuros.string;
-      line.diferenca_corrigida_jurosN = (diferencaCorrigidaJuros.string != 'prescrita') ? diferencaCorrigidaJuros.value : 0;
+      line.diferenca_corrigida_jurosN = (diferencaCorrigidaJuros.string != 'Prescrita') ? diferencaCorrigidaJuros.value : 0;
 
-      line.honorarios = (diferencaCorrigidaJuros.string != 'prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
-      line.honorariosN = (diferencaCorrigidaJuros.string != 'prescrita') ? honorarios : 0;
+      line.honorarios = (diferencaCorrigidaJuros.string != 'Prescrita') ? this.formatMoney(honorarios, 'R$', true) : '';
+      line.honorariosN = (diferencaCorrigidaJuros.string != 'Prescrita') ? honorarios : 0;
       line.beneficio_devidoH = valorDevidohonorario;
 
       line.correcao_monetariaN = correcaoMonetaria;
@@ -1507,15 +1507,19 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const valor = (this.RRASemJuros) ? diferencaCorrigidaComJuros : diferencaCorrigida;
 
-    if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
+    if (dataCorrente.isBetween(this.dataInicioDevidosDip, this.dataFinalAtual, 'month', '[]') && valor > 0) {
 
-      this.somaNumeroCompetenciasAtual += 1;
-      this.somaDiferencaCorrigidaAtual += valor;
+      if (dataCorrente.isSame(this.dataFinalAtual, 'year')) {
 
-    } else {
+        this.somaNumeroCompetenciasAtual += 1;
+        this.somaDiferencaCorrigidaAtual += valor;
 
-      this.somaNumeroCompetenciasAnterior += 1;
-      this.somaDiferencaCorrigidaAnterior += valor;
+      } else {
+
+        this.somaNumeroCompetenciasAnterior += 1;
+        this.somaDiferencaCorrigidaAnterior += valor;
+
+      }
 
     }
 
@@ -1528,6 +1532,11 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.dataCessacaoDevido != null && dataCorrente > this.dataCessacaoDevido) {
       return { reajuste: 1.0, reajusteOs: 0.0 };
     }
+
+    if (dataCorrente.isSameOrBefore(this.calculo.data_pedido_beneficio_esperado, 'month')) {
+      return { reajuste: 1.0, reajusteOs: 0.0 };
+    }
+
 
     let reajuste = 0.0;
     // let indiceObjCorrente = this.Indice.getByDate(dataCorrente);
@@ -2804,7 +2813,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       diasProporcionais = this.calcularDiasProporcionais(dataCorrente, dataFinalPrescricao);
     }
 
-
     // Não aplicar juros em valor negativo
     if (diferencaCorrigida < 0 && this.calculo.nao_aplicar_juros_sobre_negativo) {
       diferencaCorrigidaJuros = diferencaCorrigida;
@@ -2824,9 +2832,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       && this.considerarPrescricao) {
 
       if (this.considerarPrescricao && diasProporcionais === 1) {
-        diferencaCorrigidaJurosString = 'prescrita';
-        //diferencaCorrigidaJurosString = 'R$ 0,00';
-        diferencaCorrigidaJuros = 0;
+        diferencaCorrigidaJurosString = 'Prescrita';
+        // diferencaCorrigidaJurosString = 'R$ 0,00';
       } else {
         //  diferencaCorrigidaJurosString += '<br>(prescrita)';
       }

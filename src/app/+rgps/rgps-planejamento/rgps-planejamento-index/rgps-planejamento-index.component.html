@@ -241,20 +241,19 @@
                                       <select class="form-control input-lg" required [(ngModel)]="model.aliquota"
                                         #aliquota="ngModel" name="aliquota">
                                         <option [value]="5">Contribuinte Individual - 5% - MEI</option>
-                                        <option [value]="5">Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda</option>
+                                        <option [value]="51">Contribuinte Facultativo- 5% - Dona(s) de Casa - Baixa Renda</option>
                                         <option [value]="8">Trabalhador para Cooperativa - 8%</option>
-                                        <option [value]="11">Contribuinte Individual - Prestador de Serviço para PJ - 11%</option> 
-                                        <option [value]="11">Contribuinte Individual - Autônomo - 11% - Regime Simplicado</option>
+                                        <option [value]="11">Contribuinte Individual - Empresário - Pró-Labore - 11%</option>
+                                        <option [value]="113">Contribuinte Individual - Prestador de Serviço para PJ e Equiparados - 11%</option> 
+                                        <option [value]="112">Contribuinte Individual - Autônomo - 11% - Regime Simplicado</option>
                                         <option [value]="20">Contribuinte Individual- Autônomo - 20% </option>
-                                        <option [value]="20">Contribuinte Facultativo - 20%</option>
+                                        <option [value]="201">Contribuinte Facultativo - 20%</option>
                                         <option [value]="99">Contribuinte Empregado, Avulso e Doméstico - Progressiva e Cumulativa - 7,5% a 14%</option>                                      
                                       </select>
                                     </div>
                                   </div>
                                 </div>
-
                               </div>
-
                             </div>
                             <div class="tab-pane" [class.active]="activeStep.key == 'step4'">
                               <br>

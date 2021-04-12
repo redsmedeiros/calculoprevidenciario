@@ -18,7 +18,7 @@
     <div>
       <div class="widget-body no-padding widget-body-custom">
         <div class="well well-light" *ngIf="listDevidos.length === 0">
-          <strong>Não há itens na lista</strong>
+          <strong>Não Há Itens na Lista</strong>
         </div>
         <table
           class="table table-striped table-bordered table-hover table-responsive table-condensed"
@@ -617,7 +617,7 @@
                             [(ngModel)]="numDependentes"
                             (change)="errors.clear('numDependentes')"
                             [ngModelOptions]="{ standalone: true }"
-                            class="form-control"
+                            class="form-control text-right"
                             type="number"
                             min="0"
                             max="20"

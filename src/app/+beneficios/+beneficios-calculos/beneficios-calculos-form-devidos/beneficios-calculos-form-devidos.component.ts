@@ -37,8 +37,31 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     // console.log(this.errors);
     // console.log(this.formData);
     // console.log(this.type);
+   
   }
 
+  ngAfterViewInit(){
+    this.checkImportBeneficioAtrasado();
+  }
+
+  checkImportBeneficioAtrasado() {
+
+    let rst;
+    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
+      // this.resetForm();
+      rst = this.importRGPS();
+
+      if (rst.tipoCalculo !== 'AJ') {
+        setTimeout(() => {
+          this.showChildModalDevidos();
+          sessionStorage.removeItem('exportBeneficioAtrasado');
+        }, 2000)
+
+      }
+     
+    }
+
+  }
 
   private validDevido() {
 
@@ -161,6 +184,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.calcularAbono13UltimoMes,
       this.SBSemLimitacao,
       this.SBSemLimitacaoAliquota,
+      this.numDependentes
     );
 
 
@@ -212,6 +236,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.dataInicialadicional25Devido = rowEdit.dataAdicional25;
     this.calcularAbono13UltimoMes = rowEdit.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rowEdit.chkDemandasJudiciais;
+    this.numDependentes = rowEdit.numDependentes;
 
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;

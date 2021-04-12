@@ -494,8 +494,8 @@ export class RgpsResultadosComponent implements OnInit {
     const tempoNecessarioPropSexo = { 'm': 30, 'f': 25 }
     const tempoNecessarioProporcional = (tempoNecessarioPropSexo[sexoSegurado] + toll) - redutorProfessor;
 
-    if (anosContribuicao < tempoNecessarioProporcional 
-        && (tempoNecessarioProporcional - anosContribuicao) > 0.0033333333333303017) {
+    if (anosContribuicao < tempoNecessarioProporcional
+      && (tempoNecessarioProporcional - anosContribuicao) > 0.0033333333333303017) {
       return false;
     }
 
@@ -648,7 +648,7 @@ export class RgpsResultadosComponent implements OnInit {
       returnStr += ' e ';
     }
     if (month !== 0) {
-      returnStr += month + ' mes(es)';
+      returnStr += month + ' mês(es)';
     }
     if (month === 0 && year === 0) {
       returnStr = ' 0 ano(s) ';
@@ -663,14 +663,14 @@ export class RgpsResultadosComponent implements OnInit {
   public tratarTempoFracionadoMoment(anos, meses, dias, notDays = false) {
 
     if (notDays) {
-      return ` ${anos} ano(s), ${meses} mes(es)`;
+      return ` ${anos} ano(s), ${meses} mês(es)`;
     }
 
     if (anos < 0) {
-      return ` ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+      return ` ${meses} mês(es) e ${Math.floor(dias)} dia(s)`;
     }
 
-    return ` ${anos} ano(s), ${meses} mes(es) e ${Math.floor(dias)} dia(s)`;
+    return ` ${anos} ano(s), ${meses} mês(es) e ${Math.floor(dias)} dia(s)`;
 
   }
 
@@ -687,7 +687,7 @@ export class RgpsResultadosComponent implements OnInit {
     let dttDias = (xVarMes - totalFator.months) * 30;
     totalFator.days = Math.floor(dttDias);
 
-    return totalFator.years + 'ano(s) e ' + totalFator.months + 'mes(es) e ' + totalFator.days + 'dia(s)';
+    return totalFator.years + 'ano(s) e ' + totalFator.months + 'mês(es) e ' + totalFator.days + 'dia(s)';
   }
 
 
@@ -1167,6 +1167,7 @@ export class RgpsResultadosComponent implements OnInit {
       seguradoId: this.segurado.id,
       dib: data,
       valor: valor,
+      tipoCalculo: tipoCalculo,
     });
 
     sessionStorage.setItem('exportBeneficioAtrasado', objExport);
@@ -1381,18 +1382,25 @@ export class RgpsResultadosComponent implements OnInit {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    while (fimContador.isBefore(auxiliarDate, 'month')) {
-      count++;
-      auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+    console.log(this.planejamento.valor_beneficio);
+    console.log(typeof this.planejamento.valor_beneficio);
 
-      ObjValContribuicao = new ValorContribuido({
-        data: auxiliarDate.format('YYYY-MM-DD'),
-        valor_primaria: this.planejamento.valor_beneficio,
-        valor_secundaria: 0,
-      });
+    if (Number(this.planejamento.valor_beneficio) > 0) {
 
-      this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
-    };
+      while (fimContador.isBefore(auxiliarDate, 'month')) {
+        count++;
+        auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+
+        ObjValContribuicao = new ValorContribuido({
+          data: auxiliarDate.format('YYYY-MM-DD'),
+          valor_primaria: this.planejamento.valor_beneficio,
+          valor_secundaria: 0,
+        });
+
+        this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+      };
+
+    }
 
   }
 

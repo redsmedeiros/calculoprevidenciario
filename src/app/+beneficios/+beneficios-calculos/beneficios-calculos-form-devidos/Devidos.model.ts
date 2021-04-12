@@ -17,6 +17,7 @@ export class Devidos {
   public calcularAbono13UltimoMes
   public SBSemLimitacao
   public SBSemLimitacaoAliquota
+  public numDependentes
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -46,6 +47,7 @@ export class Devidos {
     calcularAbono13UltimoMes,
     SBSemLimitacao,
     SBSemLimitacaoAliquota,
+    numDependentes,
   ) {
     this.id = id;
     this.especie = especie;
@@ -63,6 +65,7 @@ export class Devidos {
     this.calcularAbono13UltimoMes = calcularAbono13UltimoMes;
     this.SBSemLimitacao = SBSemLimitacao;
     this.SBSemLimitacaoAliquota = SBSemLimitacaoAliquota;
+    this.numDependentes = numDependentes;
   }
 
 

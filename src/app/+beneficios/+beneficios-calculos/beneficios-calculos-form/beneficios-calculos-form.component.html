@@ -686,7 +686,7 @@
             class="form-group"
             [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
           >
-            <label class="col-md-3 control-label">Selecione a opção *:</label>
+            <label class="col-md-3 control-label">Selecione a Opção *:</label>
             <div class="col-md-7">
               <select
                 name="tipoCorrecaoMonetaria"
@@ -752,7 +752,7 @@
               class="form-group"
               [ngClass]="{ 'has-error': errors.has('tipoDejurosSelecionado') }"
             >
-              <label class="col-md-3 control-label">Selecione a opção *:</label>
+              <label class="col-md-3 control-label">Selecione a Opção *:</label>
               <div class="col-md-6">
                 <select
                   name="tipoDejurosSelecionado"
@@ -879,7 +879,7 @@
               *ngIf="tipoDejurosSelecionado !== 'sem_juros'"
             >
               <label class="col-md-3 control-label"
-                >Competência inicial dos juros:</label
+                >Competência Inicial dos Juros*:</label
               >
               <div class="col-md-2">
                 <input
@@ -903,6 +903,7 @@
                   <label>
                     <input
                       type="checkbox"
+                      name="chkIndice"
                       [(ngModel)]="chkIndice"
                       class="checkbox {{ styleTheme }}"
                     />

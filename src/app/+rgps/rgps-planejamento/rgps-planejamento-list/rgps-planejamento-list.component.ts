@@ -55,7 +55,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private id;
   private id_calculo;
   private data_futura;
-  private valor_beneficio;
+  private valor_beneficio = '0.00';
   private aliquota = '';
   private especie = '';
   /// form
@@ -64,7 +64,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     id: '',
     id_calculo: '',
     data_futura: '',
-    valor_beneficio: '',
+    valor_beneficio: '0.00',
     aliquota: '',
     especie: '',
   };
@@ -303,7 +303,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
     this.id = '';
     this.data_futura = '';
-    this.valor_beneficio = '';
+    this.valor_beneficio = '0.00';
     this.aliquota = '';
     this.especie = '';
 
@@ -477,28 +477,35 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.errors.clear();
     let valid = true;
 
+    if (Number(this.valor_beneficio) != 0) {
 
-    if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
-      this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
-      valid = false;
+      if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
+        this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
+        valid = false;
 
-    } else if ((Number(this.valor_beneficio) < Number(this.moeda.salario_minimo))) {
+      } else if ((Number(this.valor_beneficio) < Number(this.moeda.salario_minimo))) {
 
-      this.errors.add({ 'valor_beneficio': ['SC inferior ao limite mínimo'] });
-      valid = false;
+        this.errors.add({ 'valor_beneficio': ['SC inferior ao limite mínimo'] });
+        valid = false;
 
-    } else if ((Number(this.valor_beneficio) > Number(this.moeda.teto))) {
+      } else if ((Number(this.valor_beneficio) > Number(this.moeda.teto))) {
 
-      this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
-      valid = false;
+        this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
+        valid = false;
 
-    } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
-      && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
+      } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
+        && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
 
-      this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.'] });
-      valid = false;
+        this.errors.add({
+          'valor_beneficio':
+            ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.']
+        });
+        valid = false;
+
+      }
 
     }
+
 
     // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))
     // && (Number(this.valor_beneficio) >= Number(this.moeda.minimo))))

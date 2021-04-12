@@ -147,6 +147,12 @@ export class DefinicaoTempo {
         return totalDMY;
     }
 
+    static addDaysToDate(dateP, days){
+        const date = new Date(dateP);
+       date.setDate(date.getDate() + days);
+
+       return date;
+    }
 
     static formateStringAnosMesesDias(anos, meses, dias, notDays = false) {
 

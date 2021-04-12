@@ -44,6 +44,37 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
 
 
 
+  ngAfterViewInit() {
+    this.checkImportBeneficioAtrasadoRecebidos();
+  }
+
+  checkImportBeneficioAtrasadoRecebidos() {
+
+
+    let rst = null;
+    if (sessionStorage.exportBeneficioAtrasado && sessionStorage.exportBeneficioAtrasado != undefined) {
+      // this.resetForm();
+      rst = this.importRGPS();
+
+      if (rst.tipoCalculo === 'AJ') {
+        setTimeout(() => {
+          this.dibValoresRecebidos = rst.dib;
+          this.dipValoresRecebidos = rst.dib;
+          this.rmiValoresRecebidos = rst.valorRgps;
+          this.showChildModalRecebidos();
+
+          sessionStorage.removeItem('exportBeneficioAtrasado');
+        }, 2000)
+
+
+      }
+
+
+    }
+
+  }
+
+
   // inicio
 
   private validatePeriodoRecebidos(recebidoMultiplo) {
@@ -320,19 +351,20 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     }
 
 
-    if (!this.isEmptyInput(this.cessacaoValoresRecebidos)) {
-
-      if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
-        this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
-        valid = false;
-      } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
-        this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
-        valid = false;
-      } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') > moment()) {
-        this.errors.add({ 'cessacaoValoresRecebidos': ['A data não deve ser maior que a data atual'] });
-        valid = false;
-      }
+    if (this.isEmptyInput(this.cessacaoValoresRecebidos)) {
+      this.errors.add({ 'cessacaoValoresRecebidos': ['A Data Final é obrigatoria.'] });
+      valid = false;
+    } else if (!this.isValidDate(this.cessacaoValoresRecebidos)) {
+      this.errors.add({ 'cessacaoValoresRecebidos': ['Insira uma data válida.'] });
+      valid = false;
+    } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
+      this.errors.add({ 'cessacaoValoresRecebidos': ['A data deve ser maior que 01/1970'] });
+      valid = false;
+    } else if (moment(this.cessacaoValoresRecebidos, 'DD/MM/YYYY') > moment()) {
+      this.errors.add({ 'cessacaoValoresRecebidos': ['A data não deve ser maior que a data atual'] });
+      valid = false;
     }
+
 
     return valid;
   }

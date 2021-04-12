@@ -105,6 +105,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public naoAplicarIN77 = true;
   public irtRejusteAdministrativo = 0;
   public msgProporcionalAteEC1032019 = '';
+  public msgIntegralAteEC1032019 = '';
 
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
@@ -177,7 +178,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.msgDivisorMinimo = '';
     //this.exibirIN77 = false;
 
-   
+
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
     this.stringCabecalho = 'Entre  29/11/1999 a 13/11/2019'
 
@@ -217,9 +218,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
                           this.carenciasProgressivas = carencias;
                           this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
                           this.isUpdating = false;
-
-
-
                         });
                     });
                 });
@@ -428,141 +426,152 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     let label;
-    switch (this.tipoBeneficio) {
-      case 1: // Auxilio Doença Previdenciario
+    // switch (this.tipoBeneficio) {
+    //  case 1: // Auxilio Doença Previdenciario
 
-        divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
-        //modificado dia 04-06-2019
-        divisorSecundario = contadorSecundario;
-        divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
+    // divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
+    //modificado dia 04-06-2019
+    //  divisorSecundario = contadorSecundario;
+    //   divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
 
 
-        if (this.withMemo) {
-          // Exibir Label contendo o texto
-          label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .';
-        }
-        break;
-      case 2: // Aposentadoria Por Invalidez previdenciaria
-        if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
-          //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-          if (this.withMemo) {
-            // Exibir Label contendo o texto
-            label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.';
-          }
-        }
-        break;
-      case 7: // Auxilio Doença Previdenciario 50%
-        //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-        break;
-    }
+    // if (this.withMemo) {
+    //   // Exibir Label contendo o texto
+    //   label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .';
+    // }
+    //  break;
+    // case 2: // Aposentadoria Por Invalidez previdenciaria
+    //   if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
+    //     //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //    // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     if (this.withMemo) {
+    //       // Exibir Label contendo o texto
+    //       label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.';
+    //     }
+    //   }
+    //   break;
+    // case 7: // Auxilio Doença Previdenciario 50%
+    //   //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //   divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //   break;
+    //}
 
-    if (this.dataFiliacao >= this.dataDib99) {
-      switch (this.tipoBeneficio) {
-        case 1: //Auxilio Doença Previdenciario
-        case 2: //Aposentadoria por invalidez previdenciaria
-          if (numeroContribuicoes >= 144 || this.withMemo) {
-            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-          } else {
-            divisorMediaPrimaria = numeroContribuicoes;
-          }
-          break;
-        //  case 5: // Aposentadoria Especial
-        case 7: // Auxilio Acidente Previdenciario 50%
-          if (numeroContribuicoes < 144 || this.withMemo) {
-            divisorMediaPrimaria = numeroContribuicoes;
-          } else {
-            //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-            divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-          }
-          break;
-        case 3: // Aposentadoria Idade Trabalhador Urbano
-        case 4: // Aposentadoria Tempo de Contribuicao
-        case 5: // Aposentadoria Especial antiga
-        case 1915: // Aposentadoria Especial 15
-        case 1920: // Aposentadoria Especial 20
-        case 1925: // Aposentadoria Especial 25
-        case 16: // Aposentadoria Idade Trabalhafor Rural
-        case 25: // Deficiencia Grave
-        case 27: // Deficiencia Leva
-        case 26: // Deficiencia Moderado
-        case 28: // Deficiencia PorSalvar Idade
-          // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-          divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-          break;
-      }
-    } else if (this.dataFiliacao < this.dataDib99) {
-      if (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
-        (this.tipoBeneficio == 5 || this.tipoBeneficio == 1915 || this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925)
+    ///   if (this.dataFiliacao >= this.dataDib99) {
+    // regra antiga removida em 30/03/2021 erro de decreto revogado em 2009
+
+
+    // switch (this.tipoBeneficio) {
+    //   case 1: //Auxilio Doença Previdenciario
+    //   case 2: //Aposentadoria por invalidez previdenciaria
+    //     if (numeroContribuicoes >= 144 || this.withMemo) {
+    //       //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //       divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     // } else {
+    //     //   divisorMediaPrimaria = numeroContribuicoes;
+    //     // }
+    //     break;
+    //   //  case 5: // Aposentadoria Especial
+    //   case 7: // Auxilio Acidente Previdenciario 50%
+    //     if (numeroContribuicoes < 144 || this.withMemo) {
+    //       divisorMediaPrimaria = numeroContribuicoes;
+    //     } else {
+    //       //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //       divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     }
+    //     break;
+    //   case 3: // Aposentadoria Idade Trabalhador Urbano
+    //   case 4: // Aposentadoria Tempo de Contribuicao
+    //   case 5: // Aposentadoria Especial antiga
+    //   case 1915: // Aposentadoria Especial 15
+    //   case 1920: // Aposentadoria Especial 20
+    //   case 1925: // Aposentadoria Especial 25
+    //   case 16: // Aposentadoria Idade Trabalhafor Rural
+    //   case 25: // Deficiencia Grave
+    //   case 27: // Deficiencia Leva
+    //   case 26: // Deficiencia Moderado
+    //   case 28: // Deficiencia PorSalvar Idade
+    //     // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+    //     divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
+    //     break;
+    // }
+    // } else 
+
+    // Quando a filiação for a partir de 29/11/1999 o cálculo se dará sempre pela m.a.s dos 80% > SC. Não aplica divisor mínimo!
+    divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+
+
+    if (this.dataFiliacao < this.dataDib99 &&
+      (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
+        this.tipoBeneficio == 5 || this.tipoBeneficio == 1915 || this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925
         || this.tipoBeneficio == 6 || this.tipoBeneficio == 16 || this.tipoBeneficio == 25 || this.tipoBeneficio == 27
-        || this.tipoBeneficio == 26 || this.tipoBeneficio == 28) {
-        // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
-        // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
-        //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+        || this.tipoBeneficio == 26 || this.tipoBeneficio == 28)) {
+      // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
+      // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
+      //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
 
-        divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)); // alterado 08/042020
-        //divisorMediaPrimaria = numeroContribuicoes;
-
-
+      divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8)); // alterado 08/04/2020
+      //divisorMediaPrimaria = numeroContribuicoes;
 
 
-        if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
-
-          divisorMediaPrimaria = mesesContribuicao60;
-          this.msgDivisorMinimo = '(Divisor Mínimo)';
-
-        }
-
-        if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
-
-          this.exibirIN77 = true;
-
-          if (this.withIN45 && this.isDivisorMinimo) {
-
-            divisorMediaPrimaria = numeroContribuicoes;
-
-          } else {
-
-            divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-
-          }
-
-          if (this.naoAplicarIN77 && this.isDivisorMinimo) {
-
-            divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-
-            if (divisorMediaPrimaria < mesesContribuicao60) {
-
-              divisorMediaPrimaria = mesesContribuicao60;
-              this.msgDivisorMinimo = '(Divisor Mínimo)';
-
-            }
-
-          }
-
-        }
-
-        // divisor PBC
-        if (this.getPbcDaVidatoda()) {
-          this.exibirIN77 = false;
-          divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-          this.msgDivisorMinimo = '';
-        }
 
 
-        // if (divisorMediaPrimaria < divisorMinimo && this.isDivisorMinimo) {
-        //     divisorMediaPrimaria = divisorMinimo;
-        //     this.msgDivisorMinimo = '(Divisor Mínimo)';
-        // }
+      if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 
-        // // divisor 
-        // if(this.getPbcDaVidatoda()){
-        //   divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-        // }
+        divisorMediaPrimaria = mesesContribuicao60;
+        this.msgDivisorMinimo = '(Divisor Mínimo)';
 
       }
+
+      if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
+
+        this.exibirIN77 = true;
+
+        if (this.withIN45 && this.isDivisorMinimo) {
+
+          divisorMediaPrimaria = numeroContribuicoes;
+
+        } else {
+
+          divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+
+        }
+
+        if (this.naoAplicarIN77 && this.isDivisorMinimo) {
+
+          divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+
+          if (divisorMediaPrimaria < mesesContribuicao60) {
+
+            divisorMediaPrimaria = mesesContribuicao60;
+            this.msgDivisorMinimo = '(Divisor Mínimo)';
+
+          }
+
+        }
+
+      }
+
+      // divisor PBC
+      if (this.getPbcDaVidatoda()) {
+        this.exibirIN77 = false;
+        divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+        this.msgDivisorMinimo = '';
+      }
+
+
+      // if (divisorMediaPrimaria < divisorMinimo && this.isDivisorMinimo) {
+      //     divisorMediaPrimaria = divisorMinimo;
+      //     this.msgDivisorMinimo = '(Divisor Mínimo)';
+      // }
+
+      // // divisor 
+      // // divisor 
+      // // divisor 
+      // if(this.getPbcDaVidatoda()){
+      //   divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+      // }
+
+      //}
     }
 
     let totalMediaDozeContribuicoes = 0;
@@ -1464,8 +1473,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           // errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
           //     + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
-          this.msgProporcionalAteEC1032019 = 'POSSUI direito ao benefício proporcional. Falta(m) '
-            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.';
+
+          this.msgIntegralAteEC1032019 = 'Falta(m) ' + tempoFracionado + ' para adquirir direito à Aposentadoria Integral.';
+          this.msgProporcionalAteEC1032019 = 'Possui direito à Aposentadoria Proporcional, conforme cálculo abaixo.';
+
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
