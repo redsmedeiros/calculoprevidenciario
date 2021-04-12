@@ -477,28 +477,35 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.errors.clear();
     let valid = true;
 
+    if (this.valor_beneficio != 0) {
 
-    if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
-      this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
-      valid = false;
+      if (this.valor_beneficio == undefined || this.valor_beneficio == '') {
+        this.errors.add({ 'valor_beneficio': ['O campo é obrigatório.'] });
+        valid = false;
 
-    } else if ((Number(this.valor_beneficio) < Number(this.moeda.salario_minimo))) {
+      } else if ((Number(this.valor_beneficio) < Number(this.moeda.salario_minimo))) {
 
-      this.errors.add({ 'valor_beneficio': ['SC inferior ao limite mínimo'] });
-      valid = false;
+        this.errors.add({ 'valor_beneficio': ['SC inferior ao limite mínimo'] });
+        valid = false;
 
-    } else if ((Number(this.valor_beneficio) > Number(this.moeda.teto))) {
+      } else if ((Number(this.valor_beneficio) > Number(this.moeda.teto))) {
 
-      this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
-      valid = false;
+        this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
+        valid = false;
 
-    } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
-      && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
+      } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
+        && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
 
-      this.errors.add({ 'valor_beneficio': ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.'] });
-      valid = false;
+        this.errors.add({
+          'valor_beneficio':
+            ['O SC não pode ser superior ao valor do salário mínimo na espécie de segurado selecionado.']
+        });
+        valid = false;
+
+      }
 
     }
+
 
     // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))
     // && (Number(this.valor_beneficio) >= Number(this.moeda.minimo))))

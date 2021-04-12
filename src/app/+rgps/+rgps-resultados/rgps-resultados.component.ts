@@ -494,8 +494,8 @@ export class RgpsResultadosComponent implements OnInit {
     const tempoNecessarioPropSexo = { 'm': 30, 'f': 25 }
     const tempoNecessarioProporcional = (tempoNecessarioPropSexo[sexoSegurado] + toll) - redutorProfessor;
 
-    if (anosContribuicao < tempoNecessarioProporcional 
-        && (tempoNecessarioProporcional - anosContribuicao) > 0.0033333333333303017) {
+    if (anosContribuicao < tempoNecessarioProporcional
+      && (tempoNecessarioProporcional - anosContribuicao) > 0.0033333333333303017) {
       return false;
     }
 
@@ -1382,18 +1382,25 @@ export class RgpsResultadosComponent implements OnInit {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    while (fimContador.isBefore(auxiliarDate, 'month')) {
-      count++;
-      auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+    console.log(this.planejamento.valor_beneficio);
+    console.log(typeof this.planejamento.valor_beneficio);
 
-      ObjValContribuicao = new ValorContribuido({
-        data: auxiliarDate.format('YYYY-MM-DD'),
-        valor_primaria: this.planejamento.valor_beneficio,
-        valor_secundaria: 0,
-      });
+    if (Number(this.planejamento.valor_beneficio) > 0) {
 
-      this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
-    };
+      while (fimContador.isBefore(auxiliarDate, 'month')) {
+        count++;
+        auxiliarDate = (auxiliarDate.clone()).add(-1, 'month');
+
+        ObjValContribuicao = new ValorContribuido({
+          data: auxiliarDate.format('YYYY-MM-DD'),
+          valor_primaria: this.planejamento.valor_beneficio,
+          valor_secundaria: 0,
+        });
+
+        this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+      };
+
+    }
 
   }
 
