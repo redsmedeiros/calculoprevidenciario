@@ -4241,11 +4241,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private parseStringFloatIRT(value) {
 
-    if (typeof value === 'number') {
-      return value;
-    }
+    if (value != undefined && typeof value !== 'undefined' && value != ''  ) {
 
-    return parseFloat(value.replace(',', '.'));
+      if (typeof value === 'number') {
+        return value;
+      }
+
+      return parseFloat(value.replace(',', '.'));
+    }
 
   }
 
