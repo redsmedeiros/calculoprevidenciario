@@ -374,28 +374,28 @@ export class BeneficiosResultadosComponent implements OnInit {
                   //  return true;
 
 
-                  
+
                 });
 
-            
+
 
 
               this.allPromissesCalc.push(rstMoeda);
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
-                   console.log(values)
+                console.log(values)
 
-                   this.jurosCorrente = this.calcularJurosCorrente();
-                   this.resultadosList = this.generateTabelaResultados();
-                   this.getNameSelectJurosAnualParaMensal();
-                   this.calcularHonorariosCPC85();
-                   this.calcularHonorariosFixo();
-                   
-                   this.calcularCustosProcesso();
-                   this.updateResultadosDatatable();
-                   this.isUpdating = false;
-                    // this.calcularTutelaAntecipada();
+                this.jurosCorrente = this.calcularJurosCorrente();
+                this.resultadosList = this.generateTabelaResultados();
+                this.getNameSelectJurosAnualParaMensal();
+                this.calcularHonorariosCPC85();
+                this.calcularHonorariosFixo();
+
+                this.calcularCustosProcesso();
+                this.updateResultadosDatatable();
+                this.isUpdating = false;
+                // this.calcularTutelaAntecipada();
               });
 
 
@@ -1149,7 +1149,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       const verificacaoEspecieAbono = !(especiesSemAbono.includes(tipo_aposentadoria_recebida)
         || especiesSemAbono.includes(this.calculo.tipo_aposentadoria));
 
-      if ((dataCorrente.month() === 11 )
+      if ((dataCorrente.month() === 11)
         || (this.calculo.calcular_abono_13_ultimo_mes && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')
           && (verificacaoEspecieAbono)
           || (abono13UltimoRecebido && dataCorrente.isSame(datacessacaoBeneficioRecebido, 'month')
@@ -1194,7 +1194,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         }
 
-       
+
 
         if (abono13UltimoRecebido) {
 
@@ -1211,7 +1211,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
         }
 
-        if ( especiesSemAbono.includes(this.calculo.tipo_aposentadoria) ) {
+        if (especiesSemAbono.includes(this.calculo.tipo_aposentadoria)) {
           beneficioDevidoAbono = 0.0;
         }
 
@@ -2228,7 +2228,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCessacaoRecebido = recebidoRow.value.cessacao.clone();
       dib = dataPedidoBeneficio.clone();
       tipo_aposentadoria_recebida = recebidoRow.value.especie;
-      taxa_ajuste_maxima_concedida = recebidoRow.value.irt;
+      taxa_ajuste_maxima_concedida = this.parseStringFloatIRT(recebidoRow.value.irt);
       this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
       this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
     }
@@ -2347,8 +2347,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     line.beneficio_recebido_apos_revisao_sem_limites = this.formatMoney(this.beneficioRecebidoAposRevisaoTetos);
 
-
     if (taxa_ajuste_maxima_concedida != undefined && taxa_ajuste_maxima_concedida > 1) {
+
       if (this.dataComecoLei8870 <= dataPedidoBeneficio &&
         dataPedidoBeneficio <= this.dataFimLei8870 &&
         dataCorrente.isSame(this.dataAplicacao8870, 'month')) {
@@ -2358,8 +2358,11 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (dataPedidoBeneficio >= this.dataLei8880 && this.primeiroReajusteRecebidos == 1) {
         beneficioRecebido *= parseFloat(taxa_ajuste_maxima_concedida);
         this.primeiroReajusteRecebidos = 0;
+
       }
+
     }
+
 
     let chkBeneficioNaoConcedido = this.calculo.beneficio_nao_concedido;
     if (chkBeneficioNaoConcedido) {
@@ -3893,7 +3896,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // if ((valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003)
     //   || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
     // ) {
-      if ((valorBeneficio >= tetoSalarial )
+    if ((valorBeneficio >= tetoSalarial)
       || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
     ) {
       // Adicionar subindice ‘T’ no valor do beneficio.
@@ -4182,8 +4185,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns.push({ data: 'competencia', width: '9rem' });
     columns.push({ data: 'indice_devidos', width: '7rem' });
     columns.push({ data: 'beneficio_devido', width: '14rem' });
-   // teste regras buraco negro
-   // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
+    // teste regras buraco negro
+    // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
 
 
     if (this.calculo.tipo_aposentadoria === 22) {
@@ -4232,6 +4235,17 @@ export class BeneficiosResultadosComponent implements OnInit {
       ]
     }
 
+
+  }
+
+
+  private parseStringFloatIRT(value) {
+
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    return parseFloat(value.replace(',', '.'));
 
   }
 
