@@ -2025,26 +2025,32 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
+    if ((this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1) ||
+      (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')
+        || dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month'))
+    ) {
+
+      const defineValorComparacao2041 = (this.devidoBuracoNegro) ? this.beneficioDevidoAposRevisao : this.beneficioDevidoTetosSemLimite;
+
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
         tetoDevidos = 1200.00;
-        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+        if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
           beneficioDevidoAjustado = tetoDevidos;
         } else {
-          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+          beneficioDevidoAjustado = defineValorComparacao2041;
         }
+
       }
 
       if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
         tetoDevidos = 2400.00;
-        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+        if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
           beneficioDevidoAjustado = tetoDevidos;
-
         } else {
-
-          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+          beneficioDevidoAjustado = defineValorComparacao2041;
         }
       }
+
     }
 
 
@@ -3760,6 +3766,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     this.beneficioDevidoAposRevisaoTetos = (this.calculo.valor_beneficio_esperado_revisao) ? this.calculo.valor_beneficio_esperado_revisao : 0;
     this.beneficioRecebidoAposRevisaoTetos = (this.calculo.valor_beneficio_concedido_revisao) ? this.calculo.valor_beneficio_concedido_revisao : 0;
     this.beneficioDevidoTetosSemLimite = parseFloat(this.calculo.valor_beneficio_esperado);
+
     if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
       this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
     }
@@ -4241,7 +4248,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private parseStringFloatIRT(value) {
 
-    if (value != undefined && typeof value !== 'undefined' && value != ''  ) {
+    if (value != undefined && typeof value !== 'undefined' && value != '') {
 
       if (typeof value === 'number') {
         return value;
