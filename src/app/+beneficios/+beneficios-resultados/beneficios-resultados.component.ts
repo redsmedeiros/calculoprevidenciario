@@ -565,52 +565,52 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-  private setInicioRecebidosEDevidosIndices() {
+  // private setInicioRecebidosEDevidosIndices() {
 
-    let date_inicio_devido = this.dataInicioDevidos;
+  //   let date_inicio_devido = this.dataInicioDevidos;
 
-    if (date_inicio_devido.isAfter(this.dibAnteriorDevidos)) {
-      date_inicio_devido = this.dibAnteriorDevidos;
-    }
+  //   if (date_inicio_devido.isAfter(this.dibAnteriorDevidos)) {
+  //     date_inicio_devido = this.dibAnteriorDevidos;
+  //   }
 
-    const date_fim_devido = this.dataFinal;
+  //   const date_fim_devido = this.dataFinal;
 
 
-    let date_inicio_recebido = this.dataInicioRecebidos;
+  //   let date_inicio_recebido = this.dataInicioRecebidos;
 
-    if (date_inicio_recebido.isAfter(this.dibAnteriorRecebidos)) {
-      date_inicio_recebido = this.dibAnteriorRecebidos;
-    }
+  //   if (date_inicio_recebido.isAfter(this.dibAnteriorRecebidos)) {
+  //     date_inicio_recebido = this.dibAnteriorRecebidos;
+  //   }
 
-    if (this.listRecebidos.length > 0 && date_inicio_recebido.isAfter(this.recebidosListInicioAnterior)) {
-      date_inicio_recebido = this.recebidosListInicioAnterior;
-    }
+  //   if (this.listRecebidos.length > 0 && date_inicio_recebido.isAfter(this.recebidosListInicioAnterior)) {
+  //     date_inicio_recebido = this.recebidosListInicioAnterior;
+  //   }
 
-    let date_fim_recebido = date_fim_devido;
+  //   let date_fim_recebido = date_fim_devido;
 
-    if (date_fim_recebido.isAfter(this.dataCessacaoRecebido)) {
-      date_fim_recebido = moment(this.dataCessacaoRecebido);
-    }
+  //   if (date_fim_recebido.isAfter(this.dataCessacaoRecebido)) {
+  //     date_fim_recebido = moment(this.dataCessacaoRecebido);
+  //   }
 
-    if (this.listRecebidos.length > 0 && date_fim_recebido.isAfter(this.recebidosListInicioAnterior)) {
-      date_fim_recebido = this.recebidosListInicioAnterior;
-    }
+  //   if (this.listRecebidos.length > 0 && date_fim_recebido.isAfter(this.recebidosListInicioAnterior)) {
+  //     date_fim_recebido = this.recebidosListInicioAnterior;
+  //   }
 
-    // console.log({
-    //   date_inicio_devido: (date_inicio_devido),
-    //   date_fim_devido: (date_fim_devido),
-    //   date_inicio_recebido: (date_inicio_recebido),
-    //   date_fim_recebido: (date_fim_recebido)
-    // });
+  //   // console.log({
+  //   //   date_inicio_devido: (date_inicio_devido),
+  //   //   date_fim_devido: (date_fim_devido),
+  //   //   date_inicio_recebido: (date_inicio_recebido),
+  //   //   date_fim_recebido: (date_fim_recebido)
+  //   // });
 
-    return {
-      date_inicio_devido: (date_inicio_devido),
-      date_fim_devido: (date_fim_devido),
-      date_inicio_recebido: (date_inicio_recebido),
-      date_fim_recebido: (date_fim_recebido)
-    };
+  //   return {
+  //     date_inicio_devido: (date_inicio_devido),
+  //     date_fim_devido: (date_fim_devido),
+  //     date_inicio_recebido: (date_inicio_recebido),
+  //     date_fim_recebido: (date_fim_recebido)
+  //   };
 
-  }
+  // }
 
 
   /**
@@ -1880,11 +1880,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if (!dataCorrente.isSame(this.calculo.data_pedido_beneficio_esperado)) {
 
-        beneficioDevido *= reajusteObj.reajuste; // Reajuse de devidos, calculado na seção 2.1
-
         if (this.beneficioDevidoTetosSemLimite < beneficioDevido) {
           this.beneficioDevidoTetosSemLimite = this.roundMoeda(beneficioDevido);
         }
+
+        beneficioDevido *= reajusteObj.reajuste; // Reajuse de devidos, calculado na seção 2.1
 
         //        this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste;
         this.beneficioDevidoTetosSemLimite = this.roundMoeda(this.beneficioDevidoTetosSemLimite *= reajusteObj.reajuste);;
@@ -1910,6 +1910,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.beneficioDevidoOs = this.roundMoeda(this.beneficioDevidoOs * reajusteObj.reajuste);
     let indiceSuperior = false;
+
+
+
 
 
     // algortimo buracoNegro definida na seção de algortimos úteis.
@@ -1976,7 +1979,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     let tetoDevidos = parseFloat(moedaDataCorrente.teto);
 
 
-
     // alterado 09/09/2020 erro de rejuste em 1998
     if (this.isTetos) {
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
@@ -2025,16 +2027,56 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if ((this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1) ||
+
+
+    if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
+
+
+      if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+
+        tetoDevidos = 1200.00;
+
+        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+
+          beneficioDevidoAjustado = tetoDevidos;
+        } else {
+
+          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+
+        }
+
+      }
+
+      if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+
+        tetoDevidos = 2400.00;
+
+        if (this.devidoBuracoNegro && this.beneficioDevidoAposRevisao > tetoDevidos) {
+
+          beneficioDevidoAjustado = tetoDevidos;
+
+        } else {
+
+          beneficioDevidoAjustado = this.beneficioDevidoAposRevisao;
+
+        }
+
+      }
+
+    } else if ((this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1) &&
       (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')
         || dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month'))
     ) {
 
-      const defineValorComparacao2041 = (this.devidoBuracoNegro) ? this.beneficioDevidoAposRevisao : this.beneficioDevidoTetosSemLimite;
+      // console.log(beneficioDevidoAjustado);
+      // console.log(this.beneficioDevidoAposRevisao);
+      // console.log(line.beneficio_devido_apos_revisao_sem_limites);
+      // console.log(this.beneficioDevidoTetosSemLimite);
+      const defineValorComparacao2041 = this.beneficioDevidoTetosSemLimite;
 
       if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
         tetoDevidos = 1200.00;
-        if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
+        if (defineValorComparacao2041 > tetoDevidos) {
           beneficioDevidoAjustado = tetoDevidos;
         } else {
           beneficioDevidoAjustado = defineValorComparacao2041;
@@ -2044,7 +2086,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
         tetoDevidos = 2400.00;
-        if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
+        if (defineValorComparacao2041 > tetoDevidos) {
           beneficioDevidoAjustado = tetoDevidos;
         } else {
           beneficioDevidoAjustado = defineValorComparacao2041;
@@ -2054,8 +2096,45 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
 
+
+    // if ((this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1) &&
+    //   (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')
+    //     || dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month'))
+    // ) {
+
+    //   console.log(beneficioDevidoAjustado);
+    //   console.log(this.beneficioDevidoAposRevisao);
+    //   console.log(this.beneficioDevidoTetosSemLimite);
+
+
+    //   const defineValorComparacao2041 = (this.devidoBuracoNegro) ? this.beneficioDevidoAposRevisao : this.beneficioDevidoTetosSemLimite;
+
+    //   if (dataCorrente.isSame(this.dataPrimeiroTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+    //     tetoDevidos = 1200.00;
+    //     if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
+    //       beneficioDevidoAjustado = tetoDevidos;
+    //     } else {
+    //       beneficioDevidoAjustado = defineValorComparacao2041;
+    //     }
+
+    //   }
+
+    //   if (dataCorrente.isSame(this.dataSegundoTetoJudicial, 'month')) { // Comparação de mês e ano, ignorar dia
+    //     tetoDevidos = 2400.00;
+    //     if (this.devidoBuracoNegro || defineValorComparacao2041 > tetoDevidos) {
+    //       beneficioDevidoAjustado = tetoDevidos;
+    //     } else {
+    //       beneficioDevidoAjustado = defineValorComparacao2041;
+    //     }
+    //   }
+
+    // }
+
+
+
     // this.beneficioDevidoAposRevisao = this.aplicarTetosEMinimos(this.beneficioDevidoAposRevisao, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
-    this.beneficioDevidoAposRevisao = this.aplicarMinimos(this.beneficioDevidoAposRevisao,
+    this.beneficioDevidoAposRevisao = this.aplicarMinimos(
+      this.beneficioDevidoAposRevisao,
       dataCorrente,
       dataPedidoBeneficioEsperado,
       'Devido');
@@ -2237,6 +2316,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       taxa_ajuste_maxima_concedida = this.parseStringFloatIRT(recebidoRow.value.irt);
       this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
       this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
+      this.dataCessacaoRecebido = dataCessacaoRecebido;
     }
 
     if ((this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
@@ -3780,7 +3860,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (this.calculo.data_prevista_cessacao != '0000-00-00')
       this.dataCessacaoDevido = moment(this.calculo.data_prevista_cessacao);
-    if (this.calculo.data_cessacao != '0000-00-00')
+    if (this.calculo.data_cessacao != '0000-00-00' && this.listRecebidos.length == 0)
       this.dataCessacaoRecebido = moment(this.calculo.data_cessacao);
 
     this.jurosAntes2003 = this.calculo.previo_interesse_2003 / 100;
@@ -4193,7 +4273,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns.push({ data: 'indice_devidos', width: '7rem' });
     columns.push({ data: 'beneficio_devido', width: '14rem' });
     // teste regras buraco negro
-    // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
+   // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
+   // columns.push({ data: 'beneficio_devido_sem_limites', width: '14rem' });
 
 
     if (this.calculo.tipo_aposentadoria === 22) {
