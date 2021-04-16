@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
-import { Auth } from "../../services/Auth/Auth.service";
-import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import swal from 'sweetalert';
 
 @FadeInTop()
@@ -15,6 +15,13 @@ export class HomeComponent implements OnInit {
 
 
   private textosSimuladoresMenu = [
+    {
+      value: 'passo-a-passo',
+      link: '/importador-cnis/home',
+      icon: `fa  fa-line-chart fa-lg fa-fw`,
+      title: `Cálculo <br>Passo a Passo`,
+      label: `Calcular Contagem de tempo - Regras de transição - RMI`
+    },
     {
       value: 'RMI',
       link: '/rgps/rgps-segurados',

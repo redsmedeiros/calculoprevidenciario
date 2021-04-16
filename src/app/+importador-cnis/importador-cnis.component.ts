@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../shared/animations/fade-in-top.decorator';
@@ -18,8 +18,12 @@ import { AuthResponse } from '../services/Auth/AuthResponse.model';
   templateUrl: './importador-cnis.component.html',
   styleUrls: ['./importador-cnis.component.css']
 })
-export class ImportadorCnisComponent implements OnInit {
+export class ImportadorCnisComponent implements OnInit, OnChanges {
 
+
+  @Input() dadosPassoaPasso;
+
+  public exibirForm = false;
   public isUpdatingSegurado = true;
   public isUpdatingVinculos = true;
   public segurado: any;
@@ -46,9 +50,54 @@ export class ImportadorCnisComponent implements OnInit {
     private Auth: Auth) { }
 
   ngOnInit() {
+    // this.ref.markForCheck();
+    // this.ref.detectChanges();
+    // this.checkUserSession();
+
+    // console.log(this.dadosPassoaPasso);
+  }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+
     this.ref.markForCheck();
     this.ref.detectChanges();
     this.checkUserSession();
+
+    console.log(changes);
+    console.log(changes.dadosPassoaPasso.currentValue);
+    console.log(this.dadosPassoaPasso);
+    this.setExibirForm(this.dadosPassoaPasso);
+  }
+
+  private setExibirForm(dadosPassoaPasso) {
+    console.log(dadosPassoaPasso);
+    console.log((dadosPassoaPasso != undefined
+      && dadosPassoaPasso.origem === 'passo-a-passo'
+      && dadosPassoaPasso.type === 'manual'
+    ));
+
+    if (dadosPassoaPasso != undefined
+      && dadosPassoaPasso.origem === 'passo-a-passo'
+      && dadosPassoaPasso.type === 'manual'
+    ) {
+      this.segurado = {
+        nome: '',
+        id_documento: '',
+        numero_documento: '',
+        data_nascimento: '',
+        sexo: '',
+        funcao: '',
+        user_id: this.userId,
+      };
+      this.vinculos = [];
+      this.isUpdatingSegurado = false;
+      this.isUpdatingVinculos = false;
+      this.isUploadReaderComplete = true;
+      this.exibirForm = true;
+
+    }
+
   }
 
 

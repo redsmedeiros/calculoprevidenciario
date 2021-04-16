@@ -90,4 +90,18 @@ export class MoedaService extends ControllerService {
 		return this.list[difference];
 	}
 
+
+	
+	// public moedaSalarioMatriz(matriz) {
+
+	// 	//  return new Promise((resolve, reject) => {
+	// 	//   this.model.moedaSalarioMatriz(matriz)
+	// 	// 	.then(data => {
+	// 	// 	  resolve(data.data);
+	// 	// 	  return;
+	// 	// 	}).catch(error => reject(error.response.data));
+	// 	//  });
+	
+	//   }
+	
 }

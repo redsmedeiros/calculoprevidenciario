@@ -15,7 +15,7 @@
     <div class="row menu-home">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <ul class="list-inline text-align-center color-ieprev">
-          <li class="px-4 mx-2" *ngFor="let menuHome of textosSimuladoresMenu">
+          <li class="px-3 mx-2" *ngFor="let menuHome of textosSimuladoresMenu">
             <a
               routerLink="{{ menuHome.link }}"
               class="color-ieprev"
@@ -23,7 +23,7 @@
               (mouseout)="out(menuHome.value)"
             >
               <div class="home-box text-align-center">
-                <i class="{{ menuHome.icon }} fa-5x "></i>
+                <i class="{{ menuHome.icon }} fa-4x "></i>
                 <h3 style="font-weight: 600; font-size: 1.8rem;" [innerHTML]="menuHome.title"></h3>
               </div>
             </a>

@@ -1,13 +1,169 @@
-<div class="row" *ngIf="!isUpdating">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="modal-dialog modal-full">
+  <div class="modal-content">
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Contribuições</h3>
-      </div>
-      <div class="panel-body">
-        
-      </div>
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      
+      <dl class="padding-5">
+        <dt><b>Empresa:</b> {{vinculo.empresa}} </dt>
+        <dt><b>Período:</b> {{vinculo.data_inicio}} {{vinculo.data_termino}}</dt>
+      </dl>
+
+      <dl class="well padding-5">
+
+        <form class="form-inline">
+
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="select-1">De*:</label>
+              <div class="col-md-2">
+                <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="inicioPeriodo" name="inicioPeriodo"
+                  (keyup)="moveNext($event, 7, 'finalPeriodoInput')" id="inicioPeriodoInput"
+                  [textMask]="{mask: dateMask}" type="text" (change)="errors.clear('inicioPeriodo')">
+                <small *ngIf="errors.has('inicioPeriodo')" class="text-danger">{{ errors.get('inicioPeriodo') }}</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="select-1">Até*:</label>
+              <div class="col-md-2">
+                <input class="form-control" placeholder="MM/AAAA" [(ngModel)]="finalPeriodo" name="finalPeriodo"
+                  (keyup)="moveNext($event, 7, 'valorInput')" id="finalPeriodoInput" [textMask]="{mask: dateMask}"
+                  type="text" (change)="errors.clear('finalPeriodo')">
+                <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{ errors.get('finalPeriodo') }}</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-2 control-label" for="select-1">Valor*:</label>
+              <div class="col-md-2">
+                <input class="form-control" currencyMask maxlength="14" [(ngModel)]="salarioContribuicao"
+                  name="salarioContribuicao" id="valorInput" (change)="errors.clear('salarioContribuicao')" type="text">
+                <small *ngIf="errors.has('salarioContribuicao')"
+                  class="text-danger">{{ errors.get('salarioContribuicao') }}</small>
+              </div>
+            </div>
+            <button type="submit" (click)="preencherComValor()" class="btn btn-labeled btn-primary">
+              <span class="btn-label">
+                <i class="fa fa-calendar"></i>
+              </span> Inserir valor contribuição
+            </button>
+          </fieldset>
+        </form>
+
+      </dl>
+     
+    </article>
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span>
+          <h2>Valores de contribuição</h2>
+        </header>
+        <div class="widget-body padding"  *ngIf="matrizHasValues">
+          <sa-datatable paginationLength="true" [options]="matrixTableOptions" tableClass="table table-condensed table-bordered table-hover" width="100%">
+            <thead>
+              <tr>
+                <th style="text-align: right;">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ano&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </th>
+                <th style="text-align: right;">Janeiro</th>
+                <th style="text-align: right;">Fevereiro</th>
+                <th style="text-align: right;">Março</th>
+                <th style="text-align: right;">Abril</th>
+                <th style="text-align: right;">Maio</th>
+                <th style="text-align: right;">Junho</th>
+                <th style="text-align: right;">Julho</th>
+                <th style="text-align: right;">Agosto</th>
+                <th style="text-align: right;">Setembro</th>
+                <th style="text-align: right;">Outubro</th>
+                <th style="text-align: right;">Novembro</th>
+                <th style="text-align: right;">Dezembro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of matriz; index as i">
+                <td style="text-align: right;"><i class="fa fa-copy"
+                    (click)="copiarPeriodo(data.ano)">&nbsp;&nbsp;</i>{{data.ano}}&nbsp;&nbsp;</td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[0] =='0,00'}">
+                  <input maxlength="14" currencyMask id="01-{{data.ano}}" type="text" value="{{data.valores[0]}}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,0)" class="matriz-input"
+                    *ngIf="data.valores[0] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[1] =='0,00'}">
+                  <input maxlength="14" currencyMask id="02-{{data.ano}}" type="text" value="{{data.valores[1] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,1)" class="matriz-input"
+                    *ngIf="data.valores[1] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[2] =='0,00'}">
+                  <input maxlength="14" currencyMask id="03-{{data.ano}}" type="text" value="{{data.valores[2] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,2)" class="matriz-input"
+                    *ngIf="data.valores[2] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[3] =='0,00'}">
+                  <input maxlength="14" currencyMask id="04-{{data.ano}}" type="text" value="{{data.valores[3] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,3)" class="matriz-input"
+                    *ngIf="data.valores[3] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[4] =='0,00'}">
+                  <input maxlength="14" currencyMask id="05-{{data.ano}}" type="text" value="{{data.valores[4] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,4)" class="matriz-input"
+                    *ngIf="data.valores[4] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[5] =='0,00'}">
+                  <input maxlength="14" currencyMask id="06-{{data.ano}}" type="text" value="{{data.valores[5]}}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,5)" class="matriz-input"
+                    *ngIf="data.valores[5] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[6] =='0,00'}">
+                  <input maxlength="14" currencyMask id="07-{{data.ano}}" type="text" value="{{ data.valores[6] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,6)" class="matriz-input"
+                    *ngIf="data.valores[6] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[7] =='0,00'}">
+                  <input maxlength="14" currencyMask id="08-{{data.ano}}" type="text" value="{{ data.valores[7] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,7)" class="matriz-input"
+                    *ngIf="data.valores[7] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[8] =='0,00'}">
+                  <input maxlength="14" currencyMask id="09-{{data.ano}}" type="text" value="{{ data.valores[8] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,8)" class="matriz-input"
+                    *ngIf="data.valores[8] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[9] =='0,00'}">
+                  <input maxlength="14" currencyMask id="10-{{data.ano}}" type="text" value="{{ data.valores[9] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,9)" class="matriz-input"
+                    *ngIf="data.valores[9] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[10] =='0,00'}">
+                  <input maxlength="14" currencyMask id="11-{{data.ano}}" type="text" value="{{ data.valores[10] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,10)" class="matriz-input"
+                    *ngIf="data.valores[10] !=''" />
+                </td>
+                <td [ngClass]="{'matriz-line bg-color-red': data.valores[11] =='0,00'}">
+                  <input maxlength="14" currencyMask id="12-{{data.ano}}" type="text" value="{{ data.valores[11] }}"
+                    (focusout)="changedGridContribuicoes(data.ano,$event,11)" class="matriz-input"
+                    *ngIf="data.valores[11] !=''" />
+                </td>
+              </tr>
+            </tbody>
+          </sa-datatable>
+        </div>
+      </sa-widget>
+    </article>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default pull-left" (click)="hideContribuicoes()">
+        Voltar
+      </button>
+      <button type="button" class="btn btn-danger" id="salario" (click)="preencherComSalarioMinimo()">
+        <i class="fa fa-money"></i> Preencher valores não informados com salário mínimo
+      </button>
+      <button type="button" class="btn btn-primary" id="salvar" (click)="salvarContribuicoes()">
+        <i class="fa fa-save"></i> Salvar valores de contribuição
+      </button>
     </div>
-  </div>
-</div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

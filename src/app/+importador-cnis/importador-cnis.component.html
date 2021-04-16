@@ -5,7 +5,7 @@
       <article class="col-sm-12 col-md-12 col-lg-12">
         <div class="well">
           <h2 class="margin-top-0">
-            <span class="semi-bold">Importador CNIS - Cadastro Nacional de Informações Sociais</span>
+            <span class="semi-bold">Importador CNIS - Cadastro Nacional de Informações Sociais {{dadosPassoaPasso.type}}</span>
           </h2>
           <h4 class="margin-top-0">
             <span class="semi-bold">Instruções e observações para CNIS - Cadastro Nacional de Informações Sociais</span>
@@ -23,7 +23,7 @@
     <div *ngIf="!isUploadReaderComplete">
         <app-importador-cnis-pdf-load (infoSegurado)="reciverInfoSegurado($event)" (infoVinculos)="reciverInfoVinculos($event)"  [userId]='userId'></app-importador-cnis-pdf-load>
     </div>
-    <div *ngIf="isUploadReaderComplete">
+    <div *ngIf="isUploadReaderComplete && (dadosPassoaPasso.origem !== 'passo-a-passo')">
       <div class="well well-sm">Os dados foram importados</div>
     </div>
 
