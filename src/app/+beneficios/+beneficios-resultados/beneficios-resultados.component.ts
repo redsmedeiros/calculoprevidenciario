@@ -1797,7 +1797,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (beneficioDevido > 0
       && this.adicional25Devido
-      && dataCorrente.isSame(this.dataInicialadicional25Devido)
+      && dataCorrente.isSame(this.dataInicialadicional25Devido, 'month')
     ) {
       return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
     }
@@ -4273,8 +4273,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     columns.push({ data: 'indice_devidos', width: '7rem' });
     columns.push({ data: 'beneficio_devido', width: '14rem' });
     // teste regras buraco negro
-   // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
-   // columns.push({ data: 'beneficio_devido_sem_limites', width: '14rem' });
+    // columns.push({ data: 'beneficio_devido_apos_revisao_sem_limites', width: '14rem' });
+    // columns.push({ data: 'beneficio_devido_sem_limites', width: '14rem' });
 
 
     if (this.calculo.tipo_aposentadoria === 22) {
