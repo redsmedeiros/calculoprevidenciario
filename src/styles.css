@@ -640,6 +640,15 @@ a[class*="action-"]:hover {
   padding: 0 !important;
 }
 
+.panel-default-ieprev>.panel-heading {
+  color: #fff;
+  background-color: #4a4d4f;
+  border-color: #4a4d4f;
+}
+.panel-default-ieprev>.panel-body {
+  border: 1px solid #C2C2C2;
+}
+
 .hidden-dt .dt-toolbar {
   display: none !important;
 }

@@ -79,12 +79,20 @@ export class ImportadorHomeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') == ''
-      || sessionStorage.getItem('inicialPassoaPasso') == undefined);
-
+    this.setPaginaInicial();
   }
 
 
+  private setPaginaInicial() {
+
+
+    // sessionStorage.removeItem('inicialPassoaPasso');
+
+    // console.log(sessionStorage.getItem('inicialPassoaPasso'));
+
+    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') == ''
+      || sessionStorage.getItem('inicialPassoaPasso') == undefined);
+  }
 
 
   public checkStepURL() {

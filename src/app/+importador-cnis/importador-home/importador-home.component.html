@@ -140,26 +140,13 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify" style="font-size: 14px">
-                          <li>
-                            Selecione um cálculo cadastrado para prosseguir com
-                            o Planejamento Previdenciário;
+                          <li *ngIf="dadosPassoaPasso.type === 'manual'" >
+                          Informe os campos abaixo para realizar a contagem de tempo de contribuição.
                           </li>
-                          <li>
-                            Caso não tenha cálculo cadastrado
-                            <a
-                              (click)="redirecionarSeguradoCalculosRMI()"
-                              style="color: #ffaa21 !important"
-                            >
-                              <strong>Clique Aqui </strong></a
-                            >
-                            para criar novo cálculo;
-                          </li>
-                          <li>
-                            Caso o segurado selecionado não possua direito
-                            adquirido a nenhum benefício até a data atual, será
-                            possível prosseguir com o Planejamento
-                            Previdenciário, programando a melhor data futura
-                            para requerimento do benefício.
+                          <li *ngIf="dadosPassoaPasso.type === 'cnis'">
+                           Adicione um arquivo CNIS obtido no INSS digital para que as 
+                           informações sejam adicionadas,
+                            não se preocupe ao final do processo você poderá editar estas informações.
                           </li>
                         </ul>
                       </div>
