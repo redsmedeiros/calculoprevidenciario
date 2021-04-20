@@ -1157,8 +1157,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         )
       ) {
 
-        let beneficioRecebidoAbono;
-        let beneficioDevidoAbono = this.roundMoeda(this.ultimoBeneficioDevidoAntesProporcionalidade * abonoProporcionalDevidos);
+        let beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade;
+        let beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade;
+
+        beneficioDevidoAbono = this.aplicarAdicional25(dataCorrente, beneficioDevidoAbono);
+        beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono * abonoProporcionalDevidos);
 
         if (beneficioRecebido <= 0 || (datacessacaoBeneficioRecebido != null && dataCorrente > datacessacaoBeneficioRecebido)) {
           beneficioRecebidoAbono = 0.0;
@@ -1177,7 +1180,8 @@ export class BeneficiosResultadosComponent implements OnInit {
             abonoProporcionalRecebidos = 1;
           }
 
-          beneficioRecebidoAbono = this.roundMoeda(this.ultimoBeneficioRecebidoAntesProporcionalidade * abonoProporcionalRecebidos);
+          beneficioRecebidoAbono = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoAbono);
+          beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono * abonoProporcionalRecebidos);
 
         }
 
@@ -1187,14 +1191,14 @@ export class BeneficiosResultadosComponent implements OnInit {
           if (beneficioDevidoAbono > 0
             && dataCorrente.isSame(this.calculo.data_prevista_cessacao, 'month')) {
 
+            beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade;
+            beneficioDevidoAbono = this.aplicarAdicional25(dataCorrente, beneficioDevidoAbono);
             abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos);
 
           }
 
         }
-
-
 
         if (abono13UltimoRecebido) {
 
@@ -1205,6 +1209,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             // abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
 
             beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade;
+            beneficioRecebidoAbono = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoAbono);
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
             beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos);
 
@@ -1780,7 +1785,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (beneficioRecebido > 0
       && this.adicional25Recebido
       // && dataCorrente.isSame(this.dataInicialadicional25Recebido)
-      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Recebido)
+      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Recebido, 'month')
     ) {
       return (Math.round((beneficioRecebido + (beneficioRecebido * 0.25)) * 100) / 100);
     }
