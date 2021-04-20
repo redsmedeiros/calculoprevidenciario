@@ -832,7 +832,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
 
-      console.log(this.numDependentes);
       this.formData.num_dependentes = this.numDependentes;
 
       // Calcular Mais (Vincendos)
@@ -998,7 +997,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-    console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }

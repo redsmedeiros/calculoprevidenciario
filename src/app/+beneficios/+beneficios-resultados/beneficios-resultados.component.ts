@@ -1779,7 +1779,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (beneficioRecebido > 0
       && this.adicional25Recebido
-      && dataCorrente.isSame(this.dataInicialadicional25Recebido)
+      // && dataCorrente.isSame(this.dataInicialadicional25Recebido)
+      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Recebido)
     ) {
       return (Math.round((beneficioRecebido + (beneficioRecebido * 0.25)) * 100) / 100);
     }
@@ -1797,8 +1798,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (beneficioDevido > 0
       && this.adicional25Devido
-      && dataCorrente.isSame(this.dataInicialadicional25Devido, 'month')
+      //  && dataCorrente.isSame(this.dataInicialadicional25Devido, 'month')
+      && dataCorrente.isSameOrAfter(this.dataInicialadicional25Devido, 'month')
     ) {
+      this.isMinimoInicialDevido = false;
       return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
     }
 
@@ -2010,7 +2013,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // AplicarTetosEMinimos Definido na seção de algoritmos úteis.
     let beneficioDevidoAjustado = 0;
 
-    beneficioDevido = this.aplicarAdicional25(dataCorrente, beneficioDevido);
+    // beneficioDevido = this.aplicarAdicional25(dataCorrente, beneficioDevido);
 
 
     if (this.isTetos) {
@@ -2026,7 +2029,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioDevidoAjustado = this.aplicarTetosEMinimos(beneficioDevido, dataCorrente, dataPedidoBeneficioEsperado, 'Devido');
 
     }
-
 
 
     if (this.devidoBuracoNegro && (this.calculo.nao_aplicar_ajuste_maximo_98_2003 == 1)) {
@@ -2208,10 +2210,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
-    if (indiceSuperior) {
-      beneficioDevidoString += '*'
-    }
+
 
     let minimoAplicado = false;
 
@@ -2241,7 +2240,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     //   beneficioDevidoString += '/p';
     // }
 
-
     this.aplicarReajusteUltimoDevido = false;
     // a condição abaixo só é executada quando o valor aplicado é o salario minimo
     if (minimoAplicado) {
@@ -2263,8 +2261,18 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoTetosSemLimiteSalvo = this.beneficioDevidoTetosSemLimite;
     }
 
-    resultsObj.resultString = beneficioDevidoString;
     this.beneficioDevidoAnterior = beneficioDevidoFinal;
+    beneficioDevidoFinal = this.aplicarAdicional25(dataCorrente, beneficioDevidoFinal);
+
+    let beneficioDevidoString = this.formatMoney(beneficioDevidoFinal, siglaDataCorrente);
+    if (indiceSuperior) {
+      beneficioDevidoString += '*'
+    }
+
+
+
+    resultsObj.resultString = beneficioDevidoString;
+    // this.beneficioDevidoAnterior = beneficioDevidoFinal;
 
 
 
@@ -2479,7 +2487,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let beneficioRecebidoAjustado = 0;
 
     // Aplicar adicional 25 Recebido
-    beneficioRecebido = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebido);
+    //beneficioRecebido = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebido);
 
     if (this.isTetos) {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido,
@@ -2585,10 +2593,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     // let dibMoeda = this.Moeda.getByDate(dib);
     // let equivalencia89Moeda = this.Moeda.getByDate(this.dataEquivalenciaMinimo89);
 
-    let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
-    if (indiceSuperior) {
-      beneficioRecebidoString += '*'
-    }
 
     let minimoAplicado = false;
 
@@ -2635,14 +2639,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-03-01', 'month')) {
       this.beneficioRecebidoSalvo = beneficioRecebidoFinal;
     }
-
-    resultsObj.resultString = beneficioRecebidoString;
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
+    beneficioRecebidoFinal = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoFinal);
 
 
-
-
-
+    let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
+    if (indiceSuperior) {
+      beneficioRecebidoString += '*'
+    }
+    resultsObj.resultString = beneficioRecebidoString;
 
 
     return beneficioRecebidoFinal;

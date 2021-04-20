@@ -366,6 +366,18 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     }
 
 
+    
+    if (this.adicional25Recebido) {
+      if (!this.isValidDate(this.dataInicialadicional2Recebido)) {
+        this.errors.add({ 'dataInicialadicional2Recebido': ['Insira uma data válida.'] });
+        valid = false;
+      }else if (moment(this.dataInicialadicional2Recebido, 'DD/MM/YYYY') < moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataInicialadicional2Recebido': ['A data deve ser maior ou igual que DIB.'] });
+        valid = false;
+      }
+    }
+
+
     return valid;
   }
 

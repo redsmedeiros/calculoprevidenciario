@@ -149,6 +149,9 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       if (!this.isValidDate(this.dataInicialadicional25Devido)) {
         this.errors.add({ 'dataInicialadicional25Devido': ['Insira uma data válida.'] });
         valid = false;
+      }else if (moment(this.dataInicialadicional25Devido, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataInicialadicional25Devido': ['A data deve ser maior ou igual que DIB.'] });
+        valid = false;
       }
     }
 
