@@ -372,19 +372,14 @@ export class BeneficiosResultadosComponent implements OnInit {
                 .then((moeda: Moeda[]) => {
                   this.moeda = moeda;
                   //  return true;
-
-
-
                 });
-
-
 
 
               this.allPromissesCalc.push(rstMoeda);
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
-                console.log(values)
+                console.log(values);
 
                 this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
@@ -1806,7 +1801,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       //  && dataCorrente.isSame(this.dataInicialadicional25Devido, 'month')
       && dataCorrente.isSameOrAfter(this.dataInicialadicional25Devido, 'month')
     ) {
-      this.isMinimoInicialDevido = false;
       return (Math.round((beneficioDevido + (beneficioDevido * 0.25)) * 100) / 100);
     }
 
@@ -2644,9 +2638,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente.isSame('2003-03-01', 'month')) {
       this.beneficioRecebidoSalvo = beneficioRecebidoFinal;
     }
+
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
     beneficioRecebidoFinal = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoFinal);
-
 
     let beneficioRecebidoString = this.formatMoney(beneficioRecebidoFinal, siglaDataCorrente);
     if (indiceSuperior) {

@@ -662,6 +662,35 @@
                         {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
                       </td>
                     </tr>
+                    <tr
+                      *ngIf="
+                      ['4', '7', '2', '16', '1', '3', '5', '13', '18'].includes(
+                          recebidoLine.especie
+                        )
+                      "
+                    >
+                      <td class="td-width-30" style="text-align: left">
+                        <b> Aplicar Adicional de 25%:</b>
+                      </td>
+                      <td>
+                        {{ recebidoLine.dataAdicional25 ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                    <tr
+                      *ngIf="
+                      recebidoLine.dataAdicional25 &&
+                        ['4', '7', '2', '16', '1', '3', '5', '13', '18'].includes(
+                          recebidoLine.especie
+                        )
+                      "
+                    >
+                      <td class="td-width-30" style="text-align: left">
+                        <b> Data de Início do Adicional de 25%:</b>
+                      </td>
+                      <td>
+                        {{ formatDateIsnotNullMoment(recebidoLine.dataAdicional25) }}
+                      </td>
+                    </tr>
                     <!-- *ngIf="!recebidoLine.valor_beneficio_esperado_revisao" <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
