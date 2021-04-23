@@ -192,4 +192,17 @@ export abstract class ControllerService {
     });
   }
 
+
+  public postDataURL(urlController,matriz) {
+
+    return new Promise((resolve, reject) => {
+      this.model.postDataURL(urlController, matriz)
+        .then(data => {
+          resolve(data.data);
+          return;
+        }).catch(error => reject(error.response.data));
+    });
+
+  }
+
 }

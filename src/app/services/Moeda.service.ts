@@ -69,7 +69,7 @@ export class MoedaService extends ControllerService {
 		//	console.log(from.format('DD-MM-YYYY'), to.format('DD-MM-YYYY'))
 		return new Promise((resolve, reject) => {
 			const parameters = ['inicio_intervalo', from.format('YYYY-MM-01'),
-									 'final_intervalo', to.format('YYYY-MM-01')];
+				'final_intervalo', to.format('YYYY-MM-01')];
 			this.getWithParameters(parameters).then(() => {
 				let list = this.list;
 				this.firstMonth = moment(this.list[0].data_moeda);
@@ -91,17 +91,17 @@ export class MoedaService extends ControllerService {
 	}
 
 
-	
-	// public moedaSalarioMatriz(matriz) {
 
-	// 	//  return new Promise((resolve, reject) => {
-	// 	//   this.model.moedaSalarioMatriz(matriz)
-	// 	// 	.then(data => {
-	// 	// 	  resolve(data.data);
-	// 	// 	  return;
-	// 	// 	}).catch(error => reject(error.response.data));
-	// 	//  });
-	
-	//   }
-	
+	public moedaSalarioMatriz(matriz) {
+		return new Promise((resolve, reject) => {
+			this.postDataURL('salariomatriz', matriz)
+				.then(data => {
+					console.log(data);
+					resolve(data);
+					return;
+				}).catch(error => reject(error.response.data));
+		});
+
+	}
+
 }

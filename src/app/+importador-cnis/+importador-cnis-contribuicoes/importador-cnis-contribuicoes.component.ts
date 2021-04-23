@@ -56,10 +56,11 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    var changedvinculo = changes['vinculo'];
-    let changedisUpdating = changes['isUpdating'];
-    /* */
-    if (typeof this.vinculo.contribuicoes !== 'undefined') {
+    const changedvinculo = changes['vinculo'];
+    const changedisUpdating = changes['isUpdating'];
+
+    if (typeof this.vinculo.contribuicoes !== 'undefined'
+      && this.vinculo.contribuicoes.length > 0) {
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
     }
 
@@ -67,7 +68,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   preencherMatrizPeriodos(contribuicoes) {
 
-    this.matriz = [{ "ano": 0, "valores": [] }];
+    this.matriz = [{ 'ano': 0, 'valores': [] }];
 
     contribuicoes.forEach(periodo => {
       this.preencherMatriz(periodo);
@@ -116,9 +117,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
     let dataLimite = moment('1970-01-01');
 
-    //inicioPeriodo
+    // inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
-      this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
+      this.errors.add({ 'inicioPeriodo': ['Insira uma data válida'] });
     } else {
       // if (dateFinalPeriodo >= dataLimite) {
       //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
@@ -127,10 +128,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     //finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
-      this.errors.add({ "finalPeriodo": ["Insira uma data válida"] });
+      this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
     } else {
       if (dateFinalPeriodo < dateInicioPeriodo) {
-        this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
+        this.errors.add({ 'finalPeriodo': ['Insira uma data posterior a data inicial'] });
       }
 
       // if (dateFinalPeriodo >= dataLimite) {
@@ -140,7 +141,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     //salarioContribuicao
     if (this.isEmpty(this.salarioContribuicao)) {
-      this.errors.add({ "salarioContribuicao": ["Insira o salário"] });
+      this.errors.add({ 'salarioContribuicao': ['Insira o salário'] });
     } else {
       this.errors.clear('salarioContribuicao');
     }
@@ -182,10 +183,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValid()) {
 
-      var anoinicio = this.inicioPeriodo.split("/")[1];
-      var mesinicio = this.inicioPeriodo.split("/")[0];
-      var anofinal = this.finalPeriodo.split("/")[1];
-      var mesfinal = this.finalPeriodo.split("/")[0];
+      var anoinicio = this.inicioPeriodo.split('/')[1];
+      var mesinicio = this.inicioPeriodo.split('/')[0];
+      var anofinal = this.finalPeriodo.split('/')[1];
+      var mesfinal = this.finalPeriodo.split('/')[0];
       var mesi = 0;
 
       this.matriz.map(ano => {
@@ -236,28 +237,28 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
       swal.showLoading();
 
-      // this.obterMoedaSalarioMatriz(matriz).then(salariominimo => {
+      this.obterMoedaSalarioMatriz(matriz).then(salariominimo => {
 
-      //   swal.close();
+        swal.close();
 
-      //   this.matriz.map(ano => {
-      //     mesi = 1;
-      //     ano.valores.map(mes => {
-      //       if (mes == '0,00') {
-      //         ano.valores[mesi - 1] = salariominimo[ano.ano][mesi - 1];
-      //       }
-      //       mesi++;
-      //     });
-      //   });
-      // });
+        this.matriz.map(ano => {
+          mesi = 1;
+          ano.valores.map(mes => {
+            if (mes == '0,00') {
+              ano.valores[mesi - 1] = salariominimo[ano.ano][mesi - 1];
+            }
+            mesi++;
+          });
+        });
+      });
     }
 
   }
 
   public obterMoedaSalarioMatriz(salariominimo) {
 
-    // return this.MoedaService.moedaSalarioMatriz(salariominimo)
-    //   .then(response => { return response; }).catch(errors => this.errors.add(errors));
+    return this.MoedaService.moedaSalarioMatriz(salariominimo)
+      .then(response => { return response; }).catch(errors => this.errors.add(errors));
   }
 
   hideContribuicoes() {

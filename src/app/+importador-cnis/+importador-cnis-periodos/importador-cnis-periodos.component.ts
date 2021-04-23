@@ -9,6 +9,12 @@ import swal from 'sweetalert2';
 import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 
+
+import { ImportadorCnisContribuicoesComponent } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.component';
+import { ImportadorCnisContribuicoesService } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
+
+import { ModalDirective } from 'ngx-bootstrap';
+
 @Component({
   selector: 'app-importador-cnis-periodos',
   templateUrl: './importador-cnis-periodos.component.html',
@@ -40,22 +46,31 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public atualizarPeriodo = 0;
   public index: any;
 
+
+  public vinculo: any = {};
+  public tipo_contribuicao = 0;
+  public periodo_completo = false;
+  public vinculo_index = 0;
+
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   public countVinculosErros = 0;
 
   @Output() eventCountVinculosErros = new EventEmitter();
   @ViewChild('periodoFormheader') periodoFormheader: ElementRef;
+  @ViewChild(ImportadorCnisContribuicoesComponent) ContribuicoesComponent: ImportadorCnisContribuicoesComponent;
+  @ViewChild('contribuicoes') public contribuicoes: ModalDirective;
 
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
     protected PeriodosContagemTempoService: PeriodosContagemTempoService,
+    protected ImportadorCnisContribuicoesService: ImportadorCnisContribuicoesService,
     protected errors: ErrorService,
     private detector: ChangeDetectorRef
   ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.detector.detectChanges();
   }
 
@@ -84,18 +99,138 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
 
+  // public updateDatatablePeriodos(vinculo) {
+  //   // && !(/(Benefício)/i).test(vinculo.origemVinculo) adicionados os benefícios (luis 06-02-2018)
+
+  //   if (typeof vinculo === 'object') {
+
+  //     const line = {
+  //       data_inicio: vinculo.periodo[0],
+  //       data_termino: vinculo.periodo[1],
+  //       empresa: vinculo.origemVinculo,
+  //       fator_condicao_especial: 1,
+  //       condicao_especial: 'Não',
+  //       carencia: 'Sim',
+  //       index: vinculo.index
+  //     }
+  //     this.vinculosList.push(line);
+  //     this.isValidVinculo(line);
+  //   }
+
+  // }
+
+
+
+  public adicionarPeriodoChave(inputChave) {
+    var ano = inputChave.substring(0, 4);
+    var mes = inputChave.substring(4, 6);
+
+    if ((parseInt(mes) + 1) > 12) {
+      mes = '01';
+      ano = parseInt(ano) + 1;
+    } else {
+      mes = parseInt(mes) + 1;
+    }
+
+    var chave = ano + this.leftFillNum(mes, 2);
+
+    return chave;
+
+  }
+
+
+  public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
+
+    var contribuicoesList = [];
+    let result = contribuicoes;
+    let chave = periodo_in;
+
+    do {
+
+      const pchave = chave.substring(4, 6) + '/' + chave.substring(0, 4);
+
+      // result = _.find(contribuicoes, (item) => {
+      //   return item.competencia === pchave;
+      // });
+
+      result = contribuicoes.find((item) => {
+        return item.competencia === pchave;
+      })
+
+      if (result)     /* se encontrou a contribuição no mes*/ {
+        contribuicoesList.push(result);
+      } else {        /* se não encontrou a contribuição no mes*/
+        contribuicoesList.push({
+          competencia: pchave,
+          contrib: '0,00',
+        });
+      }
+
+      chave = this.adicionarPeriodoChave(chave);
+
+    } while (chave <= periodo_fi);
+
+    /* diferença que deve ser removida do periodo de contribuições */
+
+    let diferencas = contribuicoes.filter(c1 => contribuicoesList.filter(c2 => c2.competencia === c1.competencia).length === 0);
+
+    // diferencas.forEach(diferenca => {
+
+    //   // _.remove(contribuicoesList, function (contribuicao) {
+    //   //   return contribuicao.competencia == diferenca.competencia;
+    //   // });
+
+    // });
+
+
+    diferencas.forEach(diferenca => {
+
+      // _.remove(contribuicoesList, function (contribuicao) {
+      //   return contribuicao.competencia == diferenca.competencia;
+      // });
+
+      contribuicoesList.filter(function (contribuicao, index, arr) {
+        return contribuicao.competencia == diferenca.competencia;
+      });
+
+    });
+
+    return contribuicoesList;
+
+  }
+
   public updateDatatablePeriodos(vinculo) {
     // && !(/(Benefício)/i).test(vinculo.origemVinculo) adicionados os benefícios (luis 06-02-2018)
 
+    console.log(vinculo);
+
     if (typeof vinculo === 'object') {
 
+      let periodo_in = this.formataPeriodo(vinculo.periodo[0]);
+      let periodo_fi = this.formataPeriodo(vinculo.periodo[1]);
+      let contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
+
+      console.log(periodo_in);
+      console.log(periodo_fi);
+
+      // let result = _.filter(contribuicoes, function (item) { if (item.contrib == '0,00') return item }).length;
+      let result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') return item }).length;
+
       const line = {
+        nit: vinculo.nitEmpregador,
+        cnpj: vinculo.cnpj,
+        tipo_vinculo: vinculo.tipoVinculo,
+        datainicio: vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0],
+        datatermino: vinculo.periodo[1] === undefined ? vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0] : vinculo.periodo[1].split('/')[2] + vinculo.periodo[1].split('/')[1] + vinculo.periodo[1].split('/')[0],
         data_inicio: vinculo.periodo[0],
         data_termino: vinculo.periodo[1],
         empresa: vinculo.origemVinculo,
         fator_condicao_especial: 1,
         condicao_especial: 'Não',
         carencia: 'Sim',
+        contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_count: contribuicoes.length,
+        contribuicoes: contribuicoes,
         index: vinculo.index
       }
       this.vinculosList.push(line);
@@ -103,6 +238,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
 
   }
+
 
 
 
@@ -207,7 +343,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         fator_condicao_especial: this.fator_condicao_especial,
         condicao_especial: this.boolToLiteral(this.condicao_especial),
         carencia: this.boolToLiteral(this.carencia),
-        index:(this.vinculosList.length + 2)
+        index: (this.vinculosList.length + 2)
       }
 
       this.vinculosList.push(line);
@@ -236,7 +372,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   }
 
-  public verificarVinculos(){
+  public verificarVinculos() {
 
     this.countVinculosErros = 0;
 
@@ -331,7 +467,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         if (Math.abs(dateInicioPeriodo.diff(dateFinalPeriodo, 'years')) >= 50) {
           this.errors.add({ 'data_termino': ['O intervalo não deve ser maior que 65 anos'] });
         }
-        
+
       }
 
     }
@@ -364,6 +500,17 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     return this.errors.empty();
   }
 
+
+  showContribuicoes(vinculo, index) {
+    this.vinculo_index = index;
+    this.vinculo = vinculo;
+    this.ContribuicoesComponent.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+    this.contribuicoes.show();
+  }
+
+  hideContribuicoes() {
+    this.contribuicoes.hide();
+  }
 
 
   toastAlert(type, title, position) {
@@ -426,6 +573,21 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     document.documentElement.scrollTop = this.periodoFormheader.nativeElement.offsetLeft + 500; // For Chrome, Firefox, IE and Opera
   }
 
+  public leftFillNum(num, targetLength) {
+    return num.toString().padStart(targetLength, 0);
+  }
+
+  public formataPeriodo(inputData) {
+
+    if (inputData !== undefined) {
+      const data = inputData.split('/');
+      const periodo = data[2] + this.leftFillNum(data[1], 2);
+      return periodo;
+    }
+
+    return '00/0000'
+
+  }
 
 
 }
