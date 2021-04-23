@@ -773,14 +773,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // passo 1
     rmi = somaMedias * fatorSeguranca;
 
+
     // passo 2
     rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
-
-
-    if (!this.limited) {  // Se não foi corrigido ao percentual do teto
+    // if (!this.limited) {  // Se não foi corrigido ao percentual do teto
       rmi *= (coeficiente / 100);
-    }
+   // }
 
 
     rmi += (fatorSeguranca * numeroCompetencias * taxaMediaSecundaria) / 60;
@@ -1157,6 +1156,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {
+
     let beneficioCorrigido = beneficio;
     if (moeda && beneficio > moeda.teto) {
       beneficioCorrigido = moeda.teto * coeficiente / 100;
