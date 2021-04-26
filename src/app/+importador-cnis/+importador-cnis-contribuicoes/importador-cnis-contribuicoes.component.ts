@@ -64,6 +64,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
     }
 
+    console.log(this.vinculo);
   }
 
   preencherMatrizPeriodos(contribuicoes) {

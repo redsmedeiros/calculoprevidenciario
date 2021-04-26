@@ -206,22 +206,28 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     if (typeof vinculo === 'object') {
 
-      let periodo_in = this.formataPeriodo(vinculo.periodo[0]);
-      let periodo_fi = this.formataPeriodo(vinculo.periodo[1]);
-      let contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
+      const periodo_in = this.formataPeriodo(vinculo.periodo[0]);
+      const periodo_fi = this.formataPeriodo(vinculo.periodo[1]);
+      const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
 
-      console.log(periodo_in);
-      console.log(periodo_fi);
+      // const datainicio = vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0]
+      // const datatermino = vinculo.periodo[1] === undefined ? vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0]
+      //   : vinculo.periodo[1].split('/')[2] + vinculo.periodo[1].split('/')[1] + vinculo.periodo[1].split('/')[0]
 
-      // let result = _.filter(contribuicoes, function (item) { if (item.contrib == '0,00') return item }).length;
-      let result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') return item }).length;
+
+      const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
+      const datatermino = (vinculo.periodo[1] === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[1]) :
+        this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
+
+      // const result = _.filter(contribuicoes, function (item) { if (item.contrib == '0,00') return item }).length;
+      const result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') return item }).length;
 
       const line = {
         nit: vinculo.nitEmpregador,
         cnpj: vinculo.cnpj,
         tipo_vinculo: vinculo.tipoVinculo,
-        datainicio: vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0],
-        datatermino: vinculo.periodo[1] === undefined ? vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0] : vinculo.periodo[1].split('/')[2] + vinculo.periodo[1].split('/')[1] + vinculo.periodo[1].split('/')[0],
+        datainicio: datainicio,
+        datatermino: datatermino,
         data_inicio: vinculo.periodo[0],
         data_termino: vinculo.periodo[1],
         empresa: vinculo.origemVinculo,
@@ -233,6 +239,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         contribuicoes: contribuicoes,
         index: vinculo.index
       }
+
+      console.log(line);
       this.vinculosList.push(line);
       this.isValidVinculo(line);
     }
@@ -336,6 +344,16 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public insertPeriodo() {
     if (this.isValid()) {
 
+      const periodo_in = this.formataPeriodo(this.data_inicio);
+      const periodo_fi = this.formataPeriodo(this.data_termino);
+      const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, []);
+
+      const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
+      const datatermino = (this.data_termino === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_termino) :
+        this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
+
+      const result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') return item }).length;
+
       const line = {
         data_inicio: this.data_inicio,
         data_termino: this.data_termino,
@@ -343,7 +361,13 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         fator_condicao_especial: this.fator_condicao_especial,
         condicao_especial: this.boolToLiteral(this.condicao_especial),
         carencia: this.boolToLiteral(this.carencia),
-        index: (this.vinculosList.length + 2)
+        index: (this.vinculosList.length + 2),
+        datainicio: datainicio,
+        datatermino: datatermino,
+        contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_count: 0,
+        contribuicoes: [],
+
       }
 
       this.vinculosList.push(line);
@@ -351,11 +375,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.resetForm();
       this.detector.detectChanges();
       this.toastAlert('success', 'Relação Previdenciária inserida', null);
+
     } else {
+
       this.toastAlert('error', 'Verifique os dados do formulário', null);
+
     }
-
-
 
   }
 
@@ -577,6 +602,43 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     return num.toString().padStart(targetLength, 0);
   }
 
+
+
+
+  public formataDataInicioFim(data) {
+
+    if (data !== undefined
+      && data !== ''
+      && moment(data, 'DD/MM/YYYY').isValid()
+    ) {
+
+      const dataArray = data.split('/')
+      return dataArray[2] + dataArray[1] + dataArray[0];
+
+    }
+
+    return '';
+
+  }
+
+
+  public formataDataTo(formatIN, FormatOuT, data) {
+
+    if (data !== undefined
+      && data !== ''
+      && moment(data, formatIN).isValid()
+    ) {
+
+      return moment(data, formatIN).format(FormatOuT);
+
+    }
+
+    return '';
+
+  }
+
+
+
   public formataPeriodo(inputData) {
 
     if (inputData !== undefined) {
@@ -585,7 +647,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return periodo;
     }
 
-    return '00/0000'
+    return '00/0000';
 
   }
 

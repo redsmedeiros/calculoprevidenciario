@@ -271,19 +271,23 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
     if (contribuicoes && contribuicoes != null) {
 
       for (let i = 0; i < contribuicoes.length; i++) {
+
         contribuicoes[i] = contribuicoes[i].trim();
         arrayText = contribuicoes[i].replace(/\n/i, ' ').trim().split(/\s/i);
-        num_col = (typeof arrayText[num_col] != "undefined" && arrayText[num_col].trim() != null && arrayText[num_col].search(/(\d{2}\/\d{2}\/\d{4})|(\d{2}\/\d{4})/) > 0) ? num_col : arrayText.length - 1;
+        num_col = (typeof arrayText[num_col] != 'undefined' &&
+          arrayText[num_col].trim() != null &&
+          arrayText[num_col].search(/(\d{2}\/\d{2}\/\d{4})|(\d{2}\/\d{4})/) > 0) ? num_col : arrayText.length - 1;
+
         arrayOrganizadoNew.push({
           competencia: arrayText[0].trim(),
           contrib: arrayText[num_col].trim()
         });
+
       }
     }
 
     return arrayOrganizadoNew;
   }
-
 
   /**
    * aplicar a regra que define qual valor deve ser considerado como contribuição no array de contribuições
@@ -559,11 +563,11 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
       origemVinculo = text_vinculo.substring(inicio_string, fim_string).trim();
 
-    }else if (text_vinculo.search(/(RECOLHIMENTO)/) > 0) {
+    } else if (text_vinculo.search(/(RECOLHIMENTO)/) > 0) {
 
       origemVinculo = 'Recolhimento';
 
-    }else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
+    } else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
 
       origemVinculo = 'Contribuinte Individual';
 
