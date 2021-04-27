@@ -313,7 +313,7 @@ export class conclusoesFinais {
 
         const divisor = (this.divisorMinimo.aplicar) ?
             this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
-        listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
+        listC.push(this.setConclusao(1, `Divisor da Média dos Salários de Contribuição`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||
             (elementRegraEspecie.regra === 'deficiente' && elementPossibilidade.fator.value > 1)
@@ -327,7 +327,7 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(5, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
         listC.push(this.setConclusao(6, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
-        if (elementPossibilidade.irt > 1) {
+        if (elementPossibilidade.irt.value > 1) {
             listC.push(this.setConclusao(7, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 

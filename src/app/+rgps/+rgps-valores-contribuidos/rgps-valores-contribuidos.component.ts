@@ -123,7 +123,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   private isSomarSecundariaCheck() {
 
     //console.log(this.calculo.somar_contribuicao_secundaria)
-    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
+    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('18/06/2019', 'DD/MM/YYYY'))) {
       this.somarSecundaria = "" + this.calculo.somar_contribuicao_secundaria;
       this.exibirCampoAnteriorLei13846 = true;
     }
