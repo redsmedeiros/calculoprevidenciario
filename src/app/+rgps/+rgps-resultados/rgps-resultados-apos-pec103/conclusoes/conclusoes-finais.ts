@@ -324,8 +324,8 @@ export class conclusoesFinais {
         }
 
         listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
-        listC.push(this.setConclusao(5, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
-        listC.push(this.setConclusao(6, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
+        listC.push(this.setConclusao(6, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
+        listC.push(this.setConclusao(5, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
         if (elementPossibilidade.irt.value > 1) {
             listC.push(this.setConclusao(7, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
