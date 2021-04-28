@@ -54,7 +54,7 @@ export class DefinicaoTempo {
             const testDecimal99 = rstFator - Math.floor(rstFator);
 
             if ((Math.floor(testDecimal99 * 100) / 100) === 0.99) {
-                rstFator =  Math.round(rstFator);
+                rstFator = Math.round(rstFator);
             }
 
             return Math.floor(rstFator);
@@ -147,11 +147,97 @@ export class DefinicaoTempo {
         return totalDMY;
     }
 
-    static addDaysToDate(dateP, days){
-        const date = new Date(dateP);
-       date.setDate(date.getDate() + days);
+    /**
+    * Diferença entre datas condiderando mês 30 dias e ano 360
+    * @param dataInicio Inicio do periodo string data format ('YYYY-MM-DD')
+    * @param dataFim Fim do periodo string data format ('YYYY-MM-DD')
+    * @param mesInteiro Considerar sempre o mês Completo no inicio e fim
+    */
+    static dataDiffDateToDateCustomNotDayStart(dataInicio, dataFim, mesInteiro = false) {
 
-       return date;
+        const dataInicioString = dataInicio;
+        const dataFimString = dataFim;
+
+        dataInicio = moment(dataInicio).hour(0).minute(0).second(0).millisecond(0);
+        dataFim = moment(dataFim).hour(0).minute(0).second(0).millisecond(0);
+
+        const compareDataInicioStartM = this.toDateStringYYYY(moment(dataInicioString, 'YYYY-MM-DD').startOf('month'));
+        const compareDataFimStartM = this.toDateStringYYYY(moment(dataFimString, 'YYYY-MM-DD').endOf('month'));
+
+        let totalDias = 0;
+        let totalMeses = 0;
+
+        let diasInicio = 0
+        let diasFim = 0
+
+        totalMeses = this.monthsDiff(compareDataInicioStartM, compareDataFimStartM);
+
+        if ((dataInicio.isSame(compareDataInicioStartM) && dataFim.isSame(compareDataFimStartM)) || mesInteiro) {
+
+            totalDias = (totalMeses * 30)
+
+        } else {
+
+            totalDias = (totalMeses * 30)
+
+            if (!dataInicio.isSame(compareDataInicioStartM)) {
+
+                totalDias -= 30;
+                diasInicio = (30 - dataInicio.date());
+                totalDias += diasInicio;
+
+            }
+
+            if (!dataFim.isSame(compareDataFimStartM)) {
+
+                totalDias -= 30;
+                diasFim = dataFim.date();
+                totalDias += diasFim;
+
+            }
+
+        }
+
+        return { dias: totalDias, meses: totalMeses };
+    }
+
+    static calcularTempo360NotDayStart(dataNasc, dataFim = null) {
+
+        if (dataFim === null) {
+            dataFim = moment().format('YYYY-MM-DD');
+        }
+
+        const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustomNotDayStart(
+            dataNasc,
+            dataFim
+        );
+
+        const totalDMY = DefinicaoTempo.convertD360ToDMY(totalDay360.dias);
+
+        return totalDMY;
+    }
+
+    static addDaysToDate(dateP, days) {
+        const date = new Date(dateP);
+        date.setDate(date.getDate() + days);
+
+        return date;
+    }
+
+
+    static formataDataTo(formatIN, FormatOuT, data) {
+
+        if (data !== undefined
+            && data !== ''
+            && moment(data, formatIN).isValid()
+        ) {
+
+            return moment(data, formatIN).format(FormatOuT);
+
+        }
+
+        return '';
+
     }
 
     static formateStringAnosMesesDias(anos, meses, dias, notDays = false) {
@@ -222,63 +308,63 @@ export class DefinicaoTempo {
         return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
     }
 
-   
+
 
 
     // private defineMelhorTempo(auxiliarDate) {
 
     //     let melhorTempo = 0;
     //     let dataFull = false;
-    
+
     //     for (const vinculo of this.periodosList) {
-    
+
     //       const inicioVinculo = this.toMoment(vinculo.data_inicio);
     //       const fimVinculo = this.toMoment(vinculo.data_termino);
     //       const fator = vinculo.fator_condicao_especialN;
-    
+
     //       if (moment(auxiliarDate).isBetween(
     //         moment(inicioVinculo),
     //         moment(fimVinculo), 'month')) {
     //         melhorTempo = (30 * fator);
     //         dataFull = true;
     //       }
-    
+
     //       if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
     //         melhorTempo = ((30 - inicioVinculo.date()) + 1) * fator;
     //       }
-    
+
     //       if (moment(auxiliarDate).isSame(fimVinculo, 'month') && !dataFull) {
-    
+
     //         let tempo = fimVinculo.date();
     //         if (((fimVinculo.month() + 1) === 2) && (fimVinculo.date() === 28 || fimVinculo.date() === 29)
     //           || fimVinculo.date() === 31) {
     //           tempo = 30;
     //         }
-    
+
     //         melhorTempo = (tempo * fator);
-    
+
     //       }
-    
+
     //     }
-    
+
     //     melhorTempo = Math.floor(melhorTempo);
     //     //console.log('tempo = ' + melhorTempo + ' / ' + auxiliarDate.format('DD/MM/YYYY'))
     //     //console.log(melhorTempo);
-    
+
     //     return melhorTempo;
     //   }
-    
-    
+
+
     //   private tempoTotal360(limitesDoVinculo) {
-    
+
     //     return new Promise((resolve, reject) => {
-    
+
     //       let auxiliarDate = moment(this.toDateString(limitesDoVinculo.inicio), 'DD/MM/YYYY');
     //       const fimContador = moment(this.toDateString(limitesDoVinculo.fim), 'DD/MM/YYYY');
-    
+
     //       auxiliarDate.startOf('month');
     //       fimContador.endOf('month')
-    
+
     //       let count = 0;
     //       let count88 = 0;
     //       let count91 = 0;
@@ -286,53 +372,53 @@ export class DefinicaoTempo {
     //       let count99 = 0;
     //       let count15 = 0;
     //       let count19 = 0;
-    
+
     //       const fimContador88 = this.momentCarenciaEnd(this.fimContador88);
     //       const fimContador91 = this.momentCarenciaEnd(this.fimContador91);
     //       const fimContador98 = this.momentCarenciaEnd(this.fimContador98);
     //       const fimContador99 = this.momentCarenciaEnd(this.fimContador99);
     //       const fimContador15 = this.momentCarenciaEnd(this.fimContador15);
     //       const fimContador19 = this.momentCarenciaEnd(this.fimContador19);
-    
+
     //       let melhorTempo = 0;
-    
+
     //       do {
-    
+
     //         melhorTempo = this.defineMelhorTempo(auxiliarDate)
-    
+
     //         if (melhorTempo > 0) {
-    
+
     //           count += melhorTempo;
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador88, 'month')) {
     //             count88 += (auxiliarDate.isSame(fimContador88, 'month')) ? 5 : melhorTempo;
     //           };
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador91, 'month')) {
     //             count91 += (auxiliarDate.isSame(fimContador91, 'month')) ? 4 : melhorTempo;
     //           };
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador98, 'month')) {
     //             count98 += (auxiliarDate.isSame(fimContador98, 'month')) ? 15 : melhorTempo;
     //           };
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador99, 'month')) {
     //             count99 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
     //           };
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador15, 'month')) {
     //             count15 += (auxiliarDate.isSame(fimContador99, 'month')) ? 5 : melhorTempo;
     //           };
-    
+
     //           if (auxiliarDate.isSameOrBefore(fimContador19, 'month')) {
     //             count19 += (auxiliarDate.isSame(fimContador19, 'month')) ? 13 : melhorTempo;
     //           };
     //         }
-    
+
     //         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
-    
+
     //       } while (fimContador.isSameOrAfter(auxiliarDate));
-    
+
     //       this.tempoTotalConFator = DefinicaoTempo.convertD360ToDMY(count);
     //       this.tempoTotalConFator88 = DefinicaoTempo.convertD360ToDMY(count88);
     //       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
@@ -340,16 +426,16 @@ export class DefinicaoTempo {
     //       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
     //       this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
     //       this.tempoTotalConFator19 = DefinicaoTempo.convertD360ToDMY(count19);
-    
+
     //       // console.log(this.tempoTotalConFator);
     //       // console.log(this.tempoTotalConFator88);
     //       // console.log(this.tempoTotalConFator91);
     //       // console.log(this.tempoTotalConFator98);
     //       // console.log(this.tempoTotalConFator99);
     //       // console.log(this.tempoTotalConFator19);
-    
+
     //       if (this.tempoTotalConFator) {
-    
+
     //         // this.verificaPeriodoAposReforma();
     //         // this.subTotais();
     //         resolve(true);
@@ -357,9 +443,9 @@ export class DefinicaoTempo {
     //         reject(false);
     //       }
     //     });
-    
+
     //   }
-    
+
 
 
     // private countdown(targetDate) {

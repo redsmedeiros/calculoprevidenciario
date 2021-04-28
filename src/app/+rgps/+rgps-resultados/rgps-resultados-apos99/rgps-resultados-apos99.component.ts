@@ -13,6 +13,7 @@ import { Moeda } from '../../../services/Moeda.model';
 import { MoedaService } from '../../../services/Moeda.service';
 import { RgpsResultadosComponent } from '../rgps-resultados.component'
 import * as moment from 'moment';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @Component({
   selector: 'app-rgps-resultados-apos99',
@@ -377,7 +378,24 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
 
-    const mesesContribuicao = this.getDifferenceInMonths(moment('1994-07-01'), this.dataInicioBeneficio);
+    const getDifferenceInMonthsDef = (date1, date2 = moment(), floatRet = false) => {
+      let difference = date1.diff(date2, 'months', true);
+      difference = Math.abs(difference);
+      if (floatRet) {
+        return difference;
+      }
+      return Math.floor(difference);
+    }
+
+
+    moment().startOf('month').add()
+
+    const dataInicioBeneficioDefDivisor = this.dataInicioBeneficio.clone();
+
+    const mesesContribuicao = getDifferenceInMonthsDef(
+      moment('1994-07-01'),
+      dataInicioBeneficioDefDivisor.startOf('month').add(1, 'months')
+    );
 
 
 
@@ -389,9 +407,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // }
 
 
-    let mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8));
-    let mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6));
-    let divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
+    const mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8));
+    const mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6));
+    const divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
 
     // if (contadorSecundario < mesesContribuicao * 0.6) {
     //   contadorSecundario = Math.trunc(mesesContribuicao * 0.6);
@@ -399,8 +417,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //   contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
     // }
 
-    // let numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
-    let numeroContribuicoes = contadorPrimario; // Numero de contribuicoes carregadas para o periodo;
+    // const numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
+    const numeroContribuicoes = contadorPrimario; // Numero de contribuicoes carregadas para o periodo;
 
     // console.log(tableData.length)
     // console.log(numeroContribuicoes)
@@ -699,15 +717,45 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         naoFocado = true;
         break;
       default:
-        fatorSeguranca = ((tempoTotalContribuicao * aliquota) / expectativa) * (1 + (this.idadeFracionada + (tempoTotalContribuicao * aliquota)) / 100);
-        fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
-        this.fatorPrevidenciario = fatorSeguranca;
 
+
+        const arredFatorCalc = (vl) => {
+          return Math.floor(vl * 10000) / 10000;
+        };
+
+        const tempo = this.contribuicaoPrimaria;
+        let tempoTotalContribuicaoF = (tempo.anos) + (tempo.meses / 12) + (tempo.dias / 360);
+        tempoTotalContribuicaoF = arredFatorCalc(tempoTotalContribuicaoF);
+
+        let idadeFracionadaF = this.getIdadeFracionada(false);
+
+        idadeFracionadaF = arredFatorCalc(idadeFracionadaF);
+
+
+        fatorSeguranca = arredFatorCalc(arredFatorCalc(tempoTotalContribuicaoF * aliquota) / expectativa)
+          * arredFatorCalc(1 + arredFatorCalc(idadeFracionadaF + arredFatorCalc(tempoTotalContribuicaoF * aliquota)) / 100);
+
+        // fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
+        fatorSeguranca = arredFatorCalc(fatorSeguranca);
+
+        this.fatorPrevidenciario = fatorSeguranca;
         this.fatorPrevidenciarioAntesDaVerificacao = fatorSeguranca;
+
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
-        //conclusoes.formula_fator = "(("+tempoTotalContribuicao +'*'+ aliquota+") / "+expectativa+") * (1 + ("+idadeFracionada+" + ("+tempoTotalContribuicao+" * "+aliquota+")) / "+"100)";
-        this.formula_fator = '((' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' + this.formatDecimal(aliquota, 2) + ') / ' + this.formatDecimal(expectativa, 2) + ') * (1 + (' + this.formatDecimal(this.idadeFracionada, 2) + ' + (' + this.formatDecimal(tempoTotalContribuicao, 4) + ' * ' + this.formatDecimal(aliquota, 2) + ')) / ' + '100) = ' + fatorSeguranca;
-        //conclusoes.push({order:  0,string:"Fórmula Fator:",value: "(("+this.formatDecimal(tempoTotalContribuicao,4) +' * '+ this.formatDecimal(aliquota,2)+") / "+this.formatDecimal(expectativa, 2)+") * (1 + ("+this.formatDecimal(this.idadeFracionada,2)+" + ("+this.formatDecimal(tempoTotalContribuicao,4)+" * "+this.formatDecimal(aliquota,2)+")) / "+"100)"});
+        this.formula_fator = '((' + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
+          + this.formatDecimal(aliquota, 2) + ') / '
+          + this.formatDecimal(expectativa, 2) + ') * (1 + ('
+          + this.formatDecimal(idadeFracionadaF, 4) + ' + ('
+          + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
+          + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
+
+        conclusoes.push({
+          order: 4,
+          tipo: 'fator',
+          string: 'Fórmula Fator:',
+          value: this.formula_fator
+        });
+
         break;
     }
 
@@ -868,14 +916,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     conclusoes.push({
-      order: 5,
+      order: 6,
       tipo: 'teto',
       string: 'Teto do Salário de Contribuição',
       value: this.formatMoney(moedaDib.teto, currency.acronimo)
     });
 
     conclusoes.push({
-      order: 4,
+      order: 5,
       tipo: 'sb',
       string: 'Salário de Benefício',
       value: this.formatMoney(this.salarioBeneficio)
@@ -1028,7 +1076,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           rmi = divisorContribuicoes;
         }
 
-      
+
 
         conclusoes.push({
           order: 20,
@@ -1109,7 +1157,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           conclusoes.push({
             order: 3,
             tipo: 'fator',
-            string: 'Fator Previdenciário:', value: fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
+            string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
           });//resultados['Fator Previdenciário: '] = fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)';
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
@@ -1120,7 +1168,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           conclusoes.push({
             order: 3,
             tipo: 'fator',
-            string: 'Fator Previdenciário:', value: fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
+            string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
           });//resultados['Fator Previdenciário: '] = fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)';
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
@@ -1239,7 +1287,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           string: 'Fator Previdenciário:', value: fatorSeguranca
         });//resultados['Fator Previdenciário: '] = fatorSeguranca;
         this.fatorPrevidenciario = fatorSeguranca;
-        this.getRendaMensal(conclusoes, rmi, currency);
+        //this.getRendaMensal(conclusoes, rmi, currency);
       }
 
     }
@@ -1248,24 +1296,24 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     if (this.rmi8595 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
-     
-     
+
+
       conclusoes.push({
         order: 20,
-      //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
+        //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
         string: 'Renda Mensal Inicial', value: this.rmi8595
       })
 
-    //   rmi >= somaMedias ? conclusoes.push({
-    //     order: 20,
-    //   //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
-    //     string: 'Renda Mensal Inicial', value: this.rmi8595
-    //   }) : this.getRendaMensal(conclusoes, rmi, currency);
-    //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({
-    //     order: 20,
-    //  //   string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
-    //     string: 'Renda Mensal Inicial', value: this.rmi8595
-    //   });
+      //   rmi >= somaMedias ? conclusoes.push({
+      //     order: 20,
+      //   //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
+      //     string: 'Renda Mensal Inicial', value: this.rmi8595
+      //   }) : this.getRendaMensal(conclusoes, rmi, currency);
+      //   rmi >= somaMedias ? this.getRendaMensal(conclusoes, rmi, currency) : conclusoes.push({
+      //     order: 20,
+      //  //   string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
+      //     string: 'Renda Mensal Inicial', value: this.rmi8595
+      //   });
 
 
 
@@ -1292,7 +1340,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     } else {
-      if (fatorSeguranca > 1 && (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6)) {
+      if (fatorSeguranca > 1 || (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6)) {
         this.getRendaMensal(conclusoes, rmi, currency);
       }
     }
@@ -1951,21 +1999,35 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   }
 
-  getIdadeFracionada() {
+  getIdadeFracionada(type = true) {
 
     const dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
-    //   let idadeEmDias = this.dataInicioBeneficio.diff(dataNascimento, 'days');
+    let dataInicioBeneficioI = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
 
-    //   if (this.dataInicioBeneficio >= this.dataPec062019) {
-    //     idadeEmDias = this.dataPec062019.diff(dataNascimento, 'days');
-    //   }
-    //  // return idadeEmDias / 365.25;
-
-    if (this.dataInicioBeneficio >= this.dataPec062019) {
-      return this.dataPec062019.diff(dataNascimento, 'years', true);
+    if (dataInicioBeneficioI >= moment('13/11/2019', 'DD/MM/YYYY')) {
+      dataInicioBeneficioI = moment('13/11/2019', 'DD/MM/YYYY')
     }
 
-    return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
+    const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'days');
+
+    if (type) {
+      return idadeEmDias / 365;
+    }
+
+    const idade33 = DefinicaoTempo.calcularTempo360NotDayStart(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
+      dataInicioBeneficioI);
+
+    return idade33.fullDays / 360;
+
+
+
+    // if (this.dataInicioBeneficio >= this.dataPec062019) {
+    //   return this.dataPec062019.diff(dataNascimento, 'years', true);
+    // }
+
+    // return this.dataInicioBeneficio.diff(dataNascimento, 'years', true);
+
+
   }
 
 
