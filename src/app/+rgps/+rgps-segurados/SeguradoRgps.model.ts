@@ -40,9 +40,9 @@ export class SeguradoRgps extends Model {
   // `; 
   public actions = `
  <div class="btn-group">
-    <a href="#/rgps/rgps-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar as simulações do segurado">&nbsp;&nbsp;<i class="fa fa-calculator fa-1-7x"></i>&nbsp;&nbsp;</a>
-    <a href="#/rgps/rgps-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar o Segurado">&nbsp;&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;&nbsp;</a>
-    <a href="#/rgps/rgps-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar o Segurado">&nbsp;&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;&nbsp;</a>
+    <a href="#/rgps/rgps-calculos/${this.id}" class="btn btn-primary btn-xs" title="Visualizar Calculos Cadastrados">&nbsp;&nbsp;<i class="fa fa-list fa-1-7x"></i>&nbsp;&nbsp;</a>
+    <a href="#/rgps/rgps-segurados/${this.id}/editar" id="testee" class="btn btn-warning btn-xs"  title="Editar">&nbsp;&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;&nbsp;</a>
+    <a href="#/rgps/rgps-segurados/${this.id}/destroy" class="btn btn-danger btn-xs" title="Deletar">&nbsp;&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;&nbsp;</a>
   </div>
   `;
 

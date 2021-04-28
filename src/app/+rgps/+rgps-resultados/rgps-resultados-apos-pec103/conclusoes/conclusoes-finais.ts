@@ -316,11 +316,15 @@ export class conclusoesFinais {
         listC.push(this.setConclusao(1, `Divisor da Média dos Salários de Contribuição`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||
-            (elementRegraEspecie.regra === 'deficiente' && elementPossibilidade.fator.value > 1)
+            (elementRegraEspecie.regra === 'deficiente')
         ) {
 
-            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementPossibilidade.fator.valueMelhorString));
-            listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementPossibilidade.fator.formula));
+            const textFatorConclusao = (elementPossibilidade.fator.value > 1) ?
+                ' (Aplicado por ser mais vantajoso)'
+                : ' (Afastado por ser menos vantajoso - Utilizado Fator 1,0000)';
+
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', (elementPossibilidade.fator.valueMelhorString + textFatorConclusao)));
+            listC.push(this.setConclusao(3, 'Fórmula do Fator Previdenciário', elementPossibilidade.fator.formula));
         }
 
         listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));

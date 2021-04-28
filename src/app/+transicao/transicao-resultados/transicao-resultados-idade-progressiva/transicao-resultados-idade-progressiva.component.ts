@@ -19,7 +19,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     2021: { m: 62, md: 22645, f: 57, fd: 20819 },
     2022: { m: 62.5, md: 22828, f: 57.5, fd: 21001 },
     2023: { m: 63, md: 23010, f: 58, fd: 21184 },
-    2024: { m: 63.5, md: 23193, f: 58.5, fd: 21367 },
+    2024: { m: 63.5, md: 23193, f: 58.5, fd: 21367},
     2025: { m: 64, md: 23376, f: 59, fd: 21549 },
     2026: { m: 64.5, md: 23558, f: 59.5, fd: 21732 },
     2027: { m: 65, md: 23741, f: 60, fd: 21915 },
@@ -228,9 +228,10 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
       this.seguradoTransicao.contribuicaoFracionadoAnos)
       <=
-      (this.requisitoIdadeProgressivaRegra2[moment().year()][this.seguradoTransicao.sexo] -
+      (this.requisitoIdadeProgressivaRegra2[auxiliarDate.year()][this.seguradoTransicao.sexo] -
         this.seguradoTransicao.idadeFracionada)
     );
+
 
     if (verificacao) {
       // auxiliarDate = moment({
@@ -241,7 +242,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
       if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
-       ||
+        ||
         ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
 
         auxiliarDate = moment({
@@ -275,7 +276,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
       if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
-       ||
+        ||
         ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
 
         idadeMoment = moment.duration({
@@ -297,13 +298,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     }
 
 
-
-    // console.log('-- regra 2');
-    // console.log(correcaoAnoBissexto);
-    // console.log(auxiliarDate);
-    // console.log(idade);
-    // console.log(tempoContribuicao);
-    // console.log(count);
 
 
     return {

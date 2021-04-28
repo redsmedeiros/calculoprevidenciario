@@ -752,7 +752,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.push({
           order: 4,
           tipo: 'fator',
-          string: 'Fórmula Fator:',
+          string: 'Fórmula do Fator Previdenciário:',
           value: this.formula_fator
         });
 
