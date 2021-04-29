@@ -2091,15 +2091,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         const moeda = this.Moeda.getByDate(this.dataInicioBeneficio);
 
-        console.log();
-        console.log(valorBeneficio);
 
         if (valorBeneficio === parseFloat(moeda.salario_minimo)) {
           reajustesAutomaticos.push(reajuste02_2020);
         }
       
-
-
         reajustesAutomaticos.sort((entry1, entry2) => {
           if (moment(entry1.data_reajuste) > moment(entry2.data_reajuste)) {
             return 1;

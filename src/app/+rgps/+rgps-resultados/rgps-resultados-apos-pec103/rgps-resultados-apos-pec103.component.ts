@@ -56,6 +56,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public isRegraTransitoria = true;
   public isRegrasTransicao = false;
   public primeiraDataTabela;
+  public carenciaRequisito = 180;
   public carenciaConformDataFiliacao;
   public intervaloDeContribuicoes = 0;
   public valorExportacao = 0;
@@ -122,7 +123,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.contribuicaoPrimariaAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-    
+
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
 
@@ -283,13 +284,15 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.fatorPrevidenciario,
         this.moedaDib,
         numeroDeContribuicoes,
+        this.carenciaRequisito,
       );
 
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
         this.listaConclusaoAcesso,
         numeroDeContribuicoes,
         this.carenciaConformDataFiliacao,
-        this.calculo
+        this.calculo,
+        this.carenciaRequisito,
       );
 
       this.listaConclusaoAcesso = this.calcularListaContribuicoes.criarListasCompetenciasParaPossibilidades(
@@ -498,15 +501,15 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.planejamento.novo_rmi = Math.round(this.melhorValorRMI * 100) / 100;
     this.planejamento.nova_soma_contribuicoes = Math.round(this.melhorSoma * 100) / 100;
 
-    let planejamentoContribuicoesAdicionaisInicio = {data:  moment()};
-    let planejamentoContribuicoesAdicionaisFim = {data:  moment()};
+    let planejamentoContribuicoesAdicionaisInicio = { data: moment() };
+    let planejamentoContribuicoesAdicionaisFim = { data: moment() };
 
     if (this.planejamentoContribuicoesAdicionais.length > 0) {
       planejamentoContribuicoesAdicionaisInicio =
-      this.planejamentoContribuicoesAdicionais[this.planejamentoContribuicoesAdicionais.length - 1];
+        this.planejamentoContribuicoesAdicionais[this.planejamentoContribuicoesAdicionais.length - 1];
       planejamentoContribuicoesAdicionaisFim = this.planejamentoContribuicoesAdicionais[0];
     }
-  
+
 
     this.planejamento.resultado_rmi_novo = JSON.stringify({
       numero_contribuicoes_adicionais: this.planejamentoContribuicoesAdicionais.length,
@@ -699,6 +702,73 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
 
+  public getCarenciaProgressiva() {
+
+    const mesesCarenciaPorAno = {
+      1991: 60,
+      1992: 60,
+      1993: 66,
+      1994: 72,
+      1995: 78,
+      1996: 90,
+      1997: 96,
+      1998: 102,
+      1999: 108,
+      2000: 114,
+      2001: 120,
+      2002: 126,
+      2003: 132,
+      2004: 138,
+      2005: 144,
+      2006: 150,
+      2007: 156,
+      2008: 162,
+      2009: 168,
+      2010: 174,
+      2011: 180,
+    };
+    const filiacao = moment(this.segurado.data_filiacao, 'DD/MM/YYYY');
+    let carenciaProgressivaRequisito = 180;
+
+    console.log(this.segurado);
+    console.log(this.segurado.data_nascimento);
+    console.log(this.segurado.data_filiacao);
+    console.log(moment(this.segurado.data_filiacao, 'DD/MM/YYYY').isBefore('1991-07-24'));
+
+    if (filiacao.isValid() && filiacao.isBefore('1991-07-24')) {
+
+      console.log(this.segurado.data_nascimento);
+
+      const addAnosPorSexo = (this.segurado.sexo === 'f') ? 60 : 65;
+      const dataAnosIdade = moment(moment(this.segurado.data_nascimento, 'DD/MM/YYYY').add(addAnosPorSexo, 'years').format('YYYY-MM-DD'));
+      console.log(dataAnosIdade);
+
+
+      if (dataAnosIdade.isValid() &&
+        dataAnosIdade.isBetween('1991-01-01', '2011-12-31', 'year', '()')) {
+
+        carenciaProgressivaRequisito = mesesCarenciaPorAno[dataAnosIdade.year()];
+
+      }
+
+      if ((dataAnosIdade.isValid() &&
+        dataAnosIdade.isBefore('1991-01-01', 'year'))) {
+
+        carenciaProgressivaRequisito = 60;
+
+      }
+
+
+    }
+
+    console.log(carenciaProgressivaRequisito);
+
+    return (carenciaProgressivaRequisito !== undefined) ? carenciaProgressivaRequisito : 180;
+
+  }
+
+
+
   /**
    * Na especie idade verifica se o segurado possui carrencia mínima para acesso a regra
    * @param  {} errorArray
@@ -709,7 +779,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 
-      const mesesCarencia = 180;
+      this.carenciaRequisito = this.getCarenciaProgressiva();
+      const mesesCarenciaRequisito = this.carenciaRequisito;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
       // console.log(this.calculo.carencia_apos_ec103);
@@ -732,15 +803,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         }
 
-        //console.log(this.calculo.carencia_apos_ec103);
       }
 
-      if (this.calculo.carencia_apos_ec103 < mesesCarencia) {
-        //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
-        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia_apos_ec103) + ' mês(es) para a carência necessária.';
+      if (this.calculo.carencia_apos_ec103 < mesesCarenciaRequisito) {
+
+        const erroCarencia = 'Falta(m) '
+          + (mesesCarenciaRequisito - this.calculo.carencia_apos_ec103)
+          + ' mês(es) para a carência necessária.';
         this.errosArray.push(erroCarencia);
-        // this.erroCarenciaMinima = true;
         return false;
+
       }
 
     }

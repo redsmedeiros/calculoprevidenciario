@@ -10,6 +10,7 @@ export class RegrasAcesso {
     private contribuicaoTotal = 0;
     private numeroDeContribuicoes = 0;
     private carenciaConformDataFiliacao = 0;
+    private carenciaRequisito = 180;
     private calculo;
 
     private arrayEspecial = [1915, 1920, 1925];
@@ -33,11 +34,13 @@ export class RegrasAcesso {
     public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[],
         numeroDeContribuicoes,
         carenciaConformDataFiliacao,
-        calculo) {
+        calculo,
+        carenciaRequisito) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
         this.calculo = calculo;
+        this.carenciaRequisito = carenciaRequisito;
 
         // listaConclusaoAcesso.forEach((elementTipo, indice) => {
         //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
@@ -103,7 +106,9 @@ export class RegrasAcesso {
             // this.calculo.carencia = 190;
             // this.numeroDeContribuicoes = 205;
 
-            let maxDescarteCarencia = (this.carenciaConformDataFiliacao - 180);
+            let maxDescarteCarencia = (this.carenciaConformDataFiliacao - this.carenciaRequisito);
+
+            console.log(maxDescarteCarencia);
 
             // deve restar 12 após 1994, pois são os valores base para pós EC103
             if (
@@ -499,6 +504,7 @@ export class RegrasAcesso {
         fatorPrevidenciario: object,
         moedaDib: object,
         numeroDeContribuicoes: number,
+        carenciaRequisito: number
     ) {
 
         if (
@@ -514,6 +520,7 @@ export class RegrasAcesso {
         const ano = dataInicioBeneficio.year();
         this.moedaDib = moedaDib;
         this.numeroDeContribuicoes = numeroDeContribuicoes;
+        this.carenciaRequisito = carenciaRequisito;
 
         // aplicação default false
         if (this.arrayEspecial.includes(tipoBeneficio)) {
