@@ -109,6 +109,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public irtRejusteAdministrativo = 0;
   public msgProporcionalAteEC1032019 = '';
   public msgIntegralAteEC1032019 = '';
+  public isRegraPontos = false;
 
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
@@ -749,13 +750,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
           + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
-        conclusoes.push({
-          order: 4,
-          tipo: 'fator',
-          string: 'Fórmula do Fator Previdenciário:',
-          value: this.formula_fator
-        });
+        if (fatorSeguranca > 1) {
 
+          conclusoes.push({
+            order: 4,
+            tipo: 'fator',
+            string: 'Fórmula do Fator Previdenciário:',
+            value: this.formula_fator
+          });
+
+        }
         break;
     }
 
@@ -825,8 +829,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let rmi = 0;
 
     // passo 1
-    rmi = somaMedias * fatorSeguranca;
+    rmi = somaMedias;
+    if (fatorSeguranca > 1) {
+      rmi *= fatorSeguranca;
+    }
+
     this.salarioBeneficio = rmi;
+    // passo 1
+
+   
 
 
     // passo 2
@@ -844,6 +855,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
+   
+    // passo 2
+    
     this.limited = false;
     // old modificado 17/07/2020
     // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
@@ -1056,6 +1070,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
+    
+
 
     if (dataBeneficio >= this.dataMP664) {
       if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
@@ -1118,8 +1134,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     } else {
 
-
-
       if ((dataBeneficio >= dataRegra85_95 && dataBeneficio <= dataFimRegra85_95)) { //&& (this.contribuicaoPrimaria.anos >= (comparacaoContribuicao - redutorSexo))
 
         const redutorSexo85_95 = (this.segurado.sexo == 'f') ? 85 : 95;
@@ -1159,6 +1173,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             tipo: 'fator',
             string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
           });//resultados['Fator Previdenciário: '] = fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)';
+          
+          this.isRegraPontos = true;
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
           this.rmi8595 = this.formatMoney(somaMedias, currency.acronimo);
@@ -1170,6 +1186,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             tipo: 'fator',
             string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
           });//resultados['Fator Previdenciário: '] = fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)';
+          this.isRegraPontos = true;
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
           this.rmi8090 = this.formatMoney(somaMedias, currency.acronimo);
@@ -1234,7 +1251,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         //   this.fatorPrevidenciario = fatorSeguranca;
         // }
       } else if (dataBeneficio >= dataRegra86_96 && dataBeneficio <= dataFimRegra86_96) { // 86/96
-        textoValorPontos = (this.tipoBeneficio === 6) ? '81/91' : '86/96';
+        textoValorPontos = (this.tipoBeneficio === 6) ? ' 81/91' : ' 86/96';
         pontosPorSexo = (this.segurado.sexo === 'f') ? 86 : 96;
 
         this.tratamentoDeRegras(dataRegra86_96,
@@ -1244,7 +1261,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           conclusoes, somaMedias);
 
       } else if (dataBeneficio >= dataRegra87_97 && dataBeneficio <= dataFimRegra87_97) {
-        textoValorPontos = (this.tipoBeneficio === 6) ? '82/92' : '87/97';
+        textoValorPontos = (this.tipoBeneficio === 6) ? ' 82/92' : ' 87/97';
         pontosPorSexo = (this.segurado.sexo === 'f') ? 87 : 97;
 
         this.tratamentoDeRegras(dataRegra87_97,
@@ -1295,7 +1312,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //this.getRendaMensal(conclusoes, rmi, currency);
 
 
-    if (this.rmi8595 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
+    if (this.rmi8595  && fatorSeguranca < 1 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
 
 
       conclusoes.push({
@@ -1303,7 +1320,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
         string: 'Renda Mensal Inicial', value: this.rmi8595
       })
-
+      this.isRegraPontos = true;
       //   rmi >= somaMedias ? conclusoes.push({
       //     order: 20,
       //   //  string: 'Renda Mensal Inicial com Regra 85/95:', value: this.rmi8595
@@ -1317,14 +1334,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
 
-    } else if (this.rmi8090 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
+    } else if (fatorSeguranca < 1 && this.rmi8090 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
 
       conclusoes.push({
         order: 20,
         // string: 'Renda Mensal Inicial com Regra 80/90', value: this.rmi8090
         string: 'Renda Mensal Inicial', value: this.rmi8090
       })
-
+      this.isRegraPontos = true;
       // // console.log (rmi, somaMedias, rmi >= somaMedias);
       // rmi >= somaMedias ? conclusoes.push({
       //   order: 20,
@@ -1340,9 +1357,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     } else {
-      if (fatorSeguranca > 1 || (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6)) {
+
+      if ((fatorSeguranca > 1 && (!this.isRegraPontos)) 
+      || (!this.isRegraPontos && (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6))) {
         this.getRendaMensal(conclusoes, rmi, currency);
       }
+
     }
 
     // ULTIMA LINHA
@@ -1648,7 +1668,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           tipo: 'fator',
           string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra ' + resultString + ')'
         });//conclusoes.fator_previdenciario = fatorSeguranca + '- FP desfavorável (Aplica-se a regra ' + resultString+ ')';
-
+        
+        this.isRegraPontos = true;
         this.fatorPrevidenciario = fatorSeguranca;
         if (typeof somaMedias.valor === 'number') {
           somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
@@ -1657,8 +1678,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.push({
           order: 20,
           tipo: 'rmi',
-          // string: 'Renda Mensal Inicial com Regra ' + resultString + ':', value: currency.acronimo + somaMediasString
-          string: 'Renda Mensal Inicial' + resultString + ':', value: currency.acronimo
+          // string: 'Renda Mensal Inicial' + resultString + ':', value: currency.acronimo + somaMediasString
+          string: 'Renda Mensal Inicial' , value: currency.acronimo + ' ' + somaMediasString
         });//conclusoes.renda_mensal_inicial_com_regra = currency.acronimo + somaMedias;
         //resultados['specieKind = 4Renda Mensal Inicial com Regra'+ resultString + ': '] = currency.acronimo + somaMedias;
       }
@@ -2067,7 +2088,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         reajuste02_2020.salario_minimo = '1045.00';
         reajuste02_2020.teto = '6101.06';
 
-        reajustesAutomaticos.push(reajuste02_2020);
+
+        const moeda = this.Moeda.getByDate(this.dataInicioBeneficio);
+
+        console.log();
+        console.log(valorBeneficio);
+
+        if (valorBeneficio === parseFloat(moeda.salario_minimo)) {
+          reajustesAutomaticos.push(reajuste02_2020);
+        }
+      
 
 
         reajustesAutomaticos.sort((entry1, entry2) => {
