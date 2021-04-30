@@ -1322,6 +1322,9 @@ export class RgpsResultadosComponent implements OnInit {
     const total = { years: 0, months: 0, days: 0, totalDays: 0, totalMonths: 0, totalYears: 0 };
     let diff: any;
 
+    b.startOf('day').add(-1, 'd');
+    a.endOf('day')
+
     total.totalYears = a.diff(b, 'years', true);
     total.totalMonths = a.diff(b, 'months', true);
     total.totalDays = a.diff(b, 'days', true);
@@ -1382,8 +1385,8 @@ export class RgpsResultadosComponent implements OnInit {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    console.log(this.planejamento.valor_beneficio);
-    console.log(typeof this.planejamento.valor_beneficio);
+    // console.log(this.planejamento.valor_beneficio);
+    // console.log(typeof this.planejamento.valor_beneficio);
 
     if (Number(this.planejamento.valor_beneficio) > 0) {
 
@@ -1473,7 +1476,7 @@ export class RgpsResultadosComponent implements OnInit {
           .then((planejamento: PlanejamentoRgps) => {
 
 
-            console.log(planejamento);
+         //   console.log(planejamento);
             this.planejamento = planejamento;
 
             const calcClone = Object.assign({}, calculo);

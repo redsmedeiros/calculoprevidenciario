@@ -75,21 +75,25 @@ export class TransicaoFormComponent implements OnInit {
     }
 
 
-    // this.nome = 'teste - 28-04-2021';
-    // this.idDocumento = '';
-    // this.numeroDocumento = '';
-    // this.dataNascimento = '22/04/1982';
-    // this.dataFiliacao = '01/01/1999';
-    // this.sexo = 'f';
-    // this.professor = false;
+    if (window.location.hostname === 'localhost') {
+      // testes
+      this.nome = 'teste - 28-04-2021';
+      this.idDocumento = '';
+      this.numeroDocumento = '';
+      this.dataNascimento = '22/04/1982';
+      this.dataFiliacao = '01/01/1999';
+      this.sexo = 'f';
+      this.professor = false;
 
-    // this.contribuicaoAnosAteEC103 = '19';
-    // this.contribuicaoMesesAteEC103 = '10';
-    // this.contribuicaoDiasAteEC103 = '07';
+      this.contribuicaoAnosAteEC103 = '19';
+      this.contribuicaoMesesAteEC103 = '10';
+      this.contribuicaoDiasAteEC103 = '07';
 
-    // this.contribuicaoAnos = '21';
-    // this.contribuicaoMeses = '03';
-    // this.contribuicaoDias = '22';
+      this.contribuicaoAnos = '21';
+      this.contribuicaoMeses = '03';
+      this.contribuicaoDias = '25';
+    }
+
 
   }
 
@@ -222,9 +226,10 @@ export class TransicaoFormComponent implements OnInit {
     meses = this.isFormatInt(meses);
     dias = this.isFormatInt(dias);
 
-    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    const contribuicaoTotal = (anos * 365.25) + (meses * 30) + dias;
+    // const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
 
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   }
 
 
