@@ -727,22 +727,15 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       2010: 174,
       2011: 180,
     };
+
     const filiacao = moment(this.segurado.data_filiacao, 'DD/MM/YYYY');
     let carenciaProgressivaRequisito = 180;
 
-    console.log(this.segurado);
-    console.log(this.segurado.data_nascimento);
-    console.log(this.segurado.data_filiacao);
-    console.log(moment(this.segurado.data_filiacao, 'DD/MM/YYYY').isBefore('1991-07-24'));
-
     if (filiacao.isValid() && filiacao.isBefore('1991-07-24')) {
 
-      console.log(this.segurado.data_nascimento);
 
       const addAnosPorSexo = (this.segurado.sexo === 'f') ? 60 : 65;
       const dataAnosIdade = moment(moment(this.segurado.data_nascimento, 'DD/MM/YYYY').add(addAnosPorSexo, 'years').format('YYYY-MM-DD'));
-      console.log(dataAnosIdade);
-
 
       if (dataAnosIdade.isValid() &&
         dataAnosIdade.isBetween('1991-01-01', '2011-12-31', 'year', '()')) {
@@ -754,14 +747,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       if ((dataAnosIdade.isValid() &&
         dataAnosIdade.isBefore('1991-01-01', 'year'))) {
 
-        carenciaProgressivaRequisito = 60;
+          carenciaProgressivaRequisito = 60;
 
       }
 
 
     }
-
-    console.log(carenciaProgressivaRequisito);
 
     return (carenciaProgressivaRequisito !== undefined) ? carenciaProgressivaRequisito : 180;
 

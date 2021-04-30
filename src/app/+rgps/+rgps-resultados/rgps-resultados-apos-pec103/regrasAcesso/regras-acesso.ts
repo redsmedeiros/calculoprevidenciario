@@ -108,7 +108,6 @@ export class RegrasAcesso {
 
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - this.carenciaRequisito);
 
-            console.log(maxDescarteCarencia);
 
             // deve restar 12 após 1994, pois são os valores base para pós EC103
             if (
