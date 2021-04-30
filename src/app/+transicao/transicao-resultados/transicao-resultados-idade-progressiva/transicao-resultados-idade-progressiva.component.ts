@@ -225,10 +225,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     //   tempoContribuicao += correcaoAnoBissexto;
     // }
 
+    const anoFinalTransicao = (auxiliarDate.year() > 2031) ? 2031 : auxiliarDate.year();
+
     const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
       this.seguradoTransicao.contribuicaoFracionadoAnos)
       <=
-      (this.requisitoIdadeProgressivaRegra2[auxiliarDate.year()][this.seguradoTransicao.sexo] -
+      (this.requisitoIdadeProgressivaRegra2[anoFinalTransicao][this.seguradoTransicao.sexo] -
         this.seguradoTransicao.idadeFracionada)
     );
 
