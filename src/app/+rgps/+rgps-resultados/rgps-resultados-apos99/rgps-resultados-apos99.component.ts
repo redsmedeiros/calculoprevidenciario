@@ -750,18 +750,38 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
           + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
-        if (fatorSeguranca > 1) {
+
+
+        conclusoes.push({
+          order: 4,
+          tipo: 'fator',
+          string: 'Fórmula do Fator Previdenciário:',
+          value: this.formula_fator
+        });
+
+        //console.log(this.tipoBeneficio);
+
+        if (!this.isRegraPontos && (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
+          this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
+          this.tipoBeneficio == 25 || // Deficiencia Grave
+          this.tipoBeneficio == 26 || // Deficiencia Leve
+          this.tipoBeneficio == 27 || // Deficiencia Moderada
+          this.tipoBeneficio == 28) ||
+          (!this.isRegraPontos && fatorSeguranca < 1 && this.tipoBeneficio === 4 )) {
 
           conclusoes.push({
-            order: 4,
+            order: 3,
             tipo: 'fator',
-            string: 'Fórmula do Fator Previdenciário:',
-            value: this.formula_fator
+            string: 'Fator Previdenciário:', value: fatorSeguranca
           });
 
         }
+
+
         break;
     }
+
+    let tipoIdadeFator = false;
 
     if (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
       this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
@@ -769,13 +789,24 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       this.tipoBeneficio == 26 || // Deficiencia Leve
       this.tipoBeneficio == 27 || // Deficiencia Moderada
       this.tipoBeneficio == 28) {  // Deficiencia Por Idade
+
+
       if (fatorSeguranca < 1) {
+
         fatorSeguranca = 1;
         naoFocado = true;
+        tipoIdadeFator = false;
+
       } else if (fatorSeguranca > 1) {
+
         naoFocado = true;
+        tipoIdadeFator = true;
+
       }
     }
+
+
+
 
     //Índice de Reajuste no Teto.
     let irt = 1;
@@ -830,14 +861,19 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     // passo 1
     rmi = somaMedias;
-    if (fatorSeguranca > 1) {
+    if ((!this.isRegraPontos && this.tipoBeneficio === 4)
+      || (tipoIdadeFator && fatorSeguranca > 1)) {
+
       rmi *= fatorSeguranca;
+
+    } else {
+
+
     }
+
 
     this.salarioBeneficio = rmi;
     // passo 1
-
-   
 
 
     // passo 2
@@ -855,9 +891,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
 
-   
+
     // passo 2
-    
+
     this.limited = false;
     // old modificado 17/07/2020
     // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
@@ -1070,7 +1106,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
-    
+
 
 
     if (dataBeneficio >= this.dataMP664) {
@@ -1173,7 +1209,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             tipo: 'fator',
             string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra 85/95)'
           });//resultados['Fator Previdenciário: '] = fatorSeguranca + '(Afastado por ser menos vantajoso - Aplicada a regra 85/95)';
-          
+
           this.isRegraPontos = true;
           this.fatorPrevidenciario = fatorSeguranca;
           //let rmi85_95 = this.formatMoney(somaMedias, currency.acronimo);
@@ -1312,7 +1348,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //this.getRendaMensal(conclusoes, rmi, currency);
 
 
-    if (this.rmi8595  && fatorSeguranca < 1 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
+    if (this.rmi8595 && fatorSeguranca < 1 && tempoTotalContribuicao >= comparacaoContribuicao - redutorSexo) {
 
 
       conclusoes.push({
@@ -1358,8 +1394,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     } else {
 
-      if ((fatorSeguranca > 1 && (!this.isRegraPontos)) 
-      || (!this.isRegraPontos && (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6))) {
+      if ((fatorSeguranca > 1 && (!this.isRegraPontos))
+        || (!this.isRegraPontos && (this.tipoBeneficio !== 4 || this.tipoBeneficio !== 6))) {
         this.getRendaMensal(conclusoes, rmi, currency);
       }
 
@@ -1668,7 +1704,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           tipo: 'fator',
           string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra ' + resultString + ')'
         });//conclusoes.fator_previdenciario = fatorSeguranca + '- FP desfavorável (Aplica-se a regra ' + resultString+ ')';
-        
+
         this.isRegraPontos = true;
         this.fatorPrevidenciario = fatorSeguranca;
         if (typeof somaMedias.valor === 'number') {
@@ -1679,7 +1715,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           order: 20,
           tipo: 'rmi',
           // string: 'Renda Mensal Inicial' + resultString + ':', value: currency.acronimo + somaMediasString
-          string: 'Renda Mensal Inicial' , value: currency.acronimo + ' ' + somaMediasString
+          string: 'Renda Mensal Inicial', value: currency.acronimo + ' ' + somaMediasString
         });//conclusoes.renda_mensal_inicial_com_regra = currency.acronimo + somaMedias;
         //resultados['specieKind = 4Renda Mensal Inicial com Regra'+ resultString + ': '] = currency.acronimo + somaMedias;
       }
