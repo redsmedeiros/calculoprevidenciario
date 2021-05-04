@@ -2153,12 +2153,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       // se dib maior que 01-03-2015
       if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY') >= this.dataMP664) {
 
-        console.log(rmi);
-        console.log(this.totalMedia12Contribuicoes);
-
         const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
-
-        console.log(rmiConsiderado);
 
         conclusoes.push({
           order: 22,
