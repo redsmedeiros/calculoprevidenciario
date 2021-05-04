@@ -1525,11 +1525,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   private aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes) {
 
     const requitoPontos = this.getRequisitoPontos();
-    const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
-    const labelPontos = `${requitoPontos.requistos['f']}/${requitoPontos.requistos['m']}`
 
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
+      const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
+      const labelPontos = `${requitoPontos.requistos['f']}/${requitoPontos.requistos['m']}`
 
       if (tempoTotalContribuicao >= requitoPontos.tempoMinContribuicao[this.segurado.sexo]
         && tempoContribuicaoMaisIdade >= pontosNecessarios
@@ -2243,7 +2243,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         if (valorBeneficio === parseFloat(moeda.salario_minimo)) {
           reajustesAutomaticos.push(reajuste02_2020);
         }
-      
+
         reajustesAutomaticos.sort((entry1, entry2) => {
           if (moment(entry1.data_reajuste) > moment(entry2.data_reajuste)) {
             return 1;
