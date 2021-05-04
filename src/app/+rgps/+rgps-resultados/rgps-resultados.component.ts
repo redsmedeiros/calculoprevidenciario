@@ -1319,7 +1319,16 @@ export class RgpsResultadosComponent implements OnInit {
 
   private calcDiffContribuicao(a, b) {
 
-    const total = { years: 0, months: 0, days: 0, totalDays: 0, totalMonths: 0, totalYears: 0 };
+    const total = {
+      years: 0,
+      months: 0,
+      days: 0,
+      totalDays: 0,
+      totalMonths: 0,
+      totalYears: 0,
+      duration: {}
+    };
+
     let diff: any;
 
     b.startOf('day').add(-1, 'd');
@@ -1327,7 +1336,8 @@ export class RgpsResultadosComponent implements OnInit {
 
     total.totalYears = a.diff(b, 'years', true);
     total.totalMonths = a.diff(b, 'months', true);
-    total.totalDays = a.diff(b, 'days', true);
+    total.totalDays = Math.floor(a.diff(b, 'days', true));
+    total.duration = moment.duration(a.diff(b));
 
     diff = a.diff(b, 'years');
     b.add(diff, 'years');
@@ -1347,24 +1357,36 @@ export class RgpsResultadosComponent implements OnInit {
 
   private addTempoContribuicao(calculo, diffTempo) {
 
-    const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+   const testeobjTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
 
-    objTempo.anos += diffTempo.years;
-    objTempo.meses += diffTempo.months;
-    objTempo.dias += diffTempo.days;
+    const tempoAtual = moment.duration({
+      year: testeobjTempo.anos,
+      month: testeobjTempo.meses,
+      days: testeobjTempo.dias
+    })
 
-    if (objTempo.dias >= 30) {
-      objTempo.dias -= 30;
-      objTempo.meses += 1;
-    }
+    const tempoAtualMaisAdicional = tempoAtual.add(diffTempo.totalDays, 'days');
 
+    calculo.contribuicao_primaria_19 = `${tempoAtualMaisAdicional.years()}
+                                       -${tempoAtualMaisAdicional.months()}
+                                       -${tempoAtualMaisAdicional.days()}`;
 
-    if (objTempo.dias >= 11) {
-      objTempo.meses = 1;
-      objTempo.anos += 1;
-    }
+    // const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+    // objTempo.anos += diffTempo.years;
+    // objTempo.meses += diffTempo.months;
+    // objTempo.dias += diffTempo.days;
 
-    calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
+    // if (objTempo.dias >= 30) {
+    //   objTempo.dias -= 30;
+    //   objTempo.meses += 1;
+    // }
+
+    // if (objTempo.dias >= 11) {
+    //   objTempo.meses = 1;
+    //   objTempo.anos += 1;
+    // }
+
+    // calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
 
   }
 
@@ -1476,7 +1498,7 @@ export class RgpsResultadosComponent implements OnInit {
           .then((planejamento: PlanejamentoRgps) => {
 
 
-         //   console.log(planejamento);
+            //   console.log(planejamento);
             this.planejamento = planejamento;
 
             const calcClone = Object.assign({}, calculo);

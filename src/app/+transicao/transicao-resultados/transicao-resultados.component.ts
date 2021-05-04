@@ -224,8 +224,8 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   public calcularIdade(final) {
 
     const dataFinal = (final != null) ?
-      moment(final).hour(0).minute(0).second(0).millisecond(0) :
-      moment().hour(0).minute(0).second(0).millisecond(0);
+      moment(final).endOf('day') :
+      moment().endOf('day');
 
     const idade = moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 

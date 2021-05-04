@@ -243,8 +243,8 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
     //  console.log(this.dataAtual);
 
-   // let auxiliarDate = this.dataAtual;
-    let auxiliarDate = (this.dataAtual).clone().add(1,'d');
+    // let auxiliarDate = this.dataAtual;
+    let auxiliarDate = (this.dataAtual).clone().startOf('day').subtract(1, 'day');
     let idadeDibMoment;
     let fimContador = { status: false, ano: 0, pontos: 0 };
     let count = 1;
@@ -297,6 +297,12 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
       // }
 
+      fimContador = this.getRequisitosRegra1(
+        pontos,
+        auxiliarDate.year(),
+        sexo,
+        tempoContribuicao,
+        this.seguradoTransicao.professor);
 
       count++;
       idade += 1;
@@ -306,28 +312,7 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
 
-
-
-      fimContador = this.getRequisitosRegra1(
-        pontos,
-        auxiliarDate.year(),
-        sexo,
-        tempoContribuicao,
-        this.seguradoTransicao.professor);
-
-
     } while (!fimContador.status && pontos <= 76650);
-
-
-    // console.log('-- fim --');
-    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias);
-    // console.log(idade);
-    // console.log(this.converterTempoDias(idade));
-    // console.log(tempoContribuicao);
-    // console.log(this.converterTempoDias(tempoContribuicao));
-    // console.log(pontos);
-    // console.log(count);
-    // console.log('-- fim --');
 
 
     tempoContribuicao = (count + this.seguradoTransicao.contribuicaoFracionadoDias);
@@ -347,6 +332,15 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     dibCorigida.add(1, 'day');
     dibCorigida.add(count, 'days');
 
+    // console.log('-- fim --');
+    // console.log(this.seguradoTransicao.contribuicaoFracionadoDias);
+    // console.log(idade);
+    // console.log(this.converterTempoDias(idade));
+    // console.log(tempoContribuicao);
+    // console.log(this.converterTempoDias(tempoContribuicao));
+    // console.log(pontos);
+    // console.log(count);
+    // console.log('-- fim --');
 
     //  console.log(dibCorigida.add(count, 'days'));
 
