@@ -110,6 +110,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public msgProporcionalAteEC1032019 = '';
   public msgIntegralAteEC1032019 = '';
   public isRegraPontos = false;
+  public totalMedia12Contribuicoes = 0;
 
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
@@ -594,44 +595,55 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       //}
     }
 
-    let totalMediaDozeContribuicoes = 0;
+    //  let totalMediaDozeContribuicoes = 0;
+
     let divisorContribuicoes;
     switch (this.tipoBeneficio) {
       case 1: // Auxilio Doenca Previdenciario
         if (this.dataInicioBeneficio >= this.dataMP664) {
+
           let currency = this.loadCurrency(this.dataInicioBeneficio);
-          if (numeroContribuicoes >= 12) {
-            let contribuicoesPrimarias12 = 0;
-            let contribuicoesSecundarias12 = 0;
-            for (let contribuicao of primeirasContribuicoes) {
-              contribuicoesPrimarias12 += contribuicao.valor_primario;
-              contribuicoesSecundarias12 += contribuicao.valor_secundario;
-            }
-            // Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
-            let moeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-            let salarioMinimoRMI = moeda.salario_minimo;
-            divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / 12, 1);
 
-            if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
-              divisorContribuicoes = salarioMinimoRMI;
-            }
-            totalMediaDozeContribuicoes = divisorContribuicoes;
+          // if (numeroContribuicoes >= 12) {
 
-            // Inserir nas conclusoes:
-            // conclusoes.soma_doze_ultimas_contribuicoes = this.formatMoney(contribuicoesPrimarias12, currency.acronimo);
-            conclusoes.push({
-              order: 0,
-              string: 'Soma das 12 últimas contribuções',
-              value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo)
-            });
-            // conclusoes.media_doze_ultimas_contribuicoes = this.formatMoney(divisorContribuicoes, currency.acronimo);
-            conclusoes.push({
-              order: 0,
-              string: 'Média das 12 últimas contribuções',
-              value: this.formatMoney(divisorContribuicoes, currency.acronimo)
-            });
+          let contribuicoesPrimarias12 = 0;
+          let contribuicoesSecundarias12 = 0;
+
+          for (let contribuicao of primeirasContribuicoes) {
+            contribuicoesPrimarias12 += contribuicao.valor_primario;
+            contribuicoesSecundarias12 += contribuicao.valor_secundario;
           }
+
+          const divisorAuxilioDoenca = (numeroContribuicoes >= 12) ? 12 : numeroContribuicoes;
+
+          // Carregar 1 linha da tabela moeda onde a data é menor ou igual que data_pedido_beneficio;
+          let moeda = this.Moeda.getByDate(this.dataInicioBeneficio);
+          let salarioMinimoRMI = moeda.salario_minimo;
+          divisorContribuicoes = this.formatDecimal((contribuicoesPrimarias12 + contribuicoesSecundarias12) / divisorAuxilioDoenca, 1);
+
+          if (parseFloat(divisorContribuicoes) < salarioMinimoRMI) {
+            divisorContribuicoes = salarioMinimoRMI;
+          }
+
+          this.totalMedia12Contribuicoes = parseFloat(divisorContribuicoes);
+
+          conclusoes.push({
+            order: 21,
+            string: 'Média dos 12 últimos salários de contribuição',
+            value: this.formatMoney(divisorContribuicoes, currency.acronimo)
+          });
+
+          // totalMediaDozeContribuicoes = divisorContribuicoes;
+          // Inserir nas conclusoes:
+          // conclusoes.push({
+          //   order: 0,
+          //   string: 'Soma das 12 últimos salários de contribuição',
+          //   value: this.formatMoney(contribuicoesPrimarias12, currency.acronimo)
+          // });
+
         }
+
+        // }
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
         if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && Math.round(divisorMediaPrimaria) > 1) {
@@ -1095,41 +1107,39 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
 
-    if (dataBeneficio >= this.dataMP664) {
+    // if (dataBeneficio >= this.dataMP664) {
 
-      if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
+    //   // if (this.tipoBeneficio == 1 && rmi > totalMediaDozeContribuicoes) {
 
-        if (totalMediaDozeContribuicoes > 0)
-          rmi = totalMediaDozeContribuicoes;
+    //   //   if (totalMediaDozeContribuicoes > 0)
+    //   //     rmi = totalMediaDozeContribuicoes;
 
-      }
+    //   // }
 
-      if (this.tipoBeneficio == 1) {
-        let rmi2 = 0;
-        rmi2 = somaMedias * (coeficiente / 100);
-        // conclusoes.push({
-        //   order: 0,
-        //   tipo: 'media',
-        //   string: 'Média das contribuições x Coeficiente do Cálculo:', value: this.formatMoney(rmi2, currency.acronimo)
-        // });//resultados['Média das contribuições x Coeficiente do Cálculo: '] = currency.acronimo + rmi2;
+    //   if (this.tipoBeneficio == 1) {
+    //     let rmi2 = 0;
+    //     rmi2 = somaMedias * (coeficiente / 100);
+    //     // conclusoes.push({
+    //     //   order: 0,
+    //     //   tipo: 'media',
+    //     //   string: 'Média das contribuições x Coeficiente do Cálculo:', value: this.formatMoney(rmi2, currency.acronimo)
+    //     // });//resultados['Média das contribuições x Coeficiente do Cálculo: '] = currency.acronimo + rmi2;
 
 
-        console.log(divisorContribuicoes);
-        console.log(rmi);
 
-        if (parseFloat(divisorContribuicoes) < rmi) {
-          rmi = divisorContribuicoes;
-        }
+    //     if (parseFloat(divisorContribuicoes) < rmi) {
+    //       rmi = divisorContribuicoes;
+    //     }
 
-        // conclusoes.push({
-        //   order: 20,
-        //   tipo: 'rmi',
-        //   string: 'Renda Mensal Inicial', value: this.formatMoney(rmi, currency.acronimo)
-        // });//resultados['Renda Mensal Inicial '] = currency.acronimo + rmi;
+    //     // conclusoes.push({
+    //     //   order: 20,
+    //     //   tipo: 'rmi',
+    //     //   string: 'Renda Mensal Inicial', value: this.formatMoney(rmi, currency.acronimo)
+    //     // });//resultados['Renda Mensal Inicial '] = currency.acronimo + rmi;
 
-      }
+    //   }
 
-    }
+    // }
 
     // if (naoFocado) {
 
@@ -2104,6 +2114,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   getRendaMensal(conclusoes, rmi, currency) {
+
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
       // conclusoes.push({order:  0,string:"Renda Mensal Inicial com Fator Previdenciario:",value:this.formatMoney(somaMedias * this.fatorPrevidenciario, currency.acronimo)});//resultados['Renda Mensal Inicial com Fator Previdenciario: '] = currency.acronimo + rmi;
 
@@ -2138,6 +2149,25 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         tipo: 'rmi',
         string: 'Renda Mensal Inicial', value: this.formatMoney(rmi, currency.acronimo)
       });
+
+      // se dib maior que 01-03-2015
+      if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY') >= this.dataMP664) {
+
+        console.log(rmi);
+        console.log(this.totalMedia12Contribuicoes);
+
+        const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
+
+        console.log(rmiConsiderado);
+
+        conclusoes.push({
+          order: 22,
+          tipo: 'rmi',
+          string: 'Renda Mensal Inicial Considerada', value: this.formatMoney(rmiConsiderado, currency.acronimo)
+        });
+
+      }
+
     }
 
 
