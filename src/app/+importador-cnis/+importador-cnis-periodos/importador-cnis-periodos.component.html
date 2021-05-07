@@ -15,7 +15,7 @@
                     >Nome Empresa</label
                   >
                   <div
-                    class="col-md-4"
+                    class="col-md-5"
                     data-placement="bottom"
                     tooltip="Nome da Empresa em até 255 caracteres."
                   >
@@ -49,6 +49,7 @@
                       name="data_inicio"
                       [textMask]="{ mask: dateMask }"
                       type="text"
+                      (keyup)="moveNext($event, 7, 'data_termino')"
                       (change)="errors.clear('data_inicio')"
                     />
                     <small
@@ -72,6 +73,7 @@
                       placeholder="DD/MM/AAAA"
                       [(ngModel)]="data_termino"
                       name="data_termino"
+                      id="data_termino"
                       [textMask]="{ mask: dateMask }"
                       type="text"
                       (change)="errors.clear('data_termino')"
@@ -126,7 +128,7 @@
                     >Fator Multiplicador</label
                   >
                   <div
-                    class="col-md-2"
+                    class="col-md-1"
                     data-placement="bottom"
                     tooltip="Fator multiplicador para tempo especial."
                   >
@@ -151,7 +153,7 @@
                   <!-- </div>
                             <div class="form-group"> -->
                   <label class="col-md-1 control-label">Carência:</label>
-                  <div class="col-md-1">
+                  <div class="col-md-2">
                     <label class="radio radio-inline">
                       <input
                         [(ngModel)]="carencia"
@@ -192,7 +194,7 @@
                       type="button"
                       (click)="setupdatePeriodo()"
                       id="editar_periodos"
-                      class="btn btn-labeled btn-warning"
+                      class="btn btn-labeled btn-warning pull-right"
                     >
                       <span class="btn-label">
                         <i class="fa fa-save"></i> </span
@@ -203,7 +205,7 @@
                       type="button"
                       (click)="insertPeriodo()"
                       id="inserir_periodos"
-                      class="btn btn-labeled btn-primary"
+                      class="btn btn-labeled btn-primary pull-right"
                     >
                       <span class="btn-label">
                         <i class="fa fa-calendar"></i> </span
@@ -237,7 +239,7 @@
                     >SC</span
                   >
                 </th>
-                <th class="text-center" width="80px">
+                <th class="text-center" width="110px">
                   &nbsp;&nbsp;Ações&nbsp;&nbsp;
                 </th>
               </tr>
@@ -282,7 +284,7 @@
                   <button
                     type="button"
                     id="sc-{{vinculo.index}}"
-                    (click)="showContribuicoes(vinculo, index)"
+                    (click)="showContribuicoes(vinculo, vinculo.index)"
                     class="btn btn-success btn-xs"
                     [ngClass]="{
                       'bg-color-red': vinculo.contribuicoes_pendentes > 0
@@ -294,6 +296,14 @@
                 </td>
                 <td class="text-center">
                   <div class="btn-group">
+                    <button
+                    type="button"
+                    class="btn btn-xs btn-default"
+                    (click)="copiarVinculo(vinculo.index)"
+                    title="Copiar"
+                  >
+                    <i class="fa fa-copy fa-1-7x"></i>
+                  </button>
                     <button
                       type="button"
                       class="btn btn-xs btn-warning"

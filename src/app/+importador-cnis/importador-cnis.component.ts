@@ -52,9 +52,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   ngOnInit() {
     // this.ref.markForCheck();
     // this.ref.detectChanges();
-    // this.checkUserSession();
+    this.checkUserSession();
 
-    // console.log(this.dadosPassoaPasso);
+    if (this.dadosPassoaPasso == undefined) {
+      this.dadosPassoaPasso = {
+        origem: 'contagem',
+        type: 'auto'
+      };
+    }
+
+    this.checkUserSession();
   }
 
 
@@ -63,21 +70,12 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.ref.markForCheck();
     this.ref.detectChanges();
     this.checkUserSession();
-
-    console.log(changes);
-    console.log(changes.dadosPassoaPasso.currentValue);
-    console.log(this.dadosPassoaPasso);
     this.setExibirForm(this.dadosPassoaPasso);
+
   }
 
   private setExibirForm(dadosPassoaPasso) {
-    console.log(dadosPassoaPasso);
-    console.log((dadosPassoaPasso != undefined
-      && dadosPassoaPasso.origem === 'passo-a-passo'
-      && dadosPassoaPasso.type === 'manual'
-    ));
-
-    if (dadosPassoaPasso != undefined
+      if (dadosPassoaPasso !== undefined
       && dadosPassoaPasso.origem === 'passo-a-passo'
       && dadosPassoaPasso.type === 'manual'
     ) {
@@ -90,6 +88,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         funcao: '',
         user_id: this.userId,
       };
+
       this.vinculos = [];
       this.isUpdatingSegurado = false;
       this.isUpdatingVinculos = false;
@@ -97,6 +96,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       this.exibirForm = true;
 
     }
+ 
+    this.segurado.user_id = this.userId;
 
   }
 
@@ -105,7 +106,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
     this.userId = this.route.snapshot.queryParams['user_id'];
 
-    if (this.userId === undefined) {
+    if (this.userId === undefined || typeof this.userId === 'undefined') {
       this.userId = this.route.snapshot.params['id'] || localStorage.getItem('user_id');
     }
 
@@ -132,7 +133,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
-    // console.log(eventCountSeguradoErros);
+   // console.log(eventCountSeguradoErros);
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {
@@ -146,7 +147,9 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     const erros = this.PeriodosComponent.verificarVinculos();
     const errosSegurado = this.SeguradoComponent.validate();
 
-    if (erros === 0 && errosSegurado === 0) {
+    console.log(this.userId);
+
+    if (erros === 0 && errosSegurado.count === 0) {
 
       this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
         this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {

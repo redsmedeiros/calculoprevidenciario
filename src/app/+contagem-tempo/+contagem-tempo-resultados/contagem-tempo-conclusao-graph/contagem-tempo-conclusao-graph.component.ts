@@ -37,6 +37,8 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       this.createGrafData();
 
       this.createLabel();
+      console.log(this.objYkeys)
+      console.log(this.objLabels)
 
       this.optionsGraph = {
         xkey: 'period',
@@ -65,19 +67,22 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // xLabelFormat: function (d) { return this.formatReceivedDate(d); }
         hoverCallback: function (index, options, content, row) {
 
-        
+
             // console.log(options.data[index]);
             const obj = options.data[index];
             let labelHover = '';
             let vinculos = '';
             let periodo = '';
-            let text = '';
+
+            console.log(obj);
+
 
             Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
-
+              
+         
               if (val === 'period') {
                 periodo = obj[val];
-              } else if (typeof obj[val] !== 'undefined' && obj[val] !== undefined && obj[val] != '') {
+              } else if (typeof obj[val] != 'undefined' && obj[val] != undefined && obj[val] != '') {
                 vinculos += '&nbsp;' + obj[val] + ','
               }
               //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
@@ -93,8 +98,13 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
               }
 
             }
-            return labelHover.slice(0, -1);
-         
+
+            if (labelHover != '') {
+              console.log(labelHover.slice(0, -1));
+              return labelHover.slice(0, -1);
+            }
+           
+            return {sdmlaksd:'asdasd'};
         }
 
       };

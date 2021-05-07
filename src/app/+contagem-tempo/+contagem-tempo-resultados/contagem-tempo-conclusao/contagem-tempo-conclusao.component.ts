@@ -25,6 +25,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   public fimContador88 = this.toMoment('05/10/1988');
   public fimContador91 = this.toMoment('04/04/1991');
+  public fimContador94 = this.toMoment('01/07/1994');
   public fimContador98 = this.toMoment('16/12/1998');
   public fimContador99 = this.toMoment('29/11/1999');
   public fimContador03 = this.toMoment('31/12/2003');
@@ -34,6 +35,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoTotalConFator: any;
   public tempoTotalConFator88: any;
   public tempoTotalConFator91: any;
+  public tempoTotalConFator94: any;
   public tempoTotalConFator98: any;
   public tempoTotalConFator99: any;
   public tempoTotalConFator15: any;
@@ -43,6 +45,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public carencia = 0;
   public carencia88 = 0;
   public carencia91 = 0;
+  public carencia94 = 0;
   public carencia98 = 0;
   public carencia99 = 0;
   public carencia03 = 0;
@@ -57,6 +60,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public idade360Atual: any;
   public idade360EC103: any;
   public idade360AteEC20: any;
+  public idade360Ate94: any;
   public idade360AteUltimoVinculo: any;
 
 
@@ -69,6 +73,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   public isUpdateTotalTempoIdadeA = true;
   public isUpdateTotalTempoIdadeB = true;
+  public isUpdateTotalTempoIdade94 = true;
   public isUpdateTotalTempoIdadeEC103 = true;
   public isUpdateTotalTempoIdadeUltimoVinculo = true;
 
@@ -81,6 +86,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoParaAposProp: any; // Tempo a cumprir para aposentadoria proporcional
   public idadeMinimaAposProp: any; // idadeMinimaExigidaParaAposentadoriaProporcional
   public tempoCumprirAposItentegal: any; // Tempo a cumprir para Aposentadoria Integral
+  public somatoriaTempoContribIdade94: any; // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdade: any; // Somatória do tempo de contribuição e idade
   public somatoriaTempoContribIdadeAtual: any; // Somatória do tempo de contribuição e idade atual
   public somatoriaTempoContribIdadeEC103: any; // Somatória do tempo de contribuição e idade ate EC103
@@ -374,6 +380,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let count = 0;
       let count88 = 0;
       let count91 = 0;
+      let count94 = 0;
       let count98 = 0;
       let count99 = 0;
       let count15 = 0;
@@ -382,6 +389,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       const fimContador88 = this.momentEndFaixaContador(this.fimContador88);
       const fimContador91 = this.momentEndFaixaContador(this.fimContador91);
+      const fimContador94 = this.momentEndFaixaContador(this.fimContador94);
       const fimContador98 = this.momentEndFaixaContador(this.fimContador98);
       const fimContador99 = this.momentEndFaixaContador(this.fimContador99);
       const fimContador15 = this.momentEndFaixaContador(this.fimContador15);
@@ -409,6 +417,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
           if (auxiliarDate.isSameOrBefore(fimContador91, 'month')) {
             count91 += (auxiliarDate.isSame(fimContador91, 'month')) ? fimContador91.date() : rstMelhorTempo.melhorTempo;
+          };
+          if (auxiliarDate.isSameOrBefore(fimContador94, 'month')) {
+            count94 += (auxiliarDate.isSame(fimContador94, 'month')) ? fimContador94.date() : rstMelhorTempo.melhorTempo;
           };
 
           if (auxiliarDate.isSameOrBefore(fimContador98, 'month')) {
@@ -447,11 +458,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       count15 = this.checkFimPeriodoApliacarAjuste(count15, count, fimContador15, fimContadorDias);
       count99 = this.checkFimPeriodoApliacarAjuste(count99, count, fimContador99, fimContadorDias);
       count98 = this.checkFimPeriodoApliacarAjuste(count98, count, fimContador98, fimContadorDias);
+      count91 = this.checkFimPeriodoApliacarAjuste(count91, count, fimContador91, fimContadorDias);
+      count94 = this.checkFimPeriodoApliacarAjuste(count94, count, fimContador94, fimContadorDias);
       count88 = this.checkFimPeriodoApliacarAjuste(count88, count, fimContador88, fimContadorDias);
 
       this.tempoTotalConFator = DefinicaoTempo.convertD360ToDMY(count);
       this.tempoTotalConFator88 = DefinicaoTempo.convertD360ToDMY(count88);
       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
+      this.tempoTotalConFator94 = DefinicaoTempo.convertD360ToDMY(count94);
       this.tempoTotalConFator98 = DefinicaoTempo.convertD360ToDMY(count98);
       this.tempoTotalConFator99 = DefinicaoTempo.convertD360ToDMY(count99);
       this.tempoTotalConFator15 = DefinicaoTempo.convertD360ToDMY(count15);
@@ -598,6 +612,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       let count = 0;
       let count88 = 0;
       let count91 = 0;
+      let count94 = 0;
       let count98 = 0;
       let count99 = 0;
       let count03 = 0;
@@ -605,6 +620,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       const fimContador88 = this.momentCarencia(this.fimContador88);
       const fimContador91 = this.momentCarencia(this.fimContador91);
+      const fimContador94 = this.momentCarencia(this.fimContador94);
       const fimContador98 = this.momentCarencia(this.fimContador98);
       const fimContador99 = this.momentCarencia(this.fimContador99);
       const fimContador03 = this.momentCarencia(this.fimContador03);
@@ -622,6 +638,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           if (auxiliarDate <= fimContador91) {
             count91++;
           };
+
+          if (auxiliarDate <= fimContador94) {
+            count94++;
+          };
+
 
           if (auxiliarDate <= fimContador98) {
             count98++;
@@ -649,6 +670,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.carencia = count;
       this.carencia88 = count88;
       this.carencia91 = count91;
+      this.carencia94 = count94;
       this.carencia98 = count98;
       this.carencia99 = count99;
       this.carencia03 = count03;
@@ -741,6 +763,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
+  public somatoriaTempoContribuicaoIdade94() {
+
+    return new Promise((resolve, reject) => {
+
+      let rstTemp = 0;
+      rstTemp = (this.tempoTotalConFator94.fullDays + this.idade360Ate94.fullDays);
+
+      this.somatoriaTempoContribIdade94 = DefinicaoTempo.convertD360ToDMY(rstTemp);
+
+      if (this.somatoriaTempoContribIdade94.fullDays > 0) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+  }
+
+
+  
+
+
   public somatoriaTempoContribuicaoIdadeAteEC103() {
 
 
@@ -813,6 +856,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
 
+    this.idade360Ate94 = DefinicaoTempo.calcularTempo360(dataNasc, '1994-07-01');
     this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
     this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
     this.idade360AteUltimoVinculo = DefinicaoTempo.calcularTempo360(dataNasc, this.limitesDoVinculo.fim.format('YYYY-MM-DD'));
@@ -839,6 +883,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     this.somatoriaTempoContribuicaoIdadeP().then(result => {
       // console.log(result);
       this.isUpdateTotalTempoIdadeA = false;
+    }).catch((error) => {
+      console.log(error);
+    });
+
+    this.somatoriaTempoContribuicaoIdade94().then(result => {
+      // console.log(result);
+      this.isUpdateTotalTempoIdade94 = false;
     }).catch((error) => {
       console.log(error);
     });

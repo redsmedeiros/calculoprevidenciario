@@ -88,12 +88,12 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   preencherMatriz(periodo) {
 
-    var ano = periodo.competencia.split('/')[1];
-    var result = _.find(this.matriz, (item) => {
+    let ano = periodo.competencia.split('/')[1];
+    let result = _.find(this.matriz, (item) => {
       return item.ano === ano;
     });
 
-    var valores = [];
+    let valores = [];
 
     if (result) {
       valores = result.valores;
@@ -184,11 +184,11 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValid()) {
 
-      var anoinicio = this.inicioPeriodo.split('/')[1];
-      var mesinicio = this.inicioPeriodo.split('/')[0];
-      var anofinal = this.finalPeriodo.split('/')[1];
-      var mesfinal = this.finalPeriodo.split('/')[0];
-      var mesi = 0;
+      let anoinicio = this.inicioPeriodo.split('/')[1];
+      let mesinicio = this.inicioPeriodo.split('/')[0];
+      let anofinal = this.finalPeriodo.split('/')[1];
+      let mesfinal = this.finalPeriodo.split('/')[0];
+      let mesi = 0;
 
       this.matriz.map(ano => {
 
@@ -211,8 +211,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   preencherComSalarioMinimo() {
 
-    var mesi = 0;
-    var salariominimo: any[][] = [];
+    let mesi = 0;
+    let salariominimo: any[][] = [];
 
     this.matriz.map(ano => {
       mesi = 1;
@@ -255,6 +255,14 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
   }
+
+  private insertSCEnter(ev) {
+
+    if (ev.keyCode === 13) {
+      this.preencherComValor();
+    }
+  }
+
 
   public obterMoedaSalarioMatriz(salariominimo) {
 

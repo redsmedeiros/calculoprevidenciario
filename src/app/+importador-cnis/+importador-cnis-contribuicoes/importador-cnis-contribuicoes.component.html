@@ -66,6 +66,7 @@
                   name="salarioContribuicao"
                   id="valorInput"
                   (change)="errors.clear('salarioContribuicao')"
+                  (keyup)="insertSCEnter($event)" 
                   type="text"
                 />
                 <small
@@ -79,11 +80,13 @@
               type="submit"
               (click)="preencherComValor()"
               class="btn btn-labeled btn-primary"
+              data-placement="bottom"
+              tooltip="Inserir intervalo dos Salários de Contribuição"
             >
               <span class="btn-label">
                 <i class="fa fa-calendar"></i>
               </span>
-              Inserir valor contribuição
+              Inserir intervalo dos SC
             </button>
           </fieldset>
         </form>
@@ -113,7 +116,7 @@
             >
               <thead>
                 <tr>
-                  <th style="text-align: center; width: 58px;">Ano</th>
+                  <th style="text-align: center; width: 62px;">Ano</th>
                   <th style="text-align: center; width: 80px;">Jan</th>
                   <th style="text-align: center; width: 80px;">Fev</th>
                   <th style="text-align: center; width: 80px;">Mar</th>
@@ -360,7 +363,7 @@
         id="salvar"
         (click)="salvarContribuicoes()"
       >
-        <i class="fa fa-save"></i> Salvar valores de contribuição
+        <i class="fa fa-save"></i> Salvar
       </button>
     </div>
   </div>

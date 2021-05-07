@@ -67,6 +67,23 @@
       </td>
     </tr>
     <tr>
+      <td>Tempo de contribuição até o término (01/07/1994)</td>
+      <td class="text-center">{{ tempoTotalConFator94.years }}</td>
+      <td class="text-center">{{ tempoTotalConFator94.months }}</td>
+      <td class="text-center">{{ tempoTotalConFator94.days }}</td>
+      <td class="text-center">{{ carencia94 }}</td>
+      <td class="text-center no-padding not-print">
+        <span *ngIf="tempoTotalConFator94.fullDays > 0">
+          <app-contagem-tempo-conclusao-exportar-rgps
+            [seguradoId]="segurado.id"
+            [dataExportacao]="'01/07/1994'"
+            [dadosParaExportar]="this.dadosParaExportar"
+            [label]="'94'"
+          ></app-contagem-tempo-conclusao-exportar-rgps>
+        </span>
+      </td>
+    </tr>
+    <tr>
       <td>Tempo de contribuição até a Emenda nº 20/98 - (16/12/1998)</td>
       <td class="text-center">{{ tempoTotalConFator98.years }}</td>
       <td class="text-center">{{ tempoTotalConFator98.months }}</td>
@@ -144,7 +161,7 @@
       <td class="text-center">
         {{ tempoDePedApProp.days }}
       </td>
-      <td rowspan="9" colspan="2"></td>
+      <td rowspan="10" colspan="2"></td>
     </tr>
     <tr >
       <td>
@@ -185,6 +202,17 @@
         (16/12/1998)
       </td>
       <td colspan="3" class="text-center">{{ idadeMinimaAposProp }}</td>
+    </tr>
+    <tr *ngIf="!isUpdateTotalTempoIdade94">
+      <td>
+        Somatório do Tempo de Contribuição e Idade (01/07/1994)
+      </td>
+      <td class="text-center">{{ somatoriaTempoContribIdade94.years }}</td>
+      <td class="text-center">{{ somatoriaTempoContribIdade94.months }}</td>
+      <td class="text-center">
+        {{ somatoriaTempoContribIdade94.days }}
+      </td>
+      <td *ngIf="isPeridoAposReforma"  rowspan="3" colspan="2"></td>
     </tr>
     <tr *ngIf="!isUpdateTotalTempoIdadeA">
       <td>

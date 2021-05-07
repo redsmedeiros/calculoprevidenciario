@@ -79,6 +79,8 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
 
   public createSeguradoImportador(userId) {
+
+    // this.formData.user_id = this.userId;
     return this.Segurado.save(this.formData)
       .then((model: SeguradoModel) => {
         return model.id;
@@ -94,7 +96,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.errors.clear();
 
     if (this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
+      this.errors.add({ 'nome': ['O Nome é obrigatório.']});
       this.countSeguradoErros++;
     }
 
@@ -146,7 +148,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
     this.eventCountSeguradoErros.emit(this.countSeguradoErros);
-    return this.countSeguradoErros;
+    return {count: this.countSeguradoErros , erros: this.errors };
   }
 
 
