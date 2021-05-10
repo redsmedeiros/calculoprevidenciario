@@ -1211,7 +1211,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           }
         }
 
-        if (especiesSemAbono.includes(this.calculo.tipo_aposentadoria)) {
+        if (especiesSemAbono.includes(this.calculo.tipo_aposentadoria) || [12, 17, 24, 2021].includes(this.calculo.tipo_aposentadoria)) {
           beneficioDevidoAbono = 0.0;
         }
 
