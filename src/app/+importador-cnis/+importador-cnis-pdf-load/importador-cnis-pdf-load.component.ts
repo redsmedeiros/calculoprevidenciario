@@ -279,8 +279,8 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
           arrayText[num_col].search(/(\d{2}\/\d{2}\/\d{4})|(\d{2}\/\d{4})/) > 0) ? num_col : arrayText.length - 1;
 
         arrayOrganizadoNew.push({
-          competencia: arrayText[0].trim(),
-          contrib: arrayText[num_col].trim()
+          cp: arrayText[0].trim(),
+          sc: arrayText[num_col].trim()
         });
 
       }

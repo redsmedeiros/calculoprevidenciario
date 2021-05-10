@@ -61,21 +61,23 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       };
     }
 
-    this.checkUserSession();
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
 
+    this.checkUserSession();
+
     this.ref.markForCheck();
     this.ref.detectChanges();
-    this.checkUserSession();
     this.setExibirForm(this.dadosPassoaPasso);
 
   }
 
   private setExibirForm(dadosPassoaPasso) {
-      if (dadosPassoaPasso !== undefined
+
+
+    if (dadosPassoaPasso !== undefined
       && dadosPassoaPasso.origem === 'passo-a-passo'
       && dadosPassoaPasso.type === 'manual'
     ) {
@@ -96,8 +98,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       this.exibirForm = true;
 
     }
- 
-    this.segurado.user_id = this.userId;
+
+    // this.segurado.user_id = this.userId;
 
   }
 
@@ -133,7 +135,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
-   // console.log(eventCountSeguradoErros);
+    // console.log(eventCountSeguradoErros);
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {

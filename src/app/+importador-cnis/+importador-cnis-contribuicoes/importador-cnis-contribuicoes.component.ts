@@ -88,7 +88,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   preencherMatriz(periodo) {
 
-    let ano = periodo.competencia.split('/')[1];
+    let ano = periodo.cp.split('/')[1];
     let result = _.find(this.matriz, (item) => {
       return item.ano === ano;
     });
@@ -101,7 +101,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       valores = ['', '', '', '', '', '', '', '', '', '', '', ''];
     }
 
-    valores[+periodo.competencia.split('/')[0] - 1] = periodo.contrib;
+    valores[+periodo.cp.split('/')[0] - 1] = periodo.sc;
 
     var obj = {
       ano: ano,
@@ -125,19 +125,28 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       // if (dateFinalPeriodo >= dataLimite) {
       //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
       // }
+
+      if (dateInicioPeriodo.isBefore(moment(this.vinculo.data_inicio, 'DD/MM/YYYY'), 'month')) {
+        this.errors.add({ 'inicioPeriodo': ['Insira uma competência posterior ou igual ao inicio do período'] });
+      }
     }
+
+    console.log(dateFinalPeriodo)
+    console.log(this.vinculo)
 
     //finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
       this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
     } else {
+
       if (dateFinalPeriodo < dateInicioPeriodo) {
         this.errors.add({ 'finalPeriodo': ['Insira uma data posterior a data inicial'] });
       }
 
-      // if (dateFinalPeriodo >= dataLimite) {
-      //   this.errors.add({ "finalPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
-      // }
+      if (dateFinalPeriodo.isAfter(moment(this.vinculo.data_termino, 'DD/MM/YYYY'), 'month')) {
+        this.errors.add({ 'finalPeriodo': ['Insira uma competência anterior ou igual ao final do período'] });
+      }
+
     }
 
     //salarioContribuicao
@@ -161,12 +170,12 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   copiarPeriodo(ano) {
 
     var result = _.filter(this.vinculo.contribuicoes, (item) => {
-      return item.competencia.indexOf(ano) > -1;
+      return item.cp.indexOf(ano) > -1;
     });
 
     if (result) {
-      this.inicioPeriodo = result[0].competencia;
-      this.finalPeriodo = result[result.length - 1].competencia;
+      this.inicioPeriodo = result[0].cp;
+      this.finalPeriodo = result[result.length - 1].cp;
     }
 
   }

@@ -155,11 +155,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const pchave = chave.substring(4, 6) + '/' + chave.substring(0, 4);
 
       // result = _.find(contribuicoes, (item) => {
-      //   return item.competencia === pchave;
+      //   return item.cp === pchave;
       // });
 
       result = contribuicoes.find((item) => {
-        return item.competencia === pchave;
+        return item.cp === pchave;
       });
 
       console.log(result);
@@ -168,8 +168,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         contribuicoesList.push(result);
       } else {        /* se não encontrou a contribuição no mes*/
         contribuicoesList.push({
-          competencia: pchave,
-          contrib: '0,00',
+          cp: pchave,
+          sc: '0,00',
         });
       }
 
@@ -181,31 +181,31 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     /* diferença que deve ser removida do periodo de contribuições */
 
-    const diferencas = contribuicoes.filter(c1 => contribuicoesList.filter(c2 => c2.competencia === c1.competencia).length === 0);
+    const diferencas = contribuicoes.filter(c1 => contribuicoesList.filter(c2 => c2.cp === c1.cp).length === 0);
 
 
     // diferencas.forEach(diferenca => {
 
     //   // _.remove(contribuicoesList, function (contribuicao) {
-    //   //   return contribuicao.competencia == diferenca.competencia;
+    //   //   return contribuicao.cp == diferenca.cp;
     //   // });
 
     // });
 
     // diferencas.forEach(diferenca => {
     // _.remove(contribuicoesList, function (contribuicao) {
-    //   //   return contribuicao.competencia == diferenca.competencia;
+    //   //   return contribuicao.cp == diferenca.cp;
     //   // });
     // });
 
     diferencas.forEach(diferenca => {
 
       // _.remove(contribuicoesList, function (contribuicao) {
-      //   return contribuicao.competencia == diferenca.competencia;
+      //   return contribuicao.cp == diferenca.cp;
       // });
 
       contribuicoesList.filter(function (contribuicao, index, arr) {
-        return contribuicao.competencia == diferenca.competencia;
+        return contribuicao.cp == diferenca.cp;
       });
 
     });
@@ -233,7 +233,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datatermino = (vinculo.periodo[1] === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[1]) :
         this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
 
-      const result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') { return item } }).length;
+      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
       const line = {
         nit: vinculo.nitEmpregador,
@@ -348,7 +348,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           const datatermino = (this.data_termino === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio) :
             this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_termino);
 
-          const result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') { return item } }).length;
+          const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
           vinculo.datainicio = datainicio;
           vinculo.datatermino = datatermino;
@@ -394,7 +394,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datatermino = (this.data_termino === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_termino) :
         this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
 
-      const result = contribuicoes.filter(function (item) { if (item.contrib == '0,00') { return item } }).length;
+      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
       const line = {
         data_inicio: this.data_inicio,
@@ -613,8 +613,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         if (contribuicao != '') {
           chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
           contribuicoesList.push({
-            competencia: chave,
-            contrib: contribuicao,
+            cp: chave,
+            sc: contribuicao,
           });
         }
       });
@@ -625,8 +625,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     console.log(this.vinculosList)
     console.log(this.vinculo_index)
 
-    // let result = _.filter(contribuicoesList, function (item) { if (item.contrib == '0,00')  { return item; } }).length;
-    const result = contribuicoesList.filter(function (item) { if (item.contrib == '0,00') { return item } }).length;
+    // let result = _.filter(contribuicoesList, function (item) { if (item.sc == '0,00')  { return item; } }).length;
+    const result = contribuicoesList.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
 
     this.vinculosList.forEach(vinculo => {
