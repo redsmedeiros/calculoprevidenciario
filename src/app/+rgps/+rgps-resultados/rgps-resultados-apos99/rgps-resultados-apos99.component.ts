@@ -1474,14 +1474,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-    this.calculo.soma_contribuicao = somaContribuicoes;
-    this.calculo.valor_beneficio = this.valorExportacao;
+    // this.calculo.soma_contribuicao = somaContribuicoes;
+    // this.calculo.valor_beneficio = this.valorExportacao;
 
+    this.setObjConclusoesMelhor(rmi, somaContribuicoes, 'antes');
+
+    
+    this.CalculoRgpsService.update(this.calculo);
     this.isUpdating = false;
 
-    this.CalculoRgpsService.update(this.calculo);
-
   }
+
 
   private getRequisitoPontos() {
 

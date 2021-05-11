@@ -458,7 +458,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.valorExportacao = melhorValorRMI;
     this.melhorSoma = melhorSoma;
 
-  }
+  }s
 
 
   /**
@@ -475,8 +475,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       setTimeout(() => {
 
         // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-        this.calculo.soma_contribuicao = this.melhorSoma;
-        this.calculo.valor_beneficio = this.melhorValorRMI;
+        // this.calculo.soma_contribuicao = this.melhorSoma;
+        // this.calculo.valor_beneficio = this.melhorValorRMI;
+
+        this.setObjConclusoesMelhor(this.melhorValorRMI, this.melhorSoma, 'apos')
         this.CalculoRgpsService.update(this.calculo);
 
       }, 500);
@@ -747,7 +749,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       if ((dataAnosIdade.isValid() &&
         dataAnosIdade.isBefore('1991-01-01', 'year'))) {
 
-          carenciaProgressivaRequisito = 60;
+        carenciaProgressivaRequisito = 60;
 
       }
 

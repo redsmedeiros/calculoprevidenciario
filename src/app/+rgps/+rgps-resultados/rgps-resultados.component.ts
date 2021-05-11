@@ -277,6 +277,11 @@ export class RgpsResultadosComponent implements OnInit {
   public planejamento;
   public isPlanejamento = false;
   public planejamentoContribuicoesAdicionais = [];
+  // public objConclusoes = {
+  //   aposEc103: { rmi: 0, soma: 0 },
+  //   antesEc103: { rmi: 0, soma: 0 },
+  // };
+
 
 
   //pbc parametro get
@@ -1357,7 +1362,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   private addTempoContribuicao(calculo, diffTempo) {
 
-   const testeobjTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+    const testeobjTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
 
     const tempoAtual = moment.duration({
       year: testeobjTempo.anos,
@@ -1636,6 +1641,25 @@ export class RgpsResultadosComponent implements OnInit {
       //this.ngOnInit();
     }
 
+  }
+
+  public setObjConclusoesMelhor(rmi, somaconstribuicoes, typeEC103) {
+
+    // if (typeEC103 === 'antes') {
+    //   this.objConclusoes.antesEc103.soma = somaconstribuicoes;
+    //   this.objConclusoes.antesEc103.rmi = rmi;
+    // } else {
+    //   this.objConclusoes.aposEc103.soma = somaconstribuicoes;
+    //   this.objConclusoes.aposEc103.rmi = rmi;
+    // }
+
+    if (this.calculo.valor_beneficio < rmi) {
+
+      this.calculo.soma_contribuicao = somaconstribuicoes;
+      this.calculo.valor_beneficio = rmi;
+    }
+
+    return true;
   }
 
   private translateNovosNomesEspecie(especie) {
