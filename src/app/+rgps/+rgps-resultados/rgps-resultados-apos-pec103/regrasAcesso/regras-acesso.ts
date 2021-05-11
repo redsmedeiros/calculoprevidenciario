@@ -97,25 +97,24 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-          // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
+            // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
             // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
 
             // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
 
-            // this.carenciaConformDataFiliacao = 190;
-            // this.calculo.carencia = 190;
-            // this.numeroDeContribuicoes = 205;
-
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - this.carenciaRequisito);
-
 
             // deve restar 12 após 1994, pois são os valores base para pós EC103
             if (
                 (maxDescarteCarencia >= this.numeroDeContribuicoes)
             ) {
-                maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
-            }
 
+                if (this.numeroDeContribuicoes > 12) {
+                    maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
+                } else {
+                    maxDescarteCarencia = (this.numeroDeContribuicoes - 1);
+                }
+            }
 
             if (maxDescarteCarencia < maximoDescarte.meses) {
 
@@ -875,7 +874,7 @@ export class RegrasAcesso {
 
             if ((tempoFinalContrib - tempo_contribuicao) < 0.002737850787132) {
                 status = true;
-            } 
+            }
 
         }
 
