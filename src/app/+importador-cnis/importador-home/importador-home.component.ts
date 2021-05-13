@@ -300,9 +300,20 @@ export class ImportadorHomeComponent implements OnInit {
 
     this.dadosPassoaPasso.type = value;
     this.isTypeEntradaDados = (this.dadosPassoaPasso.type !== '');
-    this.setStepValidate('step1', (this.dadosPassoaPasso.type !== ''));
+
+    if (this.dadosPassoaPasso.type !== 'seguradoExistente') {
+
+      this.setStepValidate('step1', (this.dadosPassoaPasso.type !== ''));
+
+    } else {
+
+      this.seguradoSelecionado = {};
+      this.calculoSelecionado = {};
+
+    }
 
   }
+
 
   /**
   * Selecionar somente umm checkBox De acordo com a Classe e Id
@@ -390,13 +401,6 @@ export class ImportadorHomeComponent implements OnInit {
       this.seguradoSelecionado = {};
     }
 
-    // if ((dataSegurado.id === this.seguradoSelecionado.id)) {
-    //   stepStatus = false;
-    //   this.seguradoSelecionado = {};
-    // }else{
-
-    // }
-
     this.setStepValidate('step1', stepStatus);
     this.isSeguradoSelecionado = stepStatus;
 
@@ -405,18 +409,19 @@ export class ImportadorHomeComponent implements OnInit {
 
   public setCalculoSelecionado(dataCalculo) {
 
-    // let stepStatus = false;
-    // this.calculoSelecionado = {};
+    let stepStatus = false;
+    this.calculoSelecionado = {};
 
-    // this.calculoSelecionado = dataCalculo;
-    // this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
-    // stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
+    this.calculoSelecionado = dataCalculo;
+    console.log(this.calculoSelecionado);
+    this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
+    stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
     // // stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
 
-    // if (this.checkedUniqueCount(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
-    //   stepStatus = false;
-    //   this.calculoSelecionado = {};
-    // }
+    if (this.checkedUniqueCount(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
+      stepStatus = false;
+      this.calculoSelecionado = {};
+    }
 
     // this.setStepValidate('step2', stepStatus);
     // this.isCalculoSelecionado = stepStatus;

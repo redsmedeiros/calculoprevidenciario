@@ -66,6 +66,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 
+    console.log(this.dadosPassoaPasso);
+
     this.checkUserSession();
 
     this.ref.markForCheck();
@@ -76,20 +78,39 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   private setExibirForm(dadosPassoaPasso) {
 
+    this.segurado = {
+      nome: '',
+      id_documento: '',
+      numero_documento: '',
+      data_nascimento: '',
+      sexo: '',
+      funcao: '',
+      user_id: this.userId,
+    };
 
     if (dadosPassoaPasso !== undefined
       && dadosPassoaPasso.origem === 'passo-a-passo'
       && dadosPassoaPasso.type === 'manual'
     ) {
-      this.segurado = {
-        nome: '',
-        id_documento: '',
-        numero_documento: '',
-        data_nascimento: '',
-        sexo: '',
-        funcao: '',
-        user_id: this.userId,
-      };
+    
+      this.vinculos = [];
+      this.isUpdatingSegurado = false;
+      this.isUpdatingVinculos = false;
+      this.isUploadReaderComplete = true;
+      this.exibirForm = true;
+
+    } else if (dadosPassoaPasso !== undefined
+      && dadosPassoaPasso.origem === 'passo-a-passo'
+      && dadosPassoaPasso.type === 'seguradoExistente'
+    ) {
+
+       const seguradoSelecionado = (sessionStorage.getItem('seguradoSelecionado') !== undefined) ?
+        JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
+      const calculosSelecionado = (sessionStorage.getItem('calculosSelecionado') !== undefined) ?
+        JSON.parse(sessionStorage.getItem('calculosSelecionado')) : {};
+
+      console.log(seguradoSelecionado)
+      console.log(calculosSelecionado)
 
       this.vinculos = [];
       this.isUpdatingSegurado = false;
@@ -149,7 +170,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     const erros = this.PeriodosComponent.verificarVinculos();
     const errosSegurado = this.SeguradoComponent.validate();
 
-    console.log(this.userId);
 
     if (erros === 0 && errosSegurado.count === 0) {
 

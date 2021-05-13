@@ -264,6 +264,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   private ajusteListVinculos(calculoId) {
 
+    console.log(this.vinculosList);
+
     this.vinculosListPost = [];
     for (const vinculo of this.vinculosList) {
       this.vinculosListPost.push(
@@ -275,7 +277,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           condicao_especial: this.boolToLiteral(vinculo.condicao_especial),
           carencia: this.boolToLiteral(vinculo.carencia),
           licenca_premio_nao_usufruida: 0,
-          id_contagem_tempo: calculoId
+          id_contagem_tempo: calculoId,
+          sc: JSON.stringify(vinculo.contribuicoes),
+          sc_menor_minimo: ''
         }
       );
     }

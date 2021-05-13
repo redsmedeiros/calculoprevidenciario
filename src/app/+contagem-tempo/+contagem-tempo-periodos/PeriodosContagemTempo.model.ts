@@ -14,6 +14,8 @@ export class PeriodosContagemTempo extends Model {
     fator_condicao_especial: '',
     carencia: '',
     licenca_premio_nao_usufruida: '',
+    sc: '',
+    sc_menor_minimo: '',
     created_at: '',
     updated_at: '',
   };
@@ -26,6 +28,8 @@ export class PeriodosContagemTempo extends Model {
   public fator_condicao_especial;
   public carencia;
   public licenca_premio_nao_usufruida;
+  public sc;
+  public sc_menor_minimo;
   public created_at;
   public updated_at;
 

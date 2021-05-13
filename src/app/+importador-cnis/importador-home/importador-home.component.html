@@ -93,29 +93,89 @@
                     >
                       <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                          <div
-                            class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-md-offset-1"
-                          >
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
                               class="well well-sm txt-color-white text-center"
-                              (click)="setOptionEntradaDados($event,'manual')"
-                              [ngClass]="( dadosPassoaPasso.type === 'manual')? 'bg-color-blue' : 'bg-color-darken'"
+                              (click)="setOptionEntradaDados($event, 'manual')"
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'manual'
+                                  ? 'bg-color-blue'
+                                  : 'bg-color-darken'
+                              "
                             >
                               <h5>Selecione para inserir dados manualmente</h5>
                               <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
 
-                          <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
                               class="well well-sm txt-color-white text-center"
-                              (click)="setOptionEntradaDados($event,'cnis')"
-                              [ngClass]="( dadosPassoaPasso.type === 'cnis')? 'bg-color-blue' : 'bg-color-darken'"
+                              (click)="setOptionEntradaDados($event, 'cnis')"
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'cnis'
+                                  ? 'bg-color-blue'
+                                  : 'bg-color-darken'
+                              "
                             >
                               <h5>
                                 Selecione para inserir dados a partir do CNIS
                               </h5>
                               <!-- <code> .bg-color-darken</code> -->
+                            </div>
+                          </div>
+                          <div
+                            class="
+                              col-xs-6
+                              col-sm-6
+                              col-md-6
+                              col-lg-6
+                              col-md-offset-3
+                            "
+                          >
+                            <div
+                              class="well well-sm txt-color-white text-center"
+                              (click)="
+                                setOptionEntradaDados(
+                                  $event,
+                                  'seguradoExistente'
+                                )
+                              "
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'seguradoExistente'
+                                  ? 'bg-color-blue'
+                                  : 'bg-color-darken'
+                              "
+                            >
+                              <h5>Selecione um segurado existente</h5>
+                              <!-- <code> .bg-color-darken</code> -->
+                            </div>
+                          </div>
+                          <div
+                            *ngIf="
+                              dadosPassoaPasso.type === 'seguradoExistente'
+                            "
+                          >
+                            <div
+                              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                            >
+                              <app-importador-cnis-segurados-list
+                                (seguradoSelecionadoEvent)="
+                                  setSeguradoSelecionado($event)
+                                "
+                              ></app-importador-cnis-segurados-list>
+                            </div>
+                            <div
+                              *ngIf="isSeguradoSelecionado"
+                              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                            >
+                              <app-importador-cnis-calculos-list
+                                [seguradoSelecionado]="seguradoSelecionado"
+                                (calculoSelecionadoEvent)="
+                                  setCalculoSelecionado($event)
+                                "
+                              >
+                              </app-importador-cnis-calculos-list>
                             </div>
                           </div>
                         </div>
@@ -127,7 +187,7 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step2'"
                 >
-                  <div class="row mt-5">
+                  <div class="row mt-4">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 pt-4">
                         <ul class="bootstrapWizard form-wizard mt-3">
@@ -140,13 +200,15 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify" style="font-size: 14px">
-                          <li *ngIf="dadosPassoaPasso.type === 'manual'" >
-                          Informe os campos abaixo para realizar a contagem de tempo de contribuição.
+                          <li *ngIf="dadosPassoaPasso.type === 'manual'">
+                            Informe os campos abaixo para realizar a contagem de
+                            tempo de contribuição.
                           </li>
                           <li *ngIf="dadosPassoaPasso.type === 'cnis'">
-                           Adicione um arquivo CNIS obtido no INSS digital para que as 
-                           informações sejam adicionadas,
-                            não se preocupe ao final do processo você poderá editar estas informações.
+                            Adicione um arquivo CNIS obtido no INSS digital para
+                            que as informações sejam adicionadas, não se
+                            preocupe ao final do processo você poderá editar
+                            estas informações.
                           </li>
                         </ul>
                       </div>
@@ -154,8 +216,18 @@
                   </div>
 
                   <div class="row body-step-component">
-                    <div *ngIf="activeStep.key == 'step2' && (( dadosPassoaPasso.type === 'cnis') || ( dadosPassoaPasso.type === 'manual')) && isTypeEntradaDados" >
-                      <app-importador-cnis [dadosPassoaPasso]="dadosPassoaPasso"></app-importador-cnis>
+                    <div
+                      *ngIf="
+                        activeStep.key == 'step2' &&
+                        (dadosPassoaPasso.type === 'cnis' ||
+                          dadosPassoaPasso.type === 'manual' ||
+                          dadosPassoaPasso.type === 'seguradoExistente') &&
+                        isTypeEntradaDados
+                      "
+                    >
+                      <app-importador-cnis
+                        [dadosPassoaPasso]="dadosPassoaPasso"
+                      ></app-importador-cnis>
                     </div>
                   </div>
                 </div>
@@ -296,7 +368,12 @@
                           <a
                             data-toggle="modal"
                             data-target="#tutorial-plan"
-                            class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                            class="
+                              btn btn-lg
+                              txt-color-white
+                              btn-danger
+                              bg-ieprev-red
+                            "
                             title="Tutorial Planejamento Previdenciário"
                             >Tutorial</a
                           >
