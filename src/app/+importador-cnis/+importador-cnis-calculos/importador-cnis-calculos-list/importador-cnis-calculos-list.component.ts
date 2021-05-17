@@ -27,7 +27,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
     colReorder: true,
     data: this.calculosList,
     columns: [
-      { data: 'actions', width: '20rem' },
+      // { data: 'actions', width: '20rem' },
       { data: 'referencia_calculo' },
       {
         data: 'total_dias',

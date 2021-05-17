@@ -185,23 +185,33 @@ export class ImportadorHomeComponent implements OnInit {
     switch (step.key) {
       case 'step1':
         this.isTypeEntradaDados = false;
-        // this.dadosPassoaPasso.type = '';
-        break;
-      case 'step2':
+
+        console.log()
+
+        this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
+
+        this.isCalculoSelecionado = false;
+        this.calculoSelecionado = {}
+        this.unCheckedAll('.checkboxSegurados');
 
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
 
-        this.isPlanejamentoSelecionado = false;
-        this.planejamentoSelecionado = {}
-        this.unCheckedAll('.checkboxPlanejamento');
+        break;
+      case 'step2':
+
+     
+
+        // this.isPlanejamentoSelecionado = false;
+        // this.planejamentoSelecionado = {}
+        // this.unCheckedAll('.checkboxPlanejamento');
 
         break;
       case 'step3':
-        this.isPlanejamentoSelecionado = false;
-        this.planejamentoSelecionado = {}
-        this.unCheckedAll('.checkboxPlanejamento');
+        // this.isPlanejamentoSelecionado = false;
+        // this.planejamentoSelecionado = {}
+        // this.unCheckedAll('.checkboxPlanejamento');
 
         break;
       // case 'step4':

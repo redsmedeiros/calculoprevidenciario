@@ -72,7 +72,8 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.formData.id_documento = '3';
     this.formData.numero_documento = segurado.numero_documento;
     this.formData.data_nascimento = segurado.data_nascimento;
-    this.formData.sexo = '';
+    this.formData.sexo = (segurado.sexo !== undefined) ? segurado.sexo : '';
+    this.formData.data_filiacao = (segurado.data_filiacao !== undefined) ? segurado.data_filiacao : '';
     this.formData.funcao = segurado.funcao;
     this.formData.user_id = segurado.userId;
   }
@@ -96,7 +97,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.errors.clear();
 
     if (this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({ 'nome': ['O Nome é obrigatório.']});
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
       this.countSeguradoErros++;
     }
 
@@ -148,7 +149,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
     this.eventCountSeguradoErros.emit(this.countSeguradoErros);
-    return {count: this.countSeguradoErros , erros: this.errors };
+    return { count: this.countSeguradoErros, erros: this.errors };
   }
 
 

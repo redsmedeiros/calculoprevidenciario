@@ -66,8 +66,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 
-    console.log(this.dadosPassoaPasso);
-
     this.checkUserSession();
 
     this.ref.markForCheck();
@@ -92,7 +90,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       && dadosPassoaPasso.origem === 'passo-a-passo'
       && dadosPassoaPasso.type === 'manual'
     ) {
-    
+
       this.vinculos = [];
       this.isUpdatingSegurado = false;
       this.isUpdatingVinculos = false;
@@ -104,15 +102,11 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       && dadosPassoaPasso.type === 'seguradoExistente'
     ) {
 
-       const seguradoSelecionado = (sessionStorage.getItem('seguradoSelecionado') !== undefined) ?
-        JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
-      const calculosSelecionado = (sessionStorage.getItem('calculosSelecionado') !== undefined) ?
-        JSON.parse(sessionStorage.getItem('calculosSelecionado')) : {};
-
-      console.log(seguradoSelecionado)
-      console.log(calculosSelecionado)
-
       this.vinculos = [];
+
+      this.setDadosSeguradoSelecionado();
+      this.setDadosCalculoSelecionado();
+
       this.isUpdatingSegurado = false;
       this.isUpdatingVinculos = false;
       this.isUploadReaderComplete = true;
@@ -196,6 +190,60 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     }
 
   }
+
+
+
+  public setDadosSeguradoSelecionado() {
+
+    const seguradoSelecionado = (this.isEmptySessionStorage(sessionStorage.getItem('seguradoSelecionado'))) ?
+      JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
+
+    console.log(seguradoSelecionado);
+    console.log(Object.keys(seguradoSelecionado).length);
+
+    if (Object.keys(seguradoSelecionado).length > 0) {
+      sessionStorage.removeItem('seguradoSelecionado');
+
+      this.segurado = {
+        nome: seguradoSelecionado.nome,
+        id_documento: seguradoSelecionado.id_documento,
+        numero_documento: seguradoSelecionado.numero_documento,
+        data_nascimento: seguradoSelecionado.data_nascimento,
+        data_filiacao: seguradoSelecionado.data_filiacao,
+        sexo: seguradoSelecionado.sexo,
+        funcao: seguradoSelecionado.funcao,
+        user_id: this.userId,
+      };
+
+
+    }
+
+  }
+
+
+  public setDadosCalculoSelecionado() {
+
+
+    const calculosSelecionado = (this.isEmptySessionStorage(sessionStorage.getItem('calculosSelecionado'))) ?
+      JSON.parse(sessionStorage.getItem('calculosSelecionado')) : {};
+
+    console.log(calculosSelecionado)
+    console.log(Object.keys(calculosSelecionado).length);
+
+    if (Object.keys(calculosSelecionado).length > 0) {
+      sessionStorage.removeItem('calculosSelecionado');
+
+    }
+
+  }
+
+
+  public isEmptySessionStorage(value) {
+    return (value !== null
+      && value !== undefined
+      && value !== '')
+  }
+
 
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {
