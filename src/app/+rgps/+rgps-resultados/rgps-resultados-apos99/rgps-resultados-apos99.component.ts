@@ -703,23 +703,25 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return 0;
     });
 
-    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true)); // Calcular a quantidade de meses contida entre as duas datas.
+    // Calcular a quantidade de meses contida entre as duas datas.
+    let numeroCompetencias = Math.ceil(this.getDifferenceInMonths(this.dataDib99, this.dataInicioBeneficio, true));
+
     if (numeroCompetencias > 60) {
       numeroCompetencias = 60;
     } else if (numeroCompetencias > 0 && numeroCompetencias < 1) {
       numeroCompetencias = 1;
     }
 
-    let expectativa = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio, conclusoes);
+    const expectativa = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio, conclusoes);
 
 
-    let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
-    let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
+    const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
+    const redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
 
-    let tempoTotalContribuicao = this.getTempoServico(redutorProfessor, redutorSexo, false);
+    const tempoTotalContribuicao = this.getTempoServico(redutorProfessor, redutorSexo, false);
 
     let fatorSeguranca = 1;
-    let aliquota = 0.31;
+    const aliquota = 0.31;
     let naoFocado = false;
 
     switch (this.tipoBeneficio) {
@@ -737,6 +739,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         const tempo = this.contribuicaoPrimaria;
         let tempoTotalContribuicaoF = (tempo.anos) + (tempo.meses / 12) + (tempo.dias / 360);
+
+        // Se mulher
+        tempoTotalContribuicaoF += redutorSexo;
+
+        // Se professor
+        tempoTotalContribuicaoF += redutorProfessor;
+
         tempoTotalContribuicaoF = arredFatorCalc(tempoTotalContribuicaoF);
 
         let idadeFracionadaF = this.getIdadeFracionada(false);
@@ -1479,7 +1488,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.setObjConclusoesMelhor(rmi, somaContribuicoes, 'antes');
 
-    
+
     this.CalculoRgpsService.update(this.calculo);
     this.isUpdating = false;
 
