@@ -319,11 +319,8 @@ export class conclusoesFinais {
             (elementRegraEspecie.regra === 'deficiente')
         ) {
 
-            const textFatorConclusao = (elementPossibilidade.fator.value > 1) ?
-                ' (Aplicado por ser mais vantajoso)'
-                : ' (Afastado por ser menos vantajoso - Utilizado Fator 1,0000)';
-
-            listC.push(this.setConclusao(2, 'Fator Previdenciário', (elementPossibilidade.fator.valueMelhorString + textFatorConclusao)));
+          
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', (elementPossibilidade.fator.valueMelhorString)));
             listC.push(this.setConclusao(3, 'Fórmula do Fator Previdenciário', elementPossibilidade.fator.formula));
         }
 
