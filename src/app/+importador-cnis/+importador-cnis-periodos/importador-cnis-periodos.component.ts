@@ -28,6 +28,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   @Input() vinculos;
   @Input() isUpdating;
+  @Input() dadosPassoaPasso;
 
 
   public periodo: any = {};
@@ -77,9 +78,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    let changedvinculos = changes['vinculos'];
-    let changedisUpdating = changes['isUpdating'];
-    let changeEmpresa = changes['empresa'];
+    const changedvinculos = changes['vinculos'];
+    const changedisUpdating = changes['isUpdating'];
+    const changeEmpresa = changes['empresa'];
 
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
@@ -88,11 +89,20 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
-
   private setPeriodos(vinculos) {
+
     this.countVinculosErros = 0;
     for (const vinculo of vinculos) {
-      this.updateDatatablePeriodos(vinculo);
+
+      if (this.dadosPassoaPasso !== undefined
+        && this.dadosPassoaPasso.origem === 'passo-a-passo'
+        && this.dadosPassoaPasso.type === 'seguradoExistente'
+      ) {
+        this.updateDatatablePeriodosSelecionados(vinculo);
+      } else {
+        this.updateDatatablePeriodos(vinculo);
+      }
+
     }
     this.detector.detectChanges();
   }
@@ -141,11 +151,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
 
-    console.log(periodo_in)
-    console.log(periodo_fi)
-    console.log(contribuicoes)
-
-
     const contribuicoesList = [];
     let result = contribuicoes;
     let chave = periodo_in;
@@ -161,8 +166,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       result = contribuicoes.find((item) => {
         return item.cp === pchave;
       });
-
-      console.log(result);
 
       if (result && result !== undefined)     /* se encontrou a contribuição no mes*/ {
         contribuicoesList.push(result);
@@ -214,21 +217,64 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   }
 
-  public updateDatatablePeriodos(vinculo) {
+
+
+  public updateDatatablePeriodosSelecionados(vinculo) {
 
     console.log(vinculo);
+
+
+    if (typeof vinculo === 'object') {
+
+      const periodo_in = this.formataPeriodo(this.formatReceivedDate(vinculo.data_inicio));
+      const periodo_fi = this.formataPeriodo(this.formatReceivedDate(vinculo.data_termino));
+
+      const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_inicio));
+      const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_termino));
+      vinculo.contribuicoes = [];
+
+      if ( typeof vinculo.sc !== 'undefined' && vinculo.sc) {
+        vinculo.contribuicoes = JSON.parse(vinculo.sc);
+      }
+
+      const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
+      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+
+      const line = {
+        id:  vinculo.id,
+        nit: '',
+        cnpj: '',
+        tipo_vinculo: vinculo.tipoVinculo,
+        datainicio: datainicio,
+        datatermino: datatermino,
+        data_inicio: this.formatReceivedDate(vinculo.data_inicio),
+        data_termino: this.formatReceivedDate(vinculo.data_termino),
+        empresa: vinculo.empresa,
+        fator_condicao_especial: vinculo.fator_condicao_especial,
+        condicao_especial: (vinculo.condicao_especial === 0) ? 'Não' : 'Sim',
+        carencia: (vinculo.carencia === 1) ? 'Sim' : 'Não',
+        contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_count: contribuicoes.length,
+        contribuicoes: contribuicoes,
+        index: (this.vinculosList.length) + 1
+      }
+
+      this.vinculosList.push(line);
+      this.isValidVinculo(line);
+    }
+
+    console.log(this.vinculosList);
+
+  }
+
+
+  public updateDatatablePeriodos(vinculo) {
 
     if (typeof vinculo === 'object') {
 
       const periodo_in = this.formataPeriodo(vinculo.periodo[0]);
       const periodo_fi = this.formataPeriodo(vinculo.periodo[1]);
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
-
-      // const datainicio = vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0]
-      // const datatermino = vinculo.periodo[1] === undefined ? vinculo.periodo[0].split('/')[2] + vinculo.periodo[0].split('/')[1] + vinculo.periodo[0].split('/')[0]
-      //   : vinculo.periodo[1].split('/')[2] + vinculo.periodo[1].split('/')[1] + vinculo.periodo[1].split('/')[0]
-
-
       const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
       const datatermino = (vinculo.periodo[1] === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[1]) :
         this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
@@ -236,6 +282,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
       const line = {
+        id: null,
         nit: vinculo.nitEmpregador,
         cnpj: vinculo.cnpj,
         tipo_vinculo: vinculo.tipoVinculo,
@@ -256,6 +303,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.vinculosList.push(line);
       this.isValidVinculo(line);
     }
+
 
   }
 
@@ -575,9 +623,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   showContribuicoes(vinculo, index) {
 
-    console.log(vinculo)
-    console.log(index)
-
     this.vinculo_index = index;
     this.vinculo = vinculo;
     this.ContribuicoesComponent.preencherMatrizPeriodos(this.vinculo.contribuicoes);
@@ -626,8 +671,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       mes = 0;
     });
 
-    console.log(this.vinculosList)
-    console.log(this.vinculo_index)
 
     // let result = _.filter(contribuicoesList, function (item) { if (item.sc == '0,00')  { return item; } }).length;
     const result = contribuicoesList.filter(function (item) { if (item.sc == '0,00') { return item } }).length;

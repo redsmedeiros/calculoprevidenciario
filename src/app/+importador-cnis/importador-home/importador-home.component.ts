@@ -185,9 +185,6 @@ export class ImportadorHomeComponent implements OnInit {
     switch (step.key) {
       case 'step1':
         this.isTypeEntradaDados = false;
-
-        console.log()
-
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
         this.isCalculoSelecionado = false;
@@ -200,8 +197,6 @@ export class ImportadorHomeComponent implements OnInit {
 
         break;
       case 'step2':
-
-     
 
         // this.isPlanejamentoSelecionado = false;
         // this.planejamentoSelecionado = {}

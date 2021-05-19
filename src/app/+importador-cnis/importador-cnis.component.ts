@@ -37,6 +37,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public eventCountSeguradoErros = 0;
   public eventCountVinculosErros = 0;
+  public calculosSelecionado = {};
 
 
   @ViewChild(ImportadorCnisSeguradosComponent) SeguradoComponent: ImportadorCnisSeguradosComponent;
@@ -52,6 +53,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   ngOnInit() {
     // this.ref.markForCheck();
     // this.ref.detectChanges();
+
     this.checkUserSession();
 
     if (this.dadosPassoaPasso == undefined) {
@@ -62,7 +64,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     }
 
   }
-
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -106,6 +107,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
       this.setDadosSeguradoSelecionado();
       this.setDadosCalculoSelecionado();
+      this.setDadosPeriodosSelecionados();
 
       this.isUpdatingSegurado = false;
       this.isUpdatingVinculos = false;
@@ -133,7 +135,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
     this.segurado = importSegurado;
     this.isUpdatingSegurado = false;
-    // console.log(this.segurado);
     this.ref.detectChanges();
 
   }
@@ -143,19 +144,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.vinculos = importVinculos;
     this.isUpdatingVinculos = false;
     this.isUploadReaderComplete = true;
-    //  console.log(this.vinculos);
     this.ref.detectChanges();
 
   }
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
-    // console.log(eventCountSeguradoErros);
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {
     this.eventCountVinculosErros = eventCountVinculosErros;
-    // console.log(eventCountVinculosErros);
   }
 
 
@@ -192,17 +190,15 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   }
 
 
-
+  /**
+   * setar dados do segurado selecionado
+   */
   public setDadosSeguradoSelecionado() {
 
     const seguradoSelecionado = (this.isEmptySessionStorage(sessionStorage.getItem('seguradoSelecionado'))) ?
       JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
 
-    console.log(seguradoSelecionado);
-    console.log(Object.keys(seguradoSelecionado).length);
-
     if (Object.keys(seguradoSelecionado).length > 0) {
-      sessionStorage.removeItem('seguradoSelecionado');
 
       this.segurado = {
         nome: seguradoSelecionado.nome,
@@ -213,28 +209,51 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         sexo: seguradoSelecionado.sexo,
         funcao: seguradoSelecionado.funcao,
         user_id: this.userId,
+        id: seguradoSelecionado.id,
       };
 
+      this.calculosSelecionado = { id_segurado: seguradoSelecionado.id };
 
+      sessionStorage.removeItem('seguradoSelecionado');
     }
 
   }
 
 
+  /**
+   * setar dados do cálculo selecionado
+   */
   public setDadosCalculoSelecionado() {
 
 
     const calculosSelecionado = (this.isEmptySessionStorage(sessionStorage.getItem('calculosSelecionado'))) ?
       JSON.parse(sessionStorage.getItem('calculosSelecionado')) : {};
 
-    console.log(calculosSelecionado)
-    console.log(Object.keys(calculosSelecionado).length);
-
     if (Object.keys(calculosSelecionado).length > 0) {
+
+      this.calculosSelecionado = calculosSelecionado;
       sessionStorage.removeItem('calculosSelecionado');
 
     }
 
+
+  }
+
+
+  /**
+   * setar dados do periodo selecionado
+   */
+  public setDadosPeriodosSelecionados() {
+
+    const periodosSelecionado = (this.isEmptySessionStorage(sessionStorage.getItem('periodosSelecionado'))) ?
+      JSON.parse(sessionStorage.getItem('periodosSelecionado')) : {};
+
+    if (Object.keys(periodosSelecionado).length > 0) {
+
+      this.vinculos = periodosSelecionado;
+      sessionStorage.removeItem('periodosSelecionado');
+
+    }
   }
 
 
@@ -243,8 +262,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       && value !== undefined
       && value !== '')
   }
-
-
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {
     window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +

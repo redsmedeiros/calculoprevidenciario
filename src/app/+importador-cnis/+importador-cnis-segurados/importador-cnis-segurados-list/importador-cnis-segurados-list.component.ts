@@ -35,6 +35,7 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
   public segurado;
   public isEditForm = false;
 
+  
   @Output() seguradoSelecionadoEvent = new EventEmitter();
 
   public datatableOptions = {

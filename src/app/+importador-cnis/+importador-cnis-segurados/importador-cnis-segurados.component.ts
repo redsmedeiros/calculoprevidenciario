@@ -28,6 +28,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
   @Input() segurado;
   @Input() isUpdating;
+  @Input() dadosPassoaPasso;
   @Output() eventCountSeguradoErros = new EventEmitter();
 
 

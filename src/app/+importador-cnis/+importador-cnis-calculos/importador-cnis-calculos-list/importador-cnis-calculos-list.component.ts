@@ -5,6 +5,9 @@ import { CalculoContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo
 import { CalculoContagemTempo as CalculoContagemTempoModel } from 'app/+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.model';
 import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
+import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
+
 @Component({
   selector: 'app-importador-cnis-calculos-list',
   templateUrl: './importador-cnis-calculos-list.component.html',
@@ -56,12 +59,12 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
 
   constructor(
     protected CalculoContagemService: CalculoContagemTempoService,
+    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     private ref: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
 
-    
     console.log(this.seguradoSelecionado);
   }
 
@@ -122,11 +125,37 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
 
       this.calculosSelecionado = dataRow;
       this.isCalculosSelecionado = true;
+      this.getPeriodosImportador(this.calculosSelecionado.id)
+
+
       this.calculoSelecionadoEvent.emit(this.calculosSelecionado);
       sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculosSelecionado));
 
     }
   }
+
+  
+  public getPeriodosImportador(calculoId) {
+
+    if (calculoId !== undefined) {
+
+      return new Promise((resolve, reject) => {
+
+        this.PeriodosContagemTempoService.getByPeriodosId(calculoId)
+          .then((periodosContribuicao: PeriodosContagemTempo[]) => {
+
+            console.log(periodosContribuicao);
+            sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
+
+            resolve(periodosContribuicao);
+          }).catch(error => {
+            console.error(error);
+            reject(error);
+          })
+      });
+    }
+  }
+
 
 
 
