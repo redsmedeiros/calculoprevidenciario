@@ -20,6 +20,7 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
 
   public calculoContagemTempo = {};
   public isFormCalculo = false;
+  private referenciaCalculo = '';
 
   constructor(
     protected CalculoContagemService: CalculoContagemTempoService,
@@ -46,7 +47,7 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
     console.log(calculo)
 
 
-   this.setCalculoImportador();
+    this.setCalculoImportador();
 
   }
 
@@ -72,6 +73,8 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
         referencia_calculo: this.calculo.referencia_calculo,
       }
 
+      this.referenciaCalculo = this.calculo.referencia_calculo,
+
       this.isFormCalculo = true;
 
     }
@@ -79,7 +82,38 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
   }
 
 
+  /**
+   * Update calculo
+   * @param seguradoId 
+   * @returns 
+   */
+  public updateCalculoImportador(seguradoId) {
 
+    console.log(seguradoId);
+
+    this.calculo.total_dias = 0;
+    this.calculo.total_88 = 0;
+    this.calculo.total_91 = 0;
+    this.calculo.total_98 = 0;
+    this.calculo.total_99 = 0;
+    this.calculo.total_carencia = 0;
+    this.calculo.referencia_calculo = this.referenciaCalculo;
+
+    return this.CalculoContagemService
+      .update(this.calculo)
+      .then((model: CalculoContagemTempoModel) => {
+        return model.id;
+      })
+      .catch(errors => this.Errors.add(errors));
+
+  }
+
+
+  /**
+   * Create calculo
+   * @param seguradoId 
+   * @returns 
+   */
   public createCalculoImportador(seguradoId) {
 
     const ref = 'Importação - ' + new Date().toLocaleDateString('pt-BR');

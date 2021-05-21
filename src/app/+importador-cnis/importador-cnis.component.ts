@@ -159,21 +159,66 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public gravarImportacaoContagemTempo() {
 
-    const erros = this.PeriodosComponent.verificarVinculos();
     const errosSegurado = this.SeguradoComponent.validate();
-
+    const erros = this.PeriodosComponent.verificarVinculos();
 
     if (erros === 0 && errosSegurado.count === 0) {
 
-      this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
-        this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
-          this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-            this.realizarCalculoContagemTempo(seguradoId, calculoId);
-            this.seguradoId = seguradoId;
-            this.calculoId = calculoId;
+      if (this.dadosPassoaPasso !== undefined
+        && this.dadosPassoaPasso.origem === 'passo-a-passo'
+        && this.dadosPassoaPasso.type === 'seguradoExistente'
+      ) {
+
+        swal({
+          // position: position,
+          type: 'error',
+          title: 'update or create',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        this.SeguradoComponent.updateSeguradoImportador(this.userId).then(seguradoId => {
+          console.log(seguradoId);
+
+          if (Object.keys(this.calculosSelecionado).length > 1 
+          && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
+
+            this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
+              console.log(calculoId);
+            //   this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
+            //     this.realizarCalculoContagemTempo(seguradoId, calculoId);
+            //     this.seguradoId = seguradoId;
+            //     this.calculoId = calculoId;
+            //   });
+            });
+
+          } else {
+
+            this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
+              this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
+                this.realizarCalculoContagemTempo(seguradoId, calculoId);
+                this.seguradoId = seguradoId;
+                this.calculoId = calculoId;
+              });
+            });
+
+          }
+
+        });
+
+      } else {
+
+        this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
+          this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
+            this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
+              this.realizarCalculoContagemTempo(seguradoId, calculoId);
+              this.seguradoId = seguradoId;
+              this.calculoId = calculoId;
+            });
           });
         });
-      });
+
+      }
 
     } else {
 
@@ -199,6 +244,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
 
     if (Object.keys(seguradoSelecionado).length > 0) {
+      console.log(seguradoSelecionado);
 
       this.segurado = {
         nome: seguradoSelecionado.nome,
@@ -274,5 +320,4 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   }
 
 }
-
 

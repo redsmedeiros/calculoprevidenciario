@@ -37,8 +37,6 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
       this.createGrafData();
 
       this.createLabel();
-      console.log(this.objYkeys)
-      console.log(this.objLabels)
 
       this.optionsGraph = {
         xkey: 'period',
@@ -57,7 +55,7 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         // },
         yLabelFormat: function (d) {
 
-          return (d != undefined && d) ? Math.round(d) : ''; // Math.round(d);
+          return (typeof d !== 'undefined' && d) ? Math.round(d) : ''; // Math.round(d);
         }, // (d > 0) ? 'Vinculo: ' + d : ''
         // xLabelFormat: function (d) {
         //   return (d.getMonth() + 1) + '/' + d.getFullYear();
@@ -68,43 +66,38 @@ export class ContagemTempoConclusaoGraphComponent implements OnInit {
         hoverCallback: function (index, options, content, row) {
 
 
-            // console.log(options.data[index]);
-            const obj = options.data[index];
-            let labelHover = '';
-            let vinculos = '';
-            let periodo = '';
+          // console.log(options.data[index]);
+          const obj = options.data[index];
+          let labelHover = '';
+          let vinculos = '';
+          let periodo = '';
 
-            console.log(obj);
+          Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
 
+            if (val === 'period') {
+              periodo = obj[val];
+            } else if (typeof obj[val] != 'undefined' && obj[val] != undefined && obj[val] != '') {
+              vinculos += '&nbsp;' + obj[val] + ','
+            }
+            //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
+          });
 
-            Object.getOwnPropertyNames(obj).forEach(function (val, idx, array) {
-              
-         
-              if (val === 'period') {
-                periodo = obj[val];
-              } else if (typeof obj[val] != 'undefined' && obj[val] != undefined && obj[val] != '') {
-                vinculos += '&nbsp;' + obj[val] + ','
-              }
-              //    labelHover += (val === 'period') ? '<b class="label label-default fa-1-2x">' + obj[val] + '</b> Vínculo(s): &nbsp;' : '&nbsp;'+ obj[val] + ',';
-            });
+          labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
 
-            labelHover = '<b class="label label-default fa-1-2x">' + periodo + '</b>'
-
-            if (typeof vinculos != 'undefined' && vinculos != '') {
-              if (vinculos.search(/\,&nbsp;/g)) {
-                labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
-              } else {
-                labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
-              }
-
+          if (typeof vinculos != 'undefined' && vinculos != '') {
+            if (vinculos.search(/\,&nbsp;/g)) {
+              labelHover += ' &nbsp;Vínculos: &nbsp;' + vinculos;
+            } else {
+              labelHover += ' &nbsp;Vínculo: &nbsp;' + vinculos;
             }
 
-            if (labelHover != '') {
-              console.log(labelHover.slice(0, -1));
-              return labelHover.slice(0, -1);
-            }
-           
-            return {sdmlaksd:'asdasd'};
+          }
+
+          if (labelHover != '') {
+            return labelHover.slice(0, -1);
+          }
+
+          //  return {sdmlaksd:'asdasd'};
         }
 
       };

@@ -17,9 +17,10 @@
                         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
                       </div>
                 
-                      <label class="col-md-2 control-label" for="select-1">Tipo de documento*</label>
+                      <label class="col-md-2 control-label" for="select-1">Tipo de documento</label>
                       <div class="col-md-3">
                         <select class="form-control" id="select-1" [(ngModel)]="formData.id_documento" [ngModelOptions]="{standalone: true}"  (change)="changeDocumentMask(); validate();">
+                          <option value=''>Selecione</option>
                           <option value='1'>PIS</option>
                           <option value='2'>PASEP</option>
                           <option value='3'>CPF</option>
@@ -32,7 +33,7 @@
                 
                     <div class="form-group">
                 
-                      <label class="col-md-2 control-label">Número do documento*</label>
+                      <label class="col-md-2 control-label">Número do documento</label>
                 
                       <div class="col-md-3">
                         <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento'); validate();" class="form-control" type="text">
