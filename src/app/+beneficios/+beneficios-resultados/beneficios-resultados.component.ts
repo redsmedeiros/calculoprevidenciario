@@ -714,7 +714,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.listRecebidos.length > 0
       && recebidoRow.value.dataAdicional25 !== undefined
       && recebidoRow.value.dataAdicional25 != ''
-      && ['4', '7', '2', '16', '1', '3', '5', '13', '18'].includes(recebidoRow.value.especie)) {
+      && ['4', '7', '2', '16', '1', '3', '5', '13', '18', '19'].includes(recebidoRow.value.especie)) {
 
       this.adicional25Recebido = true;
       this.dataInicialadicional25Recebido = moment(recebidoRow.value.dataAdicional25, 'DD/MM/YYYY');
@@ -730,7 +730,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (this.listDevidos.length > 0
       && this.listDevidos[0].dataAdicional25 !== undefined
       && this.listDevidos[0].dataAdicional25 != ''
-      && ['4', '7', '2', '16', '1', '3', '5', '13', '18'].includes(this.listDevidos[0].especie)) {
+      && ['4', '7', '2', '16', '1', '3', '5', '13', '18', '19'].includes(this.listDevidos[0].especie)) {
 
       this.adicional25Devido = true;
       this.dataInicialadicional25Devido = moment(this.listDevidos[0].dataAdicional25, 'DD/MM/YYYY');

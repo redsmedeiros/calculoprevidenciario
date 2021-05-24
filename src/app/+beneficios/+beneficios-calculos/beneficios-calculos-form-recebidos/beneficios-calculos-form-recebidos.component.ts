@@ -365,8 +365,6 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       valid = false;
     }
 
-
-    
     if (this.adicional25Recebido) {
       if (!this.isValidDate(this.dataInicialadicional2Recebido)) {
         this.errors.add({ 'dataInicialadicional2Recebido': ['Insira uma data válida.'] });
