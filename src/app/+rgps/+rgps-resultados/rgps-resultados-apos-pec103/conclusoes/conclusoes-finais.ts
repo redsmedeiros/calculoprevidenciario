@@ -275,7 +275,7 @@ export class conclusoesFinais {
 
         }
 
-        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
+        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi, elementRegraEspecie.regra);
         elementPossibilidade.moeda = this.moedaDib;
 
         if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
@@ -785,7 +785,7 @@ export class conclusoesFinais {
        * Ajustar ao teto e minimo
        * @param  {} value
        */
-    private limitarTetosEMinimos(value) {
+    private limitarTetosEMinimos(value, elementRegraEspecie = '') {
 
         // se a data estiver no futuro deve ser utilizado os dados no mês atual
         const moeda = this.moedaDib;
@@ -794,7 +794,7 @@ export class conclusoesFinais {
         let avisoString = '';
         let valueRetorno = parseFloat(value);
 
-        if (moeda && value < salarioMinimo) {
+        if (moeda && value < salarioMinimo && elementRegraEspecie !== 'acidente') {
             valueRetorno = salarioMinimo;
             avisoString = 'LIMITADO AO MÍNIMO'
         } else if (moeda && value > tetoSalarial) {
@@ -808,7 +808,6 @@ export class conclusoesFinais {
             aviso: avisoString
         };
     }
-
 
 
 }

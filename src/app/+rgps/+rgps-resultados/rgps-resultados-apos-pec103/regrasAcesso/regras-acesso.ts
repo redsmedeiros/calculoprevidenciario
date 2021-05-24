@@ -114,14 +114,15 @@ export class RegrasAcesso {
                 } else {
                     maxDescarteCarencia = (this.numeroDeContribuicoes - 1);
                 }
+
             }
 
-            if (maxDescarteCarencia < maximoDescarte.meses) {
+          //  if (maxDescarteCarencia < maximoDescarte.meses) {
 
                 maximoDescarte.meses = maxDescarteCarencia;
                 maximoDescarte.anos = (maximoDescarte.meses / 12);
 
-            }
+            // }
 
         }
 
