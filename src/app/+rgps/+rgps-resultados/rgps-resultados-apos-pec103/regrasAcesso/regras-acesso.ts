@@ -117,12 +117,12 @@ export class RegrasAcesso {
 
             }
 
-          //  if (maxDescarteCarencia < maximoDescarte.meses) {
+            if (maxDescarteCarencia < maximoDescarte.meses) {
 
                 maximoDescarte.meses = maxDescarteCarencia;
                 maximoDescarte.anos = (maximoDescarte.meses / 12);
 
-            // }
+            }
 
         }
 
@@ -244,6 +244,7 @@ export class RegrasAcesso {
                 conclusoes: [],
                 destaqueMelhorValorRMI: false
             });
+
         }
 
         for (let i = maximoDescarte.anos; i >= 0; i--) {
@@ -314,8 +315,6 @@ export class RegrasAcesso {
 
             }
         }
-
-
 
         // let count12meses = 0;
         // let tempoPorAno = tempoInicial;
