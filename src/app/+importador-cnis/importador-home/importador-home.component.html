@@ -9,14 +9,27 @@
               style="color: white; font-weight: 500; font-size: 45px"
               class="py-3 pl-5"
             >
-              Cálculo Passo a Passo
+              NOVO SIMULADOR CONTAGEM DE TEMPO E SALÁRIOS DE CONTRIBUIÇÃO
             </h1>
             <p
               style="color: white; font-weight: 500; text-align: justify"
               class="py-4 px-5"
             >
-              Axiliar o usuário a seguir uma linha de raciocinio lógica e breve
-              para executar as simulações de concessão de benefícios do RGPS.
+              O Simulador de Cálculo de Contagem de Tempo de Contribuição e
+              Renda Mensal Inicial é a mais nova ferramenta de cálculos a
+              disposição dos Advogados Previdenciaristas. Criado para apurar o
+              valor do benefício previdenciário a partir de migração única dos
+              salários de contribuição e vínculos contributivos existentes no
+              Cadastro Nacional de Informações Sociais - CNIS, permitindo a
+              edição das informações migradas, além de gerar relatório de
+              contagem de tempo de contribuição e calcular a renda mensal do
+              benefício, identificando, entre vários períodos da legislação, a
+              prestação previdenciária mais vantajosa a partir da análise de
+              todas as regras existentes em cada período. Este Simulador de
+              Cálculos, baseado em passo a passo, auxiliará o operador do
+              Direito Previdenciário, permitindo, de forma ágil e eficaz, a
+              análise, elaboração e conclusão da contagem de tempo de
+              contribuição e cálculo da Renda Mensal Inicial.
             </p>
             <div
               class="row pt-5"
@@ -77,10 +90,7 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify pt-1" style="font-size: 14px">
-                          <li>
-                            Selecione uma opção para proseguir com a entrada de
-                            informações.
-                          </li>
+                          <li>Selecione uma opção para iniciar o Cálculo.</li>
                         </ul>
                       </div>
                     </div>
@@ -96,21 +106,6 @@
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
                               class="well well-sm txt-color-white text-center"
-                              (click)="setOptionEntradaDados($event, 'manual')"
-                              [ngClass]="
-                                dadosPassoaPasso.type === 'manual'
-                                  ? 'bg-color-blue'
-                                  : 'bg-color-darken'
-                              "
-                            >
-                              <h5>Selecione para inserir dados manualmente</h5>
-                              <!-- <code> .bg-color-darken</code> -->
-                            </div>
-                          </div>
-
-                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <div
-                              class="well well-sm txt-color-white text-center"
                               (click)="setOptionEntradaDados($event, 'cnis')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'cnis'
@@ -118,21 +113,11 @@
                                   : 'bg-color-darken'
                               "
                             >
-                              <h5>
-                                Selecione para inserir dados a partir do CNIS
-                              </h5>
+                              <h5>Migração dos dados a partir do CNIS</h5>
                               <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
-                          <div
-                            class="
-                              col-xs-6
-                              col-sm-6
-                              col-md-6
-                              col-lg-6
-                              col-md-offset-3
-                            "
-                          >
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
                               class="well well-sm txt-color-white text-center"
                               (click)="
@@ -147,7 +132,29 @@
                                   : 'bg-color-darken'
                               "
                             >
-                              <h5>Selecione um segurado existente</h5>
+                              <h5>Selecionar Segurado cadastrado</h5>
+                              <!-- <code> .bg-color-darken</code> -->
+                            </div>
+                          </div>
+                          <div
+                            class="
+                              col-xs-6
+                              col-sm-6
+                              col-md-6
+                              col-lg-6
+                              col-md-offset-3
+                            "
+                          >
+                            <div
+                              class="well well-sm txt-color-white text-center"
+                              (click)="setOptionEntradaDados($event, 'manual')"
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'manual'
+                                  ? 'bg-color-blue'
+                                  : 'bg-color-darken'
+                              "
+                            >
+                              <h5>Inserir dados manualmente</h5>
                               <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>

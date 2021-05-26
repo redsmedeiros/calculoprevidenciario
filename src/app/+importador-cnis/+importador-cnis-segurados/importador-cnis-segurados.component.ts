@@ -77,10 +77,6 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
     }
 
-    console.log(changedsegurado);
-    console.log(this.segurado);
-    // console.log(changedisUpdating);
-
   }
 
 
@@ -112,23 +108,17 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   }
 
 
-
-
-
-
   public updateSeguradoImportador(userId) {
 
     this.formData.user_id = userId;
     return this.Segurado
       .update(this.segurado)
       .then((modelSeg: SeguradoModel) => {
-        console.log(modelSeg);
         return modelSeg.id
       })
       .catch(errors => this.errors.add(errors));
 
   }
-
 
 
   public createSeguradoImportador(userId) {

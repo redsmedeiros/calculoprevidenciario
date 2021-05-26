@@ -65,10 +65,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log(this.seguradoSelecionado);
   }
-
-
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -76,9 +73,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
     this.ref.markForCheck();
     this.ref.detectChanges();
     // this.setExibirForm(this.dadosPassoaPasso);
-
-    console.log(this.seguradoSelecionado);
-
 
     this.getCalculosSeguradoSelecionado();
   }
@@ -144,7 +138,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit {
         this.PeriodosContagemTempoService.getByPeriodosId(calculoId)
           .then((periodosContribuicao: PeriodosContagemTempo[]) => {
 
-            console.log(periodosContribuicao);
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
 
             resolve(periodosContribuicao);

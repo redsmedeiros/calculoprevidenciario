@@ -221,8 +221,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public updateDatatablePeriodosSelecionados(vinculo) {
 
-    console.log(vinculo);
-
 
     if (typeof vinculo === 'object') {
 
@@ -262,8 +260,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.vinculosList.push(line);
       this.isValidVinculo(line);
     }
-
-    console.log(this.vinculosList);
 
   }
 
@@ -311,8 +307,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private ajusteListVinculos(calculoId) {
-
-    console.log(this.vinculosList);
 
     this.vinculosListPost = [];
     for (const vinculo of this.vinculosList) {

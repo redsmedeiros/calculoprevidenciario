@@ -29,9 +29,6 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
-    console.log(this.dadosPassoaPasso);
-    console.log(this.calculo)
-
     this.setCalculoImportador();
 
   }
@@ -42,9 +39,6 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
 
     const changedisUpdating = changes['isUpdating'];
     const calculo = changes['calculo'];
-
-    console.log(this.calculo)
-    console.log(calculo)
 
 
     this.setCalculoImportador();
@@ -59,23 +53,15 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
       && this.dadosPassoaPasso.type === 'seguradoExistente'
       && typeof this.calculo.id_segurado !== 'undefined'
     ) {
+      
 
-      this.calculoContagemTempo = {
-        id: this.calculo.id,
-        id_segurado: this.calculo.id_segurado,
-        total_dias: 0,
-        total_88: 0,
-        total_91: 0,
-        total_98: 0,
-        total_99: 0,
-        total_carencia: 0,
-        tipo_contribuicao: 'g',
-        referencia_calculo: this.calculo.referencia_calculo,
-      }
+      this.CalculoContagemService.find(this.calculo.id)
+      .then(calculo => {
+        this.calculo = calculo;
+        this.referenciaCalculo = this.calculo.referencia_calculo;
 
-      this.referenciaCalculo = this.calculo.referencia_calculo,
-
-      this.isFormCalculo = true;
+        this.isFormCalculo = true;
+      });
 
     }
 
@@ -88,8 +74,6 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
    * @returns 
    */
   public updateCalculoImportador(seguradoId) {
-
-    console.log(seguradoId);
 
     this.calculo.total_dias = 0;
     this.calculo.total_88 = 0;

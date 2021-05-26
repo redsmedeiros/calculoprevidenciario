@@ -64,7 +64,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
     }
 
-    console.log(this.vinculo);
   }
 
   preencherMatrizPeriodos(contribuicoes) {
@@ -131,9 +130,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       }
     }
 
-    console.log(dateFinalPeriodo)
-    console.log(this.vinculo)
-
     //finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
       this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
@@ -160,7 +156,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
   isEmpty(data) {
-    // console.log(data)
+
     if (data == undefined || data === '') {
       return true;
     }
@@ -184,7 +180,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     let value = event.srcElement.value;
     if (value.indexOf('_') < 0 && value != '') {
       let next = <HTMLInputElement>document.getElementById(nextElementId);
-      //console.log(next)
       next.focus();
     }
   }

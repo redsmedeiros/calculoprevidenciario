@@ -37,7 +37,7 @@ export class ImportadorHomeComponent implements OnInit {
     },
     {
       key: 'step2',
-      title: 'Vida Laboral',
+      title: 'Períodos de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
@@ -253,7 +253,7 @@ export class ImportadorHomeComponent implements OnInit {
   }
 
   onWizardComplete(data) {
-    console.log('Dados completo', data);
+    // console.log('Dados completo', data);
 
     // this.rgpsPlanejamentoService.save(data).then((model) => {
 
@@ -299,9 +299,6 @@ export class ImportadorHomeComponent implements OnInit {
 
     this.dadosPassoaPasso.type = '';
     this.isTypeEntradaDados = false;
-
-    console.log(ev);
-    console.log(value);
 
     this.dadosPassoaPasso.type = value;
     this.isTypeEntradaDados = (this.dadosPassoaPasso.type !== '');
@@ -418,7 +415,6 @@ export class ImportadorHomeComponent implements OnInit {
     this.calculoSelecionado = {};
 
     this.calculoSelecionado = dataCalculo;
-    console.log(this.calculoSelecionado);
     this.checkedUnique(`${dataCalculo.id}-checkbox-calculos`, '.checkboxCalculos');
     stepStatus = (this.isExits(this.calculoSelecionado) && isObject(this.calculoSelecionado));
     // // stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;

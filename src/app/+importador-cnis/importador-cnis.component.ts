@@ -178,13 +178,11 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         });
 
         this.SeguradoComponent.updateSeguradoImportador(this.userId).then(seguradoId => {
-          console.log(seguradoId);
 
           if (Object.keys(this.calculosSelecionado).length > 1 
           && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
 
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
-              console.log(calculoId);
             //   this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
             //     this.realizarCalculoContagemTempo(seguradoId, calculoId);
             //     this.seguradoId = seguradoId;
@@ -244,7 +242,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       JSON.parse(sessionStorage.getItem('seguradoSelecionado')) : {};
 
     if (Object.keys(seguradoSelecionado).length > 0) {
-      console.log(seguradoSelecionado);
 
       this.segurado = {
         nome: seguradoSelecionado.nome,
