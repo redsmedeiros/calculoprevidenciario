@@ -21,6 +21,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   public dataInicioBeneficio;
   public periodoInicioBeneficio;
+  public periodoInicioBeneficioOLD;
   public especieBeneficio;
 
   public primaria98anos;
@@ -124,6 +125,8 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.periodoInicioBeneficio = ((this.formData.tipo_aposentadoria === 'A partir de 13/11/2019') ?
         'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
       //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
+      this.periodoInicioBeneficioOLD = this.formData.tipo_aposentadoria;
+      
       this.changeGrupoDos12();
       if (this.formData.contibuicao_primaria_98 != '') {
         this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];
@@ -254,6 +257,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     this.formData = { ...CalculoModel.form };
     this.dataInicioBeneficio = '';
     this.periodoInicioBeneficio = '';
+    this.periodoInicioBeneficioOLD = '';
     this.especieBeneficio = '- Selecione uma espécie -';
 
     this.primaria98anos = '';
@@ -517,6 +521,15 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.errors.add({ 'carenciaAposEc103': ['Campo obrigatório.'] });
     }
 
+  }
+
+  clearEspecieChange(){
+    
+    if (this.periodoInicioBeneficio !== this.periodoInicioBeneficioOLD) {
+      console.log(this.especieBeneficio);
+      this.especieBeneficio = '';
+    }
+   
   }
 
   changePeriodoOptions() {

@@ -745,6 +745,7 @@ export class RgpsResultadosComponent implements OnInit {
         numeroEspecie = 1;
         break;
       case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
+      case 'Aposentadoria por Invalidez ou Pensão por Morte':
         numeroEspecie = 2;
         break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
