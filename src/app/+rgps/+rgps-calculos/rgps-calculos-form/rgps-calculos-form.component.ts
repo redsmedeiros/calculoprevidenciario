@@ -512,18 +512,18 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     }
 
-    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '')
+    if (this.hasCarencia && (this.carencia == undefined || this.carencia === '' || this.carencia === 0)
       && this.getEspecieBeneficio(this.especieBeneficio) != 31) {
       this.errors.add({ 'carencia': ['Campo obrigatório.'] });
     }
 
-    if (this.has19 && (this.hasCarencia && (this.carenciaAposEc103 == undefined || this.carenciaAposEc103 === ''))) {
+    if (this.has19 && (this.hasCarencia && (this.carenciaAposEc103 == undefined || this.carenciaAposEc103 === '' || this.carencia === 0))) {
       this.errors.add({ 'carenciaAposEc103': ['Campo obrigatório.'] });
     }
 
   }
 
-  clearEspecieChange(){
+  clearEspecieChange() {
     if (this.periodoInicioBeneficio !== this.periodoInicioBeneficioOLD) {
       this.especieBeneficio = '';
     }
@@ -793,11 +793,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     const dib = moment(exportDados.dib, 'DD/MM/YYYY');
 
-     // posterior a EC nº 103/2019
-     this.primaria19anos = '';
-     this.primaria19meses = '';
-     this.primaria19dias = '';
-     // posterior a EC nº 103/2019
+    // posterior a EC nº 103/2019
+    this.primaria19anos = '';
+    this.primaria19meses = '';
+    this.primaria19dias = '';
+    // posterior a EC nº 103/2019
 
     if (dib < moment('1988-10-05')) {
 
@@ -825,7 +825,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.carencia = periodos.total98.carencia;
 
     } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
-      
+
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
       this.primaria98dias = periodos.total98.days;
@@ -839,11 +839,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
 
-       // Até a EC nº 103/2019
-       this.primariaAtualanos = periodos.total19.years;
-       this.primariaAtualmeses = periodos.total19.months;
-       this.primariaAtualdias = periodos.total19.days;
-       // Até a EC nº 103/2019
+      // Até a EC nº 103/2019
+      this.primariaAtualanos = periodos.total19.years;
+      this.primariaAtualmeses = periodos.total19.months;
+      this.primariaAtualdias = periodos.total19.days;
+      // Até a EC nº 103/2019
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
@@ -906,11 +906,14 @@ export class RgpsCalculosFormComponent implements OnInit {
 
   }
 
-  public clearCarenciaChange() {
+  public clearCarenciaChange(tipo) {
 
     if (this.hasCarencia) {
 
-      this.carencia = '';
+      if (tipo == 99) {
+        this.carencia = '';
+      }
+
       this.carenciaAposEc103 = ''
 
       const errorCarencia = {
