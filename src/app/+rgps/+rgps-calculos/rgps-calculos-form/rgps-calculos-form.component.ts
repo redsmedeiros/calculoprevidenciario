@@ -126,7 +126,7 @@ export class RgpsCalculosFormComponent implements OnInit {
         'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
       //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
       this.periodoInicioBeneficioOLD = this.formData.tipo_aposentadoria;
-      
+
       this.changeGrupoDos12();
       if (this.formData.contibuicao_primaria_98 != '') {
         this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];
@@ -524,12 +524,9 @@ export class RgpsCalculosFormComponent implements OnInit {
   }
 
   clearEspecieChange(){
-    
     if (this.periodoInicioBeneficio !== this.periodoInicioBeneficioOLD) {
-      console.log(this.especieBeneficio);
       this.especieBeneficio = '';
     }
-   
   }
 
   changePeriodoOptions() {
