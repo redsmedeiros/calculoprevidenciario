@@ -3,7 +3,9 @@
   <sa-widgets-grid>
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
-        <h3 class="p-1 m-1 no-print">Cálculo dos Benefícios do Regime Geral de Previdência Social</h3>
+        <h3 class="p-1 m-1 no-print">
+          Cálculo dos Benefícios do Regime Geral de Previdência Social
+        </h3>
       </div>
     </div>
     <div class="row mb-4">
@@ -14,35 +16,198 @@
       </div>
     </div>
     <!-- row -->
-    <div *ngIf="!isEdit"class="row mb-3">
-      <app-rgps-segurados-create (onSubmit)="onCreate($event)"></app-rgps-segurados-create>
+    <div *ngIf="!isEdit" class="row mb-3">
+      <app-rgps-segurados-create
+        (onSubmit)="onCreate($event)"
+      ></app-rgps-segurados-create>
     </div>
-    <div *ngIf="isEdit"class="row mb-3">
-      <app-rgps-segurados-edit (onSubmit)="onCreate($event)"></app-rgps-segurados-edit>
+    <div *ngIf="isEdit" class="row mb-3">
+      <app-rgps-segurados-edit
+        (onSubmit)="onCreate($event)"
+      ></app-rgps-segurados-edit>
     </div>
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <app-rgps-segurados-index [list]="list" [datatableOptions]="datatableOptions"></app-rgps-segurados-index>
+        <app-rgps-segurados-index
+          [list]="list"
+          [datatableOptions]="datatableOptions"
+        ></app-rgps-segurados-index>
       </div>
     </div>
 
     <div class="row mb-3">
-          <div class="col-md-12">
-            <div class="panel panel-default">
-              <div class="panel-heading m-0 p-1">
-                <strong>Legenda</strong>
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-center">
+                <a
+                  data-toggle="modal"
+                  data-target="#tutorial-RMI"
+                  class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                  title="Tutorial Planejamento Previdenciário"
+                  >Tutorial</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="tutorial-RMI"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="tutorial-liquidacao-sentenca-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-custom-90" role="document" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content modal-lg" >
+          <div class="modal-body">
+           <div class="row">
+            <button class="close font-2-4x pr-4" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+           </div>
+            <div class="row">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/454141361?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
               </div>
-              <div class="panel-body m-1 p-1">
-                <ul class="list-inline">
-                  <li><i class="fa fa-calculator fa-1-7x bg-color-blue txt-color-white p-1"></i> Calculos do Segurado</li>
-                  <li><i class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"></i> Editar</li>
-                  <li><i class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"></i> Remover</li>
-                </ul>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291169?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291229?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291500?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291654?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291748?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291755?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/453291879?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4  mt-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe
+                    src="https://player.vimeo.com/video/413680168?color=ffffff"
+                    class="embed-responsive-item"
+                    frameborder="0"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen
+                  ></iframe>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
     </div>
+
     <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading m-0 p-1">
+            <strong>Legenda</strong>
+          </div>
+          <div class="panel-body m-1 p-1">
+            <ul class="list-inline">
+              <li>
+                <i
+                  class="fa fa-list fa-1-7x bg-color-blue txt-color-white p-1"
+                ></i>
+                Calculos do Segurado
+              </li>
+              <li>
+                <i
+                  class="fa fa-edit fa-1-7x btn-warning txt-color-white p-1"
+                ></i>
+                Editar
+              </li>
+              <li>
+                <i
+                  class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"
+                ></i>
+                Remover
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row mb-3">
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading m-0 p-1">
@@ -56,7 +221,7 @@
           </div>
         </div>
       </div>
-  </div>
+  </div> -->
 
     <!-- end row -->
   </sa-widgets-grid>

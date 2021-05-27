@@ -23,6 +23,7 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
   @Input() calculo;
   @Input() segurado;
+  @Input() numResultado;
 
   public boxId;
   public dataFiliacao;

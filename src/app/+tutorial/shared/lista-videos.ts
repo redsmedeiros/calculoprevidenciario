@@ -37,18 +37,6 @@ export class ListaVideos {
     label: 'Regras de Transição',
     value: '377178520'
   }, {
-    label: 'Contagem de Tempo e Importação dados do CNIS',
-    value: '374977453'
-  }, {
-    label: 'Exportação dos dados da Contagem de Tempo para o calculo de RMI',
-    value: '374976235'
-  }, {
-    label: 'Pensão por Morte de Instituidor não Aposentado na Data do Óbito',
-    value: '374976988'
-  }, {
-    label: 'Pensão por Morte de Segurado Aposentado na Data do Óbito',
-    value: '374977398'
-  }, {
     label: 'Planejamento Previdenciário - Plataforma IEPREV Premium',
     value: '499277891'
   },

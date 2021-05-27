@@ -1,11 +1,11 @@
-<article class="container-fluid"  >
+<article class="no-padding" >
 
 <section >
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group19911998>
 	    <h4 class="panel-title" accordion-heading>
 	      <a>
-          <strong  id='tituloCalculo'>Data de Início do Benefício entre {{stringCabecalho}} </strong>
+          <strong  id='tituloCalculo'>{{(numResultado+1)}} - Direito Adquirido entre {{stringCabecalho}} </strong>
             <i
             class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
             *ngIf="isUpdating"></i>

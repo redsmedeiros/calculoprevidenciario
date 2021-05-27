@@ -25,6 +25,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
 	@Input() calculo;
 	@Input() segurado;
 	@Input() isBlackHole;
+  @Input() numResultado;
 
   public boxId;
 	public inpsList;

@@ -37,6 +37,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   @Input() calculo;
   @Input() segurado;
+  @Input() numResultado;
   @Input() isPlanejamento;
   @Input() planejamento;
   @Input() planejamentoContribuicoesAdicionais;

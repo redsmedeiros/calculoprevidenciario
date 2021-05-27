@@ -623,6 +623,10 @@ a[class*="action-"]:hover {
   background-color: #ffaa21;
 }
 
+.btn-ieprev-rad {
+  border-radius: 15px;
+}
+
 .btn-ieprev:hover {
   color: #0d0d0d;
   background-color: #ffaa21;
@@ -773,8 +777,6 @@ a[class*="action-"]:hover {
   }
 }
 
-
-
 .embed-responsive {
   position: relative;
   display: block;
@@ -803,20 +805,69 @@ a[class*="action-"]:hover {
 }
 
 @media screen and (max-width: 1366px) {
- 
-  .modal-dialog-custom{
+  .modal-dialog-custom {
     width: 600px;
     margin: 15rem 24rem;
+  }
+
+  .modal-dialog-custom-90 {
+    width: 90%;
+    margin: 5rem 13rem;
+  }
+
+  .modal-dialog-custom-90 .modal-lg {
+    width: 90%;
+  }
+
+  .modal-dialog-custom-80 {
+    width: 80%;
+    margin: 10rem 20rem;
+  }
+
+  .modal-dialog-custom-80 .modal-lg {
+    width: 80%;
+  }
+
+  .modal-dialog-custom-85 {
+    width: 85%;
+    margin: 10rem 20rem;
+  }
+
+  .modal-dialog-custom-85 .modal-lg {
+    width: 85%;
   }
 }
 
 @media screen and (min-width: 1500px) {
-
-  .modal-dialog-custom{
+  .modal-dialog-custom {
     width: 600px;
     margin: 15rem 50rem;
   }
 
+  .modal-dialog-custom-90 {
+    width: 88%;
+    margin: 2rem 20rem;
+  }
+
+  .modal-dialog-custom-90 .modal-lg {
+    width: 88%;
+  }
+
+  .modal-dialog-custom-80 {
+    width: 78%;
+    margin: 15rem 24rem;
+  }
+
+  .modal-dialog-custom-80 .modal-lg {
+    width: 78%;
+  }
+
+  .modal-dialog-custom-85 {
+    width: 83%;
+    margin: 15rem 24rem;
+  }
+
+  .modal-dialog-custom-85 .modal-lg {
+    width: 83%;
+  }
 }
-
-

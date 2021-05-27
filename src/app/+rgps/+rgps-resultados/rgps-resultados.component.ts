@@ -1,6 +1,6 @@
 
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
@@ -25,7 +25,7 @@ import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.m
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
-import { WINDOW } from "../+rgps-calculos/window.service";
+import { WINDOW } from '../+rgps-calculos/window.service';
 
 @FadeInTop()
 @Component({
@@ -282,8 +282,6 @@ export class RgpsResultadosComponent implements OnInit {
   //   antesEc103: { rmi: 0, soma: 0 },
   // };
 
-
-
   //pbc parametro get
   public pbcCompleto = false;
 
@@ -297,6 +295,14 @@ export class RgpsResultadosComponent implements OnInit {
     valid: false,
     checked: false,
     submitted: false,
+  };
+
+  public numResultados = {
+    'mostrarCalculoAnterior88': 0,
+    'mostrarCalculo91_98': 0,
+    'mostrarCalculo98_99': 0,
+    'mostrarCalculoApos99': 0,
+    'mostrarCalculoApos19': 0
   };
 
   constructor(protected router: Router,
@@ -1126,7 +1132,39 @@ export class RgpsResultadosComponent implements OnInit {
     this.mostrarCalculoApos99 = calculo.mostrarCalculoApos99;
     this.mostrarCalculoApos19 = calculo.mostrarCalculoApos19;
 
+    this.definirNumeroDeResultados();
   }
+
+  private definirNumeroDeResultados() {
+
+    this.numResultados = {
+      'mostrarCalculoAnterior88': 0,
+      'mostrarCalculo91_98': 0,
+      'mostrarCalculo98_99': 0,
+      'mostrarCalculoApos99': 0,
+      'mostrarCalculoApos19': 0
+    };
+
+    let count = 0;
+
+    [
+      'mostrarCalculoAnterior88',
+      'mostrarCalculo91_98',
+      'mostrarCalculo98_99',
+      'mostrarCalculoApos99',
+      'mostrarCalculoApos19'
+    ].forEach(element => {
+
+      if (this[element]) {
+        this.numResultados[element] = count;
+        count++;
+      }
+
+    });
+
+  }
+
+
 
   preencheGrupoDeCalculos() {
     for (const calculo of this.calculosList) {
