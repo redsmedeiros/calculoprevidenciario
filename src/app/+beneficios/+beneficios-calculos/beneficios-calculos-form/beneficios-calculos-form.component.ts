@@ -184,7 +184,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: 'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
     { text: 'Percentual sobre o Valor Total do Benefício Devido', value: 'dev' },
     { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
-    { text: 'Fixo', value: 'fixo' }
+    { text: 'Honorários em Valor Fixo', value: 'fixo' }
   ];
 
   public tipoJurosOptions = [
