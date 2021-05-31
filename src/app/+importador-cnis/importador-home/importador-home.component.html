@@ -89,9 +89,10 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <ul class="text-justify pt-1" style="font-size: 14px">
+                        <p class="text-justify pt-3" style="font-size: 14px">Selecione uma opção para iniciar o Cálculo.</p>
+                        <!-- <ul class="text-justify pt-3" style="font-size: 14px">
                           <li>Selecione uma opção para iniciar o Cálculo.</li>
-                        </ul>
+                        </ul> -->
                       </div>
                     </div>
                   </div>
@@ -99,7 +100,7 @@
                   <div class="row mt-4 body-step-component">
                     <div
                       class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                      style="margin-top: 10rem"
+                      style="margin-top: 7rem"
                     >
                       <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -206,18 +207,29 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <ul class="text-justify" style="font-size: 14px">
+                         <p class="text-justify pt-5 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'manual'">
+                          Preencha os campos abaixo para elaboração do cálculo.
+                        </p>
+                        <p class="text-justify pt-4 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'cnis'">
+                          Insira o arquivo do CNIS em .pdf, obtido no Meu INSS, para adicionar os períodos de contribuição e os salários de contribuição;
+                          As informações inseridas poderão ser editadas posteriormente.
+                        </p>
+                        <p class="text-justify pt-5 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                          Selecionar um segurado cadastrado anteriormente, para elaboração do cálculo.
+                        </p>
+
+                        <!-- <ul class="text-justify" style="font-size: 14px">
                           <li *ngIf="dadosPassoaPasso.type === 'manual'">
-                            Informe os campos abaixo para realizar a contagem de
-                            tempo de contribuição.
+                            Preencha os campos abaixo para elaboração do cálculo.
                           </li>
                           <li *ngIf="dadosPassoaPasso.type === 'cnis'">
-                            Adicione um arquivo CNIS obtido no INSS digital para
-                            que as informações sejam adicionadas, não se
-                            preocupe ao final do processo você poderá editar
-                            estas informações.
+                            Insira o arquivo do CNIS em .pdf, obtido no Meu INSS, para adicionar os períodos de contribuição e os salários de contribuição;
+                            As informações inseridas poderão ser editadas posteriormente.
                           </li>
-                        </ul>
+                          <li *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                            Selecionar um segurado cadastrado anteriormente, para elaboração do cálculo.
+                          </li>
+                        </ul> -->
                       </div>
                     </div>
                   </div>

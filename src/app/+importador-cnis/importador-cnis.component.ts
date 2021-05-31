@@ -183,11 +183,19 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
           && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
 
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
-            //   this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-            //     this.realizarCalculoContagemTempo(seguradoId, calculoId);
-            //     this.seguradoId = seguradoId;
-            //     this.calculoId = calculoId;
-            //   });
+
+              this.PeriodosComponent.crudPeriodosImportador(calculoId).then(status => {
+
+                console.log(status);
+                console.log(seguradoId);
+                console.log(calculoId);
+
+                // this.realizarCalculoContagemTempo(seguradoId, calculoId);
+                // this.seguradoId = seguradoId;
+                // this.calculoId = calculoId;
+                // console.log(seguradoId);
+                // console.log(calculoId);
+              });
             });
 
           } else {

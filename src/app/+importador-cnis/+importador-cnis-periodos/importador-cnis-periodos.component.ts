@@ -327,6 +327,33 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
   }
 
+  
+  private ajusteListVinculosUpdate(calculoId) {
+
+    console.log(this.vinculosList);
+
+    this.vinculosListPost = [];
+    for (const vinculo of this.vinculosList) {
+      this.vinculosListPost.push(new PeriodosContagemTempo(
+        {
+          id: (vinculo.id != null && vinculo.id !== undefined)? vinculo.id : null,
+          data_inicio: this.formatPostDataDate(vinculo.data_inicio),
+          data_termino: this.formatPostDataDate(vinculo.data_termino),
+          empresa: vinculo.empresa,
+          fator_condicao_especial: this.formatFatorPost(vinculo.fator_condicao_especial),
+          condicao_especial: this.boolToLiteral(vinculo.condicao_especial),
+          carencia: this.boolToLiteral(vinculo.carencia),
+          licenca_premio_nao_usufruida: 0,
+          id_contagem_tempo: calculoId,
+          sc: JSON.stringify(vinculo.contribuicoes),
+          sc_menor_minimo: '',
+          action: null
+        })
+      );
+    }
+  }
+
+
 
   public createPeriodosImportador(calculoId) {
 
@@ -337,6 +364,31 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return this.PeriodosContagemTempoService
         .save(this.vinculosListPost)
         .then(model => {
+          return true;
+        })
+        .catch(errors => this.errors.add(errors));
+    }
+
+  }
+
+
+  
+
+  public crudPeriodosImportador(calculoId) {
+
+    if (calculoId && this.vinculosList.length >= 1) {
+
+      this.ajusteListVinculosUpdate(calculoId);
+
+      console.log(this.vinculosListPost);
+      console.log(this.PeriodosContagemTempoService);
+
+      return this.PeriodosContagemTempoService
+        .updateListPeriodos(calculoId, this.vinculosListPost)
+        .then(model => {
+
+          console.log(model);
+
           return true;
         })
         .catch(errors => this.errors.add(errors));

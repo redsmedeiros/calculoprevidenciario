@@ -30,21 +30,21 @@ export class ImportadorHomeComponent implements OnInit {
   public steps = [
     {
       key: 'step1',
-      title: 'Tipo de entrada de dados',
+      title: 'Dados do Cálculo',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step2',
-      title: 'Períodos de Contribuição',
+      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step3',
-      title: 'Contagem de Tempo',
+      title: 'Relatório da Contagem do Tempo de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
