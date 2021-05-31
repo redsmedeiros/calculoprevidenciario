@@ -123,12 +123,12 @@
                       <th>Contribuição Secundária</th>
                       <th>Contribuição Primária Corrigida</th>
                       <th>Contribuição Secundária Corrigida</th>
-                      <th>Limite</th>
+                      <th>Observação</th>
                     </tr>
                   </thead>
                 </sa-datatable>
               </div>
-              <table class="table table-bordered table-hover table-condensed">
+              <table class="table table-bordered table-hover table-condensed" *ngIf="direito" >
                 <tbody>
                   <tr>
                     <td width="50%">
@@ -212,7 +212,7 @@
               </table>
             </div>
 
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="widget-body hidden-dt no-margin" >
+            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && direito" class="widget-body hidden-dt no-margin" >
               <h3 class="p-2 m-1">Reajustes Administrativos</h3>
               <sa-datatable [options]="reajustesAdministrativosTableOptions" 
               *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
@@ -234,7 +234,7 @@
 </div>
 
 <!-- Opções do Cálculo Entre 05/04/1991 e 15/12/1998 -->
-<table class="table table-hover table-bordered">
+<table class="table table-hover table-bordered" *ngIf="direito" >
   <thead>
     <tr>
       <th>

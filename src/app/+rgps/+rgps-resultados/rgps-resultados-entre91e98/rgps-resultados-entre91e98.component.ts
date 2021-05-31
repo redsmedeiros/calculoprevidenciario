@@ -59,6 +59,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       { data: 'contribuicao_primaria_revisada' },
       { data: 'contribuicao_secundaria_revisada' },
       { data: 'limite' },
+    ],
+    columnDefs: [
+      { 'width': '15rem', 'targets': [7] },
     ]
   };
 
@@ -96,17 +99,17 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     // Ajuste para novos tipos conforme reforma
-    this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
+    // this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
 
     if (sessionStorage.withINPC == 'true') {
-    // if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
+      // if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
       this.reajustesAdministrativos = false;
     } else {
       this.reajustesAdministrativos = true;
     }
 
-    this.boxId = this.generateBoxId(this.calculo.id, '98');
+    this.boxId = this.generateBoxId(this.calculo.id, '9899');
 
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     let dataInicio = this.dataInicioBeneficio;
@@ -371,7 +374,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
 
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6
-      || this.tipoBeneficio == 5 || this.tipoBeneficio == 3
+      || [5, 1915, 1920, 1925].includes(this.tipoBeneficio)
+      || this.tipoBeneficio == 3
       || this.tipoBeneficio == 16) {
       if (contagemPrimaria < 24) {
         contagemPrimaria = 24;
@@ -551,11 +555,19 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       if (!this.verificarCarencia(-5, redutorProfessor, redutorSexo, errorArray)) {
         return false;
       }
-    } else if (this.tipoBeneficio == 5) {
-      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
+
+    } else if ([5, 1915, 1920, 1925].includes(this.tipoBeneficio)) {
+
+      // Aposentadoria Especial
+      const parametrosParaVerificarTempoDeServico = { 5: 20, 1915: 20, 1920: 15, 1925: 10 }
+      const valorExtra = parametrosParaVerificarTempoDeServico[this.tipoBeneficio];
+
+      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, valorExtra);
+
       if (!direito) {
         errorArray.push('Não possui direito ao benefício de aposentadoria especial.');
       }
+
     } else if (this.tipoBeneficio == 16) {
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
       if (!idadeMinima) {
@@ -703,6 +715,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       return false;
     return true;
   }
+
 
   coeficienteProporcional(extra, porcentagem, toll) {
     let coeficienteProporcional = 0.7 + (Math.trunc(extra - toll) * porcentagem);

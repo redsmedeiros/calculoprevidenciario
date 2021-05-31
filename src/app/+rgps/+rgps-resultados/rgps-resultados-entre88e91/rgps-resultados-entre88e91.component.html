@@ -125,7 +125,7 @@
                     </thead>
                   </sa-datatable>
                 </div>
-                <div class="widget-body" *ngIf="!isUpdating && !erro">
+                <div class="widget-body" *ngIf="!isUpdating && direito">
                   <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
@@ -244,12 +244,12 @@
                     </thead>
                   </sa-datatable>
                 </div>
-                <div class="widget-body" *ngIf="!isUpdating && direito">
+                <div class="widget-body" *ngIf="!isUpdating && direito"> 
                   <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
                         <td width="50%">
-                          <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                          <span class="pull-right font-bold">Índice de reajuste no teto: </span>
                         </td>
                         <td width="50%">{{conclusoes91_98.indice_reajuste_teto}}</td>
                       </tr>
