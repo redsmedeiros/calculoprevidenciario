@@ -279,23 +279,6 @@
                 </button>
               </td>
             </tr>
-            <tr *ngIf='!isUpdating'>
-              <td>
-                <p>Exportar para o cálculo de Liquidação de Sentença - Teto 12/98 e 12/2003</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='erro.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='erro.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
             <tr>
               <td>
                 <p>Mostrar Reajustes Administrativos</p>
