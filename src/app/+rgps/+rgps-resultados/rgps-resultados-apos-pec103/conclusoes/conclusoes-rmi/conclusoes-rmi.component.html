@@ -41,3 +41,37 @@ class="table table-bordered table-hover no-padding"
   </tr>
 </tbody>
 </table>
+
+
+<table class="table table-hover table-condensed table-bordered not-print my-3" *ngIf="!isUpdating" >
+  <!-- <thead>
+    <tr>
+      <th>{{regraLabel}}
+      </th>
+      <th>
+        Ação
+      </th>
+    </tr>
+  </thead> -->
+  <tbody>
+    <tr *ngIf='!isUpdating && valor'>
+      <td>
+        <strong>Exportar para o cálculo de Liquidação de Sentença</strong>
+        <button
+        *ngIf="!isUpdating"
+        class="btn btn-primary pull-right btn-xs mr-3 not-print"
+        type="submit"
+        (click)="exportarParaBeneficios(dataInicioBeneficio, valorExportacao, 'A')"
+      >
+        &nbsp;&nbsp;
+        <i
+          *ngIf="!isUpdating"
+          class="fa fa-external-link pull-left fa fa-lg p-1"
+        ></i>
+        Exportar &nbsp;&nbsp;
+      </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

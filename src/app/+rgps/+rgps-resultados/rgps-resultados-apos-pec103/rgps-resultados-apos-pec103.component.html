@@ -134,12 +134,16 @@
             [isUpdating]="isUpdating"
             [isRegrasTransicao]="isRegrasTransicao"
             [segurado] ="segurado"
+            [dataInicioBeneficio] ="dataInicioBeneficioExportar"
          ></app-lista-competencias>
 
          <app-conclusoes-rmi *ngIf="isRegrasPensaoObitoInstituidorAposentado"
          [conclusoes]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.list"
          [regraLabel]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.label"
          [isUpdating]="isUpdating"
+         [dataInicioBeneficio]="dataInicioBeneficio"
+         [segurado]="segurado"
+         [valorExportacao]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.rmi"
        ></app-conclusoes-rmi>
 
         

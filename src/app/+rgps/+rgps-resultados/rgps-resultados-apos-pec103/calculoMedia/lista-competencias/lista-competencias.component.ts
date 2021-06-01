@@ -14,6 +14,7 @@ export class ListaCompetenciasComponent implements OnInit {
   @Input() isUpdating;
   @Input() isRegrasTransicao;
   @Input() segurado;
+  @Input() dataInicioBeneficio;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -21,7 +22,6 @@ export class ListaCompetenciasComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
   }
 
 

@@ -80,7 +80,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public rmiFinalCustom;
 
   private numeroDeContribuicoesAux = 0;
-
+  public dataInicioBeneficioExportar;
 
 
 
@@ -127,6 +127,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
+
+    this.dataInicioBeneficioExportar = (this.dataInicioBeneficio.clone()).format('YYYY-MM-DD');
 
 
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');

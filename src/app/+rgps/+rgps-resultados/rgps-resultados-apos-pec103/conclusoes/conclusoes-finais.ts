@@ -803,7 +803,7 @@ export class conclusoesFinais {
         }
 
         return {
-            value: valueRetorno,
+            value: (Math.round(valueRetorno * 100) / 100),
             valueString: DefinicaoMoeda.formatMoney(valueRetorno),
             aviso: avisoString
         };
