@@ -116,7 +116,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   public state: any = {
     tabs: {
-      selectedTab: 'hr1',
+      selectedTab: 'hr2',
     }
   };
 

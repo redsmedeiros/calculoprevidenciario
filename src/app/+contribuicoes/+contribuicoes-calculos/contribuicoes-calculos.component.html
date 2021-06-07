@@ -34,7 +34,7 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado selecionado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
 
           <!-- widget div-->
@@ -98,7 +98,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- <tr>
               <td class="text-center">
                 <button
                   type="submit"
@@ -118,19 +118,19 @@
                   jurisprudencial
                 </p>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td class="text-center">
                 <button
                   type="submit"
                   (click)="createNewComplementar()"
-                  class="btn btn-labeled btn-info"
+                  class="btn btn-labeled btn-info my-3"
                   style="width: 250px"
                 >
                   <span class="btn-label pull-left">
-                    <i class="fa fa-arrow-right"></i>
+                    <i class="fa fa-plus"></i>
                   </span>
-                  <p class="m-2">Lei Complementar N° 128/08</p>
+                  <p class="my-2">Criar Novo Cálculo</p>
                 </button>
               </td>
               <td>
@@ -159,23 +159,27 @@
           [sortable]="false"
         >
           <header>
-            <ul class="nav nav-tabs pull-left in">
-              <li [class.active]="state.tabs.selectedTab == 'hr1'">
+            <!-- <ul class="nav nav-tabs pull-left in">
+               <li [class.active]="state.tabs.selectedTab == 'hr1'">
                 <a (click)="state.tabs.selectedTab = 'hr1'">
                   <span class="hidden-mobile hidden-tablet">
                     Jurisprudencial
                   </span>
                 </a>
-              </li>
+              </li> 
 
               <li [class.active]="state.tabs.selectedTab == 'hr2'">
                 <a (click)="state.tabs.selectedTab = 'hr2'">
                   <span class="hidden-mobile hidden-tablet">
-                    Lei Complementar N° 128/08
+                    Lista de Cálculos
                   </span>
                 </a>
               </li>
-            </ul>
+            </ul> -->
+              <span class="widget-icon">
+                <i class="fa fa-list"></i>
+              </span>
+              <h2>Lista de Cálculos</h2>
           </header>
 
           <!-- widget div-->
@@ -183,7 +187,7 @@
             <!-- widget content -->
             <div class="widget-body">
               <tabset>
-                <tab [active]="state.tabs.selectedTab == 'hr1'">
+                <!-- <tab [active]="state.tabs.selectedTab == 'hr1'">
                   <div class="alert alert-info" role="alert">
                     Cálculo de contribuições em atraso conforme entendimento
                     jurisprudencial
@@ -207,7 +211,7 @@
                       </thead>
                     </sa-datatable>
                   </div>
-                </tab>
+                </tab> -->
                 <tab [active]="state.tabs.selectedTab == 'hr2'">
                   <div class="alert alert-info" role="alert">
                     O cálculo dos valores apresentados abaixo foram realizados
