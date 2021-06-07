@@ -772,8 +772,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
 
-
-
         const tempoContribuicaoMaisIdade = this.contribuicaoTotal + this.idadeFracionada;
         this.aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes)
 
@@ -1525,7 +1523,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       requisitoSegurado.f -= 5;
 
     }
-
+   
     return {
       status: status,
       requistos: requisitoSegurado,
@@ -1538,6 +1536,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   private aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes) {
 
     const requitoPontos = this.getRequisitoPontos();
+
+   
 
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
@@ -1647,9 +1647,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let contagemPrimaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
     let contagemPrimariaAnos = contagemPrimaria / 365;
     //let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
-    if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
-      contagemPrimariaAnos += redutorProfessor + redutorSexo;
-    }
+    // if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
+    //   contagemPrimariaAnos += redutorProfessor + redutorSexo;
+    // }
 
     this.contribuicaoTotal = contagemPrimariaAnos;
 
