@@ -20,6 +20,7 @@ import { DefinicaoMoeda } from 'app/+rgps/+rgps-resultados/rgps-resultados-apos-
 import { validateConfig } from '@angular/router/src/config';
 import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
 import { ReajusteAutomaticoService } from 'app/+rgps/+rgps-resultados/ReajusteAutomatico.service';
+// import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 
 @Component({
@@ -304,8 +305,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const calculo1 = this.calculo;
       const calculo2 = this.planejamento;
 
-      console.log(calculo1);
-      console.log(calculo2);
+      // console.log(calculo1);
+      // console.log(calculo2);
 
       this.calcularIdades();
 
@@ -324,9 +325,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const dataContribuicoesAdicionaisInicial = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisInicio);
       const dataContribuicoesAdicionaisfim = moment(resultadoRmiNovo.planejamentoContribuicoesAdicionaisFim);
 
-      console.log(resultadoRmiNovo);
-      console.log(this.numeroContribuicoesAdicionais);
-      console.log(this.numeroContribuicoesTotal);
+      // console.log(resultadoRmiNovo);
+      // console.log(this.numeroContribuicoesAdicionais);
+      // console.log(this.numeroContribuicoesTotal);
 
       let investimentoEntreDatas = Math.abs(calculo1.soma_contribuicao - calculo2.nova_soma_contribuicoes);
       let tempoMinimo1 = 0;
@@ -362,8 +363,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
         //   this.planejamento.dataDibFutura,
         //   this.aliquotaRst.valor);
 
-        console.log(dataContribuicoesAdicionaisInicial)
-        console.log(dataContribuicoesAdicionaisfim)
+        // console.log(dataContribuicoesAdicionaisInicial)
+        // console.log(dataContribuicoesAdicionaisfim)
 
         const investimentoContribuicaoINSSRST = this.createListPlanContribuicoesEntreDibs(
           dataContribuicoesAdicionaisInicial.format('DD/MM/YYYY'),
@@ -504,9 +505,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
           value: this.formateObjToStringAnosMesesDias(this.idadeDibFutura)
         });
 
-        console.log(this.idadeDibFutura);
-        console.log(tempoMinimo2Ano);
-        console.log(idadeSeguradoDIB);
+        // console.log(this.idadeDibFutura);
+        // console.log(tempoMinimo2Ano);
+        // console.log(idadeSeguradoDIB);
 
 
         const idadeParaRecuperarPerdas = this.idadeDibFutura.clone();
@@ -591,7 +592,16 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   private getDiffDate(dataI, dataF) {
-    return moment.duration(dataF.diff(moment(dataI)));
+
+    const inicioV = (dataI.clone()).startOf('day')
+    const fimV = (dataF.clone()).endOf('day');
+    const rst = moment.duration(fimV.diff(inicioV));
+
+    if (rst.days() === 30) {
+      rst.add(1, 'day')
+    }
+
+    return rst;
   }
 
 
@@ -612,7 +622,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       moment(this.planejamento.data_futura)
     );
 
-    console.log(this.expectativaVidaR);
+    //console.log(this.expectativaVidaR);
 
     this.idadeDibFuturaExpectativaIBGE = this.getDiffDate(
       moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
@@ -629,17 +639,17 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private calcularValorAcumulado() {
 
-    console.log('valor esperado')
-    console.log('idade atual')
-    console.log(this.idadeAtual)
-    console.log('idade dib atual')
-    console.log(this.idadeDibAtual)
-    console.log('idade futura atual')
-    console.log(this.idadeDibFutura)
-    console.log('idade idade atual + IBGE atual')
-    console.log(this.idadeDibFuturaExpectativaIBGE)
-    console.log('idade idade futura atual - IBGE atual')
-    console.log(this.idadeDibFuturaExpectativaIBGEDiffDibFutura);
+    // console.log('valor esperado')
+    // console.log('idade atual')
+    // console.log(this.idadeAtual)
+    // console.log('idade dib atual')
+    // console.log(this.idadeDibAtual)
+    // console.log('idade futura atual')
+    // console.log(this.idadeDibFutura)
+    // console.log('idade idade atual + IBGE atual')
+    // console.log(this.idadeDibFuturaExpectativaIBGE)
+    // console.log('idade idade futura atual - IBGE atual')
+    // console.log(this.idadeDibFuturaExpectativaIBGEDiffDibFutura);
 
     const diffTempoIBGESubIDFutura = this.idadeDibFuturaExpectativaIBGEDiffDibFutura.asYears();
 
@@ -770,14 +780,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     };
 
 
-    console.log('-- inicio -- contador com abono')
-    console.log('inicio = ' + inicioPeriodo)
-    console.log('fim = ' + fimPeriodo)
-    console.log('num-contrib = ' + count)
-    console.log('soma-contrib = ' + somaContribuicoes)
-    console.log(this.reajustesAutomaticos);
-    console.log(planejamentoContribuicoesEntreDibs)
-    console.log('-- fim -- contador com abono')
+    // console.log('-- inicio -- contador com abono')
+    // console.log('inicio = ' + inicioPeriodo)
+    // console.log('fim = ' + fimPeriodo)
+    // console.log('num-contrib = ' + count)
+    // console.log('soma-contrib = ' + somaContribuicoes)
+    // console.log(this.reajustesAutomaticos);
+    // console.log(planejamentoContribuicoesEntreDibs)
+    // console.log('-- fim -- contador com abono')
 
     return { value: somaContribuicoes, count: count };
 
@@ -815,14 +825,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       const valorProp = (valorContrib / 30) * diffdays
 
-      console.log('----dias1----')
-      console.log(data)
-      console.log(data.date())
-      console.log(data.date() < 30)
-      console.log(diffdays)
-      console.log('----dias2----')
-      console.log(valorContrib);
-      console.log(valorProp);
+      // console.log('----dias1----')
+      // console.log(data)
+      // console.log(data.date())
+      // console.log(data.date() < 30)
+      // console.log(diffdays)
+      // console.log('----dias2----')
+      // console.log(valorContrib);
+      // console.log(valorProp);
 
       return Math.round(valorProp * 100) / 100;
 
@@ -853,15 +863,15 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
    */
   verificaAbonoProporcional(dataProp, valorContrib, valorFull, type) {
 
-    console.log('---------inicio MMMMMM--------')
+    // console.log('---------inicio MMMMMM--------')
 
-    console.log((dataProp.format('DD/MM/YYYY')));
-    console.log((dataProp.date()));
-    console.log(type === 'F');
-    console.log(dataProp.month());
-    console.log(type);
+    // console.log((dataProp.format('DD/MM/YYYY')));
+    // console.log((dataProp.date()));
+    // console.log(type === 'F');
+    // console.log(dataProp.month());
+    // console.log(type);
 
-    console.log('-----------fim MMMMM----------')
+    // console.log('-----------fim MMMMM----------')
 
     if (((dataProp.month() + 1) === 12 && (dataProp.date() === 1 || dataProp.date() === 31))) {
       return Math.round(valorFull * 100) / 100;
@@ -882,8 +892,16 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
   private diferencaDatas(inicio, fim) {
 
-    return moment.duration(fim.diff(inicio));
 
+    const inicioV = (inicio.clone()).startOf('day')
+    const fimV = (fim.clone()).endOf('day');
+    const rst = moment.duration(fimV.diff(inicioV));
+
+    if (rst.days() === 30) {
+      rst.add(1, 'day')
+    }
+
+    return rst;
   }
 
   private getDifferenceInMonths(date1, date2 = moment()) {

@@ -82,8 +82,9 @@ export class DefinicaoTempo {
      * @param dataInicio Inicio do periodo string data format ('YYYY-MM-DD')
      * @param dataFim Fim do periodo string data format ('YYYY-MM-DD')
      * @param mesInteiro Considerar sempre o mês Completo no inicio e fim
+     * @param contarFinal Considerar o dia final 01/01/2020 - 01/01/2021 = 1 ano e 1 dia
      */
-    static dataDiffDateToDateCustom(dataInicio, dataFim, mesInteiro = false) {
+    static dataDiffDateToDateCustom(dataInicio, dataFim, mesInteiro = false, contarFinal = 1) {
 
         const dataInicioString = dataInicio;
         const dataFimString = dataFim;
@@ -113,7 +114,7 @@ export class DefinicaoTempo {
             if (!dataInicio.isSame(compareDataInicioStartM)) {
 
                 totalDias -= 30;
-                diasInicio = (30 - dataInicio.date()) + 1;
+                diasInicio = (30 - dataInicio.date()) + contarFinal;
                 totalDias += diasInicio;
 
             }
@@ -146,6 +147,26 @@ export class DefinicaoTempo {
 
         return totalDMY;
     }
+
+    
+    static calcularTempo360MenosDiaFim(dataNasc, dataFim = null) {
+
+        if (dataFim === null) {
+            dataFim = moment().format('YYYY-MM-DD');
+        }
+
+        const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustom(
+            dataNasc,
+            dataFim,
+            false,
+            0
+        );
+
+        const totalDMY = DefinicaoTempo.convertD360ToDMY(totalDay360.dias);
+
+        return totalDMY;
+    }
+
 
     /**
     * Diferença entre datas condiderando mês 30 dias e ano 360
