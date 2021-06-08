@@ -198,7 +198,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.generateTabelaDetalhes();
     this.form.contribuicao_calculada = this.calculateContribuicao();
 
-    let novoCalculo = new ContribuicaoModel();
+    const novoCalculo = new ContribuicaoModel();
     novoCalculo.id_segurado = this.form.id_segurado;
     novoCalculo.inicio_atraso = '01/' + this.form.inicio_atraso;
     novoCalculo.final_atraso = '01/' + this.form.final_atraso
@@ -211,6 +211,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.contribuicao_calculada = this.form.contribuicao_calculada;
     novoCalculo.chk_juros = this.form.chk_juros;
     novoCalculo.contribuicoes = JSON.stringify(this.matriz);
+    novoCalculo.atualizar_ate = '01/' + this.form.atualizar_ate;
 
     if (this.form.id == undefined) {
       this.Calculo.save(novoCalculo).then((data: ContribuicaoModel) => {
@@ -541,7 +542,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     //   timer: 1000
     // });
   }
-
 
 
   //Retorna uma lista com os meses entre dateStart e dateEnd

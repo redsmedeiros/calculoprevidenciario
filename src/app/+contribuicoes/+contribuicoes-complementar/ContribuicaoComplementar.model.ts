@@ -17,8 +17,9 @@ export class ContribuicaoComplementar extends Model {
     media_salarial: 0,
     contribuicao_calculada: 0,
     data_calculo: '',
-    chk_juros:'',
-    contribuicoes:''
+    chk_juros: '',
+    contribuicoes: '',
+    atualizar_ate: ''
   };
 
   public id;
@@ -35,6 +36,7 @@ export class ContribuicaoComplementar extends Model {
   public data_calculo;
   public chk_juros;
   public contribuicoes;
+  public atualizar_ate;
   // public actions = `
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i title="Editar" class='fa fa-edit'></i> </a>
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
