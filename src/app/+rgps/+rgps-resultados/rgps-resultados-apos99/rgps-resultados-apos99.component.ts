@@ -877,7 +877,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     // passo 1
     rmi = somaMedias;
-    if ((!this.isRegraPontos && this.tipoBeneficio === 4)
+    if ((!this.isRegraPontos && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6))
       || (tipoIdadeFator && fatorSeguranca > 1)) {
 
       rmi *= this.fatorPrevidenciario;
