@@ -16,6 +16,7 @@
     [formData]="form"
     [errors]="Errors"
     (onSubmit)="preencher($event)"
+    (importCnis)="preencherComCnis($event)"
   ></app-contribuicoes-complementar-form>
 </article>
 <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdate">

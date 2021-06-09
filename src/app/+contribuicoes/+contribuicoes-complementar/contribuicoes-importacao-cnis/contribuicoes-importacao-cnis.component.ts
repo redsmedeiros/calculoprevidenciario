@@ -354,7 +354,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
     for (const element of array) {
       contribuicoes.push({
-        data: moment(element.data, 'MM/YYYY').format('YYYY-MM-DD'),
+        data: moment(element.data, 'MM/YYYY').format('MM/YYYY'),
         valor: replacePontos(element.contrib)
       });
     }
@@ -365,8 +365,6 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     })
 
     swal.showLoading();
-
-    console.log(contribuicoes);
 
     this.contribuicoesEventOut.emit(contribuicoes);
 

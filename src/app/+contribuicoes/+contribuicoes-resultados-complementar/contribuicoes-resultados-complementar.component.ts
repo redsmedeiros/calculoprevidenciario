@@ -106,6 +106,20 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             }
           }
 
+          let refenciaMoedaInicio = moment().subtract(1, 'months')
+          let refenciaMoedaFim = moment();
+
+
+          if (this.calculoComplementar.atualizar_ate !== undefined &&
+            this.calculoComplementar.atualizar_ate !== null &&
+            this.calculoComplementar.atualizar_ate !== '') {
+
+            console.log(this.calculoComplementar);
+
+            refenciaMoedaInicio = moment(this.calculoComplementar.atualizar_ate).subtract(1, 'months')
+            refenciaMoedaFim = moment(this.calculoComplementar.atualizar_ate);
+          }
+
           this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
@@ -218,14 +232,18 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     //  console.log(competencias);
 
+    const checkDataJuros = (competencia) => {
+      return moment(competencia, 'MM/YYYYY').isAfter('1996-10-14', 'months')
+    }
+
 
     for (let competencia of competencias) {
       let splited = competencia.split('-');
 
       competencia = splited[1] + '/' + splited[0];
       let valor_contribuicao = this.getValorContribuicao();
-      let juros = (this.mostrarJuros) ? this.getTaxaJuros(competencia) : 0;
-      let multa = this.getMulta();
+      let juros = (this.mostrarJuros && checkDataJuros(competencia)) ? this.getTaxaJuros(competencia) : 0;
+      let multa = (checkDataJuros(competencia)) ? this.getMulta() : 0;
       let total = (this.getBaseAliquota() * 1.1) + juros;
 
       let line = {
@@ -362,6 +380,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   //   popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + rodape + '</body></html>');
   //   popupWin.document.close();
   // }
+
+
+
+
+
 
 
 

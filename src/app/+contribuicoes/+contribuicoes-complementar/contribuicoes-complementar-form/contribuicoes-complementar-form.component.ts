@@ -39,6 +39,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   @Input() formData;
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
+  @Output() importCnis = new EventEmitter;
 
   constructor(
     protected Calculo: ContribuicaoComplementarService,
@@ -192,7 +193,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
   public setContribuicoesImport(contribuicoes){
 
-    console.log(contribuicoes);
+    this.importCnis.emit(contribuicoes)
+
   }
 
 
