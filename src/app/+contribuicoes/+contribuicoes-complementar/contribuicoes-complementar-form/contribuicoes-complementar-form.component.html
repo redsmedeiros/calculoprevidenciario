@@ -69,7 +69,6 @@
                 [textMask]="{ mask: dateMask }"
                 (change)="errors.clear('atualizarAte')"
                 placeholder="(MM/AAAA)"
-                (keyup)="moveNext($event, 7, 'contribuicaoDe')"
                 type="text"
                 id="atualizarAte"
               />
@@ -377,46 +376,46 @@
           <form class="form-horizontal">
             <fieldset class="pb-3 pt-3">
               <div class="form-group">
-                <label class="control-label col-md-2" for="contribuicaoDe"
+                <label class="control-label col-md-2" for="contribuicaoDeMatriz"
                   >Contribuição de:</label
                 >
                 <div class="col-md-2">
                   <input
                     class="form-control"
-                    [(ngModel)]="contribuicaoDe"
+                    [(ngModel)]="contribuicaoDeMatriz"
                     [ngModelOptions]="{ standalone: true }"
                     [textMask]="{ mask: dateMask }"
-                    (change)="errors.clear('contribuicaoDe')"
+                    (change)="errors.clear('contribuicaoDeMatriz')"
                     placeholder="(MM/AAAA)"
                     type="text"
-                    (keyup)="moveNext($event, 7, 'contribuicaoAte')"
-                    id="contribuicaoDe"
+                    (keyup)="moveNext($event, 7, 'contribuicaoAteMatriz')"
+                    id="contribuicaoDeMatriz"
                   />
                   <small
-                    *ngIf="errors.has('contribuicaoDe')"
+                    *ngIf="errors.has('contribuicaoDeMatriz')"
                     class="text-danger"
                     >{{ errors.get("contribuicaoDe") }}</small
                   >
                 </div>
-                <label class="control-label col-md-2" for="finalPeriodo"
+                <label class="control-label col-md-2" for="contribuicaoAteMatriz"
                   >Contribuição até:</label
                 >
                 <div class="col-md-2">
                   <input
                     class="form-control"
-                    [(ngModel)]="contribuicaoAte"
+                    [(ngModel)]="contribuicaoAteMatriz"
                     [ngModelOptions]="{ standalone: true }"
                     [textMask]="{ mask: dateMask }"
-                    (change)="errors.clear('contribuicaoAte')"
+                    (change)="errors.clear('contribuicaoAteMatriz')"
                     placeholder="(MM/AAAA)"
                     (keyup)="moveNext($event, 7, 'salarioContribuicao')"
                     type="text"
-                    id="contribuicaoAte"
+                    id="contribuicaoAteMatriz"
                   />
                   <small
-                    *ngIf="errors.has('contribuicaoAte')"
+                    *ngIf="errors.has('contribuicaoAteMatriz')"
                     class="text-danger"
-                    >{{ errors.get("contribuicaoAte") }}</small
+                    >{{ errors.get("contribuicaoAteMatriz") }}</small
                   >
                 </div>
                 <label class="col-md-2 control-label" for="salarioContribuicao"

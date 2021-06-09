@@ -52,7 +52,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   constructor(protected router: Router,
     private route: ActivatedRoute,
     protected errors: ErrorService,
-    ) {
+  ) {
   }
 
   ngOnInit() {
@@ -62,18 +62,18 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-  //  atualizarAte = moment().format('DD/MM/YYYY');
+    //  atualizarAte = moment().format('DD/MM/YYYY');
 
     this.isUpdating = true;
 
     let changedatualizarAte = changes['atualizarAte'];
 
-     console.log(changedatualizarAte);
+    console.log(changedatualizarAte);
 
 
   }
 
-  changeSomarSecundaria(){}
+  changeSomarSecundaria() { }
 
   editSegurado() {
     window.location.href = '/#/rgps/rgps-segurados/' +
@@ -86,7 +86,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
       return;
     }
-    
+
     let file = event.files[0]
     if (file.fileEntry.isFile) { //É um arquivo?
       const fileEntry = file.fileEntry as FileSystemFileEntry;
@@ -236,7 +236,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     };
 
     let somaContrib = function (valor1, valor2) {
-         return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
     arrayOrganizado.sort(function (a, b) {
@@ -253,7 +253,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     });
 
     let teste_data = null;
-   
+
 
 
     arrayOrganizado.filter(function (i, index) {
@@ -265,33 +265,33 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       }
     });
 
-     // reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
-     let result = [];
-     arrayOrganizado.reduce(function (res, value) {
-       if (!res[value.data + '-' + value.contributionType]) {
-         res[value.data + '-' + value.contributionType] = {
-           contrib: '0,00',
-           data: value.data,
-           contributionType: value.contributionType
-         };
-         result.push(res[value.data + "-" + value.contributionType])
-       }
-       res[value.data + '-' + value.contributionType].contrib = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
+    // reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
+    let result = [];
+    arrayOrganizado.reduce(function (res, value) {
+      if (!res[value.data + '-' + value.contributionType]) {
+        res[value.data + '-' + value.contributionType] = {
+          contrib: '0,00',
+          data: value.data,
+          contributionType: value.contributionType
+        };
+        result.push(res[value.data + "-" + value.contributionType])
+      }
+      res[value.data + '-' + value.contributionType].contrib = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
 
       //  if (value.data == '12/2007' && value.contributionType == 1) {
       //    console.log( value.contrib);
       //   console.log( res[value.data + "-" + value.contributionType].contrib);
       //  }
 
-       return res;
-     }, {});
-  
+      return res;
+    }, {});
+
 
     // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
     if (moment(this.atualizarAte, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
       let teste_data = null;
       for (const objPS of arrayOrganizado) {
-        
+
         if (objPS.data != teste_data) {
           objPS.contributionType = 0;
           teste_data = objPS.data;
@@ -302,30 +302,30 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         }
 
       }
-     
+
       let arraySomatorioPS = [];
       for (const objPrim of arrayOrganizado) {
 
-          arraySomatorioPS.push({
-            contrib: (objPrim.contributionType === 0)? this.getValueSecundarias(objPrim.data, objPrim.contrib) : "0,00",
-            data: objPrim.data,
-            contributionType: objPrim.contributionType
-          });
-                 
+        arraySomatorioPS.push({
+          contrib: (objPrim.contributionType === 0) ? this.getValueSecundarias(objPrim.data, objPrim.contrib) : "0,00",
+          data: objPrim.data,
+          contributionType: objPrim.contributionType
+        });
+
       }
-      
+
       return arraySomatorioPS;
-    }else{
-        
-   
-    return result;
+    } else {
+
+
+      return result;
     }
-   
+
   }
 
-  
+
   getValueSecundarias(data, contrib) {
-     let replacePontos = function (valor) {
+    let replacePontos = function (valor) {
       return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
@@ -370,15 +370,6 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
     swal.close();
     this.isUpdating = false;
-
-      // swal('Valores importados com sucesso!', '', 'success').then(() =>{ });
-
-    // this.ValorContribuidoService.save(contribuicoes).then(() => {
-    //   swal.close();
-    //   swal('Valores importados com sucesso!', '', 'success').then(() =>{
-    //     window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + this.idCalculo;
-    //   });
-    // });
   }
 
 }

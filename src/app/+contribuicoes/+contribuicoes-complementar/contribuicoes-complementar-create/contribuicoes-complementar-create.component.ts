@@ -75,7 +75,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.idSegurado = this.route.snapshot.params['id'];
     let today = moment();
 
-    this.Moeda.getByDateRangeMomentParam(moment('1990-01-01'), moment().subtract(1, 'm'))
+    this.Moeda.getByDateRangeMomentParam(moment('1980-01-01'), moment().subtract(1, 'm'))
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
         this.isUpdate = false;
@@ -90,8 +90,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
 
   preencher(data) {
+
     this.idSegurado = this.route.snapshot.params['id'];
-    let monthList = this.monthAndYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
+    const monthList = this.monthAndYear(data.contribuicao_basica_inicial, data.contribuicao_basica_final);
 
     // this.NumMeses += monthList.length;
     // this.form.numero_contribuicoes = this.NumMeses*0.8;
@@ -176,6 +177,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     this.contribuicoesImport = contribuicoes;
     const contribuicoesFormat = this.formatMatrizContribuicoes(contribuicoes);
+    //this.matrizHasValues = true;
 
     // this.matriz = JSON.parse(this.form.contribuicoes);
     // this.matriz.sort(function (a, b) { return a.ano - b.ano });
@@ -229,6 +231,12 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
 
   private getInicioFimValoresContribuicao(contribuicoes) {
+
+    this.form.contribuicao_basica_inicial = contribuicoes[0].data;
+    this.form.contribuicao_basica_final = contribuicoes[(contribuicoes.length - 1)].data;
+    this.contribuicao_basica_inicial_temp = contribuicoes[0].data;
+    this.contribuicao_basica_final_temp = contribuicoes[(contribuicoes.length - 1)].data;
+    this.form.salario = contribuicoes[(contribuicoes.length - 1)].valor;
 
     return this.monthAndYear(contribuicoes[0].data, contribuicoes[(contribuicoes.length - 1)].data);
   }
