@@ -19,7 +19,7 @@
     (importCnis)="preencherComCnis($event)"
   ></app-contribuicoes-complementar-form>
 </article>
-<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdate && matrizHasValues">
+<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdate">
   <!-- Widget ID (each widget will need unique ID)-->
   <sa-widget
     [colorbutton]="false"
@@ -37,7 +37,7 @@
       <h2>Valores de contribuição</h2>
     </header>
     <div>
-      <div class="widget-body no-padding" >
+      <div class="widget-body no-padding" *ngIf="matrizHasValues" >
         <sa-datatable
           paginationLength="true"
           [options]="matrixTableOptions"
