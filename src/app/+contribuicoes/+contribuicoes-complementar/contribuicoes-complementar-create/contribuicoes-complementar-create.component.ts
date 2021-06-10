@@ -123,8 +123,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         this.anosConsiderados.push(row.ano);
       });
 
-      console.log(this.anosConsiderados);
-
     } else {
 
       let ano = monthList[0].split('-')[0];
@@ -178,7 +176,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     // this.matriz = JSON.parse(this.form.contribuicoes);
     // this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
-    //this.matrizHasValues = true;
 
     // this.matriz.map(row => {
     //   this.anosConsiderados.push(row.ano);
@@ -187,6 +184,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     console.log(contribuicoes);
   }
+
+
 
   private formatMatrizContribuicoes(contribuicoes) {
 
@@ -209,7 +208,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       if (ano == entry.split('-')[0]) {
         valores[+entry.split('-')[1] - 1] = this.formatMoneyContribuicao(salarioContribuicao);
       } else {
-        this.updateMatrix(+ano, valores);
+        this.updateMatrixCnis(+ano, valores);
         ano = entry.split('-')[0];
         valores = ['R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
         updateValores = this.getAnoValores(ano);
@@ -221,9 +220,43 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
       }
     }
-    this.updateMatrix(+ano, valores);
+    this.updateMatrixCnis(+ano, valores);
 
   }
+
+
+  
+  updateMatrixCnis(ano, valores) {
+    if (!this.matrizHasValues) {
+      this.matriz.splice(0, 1);
+    }
+    for (let entry of this.matriz) {
+      if (entry.ano == ano) {
+        let index = 0;
+        for (index = 0; index < 12; ++index) {
+          // permitir o valor zero
+          if (entry.valores[index] != valores[index]) {
+            entry.valores[index] = valores[index];
+          }
+        }
+        return;
+      }
+    }
+
+    let valoresCompare = valores
+
+     if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
+      this.matriz.push({ 'ano': ano, 'valores': valores });
+     }
+
+    this.matriz.sort(function (a, b) { return a.ano - b.ano });
+
+    this.matrizHasValues = true;
+
+    console.log(this.matrizHasValues)
+
+  }
+
 
 
   private getInicioFimValoresContribuicao(contribuicoes) {
@@ -233,9 +266,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.contribuicao_basica_inicial_temp = contribuicoes[0].data;
     this.contribuicao_basica_final_temp = contribuicoes[(contribuicoes.length - 1)].data;
     this.form.salario = contribuicoes[(contribuicoes.length - 1)].valor;
-
-    console.log(this.contribuicao_basica_inicial_temp)
-    console.log(this.contribuicao_basica_final_temp)
 
     return this.monthAndYear(contribuicoes[0].data, contribuicoes[(contribuicoes.length - 1)].data);
   }
@@ -619,15 +649,16 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       }
     }
 
-    //let valoresCompare = valores
+    let valoresCompare = valores
 
-    //  if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
-    this.matriz.push({ 'ano': ano, 'valores': valores });
-    //}
+    // if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
+      this.matriz.push({ 'ano': ano, 'valores': valores });
+    // }
 
     this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
     this.matrizHasValues = true;
+
     // swal({
     //   type: 'success',
     //   title: 'A lista foi atualizada',
