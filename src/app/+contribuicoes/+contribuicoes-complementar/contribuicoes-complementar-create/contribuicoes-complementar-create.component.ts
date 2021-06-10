@@ -73,19 +73,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   getInformacoesIniciais() {
 
     this.idSegurado = this.route.snapshot.params['id'];
-    let today = moment();
-
-    this.Moeda.getByDateRangeMomentParam(moment('1980-01-01'), moment().subtract(1, 'm'))
+    this.Moeda.getByDateRangeMomentParam(moment('1994-06-01'), moment().subtract(1, 'm'))
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
         this.isUpdate = false;
       });
-
-    // this.Moeda.getByDateRangeMoment(moment('1990-01-01'), moment())
-    //   .then((moeda: Moeda[]) => {
-    //     this.moeda = moeda;
-    //   });
-
   }
 
 
@@ -96,14 +88,6 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     // this.NumMeses += monthList.length;
     // this.form.numero_contribuicoes = this.NumMeses*0.8;
-
-    console.log(data);
-    // console.log(data.contribuicao_basica_inicial);
-    // console.log(data.contribuicao_basica_final);
-    // console.log(this.form.numero_contribuicoes);
-    // console.log('------------');
-    // console.log(this.form);
-
 
     if (this.form.id != undefined && this.contribuicao_basica_inicial_temp == undefined) {
       this.contribuicao_basica_inicial_temp = this.form.contribuicao_basica_inicial;
@@ -128,7 +112,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     // console.log(this.contribuicao_basica_inicial_temp);
     // console.log(this.contribuicao_basica_final_temp);
 
-    if (this.form.id != undefined && !this.matrizHasValues) {
+    if (this.form.id != '' && this.form.id != undefined && !this.matrizHasValues) {
 
       this.matriz = JSON.parse(this.form.contribuicoes);
       this.matriz.sort(function (a, b) { return a.ano - b.ano });
@@ -138,6 +122,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       this.matriz.map(row => {
         this.anosConsiderados.push(row.ano);
       });
+
+      console.log(this.anosConsiderados);
 
     } else {
 
@@ -173,8 +159,18 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
 
+  getAnosConsiderados(){
+    this.anosConsiderados = [];
+    this.matriz.map(row => {
+      this.anosConsiderados.push(row.ano);
+    });
+  }
+
   preencherComCnis(contribuicoes) {
 
+    this.matrizHasValues = false;
+    this.matriz =  [];
+    this.anosConsiderados = [];
     this.contribuicoesImport = contribuicoes;
     const contribuicoesFormat = this.formatMatrizContribuicoes(contribuicoes);
     //this.matrizHasValues = true;
@@ -182,7 +178,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     // this.matriz = JSON.parse(this.form.contribuicoes);
     // this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
-    // this.matrizHasValues = true;
+    //this.matrizHasValues = true;
 
     // this.matriz.map(row => {
     //   this.anosConsiderados.push(row.ano);
@@ -238,6 +234,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.contribuicao_basica_final_temp = contribuicoes[(contribuicoes.length - 1)].data;
     this.form.salario = contribuicoes[(contribuicoes.length - 1)].valor;
 
+    console.log(this.contribuicao_basica_inicial_temp)
+    console.log(this.contribuicao_basica_final_temp)
+
     return this.monthAndYear(contribuicoes[0].data, contribuicoes[(contribuicoes.length - 1)].data);
   }
 
@@ -274,6 +273,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
 
     this.generateTabelaDetalhes();
+    console.log(this.form);
     this.form.contribuicao_calculada = this.calculateContribuicao();
 
     const novoCalculo = new ContribuicaoModel();
@@ -291,7 +291,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.contribuicoes = JSON.stringify(this.matriz);
     novoCalculo.atualizar_ate = '01/' + this.form.atualizar_ate;
 
-    if (this.form.id == undefined) {
+    if (this.form.id == undefined || this.form.id == '') {
       this.Calculo.save(novoCalculo).then((data: ContribuicaoModel) => {
         this.Calculo.get().then(() => {
           swal({
@@ -330,7 +330,10 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
   getMatrixData() {
+    this.getAnosConsiderados();
     let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
+
+    console.log(unique_anos)
     let data_dict = [];
     for (let ano of unique_anos) {
       let valor_jan = this.getNumberFromTableEntry((<HTMLInputElement>document.getElementById('01-' + ano)).value);
@@ -364,12 +367,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Tabela de detalhes gerada no momento no calculo
   generateTabelaDetalhes() {
+
+    this.getMatrixData()
     let data_array = this.getMatrixData().filter(this.onlyUnique);
     let indice_num = 0;
     let dataTabelaDetalhes = [];
-
-    // console.log(this.getMatrixData());
-    //  console.log(data_array);
 
     for (let data of data_array) {
       let splitted = data.split('-');
@@ -392,7 +394,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         indice_num: indice_num,
         mes: mes,
         contrib_base: this.formatMoneyContribuicao(contrib_base),
-        indice:  this.formatDecimal(indice, 6),
+        indice: this.formatDecimal(indice, 6),
         valor_corrigido: valor_corrigido
       };
       dataTabelaDetalhes.push(line);
@@ -486,7 +488,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   }
 
-  
+
   formatDecimal(value, n_of_decimal_digits) {
 
     value = parseFloat(value);
@@ -608,7 +610,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
           // if(entry.valores[index] != valores[index] && valores[index] != 'R$ 0,00'){
           //   entry.valores[index] = valores[index];
           // }
-          //permitir o valor zero
+          // permitir o valor zero
           if (entry.valores[index] != valores[index]) {
             entry.valores[index] = valores[index];
           }
@@ -616,9 +618,14 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
         return;
       }
     }
-    this.matriz.push({ 'ano': ano, 'valores': valores });
-    this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
+    //let valoresCompare = valores
+
+  //  if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
+      this.matriz.push({ 'ano': ano, 'valores': valores });
+    //}
+
+    this.matriz.sort(function (a, b) { return a.ano - b.ano });
 
     this.matrizHasValues = true;
     // swal({

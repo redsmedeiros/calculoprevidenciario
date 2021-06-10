@@ -18,7 +18,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public competenciaFinal;
   public contribuicaoDe;
   public contribuicaoAte;
-  public salarioContribuicao;
+  public salarioContribuicao = 0;
   public chkJuros = true;
   public showMessage = false;
   public dataDecadente;
@@ -63,6 +63,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
           this.salarioContribuicao = this.calculo.salario;
           this.contribuicoes = this.calculo.contribuicoes;
           this.atualizarAte = this.formatDateDBToView(this.calculo.atualizar_ate);
+          this.contribuicaoDeMatriz = this.contribuicaoDe;
+          this.contribuicaoAteMatriz = this.contribuicaoAte;
+          this.formData.id = this.idCalculo;
           this.submit();
         });
     }
@@ -80,16 +83,20 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
         timer: 1500
       });
     } else {
-      this.setForm();
+      this.setForm(false);
     }
   }
 
 
   private setForm(isImport = false) {
 
-    if (this.idCalculo != '') {
-      this.formData.id = this.idCalculo;
-    }
+    console.log(this.contribuicaoDeMatriz)
+    console.log(this.contribuicaoAteMatriz)
+
+    // if (this.idCalculo != '' && this.idCalculo != undefined) {
+    //   this.formData.id = this.idCalculo;
+    // }
+
     this.formData.id_segurado = this.route.snapshot.params['id'];
     this.formData.inicio_atraso = this.competenciaInicial;
     this.formData.final_atraso = this.competenciaFinal;
@@ -105,6 +112,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     this.formData.contribuicaoDeMatriz = this.contribuicaoDeMatriz;
     this.formData.contribuicaoAteMatriz = this.contribuicaoAteMatriz;
 
+console.log(!isImport);
+
     if (!isImport) {
 
       this.formData.contribuicao_basica_inicial = this.contribuicaoDeMatriz;
@@ -113,8 +122,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
     }
 
-    this.contribuicaoDeMatriz = ((moment(this.contribuicaoAte, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
-    this.contribuicaoAteMatriz = ((moment(this.contribuicaoAte, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+    this.contribuicaoDeMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+    this.contribuicaoAteMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
 
     console.log(this.salarioContribuicao)
     console.log(this.contribuicaoDeMatriz)
@@ -222,10 +231,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   }
 
   public setContribuicoesImport(contribuicoes) {
-
-     this.setForm(true);
     this.importCnis.emit(contribuicoes);
-
+    this.setForm(true);
   }
 
 
@@ -261,6 +268,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     const splited = date.split('-');
     return splited[1] + '/' + splited[0];
   }
+
 
   dateMask(rawValue) {
     if (rawValue == '') {

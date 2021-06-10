@@ -226,6 +226,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         contrib: arrayText[numCol].trim(),
         contributionType: 0
       });
+      
     }
     return arrayOrganizadoNew;
   }
@@ -315,10 +316,12 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       }
 
       return arraySomatorioPS;
+
     } else {
 
 
       return result;
+
     }
 
   }
@@ -353,10 +356,13 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     };
 
     for (const element of array) {
-      contribuicoes.push({
-        data: moment(element.data, 'MM/YYYY').format('MM/YYYY'),
-        valor: replacePontos(element.contrib)
-      });
+
+      if (moment(element.data, 'MM/YYYY').isAfter('1994-06-01')) {
+        contribuicoes.push({
+          data: moment(element.data, 'MM/YYYY').format('MM/YYYY'),
+          valor: replacePontos(element.contrib)
+        });
+      }
     }
 
     swal({
