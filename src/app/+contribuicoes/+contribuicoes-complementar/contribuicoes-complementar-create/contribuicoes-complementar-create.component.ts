@@ -159,7 +159,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
 
-  getAnosConsiderados(){
+  getAnosConsiderados() {
     this.anosConsiderados = [];
     this.matriz.map(row => {
       this.anosConsiderados.push(row.ano);
@@ -169,7 +169,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   preencherComCnis(contribuicoes) {
 
     this.matrizHasValues = false;
-    this.matriz =  [];
+    this.matriz = [];
     this.anosConsiderados = [];
     this.contribuicoesImport = contribuicoes;
     const contribuicoesFormat = this.formatMatrizContribuicoes(contribuicoes);
@@ -621,8 +621,8 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     //let valoresCompare = valores
 
-  //  if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
-      this.matriz.push({ 'ano': ano, 'valores': valores });
+    //  if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
+    this.matriz.push({ 'ano': ano, 'valores': valores });
     //}
 
     this.matriz.sort(function (a, b) { return a.ano - b.ano });
@@ -677,13 +677,19 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
   //Recebe um valor float e retorna com duas casas decimais, virgula como separador e prefixo R$
   formatMoney(data) {
-    data = parseFloat(data);
-    return 'R$ ' + (data.toFixed(2)).replace('.', ',');
+    if (data !== null && data !== '') {
+      data = parseFloat(data);
+      return 'R$ ' + (data.toFixed(2)).replace('.', ',');
+    }
+    return 'R$ 0,00';
   }
 
   formatMoneyContribuicao(data) {
     //data = parseFloat(data);
-    return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    if (data !== null && data !== '') {
+      return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    }
+    return 'R$ 0,00';
   }
 
   voltar() {

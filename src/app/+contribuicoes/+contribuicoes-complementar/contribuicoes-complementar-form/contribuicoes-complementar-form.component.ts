@@ -31,8 +31,12 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public dataMinima = new Date(1970, 0, 1);
   public data94 = new Date(1994, 5, 31);
 
+  public dataMinima94 = new Date(1994, 7, 1);
+
   public idCalculo = '';
   public calculo;
+
+  public isFormContribuicoes = false;
 
   private inputFunctions = InputFunctions;
 
@@ -66,13 +70,17 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
           this.contribuicaoDeMatriz = this.contribuicaoDe;
           this.contribuicaoAteMatriz = this.contribuicaoAte;
           this.formData.id = this.idCalculo;
+          this.isFormContribuicoes = true;
           this.submit();
         });
     }
   }
+
   submit() {
     this.errors.clear();
     this.validateInputs();
+    this.validateInputs(2);
+
     if (!this.errors.empty()) {
       swal({
         type: 'error',
@@ -90,8 +98,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
   private setForm(isImport = false) {
 
-    console.log(this.contribuicaoDeMatriz)
-    console.log(this.contribuicaoAteMatriz)
+    // console.log(this.contribuicaoDeMatriz)
+    // console.log(this.contribuicaoAteMatriz)
 
     // if (this.idCalculo != '' && this.idCalculo != undefined) {
     //   this.formData.id = this.idCalculo;
@@ -112,8 +120,6 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     this.formData.contribuicaoDeMatriz = this.contribuicaoDeMatriz;
     this.formData.contribuicaoAteMatriz = this.contribuicaoAteMatriz;
 
-console.log(!isImport);
-
     if (!isImport) {
 
       this.formData.contribuicao_basica_inicial = this.contribuicaoDeMatriz;
@@ -125,51 +131,82 @@ console.log(!isImport);
     this.contribuicaoDeMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
     this.contribuicaoAteMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
 
-    console.log(this.salarioContribuicao)
-    console.log(this.contribuicaoDeMatriz)
-    console.log(this.contribuicaoAteMatriz)
+    // console.log(this.salarioContribuicao)
+    // console.log(this.contribuicaoDeMatriz)
+    // console.log(this.contribuicaoAteMatriz)
 
-    console.log(this.formData);
+    // console.log(this.formData);
 
   }
 
 
 
 
-  validateInputs(passo = 1) {
+
+
+  validateInputs(
+    passo = 1,
+    name = null
+  ) {
 
     if (passo === 1) {
-      //competenciaInicial
-      if (this.isEmpty(this.competenciaInicial) || !this.isValidDate('01/' + this.competenciaInicial)) {
-        this.errors.add({ 'competenciaInicial': ['Insira uma data válida'] });
-      } else {
-        let pieces = this.competenciaInicial.split('/');
-        let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
-        if (dateCompetenciaInicial <= this.dataMinima) {
-          this.errors.add({ 'competenciaInicial': ['Insira uma data após 01/1970'] });
-        }
-        if (dateCompetenciaInicial >= this.dataDecadente) {
-          this.errors.add({ 'competenciaInicial': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
+
+      if (name === 'competenciaInicial' || name === null) {
+        //competenciaInicial
+        if (this.isEmpty(this.competenciaInicial) || !this.isValidDate('01/' + this.competenciaInicial)) {
+          this.errors.add({ 'competenciaInicial': ['Insira uma data válida'] });
+        } else {
+          let pieces = this.competenciaInicial.split('/');
+          let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
+          if (dateCompetenciaInicial <= this.dataMinima94) {
+            this.errors.add({ 'competenciaInicial': ['Insira uma data após 07/1994'] });
+          }
+          if (dateCompetenciaInicial >= this.dataDecadente) {
+            this.errors.add({ 'competenciaInicial': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
+          }
         }
       }
 
-      //competenciaFinal
-      if (this.isEmpty(this.competenciaFinal) || !this.isValidDate('01/' + this.competenciaFinal)) {
-        this.errors.add({ 'competenciaFinal': ['Insira uma data válida'] });
-      } else {
-        let pieces = this.competenciaFinal.split('/');
-        let dateCompetenciaFinal = new Date(pieces[1], pieces[0] - 1, 1);
-        pieces = this.competenciaInicial.split('/');
-        let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
+      if (name === 'competenciaFinal' || name === null) {
+        //competenciaFinal
+        if (this.isEmpty(this.competenciaFinal) || !this.isValidDate('01/' + this.competenciaFinal)) {
+          this.errors.add({ 'competenciaFinal': ['Insira uma data válida'] });
+        } else {
+          let pieces = this.competenciaFinal.split('/');
+          let dateCompetenciaFinal = new Date(pieces[1], pieces[0] - 1, 1);
+          pieces = this.competenciaInicial.split('/');
+          let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
 
-        if (dateCompetenciaFinal <= this.dataMinima) {
-          this.errors.add({ 'competenciaFinal': ['Insira uma data após 01/1970'] });
+          if (dateCompetenciaFinal <= this.dataMinima94) {
+            this.errors.add({ 'competenciaFinal': ['Insira uma data após 07/1994'] });
+          }
+          if (dateCompetenciaFinal >= this.dataDecadente) {
+            this.errors.add({ 'competenciaFinal': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
+          }
+          if (dateCompetenciaFinal < dateCompetenciaInicial) {
+            this.errors.add({ 'competenciaFinal': ['Insira uma data posterior a data inicial'] });
+          }
         }
-        if (dateCompetenciaFinal >= this.dataDecadente) {
-          this.errors.add({ 'competenciaFinal': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
-        }
-        if (dateCompetenciaFinal < dateCompetenciaInicial) {
-          this.errors.add({ 'competenciaFinal': ['Insira uma data posterior a data inicial'] });
+      }
+
+      if (name === 'atualizarAte' || name === null) {
+        //competenciaFinal
+        if (this.isEmpty(this.atualizarAte) || !this.isValidDate('01/' + this.atualizarAte)) {
+          this.errors.add({ 'atualizarAte': ['Insira uma data válida'] });
+        } else {
+          let pieces = this.atualizarAte.split('/');
+          let dateatualizarAte = new Date(pieces[1], pieces[0] - 1, 1);
+          pieces = this.competenciaInicial.split('/');
+          let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
+
+          if (dateatualizarAte <= this.dataMinima94) {
+            this.errors.add({ 'atualizarAte': ['Insira uma data após 07/1994'] });
+          }
+
+          if (dateatualizarAte < dateCompetenciaInicial) {
+            this.errors.add({ 'atualizarAte': ['Insira uma data posterior a data inicial'] });
+          }
+
         }
       }
 
@@ -177,64 +214,81 @@ console.log(!isImport);
 
     if (passo === 2) {
 
-      //contribuicaoDe
-      if (this.isEmpty(this.contribuicaoDeMatriz) || !this.isValidDate('01/' + this.contribuicaoDeMatriz)) {
-        this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data válida'] });
-      } else {
-        let pieces = this.contribuicaoDeMatriz.split('/');
-        let dateContribuicaoDeMatriz = new Date(pieces[1], pieces[0] - 1, 1);
+      this.errors.clear('contribuicaoDeMatriz');
+      this.errors.clear('contribuicaoAteMatriz');
 
-        if (dateContribuicaoDeMatriz < this.data94) {
-          this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data posterior a 06/1994'] });
+      if (name === 'contribuicaoDeMatriz' || name === null) {
+        //contribuicaoDe
+        if (this.isEmpty(this.contribuicaoDeMatriz) || !this.isValidDate('01/' + this.contribuicaoDeMatriz)) {
+          this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data válida'] });
+        } else {
+          let pieces = this.contribuicaoDeMatriz.split('/');
+          let datecontribuicaoDeMatriz = new Date(pieces[1], pieces[0] - 1, 1);
+
+          if (datecontribuicaoDeMatriz < this.data94) {
+            this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data posterior a 06/1994'] });
+          }
         }
       }
 
-      //contribuicaoAte
-      if (this.isEmpty(this.contribuicaoAteMatriz) || !this.isValidDate('01/' + this.contribuicaoAteMatriz)) {
-        this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data válida'] });
-      } else {
-        let pieces = this.contribuicaoAteMatriz.split('/');
-        let dateContribuicaoAteMatriz = new Date(pieces[1], pieces[0] - 1, 1);
+      if (name === 'contribuicaoAteMatriz' || name === null) {
+        //contribuicaoAte
+        if (this.isEmpty(this.contribuicaoAteMatriz) || !this.isValidDate('01/' + this.contribuicaoAteMatriz)) {
+          this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data válida'] });
+        } else {
+          let pieces = this.contribuicaoAteMatriz.split('/');
+          let dateContribuicaoAteMatriz = new Date(pieces[1], pieces[0] - 1, 1);
 
-        pieces = this.contribuicaoDeMatriz.split('/');
-        let dateContribuicaoDeMatriz = new Date(pieces[1], pieces[0] - 1, 1);
+          pieces = this.contribuicaoDeMatriz.split('/');
+          let dateContribuicaoDeMatriz = new Date(pieces[1], pieces[0] - 1, 1);
 
-        if (dateContribuicaoAteMatriz < this.data94) {
-          this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data posterior a 06/1994'] });
-        }
-        if (dateContribuicaoAteMatriz < dateContribuicaoDeMatriz) {
-          this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data posterior a data inicial'] });
-        }
+          if (dateContribuicaoAteMatriz < this.data94) {
+            this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data posterior a 06/1994'] });
+          }
+          if (dateContribuicaoAteMatriz < dateContribuicaoDeMatriz) {
+            this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data posterior a data inicial'] });
+          }
 
-        let hoje = new Date();
-        hoje = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-        //console.log(dateContribuicaoAteMatriz);
-        //console.log(hoje);
-        if (dateContribuicaoAteMatriz > hoje) {
-          this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data anterior a data atual'] });
-        }
+          let hoje = new Date();
+          hoje = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+          //console.log(dateContribuicaoAteMatriz);
+          //console.log(hoje);
+          if (dateContribuicaoAteMatriz > hoje) {
+            this.errors.add({ 'contribuicaoAteMatriz': ['Insira uma data anterior a data atual'] });
+          }
 
-        if (dateContribuicaoDeMatriz > hoje) {
-          this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data anterior a data atual'] });
+          if (dateContribuicaoDeMatriz > hoje) {
+            this.errors.add({ 'contribuicaoDeMatriz': ['Insira uma data anterior a data atual'] });
+          }
         }
       }
 
+      if (name === 'salarioContribuicao' || name === null) {
+        //salarioContribuicao
+        if (this.salarioContribuicao === null) {
+          this.errors.add({ 'salarioContribuicao': ['Insira o salário'] });
+        }
+      }
     }
 
-
-
-
-    //salarioContribuicao
-    // if(this.isEmpty(this.salarioContribuicao)){
-    // 	this.errors.add({"salarioContribuicao":["Insira o salário"]});
-    // }
   }
+
 
   public setContribuicoesImport(contribuicoes) {
     this.importCnis.emit(contribuicoes);
     this.setForm(true);
   }
 
+
+  public setIsFormContribuicoes(){
+
+    if (!this.isEmpty(this.competenciaInicial) 
+    &&  !this.isEmpty(this.competenciaFinal)
+    && !this.isEmpty(this.atualizarAte)  ) {
+      this.isFormContribuicoes = true;
+    }
+
+  }
 
   moveNext(event, maxLength, nextElementId) {
     let value = event.srcElement.value;

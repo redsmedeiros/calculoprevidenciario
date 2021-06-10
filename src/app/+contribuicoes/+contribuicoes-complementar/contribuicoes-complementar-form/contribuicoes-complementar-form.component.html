@@ -28,7 +28,7 @@
                 class="form-control"
                 id="competenciaInicial"
                 [(ngModel)]="competenciaInicial"
-                (change)="errors.clear('competenciaInicial')"
+                (change)="errors.clear('competenciaInicial');validateInputs(1, 'competenciaInicial');setIsFormContribuicoes();"
                 [ngModelOptions]="{ standalone: true }"
                 [textMask]="{ mask: dateMask }"
                 placeholder="(MM/AAAA)"
@@ -48,7 +48,7 @@
                 id="competenciaFinal"
                 [(ngModel)]="competenciaFinal"
                 [ngModelOptions]="{ standalone: true }"
-                (change)="errors.clear('competenciaFinal')"
+                (change)="errors.clear('competenciaFinal'); validateInputs(1, 'competenciaFinal'); setIsFormContribuicoes();"
                 [textMask]="{ mask: dateMask }"
                 placeholder="(MM/AAAA)"
                 type="text"
@@ -67,7 +67,7 @@
                 [(ngModel)]="atualizarAte"
                 [ngModelOptions]="{ standalone: true }"
                 [textMask]="{ mask: dateMask }"
-                (change)="errors.clear('atualizarAte')"
+                (change)="errors.clear('atualizarAte'); validateInputs(1, 'atualizarAte'); setIsFormContribuicoes();"
                 placeholder="(MM/AAAA)"
                 type="text"
                 id="atualizarAte"
@@ -348,7 +348,7 @@
   </div>
 </sa-widget>
 
-<div class="row">
+<div class="row" *ngIf="isFormContribuicoes" >
   <article class="col-md-12">
     <app-contribuicoes-importacao-cnis
       [atualizarAte]="atualizarAte"
@@ -358,7 +358,7 @@
   </article>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="isFormContribuicoes">
   <article class="col-md-12">
     <sa-widget
       [colorbutton]="false"
@@ -394,7 +394,7 @@
                   <small
                     *ngIf="errors.has('contribuicaoDeMatriz')"
                     class="text-danger"
-                    >{{ errors.get("contribuicaoDe") }}</small
+                    >{{ errors.get("contribuicaoDeMatriz") }}</small
                   >
                 </div>
                 <label class="control-label col-md-2" for="contribuicaoAteMatriz"
