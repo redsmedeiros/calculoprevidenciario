@@ -31,7 +31,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public dataMinima = new Date(1970, 0, 1);
   public data94 = new Date(1994, 5, 31);
 
-  public dataMinima94 = new Date(1994, 7, 1);
+  public dataMinima94 = new Date(1994, 6, 30);
 
   public idCalculo = '';
   public calculo;
@@ -158,9 +158,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
         } else {
           let pieces = this.competenciaInicial.split('/');
           let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
-          if (dateCompetenciaInicial <= this.dataMinima94) {
-            this.errors.add({ 'competenciaInicial': ['Insira uma data após 07/1994'] });
-          }
+          // if (dateCompetenciaInicial <= this.dataMinima94) {
+          //   this.errors.add({ 'competenciaInicial': ['Insira uma data após 07/1994'] });
+          // }
           if (dateCompetenciaInicial >= this.dataDecadente) {
             this.errors.add({ 'competenciaInicial': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
           }
@@ -177,9 +177,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
           pieces = this.competenciaInicial.split('/');
           let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
 
-          if (dateCompetenciaFinal <= this.dataMinima94) {
-            this.errors.add({ 'competenciaFinal': ['Insira uma data após 07/1994'] });
-          }
+          // if (dateCompetenciaFinal <= this.dataMinima94) {
+          //   this.errors.add({ 'competenciaFinal': ['Insira uma data após 07/1994'] });
+          // }
           if (dateCompetenciaFinal >= this.dataDecadente) {
             this.errors.add({ 'competenciaFinal': ['Insira uma data anterior a ' + (this.dataDecadente.getMonth() + 1) + '/' + (this.dataDecadente.getFullYear())] });
           }
@@ -199,9 +199,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
           pieces = this.competenciaInicial.split('/');
           let dateCompetenciaInicial = new Date(pieces[1], pieces[0] - 1, 1);
 
-          if (dateatualizarAte <= this.dataMinima94) {
-            this.errors.add({ 'atualizarAte': ['Insira uma data após 07/1994'] });
-          }
+          // if (dateatualizarAte <= this.dataMinima94) {
+          //   this.errors.add({ 'atualizarAte': ['Insira uma data após 07/1994'] });
+          // }
 
           if (dateatualizarAte < dateCompetenciaInicial) {
             this.errors.add({ 'atualizarAte': ['Insira uma data posterior a data inicial'] });

@@ -77,6 +77,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   private total_multa = 0.0;
   private total_total = 0.0;
 
+  private datasCalculoResultados;
+
   private quantcontribuicoes100 = 0;
   private quantContribuicoes80 = 0;
   private somaDosSalariosContribuicao = 0;
@@ -85,6 +87,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   private anosConsiderados = [];
   private contribuicoesMatrizInicio;
   private contribuicoesMatrizAtualizarAte;
+
 
 
   constructor(
@@ -135,18 +138,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             }
           }
 
-          let refenciaMoedaInicio = moment().subtract(1, 'months')
-          let refenciaMoedaFim = moment();
-
-
-          if (this.calculoComplementar.atualizar_ate !== undefined &&
-            this.calculoComplementar.atualizar_ate !== null &&
-            this.calculoComplementar.atualizar_ate !== '') {
-
-            console.log(this.calculoComplementar);
-
-            refenciaMoedaInicio = moment(this.calculoComplementar.atualizar_ate).subtract(1, 'months')
-            refenciaMoedaFim = moment(this.calculoComplementar.atualizar_ate);
+          this.datasCalculoResultados = {
+            inicial: moment(this.calculoComplementar.inicio_atraso).format('MM/YYYY'),
+            final: moment(this.calculoComplementar.final_atraso).format('MM/YYYY'),
+            atualizarAte: moment(this.calculoComplementar.atualizar_ate).format('MM/YYYY'),
           }
 
           this.getContribuicoesMatriz();
@@ -218,10 +213,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   updateInfCalculoComplementar() {
 
-    this.calculoComplementar.salario = 555555.11;
-    this.calculoComplementar.total_contribuicao = this.total_contrib;
-    // this.calculoComplementar.numero_contribuicoes = Math.ceil(this.form.numero_contribuicoes);
-    // this.calculoComplementar.media_salarial = this.form.media_salarial;
+    this.calculoComplementar.salario = this.baseAliquota;
+    this.calculoComplementar.total_contribuicao = this.somaDosSalariosContribuicao;
+    this.calculoComplementar.numero_contribuicoes = this.quantContribuicoes80;
+     this.calculoComplementar.media_salarial = this.mediaDosSalariosContribuicao;
     this.calculoComplementar.contribuicao_calculada = this.total_total;
 
     this.Complementar.update(this.calculoComplementar).then((rst: ContribuicaoModel) => {
@@ -324,7 +319,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       multa: '<b>' + this.formatMoney(total_multa) + '</b>',
       total: '<b>' + this.formatMoney(total_total) + '</b>'
     };
-    dataTabelaResultados.push(last_line);
+   // dataTabelaResultados.push(last_line);
     return dataTabelaResultados;
   }
 
