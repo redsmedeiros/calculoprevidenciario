@@ -38,7 +38,6 @@
             <h2>Dados do Segurado</h2>
             <button
               class="btn btn-labeled btn-info pull-right"
-              *ngIf="!isPlanejamento"
               type="submit"
               (click)="editSegurado()"
             >
@@ -216,8 +215,25 @@
               <i class="fa fa-table"></i>
             </span>
             <h2>Valores de contribuição</h2>
+            <button
+              class="btn btn-labeled btn-info pull-right"
+              type="submit"
+              (click)="setviewResultados('valoresContrib')"
+            >
+              &nbsp;&nbsp;
+              {{ !viewExibir.valoresContrib? "Abrir" : "Fechar" }}
+              <i
+                *ngIf="!isUpdating"
+                class="pull-right fa fa-lg"
+                [ngClass]="{
+                  'fa-angle-down': viewExibir.valoresContrib,
+                  'fa-angle-up': !viewExibir.valoresContrib
+                }"
+              ></i
+              >&nbsp;&nbsp;
+            </button>
           </header>
-          <div>
+          <div *ngIf="viewExibir.valoresContrib">
             <div class="col-sm-12" *ngIf="!hasDetalhe">
               <div class="well">
                 <p>
@@ -228,7 +244,7 @@
                 </p>
               </div>
             </div>
-            <div class="widget-body no-padding hidden-dt" *ngIf="hasDetalhe">
+            <div class="widget-body no-padding hidden-dt">
               <sa-datatable
                 *ngIf="hasDetalhe"
                 [options]="detalhesTableOptions"
@@ -273,8 +289,25 @@
               <i class="fa fa-table"></i>
             </span>
             <h2>Resultados</h2>
+            <button
+            class="btn btn-labeled btn-info pull-right"
+            type="submit"
+            (click)="setviewResultados('resultados')"
+          >
+            &nbsp;&nbsp;
+            {{ !viewExibir.resultados? "Abrir" : "Fechar" }}
+            <i
+              *ngIf="!isUpdating"
+              class="pull-right fa fa-lg"
+              [ngClass]="{
+                'fa-angle-down': viewExibir.resultados,
+                'fa-angle-up': !viewExibir.resultados
+              }"
+            ></i
+            >&nbsp;&nbsp;
+          </button>
           </header>
-          <div>
+          <div *ngIf="viewExibir.resultados" >
             <div class="widget-body no-padding hidden-dt">
               <sa-datatable
                 [options]="resultadosTableOptions"
@@ -295,7 +328,7 @@
               </sa-datatable>
             </div>
           </div>
-          <div id="printableDadosResultados" class="p-0">
+          <div id="printableDadosResultados" class="p-0" *ngIf="viewExibir.resultados">
             <table
               class="table table-bordered table-hover no-padding mb-0"
               *ngIf="!isUpdating"
@@ -398,7 +431,7 @@
               </tbody>
             </table>
           </div>
-          <div class="col-sm-12">
+          <div class="col-sm-12" *ngIf="viewExibir.resultados">
             <div class="well">
               <p>
                 O cálculo dos valores apresentados acima foram realizados com

@@ -88,6 +88,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   private contribuicoesMatrizInicio;
   private contribuicoesMatrizAtualizarAte;
 
+  private viewExibir = {
+    resultados: false,
+    valoresContrib: false
+  }
+
 
 
   constructor(
@@ -754,6 +759,16 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   //   popupWin.document.close();
   // }
 
+
+
+
+
+
+  private setviewResultados(value) {
+
+    this.viewExibir[value] = (!this.viewExibir[value]);
+
+  }
 
 
 

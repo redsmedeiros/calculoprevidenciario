@@ -41,6 +41,8 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   private inputFunctions = InputFunctions;
   private dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
+
+
   @Input() formData;
   @Input() errors: ErrorService;
   @Output() onSubmit = new EventEmitter;
@@ -281,11 +283,11 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   }
 
 
-  public setIsFormContribuicoes(){
+  public setIsFormContribuicoes() {
 
-    if (!this.isEmpty(this.competenciaInicial) 
-    &&  !this.isEmpty(this.competenciaFinal)
-    && !this.isEmpty(this.atualizarAte)  ) {
+    if (!this.isEmpty(this.competenciaInicial)
+      && !this.isEmpty(this.competenciaFinal)
+      && !this.isEmpty(this.atualizarAte)) {
       this.isFormContribuicoes = true;
     }
 
@@ -305,7 +307,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
    * @param ev
    * @param value
    */
-   private setOptionEntradaDados(ev, value) {
+  private setOptionEntradaDados(ev, value) {
 
     this.dadosPassoaPasso.type = value;
 
