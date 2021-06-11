@@ -348,7 +348,47 @@
   </div>
 </sa-widget>
 
-<div class="row"  >
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <div
+        class="well well-sm txt-color-white text-center"
+        (click)="setOptionEntradaDados($event, 'cnis')"
+        [ngClass]="
+          dadosPassoaPasso.type === 'cnis'
+            ? 'bg-color-blue'
+            : 'bg-color-darken'
+        "
+      >
+        <h5>Migrar dados a partir do CNIS</h5>
+        <!-- <code> .bg-color-darken</code> -->
+      </div>
+    </div>
+    <div
+      class="
+        col-xs-6
+        col-sm-6
+        col-md-6
+        col-lg-6
+      "
+    >
+      <div
+        class="well well-sm txt-color-white text-center"
+        (click)="setOptionEntradaDados($event, 'manual')"
+        [ngClass]="
+          dadosPassoaPasso.type === 'manual'
+            ? 'bg-color-blue'
+            : 'bg-color-darken'
+        "
+      >
+        <h5>Inserir dados manualmente</h5>
+        <!-- <code> .bg-color-darken</code> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row"  *ngIf="dadosPassoaPasso.type === 'cnis'" >
   <article class="col-md-12">
     <app-contribuicoes-importacao-cnis
       [atualizarAte]="atualizarAte"
@@ -358,7 +398,7 @@
   </article>
 </div>
 
-<div class="row" >
+<div class="row" *ngIf="dadosPassoaPasso.type === 'manual'">
   <article class="col-md-12">
     <sa-widget
       [colorbutton]="false"

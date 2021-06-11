@@ -39,6 +39,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   public isFormContribuicoes = false;
 
   private inputFunctions = InputFunctions;
+  private dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -298,6 +299,19 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
       next.focus();
     }
   }
+
+  /**
+   * Set opção inicial do formulário.
+   * @param ev
+   * @param value
+   */
+   private setOptionEntradaDados(ev, value) {
+
+    this.dadosPassoaPasso.type = value;
+
+  }
+
+
 
 
   voltar() {
