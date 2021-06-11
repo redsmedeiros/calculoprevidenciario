@@ -62,23 +62,15 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    //  atualizarAte = moment().format('DD/MM/YYYY');
-
     this.isUpdating = true;
-
     let changedatualizarAte = changes['atualizarAte'];
+    let contribuicoesEventOut = changes['contribuicoesEventOut'];
+    let isUpdating = changes['isUpdating'];
 
     console.log(changedatualizarAte);
-
-
+    console.log(contribuicoesEventOut);
   }
 
-  changeSomarSecundaria() { }
-
-  editSegurado() {
-    window.location.href = '/#/rgps/rgps-segurados/' +
-      this.route.snapshot.params['id_segurado'] + '/editar';
-  }
 
   public dropped(event: UploadEvent) {
     let files = event.files;
@@ -105,12 +97,15 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   }
 
   clickedDropzone() {
-    let event = new MouseEvent('click', { bubbles: false });
+    const event = new MouseEvent('click', { bubbles: false });
     this.fileInput.nativeElement.dispatchEvent(event);
   }
 
   onFileInputChange(event) {
-    let files = event.srcElement.files;
+
+    console.log(event);
+
+    const files = event.srcElement.files;
     if (files.length > 1) {
       swal('Erro', 'Selecione apenas um arquivo', 'error');
     } else if (files[0].type != 'application/pdf') {
@@ -121,8 +116,9 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   }
 
   processPdfFile(file) {
-    let PDFJS = require("pdfjs-dist");
-    PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
+    const PDFJS = require('pdfjs-dist');
+    // PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
+    PDFJS.GlobalWorkerOptions.workerSrc = '/assets/js/pdfjs/pdf.worker.min.js';
     PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
       let pdfDocument = pdf;
       // Create an array that will contain our promises 

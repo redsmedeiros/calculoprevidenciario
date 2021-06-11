@@ -14,6 +14,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { FileDropModule } from 'ngx-file-drop';
+import { ContribuicoesComplementarMatrizComponent } from './contribuicoes-complementar-form/contribuicoes-complementar-matriz/contribuicoes-complementar-matriz.component';
 
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -43,7 +44,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ContribuicoesComplementarEditComponent,
     ContribuicoesComplementarFormComponent,
     ContribuicoesComplementarIndexComponent,
-    ContribuicoesImportacaoCnisComponent],
+    ContribuicoesImportacaoCnisComponent,
+    ContribuicoesComplementarMatrizComponent],
   providers: [
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import { ErrorService } from '../../../services/error.service';
@@ -21,6 +21,7 @@ import swal from 'sweetalert2';
 export class ContribuicoesComplementarCreateComponent implements OnInit {
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
+
 
   public idSegurado;
 
@@ -183,6 +184,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
 
     console.log(contribuicoes);
+
+    // const event = new MouseEvent('click', { bubbles: false });
+    // this.matrizValues.nativeElement.dispatchEvent(event);
+    const matrizElement = document.getElementById('matrizValues').innerHTML
+    
+    console.log(matrizElement);
+
   }
 
 
@@ -250,11 +258,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
      }
 
     this.matriz.sort(function (a, b) { return a.ano - b.ano });
-
     this.matrizHasValues = true;
-
-    console.log(this.matrizHasValues)
-
   }
 
 

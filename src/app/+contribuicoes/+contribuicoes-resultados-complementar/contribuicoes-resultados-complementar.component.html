@@ -69,7 +69,7 @@
                   {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
                 </li>
                 <li class="px-5">
-                  <strong>Idade atual:</strong> {{ segurado.idade }} anos
+                  <strong>Idade Atual:</strong> {{ segurado.idade }} anos
                 </li>
               </ul>
               <div id="printableSegurado" hidden>
@@ -148,25 +148,33 @@
             <span class="widget-icon">
               <i class="fa fa-calculator"></i>
             </span>
-            <h2>Dados do cálculo</h2>
+            <h2>Informações do Cálculo</h2>
           </header>
           <div>
             <div class="widget-body ">
               <ul class="list-unstyled">
                 <li>
-                  <b>Número de contribuições consideradas:</b>
-                  {{ calculoComplementar.numero_contribuicoes }}
+                  <b>Quantidade de salários de contribuição (100%):</b>
+                  78
                 </li>
                 <li>
-                  <b>Valor total das 80% maiores contribuições corrigidas:</b>
+                  <strong>Quantidade de Salários de Contribuição Utilizados (80% maiores):</strong>
+                  {{ calculoComplementar.numero_contribuicoes }} 
+                </li>
+                <li>
+                  <b>Soma dos Salários de Contribuição Considerados:</b>
                   {{ formatMoney(calculoComplementar.total_contribuicao) }}
                 </li>
                 <li>
-                  <b>Valor médio final:</b>
+                  <b>Média dos Salários de Contribuição:</b>
                   {{ formatMoney(calculoComplementar.media_salarial) }}
                 </li>
                 <li>
-                  <b>Valor base para recolhimento de aliquota:</b>
+                  <b>Alíquota da Contribuição:</b>
+                  20%
+                </li>
+                <li>
+                  <b>Valor da Contribuição:</b>
                   {{ formatMoney(baseAliquota) }}
                 </li>
               </ul>
@@ -256,10 +264,11 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Mês de contribuição</th>
-                    <th>Contribuição Base</th>
-                    <th>Índices</th>
-                    <th>Valor corrigido</th>
+                    <th>Competência</th>
+                    <th>Salário de Contribuição</th>
+                    <th>Índice</th>
+                    <th>Salário de Contribuição Corrigido</th>
+                    <th>Observação</th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -299,10 +308,10 @@
                 <thead>
                   <tr>
                     <th>Competência</th>
-                    <th>Valor contribuição</th>
-                    <th *ngIf="mostrarJuros">Juros</th>
-                    <th>Multa</th>
-                    <th>Total</th>
+                    <th>Valor da Contribuição</th>
+                    <th *ngIf="mostrarJuros">Valor dos Juros</th>
+                    <th>Valor da Multa</th>
+                    <th>Valor total</th>
                   </tr>
                 </thead>
               </sa-datatable>

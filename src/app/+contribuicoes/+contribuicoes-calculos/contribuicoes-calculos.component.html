@@ -213,11 +213,11 @@
                   </div>
                 </tab> -->
                 <tab [active]="state.tabs.selectedTab == 'hr2'">
-                  <div class="alert alert-info" role="alert">
+                  <!-- <div class="alert alert-info" role="alert">
                     O cálculo dos valores apresentados abaixo foram realizados
                     com base na recente Lei Complementar nº. 128, de dezembro de
                     2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
-                  </div>
+                  </div> -->
                   <app-contribuicoes-complementar-index
                     *ngIf="!isUpdating"
                     [datatableOptions]="complementarTableOptions"

@@ -63,7 +63,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
     ordering: false,
     columns: [
       { data: 'actions', width: '15rem' },
-      { data: 'id' },
+    //  { data: 'id' },
       {
         data: 'data_calculo',
         render: (data) => {
@@ -82,16 +82,22 @@ export class ContribuicoesCalculosComponent implements OnInit {
           return this.formatReceivedMonthAndYear(data);
         }
       },
+      // {
+      //   data: 'contribuicao_basica_inicial',
+      //   render: (data) => {
+      //     return this.formatReceivedMonthAndYear(data);
+      //   }
+      // },
+      // {
+      //   data: 'contribuicao_basica_final',
+      //   render: (data) => {
+      //     return this.formatReceivedMonthAndYear(data);
+      //   }
+      // },
       {
-        data: 'contribuicao_basica_inicial',
+        data: 'media_salarial',
         render: (data) => {
-          return this.formatReceivedMonthAndYear(data);
-        }
-      },
-      {
-        data: 'contribuicao_basica_final',
-        render: (data) => {
-          return this.formatReceivedMonthAndYear(data);
+          return this.formatMoney(data);
         }
       },
       {
