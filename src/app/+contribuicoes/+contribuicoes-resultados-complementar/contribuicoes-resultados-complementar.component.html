@@ -29,36 +29,57 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <sa-widget
-          [colorbutton]="false"
-          [editbutton]="false"
-          [togglebutton]="false"
-          [deletebutton]="false"
-          [fullscreenbutton]="false"
-          [custombutton]="false"
-          [sortable]="false"
-        >
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [colorbutton]="false" [editbutton]="false">
           <header>
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
             <h2>Dados do Segurado</h2>
+            <button
+              class="btn btn-labeled btn-info pull-right"
+              *ngIf="!isPlanejamento"
+              type="submit"
+              (click)="editSegurado()"
+            >
+              <span class="btn-label">
+                <i class="fa fa-pencil"></i>
+              </span>
+              Editar
+            </button>
           </header>
           <!-- widget div-->
-          <div>
+          <div class="my-0 p-0">
             <!-- widget content -->
-            <div class="widget-body widget-body-custom">
-              <ul class="list-inline m-0">
-                <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
-                <li class="px-5" *ngIf="segurado.numero_documento">
-                  <strong
-                    >{{
-                      segurado.getDocumentType(segurado.id_documento)
-                    }}:</strong
-                  >
-                  {{ segurado.numero_documento }}
+            <div class="widget-body widget-body-custom m-0 p-0">
+              <table
+                class="
+                  table table-condensed table-bordered
+                  no-padding no-margin
+                "
+              >
+                <thead>
+                  <tr>
+                    <th width="40%">Nome</th>
+                    <th>Data de Nascimento</th>
+                    <th>Sexo</th>
+                    <th>Idade atual</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="40%">{{ segurado.nome }}</td>
+                    <td>{{ segurado.data_nascimento }}</td>
+                    <td>
+                      {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                    </td>
+                    <td>{{ this.idadeSegurado }} anos</td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- <ul class="list-inline m-0">
+                <li class="px-5">
+                  <strong>Nome:</strong> {{ segurado.nome }}
                 </li>
                 <li class="px-5">
                   <strong>Data de Nascimento:</strong>
@@ -69,33 +90,32 @@
                   {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
                 </li>
                 <li class="px-5">
-                  <strong>Idade Atual:</strong> {{ segurado.idade }} anos
+                  <strong>Idade atual:</strong> {{ this.idadeSegurado }} anos
                 </li>
-              </ul>
+              </ul> -->
               <div id="printableSegurado" hidden>
-                <h1>Contribuições Atrasadas - Lei complementar n. 128/08</h1>
                 <table class="table table-bordered table-hover">
-                  <caption>
-                    <h2>Dados do Segurado</h2>
-                  </caption>
+                  <!-- <caption><h2>Dados do Segurado</h2></caption> -->
                   <tr>
-                    <td width="50%">
+                    <td width="50%" style="text-align: right">
                       <b>Nome:</b>
                     </td>
                     <td width="50%">
                       {{ segurado.nome }}
                     </td>
                   </tr>
-                  <tr>
-                    <td width="50%">
-                      <b>PIS:</b>
+                  <tr *ngIf="segurado.numero_documento">
+                    <td width="50%" style="text-align: right">
+                      <b>{{
+                        segurado.getDocumentType(segurado.id_documento)
+                      }}</b>
                     </td>
                     <td width="50%">
                       {{ segurado.numero_documento }}
                     </td>
                   </tr>
                   <tr>
-                    <td width="50%">
+                    <td width="50%" style="text-align: right">
                       <b>Data de nascimento:</b>
                     </td>
                     <td width="50%">
@@ -103,7 +123,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td width="50%">
+                    <td width="50%" style="text-align: right">
                       <b>Sexo:</b>
                     </td>
                     <td width="50%">
@@ -113,22 +133,27 @@
                   </tr>
                 </table>
               </div>
-              <div class="form-actions p-0 mt-3">
+              <!-- <div
+                class="form-actions no-padding mt-3"
+                *ngIf="!isPlanejamento"
+              >
                 <div class="row">
                   <div class="col-md-12">
                     <button
+                    *ngIf="!isPlanejamento"
                       type="submit"
                       (click)="editSegurado()"
                       class="btn btn-labeled btn-info pull-right"
+                      title="Editar o segurado."
                     >
                       <span class="btn-label">
-                        <i class="fa fa-pencil-square-o"></i>
+                        <i class="fa fa-pencil"></i>
                       </span>
                       Editar
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </sa-widget>
@@ -155,19 +180,19 @@
               <ul class="list-unstyled">
                 <li>
                   <b>Quantidade de salários de contribuição (100%):</b>
-                  78
+                  {{quantcontribuicoes100}}
                 </li>
                 <li>
                   <strong>Quantidade de Salários de Contribuição Utilizados (80% maiores):</strong>
-                  {{ calculoComplementar.numero_contribuicoes }} 
+                  {{ quantContribuicoes80 }} 
                 </li>
                 <li>
                   <b>Soma dos Salários de Contribuição Considerados:</b>
-                  {{ formatMoney(calculoComplementar.total_contribuicao) }}
+                  {{ formatMoney(somaDosSalariosContribuicao) }}
                 </li>
                 <li>
                   <b>Média dos Salários de Contribuição:</b>
-                  {{ formatMoney(calculoComplementar.media_salarial) }}
+                  {{ formatMoney(mediaDosSalariosContribuicao) }}
                 </li>
                 <li>
                   <b>Alíquota da Contribuição:</b>
@@ -258,17 +283,17 @@
                 [options]="detalhesTableOptions"
                 [responsive]="false"
                 paginationLength="true"
-                tableClass="table table-striped table-bordered table-hover"
+                tableClass="table table-striped table-bordered table-hover table-condensed-custom"
                 width="100%"
               >
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>Competência</th>
-                    <th>Salário de Contribuição</th>
-                    <th>Índice</th>
-                    <th>Salário de Contribuição Corrigido</th>
-                    <th>Observação</th>
+                    <th class="text-center">#</th>
+                    <th class="text-center">Competência</th>
+                    <th class="text-center">Salário de Contribuição</th>
+                    <th class="text-center"> Índice</th>
+                    <th class="text-center">Salário de Contribuição Corrigido</th>
+                    <th class="text-center">Observação</th>
                   </tr>
                 </thead>
               </sa-datatable>
@@ -282,6 +307,8 @@
           </div>
         </sa-widget>
       </article>
+
+      
 
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
         <sa-widget
@@ -302,7 +329,7 @@
                 [options]="resultadosTableOptions"
                 [responsive]="false"
                 paginationLength="true"
-                tableClass="table table-striped table-bordered table-hover table-condensed"
+                tableClass="table table-striped table-bordered table-hover table-condensed-custom"
                 width="100%"
               >
                 <thead>
@@ -361,6 +388,95 @@
             </div>
           </div>
         </div>
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-calculator"></i>
+            </span>
+            <h2>Informações do Cálculo</h2>
+          </header>
+          <div>
+            <div class="widget-body ">
+              <ul class="list-unstyled">
+                <li>
+                  <b>Quantidade de salários de contribuição (100%):</b>
+                  {{quantcontribuicoes100}}
+                </li>
+                <li>
+                  <strong>Quantidade de Salários de Contribuição Utilizados (80% maiores):</strong>
+                  {{ quantContribuicoes80 }} 
+                </li>
+                <li>
+                  <b>Soma dos Salários de Contribuição Considerados:</b>
+                  {{ formatMoney(somaDosSalariosContribuicao) }}
+                </li>
+                <li>
+                  <b>Média dos Salários de Contribuição:</b>
+                  {{ formatMoney(mediaDosSalariosContribuicao) }}
+                </li>
+                <li>
+                  <b>Alíquota da Contribuição:</b>
+                  20%
+                </li>
+                <li>
+                  <b>Valor da Contribuição:</b>
+                  {{ formatMoney(baseAliquota) }}
+                </li>
+              </ul>
+              <div id="printableDadosCalculo" hidden>
+                <table class="table table-bordered table-hover table-condensed">
+                  <caption>
+                    <h2>Dados do cálculo</h2>
+                  </caption>
+                  <tr>
+                    <td width="50%">
+                      <b>Número de contribuições consideradas:</b>
+                    </td>
+                    <td width="50%">
+                      {{ calculoComplementar.numero_contribuicoes }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b
+                        >Valor total das 80% maiores contribuições
+                        corrigidas:</b
+                      >
+                    </td>
+                    <td width="50%">
+                      {{ formatMoney(calculoComplementar.total_contribuicao) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Valor médio final:</b>
+                    </td>
+                    <td width="50%">
+                      {{ formatMoney(calculoComplementar.media_salarial) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <b>Valor base para recolhimento de aliquota:</b>
+                    </td>
+                    <td width="50%">
+                      {{ formatMoney(baseAliquota) }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
       </article>
     </div>
   </sa-widgets-grid>

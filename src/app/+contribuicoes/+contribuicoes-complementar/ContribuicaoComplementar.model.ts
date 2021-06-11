@@ -37,6 +37,7 @@ export class ContribuicaoComplementar extends Model {
   public chk_juros;
   public contribuicoes;
   public atualizar_ate;
+  public updated_at;
   // public actions = `
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/edit" id="testee" class="action-edit"> <i title="Editar" class='fa fa-edit'></i> </a>
   //   <a href="#/contribuicoes/contribuicoes-calculos/${this.id_segurado}/${this.id}/destroy" class="action-edit"> <i title="Remover" class='fa fa-times'></i> </a>
