@@ -793,24 +793,23 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   imprimirTodosResultadosPagina() {
 
-
-    this.setviewResultados('valoresContrib');
-    this.setviewResultados('resultados');
+    this.viewExibir['valoresContrib'] = true;
+    this.viewExibir['resultados'] = true;
 
     setTimeout(() => {
       this.imprimirPagina();
-      this.setviewResultados('valoresContrib');
-      this.setviewResultados('resultados');
+      this.viewExibir['valoresContrib'] = false;
+      this.viewExibir['resultados'] = false;
     }, 1000)
   }
 
   imprimirTodosResultadosFinal() {
 
-    this.setviewResultados('resultados');
+    this.viewExibir['resultados'] = true;
 
     setTimeout(() => {
-      this.imprimirPagina('somenteTotal');
-      this.setviewResultados('resultados');
+      this.imprimirPagina('resultados');
+      this.viewExibir['resultados'] = false;
     }, 1000)
   }
 
@@ -866,7 +865,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     popupWin.document.write(`<!doctype html>
                               <html>
                                 <head>${css}</head>
-                                <title> Contribuições Atrasadas - Lei complementar 128_08 - ${this.segurado.nome}</title>
+                                <title> Contribuições em Atraso - ${this.segurado.nome}</title>
                                 <body onload="window.print()">
                                  <article class="mt-5">${printContents}</article>
                                  <footer class="mt-5">${rodape}</footer>

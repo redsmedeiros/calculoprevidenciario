@@ -74,7 +74,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
           this.contribuicaoAteMatriz = this.contribuicaoAte;
           this.formData.id = this.idCalculo;
           this.isFormContribuicoes = true;
-          this.submit();
+          this.setForm(false);
         });
     }
   }
