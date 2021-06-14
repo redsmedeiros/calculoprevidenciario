@@ -62,7 +62,7 @@
                     <th width="40%">Nome</th>
                     <th>Data de Nascimento</th>
                     <th>Sexo</th>
-                    <th>Idade atual</th>
+                    <th>Idade Atual</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -77,7 +77,12 @@
                 </tbody>
               </table>
               <div id="printableSegurado" hidden>
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover table-condensed">
+                  <tr>
+                    <td style="text-align: center" colspan="2">
+                      <strong style="font-size: 14px;" >Dados do Segurado</strong >
+                    </td>
+                  </tr>
                   <tr>
                     <td width="50%" style="text-align: right">
                       <b>Nome:</b>
@@ -98,7 +103,7 @@
                   </tr>
                   <tr>
                     <td width="50%" style="text-align: right">
-                      <b>Data de nascimento:</b>
+                      <b>Data de Nascimento:</b>
                     </td>
                     <td width="50%">
                       {{ segurado.data_nascimento }}
@@ -147,8 +152,8 @@
               >
                 <thead>
                   <tr>
-                    <th width="40%">Competência inicial</th>
-                    <th>Competência final</th>
+                    <th width="40%">Competência Inicial</th>
+                    <th>Competência Final</th>
                     <th>Atualizar até</th>
                   </tr>
                 </thead>
@@ -168,10 +173,15 @@
               </table>
 
               <div id="printableDadosCalculo" hidden>
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td style="text-align: center" colspan="3">
+                      <strong style="font-size: 14px;" >Informações do Cálculo</strong >
+                    </td>
+                  </tr>
                   <tr>
                     <td width="50%" style="text-align: right">
-                      <b>Competência inicial:</b>
+                      <b>Competência Inicial:</b>
                     </td>
                     <td width="50%">
                       {{ datasCalculoResultados.inicial }}
@@ -179,7 +189,7 @@
                   </tr>
                   <tr>
                     <td width="50%" style="text-align: right">
-                      <b>Competência final:</b>
+                      <b>Competência Final:</b>
                     </td>
                     <td width="50%">
                       {{ datasCalculoResultados.final }}
@@ -214,23 +224,23 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Valores de contribuição</h2>
+            <h2 class="not-print">Valores de contribuição</h2>
             <button
-              class="btn btn-labeled btn-info pull-right"
-              type="submit"
+              class="btn btn-labeled btn-info pull-right not-print"
+              type="button"
               (click)="setviewResultados('valoresContrib')"
             >
-              &nbsp;&nbsp;
-              {{ !viewExibir.valoresContrib? "Abrir" : "Fechar" }}
-              <i
-                *ngIf="!isUpdating"
-                class="pull-right fa fa-lg"
-                [ngClass]="{
-                  'fa-angle-down': viewExibir.valoresContrib,
-                  'fa-angle-up': !viewExibir.valoresContrib
-                }"
-              ></i
-              >&nbsp;&nbsp;
+              <span class="btn-label">
+                <i
+                  *ngIf="!isUpdating"
+                  class="fa"
+                  [ngClass]="{
+                    'fa-angle-down': viewExibir.valoresContrib,
+                    'fa-angle-up': !viewExibir.valoresContrib
+                  }"
+                ></i>
+              </span>
+              {{ !viewExibir.valoresContrib ? "Abrir" : "Fechar" }}
             </button>
           </header>
           <div *ngIf="viewExibir.valoresContrib">
@@ -254,6 +264,11 @@
                 width="100%"
               >
                 <thead>
+                  <tr class="not-screen">
+                    <td style="text-align: center" colspan="6">
+                      <strong style="font-size: 14px;" >Valores de contribuição</strong >
+                    </td>
+                  </tr>
                   <tr>
                     <th class="text-center">#</th>
                     <th class="text-center">Competência</th>
@@ -266,6 +281,82 @@
                   </tr>
                 </thead>
               </sa-datatable>
+              <div
+                id="printableDadosValoresContrib"
+                class="p-0"
+                *ngIf="viewExibir.valoresContrib"
+              >
+                <table
+                  class="table table-bordered table-hover no-padding mb-0"
+                  *ngIf="!isUpdating"
+                >
+                  <tbody>
+                    <!-- <tr>
+                    <td colspan="2">
+                      <strong >Resultado Final</strong>
+                    </td>
+                  </tr> -->
+                    <tr>
+                      <td style="text-align: right">
+                        <span class="pull-right font-bold"><b>Tipo</b></span>
+                      </td>
+                      <td style="text-align: left">
+                        <span class="font-bold"><b>Descrição</b></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Quantidade de salários de contribuição (100%):
+                        </span>
+                      </td>
+                      <td>{{ quantcontribuicoes100 }}</td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Quantidade de Salários de Contribuição Utilizados (80%
+                          maiores):
+                        </span>
+                      </td>
+                      <td>{{ quantContribuicoes80 }}</td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Soma dos Salários de Contribuição Considerados:
+                        </span>
+                      </td>
+                      <td>{{ formatMoney(somaDosSalariosContribuicao) }}</td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Média dos Salários de Contribuição:
+                        </span>
+                      </td>
+                      <td>{{ formatMoney(mediaDosSalariosContribuicao) }}</td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Alíquota da Contribuição:
+                        </span>
+                      </td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td width="50%" style="text-align: right">
+                        <span class="pull-right font-bold">
+                          Valor da Contribuição:
+                        </span>
+                      </td>
+                      <td>{{ formatMoney(baseAliquota) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
               <!-- <small style="padding-left: 10px" class="text-danger"
                 ><b
                   >Valores em vermelho correspondem a contribuições
@@ -288,26 +379,26 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <h2>Resultados</h2>
+            <h2 class="not-print">Resultados</h2>
             <button
-            class="btn btn-labeled btn-info pull-right"
-            type="submit"
-            (click)="setviewResultados('resultados')"
-          >
-            &nbsp;&nbsp;
-            {{ !viewExibir.resultados? "Abrir" : "Fechar" }}
-            <i
-              *ngIf="!isUpdating"
-              class="pull-right fa fa-lg"
-              [ngClass]="{
-                'fa-angle-down': viewExibir.resultados,
-                'fa-angle-up': !viewExibir.resultados
-              }"
-            ></i
-            >&nbsp;&nbsp;
-          </button>
+              class="btn btn-labeled btn-info pull-right not-print"
+              type="button"
+              (click)="setviewResultados('resultados')"
+            >
+              <span class="btn-label">
+                <i
+                  *ngIf="!isUpdating"
+                  class="fa"
+                  [ngClass]="{
+                    'fa-angle-down': viewExibir.resultados,
+                    'fa-angle-up': !viewExibir.resultados
+                  }"
+                ></i>
+              </span>
+              {{ !viewExibir.resultados ? "Abrir" : "Fechar" }}
+            </button>
           </header>
-          <div *ngIf="viewExibir.resultados" >
+          <div *ngIf="viewExibir.resultados">
             <div class="widget-body no-padding hidden-dt">
               <sa-datatable
                 [options]="resultadosTableOptions"
@@ -317,6 +408,11 @@
                 width="100%"
               >
                 <thead>
+                  <tr class="not-screen">
+                    <td style="text-align: center" colspan="5">
+                      <strong style="font-size: 14px;" >Resultados</strong >
+                    </td>
+                  </tr>
                   <tr>
                     <th>Competência</th>
                     <th>Valor da Contribuição</th>
@@ -328,7 +424,11 @@
               </sa-datatable>
             </div>
           </div>
-          <div id="printableDadosResultados" class="p-0" *ngIf="viewExibir.resultados">
+          <div
+            id="printableDadosResultados"
+            class="p-0"
+            *ngIf="viewExibir.resultados"
+          >
             <table
               class="table table-bordered table-hover no-padding mb-0"
               *ngIf="!isUpdating"
@@ -346,55 +446,6 @@
                   <td style="text-align: left">
                     <span class="font-bold"><b>Descrição</b></span>
                   </td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Quantidade de salários de contribuição (100%):
-                    </span>
-                  </td>
-                  <td>{{ quantcontribuicoes100 }}</td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Quantidade de Salários de Contribuição Utilizados (80%
-                      maiores):
-                    </span>
-                  </td>
-                  <td>{{ quantContribuicoes80 }}</td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Soma dos Salários de Contribuição Considerados:
-                    </span>
-                  </td>
-                  <td>{{ formatMoney(somaDosSalariosContribuicao) }}</td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Média dos Salários de Contribuição:
-                    </span>
-                  </td>
-                  <td>{{ formatMoney(mediaDosSalariosContribuicao) }}</td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Alíquota da Contribuição:
-                    </span>
-                  </td>
-                  <td>20%</td>
-                </tr>
-                <tr>
-                  <td width="50%" style="text-align: right">
-                    <span class="pull-right font-bold">
-                      Valor da Contribuição:
-                    </span>
-                  </td>
-                  <td>{{ formatMoney(baseAliquota) }}</td>
                 </tr>
                 <tr>
                   <td width="50%" style="text-align: right">
@@ -452,25 +503,25 @@
         <div class="form-actions">
           <div class="row">
             <div class="col-md-12">
-              <!-- <button (click)="voltar()" type="submit" class="btn btn-labeled btn-default margin-bottom-10">
-                  <span class="btn-label">
-                    <i class="fa fa-arrow-circle-left"></i>
-                  </span> Voltar
-                </button>
-                <button (click)="listaSegurados()" type="submit" class="btn btn-labeled btn-primary margin-bottom-10">
-                  <span class="btn-label">
-                    <i class="fa fa-list"></i>
-                  </span> Listagem de segurados 
-                </button> -->
-              <button
-                (click)="imprimirPagina()"
+                <button
+                (click)="imprimirTodosResultadosFinal()"
                 type="submit"
                 class="btn btn-labeled btn-info margin-bottom-10"
               >
                 <span class="btn-label">
                   <i class="fa fa-print"></i>
                 </span>
-                Imprimir
+                Imprimir Resultados
+              </button>
+              <button
+                (click)="imprimirTodosResultadosPagina()"
+                type="submit"
+                class="btn btn-labeled btn-info margin-bottom-10"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-print"></i>
+                </span>
+                Imprimir Todas as informações
               </button>
             </div>
           </div>

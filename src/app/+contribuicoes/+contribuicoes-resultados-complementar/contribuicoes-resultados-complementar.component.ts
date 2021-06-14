@@ -221,7 +221,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     this.calculoComplementar.salario = this.baseAliquota;
     this.calculoComplementar.total_contribuicao = this.somaDosSalariosContribuicao;
     this.calculoComplementar.numero_contribuicoes = this.quantContribuicoes80;
-     this.calculoComplementar.media_salarial = this.mediaDosSalariosContribuicao;
+    this.calculoComplementar.media_salarial = this.mediaDosSalariosContribuicao;
     this.calculoComplementar.contribuicao_calculada = this.total_total;
 
     this.Complementar.update(this.calculoComplementar).then((rst: ContribuicaoModel) => {
@@ -324,7 +324,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       multa: '<b>' + this.formatMoney(total_multa) + '</b>',
       total: '<b>' + this.formatMoney(total_total) + '</b>'
     };
-   // dataTabelaResultados.push(last_line);
+    // dataTabelaResultados.push(last_line);
     return dataTabelaResultados;
   }
 
@@ -773,10 +773,32 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
 
 
+  imprimirTodosResultadosPagina() {
 
 
+    this.setviewResultados('valoresContrib');
+    this.setviewResultados('resultados');
 
-  imprimirPagina() {
+    setTimeout(() => {
+      this.imprimirPagina();
+      this.setviewResultados('valoresContrib');
+      this.setviewResultados('resultados');
+    }, 1000)
+  }
+
+  imprimirTodosResultadosFinal() {
+
+    this.setviewResultados('resultados');
+
+    setTimeout(() => {
+      this.imprimirPagina('somenteTotal');
+      this.setviewResultados('resultados');
+    }, 1000)
+  }
+
+
+  imprimirPagina(type = 'all') {
+
 
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
                 <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
@@ -802,17 +824,23 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
                       </style>`;
 
 
-    let seguradoBox = document.getElementById('printableSegurado').innerHTML
-    let dadosCalculo = document.getElementById('printableDadosCalculo').innerHTML
-    let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML
-    let resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML
-    let printContents = seguradoBox + dadosCalculo + detalhamentoCalculo + resultadosCalculo;
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML;
+    const dadosCalculo = document.getElementById('printableDadosCalculo').innerHTML;
+    let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML;
+    const resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML;
+
+    if (type !== 'all') {
+      detalhamentoCalculo = '';
+    }
+
+    const printContents = seguradoBox + dadosCalculo + detalhamentoCalculo + resultadosCalculo;
+
     // printContents = printContents.replace(/<table/g, 
     //   '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
     const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
-    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     // popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' 
     //                           + printContents + rodape + '</body></html>');
