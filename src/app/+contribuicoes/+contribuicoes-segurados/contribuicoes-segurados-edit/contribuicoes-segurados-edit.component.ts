@@ -39,8 +39,9 @@ export class ContribuicoesSeguradosEditComponent implements OnInit, OnDestroy {
     this.Segurado
           .update(this.segurado)
           .then(model => {
-            this.Segurado.get()
-                .then(() => this.router.navigate(['/contribuicoes/contribuicoes-segurados']));
+            this.router.navigate(['/contribuicoes/contribuicoes-segurados']);
+            // this.Segurado.get()
+            //     .then(() => this.router.navigate(['/contribuicoes/contribuicoes-segurados']));
           })
           .catch(errors => this.Errors.add(errors));
   }

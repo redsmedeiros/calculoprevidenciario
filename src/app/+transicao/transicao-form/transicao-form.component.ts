@@ -148,7 +148,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
     if (this.contribuicaoAnos === undefined || this.contribuicaoAnos === '') {
-      this.errors.add({ 'contribuicaoAnos': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoAnos': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoAnos > 100 || !this.isNumber(this.contribuicaoAnos)) {
         this.errors.add({ 'contribuicaoAnos': ['Insira um valor entre 1 e 100'] });
@@ -156,7 +156,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoMeses === undefined || this.contribuicaoMeses === '') {
-      this.errors.add({ 'contribuicaoMeses': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoMeses': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoMeses > 11 || !this.isNumber(this.contribuicaoMeses)) {
         this.errors.add({ 'contribuicaoMeses': ['Insira um valor entre 1 e 11'] });
@@ -164,7 +164,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoDias === undefined || this.contribuicaoDias === '') {
-      this.errors.add({ 'contribuicaoDias': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoDias': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoDias > 29 || !this.isNumber(this.contribuicaoDias)) {
         this.errors.add({ 'contribuicaoDias': ['Insira um valor entre 0 e 29'] });
@@ -174,7 +174,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
     if (this.contribuicaoAnosAteEC103 === undefined || this.contribuicaoAnosAteEC103 === '') {
-      this.errors.add({ 'contribuicaoAnosAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoAnosAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoAnosAteEC103 > 100 || !this.isNumber(this.contribuicaoAnosAteEC103)) {
         this.errors.add({ 'contribuicaoAnosAteEC103': ['Insira um valor entre 1 e 100'] });
@@ -182,7 +182,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoMesesAteEC103 === undefined || this.contribuicaoMesesAteEC103 === '') {
-      this.errors.add({ 'contribuicaoMesesAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoMesesAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoMesesAteEC103 > 11 || !this.isNumber(this.contribuicaoMesesAteEC103)) {
         this.errors.add({ 'contribuicaoMesesAteEC103': ['Insira um valor entre 1 e 11'] });
@@ -190,7 +190,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoDiasAteEC103 === undefined || this.contribuicaoDiasAteEC103 === '') {
-      this.errors.add({ 'contribuicaoDiasAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoDiasAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoDiasAteEC103 > 29 || !this.isNumber(this.contribuicaoDiasAteEC103)) {
         this.errors.add({ 'contribuicaoDiasAteEC103': ['Insira um valor entre 0 e 29'] });
