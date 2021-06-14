@@ -152,7 +152,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
           this.getContribuicoesMatriz();
 
           // this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
-          this.Moeda.getByDateRangeMomentParam(this.contribuicoesMatrizInicio, this.contribuicoesMatrizAtualizarAte.subtract(1, 'm'))
+          this.Moeda.getByDateRangeMomentParam(this.contribuicoesMatrizInicio, moment().subtract(1, 'm'))
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
 
@@ -412,11 +412,11 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   //Tabela de detalhes gerada no momento no calculo
   generateTabelaDetalhes() {
 
-    let data_array = this.getMatrixData();
+    const data_array = this.getMatrixData();
     let indice_num = 0;
     let dataTabelaDetalhes = [];
 
-    const dataComparacao = moment(this.calculoComplementar.atualizar_ate, 'DD/MM/YYYY');
+    const dataComparacao = moment(this.calculoComplementar.atualizar_ate);
     const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
 
     for (let data of data_array) {
@@ -522,7 +522,19 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     // this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
 
-    this.detalhesList = dataTabelaDetalhes;
+    this.detalhesList = dataTabelaDetalhes.sort((entry1, entry2) => {
+
+      const dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
+      const dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
+
+      if (dataMesEntry1 < dataMesEntry2) {
+        return -1;
+      }
+      if (dataMesEntry1 > dataMesEntry2) {
+        return 1;
+      }
+      return 0;
+    });
 
     // console.log(dataTabelaDetalhes)
     // console.log(this.detalhesList)

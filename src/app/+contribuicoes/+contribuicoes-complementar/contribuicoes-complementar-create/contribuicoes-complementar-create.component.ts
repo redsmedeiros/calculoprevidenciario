@@ -74,11 +74,13 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   getInformacoesIniciais() {
 
     this.idSegurado = this.route.snapshot.params['id'];
-    this.Moeda.getByDateRangeMomentParam(moment('1994-06-01'), moment().subtract(1, 'm'))
-      .then((moeda: Moeda[]) => {
-        this.moeda = moeda;
-        this.isUpdate = false;
-      });
+    // this.Moeda.getByDateRangeMomentParam(moment('1994-06-01'), moment().subtract(1, 'm'))
+    //   .then((moeda: Moeda[]) => {
+    //     this.moeda = moeda;
+    //     this.isUpdate = false;
+    //   });
+
+      this.isUpdate = false;
   }
 
 
@@ -306,7 +308,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     e.preventDefault();
 
 
-    this.generateTabelaDetalhes();
+    //this.generateTabelaDetalhes();
     console.log(this.form);
     this.form.contribuicao_calculada = this.calculateContribuicao();
 
