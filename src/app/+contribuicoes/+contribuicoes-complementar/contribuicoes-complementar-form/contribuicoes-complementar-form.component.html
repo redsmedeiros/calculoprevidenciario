@@ -28,12 +28,12 @@
                 class="form-control"
                 id="competenciaInicial"
                 [(ngModel)]="competenciaInicial"
-                (change)="errors.clear('competenciaInicial');validateInputs(1, 'competenciaInicial');setIsFormContribuicoes();"
+                (change)="errors.clear('competenciaInicial');validateInputs(1, 'competenciaInicial');"
                 [ngModelOptions]="{ standalone: true }"
                 [textMask]="{ mask: dateMask }"
                 placeholder="(MM/AAAA)"
                 type="text"
-                (keyup)="moveNext($event, 7, 'competenciaFinal')"
+                (keyup)="moveNext($event, 7, 'competenciaFinal');setIsFormContribuicoes();"
               />
               <small
                 *ngIf="errors.has('competenciaInicial')"
@@ -48,11 +48,11 @@
                 id="competenciaFinal"
                 [(ngModel)]="competenciaFinal"
                 [ngModelOptions]="{ standalone: true }"
-                (change)="errors.clear('competenciaFinal'); validateInputs(1, 'competenciaFinal'); setIsFormContribuicoes();"
+                (change)="errors.clear('competenciaFinal'); validateInputs(1, 'competenciaFinal'); "
                 [textMask]="{ mask: dateMask }"
                 placeholder="(MM/AAAA)"
                 type="text"
-                (keyup)="moveNext($event, 7, 'atualizarAte')"
+                (keyup)="moveNext($event, 7, 'atualizarAte');setIsFormContribuicoes();"
               />
               <small
                 *ngIf="errors.has('competenciaFinal')"
@@ -67,7 +67,8 @@
                 [(ngModel)]="atualizarAte"
                 [ngModelOptions]="{ standalone: true }"
                 [textMask]="{ mask: dateMask }"
-                (change)="errors.clear('atualizarAte'); validateInputs(1, 'atualizarAte'); setIsFormContribuicoes();"
+                (change)="errors.clear('atualizarAte'); validateInputs(1, 'atualizarAte');"
+                (keyup)="setIsFormContribuicoes();"
                 placeholder="(MM/AAAA)"
                 type="text"
                 id="atualizarAte"

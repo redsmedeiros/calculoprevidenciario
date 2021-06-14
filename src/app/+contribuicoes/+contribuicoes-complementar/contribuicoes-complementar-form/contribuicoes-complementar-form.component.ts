@@ -101,8 +101,6 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
   private setForm(isImport = false) {
 
-    // console.log(this.contribuicaoDeMatriz)
-    // console.log(this.contribuicaoAteMatriz)
 
     // if (this.idCalculo != '' && this.idCalculo != undefined) {
     //   this.formData.id = this.idCalculo;
@@ -134,18 +132,7 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     this.contribuicaoDeMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
     this.contribuicaoAteMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
 
-    // console.log(this.salarioContribuicao)
-    // console.log(this.contribuicaoDeMatriz)
-    // console.log(this.contribuicaoAteMatriz)
-
-    // console.log(this.formData);
-
   }
-
-
-
-
-
 
   validateInputs(
     passo = 1,
@@ -287,7 +274,12 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
     if (!this.isEmpty(this.competenciaInicial)
       && !this.isEmpty(this.competenciaFinal)
-      && !this.isEmpty(this.atualizarAte)) {
+      && !this.isEmpty(this.atualizarAte)
+      && this.competenciaInicial.length  === 7
+      && this.competenciaFinal.length  === 7
+      && this.atualizarAte.length  === 7
+      ) {
+        this.setForm();
       this.isFormContribuicoes = true;
     }
 
