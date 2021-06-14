@@ -294,9 +294,9 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
   }
 
   moveNext(event, maxLength, nextElementId) {
-    let value = event.srcElement.value;
+    const value = event.srcElement.value;
     if (value.indexOf('_') < 0 && value != '') {
-      let next = <HTMLInputElement>document.getElementById(nextElementId);
+      const next = <HTMLInputElement>document.getElementById(nextElementId);
       //console.log(next)
       next.focus();
     }

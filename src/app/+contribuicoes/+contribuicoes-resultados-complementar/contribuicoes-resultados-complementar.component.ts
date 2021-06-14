@@ -282,20 +282,26 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     //  console.log(competencias);
 
     const checkDataJuros = (competencia) => {
-      return moment(competencia, 'MM/YYYYY').isAfter('1996-10-14', 'months')
+      return moment(competencia, 'MM/YYYYY').isSameOrAfter('1996-10-14', 'months')
     }
 
 
     for (let competencia of competencias) {
-      let splited = competencia.split('-');
 
+      const splited = competencia.split('-');
       competencia = splited[1] + '/' + splited[0];
-      let valor_contribuicao = this.getValorContribuicao();
+      const valor_contribuicao = this.getValorContribuicao();
       let juros = (this.mostrarJuros && checkDataJuros(competencia)) ? this.getTaxaJuros(competencia) : 0;
       let multa = (checkDataJuros(competencia)) ? this.getMulta() : 0;
-      let total = (this.getBaseAliquota() * 1.1) + juros;
 
-      let line = {
+      if (moment(competencia, 'MM/YYYYY').isSame('1996-10-14', 'months')) {
+        juros *= (16 / 30);
+        multa *= (16 / 30);
+      }
+
+      const total = (checkDataJuros(competencia)) ? (this.getBaseAliquota() * 1.1) + juros : this.getBaseAliquota();
+
+      const line = {
         competencia: competencia,
         valor_contribuicao: this.formatMoney(valor_contribuicao),
         juros: this.formatMoney(juros),
@@ -317,13 +323,13 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     this.total_multa = total_multa;
     this.total_total = total_total;
 
-    let last_line = {
-      competencia: '<b>Total</b>',
-      valor_contribuicao: '<b>' + this.formatMoney(total_contrib) + '</b>',
-      juros: '<b>' + this.formatMoney(total_juros) + '</b>',
-      multa: '<b>' + this.formatMoney(total_multa) + '</b>',
-      total: '<b>' + this.formatMoney(total_total) + '</b>'
-    };
+    // let last_line = {
+    //   competencia: '<b>Total</b>',
+    //   valor_contribuicao: '<b>' + this.formatMoney(total_contrib) + '</b>',
+    //   juros: '<b>' + this.formatMoney(total_juros) + '</b>',
+    //   multa: '<b>' + this.formatMoney(total_multa) + '</b>',
+    //   total: '<b>' + this.formatMoney(total_total) + '</b>'
+    // };
     // dataTabelaResultados.push(last_line);
     return dataTabelaResultados;
   }
