@@ -2,7 +2,7 @@
   <sa-widgets-grid>
     <div id="box-dados-segurado">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <h1>Contribuições Atrasadas - Lei complementar n. 128/08</h1>
+        <h1>Cálculo Indenização de Contribuições - Artigo 45-A da Lei n. 8.212/1991</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="#/contribuicoes/contribuicoes-segurados">
@@ -67,12 +67,12 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td width="40%" class="text-center">{{ segurado.nome }}</td>
-                    <td class="text-center">{{ segurado.data_nascimento }}</td>
-                    <td class="text-center">
+                    <td width="40%" >{{ segurado.nome }}</td>
+                    <td >{{ segurado.data_nascimento }}</td>
+                    <td >
                       {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
                     </td>
-                    <td class="text-center">{{ segurado.idade }} anos</td>
+                    <td >{{ segurado.idade }} anos</td>
                   </tr>
                 </tbody>
               </table>
@@ -154,18 +154,18 @@
                   <tr>
                     <th width="40%">Competência Inicial</th>
                     <th>Competência Final</th>
-                    <th>Atualizar até</th>
+                    <th>Corrigir Monetariamente até:</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="text-center">
+                    <td>
                       {{ datasCalculoResultados.inicial }}
                     </td>
-                    <td class="text-center">
+                    <td>
                       {{ datasCalculoResultados.final }}
                     </td>
-                    <td class="text-center">
+                    <td>
                       {{ datasCalculoResultados.atualizarAte }}
                     </td>
                   </tr>

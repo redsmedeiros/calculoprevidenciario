@@ -5,24 +5,20 @@
       <i class="fa fa-table"></i>
     </span>
     <h2>
-      Contribuição anterior a {{ dataDecadente.getMonth() + 1 }}/{{
-        dataDecadente.getFullYear()
-      }}
+      Período a Indenizar
     </h2>
   </header>
   <!-- widget div-->
   <div>
     <!-- widget content -->
     <div class="widget-body">
-      <h5 class="section-title">Contribuições atrasadas</h5>
       <p>
-        Favor preencher a data inicial e a data final das contribuições
-        atrasadas que pretende recolher
+        Preencher os campos abaixo com as datas das competências inicial e final do período a ser indenizado:
       </p>
       <form class="form-horizontal">
         <fieldset>
           <div class="form-group">
-            <label class="col-md-2 control-label">Competência inicial</label>
+            <label class="col-md-2 control-label">Competência Inicial:</label>
             <div class="col-md-2">
               <input
                 class="form-control"
@@ -41,7 +37,7 @@
                 >{{ errors.get("competenciaInicial") }}</small
               >
             </div>
-            <label class="col-md-2 control-label">Competência final</label>
+            <label class="col-md-2 control-label">Competência Final:</label>
             <div class="col-md-2">
               <input
                 class="form-control"
@@ -60,7 +56,7 @@
                 >{{ errors.get("competenciaFinal") }}</small
               >
             </div>
-            <label class="col-md-2 control-label">Atualizar até</label>
+            <label class="col-md-2 control-label">Corrigir Monetariamente até:</label>
             <div class="col-md-2">
               <input
                 class="form-control"
@@ -396,7 +392,7 @@
         ? 'btn-ieprev active btn-ieprev-rad '
         : 'btn-ieprev btn-ieprev-rad'
     "
-    ><strong>Migrar dados a partir do CNIS</strong></button>
+    ><strong>Migrar Salários de Contribuição a partir do CNIS</strong></button>
   </div>
   <div class="col-md-offset-2 col-xs-4 col-sm-4 col-md-4 col-lg-4">
     <button type="button" class="py-3 btn btn-block"
@@ -406,7 +402,7 @@
         ? 'btn-ieprev active btn-ieprev-rad '
         : 'btn-ieprev btn-ieprev-rad'
     "
-    ><strong>Inserir dados manualmente</strong></button>
+    ><strong>Inserir Salários de Contribuição Manualmente</strong></button>
   </div>
 </div>
 
