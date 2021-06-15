@@ -520,9 +520,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     this.baseAliquota = this.mediaDosSalariosContribuicao * 0.2;
 
-    // this.MatrixStore.setTabelaDetalhes(dataTabelaDetalhes);
 
-    this.detalhesList = dataTabelaDetalhes.sort((entry1, entry2) => {
+    dataTabelaDetalhes.sort((entry1, entry2) => {
 
       const dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
       const dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
@@ -536,8 +535,13 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       return 0;
     });
 
-    // console.log(dataTabelaDetalhes)
-    // console.log(this.detalhesList)
+    dataTabelaDetalhes.map((row, index) => {
+      row.indice_num = index + 1;
+    })
+
+
+    this.detalhesList = dataTabelaDetalhes;
+
     this.updateDetalhesDatatable();
 
   }

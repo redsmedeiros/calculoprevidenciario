@@ -495,7 +495,7 @@
             </div>
           </div>
         </sa-widget>
-        <div class="form-actions">
+        <!-- <div class="form-actions">
           <div class="row">
             <div class="col-md-12">
                 <button
@@ -520,8 +520,43 @@
               </button>
             </div>
           </div>
+        </div> -->
+      </article>
+
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-right">
+                <button
+                (click)="imprimirTodosResultadosPagina()"
+                type="submit"
+                class="btn btn-labeled btn-info"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-print"></i>
+                </span>
+                Imprimir Resultados da Contribuição Mensal/Total a Indenizar
+              </button>
+              </li>
+              <li class="pull-right">
+                <button
+                (click)="imprimirTodosResultadosFinal()"
+                type="submit"
+                class="btn btn-labeled btn-info mr-5"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-print"></i>
+                </span>
+                Imprimir Resultado da Contribuição Mensal
+              </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </article>
     </div>
   </sa-widgets-grid>
 </div>
+
+

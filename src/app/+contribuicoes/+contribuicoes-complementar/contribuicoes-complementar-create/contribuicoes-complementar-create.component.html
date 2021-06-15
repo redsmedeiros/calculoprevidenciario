@@ -19,7 +19,11 @@
     (importCnis)="preencherComCnis($event)"
   ></app-contribuicoes-complementar-form>
 </article>
-<article id="matrizValues" class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdate">
+<article
+  id="matrizValues"
+  class="col-sm-12 col-md-12 col-lg-12"
+  *ngIf="!isUpdate"
+>
   <!-- Widget ID (each widget will need unique ID)-->
   <sa-widget
     [colorbutton]="false"
@@ -29,6 +33,7 @@
     [togglebutton]="false"
     [deletebutton]="false"
     [fullscreenbutton]="false"
+    class="hidden-dt"
   >
     <header>
       <span class="widget-icon">
@@ -205,20 +210,9 @@
             </tr>
           </tbody>
         </sa-datatable>
+        <!-- <div class="form-actions">
 
-        <!-- <app-contribuicoes-complementar-matriz
-          [matriz]="matriz"
-          [matrizHasValues]="matrizHasValues"
-        >
-        </app-contribuicoes-complementar-matriz> -->
-        <div class="form-actions">
-          <div class="row">
             <div class="col-md-12">
-              <!-- <button (click)="voltar()" type="submit" class="btn btn-labeled btn-primary">
-                  <span class="btn-label">
-                    <i class="fa fa-backward"></i>
-                  </span> Voltar
-                </button> -->
               <button
                 (click)="createCalculo($event)"
                 type="submit"
@@ -230,9 +224,64 @@
                 Salvar e Calcular
               </button>
             </div>
-          </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </sa-widget>
 </article>
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-body m-1 p-1">
+      <ul class="pager wizard no-margin">
+        <li class="pull-center">
+          <a
+            data-toggle="modal"
+            data-target="#recolhimento-em-atraso"
+            class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+            title="Tutorial Planejamento Previdenciário"
+            >Tutorial</a
+          >
+        </li>
+        <li class="pull-right">
+          <button
+            (click)="createCalculo($event)"
+            type="submit"
+            class="btn btn-labeled btn-ieprev"
+          >
+            <span class="btn-label">
+              <i class="fa fa-save"></i>
+            </span>
+            Salvar e Calcular
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<div class="row mb-3">
+  <div class="col-md-12"></div>
+  <div
+    id="recolhimento-em-atraso"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="recolhimento-em-atraso-title"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-custom" role="document">
+      <div class="modal-content modal-lg">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+            src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
+            class="embed-responsive-item"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
