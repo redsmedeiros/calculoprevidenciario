@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
       value: 'contrib-atrasadas',
       link: '/contribuicoes/contribuicoes-segurados',
       icon: `fa fa-lg fa-fw fa-history`,
-      title: `Contribuições <br> em Atraso`,
+      title: `Recolhimento <br>em Atraso`,
       label: ` Elabora cálculo para indenização de contribuições anteriores aos 
       últimos 5 (cinco) anos (decadentes) na forma do artigo 45-A da Lei n. 8.212/1991, 
       com redação dada pela Lei Complementar n. 128/2008, aplicadas ainda as regras previstas 
