@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../Segurado.service';
 import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 import { ContribuicaoComplementarService } from '../+contribuicoes-complementar/ContribuicaoComplementar.service';
-import { ContribuicaoComplementar } from '../+contribuicoes-complementar/ContribuicaoComplementar.model';
+import { ContribuicaoComplementar as ContribuicaoModel } from '../+contribuicoes-complementar/ContribuicaoComplementar.model';
 import { MatrixService } from '../MatrixService.service'
 import * as moment from 'moment'
 import swal from 'sweetalert2';
@@ -29,7 +29,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   public hasDetalhe = false;
   public mostrarJuros;
-  public resultadosList;
+  public resultadosList = [];
   public resultadosTableOptions = {
     paging: false,
     ordering: false,
@@ -42,10 +42,13 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       { data: 'juros' },
       { data: 'multa' },
       { data: 'total' },
+    ],
+    columnDefs: [
+      { className: 'nowrapText notwrap text-center', targets: '_all' },
     ]
   }
 
-  public detalhesList;
+  public detalhesList = [];
   public detalhesTableOptions = {
     paging: false,
     ordering: false,
@@ -58,11 +61,40 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       { data: 'contrib_base' },
       { data: 'indice' },
       { data: 'valor_corrigido' },
+      { data: 'observacao' },
+    ],
+    columnDefs: [
+      { className: 'nowrapText notwrap text-center', targets: '_all' },
     ]
   }
 
   private idCalculo = '';
   private idSegurado = '';
+
+
+  private total_contrib = 0.0;
+  private total_juros = 0.0;
+  private total_multa = 0.0;
+  private total_total = 0.0;
+
+  private datasCalculoResultados;
+
+  private quantcontribuicoes100 = 0;
+  private quantContribuicoes80 = 0;
+  private somaDosSalariosContribuicao = 0;
+  private mediaDosSalariosContribuicao = 0;
+  private contribuicoesMatriz;
+  private anosConsiderados = [];
+  private contribuicoesMatrizInicio;
+  private contribuicoesMatrizAtualizarAte;
+
+  private viewExibir = {
+    resultados: false,
+    valoresContrib: false
+  }
+
+
+
   constructor(
     protected Complementar: ContribuicaoComplementarService,
     protected router: Router,
@@ -73,10 +105,13 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.isUpdating = true;
+
     this.idCalculo = this.route.snapshot.params['id_calculo'];
     this.idSegurado = this.route.snapshot.params['id']
     this.hasDetalhe = !((this.MatrixStore.getTabelaDetalhes()).length === 0);
-    this.isUpdating = true;
+
     this.Segurado.find(this.idSegurado).then(segurado => {
       this.segurado = segurado;
       this.dataNascimento();
@@ -94,6 +129,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
         this.Complementar.find(this.idCalculo).then(calculo => {
           this.calculoComplementar = calculo;
           this.mostrarJuros = this.calculoComplementar.chk_juros;
+          this.contribuicoesMatriz = this.calculoComplementar.chk_juros;
+
           if (!this.mostrarJuros) {
             this.resultadosTableOptions = {
               ...this.resultadosTableOptions,
@@ -106,22 +143,40 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
             }
           }
 
-          this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
+          this.datasCalculoResultados = {
+            inicial: moment(this.calculoComplementar.inicio_atraso).format('MM/YYYY'),
+            final: moment(this.calculoComplementar.final_atraso).format('MM/YYYY'),
+            atualizarAte: moment(this.calculoComplementar.atualizar_ate).format('MM/YYYY'),
+          }
+
+          this.getContribuicoesMatriz();
+
+          // this.Moeda.getByDateRange('01/' + this.competenciaInicial, '01/' + this.competenciaFinal)
+          this.Moeda.getByDateRangeMomentParam(this.contribuicoesMatrizInicio, moment().subtract(1, 'm'))
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
 
-              this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
-                .then((moedaAtual: Moeda[]) => {
+              this.moedaAtual = moeda[0];
+              if (moeda[0].salario_minimo == undefined) {
+                this.moedaAtual = moeda[1];
+              }
 
-                  this.moedaAtual = moedaAtual[1];
-                  if (moedaAtual[1].salario_minimo == undefined) {
-                    this.moedaAtual = moedaAtual[0];
-                  }
+              this.inicializar();
+              this.isUpdating = false;
 
-                  this.inicializar();
-                  this.isUpdating = false;
 
-                });
+              // this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
+              //   .then((moedaAtual: Moeda[]) => {
+
+              //     this.moedaAtual = moedaAtual[1];
+              //     if (moedaAtual[1].salario_minimo == undefined) {
+              //       this.moedaAtual = moedaAtual[0];
+              //     }
+
+              //     this.inicializar();
+              //     this.isUpdating = false;
+
+              //   });
 
             });
         });
@@ -134,23 +189,57 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
   private inicializar() {
 
+    this.generateTabelaDetalhes();
+
     let splited = this.calculoComplementar.inicio_atraso.split('-');
     this.competenciaInicial = splited[1] + '/' + splited[0];
     splited = this.calculoComplementar.final_atraso.split('-');
     this.competenciaFinal = splited[1] + '/' + splited[0];
 
-    this.calculoComplementar.media_salarial = this.verificarTeto(this.calculoComplementar.media_salarial);
+    // this.calculoComplementar.media_salarial = this.verificarTeto(this.calculoComplementar.media_salarial);
+    // this.baseAliquota = (this.calculoComplementar.media_salarial * 0.2);
 
-    this.baseAliquota = (this.calculoComplementar.media_salarial * 0.2);
     this.resultadosList = this.generateTabelaResultados();
 
     this.updateResultadosDatatable();
-    if (this.hasDetalhe) {
+    this.hasDetalhe = true;
+    // if (this.hasDetalhe) {
 
-      this.detalhesList = this.MatrixStore.getTabelaDetalhes().filter(this.onlyUnique);
-      this.updateDetalhesDatatable();
+    //   this.detalhesList = this.MatrixStore.getTabelaDetalhes().filter(this.onlyUnique);
+    //   this.updateDetalhesDatatable();
 
-    }
+    // }
+
+    this.updateInfCalculoComplementar()
+
+  }
+
+
+
+  updateInfCalculoComplementar() {
+
+    this.calculoComplementar.salario = this.baseAliquota;
+    this.calculoComplementar.total_contribuicao = this.somaDosSalariosContribuicao;
+    this.calculoComplementar.numero_contribuicoes = this.quantContribuicoes80;
+    this.calculoComplementar.media_salarial = this.mediaDosSalariosContribuicao;
+    this.calculoComplementar.contribuicao_calculada = this.total_total;
+
+    this.Complementar.update(this.calculoComplementar).then((rst: ContribuicaoModel) => {
+      this.Complementar.get().then(() => {
+        swal({
+          type: 'success',
+          title: 'O Cálculo foi salvo com sucesso',
+          text: '',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 1500
+        }).then(() => {
+
+        });
+      });
+    }).catch(error => {
+      console.log(error);
+    });
 
   }
 
@@ -170,34 +259,6 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     return valor;
   }
 
-  // getNumberFromTableEntry(tableEntry){
-  //   if(tableEntry == ''){
-  //     return 0.0;
-  //   }
-  //   return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
-  // }
-
-
-  // getMatrixData(){
-  //   let unique_anos = this.anosConsiderados.filter(this.onlyUnique);
-  //   let data_dict = [];
-  //   for(let ano of unique_anos){
-  //     data_dict.push("01/"+ano+'-'+valor_jan);
-  //     data_dict.push("02/"+ano+'-'+valor_fev);
-  //     data_dict.push("03/"+ano+'-'+valor_mar);
-  //     data_dict.push("04/"+ano+'-'+valor_abr);
-  //     data_dict.push("05/"+ano+'-'+valor_mai);
-  //     data_dict.push("06/"+ano+'-'+valor_jun);
-  //     data_dict.push("07/"+ano+'-'+valor_jul);
-  //     data_dict.push("08/"+ano+'-'+valor_ago);
-  //     data_dict.push("09/"+ano+'-'+valor_set);
-  //     data_dict.push("10/"+ano+'-'+valor_out);
-  //     data_dict.push("11/"+ano+'-'+valor_nov);
-  //     data_dict.push("12/"+ano+'-'+valor_dez);
-  //   }
-  //   return data_dict;
-  // }
-
 
 
   dataNascimento() {
@@ -206,6 +267,8 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     this.segurado.idade = moment().diff(idadeSegurado, 'years');
 
   }
+
+
   generateTabelaResultados() {
     let competencias = this.monthAndYear(this.competenciaInicial, this.competenciaFinal);
     let dataTabelaResultados = [];
@@ -218,17 +281,27 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     //  console.log(competencias);
 
+    const checkDataJuros = (competencia) => {
+      return moment(competencia, 'MM/YYYYY').isSameOrAfter('1996-10-14', 'months')
+    }
+
 
     for (let competencia of competencias) {
-      let splited = competencia.split('-');
 
+      const splited = competencia.split('-');
       competencia = splited[1] + '/' + splited[0];
-      let valor_contribuicao = this.getValorContribuicao();
-      let juros = (this.mostrarJuros) ? this.getTaxaJuros(competencia) : 0;
-      let multa = this.getMulta();
-      let total = (this.getBaseAliquota() * 1.1) + juros;
+      const valor_contribuicao = this.getValorContribuicao();
+      let juros = (this.mostrarJuros && checkDataJuros(competencia)) ? this.getTaxaJuros(competencia) : 0;
+      let multa = (checkDataJuros(competencia)) ? this.getMulta() : 0;
 
-      let line = {
+      if (moment(competencia, 'MM/YYYYY').isSame('1996-10-14', 'months')) {
+        juros *= (16 / 30);
+        multa *= (16 / 30);
+      }
+
+      const total = (checkDataJuros(competencia)) ? (this.getBaseAliquota() * 1.1) + juros : this.getBaseAliquota();
+
+      const line = {
         competencia: competencia,
         valor_contribuicao: this.formatMoney(valor_contribuicao),
         juros: this.formatMoney(juros),
@@ -244,14 +317,20 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       total_multa += multa;
       total_total += total;
     }
-    let last_line = {
-      competencia: '<b>Total</b>',
-      valor_contribuicao: '<b>' + this.formatMoney(total_contrib) + '</b>',
-      juros: '<b>' + this.formatMoney(total_juros) + '</b>',
-      multa: '<b>' + this.formatMoney(total_multa) + '</b>',
-      total: '<b>' + this.formatMoney(total_total) + '</b>'
-    };
-    dataTabelaResultados.push(last_line);
+
+    this.total_contrib = total_contrib;
+    this.total_juros = total_juros;
+    this.total_multa = total_multa;
+    this.total_total = total_total;
+
+    // let last_line = {
+    //   competencia: '<b>Total</b>',
+    //   valor_contribuicao: '<b>' + this.formatMoney(total_contrib) + '</b>',
+    //   juros: '<b>' + this.formatMoney(total_juros) + '</b>',
+    //   multa: '<b>' + this.formatMoney(total_multa) + '</b>',
+    //   total: '<b>' + this.formatMoney(total_total) + '</b>'
+    // };
+    // dataTabelaResultados.push(last_line);
     return dataTabelaResultados;
   }
 
@@ -280,6 +359,284 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
     return totalJuros;
   }
+
+
+
+  private getContribuicoesMatriz() {
+
+    this.contribuicoesMatriz = JSON.parse(this.calculoComplementar.contribuicoes);
+
+    this.contribuicoesMatriz.sort(function (a, b) { return a.ano - b.ano });
+
+    this.contribuicoesMatriz.map(row => {
+      this.anosConsiderados.push(row.ano);
+    });
+
+    this.contribuicoesMatrizInicio = moment(this.anosConsiderados[0] + '-01-01');
+    this.contribuicoesMatrizAtualizarAte = moment(this.calculoComplementar.atualizar_ate);
+
+  }
+
+
+
+  // getNumberFromTableEntry(tableEntry){
+  //   if(tableEntry == ''){
+  //     return 0.0;
+  //   }
+  //   return parseFloat((tableEntry.split(' ')[1]).replace(',','.'));
+  // }
+
+
+  getMatrixData() {
+    const unique_anos = this.anosConsiderados.filter(this.onlyUnique);
+    const data_dict = [];
+
+    for (const rowAno of this.contribuicoesMatriz) {
+
+      const ano = rowAno.ano;
+      const valor = rowAno.valores
+
+      for (let i = 0; i < 12; i++) {
+        const mes = ('0' + (i + 1)).slice(-2);
+        if (valor[i] !== 'R$ 0,00') {
+          data_dict.push(mes + '/' + ano + '-' + valor[i]);
+        }
+      }
+
+    }
+
+    return data_dict;
+  }
+
+
+  //Tabela de detalhes gerada no momento no calculo
+  generateTabelaDetalhes() {
+
+    const data_array = this.getMatrixData();
+    let indice_num = 0;
+    let dataTabelaDetalhes = [];
+
+    const dataComparacao = moment(this.calculoComplementar.atualizar_ate);
+    const moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
+
+    for (let data of data_array) {
+      const splitted = data.split('-');
+      const mes = splitted[0];
+      const contrib = this.formatDecimalValue(splitted[1]);
+
+      if (contrib == 0 || contrib == undefined) {
+        continue;
+      }
+
+      indice_num++;
+
+      const dataContribuicao = moment(mes, 'MM/YYYY');
+      const moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ?
+        this.Moeda.getByDate(dataContribuicao) : undefined;
+
+      const fatorObj = this.getFatorparaRMI(moedaContribuicao, moedaComparacao);
+      const fatorCorrigido = (moedaContribuicao) ? (fatorObj.fator / fatorObj.fatorLimite) : 1;
+
+      // let indice = this.getIndice(mes);
+      const indice = fatorCorrigido;
+      const contrib_base_limitada = this.limitarTetosEMinimos(contrib, dataContribuicao);
+
+      // const contrib_base = this.getContribBase(mes, contrib);
+      const contrib_base = contrib_base_limitada.valor;
+      const valor_corrigido = contrib_base * indice;
+
+      const line = {
+        indice_num: indice_num,
+        mes: mes,
+        contrib_base: this.formatMoneyContribuicao(contrib_base),
+        contrib_base_number: this.formatRoundMoeda(contrib_base),
+        indice: this.formatDecimal(indice, 6),
+        indice_number: indice,
+        valor_corrigido: this.formatRoundMoeda(valor_corrigido)
+      };
+      dataTabelaDetalhes.push(line);
+    }
+
+    //Ordenação dos dados pelo valor corrigido
+    dataTabelaDetalhes.sort((entry1, entry2) => {
+      if (entry1.valor_corrigido > entry2.valor_corrigido) {
+        return 1;
+      }
+      if (entry1.valor_corrigido < entry2.valor_corrigido) {
+        return -1;
+      }
+      return 0;
+    });
+
+    this.calculoComplementar.numero_contribuicoes = dataTabelaDetalhes.length * 0.8;
+
+    this.quantContribuicoes80 = Math.ceil(this.calculoComplementar.numero_contribuicoes);
+    this.quantcontribuicoes100 = dataTabelaDetalhes.length;
+
+    // Colore de vermelho os 20% menores valores. 
+    // form.numero_contribuicoes contem o numero equivalente as 80% maiores contribuicoes, 
+    // dividindo por 4 obtem-se os 20% restante
+    let index = 0;
+    const numero_contrib_desconsideradas = Math.floor((this.calculoComplementar.numero_contribuicoes) / 4);
+
+    for (index = 0; index < numero_contrib_desconsideradas; index++) {
+      dataTabelaDetalhes[index].indice_num = index + 1;
+      dataTabelaDetalhes[index].mes = '<div>' + dataTabelaDetalhes[index].mes + '</div>'
+      dataTabelaDetalhes[index].contrib_base = '<div>' + dataTabelaDetalhes[index].contrib_base + '</div>'
+      dataTabelaDetalhes[index].indice = '<div>' + dataTabelaDetalhes[index].indice + '</div>'
+      dataTabelaDetalhes[index].valor_corrigido = '<div>' + this.formatMoney(dataTabelaDetalhes[index].valor_corrigido) + '</div>'
+      dataTabelaDetalhes[index].observacao = '<div>DESCONSIDERADO</div>'
+    }
+
+    // Ordena as contribuiçoes consideradas pela data e concatena com as desconsideradas
+    dataTabelaDetalhes = dataTabelaDetalhes.slice(0, index)
+      .concat(dataTabelaDetalhes.slice(index, dataTabelaDetalhes.length)
+        .sort((entry1, entry2) => {
+
+          const dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
+          const dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
+
+          if (dataMesEntry1 < dataMesEntry2) {
+            return 1;
+          }
+          if (dataMesEntry1 > dataMesEntry2) {
+            return -1;
+          }
+          return 0;
+        }));
+
+    for (index = index; index < dataTabelaDetalhes.length; index++) {
+
+      this.somaDosSalariosContribuicao += dataTabelaDetalhes[index].valor_corrigido;
+      dataTabelaDetalhes[index].valor_corrigido = this.formatMoney(dataTabelaDetalhes[index].valor_corrigido);
+      dataTabelaDetalhes[index].indice_num = index + 1;
+      dataTabelaDetalhes[index].observacao = '<div></div>'
+
+
+    }
+
+    this.mediaDosSalariosContribuicao = this.formatRoundMoeda(this.somaDosSalariosContribuicao
+      / this.quantContribuicoes80);
+
+    this.baseAliquota = this.mediaDosSalariosContribuicao * 0.2;
+
+
+    dataTabelaDetalhes.sort((entry1, entry2) => {
+
+      const dataMesEntry1 = moment(entry1.mes, 'MM/YYYY');
+      const dataMesEntry2 = moment(entry2.mes, 'MM/YYYY');
+
+      if (dataMesEntry1 < dataMesEntry2) {
+        return -1;
+      }
+      if (dataMesEntry1 > dataMesEntry2) {
+        return 1;
+      }
+      return 0;
+    });
+
+    dataTabelaDetalhes.map((row, index) => {
+      row.indice_num = index + 1;
+    })
+
+
+    this.detalhesList = dataTabelaDetalhes;
+
+    this.updateDetalhesDatatable();
+
+  }
+
+
+  public formatDecimalValue(value) {
+
+    // typeof value === 'string' || 
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/(\.)|(R\$)|(\s)/g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
+
+  }
+
+  formatRoundMoeda(value) {
+
+    if (value !== undefined) {
+      return Math.round(value * 100) / 100;
+    }
+    return 0.00;
+  }
+
+
+
+  formatDecimal(value, n_of_decimal_digits) {
+
+    value = parseFloat(value);
+    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+
+  }
+
+
+  //Valor da contribuição base para cada mês
+  getContribBase(dataMes, contrib) {
+
+    const teto = this.getTeto(dataMes);
+    const salario_minimo = this.getSalarioMinimo(dataMes);
+
+    // contrib = parseFloat(contrib);
+    contrib = this.formatDecimalValue(contrib);
+
+    if (contrib < salario_minimo) {
+      return salario_minimo;
+    }
+
+    if (contrib > teto) {
+      return teto;
+    }
+
+    return contrib;
+  }
+
+
+  getSalarioMinimo(dataString) {
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].salario_minimo);
+
+    let data = moment(dataString, 'MM/YYYY');
+    if (data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda) {
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+      return parseFloat(this.Moeda.getByDate(data).salario_minimo);
+    }
+
+  }
+
+  getTeto(dataString) {
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].teto);
+    let data = moment(dataString, 'MM/YYYY');
+    if (data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda) {
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+      return parseFloat(this.Moeda.getByDate(data).teto);
+    }
+
+  }
+  //Valor fixado para cada mês, carregado de uma tabela do banco de dados 
+  getIndice(dataString) {
+
+    console.log(dataString);
+    // let diff = this.getDifferenceInMonths('07/1994', dataString);
+    // return parseFloat(this.moeda[diff].fator);
+    let data = moment(dataString, 'MM/YYYY');
+    if (data.format('YYYY-MM-DD') != this.Moeda.getByDate(data).data_moeda) {
+      console.log(data.format('YYYY-MM-DD'), this.Moeda.getByDate(data).data_moeda)
+      return parseFloat(this.Moeda.getByDate(data).fator);
+    }
+
+  }
+
 
   getValorContribuicao() {
     return this.getBaseAliquota();
@@ -330,6 +687,64 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     return differenceInMonths;
   }
 
+
+  limitarTetosEMinimos(valor, data) {
+
+    // se a data estiver no futuro deve ser utilizado os dados no mês atual
+    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    const tetoSalarial = (moeda) ? moeda.teto : 0;
+    let avisoString = '';
+    let valorRetorno = valor;
+
+    if (moeda && valor < salarioMinimo) {
+      valorRetorno = salarioMinimo;
+      avisoString = 'LIMITADO AO MÍNIMO'
+    } else if (moeda && valor > tetoSalarial) {
+      valorRetorno = tetoSalarial;
+      avisoString = 'LIMITADO AO TETO'
+    }
+
+    if (typeof valorRetorno !== 'number') {
+      valorRetorno = parseFloat(valorRetorno);
+    }
+
+    return { valor: valorRetorno, aviso: avisoString };
+  }
+
+
+
+  // fator conforme data atualizar até:
+
+
+  /**
+   * Seleciona o fator adequado, porém como padrão retorna 1
+   * @param  {} moedaContribuicao
+   * @param  {} moedaComparacao
+   */
+  private getFatorparaRMI(moedaContribuicao, moedaComparacao) {
+
+    let fator = 1
+    let fatorLimite = 1;
+
+    // definição de indices
+    fator = (moedaContribuicao) ? moedaContribuicao.fator : 1;
+    fatorLimite = (moedaComparacao) ? moedaComparacao.fator : 1;
+
+    return { fator: fator, fatorLimite: fatorLimite }
+
+  }
+
+
+
+  formatMoneyContribuicao(data) {
+    //data = parseFloat(data);
+    if (data !== null && data !== '') {
+      return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+    }
+    return 'R$ 0,00';
+  }
+
   formatMoney(data) {
     data = parseFloat(data);
     return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
@@ -342,6 +757,9 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
   voltar() {
     window.location.href = '/#/contribuicoes/contribuicoes-calculos/' + this.route.snapshot.params['id'];
   }
+
+
+
 
   // imprimirPagina(){
   //   let seguradoBox = document.getElementById('printableSegurado').innerHTML
@@ -365,7 +783,43 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
 
 
 
-  imprimirPagina() {
+
+
+
+  private setviewResultados(value) {
+
+    this.viewExibir[value] = (!this.viewExibir[value]);
+
+  }
+
+
+
+
+  imprimirTodosResultadosPagina() {
+
+    this.viewExibir['valoresContrib'] = true;
+    this.viewExibir['resultados'] = true;
+
+    setTimeout(() => {
+      this.imprimirPagina();
+      this.viewExibir['valoresContrib'] = false;
+      this.viewExibir['resultados'] = false;
+    }, 1000)
+  }
+
+  imprimirTodosResultadosFinal() {
+
+    this.viewExibir['resultados'] = true;
+
+    setTimeout(() => {
+      this.imprimirPagina('resultados');
+      this.viewExibir['resultados'] = false;
+    }, 1000)
+  }
+
+
+  imprimirPagina(type = 'all') {
+
 
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
                 <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">
@@ -391,17 +845,23 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
                       </style>`;
 
 
-    let seguradoBox = document.getElementById('printableSegurado').innerHTML
-    let dadosCalculo = document.getElementById('printableDadosCalculo').innerHTML
-    let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML
-    let resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML
-    let printContents = seguradoBox + dadosCalculo + detalhamentoCalculo + resultadosCalculo;
+    const seguradoBox = document.getElementById('printableSegurado').innerHTML;
+    const dadosCalculo = document.getElementById('printableDadosCalculo').innerHTML;
+    let detalhamentoCalculo = document.getElementById('detalhamentoCalculo').innerHTML;
+    const resultadosCalculo = document.getElementById('resultadosCalculo').innerHTML;
+
+    if (type !== 'all') {
+      detalhamentoCalculo = '';
+    }
+
+    const printContents = seguradoBox + dadosCalculo + detalhamentoCalculo + resultadosCalculo;
+
     // printContents = printContents.replace(/<table/g, 
     //   '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
     const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
 
-    let popupWin = window.open('', '_blank', 'width=300,height=300');
+    const popupWin = window.open('', '_blank', 'width=300,height=300');
     popupWin.document.open();
     // popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' 
     //                           + printContents + rodape + '</body></html>');
@@ -409,7 +869,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     popupWin.document.write(`<!doctype html>
                               <html>
                                 <head>${css}</head>
-                                <title> Contribuições Atrasadas - Lei complementar 128_08 - ${this.segurado.nome}</title>
+                                <title> Contribuições em Atraso - ${this.segurado.nome}</title>
                                 <body onload="window.print()">
                                  <article class="mt-5">${printContents}</article>
                                  <footer class="mt-5">${rodape}</footer>

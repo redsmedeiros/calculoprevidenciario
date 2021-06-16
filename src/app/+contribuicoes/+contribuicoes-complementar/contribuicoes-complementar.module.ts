@@ -9,9 +9,13 @@ import { ContribuicoesComplementarDestroyComponent } from './contribuicoes-compl
 import { ContribuicoesComplementarEditComponent } from './contribuicoes-complementar-edit/contribuicoes-complementar-edit.component';
 import { ContribuicoesComplementarFormComponent } from './contribuicoes-complementar-form/contribuicoes-complementar-form.component';
 import { ContribuicoesComplementarIndexComponent } from './contribuicoes-complementar-index/contribuicoes-complementar-index.component';
+import { ContribuicoesImportacaoCnisComponent } from './contribuicoes-importacao-cnis/contribuicoes-importacao-cnis.component';
 import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+import { FileDropModule } from 'ngx-file-drop';
+import { ContribuicoesComplementarMatrizComponent } from './contribuicoes-complementar-form/contribuicoes-complementar-matriz/contribuicoes-complementar-matriz.component';
+
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: 'left',
@@ -31,6 +35,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     SmartadminDatatableModule,
     TextMaskModule,
     CurrencyMaskModule,
+    FileDropModule,
   ],
   exports: [ContribuicoesComplementarIndexComponent],
   declarations: [ContribuicoesComplementarComponent,
@@ -38,7 +43,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ContribuicoesComplementarDestroyComponent,
     ContribuicoesComplementarEditComponent,
     ContribuicoesComplementarFormComponent,
-    ContribuicoesComplementarIndexComponent],
+    ContribuicoesComplementarIndexComponent,
+    ContribuicoesImportacaoCnisComponent,
+    ContribuicoesComplementarMatrizComponent],
   providers: [
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],

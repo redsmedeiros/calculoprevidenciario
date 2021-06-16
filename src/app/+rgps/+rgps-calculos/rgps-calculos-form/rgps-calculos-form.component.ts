@@ -332,7 +332,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if (this.has98 || this.hasAnterior) {
       if (this.primaria98anos == undefined || this.primaria98anos === '') {
-        this.errors.add({ 'primaria98anos': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria98anos': ['Preenchimento Obrigatório.'] });
       } else {
         if (!this.isNumber(this.primaria98anos)) {
           this.errors.add({ 'primaria98anos': ['Valor inválido.'] });
@@ -340,7 +340,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria98dias == undefined || this.primaria98dias === '') {
-        this.errors.add({ 'primaria98dias': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria98dias': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria98dias > 29 || !this.isNumber(this.primaria98dias)) {
           this.errors.add({ 'primaria98dias': ['Insira um valor entre 0 e 29'] });
@@ -348,7 +348,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria98meses == undefined || this.primaria98meses === '') {
-        this.errors.add({ 'primaria98meses': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria98meses': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria98meses > 11 || !this.isNumber(this.primaria98meses)) {
           this.errors.add({ 'primaria98meses': ['Insira um valor entre 0 e 11'] });
@@ -377,7 +377,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if (this.has99) {
       if (this.primaria99anos == undefined || this.primaria99anos === '') {
-        this.errors.add({ 'primaria99anos': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria99anos': ['Preenchimento Obrigatório.'] });
       } else {
         if (!this.isNumber(this.primaria99anos)) {
           this.errors.add({ 'primaria99anos': ['Valor inválido.'] });
@@ -385,7 +385,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria99meses == undefined || this.primaria99meses === '') {
-        this.errors.add({ 'primaria99meses': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria99meses': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria99meses > 11 || !this.isNumber(this.primaria99meses)) {
           this.errors.add({ 'primaria99meses': ['Insira um valor entre 1 e 11'] });
@@ -393,7 +393,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria99dias == undefined || this.primaria99dias === '') {
-        this.errors.add({ 'primaria99dias': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria99dias': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria99dias > 29 || !this.isNumber(this.primaria99dias)) {
           this.errors.add({ 'primaria99dias': ['Insira um valor entre 0 e 29'] });
@@ -421,7 +421,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     if (this.hasAtual) {
       if (this.primariaAtualanos == undefined || this.primariaAtualanos === '') {
-        this.errors.add({ 'primariaAtualanos': ['Campo obrigatório.'] });
+        this.errors.add({ 'primariaAtualanos': ['Preenchimento Obrigatório.'] });
       } else {
         if (!this.isNumber(this.primariaAtualanos)) {
           this.errors.add({ 'primariaAtualanos': ['Valor inválido.'] });
@@ -429,7 +429,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primariaAtualmeses == undefined || this.primariaAtualmeses === '') {
-        this.errors.add({ 'primariaAtualmeses': ['Campo obrigatório.'] });
+        this.errors.add({ 'primariaAtualmeses': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primariaAtualmeses > 11 || !this.isNumber(this.primariaAtualmeses)) {
           this.errors.add({ 'primariaAtualmeses': ['Insira um valor entre 1 e 11'] });
@@ -437,7 +437,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primariaAtualdias == undefined || this.primariaAtualdias === '') {
-        this.errors.add({ 'primariaAtualdias': ['Campo obrigatório.'] });
+        this.errors.add({ 'primariaAtualdias': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primariaAtualdias > 29 || !this.isNumber(this.primariaAtualdias)) {
           this.errors.add({ 'primariaAtualdias': ['Insira um valor entre 0 e 29'] });
@@ -467,7 +467,7 @@ export class RgpsCalculosFormComponent implements OnInit {
     if (this.has19 && (this.especieBeneficio != 'Pensão por Morte instituidor aposentado na data óbito'
       && this.especieBeneficio != 'Pensão por Morte - Instituidor Aposentado na Data do Óbito')) {
       if (this.primaria19anos == undefined || this.primaria19anos === '') {
-        this.errors.add({ 'primaria19anos': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria19anos': ['Preenchimento Obrigatório.'] });
       } else {
         if (!this.isNumber(this.primaria19anos)) {
           this.errors.add({ 'primaria19anos': ['Valor inválido.'] });
@@ -475,7 +475,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria19meses == undefined || this.primaria19meses === '') {
-        this.errors.add({ 'primaria19meses': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria19meses': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria19meses > 11 || !this.isNumber(this.primaria19meses)) {
           this.errors.add({ 'primaria19meses': ['Insira um valor entre 1 e 11'] });
@@ -483,7 +483,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       }
 
       if (this.primaria19dias == undefined || this.primaria19dias === '') {
-        this.errors.add({ 'primaria19dias': ['Campo obrigatório.'] });
+        this.errors.add({ 'primaria19dias': ['Preenchimento Obrigatório.'] });
       } else {
         if (this.primaria19dias > 29 || !this.isNumber(this.primaria19dias)) {
           this.errors.add({ 'primaria19dias': ['Insira um valor entre 0 e 29'] });
@@ -499,26 +499,26 @@ export class RgpsCalculosFormComponent implements OnInit {
 
       if (this.hasPensao19 &&
         (this.numDependentes == undefined || this.numDependentes === '' || !this.isNumber(this.numDependentes))) {
-        this.errors.add({ 'numDependentes': ['Campo obrigatório.'] });
+        this.errors.add({ 'numDependentes': ['Preenchimento Obrigatório.'] });
       }
 
       // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
-      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      //   this.errors.add({ 'carencia': ['Preenchimento Obrigatório.'] });
       // }
 
       // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
-      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      //   this.errors.add({ 'carencia': ['Preenchimento Obrigatório.'] });
       // }
 
     }
 
     if (this.hasCarencia && (this.carencia == undefined || this.carencia === '' || this.carencia === 0)
       && this.getEspecieBeneficio(this.especieBeneficio) != 31) {
-      this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      this.errors.add({ 'carencia': ['Preenchimento Obrigatório.'] });
     }
 
     if (this.has19 && (this.hasCarencia && (this.carenciaAposEc103 == undefined || this.carenciaAposEc103 === '' || this.carencia === 0))) {
-      this.errors.add({ 'carenciaAposEc103': ['Campo obrigatório.'] });
+      this.errors.add({ 'carenciaAposEc103': ['Preenchimento Obrigatório.'] });
     }
 
   }

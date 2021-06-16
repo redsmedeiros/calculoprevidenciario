@@ -39,10 +39,12 @@ export class HomeComponent implements OnInit {
       value: 'contrib-atrasadas',
       link: '/contribuicoes/contribuicoes-segurados',
       icon: `fa fa-lg fa-fw fa-history`,
-      title: `Contribuições <br> em Atraso`,
-      label: ` Simula cálculo de contribuições previdenciárias em atraso com base
-      no entendimento jurisprudencial e Lei Complementar nº 128, de
-      12/2008.`
+      title: `Recolhimento <br>em Atraso`,
+      label: ` Elabora cálculo para indenização de contribuições anteriores aos 
+      últimos 5 (cinco) anos (decadentes) na forma do artigo 45-A da Lei n. 8.212/1991, 
+      com redação dada pela Lei Complementar n. 128/2008, aplicadas ainda as regras previstas 
+      no § 7º, do artigo 216 e § 8º-A, do artigo 239, do Decreto n. 3.048/1999, com redação 
+      dada pelo Decreto n. 10.410/2020.`
     },
     {
 

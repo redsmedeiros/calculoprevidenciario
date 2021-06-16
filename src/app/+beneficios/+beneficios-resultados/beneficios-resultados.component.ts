@@ -285,6 +285,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private isMinimoInicialDevido = false;
   private isMinimoInicialRecebido = false;
+  private isMinimoInicialRecebidoLastId;
 
   private isTetoInicialDevido = false;
   private isTetoInicialRecebido = false;
@@ -2310,7 +2311,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataCessacaoRecebido = this.dataCessacaoRecebido;
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
 
+
+
+
     if (recebidoRow.status) {
+
+      // console.log(dataCorrente.format('DD/MM/YYYY'));
+      // console.log(recebidoRow);
 
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
       rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
@@ -2324,7 +2331,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
       this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
       this.dataCessacaoRecebido = dataCessacaoRecebido;
+
+
+      if (this.isMinimoInicialRecebidoLastId === undefined) {
+        this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
+      }
+
     }
+
+
 
     if ((this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
@@ -2488,6 +2503,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Aplicar adicional 25 Recebido
     //beneficioRecebido = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebido);
 
+    
+    if ((recebidoRow.status) && this.isMinimoInicialRecebidoLastId !== recebidoRow.value.id) {
+      this.isMinimoInicialRecebido = false;
+      this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
+    }
+
+
     if (this.isTetos) {
       beneficioRecebidoAjustado = this.aplicarTetosEMinimosTetos(beneficioRecebido,
         dataCorrente,
@@ -2512,6 +2534,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       dataCorrente,
       dataPedidoBeneficio,
       'Recebido');
+
+    // if (dataCorrente.isBetween('2019-10-01', '2019-11-01', 'month', '[]')) {
+    //   console.log(dataCorrente.format('DD/MM/YYYY') + ' - ' + rmiRecebidos + ' - ' + beneficioRecebidoAjustado);
+    //   console.log( ' - ' + this.isMinimoInicialRecebidoLastId + ' - ' + recebidoRow.value.id);
+    //   console.log(this.isMinimoInicialRecebidoLastId);
+    //   console.log(recebidoRow.value.id);
+    // }
 
     line.beneficio_recebido_apos_revisao = this.formatMoney(this.beneficioRecebidoAposRevisao);
     this.ultimoBeneficioRecebidoAntesProporcionalidade = beneficioRecebidoAjustado;
@@ -3934,7 +3963,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
   // Seção 5.3
-  aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo) {
+  aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo, recebidoRowid = null) {
 
     let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
     let salMinimo = dataCorrenteMoeda.salario_minimo;
@@ -3972,7 +4001,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         // Adicionar subindice ‘M’ no valor do beneficio
         return this.roundMoeda(salMinimo);
       }
-
     }
 
     // if ((this.isTetoInicialDevido && tipo === 'Devido')

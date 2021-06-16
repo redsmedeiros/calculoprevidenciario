@@ -1,0 +1,205 @@
+ <!-- Widget ID (each widget will need unique ID)-->
+ <sa-widget
+ [colorbutton]="false"
+ [editbutton]="false"
+ [colorbutton]="false"
+ [editbutton]="false"
+ [togglebutton]="false"
+ [deletebutton]="false"
+ [fullscreenbutton]="false"
+>
+ <header>
+   <span class="widget-icon">
+     <i class="fa fa-table"></i>
+   </span>
+   <h2>Valores de contribuição</h2>
+ </header>
+ <div>
+   <div class="widget-body no-padding" *ngIf="matrizHasValues" >
+     <sa-datatable
+       paginationLength="true"
+       [options]="matrixTableOptions"
+       tableClass="table table-striped table-condensed-custom table-bordered table-hover"
+       width="100%"
+     >
+       <thead>
+         <tr>
+           <th style="text-align: center; width: 62px">Ano</th>
+           <th style="text-align: center; width: 80px">Janeiro</th>
+           <th style="text-align: center; width: 80px">Fevereiro</th>
+           <th style="text-align: center; width: 80px">Março</th>
+           <th style="text-align: center; width: 80px">Abril</th>
+           <th style="text-align: center; width: 80px">Maio</th>
+           <th style="text-align: center; width: 80px">Junho</th>
+           <th style="text-align: center; width: 80px">Julho</th>
+           <th style="text-align: center; width: 80px">Agosto</th>
+           <th style="text-align: center; width: 80px">Setembro</th>
+           <th style="text-align: center; width: 80px">Outubro</th>
+           <th style="text-align: center; width: 80px">Novembro</th>
+           <th style="text-align: center; width: 80px">Dezembro</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr *ngFor="let data of matriz"  style="text-align: center;">
+           <td>{{ data.ano }}</td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="01-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[0] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 0)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="02-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[1] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 1)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="03-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[2] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 2)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="04-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[3] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 3)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="05-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[4] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 4)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="06-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[5] }}"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 5)"
+               class="matriz-input"
+               [disabled]="data.ano == 1994"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="07-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[6] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 6)"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="08-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[7] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 7)"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="09-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[8] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 8)"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="10-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[9] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 9)"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="11-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[10] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 10)"
+             />
+           </td>
+           <td class="matriz-line">
+             <input
+               maxlength="12"
+               currencyMask
+               id="12-{{ data.ano }}"
+               type="text"
+               value="{{ data.valores[11] }}"
+               class="matriz-input"
+               (focusout)="changedGridContribuicoes(data.ano, $event, 11)"
+             />
+           </td>
+         </tr>
+       </tbody>
+     </sa-datatable>
+     <!-- <div class="form-actions">
+       <div class="row">
+         <div class="col-md-12">
+
+           <button
+             (click)="createCalculo($event)"
+             type="submit"
+             class="btn btn-labeled btn-ieprev"
+           >
+             <span class="btn-label">
+               <i class="fa fa-save"></i>
+             </span>
+             Salvar e Calcular
+           </button>
+         </div>
+       </div>
+     </div> -->
+   </div>
+ </div>
+</sa-widget>

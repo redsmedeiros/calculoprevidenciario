@@ -1,105 +1,287 @@
 <article class="col-sm-12 col-md-12 col-lg-12">
   <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-segurados"> Criar/Buscar Segurado</a></li>
-          <li class="breadcrumb-item"><a href="#/contribuicoes/contribuicoes-calculos/{{idSegurado}}"> Lista de Cálculos</a></li>
-          <li class="breadcrumb-item active">Informações para o cálculo</li>
+    <li class="breadcrumb-item">
+      <a href="#/contribuicoes/contribuicoes-segurados">
+        Criar/Buscar Segurado</a
+      >
+    </li>
+    <li class="breadcrumb-item">
+      <a href="#/contribuicoes/contribuicoes-calculos/{{ idSegurado }}">
+        Lista de Cálculos</a
+      >
+    </li>
+    <li class="breadcrumb-item active">Informações para o cálculo</li>
   </ol>
-        <app-contribuicoes-complementar-form
-            [formData] = "form"
-            [errors]="Errors"
-            (onSubmit)="preencher($event)"
-          ></app-contribuicoes-complementar-form>
+  <app-contribuicoes-complementar-form
+    [formData]="form"
+    [errors]="Errors"
+    (onSubmit)="preencher($event)"
+    (importCnis)="preencherComCnis($event)"
+  ></app-contribuicoes-complementar-form>
 </article>
-<article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdate" >
+<article
+  id="matrizValues"
+  class="col-sm-12 col-md-12 col-lg-12"
+  *ngIf="!isUpdate"
+>
   <!-- Widget ID (each widget will need unique ID)-->
-  <sa-widget [colorbutton]="false" [editbutton]="false" [colorbutton]="false" 
-  [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-  [fullscreenbutton]="false">
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    class="hidden-dt"
+  >
     <header>
       <span class="widget-icon">
         <i class="fa fa-table"></i>
       </span>
-      <h2>Valores de contribuição</h2>
+      <h2>Salários de Contribuição</h2>
     </header>
     <div>
       <div class="widget-body no-padding" *ngIf="matrizHasValues">
-        <sa-datatable paginationLength="true" [options]="matrixTableOptions" tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
+        <sa-datatable
+          paginationLength="true"
+          [options]="matrixTableOptions"
+          tableClass="table table-striped table-condensed-custom table-bordered table-hover"
+          width="100%"
+        >
           <thead>
             <tr>
-              <th>Ano</th>
-              <th>Janeiro</th>
-              <th>Fevereiro</th>
-              <th>Março</th>
-              <th>Abril</th>
-              <th>Maio</th>
-              <th>Junho</th>
-              <th>Julho</th>
-              <th>Agosto</th>
-              <th>Setembro</th>
-              <th>Outubro</th>
-              <th>Novembro</th>
-              <th>Dezembro</th>
+              <th style="text-align: center; width: 62px">Ano</th>
+              <th style="text-align: center; width: 80px">Janeiro</th>
+              <th style="text-align: center; width: 80px">Fevereiro</th>
+              <th style="text-align: center; width: 80px">Março</th>
+              <th style="text-align: center; width: 80px">Abril</th>
+              <th style="text-align: center; width: 80px">Maio</th>
+              <th style="text-align: center; width: 80px">Junho</th>
+              <th style="text-align: center; width: 80px">Julho</th>
+              <th style="text-align: center; width: 80px">Agosto</th>
+              <th style="text-align: center; width: 80px">Setembro</th>
+              <th style="text-align: center; width: 80px">Outubro</th>
+              <th style="text-align: center; width: 80px">Novembro</th>
+              <th style="text-align: center; width: 80px">Dezembro</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of matriz" >
-              <td>{{data.ano}}</td>
+            <tr *ngFor="let data of matriz" style="text-align: center">
+              <td>{{ data.ano }}</td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="01-{{data.ano}}" type="text" value="{{ data.valores[0]  }}" (focusout) = "changedGridContribuicoes(data.ano,$event,0)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="01-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[0] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 0)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="02-{{data.ano}}" type="text" value="{{ data.valores[1]  }}" (focusout) = "changedGridContribuicoes(data.ano,$event,1)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="02-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[1] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 1)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="03-{{data.ano}}" type="text" value="{{ data.valores[2]  }}" (focusout) = "changedGridContribuicoes(data.ano,$event,2)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="03-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[2] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 2)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="04-{{data.ano}}" type="text" value="{{ data.valores[3]  }}" (focusout) = "changedGridContribuicoes(data.ano,$event,3)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="04-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[3] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 3)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="05-{{data.ano}}" type="text" value="{{ data.valores[4]  }}" (focusout) = "changedGridContribuicoes(data.ano,$event,4)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="05-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[4] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 4)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="06-{{data.ano}}" type="text" value="{{ data.valores[5] }}" (focusout) = "changedGridContribuicoes(data.ano,$event,5)" class="matriz-input" [disabled]="data.ano == 1994"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="06-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[5] }}"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 5)"
+                  class="matriz-input"
+                  [disabled]="data.ano == 1994"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="07-{{data.ano}}" type="text" value="{{ data.valores[6] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,6)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="07-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[6] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 6)"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="08-{{data.ano}}" type="text" value="{{ data.valores[7] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,7)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="08-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[7] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 7)"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="09-{{data.ano}}" type="text" value="{{ data.valores[8] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,8)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="09-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[8] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 8)"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id ="10-{{data.ano}}" type="text" value="{{ data.valores[9] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,9)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="10-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[9] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 9)"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id="11-{{data.ano}}" type="text" value="{{ data.valores[10] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,10)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="11-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[10] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 10)"
+                />
               </td>
               <td class="matriz-line">
-                <input maxlength="12" currencyMask id="12-{{data.ano}}" type="text" value="{{ data.valores[11] }}" class="matriz-input" (focusout) = "changedGridContribuicoes(data.ano,$event,11)"/>
+                <input
+                  maxlength="12"
+                  currencyMask
+                  id="12-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[11] }}"
+                  class="matriz-input"
+                  (focusout)="changedGridContribuicoes(data.ano, $event, 11)"
+                />
               </td>
             </tr>
           </tbody>
         </sa-datatable>
-        <div class="form-actions">
-          <div class="row">
+        <!-- <div class="form-actions">
+
             <div class="col-md-12">
-                <button (click)="voltar()" type="submit" class="btn btn-labeled btn-primary">
-                  <span class="btn-label">
-                    <i class="fa fa-backward"></i>
-                  </span> Voltar
-                </button>
-                <button (click)="createCalculo($event)" type="submit" class="btn btn-labeled btn-success">
-                  <span class="btn-label">
-                    <i class="fa fa-save"></i>
-                  </span> Enviar
-                </button>
-              </div>
+              <button
+                (click)="createCalculo($event)"
+                type="submit"
+                class="btn btn-labeled btn-ieprev"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-save"></i>
+                </span>
+                Salvar e Calcular
+              </button>
             </div>
-          </div>
+        </div> -->
       </div>
     </div>
   </sa-widget>
 </article>
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-body m-1 p-1">
+      <ul class="pager wizard no-margin">
+        <li class="pull-center">
+          <!-- <a
+            data-toggle="modal"
+            data-target="#recolhimento-em-atraso"
+            class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+            title="Tutorial Planejamento Previdenciário"
+            >Tutorial</a
+          > -->
+        </li>
+        <li class="pull-right">
+          <button
+            (click)="createCalculo($event)"
+            type="submit"
+            class="btn btn-labeled btn-ieprev"
+          >
+            <span class="btn-label">
+              <i class="fa fa-save"></i>
+            </span>
+            Salvar e Calcular
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</article>
+<!-- 
+<div class="row mb-3">
+  <div class="col-md-12"></div>
+  <div
+    id="recolhimento-em-atraso"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="recolhimento-em-atraso-title"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-custom" role="document">
+      <div class="modal-content modal-lg">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe
+            src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
+            class="embed-responsive-item"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
