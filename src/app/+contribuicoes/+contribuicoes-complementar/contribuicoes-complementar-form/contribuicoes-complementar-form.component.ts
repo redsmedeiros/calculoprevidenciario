@@ -129,8 +129,12 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
     }
 
-    this.contribuicaoDeMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
-    this.contribuicaoAteMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+    // this.contribuicaoDeMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+    // this.contribuicaoAteMatriz = ((moment(this.contribuicaoAteMatriz, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
+
+    this.contribuicaoDeMatriz = '';
+    this.contribuicaoAteMatriz = '';
+    this.salarioContribuicao = null;
 
   }
 
@@ -265,8 +269,13 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
 
   public setContribuicoesImport(contribuicoes) {
+
     this.importCnis.emit(contribuicoes);
     this.setForm(true);
+    const clickFix = document.getElementById('clickFix');
+    clickFix.click();
+
+    this.dadosPassoaPasso.type = '';
   }
 
 
