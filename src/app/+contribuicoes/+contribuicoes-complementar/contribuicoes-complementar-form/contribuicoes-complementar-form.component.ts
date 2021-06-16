@@ -275,12 +275,14 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
     if (!this.isEmpty(this.competenciaInicial)
       && !this.isEmpty(this.competenciaFinal)
       && !this.isEmpty(this.atualizarAte)
-      && this.competenciaInicial.length  === 7
-      && this.competenciaFinal.length  === 7
-      && this.atualizarAte.length  === 7
-      ) {
-        this.setForm();
-      this.isFormContribuicoes = true;
+      && !(/(_)/gi).test(this.competenciaInicial)
+      && !(/(_)/gi).test(this.competenciaFinal)
+      && !(/(_)/gi).test(this.atualizarAte)
+    ) {
+      this.formData.inicio_atraso = this.competenciaInicial;
+      this.formData.final_atraso = this.competenciaFinal;
+      this.formData.atualizar_ate = this.atualizarAte;
+
     }
 
   }
