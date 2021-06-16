@@ -80,7 +80,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     //     this.isUpdate = false;
     //   });
 
-      this.isUpdate = false;
+    this.isUpdate = false;
   }
 
 
@@ -170,19 +170,21 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     this.anosConsiderados = [];
     this.contribuicoesImport = contribuicoes;
     const contribuicoesFormat = this.formatMatrizContribuicoes(contribuicoes);
-    //this.matrizHasValues = true;
 
-    // this.matriz = JSON.parse(this.form.contribuicoes);
-    // this.matriz.sort(function (a, b) { return a.ano - b.ano });
+    const clickFix = document.getElementById('clickFix');
+    clickFix.click();
 
+    // const matrizElement = document.getElementById('matrizValues');
+    // matrizElement.click();
 
-    // this.matriz.map(row => {
-    //   this.anosConsiderados.push(row.ano);
-    // });
+    setTimeout(() => {
 
-    // const event = new MouseEvent('click', { bubbles: false });
-    // this.matrizValues.nativeElement.dispatchEvent(event);
-    const matrizElement = document.getElementById('matrizValues').innerHTML
+      clickFix.click();
+      // matrizElement.click();
+      
+
+      swal.close();
+    }, 2000);
 
   }
 
@@ -226,7 +228,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   }
 
 
-  
+
   updateMatrixCnis(ano, valores) {
     if (!this.matrizHasValues) {
       this.matriz.splice(0, 1);
@@ -246,9 +248,9 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
     let valoresCompare = valores
 
-     if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
+    if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
       this.matriz.push({ 'ano': ano, 'valores': valores });
-     }
+    }
 
     this.matriz.sort(function (a, b) { return a.ano - b.ano });
     this.matrizHasValues = true;
@@ -643,7 +645,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     let valoresCompare = valores
 
     // if (valoresCompare.filter(x => x === 'R$ 0,00').length < 11) {
-      this.matriz.push({ 'ano': ano, 'valores': valores });
+    this.matriz.push({ 'ano': ano, 'valores': valores });
     // }
 
     this.matriz.sort(function (a, b) { return a.ano - b.ano });

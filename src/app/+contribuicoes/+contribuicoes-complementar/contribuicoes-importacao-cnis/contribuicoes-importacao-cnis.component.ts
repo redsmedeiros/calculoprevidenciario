@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2'
-import { PDFJSStatic, PDFPageProxy } from "pdfjs-dist";
+import { PDFJSStatic, PDFPageProxy } from 'pdfjs-dist';
 
 //import * as PDFJS from "pdfjs-dist";
 //import {PDFJS} from 'pdfjs-dist';
@@ -67,8 +67,8 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     let contribuicoesEventOut = changes['contribuicoesEventOut'];
     let isUpdating = changes['isUpdating'];
 
-    console.log(changedatualizarAte);
-    console.log(contribuicoesEventOut);
+    // console.log(changedatualizarAte);
+    // console.log(contribuicoesEventOut);
   }
 
 
@@ -116,6 +116,15 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   }
 
   processPdfFile(file) {
+
+    swal({
+      type: 'info',
+      title: 'Aguarde por favor...',
+    })
+
+    swal.showLoading();
+
+
     const PDFJS = require('pdfjs-dist');
     // PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
     PDFJS.GlobalWorkerOptions.workerSrc = '/assets/js/pdfjs/pdf.worker.min.js';
@@ -144,11 +153,11 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         // The main trick to obtain the text of the PDF page, use the getTextContent method
         pdfPage.getTextContent().then(textContent => {
           let textItems = textContent.items;
-          let finalString = "";
+          let finalString = '';
           // Concatenate the string of the item to the final string
           for (let i = 0; i < textItems.length; i++) {
             let item = textItems[i];
-            finalString += item.str + " ";
+            finalString += item.str + ' ';
           }
           // Solve promise with the text retrieven from the page
           resolve(finalString);
@@ -222,7 +231,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         contrib: arrayText[numCol].trim(),
         contributionType: 0
       });
-      
+
     }
     return arrayOrganizadoNew;
   }
@@ -271,7 +280,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
           data: value.data,
           contributionType: value.contributionType
         };
-        result.push(res[value.data + "-" + value.contributionType])
+        result.push(res[value.data + '-' + value.contributionType])
       }
       res[value.data + '-' + value.contributionType].contrib = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
 
@@ -285,7 +294,8 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
 
     // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
-    if (moment(this.atualizarAte, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
+    // if (moment(this.atualizarAte, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
+    if (this.somarSecundaria) {
       let teste_data = null;
       for (const objPS of arrayOrganizado) {
 
@@ -304,7 +314,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       for (const objPrim of arrayOrganizado) {
 
         arraySomatorioPS.push({
-          contrib: (objPrim.contributionType === 0) ? this.getValueSecundarias(objPrim.data, objPrim.contrib) : "0,00",
+          contrib: (objPrim.contributionType === 0) ? this.getValueSecundarias(objPrim.data, objPrim.contrib) : '0,00',
           data: objPrim.data,
           contributionType: objPrim.contributionType
         });
@@ -361,16 +371,10 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       }
     }
 
-    swal({
-      type: 'info',
-      title: 'Aguarde por favor...',
-    })
-
-    swal.showLoading();
 
     this.contribuicoesEventOut.emit(contribuicoes);
 
-    swal.close();
+    // swal.close();
     this.isUpdating = false;
   }
 

@@ -265,8 +265,13 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
 
   public setContribuicoesImport(contribuicoes) {
+
     this.importCnis.emit(contribuicoes);
     this.setForm(true);
+    const clickFix = document.getElementById('clickFix');
+    clickFix.click();
+
+    this.dadosPassoaPasso.type = '';
   }
 
 

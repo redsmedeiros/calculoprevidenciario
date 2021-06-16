@@ -10,7 +10,7 @@
         Lista de Cálculos</a
       >
     </li>
-    <li class="breadcrumb-item active">Informações para o cálculo</li>
+    <li id="clickFix" class="breadcrumb-item active">Informações para o cálculo</li>
   </ol>
   <app-contribuicoes-complementar-form
     [formData]="form"
@@ -42,6 +42,9 @@
       <h2>Salários de Contribuição</h2>
     </header>
     <div>
+      <div  *ngIf="!matrizHasValues"> 
+
+      </div>
       <div class="widget-body no-padding" *ngIf="matrizHasValues">
         <sa-datatable
           paginationLength="true"
