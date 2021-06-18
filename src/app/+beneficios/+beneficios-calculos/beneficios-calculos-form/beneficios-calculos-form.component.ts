@@ -770,7 +770,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (!this.dataHonorariosDe) {
         this.dataHonorariosDe = this.dibValoresDevidos;
       }
-
+      
       if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
         this.formData.taxa_advogado_inicio = moment(this.dataHonorariosDe, 'MM/YYYY').startOf('month').format('DD/MM/YYYY');
       } else {

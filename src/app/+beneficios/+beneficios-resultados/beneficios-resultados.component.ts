@@ -3023,7 +3023,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
     }
 
-    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo') {
+    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo' 
+    && this.calculo.taxa_advogado_aplicacao_sobre !== 'condenacao') {
 
       this.calculo.taxa_advogado_inicio = this.calculo.data_pedido_beneficio_esperado;
       taxaAdvogadoInicio = moment(this.calculo.data_pedido_beneficio_esperado);
@@ -3132,23 +3133,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.exibirHonorariosValorFixo = false;
       this.exibirHonorariosValorDaCausa = true;
 
-      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio)
-      const fixoFim = moment(this.calculo.taxa_advogado_final)
-      const dataInicioDosIndices = moment(this.calculo.taxa_advogado_inicio);
-
-      // this.Indice.getByDateRange(
-      //   dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
-      //   fixoFim.format('YYYY-MM-DD'))
-      //   .then(indices => {
-
-      //     for (const indice of this.Indice.list) {
-      //       this.indicesFixo.push(indice);
-      //     }
-
-      //     this.getCalculoHonorariosFixo();
-
-      //   });
-
       this.getCalculoHonorariosValorDaCausa();
 
     }
@@ -3163,8 +3147,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const percentualHValorCausa = this.calculo.percentual_taxa_advogado;
     const fixoInicio = moment(this.calculo.taxa_advogado_inicio);
-    const fixoFim = moment(this.calculo.data_calculo_pedido);
-
+//    const fixoFim = moment(this.calculo.data_calculo_pedido);
     const correcaoMonetaria = this.getCorrecaoMonetaria(fixoInicio);
 
     let honorariosValorDaCausa = this.honorariosalorDaCausa * percentualHValorCausa;
