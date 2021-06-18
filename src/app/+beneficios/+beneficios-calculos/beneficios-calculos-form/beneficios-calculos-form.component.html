@@ -125,27 +125,39 @@
                     />
                     <span>Limitar o Valor da Causa a 60 Salários Mínimos.</span>
                     <span>
-                      <popover-content #avisoSM60
-                      title="Limitar o Valor da Causa a 60 Salários Mínimos"
-                      [closeOnClickOutside]="true"
+                      <popover-content
+                        #avisoSM60
+                        title="Limitar o Valor da Causa a 60 Salários Mínimos"
+                        [closeOnClickOutside]="true"
                       >
-                      <div class="alert alert-danger bg-ieprev fade in bold">
-                        A limitação do valor da causa a 60 salários-mínimos deve ser verificada no ajuizamento da Ação, para julgamento no Juizado Especial - JEF. Se o valor da causa superar este limite e ainda assim o segurado pretender que o julgamento ocorra no JEF deverá renunciar ao valor excedente. No Cumprimento de sentença, o limite de 60 salários-mínimos está relacionado à expedição de RPV. O valor que superar este limite será quitado através de Precatório.
-                      </div>
+                        <div class="alert alert-danger bg-ieprev fade in bold">
+                          A limitação do valor da causa a 60 salários-mínimos
+                          deve ser verificada no ajuizamento da Ação, para
+                          julgamento no Juizado Especial - JEF. Se o valor da
+                          causa superar este limite e ainda assim o segurado
+                          pretender que o julgamento ocorra no JEF deverá
+                          renunciar ao valor excedente. No Cumprimento de
+                          sentença, o limite de 60 salários-mínimos está
+                          relacionado à expedição de RPV. O valor que superar
+                          este limite será quitado através de Precatório.
+                        </div>
                       </popover-content>
-                        <button type="button" class="btn btn-xs btn-info pull-right" 
-                        popoverPlacement="left" 
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-info pull-right"
+                        popoverPlacement="left"
                         [popoverOnHover]="true"
                         [popover]="avisoSM60"
-                         >
-                            <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
-                        </button>
+                      >
+                        <i
+                          class="fa fa-question-circle fa-1-6x"
+                          style="font-size: 13px !important"
+                        ></i>
+                      </button>
                     </span>
                   </label>
-
                 </div>
               </div>
-
             </div>
             <div class="form-group">
               <div class="col-md-6 col-sm-offset-4">
@@ -157,23 +169,37 @@
                       [(ngModel)]="RRASemJuros"
                       class="checkbox"
                     />
-                    <span>Calcular Rendimentos Recebidos Acumuladamente com Juros.</span>
+                    <span
+                      >Calcular Rendimentos Recebidos Acumuladamente com
+                      Juros.</span
+                    >
                     <span>
-                      <popover-content #avisoRRA
-                      title="Rendimentos Recebidos Acumuladamente"
-                      [closeOnClickOutside]="true"
+                      <popover-content
+                        #avisoRRA
+                        title="Rendimentos Recebidos Acumuladamente"
+                        [closeOnClickOutside]="true"
                       >
-                      <div class="alert alert-danger bg-ieprev fade in bold">
-                        Conforme decidido pelo STF no julgamento do Tema 808, "Não incide imposto de renda sobre os juros de mora devidos pelo atraso no pagamento de remuneração por exercício de emprego, cargo ou função". Entretanto, o Simulador IEPREV possibilita a elaboração do cálculo dos RRA com incidência de juros.
-                      </div>
+                        <div class="alert alert-danger bg-ieprev fade in bold">
+                          Conforme decidido pelo STF no julgamento do Tema 808,
+                          "Não incide imposto de renda sobre os juros de mora
+                          devidos pelo atraso no pagamento de remuneração por
+                          exercício de emprego, cargo ou função". Entretanto, o
+                          Simulador IEPREV possibilita a elaboração do cálculo
+                          dos RRA com incidência de juros.
+                        </div>
                       </popover-content>
-                        <button type="button" class="btn btn-xs btn-info pull-right" 
-                        popoverPlacement="left" 
+                      <button
+                        type="button"
+                        class="btn btn-xs btn-info pull-right"
+                        popoverPlacement="left"
                         [popoverOnHover]="true"
                         [popover]="avisoRRA"
-                         >
-                            <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
-                        </button>
+                      >
+                        <i
+                          class="fa fa-question-circle fa-1-6x"
+                          style="font-size: 13px !important"
+                        ></i>
+                      </button>
                     </span>
                   </label>
                 </div>
@@ -217,7 +243,7 @@
                     </div>
                   </div>
                 </fieldset> -->
-          <p class="pull-right no-margin"> (*) Preenchimento Obrigatório.</p>
+          <p class="pull-right no-margin">(*) Preenchimento Obrigatório.</p>
         </form>
       </div>
     </div>
@@ -1041,8 +1067,78 @@
                   [textMask]="{ mask: dateMaskCompetencia }"
                   [(ngModel)]="dataHonorariosDe"
                   class="form-control"
-                  placeholder="data da inicial honorário fixo"
-                  tooltip="data da inicial honorário fixo"
+                  placeholder="Mês da inicial honorário fixo"
+                  tooltip="Mês inicial dos honorário fixo"
+                  type="text"
+                />
+                <small
+                  *ngIf="errors.has('dataHonorariosDe')"
+                  class="text-danger"
+                  >{{ errors.get("dataHonorariosDe") }}</small
+                >
+              </div>
+            
+            </div>
+            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
+              <label class="col-md-3 control-label">Valor da Causa:</label>
+              <div
+                class="col-md-2"
+                *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+              >
+                <input
+                  name="taxaAdvogadoValorFixoHonorarios"
+                  currencyMask
+                  [(ngModel)]="taxaAdvogadoValorFixoHonorarios"
+                  class="form-control"
+                  type="text"
+                  maxlength="14"
+                  title="Valor da Causa"
+                  placeholder="Valor da Causa"
+                />
+                <small
+                  *ngIf="errors.has('taxaAdvogadoValorFixoHonorarios')"
+                  class="text-danger"
+                  >{{ errors.get("taxaAdvogadoValorFixoHonorarios") }}</small
+                >
+              </div>
+            </div>
+            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
+              <label class="col-md-3 control-label">Percentual dos Honorários:</label>
+              <div
+                class="col-md-1"
+                *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+              >
+                <input
+                  name="percentualHonorarios"
+                  [(ngModel)]="percentualHonorarios"
+                  class="form-control"
+                  type="number"
+                  step="1"
+                  max="99"
+                  title="Percentual dos Honorários"
+                  tooltip="Percentual dos Honorários"
+                  placeholder="Percentual dos Honorários"
+                />
+                <small
+                  *ngIf="errors.has('percentualHonorarios')"
+                  class="text-danger"
+                  >{{ errors.get("percentualHonorarios") }}</small
+                >
+              </div>
+            </div>
+            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
+              <label class="col-md-3 control-label">Mês da Condenação:</label>
+              <div
+                class="col-md-2"
+                *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+              >
+                <input
+                  name="dataHonorariosDe"
+                  [textMask]="{ mask: dateMaskCompetencia }"
+                  [(ngModel)]="dataHonorariosDe"
+                  class="form-control"
+                  placeholder="data da Condenação"
+                  tooltip="Mês da Condenação"
                   type="text"
                 />
                 <small
@@ -1212,7 +1308,11 @@
                   </div> -->
             <div
               class="form-group"
-              *ngIf="taxaAdvogadoAplicacaoSobre !== 'nao_calc'"
+              *ngIf="
+                taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
+                taxaAdvogadoAplicacaoSobre !== 'fixo' &&
+                taxaAdvogadoAplicacaoSobre !== 'condenacao'
+              "
             >
               <label class="col-md-3 control-label"
                 >Calcular Honorários Até:</label
@@ -1238,7 +1338,8 @@
               *ngIf="
                 taxaAdvogadoAplicacaoSobre !== 'CPC85' &&
                 taxaAdvogadoAplicacaoSobre !== 'nao_calc' &&
-                taxaAdvogadoAplicacaoSobre !== 'fixo'
+                taxaAdvogadoAplicacaoSobre !== 'fixo' &&
+                taxaAdvogadoAplicacaoSobre !== 'condenacao'
               "
             >
               <label class="col-md-3 control-label"
@@ -1309,7 +1410,7 @@
               <span class="btn-label">
                 <i class="fa fa-arrow-circle-left"></i>
               </span>
-              Voltar para Lista de Cálculos&nbsp; 
+              Voltar para Lista de Cálculos&nbsp;
             </button>
           </div>
           <div class="col-md-3 pull-right">
@@ -1321,7 +1422,7 @@
               <span class="btn-label">
                 <i class="fa fa-save"></i>
               </span>
-               <span>&nbsp;&nbsp;Salvar e Calcular&nbsp;</span>
+              <span>&nbsp;&nbsp;Salvar e Calcular&nbsp;</span>
             </button>
           </div>
         </div>

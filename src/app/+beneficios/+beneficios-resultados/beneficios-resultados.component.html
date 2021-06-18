@@ -935,7 +935,7 @@
               <div id="printableHonorarios" class="no-margin no-padding">
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
-                  *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo"
+                  *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo && !exibirHonorariosValorDaCausa"
                 >
                   <thead class="not-screen">
                     <tr>
@@ -994,7 +994,7 @@
                 </table>
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
-                  *ngIf="exibirHonorarioscpc85 && !exibirHonorariosValorFixo"
+                  *ngIf="exibirHonorarioscpc85 && !exibirHonorariosValorFixo && !exibirHonorariosValorDaCausa"
                 >
                   <thead class="not-screen">
                     <tr>
@@ -1080,6 +1080,56 @@
                     </tr>
                   </tbody>
                 </table>
+                <table
+                class="table table-bordered table-hover no-padding no-margin"
+                *ngIf="exibirHonorariosValorDaCausa"
+              >
+                <thead class="not-screen">
+                  <tr>
+                    <th colspan="2">
+                      <h2>Honorários Advocatícios</h2>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="td-width-30" style="text-align: left">
+                      <b>Valor da Causa:</b>
+                    </td>
+                    <td>
+                      {{ honorariosalorDaCausaString }}
+                    </td>
+                  </tr>
+                  <tr *ngIf="calculo.percentual_taxa_advogado != 0">
+                    <td class="td-width-30" style="text-align: left">
+                      <b>Percentual dos Honorários:</b>
+                    </td>
+                    <td>
+                      {{ formatPercent(calculo.percentual_taxa_advogado) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-30" style="text-align: left">
+                      <b>Valor dos Honorários:</b>
+                    </td>
+                    <td>
+                      {{
+                        honorariosalorDaCausaHonorario
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td-width-30" style="text-align: left">
+                      <b>Mês da Condenação dos Honorários:</b>
+                    </td>
+                    <td>
+                      {{
+                        formatDateCompetencia(calculo.taxa_advogado_inicio)
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               </div>
             </div>
           </sa-widget>

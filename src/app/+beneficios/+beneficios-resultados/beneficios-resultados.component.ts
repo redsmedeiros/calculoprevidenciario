@@ -241,6 +241,12 @@ export class BeneficiosResultadosComponent implements OnInit {
   public indicesFixo = [];
   private dataFinalPrescricao;
 
+  // Honorarios Valor da Causa
+  public exibirHonorariosValorDaCausa = false;
+  public honorariosalorDaCausa = 0;
+  public honorariosalorDaCausaString = '';
+  public honorariosalorDaCausaHonorario = '';
+
   //
   private allPromissesCalc = [];
   // listas de periodos
@@ -387,6 +393,7 @@ export class BeneficiosResultadosComponent implements OnInit {
                 this.getNameSelectJurosAnualParaMensal();
                 this.calcularHonorariosCPC85();
                 this.calcularHonorariosFixo();
+                this.calcularHonorariosValorDaCausa();
 
                 this.calcularCustosProcesso();
                 this.updateResultadosDatatable();
@@ -2503,7 +2510,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // Aplicar adicional 25 Recebido
     //beneficioRecebido = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebido);
 
-    
+
     if ((recebidoRow.status) && this.isMinimoInicialRecebidoLastId !== recebidoRow.value.id) {
       this.isMinimoInicialRecebido = false;
       this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
@@ -3113,8 +3120,65 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
+  }
+
+
+  // Seção 4.3c Valor Da Causa
+  public calcularHonorariosValorDaCausa() {
+
+    if (this.calculo.taxa_advogado_aplicacao_sobre === 'condenacao') {
+      this.exibirSucumbencia = false;
+      this.exibirHonorarioscpc85 = false;
+      this.exibirHonorariosValorFixo = false;
+      this.exibirHonorariosValorDaCausa = true;
+
+      const tutelaInicio = moment(this.calculo.taxa_advogado_inicio)
+      const fixoFim = moment(this.calculo.taxa_advogado_final)
+      const dataInicioDosIndices = moment(this.calculo.taxa_advogado_inicio);
+
+      // this.Indice.getByDateRange(
+      //   dataInicioDosIndices.clone().startOf('month').format('YYYY-MM-DD'),
+      //   fixoFim.format('YYYY-MM-DD'))
+      //   .then(indices => {
+
+      //     for (const indice of this.Indice.list) {
+      //       this.indicesFixo.push(indice);
+      //     }
+
+      //     this.getCalculoHonorariosFixo();
+
+      //   });
+
+      this.getCalculoHonorariosValorDaCausa();
+
+    }
 
   }
+
+
+  public getCalculoHonorariosValorDaCausa() {
+
+    this.honorariosalorDaCausa = parseFloat(this.calculo.taxa_advogado_valor_fixo);
+    this.honorariosalorDaCausaString = this.formatMoney(this.honorariosalorDaCausa);
+
+    const percentualHValorCausa = this.calculo.percentual_taxa_advogado;
+    const fixoInicio = moment(this.calculo.taxa_advogado_inicio);
+    const fixoFim = moment(this.calculo.data_calculo_pedido);
+
+    const correcaoMonetaria = this.getCorrecaoMonetaria(fixoInicio);
+
+    let honorariosValorDaCausa = this.honorariosalorDaCausa * percentualHValorCausa;
+
+    this.honorariosalorDaCausaHonorario = this.formatMoney(honorariosValorDaCausa);
+
+    if (correcaoMonetaria > 0) {
+      honorariosValorDaCausa *= correcaoMonetaria;
+    }
+
+    this.somaHonorarios = this.roundMoeda(honorariosValorDaCausa);
+
+  }
+
 
 
   public calcularCustosProcesso() {
@@ -3193,6 +3257,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.somaHonorariosValorFixo = parseFloat(this.calculo.taxa_advogado_valor_fixo);
     this.somaHonorariosFixoString = this.formatMoney(this.somaHonorariosValorFixo);
+
 
     const fixoInicio = moment(this.calculo.taxa_advogado_inicio)
     const fixoFim = moment(this.calculo.taxa_advogado_final)
@@ -4440,7 +4505,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       { text: 'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
       { text: 'Percentual sobre o Valor Total do Benefício Devido', value: 'dev' },
       { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
-      { text: 'Fixo', value: 'fixo' }
+      { text: 'Calcular Sobre o Valor da Causa', value: 'condenacao' },
+      { text: 'Fixo', value: 'fixo' },
     ];
 
     return (tipoHonorariosOptions.filter(item => value === item.value))[0].text;

@@ -184,7 +184,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: 'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
     { text: 'Percentual sobre o Valor Total do Benefício Devido', value: 'dev' },
     { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
-    { text: 'Honorários em Valor Fixo', value: 'fixo' }
+    { text: 'Honorários em Valor Fixo', value: 'fixo' },
+    { text: 'Calcular Sobre o Valor da Causa', value: 'condenacao' },
   ];
 
   public tipoJurosOptions = [
@@ -770,7 +771,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.dataHonorariosDe = this.dibValoresDevidos;
       }
 
-      if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
+      if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
         this.formData.taxa_advogado_inicio = moment(this.dataHonorariosDe, 'MM/YYYY').startOf('month').format('DD/MM/YYYY');
       } else {
         this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
@@ -1087,8 +1088,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
       this.formData.taxa_advogado_aplicacao_sobre : '';
 
-    if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
-      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY');
+    if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
+      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('MM/YYYY');
     }
 
     // Calcular Mais (Vincendos)
