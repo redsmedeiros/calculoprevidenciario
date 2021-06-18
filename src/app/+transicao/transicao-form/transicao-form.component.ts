@@ -77,21 +77,40 @@ export class TransicaoFormComponent implements OnInit {
 
     if (window.location.hostname === 'localhost') {
       // testes
-      this.nome = 'teste - 04-05-2021';
-      this.idDocumento = '';
-      this.numeroDocumento = '';
-      this.dataNascimento = '12/11/1962';
-      this.dataFiliacao = '01/01/1980';
-      this.sexo = 'm';
-      this.professor = false;
+      // this.nome = 'teste ';
+      // this.idDocumento = '';
+      // this.numeroDocumento = '';
+      // this.dataNascimento = '27/09/1972';
+      // this.dataFiliacao = '01/01/1999';
+      // this.sexo = 'm';
+      // this.professor = false;
 
-      this.contribuicaoAnosAteEC103 = '32';
-      this.contribuicaoMesesAteEC103 = '06';
-      this.contribuicaoDiasAteEC103 = '07';
+      // this.contribuicaoAnosAteEC103 = '34';
+      // this.contribuicaoMesesAteEC103 = '06';
+      // this.contribuicaoDiasAteEC103 = '14';
 
-      this.contribuicaoAnos = '33';
-      this.contribuicaoMeses = '11';
-      this.contribuicaoDias = '27';
+      // this.contribuicaoAnos = '36';
+      // this.contribuicaoMeses = '09';
+      // this.contribuicaoDias = '00';
+
+
+        // testes 2
+        this.nome = 'ROSANGELA ';
+        this.idDocumento = '';
+        this.numeroDocumento = '';
+        this.dataNascimento = '11/06/1956';
+        this.dataFiliacao = '01/01/1999';
+        this.sexo = 'f';
+        this.professor = false;
+  
+        this.contribuicaoAnosAteEC103 = '13';
+        this.contribuicaoMesesAteEC103 = '06';
+        this.contribuicaoDiasAteEC103 = '14';
+  
+        this.contribuicaoAnos = '14';
+        this.contribuicaoMeses = '09';
+        this.contribuicaoDias = '01';
+      this.submit(null);
     }
 
 
@@ -237,7 +256,10 @@ export class TransicaoFormComponent implements OnInit {
 
   public submit(e) {
 
-    e.preventDefault();
+    if (e !== null) {
+      e.preventDefault();
+    }
+
     this.hasResult = false
     if (!localStorage.getItem('user_id')) {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });

@@ -11,7 +11,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   @Input() seguradoTransicao;
 
-
+  private regraIdadeAtual;
 
   public conclusoesRegra5 = {
     status: false,
@@ -95,8 +95,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // console.log(contribuicao_min);
 
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
-      { status: true, ano: ano, idade: idade, requisitosIdade: regra5 } :
-      { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
+      { status: true, ano: ano, idade: idade, requisitosIdade: regra5, tempoContrib: contribuicao_min } :
+      { status: false, ano: ano, idade: idade, requisitosIdade: regra5, tempoContrib: contribuicao_min };
 
   }
 
@@ -166,8 +166,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       this.seguradoTransicao.idadeFracionada,
       this.seguradoTransicao.contribuicaoFracionadoAnos);
 
-    //console.log(regraIdade);
-
 
     const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
 
@@ -195,7 +193,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeMoment: this.calcularIdade(this.dataAtual),
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
-        tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
+        tempoContribuicaoDib: this.converterTempoAnosP(this.seguradoTransicao.contribuicaoFracionadoAnos),
         DiffDataAtualDib: 0,
         requisitos: regraIdade,
         formula: '',
@@ -226,13 +224,17 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   public contadorRegra5() {
 
-
     let auxiliarDate = this.dataAtual.clone();
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
     let count = 0;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
-    let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+
+    let tempoContribuicao = Math.floor(parseFloat((this.seguradoTransicao.contribuicaoAnos * 365.25) +
+      (this.seguradoTransicao.contribuicaoMeses * 30.436875) +
+      this.seguradoTransicao.contribuicaoDias));
+
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
 
@@ -248,11 +250,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         idade,
         tempoContribuicao
       );
-
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade -' + idade + '|'
-      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
-
 
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
@@ -360,7 +357,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //  tempoContribuicao += correcaoAnoBissexto;
 
 
-   // console.log(tempoContribuicao);
+    // console.log(tempoContribuicao);
 
     return {
       dataDib: auxiliarDate,
