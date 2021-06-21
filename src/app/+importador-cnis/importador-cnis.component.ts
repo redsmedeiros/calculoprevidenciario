@@ -10,8 +10,13 @@ import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados/i
 import { ImportadorCnisCalculosComponent } from './+importador-cnis-calculos/importador-cnis-calculos.component';
 import { ImportadorCnisPeriodosComponent } from './+importador-cnis-periodos/importador-cnis-periodos.component';
 
+import { MoedaService } from 'app/services/Moeda.service';
+import { Moeda } from 'app/services/Moeda.model';
 import { Auth } from '../services/Auth/Auth.service';
 import { AuthResponse } from '../services/Auth/AuthResponse.model';
+
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-importador-cnis',
@@ -34,6 +39,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public seguradoId;
   public calculoId;
+  public moeda;
 
   public eventCountSeguradoErros = 0;
   public eventCountVinculosErros = 0;
@@ -48,7 +54,9 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   constructor(
     private ref: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private Auth: Auth) { }
+    private Auth: Auth,
+    private Moeda: MoedaService,
+    ) { }
 
   ngOnInit() {
     // this.ref.markForCheck();
@@ -63,6 +71,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       };
     }
 
+    this.getTabelaMoeda();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,6 +82,20 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.ref.markForCheck();
     this.ref.detectChanges();
     this.setExibirForm(this.dadosPassoaPasso);
+
+  }
+
+
+  private getTabelaMoeda() {
+
+
+    this.Moeda.getByDateRangeMoment(moment('1964-10-01'), moment())
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+
+        console.log(this.moeda);
+
+      });
 
   }
 
@@ -179,8 +203,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
         this.SeguradoComponent.updateSeguradoImportador(this.userId).then(seguradoId => {
 
-          if (Object.keys(this.calculosSelecionado).length > 1 
-          && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
+          if (Object.keys(this.calculosSelecionado).length > 1
+            && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
 
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
 
