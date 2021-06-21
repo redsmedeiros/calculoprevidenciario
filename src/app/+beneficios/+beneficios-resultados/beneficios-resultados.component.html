@@ -1493,7 +1493,7 @@
                 <tbody>
                   <tr>
                     <td class="td-width-30" style="text-align: left">
-                      <b>Diferença Corrigida:</b>
+                      <b>Diferença Corrigida (A):</b>
                     </td>
                     <td>
                       <span
@@ -1505,7 +1505,7 @@
                   </tr>
                   <tr>
                     <td class="td-width-30" style="text-align: left">
-                      <b>Valor dos Juros: </b>
+                      <b>Valor dos Juros (B): </b>
                     </td>
                     <td>
                       <span class="{{ tratarConclusao(somaJuros) }}">
@@ -1515,7 +1515,8 @@
                   </tr>
                   <tr>
                     <td class="td-width-30" style="text-align: left">
-                      <b>Sub Total (diferença corrigida + juros): </b>
+                      <!-- <b>Sub Total (diferença corrigida + juros): </b> -->
+                      <b>Sub Total (C) = (A + B): </b>
                     </td>
                     <td>
                       <span
@@ -1529,7 +1530,7 @@
                   </tr>
                   <tr *ngIf="calculo.maturidade != 0">
                     <td class="td-width-30" style="text-align: left">
-                      <b>Valor das Parcelas Vincendas: </b>
+                      <b>Valor das Parcelas Vincendas (E): </b>
                     </td>
                     <td>
                       <span class="{{ tratarConclusao(somaVincendas) }}">
@@ -1540,7 +1541,7 @@
                   <tr *ngIf="calculo.maturidade != 0">
                     <td class="td-width-30" style="text-align: left">
                       <b
-                        >Sub Total (diferença corrigida + juros + vincendas):
+                        >Sub Total (A + B + E):
                       </b>
                     </td>
                     <td>
@@ -1561,7 +1562,7 @@
                   </tr>
                   <tr *ngIf="listAcrescimosDeducoes.length > 0">
                     <td class="td-width-30" style="text-align: left">
-                      <b>Custos Adicionais: </b>
+                      <b>Custos Adicionais (D): </b>
                     </td>
                     <td>
                       <span
@@ -1570,6 +1571,20 @@
                         }}"
                       >
                         {{ somaAcrescimosDeducoes.valorMaisJuros }}</span
+                      >
+                    </td>
+                  </tr>
+                  <tr *ngIf="listAcrescimosDeducoes.length > 0">
+                    <td class="td-width-30" style="text-align: left">
+                      <b>Sub Total (C - D): </b>
+                    </td>
+                    <td>
+                      <span
+                        class="{{
+                          tratarConclusao(somaAcrescimosDeducoes.valorSubTotal)
+                        }}"
+                      >
+                        {{ somaAcrescimosDeducoes.valorSubTotal}}</span
                       >
                     </td>
                   </tr>

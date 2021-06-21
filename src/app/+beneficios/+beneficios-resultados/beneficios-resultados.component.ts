@@ -269,7 +269,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     valor: '0',
     valorJuros: '0',
     valorMaisJuros: '0',
-    valorMaisJurosN: 0
+    valorMaisJurosN: 0,
+    valorSubTotal: '',
+    valorSubTotalN: 0
   };
 
   // public resultadosTutelaAntecipadaList = [];
@@ -3023,8 +3025,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       taxaAdvogadoInicio = moment(this.calculo.taxa_advogado_inicio);
     }
 
-    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo' 
-    && this.calculo.taxa_advogado_aplicacao_sobre !== 'condenacao') {
+    if (this.calculo.taxa_advogado_aplicacao_sobre !== 'fixo'
+      && this.calculo.taxa_advogado_aplicacao_sobre !== 'condenacao') {
 
       this.calculo.taxa_advogado_inicio = this.calculo.data_pedido_beneficio_esperado;
       taxaAdvogadoInicio = moment(this.calculo.data_pedido_beneficio_esperado);
@@ -3147,7 +3149,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     const percentualHValorCausa = this.calculo.percentual_taxa_advogado;
     const fixoInicio = moment(this.calculo.taxa_advogado_inicio);
-//    const fixoFim = moment(this.calculo.data_calculo_pedido);
+    //    const fixoFim = moment(this.calculo.data_calculo_pedido);
     const correcaoMonetaria = this.getCorrecaoMonetaria(fixoInicio);
 
     let honorariosValorDaCausa = this.honorariosalorDaCausa * percentualHValorCausa;
@@ -3200,6 +3202,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     let soma = 0;
     let somaJuros = 0;
     let somaMaisJuros = 0;
+    let valorSubTotal = 0;
     let valorMaisJurosD = {
       valor: 0,
       valorC: 0,
@@ -3225,13 +3228,17 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
 
+      valorSubTotal = this.roundMoeda((this.somaTotalSegurado) + this.roundMoeda(somaMaisJuros))
+
     }
 
     this.somaAcrescimosDeducoes = {
       valor: this.formatMoney(soma),
       valorJuros: this.formatMoney(somaJuros),
       valorMaisJuros: this.formatMoney(somaMaisJuros),
-      valorMaisJurosN: this.roundMoeda(somaMaisJuros)
+      valorMaisJurosN: this.roundMoeda(somaMaisJuros),
+      valorSubTotalN: valorSubTotal,
+      valorSubTotal: this.formatMoney(valorSubTotal)
     };
 
   }
