@@ -55,6 +55,6 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
   ],
   providers: [
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomPeriodosCurrencyMaskConfig }
-],
+  ],
 })
 export class ImportadorCnisModule { }

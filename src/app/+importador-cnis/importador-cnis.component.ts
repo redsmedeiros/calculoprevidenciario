@@ -92,9 +92,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.Moeda.getByDateRangeMoment(moment('1964-10-01'), moment())
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
-
-        console.log(this.moeda);
-
       });
 
   }

@@ -635,6 +635,10 @@ a[class*="action-"]:hover {
   cursor: not-allowed;
 }
 
+.bg-color-yellow {
+  background-color: #ffce80!important;
+}
+
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
   margin: 0 !important;
   padding: 0 !important;

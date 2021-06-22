@@ -21,6 +21,7 @@ import { Moeda } from '../../services/Moeda.model';
 export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   @Input() vinculo;
+  @Input() moeda;
   @Input() isUpdating;
   @Output() eventContribuicoes = new EventEmitter();
 
@@ -64,11 +65,12 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
     }
 
+    console.log(this.moeda);
   }
 
   preencherMatrizPeriodos(contribuicoes) {
 
-    this.matriz = [{ 'ano': 0, 'valores': [] }];
+    this.matriz = [{ 'ano': 0, 'valores': [], 'class': [] }];
 
     contribuicoes.forEach(periodo => {
       this.preencherMatriz(periodo);
@@ -105,6 +107,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     var obj = {
       ano: ano,
       valores: valores,
+      class: ['', '', '', '', '', '', '', '', '', '', '', ''],
     }
 
     var index = _.findIndex(this.matriz, ['ano', obj.ano]);
@@ -282,6 +285,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
 
+
   changedGridContribuicoes(ano, event, indice) {
 
     let valor = event.target.value;
@@ -295,13 +299,62 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   }
 
+  private onModelChange(ev) { }
+
   salvarContribuicoes() {
+
+    console.log(this.matriz);
 
     const saida = {
       acao: 'salvar',
       matriz: this.matriz
     }
     this.eventContribuicoes.emit(saida);
+
+  }
+
+
+  private getMoedaCompetencia(mes, ano) {
+
+    //const data = moment(ano + '-' + mes + '-01');
+    const data = ano + '-' + mes + '-01';
+    //return this.moeda.find((md) => data.isSame(md.data_moeda, 'month'));
+    return this.moeda.find((md) => data === md.data_moeda);
+
+  }
+
+  private getClassSalarioContribuicao(mes, ano, valor) {
+
+    // console.log(valor);
+
+
+    //   valor = this.formatDecimalValue(valor);
+
+    // const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
+
+    // console.log(valor);
+    // console.log( moedaCompetencia.salario_minimo);
+
+    // if ( valor > 0.00 && valor < parseFloat(moedaCompetencia.salario_minimo)) {
+    //   return true;
+    // }
+
+    return false;
+
+  }
+
+  public formatDecimalValue(value) {
+
+    // typeof value === 'string' || 
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
 
   }
 

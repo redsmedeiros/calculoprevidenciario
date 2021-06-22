@@ -27,6 +27,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   @Input() vinculos;
+  @Input() moeda;
   @Input() isUpdating;
   @Input() dadosPassoaPasso;
 
@@ -85,7 +86,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
     }
-
+   
   }
 
 
