@@ -280,7 +280,8 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
         arrayOrganizadoNew.push({
           cp: arrayText[0].trim(),
-          sc: arrayText[num_col].trim()
+          sc: arrayText[num_col].trim(),
+          msc: 0,
         });
 
       }

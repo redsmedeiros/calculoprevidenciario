@@ -86,7 +86,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
     }
-   
+
   }
 
 
@@ -169,12 +169,18 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       });
 
       if (result && result !== undefined)     /* se encontrou a contribuição no mes*/ {
+
+        result.msc = 0;
+
         contribuicoesList.push(result);
       } else {        /* se não encontrou a contribuição no mes*/
+
         contribuicoesList.push({
           cp: pchave,
           sc: '0,00',
+          msc: 0
         });
+
       }
 
       chave = this.adicionarPeriodoChave(chave);
@@ -232,7 +238,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_termino));
       vinculo.contribuicoes = [];
 
-      if ( typeof vinculo.sc !== 'undefined' && vinculo.sc) {
+      if (typeof vinculo.sc !== 'undefined' && vinculo.sc) {
         vinculo.contribuicoes = JSON.parse(vinculo.sc);
       }
 
@@ -240,7 +246,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
 
       const line = {
-        id:  vinculo.id,
+        id: vinculo.id,
         nit: '',
         cnpj: '',
         tipo_vinculo: vinculo.tipoVinculo,
@@ -328,7 +334,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
   }
 
-  
+
   private ajusteListVinculosUpdate(calculoId) {
 
     console.log(this.vinculosList);
@@ -337,7 +343,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     for (const vinculo of this.vinculosList) {
       this.vinculosListPost.push(new PeriodosContagemTempo(
         {
-          id: (vinculo.id != null && vinculo.id !== undefined)? vinculo.id : null,
+          id: (vinculo.id != null && vinculo.id !== undefined) ? vinculo.id : null,
           data_inicio: this.formatPostDataDate(vinculo.data_inicio),
           data_termino: this.formatPostDataDate(vinculo.data_termino),
           empresa: vinculo.empresa,
@@ -373,7 +379,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
-  
+
 
   public crudPeriodosImportador(calculoId) {
 
@@ -696,9 +702,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   matrixToVinculoContribuicoes(matriz) {
 
+    console.log(matriz);
+
     const contribuicoesList = [];
     let mes = 0;
     let chave = '';
+    let msc = 0;
 
     matriz.forEach(periodo => {
 
@@ -708,16 +717,21 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
         if (contribuicao != '') {
           chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
+          msc = periodo.msc[mes];
+
           contribuicoesList.push({
             cp: chave,
             sc: contribuicao,
+            msc: msc
           });
         }
+
       });
 
       mes = 0;
     });
 
+    console.log(contribuicoesList)
 
     // let result = _.filter(contribuicoesList, function (item) { if (item.sc == '0,00')  { return item; } }).length;
     const result = contribuicoesList.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
@@ -738,6 +752,45 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     // this.vinculosList[this.vinculo_index].contribuicoes_pendentes = result ? result : 0;
 
   }
+
+  
+  private getMoedaCompetencia(mes, ano) {
+    const data = ano + '-' + mes + '-01';
+    return this.moeda.find((md) => data === md.data_moeda);
+  }
+
+
+  private getClassSalarioContribuicao(mes, ano, valor) {
+
+    valor = this.formatDecimalValue(valor);
+    // mes = (rst) ? ('0' + mes).slice(-2) : mes;
+    const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
+
+    let ClassRst = 0;
+    if (valor > 0.00 && valor < parseFloat(moedaCompetencia.salario_minimo)) {
+      ClassRst = 1
+    }
+
+    return ClassRst;
+
+
+  }
+
+  public formatDecimalValue(value) {
+
+    // typeof value === 'string' || 
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
+
+  }
+
 
 
 

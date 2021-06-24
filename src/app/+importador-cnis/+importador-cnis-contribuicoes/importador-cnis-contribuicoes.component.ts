@@ -52,7 +52,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
+
     this.detector.detectChanges();
+
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -64,13 +66,11 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       && this.vinculo.contribuicoes.length > 0) {
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
     }
-
-    console.log(this.moeda);
   }
 
   preencherMatrizPeriodos(contribuicoes) {
 
-    this.matriz = [{ 'ano': 0, 'valores': [], 'class': [] }];
+    this.matriz = [{ 'ano': 0, 'valores': [], 'msc': [] }];
 
     contribuicoes.forEach(periodo => {
       this.preencherMatriz(periodo);
@@ -89,33 +89,45 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   preencherMatriz(periodo) {
 
-    let ano = periodo.cp.split('/')[1];
+    const splitPeriodo = periodo.cp.split('/');
+    const mes = splitPeriodo[0];
+    const ano = splitPeriodo[1];
+
     let result = _.find(this.matriz, (item) => {
       return item.ano === ano;
     });
 
     let valores = [];
+    let msc = [];
 
     if (result) {
+
       valores = result.valores;
+      msc = result.msc;
+
     } else {
+
       valores = ['', '', '', '', '', '', '', '', '', '', '', ''];
+      msc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     }
 
-    valores[+periodo.cp.split('/')[0] - 1] = periodo.sc;
+    valores[+splitPeriodo[0] - 1] = periodo.sc;
+    msc[+splitPeriodo[0] - 1] = this.getClassSalarioContribuicao(mes, ano, periodo.sc, null, true);;
 
-    var obj = {
+    const obj = {
       ano: ano,
       valores: valores,
-      class: ['', '', '', '', '', '', '', '', '', '', '', ''],
+      msc: msc,
     }
 
-    var index = _.findIndex(this.matriz, ['ano', obj.ano]);
+    const index = _.findIndex(this.matriz, ['ano', obj.ano]);
     this.matriz[index >= 0 ? index : this.matriz.length] = obj;
 
   }
 
   isValid() {
+
     let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
     let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
     let dataLimite = moment('1970-01-01');
@@ -203,7 +215,11 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
           mesi = 1;
           ano.valores.map(mes => {
             if (mesi >= parseInt(mesinicio) && mesi <= parseInt(mesfinal)) {
-              ano.valores[mesi - 1] = this.salarioContribuicao;
+
+              let mesIndex = (mesi - 1);
+
+              ano.valores[mesIndex] = this.salarioContribuicao;
+              ano.msc[mesIndex] = this.getClassSalarioContribuicao(mesi, ano.ano, this.salarioContribuicao, null, true);
             }
             mesi++;
           });
@@ -216,10 +232,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
   }
 
-  preencherComSalarioMinimo() {
+  public preencherComSalario(type = 'm') {
 
     let mesi = 0;
-    let salariominimo: any[][] = [];
+    const salariominimo: any[][] = [];
 
     this.matriz.map(ano => {
       mesi = 1;
@@ -235,31 +251,45 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     });
 
-    if (salariominimo.length > 0) {
-      var matriz = { ...salariominimo };
+    this.matriz.map(ano => {
+      mesi = 1;
+      ano.valores.map(valor => {
+        if (valor == '0,00') {
 
-      swal({
-        type: 'info',
-        title: 'Obtendo Salário Mínimo, aguarde por favor...',
+          const mesF = ('0' + mesi).slice(-2);
+          const moeda = this.getMoedaCompetencia(mesF, ano.ano);
+          ano.valores[mesi - 1] = (type === 'm')? moeda.salario_minimo : moeda.teto;
+
+        }
+        mesi++;
       });
+    });
 
-      swal.showLoading();
+    // if (salariominimo.length > 0) {
+    //   var matriz = { ...salariominimo };
 
-      this.obterMoedaSalarioMatriz(matriz).then(salariominimo => {
+    //   swal({
+    //     type: 'info',
+    //     title: 'Obtendo Salário Mínimo, aguarde por favor...',
+    //   });
 
-        swal.close();
+    //   swal.showLoading();
 
-        this.matriz.map(ano => {
-          mesi = 1;
-          ano.valores.map(mes => {
-            if (mes == '0,00') {
-              ano.valores[mesi - 1] = salariominimo[ano.ano][mesi - 1];
-            }
-            mesi++;
-          });
-        });
-      });
-    }
+    //   this.obterMoedaSalarioMatriz(matriz).then(salariominimo => {
+
+    //     swal.close();
+
+    //     this.matriz.map(ano => {
+    //       mesi = 1;
+    //       ano.valores.map(mes => {
+    //         if (mes == '0,00') {
+    //           ano.valores[mesi - 1] = salariominimo[ano.ano][mesi - 1];
+    //         }
+    //         mesi++;
+    //       });
+    //     });
+    //   });
+    // }
 
   }
 
@@ -288,7 +318,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   changedGridContribuicoes(ano, event, indice) {
 
-    let valor = event.target.value;
+    const valor = event.target.value;
 
     this.matriz.map(row => {
       if (row.ano === ano) {
@@ -299,11 +329,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   }
 
-  private onModelChange(ev) { }
+  public onModelChange() { }
 
   salvarContribuicoes() {
-
-    console.log(this.matriz);
 
     const saida = {
       acao: 'salvar',
@@ -316,30 +344,35 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   private getMoedaCompetencia(mes, ano) {
 
-    //const data = moment(ano + '-' + mes + '-01');
+    // const data = moment(ano + '-' + mes + '-01');
+    // return this.moeda.find((md) => data.isSame(md.data_moeda, 'month'));
     const data = ano + '-' + mes + '-01';
-    //return this.moeda.find((md) => data.isSame(md.data_moeda, 'month'));
     return this.moeda.find((md) => data === md.data_moeda);
-
   }
 
-  private getClassSalarioContribuicao(mes, ano, valor) {
 
-    // console.log(valor);
+  private getClassSalarioContribuicao(mes, ano, valor, index, rst = false) {
 
+    valor = this.formatDecimalValue(valor);
+    mes = (rst) ? ('0' + mes).slice(-2) : mes;
+    const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
 
-    //   valor = this.formatDecimalValue(valor);
+    let ClassRst = 0;
+    if (valor > 0.00 && valor < parseFloat(moedaCompetencia.salario_minimo)) {
+      ClassRst = 1
+    }
 
-    // const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
+    if (rst) {
 
-    // console.log(valor);
-    // console.log( moedaCompetencia.salario_minimo);
+      return ClassRst;
 
-    // if ( valor > 0.00 && valor < parseFloat(moedaCompetencia.salario_minimo)) {
-    //   return true;
-    // }
+    } else {
 
-    return false;
+      const indexMes = parseInt(mes, 10) - 1;
+      this.matriz[index].msc[indexMes] = ClassRst;
+
+    }
+
 
   }
 
