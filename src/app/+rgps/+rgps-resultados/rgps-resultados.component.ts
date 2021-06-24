@@ -448,6 +448,7 @@ export class RgpsResultadosComponent implements OnInit {
         break;
       // Auxílio Acidente Previdenciário 50%
       case 7:
+      case 1905:
         coeficienteAux = 50;
         break;
       // Aponsentadoria por idade trabalhador Rural
