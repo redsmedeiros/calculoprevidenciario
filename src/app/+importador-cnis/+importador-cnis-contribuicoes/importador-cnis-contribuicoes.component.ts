@@ -180,7 +180,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   copiarPeriodo(ano) {
 
-    var result = _.filter(this.vinculo.contribuicoes, (item) => {
+    let result = _.filter(this.vinculo.contribuicoes, (item) => {
       return item.cp.indexOf(ano) > -1;
     });
 
@@ -203,10 +203,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValid()) {
 
-      let anoinicio = this.inicioPeriodo.split('/')[1];
-      let mesinicio = this.inicioPeriodo.split('/')[0];
-      let anofinal = this.finalPeriodo.split('/')[1];
-      let mesfinal = this.finalPeriodo.split('/')[0];
+      const anoinicio = this.inicioPeriodo.split('/')[1];
+      const mesinicio = this.inicioPeriodo.split('/')[0];
+      const anofinal = this.finalPeriodo.split('/')[1];
+      const mesfinal = this.finalPeriodo.split('/')[0];
       let mesi = 0;
 
       this.matriz.map(ano => {
@@ -258,7 +258,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
           const mesF = ('0' + mesi).slice(-2);
           const moeda = this.getMoedaCompetencia(mesF, ano.ano);
-          ano.valores[mesi - 1] = (type === 'm')? moeda.salario_minimo : moeda.teto;
+          const valorSC = (type === 'm') ? moeda.salario_minimo : moeda.teto;
+          ano.valores[mesi - 1] = this.formatMoney(valorSC);
 
         }
         mesi++;
@@ -374,6 +375,18 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
 
+  }
+
+  /**
+    * Formatar para moeda 
+    * @param  {} value
+    */
+  public formatMoney(value) {
+
+    value = parseFloat(value);
+    const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+
+    return numeroPadronizado;
   }
 
   public formatDecimalValue(value) {

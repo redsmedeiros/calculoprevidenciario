@@ -79,6 +79,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
+    this.vinculosList = [];
+    this.vinculosListPost = [];
+
     const changedvinculos = changes['vinculos'];
     const changedisUpdating = changes['isUpdating'];
     const changeEmpresa = changes['empresa'];
