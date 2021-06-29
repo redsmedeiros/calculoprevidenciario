@@ -59,6 +59,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public conclusoes = [];
   public contribuicaoPrimaria = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundaria = { anos: 0, meses: 0, dias: 0 };
+  public iscontribuicaoSecundaria = false;
   public erros = [];
   public withMemo = false;
   public withIN45 = true;
@@ -74,13 +75,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       { data: 'competencia' },
       { data: 'indice_corrigido' },
       { data: 'contribuicao_primaria' },
-      { data: 'contribuicao_secundaria' },
+      { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
       { data: 'contribuicao_primaria_revisada' },
-      { data: 'contribuicao_secundaria_revisada' },
+      { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
       { data: 'limite', class: '' },
     ],
     columnDefs: [
       { 'width': '15rem', 'targets': [7] },
+      {
+        'targets': [0, 1, 2, 3, 4, 5],
+        'className': 'text-center'
+      }
     ]
   };
 
@@ -141,13 +146,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         { data: 'competencia' },
         { data: 'indice_corrigido' },
         { data: 'contribuicao_primaria' },
-        { data: 'contribuicao_secundaria' },
+        { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
         { data: 'contribuicao_primaria_revisada' },
-        { data: 'contribuicao_secundaria_revisada' },
+        { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
         { data: 'limite' },
       ],
       columnDefs: [
         { 'width': '15rem', 'targets': [7] },
+        {
+          'targets': [0, 1, 2, 3, 4, 5],
+          'className': 'text-center'
+        }
       ]
     };
 
@@ -270,6 +279,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         contribuicaoSecundaria = 0;
       }
 
+
+      if (contribuicaoSecundaria > 0) {
+        this.iscontribuicaoSecundaria = true;
+      }
 
       idString += 1; // tabela['id'] = contadorPrimario;
 
@@ -1471,10 +1484,37 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     });
 
     this.tableData = tableData;
+    // this.tableOptions = {
+    //   ...this.tableOptions,
+    //   data: this.tableData,
+    // }
+
     this.tableOptions = {
-      ...this.tableOptions,
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
       data: this.tableData,
-    }
+      columns: [
+        { data: 'id' },
+        { data: 'competencia' },
+        { data: 'indice_corrigido' },
+        { data: 'contribuicao_primaria' },
+        { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_primaria_revisada' },
+        { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
+        { data: 'limite' },
+      ],
+      columnDefs: [
+        { 'width': '15rem', 'targets': [7] },
+        {
+          'targets': [0, 1, 2, 3, 4, 5],
+          'className': 'text-center'
+        }
+      ]
+    };
+
 
     this.isUpdating = false;
 

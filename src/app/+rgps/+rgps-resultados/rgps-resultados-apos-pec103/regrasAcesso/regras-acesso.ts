@@ -136,17 +136,11 @@ export class RegrasAcesso {
 
         }
 
-        console.log(this.numeroDeContribuicoes);
-        console.log(maximoDescarte.meses);
-
         // evitar que o numero de contribuicoes seja negativo
         if (this.numeroDeContribuicoes < maximoDescarte.meses) {
 
             let tempAjusteMaximoDescarte = this.numeroDeContribuicoes - 12;
             tempAjusteMaximoDescarte = (tempAjusteMaximoDescarte < 0) ? 0 : tempAjusteMaximoDescarte;
-
-            console.log(tempAjusteMaximoDescarte);
-            console.log(tempAjusteMaximoDescarte / 12);
 
             maximoDescarte.meses = tempAjusteMaximoDescarte;
             maximoDescarte.anos = maximoDescarte.meses / 12;

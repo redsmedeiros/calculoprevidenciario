@@ -40,6 +40,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   public valorExportacao;
   public contribuicaoPrimaria = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundaria = { anos: 0, meses: 0, dias: 0 };
+  public iscontribuicaoSecundaria = false;
   public coeficiente;
   public erros = [];
   public direito = false;
@@ -55,13 +56,17 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       { data: 'competencia' },
       { data: 'fator' },
       { data: 'contribuicao_primaria' },
-      { data: 'contribuicao_secundaria' },
+      { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
       { data: 'contribuicao_primaria_revisada' },
-      { data: 'contribuicao_secundaria_revisada' },
+      { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
       { data: 'limite' },
     ],
     columnDefs: [
       { 'width': '15rem', 'targets': [7] },
+      {
+        'targets': [0, 1, 2, 3, 4, 5],
+        'className': 'text-center'
+      }
     ]
   };
 
@@ -309,6 +314,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       let contribuicaoSecundaria = 0;
       if (valorSecundario != null) {
         contribuicaoSecundaria = valorSecundario;
+
+      }
+
+      if (valorSecundario > 0) {
+        this.iscontribuicaoSecundaria = false
       }
 
       let currency = this.loadCurrency(dataContribuicao); //Definido na seção de algortimos uteis
@@ -484,10 +494,38 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     conclusoes.renda_mensal_inicial_data_dib = this.formatMoney(rmiValoresAdministrativos, currency.acronimo);
     this.valorExportacao = this.formatDecimal(rmiValoresAdministrativos, 2).replace(',', '.');
     this.tableData = tableData;
+    // this.tableOptions = {
+    //   ...this.tableOptions,
+    //   data: this.tableData,
+    // }
+
     this.tableOptions = {
-      ...this.tableOptions,
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
       data: this.tableData,
-    }
+      columns: [
+        { data: 'id' },
+        { data: 'competencia' },
+        { data: 'fator' },
+        { data: 'contribuicao_primaria' },
+        { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_primaria_revisada' },
+        { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
+        { data: 'limite' },
+      ],
+      columnDefs: [
+        { 'width': '15rem', 'targets': [7] },
+        {
+          'targets': [0, 1, 2, 3, 4, 5],
+          'className': 'text-center'
+        }
+      ]
+    };
+
+
   }
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {

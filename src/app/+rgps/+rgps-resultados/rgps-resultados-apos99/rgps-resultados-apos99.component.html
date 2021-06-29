@@ -77,13 +77,13 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="pull-right font-bold">Contribuição primária:</span>
+                        <span class="pull-right font-bold">Tempo de Contribuição primário:</span>
                       </td>
                       <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="iscontribuicaoSecundaria" >
                       <td>
-                        <span class="pull-right font-bold">Contribuição secundária:</span>
+                        <span class="pull-right font-bold">Tempo de Contribuição secundário:</span>
                       </td>
                       <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                     </tr>
@@ -121,10 +121,10 @@
                             <th class="text-align-center">#</th>
                             <th class="text-align-center">Competência</th>
                             <th class="text-align-center">Índice</th>
-                            <th class="text-align-center">Contribuição Primária</th>
-                            <th class="text-align-center">Contribuição Secundária</th>
-                            <th class="text-align-center">Contribuição Primária Corrigida</th>
-                            <th class="text-align-center">Contribuição Secundária Corrigida</th>
+                            <th class="text-align-center">Salário de Contribuição Primária</th>
+                            <th class="text-align-center" >Salário de Contribuição Secundário</th>
+                            <th class="text-align-center">Salário de Contribuição Primária Corrigido</th>
+                            <th class="text-align-center" >Salário de Contribuição Secundária Corrigido</th>
                             <th class="text-align-center">Observação</th>
                           </tr>
                         </thead>
