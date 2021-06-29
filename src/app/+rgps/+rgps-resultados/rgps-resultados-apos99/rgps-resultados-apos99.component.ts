@@ -900,8 +900,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     }
 
-
+    // teto e mínimo
+    rmi =  this.corrigirSalarioDeBeneficio(rmi, moedaDib);
     this.salarioBeneficio = rmi;
+
     // passo 1
 
 
@@ -919,8 +921,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
-
-
+    
     // passo 2
 
     this.limited = false;
@@ -928,26 +929,26 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // let rmiAux = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
     // rmi = rmiAux;
 
-
     // let objMoeda = this.moeda[this.getIndex(this.dataInicioBeneficio)];//carregar apenas uma TMoeda onde currency Date é menor ou igual a Calculo.data_pedido_beneficio
-    let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
-    // let salarioAcidente = objMoeda.salario_minimo;
-    if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
-      switch (this.tipoBeneficio) {
-        case 17:// Auxilio Acidente 30
-          rmi = mediaContribuicoesPrimarias * 0.3;
-          break;
-        case 18: // Auxilio Acidente 40
-          rmi = mediaContribuicoesPrimarias * 0.4;
-          break;
-        case 7: // Auxilio Acidente 50
-          rmi = mediaContribuicoesPrimarias * 0.5;
-          break;
-        case 19: // Auxilio Acidente 60
-          rmi = mediaContribuicoesPrimarias * 0.6;
-          break;
-      }
-    }
+    // let objMoeda = this.Moeda.getByDate(this.dataInicioBeneficio);
+    // // let salarioAcidente = objMoeda.salario_minimo;
+    // if (objMoeda && mediaContribuicoesPrimarias > objMoeda.salario_minimo) {
+    //   switch (this.tipoBeneficio) {
+    //     case 17:// Auxilio Acidente 30
+    //       rmi = mediaContribuicoesPrimarias * 0.3;
+    //       break;
+    //     case 18: // Auxilio Acidente 40
+    //       rmi = mediaContribuicoesPrimarias * 0.4;
+    //       break;
+    //     case 1905: // Auxilio Acidente 50
+    //     case 7: // Auxilio Acidente 50
+    //       rmi = mediaContribuicoesPrimarias * 0.5;
+    //       break;
+    //     case 19: // Auxilio Acidente 60
+    //       rmi = mediaContribuicoesPrimarias * 0.6;
+    //       break;
+    //   }
+    // }
 
     let somaContribuicoes = totalContribuicaoPrimaria + totalContribuicaoSecundaria;
     let currency = this.loadCurrency(this.dataInicioBeneficio);
@@ -972,7 +973,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       order: 1,
       tipo: 'divisor',
       // string: 'Divisor do Cálculo da Média Primária:',
-      string: 'Divisor da Média dos Salários de Contribuição:',
+      string: 'Divisor da Média dos Salários de Contribuição',
       value: divisorMediaPrimaria + ' ' + this.msgDivisorMinimo
     });
 
@@ -1002,7 +1003,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     conclusoes.push({
       order: 19,
       tipo: 'aliquota',
-      string: 'Alíquota do Benefício:',
+      string: 'Alíquota do Benefício',
       value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%'
     });
 
@@ -1660,17 +1661,41 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
 
+  
+  corrigirSalarioDeBeneficio(beneficio, moeda) {
+
+
+    const minimo = parseFloat(moeda.salario_minimo);
+    const teto = parseFloat(moeda.teto);
+
+    if (moeda && beneficio > teto) {
+      return teto;
+    }
+
+    if (moeda && beneficio < minimo) {
+      return minimo;
+    }
+
+    return beneficio;
+  }
+
+
 
   corrigirBeneficio(beneficio, coeficiente, moeda) {
 
+    const minimo = parseFloat(moeda.salario_minimo);
+    const teto = parseFloat(moeda.teto);
+
     let beneficioCorrigido = beneficio;
-    if (moeda && beneficio > moeda.teto) {
-      beneficioCorrigido = moeda.teto * coeficiente / 100;
+    if (moeda && beneficio > teto) {
+      beneficioCorrigido = teto * coeficiente / 100;
       this.limited = true;
     }
-    if (moeda && beneficio < moeda.salario_minimo && (this.tipoBeneficio != 7 && this.tipoBeneficio != 1905)) {
-      beneficioCorrigido = moeda.salario_minimo
+
+    if (moeda && beneficio < minimo && (this.tipoBeneficio != 7 && this.tipoBeneficio != 1905)) {
+      beneficioCorrigido = minimo
     }
+    
     return beneficioCorrigido;
   }
 
