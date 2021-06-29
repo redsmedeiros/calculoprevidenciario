@@ -35,6 +35,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public limited;
   private fatorPrevidenciario;
   private fatorPrevidenciarioAntesDaVerificacao;
+  private isfatorPrevidenciario = false;
   private salarioBeneficio;
   private rmi8090 = undefined;
   private rmi8595 = undefined;
@@ -432,7 +433,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
 
-
     if (divisorSecundario < 24) {
       divisorSecundario = 24;
     }
@@ -519,8 +519,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // } else 
 
     // Quando a filiação for a partir de 29/11/1999 o cálculo se dará sempre pela m.a.s dos 80% > SC. Não aplica divisor mínimo!
-    divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
+    if (numeroContribuicoes > 1) {
+      divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+    }
 
     if (this.dataFiliacao < this.dataDib99 &&
       (this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
@@ -773,9 +775,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
         const tempoContribuicaoMaisIdade = this.contribuicaoTotal + this.idadeFracionada;
-        this.aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes)
 
-        //console.log(this.tipoBeneficio);
+        if (![0, 2, 7, 17, 18, 19, 1903, 1905].includes(this.tipoBeneficio)) {
+          this.aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes);
+        }
+
+
 
         // if (!this.isRegraPontos && (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
         //   this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
@@ -820,8 +825,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       }
     }
-
-
 
 
     //Índice de Reajuste no Teto.
@@ -1523,7 +1526,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       requisitoSegurado.f -= 5;
 
     }
-   
+
     return {
       status: status,
       requistos: requisitoSegurado,
@@ -1537,7 +1540,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     const requitoPontos = this.getRequisitoPontos();
 
-   
+
 
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
@@ -1625,7 +1628,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       beneficioCorrigido = moeda.teto * coeficiente / 100;
       this.limited = true;
     }
-    if (moeda && beneficio < moeda.salario_minimo && this.tipoBeneficio != 7) {
+    if (moeda && beneficio < moeda.salario_minimo && (this.tipoBeneficio != 7 && this.tipoBeneficio != 1905)) {
       beneficioCorrigido = moeda.salario_minimo
     }
     return beneficioCorrigido;
@@ -2277,7 +2280,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             minimo *= 0.3;
           } else if (this.tipoBeneficio === 18) {
             minimo *= 0.4;
-          } else if (this.tipoBeneficio === 7) {
+          } else if (this.tipoBeneficio === 7 || this.tipoBeneficio == 1905) {
             minimo *= 0.5;
           } else if (this.tipoBeneficio === 19) {
             minimo *= 0.6;

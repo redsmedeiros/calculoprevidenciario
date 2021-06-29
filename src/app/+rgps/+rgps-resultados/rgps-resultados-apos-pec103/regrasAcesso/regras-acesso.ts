@@ -136,11 +136,17 @@ export class RegrasAcesso {
 
         }
 
+        console.log(this.numeroDeContribuicoes);
+        console.log(maximoDescarte.meses);
+
         // evitar que o numero de contribuicoes seja negativo
         if (this.numeroDeContribuicoes < maximoDescarte.meses) {
 
-            let tempAjusteMaximoDescarte = maximoDescarte.meses - this.numeroDeContribuicoes;
+            let tempAjusteMaximoDescarte = this.numeroDeContribuicoes - 12;
             tempAjusteMaximoDescarte = (tempAjusteMaximoDescarte < 0) ? 0 : tempAjusteMaximoDescarte;
+
+            console.log(tempAjusteMaximoDescarte);
+            console.log(tempAjusteMaximoDescarte / 12);
 
             maximoDescarte.meses = tempAjusteMaximoDescarte;
             maximoDescarte.anos = maximoDescarte.meses / 12;
@@ -215,14 +221,7 @@ export class RegrasAcesso {
 
 
         // Valor default sem decrementar
-
-
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
-
-            // console.log(maximoDescarte.anos - Math.floor(maximoDescarte.anos));
-            //    console.log(Math.floor((maximoDescarte.anos - Math.floor(maximoDescarte.anos)) / 12));
-            //    console.log(Math.floor((maximoDescarte.meses) - Math.floor(maximoDescarte.meses)));
-            //    console.log(maximoDescarte);
 
             calculosPossiveis.push({
                 tempo: (tempoInicial),
@@ -272,16 +271,7 @@ export class RegrasAcesso {
 
         }
 
-        /// console.log(maximoDescarte);
-
-
-        // console.log(lastPossibilidade.descarteContrib);
-        // console.log(maximoDescarte.meses);
-        // console.log(this.numeroDeContribuicoes);
-        // console.log(this.numeroDeContribuicoes - maximoDescarte.meses);
-        // console.log(numeroConsideradoFinal);
-
-        if (elementTipo.regra === 'idade') {
+        if (elementTipo.regra === 'idade' || ['pontos', 'idadeProgressiva', 'pedagio50', 'pedagio100'].includes(elementTipo.regra)) {
 
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
@@ -289,11 +279,11 @@ export class RegrasAcesso {
             if (this.numeroDeContribuicoes > 11
                 && numeroConsideradoFinal === 12) {
 
-
-                const maximoDescarteIdade = maximoDescarte.meses + 11
+                const tempoRef11meses =  (11 * 30.436875) / 365.25;
+                const maximoDescarteIdade = maximoDescarte.meses + 11;
 
                 calculosPossiveis.push({
-                    tempo: lastPossibilidade.tempo,
+                    tempo: (lastPossibilidade.tempo - tempoRef11meses),
                     idade: lastPossibilidade.idade,
                     pontos: 0,
                     descarteContrib: maximoDescarteIdade,
