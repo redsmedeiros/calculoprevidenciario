@@ -2435,10 +2435,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   }
 
+  monthsDiff(d1, d2) {
+    const date1 = new Date(d1);
+    const date2 = new Date(d2);
+    const years = date2.getFullYear() - date1.getFullYear();
+    const months = (years * 12) + (date2.getMonth() - date1.getMonth());
+    return months;
+}
+
+
   private checkFatorprogressivoContMeses() {
 
-    const fim = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').endOf('month');
-    return Math.floor(moment.duration(fim.diff('1999-11-01')).asMonths()) - 1;
+    // const fim = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').endOf('month');
+    // return Math.floor(moment.duration(fim.diff('1999-11-01')).asMonths()) - 1;
+
+    return this.monthsDiff('1999-11-01', moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').format('YYYY-MM-DD'));
 
   }
 
