@@ -35,6 +35,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public limited;
   private fatorPrevidenciario;
   private fatorPrevidenciarioAntesDaVerificacao;
+  private SMBFatorPrevidenciarioProgressivo = { formula: '', parcela1: 0, parcela2: 0, total: 0 };
+  private isfatorPrevidenciarioProgressivo = false;
   private isfatorPrevidenciario = false;
   private salarioBeneficio;
   private rmi8090 = undefined;
@@ -793,8 +795,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes);
         }
 
-
-
         // if (!this.isRegraPontos && (this.tipoBeneficio == 16 || // Aposentadoria Travalhador Rural
         //   this.tipoBeneficio == 3 || // Aposentadoria Trabalhador Urbano
         //   this.tipoBeneficio == 25 || // Deficiencia Grave
@@ -875,10 +875,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
     this.coeficiente = Math.floor(this.coeficiente);
-    let coeficiente = this.coeficiente;
+    const coeficiente = this.coeficiente;
 
-    let somaMedias = mediaContribuicoesPrimarias + taxaMediaSecundaria;
-    let somaMediasAux = this.corrigirBeneficio(somaMedias, coeficiente, moedaDib);
+    const somaMedias = mediaContribuicoesPrimarias + taxaMediaSecundaria;
+    const somaMediasAux = this.corrigirBeneficio(somaMedias, coeficiente, moedaDib);
 
     if (this.limited) {
 
@@ -896,12 +896,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if ((!this.isRegraPontos && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6))
       || (tipoIdadeFator && fatorSeguranca > 1)) {
 
+
       rmi *= this.fatorPrevidenciario;
+
+      if (this.checkFatorprogressivo()) {
+        rmi = this.calcularFatorProgressivo(somaMedias, conclusoes);
+      }
 
     }
 
     // teto e mínimo
-    rmi =  this.corrigirSalarioDeBeneficio(rmi, moedaDib);
+    rmi = this.corrigirSalarioDeBeneficio(rmi, moedaDib);
     this.salarioBeneficio = rmi;
 
     // passo 1
@@ -921,7 +926,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     rmi = this.corrigirBeneficio(rmi, coeficiente, moedaDib);
-    
+
     // passo 2
 
     this.limited = false;
@@ -986,14 +991,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     });
 
     conclusoes.push({
-      order: 6,
+      order: 5,
       tipo: 'teto',
       string: 'Teto do Salário de Contribuição',
       value: this.formatMoney(moedaDib.teto, currency.acronimo)
     });
 
     conclusoes.push({
-      order: 5,
+      order: 6,
       tipo: 'sb',
       string: 'Salário de Benefício',
       value: this.formatMoney(this.salarioBeneficio)
@@ -1484,6 +1489,15 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return 0;
     });
 
+
+    // intervalo do fator progressivo
+    if (!this.isfatorPrevidenciario) {
+
+      this.conclusoes = [];
+      this.conclusoes = conclusoes.filter(rowObj => (rowObj.order !== 3 && rowObj.order !== 4));
+
+    }
+
     this.tableData = tableData;
     // this.tableOptions = {
     //   ...this.tableOptions,
@@ -1581,8 +1595,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     const requitoPontos = this.getRequisitoPontos();
 
-
-
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
       const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
@@ -1594,9 +1606,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       ) {
 
         conclusoes.push({
-          order: 3,
+          order: 4,
           tipo: 'fator',
-          string: 'Fator Previdenciário:', value: this.fatorPrevidenciarioAntesDaVerificacao
+          string: 'Fator Previdenciário', value: this.fatorPrevidenciarioAntesDaVerificacao
             + ` (Afastado por ser menos vantajoso - Aplicada a regra ${labelPontos})`
         });
 
@@ -1607,9 +1619,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         const textoFator = (this.fatorPrevidenciario > 1) ? '  (Aplicado por ser mais vantajoso)' : ''
 
         conclusoes.push({
-          order: 3,
+          order: 4,
           tipo: 'fator',
-          string: 'Fator Previdenciário:', value: this.fatorPrevidenciario
+          string: 'Fator Previdenciário', value: this.fatorPrevidenciario
             + textoFator
         });
 
@@ -1642,18 +1654,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
 
       conclusoes.push({
-        order: 3,
+        order: 4,
         tipo: 'fator',
-        string: 'Fator Previdenciário:', value: fatorText + textComplementar
+        string: 'Fator Previdenciário', value: fatorText + textComplementar
       });
 
 
     }
 
     conclusoes.push({
-      order: 4,
-      tipo: 'fator',
-      string: 'Fórmula do Fator Previdenciário:',
+      order: 3,
+      tipo: 'formula_fator',
+      string: 'Fórmula do Fator Previdenciário',
       value: this.formula_fator
     });
 
@@ -1661,7 +1673,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
 
-  
+
   corrigirSalarioDeBeneficio(beneficio, moeda) {
 
 
@@ -1695,7 +1707,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (moeda && beneficio < minimo && (this.tipoBeneficio != 7 && this.tipoBeneficio != 1905)) {
       beneficioCorrigido = minimo
     }
-    
+
     return beneficioCorrigido;
   }
 
@@ -2408,6 +2420,73 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       });
   }
+
+
+  private checkFatorprogressivo() {
+
+    this.isfatorPrevidenciarioProgressivo = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY')
+      .isBetween('1999-11-27', '2004-10-31', 'days', '[]');
+
+    this.isfatorPrevidenciario = !(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY')
+      .isBetween('1999-11-27', '1999-11-30', 'days', '[]'));
+
+
+    return this.isfatorPrevidenciarioProgressivo;
+
+  }
+
+  private checkFatorprogressivoContMeses() {
+
+    const fim = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').endOf('month');
+    return Math.floor(moment.duration(fim.diff('1999-11-01')).asMonths()) - 1;
+
+  }
+
+
+  private calcularFatorProgressivo(somaMedias, conclusoes) {
+
+    const nCompetencias = this.checkFatorprogressivoContMeses();
+    let parcela1 = 0;
+    let parcela2 = 0;
+    let total = 0;
+
+
+    if (this.checkFatorprogressivo() && nCompetencias > 0) {
+
+      this.formula_fator = '';
+
+      parcela1 = (this.fatorPrevidenciario * nCompetencias * somaMedias) / 60;
+      parcela2 = (somaMedias * (60 - nCompetencias)) / 60;
+      total = parcela1 + parcela2;
+
+      const formula = `((${this.formatDecimal(this.fatorPrevidenciario, 4)} * ${nCompetencias} *
+       ${this.formatDecimal(somaMedias, 2)} / 60)  +
+      (${this.formatDecimal(somaMedias, 2)} * (60 - ${nCompetencias})) / 60`;
+
+      this.formula_fator = formula;
+
+      this.SMBFatorPrevidenciarioProgressivo = {
+        formula: formula,
+        parcela1: parcela1,
+        parcela2: parcela2,
+        total: total
+      };
+
+      conclusoes.push({
+        order: 4.1,
+        tipo: 'formula_sb',
+        string: 'Fórmula do Salário de Benefício',
+        value: this.formula_fator
+      });
+
+      return total;
+    }
+
+    return somaMedias;
+
+  }
+
+
 
   public afastarIN77(AplicarIN77) {
     this.naoAplicarIN77 = (!AplicarIN77);
