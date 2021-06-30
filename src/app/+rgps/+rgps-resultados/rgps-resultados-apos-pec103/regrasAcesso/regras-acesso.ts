@@ -1247,8 +1247,17 @@ export class RegrasAcesso {
         const tempoPercentualParte1 = { m: 1, f: 1 };
 
         let status = false;
+        // this.numeroDeContribuicoes > 12
+        // if (Math.trunc(tempo_contribuicao) > tempoPercentualParte1[sexo] && this.numeroDeContribuicoes > 12) {
 
-        if (Math.trunc(tempo_contribuicao) > tempoPercentualParte1[sexo] && this.numeroDeContribuicoes > 12) {
+        //     status = true;
+
+        // } else {
+
+        //     status = false;
+        // }
+
+        if (Math.trunc(tempo_contribuicao) > 0 && this.numeroDeContribuicoes > 0) {
 
             status = true;
 

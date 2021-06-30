@@ -83,7 +83,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     columnDefs: [
       { 'width': '15rem', 'targets': [7] },
       {
-        'targets': [0, 1, 2, 3, 4, 5],
+        'targets': [0, 1, 2, 3, 4, 5, 6],
         'className': 'text-center'
       }
     ]
@@ -154,7 +154,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       columnDefs: [
         { 'width': '15rem', 'targets': [7] },
         {
-          'targets': [0, 1, 2, 3, 4, 5],
+          'targets': [0, 1, 2, 3, 4, 5, 6],
           'className': 'text-center'
         }
       ]
@@ -1510,7 +1510,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       columnDefs: [
         { 'width': '15rem', 'targets': [7] },
         {
-          'targets': [0, 1, 2, 3, 4, 5],
+          'targets': [0, 1, 2, 3, 4, 5, 6],
           'className': 'text-center'
         }
       ]

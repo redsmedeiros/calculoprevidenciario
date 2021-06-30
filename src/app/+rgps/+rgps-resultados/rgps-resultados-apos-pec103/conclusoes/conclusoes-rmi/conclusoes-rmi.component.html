@@ -1,77 +1,54 @@
 <table
-id="conclusoes-rmi-ec103"
-class="table table-bordered table-hover no-padding"
-*ngIf="!isUpdating"
+  id="conclusoes-rmi-ec103"
+  class="table table-bordered table-hover no-padding margin-bottom-0"
+  *ngIf="!isUpdating"
 >
-<!-- <thead class="not-print">
-  <tr>
-    <th colspan="2">
-      <span >{{regraLabel}}</span>
-    </th>
-  </tr>
-  <tr>
-    <th  style="text-align: right;">
-      <span class="pull-right font-bold">Tipo</span>
-    </th>
-    <th style="text-align: left;">
-      <span class="font-bold">Descrição</span>
-    </th>
-  </tr>
-</thead> -->
-<tbody>
-  <tr>
-    <td colspan="2">
-      <strong >{{regraLabel}}</strong>
-    </td>
-  </tr>
-  <tr>
-    <td  style="text-align: right;">
-      <span class="pull-right font-bold"><b>Tipo</b></span>
-    </td>
-    <td style="text-align: left;">
-      <span class="font-bold"><b>Descrição</b></span>
-    </td>
-  </tr>
-  <tr
-    *ngFor="let conclusao of conclusoes"
-    class="{{ conclusao.class }}"
-  >
-    <td width="50%" style="text-align: right;"> <span class="pull-right font-bold">{{ conclusao.label }}</span> </td>
-    <td>{{ conclusao.valueString }}</td>
-  </tr>
-</tbody>
-</table>
-
-
-<table class="table table-hover table-condensed table-bordered not-print my-3" *ngIf="!isUpdating" >
-  <!-- <thead>
-    <tr>
-      <th>{{regraLabel}}
-      </th>
-      <th>
-        Ação
-      </th>
-    </tr>
-  </thead> -->
   <tbody>
-    <tr *ngIf='!isUpdating'>
+    <tr>
+      <td colspan="2">
+        <strong>{{ regraLabel }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">
+        <span class="pull-right font-bold"><b>Tipo</b></span>
+      </td>
+      <td style="text-align: left">
+        <span class="font-bold"><b>Descrição</b></span>
+      </td>
+    </tr>
+    <tr *ngFor="let conclusao of conclusoes" class="{{ conclusao.class }}">
+      <td width="50%" style="text-align: right">
+        <span class="pull-right font-bold">{{ conclusao.label }}</span>
+      </td>
+      <td>{{ conclusao.valueString }}</td>
+    </tr>
+  </tbody>
+</table>
+<table
+  class="table table-hover table-condensed table-bordered not-print my-3"
+  *ngIf="!isUpdating"
+>
+  <tbody>
+    <tr *ngIf="!isUpdating">
       <td>
         <strong>Exportar para o cálculo de Liquidação de Sentença</strong>
         <button
-        *ngIf="!isUpdating"
-        class="btn btn-primary pull-right btn-xs mr-3 not-print"
-        type="submit"
-        (click)="exportarParaBeneficios(dataInicioBeneficio, valorExportacao, 'A')"
-      >
-        &nbsp;&nbsp;
-        <i
           *ngIf="!isUpdating"
-          class="fa fa-external-link pull-left fa fa-lg p-1"
-        ></i>
-        Exportar &nbsp;&nbsp;
-      </button>
+          class="btn btn-primary pull-right btn-xs mr-3 not-print"
+          type="submit"
+          (click)="
+            exportarParaBeneficios(dataInicioBeneficio, valorExportacao, 'A')
+          "
+        >
+          &nbsp;&nbsp;
+          <i
+            *ngIf="!isUpdating"
+            class="fa fa-external-link pull-left fa fa-lg p-1"
+          ></i>
+          Exportar &nbsp;&nbsp;
+        </button>
       </td>
     </tr>
   </tbody>
 </table>
-
