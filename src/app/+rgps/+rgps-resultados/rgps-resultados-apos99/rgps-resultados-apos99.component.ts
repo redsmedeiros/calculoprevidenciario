@@ -2432,25 +2432,28 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
     return this.isfatorPrevidenciarioProgressivo;
-
   }
 
-  monthsDiff(d1, d2) {
-    const date1 = new Date(d1);
-    const date2 = new Date(d2);
-    const years = date2.getFullYear() - date1.getFullYear();
-    const months = (years * 12) + (date2.getMonth() - date1.getMonth());
-    return months;
-}
+  private getMesesApos1999FatorProgressivo(mes, ano) {
+
+    const mesesApos1999 = {
+      1999: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      2000: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      2001: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
+      2002: [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+      2003: [38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+      2004: [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 0, 0],
+    };
+
+    const numMeses = mesesApos1999[ano][(mes - 1)];
+    return (numMeses !== undefined) ? numMeses : 0;
+  }
 
 
   private checkFatorprogressivoContMeses() {
 
-    // const fim = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').endOf('month');
-    // return Math.floor(moment.duration(fim.diff('1999-11-01')).asMonths()) - 1;
-
-    return this.monthsDiff('1999-11-01', moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').format('YYYY-MM-DD'));
-
+    const splitF = this.calculo.data_pedido_beneficio.split('/');
+    return this.getMesesApos1999FatorProgressivo(splitF[1], splitF[2]);
   }
 
 
