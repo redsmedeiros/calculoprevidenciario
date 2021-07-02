@@ -228,7 +228,15 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       });
 
     } else {
-      swal('Erro', 'Confira os dados digitados', 'error');
+
+      swal({
+        position: 'top-end',
+        type: 'error',
+        title: 'Confira os dados digitados',
+        showConfirmButton: false,
+        timer: 1000
+      });
+
     }
   }
 
@@ -347,7 +355,18 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     // const data = moment(ano + '-' + mes + '-01');
     // return this.moeda.find((md) => data.isSame(md.data_moeda, 'month'));
-    const data = ano + '-' + mes + '-01';
+    let data = ano + '-' + mes + '-01';
+    if (moment().isSameOrBefore(data)) {
+      data = moment().format('YYYY-MM-01');
+    }
+
+    if (moment(data).isBefore(this.moeda[0].data_moeda)) {
+      return {
+        salario_minimo: 0,
+        teto: 0
+      };
+    }
+
     return this.moeda.find((md) => data === md.data_moeda);
   }
 
@@ -356,6 +375,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     valor = this.formatDecimalValue(valor);
     mes = (rst) ? ('0' + mes).slice(-2) : mes;
+
     const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
 
     let ClassRst = 0;
@@ -378,7 +398,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
   /**
-    * Formatar para moeda 
+    * Formatar para moeda
     * @param  {} value
     */
   public formatMoney(value) {

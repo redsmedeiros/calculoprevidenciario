@@ -71,6 +71,11 @@ export abstract class Model {
     return axios.get(`${this.url}/${urlController}/${id}`);
   }
 
+  public static getDataParameterURL(urlController, params) {
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    return axios.get(`${this.url}/${urlController}?${params}`);
+  }
+
   public static postDataURL(urlController, data) {
     // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.post(`${this.url}/${urlController}`, data);

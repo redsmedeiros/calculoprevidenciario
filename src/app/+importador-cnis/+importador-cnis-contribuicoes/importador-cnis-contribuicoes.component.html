@@ -11,7 +11,7 @@
       <dl class="well padding-5">
         <form class="form-inline">
           <fieldset>
-            <div class="form-group">
+            <div class="form-group has-feedback " [ngClass]="{'has-error': errors.has('inicioPeriodo')}">
               <label class="col-md-2 control-label" for="select-1">De*:</label>
               <div class="col-md-2">
                 <input
@@ -25,15 +25,10 @@
                   type="text"
                   (change)="errors.clear('inicioPeriodo')"
                 />
-                <small
-                  *ngIf="errors.has('inicioPeriodo')"
-                  class="text-danger"
-                  >{{ errors.get("inicioPeriodo") }}</small
-                >
               </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': errors.has('finalPeriodo')}">
               <label class="col-md-2 control-label" for="select-1">Até*:</label>
               <div class="col-md-2">
                 <input
@@ -46,14 +41,14 @@
                   [textMask]="{ mask: dateMask }"
                   type="text"
                   (change)="errors.clear('finalPeriodo')"
+                  tooltip="{{
+                    errors.get('finalPeriodo')
+                  }}"
                 />
-                <small *ngIf="errors.has('finalPeriodo')" class="text-danger">{{
-                  errors.get("finalPeriodo")
-                }}</small>
               </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error': errors.has('salarioContribuicao')}">
               <label class="col-md-2 control-label" for="select-1"
                 >Valor*:</label
               >
@@ -68,12 +63,8 @@
                   (change)="errors.clear('salarioContribuicao')"
                   (keyup)="insertSCEnter($event)" 
                   type="text"
+                  tooltip="{{ errors.get('salarioContribuicao') }}"
                 />
-                <small
-                  *ngIf="errors.has('salarioContribuicao')"
-                  class="text-danger"
-                  >{{ errors.get("salarioContribuicao") }}</small
-                >
               </div>
             </div>
             <button

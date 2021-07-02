@@ -58,6 +58,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public countVinculosErros = 0;
 
+  public sc_mm_considerar_carencia;
+  public sc_mm_considerar_tempo;
+  public sc_mm_ajustar;
+
+
   @Output() eventCountVinculosErros = new EventEmitter();
   @ViewChild('periodoFormheader') periodoFormheader: ElementRef;
   @ViewChild(ImportadorCnisContribuicoesComponent) ContribuicoesComponent: ImportadorCnisContribuicoesComponent;
@@ -318,6 +323,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   private ajusteListVinculos(calculoId) {
 
+    console.log(this.vinculosList);
+
     this.vinculosListPost = [];
     for (const vinculo of this.vinculosList) {
       this.vinculosListPost.push(
@@ -331,7 +338,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           licenca_premio_nao_usufruida: 0,
           id_contagem_tempo: calculoId,
           sc: JSON.stringify(vinculo.contribuicoes),
-          sc_menor_minimo: ''
+          sc_mm_considerar_carencia: false,
+          sc_mm_considerar_tempo: false,
+          sc_mm_ajustar: false,
+          sc_pendentes: vinculo.contribuicoes_pendentes,
+          sc_count: vinculo.contribuicoes_count,
         }
       );
     }
@@ -356,7 +367,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           licenca_premio_nao_usufruida: 0,
           id_contagem_tempo: calculoId,
           sc: JSON.stringify(vinculo.contribuicoes),
-          sc_menor_minimo: '',
+          sc_mm_considerar_carencia: false,
+          sc_mm_considerar_tempo: false,
+          sc_mm_ajustar: false,
+          sc_pendentes: vinculo.contribuicoes_pendentes,
+          sc_count: vinculo.contribuicoes_count ,
           action: null
         })
       );
@@ -389,16 +404,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (calculoId && this.vinculosList.length >= 1) {
 
       this.ajusteListVinculosUpdate(calculoId);
-
-      console.log(this.vinculosListPost);
-      console.log(this.PeriodosContagemTempoService);
-
       return this.PeriodosContagemTempoService
         .updateListPeriodos(calculoId, this.vinculosListPost)
         .then(model => {
-
-          console.log(model);
-
           return true;
         })
         .catch(errors => this.errors.add(errors));

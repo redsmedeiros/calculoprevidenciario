@@ -186,7 +186,7 @@ export abstract class ControllerService {
       model.destroy()
         .then(response => {
           this.list = this.store.remove(this.name, model);
-          resolve();
+          resolve(true);
         })
         .catch(error => reject(error.response.data));
     });
@@ -204,5 +204,30 @@ export abstract class ControllerService {
     });
 
   }
+
+  public getDataURL(urlController, matriz) {
+
+    return new Promise((resolve, reject) => {
+      this.model.getDataURL(urlController, matriz)
+        .then(data => {
+          resolve(data.data);
+          return;
+        }).catch(error => reject(error.response.data));
+    });
+
+  }
+
+  public getDataParameterURL(urlController, param) {
+
+    return new Promise((resolve, reject) => {
+      this.model.getDataParameterURL(urlController, param)
+        .then(data => {
+          resolve(data.data);
+          return;
+        }).catch(error => reject(error.response.data));
+    });
+
+  }
+
 
 }

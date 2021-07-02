@@ -56,7 +56,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private Auth: Auth,
     private Moeda: MoedaService,
-    ) { }
+  ) { }
 
   ngOnInit() {
     // this.ref.markForCheck();
@@ -89,11 +89,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   private getTabelaMoeda() {
 
 
-    this.Moeda.getByDateRangeMoment(moment('1964-10-01'), moment())
+    // this.Moeda.getByDateRangeMoment(moment('1964-10-01'), moment())
+    //   .then((moeda: Moeda[]) => {
+    //     this.moeda = moeda;
+    //   });
+
+
+    this.Moeda.moedaSalarioMinimoTeto()
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
       });
-
   }
 
   private setExibirForm(dadosPassoaPasso) {

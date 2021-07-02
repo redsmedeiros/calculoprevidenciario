@@ -104,4 +104,16 @@ export class MoedaService extends ControllerService {
 
 	}
 
+	public moedaSalarioMinimoTeto() {
+		return new Promise((resolve, reject) => {
+			this.getDataParameterURL('salariosmt', 'salariosmt=true')
+				.then(data => {
+					console.log(data);
+					resolve(data);
+					return;
+				}).catch(error => reject(error.response.data));
+		});
+
+	}
+
 }
