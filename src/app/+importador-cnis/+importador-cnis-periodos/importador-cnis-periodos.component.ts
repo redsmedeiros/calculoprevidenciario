@@ -144,16 +144,26 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     let ano = inputChave.substring(0, 4);
     let mes = inputChave.substring(4, 6);
 
-    if ((parseInt(mes) + 1) > 12) {
+    if ((parseInt(mes, 10) + 1) > 12) {
       mes = '01';
-      ano = parseInt(ano) + 1;
+      ano = parseInt(ano, 10) + 1;
     } else {
-      mes = parseInt(mes) + 1;
+      mes = parseInt(mes, 10) + 1;
     }
 
-    let chave = ano + this.leftFillNum(mes, 2);
+    const chave = ano + this.leftFillNum(mes, 2);
 
     return chave;
+
+  }
+
+  private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
+
+    if (type === 'mm') {
+      return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
+    }
+
+    return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
 
   }
 
@@ -168,15 +178,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       const pchave = chave.substring(4, 6) + '/' + chave.substring(0, 4);
 
-      // result = _.find(contribuicoes, (item) => {
-      //   return item.cp === pchave;
-      // });
-
       result = contribuicoes.find((item) => {
         return item.cp === pchave;
       });
 
-      if (result && result !== undefined)     /* se encontrou a contribuição no mes*/ {
+      if (result && result !== undefined) {     /* se encontrou a contribuição no mes*/
 
         result.msc = 0;
 
@@ -251,7 +257,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
-      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+      const result = this.countPendenciasSC(contribuicoes, '0,00');
+      const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
+
+      console.log(contribuicoes);
 
       const line = {
         id: vinculo.id,
@@ -267,6 +276,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         condicao_especial: (vinculo.condicao_especial === 0) ? 'Não' : 'Sim',
         carencia: (vinculo.carencia === 1) ? 'Sim' : 'Não',
         contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: (this.vinculosList.length) + 1
@@ -289,8 +299,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
       const datatermino = (vinculo.periodo[1] === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[1]) :
         this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', vinculo.periodo[0]);
+      const result = this.countPendenciasSC(contribuicoes, '0,00');
+      const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
 
-      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+      console.log(contribuicoes);
 
       const line = {
         id: null,
@@ -306,6 +318,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         condicao_especial: 'Não',
         carencia: 'Sim',
         contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: vinculo.index
@@ -371,7 +384,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           sc_mm_considerar_tempo: false,
           sc_mm_ajustar: false,
           sc_pendentes: vinculo.contribuicoes_pendentes,
-          sc_count: vinculo.contribuicoes_count ,
+          sc_count: vinculo.contribuicoes_count,
           action: null
         })
       );
@@ -463,8 +476,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
           const datatermino = (this.data_termino === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio) :
             this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_termino);
-
-          const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+          const result = this.countPendenciasSC(contribuicoes, '0,00');
+          const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
 
           vinculo.datainicio = datainicio;
           vinculo.datatermino = datatermino;
@@ -477,6 +490,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           vinculo.condicao_especial = this.boolToLiteral(this.condicao_especial);
           vinculo.carencia = this.boolToLiteral(this.carencia);
           vinculo.contribuicoes_pendentes = result ? result : 0;
+          vinculo.contribuicoes_pendentes_mm = result_mm ? result_mm : 0;
           vinculo.contribuicoes_count = contribuicoes.length;
           vinculo.contribuicoes = contribuicoes;
 
@@ -509,8 +523,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
       const datatermino = (this.data_termino === undefined) ? this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_termino) :
         this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.data_inicio);
-
-      const result = contribuicoes.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+      const result = this.countPendenciasSC(contribuicoes, '0,00');
+      const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
 
       const line = {
         data_inicio: this.data_inicio,
@@ -523,6 +537,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         datainicio: datainicio,
         datatermino: datatermino,
         contribuicoes_pendentes: result ? result : 0,
+        contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
         contribuicoes_count: 0,
         contribuicoes: contribuicoes,
       }
@@ -742,29 +757,30 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       mes = 0;
     });
 
-    console.log(contribuicoesList)
+    const result = this.countPendenciasSC(contribuicoesList, '0,00');
+    const result_mm = this.countPendenciasSC(contribuicoesList, 'mm');
 
-    // let result = _.filter(contribuicoesList, function (item) { if (item.sc == '0,00')  { return item; } }).length;
-    const result = contribuicoesList.filter(function (item) { if (item.sc == '0,00') { return item } }).length;
+    this.vinculosList[this.vinculo_index].contribuicoes = contribuicoesList;
+    this.vinculosList[this.vinculo_index].contribuicoes_pendentes = result ? result : 0;
+    this.vinculosList[this.vinculo_index].contribuicoes_pendentes_mm = result_mm ? result_mm : 0;
 
+    // this.vinculosList.forEach(vinculo => {
 
-    this.vinculosList.forEach(vinculo => {
+    //   if (this.vinculo_index === vinculo.index) {
 
-      if (this.vinculo_index === vinculo.index) {
+    //     vinculo.contribuicoes = contribuicoesList;
+    //     vinculo.contribuicoes_pendentes = result ? result : 0;
 
-        vinculo.contribuicoes = contribuicoesList;
-        vinculo.contribuicoes_pendentes = result ? result : 0;
+    //   }
 
-      }
+    // })
 
-    })
+    console.log(this.vinculosList)
 
-    // this.vinculosList[this.vinculo_index].contribuicoes = contribuicoesList;
-    // this.vinculosList[this.vinculo_index].contribuicoes_pendentes = result ? result : 0;
 
   }
 
-  
+
   private getMoedaCompetencia(mes, ano) {
     const data = ano + '-' + mes + '-01';
     return this.moeda.find((md) => data === md.data_moeda);

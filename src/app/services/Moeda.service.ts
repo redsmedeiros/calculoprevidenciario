@@ -96,7 +96,6 @@ export class MoedaService extends ControllerService {
 		return new Promise((resolve, reject) => {
 			this.postDataURL('salariomatriz', matriz)
 				.then(data => {
-					console.log(data);
 					resolve(data);
 					return;
 				}).catch(error => reject(error.response.data));
@@ -108,7 +107,6 @@ export class MoedaService extends ControllerService {
 		return new Promise((resolve, reject) => {
 			this.getDataParameterURL('salariosmt', 'salariosmt=true')
 				.then(data => {
-					console.log(data);
 					resolve(data);
 					return;
 				}).catch(error => reject(error.response.data));

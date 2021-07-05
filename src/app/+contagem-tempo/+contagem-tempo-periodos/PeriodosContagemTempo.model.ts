@@ -19,6 +19,7 @@ export class PeriodosContagemTempo extends Model {
     sc_mm_considerar_carencia: '',
     sc_mm_considerar_tempo: '',
     sc_pendentes: '',
+    sc_pendentes_mm: '',
     sc_count: '',
     sc_mm_ajustar: '',
     created_at: '',
@@ -38,6 +39,7 @@ export class PeriodosContagemTempo extends Model {
   public sc_mm_considerar_carencia;
   public sc_mm_considerar_tempo;
   public sc_pendentes;
+  public sc_pendentes_mm;
   public sc_count;
   public sc_mm_ajustar;
   public created_at;
