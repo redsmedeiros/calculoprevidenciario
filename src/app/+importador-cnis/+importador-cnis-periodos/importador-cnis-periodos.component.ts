@@ -260,8 +260,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const result = this.countPendenciasSC(contribuicoes, '0,00');
       const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
 
-      console.log(contribuicoes);
-
       const line = {
         id: vinculo.id,
         nit: '',

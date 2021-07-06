@@ -7,6 +7,7 @@ import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import swal from 'sweetalert2';
+import { ModalDirective } from 'ngx-bootstrap';
 import { MoedaService } from '../../services/Moeda.service';
 import { Moeda } from '../../services/Moeda.model';
 
@@ -25,6 +26,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   @Input() isUpdating;
   @Output() eventContribuicoes = new EventEmitter();
 
+  @ViewChild('contribuicoesCheck') public contribuicoesCheck: ModalDirective;
+
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public inicioPeriodo = '';
   public finalPeriodo = '';
@@ -35,6 +38,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   public matrizHasValues = false;
   public contribuicao = [];
   private hashKey;
+
+  public sc_mm_considerar_carencia;
+  public sc_mm_considerar_tempo;
+  public sc_mm_ajustar;
 
   public matrixTableOptions = {
     paging: false,
@@ -128,9 +135,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   isValid() {
 
-    let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
-    let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
-    let dataLimite = moment('1970-01-01');
+    const dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
+    const dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
+    const dataLimite = moment('1970-01-01');
 
     // inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
@@ -145,7 +152,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       }
     }
 
-    //finalPeriodo
+    // finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
       this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
     } else {
@@ -160,7 +167,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     }
 
-    //salarioContribuicao
+    // salarioContribuicao
     if (this.isEmpty(this.salarioContribuicao)) {
       this.errors.add({ 'salarioContribuicao': ['Insira o salário'] });
     } else {
@@ -423,5 +430,14 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
   }
+
+  showContribuicoesCheck() {
+    this.contribuicoesCheck.show();
+  }
+
+  hideContribuicoesCheck() {
+    this.contribuicoesCheck.hide();
+  }
+
 
 }
