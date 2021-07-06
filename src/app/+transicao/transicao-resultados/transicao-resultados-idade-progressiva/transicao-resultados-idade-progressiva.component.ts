@@ -29,7 +29,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     2031: { m: 65, md: 23741, f: 62, fd: 22645 },
   }
 
-
   public conclusoesRegra2 = {
     status: false,
     percentual: '',
@@ -179,8 +178,10 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
   }
 
-  public contadorRegra2() {
 
+
+
+  public contadorRegra2() {
 
     let auxiliarDate = (this.dataAtual.clone()).add(1, 'day');
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
@@ -188,15 +189,14 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    let tempoContribuicaoAnos360 = this.converterTempoContribuicaoAnos360(this.seguradoTransicao.contribuicaoAnos,
+      this.seguradoTransicao.contribuicaoMeses,
+      this.seguradoTransicao.contribuicaoDias)
+
+
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
     do {
-
-
-
-      // console.log('P - ' + count + ' - data =' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade =' + idade + '|'
-      //   + '|' + 'Tempo = ' + tempoContribuicao + '|');
 
       count++;
       idade += 1;
@@ -215,16 +215,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     } while (!fimContador.status && idade <= 54750);
 
-    // const correcaoAnoBissexto = this.contarBissextosEntre(
-    //   this.seguradoTransicao.dataNascimento,
-    //   auxiliarDate
-    // );
-
-    // if (correcaoAnoBissexto > 0) {
-    //   auxiliarDate.add(correcaoAnoBissexto, 'days');
-    //   tempoContribuicao += correcaoAnoBissexto;
-    // }
-
     const anoFinalTransicao = (auxiliarDate.year() > 2031) ? 2031 : auxiliarDate.year();
 
     const verificacao = ((this.tempoContribMinimoIdadeProgressiva -
@@ -233,7 +223,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       (this.requisitoIdadeProgressivaRegra2[anoFinalTransicao][this.seguradoTransicao.sexo] -
         this.seguradoTransicao.idadeFracionada)
     );
-
 
 
 
@@ -266,37 +255,66 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       }
 
 
-    }
+
+      idadeMoment = this.calcularIdade(auxiliarDate);
+      if (idadeMoment.days() === 30) {
+        idadeMoment.add(1, 'day');
+      }
 
 
-    idadeMoment = this.calcularIdade(auxiliarDate);
-    if (idadeMoment.days() === 30) {
-      idadeMoment.add(1, 'day');
-    }
 
 
+      if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
 
-    if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
+
+        if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
+          ||
+          ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
+
+          idadeMoment = moment.duration({
+            days: 0,
+            months: 6,
+            years: idadeMoment.years(),
+          });
+
+        } else {
+
+          idadeMoment = moment.duration({
+            days: 0,
+            months: idadeMoment.months(),
+            years: idadeMoment.years(),
+          });
+
+        }
+
+      }
 
 
-      if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
-        ||
-        ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
+    } else {
 
-        idadeMoment = moment.duration({
-          days: 0,
-          months: 6,
-          years: idadeMoment.years(),
-        });
+      const requisitoContribuicoes = {
+        f: (30 - this.seguradoTransicao.redutorProfessor),
+        m: (35 - this.seguradoTransicao.redutorProfessor)
+      };
 
-      } else {
+     // let testedays = (requisitoContribuicoes[this.seguradoTransicao.sexo] - tempoContribuicaoAnos360) * 365.25;
+      const testeanos = (requisitoContribuicoes[this.seguradoTransicao.sexo] - tempoContribuicaoAnos360);
 
-        idadeMoment = moment.duration({
-          days: 0,
-          months: idadeMoment.months(),
-          years: idadeMoment.years(),
-        });
+      const anos = Math.floor(testeanos);
+      const meses = Math.floor((testeanos - Math.floor(testeanos)) * 12);
+      let dias = Math.floor((((testeanos - anos) * 12) - Math.floor((testeanos - anos) * 12)) * 30);
 
+      dias += 1
+
+      auxiliarDate = (this.dataAtual.clone()).add({
+        year: anos,
+        month: meses,
+        day: dias
+      });
+
+      idadeMoment = this.calcularIdade(auxiliarDate);
+      if (idadeMoment.days() === 30) {
+        idadeMoment.add(1, 'day');
       }
 
     }
@@ -320,7 +338,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
 
   }
-
 
 
 
