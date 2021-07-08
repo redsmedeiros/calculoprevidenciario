@@ -336,7 +336,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   realizarCalculoContagemTempo(seguradoId, calculoId) {
 
 
-    if (this.dadosPassoaPasso === 'origem') {
+    if (this.dadosPassoaPasso.origem === 'contagem') {
 
       window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
         seguradoId + '/' + calculoId;
@@ -349,7 +349,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   }
 
   setNextStepContagemTempo() {
-    if (this.dadosPassoaPasso !== 'origem') {
+    if (this.dadosPassoaPasso.origem !== 'contagem') {
       this.eventCalcularContagem.emit({
         seguradoId: this.seguradoId,
         calculoId: this.calculoId
