@@ -4595,7 +4595,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
 
     const rodape = `<img src='./assets/img/rodape/TIMBRADO_SIMULADORES1080.jpg' alt='Logo' style="width: 100%;">`;
-    const title = `<title> Benefícios Atrasados - ${this.segurado.nome}</title>`;
+    const title = `<title> Liquidação de Sentença - ${this.segurado.nome}</title>`;
 
     const popupWin = window.open('', '_blank', 'width=700,height=500');
     popupWin.document.open();
