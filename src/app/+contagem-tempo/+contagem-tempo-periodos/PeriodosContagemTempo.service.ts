@@ -34,19 +34,6 @@ export class PeriodosContagemTempoService extends ControllerService {
 	}
 
 	updateListPeriodos(id_calculo,listPeriodos) {
-		console.log(listPeriodos);
-		console.log(id_calculo);
-		// return new Promise((resolve, reject) => {
-		// 	data[0].update()
-		// 		.then(model => {
-		// 			data.hydrate(model.data);
-		// 			this.list = this.store.update(this.name, data);
-		// 			resolve(data);
-		// 		}).catch(error => reject(error.response.data));
-		// });
-
-		//const parametros = `list/${id_calculo}`
-
 		return new Promise((resolve, reject) => {
 			this.postDataURL(`updatelist`, listPeriodos)
 				.then(data => {

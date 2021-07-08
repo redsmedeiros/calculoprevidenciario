@@ -217,19 +217,6 @@
                         <p class="text-justify pt-5 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
                           Selecionar um segurado cadastrado anteriormente, para elaboração do cálculo.
                         </p>
-
-                        <!-- <ul class="text-justify" style="font-size: 14px">
-                          <li *ngIf="dadosPassoaPasso.type === 'manual'">
-                            Preencha os campos abaixo para elaboração do cálculo.
-                          </li>
-                          <li *ngIf="dadosPassoaPasso.type === 'cnis'">
-                            Insira o arquivo do CNIS em .pdf, obtido no Meu INSS, para adicionar os períodos de contribuição e os salários de contribuição;
-                            As informações inseridas poderão ser editadas posteriormente.
-                          </li>
-                          <li *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
-                            Selecionar um segurado cadastrado anteriormente, para elaboração do cálculo.
-                          </li>
-                        </ul> -->
                       </div>
                     </div>
                   </div>
@@ -280,16 +267,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row pt-4 body-step-component">
-                    <!-- <app-rgps-planejamento-list
-                      *ngIf="!isUpdatingPlan"
-                      [calculo]="calculoSelecionado"
-                      [segurado]="seguradoSelecionado"
-                      [isCalculoSelecionado]="isCalculoSelecionado"
-                      (planejamentoSelecionadoEvent)="
-                        setPlanejamentoSelecionado($event)
-                      "
-                    ></app-rgps-planejamento-list> -->
+                  <div class="row pt-4 body-step-component" *ngIf="iscontagemTempo && activeStep.key == 'step3'" >
+                    <p>contagem tempo</p>
                   </div>
                 </div>
                 <div
@@ -370,7 +349,13 @@
                   </div>
                 </div>
 
-                <div class="form-actions mt-0">
+                <div class="form-actions mt-0"  *ngIf="
+                activeStep.key == 'step1' &&
+                (dadosPassoaPasso.type === 'cnis' ||
+                  dadosPassoaPasso.type === 'manual' ||
+                  dadosPassoaPasso.type === 'seguradoExistente') &&
+                isTypeEntradaDados
+              ">
                   <div class="row">
                     <div class="col-sm-12">
                       <ul class="pager wizard no-margin">
@@ -393,7 +378,7 @@
                               btn-danger
                               bg-ieprev-red
                             "
-                            title="Tutorial Planejamento Previdenciário"
+                            title="Tutorial"
                             >Tutorial</a
                           >
                         </li>

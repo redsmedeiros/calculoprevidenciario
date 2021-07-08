@@ -8,40 +8,73 @@
         </h3>
       </div>
     </div>
-        <div class="row mb-3 not-print">
-          <div class="col-sm-12 col-md-12 col-lg-12">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados"> Criar/Buscar Segurado</a></li>
-              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-segurados/{{idSegurado}}/editar"> Editar Segurado</a></li>
-              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-calculos/{{idSegurado}}/{{this.idsCalculos[0]}}/editar"> Editar Cálculo</a></li>
-              <li class="breadcrumb-item"><a href="#/contagem-tempo/contagem-tempo-periodos/{{idSegurado}}/{{this.idsCalculos[0]}}"> Editar Períodos</a></li>
-              <li class="breadcrumb-item active">Resultado</li>
-            </ol>
-          </div>
-        </div>
+    <div class="row mb-3 not-print">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="#/contagem-tempo/contagem-tempo-segurados">
+              Criar/Buscar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/contagem-tempo/contagem-tempo-segurados/{{
+                idSegurado
+              }}/editar"
+            >
+              Editar Segurado</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/contagem-tempo/contagem-tempo-calculos/{{ idSegurado }}/{{
+                this.idsCalculos[0]
+              }}/editar"
+            >
+              Editar Cálculo</a
+            >
+          </li>
+          <li class="breadcrumb-item">
+            <a
+              href="#/contagem-tempo/contagem-tempo-periodos/{{ idSegurado }}/{{
+                this.idsCalculos[0]
+              }}"
+            >
+              Editar Períodos</a
+            >
+          </li>
+          <li class="breadcrumb-item active">Resultado</li>
+        </ol>
+      </div>
+    </div>
     <!-- row -->
     <div class="row">
-      <article id='article-segurado' class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdatingSegurado" >
-        <app-contagem-tempo-conclusao-segurado [calculo]="calculo" [segurado]="segurado" [isUpdating]=isUpdating
-          [lastdateNascimento]=lastdateNascimento></app-contagem-tempo-conclusao-segurado>
+      <article
+        id="article-segurado"
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="!isUpdatingSegurado"
+      >
+        <app-contagem-tempo-conclusao-segurado
+          [calculo]="calculo"
+          [segurado]="segurado"
+          [isUpdating]="isUpdating"
+          [lastdateNascimento]="lastdateNascimento"
+        ></app-contagem-tempo-conclusao-segurado>
       </article>
-      <article  id='article-periodos' class="col-sm-12 col-md-12 col-lg-12">
-        <app-contagem-tempo-conclusao-periodos (periodosListRst)="reciverFeedback($event)"></app-contagem-tempo-conclusao-periodos>
-        <!-- <div class="well">
-          <p class="text-justify">
-            <strong>*</strong> A coluna "Tempo Contribuição Convertido" visualiza período por período, sem a supressão
-            de eventuais concomitâncias, após a incidência dos respectivos multiplicadores. Na coluna “Tempo de
-            contribuição Convertido” já está considerada a aplicação dos fatores multiplicadores.
-            A supressão de períodos concomitantes é efetuada preservando-se a contagem do tempo em que houve a
-            aplicação de fator multiplicador mais vantajoso. Tanto a supressão quanto a aplicação de fatores
-            multiplicadores são considerados nas conclusões finais na parte inferior desta página.
-          </p>
-        </div> -->
+      <article id="article-periodos" class="col-sm-12 col-md-12 col-lg-12">
+        <app-contagem-tempo-conclusao-periodos
+          (periodosListRst)="reciverFeedback($event)"
+        ></app-contagem-tempo-conclusao-periodos>
       </article>
-
-      <article id='article-grafico' class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false">
+      <article id="article-grafico" class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-bar-chart-o"></i>
@@ -49,17 +82,28 @@
             <h2><strong>Gráfico</strong></h2>
           </header>
           <div *ngIf="!getPeriodosList">
-            <app-contagem-tempo-conclusao-graph [periodosList]="periodosList"></app-contagem-tempo-conclusao-graph>
+            <app-contagem-tempo-conclusao-graph
+              [periodosList]="periodosList"
+            ></app-contagem-tempo-conclusao-graph>
           </div>
-          <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
+          <div
+            *ngIf="getPeriodosList"
+            class="alert alert-info text-align-center no-padding"
+          >
             <i class="fa fa-gear fa-3x fa-spin"></i>
           </div>
         </sa-widget>
       </article>
 
-      <article id='article-conclusao' class="col-sm-12 col-md-12 col-lg-12">
-        <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
-          [fullscreenbutton]="false" [custombutton]="false">
+      <article id="article-conclusao" class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
           <header>
             <span class="widget-icon">
               <i class="fa fa-clock-o"></i>
@@ -68,11 +112,18 @@
           </header>
           <div *ngIf="!getPeriodosList">
             <div class="widget-body no-padding heigth-auto">
-              <app-contagem-tempo-conclusao [calculo]="calculo" [segurado]="segurado" [periodosList]="periodosList"
-                (limitesTempoTotal)="reciverFeedbackLastdate($event)"></app-contagem-tempo-conclusao>
+              <app-contagem-tempo-conclusao
+                [calculo]="calculo"
+                [segurado]="segurado"
+                [periodosList]="periodosList"
+                (limitesTempoTotal)="reciverFeedbackLastdate($event)"
+              ></app-contagem-tempo-conclusao>
             </div>
           </div>
-          <div *ngIf="getPeriodosList" class="alert alert-info text-align-center no-padding">
+          <div
+            *ngIf="getPeriodosList"
+            class="alert alert-info text-align-center no-padding"
+          >
             <i class="fa fa-gear fa-3x fa-spin"></i>
           </div>
         </sa-widget>
@@ -81,28 +132,35 @@
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- <sa-widget [colorbutton]="false" [editbutton]="false" [togglebutton]="false" [deletebutton]="false"
           [fullscreenbutton]="false" [custombutton]="false"> -->
-          <!-- <header>
+        <!-- <header>
             <span class="widget-icon">
               <i class="fa fa-list-ul"></i>
             </span>
             <h2><strong>Opções</strong></h2>
           </header> -->
-          <div >
-            <!-- <div class="widget-body no-padding heigth-auto"> -->
-              <button *ngIf="!getPeriodosList" type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-info no-margin pull-right" id="btn-imprimir-pagina"
-                data-placement="top" tooltip="Clique aqui para imprimir">
-                <span class="btn-label">
-                  <i class="fa fa-print"></i>
-                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Imprimir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              </button>
-               <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"
+        <div>
+          <!-- <div class="widget-body no-padding heigth-auto"> -->
+          <button
+            *ngIf="!getPeriodosList"
+            type="submit"
+            (click)="imprimirPagina()"
+            class="btn btn-labeled btn-info no-margin pull-right"
+            id="btn-imprimir-pagina"
+            data-placement="top"
+            tooltip="Clique aqui para imprimir"
+          >
+            <span class="btn-label">
+              <i class="fa fa-print"></i> </span
+            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Imprimir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </button>
+          <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"
                 data-placement="top" tooltip="Clique para exportar PDF">
                 <span class="btn-label">
                   <i class="fa fa-file-pdf-o"></i>
                 </span> Exportar
               </button> -->
-            </div>
-          <!-- </div>
+        </div>
+        <!-- </div>
         </sa-widget> -->
       </article>
     </div>

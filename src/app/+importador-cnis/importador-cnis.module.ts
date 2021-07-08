@@ -8,7 +8,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 
-
 import { importadorCnisRouting } from './importador-cnis.routing';
 import { ImportadorCnisComponent } from './importador-cnis.component';
 import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados/importador-cnis-segurados.component';
@@ -40,7 +39,7 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     FileDropModule,
     TextMaskModule,
     CurrencyMaskModule,
-    importadorCnisRouting
+    importadorCnisRouting,
   ],
   declarations: [
     ImportadorCnisComponent,

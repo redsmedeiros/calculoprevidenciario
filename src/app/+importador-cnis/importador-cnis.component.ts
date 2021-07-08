@@ -195,32 +195,18 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         && this.dadosPassoaPasso.type === 'seguradoExistente'
       ) {
 
-        swal({
-          // position: position,
-          type: 'error',
-          title: 'update or create',
-          showConfirmButton: false,
-          timer: 1500
-        });
-
         this.SeguradoComponent.updateSeguradoImportador(this.userId).then(seguradoId => {
 
           if (Object.keys(this.calculosSelecionado).length > 1
             && typeof this.calculosSelecionado['referencia_calculo'] !== 'undefined') {
 
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
-
               this.PeriodosComponent.crudPeriodosImportador(calculoId).then(status => {
 
-                console.log(status);
-                console.log(seguradoId);
-                console.log(calculoId);
+                this.realizarCalculoContagemTempo(seguradoId, calculoId);
+                this.seguradoId = seguradoId;
+                this.calculoId = calculoId;
 
-                // this.realizarCalculoContagemTempo(seguradoId, calculoId);
-                // this.seguradoId = seguradoId;
-                // this.calculoId = calculoId;
-                // console.log(seguradoId);
-                // console.log(calculoId);
               });
             });
 

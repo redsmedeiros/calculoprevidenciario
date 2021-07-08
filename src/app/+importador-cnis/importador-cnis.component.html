@@ -88,6 +88,46 @@
         <button *ngIf="(eventCountVinculosErros > 0 || eventCountSeguradoErros > 0)"  type="button"   class="btn btn-large btn-block btn-danger">Verifique os dados antes de prosseguir.</button> -->
       </div>
     </div>
+    <div class="form-actions mt-0" >
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="pager wizard no-margin">
+            <li class="previous">
+              <a
+                
+                [class.disabled]="!isUploadReaderComplete"
+                class="btn btn-lg btn-default"
+                title="Retornar ao passo anterior"
+                >Retornar&nbsp;</a
+              >
+            </li>
+            <li class="pull-center">
+              <a
+                data-toggle="modal"
+                data-target="#tutorial-plan"
+                class="
+                  btn btn-lg
+                  txt-color-white
+                  btn-danger
+                  bg-ieprev-red
+                "
+                title=""
+                >Tutorial</a
+              >
+            </li>
+            <li class="next">
+              <a
+              (click)="gravarImportacaoContagemTempo()"
+                [class.disabled]="!isUploadReaderComplete"
+                class="btn btn-lg txt-color-darken"
+                title="Continuar para próximo passo"
+                >Continuar</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </sa-widgets-grid>
   <!-- end widget grid -->
 </div>

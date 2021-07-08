@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
 
+
 @Component({
   selector: 'app-importador-home',
   templateUrl: './importador-home.component.html',
@@ -20,6 +21,8 @@ export class ImportadorHomeComponent implements OnInit {
   private calculoSelecionado;
   private isCalculoSelecionado = false;
   private isUpdatingCalculo = true;
+
+  private iscontagemTempo = false;
 
   private planejamentoSelecionado;
   private isPlanejamentoSelecionado = false;
@@ -78,7 +81,6 @@ export class ImportadorHomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.setPaginaInicial();
   }
 
@@ -214,6 +216,8 @@ export class ImportadorHomeComponent implements OnInit {
       //   break;
     }
   }
+
+
 
   prevStep() {
     let idx = this.steps.indexOf(this.activeStep);

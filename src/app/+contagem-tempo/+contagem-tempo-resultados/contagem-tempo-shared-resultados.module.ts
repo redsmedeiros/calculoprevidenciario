@@ -5,7 +5,6 @@ import { SmartadminModule } from '../../shared/smartadmin.module';
 import { SmartadminDatatableModule } from '../../shared/ui/datatable/smartadmin-datatable.module';
 import { TextMaskModule } from 'angular2-text-mask';
 import { MorrisGraphModule } from 'app/shared/graphs/morris-graph/morris-graph.module';
-//import { ContagemTempoSharedResultadosModule } from './contagem-tempo-shared-resultados.module';
 
 
 import { contagemTempoResultadosRouting } from './contagem-tempo-resultados.routing';
@@ -26,7 +25,6 @@ import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-co
     MorrisGraphModule,
     SmartadminDatatableModule,
     contagemTempoResultadosRouting
-  // ContagemTempoSharedResultadosModule
   ],
   declarations: [
     ContagemTempoResultadosComponent,
@@ -35,6 +33,14 @@ import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-co
     ContagemTempoConclusaoGraphComponent,
     ContagemTempoConclusaoSeguradoComponent,
     ContagemTempoConclusaoExportarRgpsComponent
+  ],
+  exports:[
+    ContagemTempoResultadosComponent,
+    ContagemTempoConclusaoComponent,
+    ContagemTempoConclusaoPeriodosComponent,
+    ContagemTempoConclusaoGraphComponent,
+    ContagemTempoConclusaoSeguradoComponent,
+    ContagemTempoConclusaoExportarRgpsComponent
   ]
 })
-export class ContagemTempoResultadosModule { }
+export class ContagemTempoSharedResultadosModule { }

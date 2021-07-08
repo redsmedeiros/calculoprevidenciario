@@ -71,7 +71,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
-      this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+ 
+        this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+        this.preencherCheckContribuicoes(this.vinculo);
+
     }
   }
 
@@ -93,6 +96,15 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     this.errors.clear('salarioContribuicao');
     this.matrizHasValues = true;
   }
+
+  private preencherCheckContribuicoes(vinculo) {
+
+  this.sc_mm_considerar_carencia = vinculo.sc_mm_considerar_carencia;
+  this.sc_mm_considerar_tempo = vinculo.sc_mm_considerar_tempo;
+  this.sc_mm_ajustar = vinculo.sc_mm_ajustar;
+
+  }
+
 
   preencherMatriz(periodo) {
 
@@ -351,7 +363,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     const saida = {
       acao: 'salvar',
-      matriz: this.matriz
+      matriz: this.matriz,
+      sc_mm_ajustar: this.sc_mm_ajustar,
+      sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
+      sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
     }
     this.eventContribuicoes.emit(saida);
 
@@ -418,7 +433,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   public formatDecimalValue(value) {
 
-    // typeof value === 'string' || 
+    // typeof value === 'string' ||
     if (isNaN(value)) {
 
       return parseFloat(value.replace(/\./g, '').replace(',', '.'));
@@ -429,6 +444,19 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     }
 
+  }
+
+  private setCheckInformacoes() {
+
+    const saida = {
+      acao: 'salvar-check',
+      sc_mm_ajustar: this.sc_mm_ajustar,
+      sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
+      sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
+    }
+    this.eventContribuicoes.emit(saida);
+
+    this.hideContribuicoesCheck();
   }
 
   showContribuicoesCheck() {

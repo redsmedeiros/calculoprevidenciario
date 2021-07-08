@@ -21,7 +21,7 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 @FadeInTop()
 @Component({
-	selector: 'sa-datatables-showcase',
+	selector: 'app-contagem-tempo-resultados-component',
 	templateUrl: './contagem-tempo-resultados.component.html',
 	styleUrls: ['./contagem-tempo-resultados.component.css'],
 	providers: [
