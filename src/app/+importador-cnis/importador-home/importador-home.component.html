@@ -233,6 +233,7 @@
                     >
                       <app-importador-cnis
                         [dadosPassoaPasso]="dadosPassoaPasso"
+                        (eventCalcularContagem)=eventCalcularContagem($event)
                       ></app-importador-cnis>
                     </div>
                   </div>
@@ -267,8 +268,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row pt-4 body-step-component" *ngIf="iscontagemTempo && activeStep.key == 'step3'" >
+                  <!-- iscontagemTempo && -->
+                  <div class="row pt-4 body-step-component" *ngIf=" activeStep.key == 'step3'" >
                     <p>contagem tempo</p>
+                    <app-contagem-tempo-resultados-component
+                    [dadosPassoaPasso]="dadosPassoaPasso"
+                    [idSeguradoSelecionado]="idSeguradoSelecionado"
+                    [idCalculoSelecionado]="idCalculoSelecionado"
+                    ></app-contagem-tempo-resultados-component>
                   </div>
                 </div>
                 <div

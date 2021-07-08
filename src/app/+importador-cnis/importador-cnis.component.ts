@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../shared/animations/fade-in-top.decorator';
@@ -27,6 +27,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
 
   @Input() dadosPassoaPasso;
+  @Output() eventCalcularContagem = new EventEmitter();
 
   public exibirForm = false;
   public isUpdatingSegurado = true;
@@ -203,10 +204,12 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
               this.PeriodosComponent.crudPeriodosImportador(calculoId).then(status => {
 
-                this.realizarCalculoContagemTempo(seguradoId, calculoId);
+                
                 this.seguradoId = seguradoId;
                 this.calculoId = calculoId;
-
+                this.setNextStepContagemTempo();
+                this.realizarCalculoContagemTempo(seguradoId, calculoId);
+                
               });
             });
 
@@ -214,9 +217,11 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
             this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
               this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-                this.realizarCalculoContagemTempo(seguradoId, calculoId);
+               
                 this.seguradoId = seguradoId;
                 this.calculoId = calculoId;
+                this.setNextStepContagemTempo();
+                this.realizarCalculoContagemTempo(seguradoId, calculoId);
               });
             });
 
@@ -229,9 +234,11 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
           this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
             this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-              this.realizarCalculoContagemTempo(seguradoId, calculoId);
+             
               this.seguradoId = seguradoId;
               this.calculoId = calculoId;
+              this.setNextStepContagemTempo();
+              this.realizarCalculoContagemTempo(seguradoId, calculoId);
             });
           });
         });
@@ -327,13 +334,27 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   }
 
   realizarCalculoContagemTempo(seguradoId, calculoId) {
-    window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
-      seguradoId + '/' + calculoId;
 
+
+    if (this.dadosPassoaPasso === 'origem') {
+
+      window.location.href = '/#/contagem-tempo/contagem-tempo-resultados/' +
+        seguradoId + '/' + calculoId;
+
+    }
 
     // window.open(
     //   '/#/contagem-tempo/contagem-tempo-resultados/' + seguradoId + '/' + calculoId,
     //   '_blank');
+  }
+
+  setNextStepContagemTempo() {
+    if (this.dadosPassoaPasso !== 'origem') {
+      this.eventCalcularContagem.emit({
+        seguradoId: this.seguradoId,
+        calculoId: this.calculoId
+      });
+    }
   }
 
 }

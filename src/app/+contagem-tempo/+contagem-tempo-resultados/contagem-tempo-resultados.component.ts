@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChange, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -28,8 +28,12 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 		ErrorService
 	]
 })
-export class ContagemTempoResultadosComponent implements OnInit {
+export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 
+
+	@Input() dadosPassoaPasso;
+	@Input() idSeguradoSelecionado;
+	@Input() idCalculoSelecionado;
 
 	public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 	public isUpdating = false;
@@ -67,6 +71,11 @@ export class ContagemTempoResultadosComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
+		console.log(this.dadosPassoaPasso)
+		console.log(this.idSeguradoSelecionado)
+		console.log(this.idCalculoSelecionado)
+
 		this.periodosList = [];
 		this.isUpdating = true;
 		this.getPeriodosList = true;
@@ -74,9 +83,56 @@ export class ContagemTempoResultadosComponent implements OnInit {
 		// this.updateTabelaPeriodosView();
 	}
 
+
+
+
+	ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+
+		const changedsegurado = changes['segurado'];
+		const changedisUpdating = changes['isUpdating'];
+
+		const dadosPassoaPasso = changes['dadosPassoaPasso'];
+		const idSeguradoSelecionado = changes['idSeguradoSelecionado'];
+		const idCalculoSelecionado = changes['idCalculoSelecionado'];
+
+		// if (!changedisUpdating.currentValue) {
+
+
+
+		//   if (this.dadosPassoaPasso !== undefined
+		// 	&& this.dadosPassoaPasso.origem === 'passo-a-passo'
+		// 	&& this.dadosPassoaPasso.type === 'seguradoExistente'
+		//   ) {
+
+
+		this.periodosList = [];
+		this.isUpdating = true;
+		this.getPeriodosList = true;
+		this.updateTabelasView();
+
+		//   } else {
+
+
+		//   }
+
+		// }
+
+	}
+
+
 	updateTabelasView() {
-		this.idSegurado = this.route.snapshot.params['id_segurado'];
-		this.idsCalculos = this.route.snapshot.params['id'].split(',');
+
+		if (!this.isEmpty(this.route.snapshot.params['id_segurado'])) {
+
+			this.idSegurado = this.route.snapshot.params['id_segurado'];
+			this.idsCalculos = this.route.snapshot.params['id'];
+
+		} else {
+
+			this.idSegurado = this.idSeguradoSelecionado;
+			this.idsCalculos = this.idCalculoSelecionado;
+		}
+
 
 		this.Segurado.find(this.idSegurado)
 			.then(segurado => {
@@ -94,7 +150,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 					}).then(() => { });
 					this.voltar();
 				}
-				this.CalculoContagemTempoService.find(this.idsCalculos[0])
+				this.CalculoContagemTempoService.find(this.idsCalculos)
 					.then(calculo => {
 						this.calculoSetView(calculo);
 						this.isUpdating = false;
@@ -273,7 +329,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 	}
 
 	isEmpty(data) {
-		if (data == undefined || data == '') {
+		if (data == undefined || data == '' || typeof data === 'undefined') {
 			return true;
 		}
 		return false;
@@ -304,7 +360,7 @@ export class ContagemTempoResultadosComponent implements OnInit {
 
 	returnListaPeriodos() {
 		window.location.href = '/#/contagem-tempo/contagem-tempo-periodos/' +
-			this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+			this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos;
 	}
 
 	voltar() {

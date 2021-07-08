@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../services/error.service';
@@ -16,6 +16,8 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
   styleUrls: ['./contagem-tempo-conclusao-periodos.component.css']
 })
 export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
+
+  @Input() idCalculoSelecionado;
 
   public idsCalculos = '';
   public isUpdating = false;
@@ -61,15 +63,14 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   ngOnInit() {
     this.periodosListInicial = [];
     this.isUpdating = true;
-    this.idsCalculos = this.route.snapshot.params['id'].split(',');
     this.updateTabelaPeriodosView();
   }
 
   updateTabelaPeriodosView() {
 
-    this.idsCalculos = this.route.snapshot.params['id'].split(',');
+    this.idsCalculos = this.idCalculoSelecionado;
 
-    this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos[0])
+    this.PeriodosContagemTempoService.getByPeriodosId(this.idsCalculos)
       .then((periodosContribuicao: PeriodosContagemTempo[]) => {
         this.periodosListInicial = [];
         if (periodosContribuicao.length > 0) {
@@ -97,7 +98,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   updateDatatablePeriodos(periodo) {
 
-    if (typeof periodo === 'object' && this.idsCalculos[0] == periodo.id_contagem_tempo) {
+    if (typeof periodo === 'object' && this.idsCalculos == periodo.id_contagem_tempo) {
 
       const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
       const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
@@ -232,7 +233,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   returnListaPeriodos() {
     window.location.href = '/#/contagem-tempo/contagem-tempo-periodos/' +
-      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos[0];
+      this.route.snapshot.params['id_segurado'] + '/' + this.idsCalculos;
   }
 
 
@@ -262,5 +263,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   formatPostDataDate(inputDate) {
     let date = moment(inputDate, 'DD/MM/YYYY');
     return date.format('YYYY-MM-DD');
+  }
+
+  isEmpty(data) {
+    if (data == undefined || data == '' || typeof data === 'undefined') {
+      return true;
+    }
+    return false;
   }
 }

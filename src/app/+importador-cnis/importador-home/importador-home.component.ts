@@ -30,6 +30,9 @@ export class ImportadorHomeComponent implements OnInit {
 
   private isPaginaInicial = true;
 
+  public idSeguradoSelecionado = 393;
+  public idCalculoSelecionado = 127;
+
   public steps = [
     {
       key: 'step1',
@@ -41,9 +44,9 @@ export class ImportadorHomeComponent implements OnInit {
     {
       key: 'step2',
       title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
-      valid: false,
-      checked: false,
-      submitted: false,
+      valid: true,
+      checked: true,
+      submitted: true,
     },
     {
       key: 'step3',
@@ -431,6 +434,13 @@ export class ImportadorHomeComponent implements OnInit {
     // this.setStepValidate('step2', stepStatus);
     // this.isCalculoSelecionado = stepStatus;
     // this.isUpdatingPlan = !stepStatus;
+  }
+
+
+  public eventCalcularContagem(dataRSTImportForm){
+
+    console.log(dataRSTImportForm);
+
   }
 
 

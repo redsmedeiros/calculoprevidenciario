@@ -33,11 +33,11 @@ export class PeriodosContagemTempoService extends ControllerService {
 		});
 	}
 
-	updateListPeriodos(id_calculo,listPeriodos) {
+	updateListPeriodos(id_calculo, listPeriodos) {
 		return new Promise((resolve, reject) => {
 			this.postDataURL(`updatelist`, listPeriodos)
 				.then(data => {
-					console.log(data);
+					//console.log(data);
 					resolve(data);
 					return;
 				}).catch(error => reject(error.response.data));

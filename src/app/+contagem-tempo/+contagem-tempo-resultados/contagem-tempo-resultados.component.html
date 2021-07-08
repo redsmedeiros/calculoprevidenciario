@@ -60,11 +60,15 @@
           [isUpdating]="isUpdating"
           [lastdateNascimento]="lastdateNascimento"
         ></app-contagem-tempo-conclusao-segurado>
+
       </article>
       <article id="article-periodos" class="col-sm-12 col-md-12 col-lg-12">
+
         <app-contagem-tempo-conclusao-periodos
+          [idCalculoSelecionado]="idsCalculos"
           (periodosListRst)="reciverFeedback($event)"
         ></app-contagem-tempo-conclusao-periodos>
+
       </article>
       <article id="article-grafico" class="col-sm-12 col-md-12 col-lg-12">
         <sa-widget
@@ -149,8 +153,7 @@
             data-placement="top"
             tooltip="Clique aqui para imprimir"
           >
-            <span class="btn-label">
-              <i class="fa fa-print"></i> </span
+            <span class="btn-label"> <i class="fa fa-print"></i> </span
             >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Imprimir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </button>
           <!-- <button type="submit" (click)="savePDF()" class="btn btn-labeled btn-info no-margin" id="btn-imprimir-pagina"

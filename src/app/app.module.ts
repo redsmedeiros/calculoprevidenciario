@@ -45,6 +45,7 @@ import { SeguradoPlanService } from './+rgps/rgps-planejamento/rgps-planejamento
 import { ImportadorCnisContribuicoesService } from './+importador-cnis/+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { Auth } from './services/Auth/Auth.service';
+import { ContagemTempoSharedResultadosModule } from './+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-shared-resultados.module';
 
 
 // Application wide providers
@@ -76,7 +77,8 @@ type StoreType = {
     CoreModule,
     SmartadminLayoutModule,
     FileDropModule,
-    routing
+    routing,
+    ContagemTempoSharedResultadosModule
   ],
   exports: [
   ],

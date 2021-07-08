@@ -24,7 +24,7 @@ import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-co
     TextMaskModule,
     MorrisGraphModule,
     SmartadminDatatableModule,
-    contagemTempoResultadosRouting
+  //  contagemTempoResultadosRouting
   ],
   declarations: [
     ContagemTempoResultadosComponent,
@@ -34,7 +34,7 @@ import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-co
     ContagemTempoConclusaoSeguradoComponent,
     ContagemTempoConclusaoExportarRgpsComponent
   ],
-  exports:[
+  exports: [
     ContagemTempoResultadosComponent,
     ContagemTempoConclusaoComponent,
     ContagemTempoConclusaoPeriodosComponent,
