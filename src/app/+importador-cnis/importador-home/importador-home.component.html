@@ -256,13 +256,8 @@
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify pt-1" style="font-size: 14px">
                           <li>
-                            Selecione um benefício futuro cadastrado para
-                            prosseguir com o Planejamento Previdenciário;
-                          </li>
-                          <li>
-                            Caso não tenha benefício futuro cadastrado, insira
-                            as informações no formulário para criar novo
-                            benefício futuro.
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
                           </li>
                         </ul>
                       </div>
@@ -270,11 +265,11 @@
                   </div>
                   <!-- iscontagemTempo && -->
                   <div class="row pt-4 body-step-component" *ngIf=" activeStep.key == 'step3'" >
-                    <p>contagem tempo</p>
                     <app-contagem-tempo-resultados-component
                     [dadosPassoaPasso]="dadosPassoaPasso"
                     [idSeguradoSelecionado]="idSeguradoSelecionado"
                     [idCalculoSelecionado]="idCalculoSelecionado"
+                    (eventCalcularContagemResult)="eventCalcularContagemResult($event)"
                     ></app-contagem-tempo-resultados-component>
                   </div>
                 </div>
@@ -299,17 +294,8 @@
                           style="font-size: 14px"
                         >
                           <li>
-                            O Simulador realizará o cálculo da renda mensal
-                            inicial do benefício futuro, com a inclusão dos
-                            salários de contribuição informados no Passo 3;
-                          </li>
-                          <li>
-                            Clique em Abrir para acessar o cálculo ou em
-                            Imprimir, onde poderá salvar o cálculo, inclusive;
-                          </li>
-                          <li>
-                            Clique em continuar para acessar o relatório com as
-                            informações do Planejamento Previdenciário.
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
                           </li>
                         </ul>
                       </div>
@@ -320,14 +306,7 @@
                     class="body-step-component my-4"
                     *ngIf="activeStep.key == 'step4'"
                   >
-                    <!-- <app-rgps-planejamento-calculo-futuro
-                      *ngIf="isPlanejamentoSelecionado"
-                      [calculo]="calculoSelecionado"
-                      [segurado]="seguradoSelecionado"
-                      [planejamento]="planejamentoSelecionado"
-                      [isPlanejamentoSelecionado]="isPlanejamentoSelecionado"
-                    >
-                    </app-rgps-planejamento-calculo-futuro> -->
+                    <p>Formulário RMI</p>
                   </div>
                   <br />
                   <br />
@@ -355,9 +334,8 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="form-actions mt-0"  *ngIf="
-                activeStep.key == 'step1' &&
+                activeStep.key !== 'step2' &&
                 (dadosPassoaPasso.type === 'cnis' ||
                   dadosPassoaPasso.type === 'manual' ||
                   dadosPassoaPasso.type === 'seguradoExistente') &&

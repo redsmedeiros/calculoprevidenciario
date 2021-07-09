@@ -20,7 +20,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   @Input() calculo;
   @Input() public periodosList = [];
 
+  @Input() dadosPassoaPasso;
   @Output() limitesTempoTotal = new EventEmitter();
+  @Output() contagemTempoConclusaoSave = new EventEmitter();
 
 
   public fimContador88 = this.toMoment('05/10/1988');
@@ -1007,10 +1009,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           .update(this.calculo)
           .then(model => {
             // console.log('update ok');
+            this.contagemTempoConclusaoSaveRST();
           })
           .catch(errors => this.Errors.add(errors));
       }
-    }, 2000);
+    }, 1000);
 
   }
 
@@ -1046,6 +1049,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label], label);
       this.dadosParaExportar['total' + label] = objExport;
       // this.dadosParaExportar.push(objExport);
+    });
+
+  }
+
+  public contagemTempoConclusaoSaveRST(){
+
+    this.contagemTempoConclusaoSave.emit({
+      export_result: this.dadosParaExportar,
+      limitesDoVinculo: this.limitesDoVinculo,
+      resultComplete: true
     });
 
   }

@@ -8,7 +8,8 @@
         </h3>
       </div>
     </div>
-    <div class="row mb-3 not-print">
+    
+    <div class="row mb-3 not-print" *ngIf="dadosPassoaPasso.origem === 'contagem'" >
       <div class="col-sm-12 col-md-12 col-lg-12">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -117,10 +118,12 @@
           <div *ngIf="!getPeriodosList">
             <div class="widget-body no-padding heigth-auto">
               <app-contagem-tempo-conclusao
+                [dadosPassoaPasso]="dadosPassoaPasso"
                 [calculo]="calculo"
                 [segurado]="segurado"
                 [periodosList]="periodosList"
                 (limitesTempoTotal)="reciverFeedbackLastdate($event)"
+                (contagemTempoConclusaoSave)="reciverFeedbackContagemTempoConclusaoSave($event)"
               ></app-contagem-tempo-conclusao>
             </div>
           </div>
@@ -167,6 +170,46 @@
         </sa-widget> -->
       </article>
     </div>
+     <!-- <div class="form-actions mt-5" *ngIf="dadosPassoaPasso.origem !== 'contagem'" >
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="pager wizard no-margin">
+            <li class="previous">
+              <a
+                
+                [class.disabled]="!isUploadReaderComplete"
+                class="btn btn-lg btn-default"
+                title="Retornar ao passo anterior"
+                >Retornar&nbsp;</a
+              >
+            </li>
+            <li class="pull-center">
+              <a
+                data-toggle="modal"
+                data-target="#tutorial-plan"
+                class="
+                  btn btn-lg
+                  txt-color-white
+                  btn-danger
+                  bg-ieprev-red
+                "
+                title=""
+                >Tutorial</a
+              >
+            </li>
+            <li class="next">
+              <a
+              (click)="gravarImportacaoContagemTempo()"
+                [class.disabled]="!isUploadReaderComplete"
+                class="btn btn-lg txt-color-darken"
+                title="Continuar para próximo passo"
+                >Continuar</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
     <!-- end row -->
   </sa-widgets-grid>
   <!-- end widget grid -->

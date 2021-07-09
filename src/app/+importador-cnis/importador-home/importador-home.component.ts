@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
 import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -33,6 +33,8 @@ export class ImportadorHomeComponent implements OnInit {
   public idSeguradoSelecionado;
   public idCalculoSelecionado;
 
+  public exportResultContagemTempo;
+
   public steps = [
     {
       key: 'step1',
@@ -64,7 +66,7 @@ export class ImportadorHomeComponent implements OnInit {
     },
     {
       key: 'step5',
-      title: 'Relatório',
+      title: 'Relatório Renda Mensal Inicial',
       valid: false,
       checked: false,
       submitted: false,
@@ -87,16 +89,24 @@ export class ImportadorHomeComponent implements OnInit {
     this.setPaginaInicial();
   }
 
+  
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+
+    const steps = changes['steps'];
+    const changedisUpdating = changes['isUpdating'];
+
+  }
+
 
   private setPaginaInicial() {
-
 
     // sessionStorage.removeItem('inicialPassoaPasso');
 
     // console.log(sessionStorage.getItem('inicialPassoaPasso'));
 
-    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') == ''
-      || sessionStorage.getItem('inicialPassoaPasso') == undefined);
+    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') === ''
+      || sessionStorage.getItem('inicialPassoaPasso') === undefined
+      || typeof sessionStorage.getItem('inicialPassoaPasso') === 'undefined');
   }
 
 
@@ -173,7 +183,7 @@ export class ImportadorHomeComponent implements OnInit {
 
     //  console.log(steo);
     //  console.log(this.activeStep);
-    //this.setStepDefaultRetorno(stepNumber)
+    // this.setStepDefaultRetorno(stepNumber)
 
 
     if (steo.key === 'step1' || steo.key === 'step2' || steo.key === 'step3') {
@@ -223,7 +233,7 @@ export class ImportadorHomeComponent implements OnInit {
 
 
   prevStep() {
-    let idx = this.steps.indexOf(this.activeStep);
+    const idx = this.steps.indexOf(this.activeStep);
     if (idx > 0) {
       this.activeStep = this.steps[idx - 1];
     }
@@ -250,7 +260,7 @@ export class ImportadorHomeComponent implements OnInit {
       let idx = this.steps.indexOf(this.activeStep);
       this.activeStep = null;
       while (!this.activeStep) {
-        idx = idx == this.steps.length - 1 ? 0 : idx + 1;
+        idx = idx === this.steps.length - 1 ? 0 : idx + 1;
         if (!this.steps[idx].valid || !this.steps[idx].checked) {
           this.activeStep = this.steps[idx];
         }
@@ -403,7 +413,7 @@ export class ImportadorHomeComponent implements OnInit {
     this.seguradoSelecionado = dataSegurado;
     this.checkedUnique(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado');
     stepStatus = (this.isExits(this.seguradoSelecionado) && isObject(this.seguradoSelecionado));
-    //stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
+    // stepStatus = (this.isSeguradoSelecionado && dataSegurado.id === this.seguradoSelecionado.id) ? false : true;
 
     if (this.checkedUniqueCount(`${dataSegurado.id}-checkbox-segurado`, '.checkboxSegurado') === 0) {
       stepStatus = false;
@@ -430,27 +440,35 @@ export class ImportadorHomeComponent implements OnInit {
       stepStatus = false;
       this.calculoSelecionado = {};
     }
-
-    // this.setStepValidate('step2', stepStatus);
-    // this.isCalculoSelecionado = stepStatus;
-    // this.isUpdatingPlan = !stepStatus;
+    
   }
 
 
-  public eventCalcularContagem(dataRSTImportForm){
-
-    console.log(dataRSTImportForm);
+  public eventCalcularContagem(dataRSTImportForm) {
 
     if (this.isExits(dataRSTImportForm.seguradoId)
       && this.isExits(dataRSTImportForm.calculoId)) {
 
+      this.idSeguradoSelecionado = dataRSTImportForm.seguradoId;
+      this.idCalculoSelecionado = dataRSTImportForm.calculoId;
+      this.setStepValidate('step2', true);
+      this.nextStep();
 
-        console.log(dataRSTImportForm);
+    }
 
-        this.idSeguradoSelecionado = dataRSTImportForm.seguradoId;
-        this.idCalculoSelecionado = dataRSTImportForm.calculoId;
-        this.setStepValidate('step2', true);
-        this.nextStep();
+  }
+
+
+  public eventCalcularContagemResult(data) {
+
+    if (this.isExits(data) && data.resultComplete) {
+
+      this.exportResultContagemTempo = data.export_result;
+      this.setStepValidate('step3', data.resultComplete);
+
+      sessionStorage.setItem(
+        'exportResultContagemTempo', 
+        JSON.stringify(this.exportResultContagemTempo));
 
     }
 
@@ -510,8 +528,8 @@ export class ImportadorHomeComponent implements OnInit {
 
   private isExits(value) {
     return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
-      value !== undefined && value != '')
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
       ? true : false;
   }
 

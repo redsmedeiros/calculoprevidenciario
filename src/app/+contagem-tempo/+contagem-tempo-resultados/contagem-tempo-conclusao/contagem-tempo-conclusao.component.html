@@ -14,7 +14,7 @@
       </th>
       <th colspan="3" class="text-center">Tempo de Contribuição</th>
       <th rowspan="2" class="text-center">Carência</th>
-      <th rowspan="2" class="text-center not-print">
+      <th rowspan="2" class="text-center not-print" *ngIf="dadosPassoaPasso === 'contagem'" >
         Exportar para RMI do RGPS
         <i
           class="fa fa-question-circle fa-lg text-info"
@@ -39,7 +39,7 @@
       </td>
       <td class="text-center">{{ carencia88 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator88.fullDays > 0">
+        <span *ngIf="tempoTotalConFator88.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'04/10/1988'"
@@ -56,7 +56,7 @@
       <td class="text-center">{{ tempoTotalConFator91.days }}</td>
       <td class="text-center">{{ carencia91 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator91.fullDays > 0">
+        <span *ngIf="tempoTotalConFator91.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'04/04/1991'"
@@ -73,7 +73,7 @@
       <td class="text-center">{{ tempoTotalConFator94.days }}</td>
       <td class="text-center">{{ carencia94 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator94.fullDays > 0">
+        <span *ngIf="tempoTotalConFator94.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'01/07/1994'"
@@ -90,7 +90,7 @@
       <td class="text-center">{{ tempoTotalConFator98.days }}</td>
       <td class="text-center">{{ carencia98 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator98.fullDays > 0">
+        <span *ngIf="tempoTotalConFator98.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'15/12/1998'"
@@ -107,7 +107,7 @@
       <td class="text-center">{{ tempoTotalConFator99.days }}</td>
       <td class="text-center">{{ carencia99 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator99.fullDays > 0">
+        <span *ngIf="tempoTotalConFator99.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'28/11/1999'"
@@ -124,7 +124,7 @@
       <td class="text-center">{{ tempoTotalConFator19.days }}</td>
       <td class="text-center">{{ carencia19 }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator19.fullDays > 0">
+        <span *ngIf="tempoTotalConFator19.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="'13/11/2019'"
@@ -141,7 +141,7 @@
       <td class="text-center">{{ tempoTotalConFator.days }}</td>
       <td class="text-center">{{ carencia }}</td>
       <td class="text-center no-padding not-print">
-        <span *ngIf="tempoTotalConFator.fullDays > 0">
+        <span *ngIf="tempoTotalConFator.fullDays > 0 && dadosPassoaPasso === 'contagem'">
           <app-contagem-tempo-conclusao-exportar-rgps
             [seguradoId]="segurado.id"
             [dataExportacao]="limitesDoVinculo.fim.format('DD/MM/YYYY')"

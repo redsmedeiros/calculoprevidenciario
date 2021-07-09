@@ -34,6 +34,7 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 	@Input() dadosPassoaPasso;
 	@Input() idSeguradoSelecionado;
 	@Input() idCalculoSelecionado;
+	@Output() eventCalcularContagemResult = new EventEmitter();
 
 	public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 	public isUpdating = false;
@@ -72,13 +73,18 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 
 	ngOnInit() {
 
-		console.log(this.dadosPassoaPasso)
-		console.log(this.idSeguradoSelecionado)
-		console.log(this.idCalculoSelecionado)
-
 		this.periodosList = [];
 		this.isUpdating = true;
 		this.getPeriodosList = true;
+
+		if (this.dadosPassoaPasso == undefined) {
+			this.dadosPassoaPasso = {
+				origem: 'contagem',
+				type: 'auto'
+			};
+		}
+
+
 		this.updateTabelasView();
 		// this.updateTabelaPeriodosView();
 	}
@@ -301,6 +307,27 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 
 	// }
 
+
+
+
+	public setNextStepContagemTempoResultado(data) {
+		if (this.dadosPassoaPasso.origem !== 'contagem') {
+
+			this.eventCalcularContagemResult.emit({
+				resultComplete: data.resultComplete,
+				seguradoId: this.idSegurado,
+				calculoId: this.idsCalculos,
+				export_result: data.export_result,
+			});
+		}
+	}
+
+
+	public reciverFeedbackContagemTempoConclusaoSave(data) {
+		
+		this.setNextStepContagemTempoResultado(data);
+
+	}
 
 
 

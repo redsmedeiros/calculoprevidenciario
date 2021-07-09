@@ -574,7 +574,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.PeriodosContagemTempoService.find(vinculoARemover.id)
         .then(periodo => {
           this.PeriodosContagemTempoService.destroy(periodo)
-            .then(() => { 
+            .then(() => {
 
             }).catch((err) => {
               // this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
@@ -754,7 +754,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       case 'salvar':
         this.setCheckVinculo(event);
         this.matrixToVinculoContribuicoes(event.matriz);
-        this.contribuicoes.hide();
+        this.isValidPeriodoContribuicoes(this.vinculosList[this.vinculo_index])
         break;
     }
   }
@@ -767,9 +767,30 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   }
 
-  matrixToVinculoContribuicoes(matriz) {
+  private isValidPeriodoContribuicoes(vinculo) {
+    let checkContrib = false;
 
-    console.log(matriz);
+    console.log(vinculo);
+
+    const checkNumContricuicoes = !(vinculo.contribuicoes_pendentes > 0
+      || vinculo.contribuicoes_pendentes_mm > 0);
+
+    const checkNumStatusContribuicoes = !(vinculo.sc_mm_ajustar > 0
+      || vinculo.sc_mm_considerar_carencia > 0 
+      || vinculo.sc_mm_considerar_tempo > 0);
+
+    if (checkNumContricuicoes) {
+      checkContrib = true;
+    }
+
+
+    if (checkContrib) {
+      this.contribuicoes.hide();
+    }
+
+  }
+
+  matrixToVinculoContribuicoes(matriz) {
 
     const contribuicoesList = [];
     let mes = 0;
@@ -784,7 +805,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
         if (contribuicao != '') {
           chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
-          msc = periodo.msc[mes];
+          msc = periodo.msc[mes-1];
 
           contribuicoesList.push({
             cp: chave,
@@ -804,6 +825,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.vinculosList[this.vinculo_index].contribuicoes = contribuicoesList;
     this.vinculosList[this.vinculo_index].contribuicoes_pendentes = result ? result : 0;
     this.vinculosList[this.vinculo_index].contribuicoes_pendentes_mm = result_mm ? result_mm : 0;
+    this.vinculosList[this.vinculo_index].contribuicoes_count = contribuicoesList.length;
 
 
     // this.vinculosList.forEach(vinculo => {
