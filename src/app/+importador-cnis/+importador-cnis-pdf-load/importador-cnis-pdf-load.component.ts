@@ -242,7 +242,10 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
       indicador: null,
       periodo: null,
       contribuicoes: null,
-      index: null
+      index: null,
+      sc_mm_ajustar: null,
+      sc_mm_considerar_tempo: null,
+      sc_mm_considerar_carencia: null,
     }
 
     vinculo.cnpj = this.selecionarDadosCNPJ(text_vinculo);

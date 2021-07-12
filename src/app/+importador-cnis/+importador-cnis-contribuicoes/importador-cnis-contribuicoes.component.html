@@ -471,8 +471,9 @@
         Voltar
       </button>
       <button
+        *ngIf="isSC_mm_ajustar_btn" 
         type="button"
-        class="btn btn-default pull-left"
+        class="btn btn-warning pull-left"
         (click)="showContribuicoesCheck()"
       >
         opções de tempo e carência

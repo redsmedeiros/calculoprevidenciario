@@ -42,9 +42,13 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   public contribuicao = [];
   private hashKey;
 
-  public sc_mm_considerar_carencia;
-  public sc_mm_considerar_tempo;
-  public sc_mm_ajustar;
+  private isSC_mm_ajustar_btn = false;
+  public sc_mm_considerar_carencia = null;
+  public sc_mm_considerar_tempo = null;
+  public sc_mm_ajustar = null;
+
+  public result_sc = 0
+  public result_sc_mm = 0;
 
   public matrixTableOptions = {
     paging: false,
@@ -75,8 +79,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
 
-      this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
       this.preencherCheckContribuicoes(this.vinculo);
+      this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
 
     }
   }
@@ -102,9 +106,20 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   private preencherCheckContribuicoes(vinculo) {
 
-    this.sc_mm_considerar_carencia = vinculo.sc_mm_considerar_carencia;
-    this.sc_mm_considerar_tempo = vinculo.sc_mm_considerar_tempo;
-    this.sc_mm_ajustar = vinculo.sc_mm_ajustar;
+    this.isSC_mm_ajustar_btn = false
+
+    if (!this.isEmpty(vinculo.sc_mm_considerar_carencia)) {
+      this.sc_mm_considerar_carencia = vinculo.sc_mm_considerar_carencia;
+    }
+
+    if (!this.isEmpty(vinculo.sc_mm_considerar_tempo)) {
+      this.sc_mm_considerar_tempo = vinculo.sc_mm_considerar_tempo;
+    }
+
+    if (!this.isEmpty(vinculo.sc_mm_ajustar)) {
+      this.sc_mm_ajustar = vinculo.sc_mm_ajustar;
+    }
+
 
   }
 
@@ -135,7 +150,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
     valores[+splitPeriodo[0] - 1] = periodo.sc;
-    msc[+splitPeriodo[0] - 1] = this.getClassSalarioContribuicao(mes, ano, periodo.sc, null, true); ;
+    msc[+splitPeriodo[0] - 1] = this.getClassSalarioContribuicao(mes, ano, periodo.sc, null, true);;
 
     const obj = {
       ano: ano,
@@ -194,7 +209,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   isEmpty(data) {
 
-    if (data === undefined || data === '' || typeof data === 'undefined') {
+    if (data === undefined
+      || data === ''
+      || typeof data === 'undefined'
+      || data === 'undefined') {
       return true;
     }
     return false;
@@ -230,6 +248,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       const anofinal = this.finalPeriodo.split('/')[1];
       const mesfinal = this.finalPeriodo.split('/')[0];
       let mesi = 0;
+      this.isSC_mm_ajustar_btn = false;
 
       this.matriz.map(ano => {
 
@@ -248,7 +267,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
         }
       });
-
+      console.log(this.isSC_mm_ajustar_btn);
     } else {
 
       swal({
@@ -364,15 +383,22 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   salvarContribuicoes() {
 
+    if (this.isValidPeriodoContribuicoes(this.matriz)) {
+
     const saida = {
       acao: 'salvar',
       matriz: this.matriz,
       sc_mm_ajustar: this.sc_mm_ajustar,
       sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
       sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
+      result_sc: this.result_sc,
+      result_sc_mm: this.result_sc_mm
     }
-    this.eventContribuicoes.emit(saida);
-
+      this.eventContribuicoes.emit(saida);
+    }else{
+      this.toastAlert('error', 'Verifique a Data Início e a Data Fim do período', null);
+      this.showContribuicoesCheck()
+    }
   }
 
 
@@ -408,6 +434,11 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       ClassRst = 1
     }
 
+    // habilitar as opções de correcao e descarte
+    if (!this.isSC_mm_ajustar_btn && ClassRst) {
+      this.isSC_mm_ajustar_btn = true;
+    }
+
     if (rst) {
 
       return ClassRst;
@@ -418,7 +449,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       this.matriz[index].msc[indexMes] = ClassRst;
 
     }
-
 
   }
 
@@ -459,10 +489,104 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
       sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
     }
-    this.eventContribuicoes.emit(saida);
 
+    this.eventContribuicoes.emit(saida);
     this.hideContribuicoesCheck();
+
   }
+
+
+  private isValidPeriodoContribuicoes(matriz) {
+
+    let checkContrib = false;
+
+    console.log(matriz);
+    const contribuicoesList = [];
+    let mes = 0;
+    let chave = '';
+    let msc = 0;
+
+    matriz.forEach(periodo => {
+
+      periodo.valores.forEach(contribuicao => {
+
+        mes++;
+
+        if (contribuicao != '') {
+          chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
+          msc = periodo.msc[mes - 1];
+
+          contribuicoesList.push({
+            cp: chave,
+            sc: contribuicao,
+            msc: msc
+          });
+        }
+
+      });
+
+      mes = 0;
+    });
+
+    console.log(contribuicoesList);
+
+    this.result_sc = this.countPendenciasSC(contribuicoesList, '0,00');
+    this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
+
+    const checkNumContricuicoes = !(this.result_sc > 0 || this.result_sc_mm > 0);
+
+    const checkNumStatusContribuicoes = (this.sc_mm_ajustar !== null
+      && this.sc_mm_considerar_carencia !== null
+      && this.sc_mm_considerar_tempo !== null);
+
+
+    console.log(checkNumContricuicoes);
+    console.log(checkNumStatusContribuicoes);
+
+
+    if (checkNumContricuicoes || (checkNumContricuicoes && checkNumStatusContribuicoes)) {
+      checkContrib = true;
+    }
+
+    console.log(checkContrib);
+
+    return checkContrib;
+
+  }
+
+
+  private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
+
+    if (type === 'mm') {
+      return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
+    }
+
+    return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
+
+  }
+
+  
+
+  toastAlert(type, title, position) {
+
+    position = (!position) ? 'top-end' : position;
+
+    swal({
+      position: position,
+      type: type,
+      title: title,
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+  }
+
+
+
+  public leftFillNum(num, targetLength) {
+    return num.toString().padStart(targetLength, 0);
+  }
+
 
   showContribuicoesCheck() {
     this.contribuicoesCheck.show();
