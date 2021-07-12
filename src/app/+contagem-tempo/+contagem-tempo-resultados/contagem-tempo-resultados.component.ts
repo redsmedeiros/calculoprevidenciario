@@ -46,6 +46,7 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 	public calculo: any = {};
 	public periodo: any = {};
 	public periodosList = [];
+	public periodosListDB = [];
 
 	public lastdateNascimento = { years: 0, months: 0, days: 0, fullDays: 0 };
 
@@ -176,7 +177,8 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 	// }
 
 	reciverFeedback(rstPeriodos) {
-		this.periodosList = rstPeriodos;
+		this.periodosList = rstPeriodos.listRST;
+		this.periodosListDB = rstPeriodos.listDB;
 		this.getPeriodosList = false;
 	}
 
@@ -312,6 +314,14 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 
 	public setNextStepContagemTempoResultado(data) {
 		if (this.dadosPassoaPasso.origem !== 'contagem') {
+
+			console.log(this.segurado)
+			console.log(this.calculo)
+			console.log(this.periodosListDB)
+			
+			sessionStorage.setItem('seguradoSelecionado', JSON.stringify(this.segurado));
+			sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculo));
+			sessionStorage.setItem('periodosSelecionado', JSON.stringify(this.periodosListDB));
 
 			this.eventCalcularContagemResult.emit({
 				resultComplete: data.resultComplete,

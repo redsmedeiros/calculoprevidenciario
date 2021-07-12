@@ -22,6 +22,8 @@ export class ImportadorHomeComponent implements OnInit {
   private isCalculoSelecionado = false;
   private isUpdatingCalculo = true;
 
+  private periodosSelecionado;
+
   private iscontagemTempo = false;
 
   private planejamentoSelecionado;
@@ -183,7 +185,7 @@ export class ImportadorHomeComponent implements OnInit {
 
     //  console.log(steo);
     //  console.log(this.activeStep);
-    // this.setStepDefaultRetorno(stepNumber)
+   //this.setStepDefaultRetorno(stepNumber)
 
 
     if (steo.key === 'step1' || steo.key === 'step2' || steo.key === 'step3') {
@@ -212,6 +214,9 @@ export class ImportadorHomeComponent implements OnInit {
 
         break;
       case 'step2':
+
+      console.log(step)
+      this.dadosPassoaPasso = { origem: 'passo-a-passo', type: 'seguradoExistente' }
 
         // this.isPlanejamentoSelecionado = false;
         // this.planejamentoSelecionado = {}
@@ -400,7 +405,7 @@ export class ImportadorHomeComponent implements OnInit {
   //     this.setStepValidate(step, false);
   //   }
 
-  //   this.isUpdatingPlan = false;
+  // //  this.isUpdatingPlan = false;
 
   // }
 
@@ -440,7 +445,7 @@ export class ImportadorHomeComponent implements OnInit {
       stepStatus = false;
       this.calculoSelecionado = {};
     }
-    
+
   }
 
 
@@ -460,6 +465,7 @@ export class ImportadorHomeComponent implements OnInit {
 
 
   public eventCalcularContagemResult(data) {
+    console.log(data);
 
     if (this.isExits(data) && data.resultComplete) {
 
@@ -471,6 +477,16 @@ export class ImportadorHomeComponent implements OnInit {
         JSON.stringify(this.exportResultContagemTempo));
 
     }
+
+  }
+
+
+
+  public eventPrevStepPassoaPasso(data){
+    
+    this.setStepValidate(data.activeStep, false);
+    const stepRetun = this.steps.filter((step)=> data.activeStep === step.key);
+    this.activeStep = stepRetun[0];
 
   }
 

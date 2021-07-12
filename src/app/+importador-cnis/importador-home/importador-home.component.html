@@ -62,12 +62,13 @@
                     *ngFor="let pane of steps; let i = index"
                     [class.active]="activeStep == pane"
                   >
-                    <a (click)="setActiveStep(pane)">
+                    <a (click)="setActiveStep(pane)"
+                    >
                       <span class="step">
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
                       </span>
-                      <span class="title">{{ pane.title }}</span>
+                      <span class="title">{{ pane.tlitle }}</span>
                     </a>
                   </li>
                 </ul>
@@ -221,7 +222,7 @@
                     </div>
                   </div>
 
-                  <div class="row body-step-component">
+                  <div class="row body-step-component" >
                     <div
                       *ngIf="
                         activeStep.key == 'step2' &&
@@ -234,6 +235,7 @@
                       <app-importador-cnis
                         [dadosPassoaPasso]="dadosPassoaPasso"
                         (eventCalcularContagem)=eventCalcularContagem($event)
+                        (eventPrevStepPassoaPasso)=eventPrevStepPassoaPasso($event)
                       ></app-importador-cnis>
                     </div>
                   </div>

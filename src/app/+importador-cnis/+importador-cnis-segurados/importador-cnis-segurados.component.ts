@@ -124,7 +124,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   public createSeguradoImportador(userId) {
 
      this.formData.user_id = userId;
-     this.formData.funcao = 'contagem';
+     this.formData.funcao = 'contagem';   
 
     return this.Segurado.save(this.formData)
       .then((model: SeguradoModel) => {

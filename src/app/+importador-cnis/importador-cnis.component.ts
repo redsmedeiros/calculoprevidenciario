@@ -28,6 +28,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   @Input() dadosPassoaPasso;
   @Output() eventCalcularContagem = new EventEmitter();
+  @Output() eventPrevStepPassoaPasso = new EventEmitter();
 
   public exibirForm = false;
   public isUpdatingSegurado = true;
@@ -204,12 +205,12 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
             this.CalculosComponent.updateCalculoImportador(seguradoId).then(calculoId => {
               this.PeriodosComponent.crudPeriodosImportador(calculoId).then(status => {
 
-                
+
                 this.seguradoId = seguradoId;
                 this.calculoId = calculoId;
                 this.setNextStepContagemTempo();
                 this.realizarCalculoContagemTempo(seguradoId, calculoId);
-                
+
               });
             });
 
@@ -217,7 +218,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
             this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
               this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-               
+
                 this.seguradoId = seguradoId;
                 this.calculoId = calculoId;
                 this.setNextStepContagemTempo();
@@ -234,7 +235,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
         this.SeguradoComponent.createSeguradoImportador(this.userId).then(seguradoId => {
           this.CalculosComponent.createCalculoImportador(seguradoId).then(calculoId => {
             this.PeriodosComponent.createPeriodosImportador(calculoId).then(status => {
-             
+
               this.seguradoId = seguradoId;
               this.calculoId = calculoId;
               this.setNextStepContagemTempo();
@@ -256,6 +257,13 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       });
 
     }
+
+  }
+
+
+  public prevStepPassoaPasso() {
+
+    this.eventPrevStepPassoaPasso.emit({activeStep: 'step1'});
 
   }
 

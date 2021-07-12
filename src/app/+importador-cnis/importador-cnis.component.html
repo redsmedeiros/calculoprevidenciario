@@ -35,7 +35,7 @@
         </div>
       </article>
     </div>
-    <div *ngIf="!isUploadReaderComplete">
+    <div *ngIf="!isUploadReaderComplete"  style="min-height: 300px;">
       <app-importador-cnis-pdf-load
         (infoSegurado)="reciverInfoSegurado($event)"
         (infoVinculos)="reciverInfoVinculos($event)"
@@ -93,9 +93,10 @@
         <div class="col-sm-12">
           <ul class="pager wizard no-margin">
             <li class="previous">
+              <!-- [class.disabled]="!isUploadReaderComplete" -->
               <a
-                
-                [class.disabled]="!isUploadReaderComplete"
+              (click)="prevStepPassoaPasso()"
+               
                 class="btn btn-lg btn-default"
                 title="Retornar ao passo anterior"
                 >Retornar&nbsp;</a

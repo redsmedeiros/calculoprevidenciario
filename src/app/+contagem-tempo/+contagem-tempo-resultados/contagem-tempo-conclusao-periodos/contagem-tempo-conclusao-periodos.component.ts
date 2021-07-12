@@ -84,7 +84,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
           }
 
           this.periodosList = this.periodosListInicial;
-          this.periodosListRst.emit(this.periodosList);
+          this.periodosListRst.emit({listRST: this.periodosList,
+                                    listDB: periodosContribuicao});
         }
 
         // this.tableOptionsPeriodos = {
