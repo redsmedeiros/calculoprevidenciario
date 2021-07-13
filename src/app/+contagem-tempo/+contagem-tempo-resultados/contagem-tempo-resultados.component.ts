@@ -315,13 +315,17 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
 	public setNextStepContagemTempoResultado(data) {
 		if (this.dadosPassoaPasso.origem !== 'contagem') {
 
-			console.log(this.segurado)
-			console.log(this.calculo)
-			console.log(this.periodosListDB)
+			sessionStorage.removeItem('seguradoSelecionado');
+			sessionStorage.removeItem('calculosSelecionado');
+			sessionStorage.removeItem('periodosSelecionado');
 			
 			sessionStorage.setItem('seguradoSelecionado', JSON.stringify(this.segurado));
 			sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculo));
 			sessionStorage.setItem('periodosSelecionado', JSON.stringify(this.periodosListDB));
+
+			console.log(this.segurado)
+			console.log(this.calculo)
+			console.log(this.periodosListDB)
 
 			this.eventCalcularContagemResult.emit({
 				resultComplete: data.resultComplete,

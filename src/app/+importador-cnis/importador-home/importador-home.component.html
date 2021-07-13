@@ -349,7 +349,7 @@
                         <li class="previous">
                           <a
                             (click)="prevStep()"
-                            [class.disabled]="steps.indexOf(activeStep) == 0"
+                            [class.disabled]="steps.indexOf(activeStep) == 0 || (activeStep !== step3 && !activeStep.valid)"
                             class="btn btn-lg btn-default"
                             title="Retornar ao passo anterior"
                             >Retornar&nbsp;</a

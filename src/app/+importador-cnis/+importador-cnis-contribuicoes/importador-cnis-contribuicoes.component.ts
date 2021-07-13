@@ -267,7 +267,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
         }
       });
-      console.log(this.isSC_mm_ajustar_btn);
+
     } else {
 
       swal({
@@ -365,7 +365,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
 
-
   changedGridContribuicoes(ano, event, indice) {
 
     const valor = event.target.value;
@@ -385,17 +384,17 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValidPeriodoContribuicoes(this.matriz)) {
 
-    const saida = {
-      acao: 'salvar',
-      matriz: this.matriz,
-      sc_mm_ajustar: this.sc_mm_ajustar,
-      sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
-      sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
-      result_sc: this.result_sc,
-      result_sc_mm: this.result_sc_mm
-    }
+      const saida = {
+        acao: 'salvar',
+        matriz: this.matriz,
+        sc_mm_ajustar: this.sc_mm_ajustar,
+        sc_mm_considerar_tempo: this.sc_mm_considerar_tempo,
+        sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
+        result_sc: this.result_sc,
+        result_sc_mm: this.result_sc_mm
+      }
       this.eventContribuicoes.emit(saida);
-    }else{
+    } else {
       this.toastAlert('error', 'Verifique a Data Início e a Data Fim do período', null);
       this.showContribuicoesCheck()
     }
@@ -435,7 +434,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
     // habilitar as opções de correcao e descarte
-    if (!this.isSC_mm_ajustar_btn && ClassRst) {
+    if ((!this.isSC_mm_ajustar_btn && ClassRst) || (valor <= 0.00)) {
       this.isSC_mm_ajustar_btn = true;
     }
 
@@ -528,27 +527,31 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       mes = 0;
     });
 
-    console.log(contribuicoesList);
-
     this.result_sc = this.countPendenciasSC(contribuicoesList, '0,00');
     this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
 
     const checkNumContricuicoes = !(this.result_sc > 0 || this.result_sc_mm > 0);
 
-    const checkNumStatusContribuicoes = (this.sc_mm_ajustar !== null
-      && this.sc_mm_considerar_carencia !== null
-      && this.sc_mm_considerar_tempo !== null);
+    console.log(this.sc_mm_considerar_tempo)
+    console.log(this.sc_mm_considerar_tempo === 1)
+    console.log(this.sc_mm_considerar_tempo === 0)
+    console.log(this.sc_mm_ajustar)
+
+    const checkNumStatusContribuicoes = (
+      this.sc_mm_considerar_carencia !== null &&
+      (this.sc_mm_considerar_tempo === 0 || (this.sc_mm_considerar_tempo === 1 && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
+    );
 
 
     console.log(checkNumContricuicoes);
     console.log(checkNumStatusContribuicoes);
 
 
-    if (checkNumContricuicoes || (checkNumContricuicoes && checkNumStatusContribuicoes)) {
+    if (checkNumContricuicoes || (!checkNumContricuicoes && checkNumStatusContribuicoes)) {
       checkContrib = true;
     }
 
-    console.log(checkContrib);
+    // console.log(checkContrib);
 
     return checkContrib;
 
@@ -565,7 +568,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   }
 
-  
+
 
   toastAlert(type, title, position) {
 

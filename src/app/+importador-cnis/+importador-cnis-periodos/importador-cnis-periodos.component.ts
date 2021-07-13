@@ -58,9 +58,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public countVinculosErros = 0;
 
-  public sc_mm_considerar_carencia;
-  public sc_mm_considerar_tempo;
-  public sc_mm_ajustar;
+  public sc_mm_considerar_carencia = null;
+  public sc_mm_considerar_tempo = null;
+  public sc_mm_ajustar = null;
 
 
   @Output() eventCountVinculosErros = new EventEmitter();
@@ -276,9 +276,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: (vinculo.carencia === 1) ? 'Sim' : 'Não',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        sc_mm_ajustar: vinculo.sc_mm_ajustar,
-        sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
+        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
+        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
+        sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+        sc_mm_ajustar: vinculo.sc_mm_ajustar,
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: (this.vinculosList.length) + 1
@@ -321,9 +324,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: 'Sim',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        sc_mm_ajustar: vinculo.sc_mm_ajustar,
-        sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
+        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
+        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
+        sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+        sc_mm_ajustar: vinculo.sc_mm_ajustar,
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: vinculo.index
@@ -356,9 +362,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           licenca_premio_nao_usufruida: 0,
           id_contagem_tempo: calculoId,
           sc: JSON.stringify(vinculo.contribuicoes),
-          sc_mm_considerar_carencia: 1,
-          sc_mm_considerar_tempo: 1,
-          sc_mm_ajustar: 0,
+          sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
+          sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+          sc_mm_ajustar: vinculo.sc_mm_ajustar,
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
@@ -386,9 +392,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           licenca_premio_nao_usufruida: 0,
           id_contagem_tempo: calculoId,
           sc: JSON.stringify(vinculo.contribuicoes),
-          sc_mm_considerar_carencia: this.isEmpty(vinculo.sc_mm_considerar_carencia) ? 1 : vinculo.sc_mm_considerar_carencia,
-          sc_mm_considerar_tempo: this.isEmpty(vinculo.sc_mm_considerar_tempo) ? 1 : vinculo.sc_mm_considerar_tempo,
-          sc_mm_ajustar: this.isEmpty(vinculo.sc_mm_ajustar) ? 0 : vinculo.sc_mm_ajustar,
+          sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
+          sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
+          sc_mm_ajustar: vinculo.sc_mm_ajustar,
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
@@ -396,6 +402,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         })
       );
     }
+
+    console.log(this.vinculosList);
   }
 
 
@@ -424,6 +432,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (calculoId && this.vinculosList.length >= 1) {
 
       this.ajusteListVinculosUpdate(calculoId);
+      console.log(this.vinculosListPost)
       return this.PeriodosContagemTempoService
         .updateListPeriodos(calculoId, this.vinculosListPost)
         .then(model => {
@@ -435,22 +444,23 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
-  public copiarVinculo(index, vinculo) {
+  public copiarVinculo(index) {
 
-  //  const vinculo = this.vinculosList.find(x => x.index === index);
+     const vinculo = this.vinculosList.find(x => x.index === index);
 
     if (this.isEmpty(vinculo.data_inicio) || this.isEmpty(vinculo.data_termino)) {
 
       this.toastAlert('error', 'Verifique a Data Início e a Data Fim do período', null);
 
     } else {
-     
-    const vinculoCopy = Object.assign({}, vinculo);
-    vinculoCopy.index = (this.vinculosList.length + 2);
 
-    this.vinculosList.push(vinculoCopy);
-    this.detector.detectChanges();
-    this.toastAlert('success', 'Cópia efetuada', null);
+      const vinculoCopy = Object.assign({}, vinculo);
+      vinculoCopy.index = (this.vinculosList.length + 2);
+      vinculoCopy.id = null;
+
+      this.vinculosList.push(vinculoCopy);
+      this.detector.detectChanges();
+      this.toastAlert('success', 'Cópia efetuada', null);
 
     }
 
@@ -554,9 +564,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         datatermino: datatermino,
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        sc_mm_ajustar: 0,
-        sc_mm_considerar_tempo: 0,
-        sc_mm_considerar_carencia: 0,
+        sc_mm_ajustar: null,
+        sc_mm_considerar_tempo: null,
+        sc_mm_considerar_carencia: null,
         contribuicoes_count: 0,
         contribuicoes: contribuicoes,
       }
@@ -751,6 +761,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     }
 
+    console.log(index)
+    console.log(this.vinculo_index)
+    console.log(vinculo)
+
   }
 
   hideContribuicoes() {
@@ -772,36 +786,37 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         break;
       case 'salvar':
         this.setCheckVinculo(event);
-        this.setCheckVinculoCheckContribuicoes(event);
-        this.matrixToVinculoContribuicoes(event.matriz);
+        this.matrixToVinculoContribuicoes(event);
         this.contribuicoes.hide();
         break;
     }
   }
 
+
   private setCheckVinculo(value) {
 
-    this.vinculosList[this.vinculo_index].sc_mm_ajustar = value.sc_mm_ajustar;
-    this.vinculosList[this.vinculo_index].sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
-    this.vinculosList[this.vinculo_index].sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
+    this.vinculosList.map(vinculo => {
 
-  } 
-  
-  private setCheckVinculoCheckContribuicoes(value) {
+      if (this.vinculo_index === vinculo.index) {
+        vinculo.sc_mm_ajustar = value.sc_mm_ajustar;
+        vinculo.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
+        vinculo.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
+        vinculo.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
+        vinculo.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+      }
 
-    this.vinculosList[this.vinculo_index].contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
-    this.vinculosList[this.vinculo_index].contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+    });
 
   }
 
-  matrixToVinculoContribuicoes(matriz) {
+  matrixToVinculoContribuicoes(eventRST) {
 
     const contribuicoesList = [];
     let mes = 0;
     let chave = '';
     let msc = 0;
 
-    matriz.forEach(periodo => {
+    eventRST.matriz.forEach(periodo => {
 
       periodo.valores.forEach(contribuicao => {
 
@@ -823,35 +838,26 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       mes = 0;
     });
 
-    
-    this.vinculosList[this.vinculo_index].contribuicoes = contribuicoesList;
-    this.vinculosList[this.vinculo_index].contribuicoes_count = contribuicoesList.length;
+    this.vinculosList.map(vinculo => {
 
-    // const result = this.countPendenciasSC(contribuicoesList, '0,00');
-    // const result_mm = this.countPendenciasSC(contribuicoesList, 'mm');
-    // this.vinculosList[this.vinculo_index].contribuicoes_pendentes = result ? result : 0;
-    // this.vinculosList[this.vinculo_index].contribuicoes_pendentes_mm = result_mm ? result_mm : 0;
-    
+      if (this.vinculo_index === vinculo.index) {
 
+        vinculo.contribuicoes = contribuicoesList;
+        vinculo.contribuicoes_count = contribuicoesList.length;
+        vinculo.sc_mm_ajustar = eventRST.sc_mm_ajustar;
+        vinculo.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
+        vinculo.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
+        vinculo.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
+        vinculo.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
 
-    // this.vinculosList.forEach(vinculo => {
+      }
 
-    //   if (this.vinculo_index === vinculo.index) {
-
-    //     vinculo.contribuicoes = contribuicoesList;
-    //     vinculo.contribuicoes_pendentes = result ? result : 0;
-
-    //   }
-
-    // })
-
-    //console.log(this.vinculosList[this.vinculo_index])
-
+    });
 
   }
 
 
-  
+
   // private isValidPeriodoContribuicoes(vinculo) {
 
   //  // this.contribuicoes.hide();
@@ -950,7 +956,19 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
   isEmpty(data) {
-    if (data == undefined || data == '' || !data || typeof data === 'undefined' || data === 'undefined') {
+    if (data == undefined
+      || data == ''
+      || typeof data === 'undefined'
+      || data === 'undefined') {
+      return true;
+    }
+    return false;
+  }
+
+  isExist(data) {
+    if (data == undefined
+      || typeof data === 'undefined'
+      || data === 'undefined') {
       return true;
     }
     return false;

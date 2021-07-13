@@ -36,6 +36,7 @@ export class ImportadorHomeComponent implements OnInit {
   public idCalculoSelecionado;
 
   public exportResultContagemTempo;
+  public isCompleteResultContagemTempo = false;
 
   public steps = [
     {
@@ -214,7 +215,7 @@ export class ImportadorHomeComponent implements OnInit {
 
         break;
       case 'step2':
-
+        this.isCompleteResultContagemTempo = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: 'seguradoExistente' }
 
         // this.isPlanejamentoSelecionado = false;
@@ -469,6 +470,7 @@ export class ImportadorHomeComponent implements OnInit {
     if (this.isExits(data) && data.resultComplete) {
 
       this.exportResultContagemTempo = data.export_result;
+      this.isCompleteResultContagemTempo = data.resultComplete;
       this.setStepValidate('step3', data.resultComplete);
 
       sessionStorage.setItem(
