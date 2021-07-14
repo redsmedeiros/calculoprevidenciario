@@ -111,7 +111,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       } else {
         this.updateDatatablePeriodos(vinculo);
       }
-      console.log(this.vinculosList);
+     
     }
     this.detector.detectChanges();
   }
@@ -177,7 +177,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     do {
 
-      const pchave = chave.substring(4, 6) + '/' + chave.substring(0, 4);
+      const ano = chave.substring(0, 4);
+      const mes = chave.substring(4, 6);
+      const pchave = mes + '/' + ano;
 
       result = contribuicoes.find((item) => {
         return item.cp === pchave;
@@ -185,7 +187,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       if (result && result !== undefined) {     /* se encontrou a contribuição no mes*/
 
-        result.msc = 0;
+        result.msc = this.getClassSalarioContribuicao(mes, ano, result.sc);
 
         contribuicoesList.push(result);
       } else {        /* se não encontrou a contribuição no mes*/
@@ -260,6 +262,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
       const result = this.countPendenciasSC(contribuicoes, '0,00');
       const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
+
+      console.log(vinculo);
+
+      console.log(result_mm);
 
       const line = {
         id: vinculo.id,
@@ -761,8 +767,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     }
 
-    console.log(index)
-    console.log(this.vinculo_index)
     console.log(vinculo)
 
   }
@@ -858,37 +862,72 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
 
-  // private isValidPeriodoContribuicoes(vinculo) {
-
-  //  // this.contribuicoes.hide();
-
-  //   // let checkContrib = false;
-
-  //   // console.log(vinculo);
-
-  //   // const checkNumContricuicoes = !(vinculo.contribuicoes_pendentes > 0
-  //   //   || vinculo.contribuicoes_pendentes_mm > 0);
-
-  //   // const checkNumStatusContribuicoes = (vinculo.sc_mm_ajustar !== null
-  //   //   && vinculo.sc_mm_considerar_carencia !== null
-  //   //   && vinculo.sc_mm_considerar_tempo !== null);
+  private isValidPeriodoContribuicoes(vinculo) {
 
 
-  //   //   console.log(checkNumContricuicoes);
-  //   //   console.log(checkNumStatusContribuicoes);
+    let checkContrib = false;
+
+    console.log(vinculo);
+    const contribuicoesList = [];
+    let mes = 0;
+    let chave = '';
+    let msc = 0;
+
+    vinculo.forEach(periodo => {
+
+      periodo.valores.forEach(contribuicao => {
+
+        mes++;
+
+        if (contribuicao != '') {
+          chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
+          msc = periodo.msc[mes - 1];
+
+          contribuicoesList.push({
+            cp: chave,
+            sc: contribuicao,
+            msc: msc
+          });
+        }
+
+      });
+
+      mes = 0;
+    });
+
+    // this.result_sc = this.countPendenciasSC(contribuicoesList, '0,00');
+    // this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
 
 
-  //   // if (checkNumContricuicoes ||  (checkNumContricuicoes && checkNumStatusContribuicoes)) {
-  //   //   checkContrib = true;
-  //   // }
+   // this.contribuicoes.hide();
 
-  //   // console.log(checkContrib);
+    // let checkContrib = false;
 
-  //   // if (checkContrib) {
-  //   //   this.contribuicoes.hide();
-  //   // }
+    // console.log(vinculo);
 
-  // }
+    // const checkNumContricuicoes = !(vinculo.contribuicoes_pendentes > 0
+    //   || vinculo.contribuicoes_pendentes_mm > 0);
+
+    // const checkNumStatusContribuicoes = (vinculo.sc_mm_ajustar !== null
+    //   && vinculo.sc_mm_considerar_carencia !== null
+    //   && vinculo.sc_mm_considerar_tempo !== null);
+
+
+    //   console.log(checkNumContricuicoes);
+    //   console.log(checkNumStatusContribuicoes);
+
+
+    // if (checkNumContricuicoes ||  (checkNumContricuicoes && checkNumStatusContribuicoes)) {
+    //   checkContrib = true;
+    // }
+
+    // console.log(checkContrib);
+
+    // if (checkContrib) {
+    //   this.contribuicoes.hide();
+    // }
+
+  }
 
 
   private getMoedaCompetencia(mes, ano) {
