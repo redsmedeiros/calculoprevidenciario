@@ -249,7 +249,7 @@
                           </button>
                       </div>
                     </div>
-                    <div *ngIf="has19 && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
+                    <div *ngIf="(has19 || hasAtual) && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="media12Ultimos" class="checkbox" [ngModelOptions]="{standalone: true}">

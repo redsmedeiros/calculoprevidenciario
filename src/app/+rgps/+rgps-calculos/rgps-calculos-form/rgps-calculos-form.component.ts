@@ -1127,7 +1127,7 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     this.ismedia12Ultimos = false;
 
-    if ((this.has19 && !this.hasPensaoInstuidorAposentado)
+    if (((this.has19 || this.hasAtual) && !this.hasPensaoInstuidorAposentado)
       && especiesActive.includes(this.especieBeneficio)) {
 
       this.ismedia12Ultimos = true;

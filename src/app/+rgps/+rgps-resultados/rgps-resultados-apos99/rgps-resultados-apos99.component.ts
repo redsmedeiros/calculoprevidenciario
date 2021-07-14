@@ -618,7 +618,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let divisorContribuicoes;
     switch (this.tipoBeneficio) {
       case 1: // Auxilio Doenca Previdenciario
-        if (this.dataInicioBeneficio >= this.dataMP664) {
+        if (this.dataInicioBeneficio >= this.dataMP664 && this.calculo.media_12_ultimos === 0) {
 
           let currency = this.loadCurrency(this.dataInicioBeneficio);
 
@@ -2244,9 +2244,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       });
 
       // se dib maior que 01-03-2015
-      if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY') >= this.dataMP664) {
+      if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY') >= this.dataMP664 && this.calculo.media_12_ultimos === 0) {
 
-        const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
+         const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
+        // modificado 14/07/2021 
+        // let rmiConsiderado = rmi;
+        // if (this.calculo.media_12_ultimos === 0 && rmi > this.totalMedia12Contribuicoes) {
+        //   rmiConsiderado = this.totalMedia12Contribuicoes;
+        // }
 
         conclusoes.push({
           order: 22,
