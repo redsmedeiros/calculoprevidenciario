@@ -231,9 +231,9 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
 
-    let tempoContribuicao = Math.floor(parseFloat((this.seguradoTransicao.contribuicaoAnos * 365.25) +
-      (this.seguradoTransicao.contribuicaoMeses * 30.436875) +
-      this.seguradoTransicao.contribuicaoDias));
+    let tempoContribuicao = Math.floor(((parseInt(this.seguradoTransicao.contribuicaoAnos, 10) * 365.25) +
+      (parseInt(this.seguradoTransicao.contribuicaoMeses, 10) * 30.436875) +
+      parseInt(this.seguradoTransicao.contribuicaoDias, 10)));
 
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
@@ -321,7 +321,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     if (this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
 
 
-      if (auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) {
+      if ((auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) && this.seguradoTransicao.sexo === 'f') {
 
         idadeMoment = moment.duration({
           days: 0,

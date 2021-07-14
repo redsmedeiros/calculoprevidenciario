@@ -1215,7 +1215,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
             beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade;
             beneficioRecebidoAbono = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoAbono);
-            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+          //  abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+
+            abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidosInicioFim(
+              dataPedidoBeneficio.clone(),
+              datacessacaoBeneficioRecebido.clone()
+            );
+
             beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos);
 
           }
@@ -4210,6 +4216,57 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     let proporcional = 1 - dibMonth / 12;
+
+    if (proporcional < 1) {
+      this.aplicaProporcionalRecebidos = true;
+    } else {
+      this.aplicaProporcionalRecebidos = false;
+    }
+
+    return proporcional;
+  }
+
+
+  monthsDiff(d1, d2) {
+    const date1 = new Date(d1);
+    const date2 = new Date(d2);
+    const years = date2.getFullYear() - date1.getFullYear();
+    const months = (years * 12) + (date2.getMonth() - date1.getMonth());
+    return months;
+  }
+
+  verificaAbonoProporcionalRecebidosInicioFim(inicio, fim) {
+
+    if (inicio.isAfter(fim, 'year')) {
+      console.log(inicio.isAfter(fim, 'year'));
+      return this.verificaAbonoProporcionalRecebidos(fim.clone())
+    }
+
+    let dibMonthINI = inicio.month() + 1;
+    if (inicio.date() > 15) {
+      dibMonthINI -= 1;
+    }
+
+    let dibMonthFIM = fim.month() + 1;
+    if (fim.date() < 15) {
+      dibMonthFIM -= 1;
+    }
+
+    let diffTotal = this.monthsDiff(
+      (inicio.clone()).startOf('month').format('YYYY-MM-DD'),
+      (fim.clone()).endOf('month').format('YYYY-MM-DD'));
+
+
+    if (inicio.date() > 15) {
+      diffTotal -= 1
+    }
+
+
+    if (fim.date() < 15) {
+      diffTotal -= 1
+    }
+
+    let proporcional = 1 - diffTotal / 12;
 
     if (proporcional < 1) {
       this.aplicaProporcionalRecebidos = true;

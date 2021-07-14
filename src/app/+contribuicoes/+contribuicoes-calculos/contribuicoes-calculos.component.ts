@@ -165,12 +165,23 @@ export class ContribuicoesCalculosComponent implements OnInit {
           //     this.updateDatatable();
           //   })
 
-          this.Complementar.get()
-            .then(() => {
+          // this.Complementar.get()
+          //   .then(() => {
 
-              this.complementarList = this.Complementar.list;
+          //     this.complementarList = this.Complementar.list;
+          //     this.updateDatatable();
+          //     this.isUpdating = false;
+          //   });
+
+
+            this.Complementar.getWithParameters(['id_segurado', this.idSegurado])
+            .then((calculos) => {
+
+              console.log(calculos)
+
               this.updateDatatable();
               this.isUpdating = false;
+
             });
         }
       });
