@@ -12,6 +12,24 @@ import { RgpsCalculosFormComponent } from './rgps-calculos-form/rgps-calculos-fo
 import { RgpsCalculosIndexComponent } from './rgps-calculos-index/rgps-calculos-index.component';
 import { RgpsCalculosComponent } from './rgps-calculos.component';
 
+import { I18nModule } from '../../shared/i18n/i18n.module';
+import { WINDOW_PROVIDERS } from './window.service';
+import { ModalModule } from 'ngx-bootstrap';
+
+import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: 'left',
+  allowNegative: false,
+  decimal: ',',
+  precision: 2,
+  prefix: '',
+  suffix: '',
+  thousands: '.'
+};
+
 
 
 @NgModule({
@@ -19,7 +37,10 @@ import { RgpsCalculosComponent } from './rgps-calculos.component';
     CommonModule,
     SmartadminModule,
     TextMaskModule,
+    I18nModule,
     SmartadminDatatableModule,
+    CurrencyMaskModule,
+    ModalModule.forRoot(),
   ],
   declarations: [
     RgpsCalculosComponent,
@@ -30,12 +51,16 @@ import { RgpsCalculosComponent } from './rgps-calculos.component';
     RgpsCalculosCreateComponent
   ],
   exports: [
+    ModalModule,
     RgpsCalculosComponent,
     RgpsCalculosEditComponent,
     RgpsCalculosFormComponent,
     RgpsCalculosIndexComponent,
     RgpsCalculosDestroyComponent,
     RgpsCalculosCreateComponent
-  ]
+  ],
+  providers: [WINDOW_PROVIDERS,
+    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+  ],
 })
 export class RgpsCalculosSharedModule { }

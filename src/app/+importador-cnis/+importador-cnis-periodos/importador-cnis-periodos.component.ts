@@ -111,7 +111,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       } else {
         this.updateDatatablePeriodos(vinculo);
       }
-
+      console.log(this.vinculosList);
     }
     this.detector.detectChanges();
   }

@@ -16,6 +16,7 @@ import { ModalModule } from 'ngx-bootstrap';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
+import { RgpsCalculosSharedModule } from './rgps-calculos-shared.module';
 
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -28,30 +29,54 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   thousands: '.'
 };
 
+// @NgModule({
+//   imports: [
+//     CommonModule,
+//     rgpsCalculosRouting,
+//     SmartadminModule,
+//     TextMaskModule,
+//     I18nModule,
+//     SmartadminDatatableModule,
+//     CurrencyMaskModule,
+//     ModalModule.forRoot(),
+//   ],
+//   providers: [WINDOW_PROVIDERS,
+//     { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+//   ],
+//   declarations: [
+//     RgpsCalculosComponent,
+//     RgpsCalculosEditComponent,
+//     RgpsCalculosFormComponent,
+//     RgpsCalculosIndexComponent,
+//     RgpsCalculosDestroyComponent,
+//     RgpsCalculosCreateComponent
+//   ],
+//   exports: [
+//     ModalModule
+//   ]
+// })
+
 @NgModule({
   imports: [
     CommonModule,
     rgpsCalculosRouting,
     SmartadminModule,
-    TextMaskModule,
-    I18nModule,
-    SmartadminDatatableModule,
-    CurrencyMaskModule,
-    ModalModule.forRoot(),
+    RgpsCalculosSharedModule
   ],
-  providers: [WINDOW_PROVIDERS,
-    { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+  providers: [
+    // WINDOW_PROVIDERS,
+    // { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   declarations: [
-    RgpsCalculosComponent,
-    RgpsCalculosEditComponent,
-    RgpsCalculosFormComponent,
-    RgpsCalculosIndexComponent,
-    RgpsCalculosDestroyComponent,
-    RgpsCalculosCreateComponent
+    // RgpsCalculosComponent,
+    // RgpsCalculosEditComponent,
+    // RgpsCalculosFormComponent,
+    // RgpsCalculosIndexComponent,
+    // RgpsCalculosDestroyComponent,
+    // RgpsCalculosCreateComponent
   ],
   exports: [
-    ModalModule
+  //  ModalModule
   ]
 })
 export class RgpsCalculosModule { }

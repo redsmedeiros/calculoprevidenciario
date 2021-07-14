@@ -293,6 +293,7 @@
                     (click)="showContribuicoes(vinculo, vinculo.index)"
                     class="btn btn-success btn-xs"
                     [ngClass]="{
+                      'bg-color-yellow': vinculo.contribuicoes_pendentes_mm > 0,
                       'bg-color-red': vinculo.contribuicoes_pendentes > 0
                     }"
                     data-placement="bottom"
