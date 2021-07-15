@@ -16,7 +16,7 @@ import * as moment from 'moment';
 
 @FadeInTop()
 @Component({
-  selector: 'sa-datatables-showcase',
+  selector: 'app-rgps-calculos-component',
   templateUrl: './rgps-calculos.component.html',
   styleUrls: ['./rgps-calculos-component.css'],
   providers: [

@@ -16,7 +16,7 @@ import { ModalModule } from 'ngx-bootstrap';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
-import { RgpsCalculosSharedModule } from './rgps-calculos-shared.module';
+import { RgpsCalculosSharedModule } from './shared/rgps-calculos-shared.module';
 
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {

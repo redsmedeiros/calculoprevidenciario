@@ -217,8 +217,12 @@ export class DefinicaoTempo {
         return totalFator;
     }
 
-
-    private leapYear(year) {
+    /**
+     * Identifica ano bissexto
+     * @param year 
+     * @returns 
+     */
+    static leapYear(year) {
         return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
     }
 

@@ -17,7 +17,7 @@ import { contagemTempoResultadosRouting } from './contagem-tempo-resultados.rout
 // import { ContagemTempoConclusaoExportarRgpsComponent } from './contagem-tempo-conclusao-exportar-rgps/contagem-tempo-conclusao-exportar-rgps.component';
 
 
-import { ContagemTempoSharedResultadosModule } from './contagem-tempo-shared-resultados.module';
+import { ContagemTempoSharedResultadosModule } from './shared/contagem-tempo-shared-resultados.module';
 
 
 @NgModule({
