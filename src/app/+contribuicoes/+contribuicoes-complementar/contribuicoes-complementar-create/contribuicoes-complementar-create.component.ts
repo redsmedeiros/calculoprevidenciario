@@ -320,37 +320,41 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.atualizar_ate = '01/' + this.form.atualizar_ate;
 
     if (this.form.id == undefined || this.form.id == '') {
+      
       this.Calculo.save(novoCalculo).then((data: ContribuicaoModel) => {
-        this.Calculo.get().then(() => {
-          swal({
-            type: 'success',
-            title: 'O Cálculo foi salvo com sucesso',
-            text: '',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            timer: 1500
-          }).then(() => {
-            window.location.href = '/#/contribuicoes/' + this.idSegurado + '/contribuicoes-resultados-complementar/' + data.id;
-          });
+
+        swal({
+          type: 'success',
+          title: 'O Cálculo foi salvo com sucesso',
+          text: '',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 1500
+        }).then(() => {
+          window.location.href = '/#/contribuicoes/' + this.idSegurado + '/contribuicoes-resultados-complementar/' + data.id;
         });
+
       }).catch(error => {
         console.log(error);
       });
+
     } else {
+
       novoCalculo.id = this.form.id;
       this.Calculo.update(novoCalculo).then((data: ContribuicaoModel) => {
-        this.Calculo.get().then(() => {
-          swal({
-            type: 'success',
-            title: 'O Cálculo foi salvo com sucesso',
-            text: '',
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            timer: 1500
-          }).then(() => {
-            window.location.href = '/#/contribuicoes/' + this.idSegurado + '/contribuicoes-resultados-complementar/' + data.id;
-          });
+
+        swal({
+          type: 'success',
+          title: 'O Cálculo foi salvo com sucesso',
+          text: '',
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 1500
+        }).then(() => {
+          window.location.href = '/#/contribuicoes/' + this.idSegurado + '/contribuicoes-resultados-complementar/' + data.id;
         });
+
+
       }).catch(error => {
         console.log(error);
       });

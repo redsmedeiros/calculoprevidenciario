@@ -60,6 +60,10 @@ export class ContribuicoesComplementarFormComponent implements OnInit {
 
     this.idCalculo = this.route.snapshot.params['id_calculo'];
     if (this.idCalculo != undefined) {
+      // this.Calculo.getWithParameters(['id_calculo', this.idCalculo])
+      // .then((calculo) => {
+
+      // });
       this.Calculo.find(this.idCalculo)
         .then(calculo => {
           this.calculo = calculo;

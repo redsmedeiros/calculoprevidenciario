@@ -159,25 +159,9 @@ export class ContribuicoesCalculosComponent implements OnInit {
             window.location.href = '/#/contribuicoes/contribuicoes-segurados/';
           });
         } else {
-          // this.Jurisprudencial.get()
-          //   .then(() => {
-          //     this.jurisprudencialList = this.Jurisprudencial.list;
-          //     this.updateDatatable();
-          //   })
-
-          // this.Complementar.get()
-          //   .then(() => {
-
-          //     this.complementarList = this.Complementar.list;
-          //     this.updateDatatable();
-          //     this.isUpdating = false;
-          //   });
-
-
+       
             this.Complementar.getWithParameters(['id_segurado', this.idSegurado])
             .then((calculos) => {
-
-              console.log(calculos)
 
               this.updateDatatable();
               this.isUpdating = false;
