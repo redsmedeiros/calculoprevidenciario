@@ -90,6 +90,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     const changedvinculos = changes['vinculos'];
     const changedisUpdating = changes['isUpdating'];
     const changeEmpresa = changes['empresa'];
+    const changeMoeda = changes['moeda'];
 
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
@@ -98,7 +99,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
+
   private setPeriodos(vinculos) {
+
+    this.detector.detectChanges();
 
     this.countVinculosErros = 0;
     for (const vinculo of vinculos) {
@@ -111,7 +115,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       } else {
         this.updateDatatablePeriodos(vinculo);
       }
-     
+
     }
     this.detector.detectChanges();
   }
@@ -169,11 +173,22 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
+/**
+ * Se moeda null
+ */
+  private checkMoeda() {
+    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+      this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'))
+    }
+  }
+
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
 
     const contribuicoesList = [];
     let result = contribuicoes;
     let chave = periodo_in;
+
+    this.checkMoeda();
 
     do {
 
@@ -190,6 +205,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         result.msc = this.getClassSalarioContribuicao(mes, ano, result.sc);
 
         contribuicoesList.push(result);
+
       } else {        /* se não encontrou a contribuição no mes*/
 
         contribuicoesList.push({
@@ -232,7 +248,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       // });
 
       contribuicoesList.filter(function (contribuicao, index, arr) {
-        return contribuicao.cp == diferenca.cp;
+        return contribuicao.cp === diferenca.cp;
       });
 
     });
@@ -262,10 +278,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
       const result = this.countPendenciasSC(contribuicoes, '0,00');
       const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
-
-      console.log(vinculo);
-
-      console.log(result_mm);
 
       const line = {
         id: vinculo.id,
@@ -382,8 +394,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   private ajusteListVinculosUpdate(calculoId) {
 
-    console.log(this.vinculosList);
-
     this.vinculosListPost = [];
     for (const vinculo of this.vinculosList) {
       this.vinculosListPost.push(new PeriodosContagemTempo(
@@ -409,7 +419,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       );
     }
 
-    console.log(this.vinculosList);
   }
 
 
@@ -438,7 +447,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (calculoId && this.vinculosList.length >= 1) {
 
       this.ajusteListVinculosUpdate(calculoId);
-      console.log(this.vinculosListPost)
       return this.PeriodosContagemTempoService
         .updateListPeriodos(calculoId, this.vinculosListPost)
         .then(model => {
@@ -452,7 +460,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public copiarVinculo(index) {
 
-     const vinculo = this.vinculosList.find(x => x.index === index);
+    const vinculo = this.vinculosList.find(x => x.index === index);
 
     if (this.isEmpty(vinculo.data_inicio) || this.isEmpty(vinculo.data_termino)) {
 
@@ -826,7 +834,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
         mes++;
 
-        if (contribuicao != '') {
+        if (contribuicao !== '') {
           chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
           msc = periodo.msc[mes - 1];
 
@@ -865,7 +873,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   private isValidPeriodoContribuicoes(vinculo) {
 
 
-    let checkContrib = false;
+    // let checkContrib = false;
 
     console.log(vinculo);
     const contribuicoesList = [];
@@ -879,7 +887,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
         mes++;
 
-        if (contribuicao != '') {
+        if (contribuicao !== '') {
           chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
           msc = periodo.msc[mes - 1];
 
@@ -899,7 +907,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     // this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
 
 
-   // this.contribuicoes.hide();
+    // this.contribuicoes.hide();
 
     // let checkContrib = false;
 
@@ -954,7 +962,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public formatDecimalValue(value) {
 
-    // typeof value === 'string' || 
+    // typeof value === 'string' ||
     if (isNaN(value)) {
 
       return parseFloat(value.replace(/\./g, '').replace(',', '.'));
@@ -995,8 +1003,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
   isEmpty(data) {
-    if (data == undefined
-      || data == ''
+    if (data === undefined
+      || data === ''
       || typeof data === 'undefined'
       || data === 'undefined') {
       return true;
@@ -1005,7 +1013,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
   isExist(data) {
-    if (data == undefined
+    if (data === undefined
       || typeof data === 'undefined'
       || data === 'undefined') {
       return true;
@@ -1026,13 +1034,13 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
   formatReceivedDate(inputDate) {
-    let date = moment(inputDate, 'YYYY-MM-DD');
+    const date = moment(inputDate, 'YYYY-MM-DD');
     return date.format('DD/MM/YYYY');
   }
 
   formatPostDataDate(inputDate) {
 
-    let date = moment(inputDate, 'DD/MM/YYYY');
+    const date = moment(inputDate, 'DD/MM/YYYY');
     return date.format('YYYY-MM-DD');
 
   }

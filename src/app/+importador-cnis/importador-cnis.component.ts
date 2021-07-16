@@ -64,6 +64,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     // this.ref.markForCheck();
     // this.ref.detectChanges();
 
+    this.getTabelaMoeda();
     this.checkUserSession();
 
     if (this.dadosPassoaPasso == undefined) {
@@ -73,7 +74,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       };
     }
 
-    this.getTabelaMoeda();
+
 
   }
 
@@ -90,17 +91,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   private getTabelaMoeda() {
 
-
-    // this.Moeda.getByDateRangeMoment(moment('1964-10-01'), moment())
-    //   .then((moeda: Moeda[]) => {
-    //     this.moeda = moeda;
-    //   });
-
-
     this.Moeda.moedaSalarioMinimoTeto()
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
+
+        sessionStorage.setItem(
+          'moedaSalarioMinimoTeto',
+          JSON.stringify(moeda));
+
       });
+
   }
 
   private setExibirForm(dadosPassoaPasso) {
@@ -263,7 +263,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public prevStepPassoaPasso() {
 
-    this.eventPrevStepPassoaPasso.emit({activeStep: 'step1'});
+    this.eventPrevStepPassoaPasso.emit({ activeStep: 'step1' });
 
   }
 
