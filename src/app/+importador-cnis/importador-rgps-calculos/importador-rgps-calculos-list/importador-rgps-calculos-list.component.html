@@ -1,0 +1,38 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Selecione um Cálculo ou clique em continuar para criar um novo</h2>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div *ngIf="!isUpdatingCalcRGPS" class="widget-body no-padding">
+      <sa-datatable
+        [options]="calculoTableOptionsRMIList"
+        (selectedRowEvent)="getRow($event)"
+        (updateRowEvent)="updateRow($event)"
+        (deleteRowEvent)="deleteRow($event)"
+        paginationLength="true"
+        tableClass="table table-striped table-bordered table-hover"
+        width="100%"
+      >
+      <thead>
+        <tr>
+          <th>Ações</th>
+          <th>Espécie</th>
+          <th>Período para início de benefício</th>
+          <th>Contribuição Primária (Ano/Mês/Dia)</th>
+          <th>DIB</th>
+          <th>RMI</th>
+          <th>Data de Criação</th>
+          <th>Selecionar</th> 
+        </tr>
+      </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>

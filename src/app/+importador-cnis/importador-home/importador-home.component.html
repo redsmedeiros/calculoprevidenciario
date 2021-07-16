@@ -62,8 +62,7 @@
                     *ngFor="let pane of steps; let i = index"
                     [class.active]="activeStep == pane"
                   >
-                    <a (click)="setActiveStep(pane)"
-                    >
+                    <a (click)="setActiveStep(pane)">
                       <span class="step">
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
@@ -90,7 +89,9 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <p class="text-justify pt-3" style="font-size: 14px">Selecione uma opção para iniciar o Cálculo.</p>
+                        <p class="text-justify pt-3" style="font-size: 14px">
+                          Selecione uma opção para iniciar o Cálculo.
+                        </p>
                         <!-- <ul class="text-justify pt-3" style="font-size: 14px">
                           <li>Selecione uma opção para iniciar o Cálculo.</li>
                         </ul> -->
@@ -208,21 +209,36 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                         <p class="text-justify pt-5 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'manual'">
+                        <p
+                          class="text-justify pt-5 mb-5"
+                          style="font-size: 14px"
+                          *ngIf="dadosPassoaPasso.type === 'manual'"
+                        >
                           Preencha os campos abaixo para elaboração do cálculo.
                         </p>
-                        <p class="text-justify pt-4 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'cnis'">
-                          Insira o arquivo do CNIS em .pdf, obtido no Meu INSS, para adicionar os períodos de contribuição e os salários de contribuição;
-                          As informações inseridas poderão ser editadas posteriormente.
+                        <p
+                          class="text-justify pt-4 mb-5"
+                          style="font-size: 14px"
+                          *ngIf="dadosPassoaPasso.type === 'cnis'"
+                        >
+                          Insira o arquivo do CNIS em .pdf, obtido no Meu INSS,
+                          para adicionar os períodos de contribuição e os
+                          salários de contribuição; As informações inseridas
+                          poderão ser editadas posteriormente.
                         </p>
-                        <p class="text-justify pt-5 mb-5" style="font-size: 14px" *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
-                          Selecionar um segurado cadastrado anteriormente, para elaboração do cálculo.
+                        <p
+                          class="text-justify pt-5 mb-5"
+                          style="font-size: 14px"
+                          *ngIf="dadosPassoaPasso.type === 'seguradoExistente'"
+                        >
+                          Selecionar um segurado cadastrado anteriormente, para
+                          elaboração do cálculo.
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div class="row body-step-component" >
+                  <div class="row body-step-component">
                     <div
                       *ngIf="
                         activeStep.key == 'step2' &&
@@ -234,8 +250,10 @@
                     >
                       <app-importador-cnis
                         [dadosPassoaPasso]="dadosPassoaPasso"
-                        (eventCalcularContagem)=eventCalcularContagem($event)
-                        (eventPrevStepPassoaPasso)=eventPrevStepPassoaPasso($event)
+                        (eventCalcularContagem)="eventCalcularContagem($event)"
+                        (eventPrevStepPassoaPasso)="
+                          eventPrevStepPassoaPasso($event)
+                        "
                       ></app-importador-cnis>
                     </div>
                   </div>
@@ -266,12 +284,17 @@
                     </div>
                   </div>
                   <!-- iscontagemTempo && -->
-                  <div class="row pt-4 body-step-component" *ngIf=" activeStep.key == 'step3'" >
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step3'"
+                  >
                     <app-contagem-tempo-resultados-component
-                    [dadosPassoaPasso]="dadosPassoaPasso"
-                    [idSeguradoSelecionado]="idSeguradoSelecionado"
-                    [idCalculoSelecionado]="idCalculoSelecionado"
-                    (eventCalcularContagemResult)="eventCalcularContagemResult($event)"
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionado]="idCalculoSelecionado"
+                      (eventCalcularContagemResult)="
+                        eventCalcularContagemResult($event)
+                      "
                     ></app-contagem-tempo-resultados-component>
                   </div>
                 </div>
@@ -308,7 +331,11 @@
                     class="body-step-component my-4"
                     *ngIf="activeStep.key == 'step4'"
                   >
-                    <app-rgps-calculos-component></app-rgps-calculos-component>
+                    <app-importador-rgps-calculos
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionadoCT]="idCalculoSelecionado"
+                    ></app-importador-rgps-calculos>
                   </div>
                   <br />
                   <br />
@@ -336,20 +363,26 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-actions mt-0"  *ngIf="
-                activeStep.key !== 'step2' &&
-                (dadosPassoaPasso.type === 'cnis' ||
-                  dadosPassoaPasso.type === 'manual' ||
-                  dadosPassoaPasso.type === 'seguradoExistente') &&
-                isTypeEntradaDados
-              ">
+                <div
+                  class="form-actions mt-0"
+                  *ngIf="
+                    activeStep.key !== 'step2' &&
+                    (dadosPassoaPasso.type === 'cnis' ||
+                      dadosPassoaPasso.type === 'manual' ||
+                      dadosPassoaPasso.type === 'seguradoExistente') &&
+                    isTypeEntradaDados
+                  "
+                >
                   <div class="row">
                     <div class="col-sm-12">
                       <ul class="pager wizard no-margin">
                         <li class="previous">
                           <a
                             (click)="prevStep()"
-                            [class.disabled]="steps.indexOf(activeStep) == 0 || (activeStep !== step3 && !activeStep.valid)"
+                            [class.disabled]="
+                              steps.indexOf(activeStep) == 0 ||
+                              (activeStep !== step3 && !activeStep.valid)
+                            "
                             class="btn btn-lg btn-default"
                             title="Retornar ao passo anterior"
                             >Retornar&nbsp;</a

@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,
+   ChangeDetectorRef, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Auth } from 'app/services/Auth/Auth.service';
 
 import { CalculoContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-calculos/CalculoContagemTempo.service';
@@ -13,7 +14,7 @@ import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-perio
   templateUrl: './importador-cnis-calculos-list.component.html',
   styleUrls: ['./importador-cnis-calculos-list.component.css']
 })
-export class ImportadorCnisCalculosListComponent implements OnInit {
+export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
 
 

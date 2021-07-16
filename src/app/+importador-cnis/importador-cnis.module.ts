@@ -20,6 +20,8 @@ import { ImportadorCnisSeguradosListComponent } from './+importador-cnis-segurad
 import { ImportadorCnisCalculosListComponent } from './+importador-cnis-calculos/importador-cnis-calculos-list/importador-cnis-calculos-list.component';
 import { ContagemTempoSharedResultadosModule } from 'app/+contagem-tempo/+contagem-tempo-resultados/shared/contagem-tempo-shared-resultados.module';
 import { RgpsCalculosSharedModule } from 'app/+rgps/+rgps-calculos/shared/rgps-calculos-shared.module';
+import { ImportadorRgpsCalculosComponent } from './importador-rgps-calculos/importador-rgps-calculos.component';
+import { ImportadorRgpsCalculosListComponent } from './importador-rgps-calculos/importador-rgps-calculos-list/importador-rgps-calculos-list.component';
 
 
 export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -55,6 +57,8 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     ImportadorHomeComponent,
     ImportadorCnisSeguradosListComponent,
     ImportadorCnisCalculosListComponent,
+    ImportadorRgpsCalculosComponent,
+    ImportadorRgpsCalculosListComponent,
   ],
   providers: [
     { provide: CURRENCY_MASK_CONFIG, useValue: CustomPeriodosCurrencyMaskConfig }
