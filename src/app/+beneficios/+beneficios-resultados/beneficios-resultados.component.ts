@@ -4237,8 +4237,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   verificaAbonoProporcionalRecebidosInicioFim(inicio, fim) {
 
-    if (inicio.isAfter(fim, 'year')) {
-      console.log(inicio.isAfter(fim, 'year'));
+    if (inicio.isBefore(fim, 'year')) {
       return this.verificaAbonoProporcionalRecebidos(fim.clone())
     }
 
