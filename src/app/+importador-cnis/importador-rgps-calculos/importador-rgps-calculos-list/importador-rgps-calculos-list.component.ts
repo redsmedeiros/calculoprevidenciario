@@ -8,13 +8,19 @@ import { CalculoRgps } from 'app/+rgps/+rgps-calculos/CalculoRgps.model';
 import { Auth } from 'app/services/Auth/Auth.service';
 
 import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
+import { ModalDirective } from 'ngx-bootstrap';
+import { ErrorService } from 'app/services/error.service';
+import swal from 'sweetalert2';
 
 
 
 @Component({
   selector: 'app-importador-rgps-calculos-list',
   templateUrl: './importador-rgps-calculos-list.component.html',
-  styleUrls: ['./importador-rgps-calculos-list.component.css']
+  styleUrls: ['./importador-rgps-calculos-list.component.css'],
+  providers: [
+    ErrorService
+  ]
 })
 export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
@@ -28,10 +34,13 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   @Input() calculoSelecionadoCT;
   @Output() calculoSelecionadoEvent = new EventEmitter();
 
+  @ViewChild('modalCalculosRGPS') public modalCalculosRGPS: ModalDirective;
+
   public calculoSelecionado = {};
 
   public listRMICalculos = [];
   public calculosRMIList = [];
+  public isEditRGPS = false;
 
 
   public calculoTableOptionsRMIList = {
@@ -86,6 +95,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
   constructor(
     protected CalculoRgpsService: CalculoRgpsService,
+    protected Errors: ErrorService,
   ) { }
 
   ngOnInit() {
@@ -115,7 +125,6 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
       this.CalculoRgpsService.getCalculoBySeguradoId(this.idSeguradoSelecionado)
         .then((calculosRst: CalculoRgps[]) => {
-          console.log(calculosRst)
 
           this.calculosRMIList = calculosRst;
           this.updateDatatable();
@@ -127,8 +136,6 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   }
 
   updateDatatable() {
-
-    console.log(this.calculosRMIList);
 
     this.calculoTableOptionsRMIList = {
       ...this.calculoTableOptionsRMIList,
@@ -172,8 +179,119 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
       console.log(dataRow);
 
+      this.deleteCalculoRGPS(dataRow)
     }
   }
+
+
+  public submit(dataForm) {
+
+    dataForm.id_segurado = this.idSeguradoSelecionado;
+
+
+
+    if (!this.isEditRGPS) {
+      this.createCalculoRGPS(dataForm)
+    } else {
+      this.updateCalculoRGPS(dataForm)
+    }
+
+
+    console.log(dataForm);
+
+  }
+
+
+  private createCalculoRGPS(data) {
+
+    this.CalculoRgpsService
+      .save(data)
+      .then(model => {
+
+        //   const teste = {
+        //   position: 'top-end',
+        //   icon: 'success',
+        //   title: 'Cálculo salvo com sucesso.',
+        //   button: false,
+        //   timer: 1500
+        // };
+
+        // swal(teste);
+        // this.hideChildModal();
+        // this.resetForm();
+        // this.onSubmit.emit();
+        this.getCalculosSeguradoSelecionado();
+        this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+      })
+      .catch(errors => this.Errors.add(errors));
+
+  }
+
+  private updateCalculoRGPS(data) {
+    // console.log(this.calculo);
+
+    this.CalculoRgpsService
+      .update(data)
+      .then(model => {
+
+        // const teste = {
+        //   position: 'top-end',
+        //   icon: 'success',
+        //   title: 'Cálculo salvo com sucesso.',
+        //   button: false,
+        //   timer: 1500
+        // };
+
+        // swal(teste).then(() => {
+
+        // });
+        this.getCalculosSeguradoSelecionado();
+        this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+      })
+      .catch(errors => { this.Errors.add(errors); console.log(errors) });
+  }
+
+
+  private deleteCalculoRGPS(calculoRMI) {
+
+    swal({
+      title: 'Tem certeza?',
+      text: 'Essa ação é irreversível!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Deletar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+
+        console.log(this.CalculoRgpsService.list)
+
+        console.log(this.calculosRMIList)
+
+        this.CalculoRgpsService.find(calculoRMI)
+          .then(calculorgps => {
+            console.log(calculorgps);
+            this.CalculoRgpsService.destroy(calculorgps)
+              .then((model) => {
+                console.log(model);
+                this.getCalculosSeguradoSelecionado();
+              //   swal('Sucesso', 'Cálculo excluído com sucesso', 'success');
+                this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+              }).catch((err) => {
+                this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+              //  swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
+              });
+          })
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+
+      }
+    });
+  }
+
 
 
   public getPeriodosImportador(calculoId) {
@@ -247,6 +365,15 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   }
 
 
+  public showChildModal(): void {
+    this.modalCalculosRGPS.show();
+  }
+
+  public hideChildModal(): void {
+    this.modalCalculosRGPS.hide();
+  }
+
+
 
   formatAnosMesesDias(dias) {
 
@@ -276,5 +403,20 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       ? true : false;
   }
 
+
+
+  toastAlert(type, title, position) {
+
+    position = (!position) ? 'top-end' : position;
+
+    swal({
+      position: position,
+      type: type,
+      title: title,
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+  }
 
 }
