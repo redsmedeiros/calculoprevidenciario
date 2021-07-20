@@ -328,6 +328,7 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
                 seguradoId: this.idSegurado,
                 calculoId: this.idsCalculos,
                 export_result: data.export_result,
+                limitesDoVinculo: data.limitesDoVinculo,
             });
         }
     }

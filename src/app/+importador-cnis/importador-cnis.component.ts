@@ -67,7 +67,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.getTabelaMoeda();
     this.checkUserSession();
 
-    if (this.dadosPassoaPasso == undefined) {
+    if (this.dadosPassoaPasso === undefined) {
       this.dadosPassoaPasso = {
         origem: 'contagem',
         type: 'auto'

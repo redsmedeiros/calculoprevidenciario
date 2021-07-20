@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, SimpleChange, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Moeda } from 'app/services/Moeda.model';
+import { Component, OnInit, Input, SimpleChange,
+  OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -6,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
+import { MoedaService } from 'app/services/Moeda.service';
 import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 
@@ -14,6 +17,7 @@ import { ImportadorCnisContribuicoesComponent } from '../+importador-cnis-contri
 import { ImportadorCnisContribuicoesService } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
 
 import { ModalDirective } from 'ngx-bootstrap';
+
 
 @Component({
   selector: 'app-importador-cnis-periodos',
@@ -71,6 +75,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
+    private Moeda: MoedaService,
     protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected ImportadorCnisContribuicoesService: ImportadorCnisContribuicoesService,
     protected errors: ErrorService,
@@ -173,12 +178,30 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
+  private getTabelaMoeda() {
+
+    this.Moeda.moedaSalarioMinimoTeto()
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+
+        sessionStorage.setItem(
+          'moedaSalarioMinimoTeto',
+          JSON.stringify(moeda));
+
+      });
+
+  }
+
 /**
  * Se moeda null
  */
   private checkMoeda() {
     if (this.moeda === undefined || this.isEmpty(this.moeda)) {
-      this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'))
+      this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
+    }
+
+    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+      this.getTabelaMoeda();
     }
   }
 

@@ -5,7 +5,7 @@
       <i class="fa fa-table"></i>
     </span>
     <h2>Selecione um Cálculo ou clique em Criar novo Cálculo</h2>
-      <button type="button" (click)="modalCalculosRGPS.show()" class="btn btn-labeled btn-info pull-right">
+      <button type="button" (click)="setNewFormRMIinfoContagemTempo()" class="btn btn-labeled btn-info pull-right">
         <span class="btn-label">
           <i class="fa fa-plus"></i>
         </span> Criar novo Cálculo
@@ -21,6 +21,7 @@
         (selectedRowEvent)="getRow($event)"
         (updateRowEvent)="updateRow($event)"
         (deleteRowEvent)="deleteRow($event)"
+        (copyRowEvent)="copyRow($event)"
         paginationLength="true"
         tableClass="table table-striped table-bordered table-hover"
         width="100%"
@@ -64,8 +65,9 @@
               <div class="widget-body mb-0">
                 <app-rgps-calculos-form
                       [errors]="Errors"
-                      [formData]="form"
+                      [formData]="formCalculo"
                       [isEdit]="isEditRGPS"
+                      [dadosPassoaPasso]="dadosPassoaPasso"
                       (onSubmit)="submit($event)"
                 ></app-rgps-calculos-form> 
               </div>

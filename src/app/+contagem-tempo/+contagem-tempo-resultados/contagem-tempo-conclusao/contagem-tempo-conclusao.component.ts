@@ -99,10 +99,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   private isCompleteCarencia = false;
   private isCompleteTempoTotal = false;
 
-  //public idadeMasculinaProporcional = 19357.853;
-  //public idadeLimiteDias = 10957.5; // dias
+  // public idadeMasculinaProporcional = 19357.853;
+  // public idadeLimiteDias = 10957.5; // dias
   // public idadeLimiteDias = 10800; // dias 30 anos
-  //public idadeLimiteDias = 10957.5; // dias
+  // public idadeLimiteDias = 10957.5; // dias
 
   constructor(
     protected CalculoContagemTempoService: CalculoContagemTempoService,
@@ -111,7 +111,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
-    //this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
+    // this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
     this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1800; // dias
 
     if (this.periodosList.length > 0) {
@@ -1055,9 +1055,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   public contagemTempoConclusaoSaveRST(){
 
+    const limitesDoVinculo = {
+      inicio: this.limitesDoVinculo.inicio.format('YYYY-MM-DD'),
+      fim: this.limitesDoVinculo.fim.format('YYYY-MM-DD')
+    }
+
     this.contagemTempoConclusaoSave.emit({
       export_result: this.dadosParaExportar,
-      limitesDoVinculo: this.limitesDoVinculo,
+      limitesDoVinculo: limitesDoVinculo,
       resultComplete: true
     });
 

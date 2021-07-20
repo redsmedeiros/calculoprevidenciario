@@ -29,6 +29,7 @@ export class DatatableComponent implements OnInit {
   @Output() selectedRowEvent = new EventEmitter();
   @Output() updateRowEvent = new EventEmitter();
   @Output() deleteRowEvent = new EventEmitter();
+  @Output() copyRowEvent = new EventEmitter();
 
   constructor(
     private el: ElementRef
@@ -51,6 +52,7 @@ export class DatatableComponent implements OnInit {
     const selectedRowEvent = this.selectedRowEvent;
     const updateRowEvent = this.updateRowEvent;
     const deleteRowEvent = this.deleteRowEvent;
+    const copyRowEvent = this.copyRowEvent;
 
 
     let toolbar = '';
@@ -198,6 +200,13 @@ export class DatatableComponent implements OnInit {
 
     });
 
+    element.on('click', '.copy-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      copyRowEvent.emit(row.data());
+
+    });
   }
 
 

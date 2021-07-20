@@ -28,6 +28,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   @Input() dadosPassoaPasso;
   @Input() idSeguradoSelecionado;
   @Input() idCalculoSelecionadoCT;
+  @Input() calculoRMIDefaulForm;
 
 
   @Input() seguradoSelecionado;
@@ -40,47 +41,50 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
   public listRMICalculos = [];
   public calculosRMIList = [];
+  public formCalculo;
   public isEditRGPS = false;
 
+
+  public columnsConfig = [
+    {
+      data: 'actions2',
+      render: (data, type, row) => {
+        return this.getBtnAcoesCalculoRMI(row.id);
+      }, width: '11rem', class: 'text-center'
+    },
+    { data: 'tipo_seguro' },
+    { data: 'tipo_aposentadoria', visible: false },
+    {
+      data: (data, type, dataToSet) => {
+        return this.getTempoDeContribuicao(data, type, dataToSet);
+      }, visible: false
+    },
+    { data: 'data_pedido_beneficio' },
+    {
+      data: 'valor_beneficio',
+      render: (valor) => {
+        return this.formatMoeda(valor);
+      }
+    },
+    {
+      data: 'data_calculo',
+      render: (data) => {
+        return this.formatReceivedDate(data);
+      }
+    },
+    {
+      data: 'selecionarCalculo',
+      render: (data, type, row) => {
+        return this.getBtnSelecionarCalculo(row.id);
+      }, width: '6rem', class: 'p-1'
+    },
+  ];
 
   public calculoTableOptionsRMIList = {
     colReorder: true,
     data: this.calculosRMIList,
-    // order: [[6, 'desc']],
-    columns: [
-      {
-        data: 'actions2',
-        render: (data, type, row) => {
-          return this.getBtnAcoesCalculoRMI(row.id);
-        }, width: '10rem', class: 'text-center'
-      },
-      { data: 'tipo_seguro' },
-      { data: 'tipo_aposentadoria', visible: false },
-      {
-        data: (data, type, dataToSet) => {
-          return this.getTempoDeContribuicao(data, type, dataToSet);
-        }, visible: false
-      },
-      { data: 'data_pedido_beneficio' },
-      {
-        data: 'valor_beneficio',
-        render: (valor) => {
-          return this.formatMoeda(valor);
-        }
-      },
-      {
-        data: 'data_calculo',
-        render: (data) => {
-          return this.formatReceivedDate(data);
-        }
-      },
-      {
-        data: 'selecionarCalculo',
-        render: (data, type, row) => {
-          return this.getBtnSelecionarCalculo(row.id);
-        }, width: '6rem', class: 'p-1'
-      },
-    ],
+    // order: [[6, 'desc']],]
+    columns: this.columnsConfig,
     buttons: [
       {
         extend: 'colvis',
@@ -138,9 +142,23 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   updateDatatable() {
 
     this.calculoTableOptionsRMIList = {
-      ...this.calculoTableOptionsRMIList,
+      colReorder: true,
       data: this.calculosRMIList,
-    }
+      // order: [[6, 'desc']],
+      columns: this.columnsConfig,
+      buttons: [
+        {
+          extend: 'colvis',
+          text: 'Exibir e ocultar colunas',
+        }
+      ]
+    };
+
+
+    // this.calculoTableOptionsRMIList = {
+    //   ...this.calculoTableOptionsRMIList,
+    //   data: this.calculosRMIList,
+    // }
 
     this.isUpdatingCalcRGPS = false;
   }
@@ -163,12 +181,29 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     }
   }
 
+
+  private setNewFormRMIinfoContagemTempo() {
+
+    console.log(this.calculoRMIDefaulForm);
+
+   // JSON.parse(sessionStorage.getItem('exportResultContagemTempo'));
+    // sessionStorage.setItem('exportContagemTempo') = sessionStorage.getItem('exportResultContagemTempo')
+    this.showChildModal();
+  }
+
+  private setUpdateForm(dataRow) {
+
+    this.showChildModal();
+    this.isEditRGPS = true;
+    this.formCalculo = dataRow;
+
+  }
+
   private updateRow(dataRow) {
 
     if (this.isExits(dataRow)) {
 
-      console.log(dataRow);
-
+      this.setUpdateForm(dataRow);
 
     }
   }
@@ -176,10 +211,17 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   private deleteRow(dataRow) {
 
     if (this.isExits(dataRow)) {
-
-      console.log(dataRow);
-
       this.deleteCalculoRGPS(dataRow)
+    }
+
+  }
+
+  private copyRow(dataRow) {
+
+    if (this.isExits(dataRow)) {
+
+      this.copyCalculoRGPS(dataRow);
+
     }
   }
 
@@ -188,39 +230,34 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
     dataForm.id_segurado = this.idSeguradoSelecionado;
 
-
-
     if (!this.isEditRGPS) {
       this.createCalculoRGPS(dataForm)
     } else {
       this.updateCalculoRGPS(dataForm)
     }
 
-
-    console.log(dataForm);
-
   }
 
 
+  
+  public copyCalculoRGPS(calculoRMI) {
+
+    const calculorgps = Object.assign({}, calculoRMI);
+    calculorgps.id = null;
+    this.createCalculoRGPS(calculorgps);
+
+  }
+
   private createCalculoRGPS(data) {
 
+    data.id_contagem_tempo = this.idCalculoSelecionadoCT;
     this.CalculoRgpsService
       .save(data)
       .then(model => {
 
-        //   const teste = {
-        //   position: 'top-end',
-        //   icon: 'success',
-        //   title: 'Cálculo salvo com sucesso.',
-        //   button: false,
-        //   timer: 1500
-        // };
-
-        // swal(teste);
-        // this.hideChildModal();
-        // this.resetForm();
-        // this.onSubmit.emit();
         this.getCalculosSeguradoSelecionado();
+        this.hideChildModal();
+        // this.resetForm();
         this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
 
       })
@@ -229,24 +266,14 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   }
 
   private updateCalculoRGPS(data) {
-    // console.log(this.calculo);
 
     this.CalculoRgpsService
       .update(data)
       .then(model => {
 
-        // const teste = {
-        //   position: 'top-end',
-        //   icon: 'success',
-        //   title: 'Cálculo salvo com sucesso.',
-        //   button: false,
-        //   timer: 1500
-        // };
-
-        // swal(teste).then(() => {
-
-        // });
         this.getCalculosSeguradoSelecionado();
+        this.isEditRGPS = false;
+        this.hideChildModal();
         this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
 
       })
@@ -266,29 +293,25 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       confirmButtonText: 'Deletar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
+
       if (result.value) {
 
-        console.log(this.CalculoRgpsService.list)
+        const calculorgps = this.calculosRMIList.find((calculo) => calculo.id === calculoRMI.id);
 
-        console.log(this.calculosRMIList)
+        this.CalculoRgpsService.destroy(calculorgps)
+          .then((model) => {
+            console.log(model);
+            this.getCalculosSeguradoSelecionado();
+            this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+          }).catch((err) => {
+            this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+          });
 
-        this.CalculoRgpsService.find(calculoRMI)
-          .then(calculorgps => {
-            console.log(calculorgps);
-            this.CalculoRgpsService.destroy(calculorgps)
-              .then((model) => {
-                console.log(model);
-                this.getCalculosSeguradoSelecionado();
-              //   swal('Sucesso', 'Cálculo excluído com sucesso', 'success');
-                this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
-              }).catch((err) => {
-                this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
-              //  swal('Erro', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', 'error');
-              });
-          })
+
       } else if (result.dismiss === swal.DismissReason.cancel) {
 
       }
+
     });
   }
 
@@ -358,6 +381,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public getBtnAcoesCalculoRMI(id) {
 
     return ` <div class="btn-group">
+    <button class="btn btn-default btn-xs copy-btn" title="Copiar" >&nbsp;<i class="fa fa-copy fa-1-7x"></i>&nbsp;</button>
       <button class="btn btn-warning btn-xs update-btn" title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</button>
       <button class="btn btn-danger btn-xs delete-btn" title="Deletar" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</button>
     </div>
@@ -366,10 +390,12 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
 
   public showChildModal(): void {
+    this.formCalculo = CalculoRgps.form;
     this.modalCalculosRGPS.show();
   }
 
   public hideChildModal(): void {
+    this.formCalculo = CalculoRgps.form;
     this.modalCalculosRGPS.hide();
   }
 

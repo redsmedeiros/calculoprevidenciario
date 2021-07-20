@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
@@ -17,7 +17,7 @@ import { InputFunctions } from 'app/shared/functions/input-functions';
     ErrorService
   ],
 })
-export class RgpsCalculosFormComponent implements OnInit {
+export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   public dataInicioBeneficio;
   public periodoInicioBeneficio;
@@ -47,18 +47,18 @@ export class RgpsCalculosFormComponent implements OnInit {
   public secundariaAtualmeses;
   public secundariaAtualdias;
 
-  //reforma EC 103/2019
+  // reforma EC 103/2019
   public primaria19anos;
   public primaria19meses;
   public primaria19dias;
-  //reforma EC 103/2019
+  // reforma EC 103/2019
 
   public grupoDos12;
   public carencia;
   public carenciaAposEc103;
   public alertCarenciaAposEc103 = false;
 
-  //reforma EC 103/2019
+  // reforma EC 103/2019
   public numDependentes;
   public depedenteInvalido;
   public obitoDecorrenciaTrabalho;
@@ -71,7 +71,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   public iscalcularDescarteDeficienteEC103 = false;
   public media12Ultimos = false;
   public ismedia12Ultimos = false;
-  //reforma EC 103/2019
+  // reforma EC 103/2019
 
   public hasAnterior = false;
   public has98 = false;
@@ -82,14 +82,14 @@ export class RgpsCalculosFormComponent implements OnInit {
   public hasGrupoDos12 = false;
   public posteriorMaio2013 = false;
 
-  //reforma EC 103/2019
+  // reforma EC 103/2019
   public hasPensao19 = false;
   public hasInvalidez19 = false;
   public hasPensaoNaoInstuidorAposentado = false;
   public hasPensaoInstuidorAposentado = false;
   public hasAuxilioAcidente = false;
   public hasDivisorMinimo = false;
-  //reforma EC 103/2019
+  // reforma EC 103/2019
 
 
 
@@ -104,6 +104,7 @@ export class RgpsCalculosFormComponent implements OnInit {
   @Input() formData;
   @Input() errors: ErrorService;
   @Input() isEdit: boolean;
+  @Input() dadosPassoaPasso;
   @Output() onSubmit = new EventEmitter;
 
   constructor(
@@ -111,7 +112,8 @@ export class RgpsCalculosFormComponent implements OnInit {
     protected Segurado: SeguradoService
   ) { }
 
-  ngOnInit() {
+
+  private iniciarForm() {
 
     this.getSegurado();
 
@@ -174,8 +176,24 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.checkImportContagemTempo();
     }
 
+  }
+
+
+
+  ngOnInit() {
+
+    this.iniciarForm();
 
   }
+
+
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    this.iniciarForm();
+
+  }
+
 
 
   private getSegurado() {
@@ -777,17 +795,15 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     this.dataInicioBeneficio = exportDados.dib;
 
-    console.log(exportDados)
-
     this.changePeriodoOptions();
 
     const dib = moment(exportDados.dib, 'DD/MM/YYYY');
 
-     // posterior a EC nº 103/2019
-     this.primaria19anos = '';
-     this.primaria19meses = '';
-     this.primaria19dias = '';
-     // posterior a EC nº 103/2019
+    // posterior a EC nº 103/2019
+    this.primaria19anos = '';
+    this.primaria19meses = '';
+    this.primaria19dias = '';
+    // posterior a EC nº 103/2019
 
     if (dib < moment('1988-10-05')) {
 
@@ -815,7 +831,7 @@ export class RgpsCalculosFormComponent implements OnInit {
       this.carencia = periodos.total98.carencia;
 
     } else if (dib > moment('1998-12-15') && dib <= moment('1999-11-29')) {
-      
+
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
       this.primaria98dias = periodos.total98.days;
@@ -829,11 +845,11 @@ export class RgpsCalculosFormComponent implements OnInit {
 
     } else if (dib > moment('1999-11-29') && dib <= moment('2019-11-13')) {
 
-       // Até a EC nº 103/2019
-       this.primariaAtualanos = periodos.total19.years;
-       this.primariaAtualmeses = periodos.total19.months;
-       this.primariaAtualdias = periodos.total19.days;
-       // Até a EC nº 103/2019
+      // Até a EC nº 103/2019
+      this.primariaAtualanos = periodos.total19.years;
+      this.primariaAtualmeses = periodos.total19.months;
+      this.primariaAtualdias = periodos.total19.days;
+      // Até a EC nº 103/2019
 
       this.primaria98anos = periodos.total98.years;
       this.primaria98meses = periodos.total98.months;
