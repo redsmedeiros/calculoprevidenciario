@@ -283,6 +283,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   public planejamento;
   public isPlanejamento = false;
+  public isPassoaPasso = false;
   public planejamentoContribuicoesAdicionais = [];
 
 
@@ -312,34 +313,53 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
   ngOnInit() {
-    this.calculoList = [];
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.idsCalculo = this.route.snapshot.params['id'].split(',');
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
 
-    this.isPlanejamento = this.getIsPlanejamento();
-    if (this.isExits(this.idSegurado) && this.isExits(this.idsCalculo)) {
-      this.iniciarCalculoRMI();
-    }
+    this.setAtributosIniciais();
+
   }
 
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
+    this.setAtributosIniciais();
+
+  }
+
+
+  private setAtributosIniciais() {
+
     this.calculoList = [];
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.idsCalculo = this.route.snapshot.params['id'].split(',');
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
 
-    this.isPlanejamento = this.getIsPlanejamento();
+    if (this.isExits(this.route.snapshot.params['id_segurado'])
+      && this.isExits(this.route.snapshot.params['id'])
+      && !this.isExits(this.dadosPassoaPasso.origem)) {
 
-    if (this.isExits(this.idSegurado)
-      && this.isExits(this.idsCalculo)
+      this.idSegurado = this.route.snapshot.params['id_segurado'];
+      this.idsCalculo = this.route.snapshot.params['id'].split(',');
+      this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    } else if (this.isExits(this.idSeguradoSelecionado)
+      && this.isExits(this.idCalculoSelecionadoRMI)
       && this.isExits(this.dadosPassoaPasso)
       && this.isExits(this.dadosPassoaPasso.origem)
     ) {
-      this.iniciarCalculoRMI();
+
+      this.idsCalculo = []
+      this.isPassoaPasso = true;
+      this.idSegurado = this.idSeguradoSelecionado;
+      this.idsCalculo[0] = this.idCalculoSelecionadoRMI;
+      this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
     }
+
+    if (this.isExits(this.idSegurado)
+      && this.isExits(this.idsCalculo)
+    ) {
+
+      this.isPlanejamento = this.getIsPlanejamento();
+      this.iniciarCalculoRMI();
+
+    }
+
   }
 
 
@@ -363,7 +383,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
           }).then(() => {
             this.listaSegurados();
           });
+
         } else {
+
           this.idadeSegurado = this.getIdadeSegurado();
           this.dataFiliacao = this.getDataFiliacao();
           let counter = 0;
@@ -1418,9 +1440,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    console.log(this.planejamento.valor_beneficio);
-    console.log(typeof this.planejamento.valor_beneficio);
-
     if (Number(this.planejamento.valor_beneficio) > 0) {
 
       while (fimContador.isBefore(auxiliarDate, 'month')) {
@@ -1489,8 +1508,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
   public getPlanejamento(calculo) {
-    // console.log(this.route.snapshot.params['correcao_pbc']);
-    // console.log(this.route.snapshot.params['pbc']);
 
     const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
 
@@ -1509,7 +1526,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
           .then((planejamento: PlanejamentoRgps) => {
 
 
-            console.log(planejamento);
             this.planejamento = planejamento;
 
             const calcClone = Object.assign({}, calculo);

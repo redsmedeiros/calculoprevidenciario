@@ -348,8 +348,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const result = this.countPendenciasSC(contribuicoes, '0,00');
       const result_mm = this.countPendenciasSC(contribuicoes, 'mm');
 
-      console.log(contribuicoes);
-
       const line = {
         id: null,
         nit: vinculo.nitEmpregador,
@@ -387,8 +385,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private ajusteListVinculos(calculoId) {
-
-    console.log(this.vinculosList);
 
     this.vinculosListPost = [];
     for (const vinculo of this.vinculosList) {
@@ -798,8 +794,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     }
 
-    console.log(vinculo)
-
   }
 
   hideContribuicoes() {
@@ -809,8 +803,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   eventContribuicoes(event) {
-
-    console.log(event);
 
     switch (event.acao) {
       case 'sair':
@@ -898,7 +890,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     // let checkContrib = false;
 
-    console.log(vinculo);
     const contribuicoesList = [];
     let mes = 0;
     let chave = '';

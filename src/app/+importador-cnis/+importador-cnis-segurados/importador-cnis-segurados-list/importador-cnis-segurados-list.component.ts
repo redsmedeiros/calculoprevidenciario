@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { ErrorService } from 'app/services/error.service';
 import { Auth } from 'app/services/Auth/Auth.service';
 import { DOCUMENT } from '@angular/platform-browser';
-//import { WINDOW } from '../../../+rgps-calculos/window.service';
+// import { WINDOW } from '../../../+rgps-calculos/window.service';
 
 import { SeguradoContagemTempo as SeguradoModel } from 'app/+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { SeguradoService } from 'app/+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
@@ -35,7 +35,7 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
   public segurado;
   public isEditForm = false;
 
-  
+
   @Output() seguradoSelecionadoEvent = new EventEmitter();
 
   public datatableOptions = {
@@ -139,9 +139,6 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
     this.seguradoSelecionado = {};
     this.seguradoSelecionado = this.list.find(row => row.id === Number(idSelecionado));
 
-    // console.log(idSelecionado);
-    // console.log(this.seguradoSelecionado);
-
     if (this.isExits(this.seguradoSelecionado)) {
 
       this.seguradoSelecionadoEvent.emit(this.seguradoSelecionado);
@@ -177,7 +174,7 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
       .then((model: SeguradoModel) => {
         // this.resetForm();
         // this.onSubmit.emit();
-        //window.location.href='#/rgps/rgps-calculos/'+ model.id;
+        // window.location.href='#/rgps/rgps-calculos/'+ model.id;
       })
       .catch(errors => this.Errors.add(errors));
   }
@@ -228,8 +225,8 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
 
   private isExits(value) {
     return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
-      value !== undefined && value != '')
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
       ? true : false;
   }
 

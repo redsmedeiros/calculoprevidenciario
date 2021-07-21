@@ -499,7 +499,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     let checkContrib = false;
 
-    console.log(matriz);
     const contribuicoesList = [];
     let mes = 0;
     let chave = '';
@@ -532,26 +531,15 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     const checkNumContricuicoes = !(this.result_sc > 0 || this.result_sc_mm > 0);
 
-    console.log(this.sc_mm_considerar_tempo)
-    console.log(this.sc_mm_considerar_tempo === 1)
-    console.log(this.sc_mm_considerar_tempo === 0)
-    console.log(this.sc_mm_ajustar)
-
     const checkNumStatusContribuicoes = (
       this.sc_mm_considerar_carencia !== null &&
       (this.sc_mm_considerar_tempo === 0 || (this.sc_mm_considerar_tempo === 1 && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
     );
 
 
-    console.log(checkNumContricuicoes);
-    console.log(checkNumStatusContribuicoes);
-
-
     if (checkNumContricuicoes || (!checkNumContricuicoes && checkNumStatusContribuicoes)) {
       checkContrib = true;
     }
-
-    // console.log(checkContrib);
 
     return checkContrib;
 

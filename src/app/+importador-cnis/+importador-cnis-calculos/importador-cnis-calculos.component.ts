@@ -53,7 +53,6 @@ export class ImportadorCnisCalculosComponent implements OnInit, OnChanges {
       && this.dadosPassoaPasso.type === 'seguradoExistente'
       && typeof this.calculo.id_segurado !== 'undefined'
     ) {
-      
 
       this.CalculoContagemService.find(this.calculo.id)
       .then(calculo => {

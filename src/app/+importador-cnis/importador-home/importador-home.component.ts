@@ -473,11 +473,10 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
   public eventCalcularContagemResult(data) {
-    console.log(data);
 
     if (this.isExits(data) && data.resultComplete) {
 
-      this.exportResultContagemTempo = data.export_result;
+      this.exportResultContagemTempo = data;
       this.isCompleteResultContagemTempo = data.resultComplete;
       this.setStepValidate('step3', data.resultComplete);
 

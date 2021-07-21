@@ -113,9 +113,6 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     // this.ref.detectChanges();
     // this.setExibirForm(this.dadosPassoaPasso);
 
-    console.log(this.idSeguradoSelecionado)
-    console.log(this.idCalculoSelecionadoCT)
-
     this.getCalculosSeguradoSelecionado();
   }
 
@@ -168,12 +165,9 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
     if (this.isExits(dataRow)) {
 
-      console.log(dataRow);
-
       this.calculosSelecionadoRMI = dataRow;
       this.isCalculosSelecionadoRMI = true;
       this.getPeriodosImportador(this.calculosSelecionadoRMI.id)
-
 
       this.calculoSelecionadoEvent.emit(this.calculosSelecionadoRMI);
       sessionStorage.setItem('calculosSelecionadoRMI', JSON.stringify(this.calculosSelecionadoRMI));
@@ -184,12 +178,16 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
   private setNewFormRMIinfoContagemTempo() {
 
-    console.log(this.calculoRMIDefaulForm);
+    console.log(this.calculoRMIDefaulForm)
+    console.log(JSON.parse(sessionStorage.getItem('exportResultContagemTempo')))
 
    // JSON.parse(sessionStorage.getItem('exportResultContagemTempo'));
     // sessionStorage.setItem('exportContagemTempo') = sessionStorage.getItem('exportResultContagemTempo')
     this.showChildModal();
   }
+
+
+  
 
   private setUpdateForm(dataRow) {
 
@@ -239,7 +237,6 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   }
 
 
-  
   public copyCalculoRGPS(calculoRMI) {
 
     const calculorgps = Object.assign({}, calculoRMI);
@@ -300,9 +297,10 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
         this.CalculoRgpsService.destroy(calculorgps)
           .then((model) => {
-            console.log(model);
+
             this.getCalculosSeguradoSelecionado();
             this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
           }).catch((err) => {
             this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
           });

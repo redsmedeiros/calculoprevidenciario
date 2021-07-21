@@ -124,7 +124,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   public createSeguradoImportador(userId) {
 
      this.formData.user_id = userId;
-     this.formData.funcao = 'contagem';   
+     this.formData.funcao = 'contagem';
 
     return this.Segurado.save(this.formData)
       .then((model: SeguradoModel) => {
@@ -140,20 +140,20 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.countSeguradoErros = 0;
     this.errors.clear();
 
-    if (this.formData.nome == undefined || this.formData.nome == '') {
+    if (this.formData.nome === undefined || this.formData.nome === '') {
       this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
       this.countSeguradoErros++;
     }
 
 
 
-    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
+    if (this.formData.data_nascimento === undefined || this.formData.data_nascimento === '') {
       this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
       this.countSeguradoErros++;
     } else {
 
-      let dateParts = this.formData.data_nascimento.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      const dateParts = this.formData.data_nascimento.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
       if (isNaN(date.getTime())) {
         this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
@@ -162,12 +162,12 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
 
-    if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
+    if (this.formData.data_filiacao === undefined || this.formData.data_filiacao === '') {
       this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
       this.countSeguradoErros++;
     } else {
-      let dateParts = this.formData.data_filiacao.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      const dateParts = this.formData.data_filiacao.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
       if (isNaN(date.getTime())) {
         this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
@@ -175,7 +175,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
       }
     }
 
-    if (this.formData.sexo == undefined || this.formData.sexo == '') {
+    if (this.formData.sexo === undefined || this.formData.sexo === '') {
       this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
       this.countSeguradoErros++;
     }
@@ -202,7 +202,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
   changeDocumentMask() {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
-    let id = this.formData.id_documento.toString();
+    const id = this.formData.id_documento.toString();
   }
 
   getDocumentType(id_documento) {

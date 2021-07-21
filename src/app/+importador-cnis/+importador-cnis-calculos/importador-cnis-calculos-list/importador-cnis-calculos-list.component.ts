@@ -129,7 +129,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     }
   }
 
-  
+
   public getPeriodosImportador(calculoId) {
 
     if (calculoId !== undefined) {
@@ -172,7 +172,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
 
   formatReceivedDate(inputDate) {
-    let date = new Date(inputDate);
+    const date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
     if (!isNaN(date.getTime())) {
       // Months use 0 index.
@@ -186,8 +186,8 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   private isExits(value) {
     return (typeof value !== 'undefined' &&
-      value != null && value != 'null' &&
-      value !== undefined && value != '')
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
       ? true : false;
   }
 
