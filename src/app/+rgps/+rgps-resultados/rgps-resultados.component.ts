@@ -1,6 +1,6 @@
 
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { Component, OnInit, HostListener, Inject, Input, SimpleChange, OnChanges } from '@angular/core';
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
@@ -25,15 +25,22 @@ import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.m
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
-import { WINDOW } from "../+rgps-calculos/window.service";
+import { WINDOW } from '../+rgps-calculos/window.service';
 
 @FadeInTop()
 @Component({
-  selector: 'sa-datatables-showcase',
+  selector: 'app-rgps-resultados-component',
   templateUrl: './rgps-resultados.component.html',
   styleUrls: ['./rgps-resultados.component.css']
 })
-export class RgpsResultadosComponent implements OnInit {
+export class RgpsResultadosComponent implements OnInit, OnChanges {
+
+
+  @Input() dadosPassoaPasso;
+  @Input() idSeguradoSelecionado;
+  @Input() idCalculoSelecionadoCT;
+  @Input() exportResultContagemTempo;
+  @Input() idCalculoSelecionadoRMI;
 
   public styleTheme = 'style-0';
 
@@ -279,7 +286,7 @@ export class RgpsResultadosComponent implements OnInit {
   public planejamentoContribuicoesAdicionais = [];
 
 
-  //pbc parametro get
+  // pbc parametro get
   public pbcCompleto = false;
 
   // pbc indices de correção
@@ -311,6 +318,34 @@ export class RgpsResultadosComponent implements OnInit {
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
 
     this.isPlanejamento = this.getIsPlanejamento();
+    if (this.isExits(this.idSegurado) && this.isExits(this.idsCalculo)) {
+      this.iniciarCalculoRMI();
+    }
+  }
+
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+
+    this.calculoList = [];
+    this.idSegurado = this.route.snapshot.params['id_segurado'];
+    this.idsCalculo = this.route.snapshot.params['id'].split(',');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    this.isPlanejamento = this.getIsPlanejamento();
+
+    if (this.isExits(this.idSegurado)
+      && this.isExits(this.idsCalculo)
+      && this.isExits(this.dadosPassoaPasso)
+      && this.isExits(this.dadosPassoaPasso.origem)
+    ) {
+      this.iniciarCalculoRMI();
+    }
+  }
+
+
+
+  private iniciarCalculoRMI() {
+
 
     this.isUpdating = true;
 
@@ -341,8 +376,8 @@ export class RgpsResultadosComponent implements OnInit {
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
-              <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
-              <span> </span></label></div>`;
+            <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
+            <span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
 
                 calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
@@ -372,6 +407,7 @@ export class RgpsResultadosComponent implements OnInit {
         }
       });
   }
+
 
   loadCurrency(data) {
     for (const currency of this.currencyList) {

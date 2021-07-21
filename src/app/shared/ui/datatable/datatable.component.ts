@@ -158,29 +158,53 @@ export class DatatableComponent implements OnInit {
 
     element.on('click', '.select-btn', function () {
 
+      $('tr').removeClass('bg-ieprev-checked');
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
+
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 
     element.on('click', '.checked-row', function () {
 
+      $('tr').removeClass('bg-ieprev-checked');
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
+
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 
     element.on('click', '.checked-row-one', function () {
 
       $('.checked-row-one').removeAttr('checked');
+      // $('tr').removeClass('bg-ieprev-checked');
+
+      // $('tr .bg-ieprev-checked').removeClass('bg-ieprev-checked');
+
+       const table = $(this).closest('table');
+       table.closest('tr').removeClass('bg-ieprev-checked');
+
+       console.log(table.children('tr'))
+       console.log(table)
+        console.log(table.closest('tr'))
+
 
       const tr = $(this).closest('tr');
+     // tr.parent( 'tr .checked-row-one' ).removeClass('bg-ieprev-checked');
+
+     console.log(tr)
+
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
 
       $(this).attr('checked', 'checked');
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 

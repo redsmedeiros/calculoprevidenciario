@@ -17,6 +17,7 @@
   <div *ngIf="!isUpdatingListSeg">
     <div class="widget-body no-padding">
       <sa-datatable
+        id="calculos-contagem-segurado"
         [options]="datatableOptions"
         paginationLength="true"
         (selectedRowEvent)="getRow($event)"

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, OnChanges, Output, EventEmitter } from '@angular/core';
 import { CalculoRgps } from 'app/+rgps/+rgps-calculos/CalculoRgps.model';
 
 
@@ -13,6 +13,7 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
   @Input() idSeguradoSelecionado;
   @Input() idCalculoSelecionadoCT;
   @Input() exportResultContagemTempo;
+  @Output() calculoSelecionadoEventRST = new EventEmitter();
 
   public calcRMIDefaulForm = CalculoRgps.form;
 
@@ -32,11 +33,11 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
   }
 
 
-  formatCalcRMIDefaulForm(exportResultContagemTempo){
+  formatCalcRMIDefaulForm(exportResultContagemTempo) {
 
     console.log(exportResultContagemTempo);
     // deve ser padronizado object CalculoRgps
-  //  this.calcRMIDefaulForm = exportResultContagemTempo;
+    //  this.calcRMIDefaulForm = exportResultContagemTempo;
   }
 
 
@@ -48,6 +49,12 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
     this.formatCalcRMIDefaulForm(exportResultContagemTempo);
     // JSON.parse(sessionStorage.getItem('exportResultContagemTempo'));
 
+  }
+
+
+  public setCalculoSelecionadoEvent(data) {
+
+    this.calculoSelecionadoEventRST.emit(data);
   }
 
 }

@@ -10,17 +10,24 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './importador-home.component.html',
   styleUrls: ['./importador-home.component.css']
 })
-export class ImportadorHomeComponent implements OnInit {
+export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   private dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
   private isTypeEntradaDados = false;
 
+  public idSeguradoSelecionado;
   private seguradoSelecionado;
   private isSeguradoSelecionado = false;
 
+  public idCalculoSelecionado;
   private calculoSelecionado;
   private isCalculoSelecionado = false;
   private isUpdatingCalculo = true;
+
+  public idCalculoSelecionadoRMI;
+  private calculoSelecionadoRMI;
+  private isCalculoSelecionadoRMI = false;
+  private isUpdatingCalculoRMI = true;
 
   private periodosSelecionado;
 
@@ -32,8 +39,8 @@ export class ImportadorHomeComponent implements OnInit {
 
   private isPaginaInicial = true;
 
-  public idSeguradoSelecionado;
-  public idCalculoSelecionado;
+
+
 
   public exportResultContagemTempo;
   public isCompleteResultContagemTempo = false;
@@ -186,7 +193,7 @@ export class ImportadorHomeComponent implements OnInit {
 
     //  console.log(steo);
     //  console.log(this.activeStep);
-    //this.setStepDefaultRetorno(stepNumber)
+    // this.setStepDefaultRetorno(stepNumber)
 
 
     if (steo.key === 'step1' || steo.key === 'step2' || steo.key === 'step3') {
@@ -218,10 +225,6 @@ export class ImportadorHomeComponent implements OnInit {
         this.isCompleteResultContagemTempo = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: 'seguradoExistente' }
 
-        // this.isPlanejamentoSelecionado = false;
-        // this.planejamentoSelecionado = {}
-        // this.unCheckedAll('.checkboxPlanejamento');
-
         break;
       case 'step3':
         // this.isPlanejamentoSelecionado = false;
@@ -229,9 +232,14 @@ export class ImportadorHomeComponent implements OnInit {
         // this.unCheckedAll('.checkboxPlanejamento');
 
         break;
-      // case 'step4':
-      // this.setStepValidate('step4', false);
-      //   break;
+        case 'step4':
+
+          this.isCalculoSelecionadoRMI = false;
+          this.calculoSelecionadoRMI = {}
+          this.unCheckedAll('.checkboxCalculosRMI');
+          this.setStepValidate('step4', false);
+
+        break;
     }
   }
 
@@ -482,6 +490,26 @@ export class ImportadorHomeComponent implements OnInit {
   }
 
 
+  public setCalculoSelecionadoEventRMI(dataCalculoRMI) {
+
+    let stepStatus = false;
+    this.calculoSelecionadoRMI = {};
+
+    this.calculoSelecionadoRMI = dataCalculoRMI;
+    this.idCalculoSelecionadoRMI = dataCalculoRMI.id;
+
+    this.checkedUnique(`${dataCalculoRMI.id}-checkbox-calculos-rmi`, '.checkboxCalculosRMI');
+    stepStatus = (this.isExits(this.calculoSelecionadoRMI) && isObject(this.calculoSelecionadoRMI));
+    // // stepStatus = (this.isCalculoSelecionado && dataCalculo.id === this.calculoSelecionado.id) ? false : true;
+
+    if (this.checkedUniqueCount(`${dataCalculoRMI.id}-checkbox-calculos-rmi`, '.checkboxCalculosRMI') === 0) {
+      stepStatus = false;
+      this.calculoSelecionado = {};
+    }
+
+    this.setStepValidate('step4', stepStatus);
+
+  }
 
   public eventPrevStepPassoaPasso(data) {
 

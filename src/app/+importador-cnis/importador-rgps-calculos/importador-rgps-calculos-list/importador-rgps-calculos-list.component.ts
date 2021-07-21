@@ -370,8 +370,8 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public getBtnSelecionarCalculo(id) {
 
     return `<div class="checkbox "><label>
-          <input type="checkbox" id='${id}-checkbox-calculos'
-          class="select-btn checkbox {{styleTheme}} checkboxCalculos"
+          <input type="checkbox" id='${id}-checkbox-calculos-rmi'
+          class="checked-row-one checkbox {{styleTheme}} checkboxCalculosRMI"
           value="${id}"><span> </span></label>
    </div>`;
   }

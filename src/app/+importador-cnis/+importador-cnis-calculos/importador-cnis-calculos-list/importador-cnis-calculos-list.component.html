@@ -12,6 +12,7 @@
     </div>
     <div *ngIf="!isUpdatingCalc" class="widget-body no-padding">
       <sa-datatable
+        id="calculos-contagem-tempo"
         [options]="calculoTableOptions"
         (selectedRowEvent)="getRow($event)"
         paginationLength="true"

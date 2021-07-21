@@ -22,6 +22,7 @@ import { ContagemTempoSharedResultadosModule } from 'app/+contagem-tempo/+contag
 import { RgpsCalculosSharedModule } from 'app/+rgps/+rgps-calculos/shared/rgps-calculos-shared.module';
 import { ImportadorRgpsCalculosComponent } from './importador-rgps-calculos/importador-rgps-calculos.component';
 import { ImportadorRgpsCalculosListComponent } from './importador-rgps-calculos/importador-rgps-calculos-list/importador-rgps-calculos-list.component';
+import { RgpsResultadosModule } from 'app/+rgps/+rgps-resultados/rgps-resultados.module';
 
 
 export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -45,7 +46,8 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule,
     importadorCnisRouting,
     ContagemTempoSharedResultadosModule,
-    RgpsCalculosSharedModule
+    RgpsCalculosSharedModule,
+    RgpsResultadosModule,
   ],
   declarations: [
     ImportadorCnisComponent,

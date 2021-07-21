@@ -614,6 +614,10 @@ a[class*="action-"]:hover {
   color: #fff !important;
 }
 
+.bg-ieprev-checked{
+  background:#ffdc69b8 !important;
+}
+
 .color-ieprev {
   color: #4a4d4f !important;
 }

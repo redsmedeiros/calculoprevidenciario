@@ -157,7 +157,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
     return `<div class="checkbox "><label>
           <input type="checkbox" id='${id}-checkbox-calculos'
-          class="select-btn checkbox {{styleTheme}} checkboxCalculos"
+          class="checked-row-one checkbox {{styleTheme}} checkboxCalculos"
           value="${id}"><span> </span></label>
    </div>`;
   }
