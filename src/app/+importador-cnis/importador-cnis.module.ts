@@ -18,11 +18,12 @@ import { ImportadorCnisCalculosComponent } from './+importador-cnis-calculos/imp
 import { ImportadorHomeComponent } from './importador-home/importador-home.component';
 import { ImportadorCnisSeguradosListComponent } from './+importador-cnis-segurados/importador-cnis-segurados-list/importador-cnis-segurados-list.component';
 import { ImportadorCnisCalculosListComponent } from './+importador-cnis-calculos/importador-cnis-calculos-list/importador-cnis-calculos-list.component';
-import { ContagemTempoSharedResultadosModule } from 'app/+contagem-tempo/+contagem-tempo-resultados/shared/contagem-tempo-shared-resultados.module';
+
 import { RgpsCalculosSharedModule } from 'app/+rgps/+rgps-calculos/shared/rgps-calculos-shared.module';
 import { ImportadorRgpsCalculosComponent } from './importador-rgps-calculos/importador-rgps-calculos.component';
 import { ImportadorRgpsCalculosListComponent } from './importador-rgps-calculos/importador-rgps-calculos-list/importador-rgps-calculos-list.component';
 import { RgpsResultadosModule } from 'app/+rgps/+rgps-resultados/rgps-resultados.module';
+import { ContagemTempoResultadosModule } from 'app/+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-resultados.module';
 
 
 export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -45,7 +46,7 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     TextMaskModule,
     CurrencyMaskModule,
     importadorCnisRouting,
-    ContagemTempoSharedResultadosModule,
+    ContagemTempoResultadosModule,
     RgpsCalculosSharedModule,
     RgpsResultadosModule,
   ],

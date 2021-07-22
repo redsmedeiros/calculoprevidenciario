@@ -105,6 +105,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   @Input() errors: ErrorService;
   @Input() isEdit: boolean;
   @Input() dadosPassoaPasso;
+  @Input() calculoRMIDefaulForm;
   @Output() onSubmit = new EventEmitter;
 
   constructor(
@@ -115,7 +116,6 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   private iniciarForm() {
 
-   
 
     if (this.isEdit) {
       this.dataInicioBeneficio = this.formData.data_pedido_beneficio;
@@ -176,8 +176,28 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       this.checkImportContagemTempo();
     }
 
+    if (!this.isEdit && this.isExits(this.calculoRMIDefaulForm)) {
+      this.setNewFormRMIinfoContagemTempo();
+    }
+
   }
 
+  private setNewFormRMIinfoContagemTempo() {
+
+    if (this.isExits(this.calculoRMIDefaulForm)) {
+      for (const key in this.calculoRMIDefaulForm) {
+        if (Object.prototype.hasOwnProperty.call(this.calculoRMIDefaulForm, key)) {
+
+          this[key] = this.calculoRMIDefaulForm[key];
+
+          console.log(key + '=' + this[key]);
+        }
+      }
+    }
+
+    this.changePeriodoOptions();
+
+  }
 
 
   ngOnInit() {
@@ -254,7 +274,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     } else {
 
       // console.log(this.errors.all())
-      //swal('Erro', 'Confira os dados digitados', 'error');
+      // swal('Erro', 'Confira os dados digitados', 'error');
 
       const swalErrorConf = {
         position: 'top-end',
@@ -332,10 +352,14 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     if (this.dataInicioBeneficio === undefined || this.dataInicioBeneficio === '') {
       this.errors.add({ 'dataInicioBeneficio': ['A Data é obrigatória.'] });
     } else {
-      var dateParts = this.dataInicioBeneficio.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()) || date < new Date('01/01/1970'))
+
+      const dateParts = this.dataInicioBeneficio.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+
+      if (isNaN(date.getTime()) || date < new Date('01/01/1970')) {
         this.errors.add({ 'dataInicioBeneficio': ['Insira uma data válida.'] });
+      }
+
     }
 
     if (this.periodoInicioBeneficio === undefined || this.periodoInicioBeneficio === '') {
@@ -460,7 +484,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
         }
       }
 
-      //Secundaria
+      // Secundaria
       if (!(this.secundariaAtualanos === undefined || this.secundariaAtualanos === '')) {
         if (!this.isNumber(this.secundariaAtualanos)) {
           this.errors.add({ 'secundariaAtualanos': ['Valor inválido.'] });
@@ -960,7 +984,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
   formatDate(ano, prim_or_sec) {
-    //prim_or_sec = 0 para primaria
+    // prim_or_sec = 0 para primaria
     //            = 1 para secundaria
     if (ano === '98' && prim_or_sec === 0) {
       return this.primaria98anos + '-' + this.primaria98meses + '-' + this.primaria98dias;
@@ -1208,6 +1232,11 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
 
+  isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '') ? true : false;
+  }
 
   isNumber(value) {
     if (!isNaN(value) && Number.isInteger(+value)) {

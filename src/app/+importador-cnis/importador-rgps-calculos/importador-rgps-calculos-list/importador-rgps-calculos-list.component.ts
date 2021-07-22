@@ -177,17 +177,10 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
 
   private setNewFormRMIinfoContagemTempo() {
-
-    console.log(this.calculoRMIDefaulForm)
-    console.log(JSON.parse(sessionStorage.getItem('exportResultContagemTempo')))
-
-   // JSON.parse(sessionStorage.getItem('exportResultContagemTempo'));
-    // sessionStorage.setItem('exportContagemTempo') = sessionStorage.getItem('exportResultContagemTempo')
+    this.isEditRGPS = false;
     this.showChildModal();
   }
 
-
-  
 
   private setUpdateForm(dataRow) {
 

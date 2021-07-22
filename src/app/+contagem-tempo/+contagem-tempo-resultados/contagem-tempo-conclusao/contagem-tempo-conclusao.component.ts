@@ -783,8 +783,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
-  
-
 
   public somatoriaTempoContribuicaoIdadeAteEC103() {
 
@@ -1056,8 +1054,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public contagemTempoConclusaoSaveRST(){
 
     const limitesDoVinculo = {
-      inicio: this.limitesDoVinculo.inicio.format('YYYY-MM-DD'),
-      fim: this.limitesDoVinculo.fim.format('YYYY-MM-DD')
+      inicio: this.limitesDoVinculo.inicio.format('DD/MM/YYYY'),
+      fim: this.limitesDoVinculo.fim.format('DD/MM/YYYY')
     }
 
     this.contagemTempoConclusaoSave.emit({
@@ -1076,7 +1074,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private momentEndFaixaContadorRegrafinal(dataref, dateFim) {
 
-    //.endOf('month');
+    // .endOf('month');
     if (dataref.isAfter(dateFim)) {
       return moment(this.toDateString(dateFim), 'DD/MM/YYYY');
     }

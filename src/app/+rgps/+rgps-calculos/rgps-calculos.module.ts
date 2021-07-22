@@ -52,9 +52,16 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 //     RgpsCalculosCreateComponent
 //   ],
 //   exports: [
-//     ModalModule
+//     ModalModule,
+//     RgpsCalculosComponent,
+//     RgpsCalculosEditComponent,
+//     RgpsCalculosFormComponent,
+//     RgpsCalculosIndexComponent,
+//     RgpsCalculosDestroyComponent,
+//     RgpsCalculosCreateComponent
 //   ]
 // })
+// export class RgpsCalculosModule { }
 
 @NgModule({
   imports: [

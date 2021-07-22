@@ -15,38 +15,13 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
   @Input() exportResultContagemTempo;
   @Output() calculoSelecionadoEventRST = new EventEmitter();
 
-  public calculoRMIDefaulForm = {
-    dataInicioBeneficio: '',
-    primaria98anos: '',
-    primaria98meses: '',
-    primaria98dias: '',
-    secundaria98anos: '',
-    secundaria98meses: '',
-    secundaria98dias: '',
-    primaria99anos: '',
-    primaria99meses: '',
-    primaria99dias: '',
-    secundaria99anos: '',
-    secundaria99meses: '',
-    secundaria99dias: '',
-    primariaAtualanos: '',
-    primariaAtualmeses: '',
-    primariaAtualdias: '',
-    secundariaAtualanos: '',
-    secundariaAtualmeses: '',
-    secundariaAtualdias: '',
-    primaria19anos: '',
-    primaria19meses: '',
-    primaria19dias: '',
-    carencia: '',
-    carenciaAposEc103: ''
-  };
+  public calculoRMIDefaulForm = { };
 
   constructor() { }
 
   ngOnInit() {
 
-    this.setDefaultValueContagemTempoExport();
+    // this.setDefaultValueContagemTempoExport();
 
   }
 
@@ -74,29 +49,35 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
 
   formatCalcRMIDefaulForm(exportResultContagemTempo) {
 
-    console.log(this.calculoRMIDefaulForm);
-    console.log(exportResultContagemTempo);
+    const exportCT = exportResultContagemTempo.export_result;
 
-    const CalculoRMIobject = {
-      carencia: "",
-      carencia_apos_ec103: "",
-      contribuicao_primaria_19: "",
-      contribuicao_primaria_98: "",
-      contribuicao_primaria_99: "",
-      contribuicao_primaria_atual: "",
-      contribuicao_secundaria_98: "",
-      contribuicao_secundaria_99: "",
-      contribuicao_secundaria_atual: "",
-      data_pedido_beneficio: "",
-      id_contagem_tempo: this.idCalculoSelecionadoCT,
-      id_segurado: this.idSeguradoSelecionado,
-      tipo_seguro: "",
-    }
+    this.calculoRMIDefaulForm = {
+      dataInicioBeneficio: exportResultContagemTempo.limitesDoVinculo.fim,
+      primaria98anos: exportCT.total98.years,
+      primaria98meses: exportCT.total98.months,
+      primaria98dias: exportCT.total98.days,
+      secundaria98anos: '',
+      secundaria98meses: '',
+      secundaria98dias: '',
+      primaria99anos: exportCT.total99.years,
+      primaria99meses: exportCT.total99.months,
+      primaria99dias: exportCT.total99.days,
+      secundaria99anos: '',
+      secundaria99meses: '',
+      secundaria99dias: '',
+      primariaAtualanos: exportCT.total19.years,
+      primariaAtualmeses: exportCT.total19.months,
+      primariaAtualdias: exportCT.total19.days,
+      secundariaAtualanos: '',
+      secundariaAtualmeses: '',
+      secundariaAtualdias: '',
+      primaria19anos: exportCT.total.years,
+      primaria19meses: exportCT.total.months,
+      primaria19dias: exportCT.total.days,
+      carencia: exportCT.total19.carencia,
+      carenciaAposEc103: exportCT.total19.carencia,
+    };
 
-
-    // console.log(exportResultContagemTempo);
-    // deve ser padronizado object CalculoRgps
-    //  this.calcRMIDefaulForm = exportResultContagemTempo;
   }
 
 
