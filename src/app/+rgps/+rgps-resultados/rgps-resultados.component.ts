@@ -5,27 +5,32 @@ import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model';
-import { MoedaService } from '../../services/Moeda.service';
-import { IndiceInps } from './IndiceInps.model';
-import { IndiceInpsService } from './IndiceInps.service';
-import { SalarioMinimoMaximo } from './SalarioMinimoMaximo.model';
-import { SalarioMinimoMaximoService } from './SalarioMinimoMaximo.service';
-import { CarenciaProgressiva } from './CarenciaProgressiva.model';
-import { CarenciaProgressivaService } from './CarenciaProgressiva.service';
-import { ReajusteAutomatico } from './ReajusteAutomatico.model';
-import { ReajusteAutomaticoService } from './ReajusteAutomatico.service';
-import { ExpectativaVida } from './ExpectativaVida.model';
-import { ExpectativaVidaService } from './ExpectativaVida.service';
-import { Moeda } from '../../services/Moeda.model';
+// import { MoedaService } from '../../services/Moeda.service';
+// import { Moeda } from '../../services/Moeda.model';
+// import { IndiceInps } from './IndiceInps.model';
+// import { IndiceInpsService } from './IndiceInps.service';
+// import { SalarioMinimoMaximo } from './SalarioMinimoMaximo.model';
+// import { SalarioMinimoMaximoService } from './SalarioMinimoMaximo.service';
+// import { CarenciaProgressiva } from './CarenciaProgressiva.model';
+// import { CarenciaProgressivaService } from './CarenciaProgressiva.service';
+// import { ReajusteAutomatico } from './ReajusteAutomatico.model';
+// import { ReajusteAutomaticoService } from './ReajusteAutomatico.service';
+// import { ExpectativaVida } from './ExpectativaVida.model';
+// import { ExpectativaVidaService } from './ExpectativaVida.service';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
 import { RgpsPlanejamentoService } from 'app/+rgps/rgps-planejamento/rgps-planejamento.service';
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
+import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from '../+rgps-calculos/window.service';
+import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
+import { DefinicaoSalariosContribuicao } from 'app/+rgps/+rgps-resultados/shared/definicao-salarios-contribuicao'
+
 
 @FadeInTop()
 @Component({
@@ -55,78 +60,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public idsCalculo;
   public calculosList = [];
   public erroAnterior88;
-  public currencyList = [
-    {
-      'startDate': '1000-01-01',
-      'endDate': '1942-10-31',
-      'acronimo': 'MR$',
-      'nome': 'Mil-Réis',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1942-11-01',
-      'endDate': '1967-02-12',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1967-02-13',
-      'endDate': '1970-05-15',
-      'acronimo': 'NCR$',
-      'nome': 'Cruzeiro Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1970-05-15',
-      'endDate': '1986-02-28',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1986-03-01',
-      'endDate': '1988-12-31',
-      'acronimo': 'CZ$',
-      'nome': 'Cruzado',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1989-01-01',
-      'endDate': '1990-03-15',
-      'acronimo': 'NCZ$',
-      'nome': 'Cruzado Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1990-03-16',
-      'endDate': '1993-07-31',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1993-08-01',
-      'endDate': '1994-02-28',
-      'acronimo': 'CR$',
-      'nome': 'Cruzeiro Real',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1994-03-01',
-      'endDate': '1994-06-30',
-      'acronimo': 'URV',
-      'nome': 'Unidade Real de Valor',
-      'indiceCorrecaoAnterior': 637.639978027344
-    },
-    {
-      'startDate': '1994-07-01',
-      'endDate': '9999-12-31',
-      'acronimo': 'R$',
-      'nome': 'Real',
-      'indiceCorrecaoAnterior': 1
-    }
-  ];
+  public currencyList = DefinicaoMoeda.currencyList;
 
   public segurado: any = {};
   public calculo: any = {};
@@ -139,6 +73,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public dataFiliacao;
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
+  public listaPeriodosCT = [];
+  public listaValoresContribuidosPeriodosCT = [];
   public tipoBeneficio;
 
   // Variaveis de controle do template
@@ -302,11 +238,14 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     submitted: false,
   };
 
-  constructor(protected router: Router,
+  constructor(
+    protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoRgps: CalculoRgpsService,
+    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected planejamentoService: RgpsPlanejamentoService,
+   // protected definicaoSalariosContribuicao: DefinicaoSalariosContribuicao,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
@@ -321,7 +260,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    this.setAtributosIniciais();
+    // this.setAtributosIniciais();
 
   }
 
@@ -330,10 +269,20 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     this.calculoList = [];
 
+    if (this.dadosPassoaPasso === undefined
+      || typeof this.dadosPassoaPasso === 'undefined') {
+      this.dadosPassoaPasso = {
+        origem: 'rmi',
+        type: 'auto'
+      };
+    }
+
+
     if (this.isExits(this.route.snapshot.params['id_segurado'])
       && this.isExits(this.route.snapshot.params['id'])
-      && !this.isExits(this.dadosPassoaPasso.origem)) {
+      && this.dadosPassoaPasso.origem === 'rmi') {
 
+      this.isPassoaPasso = false;
       this.idSegurado = this.route.snapshot.params['id_segurado'];
       this.idsCalculo = this.route.snapshot.params['id'].split(',');
       this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
@@ -342,6 +291,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       && this.isExits(this.idCalculoSelecionadoRMI)
       && this.isExits(this.dadosPassoaPasso)
       && this.isExits(this.dadosPassoaPasso.origem)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo'
     ) {
 
       this.idsCalculo = []
@@ -349,6 +299,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       this.idSegurado = this.idSeguradoSelecionado;
       this.idsCalculo[0] = this.idCalculoSelecionadoRMI;
       this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+      this.setSalariosContribuicoesContTempoCNIS();
     }
 
     if (this.isExits(this.idSegurado)
@@ -420,8 +371,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
                   data: this.calculoList,
                 }
 
-                if ((counter + 1) === this.idsCalculo.length)
+                if ((counter + 1) === this.idsCalculo.length) {
                   this.isUpdating = false;
+                }
                 counter++;
               });
           }
@@ -441,6 +393,57 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
   }
 
+  private setSalariosContribuicoesContTempoCNIS() {
+
+    if (this.idCalculoSelecionadoCT !== undefined
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+       console.log(rst)
+       console.log(this.listaPeriodosCT)
+       DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+
+      }).catch(error => {
+        console.error(error);
+      });
+
+
+      // DefinicaoSalariosContribuicao
+
+    }
+
+  }
+
+  private getSalariosContribuicoesContTempoCNIS() {
+
+    return new Promise((resolve, reject) => {
+
+      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado')))) {
+
+        this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
+        resolve(this.listaPeriodosCT);
+
+      } else {
+
+        this.PeriodosContagemTempoService.getByPeriodosId(this.idCalculoSelecionadoCT)
+          .then((periodosContribuicao: PeriodosContagemTempo[]) => {
+
+
+            sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
+            this.listaPeriodosCT = periodosContribuicao;
+
+            resolve(this.listaPeriodosCT);
+
+          }).catch(error => {
+            console.error(error);
+            reject(error);
+          });
+      }
+    });
+  }
+
+
   calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, proporcional, dib) {
     let coeficienteAux = 0;
     let porcentagem = 0.06;
@@ -457,22 +460,24 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     switch (this.tipoBeneficio) {
       // Auxílio Doença Previdenciário
       case 1:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 91;
-        else if (dib >= this.dataLei8213) {
+        } else if (dib >= this.dataLei8213) {
           coeficienteAux = 80 + anosContribuicao;
-          if (coeficienteAux > 92)
+          if (coeficienteAux > 92) {
             coeficienteAux = 92;
+          }
         } else {
           coeficienteAux = 80 + anosContribuicao;
         }
         break;
       // Aposentadoria por invalidez previdênciária
       case 2:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 100;
-        else
+        } else {
           coeficienteAux = 80 + anosContribuicao;
+        }
         break;
       // Aponsentadoria por idade trabalhador Urbano ou Rural
       case 3:
@@ -484,10 +489,11 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         break;
       // Aposentadoria Especial
       case 5:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 100;
-        else
+        } else {
           coeficienteAux = 85 + anosContribuicao;
+        }
         break;
       // Aposentadoria por tempo de serviço de professor
       case 6:
@@ -541,8 +547,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra) {
     const tempoNecessario = 35 - redutorProfessor - redutorSexo - extra;
-    if (Math.trunc(anosContribuicao) < Math.trunc(tempoNecessario))
+    if (Math.trunc(anosContribuicao) < Math.trunc(tempoNecessario)) {
       return false;
+    }
     return true;
   }
 
@@ -626,9 +633,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     const xValor = fullYears;
 
     totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
+    const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.round(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
@@ -738,11 +745,11 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     //let xValor = (Math.floor(fullDays) / 365);
 
-    let xValor = fullDays;
+    const xValor = fullDays;
     totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
+    const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30;
+    const dttDias = (xVarMes - totalFator.months) * 30;
     totalFator.days = Math.floor(dttDias);
 
     return totalFator.years + 'ano(s) e ' + totalFator.months + 'mês(es) e ' + totalFator.days + 'dia(s)';

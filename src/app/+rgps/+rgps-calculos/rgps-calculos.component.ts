@@ -104,7 +104,7 @@ export class RgpsCalculosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
-          //redirecionar para pagina de segurados
+          // redirecionar para pagina de segurados
           swal({
             type: 'error',
             title: 'Erro',

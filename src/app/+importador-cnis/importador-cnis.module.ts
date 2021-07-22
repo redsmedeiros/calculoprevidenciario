@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SmartadminModule } from '../shared/smartadmin.module';
@@ -22,8 +23,8 @@ import { ImportadorCnisCalculosListComponent } from './+importador-cnis-calculos
 import { RgpsCalculosSharedModule } from 'app/+rgps/+rgps-calculos/shared/rgps-calculos-shared.module';
 import { ImportadorRgpsCalculosComponent } from './importador-rgps-calculos/importador-rgps-calculos.component';
 import { ImportadorRgpsCalculosListComponent } from './importador-rgps-calculos/importador-rgps-calculos-list/importador-rgps-calculos-list.component';
-import { RgpsResultadosModule } from 'app/+rgps/+rgps-resultados/rgps-resultados.module';
 import { ContagemTempoResultadosModule } from 'app/+contagem-tempo/+contagem-tempo-resultados/contagem-tempo-resultados.module';
+import { RgpsResultadosSharedModule } from 'app/+rgps/+rgps-resultados/shared/rgps-resultados-shared.module';
 
 
 export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -48,7 +49,7 @@ export const CustomPeriodosCurrencyMaskConfig: CurrencyMaskConfig = {
     importadorCnisRouting,
     ContagemTempoResultadosModule,
     RgpsCalculosSharedModule,
-    RgpsResultadosModule,
+    RgpsResultadosSharedModule,
   ],
   declarations: [
     ImportadorCnisComponent,

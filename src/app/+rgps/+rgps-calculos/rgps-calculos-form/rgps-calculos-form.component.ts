@@ -190,7 +190,6 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
           this[key] = this.calculoRMIDefaulForm[key];
 
-          console.log(key + '=' + this[key]);
         }
       }
     }

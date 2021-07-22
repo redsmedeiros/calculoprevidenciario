@@ -86,7 +86,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,
     private CalculoRgpsService:CalculoRgpsService,
     ) {
-      super(null, route, null, null, null, null, null);
+      super(null, route, null, null, null, null, null, null);
     }
 
   ngOnInit(){

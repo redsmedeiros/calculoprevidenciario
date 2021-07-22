@@ -98,7 +98,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private calcularListaContribuicoes: CalcularListaContribuicoes,
     private conclusoesFinais: conclusoesFinais,
   ) {
-    super(null, route, null, null, null, null, null);
+    super(null, route, null, null, null, null, null, null);
   }
 
 
@@ -122,7 +122,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.contribuicaoPrimariaAtePec = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
-    
+
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
 
@@ -141,6 +141,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       .then(valorescontribuidos => {
 
         this.listaValoresContribuidos = valorescontribuidos;
+
+        console.log(valorescontribuidos);
 
         if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
 
