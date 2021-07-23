@@ -245,7 +245,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     protected CalculoRgps: CalculoRgpsService,
     protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected planejamentoService: RgpsPlanejamentoService,
-   // protected definicaoSalariosContribuicao: DefinicaoSalariosContribuicao,
+    // protected definicaoSalariosContribuicao: DefinicaoSalariosContribuicao,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
@@ -299,7 +299,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       this.idSegurado = this.idSeguradoSelecionado;
       this.idsCalculo[0] = this.idCalculoSelecionadoRMI;
       this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-      this.setSalariosContribuicoesContTempoCNIS();
+
     }
 
     if (this.isExits(this.idSegurado)
@@ -375,6 +375,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
                   this.isUpdating = false;
                 }
                 counter++;
+
+                this.setSalariosContribuicoesContTempoCNIS(calculo);
               });
           }
 
@@ -393,16 +395,18 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
   }
 
-  private setSalariosContribuicoesContTempoCNIS() {
+  private setSalariosContribuicoesContTempoCNIS(calculo) {
 
     if (this.idCalculoSelecionadoCT !== undefined
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
       this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
 
-       console.log(rst)
-       console.log(this.listaPeriodosCT)
-       DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+        console.log(rst)
+        console.log(this.listaPeriodosCT)
+        const rstTratamentoSC = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT, calculo);
+
+        console.log(rstTratamentoSC);
 
       }).catch(error => {
         console.error(error);
