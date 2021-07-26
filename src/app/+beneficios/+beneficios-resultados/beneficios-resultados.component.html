@@ -15,9 +15,7 @@
     <div class="row" *ngIf="!isUpdating">
       <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h1 *ngIf="!isTetos" class="title-pdf">Demonstrativo de Cálculo</h1>
-        <h1 *ngIf="isTetos" class="title-pdf">
-          Demonstrativo de Cálculo - Revisão do Teto
-        </h1>
+        <h1 *ngIf="isTetos" class="title-pdf">Demonstrativo de Cálculo - Revisão do Teto</h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="#/beneficios/beneficios-segurados">
@@ -58,18 +56,25 @@
           <div class="no-padding">
             <div class="widget-body widget-body-custom no-padding no-margin">
               <div id="printableSegurado">
-                <div class="not-screen">
+                <!-- <div class="not-screen">
                   <h1 *ngIf="!isTetos">Demonstrativo de Cálculo</h1>
                   <h1 *ngIf="isTetos">
                     Demonstrativo de Cálculo - Revisão do Teto
                   </h1>
-                </div>
+                </div> -->
+                <table class="table table-bordered table-hover no-padding no-margin not-screen">
+                  <thead >
+                    <tr>
+                      <th colspan="2">
+                        <h1 *ngIf="!isTetos">Demonstrativo de Cálculo</h1>
+                        <h1 *ngIf="isTetos">Demonstrativo de Cálculo - Revisão do Teto</h1>
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
                 >
-                  <!-- <caption>
-                    <h2>Dados do Segurado</h2>
-                  </caption> -->
                   <thead class="not-screen">
                     <tr>
                       <th colspan="2">
@@ -164,9 +169,6 @@
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
                 >
-                  <!-- <caption>
-                      <h2>Dados do Processo</h2>
-                    </caption> -->
                   <thead class="not-screen">
                     <tr>
                       <th colspan="2">
@@ -273,9 +275,6 @@
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
                 >
-                  <!-- <caption>
-                      <h2>Valores Devidos</h2>
-                    </caption> -->
                   <thead class="not-screen">
                     <tr>
                       <th colspan="2">
@@ -809,9 +808,6 @@
                 <table
                   class="table table-bordered table-hover no-margin no-padding"
                 >
-                  <!-- <caption>
-                      <h2>Correção Monetária</h2>
-                    </caption> -->
                   <thead class="not-screen">
                     <tr>
                       <th colspan="2">

@@ -1215,7 +1215,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
             beneficioRecebidoAbono = this.ultimoBeneficioRecebidoAntesProporcionalidade;
             beneficioRecebidoAbono = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoAbono);
-          //  abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
+            //  abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidos(datacessacaoBeneficioRecebido.clone());
 
             abonoProporcionalRecebidos = this.verificaAbonoProporcionalRecebidosInicioFim(
               dataPedidoBeneficio.clone(),

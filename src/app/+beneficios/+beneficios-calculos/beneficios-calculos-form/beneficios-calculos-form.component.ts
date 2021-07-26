@@ -323,8 +323,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!moment(this.dataCalculo, 'MM/YYYY').isValid()) {
       this.errors.add({ 'dataCalculo': ['Insira uma data Válida.'] });
       valid = false;
-    } else if (moment(this.dataCalculo, 'DD/MM/YYYY') < this.dataMinima) {
+    } else if (moment(this.dataCalculo, 'MM/YYYY') < this.dataMinima) {
       this.errors.add({ 'dataCalculo': ['A data do Cálculo deve ser posterior a 01/01/1970.'] })
+      valid = false;
+    }else if (moment(this.dataCalculo, 'MM/YYYY').isAfter(moment(), 'month')) {
+      this.errors.add({ 'dataCalculo': ['A data do Cálculo não deve ser posterior ao mês atual.'] })
       valid = false;
     }
 

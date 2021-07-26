@@ -83,13 +83,18 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       return true;
     }
 
+    // &&
+    //     (moment(recebidoMultiplo.dip, 'DD/MM/YYYY')).isBetween(
+    //       moment(Obj.dip, 'DD/MM/YYYY'),
+    //       moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+
     const isExistConcomitante = this.listRecebidos.find(Obj => (
-      (moment(recebidoMultiplo.dib, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
-        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+      ((moment(recebidoMultiplo.dip, 'DD/MM/YYYY')).isBetween(
+        moment(Obj.dip, 'DD/MM/YYYY'),
+        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]'))
       ||
       (moment(recebidoMultiplo.cessacao, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
+        moment(Obj.dip, 'DD/MM/YYYY'),
         moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
     ));
 
@@ -235,16 +240,30 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
   private updateDatatableRecebidos(recebidos) {
 
     if (typeof recebidos === 'object') {
+
       this.listRecebidos.push(recebidos);
+
       this.listRecebidos.sort((a, b) => {
-        if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
-          return -1;
+
+        const dib1 = moment(a.dib, 'MM/YYYY');
+        const dib2 = moment(b.dib, 'MM/YYYY');
+
+        const dip1 = moment(a.dip, 'MM/YYYY');
+        const dip2 = moment(b.dip, 'MM/YYYY');
+
+
+        if (dib1.isSame(dib2, 'month')) {
+          return dip1 > dip2 ? -1 : 1
+        } else {
+          return dib1 > dib2 ? -1 : 1
         }
+
       });
 
       this.recebidosAtributes.emit(this.listRecebidos);
     }
   }
+
 
   validRecebidos() {
 
@@ -369,7 +388,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       if (!this.isValidDate(this.dataInicialadicional2Recebido)) {
         this.errors.add({ 'dataInicialadicional2Recebido': ['Insira uma data válida.'] });
         valid = false;
-      }else if (moment(this.dataInicialadicional2Recebido, 'DD/MM/YYYY') < moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
+      } else if (moment(this.dataInicialadicional2Recebido, 'DD/MM/YYYY') < moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
         this.errors.add({ 'dataInicialadicional2Recebido': ['A data deve ser maior ou igual que DIB.'] });
         valid = false;
       }
