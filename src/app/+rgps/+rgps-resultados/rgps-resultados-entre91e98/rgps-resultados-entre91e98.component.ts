@@ -18,9 +18,12 @@ import * as moment from 'moment';
   styleUrls: ['./rgps-resultados-entre91e98.component.css']
 })
 export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent implements OnInit {
+  
   @Input() calculo;
   @Input() segurado;
   @Input() tipoCalculo;
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
 
   public boxId;
   public isUpdating = false;

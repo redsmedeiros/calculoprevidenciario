@@ -162,7 +162,7 @@ export class DefinicaoMoeda {
      */
     static formatDecimal(value, n_of_decimal_digits) {
         value = parseFloat(value);
-        return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+        return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
     }
 
     /**

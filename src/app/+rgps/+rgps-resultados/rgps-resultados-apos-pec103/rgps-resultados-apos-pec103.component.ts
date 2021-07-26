@@ -40,7 +40,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   @Input() isPlanejamento;
   @Input() planejamento;
   @Input() planejamentoContribuicoesAdicionais;
-
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
   @Output() planejamentoResultEvent = new EventEmitter();
 
 
@@ -143,6 +144,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.listaValoresContribuidos = valorescontribuidos;
 
         console.log(valorescontribuidos);
+        console.log(this.dadosPassoaPasso);
+
+        if (this.isExits(this.dadosPassoaPasso)
+          && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+          this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(dataLimite, dataInicio);
+          console.log(this.listaValoresContribuidos);
+        }
 
         if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
 

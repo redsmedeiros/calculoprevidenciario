@@ -20,8 +20,11 @@ import * as moment from 'moment';
   styleUrls: ['./rgps-resultados-apos99.component.css']
 })
 export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
+
   @Input() calculo;
   @Input() segurado;
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
 
   public boxId;
   public dataFiliacao;
