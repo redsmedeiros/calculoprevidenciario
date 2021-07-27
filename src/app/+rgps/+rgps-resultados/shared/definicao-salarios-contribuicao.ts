@@ -65,10 +65,10 @@ export class DefinicaoSalariosContribuicao {
             if (cp1.isSame(cp2, 'month')) {
                 return valor1 < valor2 ? -1 : 1
             } else {
-                if (cp1 > cp2) {
+                if (cp1 < cp2) {
                     return 1;
                 }
-                if (cp1 < cp2) {
+                if (cp1 > cp2) {
                     return -1;
                 }
                 return 0;

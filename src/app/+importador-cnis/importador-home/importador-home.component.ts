@@ -62,20 +62,34 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     },
     {
       key: 'step3',
-      title: 'Relatório da Contagem do Tempo de Contribuição',
+      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step4',
-      title: 'Renda Mensal Inicial',
+      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step5',
+      title: 'Relatório da Contagem do Tempo de Contribuição',
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+    {
+      key: 'step6',
+      title: 'Renda Mensal Inicial',
+      valid: false,
+      checked: false,
+      submitted: false,
+    },
+    {
+      key: 'step7',
       title: 'Relatório Renda Mensal Inicial',
       valid: false,
       checked: false,
@@ -191,11 +205,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.clearDataSelected(this.activeStep);
     }
 
-    //  console.log(steo);
-    //  console.log(this.activeStep);
-    // this.setStepDefaultRetorno(stepNumber)
-
-
     if (steo.key === 'step1' || steo.key === 'step2' || steo.key === 'step3') {
       this.isUpdatingPlan = false;
     }
@@ -212,32 +221,44 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         this.isTypeEntradaDados = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
+
+        // this.isCalculoSelecionado = false;
+        // this.calculoSelecionado = {}
+        // this.unCheckedAll('.checkboxSegurados');
+
+        // this.isCalculoSelecionado = false;
+        // this.calculoSelecionado = {}
+        // this.unCheckedAll('.checkboxCalculos');
+
+
+        break;
+      case 'step2':
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxSegurados');
 
+        break;
+      case 'step3':
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
 
         break;
-      case 'step2':
+      case 'step4':
+
+
+        break;
+      case 'step5':
         this.isCompleteResultContagemTempo = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: 'seguradoExistente' }
 
         break;
-      case 'step3':
-        // this.isPlanejamentoSelecionado = false;
-        // this.planejamentoSelecionado = {}
-        // this.unCheckedAll('.checkboxPlanejamento');
+      case 'step6':
 
-        break;
-        case 'step4':
-
-          this.isCalculoSelecionadoRMI = false;
-          this.calculoSelecionadoRMI = {}
-          this.unCheckedAll('.checkboxCalculosRMI');
-          this.setStepValidate('step4', false);
+        this.isCalculoSelecionadoRMI = false;
+        this.calculoSelecionadoRMI = {}
+        this.unCheckedAll('.checkboxCalculosRMI');
+        this.setStepValidate('step6', false);
 
         break;
     }
@@ -263,6 +284,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     if (!this.activeStep.valid) {
       return;
     }
+
 
     this.activeStep.checked = true;
     if (this.steps.every((it) => it.valid && it.checked)) {
@@ -333,16 +355,42 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     this.dadosPassoaPasso.type = value;
     this.isTypeEntradaDados = (this.dadosPassoaPasso.type !== '');
 
+    // if (this.dadosPassoaPasso.type !== 'seguradoExistente') {
+
+    //   this.setStepValidate('step1', (this.dadosPassoaPasso.type !== ''));
+
+    // } else {
+
+    // this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
+    // this.seguradoSelecionado = {};
+    // this.calculoSelecionado = {};
+
+    // }
+
+  
     if (this.dadosPassoaPasso.type !== 'seguradoExistente') {
 
-      this.setStepValidate('step1', (this.dadosPassoaPasso.type !== ''));
+      this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
+      this.seguradoSelecionado = {};
+      this.calculoSelecionado = {};
 
     } else {
 
+
+      this.setStepValidate('step3', (this.isExits(this.dadosPassoaPasso.type)));
+      this.setStepValidate('step2', (this.isExits(this.dadosPassoaPasso.type)));
+      this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
+
+
+    
       this.seguradoSelecionado = {};
       this.calculoSelecionado = {};
 
     }
+
+
+    console.log(this.steps)
+
 
   }
 
@@ -433,7 +481,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.seguradoSelecionado = {};
     }
 
-    this.setStepValidate('step1', stepStatus);
+    this.setStepValidate('step2', stepStatus);
     this.isSeguradoSelecionado = stepStatus;
 
   }
@@ -454,6 +502,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.calculoSelecionado = {};
     }
 
+    this.setStepValidate('step3', stepStatus);
+
   }
 
 
@@ -464,7 +514,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
       this.idSeguradoSelecionado = dataRSTImportForm.seguradoId;
       this.idCalculoSelecionado = dataRSTImportForm.calculoId;
-      this.setStepValidate('step2', true);
+      this.setStepValidate('step4', true);
       this.nextStep();
 
     }
@@ -478,7 +528,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
       this.exportResultContagemTempo = data;
       this.isCompleteResultContagemTempo = data.resultComplete;
-      this.setStepValidate('step3', data.resultComplete);
+      this.setStepValidate('step5', data.resultComplete);
 
       sessionStorage.setItem(
         'exportResultContagemTempo',
@@ -506,7 +556,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.calculoSelecionado = {};
     }
 
-    this.setStepValidate('step4', stepStatus);
+    this.setStepValidate('step6', stepStatus);
 
   }
 

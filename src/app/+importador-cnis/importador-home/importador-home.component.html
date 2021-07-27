@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div id="passoPlanejamento" class="well mt-5" *ngIf="!isPaginaInicial">
+    <div id="passoContagemRMI" class="well mt-5" *ngIf="!isPaginaInicial">
       <div class="row mt-5">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <form novalidate="novalidate">
@@ -161,7 +161,7 @@
                               <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
-                          <div
+                          <!-- <div
                             *ngIf="
                               dadosPassoaPasso.type === 'seguradoExistente'
                             "
@@ -187,23 +187,105 @@
                               >
                               </app-importador-cnis-calculos-list>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step2'"
+                >
+                  <div class="row mt-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard mt-3">
+                          <li class="active" data-target="#step2">
+                            <a data-toggle="tab">
+                              <span class="step">2</span></a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="text-justify pt-1" style="font-size: 14px">
+                          <li>Selecione Segurado existente</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- iscontagemTempo && -->
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step2'"
+                  >
+                    <div *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <app-importador-cnis-segurados-list
+                          (seguradoSelecionadoEvent)="
+                            setSeguradoSelecionado($event)
+                          "
+                        ></app-importador-cnis-segurados-list>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div
                   class="tab-pane"
-                  [class.active]="activeStep.key == 'step2'"
+                  [class.active]="activeStep.key == 'step3'"
+                >
+                  <div class="row mt-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard mt-3">
+                          <li class="active" data-target="#step3">
+                            <a data-toggle="tab">
+                              <span class="step">3</span></a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul class="text-justify pt-1" style="font-size: 14px">
+                          <li>Selecione Cálculo existente</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- iscontagemTempo && -->
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step3'"
+                  >
+                    <div *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                      <div
+                        *ngIf="isSeguradoSelecionado"
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                      >
+                        <app-importador-cnis-calculos-list
+                          [seguradoSelecionado]="seguradoSelecionado"
+                          (calculoSelecionadoEvent)="
+                            setCalculoSelecionado($event)
+                          "
+                        >
+                        </app-importador-cnis-calculos-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step4'"
                 >
                   <div class="row mt-4">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 pt-4">
                         <ul class="bootstrapWizard form-wizard mt-3">
-                          <li class="active" data-target="#step2">
+                          <li class="active" data-target="#step4">
                             <a data-toggle="tab">
-                              <span class="step">2</span></a
+                              <span class="step">4</span></a
                             >
                           </li>
                         </ul>
@@ -241,7 +323,7 @@
                   <div class="row body-step-component">
                     <div
                       *ngIf="
-                        activeStep.key == 'step2' &&
+                        activeStep.key == 'step4' &&
                         (dadosPassoaPasso.type === 'cnis' ||
                           dadosPassoaPasso.type === 'manual' ||
                           dadosPassoaPasso.type === 'seguradoExistente') &&
@@ -260,15 +342,15 @@
                 </div>
                 <div
                   class="tab-pane"
-                  [class.active]="activeStep.key == 'step3'"
+                  [class.active]="activeStep.key == 'step5'"
                 >
                   <div class="row mt-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                         <ul class="bootstrapWizard form-wizard mt-3">
-                          <li class="active" data-target="#step3">
+                          <li class="active" data-target="#step5">
                             <a data-toggle="tab">
-                              <span class="step">3</span></a
+                              <span class="step">5</span></a
                             >
                           </li>
                         </ul>
@@ -286,7 +368,7 @@
                   <!-- iscontagemTempo && -->
                   <div
                     class="row pt-4 body-step-component"
-                    *ngIf="activeStep.key == 'step3'"
+                    *ngIf="activeStep.key == 'step5'"
                   >
                     <app-contagem-tempo-resultados-component
                       [dadosPassoaPasso]="dadosPassoaPasso"
@@ -300,15 +382,62 @@
                 </div>
                 <div
                   class="tab-pane"
-                  [class.active]="activeStep.key == 'step4'"
+                  [class.active]="activeStep.key == 'step6'"
                 >
                   <div class="row my-5">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                         <ul class="bootstrapWizard form-wizard mt-3">
-                          <li class="active" data-target="#step4">
+                          <li class="active" data-target="#step6">
                             <a data-toggle="tab">
-                              <span class="step">4</span></a
+                              <span class="step">6</span></a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                        <ul
+                          class="list-unstyled text-justify"
+                          style="font-size: 14px"
+                        >
+                          <li>
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                            xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="body-step-component my-6"
+                    *ngIf="activeStep.key == 'step6'"
+                  >
+                    <app-importador-rgps-calculos
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionadoCT]="idCalculoSelecionado"
+                      [exportResultContagemTempo]="exportResultContagemTempo"
+                      (calculoSelecionadoEventRST)="
+                        setCalculoSelecionadoEventRMI($event)
+                      "
+                    ></app-importador-rgps-calculos>
+                  </div>
+                  <br />
+                  <br />
+                </div>
+
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step7'"
+                >
+                  <div class="row my-5">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <ul class="bootstrapWizard form-wizard mt-3">
+                          <li class="active" data-target="#step7">
+                            <a data-toggle="tab">
+                              <span class="step">7</span></a
                             >
                           </li>
                         </ul>
@@ -329,69 +458,20 @@
 
                   <div
                     class="body-step-component my-4"
-                    *ngIf="activeStep.key == 'step4'"
+                    *ngIf="activeStep.key == 'step7'"
                   >
-                    <app-importador-rgps-calculos
+                    <app-rgps-resultados-component
                       [dadosPassoaPasso]="dadosPassoaPasso"
                       [idSeguradoSelecionado]="idSeguradoSelecionado"
                       [idCalculoSelecionadoCT]="idCalculoSelecionado"
                       [exportResultContagemTempo]="exportResultContagemTempo"
-                      (calculoSelecionadoEventRST)="
-                                  setCalculoSelecionadoEventRMI($event)
-                                "
-                    ></app-importador-rgps-calculos>
+                      [idCalculoSelecionadoRMI]="idCalculoSelecionadoRMI"
+                    >
+                    </app-rgps-resultados-component>
                   </div>
                   <br />
                   <br />
                 </div>
-
-                <div
-                class="tab-pane"
-                [class.active]="activeStep.key == 'step5'"
-              >
-                <div class="row my-5">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                      <ul class="bootstrapWizard form-wizard mt-3">
-                        <li class="active" data-target="#step5">
-                          <a data-toggle="tab">
-                            <span class="step">5</span></a
-                          >
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                      <ul
-                        class="list-unstyled text-justify"
-                        style="font-size: 14px"
-                      >
-                        <li>
-                          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  class="body-step-component my-4"
-                  *ngIf="activeStep.key == 'step5'"
-                >
-                 <app-rgps-resultados-component
-                 [dadosPassoaPasso]="dadosPassoaPasso"
-                 [idSeguradoSelecionado]="idSeguradoSelecionado"
-                 [idCalculoSelecionadoCT]="idCalculoSelecionado"
-                 [exportResultContagemTempo]="exportResultContagemTempo"
-                 [idCalculoSelecionadoRMI] = "idCalculoSelecionadoRMI"
-                 >
-                 </app-rgps-resultados-component>
-
-                </div>
-                <br />
-                <br />
-              </div>
-                
 
                 <div
                   id="tutorial-plan"
@@ -405,7 +485,7 @@
                     <div class="modal-content modal-lg">
                       <div class="embed-responsive embed-responsive-16by9">
                         <iframe
-                          src="https://player.vimeo.com/video/499277891?color=ffffff"
+                          src="https://www.youtube.com/embed/l1aGuq-K0sc"
                           class="embed-responsive-item"
                           frameborder="0"
                           allow="autoplay; fullscreen"
@@ -418,7 +498,7 @@
                 <div
                   class="form-actions mt-0"
                   *ngIf="
-                    activeStep.key !== 'step2' &&
+                    activeStep.key !== 'step4' &&
                     (dadosPassoaPasso.type === 'cnis' ||
                       dadosPassoaPasso.type === 'manual' ||
                       dadosPassoaPasso.type === 'seguradoExistente') &&
@@ -433,7 +513,7 @@
                             (click)="prevStep()"
                             [class.disabled]="
                               steps.indexOf(activeStep) == 0 ||
-                              (activeStep !== step3 && !activeStep.valid)
+                              ([step4,step5,'step6'].includes(activeStep) && !activeStep.valid)
                             "
                             class="btn btn-lg btn-default"
                             title="Retornar ao passo anterior"

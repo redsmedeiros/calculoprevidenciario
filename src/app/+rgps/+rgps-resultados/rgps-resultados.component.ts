@@ -371,12 +371,14 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
                   data: this.calculoList,
                 }
 
+                // this.setSalariosContribuicoesContTempoCNIS(null);
+
                 if ((counter + 1) === this.idsCalculo.length) {
                   this.isUpdating = false;
                 }
                 counter++;
 
-                this.setSalariosContribuicoesContTempoCNIS(null);
+
               });
           }
 
@@ -395,54 +397,43 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
   }
 
-  private setSalariosContribuicoesContTempoCNIS(calculo) {
+  // private setSalariosContribuicoesContTempoCNIS(calculo) {
 
-    if (this.idCalculoSelecionadoCT !== undefined
-      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+  //   if (this.idCalculoSelecionadoCT !== undefined
+  //     && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+  //     this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
 
-        console.log(rst)
-        console.log(this.listaPeriodosCT)
-        const rstTratamentoSC = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
-        this.listaValoresContribuidosPeriodosCT = rstTratamentoSC;
+  //       console.log(rst);
+  //     }).catch(error => {
+  //       console.error(error);
+  //     });
 
-        console.log(this.listaValoresContribuidosPeriodosCT);
+  //   }
 
-      }).catch(error => {
-        console.error(error);
-      });
-
-    }
-
-  }
+  // }
 
   /**
    * @param inicio inicio 07/1994
    * @param fim Dib
    * @returns array salários de contribuição
    */
-  public getlistaValoresContribuidosPeriodosCT(inicio, fim) {
-    const listCT = this.listaValoresContribuidosPeriodosCT;
+  public getlistaValoresContribuidosPeriodosCT(listaValoresContribuidosPeriodosCT, inicio, fim) {
 
-    console.log(this.listaValoresContribuidosPeriodosCT);
-    console.log(listCT);
+    // const listCT = this.listaValoresContribuidosPeriodosCT;
+    return listaValoresContribuidosPeriodosCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '[)'));
 
-    console.log(listCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '()')));
-
-    console.log(listCT);
-
-    return listCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '()'));
   }
 
-  private getSalariosContribuicoesContTempoCNIS() {
+  public getSalariosContribuicoesContTempoCNIS() {
 
     return new Promise((resolve, reject) => {
 
       if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado')))) {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
-        resolve(this.listaPeriodosCT);
+        this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+        resolve(this.listaValoresContribuidosPeriodosCT);
 
       } else {
 
@@ -452,8 +443,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
             this.listaPeriodosCT = periodosContribuicao;
-
-            resolve(this.listaPeriodosCT);
+            this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+            resolve(this.listaValoresContribuidosPeriodosCT);
 
           }).catch(error => {
             console.error(error);

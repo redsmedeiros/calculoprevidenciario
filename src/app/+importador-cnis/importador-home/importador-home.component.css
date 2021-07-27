@@ -1,3 +1,11 @@
+.bootstrapWizard li {
+  display: block;
+  float: left;
+  width: 14% !important;
+  text-align: center;
+  padding-left: 0;
+}
+
 @media screen and (min-width: 1024px) {
     .jumbotrom-custom-plan {
       /* min-height: 600px !important;; */
