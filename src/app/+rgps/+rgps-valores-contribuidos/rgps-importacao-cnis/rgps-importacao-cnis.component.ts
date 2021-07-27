@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FadeInTop } from "../../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../../+rgps-segurados/SeguradoRgps.service';
@@ -12,7 +12,7 @@ import { ValorContribuidoService } from '../ValorContribuido.service'
 import * as moment from 'moment';
 //import swal from 'sweetalert';
 import swal from 'sweetalert2'
-import { PDFJSStatic, PDFPageProxy } from "pdfjs-dist";
+import { PDFJSStatic, PDFPageProxy } from 'pdfjs-dist';
 
 //import * as PDFJS from "pdfjs-dist";
 //import {PDFJS} from 'pdfjs-dist';
@@ -41,6 +41,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   public exibirCampoAnteriorLei13846: boolean = false;
   public arrayPrimarias = [];
   public arraySecundarias = [];
+  private moedaImportAmerika = false;
 
 
   //Variaveis para importação do CNIS
@@ -49,6 +50,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   private regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
   private regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
   private regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
+
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -59,8 +61,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.arrayPrimarias = [];
+    this.arraySecundarias = [];
+
     this.idSegurado = this.route.snapshot.params['id_segurado'];
-    //this.idCalculo = this.route.snapshot.params['id'];
+    // this.idCalculo = this.route.snapshot.params['id'];
     this.idCalculo = this.route.snapshot.params['id'];
     this.isUpdating = true;
 
@@ -79,7 +85,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   }
 
-  changeSomarSecundaria(){}
+  changeSomarSecundaria() { }
 
   editSegurado() {
     window.location.href = '/#/rgps/rgps-segurados/' +
@@ -87,14 +93,14 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   public dropped(event: UploadEvent) {
-    let files = event.files;
+    const files = event.files;
     if (files.length > 1) {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
       return;
     }
-    
-    let file = event.files[0]
-    if (file.fileEntry.isFile) { //É um arquivo?
+
+    const file = event.files[0]
+    if (file.fileEntry.isFile) { // É um arquivo?
       const fileEntry = file.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
         if (file.type != 'application/pdf') {
@@ -111,12 +117,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   clickedDropzone() {
-    let event = new MouseEvent('click', { bubbles: false });
+    const event = new MouseEvent('click', { bubbles: false });
     this.fileInput.nativeElement.dispatchEvent(event);
   }
 
   onFileInputChange(event) {
-    let files = event.srcElement.files;
+    const files = event.srcElement.files;
     if (files.length > 1) {
       swal('Erro', 'Selecione apenas um arquivo', 'error');
     } else if (files[0].type != 'application/pdf') {
@@ -127,12 +133,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   processPdfFile(file) {
-    let PDFJS = require("pdfjs-dist");
+    const PDFJS = require('pdfjs-dist');
     PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
     PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
-      let pdfDocument = pdf;
+      const pdfDocument = pdf;
       // Create an array that will contain our promises 
-      let pagesPromises = [];
+      const pagesPromises = [];
       for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
         // Required to prevent that i is always the total of pages
         (pageNumber => {
@@ -153,12 +159,12 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       PDFDocumentInstance.getPage(pageNum).then(pdfPage => {
         // The main trick to obtain the text of the PDF page, use the getTextContent method
         pdfPage.getTextContent().then(textContent => {
-          let textItems = textContent.items;
-          let finalString = "";
+          const textItems = textContent.items;
+          let finalString = '';
           // Concatenate the string of the item to the final string
           for (let i = 0; i < textItems.length; i++) {
-            let item = textItems[i];
-            finalString += item.str + " ";
+            const item = textItems[i];
+            finalString += item.str + ' ';
           }
           // Solve promise with the text retrieven from the page
           resolve(finalString);
@@ -168,7 +174,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   importFromTextArea() {
-    let text = this.cnisTextArea;
+    const text = this.cnisTextArea;
     this.processText(text, true);
   }
 
@@ -182,6 +188,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     let facultativoOuIndividual_array = [];
     let todas_os_periodos_array = [];
     let regras_aplicadas_array = [];
+
+    this.verificarPadraoMoeda(text);
 
     empregado = text.match(this.regexpEmpregado)
     if (tipoImportacao) {
@@ -217,11 +225,11 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     } else {
       swal('Erro', 'Nenhuma contribuição encontrada no PDF', 'error');
     }
-    console.log(regras_aplicadas_array);
+
   }
 
   getArrayFromText(text, numCol) {
-    let arrayOrganizadoNew = [];
+    const arrayOrganizadoNew = [];
     let arrayText = [];
     for (let i = 0; i < text.length; i++) {
       arrayText = text[i].replace(/\n/i, ' ').trim().split(/\s/i);
@@ -235,17 +243,25 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   aplicarRegras(arrayOrganizado) {
-    let replacePontos = function (valor) {
-      return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+
+    const moedaImportAmerika = this.moedaImportAmerika;
+
+    const replacePontos = function (valor) {
+
+    if (moedaImportAmerika) {
+      return parseFloat(valor.replace(/\,/g, ''));
+    }
+
+    return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
-    let somaContrib = function (valor1, valor2) {
-         return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    const somaContrib = function (valor1, valor2) {
+      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
     arrayOrganizado.sort(function (a, b) {
-      let dateA = moment(a.data, 'MM/YYYY');
-      let dateB = moment(b.data, 'MM/YYYY');
+      const dateA = moment(a.data, 'MM/YYYY');
+      const dateB = moment(b.data, 'MM/YYYY');
       if (dateA > dateB) {
         return 1;
       }
@@ -257,7 +273,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     });
 
     let teste_data = null;
-   
+
 
 
     arrayOrganizado.filter(function (i, index) {
@@ -269,33 +285,34 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       }
     });
 
-     //reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
-     let result = [];
-     arrayOrganizado.reduce(function (res, value) {
-       if (!res[value.data + "-" + value.contributionType]) {
-         res[value.data + "-" + value.contributionType] = {
-           contrib: "0,00",
-           data: value.data,
-           contributionType: value.contributionType
-         };
-         result.push(res[value.data + "-" + value.contributionType])
-       }
-       res[value.data + "-" + value.contributionType].contrib = somaContrib(res[value.data + "-" + value.contributionType].contrib, value.contrib);
+    //reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
+    const result = [];
+    arrayOrganizado.reduce(function (res, value) {
+      if (!res[value.data + '-' + value.contributionType]) {
+        res[value.data + '-' + value.contributionType] = {
+          contrib: '0,00',
+          data: value.data,
+          contributionType: value.contributionType
+        };
+        result.push(res[value.data + '-' + value.contributionType])
+      }
+      res[value.data + '-' + value.contributionType].contrib
+        = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
 
       //  if (value.data == '12/2007' && value.contributionType == 1) {
       //    console.log( value.contrib);
       //   console.log( res[value.data + "-" + value.contributionType].contrib);
       //  }
 
-       return res;
-     }, {});
-  
+      return res;
+    }, {});
+
 
     // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
     if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
       let teste_data = null;
       for (const objPS of arrayOrganizado) {
-        
+
         if (objPS.data != teste_data) {
           objPS.contributionType = 0;
           teste_data = objPS.data;
@@ -306,34 +323,91 @@ export class RgpsImportacaoCnisComponent implements OnInit {
         }
 
       }
-     
-      let arraySomatorioPS = [];
+
+      const arraySomatorioPS = [];
       for (const objPrim of arrayOrganizado) {
 
-          arraySomatorioPS.push({
-            contrib: (objPrim.contributionType === 0)? this.getValueSecundarias(objPrim.data, objPrim.contrib) : "0,00",
-            data: objPrim.data,
-            contributionType: objPrim.contributionType
-          });
-                 
+        arraySomatorioPS.push({
+          contrib: (objPrim.contributionType === 0) ? this.getValueSecundarias(objPrim.data, objPrim.contrib) : '0,00',
+          data: objPrim.data,
+          contributionType: objPrim.contributionType
+        });
+
       }
-      
+
       return arraySomatorioPS;
-    }else{
-        
-   
-    return result;
+    } else {
+
+
+      return result;
     }
-   
+
   }
 
-  
+
+  private isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
+  }
+
+
+  private replacePontos(valor) {
+
+    if (this.moedaImportAmerika) {
+
+      return parseFloat(valor.replace(/\,/g, ''));
+
+    }
+
+    return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+
+  };
+
+  // private somaContrib(valor1, valor2) {
+
+  //   return Number((this.replacePontos(valor1) +
+  //     this.replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+  // };
+
+  private verificarPadraoMoeda(text_vinculo) {
+
+    if (this.isExits(text_vinculo)) {
+      this.moedaImportAmerika = (/(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2})($|\s|\n|\t|\r)/gi).test(text_vinculo);
+
+      if (this.moedaImportAmerika) {
+
+        this.regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
+        this.regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+        this.regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+
+      }
+
+
+    }
+
+    return this.moedaImportAmerika;
+  }
+
+
   getValueSecundarias(data, contrib) {
-     let replacePontos = function (valor) {
-      return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+
+    const moedaImportAmerika = this.moedaImportAmerika;
+
+    const replacePontos = function (valor) {
+
+        if (moedaImportAmerika) {
+
+          return parseFloat(valor.replace(/\,/g, ''));
+
+        }
+
+        return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
-    let somaContrib = function (valor1, valor2) {
+    const somaContrib = function (valor1, valor2) {
       return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
@@ -347,17 +421,17 @@ export class RgpsImportacaoCnisComponent implements OnInit {
   }
 
   salvarContribuicoes(array) {
-    let contribuicoes = [];
+    const contribuicoes = [];
 
-    let replacePontos = function (valor) {
+    const replacePontos = function (valor) {
       for (let i = 0; i < 5; i++) {
         valor = valor.replace('.', '');
       }
       return parseFloat(valor.replace(',', '.'));
     };
 
-    for (let element of array) {
-      let contribuicao = new ValorContribuido({
+    for (const element of array) {
+      const contribuicao = new ValorContribuido({
         id_calculo: [this.idCalculo],
         data: moment(element.data, 'MM/YYYY').format('YYYY-MM-DD'),
         tipo: element.contributionType,
@@ -376,11 +450,13 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
     this.ValorContribuidoService.save(contribuicoes).then(() => {
       swal.close();
-      swal('Valores importados com sucesso!', '', 'success').then(() =>{
+      swal('Valores importados com sucesso!', '', 'success').then(() => {
         window.location.href = '/#/rgps/rgps-valores-contribuidos/' + this.idSegurado + '/' + this.idCalculo;
       });
     });
   }
+
+
 
 }
 
