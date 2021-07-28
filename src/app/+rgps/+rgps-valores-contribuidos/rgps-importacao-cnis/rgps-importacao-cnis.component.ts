@@ -422,12 +422,14 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   salvarContribuicoes(array) {
     const contribuicoes = [];
-
+    const moedaImportAmerika = this.moedaImportAmerika;
     const replacePontos = function (valor) {
-      for (let i = 0; i < 5; i++) {
-        valor = valor.replace('.', '');
+
+      if (moedaImportAmerika) {
+        return parseFloat(valor.replace(/\,/g, ''));
+      } else {
+        return parseFloat(valor.replace(/\./g, '').replace(/\,/g, '.'));
       }
-      return parseFloat(valor.replace(',', '.'));
     };
 
     for (const element of array) {
