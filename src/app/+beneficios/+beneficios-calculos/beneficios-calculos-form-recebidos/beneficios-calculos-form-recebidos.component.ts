@@ -242,27 +242,33 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     if (typeof recebidos === 'object') {
 
       this.listRecebidos.push(recebidos);
-
-      this.listRecebidos.sort((a, b) => {
-
-        const dib1 = moment(a.dib, 'MM/YYYY');
-        const dib2 = moment(b.dib, 'MM/YYYY');
-
-        const dip1 = moment(a.dip, 'MM/YYYY');
-        const dip2 = moment(b.dip, 'MM/YYYY');
-
-
-        if (dib1.isSame(dib2, 'month')) {
-          return dip1 > dip2 ? -1 : 1
-        } else {
-          return dib1 > dib2 ? -1 : 1
-        }
-
-      });
+      this.ordenarLista();
 
       this.recebidosAtributes.emit(this.listRecebidos);
     }
   }
+
+  // private ordenarLista(){
+
+  //   this.listRecebidos.sort((a, b) => {
+
+  //     const dib1 = moment(a.dib, 'DD/MM/YYYY');
+  //     const dib2 = moment(b.dib, 'DD/MM/YYYY');
+
+  //     const dip1 = moment(a.dip, 'DD/MM/YYYY');
+  //     const dip2 = moment(b.dip, 'DD/MM/YYYY');
+
+  //     console.log(a.dib)
+  //     console.log(a.dip)
+
+  //     if (dib1.isSame(dib2)) {
+  //       return dip1 < dip2 ? -1 : 1
+  //     } else {
+  //       return dib1 > dib2 ? -1 : 1
+  //     }
+
+  //   });
+  // }
 
 
   validRecebidos() {

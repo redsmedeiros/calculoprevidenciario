@@ -514,7 +514,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (this.calculo.list_recebidos) {
+
       this.listRecebidos = JSON.parse(this.calculo.list_recebidos);
+      this.ordenarListaRecebidos();
+
     }
 
     if (this.calculo.list_acrescimos_deducoes) {
@@ -4469,6 +4472,25 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   }
 
+  
+  public ordenarListaRecebidos(){
+
+    this.listRecebidos.sort((a, b) => {
+
+      const dib1 = moment(a.dib, 'DD/MM/YYYY');
+      const dib2 = moment(b.dib, 'DD/MM/YYYY');
+
+      const dip1 = moment(a.dip, 'DD/MM/YYYY');
+      const dip2 = moment(b.dip, 'DD/MM/YYYY');
+
+      if (dib1.isSame(dib2)) {
+        return dip1 < dip2 ? -1 : 1
+      } else {
+        return dib1 > dib2 ? -1 : 1
+      }
+
+    });
+  }
 
   private parseStringFloatIRT(value) {
 

@@ -1006,13 +1006,15 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   reciverFeedbackRecebidos(rstRecebido) {
-    // console.log(rstRecebido);
 
     rstRecebido.sort((a, b) => {
       if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
         return -1;
       }
     });
+
+
+    
 
     this.listRecebidos = rstRecebido;
   }
@@ -1269,7 +1271,30 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.rowDevidosEdit = (this.listDevidos.length > 0);
   }
 
-  private addLoadRecebidoList() {
+
+  public ordenarLista(){
+
+    this.listRecebidos.sort((a, b) => {
+
+      const dib1 = moment(a.dib, 'DD/MM/YYYY');
+      const dib2 = moment(b.dib, 'DD/MM/YYYY');
+
+      const dip1 = moment(a.dip, 'DD/MM/YYYY');
+      const dip2 = moment(b.dip, 'DD/MM/YYYY');
+
+      if (dib1.isSame(dib2)) {
+        return dip1 < dip2 ? -1 : 1
+      } else {
+        return dib1 > dib2 ? -1 : 1
+      }
+
+    });
+  }
+
+
+  public addLoadRecebidoList() {
+
+   this.ordenarLista();
 
     if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
 
