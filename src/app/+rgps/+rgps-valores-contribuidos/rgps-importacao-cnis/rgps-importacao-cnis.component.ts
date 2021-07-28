@@ -399,15 +399,17 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     const replacePontos = function (valor) {
 
         if (moedaImportAmerika) {
-
           return parseFloat(valor.replace(/\,/g, ''));
-
         }
-
         return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
     const somaContrib = function (valor1, valor2) {
+
+      if (moedaImportAmerika) {
+        return (replacePontos(valor1) + replacePontos(valor2)).toFixed(2);
+      }
+
       return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
@@ -415,6 +417,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     for (const objSec of this.arraySecundarias) {
       if (objSec.data === data) {
         value = somaContrib(objSec.contrib, value);
+        // console.log(value)
       }
     }
     return value
@@ -422,6 +425,10 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   salvarContribuicoes(array) {
     const contribuicoes = [];
+
+    // console.log(this.moedaImportAmerika);
+    // console.log(array);
+
     const moedaImportAmerika = this.moedaImportAmerika;
     const replacePontos = function (valor) {
 
@@ -442,6 +449,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       });
       contribuicoes.push(contribuicao);
     }
+
+    //console.log(contribuicoes);
 
     swal({
       type: 'info',
