@@ -15,13 +15,15 @@
         id="calculos-contagem-tempo"
         [options]="calculoTableOptions"
         (selectedRowEvent)="getRow($event)"
+        (deleteRowEvent)="deleteRow($event)"
+        (copyRowEvent)="copyRow($event)"
         paginationLength="true"
         tableClass="table table-striped table-bordered table-hover"
         width="100%"
       >
         <thead>
           <tr>
-            <!-- <th>Ações</th> -->
+            <th>Ações</th>
             <th>Referência</th>
             <th>Total (Ano/Mês/Dia)</th>
             <th>Data de Criação</th>

@@ -364,7 +364,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
           <input type="checkbox" id='${id}-checkbox-calculos-rmi'
           class="checked-row-one checkbox {{styleTheme}} checkboxCalculosRMI"
           value="${id}"><span> </span></label>
-   </div>`;
+        </div>`;
   }
 
 
@@ -372,11 +372,13 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public getBtnAcoesCalculoRMI(id) {
 
     return ` <div class="btn-group">
-    <button class="btn btn-default btn-xs copy-btn" title="Copiar" >&nbsp;<i class="fa fa-copy fa-1-7x"></i>&nbsp;</button>
-      <button class="btn btn-warning btn-xs update-btn" title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</button>
-      <button class="btn btn-danger btn-xs delete-btn" title="Deletar" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</button>
-    </div>
-`;
+              <button class="btn btn-default btn-xs copy-btn bg-color-teal" 
+                  title="Duplicar" >&nbsp;<i class="fa fa-copy fa-1-7x"></i>&nbsp;</button>
+              <button class="btn btn-warning btn-xs update-btn" 
+                  title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</button>
+              <button class="btn btn-danger btn-xs delete-btn" 
+                  title="Deletar" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</button>
+        </div>`;
   }
 
 
