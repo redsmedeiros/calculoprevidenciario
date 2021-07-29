@@ -108,21 +108,20 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
-                              class="well well-sm txt-color-white text-center"
+                              class="well well-sm  text-center btn-radius-custom"
                               (click)="setOptionEntradaDados($event, 'cnis')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'cnis'
-                                  ? 'bg-color-blue'
-                                  : 'bg-color-darken'
+                                  ? 'btn-ieprev-selected'
+                                  : 'btn-ieprev'
                               "
                             >
                               <h5>Migração dos dados a partir do CNIS</h5>
-                              <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
-                              class="well well-sm txt-color-white text-center"
+                              class="well well-sm  text-center btn-radius-custom"
                               (click)="
                                 setOptionEntradaDados(
                                   $event,
@@ -131,12 +130,11 @@
                               "
                               [ngClass]="
                                 dadosPassoaPasso.type === 'seguradoExistente'
-                                  ? 'bg-color-blue'
-                                  : 'bg-color-darken'
+                                  ? 'btn-ieprev-selected'
+                                  : 'btn-ieprev'
                               "
                             >
                               <h5>Selecionar Segurado cadastrado</h5>
-                              <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
                           <div
@@ -149,16 +147,15 @@
                             "
                           >
                             <div
-                              class="well well-sm txt-color-white text-center"
+                              class="well well-sm  text-center btn-radius-custom"
                               (click)="setOptionEntradaDados($event, 'manual')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'manual'
-                                  ? 'bg-color-blue'
-                                  : 'bg-color-darken'
+                                  ? 'btn-ieprev-selected'
+                                  : 'btn-ieprev'
                               "
                             >
                               <h5>Inserir dados manualmente</h5>
-                              <!-- <code> .bg-color-darken</code> -->
                             </div>
                           </div>
                           <!-- <div

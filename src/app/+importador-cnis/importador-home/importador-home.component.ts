@@ -218,27 +218,20 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     this.setStepValidateClear(false);
     switch (step.key) {
       case 'step1':
+
         this.isTypeEntradaDados = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
-
-        // this.isCalculoSelecionado = false;
-        // this.calculoSelecionado = {}
-        // this.unCheckedAll('.checkboxSegurados');
-
-        // this.isCalculoSelecionado = false;
-        // this.calculoSelecionado = {}
-        // this.unCheckedAll('.checkboxCalculos');
-
-
         break;
       case 'step2':
+
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxSegurados');
 
         break;
       case 'step3':
+
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
@@ -249,6 +242,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
         break;
       case 'step5':
+
         this.isCompleteResultContagemTempo = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: 'seguradoExistente' }
 
@@ -267,12 +261,17 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
   prevStep() {
-    const idx = this.steps.indexOf(this.activeStep);
-    if (idx > 0) {
-      this.activeStep = this.steps[idx - 1];
-    }
 
-    this.clearDataSelected(this.activeStep);
+    if (this.prevManualCNIS()) {
+
+      const idx = this.steps.indexOf(this.activeStep);
+      if (idx > 0) {
+        this.activeStep = this.steps[idx - 1];
+      }
+
+      this.clearDataSelected(this.activeStep);
+
+    }
   }
 
   nextStep() {
@@ -285,24 +284,57 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       return;
     }
 
+    if (this.nextManualCNIS()) {
 
-    this.activeStep.checked = true;
-    if (this.steps.every((it) => it.valid && it.checked)) {
+      this.activeStep.checked = true;
+      if (this.steps.every((it) => it.valid && it.checked)) {
 
-      //   this.onWizardComplete(this.model);
+        //   this.onWizardComplete(this.model);
 
-    } else {
-      let idx = this.steps.indexOf(this.activeStep);
-      this.activeStep = null;
-      while (!this.activeStep) {
-        idx = idx === this.steps.length - 1 ? 0 : idx + 1;
-        if (!this.steps[idx].valid || !this.steps[idx].checked) {
-          this.activeStep = this.steps[idx];
+      } else {
+        let idx = this.steps.indexOf(this.activeStep);
+        this.activeStep = null;
+        while (!this.activeStep) {
+          idx = idx === this.steps.length - 1 ? 0 : idx + 1;
+          if (!this.steps[idx].valid || !this.steps[idx].checked) {
+            this.activeStep = this.steps[idx];
+          }
         }
       }
     }
 
   }
+
+  nextManualCNIS() {
+
+    if (this.activeStep.key === 'step1' && this.dadosPassoaPasso.type !== 'seguradoExistente') {
+
+      const keyStepUrl = 'step4';
+      const step = this.steps.find((item) => keyStepUrl === item.key);
+      this.activeStep = step;
+
+      return false;
+    }
+
+    return true;
+  }
+
+
+  prevManualCNIS() {
+
+    if (this.activeStep.key === 'step4' && this.dadosPassoaPasso.type !== 'seguradoExistente') {
+
+      const keyStepUrl = 'step1';
+      const step = this.steps.find((item) => keyStepUrl === item.key);
+      this.activeStep = step;
+      this.clearDataSelected(this.activeStep);
+
+      return false;
+    }
+
+    return true;
+  }
+
 
   onWizardComplete(data) {
     // console.log('Dados completo', data);
@@ -367,8 +399,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
     // }
 
-  
-    if (this.dadosPassoaPasso.type !== 'seguradoExistente') {
+    if (this.dadosPassoaPasso.type === 'seguradoExistente') {
 
       this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
       this.seguradoSelecionado = {};
@@ -376,13 +407,10 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
     } else {
 
-
       this.setStepValidate('step3', (this.isExits(this.dadosPassoaPasso.type)));
       this.setStepValidate('step2', (this.isExits(this.dadosPassoaPasso.type)));
       this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
 
-
-    
       this.seguradoSelecionado = {};
       this.calculoSelecionado = {};
 
