@@ -143,8 +143,6 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
 
       this.seguradoSelecionadoEvent.emit(this.seguradoSelecionado);
 
-    } else {
-
     }
 
   }

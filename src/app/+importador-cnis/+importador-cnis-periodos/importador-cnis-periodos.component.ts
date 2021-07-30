@@ -1,6 +1,8 @@
 import { Moeda } from 'app/services/Moeda.model';
-import { Component, OnInit, Input, SimpleChange,
-  OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, Input, SimpleChange,
+  OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter
+} from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -192,9 +194,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   }
 
-/**
- * Se moeda null
- */
+  /**
+   * Se moeda null
+   */
   private checkMoeda() {
     if (this.moeda === undefined || this.isEmpty(this.moeda)) {
       this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
@@ -709,6 +711,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return true;
     }
 
+    if (this.isValidPeriodoContribuicoes(vinculo)) {
+      return true;
+    }
+
     return false;
   }
 
@@ -887,35 +893,39 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   private isValidPeriodoContribuicoes(vinculo) {
 
+    return ((vinculo.contribuicoes_pendentes_mm > 0 || vinculo.contribuicoes_pendentes > 0)
+      && this.isExistPeriodo(vinculo.sc_mm_considerar_carencia)
+      && this.isExistPeriodo(vinculo.sc_mm_considerar_tempo));
+
 
     // let checkContrib = false;
 
-    const contribuicoesList = [];
-    let mes = 0;
-    let chave = '';
-    let msc = 0;
+    // const contribuicoesList = [];
+    // let mes = 0;
+    // let chave = '';
+    // let msc = 0;
 
-    vinculo.forEach(periodo => {
+    // vinculo.forEach(periodo => {
 
-      periodo.valores.forEach(contribuicao => {
+    //   periodo.valores.forEach(contribuicao => {
 
-        mes++;
+    //     mes++;
 
-        if (contribuicao !== '') {
-          chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
-          msc = periodo.msc[mes - 1];
+    //     if (contribuicao !== '') {
+    //       chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
+    //       msc = periodo.msc[mes - 1];
 
-          contribuicoesList.push({
-            cp: chave,
-            sc: contribuicao,
-            msc: msc
-          });
-        }
+    //       contribuicoesList.push({
+    //         cp: chave,
+    //         sc: contribuicao,
+    //         msc: msc
+    //       });
+    //     }
 
-      });
+    //   });
 
-      mes = 0;
-    });
+    //   mes = 0;
+    // });
 
     // this.result_sc = this.countPendenciasSC(contribuicoesList, '0,00');
     // this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
@@ -1030,6 +1040,16 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (data === undefined
       || typeof data === 'undefined'
       || data === 'undefined') {
+      return true;
+    }
+    return false;
+  }
+
+  isExistPeriodo(data) {
+    if (data === undefined
+      || typeof data === 'undefined'
+      || data === 'undefined'
+      || data === null) {
       return true;
     }
     return false;

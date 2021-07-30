@@ -283,7 +283,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   public preencherComSalario(type = 'm') {
 
+    console.log(this.matriz);
+
     let mesi = 0;
+    let mesiC = 0;
     const salariominimo: any[][] = [];
 
     this.matriz.map(ano => {
@@ -298,10 +301,25 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
         mesi++;
       });
 
+
+      // mesiC = 1;
+      // ano.valores.map(mes => {
+      //   if (mes === '0,00') {
+      //     if (typeof salariominimo[ano.ano] === 'undefined') {
+      //       salariominimo[ano.ano] = [];
+      //     }
+      //     salariominimo[ano.ano][mesiC - 1] = mes;
+      //   }
+      //   mesiC++;
+      // });
+
+
+
     });
 
     this.matriz.map(ano => {
       mesi = 1;
+
       ano.valores.map(valor => {
         if (valor === '0,00') {
 
@@ -312,6 +330,20 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
         }
         mesi++;
+      });
+
+      mesiC = 1;
+      ano.msc.map(checkMM => {
+        if (checkMM === 1) {
+
+          const mesF = ('0' + mesiC).slice(-2);
+          const moeda = this.getMoedaCompetencia(mesF, ano.ano);
+          const valorSC = (type === 'm') ? moeda.salario_minimo : moeda.teto;
+          ano.valores[mesiC - 1] = this.formatMoney(valorSC);
+          ano.msc[mesiC - 1] = 0;
+
+        }
+        mesiC++;
       });
     });
 

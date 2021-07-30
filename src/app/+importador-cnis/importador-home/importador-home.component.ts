@@ -222,12 +222,20 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         this.isTypeEntradaDados = false;
         this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
 
+        this.isSeguradoSelecionado = false;
+        this.seguradoSelecionado = {}
+        this.unCheckedAll('.checkboxSegurados');
+
+        this.isCalculoSelecionado = false;
+        this.calculoSelecionado = {}
+        this.unCheckedAll('.checkboxCalculos');
+
         break;
       case 'step2':
 
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
-        this.unCheckedAll('.checkboxSegurados');
+        this.unCheckedAll('.checkboxCalculos');
 
         break;
       case 'step3':
@@ -261,6 +269,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
   prevStep() {
+
+    console.log(this.seguradoSelecionado);
 
     if (this.prevManualCNIS()) {
 
@@ -322,7 +332,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   prevManualCNIS() {
 
-    if (this.activeStep.key === 'step4' && this.dadosPassoaPasso.type !== 'seguradoExistente') {
+    if (this.activeStep.key === 'step4' && this.dadosPassoaPasso.type === 'seguradoExistente') {
 
       const keyStepUrl = 'step1';
       const step = this.steps.find((item) => keyStepUrl === item.key);
@@ -387,23 +397,11 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     this.dadosPassoaPasso.type = value;
     this.isTypeEntradaDados = (this.dadosPassoaPasso.type !== '');
 
-    // if (this.dadosPassoaPasso.type !== 'seguradoExistente') {
-
-    //   this.setStepValidate('step1', (this.dadosPassoaPasso.type !== ''));
-
-    // } else {
-
-    // this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
-    // this.seguradoSelecionado = {};
-    // this.calculoSelecionado = {};
-
-    // }
-
     if (this.dadosPassoaPasso.type === 'seguradoExistente') {
 
       this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
-      this.seguradoSelecionado = {};
-      this.calculoSelecionado = {};
+      // this.seguradoSelecionado = {};
+      // this.calculoSelecionado = {};
 
     } else {
 
@@ -411,14 +409,10 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.setStepValidate('step2', (this.isExits(this.dadosPassoaPasso.type)));
       this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
 
-      this.seguradoSelecionado = {};
-      this.calculoSelecionado = {};
+      // this.seguradoSelecionado = {};
+      // this.calculoSelecionado = {};
 
     }
-
-
-    console.log(this.steps)
-
 
   }
 

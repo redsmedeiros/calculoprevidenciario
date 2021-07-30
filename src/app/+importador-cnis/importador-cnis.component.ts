@@ -263,7 +263,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public prevStepPassoaPasso() {
 
-    this.eventPrevStepPassoaPasso.emit({ activeStep: 'step1' });
+    const step = (this.dadosPassoaPasso.type !== 'seguradoExistente') ? 'step1' : 'step3';
+    this.eventPrevStepPassoaPasso.emit({ activeStep: step });
 
   }
 
@@ -292,7 +293,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
       this.calculosSelecionado = { id_segurado: seguradoSelecionado.id };
 
-      sessionStorage.removeItem('seguradoSelecionado');
+     // sessionStorage.removeItem('seguradoSelecionado');
     }
 
   }

@@ -293,8 +293,8 @@
                     (click)="showContribuicoes(vinculo, vinculo.index)"
                     class="btn btn-success btn-xs"
                     [ngClass]="{
-                      'bg-color-yellow': vinculo.contribuicoes_pendentes_mm > 0,
-                      'bg-color-red': vinculo.contribuicoes_pendentes > 0
+                      'bg-color-yellow': (vinculo.contribuicoes_pendentes_mm > 0 && isExistPeriodo(vinculo.sc_mm_considerar_carencia) && isExistPeriodo(vinculo.sc_mm_considerar_tempo)),
+                      'bg-color-red': vinculo.contribuicoes_pendentes > 0 && isExistPeriodo(vinculo.sc_mm_considerar_carencia) && isExistPeriodo(vinculo.sc_mm_considerar_tempo)
                     }"
                     data-placement="bottom"
                     tooltip="Salários de Contribuição"
@@ -306,9 +306,9 @@
                   <div class="btn-group">
                     <button
                       type="button"
-                      class="btn btn-xs btn-default"
+                      class="btn btn-xs btn-default bg-color-teal txt-color-white"
                       (click)="copiarVinculo(vinculo.index)"
-                      title="Copiar"
+                      title="Duplicar"
                     >
                       <i class="fa fa-copy fa-1-7x"></i>
                     </button>
