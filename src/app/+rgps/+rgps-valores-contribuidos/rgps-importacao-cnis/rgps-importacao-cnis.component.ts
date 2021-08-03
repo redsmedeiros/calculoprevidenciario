@@ -256,7 +256,11 @@ export class RgpsImportacaoCnisComponent implements OnInit {
     };
 
     const somaContrib = function (valor1, valor2) {
-      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      if (moedaImportAmerika) {
+        return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+      } else {
+        return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      }
     };
 
     arrayOrganizado.sort(function (a, b) {
@@ -269,7 +273,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
         return -1;
       }
       return 0;
-      //sort by date ascending
+      // sort by date ascending
     });
 
     let teste_data = null;
@@ -306,7 +310,6 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
       return res;
     }, {});
-
 
     // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
     if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
