@@ -90,7 +90,7 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <p class="text-justify pt-3" style="font-size: 14px">
-                          Selecione uma opção para iniciar o Cálculo.
+                          Selecione uma Opção para Iniciar o Cálculo.
                         </p>
                         <!-- <ul class="text-justify pt-3" style="font-size: 14px">
                           <li>Selecione uma opção para iniciar o Cálculo.</li>
@@ -116,7 +116,7 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Migração dos dados a partir do CNIS</h5>
+                              <h5>Migração dos Dados a Partir do CNIS</h5>
                             </div>
                           </div>
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -134,7 +134,7 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Selecionar Segurado cadastrado</h5>
+                              <h5>Selecionar Segurado Cadastrado</h5>
                             </div>
                           </div>
                           <div
@@ -155,7 +155,7 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Inserir dados manualmente</h5>
+                              <h5>Inserir Dados Manualmente</h5>
                             </div>
                           </div>
                           <!-- <div
@@ -208,7 +208,7 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify pt-1" style="font-size: 14px">
-                          <li>Selecione Segurado existente</li>
+                          <li>Selecione Segurado Existente</li>
                         </ul>
                       </div>
                     </div>
@@ -246,7 +246,7 @@
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                         <ul class="text-justify pt-1" style="font-size: 14px">
-                          <li>Selecione Cálculo existente</li>
+                          <li>Selecione Cálculo Existente</li>
                         </ul>
                       </div>
                     </div>
@@ -261,7 +261,6 @@
                         *ngIf="isSeguradoSelecionado"
                         class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
                       >
-                      {{seguradoSelecionado.nome}}
                         <app-importador-cnis-calculos-list
                           [seguradoSelecionado]="seguradoSelecionado"
                           (calculoSelecionadoEvent)="

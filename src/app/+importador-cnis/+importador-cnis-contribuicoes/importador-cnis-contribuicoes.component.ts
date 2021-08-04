@@ -165,14 +165,25 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   isValid() {
 
-    const dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
-    const dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
+    this.errors.clear();
+
+    let dateInicioPeriodo;
+    let dateFinalPeriodo;
+
+    if (!this.isEmpty(this.inicioPeriodo) && !this.isEmpty(this.finalPeriodo)) {
+      dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
+      dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
+    }
+
     const dataLimite = moment('1970-01-01');
 
     // inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
+
       this.errors.add({ 'inicioPeriodo': ['Insira uma data válida'] });
+
     } else {
+
       // if (dateFinalPeriodo >= dataLimite) {
       //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
       // }
@@ -184,7 +195,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     // finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
+
       this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
+
     } else {
 
       if (dateFinalPeriodo < dateInicioPeriodo) {

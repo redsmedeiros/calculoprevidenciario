@@ -4,11 +4,11 @@
     <span class="widget-icon">
       <i class="fa fa-table"></i>
     </span>
-    <h2>Selecione um Cálculo ou clique em Criar novo Cálculo</h2>
+    <h2>Selecione um Cálculo ou Clique em Criar Novo Cálculo</h2>
       <button type="button" (click)="setNewFormRMIinfoContagemTempo()" class="btn btn-labeled btn-info pull-right">
         <span class="btn-label">
           <i class="fa fa-plus"></i>
-        </span> Criar novo Cálculo
+        </span> Criar Novo Cálculo
       </button>
   </header>
   <div>
@@ -30,7 +30,7 @@
         <tr>
           <th>Ações</th>
           <th>Espécie</th>
-          <th>Período para início de benefício</th>
+          <th>Período para Início de Benefício</th>
           <th>Contribuição Primária (Ano/Mês/Dia)</th>
           <th>DIB</th>
           <th>RMI</th>
@@ -55,8 +55,8 @@
               <span class="widget-icon">
                 <i class="fa fa-plus"></i>
               </span>
-              <h2 *ngIf="!isEditRGPS" >Adicionar informações para cálculos</h2>
-              <h2 *ngIf="isEditRGPS" >Editar informações para cálculos</h2>
+              <h2 *ngIf="!isEditRGPS" >Adicionar Informações Para Cálculos</h2>
+              <h2 *ngIf="isEditRGPS" >Editar Informações Para Cálculos</h2>
               <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCalculosRGPS.hide()" aria-hidden="true">
                 <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"></i>
               </button>
