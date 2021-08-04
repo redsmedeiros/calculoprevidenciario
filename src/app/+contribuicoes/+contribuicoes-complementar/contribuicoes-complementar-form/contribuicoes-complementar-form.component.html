@@ -112,29 +112,29 @@
     <!-- widget content -->
     <div class="widget-body widget-body-custom">
       <div class="row my-4">
-        <div class="col-lg-offset-1 col-xs-6 col-sm-6 col-md-6 col-lg-5">
+        <div class="col-lg-offset-1 col-xs-5 col-sm-5 col-md-5 col-lg-5">
           <button
             type="button"
-            class="py-3 btn btn-block"
+            class="py-3 btn btn-block btn-ieprev btn-ieprev-rad"
             (click)="setOptionEntradaDados($event, 'cnis')"
             [ngClass]="
               dadosPassoaPasso.type === 'cnis'
-                ? 'btn-ieprev active btn-ieprev-rad '
-                : 'btn-ieprev btn-ieprev-rad'
+                ? 'active'
+                : ''
             "
           >
             <strong>Importar Salários de Contribuição do CNIS</strong>
           </button>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5">
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
           <button
             type="button"
-            class="py-3 btn btn-block"
+            class="py-3 btn btn-block btn-ieprev btn-ieprev-rad"
             (click)="setOptionEntradaDados($event, 'manual')"
             [ngClass]="
               dadosPassoaPasso.type === 'manual'
-                ? 'btn-ieprev active btn-ieprev-rad'
-                : 'btn-ieprev btn-ieprev-rad'
+                ? 'active'
+                : ''
             "
           >
             <strong>Inserir Salários de Contribuição Manualmente</strong>
