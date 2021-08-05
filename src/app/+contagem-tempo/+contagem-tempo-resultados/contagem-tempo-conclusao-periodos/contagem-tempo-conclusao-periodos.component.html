@@ -1,4 +1,10 @@
-<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" [togglebutton]="false" [fullscreenbutton]="false">
+<sa-widget
+  [colorbutton]="false"
+  [editbutton]="false"
+  [deletebutton]="false"
+  [togglebutton]="false"
+  [fullscreenbutton]="false"
+>
   <header>
     <span class="widget-icon">
       <i class="fa fa-table"></i>
@@ -7,7 +13,17 @@
   </header>
   <div>
     <div class="widget-body heigth-auto no-padding">
-      <table class="table table-striped table-hover table-responsive table-bordered  table-condensed-fit" *ngIf="!isUpdating && periodosList.length > 0">
+      <table
+        class="
+          table
+          table-striped
+          table-hover
+          table-responsive
+          table-bordered
+          table-condensed-fit
+        "
+        *ngIf="!isUpdating && periodosList.length > 0"
+      >
         <thead>
           <tr>
             <th rowspan="2">Nº</th>
@@ -17,11 +33,27 @@
             <th rowspan="2" class="text-center">Fator</th>
             <th rowspan="2" class="text-center">Cota Carência</th>
             <th rowspan="2" class="text-center">Cota Tempo Contribuição</th>
-            <th colspan="3" class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (Somente a diferença entre datas)">Tempo
-                de Contribuição</span></th>
-            <th colspan="3" class="text-center"><span data-placement="top" tooltip="Tempo de contribuição (com fator multiplicador)">Tempo
-                de Contribuição Convertido<strong></strong></span></th>
-            <th rowspan="2" class="text-center"><span data-placement="top" tooltip="Identifica os vínculos em conflito">Concomitâncias</span></th>
+            <th colspan="3" class="text-center">
+              <span
+                data-placement="top"
+                tooltip="Tempo de contribuição (Somente a diferença entre datas)"
+                >Tempo de Contribuição</span
+              >
+            </th>
+            <th colspan="3" class="text-center">
+              <span
+                data-placement="top"
+                tooltip="Tempo de contribuição (com fator multiplicador)"
+                >Tempo de Contribuição Convertido<strong></strong
+              ></span>
+            </th>
+            <th rowspan="2" class="text-center">
+              <span
+                data-placement="top"
+                tooltip="Identifica os vínculos em conflito"
+                >Concomitâncias</span
+              >
+            </th>
           </tr>
           <tr>
             <th class="text-center">Anos</th>
@@ -34,13 +66,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let periodo of periodosList">
-            <td>{{periodo.vinculo}}</td>
-            <td>{{periodo.empresa}}</td>
-            <td>{{periodo.data_inicio}}</td>
-            <td>{{periodo.data_termino}}</td>
-            <td class="text-center">{{periodo.fator_condicao_especial}}</td>
-            <td class="text-center">{{periodo.carencia}}</td>
-            <td class="text-center">{{periodo.carencia}}</td>
+            <td>{{ periodo.vinculo }}</td>
+            <td>{{ periodo.empresa }}</td>
+            <td>{{ periodo.data_inicio }}</td>
+            <td>{{ periodo.data_termino }}</td>
+            <td class="text-center">{{ periodo.fator_condicao_especial }}</td>
+            <td class="text-center">{{ periodo.carencia }}</td>
+            <td class="text-center">{{ periodo.carencia }}</td>
             <!--       
           <td class="text-center">{{ periodo.totalSemFator.years()  }} </td>
           <td class="text-center"> {{ periodo.totalSemFator.months()  }}</td>
@@ -49,22 +81,43 @@
           <td class="text-center"> {{ periodo.totalComFator.months()  }}</td>
           <td class="text-center"> {{ this.Math.ceil(periodo.totalComFator.days())  | number : '1.0-0' }}</td> -->
 
-            <td class="text-center">{{ periodo.totalSemFator.years }} </td>
+            <td class="text-center">{{ periodo.totalSemFator.years }}</td>
             <td class="text-center">{{ periodo.totalSemFator.months }}</td>
             <td class="text-center">{{ periodo.totalSemFator.days }}</td>
-            <td class="text-center">{{ periodo.totalComFator.years }} </td>
+            <td class="text-center">{{ periodo.totalComFator.years }}</td>
             <td class="text-center">{{ periodo.totalComFator.months }}</td>
-            <td class="text-center">{{ periodo.totalComFator.days}}</td>
-            <td class="text-center">{{ periodo.concomitantes.vinculosList }}</td>
+            <td class="text-center">{{ periodo.totalComFator.days }}</td>
+            <td class="text-center">
+              {{ periodo.concomitantes.vinculosList }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-bordered table-condensed-fit" *ngIf="!isUpdating && periodosList.length > 0">
+        <tbody>
+          <tr>
+            <td>*Cota Carência</td>
+            <td>
+              Integral, Parcial
+            </td>
+          </tr>
+          <tr>
+            <td>*Cota Tempo Contribuição</td>
+            <td>
+              Integral, Parcial
+            </td>
           </tr>
         </tbody>
       </table>
 
-      <div *ngIf="isUpdating" class="alert text-align-center no-padding no-margin">
+      <div
+        *ngIf="isUpdating"
+        class="alert text-align-center no-padding no-margin"
+      >
         <i class="fa fa-gear fa-3x fa-spin text-info"></i>
       </div>
-
     </div>
+
     <!-- <div class="form-actions no-padding no-margin not-print">
       <div class="row">
         <div>
