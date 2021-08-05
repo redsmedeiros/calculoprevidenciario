@@ -84,8 +84,10 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
           }
 
           this.periodosList = this.periodosListInicial;
-          this.periodosListRst.emit({listRST: this.periodosList,
-                                    listDB: periodosContribuicao});
+          this.periodosListRst.emit({
+            listRST: this.periodosList,
+            listDB: periodosContribuicao
+          });
         }
 
         // this.tableOptionsPeriodos = {
@@ -99,10 +101,17 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   updateDatatablePeriodos(periodo) {
 
-    if (typeof periodo === 'object' && this.idsCalculos == periodo.id_contagem_tempo) {
+    console.log(periodo);
+
+    if (typeof periodo === 'object' && this.idsCalculos === periodo.id_contagem_tempo) {
 
       const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
       const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
+
+
+      const statusCarencia = this.defineStatusCarencia(periodo);
+      const statusTempoContribuicao = this.defineStatusTempoCintribuicao(periodo);
+
 
       const line = {
         vinculo: this.periodosListInicial.length + 1,
@@ -111,8 +120,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         empresa: periodo.empresa,
         fator_condicao_especial: periodo.fator_condicao_especial,
         fator_condicao_especialN: ajusteFator,
-        condicao_especial: (periodo.condicao_especial) ? 'Sim' : 'Não',
-        carencia: (periodo.carencia) ? 'Sim' : 'Não',
+        carencia: statusCarencia,
+        tempoContrib: statusTempoContribuicao,
         actions: periodo.actions,
         created_at: this.formatReceivedDate(periodo.created_at),
         id: periodo.id,
@@ -124,6 +133,49 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       this.periodosListInicial.push(line);
     }
 
+  }
+
+
+  private defineStatusCarencia(periodo) {
+
+    if (periodo.carencia === 0) {
+      return 'Não';
+    }
+
+    console.log((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
+    && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes))))
+
+    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
+      && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
+    ) {
+
+      return (periodo.carencia) ? 'Integral' : 'Não';
+    } else {
+
+      return (this.isExist(periodo.sc_mm_considerar_carencia) && periodo.sc_mm_considerar_carencia === 1) ? 'Integral' : 'Parcial';
+    }
+
+  }
+
+  private defineStatusTempoCintribuicao(periodo) {
+
+    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
+      && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
+    ) {
+
+      return 'Integral';
+
+    } else {
+
+      return (this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1) ? 'Integral' : 'Parcial';
+    }
+  }
+
+
+  private descontarTempoConformeSC(periodo, totalTempo) {
+
+
+    return totalTempo;
   }
 
 
@@ -230,6 +282,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     periodo.concomitantes = concomitantes;
 
     return periodo;
+  }
+
+  isExist(data) {
+    if (data === undefined
+      || typeof data === 'undefined'
+      || data === 'undefined'
+      || data === null) {
+      return true;
+    }
+    return false;
   }
 
   returnListaPeriodos() {
