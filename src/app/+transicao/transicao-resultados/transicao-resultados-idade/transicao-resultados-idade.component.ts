@@ -206,6 +206,18 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     }
 
+    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+
+      rstRegraIdadeProgressiva.tempoContribuicaoDib = {
+        days: parseInt(this.seguradoTransicao.contribuicaoDias, 10),
+        fullDays: this.seguradoTransicao.contribuicaoFracionadoDias,
+        months: parseInt(this.seguradoTransicao.contribuicaoMeses, 10),
+        years: parseInt(this.seguradoTransicao.contribuicaoAnos, 10),
+      }
+
+    }
+
+
     if (Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years) >= tempoPercentualR1[this.seguradoTransicao.sexo]) {
       percentualR1 += ((Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years)
         - tempoPercentualR1[this.seguradoTransicao.sexo]) * 2);
@@ -344,6 +356,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     if (idadeMoment.days() === 30) {
       idadeMoment.add(1, 'day');
     }
+
 
 
     // console.log('-- regra 5');
