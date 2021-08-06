@@ -93,18 +93,20 @@
           </tr>
         </tbody>
       </table>
-      <table class="table table-bordered table-condensed-fit" *ngIf="!isUpdating && periodosList.length > 0">
+      <table class="table table-bordered table-condensed-custom font-1-1x" *ngIf="!isUpdating && periodosList.length > 0">
         <tbody>
           <tr>
-            <td>*Cota Carência</td>
+            <td >*Cota Carência</td>
             <td>
-              Integral, Parcial
+              Integral: período possui todos os salários de contribuíção ou usuário selecionou Considerar Carência. 
+              <br> Parcial: período não possui todos os salários de contribuíção e usuário escolheu não considerar todo o período como Carência.
             </td>
           </tr>
           <tr>
             <td>*Cota Tempo Contribuição</td>
             <td>
-              Integral, Parcial
+              Integral:  período possui todos os salários de contribuíção ou usuário selecionou Considerar como Tempo de Contribuição.
+              <br> Parcial: período não possui todos os salários de contribuíção e usuário escolheu não considerar todo o período como Tempo de Contribuição.
             </td>
           </tr>
         </tbody>

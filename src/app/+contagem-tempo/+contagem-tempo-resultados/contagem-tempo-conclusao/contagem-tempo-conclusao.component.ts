@@ -985,7 +985,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     setTimeout(() => {
       if (
-        (this.calculo.total_dias !== this.tempoTotalConFator.fullDays ||
+       ( (this.calculo.total_dias !== this.tempoTotalConFator.fullDays ||
           this.calculo.total_88 !== this.tempoTotalConFator88.fullDays ||
           this.calculo.total_91 !== this.tempoTotalConFator91.fullDays ||
           this.calculo.total_98 !== this.tempoTotalConFator98.fullDays ||
@@ -993,7 +993,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           this.calculo.total_19 !== this.tempoTotalConFator19.fullDays ||
           this.calculo.total_carencia !== this.carencia)
         &&
-        (this.isCompleteCarencia && this.isCompleteTempoTotal)
+        (this.isCompleteCarencia && this.isCompleteTempoTotal))
+        ||
+        this.dadosPassoaPasso.origem !== 'contagem'
       ) {
         this.calculo.total_dias = this.tempoTotalConFator.fullDays;
         this.calculo.total_88 = this.tempoTotalConFator88.fullDays;
@@ -1006,8 +1008,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         this.CalculoContagemTempoService
           .update(this.calculo)
           .then(model => {
-            // console.log('update ok');
+
             this.contagemTempoConclusaoSaveRST();
+
           })
           .catch(errors => this.Errors.add(errors));
       }

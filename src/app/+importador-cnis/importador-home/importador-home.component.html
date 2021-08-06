@@ -510,7 +510,7 @@
                             (click)="prevStep()"
                             [class.disabled]="
                               steps.indexOf(activeStep) == 0 ||
-                              ([step4,step5,'step6'].includes(activeStep) && !activeStep.valid)
+                              (['step4','step5','step6'].includes(activeStep.key) && !activeStep.valid)
                             "
                             class="btn btn-lg btn-default"
                             title="Retornar ao passo anterior"

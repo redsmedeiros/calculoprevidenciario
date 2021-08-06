@@ -112,6 +112,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       const statusCarencia = this.defineStatusCarencia(periodo);
       const statusTempoContribuicao = this.defineStatusTempoCintribuicao(periodo);
 
+      this.descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao)
 
       const line = {
         vinculo: this.periodosListInicial.length + 1,
@@ -142,37 +143,95 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       return 'Não';
     }
 
-    console.log((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
-    && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes))))
-
-    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
-      && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
+    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
+      && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
     ) {
 
       return (periodo.carencia) ? 'Integral' : 'Não';
+
     } else {
 
-      return (this.isExist(periodo.sc_mm_considerar_carencia) && periodo.sc_mm_considerar_carencia === 1) ? 'Integral' : 'Parcial';
+      console.log(periodo.sc_pendentes);
+
+      return (!this.isExist(periodo.sc_mm_considerar_carencia) && periodo.sc_mm_considerar_carencia === 1) ? 'Integral' : 'Parcial';
     }
 
   }
 
   private defineStatusTempoCintribuicao(periodo) {
 
-    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm)
-      && (periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
+    if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
+      && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
     ) {
 
       return 'Integral';
 
     } else {
 
-      return (this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1) ? 'Integral' : 'Parcial';
+      console.log(periodo.sc_pendentes);
+
+      return ((!this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1)) ? 'Integral' : 'Parcial';
     }
   }
 
 
-  private descontarTempoConformeSC(periodo, totalTempo) {
+
+  private testInicioFimDoPeriodo(dataIni, inicioSC, dataFim, fimSC) {
+
+    const descarteLimites = {
+      inicio: 0,
+      fim: 0
+    }
+
+    console.log(dataIni)
+    console.log(dataFim)
+    console.log(inicioSC)
+    console.log(fimSC)
+
+
+    if (moment(inicioSC.cp, 'DD/YYYY').isSame(dataIni, 'month') 
+      ) {
+      descarteLimites.inicio = moment(dataIni).date();
+    }
+
+
+    if (moment(fimSC.cp, 'DD/YYYY').isSame(dataFim, 'month')
+     && (fimSC.msc === 1 || fimSC.sc === '0,00')
+    ) {
+      descarteLimites.fim = moment(dataFim).date();
+    }
+
+
+    console.log(descarteLimites)
+
+  }
+
+  private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
+
+
+
+
+    if (this.isExist(periodo.sc)) {
+      periodo.sc = JSON.parse(periodo.sc)
+    }
+
+    if (statusTempoContribuicao === 'Parcial') {
+
+      this.testInicioFimDoPeriodo(periodo.data_inicio,
+        periodo.sc[0],
+        periodo.data_termino,
+        periodo.sc[periodo.sc.length - 1]);
+
+    }
+
+
+    console.log(periodo.sc)
+    console.log(periodo)
+    console.log(totalTempo)
+    console.log(statusCarencia)
+    console.log(statusTempoContribuicao);
+
+
 
 
     return totalTempo;
@@ -289,9 +348,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       || typeof data === 'undefined'
       || data === 'undefined'
       || data === null) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   returnListaPeriodos() {
@@ -319,17 +378,20 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
   formatReceivedDate(inputDate) {
-    let date = moment(inputDate, 'YYYY-MM-DD');
+    const date = moment(inputDate, 'YYYY-MM-DD');
     return date.format('DD/MM/YYYY');
   }
 
   formatPostDataDate(inputDate) {
-    let date = moment(inputDate, 'DD/MM/YYYY');
+    const date = moment(inputDate, 'DD/MM/YYYY');
     return date.format('YYYY-MM-DD');
   }
 
   isEmpty(data) {
-    if (data == undefined || data == '' || typeof data === 'undefined') {
+    if (data === undefined
+      || typeof data === 'undefined'
+      || data === 'undefined'
+      || data === null) {
       return true;
     }
     return false;
