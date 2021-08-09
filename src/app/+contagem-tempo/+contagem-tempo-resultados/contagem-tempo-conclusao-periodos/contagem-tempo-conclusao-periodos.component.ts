@@ -247,6 +247,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     let totalDescarteDias = 0;
     let totalDescarteMeses = 0;
+    let totalFinalEmDias = totalTempo.semFator.fullDays;
 
     if (periodo.descarteLimites.inicioType === 'z') {
 
@@ -276,14 +277,34 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     totalDescarteMeses = (periodo.sc_pendentes + periodo.sc_pendentes_mm);
 
-    console.log(periodo);
-    console.log(totalTempo);
-
     console.log(totalDescarteDias);
     console.log(totalDescarteMeses);
 
-    //  DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+    if (totalDescarteMeses > 0) {
+      totalDescarteDias += (30 * totalDescarteMeses);
+    }
 
+    if (totalFinalEmDias > totalDescarteDias) {
+      totalFinalEmDias -= totalDescarteDias
+    }
+
+    console.log(totalTempo.semFator.fullDays)
+    console.log(totalFinalEmDias)
+
+    totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
+
+    const fator = parseFloat(periodo.fator_condicao_especial);
+
+    if (fator === 1) {
+
+      totalTempo.comFator = Object.assign({}, totalTempo.semFator);
+
+    } else {
+
+      const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
+      totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+
+    }
 
     return totalTempo
   }
@@ -323,16 +344,17 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
+
+
+
+      console.log(periodo)
+      console.log(totalTempo)
+      console.log(statusCarencia)
+      console.log(statusTempoContribuicao);
+
+
+
     }
-
-
-    console.log(periodo.sc)
-    console.log(periodo)
-    console.log(totalTempo)
-    console.log(statusCarencia)
-    console.log(statusTempoContribuicao);
-
-
 
 
     return totalTempo;
