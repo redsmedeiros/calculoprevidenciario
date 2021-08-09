@@ -136,7 +136,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   }
 
-
+  /**
+   * define o status da carencia conforme os salários de contribuição
+   * @param periodo
+   * @returns string status
+   */
   private defineStatusCarencia(periodo) {
 
     if (periodo.carencia === 0) {
@@ -151,13 +155,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     } else {
 
-      console.log(periodo.sc_pendentes);
-
       return (!this.isExist(periodo.sc_mm_considerar_carencia) && periodo.sc_mm_considerar_carencia === 1) ? 'Integral' : 'Parcial';
     }
 
   }
 
+  /**
+   * define o status de tempo de contribuição conforme os salários de contribuição
+   * @param periodo
+   * @returns string status
+   */
   private defineStatusTempoCintribuicao(periodo) {
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
@@ -167,8 +174,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       return 'Integral';
 
     } else {
-
-      console.log(periodo.sc_pendentes);
 
       return ((!this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1)) ? 'Integral' : 'Parcial';
     }
@@ -180,47 +185,143 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     const descarteLimites = {
       inicio: 0,
-      fim: 0
+      fim: 0,
+      inicioType: '',
+      fimType: ''
     }
 
-    console.log(dataIni)
-    console.log(dataFim)
-    console.log(inicioSC)
-    console.log(fimSC)
+    const defineType = (msc, sc) => {
 
+      if ((msc !== 1 && sc === '0,00')) {
+        return 'z'
+      } else if ((msc === 1 && sc !== '0,00')) {
+        return 'm'
+      }
 
-    if (moment(inicioSC.cp, 'DD/YYYY').isSame(dataIni, 'month') 
-      ) {
+    }
+
+    if (moment(inicioSC.cp, 'DD/YYYY').isSame(dataIni, 'month')
+      && moment(dataIni).isAfter(moment(dataIni).startOf('month'))
+      && (fimSC.msc === 1 || fimSC.sc === '0,00')
+    ) {
       descarteLimites.inicio = moment(dataIni).date();
+      descarteLimites.inicioType = defineType(inicioSC.msc, inicioSC.sc);
     }
 
 
     if (moment(fimSC.cp, 'DD/YYYY').isSame(dataFim, 'month')
-     && (fimSC.msc === 1 || fimSC.sc === '0,00')
+      && moment(dataFim).isBefore(moment(dataFim).endOf('month'))
+      && (fimSC.msc === 1 || fimSC.sc === '0,00')
     ) {
-      descarteLimites.fim = moment(dataFim).date();
+
+      //  descarteLimites.fim = moment(dataFim).endOf('month').date() - moment(dataFim).date();
+      descarteLimites.fim = 30 - moment(dataFim).date();
+      descarteLimites.fimType = defineType(fimSC.msc, fimSC.sc);
+
     }
 
 
-    console.log(descarteLimites)
+    return descarteLimites
 
   }
 
+
+  /**
+   * calcular descarte da carencia
+   * @param periodo obj
+   * @param totalTempo obj
+   * @returns obj
+   */
+  private calcularDescarteCarencia(periodo, totalTempo) {
+
+    totalTempo.carencia -= periodo.sc_pendentes
+    totalTempo.carencia -= periodo.sc_pendentes_mm
+    return totalTempo.carencia
+
+  }
+
+
+
+  private calcularDescarteTempoContribuicao(periodo, totalTempo) {
+
+
+    let totalDescarteDias = 0;
+    let totalDescarteMeses = 0;
+
+    if (periodo.descarteLimites.inicioType === 'z') {
+
+      periodo.sc_pendentes -= 1;
+      totalDescarteDias = periodo.descarteLimites.inicio;
+
+    } else if (periodo.descarteLimites.inicioType === 'm') {
+
+      periodo.sc_pendentes_mm -= 1;
+      totalDescarteDias = periodo.descarteLimites.inicio;
+
+    }
+
+
+    if (periodo.descarteLimites.fimType === 'z') {
+
+      periodo.sc_pendentes -= 1;
+      totalDescarteDias += periodo.descarteLimites.fim;
+
+    } else if (periodo.descarteLimites.fimType === 'm') {
+
+      periodo.sc_pendentes_mm -= 1;
+      totalDescarteDias += periodo.descarteLimites.fim;
+
+    }
+
+
+    totalDescarteMeses = (periodo.sc_pendentes + periodo.sc_pendentes_mm);
+
+    console.log(periodo);
+    console.log(totalTempo);
+
+    console.log(totalDescarteDias);
+    console.log(totalDescarteMeses);
+
+    //  DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+
+
+    return totalTempo
+  }
+
+
+
+  private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
+
+    if (statusCarencia === 'Parcial') {
+
+      totalTempo.carencia = this.calcularDescarteCarencia(periodo, totalTempo);
+
+    }
+
+    if (statusTempoContribuicao === 'Parcial') {
+
+      totalTempo = this.calcularDescarteTempoContribuicao(periodo, totalTempo);
+    }
+
+    return totalTempo
+
+  }
+
+
   private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
-
-
-
 
     if (this.isExist(periodo.sc)) {
       periodo.sc = JSON.parse(periodo.sc)
     }
 
-    if (statusTempoContribuicao === 'Parcial') {
+    if (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial') {
 
-      this.testInicioFimDoPeriodo(periodo.data_inicio,
+      periodo.descarteLimites = this.testInicioFimDoPeriodo(periodo.data_inicio,
         periodo.sc[0],
         periodo.data_termino,
         periodo.sc[periodo.sc.length - 1]);
+
+      totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
     }
 

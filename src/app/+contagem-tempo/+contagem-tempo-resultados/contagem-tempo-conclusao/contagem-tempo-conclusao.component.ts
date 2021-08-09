@@ -573,11 +573,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   }
 
-
-
-
-
-
+  
   private defineCarenciaData(auxiliarDate) {
     let carencia = false;
 
@@ -585,7 +581,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       const fimVinculo = this.toMomentCarencia(vinculo.data_termino);
 
-      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
+      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral' 
+      || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
         carencia = true;
       }
 
