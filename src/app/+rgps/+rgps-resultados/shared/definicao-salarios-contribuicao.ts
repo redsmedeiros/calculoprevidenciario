@@ -23,10 +23,11 @@ export class DefinicaoSalariosContribuicao {
 
     static convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio) {
 
+        console.log(listaPeriodosCT);
 
         listaPeriodosCT.map((rowObj) => {
 
-            if (this.isExits(rowObj.sc)) {
+            if (this.isExits(rowObj.sc) && (typeof rowObj.sc === 'string' || typeof rowObj.sc !== 'object')) {
                 rowObj.sc = JSON.parse(rowObj.sc);
                 // rowObj.sc = this.checarSalariosContribuicao(rowObj, dataInicioBeneficio);
             }

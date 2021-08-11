@@ -101,18 +101,14 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   updateDatatablePeriodos(periodo) {
 
-    console.log(periodo);
-
     if (typeof periodo === 'object' && this.idsCalculos === periodo.id_contagem_tempo) {
 
       const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
       const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
 
-
       const statusCarencia = this.defineStatusCarencia(periodo);
       const statusTempoContribuicao = this.defineStatusTempoCintribuicao(periodo);
-
-      this.descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao)
+      const limites = this.descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
       const line = {
         vinculo: this.periodosListInicial.length + 1,
@@ -129,8 +125,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         totalSemFator: totalTempo.semFator,
         totalComFator: totalTempo.comFator,
         totalCarencia: totalTempo.carencia,
-        concomitantes: ''
+        concomitantes: '',
+        sc_count: periodo.sc_count,
+        sc_mm_ajustar: periodo.sc_mm_ajustar,
+        sc_mm_considerar_carencia: periodo.sc_mm_considerar_carencia,
+        sc_mm_considerar_tempo: periodo.sc_mm_considerar_tempo,
+        sc_pendentes: periodo.sc_pendentes,
+        sc_pendentes_mm: periodo.sc_pendentes_mm,
+        limites: limites,
       }
+
       this.periodosListInicial.push(line);
     }
 
@@ -181,9 +185,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
 
+
+
   private testInicioFimDoPeriodo(dataIni, inicioSC, dataFim, fimSC) {
 
-    const descarteLimites = {
+    const limites = {
       inicio: 0,
       fim: 0,
       inicioType: '',
@@ -200,30 +206,54 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     }
 
-    if (moment(inicioSC.cp, 'DD/YYYY').isSame(dataIni, 'month')
-      && moment(dataIni).isAfter(moment(dataIni).startOf('month'))
-      && (fimSC.msc === 1 || fimSC.sc === '0,00')
-    ) {
-      descarteLimites.inicio = moment(dataIni).date();
-      descarteLimites.inicioType = defineType(inicioSC.msc, inicioSC.sc);
-    }
-
-
-    if (moment(fimSC.cp, 'DD/YYYY').isSame(dataFim, 'month')
-      && moment(dataFim).isBefore(moment(dataFim).endOf('month'))
-      && (fimSC.msc === 1 || fimSC.sc === '0,00')
+    if (moment(inicioSC.cp, 'MM/YYYY').isSame(dataIni, 'month')
+      && moment(dataIni).isSameOrAfter(moment(dataIni).startOf('month'))
     ) {
 
-      //  descarteLimites.fim = moment(dataFim).endOf('month').date() - moment(dataFim).date();
-      descarteLimites.fim = 30 - moment(dataFim).date();
-      descarteLimites.fimType = defineType(fimSC.msc, fimSC.sc);
+      if ((inicioSC.msc === 0 && inicioSC.sc !== '0,00')) {
+
+        limites.inicioType = 'i'; // integral
+
+      } else if (inicioSC.msc === 1) {  // parcial
+
+        const inicioDias = (moment(dataIni).date() >= 30) ? 1 : 30 - moment(dataIni).date();
+        limites.inicio = inicioDias;
+        limites.inicioType = 'm';
+
+      } else {  // não conta
+
+        limites.inicioType = 'z';
+
+      }
 
     }
 
+    if (moment(fimSC.cp, 'MM/YYYY').isSame(dataFim, 'month')
+      && moment(dataFim).isSameOrBefore(moment(dataFim).endOf('month'))
+    ) {
 
-    return descarteLimites
+      if ((fimSC.msc === 0 && fimSC.sc !== '0,00')) {
+
+        limites.fimType = 'i'; // integral
+
+      } else if (fimSC.msc === 1) { // parcial
+
+        limites.fim = moment(dataFim).date();
+        limites.fimType = 'm';
+
+      } else { // não conta
+
+        limites.fimType = 'z';
+
+      }
+
+    }
+
+    return limites
 
   }
+
+
 
 
   /**
@@ -242,53 +272,141 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
 
+  // private calcularDescarteTempoContribuicao2(periodo, totalTempo) {
+
+
+  //   let totalDescarteDias = 0;
+  //   let totalDescarteMeses = 0;
+  //   let totalFinalEmDias = totalTempo.semFator.fullDays;
+
+  //   if (this.isExist(periodo.limites.inicioType) && periodo.limites.inicioType !== ''
+  //     || this.isExist(periodo.limites.fimType) && periodo.limites.fimType !== '') {
+
+  //     if (periodo.limites.inicioType === 'z') {
+
+  //       periodo.sc_pendentes -= 1;
+  //       totalDescarteDias = periodo.limites.inicio;
+
+  //     } else if (periodo.limites.inicioType === 'm') {
+
+  //       periodo.sc_pendentes_mm -= 1;
+  //       totalDescarteDias = periodo.limites.inicio;
+
+  //     }
+
+
+  //     if (periodo.limites.fimType === 'z') {
+
+  //       periodo.sc_pendentes -= 1;
+  //       totalDescarteDias += periodo.limites.fim;
+
+  //     } else if (periodo.limites.fimType === 'm') {
+
+  //       periodo.sc_pendentes_mm -= 1;
+  //       totalDescarteDias += periodo.limites.fim;
+
+  //     }
+
+  //     console.log(totalDescarteDias)
+
+  //     totalDescarteMeses = (periodo.sc_pendentes + periodo.sc_pendentes_mm);
+  //     console.log(totalDescarteMeses)
+
+  //     if (totalDescarteMeses > 0) {
+  //       totalDescarteDias += (30 * totalDescarteMeses);
+  //     }
+
+  //     console.log(totalDescarteDias)
+  //     console.log(totalFinalEmDias)
+
+  //     if (totalFinalEmDias > totalDescarteDias) {
+  //       totalFinalEmDias -= totalDescarteDias
+  //     }
+
+  //   } else {
+
+  //     if (periodo.sc_pendentes > 0 || periodo.sc_pendentes_mm > 0) {
+
+  //       totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
+
+  //     }
+
+  //   }
+
+
+
+  //   console.log(totalFinalEmDias)
+
+  //   totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
+
+  //   const fator = parseFloat(periodo.fator_condicao_especial);
+
+  //   if (fator === 1) {
+
+  //     totalTempo.comFator = Object.assign({}, totalTempo.semFator);
+
+  //   } else {
+
+  //     const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
+  //     totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+
+  //   }
+
+  //   return totalTempo
+  // }
+
+
+
+
+  /**
+   * Calcular o descarte conforme os salários de contribuição
+   * @param periodo
+   * @param totalTempo
+   * @returns
+   */
   private calcularDescarteTempoContribuicao(periodo, totalTempo) {
 
 
-    let totalDescarteDias = 0;
-    let totalDescarteMeses = 0;
+    let totalDias = 0;
     let totalFinalEmDias = totalTempo.semFator.fullDays;
 
-    if (periodo.descarteLimites.inicioType === 'z') {
+    if (periodo.limites.inicioType !== 'i' || periodo.limites.fimType !== 'i') {
 
-      periodo.sc_pendentes -= 1;
-      totalDescarteDias = periodo.descarteLimites.inicio;
+      if (periodo.limites.inicioType === 'm') {
 
-    } else if (periodo.descarteLimites.inicioType === 'm') {
+        // periodo.sc_pendentes_mm -= 1;
+        totalDias = periodo.limites.inicio;
 
-      periodo.sc_pendentes_mm -= 1;
-      totalDescarteDias = periodo.descarteLimites.inicio;
+      }
+
+      if (periodo.limites.fimType === 'm') {
+
+        // periodo.sc_pendentes_mm -= 1;
+        totalDias += periodo.limites.fim;
+
+      }
+
+      console.log(totalDias)
+
+      console.log(totalDias)
+      console.log(totalFinalEmDias)
+
+
+      totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
+      totalFinalEmDias += totalDias;
+
+    } else {
+
+      if (periodo.sc_pendentes > 0 || periodo.sc_pendentes_mm > 0) {
+
+        totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
+
+      }
 
     }
 
 
-    if (periodo.descarteLimites.fimType === 'z') {
 
-      periodo.sc_pendentes -= 1;
-      totalDescarteDias += periodo.descarteLimites.fim;
-
-    } else if (periodo.descarteLimites.fimType === 'm') {
-
-      periodo.sc_pendentes_mm -= 1;
-      totalDescarteDias += periodo.descarteLimites.fim;
-
-    }
-
-
-    totalDescarteMeses = (periodo.sc_pendentes + periodo.sc_pendentes_mm);
-
-    console.log(totalDescarteDias);
-    console.log(totalDescarteMeses);
-
-    if (totalDescarteMeses > 0) {
-      totalDescarteDias += (30 * totalDescarteMeses);
-    }
-
-    if (totalFinalEmDias > totalDescarteDias) {
-      totalFinalEmDias -= totalDescarteDias
-    }
-
-    console.log(totalTempo.semFator.fullDays)
     console.log(totalFinalEmDias)
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
@@ -337,27 +455,18 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     if (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial') {
 
-      periodo.descarteLimites = this.testInicioFimDoPeriodo(periodo.data_inicio,
+      periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
         periodo.sc[0],
         periodo.data_termino,
         periodo.sc[periodo.sc.length - 1]);
 
       totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
-
-
-
-      console.log(periodo)
-      console.log(totalTempo)
-      console.log(statusCarencia)
-      console.log(statusTempoContribuicao);
-
-
-
     }
 
+    console.log(periodo)
 
-    return totalTempo;
+    return periodo.limites;
   }
 
 
@@ -453,10 +562,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       checkConcomitante = this.checkDatasConcomitantes(periodo.data_inicio, periodo.data_termino,
         periodoCom.data_inicio, periodoCom.data_termino);
+
       if (periodo.vinculo !== periodoCom.vinculo && checkConcomitante) {
+
         concomitantes.check = true;
         concomitantes.text = 'Sim';
         concomitantes.vinculosList += (concomitantes.vinculosList === '') ? periodoCom.vinculo : ', ' + periodoCom.vinculo;
+
       }
 
     }

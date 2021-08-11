@@ -364,6 +364,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     }
 
+    console.log(this.periodosList)
+
     return { soma: somaF, concomitante: concomitanteP };
   }
 
