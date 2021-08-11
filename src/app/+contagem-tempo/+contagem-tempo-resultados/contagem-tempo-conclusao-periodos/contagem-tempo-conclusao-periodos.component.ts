@@ -107,7 +107,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
 
       const statusCarencia = this.defineStatusCarencia(periodo);
-      const statusTempoContribuicao = this.defineStatusTempoCintribuicao(periodo);
+      const statusTempoContribuicao = this.defineStatusTempoContribuicao(periodo);
       const limites = this.descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
       const line = {
@@ -126,6 +126,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         totalComFator: totalTempo.comFator,
         totalCarencia: totalTempo.carencia,
         concomitantes: '',
+        sc: periodo.sc,
         sc_count: periodo.sc_count,
         sc_mm_ajustar: periodo.sc_mm_ajustar,
         sc_mm_considerar_carencia: periodo.sc_mm_considerar_carencia,
@@ -147,8 +148,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private defineStatusCarencia(periodo) {
 
+
     if (periodo.carencia === 0) {
       return 'Não';
+    }
+
+    if (this.checkPeriodoPosReforma(periodo)) {
+      return 'Integral';
     }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
@@ -169,7 +175,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    * @param periodo
    * @returns string status
    */
-  private defineStatusTempoCintribuicao(periodo) {
+  private defineStatusTempoContribuicao(periodo) {
+
+    if (this.checkPeriodoPosReforma(periodo)) {
+      return 'Integral';
+    }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
       && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
@@ -181,9 +191,21 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       return ((!this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1)) ? 'Integral' : 'Parcial';
     }
+
+
   }
 
 
+  private checkPeriodoPosReforma(periodo) {
+
+    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return false;
+
+    }
+    return true;
+
+  }
 
 
 
@@ -386,11 +408,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       }
 
-      console.log(totalDias)
-
-      console.log(totalDias)
-      console.log(totalFinalEmDias)
-
 
       totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
       totalFinalEmDias += totalDias;
@@ -404,10 +421,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       }
 
     }
-
-
-
-    console.log(totalFinalEmDias)
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
@@ -453,7 +466,10 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       periodo.sc = JSON.parse(periodo.sc)
     }
 
-    if (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial') {
+    console.log(typeof periodo.sc)
+
+    if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
+      && (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')) {
 
       periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
         periodo.sc[0],
