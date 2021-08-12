@@ -198,12 +198,25 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private checkPeriodoPosReforma(periodo) {
 
-    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+    if (moment(periodo.data_inicio).isSameOrAfter('2019-11-13')
+      || moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
 
       return false;
 
     }
     return true;
+
+  }
+
+  private checkPeriodoComIntersessaoEC(periodo) {
+
+    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return true;
+
+    }
+
+    return false;
 
   }
 
@@ -379,6 +392,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
 
+  private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
+
+    return contribuicoes.filter(function (item) {
+      if (moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    }).length;
+
+  }
+
+
+
 
   /**
    * Calcular o descarte conforme os salários de contribuição
@@ -388,6 +411,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private calcularDescarteTempoContribuicao(periodo, totalTempo) {
 
+    console.log(periodo)
+    console.log(totalTempo)
 
     let totalDias = 0;
     let totalFinalEmDias = totalTempo.semFator.fullDays;
@@ -414,6 +439,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     } else {
 
+
       if (periodo.sc_pendentes > 0 || periodo.sc_pendentes_mm > 0) {
 
         totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
@@ -421,6 +447,32 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       }
 
     }
+
+    console.log('teste');
+    console.log(totalDias);
+
+    console.log(this.checkPeriodoComIntersessaoEC(periodo));
+
+    if (this.checkPeriodoComIntersessaoEC(periodo)) {
+
+      const totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
+        moment(periodo.data_inicio).format('YYYY-MM-DD'),
+        '2019-11-13'
+      );
+
+      const sc_countApos19 = this.countPendenciasSC(periodo.sc);
+
+      totalFinalEmDias = totalDay360AntesEC.dias + totalDias;
+
+      console.log(sc_countApos19)
+      console.log(totalDay360AntesEC)
+
+    }
+
+
+
+
+    console.log(totalFinalEmDias);
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
@@ -441,7 +493,14 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
-
+  /**
+   * Calcular descarete do tempo conforme a EC103
+   * @param periodo
+   * @param totalTempo
+   * @param statusCarencia
+   * @param statusTempoContribuicao
+   * @returns
+   */
   private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
     if (statusCarencia === 'Parcial') {
@@ -453,6 +512,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     if (statusTempoContribuicao === 'Parcial') {
 
       totalTempo = this.calcularDescarteTempoContribuicao(periodo, totalTempo);
+
     }
 
     return totalTempo
@@ -466,8 +526,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       periodo.sc = JSON.parse(periodo.sc)
     }
 
-    console.log(typeof periodo.sc)
-
     if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
       && (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')) {
 
@@ -479,8 +537,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
     }
-
-    console.log(periodo)
 
     return periodo.limites;
   }
