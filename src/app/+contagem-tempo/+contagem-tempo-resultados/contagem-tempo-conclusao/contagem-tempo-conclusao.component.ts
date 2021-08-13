@@ -478,9 +478,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
 
+      console.log(count19);
       console.log(count);
       console.log(this.tempoTotalConFatorUltimoVinculo);
-      
+
       // console.log(this.periodosList);
       // console.log(somateste);
       // console.log(somatesteF);
@@ -489,7 +490,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       if (this.tempoTotalConFator) {
 
         // this.verificaPeriodoAposReforma();
-        // this.subTotais();
         resolve(true);
       } else {
         reject(false);
@@ -536,59 +536,106 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   /**
    * Ajustar o periodo de 30 ou 31 para um mês completo
    */
-  private ajusteHumanizadoDateINSS() {
+  // private ajusteHumanizadoDateINSS() {
 
-    const correcaoPeriodos = ['', '88', '91', '98', '99', '19'];
-
-
-    correcaoPeriodos.forEach(label => {
-
-      if (this['tempoTotalConFator' + label].days() >= 30) {
-
-        this['tempoTotalConFator' + label] = moment.duration(
-          {
-            years: this['tempoTotalConFator' + label].years(),
-            months: (this['tempoTotalConFator' + label].months() + 1),
-            days: 0,
-            seconds: 0,
-            hours: 0,
-            milliseconds: 0,
-            minutes: 0
-          });
-
-      }
+  //   const correcaoPeriodos = ['', '88', '91', '98', '99', '19'];
 
 
-      // if (this['tempoTotalConFator' + label].months() >= 12) {
+  //   correcaoPeriodos.forEach(label => {
 
-      //   this['tempoTotalConFator' + label] = moment.duration(
-      //     {
-      //       years: this['tempoTotalConFator' + label].years() + 1,
-      //       months: (this['tempoTotalConFator' + label].months() - 12),
-      //       days: 0,
-      //       seconds: 0,
-      //       hours: 0,
-      //       milliseconds: 0,
-      //       minutes: 0
-      //     });
+  //     if (this['tempoTotalConFator' + label].days() >= 30) {
 
-      // }
+  //       this['tempoTotalConFator' + label] = moment.duration(
+  //         {
+  //           years: this['tempoTotalConFator' + label].years(),
+  //           months: (this['tempoTotalConFator' + label].months() + 1),
+  //           days: 0,
+  //           seconds: 0,
+  //           hours: 0,
+  //           milliseconds: 0,
+  //           minutes: 0
+  //         });
 
-    });
+  //     }
 
+
+  //     // if (this['tempoTotalConFator' + label].months() >= 12) {
+
+  //     //   this['tempoTotalConFator' + label] = moment.duration(
+  //     //     {
+  //     //       years: this['tempoTotalConFator' + label].years() + 1,
+  //     //       months: (this['tempoTotalConFator' + label].months() - 12),
+  //     //       days: 0,
+  //     //       seconds: 0,
+  //     //       hours: 0,
+  //     //       milliseconds: 0,
+  //     //       minutes: 0
+  //     //     });
+
+  //     // }
+
+  //   });
+
+  // }
+
+
+
+  private checkPeriodoPosReforma(periodo) {
+
+    if (moment(periodo.data_inicioDb).isSameOrAfter('2019-11-13')
+      || moment('2019-11-13').isBetween(periodo.data_inicioDb, periodo.data_terminoDb, null, '[]')) {
+      return true;
+    }
+    return false;
   }
 
-  
+
+  private checkScIntegral(salariosC, auxiliarDate) {
+
+    const data = auxiliarDate.format('MM/YYYY');
+
+    const salC = salariosC.find((x) => x.cp === data)
+
+    if ((salC.msc === 0 && salC.sc !== '0,00')) {
+      return true;
+    }
+
+    return false;
+  }
+
+
   private defineCarenciaData(auxiliarDate) {
     let carencia = false;
 
     for (const vinculo of this.periodosList) {
+
       const inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       const fimVinculo = this.toMomentCarencia(vinculo.data_termino);
 
-      if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral' 
-      || vinculo.carencia === 1) && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)) {
-        carencia = true;
+
+      console.log(vinculo);
+
+      if ((vinculo.carenciaP === 1)
+        && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)
+      ) {
+
+
+        if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral')) {
+          return true;
+        }
+
+        if (vinculo.carencia === 'Parcial'
+          && this.checkPeriodoPosReforma(vinculo)
+        ) {
+
+          if (this.checkScIntegral(vinculo.sc, auxiliarDate)) {
+
+            return true;
+
+          }
+
+        }
+
       }
 
       // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
@@ -598,6 +645,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // }
 
     }
+
+    console.log(carencia);
 
     return carencia;
   }
@@ -987,15 +1036,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     setTimeout(() => {
       if (
-       ( (this.calculo.total_dias !== this.tempoTotalConFator.fullDays ||
+        ((this.calculo.total_dias !== this.tempoTotalConFator.fullDays ||
           this.calculo.total_88 !== this.tempoTotalConFator88.fullDays ||
           this.calculo.total_91 !== this.tempoTotalConFator91.fullDays ||
           this.calculo.total_98 !== this.tempoTotalConFator98.fullDays ||
           this.calculo.total_99 !== this.tempoTotalConFator99.fullDays ||
           this.calculo.total_19 !== this.tempoTotalConFator19.fullDays ||
           this.calculo.total_carencia !== this.carencia)
-        &&
-        (this.isCompleteCarencia && this.isCompleteTempoTotal))
+          &&
+          (this.isCompleteCarencia && this.isCompleteTempoTotal))
         ||
         this.dadosPassoaPasso.origem !== 'contagem'
       ) {
@@ -1056,7 +1105,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   }
 
-  public contagemTempoConclusaoSaveRST(){
+  public contagemTempoConclusaoSaveRST() {
 
     const limitesDoVinculo = {
       inicio: this.limitesDoVinculo.inicio.format('DD/MM/YYYY'),
