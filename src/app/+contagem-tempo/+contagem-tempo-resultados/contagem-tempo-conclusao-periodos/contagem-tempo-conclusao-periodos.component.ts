@@ -99,15 +99,31 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       });
   }
 
+
+  private convertSCEMObjjSON(sc) {
+
+    if (this.isExist(sc)) {
+      sc = JSON.parse(sc)
+    }
+    return sc;
+  }
+
   updateDatatablePeriodos(periodo) {
 
     if (typeof periodo === 'object' && this.idsCalculos === periodo.id_contagem_tempo) {
 
-      const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
-      const totalTempo = this.dateDiffPeriodos(periodo.data_inicio, periodo.data_termino, periodo.fator_condicao_especial);
-
       const statusCarencia = this.defineStatusCarencia(periodo);
       const statusTempoContribuicao = this.defineStatusTempoContribuicao(periodo);
+
+      periodo.sc = this.convertSCEMObjjSON(periodo.sc);
+      periodo.limites = this.testInicioFimDoPeriodoIntegral(periodo, statusTempoContribuicao)
+
+      const ajusteFator = (periodo.condicao_especial !== 0) ? Number(periodo.fator_condicao_especial) : 1;
+      const totalTempo = this.dateDiffPeriodos(periodo.data_inicio,
+        periodo.data_termino,
+        periodo.fator_condicao_especial,
+        periodo.limites);
+
       const limites = this.descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
 
       const line = {
@@ -221,6 +237,46 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
+  private testInicioFimDoPeriodoIntegral(periodo, statusTempoContribuicao) {
+
+    const limites = {
+      inicio: 0,
+      fim: 0,
+      inicioType: '',
+      fimType: ''
+    }
+
+    if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
+      && (statusTempoContribuicao === 'Integral') && !this.checkPeriodoPosReforma(periodo)) {
+
+      const inicioSC = periodo.sc[0];
+      const fimSC = periodo.sc[periodo.sc.length - 1];
+
+      if ((inicioSC.msc === 0 && inicioSC.sc !== '0,00')) {
+
+        if (moment(periodo.data_inicio).isSameOrAfter('2019-11-14')) {
+          limites.inicio = 30;
+        }
+        limites.inicioType = 'i'; // integral
+
+      }
+
+      if ((fimSC.msc === 0 && fimSC.sc !== '0,00')) {
+
+        if (moment(periodo.data_termino).isSameOrAfter('2019-11-14')) {
+          limites.fim = 30;
+        }
+
+        limites.fimType = 'i'; // integral
+
+      }
+
+    }
+
+    return limites
+
+  }
+
 
   private testInicioFimDoPeriodo(dataIni, inicioSC, dataFim, fimSC) {
 
@@ -245,17 +301,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       && moment(dataIni).isSameOrAfter(moment(dataIni).startOf('month'))
     ) {
 
-      if ((inicioSC.msc === 0 && inicioSC.sc !== '0,00')) {
-
-        limites.inicioType = 'i'; // integral
-
-      } else if (inicioSC.msc === 1) {  // parcial
+      if (inicioSC.msc === 1) {  // parcial
 
         const inicioDias = (moment(dataIni).date() >= 30) ? 1 : 30 - moment(dataIni).date();
         limites.inicio = inicioDias;
         limites.inicioType = 'm';
 
-      } else {  // não conta
+      } else if (inicioSC.sc === '0,00') { // não conta
 
         limites.inicioType = 'z';
 
@@ -267,16 +319,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       && moment(dataFim).isSameOrBefore(moment(dataFim).endOf('month'))
     ) {
 
-      if ((fimSC.msc === 0 && fimSC.sc !== '0,00')) {
-
-        limites.fimType = 'i'; // integral
-
-      } else if (fimSC.msc === 1) { // parcial
+      if (fimSC.msc === 1) { // parcial
 
         limites.fim = moment(dataFim).date();
         limites.fimType = 'm';
 
-      } else { // não conta
+      } else if (inicioSC.sc === '0,00') { // não conta
 
         limites.fimType = 'z';
 
@@ -392,7 +440,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
 
-  private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
+  private countPosEC103SC(contribuicoes: Array<any>, type = 'mm') {
 
     return contribuicoes.filter(function (item) {
       if (moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
@@ -410,9 +458,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    * @returns
    */
   private calcularDescarteTempoContribuicao(periodo, totalTempo) {
-
-    console.log(periodo)
-    console.log(totalTempo)
 
     let totalDias = 0;
     let totalFinalEmDias = totalTempo.semFator.fullDays;
@@ -448,11 +493,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     }
 
-    console.log('teste');
-    console.log(totalDias);
-
-    console.log(this.checkPeriodoComIntersessaoEC(periodo));
-
     if (this.checkPeriodoComIntersessaoEC(periodo)) {
 
       const totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
@@ -460,19 +500,17 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         '2019-11-13'
       );
 
-      const sc_countApos19 = this.countPendenciasSC(periodo.sc);
+      const sc_countApos19 = this.countPosEC103SC(periodo.sc);
 
-      totalFinalEmDias = totalDay360AntesEC.dias + totalDias;
 
-      console.log(sc_countApos19)
-      console.log(totalDay360AntesEC)
+      if (periodo.limites.fimType === 'm') {
+        periodo.sc_pendentes_mm -= 1;
+        totalDias = periodo.limites.fim;
+      }
+
+      totalFinalEmDias = totalDay360AntesEC.dias + totalDias + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
 
     }
-
-
-
-
-    console.log(totalFinalEmDias);
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
@@ -522,9 +560,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
-    if (this.isExist(periodo.sc)) {
-      periodo.sc = JSON.parse(periodo.sc)
-    }
 
     if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
       && (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')) {
@@ -542,11 +577,36 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
-  public dataDiffDateToDate(date1, date2, fator) {
+  public dataDiffDateToDate(date1, date2, fator, limites = null) {
+
+    let inicioP = moment(date1).format('YYYY-MM-DD');
+    let fimP = moment(date2).format('YYYY-MM-DD');
+    let integralInicioFim = false;
+
+    if (this.isExist(limites)) {
+
+      if (limites.inicioType === 'i' && limites.fimType === 'i'
+        && limites.inicio === 30 && limites.fim === 30) {
+
+        integralInicioFim = true;
+
+      } else {
+
+        if (limites.inicioType === 'i' && limites.inicio === 30) {
+          inicioP = moment(date1).startOf('month').format('YYYY-MM-DD');
+        }
+
+        if (limites.fimType === 'i' && limites.fim === 30) {
+          fimP = moment(date2).endOf('month').format('YYYY-MM-DD');
+        }
+      }
+
+    }
 
     const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustom(
-      moment(date1).format('YYYY-MM-DD'),
-      moment(date2).format('YYYY-MM-DD')
+      inicioP,
+      fimP,
+      integralInicioFim
     );
 
     const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalDay360.dias, fator);
@@ -577,11 +637,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     return tempoObj;
   }
 
-  public dateDiffPeriodos(inicio, fim, fator) {
+  private considerarMesCompleto() {
+
+  }
+
+
+  public dateDiffPeriodos(inicio, fim, fator, limites = null) {
 
     // const tempoTotal = this.dataDiff(inicio, fim, Number(fator));
 
-    const tempoTotal = this.dataDiffDateToDate(inicio, fim, Number(fator));
+    const tempoTotal = this.dataDiffDateToDate(inicio, fim, Number(fator), limites);
 
     return tempoTotal;
   }

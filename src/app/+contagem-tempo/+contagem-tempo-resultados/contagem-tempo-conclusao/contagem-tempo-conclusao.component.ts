@@ -466,6 +466,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       count94 = this.checkFimPeriodoApliacarAjuste(count94, count, fimContador94, fimContadorDias);
       count88 = this.checkFimPeriodoApliacarAjuste(count88, count, fimContador88, fimContadorDias);
 
+
       this.tempoTotalConFator = DefinicaoTempo.convertD360ToDMY(count);
       this.tempoTotalConFator88 = DefinicaoTempo.convertD360ToDMY(count88);
       this.tempoTotalConFator91 = DefinicaoTempo.convertD360ToDMY(count91);
@@ -477,7 +478,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
 
-      // console.log(this.tempoTotalConFatorUltimoVinculo);
+      console.log(count);
+      console.log(this.tempoTotalConFatorUltimoVinculo);
+      
       // console.log(this.periodosList);
       // console.log(somateste);
       // console.log(somatesteF);
