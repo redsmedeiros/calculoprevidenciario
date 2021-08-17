@@ -362,9 +362,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       somaSF += Number(iterator.totalSemFator.fullDays);
       /// console.log('P - ' + (iTeste2++) + '|' + iterator.totalComFator.fullDays + ' -- ' + somatesteF);
 
+      console.log(iterator.totalCarencia)
     }
 
     console.log(this.periodosList)
+
 
     return { soma: somaF, concomitante: concomitanteP };
   }
@@ -592,6 +594,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkScIntegral(salariosC, auxiliarDate) {
 
+
+    if (auxiliarDate.isBefore('2019-11-13')) {
+      return true;
+    }
+
+
     const data = auxiliarDate.format('MM/YYYY');
 
     const salC = salariosC.find((x) => x.cp === data)
@@ -611,9 +619,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       const inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
       const fimVinculo = this.toMomentCarencia(vinculo.data_termino);
-
-
-      console.log(vinculo);
 
       if ((vinculo.carenciaP === 1)
         && (auxiliarDate >= inicioVinculo && auxiliarDate <= fimVinculo)
@@ -681,6 +686,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
       do {
+
         if (this.defineCarenciaData(auxiliarDate)) {
           count++;
 
@@ -696,7 +702,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count94++;
           };
 
-
           if (auxiliarDate <= fimContador98) {
             count98++;
           };
@@ -708,10 +713,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           if (auxiliarDate <= fimContador03) {
             count03++;
           };
+
           if (auxiliarDate <= fimContador19) {
             count19++;
           };
         }
+
+        console.log(auxiliarDate.format('MM/YYYY') + '|' + count)
 
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
