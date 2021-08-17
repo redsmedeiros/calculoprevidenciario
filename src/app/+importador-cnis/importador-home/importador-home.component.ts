@@ -111,6 +111,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.setPaginaInicial();
+    this.clearTempSessionStorageStart();
   }
 
 
@@ -209,6 +210,17 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.isUpdatingPlan = false;
     }
 
+
+  }
+
+  private clearTempSessionStorageStart(){
+    sessionStorage.removeItem('calculoSelecionado');
+    sessionStorage.removeItem('calculosSelecionado');
+    sessionStorage.removeItem('seguradoSelecionado');
+    sessionStorage.removeItem('periodosSelecionado');
+    sessionStorage.removeItem('calculosSelecionadoRMI');
+    sessionStorage.removeItem('exportResultContagemTempo');
+    sessionStorage.removeItem('seguradoSelecionado');
 
   }
 

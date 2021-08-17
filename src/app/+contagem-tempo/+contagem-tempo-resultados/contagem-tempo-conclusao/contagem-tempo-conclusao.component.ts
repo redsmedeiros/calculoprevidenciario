@@ -601,7 +601,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
 
     const data = auxiliarDate.format('MM/YYYY');
-
     const salC = salariosC.find((x) => x.cp === data)
 
     if ((salC.msc === 0 && salC.sc !== '0,00')) {
