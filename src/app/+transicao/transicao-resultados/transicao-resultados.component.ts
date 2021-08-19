@@ -157,7 +157,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
         this.seguradoTransicao.dataFiliacao,
         this.dataEC1032019
       )
-      //this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
+      // this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
     }
 
 
@@ -217,15 +217,15 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   public formatDecimal(value, n_of_decimal_digits) {
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
   }
 
 
   public calcularIdade(final) {
 
     const dataFinal = (final != null) ?
-      moment(final).endOf('day') :
-      moment().endOf('day');
+      moment(final).add(1, 'day').startOf('day') :
+      moment().add(1, 'day').startOf('day');
 
     const idade = moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 
@@ -317,6 +317,17 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
        return (anos + (dias / 360) + (meses / 12));
   }
+
+  
+  public converterTempoContribuicaoDias360(anos, meses, dias) {
+
+    anos = parseInt(anos, 10);
+    meses = parseInt(meses, 10);
+    dias = parseInt(dias, 10 );
+
+       return (anos + (dias / 360) + (meses / 12)) * 360;
+  }
+
 
 
   // public converterTempoContribuicao(anos, meses, dias, type) {
@@ -427,6 +438,11 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     totalFator.months = Math.floor(xVarMes);
     const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.floor(dttDias);
+
+    if (totalFator.days === 30) {
+      totalFator.days = 0;
+      totalFator.months += 1;
+    }
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
