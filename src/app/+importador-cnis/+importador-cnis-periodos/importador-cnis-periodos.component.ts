@@ -171,16 +171,29 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
 
+    // if (type === 'mm') {
+    //   return contribuicoes.filter(function (item) {
+    //     if (item.msc === 1
+    //       && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    //   }).length;
+    // }
+
+    // return contribuicoes.filter(function (item) {
+    //   if (item.sc === '0,00'
+    //     && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    // }).length;
+
+
     if (type === 'mm') {
       return contribuicoes.filter(function (item) {
         if (item.msc === 1
-          && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+          && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
       }).length;
     }
 
     return contribuicoes.filter(function (item) {
       if (item.sc === '0,00'
-        && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+        && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
     }).length;
 
   }
@@ -612,7 +625,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         sc_mm_considerar_carencia: null,
         contribuicoes_count: 0,
         contribuicoes: contribuicoes,
-      }
+      };
 
       this.vinculosList.push(line);
 

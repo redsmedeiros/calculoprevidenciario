@@ -412,6 +412,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     if (this.dadosPassoaPasso.type === 'seguradoExistente') {
 
       this.setStepValidate('step1', (this.isExits(this.dadosPassoaPasso.type)));
+      this.setStepValidate('step3', (this.isExits(this.dadosPassoaPasso.type)));
       // this.seguradoSelecionado = {};
       // this.calculoSelecionado = {};
 

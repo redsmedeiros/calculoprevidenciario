@@ -519,7 +519,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     const fator = parseFloat(periodo.fator_condicao_especial);
 
-    if (fator === 1) {
+    if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
 
       totalTempo.comFator = Object.assign({}, totalTempo.semFator);
 
