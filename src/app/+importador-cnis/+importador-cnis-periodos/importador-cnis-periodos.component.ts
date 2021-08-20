@@ -67,6 +67,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public sc_mm_considerar_carencia = null;
   public sc_mm_considerar_tempo = null;
   public sc_mm_ajustar = null;
+  public converter_especial_apos_ec103 = 0;
+  public is_converter_especial_apos_ec103 = false;
 
 
   @Output() eventCountVinculosErros = new EventEmitter();
@@ -980,6 +982,51 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     //   this.contribuicoes.hide();
     // }
 
+  }
+
+
+public changeCondicoesEspeciais(){
+
+  this.is_converter_especial_apos_ec103 = false;
+  if (this.condicao_especial && this.checkPeriodoPosReformaForm()) {
+    this.is_converter_especial_apos_ec103 = true;
+  }
+
+}
+
+
+
+  private checkPeriodoPosReformaForm() {
+
+
+    if (this.isEmpty(this.data_inicio)) {
+
+      if (this.isEmpty(this.data_termino)) {
+        return this.checkPeriodoPosReforma({
+          data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY/MM/DD'),
+          data_termino: moment().format('YYYY/MM/DD')
+         });
+      }
+
+      return this.checkPeriodoPosReforma({
+        data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY/MM/DD'),
+        data_termino: moment(this.data_termino, 'DD/MM/YYYY').format('YYYY/MM/DD')
+       });
+
+    }
+
+  }
+
+
+  private checkPeriodoPosReforma(periodo) {
+
+    if (moment(periodo.data_inicio).isSameOrAfter('2019-11-13')
+      || moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return true;
+    }
+
+    return false;
   }
 
 
