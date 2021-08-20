@@ -148,6 +148,22 @@ export class DefinicaoTempo {
         return totalDMY;
     }
 
+
+    
+    static calcularTempo360Dias(dataNasc, dataFim = null) {
+
+        if (dataFim === null) {
+            dataFim = moment().format('YYYY-MM-DD');
+        }
+
+        const totalDay360 = DefinicaoTempo.dataDiffDateToDateCustom(
+            dataNasc,
+            dataFim
+        );
+
+        return totalDay360;
+    }
+
     
     static calcularTempo360MenosDiaFim(dataNasc, dataFim = null) {
 

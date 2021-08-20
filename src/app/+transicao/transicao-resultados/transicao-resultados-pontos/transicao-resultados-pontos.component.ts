@@ -1,7 +1,9 @@
 
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 import * as moment from 'moment';
 import { TransicaoResultadosComponent } from './../transicao-resultados.component';
+
 
 @Component({
   selector: 'app-transicao-resultados-pontos',
@@ -21,40 +23,78 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
     f: 15
   };
 
-  // public requisitoPontosRegra1Prof = {
-  //   2019: { m: 91, md: 33215, f: 81, fd: 29565 },
-  //   2020: { m: 92, md: 33580, f: 82, fd: 29930 },
-  //   2021: { m: 93, md: 33945, f: 83, fd: 30295 },
-  //   2022: { m: 94, md: 34310, f: 84, fd: 30660 },
-  //   2023: { m: 95, md: 34675, f: 85, fd: 31025 },
-  //   2024: { m: 96, md: 35040, f: 86, fd: 31390 },
-  //   2025: { m: 97, md: 35405, f: 87, fd: 31755 },
-  //   2026: { m: 98, md: 35770, f: 88, fd: 32120 },
-  //   2027: { m: 99, md: 36135, f: 89, fd: 32485 },
-  //   2028: { m: 100, md: 36500, f: 90, fd: 32850 },
-  //   2029: { m: 100, md: 36500, f: 91, fd: 33215 },
-  //   2030: { m: 100, md: 36500, f: 92, fd: 33580 },
-  // };
+
+  public requisitoPontosRegra360Prof = {
+    2019: { m: 91, md: 32760, f: 81, fd: 29160 },
+    2020: { m: 92, md: 33120, f: 82, fd: 29520 },
+    2021: { m: 93, md: 33480, f: 83, fd: 29880 },
+    2022: { m: 94, md: 33840, f: 84, fd: 30240 },
+    2023: { m: 95, md: 34200, f: 85, fd: 30600 },
+    2024: { m: 96, md: 34560, f: 86, fd: 30960 },
+    2025: { m: 97, md: 34920, f: 87, fd: 31320 },
+    2026: { m: 98, md: 35280, f: 88, fd: 31680 },
+    2027: { m: 99, md: 35640, f: 89, fd: 32040 },
+    2028: { m: 100, md: 36000, f: 90, fd: 32400 },
+    2029: { m: 100, md: 36000, f: 91, fd: 32760 },
+    2030: { m: 100, md: 36000, f: 92, fd: 33120 },
+  };
 
 
-  // public requisitoPontosRegra1 = {
-  //   2019: { m: 96, md: 35040, f: 86, fd: 31390 },
-  //   2020: { m: 97, md: 35405, f: 87, fd: 31755 },
-  //   2021: { m: 98, md: 35770, f: 88, fd: 32120 },
-  //   2022: { m: 99, md: 36135, f: 89, fd: 32485 },
-  //   2023: { m: 100, md: 36500, f: 90, fd: 32850 },
-  //   2024: { m: 101, md: 36865, f: 91, fd: 33215 },
-  //   2025: { m: 102, md: 37230, f: 92, fd: 33580 },
-  //   2026: { m: 103, md: 37595, f: 93, fd: 33945 },
-  //   2027: { m: 104, md: 37960, f: 94, fd: 34310 },
-  //   2028: { m: 105, md: 38325, f: 95, fd: 34675 },
-  //   2029: { m: 105, md: 38325, f: 96, fd: 35040 },
-  //   2030: { m: 105, md: 38325, f: 97, fd: 35405 },
-  //   2031: { m: 105, md: 38325, f: 98, fd: 35770 },
-  //   2032: { m: 105, md: 38325, f: 99, fd: 36135 },
-  //   2033: { m: 105, md: 38325, f: 100, fd: 36500 },
 
-  // }
+  public requisitoPontosRegra360 = {
+    2019: { m: 96, md: 34560, f: 86, fd: 30960 },
+    2020: { m: 97, md: 34920, f: 87, fd: 31320 },
+    2021: { m: 98, md: 35280, f: 88, fd: 31680 },
+    2022: { m: 99, md: 35640, f: 89, fd: 32040 },
+    2023: { m: 100, md: 36000, f: 90, fd: 32400 },
+    2024: { m: 101, md: 36360, f: 91, fd: 32760 },
+    2025: { m: 102, md: 36720, f: 92, fd: 33120 },
+    2026: { m: 103, md: 37080, f: 93, fd: 33480 },
+    2027: { m: 104, md: 37440, f: 94, fd: 33840 },
+    2028: { m: 105, md: 37800, f: 95, fd: 34200 },
+    2029: { m: 105, md: 37800, f: 96, fd: 34560 },
+    2030: { m: 105, md: 37800, f: 97, fd: 34920 },
+    2031: { m: 105, md: 37800, f: 98, fd: 35280 },
+    2032: { m: 105, md: 37800, f: 99, fd: 35640 },
+    2033: { m: 105, md: 37800, f: 100, fd: 36000 },
+  };
+
+
+
+  public requisitoPontosRegra360ProfList = [
+    { ano: 2019, m: 91, md: 32760, f: 81, fd: 29160 },
+    { ano: 2020, m: 92, md: 33120, f: 82, fd: 29520 },
+    { ano: 2021, m: 93, md: 33480, f: 83, fd: 29880 },
+    { ano: 2022, m: 94, md: 33840, f: 84, fd: 30240 },
+    { ano: 2023, m: 95, md: 34200, f: 85, fd: 30600 },
+    { ano: 2024, m: 96, md: 34560, f: 86, fd: 30960 },
+    { ano: 2025, m: 97, md: 34920, f: 87, fd: 31320 },
+    { ano: 2026, m: 98, md: 35280, f: 88, fd: 31680 },
+    { ano: 2027, m: 99, md: 35640, f: 89, fd: 32040 },
+    { ano: 2028, m: 100, md: 36000, f: 90, fd: 32400 },
+    { ano: 2029, m: 100, md: 36000, f: 91, fd: 32760 },
+    { ano: 2030, m: 100, md: 36000, f: 92, fd: 33120 },
+  ];
+
+
+
+  public requisitoPontosRegra360List = [
+    { ano: 2019, m: 96, md: 34560, f: 86, fd: 30960 },
+    { ano: 2020, m: 97, md: 34920, f: 87, fd: 31320 },
+    { ano: 2021, m: 98, md: 35280, f: 88, fd: 31680 },
+    { ano: 2022, m: 99, md: 35640, f: 89, fd: 32040 },
+    { ano: 2023, m: 100, md: 36000, f: 90, fd: 32400 },
+    { ano: 2024, m: 101, md: 36360, f: 91, fd: 32760 },
+    { ano: 2025, m: 102, md: 36720, f: 92, fd: 33120 },
+    { ano: 2026, m: 103, md: 37080, f: 93, fd: 33480 },
+    { ano: 2027, m: 104, md: 37440, f: 94, fd: 33840 },
+    { ano: 2028, m: 105, md: 37800, f: 95, fd: 34200 },
+    { ano: 2029, m: 105, md: 37800, f: 96, fd: 34560 },
+    { ano: 2030, m: 105, md: 37800, f: 97, fd: 34920 },
+    { ano: 2031, m: 105, md: 37800, f: 98, fd: 35280 },
+    { ano: 2032, m: 105, md: 37800, f: 99, fd: 35640 },
+    { ano: 2033, m: 105, md: 37800, f: 100, fd: 36000 },
+  ];
 
 
 
@@ -239,73 +279,32 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
 
+
   public contadorRegra1(pontosAtuais, pontosAtuaisDias) {
 
     //  console.log(this.dataAtual);
 
     // let auxiliarDate = this.dataAtual;
-    let auxiliarDate = (this.dataAtual).clone().startOf('day').subtract(1, 'day');
+    let auxiliarDate = moment().clone().startOf('day');
     let idadeDibMoment;
     let fimContador = { status: false, ano: 0, pontos: 0 };
     let count = 1;
     let pontos = pontosAtuaisDias;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
-    let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    let tempoContribuicao = this.converterTempoContribuicao(this.seguradoTransicao.contribuicaoAnos,
+      this.seguradoTransicao.contribuicaoMeses,
+      this.seguradoTransicao.contribuicaoDias, 'd');
     const sexo = this.seguradoTransicao.sexo + 'd';
 
-    // let tempoContribuicaoAnos360 = this.converterTempoContribuicaoAnos360(this.seguradoTransicao.contribuicaoAnos,
-    //   this.seguradoTransicao.contribuicaoMeses,
-    //   this.seguradoTransicao.contribuicaoDias);
-
-    //   let idadeAnos360 = this.seguradoTransicao.idadeFracionada
-
-      // console.log(tempoContribuicaoAnos360);
-      // console.log(tempoContribuicaoAnos360);
-      // console.log(tempoContribuicaoAnos360 + idadeAnos360);
-      // console.log(tempoContribuicao);
-
-    // console.log(this.getRequisitosRegra1(
-    //   pontos,
-    //   auxiliarDate.year(),
-    //   sexo,
-    //   tempoContribuicao,
-    //   this.seguradoTransicao.professor));
-
-    // console.log('-- Antes --');
-    // console.log((this.dataAtual).clone().format('DD/MM/YYYY'))
+    // console.log(this.seguradoTransicao);
     // console.log(pontos);
-    // console.log(auxiliarDate.year());
-    // console.log(sexo);
     // console.log(tempoContribuicao);
-    // console.log(this.seguradoTransicao.professor);
-    // console.log('-- Antes --');
+
 
     do {
 
-
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade -' + idade + '|'
-      //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-      //   + '|' + 'pontos - ' + pontos);
-
-      // if (fimContador.status) {
-
-      //   // console.log('F - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   //   + '|' + 'idade -' + idade + '|'
-      //   //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
-      //   //   + '|' + 'pontos - ' + pontos + '|'
-      //   //   + '|');
-
-      // }
-
-      // if (this.addBissexto(auxiliarDate) > 0) {
-      //   count += 1;
-      //   idade += 1;
-      //   tempoContribuicao += 1;
-      // //  auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
-
-      // }
 
       fimContador = this.getRequisitosRegra1(
         pontos,
@@ -321,6 +320,12 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       pontos = idade + tempoContribuicao;
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
+
+      // console.log('P ' + count + '- data - '
+      //   + auxiliarDate.format('DD/MM/YYYY')
+      //   + '|' + 'idade -' + idade + '|'
+      //   + '|' + 'Tempo - ' + tempoContribuicao + '|'
+      //   + '|' + 'pontos - ' + pontos);
 
     } while (!fimContador.status && pontos <= 76650);
 
@@ -341,54 +346,23 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       idadeDibMoment.add(1, 'day');
     }
 
-   // console.log(idadeDibMoment.days())
+    // console.log(idadeDibMoment.days())
 
     const dibCorigida = this.dataAtual.clone();
-   // dibCorigida.add(1, 'day');
+    // dibCorigida.add(1, 'day');
     dibCorigida.add(count, 'days');
 
-   
 
+
+    // console.log(fimContador);
     // console.log('-- fim --');
+    // console.log(pontos);
+    // console.log(count);
     // console.log(this.seguradoTransicao.contribuicaoFracionadoDias);
-    // console.log(this.seguradoTransicao.idade);
-    // console.log(idadeDibMoment);
-    // console.log(idade);
-    // console.log(this.converterTempoDias(idade));
-    // console.log(tempoContribuicao);
-    // console.log(this.converterTempoDias(tempoContribuicao));
+    // console.log(this.seguradoTransicao.idadeFracionadaDias);
+    // console.log(this.seguradoTransicao.idadeFracionadaDias + this.seguradoTransicao.contribuicaoFracionadoDias);
+    // console.log(this.seguradoTransicao.idadeFracionadaDias + this.seguradoTransicao.contribuicaoFracionadoDias + count);
     // console.log(pontos);
-    // console.log(count);
-    // console.log('-- fim --');
-
-    //  console.log(dibCorigida.add(count, 'days'));
-
-
-    // tempoContribuicao += correcaoAnoBissexto;
-
-    // // console.log(teste.add(correcaoAnoBissexto + count, 'days'));
-    // console.log(idade);
-    // console.log(this.converterTempoDias(idade));
-    // console.log(tempoContribuicao);
-    // console.log(this.converterTempoDias(tempoContribuicao));
-    // console.log(pontos);
-    // console.log(count);
-
-    // console.log('idade');
-
-    // console.log(idadeDibMoment);
-    // console.log(this.converterTempoDias(idade));
-
-    // console.log(idade);
-    // console.log(this.seguradoTransicao.idadeFracionadaDias + count);
-
-    // console.log('tempo')
-    // console.log(tempoContribuicao);
-    // console.log(this.converterTempoDias(tempoContribuicao));
-    // console.log(moment.duration(tempoContribuicao, 'days'));
-
-
-    // idade = (this.seguradoTransicao.idadeFracionadaDias + count);
 
 
     return {
@@ -427,14 +401,6 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
 
 
   public requisitosRegra1(pontos, ano, sexo, tempo_contribuicao) {
-
-
-
-    // console.log(pontos);
-    // console.log(ano);
-    // console.log(sexo);
-    // console.log(tempo_contribuicao);
-
 
     const requisitoContribuicoes = {
       f: 30,
@@ -505,11 +471,6 @@ export class TransicaoResultadosPontosComponent extends TransicaoResultadosCompo
       { status: false, ano: 0, pontos: 0, requisitosPosntos: 0 };
 
   }
-
-
-
-
-
 
 
 

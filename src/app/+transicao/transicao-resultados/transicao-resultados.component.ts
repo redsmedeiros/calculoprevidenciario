@@ -448,6 +448,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     return totalFator;
   }
 
+  public convertD360ToDMY(daysY360) {
+    const total = { years: 0, months: 0, days: 0, fullDays: daysY360 };
+
+    total.years = Math.floor(daysY360 / 360);
+    total.months = Math.floor((daysY360 - total.years * 360) / 30);
+    total.days = Math.floor(daysY360 - total.years * 360 - total.months * 30);
+
+    return total;
+}
+
   public converterTempoDiasParaAnos(fullDays) {
     return ((fullDays) / 365.25);
   }
