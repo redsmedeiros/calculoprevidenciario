@@ -348,6 +348,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
+        converter_especial_apos_ec103:  (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: (this.vinculosList.length) + 1
@@ -394,6 +395,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
+        converter_especial_apos_ec103: 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: vinculo.index
@@ -427,6 +429,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
           sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
           sc_mm_ajustar: vinculo.sc_mm_ajustar,
+          converter_especial_apos_ec103: this.boolToLiteral(vinculo.converter_especial_apos_ec103),
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
@@ -455,6 +458,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
           sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
           sc_mm_ajustar: vinculo.sc_mm_ajustar,
+          converter_especial_apos_ec103: this.boolToLiteral(vinculo.converter_especial_apos_ec103),
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
@@ -535,10 +539,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.fator_condicao_especial = vinculo.fator_condicao_especial;
     this.condicao_especial = this.boolToLiteral(vinculo.condicao_especial);
     this.carencia = this.boolToLiteral(vinculo.carencia);
+    this.converter_especial_apos_ec103 = this.boolToLiteral(vinculo.converter_especial_apos_ec103);
     this.index = vinculo.index;
 
     this.atualizarPeriodo = vinculo.index; // exibir o botao de atualizar e ocultar o insert
     this.topForm();
+    this.changeCondicoesEspeciais();
     this.detector.detectChanges();
 
   }
@@ -577,6 +583,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           vinculo.contribuicoes_pendentes_mm = result_mm ? result_mm : 0;
           vinculo.contribuicoes_count = contribuicoes.length;
           vinculo.contribuicoes = contribuicoes;
+          vinculo.converter_especial_apos_ec103 = this.boolToLiteral(this.converter_especial_apos_ec103);
 
         }
 
@@ -622,6 +629,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         datatermino: datatermino,
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
+        converter_especial_apos_ec103: this.boolToLiteral(this.converter_especial_apos_ec103),
         sc_mm_ajustar: null,
         sc_mm_considerar_tempo: null,
         sc_mm_considerar_carencia: null,
@@ -988,10 +996,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 public changeCondicoesEspeciais(){
 
   this.is_converter_especial_apos_ec103 = false;
-  if (this.condicao_especial && this.checkPeriodoPosReformaForm()) {
+  if ( this.is_converter_especial_apos_ec103 || (this.condicao_especial && this.checkPeriodoPosReformaForm())) {
     this.is_converter_especial_apos_ec103 = true;
   }
-
 }
 
 
@@ -999,18 +1006,18 @@ public changeCondicoesEspeciais(){
   private checkPeriodoPosReformaForm() {
 
 
-    if (this.isEmpty(this.data_inicio)) {
+    if (!this.isEmpty(this.data_inicio)) {
 
       if (this.isEmpty(this.data_termino)) {
         return this.checkPeriodoPosReforma({
-          data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY/MM/DD'),
-          data_termino: moment().format('YYYY/MM/DD')
+          data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          data_termino: moment().format('YYYY-MM-DD')
          });
       }
 
       return this.checkPeriodoPosReforma({
-        data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY/MM/DD'),
-        data_termino: moment(this.data_termino, 'DD/MM/YYYY').format('YYYY/MM/DD')
+        data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+        data_termino: moment(this.data_termino, 'DD/MM/YYYY').format('YYYY-MM-DD')
        });
 
     }
@@ -1019,6 +1026,8 @@ public changeCondicoesEspeciais(){
 
 
   private checkPeriodoPosReforma(periodo) {
+
+    console.log(periodo)
 
     if (moment(periodo.data_inicio).isSameOrAfter('2019-11-13')
       || moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {

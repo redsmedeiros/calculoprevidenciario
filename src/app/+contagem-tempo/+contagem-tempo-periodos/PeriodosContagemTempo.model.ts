@@ -22,6 +22,7 @@ export class PeriodosContagemTempo extends Model {
     sc_pendentes_mm: '',
     sc_count: '',
     sc_mm_ajustar: '',
+    converter_especial_apos_ec103: '',
     created_at: '',
     updated_at: '',
   };
@@ -42,6 +43,7 @@ export class PeriodosContagemTempo extends Model {
   public sc_pendentes_mm;
   public sc_count;
   public sc_mm_ajustar;
+  public converter_especial_apos_ec103;
   public created_at;
   public updated_at;
 
