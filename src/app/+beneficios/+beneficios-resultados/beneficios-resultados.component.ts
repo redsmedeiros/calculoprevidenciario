@@ -298,6 +298,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   private isTetoInicialDevido = false;
   private isTetoInicialRecebido = false;
 
+  private ultimaAtualizacao;
+
   // limmitado
   private islimit60SC = false;
   private limit60SCPercDescartado = {
@@ -368,7 +370,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               this.setInicioRecebidosEDevidos();
               //  this.setInicioRecebidosEDevidosIndices();
               // console.log(this.calculo);
-              this.getIndicesIniciais();
+              this.getIndicesIniciais(calculo);
               this.getIndicesReajusteListRecebidos();
 
 
@@ -383,12 +385,11 @@ export class BeneficiosResultadosComponent implements OnInit {
                   //  return true;
                 });
 
-
               this.allPromissesCalc.push(rstMoeda);
 
               Promise.all(this.allPromissesCalc).then((values) => {
 
-                console.log(values);
+                // console.log(values);
 
                 this.jurosCorrente = this.calcularJurosCorrente();
                 this.resultadosList = this.generateTabelaResultados();
@@ -410,7 +411,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
-  private getIndicesIniciais() {
+  private getIndicesIniciais(calculo) {
 
 
     const refreshIfInvalidDate = (date) => {
@@ -792,6 +793,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (this.calculo.dip_valores_devidos !== undefined && moment(this.calculo.dip_valores_devidos).isValid()) {
       dataPagamentoBeneficioDevido = moment(this.calculo.dip_valores_devidos);
+    }
+
+    if (this.calculo.updated_at !== undefined && moment(this.calculo.updated_at).isValid()) {
+      this.ultimaAtualizacao = moment(this.calculo.updated_at).format('DD/MM/YYYY');
     }
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
@@ -2348,6 +2353,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       taxa_ajuste_maxima_concedida = this.parseStringFloatIRT(recebidoRow.value.irt);
       this.calculo.tipo_aposentadoria_recebida = recebidoRow.value.especie;
       this.calculo.nao_aplicar_sm_beneficio_concedido = recebidoRow.value.reajusteMinimo;
+      this.calculo.manterPercentualSMConcedido = recebidoRow.value.manterPercentualSMConcedido;
       this.dataCessacaoRecebido = dataCessacaoRecebido;
 
 
@@ -4030,34 +4036,53 @@ export class BeneficiosResultadosComponent implements OnInit {
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo, recebidoRowid = null) {
 
     let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
-    let salMinimo = dataCorrenteMoeda.salario_minimo;
-    let tetoSalarial = dataCorrenteMoeda.teto;
+    let salMinimo = parseFloat(dataCorrenteMoeda.salario_minimo);
+    let tetoSalarial = parseFloat(dataCorrenteMoeda.teto);
     let tipoAposentadoria = '';
     let naoAplicarMinimo = false;
+    let manterProporcaoAplicarMinimo = false;
 
     if (tipo === 'Recebido') {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+      manterProporcaoAplicarMinimo = (this.isExits(this.calculo.manterPercentualSMConcedido)
+        && this.calculo.manterPercentualSMConcedido) ? true : false;
 
     } else {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+      manterProporcaoAplicarMinimo = (this.isExits(this.listDevidos[0].manterPercentualSMEsperado)
+        && this.listDevidos[0].manterPercentualSMEsperado) ? true : false;
 
     }
 
+    if (tipoAposentadoria.toString() === '8') { // ’Auxilio Acidente - 30%’
+      salMinimo *= 0.3;
+    } else if (tipoAposentadoria.toString() === '9') {// ‘Auxilio Acidente - 40%’
+      salMinimo *= 0.4;
+    } else if (tipoAposentadoria.toString() === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+      salMinimo *= 0.5;
+    } else if (tipoAposentadoria.toString() === '10') {// ‘Auxilio Acidente - 60%’
+      salMinimo *= 0.6;
+    }
+
+
+
     if (!naoAplicarMinimo && tipoAposentadoria !== '2021') {
 
-      if (tipoAposentadoria === '8') { // ’Auxilio Acidente - 30%’
-        salMinimo *= 0.3;
-      } else if (tipoAposentadoria === '9') {// ‘Auxilio Acidente - 40%’
-        salMinimo *= 0.4;
-      } else if (tipoAposentadoria === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-        salMinimo *= 0.5;
-      } else if (tipoAposentadoria === '10') {// ‘Auxilio Acidente - 60%’
-        salMinimo *= 0.6;
-      }
+      // if (tipoAposentadoria.toString() === '8') { // ’Auxilio Acidente - 30%’
+      //   salMinimo *= 0.3;
+      // } else if (tipoAposentadoria.toString() === '9') {// ‘Auxilio Acidente - 40%’
+      //   salMinimo *= 0.4;
+      // } else if (tipoAposentadoria.toString() === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+      //   salMinimo *= 0.5;
+      // } else if (tipoAposentadoria.toString() === '10') {// ‘Auxilio Acidente - 60%’
+      //   salMinimo *= 0.6;
+      // }
+
+
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4065,6 +4090,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         // Adicionar subindice ‘M’ no valor do beneficio
         return this.roundMoeda(salMinimo);
       }
+
+    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
+
+      if (manterProporcaoAplicarMinimo) {
+
+        return this.roundMoeda(salMinimo);
+      }
+
     }
 
     // if ((this.isTetoInicialDevido && tipo === 'Devido')
@@ -4086,6 +4119,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       return this.roundMoeda(tetoSalarial);
     }
 
+
     return this.roundMoeda(valorBeneficio);
   }
 
@@ -4100,30 +4134,38 @@ export class BeneficiosResultadosComponent implements OnInit {
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
     let naoAplicarMinimo = false;
+    let manterProporcaoAplicarMinimo = false;
 
     if (tipo == 'Recebido') {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+      manterProporcaoAplicarMinimo = (this.isExits(this.calculo.manterPercentualSMConcedido)
+        && this.calculo.manterPercentualSMConcedido) ? true : false;
 
     } else {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+      manterProporcaoAplicarMinimo = (this.isExits(this.listDevidos[0].manterPercentualSMEsperado)
+        && this.listDevidos[0].manterPercentualSMEsperado) ? true : false;
 
     }
 
-    if (!naoAplicarMinimo) {
+    // console.log(valorBeneficio);
 
-      if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
-        salMinimo *= 0.3;
-      } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
-        salMinimo *= 0.4;
-      } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-        salMinimo *= 0.5;
-      } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
-        salMinimo *= 0.6;
-      }
+
+    if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
+      salMinimo *= 0.3;
+    } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
+      salMinimo *= 0.4;
+    } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+      salMinimo *= 0.5;
+    } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
+      salMinimo *= 0.6;
+    }
+
+    if (!naoAplicarMinimo) {
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4132,6 +4174,12 @@ export class BeneficiosResultadosComponent implements OnInit {
         return this.roundMoeda(salMinimo);
       }
 
+    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
+
+      if (manterProporcaoAplicarMinimo) {
+
+        return this.roundMoeda(salMinimo);
+      }
     }
 
     // if ((this.isTetoInicialDevido && tipo === 'Devido')
@@ -4156,30 +4204,36 @@ export class BeneficiosResultadosComponent implements OnInit {
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
     let naoAplicarMinimo = false;
+    let manterProporcaoAplicarMinimo = false;
 
     if (tipo == 'Recebido') {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
+      manterProporcaoAplicarMinimo = (this.isExits(this.calculo.manterPercentualSMConcedido)
+        && this.calculo.manterPercentualSMConcedido) ? true : false;
 
     } else {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_esperado;
+      manterProporcaoAplicarMinimo = (this.isExits(this.listDevidos[0].manterPercentualSMEsperado)
+        && this.listDevidos[0].manterPercentualSMEsperado) ? true : false;
 
     }
 
-    if (!naoAplicarMinimo) {
+    if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
+      salMinimo *= 0.3;
+    } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
+      salMinimo *= 0.4;
+    } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+      salMinimo *= 0.5;
+    } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
+      salMinimo *= 0.6;
+    }
 
-      if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
-        salMinimo *= 0.3;
-      } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
-        salMinimo *= 0.4;
-      } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-        salMinimo *= 0.5;
-      } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
-        salMinimo *= 0.6;
-      }
+
+    if (!naoAplicarMinimo) {
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4188,6 +4242,12 @@ export class BeneficiosResultadosComponent implements OnInit {
         return this.roundMoeda(salMinimo);
       }
 
+    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
+
+      if (manterProporcaoAplicarMinimo) {
+
+        return this.roundMoeda(salMinimo);
+      }
     }
 
     return this.roundMoeda(valorBeneficio);
@@ -4472,8 +4532,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   }
 
-  
-  public ordenarListaRecebidos(){
+
+  public ordenarListaRecebidos() {
 
     this.listRecebidos.sort((a, b) => {
 
@@ -4738,7 +4798,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       //   value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
       // },
       {
-        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5,
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, aplicar_juros_poupanca: 1,
         value: '12_6', name: '12% ao ano (até 06/2009) / 6% ao ano (Poupança)'
       },
       // {
@@ -4746,33 +4806,35 @@ export class BeneficiosResultadosComponent implements OnInit {
       //   value: '6_selic', name: '6% ao ano (observando a SELIC - Poupança)'
       // },
       {
-        jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1,
+        jurosAntes2003: 1, jurosDepois2003: 1, jurosDepois2009: 1, aplicar_juros_poupanca: 0,
         value: '12_ano', name: '12% ao ano'
       },
       {
-        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1,
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 1, aplicar_juros_poupanca: 0,
         value: '6_12', name: '6% ao ano (até 01/2003) / 12% ao ano'
       },
       {
-        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5,
+        jurosAntes2003: 0.5, jurosDepois2003: 1, jurosDepois2009: 0.5, aplicar_juros_poupanca: 0,
         value: '6_12_6', name: '6% ao ano (até 01/2003) / 12% ao ano (até 06/2009) / 6% ao ano'
       },
       {
-        jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5,
+        jurosAntes2003: 0.5, jurosDepois2003: 0.5, jurosDepois2009: 0.5, aplicar_juros_poupanca: 0,
         value: '6_fixo', name: '6% ao ano (fixo)'
       },
       {
-        jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null,
+        jurosAntes2003: null, jurosDepois2003: null, jurosDepois2009: null, aplicar_juros_poupanca: 0,
         value: 'sem_juros', name: 'Sem Juros'
       },
     ];
+
 
     for (const confJuros of opcoesMensalParaAnual) {
 
       if (
         confJuros.jurosAntes2003 === this.calculo.previo_interesse_2003 &&
         confJuros.jurosDepois2003 === this.calculo.pos_interesse_2003 &&
-        confJuros.jurosDepois2009 === this.calculo.pos_interesse_2009
+        confJuros.jurosDepois2009 === this.calculo.pos_interesse_2009 &&
+        confJuros.aplicar_juros_poupanca === this.calculo.aplicar_juros_poupanca
       ) {
         this.jurosEmFormatoAnual = confJuros.name;
       }

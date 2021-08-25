@@ -282,7 +282,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   // }
 
   
-  public converterTempoContribuicao2(anos, meses, dias, type) {
+  public converterTempoContribuicao360(anos, meses, dias, type) {
 
     anos = this.isFormatInt(anos);
     meses = this.isFormatInt(meses);
@@ -309,24 +309,24 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
 
   
-  public converterTempoContribuicaoAnos360(anos, meses, dias) {
+  // public converterTempoContribuicaoAnos360(anos, meses, dias) {
 
-    anos = parseInt(anos, 10);
-    meses = parseInt(meses, 10);
-    dias = parseInt(dias, 10 );
+  //   anos = parseInt(anos, 10);
+  //   meses = parseInt(meses, 10);
+  //   dias = parseInt(dias, 10 );
 
-       return (anos + (dias / 360) + (meses / 12));
-  }
+  //      return (anos + (dias / 360) + (meses / 12));
+  // }
 
   
-  public converterTempoContribuicaoDias360(anos, meses, dias) {
+  // public converterTempoContribuicaoDias360(anos, meses, dias) {
 
-    anos = parseInt(anos, 10);
-    meses = parseInt(meses, 10);
-    dias = parseInt(dias, 10 );
+  //   anos = parseInt(anos, 10);
+  //   meses = parseInt(meses, 10);
+  //   dias = parseInt(dias, 10 );
 
-       return (anos + (dias / 360) + (meses / 12)) * 360;
-  }
+  //      return (anos + (dias / 360) + (meses / 12)) * 360;
+  // }
 
 
 

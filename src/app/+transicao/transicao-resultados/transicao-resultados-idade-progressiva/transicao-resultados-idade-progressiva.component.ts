@@ -189,9 +189,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
     let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
-    let tempoContribuicaoAnos360 = this.converterTempoContribuicaoAnos360(this.seguradoTransicao.contribuicaoAnos,
+    let tempoContribuicaoAnos360 = this.converterTempoContribuicao360(this.seguradoTransicao.contribuicaoAnos,
       this.seguradoTransicao.contribuicaoMeses,
-      this.seguradoTransicao.contribuicaoDias)
+      this.seguradoTransicao.contribuicaoDias, 'a')
 
 
     const sexo = this.seguradoTransicao.sexo + 'd';

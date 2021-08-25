@@ -242,6 +242,15 @@
                             : "Calculado com Correção Monetária e Juros"
                         }}
                       </td>
+                    </tr>                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data do Cálculo:</b>
+                      </td>
+                      <td>
+                        {{
+                          ultimaAtualizacao
+                        }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -884,12 +893,13 @@
                         <b>A partir de Julho de 2009:</b>
                       </td>
                       <td>
-                        {{ calculo.pos_interesse_2009 }}% ao mês, caso a taxa
+                        {{ calculo.pos_interesse_2009 }}% ao mês
+                        <span *ngIf="calculo.aplicar_juros_poupanca === 1" >, caso a taxa
                         selic ao ano seja superior à 8,5%,<br
                           class="not-screen"
                         />
                         ou 70% da taxa Selic ao ano, mensalizada, nos demais
-                        casos
+                        casos </span>
                       </td>
                     </tr>
                     <!-- <tr *ngIf="jurosEmFormatoAnual != ''">

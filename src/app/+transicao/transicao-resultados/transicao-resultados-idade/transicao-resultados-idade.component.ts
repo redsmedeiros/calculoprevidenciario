@@ -287,11 +287,14 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //   )
     //   || (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) < 2)) {
 
-    const testContrib = (this.seguradoTransicao.contribuicaoFracionadoAnos - 15);
+    const testContrib = (15 - this.seguradoTransicao.contribuicaoFracionadoAnos);
     const testeIdade = (this.getparametrosRegra5(auxiliarDate.year(), this.seguradoTransicao.sexo) -
       this.seguradoTransicao.idadeFracionada);
 
-    //if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+      console.log(testContrib)
+      console.log(testeIdade)
+
+    // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15 || testContrib < testeIdade) {
 
 

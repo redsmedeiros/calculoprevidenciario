@@ -222,6 +222,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public SBSemLimitacao;
   public SBSemLimitacaoAliquota;
 
+  public manterPercentualSMConcedido;
+  public manterPercentualSMEsperado;
+
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -326,7 +329,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (moment(this.dataCalculo, 'MM/YYYY') < this.dataMinima) {
       this.errors.add({ 'dataCalculo': ['A data do Cálculo deve ser posterior a 01/01/1970.'] })
       valid = false;
-    }else if (moment(this.dataCalculo, 'MM/YYYY').isAfter(moment(), 'month')) {
+    } else if (moment(this.dataCalculo, 'MM/YYYY').isAfter(moment(), 'month')) {
       this.errors.add({ 'dataCalculo': ['A data do Cálculo não deve ser posterior ao mês atual.'] })
       valid = false;
     }
@@ -592,7 +595,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
 
-    if ( this.tipoDejurosSelecionado !== 'sem_juros') {
+    if (this.tipoDejurosSelecionado !== 'sem_juros') {
       if (this.isEmptyInput(this.competenciaInicioJuros)) {
         this.errors.add({ 'competenciaInicioJuros': ['A Competência Inicial dos Juros é obrigatoria'] });
         valid = false;
@@ -773,7 +776,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       if (!this.dataHonorariosDe) {
         this.dataHonorariosDe = this.dibValoresDevidos;
       }
-      
+
       if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
         this.formData.taxa_advogado_inicio = moment(this.dataHonorariosDe, 'MM/YYYY').startOf('month').format('DD/MM/YYYY');
       } else {
@@ -837,6 +840,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
 
       this.formData.num_dependentes = this.numDependentes;
+      this.formData.manterPercentualSMEsperado = this.manterPercentualSMEsperado;
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
@@ -997,6 +1001,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.SBSemLimitacao = rstDevidos.SBSemLimitacao;
     this.SBSemLimitacaoAliquota = rstDevidos.SBSemLimitacaoAliquota;
     this.numDependentes = rstDevidos.numDependentes;
+    this.manterPercentualSMEsperado = rstDevidos.manterPercentualSMEsperado;
 
   }
 
@@ -1014,7 +1019,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     });
 
 
-    
+
 
     this.listRecebidos = rstRecebido;
   }
@@ -1195,6 +1200,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.numeroBeneficioDevido = this.formData.numero_beneficio_devido;
     this.numeroBeneficioRecebido = this.formData.numero_beneficio_recebido;
     this.numDependentes = this.formData.num_dependentes;
+    this.manterPercentualSMEsperado = this.formData.manterPercentualSMEsperado;
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
@@ -1232,7 +1238,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.limit60SC = this.formData.limit_60_sc;
     this.RRASemJuros = this.formData.rra_sem_juros;
 
-    //this.dibValoresDevidosChanged();
+    // this.dibValoresDevidosChanged();
     if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
       this.dibValoresDevidosChanged();
     }
@@ -1264,7 +1270,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.calcularAbono13UltimoMes,
       this.SBSemLimitacao,
       this.SBSemLimitacaoAliquota,
-      this.numDependentes
+      this.numDependentes,
+      this.manterPercentualSMEsperado,
     );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1272,7 +1279,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
 
-  public ordenarLista(){
+  public ordenarLista() {
 
     this.listRecebidos.sort((a, b) => {
 
@@ -1294,7 +1301,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public addLoadRecebidoList() {
 
-   this.ordenarLista();
+    this.ordenarLista();
 
     if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
 
@@ -1312,6 +1319,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.naoAplicarSMBeneficioConcedido,
         this.dataInicialadicional2Recebido,
         this.calcularAbono13UltimoMesRecebidos,
+        this.manterPercentualSMConcedido,
       );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
@@ -1411,11 +1419,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (this.checkDateAfterBuracoNegro(dibDate)) {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = true;
-     // this.chkDemandasJudiciais = false;
+      // this.chkDemandasJudiciais = false;
     } else {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = false;
-     // this.chkDemandasJudiciais = false;
+      // this.chkDemandasJudiciais = false;
     }
   }
 
@@ -1647,6 +1655,47 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   }
 
+
+  /**
+   * changePercentual
+   */
+  public changePercentual(especie, type) {
+
+    let text = '';
+    switch (especie) {
+      case '6':
+      case 6:
+        text = '50%'
+        break;
+      case '8':
+      case 8:
+        text = '30%'
+        break;
+      case '9':
+      case 9:
+        text = '40%'
+        break;
+      case '10':
+      case 10:
+        text = '60%'
+        break;
+    }
+
+    // if (type === 'd') {
+
+    //   this.manterPercentualSMEsperado = (text !== '') ? true : false;
+
+    // }
+
+    // if (type === 'r') {
+
+    //   this.manterPercentualSMConcedido = (text !== '') ? true : false;
+
+    // }
+
+    return text;
+
+  }
 
 
   getTipoAposentadoria(value) {
