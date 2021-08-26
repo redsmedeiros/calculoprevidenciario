@@ -298,7 +298,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   private isTetoInicialDevido = false;
   private isTetoInicialRecebido = false;
 
-  private ultimaAtualizacao;
+  private dataCriacao;
+  private dataUltimaAtualizacao;
 
   // limmitado
   private islimit60SC = false;
@@ -348,7 +349,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
         this.dataNascimento();
-        if (localStorage.getItem('user_id') != this.segurado.user_id) {
+        if (localStorage.getItem('user_id') !== this.segurado.user_id) {
           // redirecionar para pagina de segurados
           swal({
             type: 'error',
@@ -622,9 +623,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   // }
 
 
-  /**
-   * 
-   */
   private getIndicesReajusteListRecebidos() {
 
     let promRecebidoRow;
@@ -690,7 +688,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   dataNascimento() {
 
-    let idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
+    const idadeSegurado = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     this.segurado.idade = moment().diff(idadeSegurado, 'years');
 
   }
@@ -781,6 +779,19 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
 
+  private setDatasDeControle() {
+
+    if (this.calculo.updated_at !== undefined && moment(this.calculo.updated_at).isValid()) {
+      this.dataUltimaAtualizacao = moment(this.calculo.updated_at).format('DD/MM/YYYY - HH:MM');
+    }
+
+    if (this.calculo.created_at !== undefined && moment(this.calculo.created_at).isValid()) {
+      this.dataCriacao = moment(this.calculo.created_at).format('DD/MM/YYYY - HH:MM');
+    }
+
+  }
+
+
   // opção 2
   generateTabelaResultados() {
 
@@ -790,13 +801,10 @@ export class BeneficiosResultadosComponent implements OnInit {
     const tableData = [];
     const dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     let dataPagamentoBeneficioDevido = dataPedidoBeneficioEsperado.clone();
+    this.setDatasDeControle();
 
     if (this.calculo.dip_valores_devidos !== undefined && moment(this.calculo.dip_valores_devidos).isValid()) {
       dataPagamentoBeneficioDevido = moment(this.calculo.dip_valores_devidos);
-    }
-
-    if (this.calculo.updated_at !== undefined && moment(this.calculo.updated_at).isValid()) {
-      this.ultimaAtualizacao = moment(this.calculo.updated_at).format('DD/MM/YYYY');
     }
 
     let dataPedidoBeneficio = moment(this.calculo.data_pedido_beneficio);
@@ -878,10 +886,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         break;
       }
 
-      let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-      let siglaDataCorrente = moedaDataCorrente.sigla;
+      const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+      const siglaDataCorrente = moedaDataCorrente.sigla;
 
-      let stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
+      const stringCompetencia = (dataCorrente.month() + 1) + '/' + dataCorrente.year();
       this.ultimaCompretencia = stringCompetencia;
       this.dataCalculo = moment(dataCorrenteString).format();
       let indiceReajusteValoresDevidos = { reajuste: 0.0, reajusteOs: 0.0 };
@@ -889,12 +897,13 @@ export class BeneficiosResultadosComponent implements OnInit {
       let indiceReajusteValoresRecebidos = { reajuste: 0.0, reajusteOs: 0.0 };
       let beneficioRecebido = 0.0;
       let diferencaMensal = 0.0;
-      let correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
+      const correcaoMonetaria = this.getCorrecaoMonetaria(dataCorrente);
       let diferencaCorrigida = 0.0;
       // let juros = this.getJuros(dataCorrente);
       let juros = this.getJurosPorCompetencia(dataCorrente);
       let valorJuros = 0.0; // diferencaCorrigida * juros;
-      let diferencaCorrigidaJuros = { string: '', value: 0 }; // this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
+      let diferencaCorrigidaJuros = { string: '', value: 0 }; 
+      // this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       let honorarios = 0.0;
       let isPrescricao = false;
       let valorDevidohonorario = 0;
@@ -908,10 +917,16 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       const recebidoRow = this.getPeriodoRecebidoList(dataCorrente);
       let dataPagamentoBeneficioRecebido = dataPedidoBeneficio.clone();
-      let cessaBeneficioRecebido = dataPedidoBeneficio.clone();
+      const cessaBeneficioRecebido = dataPedidoBeneficio.clone();
       let abono13UltimoRecebido = false;
       let datacessacaoBeneficioRecebido = this.dataCessacaoRecebido;
       let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
+
+
+      console.log('---');
+      console.log(dataCorrente.format('DD/MM/YYYY'));
+      console.log(correcaoMonetaria);
+      console.log('---');
 
       if (recebidoRow.status) {
 
@@ -977,8 +992,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         indiceReajusteValoresDevidos = this.getIndiceReajusteValoresDevidos(dataCorrente);
         // teste 02/06
         // console.log(dataCorrente);
-        // console.log(indiceReajusteValoresDevidos);
-
         beneficioDevido = func_beneficioDevido.call(this, dataCorrente, indiceReajusteValoresDevidos, beneficioDevidoString, line);
         indiceReajusteValoresRecebidos = this.getIndiceReajusteValoresRecebidos(dataCorrente, recebidoRow);
 
@@ -2710,6 +2723,13 @@ export class BeneficiosResultadosComponent implements OnInit {
   getCorrecaoMonetaria(dataCorrente) {
 
     const tipo_correcao = this.calculo.tipo_correcao;
+
+
+    if (dataCorrente.isBetween('1994-03-01','1994-06-01','month','[]')) {
+      dataCorrente = moment('01/07/1994', 'DD/MM/YYYY')
+    }
+
+
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     const moedaDataAtual = this.Moeda.getByDate(moment());
     const moedaDataCalculo = this.Moeda.getByDate(moment(this.calculo.data_calculo_pedido));
@@ -2789,6 +2809,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         data: dataCorrente,
         juros: (indexComp === 0) ? 0 : this.getJuros(dataCorrente)
       }
+
+      console.log(jurosCompetencia);
 
       jurosList.push(jurosCompetencia);
       indexComp++;
@@ -3983,8 +4005,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   // Retorna uma lista com os meses em formato string YYYY-MM-DD  entre dateStart e dateEnd
   monthsBetween(dateStart, dateEnd) {
-    let startClone = dateStart.clone();
-    let timeValues = [];
+    const startClone = dateStart.clone();
+    const timeValues = [];
     while (dateEnd > startClone || startClone.format('M') === dateEnd.format('M')) {
       timeValues.push(startClone.startOf('month').format('YYYY-MM-DD'));
       startClone.add(1, 'month');
