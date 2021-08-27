@@ -844,11 +844,16 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
+
+      console.log(this.jurosAntes2003);
+      console.log(this.jurosDepois2003);
+      console.log(this.jurosDepois2009);
+
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
-        this.formData.previo_interesse_2003 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
+        this.formData.previo_interesse_2003 =  this.jurosAntes2003;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
 
       } else {
         this.formData.previo_interesse_2003 = 0;
@@ -856,8 +861,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros posterior a janeiro 2003
       if (this.jurosDepois2003 != undefined) {
 
-        this.formData.pos_interesse_2003 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2003.replace(',', '.') : this.jurosDepois2003;
+        this.formData.pos_interesse_2003 = this.jurosDepois2003;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2003.replace(',', '.') : this.jurosDepois2003;
 
       } else {
         this.formData.pos_interesse_2003 = 0;
@@ -865,12 +870,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros posterior a julho 2009
       if (this.jurosDepois2009 != undefined) {
 
-        this.formData.pos_interesse_2009 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2009.replace(',', '.') : this.jurosDepois2009;
+        this.formData.pos_interesse_2009 = this.jurosDepois2009;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2009.replace(',', '.') : this.jurosDepois2009;
 
       } else {
         this.formData.pos_interesse_2009 = 0;
       }
+
       // Espécie valores devidos
       this.formData.tipo_aposentadoria = this.especieValoresDevidos;
       // Agora
@@ -1116,6 +1122,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.pos_interesse_2009 != null) {
       this.jurosDepois2009 = this.formData.pos_interesse_2009.toString().replace('.', ',');
     }
+
     // Espécie valores devidos
     this.especieValoresDevidos = this.formData.tipo_aposentadoria;
     // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
@@ -1561,7 +1568,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       case '12_6':
         // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
         this.jurosAntes2003 = 0.50;
-        // this.jurosAntes2003 = 1.00;
         this.jurosDepois2003 = 1.00;
         this.jurosDepois2009 = 0.50;
         this.chkBoxTaxaSelic = true;
@@ -1601,18 +1607,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.jurosDepois2009 = 0.50;
         this.chkBoxTaxaSelic = false;
         break;
-      case 'manual':
-        // (manual)
-        this.jurosAntes2003 = null;
-        this.jurosDepois2003 = null;
-        this.jurosDepois2009 = null;
-        break;
       case 'sem_juros':
         // sem juros
         this.jurosAntes2003 = 0;
         this.jurosDepois2003 = 0;
         this.jurosDepois2009 = 0;
         this.chkBoxTaxaSelic = false;
+        break;
+      case 'manual':
+        // (manual)
+        // this.jurosAntes2003 = this.formData.previo_interesse_2003 ;
+        // this.jurosDepois2003 = this.formData.pos_interesse_2003;
+        // this.jurosDepois2009 = this.formData.aplicar_juros_poupanca;
         break;
     }
 
@@ -1651,6 +1657,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
     }
+
     return 'manual';
 
   }

@@ -300,6 +300,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private dataCriacao;
   private dataUltimaAtualizacao;
+  private dataImpressao;
 
   // limmitado
   private islimit60SC = false;
@@ -341,9 +342,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.debugMode = true;
     }
 
-    // if (this.route.snapshot.queryParams['DEBUG'] == 'true' || this.route.snapshot.queryParams['DEBUG'] == '1') {
-    //   this.debugMode = true;
-    // }
     this.seguradoId = this.route.snapshot.params['id'];
     this.Segurado.find(this.seguradoId)
       .then(segurado => {
@@ -781,12 +779,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   private setDatasDeControle() {
 
+    this.dataImpressao = moment().format('DD/MM/YYYY - HH:mm');
+
     if (this.calculo.updated_at !== undefined && moment(this.calculo.updated_at).isValid()) {
-      this.dataUltimaAtualizacao = moment(this.calculo.updated_at).format('DD/MM/YYYY - HH:MM');
+      this.dataUltimaAtualizacao = moment(this.calculo.updated_at).format('DD/MM/YYYY - HH:mm');
     }
 
     if (this.calculo.created_at !== undefined && moment(this.calculo.created_at).isValid()) {
-      this.dataCriacao = moment(this.calculo.created_at).format('DD/MM/YYYY - HH:MM');
+      this.dataCriacao = moment(this.calculo.created_at).format('DD/MM/YYYY - HH:mm');
     }
 
   }
@@ -902,7 +902,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       // let juros = this.getJuros(dataCorrente);
       let juros = this.getJurosPorCompetencia(dataCorrente);
       let valorJuros = 0.0; // diferencaCorrigida * juros;
-      let diferencaCorrigidaJuros = { string: '', value: 0 }; 
+      let diferencaCorrigidaJuros = { string: '', value: 0 };
       // this.getDiferencaCorrigidaJuros(dataCorrente, valorJuros, diferencaCorrigida);
       let honorarios = 0.0;
       let isPrescricao = false;
@@ -921,12 +921,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       let abono13UltimoRecebido = false;
       let datacessacaoBeneficioRecebido = this.dataCessacaoRecebido;
       let tipo_aposentadoria_recebida = this.calculo.tipo_aposentadoria_recebida;
-
-
-      console.log('---');
-      console.log(dataCorrente.format('DD/MM/YYYY'));
-      console.log(correcaoMonetaria);
-      console.log('---');
 
       if (recebidoRow.status) {
 
@@ -2725,8 +2719,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     const tipo_correcao = this.calculo.tipo_correcao;
 
 
-    if (dataCorrente.isBetween('1994-03-01','1994-06-01','month','[]')) {
-      dataCorrente = moment('01/07/1994', 'DD/MM/YYYY')
+    if (dataCorrente.isBetween('1994-03-01', '1994-06-01', 'month', '[]')) {
+      dataCorrente = moment('01/07/1994', 'DD/MM/YYYY');
     }
 
 
@@ -2790,40 +2784,33 @@ export class BeneficiosResultadosComponent implements OnInit {
 
   createJurosCorrenteList(competencias) {
 
-    let competenciasReverse = [];
+    const competenciasReverse = [];
     competencias.map((row) => {
       competenciasReverse.push(row);
     });
 
     competenciasReverse.reverse()
-    let jurosList = [];
+    const jurosList = [];
     let jurosCompetencia;
     let dataCorrente;
     let indexComp = 0;
 
-    for (let competencia of competenciasReverse) {
+    for (const competencia of competenciasReverse) {
 
       dataCorrente = moment(competencia);
 
       jurosCompetencia = {
         data: dataCorrente,
-        juros: (indexComp === 0) ? 0 : this.getJuros(dataCorrente)
+        juros: this.getJuros(dataCorrente)
       }
-
-      console.log(jurosCompetencia);
 
       jurosList.push(jurosCompetencia);
       indexComp++;
 
     }
 
-
-    // console.log(jurosList);
-
     return jurosList.reverse();
   }
-
-
 
   getJuros(dataCorrente) {
 
@@ -2849,7 +2836,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       if (dataCorrente >= this.dataJuros2009) {
         if (!chkBoxTaxaSelic) {
-          if (this.soma == 1) {
+          if (this.soma === 1) {
             this.jurosCorrente += this.jurosDepois2009;
           } else {
             this.soma = 1;
@@ -2860,7 +2847,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           if (dataCorrente < this.dataSelic70) {
             this.jurosCorrente += this.jurosDepois2009;
           } else {
-            let moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+            const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
             this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; // Carregado do BD na coluna da data corrente;
           }
 
@@ -2869,7 +2856,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       jurosAplicado = this.jurosCorrente;
     } else {
       if (!chkJurosMora) {
-        if (dataCorrente != dataMesCitacaoReu) {
+        if (dataCorrente !== dataMesCitacaoReu) {
           jurosAplicado = 0;
         } else {
           jurosAplicado = this.jurosCorrente;
@@ -2912,10 +2899,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         // juros += taxa apos 2009 * numero de meses entre '01/07/2009' e a dataSelic70 ('01/05/2012')
         juros += this.jurosDepois2009 * this.getDifferenceInMonthsRounded(this.dataJuros2009, this.dataSelic70.clone().subtract(1, 'days'));
         // juros += taxaTabelada de cada mes entre ('01/05/2012') e a this.calculo.data_calculo_pedido (data do calculo);
-        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-        for (let mes of mesesEntreSelicDataCalculo) {
-          let dateMes = moment(mes);
-          let mesMoeda = this.Moeda.getByDate(dateMes);
+        const mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        for (const mes of mesesEntreSelicDataCalculo) {
+          const dateMes = moment(mes);
+          const mesMoeda = this.Moeda.getByDate(dateMes);
           juros += parseFloat(mesMoeda.juros_selic_70) / 100;
         }
       }
@@ -2932,11 +2919,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         juros += this.jurosDepois2009 * this.getDifferenceInMonths(this.dataJuros2009, this.dataSelic70);
 
         // juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo;
-        let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+        const mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
 
-        for (let mes of mesesEntreSelicDataCalculo) {
-          let dateMes = moment(mes);
-          let mesMoeda = this.Moeda.getByDate(dateMes);
+        for (const mes of mesesEntreSelicDataCalculo) {
+          const dateMes = moment(mes);
+          const mesMoeda = this.Moeda.getByDate(dateMes);
           juros += parseFloat(mesMoeda.juros_selic_70) / 100;
         }
       }
@@ -2952,10 +2939,10 @@ export class BeneficiosResultadosComponent implements OnInit {
         } else {
           juros += this.jurosDepois2009 * this.getDifferenceInMonths(data, this.dataSelic70);
           // juros += taxaTabelada de cada mes entre ('01/05/2012') e a data do calculo / 100;
-          let mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
-          for (let mes of mesesEntreSelicDataCalculo) {
-            let dateMes = moment(mes);
-            let mesMoeda = this.Moeda.getByDate(dateMes);
+          const mesesEntreSelicDataCalculo = this.monthsBetween(this.dataSelic70, dataDoCalculo);
+          for (const mes of mesesEntreSelicDataCalculo) {
+            const dateMes = moment(mes);
+            const mesMoeda = this.Moeda.getByDate(dateMes);
             juros += parseFloat(mesMoeda.juros_selic_70) / 100;
           }
         }
@@ -4053,6 +4040,26 @@ export class BeneficiosResultadosComponent implements OnInit {
   // }
 
 
+  private aplicarPercentualSM(tipoAposentadoria, salMinimo) {
+
+    if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
+
+      if (tipoAposentadoria.toString() === '8') { // ’Auxilio Acidente - 30%’
+        salMinimo *= 0.3;
+      } else if (tipoAposentadoria.toString() === '9') {// ‘Auxilio Acidente - 40%’
+        salMinimo *= 0.4;
+      } else if (tipoAposentadoria.toString() === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
+        salMinimo *= 0.5;
+      } else if (tipoAposentadoria.toString() === '10') {// ‘Auxilio Acidente - 60%’
+        salMinimo *= 0.6;
+      }
+
+    }
+
+    return salMinimo;
+  }
+
+
 
   // Seção 5.3
   aplicarTetosEMinimos(valorBeneficio, dataCorrente, dib, tipo, recebidoRowid = null) {
@@ -4080,31 +4087,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if (tipoAposentadoria.toString() === '8') { // ’Auxilio Acidente - 30%’
-      salMinimo *= 0.3;
-    } else if (tipoAposentadoria.toString() === '9') {// ‘Auxilio Acidente - 40%’
-      salMinimo *= 0.4;
-    } else if (tipoAposentadoria.toString() === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-      salMinimo *= 0.5;
-    } else if (tipoAposentadoria.toString() === '10') {// ‘Auxilio Acidente - 60%’
-      salMinimo *= 0.6;
-    }
-
 
 
     if (!naoAplicarMinimo && tipoAposentadoria !== '2021') {
 
-      // if (tipoAposentadoria.toString() === '8') { // ’Auxilio Acidente - 30%’
-      //   salMinimo *= 0.3;
-      // } else if (tipoAposentadoria.toString() === '9') {// ‘Auxilio Acidente - 40%’
-      //   salMinimo *= 0.4;
-      // } else if (tipoAposentadoria.toString() === '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-      //   salMinimo *= 0.5;
-      // } else if (tipoAposentadoria.toString() === '10') {// ‘Auxilio Acidente - 60%’
-      //   salMinimo *= 0.6;
-      // }
-
-
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4113,27 +4100,14 @@ export class BeneficiosResultadosComponent implements OnInit {
         return this.roundMoeda(salMinimo);
       }
 
-    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
+    }
+    if (manterProporcaoAplicarMinimo) {
 
-      if (manterProporcaoAplicarMinimo) {
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
 
-        return this.roundMoeda(salMinimo);
-      }
-
+      return this.roundMoeda(salMinimo);
     }
 
-    // if ((this.isTetoInicialDevido && tipo === 'Devido')
-    //   || (this.isTetoInicialRecebido && tipo === 'Recebido')
-    //   && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
-    //   // Adicionar subindice ‘T’ no valor do beneficio.
-    //   return this.roundMoeda(tetoSalarial);
-    // }
-
-
-    // && dib >= this.dataInicioBuracoNegro removido 28/07/2020 - DR. Sergio
-    // if ((valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003)
-    //   || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
-    // ) {
     if ((valorBeneficio >= tetoSalarial)
       || (valorBeneficio >= tetoSalarial) && tipo === 'Recebido'
     ) {
@@ -4152,7 +4126,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     //   return valorBeneficio;
     // }
 
-    let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
+    const dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
     let naoAplicarMinimo = false;
@@ -4174,20 +4148,9 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    // console.log(valorBeneficio);
-
-
-    if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
-      salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
-      salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-      salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
-      salMinimo *= 0.6;
-    }
-
     if (!naoAplicarMinimo) {
+
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4196,39 +4159,33 @@ export class BeneficiosResultadosComponent implements OnInit {
         return this.roundMoeda(salMinimo);
       }
 
-    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
-
-      if (manterProporcaoAplicarMinimo) {
-
-        return this.roundMoeda(salMinimo);
-      }
     }
 
-    // if ((this.isTetoInicialDevido && tipo === 'Devido')
-    //   || (this.isTetoInicialRecebido && tipo === 'Recebido')
-    //   && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
-    //   // Adicionar subindice ‘T’ no valor do beneficio.
-    //   return this.roundMoeda(tetoSalarial);
-    // }
+    if (manterProporcaoAplicarMinimo) {
+
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
+
+      return this.roundMoeda(salMinimo);
+    }
 
     // removido && dib >= this.dataInicioBuracoNegro  removido 28/07/2020 - DR. Sergio
     if (valorBeneficio >= tetoSalarial && !this.calculo.nao_aplicar_ajuste_maximo_98_2003) {
       // Adicionar subindice ‘T’ no valor do beneficio.
       return this.roundMoeda(tetoSalarial);
     }
+
     return this.roundMoeda(valorBeneficio);
   }
 
   private aplicarMinimos(valorBeneficio, dataCorrente, dib, tipo) {
 
-
-    let dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
+    const dataCorrenteMoeda = this.Moeda.getByDate(dataCorrente);
     let salMinimo = dataCorrenteMoeda.salario_minimo;
     let tipoAposentadoria = '';
     let naoAplicarMinimo = false;
     let manterProporcaoAplicarMinimo = false;
 
-    if (tipo == 'Recebido') {
+    if (tipo === 'Recebido') {
 
       tipoAposentadoria = this.calculo.tipo_aposentadoria_recebida;
       naoAplicarMinimo = this.calculo.nao_aplicar_sm_beneficio_concedido;
@@ -4244,18 +4201,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-    if (tipoAposentadoria == '8') { // ’Auxilio Acidente - 30%’
-      salMinimo *= 0.3;
-    } else if (tipoAposentadoria == '9') {// ‘Auxilio Acidente - 40%’
-      salMinimo *= 0.4;
-    } else if (tipoAposentadoria == '6') { // ‘Auxilio Acidente Previdenciario- 50%’
-      salMinimo *= 0.5;
-    } else if (tipoAposentadoria == '10') {// ‘Auxilio Acidente - 60%’
-      salMinimo *= 0.6;
-    }
-
 
     if (!naoAplicarMinimo) {
+
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
 
       if (valorBeneficio <= salMinimo ||
         (this.isMinimoInicialDevido && tipo === 'Devido')
@@ -4264,13 +4213,16 @@ export class BeneficiosResultadosComponent implements OnInit {
         return this.roundMoeda(salMinimo);
       }
 
-    } else if (['6', '8', '9', '10'].includes(tipoAposentadoria.toString())) {
-
-      if (manterProporcaoAplicarMinimo) {
-
-        return this.roundMoeda(salMinimo);
-      }
     }
+
+
+    if (manterProporcaoAplicarMinimo) {
+
+      salMinimo = this.aplicarPercentualSM(tipoAposentadoria, salMinimo);
+
+      return this.roundMoeda(salMinimo);
+    }
+
 
     return this.roundMoeda(valorBeneficio);
   }
@@ -4862,6 +4814,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
 
     }
+
+    console.log(this.jurosEmFormatoAnual)
+
+    if (this.isExits(this.jurosEmFormatoAnual)) {
+      this.jurosEmFormatoAnual = 'manual';
+    }
+
+
+
   }
 
 
