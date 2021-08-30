@@ -457,7 +457,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_devido of this.IndiceDevido.list) {
             this.indiceDevido.push(i_devido);
           }
-          // return true;
+           return true;
         });
 
       const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
@@ -468,7 +468,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_recebido of this.IndiceRecebido.list) {
             this.indiceRecebido.push(i_recebido);
           }
-          //  return true;
+            return true;
         });
 
       this.devidoBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio_esperado));
@@ -2327,6 +2327,11 @@ export class BeneficiosResultadosComponent implements OnInit {
   // Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj, line, recebidoRow) {
 
+
+    if (this.listRecebidos.length === 0) {
+      return 0;
+    }
+
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
     const siglaDataCorrente = moedaDataCorrente.sigla;
     let irtRecebidoSimplificado89 = 1;
@@ -2340,8 +2345,6 @@ export class BeneficiosResultadosComponent implements OnInit {
     let dataPagamentoBeneficio = moment(this.calculo.data_pedido_beneficio);
     let dataCessacaoRecebido = this.dataCessacaoRecebido;
     let rmiRecebidos = parseFloat(this.calculo.valor_beneficio_concedido);
-
-
 
 
     if (recebidoRow.status) {
@@ -2367,6 +2370,8 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (this.isMinimoInicialRecebidoLastId === undefined) {
         this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
       }
+
+    }else{
 
     }
 
@@ -4814,8 +4819,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       }
 
     }
-
-    console.log(this.jurosEmFormatoAnual)
 
     if (this.isExits(this.jurosEmFormatoAnual)) {
       this.jurosEmFormatoAnual = 'manual';

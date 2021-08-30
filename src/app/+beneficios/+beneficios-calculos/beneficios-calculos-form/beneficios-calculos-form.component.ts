@@ -845,10 +845,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
 
-      console.log(this.jurosAntes2003);
-      console.log(this.jurosDepois2003);
-      console.log(this.jurosDepois2009);
-
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
@@ -1230,7 +1226,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.list_recebidos && this.formData.list_recebidos.length > 0) {
       this.listRecebidos = JSON.parse(this.formData.list_recebidos);
     }
-    this.addLoadRecebidoList();
+    // this.addLoadRecebidoList();
 
     if ((this.formData.list_devidos && this.formData.list_devidos.length > 0)) {
       this.listDevidos = JSON.parse(this.formData.list_devidos);

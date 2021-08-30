@@ -428,148 +428,7 @@
         <!-- </div>
 
       <div class="row" > -->
-        <article
-          class="col-md-12 col-lg-12 col-xs-12 col-sm-12"
-          *ngIf="
-            !this.calculo.beneficio_nao_concedido &&
-            this.listRecebidos.length == 0
-          "
-        >
-          <sa-widget
-            [colorbutton]="false"
-            [editbutton]="false"
-            [togglebutton]="false"
-            [deletebutton]="false"
-            [fullscreenbutton]="false"
-            [custombutton]="false"
-          >
-            <header>
-              <span class="widget-icon">
-                <i class="fa fa-money"></i>
-              </span>
-              <h2>Valores Recebidos</h2>
-            </header>
-
-            <!-- widget div-->
-            <!-- widget content -->
-            <div class="widget-body widget-body-custom no-margin no-padding">
-              <div id="printableValoresRecebidos">
-                <table
-                  class="table table-bordered table-hover no-margin no-padding"
-                >
-                  <!-- <caption>
-                      <h2>Valores Recebidos</h2>
-                    </caption> -->
-
-                  <thead class="not-screen">
-                    <tr>
-                      <th colspan="2">
-                        <h2>Benefícios Recebidos</h2>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Espécie:</b>
-                      </td>
-                      <td>
-                        {{
-                          getTipoAposentadoria(
-                            calculo.tipo_aposentadoria_recebida
-                          )
-                        }}
-                      </td>
-                    </tr>
-                    <tr *ngIf="calculo.numero_beneficio_recebido">
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Número do Benefício:</b>
-                      </td>
-                      <td>
-                        {{ calculo.numero_beneficio_recebido }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Data de Início de Benefício - DIB:</b>
-                      </td>
-                      <td>
-                        {{ formatDate(calculo.data_pedido_beneficio) }}
-                      </td>
-                    </tr>
-                    <tr
-                      *ngIf="
-                        calculo.data_anterior_pedido_beneficio !== '0000-00-00'
-                      "
-                    >
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Data Inicial do Benefício Anterior se Houver:</b>
-                      </td>
-                      <td>
-                        {{ formatDate(calculo.data_anterior_pedido_beneficio) }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Data Final Recebidos:</b>
-                      </td>
-                      <td>
-                        {{ formatDate(calculo.data_cessacao) }}
-                      </td>
-                    </tr>
-                    <tr >
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Renda Mensal Inicial - RMI:</b>
-                      </td>
-                      <td>
-                        {{
-                          formatRMI(
-                            calculo.valor_beneficio_concedido,
-                            "Recebidos"
-                          )
-                        }}
-                      </td>
-                    </tr>
-                    <!-- *ngIf="!calculo.valor_beneficio_esperado_revisao"<tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Renda Mensal Inicial - RMI Antes da Revisão:</b>
-                      </td>
-                      <td>
-                        {{
-                          formatRMI(
-                            calculo.valor_beneficio_concedido,
-                            "Recebidos"
-                          )
-                        }}
-                      </td>
-                    </tr>
-                    <tr *ngIf="calculo.valor_beneficio_esperado_revisao">
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Renda Mensal Inicial - RMI Depois da Revisão:</b>
-                      </td>
-                      <td>
-                        {{
-                          formatRMI(
-                            calculo.valor_beneficio_concedido_revisao,
-                            "Recebidos"
-                          )
-                        }}
-                      </td>
-                    </tr> -->
-                    <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Índice de Limitação no Teto:</b>
-                      </td>
-                      <td>
-                        {{ calculo.taxa_ajuste_maxima_concedida }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </sa-widget>
-        </article>
+       
       </div>
       <div class="row" id="printableValoresRecebidosList">
         <article
@@ -2108,3 +1967,113 @@
 
   <!-- end widget grid -->
 </div>
+
+
+ <!-- <article
+          class="col-md-12 col-lg-12 col-xs-12 col-sm-12"
+          *ngIf="
+            !this.calculo.beneficio_nao_concedido &&
+            this.listRecebidos.length == 0
+          "
+        >
+          <sa-widget
+            [colorbutton]="false"
+            [editbutton]="false"
+            [togglebutton]="false"
+            [deletebutton]="false"
+            [fullscreenbutton]="false"
+            [custombutton]="false"
+          >
+            <header>
+              <span class="widget-icon">
+                <i class="fa fa-money"></i>
+              </span>
+              <h2>Valores Recebidos</h2>
+            </header>
+            <div class="widget-body widget-body-custom no-margin no-padding">
+              <div id="printableValoresRecebidos">
+                <table
+                  class="table table-bordered table-hover no-margin no-padding">
+                  <thead class="not-screen">
+                    <tr>
+                      <th colspan="2">
+                        <h2>Benefícios Recebidos</h2>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Espécie:</b>
+                      </td>
+                      <td>
+                        {{
+                          getTipoAposentadoria(
+                            calculo.tipo_aposentadoria_recebida
+                          )
+                        }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.numero_beneficio_recebido">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Número do Benefício:</b>
+                      </td>
+                      <td>
+                        {{ calculo.numero_beneficio_recebido }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data de Início de Benefício - DIB:</b>
+                      </td>
+                      <td>
+                        {{ formatDate(calculo.data_pedido_beneficio) }}
+                      </td>
+                    </tr>
+                    <tr
+                      *ngIf="
+                        calculo.data_anterior_pedido_beneficio !== '0000-00-00'
+                      "
+                    >
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Inicial do Benefício Anterior se Houver:</b>
+                      </td>
+                      <td>
+                        {{ formatDate(calculo.data_anterior_pedido_beneficio) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Final Recebidos:</b>
+                      </td>
+                      <td>
+                        {{ formatDate(calculo.data_cessacao) }}
+                      </td>
+                    </tr>
+                    <tr >
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Renda Mensal Inicial - RMI:</b>
+                      </td>
+                      <td>
+                        {{
+                          formatRMI(
+                            calculo.valor_beneficio_concedido,
+                            "Recebidos"
+                          )
+                        }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.taxa_ajuste_maxima_concedida">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Índice de Limitação no Teto:</b>
+                      </td>
+                      <td>
+                        {{ calculo.taxa_ajuste_maxima_concedida }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </sa-widget>
+        </article> -->
