@@ -15,7 +15,9 @@
     <div class="row" *ngIf="!isUpdating">
       <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <h1 *ngIf="!isTetos" class="title-pdf">Demonstrativo de Cálculo</h1>
-        <h1 *ngIf="isTetos" class="title-pdf">Demonstrativo de Cálculo - Revisão do Teto</h1>
+        <h1 *ngIf="isTetos" class="title-pdf">
+          Demonstrativo de Cálculo - Revisão do Teto
+        </h1>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="#/beneficios/beneficios-segurados">
@@ -62,12 +64,20 @@
                     Demonstrativo de Cálculo - Revisão do Teto
                   </h1>
                 </div> -->
-                <table class="table table-bordered table-hover no-padding no-margin not-screen">
-                  <thead >
+                <table
+                  class="
+                    table table-bordered table-hover
+                    no-padding no-margin
+                    not-screen
+                  "
+                >
+                  <thead>
                     <tr>
                       <th colspan="2">
                         <h1 *ngIf="!isTetos">Demonstrativo de Cálculo</h1>
-                        <h1 *ngIf="isTetos">Demonstrativo de Cálculo - Revisão do Teto</h1>
+                        <h1 *ngIf="isTetos">
+                          Demonstrativo de Cálculo - Revisão do Teto
+                        </h1>
                       </th>
                     </tr>
                   </thead>
@@ -198,7 +208,11 @@
                         <b>Data da Citação:</b>
                       </td>
                       <td>
-                        {{ formatDate(calculo.data_citacao_reu) }}
+                        {{
+                          formatDate(calculo.data_citacao_reu) === "--"
+                            ? "Não Informada"
+                            : formatDate(calculo.data_citacao_reu)
+                        }}
                       </td>
                     </tr>
                     <tr>
@@ -242,7 +256,7 @@
                             : "Calculado com Correção Monetária e Juros"
                         }}
                       </td>
-                    </tr>    
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -291,12 +305,15 @@
                         {{ getTipoAposentadoria(calculo.tipo_aposentadoria) }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.numero_beneficio_devido">
+                    <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Número do Benefício:</b>
                       </td>
-                      <td>
+                      <td *ngIf="calculo.numero_beneficio_devido">
                         {{ calculo.numero_beneficio_devido }}
+                      </td>
+                      <td *ngIf="!calculo.numero_beneficio_devido">
+                        Não Informado
                       </td>
                     </tr>
                     <tr>
@@ -340,7 +357,7 @@
                         {{ formatDate(calculo.data_prevista_cessacao) }}
                       </td>
                     </tr>
-                    <tr >
+                    <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
@@ -428,7 +445,6 @@
         <!-- </div>
 
       <div class="row" > -->
-       
       </div>
       <div class="row" id="printableValoresRecebidosList">
         <article
@@ -447,11 +463,19 @@
               <h2>Benefícios Recebidos</h2>
             </header>
             <div
-              class="widget-body no-padding widget-body-custom no-margin no-padding"
+              class="
+                widget-body
+                no-padding
+                widget-body-custom
+                no-margin no-padding
+              "
             >
               <div *ngFor="let recebidoLine of listRecebidos">
                 <table
-                  class="table table-print-no-margin table-bordered table-hover no-padding no-margin"
+                  class="
+                    table table-print-no-margin table-bordered table-hover
+                    no-padding no-margin
+                  "
                   style="margin-top: 0px !important"
                 >
                   <thead>
@@ -470,12 +494,15 @@
                         {{ getTipoAposentadoria(recebidoLine.especie) }}
                       </td>
                     </tr>
-                    <tr *ngIf="recebidoLine.numeroBeneficio">
+                    <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Número do Benefício:</b>
                       </td>
-                      <td>
+                      <td *ngIf="recebidoLine.numeroBeneficio">
                         {{ recebidoLine.numeroBeneficio }}
+                      </td>
+                      <td *ngIf="!recebidoLine.numeroBeneficio">
+                        Não Informado
                       </td>
                     </tr>
                     <tr>
@@ -512,7 +539,7 @@
                         {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}
                       </td>
                     </tr>
-                    <tr >
+                    <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
@@ -522,9 +549,18 @@
                     </tr>
                     <tr
                       *ngIf="
-                      ['4', '7', '2', '16', '1', '3', '5', '13', '18','19'].includes(
-                          recebidoLine.especie
-                        )
+                        [
+                          '4',
+                          '7',
+                          '2',
+                          '16',
+                          '1',
+                          '3',
+                          '5',
+                          '13',
+                          '18',
+                          '19'
+                        ].includes(recebidoLine.especie)
                       "
                     >
                       <td class="td-width-30" style="text-align: left">
@@ -536,17 +572,30 @@
                     </tr>
                     <tr
                       *ngIf="
-                      recebidoLine.dataAdicional25 &&
-                        ['4', '7', '2', '16', '1', '3', '5', '13', '18','19'].includes(
-                          recebidoLine.especie
-                        )
+                        recebidoLine.dataAdicional25 &&
+                        [
+                          '4',
+                          '7',
+                          '2',
+                          '16',
+                          '1',
+                          '3',
+                          '5',
+                          '13',
+                          '18',
+                          '19'
+                        ].includes(recebidoLine.especie)
                       "
                     >
                       <td class="td-width-30" style="text-align: left">
                         <b> Data de Início do Adicional de 25%:</b>
                       </td>
                       <td>
-                        {{ formatDateIsnotNullMoment(recebidoLine.dataAdicional25) }}
+                        {{
+                          formatDateIsnotNullMoment(
+                            recebidoLine.dataAdicional25
+                          )
+                        }}
                       </td>
                     </tr>
                     <!-- *ngIf="!recebidoLine.valor_beneficio_esperado_revisao" <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">
@@ -744,12 +793,13 @@
                       </td>
                       <td>
                         {{ calculo.pos_interesse_2009 }}% ao mês
-                        <span *ngIf="calculo.aplicar_juros_poupanca === 1" >, caso a taxa
-                        selic ao ano seja superior à 8,5%,<br
-                          class="not-screen"
-                        />
-                        ou 70% da taxa Selic ao ano, mensalizada, nos demais
-                        casos </span>
+                        <span *ngIf="calculo.aplicar_juros_poupanca === 1"
+                          >, caso a taxa selic ao ano seja superior à 8,5%,<br
+                            class="not-screen"
+                          />
+                          ou 70% da taxa Selic ao ano, mensalizada, nos demais
+                          casos
+                        </span>
                       </td>
                     </tr>
                     <!-- <tr *ngIf="jurosEmFormatoAnual != ''">
@@ -791,7 +841,11 @@
               <div id="printableHonorarios" class="no-margin no-padding">
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
-                  *ngIf="!exibirHonorarioscpc85 && !exibirHonorariosValorFixo && !exibirHonorariosValorDaCausa"
+                  *ngIf="
+                    !exibirHonorarioscpc85 &&
+                    !exibirHonorariosValorFixo &&
+                    !exibirHonorariosValorDaCausa
+                  "
                 >
                   <thead class="not-screen">
                     <tr>
@@ -850,7 +904,11 @@
                 </table>
                 <table
                   class="table table-bordered table-hover no-padding no-margin"
-                  *ngIf="exibirHonorarioscpc85 && !exibirHonorariosValorFixo && !exibirHonorariosValorDaCausa"
+                  *ngIf="
+                    exibirHonorarioscpc85 &&
+                    !exibirHonorariosValorFixo &&
+                    !exibirHonorariosValorDaCausa
+                  "
                 >
                   <thead class="not-screen">
                     <tr>
@@ -937,55 +995,53 @@
                   </tbody>
                 </table>
                 <table
-                class="table table-bordered table-hover no-padding no-margin"
-                *ngIf="exibirHonorariosValorDaCausa"
-              >
-                <thead class="not-screen">
-                  <tr>
-                    <th colspan="2">
-                      <h2>Honorários Advocatícios</h2>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="td-width-30" style="text-align: left">
-                      <b>Valor da Causa:</b>
-                    </td>
-                    <td>
-                      {{ honorariosalorDaCausaString }}
-                    </td>
-                  </tr>
-                  <tr *ngIf="calculo.percentual_taxa_advogado != 0">
-                    <td class="td-width-30" style="text-align: left">
-                      <b>Percentual dos Honorários:</b>
-                    </td>
-                    <td>
-                      {{ formatPercent(calculo.percentual_taxa_advogado) }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-30" style="text-align: left">
-                      <b>Valor dos Honorários:</b>
-                    </td>
-                    <td>
-                      {{
-                        honorariosalorDaCausaHonorario
-                      }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="td-width-30" style="text-align: left">
-                      <b>Mês da Condenação dos Honorários:</b>
-                    </td>
-                    <td>
-                      {{
-                        formatDateCompetencia(calculo.taxa_advogado_inicio)
-                      }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  class="table table-bordered table-hover no-padding no-margin"
+                  *ngIf="exibirHonorariosValorDaCausa"
+                >
+                  <thead class="not-screen">
+                    <tr>
+                      <th colspan="2">
+                        <h2>Honorários Advocatícios</h2>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Valor da Causa:</b>
+                      </td>
+                      <td>
+                        {{ honorariosalorDaCausaString }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="calculo.percentual_taxa_advogado != 0">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Percentual dos Honorários:</b>
+                      </td>
+                      <td>
+                        {{ formatPercent(calculo.percentual_taxa_advogado) }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Valor dos Honorários:</b>
+                      </td>
+                      <td>
+                        {{ honorariosalorDaCausaHonorario }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Mês da Condenação dos Honorários:</b>
+                      </td>
+                      <td>
+                        {{
+                          formatDateCompetencia(calculo.taxa_advogado_inicio)
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </sa-widget>
@@ -1065,7 +1121,10 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <th>Benefício Devido  <br /> Tetos</th>
+                    <th>
+                      Benefício Devido <br />
+                      Tetos
+                    </th>
                     <th *ngIf="debugMode">
                       Benefício Devido<br />Tetos Sem<br />Limites
                     </th>
@@ -1081,7 +1140,10 @@
                       Índice de<br />
                       Reajuste
                     </th>
-                    <th>Benefício Recebido <br /> Tetos</th>
+                    <th>
+                      Benefício Recebido <br />
+                      Tetos
+                    </th>
                     <th *ngIf="debugMode">
                       Benefício Recebido<br />Tetos Sem Limites
                     </th>
@@ -1093,7 +1155,10 @@
                       Benefício Recebido<br />Tetos Após Revisao
                     </th>
                     <!-- <th>Benefício Recebido</th> -->
-                    <th>Diferença Mensal <br /> Tetos</th>
+                    <th>
+                      Diferença Mensal <br />
+                      Tetos
+                    </th>
                     <!-- <th>Diferença Mensal</th> -->
                     <th>Correção Monetária</th>
                     <!-- <th>Diferença Corrigida</th> -->
@@ -1147,7 +1212,15 @@
               </div>
               <div>
                 <table
-                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
+                  class="
+                    table
+                    table-striped
+                    table-bordered
+                    table-hover
+                    table-responsive
+                    table-condensed
+                    mb-0
+                  "
                   *ngIf="
                     !isUpdatingCustasProcesso &&
                     listAcrescimosDeducoes.length > 0
@@ -1396,9 +1469,7 @@
                   </tr>
                   <tr *ngIf="calculo.maturidade != 0">
                     <td class="td-width-30" style="text-align: left">
-                      <b
-                        >Sub Total (A + B + E):
-                      </b>
+                      <b>Sub Total (A + B + E): </b>
                     </td>
                     <td>
                       <span class="{{ tratarConclusao(somaVincendas) }}">
@@ -1440,7 +1511,7 @@
                           tratarConclusao(somaAcrescimosDeducoes.valorSubTotal)
                         }}"
                       >
-                        {{ somaAcrescimosDeducoes.valorSubTotal}}</span
+                        {{ somaAcrescimosDeducoes.valorSubTotal }}</span
                       >
                     </td>
                   </tr>
@@ -1804,7 +1875,7 @@
             <strong>Observações:</strong>
           </p>
           <p>
-            <strong>a) </strong> Cálculos atualizados até: 
+            <strong>a) </strong> Cálculos atualizados até:
             {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p>
@@ -1891,9 +1962,17 @@
             ao ano, mensalizada, nos demais casos - A partir de jul/2009;
           </p>
 
-          <p><strong>d) </strong> Data da Criação do Cálculo:  {{ dataCriacao }};</p>
-          <p><strong>e) </strong> Data da Atualização do Cálculo: {{ dataUltimaAtualizacao }}.</p>
-          <p><strong>e) </strong> Data da Impressão do Cálculo: {{ dataImpressao }}.</p>
+          <p>
+            <strong>d) </strong> Data da Criação do Cálculo: {{ dataCriacao }};
+          </p>
+          <p>
+            <strong>e) </strong> Data da Atualização do Cálculo:
+            {{ dataUltimaAtualizacao }}.
+          </p>
+          <p>
+            <strong>e) </strong> Data da Impressão do Cálculo:
+            {{ dataImpressao }}.
+          </p>
         </div>
       </article>
     </div>
@@ -1907,57 +1986,71 @@
           <p>
             <strong>Legenda:</strong>
           </p>
-           <p *ngIf="isBuracoNegroLeg">
-              * Efeito Financeiro da Revisão do Buraco Negro
-              <span>
-                <popover-content #avisoisBuracoNegroLeg
+          <p *ngIf="isBuracoNegroLeg">
+            * Efeito Financeiro da Revisão do Buraco Negro
+            <span>
+              <popover-content
+                #avisoisBuracoNegroLeg
                 title="Efeito Financeiro da Revisão do Buraco Negro"
                 [closeOnClickOutside]="true"
+              >
+                <div
+                  class="alert alert-danger bg-ieprev fade in bold text-justify"
                 >
-                <div class="alert alert-danger bg-ieprev fade in bold text-justify">
-                  Conforme o art 144 da Lei 8.213/1991 os benefícios
-                    concedidos entre 05/10/1988 e 05/04/1991 tiveram suas rendas
-                    mensais iniciais revisadas, porém o efeito financeiro desta
-                    revisão não abrange o período entre a DIB e 05/1992 e se dá
-                    somente a partir de 06/1992.
+                  Conforme o art 144 da Lei 8.213/1991 os benefícios concedidos
+                  entre 05/10/1988 e 05/04/1991 tiveram suas rendas mensais
+                  iniciais revisadas, porém o efeito financeiro desta revisão
+                  não abrange o período entre a DIB e 05/1992 e se dá somente a
+                  partir de 06/1992.
                 </div>
-                </popover-content>
-                  <button type="button" class="btn btn-xs btn-info" 
-                  popoverPlacement="right" 
-                  [popoverOnHover]="true"
-                  [popover]="avisoisBuracoNegroLeg"
-                   >
-                      <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
-                  </button>
-              </span>
-          </p> 
+              </popover-content>
+              <button
+                type="button"
+                class="btn btn-xs btn-info"
+                popoverPlacement="right"
+                [popoverOnHover]="true"
+                [popover]="avisoisBuracoNegroLeg"
+              >
+                <i
+                  class="fa fa-question-circle fa-1-6x"
+                  style="font-size: 13px !important"
+                ></i>
+              </button>
+            </span>
+          </p>
           <p *ngIf="isTetos">
-              (os) Índice de reajuste pela OS 121
-              <span>
-                <popover-content #avisoisTetos
+            (os) Índice de reajuste pela OS 121
+            <span>
+              <popover-content
+                #avisoisTetos
                 title="Índice de reajuste pela OS 121"
                 [closeOnClickOutside]="true"
+              >
+                <div
+                  class="alert alert-danger bg-ieprev fade in bold text-justify"
                 >
-                <div class="alert alert-danger bg-ieprev fade in bold text-justify">
-                  Os valores dos indices de reajustes entre a DIB de
-                    benefícios concedidos entre 05/10/1988 e 05/04/1991 (buraco
-                    negro), e 05/1992, foram alterados por esta OS 121/1992 e a
-                    aplicação destes indices sobre a renda mensal inicial
-                    revisada teve efeito financeiro a partir de 06/1992, não
-                    sendo devidas diferenças para o período entre a DIB e
-                    05/1992.
+                  Os valores dos indices de reajustes entre a DIB de benefícios
+                  concedidos entre 05/10/1988 e 05/04/1991 (buraco negro), e
+                  05/1992, foram alterados por esta OS 121/1992 e a aplicação
+                  destes indices sobre a renda mensal inicial revisada teve
+                  efeito financeiro a partir de 06/1992, não sendo devidas
+                  diferenças para o período entre a DIB e 05/1992.
                 </div>
-                </popover-content>
-                  <button type="button" class="btn btn-xs btn-info" 
-                  popoverPlacement="right" 
-                  [popoverOnHover]="true"
-                  [popover]="avisoisTetos"
-                   >
-                      <i class="fa fa-question-circle fa-1-6x" style="font-size: 13px !important;"></i>
-                  </button>
-              </span>
+              </popover-content>
+              <button
+                type="button"
+                class="btn btn-xs btn-info"
+                popoverPlacement="right"
+                [popoverOnHover]="true"
+                [popover]="avisoisTetos"
+              >
+                <i
+                  class="fa fa-question-circle fa-1-6x"
+                  style="font-size: 13px !important"
+                ></i>
+              </button>
+            </span>
           </p>
-         
         </div>
       </article>
     </div>
@@ -1968,8 +2061,7 @@
   <!-- end widget grid -->
 </div>
 
-
- <!-- <article
+<!-- <article
           class="col-md-12 col-lg-12 col-xs-12 col-sm-12"
           *ngIf="
             !this.calculo.beneficio_nao_concedido &&
