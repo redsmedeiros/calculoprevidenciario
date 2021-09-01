@@ -1,6 +1,6 @@
 export class ListaVideos {
 
- public static listVideos = [{
+  public static listVideos = [{
     label: 'MIGRANDO OS DADOS DO CNIS PARA CONTAGEM DE TEMPO DE CONTRIBUIÇÃO ',
     // value: '453291034'
     value: '0wwPYtCh4lM'
@@ -40,15 +40,19 @@ export class ListaVideos {
     label: 'Revisão da Vida Toda - Dr. Sergio Geromes',
     // value: '413680168'
     value: 'jbUWfP6WYTo'
-  }, {
-    label: 'Liquidação de Sentença',
-    value: '447520641'
-  }, {
-    label: 'Regras de Transição',
-    value: '377178520'
-  }, {
+  },
+
+  // {
+  //   label: 'Liquidação de Sentença',
+  //   value: '447520641'
+  // }, {
+  //   label: 'Regras de Transição',
+  //   value: '377178520'
+  // }, 
+
+  {
     label: 'Planejamento Previdenciário - Plataforma IEPREV Premium',
-    value: '499277891'
+    value: 'ENJaER2VoJQ'
   },
   ];
 
