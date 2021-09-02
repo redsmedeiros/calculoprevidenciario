@@ -134,7 +134,8 @@ export class RgpsImportacaoCnisComponent implements OnInit {
 
   processPdfFile(file) {
     const PDFJS = require('pdfjs-dist');
-    PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
+   // PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
+    PDFJS.GlobalWorkerOptions.workerSrc = '/assets/js/pdfjs/pdf.worker.min.js';
     PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
       const pdfDocument = pdf;
       // Create an array that will contain our promises 
@@ -453,7 +454,7 @@ export class RgpsImportacaoCnisComponent implements OnInit {
       contribuicoes.push(contribuicao);
     }
 
-    //console.log(contribuicoes);
+    // console.log(contribuicoes);
 
     swal({
       type: 'info',

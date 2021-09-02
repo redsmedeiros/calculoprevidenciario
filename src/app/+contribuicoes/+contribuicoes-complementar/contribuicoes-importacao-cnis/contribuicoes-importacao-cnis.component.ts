@@ -7,8 +7,8 @@ import * as moment from 'moment';
 import swal from 'sweetalert2'
 import { PDFJSStatic, PDFPageProxy } from 'pdfjs-dist';
 
-//import * as PDFJS from "pdfjs-dist";
-//import {PDFJS} from 'pdfjs-dist';
+// import * as PDFJS from "pdfjs-dist";
+// import {PDFJS} from 'pdfjs-dist';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
 
@@ -23,9 +23,8 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
 
 export class ContribuicoesImportacaoCnisComponent implements OnInit {
+
   @ViewChild('cnisFileInput') fileInput: ElementRef;
-
-
   @Input() atualizarAte;
   @Output() contribuicoesEventOut = new EventEmitter;
 
@@ -38,11 +37,12 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   public exibirCampoAnteriorLei13846: boolean = false;
   public arrayPrimarias = [];
   public arraySecundarias = [];
+  private moedaImportAmerika = false;
 
 
 
 
-  //Variaveis para importação do CNIS
+  // Variaveis para importação do CNIS
   private files: UploadFile[] = [];
   private cnisTextArea;
   private regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
@@ -63,9 +63,9 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
     this.isUpdating = true;
-    let changedatualizarAte = changes['atualizarAte'];
-    let contribuicoesEventOut = changes['contribuicoesEventOut'];
-    let isUpdating = changes['isUpdating'];
+    const changedatualizarAte = changes['atualizarAte'];
+    const contribuicoesEventOut = changes['contribuicoesEventOut'];
+    const isUpdating = changes['isUpdating'];
 
     // console.log(changedatualizarAte);
     // console.log(contribuicoesEventOut);
@@ -73,14 +73,14 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
 
   public dropped(event: UploadEvent) {
-    let files = event.files;
+    const files = event.files;
     if (files.length > 1) {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
       return;
     }
 
-    let file = event.files[0]
-    if (file.fileEntry.isFile) { //É um arquivo?
+    const file = event.files[0]
+    if (file.fileEntry.isFile) { // É um arquivo?
       const fileEntry = file.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
         if (file.type != 'application/pdf') {
@@ -91,7 +91,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       });
 
     } else {
-      //É um diretório
+      // É um diretório
       swal('Erro', 'Não é permitido arrastar um diretório', 'error');
     }
   }
@@ -103,16 +103,21 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
   onFileInputChange(event) {
 
-    console.log(event);
-
     const files = event.srcElement.files;
     if (files.length > 1) {
+
       swal('Erro', 'Selecione apenas um arquivo', 'error');
+
     } else if (files[0].type != 'application/pdf') {
+
       swal('Erro', 'Formato de arquivo inválido', 'error');
+
     } else {
+
       this.processPdfFile(files[0]);
+
     }
+
   }
 
   processPdfFile(file) {
@@ -129,9 +134,9 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     // PDFJS.GlobalWorkerOptions.workerSrc = '../../../../../node_modules/pdfjs-dist/build/pdf.worker.js';
     PDFJS.GlobalWorkerOptions.workerSrc = '/assets/js/pdfjs/pdf.worker.min.js';
     PDFJS.getDocument(window.URL.createObjectURL(file)).then(pdf => {
-      let pdfDocument = pdf;
-      // Create an array that will contain our promises 
-      let pagesPromises = [];
+      const pdfDocument = pdf;
+      // Create an array that will contain our promises
+      const pagesPromises = [];
       for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
         // Required to prevent that i is always the total of pages
         (pageNumber => {
@@ -156,7 +161,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
           let finalString = '';
           // Concatenate the string of the item to the final string
           for (let i = 0; i < textItems.length; i++) {
-            let item = textItems[i];
+            const item = textItems[i];
             finalString += item.str + ' ';
           }
           // Solve promise with the text retrieven from the page
@@ -167,7 +172,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   }
 
   importFromTextArea() {
-    let text = this.cnisTextArea;
+    const text = this.cnisTextArea;
     this.processText(text, true);
   }
 
@@ -181,6 +186,8 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     let facultativoOuIndividual_array = [];
     let todas_os_periodos_array = [];
     let regras_aplicadas_array = [];
+
+    this.verificarPadraoMoeda(text);
 
     empregado = text.match(this.regexpEmpregado)
     if (tipoImportacao) {
@@ -217,12 +224,11 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
       swal('Erro', 'Nenhuma contribuição encontrada no PDF', 'error');
     }
 
-    //console.log(regras_aplicadas_array);
 
   }
 
   getArrayFromText(text, numCol) {
-    let arrayOrganizadoNew = [];
+    const arrayOrganizadoNew = [];
     let arrayText = [];
     for (let i = 0; i < text.length; i++) {
       arrayText = text[i].replace(/\n/i, ' ').trim().split(/\s/i);
@@ -236,18 +242,32 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     return arrayOrganizadoNew;
   }
 
+
   aplicarRegras(arrayOrganizado) {
-    let replacePontos = function (valor) {
+
+    const moedaImportAmerika = this.moedaImportAmerika;
+
+    const replacePontos = function (valor) {
+
+      if (moedaImportAmerika) {
+        return parseFloat(valor.replace(/\,/g, ''));
+      }
+
       return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
-    let somaContrib = function (valor1, valor2) {
-      return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+    const somaContrib = function (valor1, valor2) {
+      if (moedaImportAmerika) {
+        return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+      } else {
+        return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      }
     };
 
+
     arrayOrganizado.sort(function (a, b) {
-      let dateA = moment(a.data, 'MM/YYYY');
-      let dateB = moment(b.data, 'MM/YYYY');
+      const dateA = moment(a.data, 'MM/YYYY');
+      const dateB = moment(b.data, 'MM/YYYY');
       if (dateA > dateB) {
         return 1;
       }
@@ -255,11 +275,10 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         return -1;
       }
       return 0;
-      //sort by date ascending
+      // sort by date ascending
     });
 
     let teste_data = null;
-
 
 
     arrayOrganizado.filter(function (i, index) {
@@ -272,7 +291,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     });
 
     // reduzir o array somando item onde value.data+"-"+value.contributionType são iguais
-    let result = [];
+    const result = [];
     arrayOrganizado.reduce(function (res, value) {
       if (!res[value.data + '-' + value.contributionType]) {
         res[value.data + '-' + value.contributionType] = {
@@ -282,7 +301,8 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
         };
         result.push(res[value.data + '-' + value.contributionType])
       }
-      res[value.data + '-' + value.contributionType].contrib = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
+      res[value.data + '-' + value.contributionType].contrib
+        = somaContrib(res[value.data + '-' + value.contributionType].contrib, value.contrib);
 
       //  if (value.data == '12/2007' && value.contributionType == 1) {
       //    console.log( value.contrib);
@@ -291,7 +311,6 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
       return res;
     }, {});
-
 
     // Nova regra Lei 13.846/19 - não há constribuições secundárias, secundárias devem ser somadas as primarias; 
     // if (moment(this.atualizarAte, 'DD/MM/YYYY').isAfter(moment('17/06/2019', 'DD/MM/YYYY')) || this.somarSecundaria) {
@@ -310,7 +329,7 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
       }
 
-      let arraySomatorioPS = [];
+      const arraySomatorioPS = [];
       for (const objPrim of arrayOrganizado) {
 
         arraySomatorioPS.push({
@@ -325,7 +344,6 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
 
     } else {
 
-
       return result;
 
     }
@@ -333,12 +351,72 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
   }
 
 
+
+  private isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
+  }
+
+
+  private replacePontos(valor) {
+
+    if (this.moedaImportAmerika) {
+
+      return parseFloat(valor.replace(/\,/g, ''));
+
+    }
+
+    return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+
+  };
+
+  // private somaContrib(valor1, valor2) {
+
+  //   return Number((this.replacePontos(valor1) +
+  //     this.replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+  // };
+
+  private verificarPadraoMoeda(text_vinculo) {
+
+    if (this.isExits(text_vinculo)) {
+      this.moedaImportAmerika = (/(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2})($|\s|\n|\t|\r)/gi).test(text_vinculo);
+
+      if (this.moedaImportAmerika) {
+
+        this.regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
+        this.regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+        this.regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+
+      }
+
+
+    }
+
+    return this.moedaImportAmerika;
+  }
+
+
   getValueSecundarias(data, contrib) {
-    let replacePontos = function (valor) {
+
+    const moedaImportAmerika = this.moedaImportAmerika;
+
+    const replacePontos = function (valor) {
+
+      if (moedaImportAmerika) {
+        return parseFloat(valor.replace(/\,/g, ''));
+      }
       return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
     };
 
-    let somaContrib = function (valor1, valor2) {
+    const somaContrib = function (valor1, valor2) {
+
+      if (moedaImportAmerika) {
+        return (replacePontos(valor1) + replacePontos(valor2)).toFixed(2);
+      }
+
       return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     };
 
@@ -346,19 +424,44 @@ export class ContribuicoesImportacaoCnisComponent implements OnInit {
     for (const objSec of this.arraySecundarias) {
       if (objSec.data === data) {
         value = somaContrib(objSec.contrib, value);
+        // console.log(value)
       }
     }
     return value
   }
 
-  salvarContribuicoes(array) {
-    let contribuicoes = [];
 
-    let replacePontos = function (valor) {
-      for (let i = 0; i < 5; i++) {
-        valor = valor.replace('.', '');
+
+  // getValueSecundarias(data, contrib) {
+  //   const replacePontos = function (valor) {
+  //     return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+  //   };
+
+  //   const somaContrib = function (valor1, valor2) {
+  //     return Number((replacePontos(valor1) + replacePontos(valor2)).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  //   };
+
+  //   let value = contrib;
+  //   for (const objSec of this.arraySecundarias) {
+  //     if (objSec.data === data) {
+  //       value = somaContrib(objSec.contrib, value);
+  //     }
+  //   }
+  //   return value
+  // }
+
+  salvarContribuicoes(array) {
+    const contribuicoes = [];
+
+    const moedaImportAmerika = this.moedaImportAmerika;
+    const replacePontos = function (valor) {
+
+      if (moedaImportAmerika) {
+        return parseFloat(valor.replace(/\,/g, ''));
+      } else {
+        return parseFloat(valor.replace(/\./g, '').replace(/\,/g, '.'));
       }
-      return parseFloat(valor.replace(',', '.'));
+
     };
 
     for (const element of array) {
