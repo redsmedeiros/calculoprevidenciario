@@ -152,7 +152,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
          this.iniciarCalculo();
 
-        console.log(rst);
       }).catch(error => {
         console.error(error);
       });
@@ -286,9 +285,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
     this.numeroDeContribuicoesAux = numeroDeContribuicoes;
 
-    console.log(this.getMesesDeContribuicao());
-    console.log(this.numeroDeContribuicoesAux);
-
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
     this.fatorPrevidenciario = this.calcularFatorPrevidenciario(tempoContribuicaoTotal.anos,
@@ -416,10 +412,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       return this.listaValoresContribuidos.length;
     }
 
-    console.log(this.listaValoresContribuidos.length)
-    console.log(this.listaValoresContribuidos)
-    console.log(this.primeiraDataTabela)
-
     let numeroContribuicoes = 0;
     this.listaValoresContribuidos.forEach(contribuicao => {
 
@@ -428,8 +420,6 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       }
 
     });
-
-    console.log(numeroContribuicoes);
 
     // Set numero total de meses entre o inicio e fim das contribuições
     this.intervaloDeContribuicoes = (this.dataInicioBeneficio.clone()).startOf('month').diff(this.primeiraDataTabela, 'month');

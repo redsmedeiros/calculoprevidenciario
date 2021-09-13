@@ -122,7 +122,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
-    console.log();
 
     this.tableData = [];
     this.conclusoes = [];
@@ -179,7 +178,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // aplicação divisor mínimo
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
     this.msgDivisorMinimo = '';
-    //this.exibirIN77 = false;
+    // this.exibirIN77 = false;
 
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
@@ -191,43 +190,85 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     // pbc da vida toda
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+    const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 
     // indices de correção pbc da vida toda
 
 
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
-      .then(valorescontribuidos => {
-        this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0) {
-          // Exibir MSG de erro e encerrar Cálculo.
-          this.nenhumaContrib = true;
-          this.isUpdating = false;
-        } else {
-          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(primeiraDataTabela, moment())
-            .then((moeda: Moeda[]) => {
-              this.moeda = moeda;
-              let dataReajustesAutomaticos = this.dataInicioBeneficio;
-              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-                .then(reajustes => {
-                  this.reajustesAutomaticos = reajustes;
-                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
-                    .then(expectativas => {
-                      this.expectativasVida = expectativas;
-                      this.CarenciaProgressiva.getCarencias()
-                        .then(carencias => {
-                          this.carenciasProgressivas = carencias;
-                          this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-                          this.isUpdating = false;
-                        });
-                    });
-                });
-            });
-        }
-      });
+    this.getValoresContribuicao(dataInicio, dataLimite)
+
   }
+
+  private getValoresContribuicao(dataInicio, dataLimite) {
+
+
+    if (this.isExits(this.dadosPassoaPasso)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+        this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+          rst,
+          dataLimite,
+          dataInicio);
+
+        this.startCalculoApos99();
+
+      }).catch(error => {
+        console.error(error);
+      });
+
+
+    } else {
+
+      this.idSegurado = this.route.snapshot.params['id_segurado'];
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
+        .then(valorescontribuidos => {
+
+          this.listaValoresContribuidos = valorescontribuidos;
+          if (this.listaValoresContribuidos.length == 0) {
+
+            // Exibir MSG de erro e encerrar Cálculo.
+            this.nenhumaContrib = true;
+            this.isUpdating = false;
+
+          } else {
+
+            this.startCalculoApos99();
+
+          }
+
+        });
+
+    }
+
+  }
+
+  private startCalculoApos99() {
+
+    const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+    this.Moeda.getByDateRange(primeiraDataTabela, moment())
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+        const dataReajustesAutomaticos = this.dataInicioBeneficio;
+        this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+          .then(reajustes => {
+            this.reajustesAutomaticos = reajustes;
+            this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+              .then(expectativas => {
+                this.expectativasVida = expectativas;
+                this.CarenciaProgressiva.getCarencias()
+                  .then(carencias => {
+                    this.carenciasProgressivas = carencias;
+                    this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                    this.isUpdating = false;
+                  });
+              });
+          });
+      });
+
+  }
+
 
   calculo_apos_99(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
     let dib = this.dataInicioBeneficio;

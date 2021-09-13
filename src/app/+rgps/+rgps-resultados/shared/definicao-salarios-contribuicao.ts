@@ -11,6 +11,7 @@ export class DefinicaoSalariosContribuicao {
 
     static setValoresCotribuicaoRMICT(listaPeriodosCT) {
 
+        'use strict';
         // const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
         const dataInicioBeneficio = null;
         this.convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio);
@@ -23,32 +24,68 @@ export class DefinicaoSalariosContribuicao {
 
     static convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio) {
 
-        console.log(listaPeriodosCT);
+        'use strict';
+        // console.log(listaPeriodosCT);
 
         listaPeriodosCT.map((rowObj) => {
 
+            // console.log((this.isExits(rowObj.sc) && (typeof rowObj.sc === 'string' || typeof rowObj.sc !== 'object')));
+
             if (this.isExits(rowObj.sc) && (typeof rowObj.sc === 'string' || typeof rowObj.sc !== 'object')) {
                 rowObj.sc = JSON.parse(rowObj.sc);
-                // rowObj.sc = this.checarSalariosContribuicao(rowObj, dataInicioBeneficio);
             }
 
+            rowObj.sc_original = rowObj.sc;
+
+            if (this.isExits(rowObj.sc)) {
+                rowObj.sc = this.checarSalariosContribuicao(rowObj);
+            }
         });
 
         return listaPeriodosCT;
     }
 
-    static checarSalariosContribuicao(rowObj, dataInicioBeneficio) {
+    static checarSalariosContribuicao(rowObj) {
+        'use strict';
+
+        // console.log(rowObj);
+        // console.log(rowObj.sc_mm_ajustar);
 
 
         if (rowObj.sc_mm_ajustar !== 1) {
-            rowObj.sc = rowObj.sc.filter((sc) => sc.msc === 0);
+            // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
+
+            rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
+                || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
+                && scRow.sc !== '0,00' && scRow.sc !== 0));
+
+        } else {
+
+            rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '0,00' && scRow.sc !== 0));
+
         }
 
 
         return rowObj.sc
     }
 
+    //  static filterSCAposDecreto10410(listSM, sc_mm_ajustar){
+
+    //     if (sc_mm_ajustar !== 1) {
+    //         listSM = listSM.filter((scRow) => ( scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
+
+    //            // listSM = listSM.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
+    //         //     || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
+    //         //     && scRow.sc !== '0,00' && scRow.sc !== 0));
+    //     }
+
+    //     return listSM
+
+    //  }
+
+
     static mergeSalariosContribiocao(listaPeriodosCT) {
+        'use strict';
 
         const scMerge = [];
         for (const periodo of listaPeriodosCT) {
@@ -83,7 +120,7 @@ export class DefinicaoSalariosContribuicao {
 
 
     static groupSalariosContribuicoes(scMerge) {
-
+        'use strict';
 
         const listaDeSCRMI = [];
         let lastDate;
@@ -130,6 +167,8 @@ export class DefinicaoSalariosContribuicao {
 
 
     static isExits(value) {
+        'use strict';
+
         return (typeof value !== 'undefined' &&
             value != null && value !== 'null' &&
             value !== undefined) ? true : false;

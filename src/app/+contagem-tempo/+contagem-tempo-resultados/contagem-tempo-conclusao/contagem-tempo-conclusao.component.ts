@@ -208,7 +208,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
 
-    console.log(salC);
+   // console.log(salC);
 
     if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
@@ -361,10 +361,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     }
 
-    if (auxiliarDatePosEC103) {
-      console.log(dataFull);
-      console.log(melhorTempo);
-    }
+    // if (auxiliarDatePosEC103) {
+    //   console.log(dataFull);
+    //   console.log(melhorTempo);
+    // }
 
 
     // melhorTempo = Math.floor(melhorTempo);
@@ -394,11 +394,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       somaF += Number(iterator.totalComFator.fullDays);
       somaSF += Number(iterator.totalSemFator.fullDays);
       /// console.log('P - ' + (iTeste2++) + '|' + iterator.totalComFator.fullDays + ' -- ' + somatesteF);
-
-      console.log(iterator.totalCarencia)
     }
-
-    console.log(this.periodosList)
 
 
     return { soma: somaF, concomitante: concomitanteP };
@@ -483,7 +479,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         }
 
-        console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
+       // console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
 
         auxiliarDate = moment(this.toDateString(auxiliarDate.clone()), 'DD/MM/YYYY').add(1, 'M');
 
@@ -515,10 +511,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
 
-      console.log(this.tempoTotalConFator19);
-      console.log(count19);
-      console.log(count);
-      console.log(this.tempoTotalConFatorUltimoVinculo);
+      // console.log(this.tempoTotalConFator19);
+      // console.log(count19);
+      // console.log(count);
+      // console.log(this.tempoTotalConFatorUltimoVinculo);
 
       // console.log(this.periodosList);
       // console.log(somateste);
