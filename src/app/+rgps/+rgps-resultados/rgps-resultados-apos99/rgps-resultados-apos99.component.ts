@@ -191,7 +191,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
     // aplicação divisor mínimo
-    this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
+    this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
     this.msgDivisorMinimo = '';
     //this.exibirIN77 = false;
 
