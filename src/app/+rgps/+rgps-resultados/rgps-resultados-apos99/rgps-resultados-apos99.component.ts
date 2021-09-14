@@ -133,6 +133,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+    'use strict'
 
     this.tableData = [];
     this.conclusoes = [];
@@ -191,9 +192,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
     // aplicação divisor mínimo
-    this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
+    //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
+    if (this.calculo.divisor_minimo === 1) {
+      this.isDivisorMinimo = false;
+    }
+
     this.msgDivisorMinimo = '';
-    //this.exibirIN77 = false;
+    // this.exibirIN77 = false;
 
 
     let dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
@@ -2246,7 +2251,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       // se dib maior que 01-03-2015
       if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY') >= this.dataMP664 && this.calculo.media_12_ultimos === 0) {
 
-         const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
+        const rmiConsiderado = (rmi > this.totalMedia12Contribuicoes) ? this.totalMedia12Contribuicoes : rmi;
         // modificado 14/07/2021 
         // let rmiConsiderado = rmi;
         // if (this.calculo.media_12_ultimos === 0 && rmi > this.totalMedia12Contribuicoes) {
