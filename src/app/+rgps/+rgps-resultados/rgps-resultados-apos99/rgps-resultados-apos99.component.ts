@@ -195,26 +195,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
-
-    if (typeof this.calculo.divisor_minimo === 'number') {
-
-      this.isDivisorMinimo = (this.calculo.divisor_minimo === 0) ? true : false;
-
-    } else if (typeof this.calculo.divisor_minimo === 'boolean') {
-
-      this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
-
-    }
-
     console.log( this.isDivisorMinimo );
-    console.log(this.calculo.divisor_minimo);
-    console.log(typeof this.calculo.divisor_minimo);
-    console.log(parseInt(this.calculo.divisor_minimo, 10));
-    console.log((!this.calculo.divisor_minimo) ? true : false);
 
-    // if (parseInt(this.calculo.divisor_minimo, 10) === 1) {
-    //   this.isDivisorMinimo = false;
-    // }
 
     this.msgDivisorMinimo = '';
     // this.exibirIN77 = false;
@@ -570,18 +552,23 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         || this.tipoBeneficio == 26 || this.tipoBeneficio == 28)) {
       // Deficiencia Por Idade, Deficiencia Grave, Deficiencia Leve, Deficiencia Moderada, Aposentadoria Idade trabalhador Rural,
       // Aposentadoria Idade Urbano, Aposentadoria Tempo Contribuicao, Aposentadoria Especial, Aposentadoria Tempo Servico Professor
-      //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
+      // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
 
       divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8)); // alterado 08/04/2020
-      //divisorMediaPrimaria = numeroContribuicoes;
+      // divisorMediaPrimaria = numeroContribuicoes;
 
 
+      console.log(numeroContribuicoes)
+      console.log(mesesContribuicao60)
+      console.log(this.isDivisorMinimo)
 
 
       if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 
         divisorMediaPrimaria = mesesContribuicao60;
         this.msgDivisorMinimo = '(Divisor Mínimo)';
+
+        console.log('teste 1');
 
       }
 
@@ -593,9 +580,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           divisorMediaPrimaria = numeroContribuicoes;
 
+          console.log('teste 2');
+
         } else {
 
           divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+
+          console.log('teste 3');
 
         }
 
@@ -603,10 +594,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
+          console.log('teste 4');
+
           if (divisorMediaPrimaria < mesesContribuicao60) {
 
             divisorMediaPrimaria = mesesContribuicao60;
             this.msgDivisorMinimo = '(Divisor Mínimo)';
+
+            console.log('teste 5');
 
           }
 
