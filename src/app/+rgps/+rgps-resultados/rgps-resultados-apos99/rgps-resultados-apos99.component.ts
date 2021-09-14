@@ -193,14 +193,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
     // aplicação divisor mínimo
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
+    this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
-
-    console.log(this.calculo.divisor_minimo);
-    console.log(typeof this.calculo.divisor_minimo);
-
-    if (parseInt(this.calculo.divisor_minimo, 10) === 1) {
-      this.isDivisorMinimo = false;
-    }
+    // if (parseInt(this.calculo.divisor_minimo, 10) === 1) {
+    //   this.isDivisorMinimo = false;
+    // }
 
     this.msgDivisorMinimo = '';
     // this.exibirIN77 = false;
