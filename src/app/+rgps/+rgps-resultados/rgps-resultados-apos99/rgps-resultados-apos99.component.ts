@@ -195,6 +195,23 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
+
+    if (typeof this.calculo.divisor_minimo === 'number') {
+
+      this.isDivisorMinimo = (this.calculo.divisor_minimo === 0) ? true : false;
+
+    } else if (typeof this.calculo.divisor_minimo === 'boolean') {
+
+      this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
+
+    }
+
+    console.log( this.isDivisorMinimo );
+    console.log(this.calculo.divisor_minimo);
+    console.log(typeof this.calculo.divisor_minimo);
+    console.log(parseInt(this.calculo.divisor_minimo, 10));
+    console.log((!this.calculo.divisor_minimo) ? true : false);
+
     // if (parseInt(this.calculo.divisor_minimo, 10) === 1) {
     //   this.isDivisorMinimo = false;
     // }
