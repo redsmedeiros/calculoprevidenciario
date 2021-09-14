@@ -193,7 +193,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
     // aplicação divisor mínimo
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
-    if (this.calculo.divisor_minimo === 1) {
+
+
+    console.log(this.calculo.divisor_minimo);
+    console.log(typeof this.calculo.divisor_minimo);
+
+    if (parseInt(this.calculo.divisor_minimo, 10) === 1) {
       this.isDivisorMinimo = false;
     }
 
