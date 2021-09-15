@@ -195,7 +195,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
-    console.log( this.isDivisorMinimo );
+    console.log(this.calculo.divisor_minimo);
+    console.log(this.isDivisorMinimo);
 
 
     this.msgDivisorMinimo = '';
@@ -436,20 +437,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     const mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6));
     const divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
 
-    // if (contadorSecundario < mesesContribuicao * 0.6) {
-    //   contadorSecundario = Math.trunc(mesesContribuicao * 0.6);
-    // } else if (contadorSecundario < mesesContribuicao * 0.6) {
-    //   contadorSecundario = Math.trunc(mesesContribuicao * 0.8);
-    // }
-
-    // const numeroContribuicoes = tableData.length; // Numero de contribuicoes carregadas para o periodo;
     const numeroContribuicoes = contadorPrimario; // Numero de contribuicoes carregadas para o periodo;
-
-    // console.log(tableData.length)
-    // console.log(numeroContribuicoes)
-    // console.log(contadorSecundario)
-    // console.log(Math.round(mesesContribuicao * 0.8))
-    // console.log(Math.round(mesesContribuicao * 0.6))
 
     let divisorMediaPrimaria = numeroContribuicoes;
     let divisorSecundario = contadorSecundario;
@@ -468,79 +456,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       divisorSecundario = Math.round(contadorSecundario * 0.8);
     }
 
-    let label;
-    // switch (this.tipoBeneficio) {
-    //  case 1: // Auxilio Doença Previdenciario
-
-    // divisorMediaPrimaria = Math.round((divisorMediaPrimaria * 0.8) - 0.5);
-    //modificado dia 04-06-2019
-    //  divisorSecundario = contadorSecundario;
-    //   divisorSecundario = Math.round((divisorSecundario * 0.8) - 0.5);
-
-
-    // if (this.withMemo) {
-    //   // Exibir Label contendo o texto
-    //   label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários .';
-    // }
-    //  break;
-    // case 2: // Aposentadoria Por Invalidez previdenciaria
-    //   if (divisorMediaPrimaria >= divisorMinimo || this.withMemo) {
-    //     //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-    //    // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-    //     if (this.withMemo) {
-    //       // Exibir Label contendo o texto
-    //       label = 'Este calculo foi realizado com base no <a href=\'#\' onclick=\'javascript:alert("Em breve a descrição do Memorando.");\'>Memorando n.º21,28/10</a> descarte dos 20% menores salários.';
-    //     }
-    //   }
-    //   break;
-    // case 7: // Auxilio Doença Previdenciario 50%
-    //   //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-    //   divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-    //   break;
-    //}
-
-    ///   if (this.dataFiliacao >= this.dataDib99) {
-    // regra antiga removida em 30/03/2021 erro de decreto revogado em 2009
-
-
-    // switch (this.tipoBeneficio) {
-    //   case 1: //Auxilio Doença Previdenciario
-    //   case 2: //Aposentadoria por invalidez previdenciaria
-    //     if (numeroContribuicoes >= 144 || this.withMemo) {
-    //       //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-    //       divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-    //     // } else {
-    //     //   divisorMediaPrimaria = numeroContribuicoes;
-    //     // }
-    //     break;
-    //   //  case 5: // Aposentadoria Especial
-    //   case 7: // Auxilio Acidente Previdenciario 50%
-    //     if (numeroContribuicoes < 144 || this.withMemo) {
-    //       divisorMediaPrimaria = numeroContribuicoes;
-    //     } else {
-    //       //divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-    //       divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-    //     }
-    //     break;
-    //   case 3: // Aposentadoria Idade Trabalhador Urbano
-    //   case 4: // Aposentadoria Tempo de Contribuicao
-    //   case 5: // Aposentadoria Especial antiga
-    //   case 1915: // Aposentadoria Especial 15
-    //   case 1920: // Aposentadoria Especial 20
-    //   case 1925: // Aposentadoria Especial 25
-    //   case 16: // Aposentadoria Idade Trabalhafor Rural
-    //   case 25: // Deficiencia Grave
-    //   case 27: // Deficiencia Leva
-    //   case 26: // Deficiencia Moderado
-    //   case 28: // Deficiencia PorSalvar Idade
-    //     // divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8)-0.5);
-    //     divisorMediaPrimaria = Math.trunc((divisorMediaPrimaria * 0.8));
-    //     break;
-    // }
-    // } else 
-
     // Quando a filiação for a partir de 29/11/1999 o cálculo se dará sempre pela m.a.s dos 80% > SC. Não aplica divisor mínimo!
-
     if (numeroContribuicoes > 1) {
       divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
     }
@@ -558,17 +474,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       // divisorMediaPrimaria = numeroContribuicoes;
 
 
-      console.log(numeroContribuicoes)
-      console.log(mesesContribuicao60)
-      console.log(this.isDivisorMinimo)
-
-
       if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
 
         divisorMediaPrimaria = mesesContribuicao60;
         this.msgDivisorMinimo = '(Divisor Mínimo)';
-
-        console.log('teste 1');
 
       }
 
@@ -580,13 +489,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           divisorMediaPrimaria = numeroContribuicoes;
 
-          console.log('teste 2');
-
         } else {
 
           divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-
-          console.log('teste 3');
 
         }
 
@@ -594,14 +499,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
 
-          console.log('teste 4');
-
           if (divisorMediaPrimaria < mesesContribuicao60) {
 
             divisorMediaPrimaria = mesesContribuicao60;
             this.msgDivisorMinimo = '(Divisor Mínimo)';
-
-            console.log('teste 5');
 
           }
 
@@ -616,21 +517,43 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         this.msgDivisorMinimo = '';
       }
 
-
-      // if (divisorMediaPrimaria < divisorMinimo && this.isDivisorMinimo) {
-      //     divisorMediaPrimaria = divisorMinimo;
-      //     this.msgDivisorMinimo = '(Divisor Mínimo)';
-      // }
-
-      // // divisor 
-      // // divisor 
-      // // divisor 
-      // if(this.getPbcDaVidatoda()){
-      //   divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
-      // }
-
-      //}
     }
+
+
+
+    // console.log('teste1')
+
+    // console.log((this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
+    //   this.tipoBeneficio == 5 || this.tipoBeneficio == 1915 || this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925
+    //   || this.tipoBeneficio == 6 || this.tipoBeneficio == 16 || this.tipoBeneficio == 25 || this.tipoBeneficio == 27
+    //   || this.tipoBeneficio == 26 || this.tipoBeneficio == 28))
+
+    // // adicionado 15/09/2021 - teste 14-09-2021
+    // if ((this.tipoBeneficio == 3 || this.tipoBeneficio == 4 ||
+    //   this.tipoBeneficio == 5 || this.tipoBeneficio == 1915 || this.tipoBeneficio == 1920 || this.tipoBeneficio == 1925
+    //   || this.tipoBeneficio == 6 || this.tipoBeneficio == 16 || this.tipoBeneficio == 25 || this.tipoBeneficio == 27
+    //   || this.tipoBeneficio == 26 || this.tipoBeneficio == 28)) {
+
+    //   console.log(this.isDivisorMinimo);
+
+    //   divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8)); // alterado 08/04/2020
+
+    //   if (numeroContribuicoes < mesesContribuicao60 && this.isDivisorMinimo) {
+
+    //     divisorMediaPrimaria = mesesContribuicao60;
+    //     this.msgDivisorMinimo = '(Divisor Mínimo)';
+
+    //   }
+
+    //   // divisor PBC
+    //   if (this.getPbcDaVidatoda()) {
+    //     this.exibirIN77 = false;
+    //     divisorMediaPrimaria = Math.trunc((numeroContribuicoes * 0.8));
+    //     this.msgDivisorMinimo = '';
+    //   }
+
+    // }
+
 
     //  let totalMediaDozeContribuicoes = 0;
 

@@ -457,7 +457,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_devido of this.IndiceDevido.list) {
             this.indiceDevido.push(i_devido);
           }
-           return true;
+          return true;
         });
 
       const indiceRecebidoRST = this.IndiceRecebido.getByDateRange(
@@ -468,7 +468,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           for (const i_recebido of this.IndiceRecebido.list) {
             this.indiceRecebido.push(i_recebido);
           }
-            return true;
+          return true;
         });
 
       this.devidoBuracoNegro = this.getIndiceBuracoNegro.checkDIB(moment(this.calculo.data_pedido_beneficio_esperado));
@@ -1213,7 +1213,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
             beneficioDevidoAbono = this.ultimoBeneficioDevidoAntesProporcionalidade;
             beneficioDevidoAbono = this.aplicarAdicional25(dataCorrente, beneficioDevidoAbono);
-            abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
+            // abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
+            abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidoInicioFim(
+                                                    moment(this.calculo.data_pedido_beneficio_esperado), 
+                                                    moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos);
 
           }
@@ -2371,7 +2374,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
       }
 
-    }else{
+    } else {
 
     }
 
@@ -4276,6 +4279,49 @@ export class BeneficiosResultadosComponent implements OnInit {
     const months = (years * 12) + (date2.getMonth() - date1.getMonth());
     return months;
   }
+
+
+  verificaAbonoProporcionalDevidoInicioFim(inicio, fim) {
+
+    if (inicio.isBefore(fim, 'year')) {
+      return this.verificaAbonoProporcionalDevidos(fim.clone())
+    }
+
+    let dibMonthINI = inicio.month() + 1;
+    if (inicio.date() > 15) {
+      dibMonthINI -= 1;
+    }
+
+    let dibMonthFIM = fim.month() + 1;
+    if (fim.date() < 15) {
+      dibMonthFIM -= 1;
+    }
+
+    let diffTotal = this.monthsDiff(
+      (inicio.clone()).startOf('month').format('YYYY-MM-DD'),
+      (fim.clone()).endOf('month').format('YYYY-MM-DD'));
+
+
+    if (inicio.date() > 15) {
+      diffTotal -= 1
+    }
+
+
+    if (fim.date() < 15) {
+      diffTotal -= 1
+    }
+
+    let proporcional = 1 - diffTotal / 12;
+
+    if (proporcional < 1) {
+      this.aplicaProporcionalDevidos = true;
+    } else {
+      this.aplicaProporcionalDevidos = false;
+    }
+
+    return proporcional;
+  }
+
 
   verificaAbonoProporcionalRecebidosInicioFim(inicio, fim) {
 
