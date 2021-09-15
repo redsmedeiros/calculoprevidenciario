@@ -206,7 +206,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
     }
 
-    if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+    // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
 
       rstRegraIdadeProgressiva.tempoContribuicaoDib = {
         days: parseInt(this.seguradoTransicao.contribuicaoDias, 10),
@@ -215,7 +215,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         years: parseInt(this.seguradoTransicao.contribuicaoAnos, 10),
       }
 
-    }
+    // }
 
 
     if (Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years) >= tempoPercentualR1[this.seguradoTransicao.sexo]) {
@@ -291,8 +291,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     const testeIdade = (this.getparametrosRegra5(auxiliarDate.year(), this.seguradoTransicao.sexo) -
       this.seguradoTransicao.idadeFracionada);
 
-      console.log(testContrib)
-      console.log(testeIdade)
+      // console.log(testContrib)
+      // console.log(testeIdade)
 
     // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15 || testContrib < testeIdade) {
@@ -318,14 +318,14 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       idadeMoment = this.calcularIdade(auxiliarDate);
 
-      //console.log(idadeMoment);
+      // console.log(idadeMoment);
 
       if (this.seguradoTransicao.sexo === 'm' &&
         idadeMoment.days() === 1) {
         idadeMoment.add(-1, 'day');
       }
 
-      //idadeMoment.add(-1, 'day');
+      // idadeMoment.add(-1, 'day');
     } else {
 
       idadeMoment = this.calcularIdade(auxiliarDate);
