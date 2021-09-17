@@ -270,8 +270,9 @@ export class RegrasAcesso {
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
-            if (this.numeroDeContribuicoes > 11
-                && numeroConsideradoFinal === 12) {
+
+            if (this.numeroDeContribuicoes > 1
+                && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)) {
 
                 const tempoRef11meses =  (11 * 30.436875) / 365.25;
                 const maximoDescarteIdade = maximoDescarte.meses + 11;

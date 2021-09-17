@@ -6,6 +6,7 @@ import { ExpectativaVidaService } from '../ExpectativaVida.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
 import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
 import { ValorContribuidoService } from '../../+rgps-valores-contribuidos/ValorContribuido.service'
+import { ValorContribuido } from 'app/+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
 import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
@@ -21,6 +22,7 @@ import { conclusoesFinais } from './conclusoes/conclusoes-finais';
 import { RgpsPlanejamentoService } from './../../rgps-planejamento/rgps-planejamento.service';
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import swal from 'sweetalert2';
+
 
 
 @Component({
@@ -80,6 +82,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public rmiFinalCustom;
 
   private numeroDeContribuicoesAux = 0;
+  private numeroDeContribuicoesAuxTotal = 0;
   public dataInicioBeneficioExportar;
 
 
@@ -139,6 +142,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
+
+
+    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), 0, this.idSegurado)
+    .then((valorescontribuidosTotal: ValorContribuido[]) => {
+      this.numeroDeContribuicoesAuxTotal  = valorescontribuidosTotal.length;
+    });
 
     // indices de correção pbc da vida toda
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
@@ -256,6 +265,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
     this.numeroDeContribuicoesAux = numeroDeContribuicoes;
+    //this.numeroDeContribuicoesAuxTotal
 
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
@@ -461,7 +471,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.valorExportacao = melhorValorRMI;
     this.melhorSoma = melhorSoma;
 
-  }s
+  }
 
 
   /**

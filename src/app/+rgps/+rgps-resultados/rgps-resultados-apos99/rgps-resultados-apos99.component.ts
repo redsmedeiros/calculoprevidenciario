@@ -195,9 +195,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //  this.isDivisorMinimo = (this.calculo.divisor_minimo !== 1) ? true : false;
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
-    console.log(this.calculo.divisor_minimo);
-    console.log(this.isDivisorMinimo);
-
 
     this.msgDivisorMinimo = '';
     // this.exibirIN77 = false;
