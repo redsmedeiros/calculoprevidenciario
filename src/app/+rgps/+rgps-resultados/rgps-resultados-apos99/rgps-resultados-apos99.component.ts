@@ -223,11 +223,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           this.nenhumaContrib = true;
           this.isUpdating = false;
         } else {
-          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+          const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
           this.Moeda.getByDateRange(primeiraDataTabela, moment())
             .then((moeda: Moeda[]) => {
               this.moeda = moeda;
-              let dataReajustesAutomaticos = this.dataInicioBeneficio;
+              const dataReajustesAutomaticos = this.dataInicioBeneficio;
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
@@ -1892,6 +1892,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
 
   procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
+
     let dataNascimento = moment(this.segurado.data_nascimento, 'DD/MM/YYYY');
     let dataAgora = moment();
     let expectativaVida;
@@ -1900,7 +1901,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     if (ano != null) {
-      expectativaVida = this.ExpectativaVida.getByAno(ano);//Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
+      expectativaVida = this.ExpectativaVida.getByAno(ano);
+      // Carregar do BD na tabela ExpectativaVida onde age == idadeFracionada e year == ano
     } else {
       expectativaVida = this.ExpectativaVida.getByProperties(dataInicio, dataFim);
     }
@@ -1910,9 +1912,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   projetarExpectativa(idadeFracionada, dib, conclusoes) {
     let expectativa = 0;
 
-    let dataInicio = moment('2000-11-30');
-    let dataFim = moment('2019-12-01');
-    let dataHoje = moment();
+    const dataInicio = moment('2000-11-30');
+    const dataFim = moment('2019-12-01');
+    const dataHoje = moment();
 
 
 
@@ -1924,14 +1926,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         anos = Math.trunc(anos);
       }
 
-      let tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
-      let tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
-      let tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
+      const tempo1 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-2, 'years')).year(), null, null);
+      const tempo2 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-3, 'years')).year(), null, null);
+      const tempo3 = this.procurarExpectativa(idadeFracionada, ((dataHoje.clone()).add(-4, 'years')).year(), null, null);
 
       expectativa = (anos * Math.abs(((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1;
 
       this.formula_expectativa_sobrevida = `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`;
-      //conclusoes.push({order:  0,string:'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+      // conclusoes.push({order:  0,string:
+      // 'Fórmula Expectativa de Sobrevida:' ,value: `(${anos} * (((${tempo1} + ${tempo2} + ${tempo3}) / 3) - 
+      // ${tempo1})) + ${tempo1}`});//formula_expectativa_sobrevida = "(anos * (((tempo1 + tempo2 + tempo3) / 3) - tempo1)) + tempo1";
+
     } else if (dib.isSameOrBefore(dataInicio)) {
       expectativa = this.procurarExpectativa(idadeFracionada, null, null, dataInicio);
     } else if (dib.isSameOrAfter(dataFim)) {
@@ -1949,10 +1954,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
     let idadeDoSegurado = this.idadeFracionada;
-    //let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+    // let tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
     let redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     let redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
-    //let anosSecundaria = (this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98)).anos;
+    // let anosSecundaria = (this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98)).anos;
     let anosSecundaria = tempoContribuicaoSecundaria.anos;
     let anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365) + (parseFloat(tempoContribuicaoPrimaria.meses) * 30) + parseFloat(tempoContribuicaoPrimaria.dias)) / 365;
 
