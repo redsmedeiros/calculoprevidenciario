@@ -6,9 +6,6 @@
         <h3 class="p-1 m-1 no-print" *ngIf="!isPlanejamento">
           Cálculo dos Benefícios do Regime Geral de Previdência Social
         </h3>
-        <!-- <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
-          RMI do Benefício Futuro
-        </h3> -->
       </div>
     </div>
     <div class="row mb-3">
@@ -110,34 +107,6 @@
     </div>
     <!-- row -->
     <div class="row">
-      <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
-        <div class="col-md-12">
-          <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-user"></i>
-            </span> Selecionar segurado
-          </button>
-
-          <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-calculator"></i>
-            </span> Informações para o cálculo
-          </button>
-
-          <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-dollar"></i>
-            </span> Valores de contribuição
-          </button>
-
-          <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-print"></i>
-            </span> Imprimir tudo
-          </button>
-        </div>
-      </div>  -->
-
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
         <article class="col-sm-12 col-md-12 col-lg-12">
@@ -156,14 +125,6 @@
                   <li class="px-5">
                     <strong>Nome:</strong> {{ segurado.nome }}
                   </li>
-                  <!-- <li class="px-5" *ngIf="segurado.numero_documento">
-                    <strong
-                      >{{
-                        segurado.getDocumentType(segurado.id_documento)
-                      }}:</strong
-                    >
-                    {{ segurado.numero_documento }}
-                  </li> -->
                   <li class="px-5">
                     <strong>Data de Nascimento:</strong>
                     {{ segurado.data_nascimento }}
@@ -178,7 +139,6 @@
                 </ul>
                 <div id="printableSegurado" hidden>
                   <table class="table table-bordered table-hover">
-                    <!-- <caption><h2>Dados do Segurado</h2></caption> -->
                     <tr>
                       <td width="50%" style="text-align: right">
                         <b>Nome:</b>
@@ -420,33 +380,19 @@
         >
         </app-rgps-resultados-apos99>
 
-        <!-- <app-rgps-resultados-apos-pec062019 
-        [segurado]="segurado"
-        [calculo]="calculo"
-        *ngIf="calculo.mostrarCalculoApos19"></app-rgps-resultados-apos-pec062019>  -->
-
         <app-rgps-resultados-apos-pec103
           [segurado]="segurado"
           [calculo]="calculo"
           *ngIf="calculo.mostrarCalculoApos19"
           [isPlanejamento]="isPlanejamento"
           [planejamento]="planejamento"
-          [planejamentoContribuicoesAdicionais]="
-            planejamentoContribuicoesAdicionais
-          "
+          [planejamentoContribuicoesAdicionais]="planejamentoContribuicoesAdicionais"
           (planejamentoResultEvent)="setStepPlanejamento($event)"
           [dadosPassoaPasso]="dadosPassoaPasso"
           [listaValoresContribuidosPeriodosCT]="listaValoresContribuidosPeriodosCT"
         >
         </app-rgps-resultados-apos-pec103>
       </div>
-
-      <!-- Planejamento -->
-      <!-- <app-rgps-planejamento-index
-        *ngIf="isUpdating"
-        [calculo]="calculosList[0]"
-        [segurado]="segurado"
-      ></app-rgps-planejamento-index> -->
 
       <!-- Planejamento  -->
       <article class="col-sm-12 col-md-12 col-lg-12 mt-3"
@@ -522,52 +468,6 @@
         </sa-widget>
       </article>
 
-      <!-- Planejamento Comparativo não deletar-->
-      <!-- <app-rgps-planejamento-calculo
-      *ngIf="false && !isPlanejamento && !isUpdating"
-      ></app-rgps-planejamento-calculo> -->
-
-      <!-- opções do calculo -->
-      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
-                    <div class="row not-print mb-0" id='containerOpcoes'>
-                      <div class="col-md-12">
-                        <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default mr-3 pull-right"
-                        title="Retorna para a lista de segurados.">
-                          <span class="btn-label">
-                            <i class="fa fa-user"></i>
-                          </span> Segurados
-                        </button>
-      
-                        <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
-                        title="Retorna para edição de tempo de contribuição, espécie e DIB">
-                          <span class="btn-label">
-                            <i class="fa fa-edit"></i>
-                          </span> Cálculo
-                        </button>
-       
-                        <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
-                        title="Retorna para lista de cálculos do segurado selecionado">
-                          <span class="btn-label">
-                            <i class="fa fa-list"></i>
-                          </span> Lista cálculos
-                        </button> 
-      
-                        <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default mr-3 pull-right"
-                        title="Retorna para editar os valores de contribuíção">
-                          <span class="btn-label">
-                            <i class="fa fa-edit"></i>
-                          </span> Contribuições
-                        </button>
-      
-                        <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled  btn-default mr-3 pull-right" 
-                        title="Imprime todos os cálculos da página.">
-                          <span class="btn-label">
-                            <i class="fa fa-print"></i>
-                          </span> Imprimir todos
-                        </button>
-                      </div>
-                    </div>
-            </article>  -->
     </div>
 
     <!-- end row -->

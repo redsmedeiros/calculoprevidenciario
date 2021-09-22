@@ -143,19 +143,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     if (this.isExits(this.dadosPassoaPasso)
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
-
-        this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
-          rst,
-          dataLimite,
-          dataInicio);
-
-         this.iniciarCalculo();
-
-      }).catch(error => {
-        console.error(error);
-      });
-
+      this.getContribuicoesCNIS(dataLimite, dataInicio);
 
     } else {
 
@@ -163,13 +151,43 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
-          this.iniciarCalculo();
+          if (this.listaValoresContribuidos.length === 0) {
 
+            this.getContribuicoesCNIS(dataLimite, dataInicio);
+
+          } else {
+
+            this.iniciarCalculo();
+
+          }
         });
 
     }
 
   }
+
+  /**
+   * buscar as contribuições adicionadas por vinculo empregatício.
+   * @param dataLimite
+   * @param dataInicio
+   */
+  private getContribuicoesCNIS(dataLimite, dataInicio) {
+
+    this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+      this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+        rst,
+        dataLimite,
+        dataInicio);
+
+      this.iniciarCalculo();
+
+    }).catch(error => {
+      console.error(error);
+    });
+
+  }
+
 
   private iniciarCalculo() {
 

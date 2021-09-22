@@ -371,13 +371,10 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
                   data: this.calculoList,
                 }
 
-                // this.setSalariosContribuicoesContTempoCNIS(null);
-
                 if ((counter + 1) === this.idsCalculo.length) {
                   this.isUpdating = false;
                 }
                 counter++;
-
 
               });
           }
@@ -699,7 +696,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     let toll = ((35 - proporcional - redutorSexo) - tempoDeServico) * porcentagem;
     toll = (toll < 0 || tempoDeServico == 'NaN') ? 0 : toll;
-    //return 0;
+    // return 0;
     return toll;
   }
 
@@ -754,7 +751,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-    //let xValor = (Math.floor(fullDays) / 365);
+    // let xValor = (Math.floor(fullDays) / 365);
 
     const xValor = fullDays;
     totalFator.years = Math.floor(xValor);
@@ -908,7 +905,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
    * @param especieBeneficio
    */
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
-    //25, 26, 27,
+    // 25, 26, 27,
 
     const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
@@ -974,7 +971,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   formatDecimal(value, n_of_decimal_digits) {
 
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
 
   }
 
@@ -995,7 +992,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   }
 
   formatDecimalIdade(value, n_of_decimal_digits) {
-    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
   }
 
   formatReceivedDate(inputDate) {
@@ -1207,7 +1204,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       const contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
       const dib = calculo.data_pedido_beneficio;
       const dataCriacao = this.formatReceivedDate(calculo.data_calculo);
-      const checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+      const checkBox = `<div class="checkbox"><label><input type="checkbox" 
+      id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
       this.checkboxIdList.push(`${calculo.id}-checkbox`);
       const line = {
         especie: especie,
@@ -1651,12 +1649,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   }
 
   // planejamento adicionais RMI
-
   public calcularPBCIndices(indice) {
 
     if (!this.isExits(indice)) {
-      // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
-      // this.ngOnInit();
 
       const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
       const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
@@ -1666,19 +1661,12 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
 
     if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
-      //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
       const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
       this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
         this.router.navigate([urlpbcNew])
       );
 
-      // this.router.navigate([urlpbcNew]);
-      // this.ngOnInit();
-
-
-      //window.location.reload(true)
-      //this.ngOnInit();
     }
 
   }
@@ -1738,13 +1726,15 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById('containerOpcoes');
     const navbar = document.getElementById('navbar');
-    // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
     if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined) ||
-      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
-      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
+      (this.document !== undefined && this.document !== null
+        && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
+      || (this.document !== undefined && this.document !== null
+        && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
     ) {
+
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
       if (offset > this.offset(this.caixaOpcoes)) {
