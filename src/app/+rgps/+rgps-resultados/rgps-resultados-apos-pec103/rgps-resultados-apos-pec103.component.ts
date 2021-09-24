@@ -265,7 +265,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
     this.numeroDeContribuicoesAux = numeroDeContribuicoes;
-    //this.numeroDeContribuicoesAuxTotal
+    // this.numeroDeContribuicoesAuxTotal
 
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
@@ -297,12 +297,14 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.fatorPrevidenciario,
         this.moedaDib,
         numeroDeContribuicoes,
+        this.numeroDeContribuicoesAuxTotal,
         this.carenciaRequisito,
       );
 
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
         this.listaConclusaoAcesso,
         numeroDeContribuicoes,
+        this.numeroDeContribuicoesAuxTotal,
         this.carenciaConformDataFiliacao,
         this.calculo,
         this.carenciaRequisito,

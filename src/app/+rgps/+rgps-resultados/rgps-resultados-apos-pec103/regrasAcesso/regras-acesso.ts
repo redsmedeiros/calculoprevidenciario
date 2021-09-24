@@ -9,6 +9,7 @@ export class RegrasAcesso {
     public dataPromulgacao2019 = moment('13/11/2019', 'DD/MM/YYYY');
     private contribuicaoTotal = 0;
     private numeroDeContribuicoes = 0;
+    private numeroDeContribuicoesAuxTotal = 0;
     private carenciaConformDataFiliacao = 0;
     private carenciaRequisito = 180;
     private calculo;
@@ -31,13 +32,16 @@ export class RegrasAcesso {
      * @param  {} numeroDeContribuicoes
      * @param  {} carenciaConformDataFiliacao
      */
-    public calCularTempoMaximoExcluido(listaConclusaoAcesso: any[],
+    public calCularTempoMaximoExcluido(
+        listaConclusaoAcesso: any[],
         numeroDeContribuicoes,
+        numeroDeContribuicoesAuxTotal,
         carenciaConformDataFiliacao,
         calculo,
         carenciaRequisito) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
+        this.numeroDeContribuicoesAuxTotal = numeroDeContribuicoesAuxTotal;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
         this.calculo = calculo;
         this.carenciaRequisito = carenciaRequisito;
@@ -270,9 +274,24 @@ export class RegrasAcesso {
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
+            console.log(numeroConsideradoFinal)
+            console.log(this.numeroDeContribuicoes)
+            console.log( maximoDescarte.meses)
+
+            console.log('----');
+            console.log(this.numeroDeContribuicoes);
+            console.log(this.numeroDeContribuicoesAuxTotal);
+            console.log(this.numeroDeContribuicoesAuxTotal - this.numeroDeContribuicoes);
+
+            console.log(this.numeroDeContribuicoes > 1
+                && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito )) >=  1 )
+            console.log((this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)))
 
             if (this.numeroDeContribuicoes > 1
-                && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)) {
+                && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)
+                ||
+                (this.numeroDeContribuicoes > 1
+                    && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito )) >=  1 )) {
 
                 const tempoRef11meses =  (11 * 30.436875) / 365.25;
                 const maximoDescarteIdade = maximoDescarte.meses + 11;
@@ -487,6 +506,7 @@ export class RegrasAcesso {
         fatorPrevidenciario: object,
         moedaDib: object,
         numeroDeContribuicoes: number,
+        numeroDeContribuicoesAuxTotal: number,
         carenciaRequisito: number
     ) {
 
