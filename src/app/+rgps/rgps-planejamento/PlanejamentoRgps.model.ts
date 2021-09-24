@@ -15,6 +15,14 @@ export class PlanejamentoRgps extends Model {
     resultado_rmi_original: '',
     resultado_rmi_novo: '',
     especie: '',
+    sc: '',
+    sc_menor_minimo: '',
+    sc_mm_considerar_carencia: '',
+    sc_mm_considerar_tempo: '',
+    sc_pendentes: '',
+    sc_pendentes_mm: '',
+    sc_count: '',
+    sc_mm_ajustar: '',
   };
 
   public id;
@@ -27,16 +35,27 @@ export class PlanejamentoRgps extends Model {
   public resultado_rmi_original;
   public resultado_rmi_novo;
   public especie;
-//   public actions = `
-//     <div class="btn-group">
-//       <button type="button" class="btn btn-xs btn-warning" (click)='updatePlananejamentoList(${this.id})' title='Editar Referência'>
-//         <i class='fa fa-edit fa-1-7x'></i>
-//       </button>
-//       <button type="button" class="btn btn-xs btn-danger" (click)='deletarPlananejamentoList(${this.id})' title='Excluir'>
-//         <i class='fa fa-times fa-1-7x'></i>
-//       </button>
-//     </div>
-//       `;
+  public contribuicoes_pendentes_mm;
+  public contribuicoes_pendentes;
+  public sc;
+  public sc_menor_minimo;
+  public sc_mm_considerar_carencia;
+  public sc_mm_considerar_tempo;
+  public sc_pendentes;
+  public sc_pendentes_mm;
+  public sc_count;
+  public sc_mm_ajustar;
+  
+  //   public actions = `
+  //     <div class="btn-group">
+  //       <button type="button" class="btn btn-xs btn-warning" (click)='updatePlananejamentoList(${this.id})' title='Editar Referência'>
+  //         <i class='fa fa-edit fa-1-7x'></i>
+  //       </button>
+  //       <button type="button" class="btn btn-xs btn-danger" (click)='deletarPlananejamentoList(${this.id})' title='Excluir'>
+  //         <i class='fa fa-times fa-1-7x'></i>
+  //       </button>
+  //     </div>
+  //       `;
 
 
- }
+}

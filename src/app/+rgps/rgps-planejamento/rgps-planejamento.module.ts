@@ -18,6 +18,7 @@ import { RgpsPlanejamentoSeguradosListComponent } from './rgps-planejamento-segu
 import { RgpsPlanejamentoResultadosComponent } from './rgps-planejamento-resultados/rgps-planejamento-resultados.component';
 import { RgpsPlanejamentoListComponent } from './rgps-planejamento-list/rgps-planejamento-list.component';
 import { RgpsPlanejamentoCalculoFuturoComponent } from './rgps-planejamento-calculo-futuro/rgps-planejamento-calculo-futuro.component';
+import { RgpsPlanejamentoContribuicoesComponent } from './rgps-planejamento-list/rgps-planejamento-contribuicoes/rgps-planejamento-contribuicoes.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: 'left',
@@ -52,6 +53,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     RgpsPlanejamentoResultadosComponent,
     RgpsPlanejamentoListComponent,
     RgpsPlanejamentoCalculoFuturoComponent,
+    RgpsPlanejamentoContribuicoesComponent,
   ],
   exports: [
     ModalModule
