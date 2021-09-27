@@ -92,7 +92,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
       this.isDataLoad = true;
 
-      console.log(this.isDataLoad);
       console.log(this.planejamentoContrib);
       console.log(this.calculo);
 
