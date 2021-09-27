@@ -86,7 +86,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     const changedvinculo = changes['planejamentoContrib'];
     const changedisUpdating = changes['isUpdating'];
 
-
     if (typeof this.planejamentoContrib !== 'undefined'
       && typeof this.planejamentoContrib.data_futura !== 'undefined') {
 
@@ -445,6 +444,8 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   salvarContribuicoes() {
 
+    console.log(this.isValidPeriodoContribuicoes(this.matriz));
+
     if (this.isValidPeriodoContribuicoes(this.matriz)) {
 
       const saida = {
@@ -458,6 +459,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
         planejamento: this.planejamentoContrib
       }
       this.eventContribuicoes.emit(saida);
+
     } else {
       this.toastAlert('error', 'Verifique a Data Início e a Data Fim do período', null);
       this.showContribuicoesCheck()
@@ -546,9 +548,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   private setCheckInformacoes() {
 
-    console.log(this.planejamentoContrib)
-
-    // this.planejamentoContrib.sc_mm_ajustar = this.contribuicao;
     this.planejamentoContrib.sc_mm_ajustar = this.sc_mm_ajustar;
     this.planejamentoContrib.sc_mm_considerar_tempo = this.sc_mm_considerar_tempo
     this.planejamentoContrib.sc_mm_considerar_carencia = this.sc_mm_considerar_carencia
@@ -560,7 +559,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
     this.eventContribuicoes.emit(saida);
     this.hideContribuicoesCheck();
-
   }
 
 

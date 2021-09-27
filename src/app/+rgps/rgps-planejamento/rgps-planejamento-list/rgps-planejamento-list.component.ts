@@ -270,7 +270,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     this.plan.valor_beneficio = this.valor_beneficio;
     this.plan.aliquota = this.aliquota;
     this.plan.especie = this.especie;
-    this.plan.sc = this.formatContribuicaoList(this.plan.sc);
+    this.plan.sc = this.formatContribuicaoList(this.plan.sc, 's');
 
   }
 
@@ -354,8 +354,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         // const objPlanejamento = Object.assign({}, this.planejamentoContrib);
         // objPlanejamento.sc = this.formatContribuicaoList(objPlanejamento.sc);
 
-
-        this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc)
+        this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's')
         this.updatePlanejamento(this.planejamentoContrib);
 
       }
@@ -583,12 +582,6 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
 
 
-
-
-
-
-
-
   public adicionarPeriodoChave(inputChave) {
 
     let ano = inputChave.substring(0, 4);
@@ -677,12 +670,16 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       const periodo_fi = this.formataPeriodo(planRow.dibString);
 
       planRow.sc = this.verificarContribuicoes(periodo_in, periodo_fi, []);
+
+    } else {
+
+      planRow.sc = this.formatContribuicaoList(planRow.sc, 'j');
+
     }
 
     this.plan_index = index;
     this.planejamentoContrib = planRow;
-    this.planejamentoContrib.sc = this.formatContribuicaoList(planRow.sc)
-    // this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
+    ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
     this.contribuicoes.show();
   }
 
@@ -695,11 +692,12 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (value.planejamento.id === this.planejamentoContrib.id) {
 
-      this.planejamentoContrib.sc_mm_ajustar = value.planejamento.sc_mm_ajustar;
-      this.planejamentoContrib.sc_mm_considerar_tempo = value.planejamento.sc_mm_considerar_tempo;
-      this.planejamentoContrib.sc_mm_considerar_carencia = value.planejamento.sc_mm_considerar_carencia;
-      this.planejamentoContrib.contribuicoes_pendentes = value.planejamento.result_sc ? value.planejamento.result_sc : 0;
-      this.planejamentoContrib.contribuicoes_pendentes_mm = value.planejamento.result_sc_mm ? value.planejamento.result_sc_mm : 0;
+    //  this.planejamentoContrib.sc = value.planejamento.sc;
+      this.planejamentoContrib.sc_mm_ajustar = value.sc_mm_ajustar;
+      this.planejamentoContrib.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
+      this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
+      this.planejamentoContrib.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
+      this.planejamentoContrib.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
 
     }
   }
@@ -737,14 +735,18 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (eventRST.planejamento.id === this.planejamentoContrib.id) {
 
-      this.planejamentoContrib.sc = contribuicoesList;
-      this.planejamentoContrib.count = contribuicoesList.length;
-      this.planejamentoContrib.sc_mm_ajustar = eventRST.planejamento.sc_mm_ajustar;
-      this.planejamentoContrib.sc_mm_considerar_tempo = eventRST.planejamento.sc_mm_considerar_tempo;
-      this.planejamentoContrib.sc_mm_considerar_carencia = eventRST.planejamento.sc_mm_considerar_carencia;
-      this.planejamentoContrib.contribuicoes_pendentes = eventRST.planejamento.result_sc ? eventRST.planejamento.result_sc : 0;
-      this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.planejamento.result_sc_mm ? eventRST.planejamento.result_sc_mm : 0;
+      console.log(eventRST)
 
+      this.planejamentoContrib.sc = contribuicoesList;
+      this.planejamentoContrib.sc_count = contribuicoesList.length;
+      this.planejamentoContrib.sc_mm_ajustar = eventRST.sc_mm_ajustar;
+      this.planejamentoContrib.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
+      this.planejamentoContrib.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
+      this.planejamentoContrib.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
+      this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+
+
+      console.log(this.planejamentoContrib);
     }
 
   }
@@ -795,18 +797,18 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       return ListSC;
     }
 
-    if (typeof ListSC === 'string') {
+    if (typeof ListSC === 'string' && type === 'j') {
       return JSON.parse(ListSC);
     }
 
-    if (typeof ListSC === 'object') {
-      return JSON.stringify(ListSC)
+    if (typeof ListSC === 'object' && type === 's') {
+      return JSON.stringify(ListSC);
     }
 
+    return ListSC;
   }
 
   public eventContribuicoes(event) {
-
 
     switch (event.acao) {
       case 'sair':
@@ -817,7 +819,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         this.updatePlan(null, 'sc');
         break;
       case 'salvar':
-        this.setCheckPlanContrib(event);
+       this.setCheckPlanContrib(event);
         this.matrixToVinculoContribuicoes(event);
         this.updatePlan(null, 'sc');
         this.contribuicoes.hide();
