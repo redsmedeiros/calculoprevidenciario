@@ -274,19 +274,6 @@ export class RegrasAcesso {
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
-            console.log(numeroConsideradoFinal)
-            console.log(this.numeroDeContribuicoes)
-            console.log( maximoDescarte.meses)
-
-            console.log('----');
-            console.log(this.numeroDeContribuicoes);
-            console.log(this.numeroDeContribuicoesAuxTotal);
-            console.log(this.numeroDeContribuicoesAuxTotal - this.numeroDeContribuicoes);
-
-            console.log(this.numeroDeContribuicoes > 1
-                && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito )) >=  1 )
-            console.log((this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)))
-
             if (this.numeroDeContribuicoes > 1
                 && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)
                 ||
