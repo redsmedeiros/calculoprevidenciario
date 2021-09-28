@@ -304,11 +304,7 @@
                   <tr>
                     <th width="78%">Espécie</th>
                     <th>DIB</th>
-                    <th
-                      class="not-print"
-                      *ngIf="false"
-                      disply:none
-                    >
+                    <th class="not-print" *ngIf="false" disply:none>
                       Comparar
                     </th>
                   </tr>
@@ -317,11 +313,7 @@
                   <tr *ngFor="let calculoL of calculoList">
                     <td>{{ calculoL.especie }}</td>
                     <td>{{ calculoL.dib }}</td>
-                    <td
-                      class="not-print"
-                      *ngIf="false"
-                      disply:none
-                    >
+                    <td class="not-print" *ngIf="false" disply:none>
                       <button
                         (click)="compararCalculos()"
                         type="submit"
@@ -594,6 +586,42 @@
           </div>
         </sa-widget>
       </article>
+
+      <div id="printableRodapeControle" hidden>
+        <table
+          style="
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+          "
+          cellpadding="3"
+        >
+          <thead>
+            <tr>
+              <th style="text-align: center">Data da Criação do Cálculo</th>
+              <th style="text-align: center">Data da Atualização do Cálculo</th>
+              <th style="text-align: center">Data da Impressão do Cálculo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center">
+                {{ formatDataHora(calculosList[0].updated_at) }}
+              </td>
+              <td style="text-align: center">
+                {{ formatDataHora(calculosList[0].created_at) }}
+              </td>
+              <td style="text-align: center">{{ formatDataHora() }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <img
+          style="width: 100%"
+          src="./assets/img/rodapesimulador.png"
+          alt="Logo"
+        />
+      </div>
 
       <!-- Planejamento Comparativo não deletar-->
       <!-- <app-rgps-planejamento-calculo

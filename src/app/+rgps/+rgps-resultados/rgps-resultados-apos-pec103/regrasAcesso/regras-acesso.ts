@@ -101,11 +101,6 @@ export class RegrasAcesso {
         // Ajuste para considerar a carrencia mínima para idade
         if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
 
-            // const maxDescarteCarencia = (this.numeroDeContribuicoes - this.carenciaConformDataFiliacao);
-            // const maxDescarteCarencia = (this.numeroDeContribuicoes - 12)
-
-            // let maxDescarteCarencia = (this.numeroDeContribuicoes - 180);
-
             let maxDescarteCarencia = (this.carenciaConformDataFiliacao - this.carenciaRequisito);
 
             // deve restar 12 após 1994, pois são os valores base para pós EC103
@@ -119,6 +114,11 @@ export class RegrasAcesso {
                     maxDescarteCarencia = (this.numeroDeContribuicoes - 1);
                 }
 
+                if ((this.numeroDeContribuicoes > 1
+                    && (this.calculo.carencia >= this.carenciaRequisito && this.calculo.carencia_apos_ec103 >= 1))) {
+                    maxDescarteCarencia = (this.numeroDeContribuicoes - 1);
+                }
+
             }
 
             if (maxDescarteCarencia < maximoDescarte.meses) {
@@ -129,6 +129,45 @@ export class RegrasAcesso {
             }
 
         }
+
+        // Ajuste para considerar a carrencia mínima para idade
+        //   if (['idadeTransitoria', 'idade'].includes(elementTipo.regra)) {
+
+
+        //     let maxDescarteCarencia = (this.carenciaConformDataFiliacao - this.carenciaRequisito);
+
+        //     console.log(this.carenciaConformDataFiliacao);
+        //     console.log(maxDescarteCarencia);
+        //     console.log((this.numeroDeContribuicoes - maxDescarteCarencia));
+
+        //     if (
+        //         (maxDescarteCarencia >= this.numeroDeContribuicoes)
+        //     ) {
+
+        //         if ((this.numeroDeContribuicoes - maxDescarteCarencia) >= 12) {
+
+        //             maxDescarteCarencia = (this.numeroDeContribuicoes - 12);
+
+        //         } else {
+
+        //             maxDescarteCarencia = (this.numeroDeContribuicoes - 1);
+
+        //         }
+
+        //     }
+
+        //     console.log(maxDescarteCarencia);
+
+        //     if (maxDescarteCarencia < maximoDescarte.meses) {
+
+        //         maximoDescarte.meses = maxDescarteCarencia;
+        //         maximoDescarte.anos = (maximoDescarte.meses / 12);
+
+        //     }
+
+        // }
+
+
 
         // Ajuste para considerar a carrencia mínima para auxilio acidente, doença, pensaoObito e incapacidade
         if (['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra)) {
@@ -152,7 +191,8 @@ export class RegrasAcesso {
 
         if ((!this.calculo.calcular_descarte_apos_ec103
             && ['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra))
-            || elementTipo.regra === 'deficiente') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
+            || elementTipo.regra === 'deficiente'
+            || elementTipo.regra === 'idadeRural') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
 
             maximoDescarte.meses = 0;
             maximoDescarte.anos = 0;
@@ -184,32 +224,50 @@ export class RegrasAcesso {
         elementTipo
     ) {
 
-        // const requisitos = elementTipo.requisitos;
-        // const calculosPossiveis = [];
-        // const idadeInicial = (Math.floor(elementTipo.idade - maximoDescarte.anos));
-        // const tempoInicial = (Math.floor(elementTipo.tempoTotalAposEC103 - maximoDescarte.anos));
+        const requisitos = elementTipo.requisitos;
+        let calculosPossiveis = [];
 
-        // console.log(maximoDescarte.anos);
 
-        // calculosPossiveis.push({
-        //     tempo: tempoInicial,
-        //     idade: idadeInicial,
-        //     pontos: requisitos.pontos,
-        //     descarteContrib: maximoDescarte.meses
-        // });
+        if (elementTipo.regra === 'idade') {
 
-        // for (let i = 1; i < maximoDescarte.anos; i++) {
+            calculosPossiveis = this.descarteMensal(elementTipo, maximoDescarte);
 
-        //     /// console.log(i);
+        } else {
 
-        //     calculosPossiveis.push({
-        //         tempo: (tempoInicial + i),
-        //         idade: (idadeInicial + i),
-        //         pontos: ((requisitos.pontos > 0) ? (requisitos.pontos + (i * 2)) : 0),
-        //         descarteContrib: maximoDescarte.meses - (i * 12)
-        //     });
+            calculosPossiveis = this.descarteAnual(elementTipo, maximoDescarte);
+        }
 
-        // }
+        return calculosPossiveis;
+
+    }
+
+
+    private setCalculosPossiveis(tempo, idade, pontos, descarteContrib) {
+
+        return {
+            tempo: tempo,
+            idade: idade,
+            pontos: pontos,
+            descarteContrib: descarteContrib,
+            listaCompetencias: [],
+            lista12Competencias: [],
+            mediaDasContribuicoes: {},
+            mediaDasContribuicoes12: {},
+            somaContribuicoes: {},
+            numeroCompetencias: 0,
+            salarioBeneficio: 0,
+            irt: 0,
+            rmi: 0,
+            rmiConsiderado: 0,
+            fator: {},
+            moeda: {},
+            conclusoes: [],
+            destaqueMelhorValorRMI: false
+        };
+    }
+
+    private descarteAnual(elementTipo, maximoDescarte) {
+
 
         const requisitos = elementTipo.requisitos;
         const calculosPossiveis = [];
@@ -217,55 +275,25 @@ export class RegrasAcesso {
         const tempoInicial = elementTipo.tempoTotalAposEC103;
         const pontosInicial = elementTipo.pontos;
 
-
         // Valor default sem decrementar
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
 
-            calculosPossiveis.push({
-                tempo: (tempoInicial),
-                idade: (idadeInicial),
-                pontos: ((requisitos.pontos > 0) ? pontosInicial : 0),
-                descarteContrib: 0,
-                listaCompetencias: [],
-                lista12Competencias: [],
-                mediaDasContribuicoes: {},
-                mediaDasContribuicoes12: {},
-                somaContribuicoes: {},
-                numeroCompetencias: 0,
-                salarioBeneficio: 0,
-                irt: 0,
-                rmi: 0,
-                rmiConsiderado: 0,
-                fator: {},
-                moeda: {},
-                conclusoes: [],
-                destaqueMelhorValorRMI: false
-            });
+            calculosPossiveis.push(this.setCalculosPossiveis(
+                tempoInicial,
+                idadeInicial,
+                ((requisitos.pontos > 0) ? pontosInicial : 0), 0)
+            );
 
         }
 
         for (let i = maximoDescarte.anos; i >= 0; i--) {
 
-            calculosPossiveis.push({
-                tempo: (tempoInicial - i),
-                idade: (idadeInicial - i),
-                pontos: ((requisitos.pontos > 0) ? (pontosInicial - (i * 2)) : 0),
-                descarteContrib: Math.floor(i * 12),
-                listaCompetencias: [],
-                lista12Competencias: [],
-                mediaDasContribuicoes: {},
-                mediaDasContribuicoes12: {},
-                somaContribuicoes: {},
-                numeroCompetencias: 0,
-                salarioBeneficio: 0,
-                irt: 0,
-                rmi: 0,
-                rmiConsiderado: 0,
-                fator: {},
-                moeda: {},
-                conclusoes: [],
-                destaqueMelhorValorRMI: false
-            });
+
+            calculosPossiveis.push(this.setCalculosPossiveis(
+                (tempoInicial - i),
+                (idadeInicial - i),
+                ((requisitos.pontos > 0) ? pontosInicial : 0),
+                Math.floor(i * 12)));
 
         }
 
@@ -274,87 +302,159 @@ export class RegrasAcesso {
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
+            // console.log(' até 07/1994 = ' + (this.numeroDeContribuicoesAuxTotal - this.numeroDeContribuicoes));
+            // console.log(' após 07/1994  = ' + this.numeroDeContribuicoes);
+            // console.log(' Total = ' + this.numeroDeContribuicoesAuxTotal);
+            // console.log('-----');
+            // console.log(this.calculo);
+            // console.log(this.calculo.carencia);
+            // console.log(this.calculo.carencia_apos_ec103);
+            // console.log('-----');
+            // console.log(numeroConsideradoFinal);
+            // console.log(this.carenciaRequisito);
+            // console.log(maximoDescarte.meses);
+
+
+            let idadeTeste15AnosFracao = false;
+            let testeTempoRest = 0;
+            if ((this.numeroDeContribuicoes > 1
+                && (this.calculo.carencia >= this.carenciaRequisito && this.calculo.carencia_apos_ec103 > 0))
+                && elementTipo.regra === 'idade'
+                && Math.floor(lastPossibilidade.tempo) === elementTipo.requisitos.tempo) {
+
+                testeTempoRest = (lastPossibilidade.tempo - elementTipo.requisitos.tempo);
+                if (testeTempoRest < 1 && testeTempoRest > 0) {
+                    idadeTeste15AnosFracao = true;
+                }
+
+            }
+
+
+            console.log((this.numeroDeContribuicoes > 1
+                && (this.calculo.carencia >= this.carenciaRequisito && this.calculo.carencia_apos_ec103 > 0)));
+
+            console.log((this.numeroDeContribuicoes > 1
+                && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)));
+            console.log((this.numeroDeContribuicoes > 1
+                && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)) >= 1));
+
             if (this.numeroDeContribuicoes > 1
                 && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)
                 ||
                 (this.numeroDeContribuicoes > 1
-                    && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito )) >=  1 )) {
+                    && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)) >= 1)) {
 
-                const tempoRef11meses =  (11 * 30.436875) / 365.25;
+                const tempoRef11meses = (11 * 30.436875) / 365.25;
                 const maximoDescarteIdade = maximoDescarte.meses + 11;
 
-                calculosPossiveis.push({
-                    tempo: (lastPossibilidade.tempo - tempoRef11meses),
-                    idade: lastPossibilidade.idade,
-                    pontos: 0,
-                    descarteContrib: maximoDescarteIdade,
-                    listaCompetencias: [],
-                    lista12Competencias: [],
-                    mediaDasContribuicoes: {},
-                    mediaDasContribuicoes12: {},
-                    somaContribuicoes: {},
-                    numeroCompetencias: 0,
-                    salarioBeneficio: 0,
-                    irt: 0,
-                    rmi: 0,
-                    rmiConsiderado: 0,
-                    fator: 0,
-                    moeda: {},
-                    conclusoes: [],
-                    destaqueMelhorValorRMI: false
-                });
+                //  if (maximoDescarteIdade <= maximoDescarte.meses) {
 
-            }
+                calculosPossiveis.push(this.setCalculosPossiveis(
+                    (lastPossibilidade.tempo - tempoRef11meses),
+                    lastPossibilidade.idade,
+                    0,
+                    maximoDescarteIdade));
+                //   }
+
+            } 
+            // else if (idadeTeste15AnosFracao) {
+
+                // const tempoRef11meses = Math.floor(testeTempoRest * 12);
+                // const maximoDescarteIdade = maximoDescarte.meses + tempoRef11meses;
+
+                // calculosPossiveis.push(this.setCalculosPossiveis(
+                //     (lastPossibilidade.tempo - tempoRef11meses),
+                //     lastPossibilidade.idade,
+                //     0,
+                //     maximoDescarteIdade));
+
+           // }
         }
 
-        // let count12meses = 0;
-        // let tempoPorAno = tempoInicial;
-        // let idadePorAno = idadeInicial;
-        // let pontosPorAno = pontosInicial;
-
-        // for (let i = maximoDescarte.meses; i >= 0; i--) {
-
-        //     count12meses++;
-
-        //     if (count12meses === 11) {
-
-
-        //         tempoPorAno -= 1;
-        //         idadePorAno -= 1;
-
-        //         if (pontosInicial > 0) {
-        //             pontosPorAno -= 2;
-        //         }
-
-        //         count12meses = 0;
-        //     }
-
-
-
-        //     calculosPossiveis.push({
-        //         tempo: tempoPorAno,
-        //         idade: idadePorAno,
-        //         pontos: pontosPorAno,
-        //         descarteContrib: i,
-        //         listaCompetencias: [],
-        //         lista12Competencias: [],
-        //         mediaDasContribuicoes: {},
-        //         somaContribuicoes: {},
-        //         numeroCompetencias: 0,
-        //         salarioBeneficio: 0,
-        //         irt: 0,
-        //         rmi: 0,
-        //         fator: 0,
-        //         moeda: {},
-        //         conclusoes: [],
-        //         destaqueMelhorValorRMI: false
-        //     });
-
-        // }
 
         return calculosPossiveis;
 
     }
+
+
+
+
+    private descarteMensal(elementTipo, maximoDescarte) {
+
+        const requisitos = elementTipo.requisitos;
+        const calculosPossiveis = [];
+        const idadeInicial = elementTipo.idade;
+        const tempoInicial = elementTipo.tempoTotalAposEC103;
+        const pontosInicial = elementTipo.pontos;
+
+
+        let count12meses = 0;
+        let countMesesD = 0;
+        let tempoPorAno = tempoInicial;
+        let idadePorAno = idadeInicial;
+        let pontosPorAno = pontosInicial;
+
+
+        // Valor default sem decrementar
+        if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
+
+            calculosPossiveis.push(this.setCalculosPossiveis(
+                tempoInicial,
+                idadeInicial,
+                ((requisitos.pontos > 0) ? pontosInicial : 0),
+                0));
+        }
+
+
+        const round12 = (x) => {
+            return Math.ceil(x / 12) * 12;
+        }
+
+        const listCalculoP = [];
+        for (let i = maximoDescarte.meses; i >= 0; i--) {
+
+            const num = round12(i)
+            if (i === num) {
+                listCalculoP.push(num);
+            }
+
+        }
+
+        for (let i = maximoDescarte.meses; i >= 0; i--) {
+
+            count12meses++;
+
+            if (count12meses === 11) {
+
+                tempoPorAno -= 1;
+                idadePorAno -= 1;
+
+                if (pontosInicial > 0) {
+                    pontosPorAno -= 2;
+                }
+
+                count12meses = 0;
+            }
+
+            if (listCalculoP.includes(this.numeroDeContribuicoes - countMesesD)
+                || (this.numeroDeContribuicoes - countMesesD) < 12
+                || this.numeroDeContribuicoes === countMesesD) {
+
+                calculosPossiveis.push(this.setCalculosPossiveis(
+                    tempoPorAno,
+                    idadePorAno,
+                    pontosPorAno,
+                    countMesesD));
+
+            }
+
+            countMesesD++
+        }
+
+        return calculosPossiveis;
+
+    }
+
 
     /**
       * Criar uma unica possibilidade com 100% ou 80% das contribuições existentes
@@ -375,26 +475,11 @@ export class RegrasAcesso {
 
 
         // Valor default sem decrementar
-        calculosPossiveis.push({
-            tempo: (tempoInicial),
-            idade: (idadeInicial),
-            pontos: ((requisitos.pontos > 0) ? pontosInicial : 0),
-            descarteContrib: maximoDescarte.meses,
-            listaCompetencias: [],
-            lista12Competencias: [],
-            mediaDasContribuicoes: {},
-            mediaDasContribuicoes12: {},
-            somaContribuicoes: {},
-            numeroCompetencias: 0,
-            salarioBeneficio: 0,
-            irt: 0,
-            rmi: 0,
-            rmiConsiderado: 0,
-            fator: {},
-            moeda: {},
-            conclusoes: [],
-            destaqueMelhorValorRMI: false
-        });
+        calculosPossiveis.push(this.setCalculosPossiveis(
+            tempoInicial,
+            idadeInicial,
+            ((requisitos.pontos > 0) ? pontosInicial : 0),
+            maximoDescarte.meses));
 
         return calculosPossiveis;
 
@@ -1067,10 +1152,13 @@ export class RegrasAcesso {
 
         if (tempo_contribuicao >= contribuicao_min[sexo] && idade >= idade_min[sexo]) {
             status = true;
+
         }
 
+        const regra = (tipoBeneficio === '16' || tipoBeneficio === 16) ? 'idadeRural' : 'idadeTransitoria';
+
         this.setConclusaoAcesso(
-            'idadeTransitoria',
+            regra,
             label,
             status,
             0,

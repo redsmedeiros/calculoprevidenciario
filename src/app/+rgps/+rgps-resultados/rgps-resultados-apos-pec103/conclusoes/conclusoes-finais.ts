@@ -231,6 +231,7 @@ export class conclusoesFinais {
         const methodsPorEspecie = {
             idade: this.defineAliquotaIdade,
             idadeTransitoria: this.defineAliquotaIdadeTransitoria,
+            idadeRural: this.defineAliquotaIdadeRural,
             pontos: this.defineAliquotaPontos,
             idadeProgressiva: this.defineAliquotaIdadeProgressiva,
             pedagio50: this.defineAliquotaPedagio50,
@@ -371,15 +372,14 @@ export class conclusoesFinais {
         if (elementRegraEspecie.calculosPossiveis.length > 1) {
 
             elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-                if (entry1.rmi.value < entry2.rmi.value) {
+                if ((entry1.rmi.value < entry2.rmi.value) || (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)) {
                     return 1;
                 }
-                if (entry1.rmi.value > entry2.rmi.value) {
+                if ((entry1.rmi.value > entry2.rmi.value) || (entry1.mediaDasContribuicoes.value > entry2.mediaDasContribuicoes.value)) {
                     return -1;
                 }
                 return 0;
             });
-
 
             elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
 
@@ -418,7 +418,6 @@ export class conclusoesFinais {
 
     // define aliquotas por espepecie - inicio
 
-
     private defineAliquotaIdade(elementPossibilidade) {
 
         const tempoParaPercentual = {
@@ -454,11 +453,9 @@ export class conclusoesFinais {
         let formula = '70'
         let valueString = aliquota + '%'
 
-        if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual[this.segurado.sexo]) {
-            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual[this.segurado.sexo]));
-            formula = `70 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual[this.segurado.sexo]}))`;
+            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo)));
+            formula = `70 + ((${Math.floor(elementPossibilidade.tempo)}))`;
             valueString = aliquota + '%'
-        }
 
         return this.setAliquota(
             aliquota,

@@ -282,7 +282,7 @@ export class RgpsResultadosComponent implements OnInit {
   //   antesEc103: { rmi: 0, soma: 0 },
   // };
 
-  //pbc parametro get
+  // pbc parametro get
   public pbcCompleto = false;
 
   // pbc indices de correção
@@ -348,7 +348,6 @@ export class RgpsResultadosComponent implements OnInit {
               .then((calculo: CalculoModel) => {
 
                 this.getPlanejamento(calculo);
-
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
@@ -374,8 +373,9 @@ export class RgpsResultadosComponent implements OnInit {
                   data: this.calculoList,
                 }
 
-                if ((counter + 1) === this.idsCalculo.length)
+                if ((counter + 1) === this.idsCalculo.length) {
                   this.isUpdating = false;
+                }
                 counter++;
               });
           }
@@ -1309,13 +1309,17 @@ export class RgpsResultadosComponent implements OnInit {
     const boxContent = document.getElementById(boxId).innerHTML;
 
 
-    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    const rodape = document.getElementById('printableRodapeControle').innerHTML;
+    // const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
       + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
       + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
+
+
+
 
     popupWin.document.open();
     popupWin.document.write(printableString);
@@ -1751,6 +1755,17 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
     return especie;
+  }
+
+  private formatDataHora(value = null) {
+
+    if (value === null) {
+      return moment().format('DD/MM/YYYY H:m')
+    }
+
+    if (typeof value !== 'undefined') {
+      return moment(value).format('DD/MM/YYYY H:m')
+    }
   }
 
   @HostListener('window:scroll', [])

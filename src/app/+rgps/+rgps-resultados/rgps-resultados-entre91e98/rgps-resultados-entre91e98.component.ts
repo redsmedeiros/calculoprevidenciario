@@ -256,6 +256,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
   }
 
+
+  private getDataInicioBeneficio(){
+
+  }
+
   calculo91_98(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
     let dib = this.dataInicioBeneficio;
     let dibCurrency = this.loadCurrency(dib);
