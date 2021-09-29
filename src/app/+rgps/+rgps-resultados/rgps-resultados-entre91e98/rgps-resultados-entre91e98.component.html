@@ -211,25 +211,24 @@
                 </tbody>
               </table>
             </div>
-
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && direito" class="widget-body hidden-dt no-margin" >
-              <h3 class="p-2 m-1">Reajustes Administrativos</h3>
-              <sa-datatable [options]="reajustesAdministrativosTableOptions" 
-              *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
-               tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
-                  <thead>
-                    <tr>
-                      <th>Competência</th>
-                      <th>Reajuste</th>
-                      <th>Benefício</th>
-                      <th>Limite</th>
-                    </tr>
-                  </thead>
-              </sa-datatable>
-            </div>
-           
           </div>
         </sa-widget>
+        <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && direito"
+        class="widget-body hidden-dt no-margin mt-3" >
+        <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos"><strong>Reajustes Administrativos</strong></h4>
+         <sa-datatable [options]="reajustesAdministrativosTableOptions" 
+         *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
+          tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
+             <thead>
+               <tr>
+                 <th>Competência</th>
+                 <th>Reajuste</th>
+                 <th>Benefício</th>
+                 <th>Limite</th>
+               </tr>
+             </thead>
+         </sa-datatable>
+       </div>
 </article>
 </div>
 
