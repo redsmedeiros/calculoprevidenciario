@@ -78,7 +78,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
 
-        if (localStorage.getItem('user_id') !== this.segurado.user_id) {
+        if (localStorage.getItem('user_id') != this.segurado.user_id) {
           // redirecionar para pagina de segurados
           swal({
             type: 'error',
@@ -89,7 +89,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
             window.location.href = '/#/rgps/rgps-segurados/';
           });
         } else {
-          if (this.idsCalculos.length === 1) {
+          if (this.idsCalculos.length == 1) {
             this.CalculoRgps.find(this.idsCalculos[0])
               .then(calculo => {
 
@@ -124,7 +124,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   private isSomarSecundariaCheck() {
 
     // console.log(this.calculo.somar_contribuicao_secundaria)
-    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('18/06/2019', 'DD/MM/YYYY'))) {
+    if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
       this.somarSecundaria = '' + this.calculo.somar_contribuicao_secundaria;
       this.exibirCampoAnteriorLei13846 = true;
     }
@@ -205,8 +205,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       let valuesPrimaria = [];
       let valuesSecundaria = [];
       for (const contribuicao of valorescontribuidos) {
-        const contribAno = parseInt((contribuicao.data).split('-')[0]);
-        const contribMes = parseInt((contribuicao.data).split('-')[1]);
+        const contribAno = parseInt((contribuicao.data).split('-')[0], 10);
+        const contribMes = parseInt((contribuicao.data).split('-')[1], 10);
         if (contribAno !== ano) {
           this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
           this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
@@ -265,7 +265,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       } else if (this.tipoContribuicao === 'Secundaria') {
         this.matrizContribuicoesSecundarias.preencher(periodoObj);
       }
-      // Salva contribuicoes no bd
+      // Salva contribuicoes no bd 
       this.salvarContribuicoes(periodoObj, this.tipoContribuicao)
       this.inicioPeriodo = ((moment(this.finalPeriodo, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
       this.finalPeriodo = this.inicioPeriodo;
@@ -277,7 +277,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   moveNext(event, maxLength, nextElementId) {
     const value = event.srcElement.value;
-    if (value.indexOf('_') < 0 && value !== '') {
+    if (value.indexOf('_') < 0 && value != '') {
       const next = <HTMLInputElement>document.getElementById(nextElementId);
       next.focus();
     }
@@ -321,38 +321,6 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     });
   }
 
-
-  private testeConstrib() {
-
-    //   if (window.location.hostname === 'localhost') {
-    //    const teste =   [{},];
-
-
-    //  const contribuicoesAdicionadasteste = [];
-    //                     for (const row of teste) {
-    //                       const valorContribuido = new ValorContribuido({
-    //                         id_calculo: this.idsCalculos,
-    //                         id_segurado: this.idSegurado,
-    //                         data: row.data,
-    //                         tipo: 0,
-    //                         valor: row.valor_primaria,
-    //                       });
-    //                       contribuicoesAdicionadasteste.push(valorContribuido);
-    //                     }
-    //                     this.ValorContribuidoService.save(contribuicoesAdicionadasteste).then(() => {
-    //                       // swal.close();
-    //                       swal({
-    //                         position: 'top-end',
-    //                         type: 'success',
-    //                         title: 'Valores salvos com sucesso!',
-    //                         showConfirmButton: false,
-    //                         timer: 1000
-    //                       });
-    //                     });
-    //                   }
-  }
-
-
   isValid() {
     const dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
     const dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
@@ -392,7 +360,8 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   isEmpty(data) {
     // console.log(data)
-    if (data === undefined || data === '') {
+    if (data === undefined || data === ''
+      || typeof data === 'undefined' || data === null) {
       return true;
     }
     return false;
@@ -460,18 +429,18 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     const mask = [];
     mask.push(/[0-1]/);
 
-    if (rawValue[0] === 1) {
+    if (rawValue[0] === '1') {
       mask.push(/[0-2]/);
-    } else if (rawValue[0] === 0) {
+    } else if (rawValue[0] === '0') {
       mask.push(/[1-9]/);
     }
 
     mask.push('/');
     mask.push(/[1-2]/);
 
-    if (rawValue[3] === 1) {
+    if (rawValue[3] === '1') {
       mask.push(/[9]/);
-    } else if (rawValue[3] === 2) {
+    } else if (rawValue[3] === '2') {
       mask.push(/[0]/);
     }
     mask.push(/\d/);
