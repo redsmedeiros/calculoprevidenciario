@@ -385,7 +385,7 @@ export class RegrasAcesso {
 
 
         // Valor default sem decrementar
-        if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) > 0) {
+        if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) >= 0) {
 
             calculosPossiveis.push(this.setCalculosPossiveis(
                 tempoInicial,
