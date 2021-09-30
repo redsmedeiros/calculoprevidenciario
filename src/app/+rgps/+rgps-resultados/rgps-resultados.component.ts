@@ -1760,11 +1760,11 @@ export class RgpsResultadosComponent implements OnInit {
   private formatDataHora(value = null) {
 
     if (value === null) {
-      return moment().format('DD/MM/YYYY H:m')
+      return moment().format('DD/MM/YYYY HH:mm')
     }
 
     if (typeof value !== 'undefined') {
-      return moment(value).format('DD/MM/YYYY H:m')
+      return moment(value).format('DD/MM/YYYY HH:mm')
     }
   }
 
