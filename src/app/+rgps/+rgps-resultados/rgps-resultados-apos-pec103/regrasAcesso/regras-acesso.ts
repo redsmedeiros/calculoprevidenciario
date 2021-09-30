@@ -335,7 +335,7 @@ export class RegrasAcesso {
                 const maximoDescarteIdade = maximoDescarte.meses + 11;
 
                 if (typeof lastPossibilidade !== 'undefined' &&
-                     maximoDescarteIdade <= maximoDescarte.meses) {
+                    maximoDescarteIdade <= maximoDescarte.meses) {
 
 
                     calculosPossiveis.push(this.setCalculosPossiveis(
@@ -383,7 +383,6 @@ export class RegrasAcesso {
         let idadePorAno = idadeInicial;
         let pontosPorAno = pontosInicial;
 
-
         // Valor default sem decrementar
         if ((maximoDescarte.anos) - Math.floor(maximoDescarte.anos) >= 0) {
 
@@ -399,8 +398,11 @@ export class RegrasAcesso {
             return Math.ceil(x / 12) * 12;
         }
 
+        const countDescarteList = (this.numeroDeContribuicoes > maximoDescarte.meses) ?
+            this.numeroDeContribuicoes : maximoDescarte.meses;
+
         const listCalculoP = [];
-        for (let i = maximoDescarte.meses; i >= 0; i--) {
+        for (let i = countDescarteList; i >= 0; i--) {
 
             const num = round12(i)
             if (i === num) {
