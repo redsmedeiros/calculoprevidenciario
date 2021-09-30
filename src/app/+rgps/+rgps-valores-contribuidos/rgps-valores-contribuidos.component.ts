@@ -120,6 +120,37 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       });
   }
 
+  private testeContribuicoesCliente() {
+
+    const teste = [];
+    const contribuicoesAdicionadasteste = [];
+
+    if (teste.length > 0 && window.location.hostname === 'localhost' ) {
+      for (const row of teste) {
+
+        const valorContribuido = new ValorContribuido({
+          id_calculo: this.idsCalculos,
+          id_segurado: this.idSegurado,
+          data: row.data,
+          tipo: 0,
+          valor: row.valor_primaria,
+        });
+        contribuicoesAdicionadasteste.push(valorContribuido);
+      }
+      this.ValorContribuidoService.save(contribuicoesAdicionadasteste).then(() => {
+        // swal.close();
+        swal({
+          position: 'top-end',
+          type: 'success',
+          title: 'Valores salvos com sucesso!',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      });
+    }
+
+  }
+
 
   private isSomarSecundariaCheck() {
 

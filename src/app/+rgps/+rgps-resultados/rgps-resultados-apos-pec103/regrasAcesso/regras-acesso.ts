@@ -302,18 +302,6 @@ export class RegrasAcesso {
             const lastPossibilidade = calculosPossiveis.find((element) => element.descarteContrib === maximoDescarte.meses);
             const numeroConsideradoFinal = (this.numeroDeContribuicoes - maximoDescarte.meses);
 
-            // console.log(' até 07/1994 = ' + (this.numeroDeContribuicoesAuxTotal - this.numeroDeContribuicoes));
-            // console.log(' após 07/1994  = ' + this.numeroDeContribuicoes);
-            // console.log(' Total = ' + this.numeroDeContribuicoesAuxTotal);
-            // console.log('-----');
-            // console.log(this.calculo);
-            // console.log(this.calculo.carencia);
-            // console.log(this.calculo.carencia_apos_ec103);
-            // console.log('-----');
-            // console.log(numeroConsideradoFinal);
-            // console.log(this.carenciaRequisito);
-            // console.log(maximoDescarte.meses);
-
 
             let idadeTeste15AnosFracao = false;
             let testeTempoRest = 0;
@@ -329,14 +317,13 @@ export class RegrasAcesso {
 
             }
 
+            // console.log((this.numeroDeContribuicoes > 1
+            //     && (this.calculo.carencia >= this.carenciaRequisito && this.calculo.carencia_apos_ec103 > 0)));
 
-            console.log((this.numeroDeContribuicoes > 1
-                && (this.calculo.carencia >= this.carenciaRequisito && this.calculo.carencia_apos_ec103 > 0)));
-
-            console.log((this.numeroDeContribuicoes > 1
-                && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)));
-            console.log((this.numeroDeContribuicoes > 1
-                && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)) >= 1));
+            // console.log((this.numeroDeContribuicoes > 1
+            //     && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)));
+            // console.log((this.numeroDeContribuicoes > 1
+            //     && (this.numeroDeContribuicoesAuxTotal - (this.carenciaRequisito)) >= 1));
 
             if (this.numeroDeContribuicoes > 1
                 && (numeroConsideradoFinal === 1 && numeroConsideradoFinal > 0)
@@ -347,28 +334,30 @@ export class RegrasAcesso {
                 const tempoRef11meses = (11 * 30.436875) / 365.25;
                 const maximoDescarteIdade = maximoDescarte.meses + 11;
 
-                //  if (maximoDescarteIdade <= maximoDescarte.meses) {
+                if (typeof lastPossibilidade !== 'undefined' &&
+                     maximoDescarteIdade <= maximoDescarte.meses) {
 
-                calculosPossiveis.push(this.setCalculosPossiveis(
-                    (lastPossibilidade.tempo - tempoRef11meses),
-                    lastPossibilidade.idade,
-                    0,
-                    maximoDescarteIdade));
-                //   }
 
-            } 
+                    calculosPossiveis.push(this.setCalculosPossiveis(
+                        (lastPossibilidade.tempo - tempoRef11meses),
+                        lastPossibilidade.idade,
+                        0,
+                        maximoDescarteIdade));
+                }
+
+            }
             // else if (idadeTeste15AnosFracao) {
 
-                // const tempoRef11meses = Math.floor(testeTempoRest * 12);
-                // const maximoDescarteIdade = maximoDescarte.meses + tempoRef11meses;
+            // const tempoRef11meses = Math.floor(testeTempoRest * 12);
+            // const maximoDescarteIdade = maximoDescarte.meses + tempoRef11meses;
 
-                // calculosPossiveis.push(this.setCalculosPossiveis(
-                //     (lastPossibilidade.tempo - tempoRef11meses),
-                //     lastPossibilidade.idade,
-                //     0,
-                //     maximoDescarteIdade));
+            // calculosPossiveis.push(this.setCalculosPossiveis(
+            //     (lastPossibilidade.tempo - tempoRef11meses),
+            //     lastPossibilidade.idade,
+            //     0,
+            //     maximoDescarteIdade));
 
-           // }
+            // }
         }
 
 
