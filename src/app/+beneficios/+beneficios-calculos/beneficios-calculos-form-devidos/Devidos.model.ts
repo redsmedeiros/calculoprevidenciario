@@ -14,10 +14,11 @@ export class Devidos {
   public reajusteMinimo;
   public dataAdicional25;
   public chkDemandasJudiciais;
-  public calcularAbono13UltimoMes
-  public SBSemLimitacao
-  public SBSemLimitacaoAliquota
-  public numDependentes
+  public calcularAbono13UltimoMes;
+  public SBSemLimitacao;
+  public SBSemLimitacaoAliquota;
+  public numDependentes;
+  public manterPercentualSMEsperado;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -48,6 +49,7 @@ export class Devidos {
     SBSemLimitacao,
     SBSemLimitacaoAliquota,
     numDependentes,
+    manterPercentualSMEsperado,
   ) {
     this.id = id;
     this.especie = especie;
@@ -66,6 +68,7 @@ export class Devidos {
     this.SBSemLimitacao = SBSemLimitacao;
     this.SBSemLimitacaoAliquota = SBSemLimitacaoAliquota;
     this.numDependentes = numDependentes;
+    this.manterPercentualSMEsperado = manterPercentualSMEsperado;
   }
 
 

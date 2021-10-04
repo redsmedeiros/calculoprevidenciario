@@ -14,6 +14,7 @@ export class Recebidos {
   public reajusteMinimo;
   public dataAdicional25;
   public abono13Ultimo;
+  public manterPercentualSMConcedido;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -40,6 +41,7 @@ export class Recebidos {
     reajusteMinimo,
     dataAdicional25,
     abono13Ultimo,
+    manterPercentualSMConcedido,
   ) {
     this.id = id;
     this.especie = especie;
@@ -54,6 +56,7 @@ export class Recebidos {
     this.reajusteMinimo = reajusteMinimo;
     this.dataAdicional25 = dataAdicional25;
     this.abono13Ultimo = abono13Ultimo;
+    this.manterPercentualSMConcedido = manterPercentualSMConcedido;
   }
 
 

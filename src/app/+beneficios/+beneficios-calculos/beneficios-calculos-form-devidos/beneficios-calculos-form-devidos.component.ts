@@ -149,6 +149,9 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       if (!this.isValidDate(this.dataInicialadicional25Devido)) {
         this.errors.add({ 'dataInicialadicional25Devido': ['Insira uma data válida.'] });
         valid = false;
+      }else if (moment(this.dataInicialadicional25Devido, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataInicialadicional25Devido': ['A data deve ser maior ou igual que DIB.'] });
+        valid = false;
       }
     }
 
@@ -184,7 +187,8 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.calcularAbono13UltimoMes,
       this.SBSemLimitacao,
       this.SBSemLimitacaoAliquota,
-      this.numDependentes
+      this.numDependentes,
+      this.manterPercentualSMEsperado,
     );
 
 
@@ -237,6 +241,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.calcularAbono13UltimoMes = rowEdit.calcularAbono13UltimoMes;
     this.chkDemandasJudiciais = rowEdit.chkDemandasJudiciais;
     this.numDependentes = rowEdit.numDependentes;
+    this.manterPercentualSMEsperado = rowEdit.manterPercentualSMEsperado;
 
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;

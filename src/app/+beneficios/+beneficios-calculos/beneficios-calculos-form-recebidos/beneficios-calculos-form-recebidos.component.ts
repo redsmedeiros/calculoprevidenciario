@@ -83,13 +83,18 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       return true;
     }
 
+    // &&
+    //     (moment(recebidoMultiplo.dip, 'DD/MM/YYYY')).isBetween(
+    //       moment(Obj.dip, 'DD/MM/YYYY'),
+    //       moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+
     const isExistConcomitante = this.listRecebidos.find(Obj => (
-      (moment(recebidoMultiplo.dib, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
-        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
+      ((moment(recebidoMultiplo.dip, 'DD/MM/YYYY')).isBetween(
+        moment(Obj.dip, 'DD/MM/YYYY'),
+        moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]'))
       ||
       (moment(recebidoMultiplo.cessacao, 'DD/MM/YYYY')).isBetween(
-        moment(Obj.dib, 'DD/MM/YYYY'),
+        moment(Obj.dip, 'DD/MM/YYYY'),
         moment(Obj.cessacao, 'DD/MM/YYYY'), undefined, '[]')
     ));
 
@@ -116,7 +121,8 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.taxaAjusteMaximaConcedida,
       this.naoAplicarSMBeneficioConcedido,
       this.dataInicialadicional2Recebido,
-      this.calcularAbono13UltimoMesRecebidos);
+      this.calcularAbono13UltimoMesRecebidos,
+      this.manterPercentualSMConcedido);
 
     let statusInput = true;
 
@@ -207,6 +213,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.naoAplicarSMBeneficioConcedido = rowEdit.reajusteMinimo;
     this.dataInicialadicional2Recebido = rowEdit.dataAdicional25;
     this.calcularAbono13UltimoMesRecebidos = rowEdit.abono13Ultimo;
+    this.manterPercentualSMConcedido = rowEdit.manterPercentualSMConcedido;
 
     if (rowEdit.dataAdicional25 != undefined && rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
@@ -229,22 +236,43 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.naoAplicarSMBeneficioConcedido = false;
     this.dataInicialadicional2Recebido = '';
     this.calcularAbono13UltimoMesRecebidos = false;
+    this.manterPercentualSMConcedido = false;
   }
 
 
   private updateDatatableRecebidos(recebidos) {
 
     if (typeof recebidos === 'object') {
+
       this.listRecebidos.push(recebidos);
-      this.listRecebidos.sort((a, b) => {
-        if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
-          return -1;
-        }
-      });
+      this.ordenarLista();
 
       this.recebidosAtributes.emit(this.listRecebidos);
     }
   }
+
+  // private ordenarLista(){
+
+  //   this.listRecebidos.sort((a, b) => {
+
+  //     const dib1 = moment(a.dib, 'DD/MM/YYYY');
+  //     const dib2 = moment(b.dib, 'DD/MM/YYYY');
+
+  //     const dip1 = moment(a.dip, 'DD/MM/YYYY');
+  //     const dip2 = moment(b.dip, 'DD/MM/YYYY');
+
+  //     console.log(a.dib)
+  //     console.log(a.dip)
+
+  //     if (dib1.isSame(dib2)) {
+  //       return dip1 < dip2 ? -1 : 1
+  //     } else {
+  //       return dib1 > dib2 ? -1 : 1
+  //     }
+
+  //   });
+  // }
+
 
   validRecebidos() {
 
@@ -365,6 +393,16 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       valid = false;
     }
 
+    if (this.adicional25Recebido) {
+      if (!this.isValidDate(this.dataInicialadicional2Recebido)) {
+        this.errors.add({ 'dataInicialadicional2Recebido': ['Insira uma data válida.'] });
+        valid = false;
+      } else if (moment(this.dataInicialadicional2Recebido, 'DD/MM/YYYY') < moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dataInicialadicional2Recebido': ['A data deve ser maior ou igual que DIB.'] });
+        valid = false;
+      }
+    }
+
 
     return valid;
   }
@@ -392,7 +430,6 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
   validateInputs() {
 
     this.errors.clear();
-
     let valid = true;
 
     return valid;

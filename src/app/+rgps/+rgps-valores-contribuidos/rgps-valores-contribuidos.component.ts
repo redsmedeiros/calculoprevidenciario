@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
@@ -59,7 +59,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   public tipoContribuicao = 'Primaria';
 
   public exibirCampoAnteriorLei13846 = false;
-  public somarSecundaria = "0";
+  public somarSecundaria = '0';
 
   constructor(protected router: Router,
     private route: ActivatedRoute,
@@ -71,7 +71,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   ngOnInit() {
     this.idSegurado = this.route.snapshot.params['id_segurado'];
-    //this.idCalculo = this.route.snapshot.params['id'];
+    // this.idCalculo = this.route.snapshot.params['id'];
     this.idsCalculos = this.route.snapshot.params['id'].split(',');
     this.isUpdating = true;
     this.Segurado.find(this.idSegurado)
@@ -79,7 +79,7 @@ export class RgpsValoresContribuidosComponent implements OnInit {
         this.segurado = segurado;
 
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
-          //redirecionar para pagina de segurados
+          // redirecionar para pagina de segurados
           swal({
             type: 'error',
             title: 'Erro',
@@ -105,12 +105,13 @@ export class RgpsValoresContribuidosComponent implements OnInit {
               });
           } else {
             let counter = 0;
-            for (let idCalculo of this.idsCalculos) {
+            for (const idCalculo of this.idsCalculos) {
               this.CalculoRgps.find(idCalculo)
                 .then((calculo: CalculoModel) => {
                   this.updateDatatable(calculo)
-                  if ((counter + 1) == this.idsCalculos.length)
+                  if ((counter + 1) === this.idsCalculos.length) {
                     this.isUpdating = false;
+                  }
                   counter++;
                 });
             }
@@ -119,12 +120,43 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       });
   }
 
+  private testeContribuicoesCliente() {
+
+    const teste = [];
+    const contribuicoesAdicionadasteste = [];
+
+    if (teste.length > 0 && window.location.hostname === 'localhost' ) {
+      for (const row of teste) {
+
+        const valorContribuido = new ValorContribuido({
+          id_calculo: this.idsCalculos,
+          id_segurado: this.idSegurado,
+          data: row.data,
+          tipo: 0,
+          valor: row.valor_primaria,
+        });
+        contribuicoesAdicionadasteste.push(valorContribuido);
+      }
+      this.ValorContribuidoService.save(contribuicoesAdicionadasteste).then(() => {
+        // swal.close();
+        swal({
+          position: 'top-end',
+          type: 'success',
+          title: 'Valores salvos com sucesso!',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      });
+    }
+
+  }
+
 
   private isSomarSecundariaCheck() {
 
-    //console.log(this.calculo.somar_contribuicao_secundaria)
+    // console.log(this.calculo.somar_contribuicao_secundaria)
     if (moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').isBefore(moment('17/06/2019', 'DD/MM/YYYY'))) {
-      this.somarSecundaria = "" + this.calculo.somar_contribuicao_secundaria;
+      this.somarSecundaria = '' + this.calculo.somar_contribuicao_secundaria;
       this.exibirCampoAnteriorLei13846 = true;
     }
 
@@ -197,16 +229,16 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       }
       return 0;
     });
-    if (valorescontribuidos.length != 0) {
-      let matrizPrimarias = [];
-      let matrizSecundarias = [];
+    if (valorescontribuidos.length !== 0) {
+      const matrizPrimarias = [];
+      const matrizSecundarias = [];
       let ano = 0
       let valuesPrimaria = [];
       let valuesSecundaria = [];
-      for (let contribuicao of valorescontribuidos) {
-        let contribAno = parseInt((contribuicao.data).split('-')[0]);
-        let contribMes = parseInt((contribuicao.data).split('-')[1]);
-        if (contribAno != ano) {
+      for (const contribuicao of valorescontribuidos) {
+        const contribAno = parseInt((contribuicao.data).split('-')[0], 10);
+        const contribMes = parseInt((contribuicao.data).split('-')[1], 10);
+        if (contribAno !== ano) {
           this.matrizContribuicoesPrimarias.updateMatrix(ano, valuesPrimaria);
           this.matrizContribuicoesSecundarias.updateMatrix(ano, valuesSecundaria);
           ano = contribAno;
@@ -226,14 +258,14 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   updateDatatable(calculo) {
-    let especie = calculo.tipo_seguro;
-    let periodoInicioBeneficio = calculo.tipo_aposentadoria;
-    let contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
-    let contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
-    let dib = calculo.data_pedido_beneficio;
-    let dataCriacao = this.formatReceivedDate(calculo.data_calculo);
+    const especie = calculo.tipo_seguro;
+    const periodoInicioBeneficio = calculo.tipo_aposentadoria;
+    const contribuicaoPrimaria = this.getTempoDeContribuicaoPrimaria(calculo);
+    const contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
+    const dib = calculo.data_pedido_beneficio;
+    const dataCriacao = this.formatReceivedDate(calculo.data_calculo);
 
-    let line = {
+    const line = {
       especie: especie,
       periodoInicioBeneficio: periodoInicioBeneficio,
       contribuicaoPrimaria: contribuicaoPrimaria,
@@ -253,18 +285,18 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   submit() {
     if (this.isValid()) {
-      let periodoObj = {
+      const periodoObj = {
         inicioPeriodo: this.inicioPeriodo,
         finalPeriodo: this.finalPeriodo,
         salarioContribuicao: this.salarioContribuicao
       };
-      //Preenche a tabela de contribuiçoes
+      // Preenche a tabela de contribuiçoes
       if (this.tipoContribuicao === 'Primaria') {
         this.matrizContribuicoesPrimarias.preencher(periodoObj);
       } else if (this.tipoContribuicao === 'Secundaria') {
         this.matrizContribuicoesSecundarias.preencher(periodoObj);
       }
-      //Salva contribuicoes no bd 
+      // Salva contribuicoes no bd 
       this.salvarContribuicoes(periodoObj, this.tipoContribuicao)
       this.inicioPeriodo = ((moment(this.finalPeriodo, 'MM/YYYY')).add(1, 'month')).format('MM/YYYY');
       this.finalPeriodo = this.inicioPeriodo;
@@ -275,9 +307,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   moveNext(event, maxLength, nextElementId) {
-    let value = event.srcElement.value;
+    const value = event.srcElement.value;
     if (value.indexOf('_') < 0 && value != '') {
-      let next = <HTMLInputElement>document.getElementById(nextElementId);
+      const next = <HTMLInputElement>document.getElementById(nextElementId);
       next.focus();
     }
   }
@@ -290,16 +322,16 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     //    });
     //   swal.showLoading();
 
-    let contribuicoesAdicionadas = [];
-    let monthList = this.monthAndYear(periodoObj.inicioPeriodo, periodoObj.finalPeriodo);
-    for (let mes of monthList) {
-      let dateMonth = mes;
-      let valor = periodoObj.salarioContribuicao;
-      let tipo = (tipoContribuicao === 'Primaria') ? 0 : 1;
-      //if (valor == 0)
+    const contribuicoesAdicionadas = [];
+    const monthList = this.monthAndYear(periodoObj.inicioPeriodo, periodoObj.finalPeriodo);
+    for (const mes of monthList) {
+      const dateMonth = mes;
+      const valor = periodoObj.salarioContribuicao;
+      const tipo = (tipoContribuicao === 'Primaria') ? 0 : 1;
+      // if (valor == 0)
       //  continue;
-      let date = dateMonth + '-01';
-      let valorContribuido = new ValorContribuido({
+      const date = dateMonth + '-01';
+      const valorContribuido = new ValorContribuido({
         id_calculo: this.idsCalculos,
         id_segurado: this.idSegurado,
         data: date,
@@ -321,25 +353,25 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   isValid() {
-    let dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
-    let dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
-    let dataLimite = moment('1970-01-01');
+    const dateInicioPeriodo = moment(this.inicioPeriodo.split('/')[1] + '-' + this.inicioPeriodo.split('/')[0] + '-01');
+    const dateFinalPeriodo = moment(this.finalPeriodo.split('/')[1] + '-' + this.finalPeriodo.split('/')[0] + '-01');
+    const dataLimite = moment('1970-01-01');
 
-    //inicioPeriodo
+    // inicioPeriodo
     if (this.isEmpty(this.inicioPeriodo) || !dateInicioPeriodo.isValid()) {
-      this.errors.add({ "inicioPeriodo": ["Insira uma data válida"] });
+      this.errors.add({ 'inicioPeriodo': ['Insira uma data válida'] });
     } else {
       // if (dateFinalPeriodo >= dataLimite) {
       //   this.errors.add({ "inicioPeriodo": ["Insira uma data posterior ou igual 01/1970"] });
       // }
     }
 
-    //finalPeriodo
+    // finalPeriodo
     if (this.isEmpty(this.finalPeriodo) || !dateFinalPeriodo.isValid()) {
-      this.errors.add({ "finalPeriodo": ["Insira uma data válida"] });
+      this.errors.add({ 'finalPeriodo': ['Insira uma data válida'] });
     } else {
       if (dateFinalPeriodo < dateInicioPeriodo) {
-        this.errors.add({ "finalPeriodo": ["Insira uma data posterior a data inicial"] });
+        this.errors.add({ 'finalPeriodo': ['Insira uma data posterior a data inicial'] });
       }
 
       // if (dateFinalPeriodo >= dataLimite) {
@@ -347,9 +379,9 @@ export class RgpsValoresContribuidosComponent implements OnInit {
       // }
     }
 
-    //salarioContribuicao
+    // salarioContribuicao
     if (this.isEmpty(this.salarioContribuicao)) {
-      this.errors.add({ "salarioContribuicao": ["Insira o salário"] });
+      this.errors.add({ 'salarioContribuicao': ['Insira o salário'] });
     } else {
       this.errors.clear('salarioContribuicao');
     }
@@ -359,14 +391,15 @@ export class RgpsValoresContribuidosComponent implements OnInit {
 
   isEmpty(data) {
     // console.log(data)
-    if (data == undefined || data === '') {
+    if (data === undefined || data === ''
+      || typeof data === 'undefined' || data === null) {
       return true;
     }
     return false;
   }
 
   formatReceivedDate(inputDate) {
-    var date = new Date(inputDate);
+    const date = new Date(inputDate);
     date.setTime(date.getTime() + (5 * 60 * 60 * 1000))
     if (!isNaN(date.getTime())) {
       // Months use 0 index.
@@ -421,24 +454,24 @@ export class RgpsValoresContribuidosComponent implements OnInit {
   }
 
   dateMask(rawValue) {
-    if (rawValue == '') {
+    if (rawValue === '') {
       return [/[0-1]/, /\d/, '/', /[1-2]/, /[0|9]/, /\d/, /\d/];
     }
-    let mask = [];
+    const mask = [];
     mask.push(/[0-1]/);
 
-    if (rawValue[0] == 1) {
+    if (rawValue[0] === '1') {
       mask.push(/[0-2]/);
-    } else if (rawValue[0] == 0) {
+    } else if (rawValue[0] === '0') {
       mask.push(/[1-9]/);
     }
 
     mask.push('/');
     mask.push(/[1-2]/);
 
-    if (rawValue[3] == 1) {
+    if (rawValue[3] === '1') {
       mask.push(/[9]/);
-    } else if (rawValue[3] == 2) {
+    } else if (rawValue[3] === '2') {
       mask.push(/[0]/);
     }
     mask.push(/\d/);
@@ -455,12 +488,12 @@ export class RgpsValoresContribuidosComponent implements OnInit {
     dateStart = '01/' + dateStart;
     dateEnd = '01/' + dateEnd;
 
-    let startSplit = dateStart.split('/');
-    let endSplit = dateEnd.split('/');
+    const startSplit = dateStart.split('/');
+    const endSplit = dateEnd.split('/');
 
     dateStart = moment(startSplit[2] + '-' + startSplit[1] + '-' + startSplit[0]);
     dateEnd = moment(endSplit[2] + '-' + endSplit[1] + '-' + endSplit[0]);
-    let timeValues = [];
+    const timeValues = [];
 
     while (dateEnd > dateStart || dateStart.format('M') === dateEnd.format('M')) {
       timeValues.push(dateStart.format('YYYY-MM'));

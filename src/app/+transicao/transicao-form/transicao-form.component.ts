@@ -75,21 +75,44 @@ export class TransicaoFormComponent implements OnInit {
     }
 
 
-  // this.nome = 'teste - 22-02-2021';
-  // this.idDocumento = '';
-  // this.numeroDocumento = '';
-  // this.dataNascimento = '22/04/1982';
-  // this.dataFiliacao = '22/04/1982';
-  // this.sexo = 'f';
-  // this.professor = false;
+    if (window.location.hostname === 'localhost') {
+      // testes
+      // this.nome = 'teste ';
+      // this.idDocumento = '';
+      // this.numeroDocumento = '';
+      // this.dataNascimento = '27/09/1972';
+      // this.dataFiliacao = '01/01/1999';
+      // this.sexo = 'm';
+      // this.professor = false;
 
-  // this.contribuicaoAnosAteEC103 = '19';
-  // this.contribuicaoMesesAteEC103 = '10';
-  // this.contribuicaoDiasAteEC103 = '07';
+      // this.contribuicaoAnosAteEC103 = '34';
+      // this.contribuicaoMesesAteEC103 = '06';
+      // this.contribuicaoDiasAteEC103 = '14';
 
-  // this.contribuicaoAnos = '21';
-  // this.contribuicaoMeses = '02';
-  // this.contribuicaoDias = '24';
+      // this.contribuicaoAnos = '36';
+      // this.contribuicaoMeses = '09';
+      // this.contribuicaoDias = '00';
+
+
+      // testes 2
+      this.nome = ' ';
+      this.idDocumento = '';
+      this.numeroDocumento = '';
+      this.dataNascimento = '12/08/1963';
+      this.dataFiliacao = '01/01/1980';
+      this.sexo = 'f';
+      this.professor = false;
+
+      this.contribuicaoAnosAteEC103 = '11';
+      this.contribuicaoMesesAteEC103 = '05';
+      this.contribuicaoDiasAteEC103 = '02';
+
+      this.contribuicaoAnos = '13';
+      this.contribuicaoMeses = '03';
+      this.contribuicaoDias = '04';
+      this.submit(null);
+    }
+
 
   }
 
@@ -144,7 +167,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
     if (this.contribuicaoAnos === undefined || this.contribuicaoAnos === '') {
-      this.errors.add({ 'contribuicaoAnos': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoAnos': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoAnos > 100 || !this.isNumber(this.contribuicaoAnos)) {
         this.errors.add({ 'contribuicaoAnos': ['Insira um valor entre 1 e 100'] });
@@ -152,7 +175,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoMeses === undefined || this.contribuicaoMeses === '') {
-      this.errors.add({ 'contribuicaoMeses': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoMeses': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoMeses > 11 || !this.isNumber(this.contribuicaoMeses)) {
         this.errors.add({ 'contribuicaoMeses': ['Insira um valor entre 1 e 11'] });
@@ -160,7 +183,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoDias === undefined || this.contribuicaoDias === '') {
-      this.errors.add({ 'contribuicaoDias': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoDias': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoDias > 29 || !this.isNumber(this.contribuicaoDias)) {
         this.errors.add({ 'contribuicaoDias': ['Insira um valor entre 0 e 29'] });
@@ -170,7 +193,7 @@ export class TransicaoFormComponent implements OnInit {
 
 
     if (this.contribuicaoAnosAteEC103 === undefined || this.contribuicaoAnosAteEC103 === '') {
-      this.errors.add({ 'contribuicaoAnosAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoAnosAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoAnosAteEC103 > 100 || !this.isNumber(this.contribuicaoAnosAteEC103)) {
         this.errors.add({ 'contribuicaoAnosAteEC103': ['Insira um valor entre 1 e 100'] });
@@ -178,7 +201,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoMesesAteEC103 === undefined || this.contribuicaoMesesAteEC103 === '') {
-      this.errors.add({ 'contribuicaoMesesAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoMesesAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoMesesAteEC103 > 11 || !this.isNumber(this.contribuicaoMesesAteEC103)) {
         this.errors.add({ 'contribuicaoMesesAteEC103': ['Insira um valor entre 1 e 11'] });
@@ -186,7 +209,7 @@ export class TransicaoFormComponent implements OnInit {
     }
 
     if (this.contribuicaoDiasAteEC103 === undefined || this.contribuicaoDiasAteEC103 === '') {
-      this.errors.add({ 'contribuicaoDiasAteEC103': ['Campo obrigatório.'] });
+      this.errors.add({ 'contribuicaoDiasAteEC103': ['Preenchimento Obrigatório.'] });
     } else {
       if (this.contribuicaoDiasAteEC103 > 29 || !this.isNumber(this.contribuicaoDiasAteEC103)) {
         this.errors.add({ 'contribuicaoDiasAteEC103': ['Insira um valor entre 0 e 29'] });
@@ -222,9 +245,10 @@ export class TransicaoFormComponent implements OnInit {
     meses = this.isFormatInt(meses);
     dias = this.isFormatInt(dias);
 
-    const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    const contribuicaoTotal = (anos * 365.25) + (meses * 30) + dias;
+    // const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
 
-    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365;
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   }
 
 
@@ -232,7 +256,10 @@ export class TransicaoFormComponent implements OnInit {
 
   public submit(e) {
 
-    e.preventDefault();
+    if (e !== null) {
+      e.preventDefault();
+    }
+
     this.hasResult = false
     if (!localStorage.getItem('user_id')) {
       swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });

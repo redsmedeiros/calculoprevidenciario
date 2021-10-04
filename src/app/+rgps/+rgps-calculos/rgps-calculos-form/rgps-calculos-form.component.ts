@@ -21,6 +21,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   public dataInicioBeneficio;
   public periodoInicioBeneficio;
+  public periodoInicioBeneficioOLD;
   public especieBeneficio;
 
   public primaria98anos;
@@ -126,6 +127,8 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       this.periodoInicioBeneficio = ((this.formData.tipo_aposentadoria === 'A partir de 13/11/2019') ?
         'A partir de 14/11/2019' : this.formData.tipo_aposentadoria);
       //   this.periodoInicioBeneficio = this.formData.tipo_aposentadoria;
+      this.periodoInicioBeneficioOLD = this.formData.tipo_aposentadoria;
+
       this.changeGrupoDos12();
       if (this.formData.contibuicao_primaria_98 !== '') {
         this.primaria98anos = this.formData.contribuicao_primaria_98.split('-')[0];
@@ -293,6 +296,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     this.formData = { ...CalculoModel.form };
     this.dataInicioBeneficio = '';
     this.periodoInicioBeneficio = '';
+    this.periodoInicioBeneficioOLD = '';
     this.especieBeneficio = '- Selecione uma espécie -';
 
     this.primaria98anos = '';
@@ -542,11 +546,11 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       }
 
       // if (this.hasPensao19 && (this.depedente_invalido == undefined || this.carencia === '')) {
-      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      //   this.errors.add({ 'carencia': ['Preenchimento Obrigatório.'] });
       // }
 
       // if (this.hasPensao19 && (this.carencia == undefined || this.carencia === '')) {
-      //   this.errors.add({ 'carencia': ['Campo obrigatório.'] });
+      //   this.errors.add({ 'carencia': ['Preenchimento Obrigatório.'] });
       // }
 
     }
@@ -560,6 +564,12 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       this.errors.add({ 'carenciaAposEc103': ['Campo obrigatório.'] });
     }
 
+  }
+
+  clearEspecieChange() {
+    if (this.periodoInicioBeneficio !== this.periodoInicioBeneficioOLD) {
+      this.especieBeneficio = '';
+    }
   }
 
   changePeriodoOptions() {
@@ -937,11 +947,14 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   }
 
-  public clearCarenciaChange() {
+  public clearCarenciaChange(tipo) {
 
     if (this.hasCarencia) {
 
-      this.carencia = '';
+      if (tipo == 99) {
+        this.carencia = '';
+      }
+
       this.carenciaAposEc103 = ''
 
       const errorCarencia = {
@@ -1155,7 +1168,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
     this.ismedia12Ultimos = false;
 
-    if ((this.has19 && !this.hasPensaoInstuidorAposentado)
+    if (((this.has19 || this.hasAtual) && !this.hasPensaoInstuidorAposentado)
       && especiesActive.includes(this.especieBeneficio)) {
 
       this.ismedia12Ultimos = true;

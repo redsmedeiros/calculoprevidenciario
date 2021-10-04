@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from 'app/+rgps/+rgps-calculos/window.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-lista-competencias',
@@ -14,15 +15,14 @@ export class ListaCompetenciasComponent implements OnInit {
   @Input() isUpdating;
   @Input() isRegrasTransicao;
   @Input() segurado;
+  @Input() dataInicioBeneficio;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
 
   imprimirBox(event, boxId) {
@@ -33,7 +33,8 @@ export class ListaCompetenciasComponent implements OnInit {
     const calculoBox = document.getElementById('printableCalculo').innerHTML
     const boxlista = document.getElementById('lista-' + boxId).innerHTML;
     const boxconclusao = document.getElementById('conclusao-' + boxId).innerHTML;
-    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    //  const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    const rodape = document.getElementById('printableRodapeControle').innerHTML;
 
     const css = `<link rel="stylesheet" type="text/css"  href="assets/css/bootstrap.min.css">
                 <link rel="stylesheet" type="text/css"  href="assets/css/demo.min.css">

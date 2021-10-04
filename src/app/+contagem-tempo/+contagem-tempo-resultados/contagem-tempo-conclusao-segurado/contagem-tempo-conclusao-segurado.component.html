@@ -37,7 +37,7 @@
             <td><strong class="pull-right">Idade:</strong></td>
             <td>{{ segurado.idade }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="islastdateNascimento" >
             <td><strong class="pull-right">Idade após última data:</strong></td>
             <td>
               {{

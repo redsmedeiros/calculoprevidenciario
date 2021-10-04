@@ -28,7 +28,8 @@ export class TutorialVideoComponent implements OnInit {
     try {
       if (this.isExits(this.idVimeo)) {
 
-        this.link = `https://player.vimeo.com/video/${this.idVimeo}?color=ffffff`
+        // this.link = `https://player.vimeo.com/video/${this.idVimeo}?color=ffffff`
+        this.link = `https://www.youtube.com/embed/${this.idVimeo}`
         this.titleVideo = this.title;
       }
 

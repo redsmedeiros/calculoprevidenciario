@@ -46,17 +46,17 @@ export class BeneficiosCalculosFormCustasProcessoComponent extends BeneficiosCal
     this.errors.clear();
 
     if (this.isEmptyInput(this.custasFormDescricao)) {
-      this.errors.add({ 'custasFormDescricao': ['Campo Obrigatório.'] });
+      this.errors.add({ 'custasFormDescricao': ['Preenchimento Obrigatório.'] });
       valid = false;
     }
 
     if (this.isEmptyInput(this.custasFormData)) {
-      this.errors.add({ 'custasFormData': ['Campo Obrigatório.'] });
+      this.errors.add({ 'custasFormData': ['Preenchimento Obrigatório.'] });
       valid = false;
     }
 
     if (this.isEmptyInput(this.custasFormValor)) {
-      this.errors.add({ 'custasFormValor': ['Campo Obrigatório.'] });
+      this.errors.add({ 'custasFormValor': ['Preenchimento Obrigatório.'] });
       valid = false;
     }
 

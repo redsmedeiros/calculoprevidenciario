@@ -1,11 +1,11 @@
-<article class="container-fluid">
+<article class="no-padding">
 
 <section>
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group1120192020>
 	    <h4 class="panel-title " accordion-heading>
 	      <a>
-            <strong id="tituloCalculo" *ngIf="!isPlanejamento" >Data de Início do Benefício a partir de 14/11/2019 EC nº 103/2019 </strong>
+            <strong id="tituloCalculo" *ngIf="!isPlanejamento" >{{(numResultado+1)}} - Direito Adquirido a partir de 14/11/2019 EC nº 103/2019 </strong>
             <strong id="tituloCalculo" *ngIf="isPlanejamento" >Cálculo de RMI projetado de {{ calculo.data_pedido_beneficio_old }} para {{ calculo.data_pedido_beneficio }}</strong>
             <i
             class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
@@ -134,12 +134,16 @@
             [isUpdating]="isUpdating"
             [isRegrasTransicao]="isRegrasTransicao"
             [segurado] ="segurado"
+            [dataInicioBeneficio] ="dataInicioBeneficioExportar"
          ></app-lista-competencias>
 
          <app-conclusoes-rmi *ngIf="isRegrasPensaoObitoInstituidorAposentado"
          [conclusoes]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.list"
          [regraLabel]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.label"
          [isUpdating]="isUpdating"
+         [dataInicioBeneficio]="dataInicioBeneficio"
+         [segurado]="segurado"
+         [valorExportacao]="conclusoesInstituidorAposentadoPensaoObitoInstituidorAposentado.rmi"
        ></app-conclusoes-rmi>
 
         

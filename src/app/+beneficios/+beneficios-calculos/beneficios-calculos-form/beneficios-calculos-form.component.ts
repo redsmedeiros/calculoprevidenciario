@@ -184,7 +184,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     { text: 'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
     { text: 'Percentual sobre o Valor Total do Benefício Devido', value: 'dev' },
     { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
-    { text: 'Fixo', value: 'fixo' }
+    { text: 'Honorários em Valor Fixo', value: 'fixo' },
+    { text: 'Calcular Sobre o Valor da Causa', value: 'condenacao' },
   ];
 
   public tipoJurosOptions = [
@@ -220,6 +221,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public RRASemJuros = false;
   public SBSemLimitacao;
   public SBSemLimitacaoAliquota;
+
+  public manterPercentualSMConcedido;
+  public manterPercentualSMEsperado;
 
 
   @Input() formData;
@@ -322,8 +326,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (!moment(this.dataCalculo, 'MM/YYYY').isValid()) {
       this.errors.add({ 'dataCalculo': ['Insira uma data Válida.'] });
       valid = false;
-    } else if (moment(this.dataCalculo, 'DD/MM/YYYY') < this.dataMinima) {
+    } else if (moment(this.dataCalculo, 'MM/YYYY') < this.dataMinima) {
       this.errors.add({ 'dataCalculo': ['A data do Cálculo deve ser posterior a 01/01/1970.'] })
+      valid = false;
+    } else if (moment(this.dataCalculo, 'MM/YYYY').isAfter(moment(), 'month')) {
+      this.errors.add({ 'dataCalculo': ['A data do Cálculo não deve ser posterior ao mês atual.'] })
       valid = false;
     }
 
@@ -588,7 +595,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
     }
 
-    if ( this.tipoDejurosSelecionado !== 'sem_juros') {
+    if (this.tipoDejurosSelecionado !== 'sem_juros') {
       if (this.isEmptyInput(this.competenciaInicioJuros)) {
         this.errors.add({ 'competenciaInicioJuros': ['A Competência Inicial dos Juros é obrigatoria'] });
         valid = false;
@@ -770,7 +777,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.dataHonorariosDe = this.dibValoresDevidos;
       }
 
-      if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
+      if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
         this.formData.taxa_advogado_inicio = moment(this.dataHonorariosDe, 'MM/YYYY').startOf('month').format('DD/MM/YYYY');
       } else {
         this.formData.taxa_advogado_inicio = this.dataHonorariosDe;
@@ -832,16 +839,17 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.formData.numero_beneficio_devido = this.numeroBeneficioDevido;
       this.formData.numero_beneficio_recebido = this.numeroBeneficioRecebido;
 
-      console.log(this.numDependentes);
       this.formData.num_dependentes = this.numDependentes;
+      this.formData.manterPercentualSMEsperado = this.manterPercentualSMEsperado;
 
       // Calcular Mais (Vincendos)
       this.formData.maturidade = (this.maturidade) ? 12 : 0;
+
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
-        this.formData.previo_interesse_2003 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
+        this.formData.previo_interesse_2003 =  this.jurosAntes2003;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
 
       } else {
         this.formData.previo_interesse_2003 = 0;
@@ -849,8 +857,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros posterior a janeiro 2003
       if (this.jurosDepois2003 != undefined) {
 
-        this.formData.pos_interesse_2003 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2003.replace(',', '.') : this.jurosDepois2003;
+        this.formData.pos_interesse_2003 = this.jurosDepois2003;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2003.replace(',', '.') : this.jurosDepois2003;
 
       } else {
         this.formData.pos_interesse_2003 = 0;
@@ -858,12 +866,13 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros posterior a julho 2009
       if (this.jurosDepois2009 != undefined) {
 
-        this.formData.pos_interesse_2009 =
-          (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2009.replace(',', '.') : this.jurosDepois2009;
+        this.formData.pos_interesse_2009 = this.jurosDepois2009;
+        //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosDepois2009.replace(',', '.') : this.jurosDepois2009;
 
       } else {
         this.formData.pos_interesse_2009 = 0;
       }
+
       // Espécie valores devidos
       this.formData.tipo_aposentadoria = this.especieValoresDevidos;
       // Agora
@@ -994,23 +1003,25 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.SBSemLimitacao = rstDevidos.SBSemLimitacao;
     this.SBSemLimitacaoAliquota = rstDevidos.SBSemLimitacaoAliquota;
     this.numDependentes = rstDevidos.numDependentes;
+    this.manterPercentualSMEsperado = rstDevidos.manterPercentualSMEsperado;
 
   }
 
   reciverFeedbackDevidos(rstDevidos) {
-    console.log(rstDevidos);
     this.listDevidos = rstDevidos;
     this.setVarDevidos(rstDevidos[0]);
   }
 
   reciverFeedbackRecebidos(rstRecebido) {
-    // console.log(rstRecebido);
 
     rstRecebido.sort((a, b) => {
       if (moment(a.dib, 'DD/MM/YYYY') < moment(b.dib, 'DD/MM/YYYY')) {
         return -1;
       }
     });
+
+
+
 
     this.listRecebidos = rstRecebido;
   }
@@ -1089,8 +1100,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.taxaAdvogadoAplicacaoSobre = (this.isExits(this.formData.taxa_advogado_aplicacao_sobre)) ?
       this.formData.taxa_advogado_aplicacao_sobre : '';
 
-    if (this.taxaAdvogadoAplicacaoSobre === 'fixo') {
-      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('DD/MM/YYYY');
+    if (this.taxaAdvogadoAplicacaoSobre === 'fixo' || this.taxaAdvogadoAplicacaoSobre === 'condenacao') {
+      this.dataHonorariosDe = moment(this.formData.taxa_advogado_inicio, 'YYYY-MM-DD').format('MM/YYYY');
     }
 
     // Calcular Mais (Vincendos)
@@ -1107,6 +1118,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.pos_interesse_2009 != null) {
       this.jurosDepois2009 = this.formData.pos_interesse_2009.toString().replace('.', ',');
     }
+
     // Espécie valores devidos
     this.especieValoresDevidos = this.formData.tipo_aposentadoria;
     // CheckBox tetos judiciais em 12/1998 e em 12/2003 (indisponivel para calculo comum)
@@ -1191,6 +1203,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.numeroBeneficioDevido = this.formData.numero_beneficio_devido;
     this.numeroBeneficioRecebido = this.formData.numero_beneficio_recebido;
     this.numDependentes = this.formData.num_dependentes;
+    this.manterPercentualSMEsperado = this.formData.manterPercentualSMEsperado;
 
     if (this.taxaAdvogadoAplicacaoSobre === 'CPC85') // somente se o check for maracado
     {
@@ -1213,7 +1226,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.formData.list_recebidos && this.formData.list_recebidos.length > 0) {
       this.listRecebidos = JSON.parse(this.formData.list_recebidos);
     }
-    this.addLoadRecebidoList();
+    // this.addLoadRecebidoList();
 
     if ((this.formData.list_devidos && this.formData.list_devidos.length > 0)) {
       this.listDevidos = JSON.parse(this.formData.list_devidos);
@@ -1228,7 +1241,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     this.limit60SC = this.formData.limit_60_sc;
     this.RRASemJuros = this.formData.rra_sem_juros;
 
-    //this.dibValoresDevidosChanged();
+    // this.dibValoresDevidosChanged();
     if (!this.dipValoresDevidos && (this.dibValoresDevidos !== undefined && this.dibValoresDevidos !== '')) {
       this.dibValoresDevidosChanged();
     }
@@ -1260,14 +1273,38 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.calcularAbono13UltimoMes,
       this.SBSemLimitacao,
       this.SBSemLimitacaoAliquota,
-      this.numDependentes
+      this.numDependentes,
+      this.manterPercentualSMEsperado,
     );
 
     this.listDevidos.push(devidoMultiplo);
     this.rowDevidosEdit = (this.listDevidos.length > 0);
   }
 
-  private addLoadRecebidoList() {
+
+  public ordenarLista() {
+
+    this.listRecebidos.sort((a, b) => {
+
+      const dib1 = moment(a.dib, 'DD/MM/YYYY');
+      const dib2 = moment(b.dib, 'DD/MM/YYYY');
+
+      const dip1 = moment(a.dip, 'DD/MM/YYYY');
+      const dip2 = moment(b.dip, 'DD/MM/YYYY');
+
+      if (dib1.isSame(dib2)) {
+        return dip1 < dip2 ? -1 : 1
+      } else {
+        return dib1 > dib2 ? -1 : 1
+      }
+
+    });
+  }
+
+
+  public addLoadRecebidoList() {
+
+    this.ordenarLista();
 
     if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
 
@@ -1285,6 +1322,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.naoAplicarSMBeneficioConcedido,
         this.dataInicialadicional2Recebido,
         this.calcularAbono13UltimoMesRecebidos,
+        this.manterPercentualSMConcedido,
       );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
@@ -1384,11 +1422,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     } else if (this.checkDateAfterBuracoNegro(dibDate)) {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = true;
-     // this.chkDemandasJudiciais = false;
+      // this.chkDemandasJudiciais = false;
     } else {
       this.devidosBuracoNegro = false;
       this.devidosPosBuracoNegro = false;
-     // this.chkDemandasJudiciais = false;
+      // this.chkDemandasJudiciais = false;
     }
   }
 
@@ -1526,7 +1564,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       case '12_6':
         // 12% ao ano (até 06/2009) / 6% ao ano (Poupança)
         this.jurosAntes2003 = 0.50;
-        // this.jurosAntes2003 = 1.00;
         this.jurosDepois2003 = 1.00;
         this.jurosDepois2009 = 0.50;
         this.chkBoxTaxaSelic = true;
@@ -1566,18 +1603,18 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.jurosDepois2009 = 0.50;
         this.chkBoxTaxaSelic = false;
         break;
-      case 'manual':
-        // (manual)
-        this.jurosAntes2003 = null;
-        this.jurosDepois2003 = null;
-        this.jurosDepois2009 = null;
-        break;
       case 'sem_juros':
         // sem juros
         this.jurosAntes2003 = 0;
         this.jurosDepois2003 = 0;
         this.jurosDepois2009 = 0;
         this.chkBoxTaxaSelic = false;
+        break;
+      case 'manual':
+        // (manual)
+        // this.jurosAntes2003 = this.formData.previo_interesse_2003 ;
+        // this.jurosDepois2003 = this.formData.pos_interesse_2003;
+        // this.jurosDepois2009 = this.formData.aplicar_juros_poupanca;
         break;
     }
 
@@ -1616,10 +1653,52 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
     }
+
     return 'manual';
 
   }
 
+
+  /**
+   * changePercentual
+   */
+  public changePercentual(especie, type) {
+
+    let text = '';
+    switch (especie) {
+      case '6':
+      case 6:
+        text = '50%'
+        break;
+      case '8':
+      case 8:
+        text = '30%'
+        break;
+      case '9':
+      case 9:
+        text = '40%'
+        break;
+      case '10':
+      case 10:
+        text = '60%'
+        break;
+    }
+
+    // if (type === 'd') {
+
+    //   this.manterPercentualSMEsperado = (text !== '') ? true : false;
+
+    // }
+
+    // if (type === 'r') {
+
+    //   this.manterPercentualSMConcedido = (text !== '') ? true : false;
+
+    // }
+
+    return text;
+
+  }
 
 
   getTipoAposentadoria(value) {

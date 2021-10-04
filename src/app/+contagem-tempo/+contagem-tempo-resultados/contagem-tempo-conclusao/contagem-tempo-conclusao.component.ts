@@ -809,7 +809,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   public tempoCumprirAposentadoriaItentegal() {
 
     let rstTemp = 0;
-    rstTemp = this.tempoTotalConFator.fullDays - (this.tempoMinimoIntegralEmenda20 - this.redutorSexoDias);
+    rstTemp = this.tempoTotalConFator19.fullDays - (this.tempoMinimoIntegralEmenda20 - this.redutorSexoDias);
 
     rstTemp = (rstTemp < 0) ? rstTemp * -1 : 0;
 

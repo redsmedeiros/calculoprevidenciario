@@ -27,8 +27,10 @@ export class HomeComponent implements OnInit {
       link: '/rgps/rgps-segurados',
       icon: `fa fa-lg fa-fw fa-calculator`,
       title: `RMI  <br>do RGPS`,
-      label: `Simula a Renda Mensal Inicial de benefícios com datas de início a
-      partir de Janeiro de 1970.`
+      label: `Simula a Renda Mensal Inicial de benefícios com datas de início a partir de janeiro de 1970, 
+      aplicando as regras contidas na EC nº 103/2019 e Decreto nº 10.410/2020, com descarte dos menores 
+      salários de contribuição de acordo com o disposto no artigo 26, § 6º da EC e artigo 32 do Decreto, 
+      além de verificar o direito adquirido ao benefício nas legislações anteriores.`
     },
     {
       value: 'benef-atrasados',
@@ -44,10 +46,12 @@ export class HomeComponent implements OnInit {
       value: 'contrib-atrasadas',
       link: '/contribuicoes/contribuicoes-segurados',
       icon: `fa fa-lg fa-fw fa-history`,
-      title: `Contribuições <br> em Atraso`,
-      label: ` Simula cálculo de contribuições previdenciárias em atraso com base
-      no entendimento jurisprudencial e Lei Complementar nº. 128, de
-      12/2008.`
+      title: `Recolhimento <br>em Atraso`,
+      label: ` Elabora cálculo para indenização de contribuições anteriores aos 
+      últimos 5 (cinco) anos (decadentes) na forma do artigo 45-A da Lei n. 8.212/1991, 
+      com redação dada pela Lei Complementar n. 128/2008, aplicadas ainda as regras previstas 
+      no § 7º, do artigo 216 e § 8º-A, do artigo 239, do Decreto n. 3.048/1999, com redação 
+      dada pelo Decreto n. 10.410/2020.`
     },
     {
 
@@ -78,7 +82,7 @@ export class HomeComponent implements OnInit {
       value: 'tutorial',
       link: '/tutorial',
       icon: `fa fa-lg fa-fw fa-question-circle `,
-      title: `Tutoriais  <br>e Manuais`,
+      title: `Tutoriais <br> &nbsp;`,
       label: `Tutoriais dos simuladores de cálculos previdenciários.`
     },
   ];

@@ -161,9 +161,19 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     if (tempoFinalContribAteEC103 <= contribuicao_min) {
 
-      contribuicaoDiff = (contribuicao_min - tempoFinalContrib);
-      tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
-      tempoDePedagioAnos = ((contribuicao_min_anos - tempoFinalContribAteEC103Anos) * 0.5);
+
+      if ((contribuicao_min > tempoFinalContrib)) {
+        contribuicaoDiff = contribuicao_min - tempoFinalContrib;
+      }
+
+      if ((contribuicao_min > tempoFinalContribAteEC103)) {
+        tempoDePedagio = ((contribuicao_min - tempoFinalContribAteEC103) * 0.5);
+      }
+
+
+      if ((contribuicao_min_anos > tempoFinalContribAteEC103Anos)) {
+        tempoDePedagioAnos = ((contribuicao_min_anos - tempoFinalContribAteEC103Anos) * 0.5);
+      }
 
 
       tempoFinalContribfinalComPedagio = contribuicao_min + tempoDePedagio;
@@ -174,8 +184,11 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
       tempoDePedagioTotalNecessarioAnos = (tempoFinalContribfinalComPedagioAnos - tempoFinalContribAnos);
 
-      idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
-
+      // console.log(contribuicaoDiff);
+      // console.log(contribuicao_min);
+      // console.log(tempoFinalContrib);
+      // console.log(tempoFinalContribAteEC103);
+      // console.log(tempoDePedagio);
       // console.log(tempoDePedagioAnos);
       // console.log(tempoFinalContribfinalComPedagio);
       // console.log(tempoFinalContribfinalComPedagioAnos);
@@ -186,7 +199,19 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       // console.log(tempoFinalContribAnos);
       // dataDib.add(tempoDePedagioTotalNecessario, 'd');
 
-      dataDib.add(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25), 'd');
+      if (tempoDePedagioTotalNecessarioAnos > 0) {
+
+        idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
+        dataDib.add(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25), 'd');
+
+      } else {
+
+        tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+        dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
+
+      }
+
+
 
 
 

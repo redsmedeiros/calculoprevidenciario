@@ -11,13 +11,29 @@ export class ConclusoesRmiComponent implements OnInit {
   @Input() conclusoes;
   @Input() regraLabel;
   @Input() isUpdating;
+  @Input() dataInicioBeneficio;
+  @Input() segurado;
+  @Input() valorExportacao;
 
   constructor() { }
 
   ngOnInit() {
 
-    // console.log(this.conclusoes);
+  }
+
+  exportarParaBeneficios(data, valor, tipoCalculo) {
+
+    const objExport = JSON.stringify({
+      seguradoId: this.segurado.id,
+      dib: data,
+      valor: valor,
+      tipoCalculo: tipoCalculo,
+    });
+
+    sessionStorage.setItem('exportBeneficioAtrasado', objExport);
+    window.location.href = '/#/beneficios/beneficios-calculos/' + tipoCalculo + '/' + this.segurado.id;
 
   }
 
+  
 }

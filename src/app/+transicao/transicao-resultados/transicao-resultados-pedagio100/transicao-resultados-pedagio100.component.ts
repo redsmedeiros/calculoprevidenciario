@@ -164,7 +164,6 @@ export class TransicaoResultadosPedagio100Component extends TransicaoResultadosC
       // console.log(' -- Regra 4 ---');
       // console.log(rstRegra4pedagio100);
       //  // console.log(this.conclusoesRegra4);
-      //   console.log(this.conclusoesRegra4);
 
       // fim do processo
       this.isUpdating = false;

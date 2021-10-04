@@ -63,7 +63,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
     ordering: false,
     columns: [
       { data: 'actions', width: '15rem' },
-      { data: 'id' },
+      //  { data: 'id' },
       {
         data: 'data_calculo',
         render: (data) => {
@@ -82,21 +82,27 @@ export class ContribuicoesCalculosComponent implements OnInit {
           return this.formatReceivedMonthAndYear(data);
         }
       },
-      {
-        data: 'contribuicao_basica_inicial',
-        render: (data) => {
-          return this.formatReceivedMonthAndYear(data);
-        }
-      },
-      {
-        data: 'contribuicao_basica_final',
-        render: (data) => {
-          return this.formatReceivedMonthAndYear(data);
-        }
-      },
+      // {
+      //   data: 'contribuicao_basica_inicial',
+      //   render: (data) => {
+      //     return this.formatReceivedMonthAndYear(data);
+      //   }
+      // },
+      // {
+      //   data: 'contribuicao_basica_final',
+      //   render: (data) => {
+      //     return this.formatReceivedMonthAndYear(data);
+      //   }
+      // },
       {
         data: 'media_salarial',
         render: (data) => {
+          return this.formatMoney(data);
+        }
+      },
+      {
+        data: 'salario',
+        render: (data, row) => {
           return this.formatMoney(data);
         }
       },
@@ -116,7 +122,7 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   public state: any = {
     tabs: {
-      selectedTab: 'hr1',
+      selectedTab: 'hr2',
     }
   };
 
@@ -153,17 +159,13 @@ export class ContribuicoesCalculosComponent implements OnInit {
             window.location.href = '/#/contribuicoes/contribuicoes-segurados/';
           });
         } else {
-          this.Jurisprudencial.get()
-            .then(() => {
-              this.jurisprudencialList = this.Jurisprudencial.list;
-              this.updateDatatable();
-            })
+       
+            this.Complementar.getWithParameters(['id_segurado', this.idSegurado])
+            .then((calculos) => {
 
-          this.Complementar.get()
-            .then(() => {
-              this.complementarList = this.Complementar.list;
               this.updateDatatable();
               this.isUpdating = false;
+
             });
         }
       });
@@ -187,6 +189,15 @@ export class ContribuicoesCalculosComponent implements OnInit {
       data: this.jurisprudencialList,
     }
 
+
+    this.complementarList.map((row) => {
+
+      if (moment(row.updated_at).isBefore('2021-06-01')) {
+        row.salario = 0;
+      }
+
+    });
+
     this.complementarList = this.complementarList.filter(this.isSegurado, this);
     this.complementarTableOptions = {
       ...this.complementarTableOptions,
@@ -205,11 +216,17 @@ export class ContribuicoesCalculosComponent implements OnInit {
 
   formatReceivedDateTime(inputDateTime) {
     // inputDateTime.substring(11, 19) + ' ' +
-    return  this.formatReceivedDate(inputDateTime.substring(0, 10));
+    return this.formatReceivedDate(inputDateTime.substring(0, 10));
   }
 
+  // formatMoney(data) {
+  //   return 'R$' + (data.toFixed(2)).replace('.', ',');
+  // }
+
+
   formatMoney(data) {
-    return 'R$' + (data.toFixed(2)).replace('.', ',');
+    data = parseFloat(data);
+    return 'R$ ' + data.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
   }
 
   getDocumentType(id_documento) {

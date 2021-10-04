@@ -1,6 +1,6 @@
       
-<article class="container-fluid">
-     <section class="container-fluid">
+<article class="no-padding">
+     <section >
         <accordion class="smart-accordion-red panel-group" [closeOthers]="true">
           <accordion-group [isOpen]="false" #groupAntes1988>
             <h4 class="panel-title" accordion-heading>
@@ -17,7 +17,7 @@
                   }"
                 ></i>
                 <!-- {{calculo.tipo_seguro}} -->
-                <strong id='tituloCalculo'> Anterior a 05/10/1988</strong></a
+                <strong id='tituloCalculo'>{{(numResultado+1)}} - Direito Adquirido Anterior a 05/10/1988</strong></a
               >
             </h4>
             <div class="no-padding no-margin">
@@ -268,23 +268,6 @@
               </td>
               <td>
                 <button type="submit" *ngIf='erro.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-                <button type="submit" *ngIf='erro.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
-                  <span class="btn-label">
-                    <i class="fa fa-link"></i>
-                  </span> EXPORTAR
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf='!isUpdating'>
-              <td>
-                <p>Exportar para o cálculo de Liquidação de Sentença - Teto 12/98 e 12/2003</p>
-              </td>
-              <td>
-                <button type="submit" *ngIf='erro.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficio.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
                   <span class="btn-label">
                     <i class="fa fa-link"></i>
                   </span> EXPORTAR

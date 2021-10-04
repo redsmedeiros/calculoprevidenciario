@@ -1,0 +1,145 @@
+<div>
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <!-- row -->
+    <div class="row">
+<!-- 
+      <article
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="exibirCampoAnteriorLei13846"
+      >
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-edit"></i>
+            </span>
+            <h2>Soma das Contribuições Primárias e Secundárias - Lei 13.846/19</h2>
+          </header>
+          <div *ngIf="!isUpdating" class="widget-body">
+            <p>
+              Para os benefícios concedidos a partir de 18 de junho de 2019 foi
+              determinada a soma das contribuições concomitantes de acordo com
+              as alterações trazidas pela Lei 13.846/19.
+            </p>
+            <p>
+              <strong
+                >DIB do Cálculo: {{ calculo.data_pedido_beneficio }}</strong
+              >
+            </p>
+
+            <div class="alert alert-warning ">
+              <div class="row form-group form-horizontal m-2">
+                <label
+                  class="col-md-5 control-label"
+                  for="select-somarSecundaria"
+                >
+                <strong>Deseja realizar a soma das contribuições primárias e secundárias para DIB anterior a 18/06/2019?</strong>
+                </label>
+                <div class="col-md-2">
+                  <select
+                    [(ngModel)]="somarSecundaria"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="changeSomarSecundaria()"
+                    [ngModelOptions]="{ standalone: true }"
+                    class="form-control"
+                    id="select-somarSecundaria"
+                  >
+                    <option value="true">SIM</option>
+                    <option value="false">NÃO</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article> -->
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          [sortable]="false"
+          [colorbutton]="false"
+          [editbutton]="false"
+          class="mb-3"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Importar Salários de Contribuição do CNIS</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+              <div class="alert alert-warning margin-top-10" role="alert">
+                <p>
+                  O modelo para importação pode ser baixado
+                  <a href="modelo_importacao_cnis.pdf" target="_blank">aqui</a>.
+                </p>
+              </div>
+              <file-drop
+                (click)="clickedDropzone()"
+                (onFileDrop)="dropped($event)"
+              >
+                <span
+                  >Clique aqui e selecione o CNIS.pdf ou arraste para este
+                  local.</span
+                >
+              </file-drop>
+              <input
+                type="file"
+                (change)="onFileInputChange($event)"
+                accept="application/pdf"
+                #cnisFileInput
+                style="display:none"
+              />
+            </div>
+          </div>
+        </sa-widget>
+      </article>
+
+      <!--       <article class="col-sm-12 col-md-12 col-lg-12">
+        <sa-widget [togglebutton]="false" [deletebutton]="false" [fullscreenbutton]="false" [custombutton]="false" [sortable]="false" [colorbutton]="false" [editbutton]="false">
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2>Opção 2</h2>
+          </header>
+          <div>
+            <div class="widget-body">
+            <div>
+            <span>Copie todos os dados do CNIS ou Carta de Concessão e cole no espaço reservado os dados copiados:</span>
+            <textarea rows="5" cols="50" [(ngModel)]="cnisTextArea"></textarea>
+           
+            </div>
+            <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-12">
+                       <button type="submit" (click)="importFromTextArea()" class="btn btn-labeled btn-primary">
+                        <span class="btn-label">
+                          <i class="fa fa-upload"></i>
+                        </span> Iniciar importação
+                        </button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </sa-widget>
+      </article> -->
+    </div>
+
+    <!-- end row -->
+  </sa-widgets-grid>
+
+  <!-- end widget grid -->
+</div>

@@ -6,6 +6,7 @@ import { ExpectativaVidaService } from '../ExpectativaVida.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
 import { ReajusteAutomaticoService } from '../ReajusteAutomatico.service';
 import { ValorContribuidoService } from '../../+rgps-valores-contribuidos/ValorContribuido.service'
+import { ValorContribuido } from 'app/+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
 import { CarenciaProgressiva } from '../CarenciaProgressiva.model';
 import { CarenciaProgressivaService } from '../CarenciaProgressiva.service';
 import { CalculoRgpsService } from '../../+rgps-calculos/CalculoRgps.service';
@@ -23,6 +24,7 @@ import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.m
 import swal from 'sweetalert2';
 
 
+
 @Component({
   selector: 'app-rgps-resultados-apos-pec103',
   templateUrl: './rgps-resultados-apos-pec103.component.html',
@@ -37,6 +39,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
   @Input() calculo;
   @Input() segurado;
+  @Input() numResultado;
   @Input() isPlanejamento;
   @Input() planejamento;
   @Input() planejamentoContribuicoesAdicionais;
@@ -57,6 +60,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public isRegraTransitoria = true;
   public isRegrasTransicao = false;
   public primeiraDataTabela;
+  public carenciaRequisito = 180;
   public carenciaConformDataFiliacao;
   public intervaloDeContribuicoes = 0;
   public valorExportacao = 0;
@@ -79,7 +83,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   public rmiFinalCustom;
 
   private numeroDeContribuicoesAux = 0;
-
+  private numeroDeContribuicoesAuxTotal = 0;
+  public dataInicioBeneficioExportar;
 
 
 
@@ -127,6 +132,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     this.isRegrasPensaoObitoInstituidorAposentado = (this.tipoBeneficio === 1900) ? true : false;
     this.isRegrasTransicao = (this.tipoBeneficio === 4) ? true : false;
 
+    this.dataInicioBeneficioExportar = (this.dataInicioBeneficio.clone()).format('YYYY-MM-DD');
+
 
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
@@ -136,6 +143,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
+
+
+    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), 0, this.idSegurado)
+    .then((valorescontribuidosTotal: ValorContribuido[]) => {
+      this.numeroDeContribuicoesAuxTotal  = valorescontribuidosTotal.length;
+    });
 
     // indices de correção pbc da vida toda
 
@@ -302,6 +315,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
     const numeroDeContribuicoes = this.getMesesDeContribuicao();
     this.numeroDeContribuicoesAux = numeroDeContribuicoes;
+    // this.numeroDeContribuicoesAuxTotal
 
 
     this.expectativaSobrevida = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio);
@@ -333,13 +347,17 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.fatorPrevidenciario,
         this.moedaDib,
         numeroDeContribuicoes,
+        this.numeroDeContribuicoesAuxTotal,
+        this.carenciaRequisito,
       );
 
       this.listaConclusaoAcesso = this.regrasAcesso.calCularTempoMaximoExcluido(
         this.listaConclusaoAcesso,
         numeroDeContribuicoes,
+        this.numeroDeContribuicoesAuxTotal,
         this.carenciaConformDataFiliacao,
-        this.calculo
+        this.calculo,
+        this.carenciaRequisito,
       );
 
       this.listaConclusaoAcesso = this.calcularListaContribuicoes.criarListasCompetenciasParaPossibilidades(
@@ -522,8 +540,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       setTimeout(() => {
 
         // Salvar Valor do Beneficio no Banco de Dados (rmi, somaContribuicoes);
-        this.calculo.soma_contribuicao = this.melhorSoma;
-        this.calculo.valor_beneficio = this.melhorValorRMI;
+        // this.calculo.soma_contribuicao = this.melhorSoma;
+        // this.calculo.valor_beneficio = this.melhorValorRMI;
+
+        this.setObjConclusoesMelhor(this.melhorValorRMI, this.melhorSoma, 'apos')
         this.CalculoRgpsService.update(this.calculo);
 
       }, 500);
@@ -749,6 +769,64 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
 
 
+  public getCarenciaProgressiva() {
+
+    const mesesCarenciaPorAno = {
+      1991: 60,
+      1992: 60,
+      1993: 66,
+      1994: 72,
+      1995: 78,
+      1996: 90,
+      1997: 96,
+      1998: 102,
+      1999: 108,
+      2000: 114,
+      2001: 120,
+      2002: 126,
+      2003: 132,
+      2004: 138,
+      2005: 144,
+      2006: 150,
+      2007: 156,
+      2008: 162,
+      2009: 168,
+      2010: 174,
+      2011: 180,
+    };
+
+    const filiacao = moment(this.segurado.data_filiacao, 'DD/MM/YYYY');
+    let carenciaProgressivaRequisito = 180;
+
+    if (filiacao.isValid() && filiacao.isBefore('1991-07-24')) {
+
+
+      const addAnosPorSexo = (this.segurado.sexo === 'f') ? 60 : 65;
+      const dataAnosIdade = moment(moment(this.segurado.data_nascimento, 'DD/MM/YYYY').add(addAnosPorSexo, 'years').format('YYYY-MM-DD'));
+
+      if (dataAnosIdade.isValid() &&
+        dataAnosIdade.isBetween('1991-01-01', '2011-12-31', 'year', '()')) {
+
+        carenciaProgressivaRequisito = mesesCarenciaPorAno[dataAnosIdade.year()];
+
+      }
+
+      if ((dataAnosIdade.isValid() &&
+        dataAnosIdade.isBefore('1991-01-01', 'year'))) {
+
+        carenciaProgressivaRequisito = 60;
+
+      }
+
+
+    }
+
+    return (carenciaProgressivaRequisito !== undefined) ? carenciaProgressivaRequisito : 180;
+
+  }
+
+
+
   /**
    * Na especie idade verifica se o segurado possui carrencia mínima para acesso a regra
    * @param  {} errorArray
@@ -759,7 +837,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 
-      const mesesCarencia = 180;
+      this.carenciaRequisito = this.getCarenciaProgressiva();
+      const mesesCarenciaRequisito = this.carenciaRequisito;
       this.carenciaConformDataFiliacao = this.calculo.carencia_apos_ec103;
 
       // console.log(this.calculo.carencia_apos_ec103);
@@ -782,15 +861,16 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
         }
 
-        //console.log(this.calculo.carencia_apos_ec103);
       }
 
-      if (this.calculo.carencia_apos_ec103 < mesesCarencia) {
-        //  const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
-        const erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia_apos_ec103) + ' mês(es) para a carência necessária.';
+      if (this.calculo.carencia_apos_ec103 < mesesCarenciaRequisito) {
+
+        const erroCarencia = 'Falta(m) '
+          + (mesesCarenciaRequisito - this.calculo.carencia_apos_ec103)
+          + ' mês(es) para a carência necessária.';
         this.errosArray.push(erroCarencia);
-        // this.erroCarenciaMinima = true;
         return false;
+
       }
 
     }

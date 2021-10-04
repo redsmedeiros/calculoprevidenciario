@@ -130,9 +130,15 @@
               </a>
             </h4>
             <div *ngIf="!isUpdating" class="no-padding">
-              <sa-widget [colorbutton]="false" [editbutton]="false">
+              <sa-widget
+                [colorbutton]="false"
+                [editbutton]="false"
+                class="no-margin"
+              >
                 <div>
-                  <div class="widget-body no-padding hidden-dt">
+                  <div
+                    class="widget-body widget-body-custom no-padding hidden-dt"
+                  >
                     <sa-datatable
                       id="lista-{{ i + calculoPorRegra.regra }}"
                       [options]="calculoPossivel.listaCompetencias"
@@ -166,6 +172,9 @@
                   [conclusoes]="calculoPossivel.conclusoes"
                   [regraLabel]="calculoPorRegra.label"
                   [isUpdating]="isUpdating"
+                  [segurado]="segurado"
+                  [dataInicioBeneficio]="dataInicioBeneficio"
+                  [valorExportacao]="calculoPossivel.rmi.value"
                 ></app-conclusoes-rmi>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -10,9 +10,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class ContribuicoesSeguradosFormComponent {
 
-  public dateMask = [/\d/, /\d/,'/',/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
+  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  public docMask = [/\d/, /\d/,/\d/,'.',/\d/,/\d/,/\d/,'.',/\d/,/\d/,/\d/,'-',/\d/,/\d/];
+  public docMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
 
   @Input() formData;
   @Input() errors: ErrorService;
@@ -21,20 +21,37 @@ export class ContribuicoesSeguradosFormComponent {
   public submit(e) {
     e.preventDefault();
 
-    if(!localStorage.getItem('user_id')){
-      swal('Erro', 'Falha de login!','error').then(() => {window.location.href = environment.loginPageUrl;});
+    if (!localStorage.getItem('user_id')) {
+      swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
     }
 
     this.validate();
-    
+
     if (this.errors.empty()) {
-      swal('Sucesso', 'Segurado salvo com sucesso','success');
-      this.formData.funcao = "contribuicao";
-      this.formData.user_id = localStorage.getItem('user_id'); 
-      this.onSubmit.emit( this.formData );
+      //  swal('Sucesso', 'Segurado salvo com sucesso', 'success');
+      swal({
+        type: 'success',
+        title: 'Segurado salvo com sucesso',
+        text: '',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timer: 1500
+      });
+      
+      this.formData.funcao = 'contribuicao';
+      this.formData.user_id = localStorage.getItem('user_id');
+      this.onSubmit.emit(this.formData);
     }
     else {
-      swal('Erro', 'Confira os dados digitados','error');
+      //  swal('Erro', 'Confira os dados digitados', 'error');
+      swal({
+        type: 'error',
+        title: 'Confira os dados digitados',
+        text: '',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timer: 1500
+      });
     }
   }
 
@@ -48,62 +65,62 @@ export class ContribuicoesSeguradosFormComponent {
   }
 
   validate() {
-    if(this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({"nome":["O Nome é obrigatório."]});
+    if (this.formData.nome == undefined || this.formData.nome == '') {
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
     }
 
-    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == "") {
-      this.errors.add({"data_nascimento":["A data de nascimento é obrigatória."]});
+    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
+      this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
     } else {
-      var dateParts = this.formData.data_nascimento.split("/");
-      let date = new Date(dateParts[1]+'/'+dateParts[0]+'/'+dateParts[2]);
+      var dateParts = this.formData.data_nascimento.split('/');
+      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
       if (isNaN(date.getTime()))
-        this.errors.add({"data_nascimento":["Insira uma data válida."]});
+        this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
-        this.errors.add({"sexo":["O campo sexo é obrigatório."]});
+      this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
     }
 
-   
+
     // if(this.formData.id_documento == undefined || this.formData.id_documento == '') {
     //   this.errors.add({"id_documento":["O Tipo de Documento é obrigatório."]});
     // }
-    
+
     // if(this.formData.numero_documento == undefined || this.formData.id_documento == '') {
     //   this.errors.add({"numero_documento":["O Número do Documento é obrigatório."]});
     // } else {
     //   let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi,'');
     //   let id = this.formData.id_documento.toString();
-      // switch (id) {
-      //   case '1': //PIS
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["PIS inválido."]});
-      //     break;
+    // switch (id) {
+    //   case '1': //PIS
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["PIS inválido."]});
+    //     break;
 
-      //   case '2': //PASEP
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["PASEP inválido."]});
-      //     break;
+    //   case '2': //PASEP
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["PASEP inválido."]});
+    //     break;
 
-      //   case '3': //CPF
-      //     if (!this.validateCPF(documentNumber))
-      //       this.errors.add({"numero_documento":["CPF inválido."]});
-      //     break;
+    //   case '3': //CPF
+    //     if (!this.validateCPF(documentNumber))
+    //       this.errors.add({"numero_documento":["CPF inválido."]});
+    //     break;
 
-      //   case '4': //NIT
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({"numero_documento":["NIT inválido."]});
-      //     break;
+    //   case '4': //NIT
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({"numero_documento":["NIT inválido."]});
+    //     break;
 
-      //   case '5': //RG
-      //     if (!this.validateRG(documentNumber))
-      //       this.errors.add({"numero_documento":["RG inválido."]});
-      //     break;
+    //   case '5': //RG
+    //     if (!this.validateRG(documentNumber))
+    //       this.errors.add({"numero_documento":["RG inválido."]});
+    //     break;
 
-      //   default:
-      //     break;
-      // }
+    //   default:
+    //     break;
+    // }
     //}
 
 

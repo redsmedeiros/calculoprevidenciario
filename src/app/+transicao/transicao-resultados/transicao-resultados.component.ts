@@ -157,7 +157,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
         this.seguradoTransicao.dataFiliacao,
         this.dataEC1032019
       )
-      //this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
+      // this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 += addBissextoTempoAteEC103;
     }
 
 
@@ -217,15 +217,15 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
   public formatDecimal(value, n_of_decimal_digits) {
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
   }
 
 
   public calcularIdade(final) {
 
     const dataFinal = (final != null) ?
-      moment(final).hour(0).minute(0).second(0).millisecond(0) :
-      moment().hour(0).minute(0).second(0).millisecond(0);
+      moment(final).add(1, 'day').startOf('day') :
+      moment().add(1, 'day').startOf('day');
 
     const idade = moment.duration(dataFinal.diff(moment(this.seguradoTransicao.dataNascimento, 'DD/MM/YYYY')));
 
@@ -238,13 +238,13 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
 
     if (d1.date() === d2.date() && d1.month() === d2.month()) {
 
-     return moment.duration({
-            days: 0,
-            months: idade.months(),
-            years: idade.years(),
-          });
+      return moment.duration({
+        days: 0,
+        months: idade.months(),
+        years: idade.years(),
+      });
 
-    }else{
+    } else {
 
       return idade;
 
@@ -281,6 +281,18 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   // }
 
+  
+  public converterTempoContribuicao360(anos, meses, dias, type) {
+
+    anos = this.isFormatInt(anos);
+    meses = this.isFormatInt(meses);
+    dias = this.isFormatInt(dias);
+
+    const contribuicaoTotal = (anos * 360) + (meses * 30) + dias;
+
+    return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 360;
+  }
+
 
 
   public converterTempoContribuicao(anos, meses, dias, type) {
@@ -290,14 +302,34 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     dias = this.isFormatInt(dias);
 
     const contribuicaoTotal = (anos * 365.25) + (meses * 30.436875) + dias;
-   // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
+    // const contribuicaoTotal = (anos * 365) + (meses * 30) + dias;
 
     return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   }
 
 
+  
+  // public converterTempoContribuicaoAnos360(anos, meses, dias) {
+
+  //   anos = parseInt(anos, 10);
+  //   meses = parseInt(meses, 10);
+  //   dias = parseInt(dias, 10 );
+
+  //      return (anos + (dias / 360) + (meses / 12));
+  // }
 
   
+  // public converterTempoContribuicaoDias360(anos, meses, dias) {
+
+  //   anos = parseInt(anos, 10);
+  //   meses = parseInt(meses, 10);
+  //   dias = parseInt(dias, 10 );
+
+  //      return (anos + (dias / 360) + (meses / 12)) * 360;
+  // }
+
+
+
   // public converterTempoContribuicao(anos, meses, dias, type) {
 
   //   anos = this.isFormatInt(anos);
@@ -407,9 +439,24 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.floor(dttDias);
 
+    if (totalFator.days === 30) {
+      totalFator.days = 0;
+      totalFator.months += 1;
+    }
+
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
     return totalFator;
   }
+
+  public convertD360ToDMY(daysY360) {
+    const total = { years: 0, months: 0, days: 0, fullDays: daysY360 };
+
+    total.years = Math.floor(daysY360 / 360);
+    total.months = Math.floor((daysY360 - total.years * 360) / 30);
+    total.days = Math.floor(daysY360 - total.years * 360 - total.months * 30);
+
+    return total;
+}
 
   public converterTempoDiasParaAnos(fullDays) {
     return ((fullDays) / 365.25);
@@ -590,7 +637,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   }
 
   isFormatInt(value) {
-    return (typeof value === 'string') ? parseInt(value) : value;
+    return (typeof value === 'string') ? parseInt(value, 10) : value;
   }
 
   formatDurationMoment(durationObj) {

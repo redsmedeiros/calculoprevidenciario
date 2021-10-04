@@ -4,7 +4,7 @@
     <!-- row -->
     <div class="row">
       <article class="col-sm-12 col-md-12 col-lg-12">
-        <h1>Contribuições em Atraso</h1>
+        <h3 class="p-1 m-1">Recolhimento em Atraso de Contribuições - Artigo 45-A da Lei n. 8.212/1991</h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
             <a href="#/contribuicoes/contribuicoes-segurados">
@@ -12,7 +12,7 @@
             >
           </li>
           <li class="breadcrumb-item active">
-            Lista dos cálculos de Contribuições Atrasadas realizados
+            Lista dos Cálculos
           </li>
         </ol>
       </article>
@@ -34,7 +34,7 @@
             <span class="widget-icon">
               <i class="fa fa-edit"></i>
             </span>
-            <h2>Dados do segurado selecionado</h2>
+            <h2>Dados do Segurado</h2>
           </header>
 
           <!-- widget div-->
@@ -98,7 +98,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- <tr>
               <td class="text-center">
                 <button
                   type="submit"
@@ -118,26 +118,24 @@
                   jurisprudencial
                 </p>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td class="text-center">
                 <button
                   type="submit"
                   (click)="createNewComplementar()"
-                  class="btn btn-labeled btn-info"
+                  class="btn btn-labeled btn-info my-3"
                   style="width: 250px"
                 >
                   <span class="btn-label pull-left">
-                    <i class="fa fa-arrow-right"></i>
+                    <i class="fa fa-plus"></i>
                   </span>
-                  <p class="m-2">Lei Complementar N° 128/08</p>
+                  <p class="my-2">Criar Novo Cálculo</p>
                 </button>
               </td>
               <td>
-                <p>
-                  O cálculo dos valores apresentados acima foram realizados com
-                  base na recente Lei Complementar nº. 128, de dezembro de 2008,
-                  que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
+                <p class="text-justify">
+                  Cálculo para indenização de contribuições anteriores aos últimos 5 (cinco) anos (decadentes) na forma do artigo 45-A da Lei n. 8.212/1991, com redação dada pela Lei Complementar n. 128/2008, aplicadas ainda as regras previstas no § 7º, do artigo 216 e § 8º-A, do artigo 239, do Decreto n. 3.048/1999, com redação dada pelo Decreto n. 10.410/2020.
                 </p>
               </td>
             </tr>
@@ -159,23 +157,27 @@
           [sortable]="false"
         >
           <header>
-            <ul class="nav nav-tabs pull-left in">
-              <li [class.active]="state.tabs.selectedTab == 'hr1'">
+            <!-- <ul class="nav nav-tabs pull-left in">
+               <li [class.active]="state.tabs.selectedTab == 'hr1'">
                 <a (click)="state.tabs.selectedTab = 'hr1'">
                   <span class="hidden-mobile hidden-tablet">
                     Jurisprudencial
                   </span>
                 </a>
-              </li>
+              </li> 
 
               <li [class.active]="state.tabs.selectedTab == 'hr2'">
                 <a (click)="state.tabs.selectedTab = 'hr2'">
                   <span class="hidden-mobile hidden-tablet">
-                    Lei Complementar N° 128/08
+                    Lista de Cálculos
                   </span>
                 </a>
               </li>
-            </ul>
+            </ul> -->
+              <span class="widget-icon">
+                <i class="fa fa-list"></i>
+              </span>
+              <h2>Lista de Cálculos</h2>
           </header>
 
           <!-- widget div-->
@@ -183,7 +185,7 @@
             <!-- widget content -->
             <div class="widget-body">
               <tabset>
-                <tab [active]="state.tabs.selectedTab == 'hr1'">
+                <!-- <tab [active]="state.tabs.selectedTab == 'hr1'">
                   <div class="alert alert-info" role="alert">
                     Cálculo de contribuições em atraso conforme entendimento
                     jurisprudencial
@@ -207,13 +209,13 @@
                       </thead>
                     </sa-datatable>
                   </div>
-                </tab>
+                </tab> -->
                 <tab [active]="state.tabs.selectedTab == 'hr2'">
-                  <div class="alert alert-info" role="alert">
+                  <!-- <div class="alert alert-info" role="alert">
                     O cálculo dos valores apresentados abaixo foram realizados
                     com base na recente Lei Complementar nº. 128, de dezembro de
                     2008, que deu nova redação ao artigo 45 da Lei nº. 8.212/91.
-                  </div>
+                  </div> -->
                   <app-contribuicoes-complementar-index
                     *ngIf="!isUpdating"
                     [datatableOptions]="complementarTableOptions"
@@ -228,6 +230,49 @@
         <!-- end widget -->
       </article>
     </div>
+
+    
+    <!-- <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-center">
+                <a
+                  data-toggle="modal"
+                  data-target="#recolhimento-em-atraso"
+                  class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                  title="Tutorial Planejamento Previdenciário"
+                  >Tutorial</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        id="recolhimento-em-atraso"
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="recolhimento-em-atraso-title"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-custom" role="document">
+          <div class="modal-content modal-lg">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe
+                src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/0800b3ba91f4f0dcb1e0260a86ff599b"
+                class="embed-responsive-item"
+                frameborder="0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
 
     <!-- end row -->
     <div class="row mb-0">

@@ -15,9 +15,7 @@
               Criar/Buscar Segurado</a
             >
           </li>
-          <li class="breadcrumb-item active">
-            Lista dos Cálculos Realizados
-          </li>
+          <li class="breadcrumb-item active">Lista dos Cálculos Realizados</li>
         </ol>
       </div>
     </div>
@@ -42,12 +40,23 @@
             <!-- widget content -->
             <div class="widget-body p-0 widget-body-custom">
               <ul class="list-inline m-0">
-                <li class="px-5"><strong>Nome:</strong>  {{segurado.nome}} </li>
-                <li  class="px-5" *ngIf="segurado.numero_documento" >
-                  <strong>{{segurado.getDocumentType(segurado.id_documento)}}:</strong>   {{segurado.numero_documento}}
+                <li class="px-5"><strong>Nome:</strong> {{ segurado.nome }}</li>
+                <li class="px-5" *ngIf="segurado.numero_documento">
+                  <strong
+                    >{{
+                      segurado.getDocumentType(segurado.id_documento)
+                    }}:</strong
+                  >
+                  {{ segurado.numero_documento }}
                 </li>
-                <li  class="px-5"><strong>Data de Nascimento:</strong>  {{segurado.data_nascimento}}</li>
-                <li  class="px-5"><strong>Sexo:</strong>  {{(segurado.sexo=='m')? 'Masculino' : 'Feminino'}}</li>
+                <li class="px-5">
+                  <strong>Data de Nascimento:</strong>
+                  {{ segurado.data_nascimento }}
+                </li>
+                <li class="px-5">
+                  <strong>Sexo:</strong>
+                  {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                </li>
               </ul>
               <div class="form-actions p-0 mt-3">
                 <div class="row">
@@ -87,67 +96,69 @@
                   type="submit"
                   (click)="createNewCalculo()"
                   class="btn btn-labeled btn-info mt-2"
-                  style="width: 325px;"
+                  style="width: 325px"
                 >
                   <span class="btn-label pull-left">
                     <i class="fa fa-plus"></i>
                   </span>
-                 <p class="m-2">Criar Novo Cálculo</p>
+                  <p class="m-2">Criar Novo Cálculo</p>
                 </a>
-                <!-- <br>
-                <br>
-                <br>
-                <button type="submit" (click)="createNewCalculo('R')" class="btn btn-labeled btn-info pull-left">
-                  <span class="btn-label">
-                    <i class="fa fa-arrow-right"></i>
-                  </span> Revisão de beneficios 
-                </button> -->
               </td>
               <td>
                 <p>
-                  Diferenças entre valores de rendas
-                    mensais de benefícios devidos e recebidos, com a aplicação de
-                    correção monetária, juros de mora e honorários advocatícios.
+                  Diferenças entre valores de rendas mensais de benefícios
+                  devidos e recebidos, com a aplicação de correção monetária,
+                  juros de mora e honorários advocatícios.
                 </p>
               </td>
             </tr>
             <tr>
               <td>
+                <popover-content
+                  #avisoCarencia
+                  title="Criar Novo Cálculo EC 20/1998 e EC 41/2003"
+                  [closeOnClickOutside]="true"
+                >
+                  <div class="alert alert-warning fade in bold">
+                    <i class="fa-fw fa fa-warning"></i> A partir de 13/05/2021,
+                    em razão de recentes adequações realizadas no Simulador de
+                    Liquidação de Sentença, a Revisão do Teto (EC’s 20/98 e
+                    41/03) poderá ser realizada através da opção “Criar Novo
+                    Cálculo”.
+                  </div>
+                </popover-content>
                 <a
-                  type="submit"
-                  (click)="createNewCalculoJudicial()"
                   class="btn btn-labeled btn-info"
-                  style="width: 325px; margin-top: 4rem;"
+                  style="width: 325px; margin-top: 4rem"
+                  popoverPlacement="right"
+                  [popoverOnHover]="true"
+                  [popover]="avisoCarencia"
                 >
                   <span class="btn-label pull-left">
                     <i class="fa fa-plus"></i>
                   </span>
-                  <p class="m-2"> Criar Novo Cálculo 
-                  EC 20/1998 e EC 41/2003</p>
+                  <p class="m-2">Criar Novo Cálculo EC 20/1998 e EC 41/2003</p>
                 </a>
               </td>
               <td>
                 <p>
-                  Diferenças devidas (com juros, correção monetária e honorários advocatícios) referente à readequação aos Tetos Constitucionais (Revisão do Teto) previstos nas EC’s 20/98 e 41/03 (R$ 1.200,00 e R$ 2.400,00), decorrente da limitação do Salário de Benefício ao teto do Salário de Contribuição vigente na Data de Início do Benefício – DIB.
+                  Diferenças devidas (com juros, correção monetária e honorários
+                  advocatícios) referente à readequação aos Tetos
+                  Constitucionais (Revisão do Teto) previstos nas EC’s 20/98 e
+                  41/03 (R$ 1.200,00 e R$ 2.400,00), decorrente da limitação do
+                  Salário de Benefício ao teto do Salário de Contribuição
+                  vigente na Data de Início do Benefício – DIB.
                 </p>
                 <div class="alert alert-warning fade in m-0">
                   <i class="fa-fw fa fa-warning"></i>
-                  Esta opção para elaboração de cálculo estará disponível até o dia 12/05/2021. Em razão de recentes adequações realizadas no Simulador de Liquidação de Sentença, a Revisão do Teto (EC’s 20/98 e 41/03) poderá ser realizada através da opção “Criar Novo Cálculo”.
+                  Esta opção para elaboração de cálculo estará disponível até o
+                  dia 12/05/2021. Em razão de recentes adequações realizadas no
+                  Simulador de Liquidação de Sentença, a Revisão do Teto (EC’s
+                  20/98 e 41/03) poderá ser realizada através da opção “Criar
+                  Novo Cálculo”.
                 </div>
               </td>
             </tr>
-            <!-- <tr>
-              <td>
-                <button type="submit" (click)="createNewCalculoIndices()" class="btn btn-labeled btn-default pull-left">
-                  <span class="btn-label">
-                    <i class="fa fa-arrow-right"></i>
-                  </span> Benefícios Atrasados - Índices 06/1999 e 05/2004
-                </button>
-              </td>
-              <td>
-                <p>Simula revisão com acréscimo dos índices de 2,28% em 06/1999 e 1,75% em 05/2004. (<a target="_blank"href="http://qualidade.ieprev.com.br/conteudo/id/34152/t/beneficio-atrasados---indices-06-99-e-05-04">manual</a>, <a target="_blank"href="http://qualidade.ieprev.com.br/UserFiles/File/MANUAL%20DO%20SIMULADOR%20DE%20C%c3%81LCULO%20DE%20BENEF%c3%8dCIOS%20ATRASADOS%2099-04.pdf">manual em PDF</a>, <a target="_blank"href="https://www.youtube.com/watch?v=v-GFKdUxwYE&list=PLNw6awklYZ0NN4G5zkE3jPY8IT5AqwPBt&index=9">videoaula</a>)</p>
-              </td>
-            </tr> -->
           </tbody>
         </table>
       </div>
@@ -185,27 +196,27 @@
       </div>
     </div>
     <div
-    id="tutorial-liquidacao-sentenca"
-    class="modal fade"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="tutorial-liquidacao-sentenca-title"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-custom" role="document">
-      <div class="modal-content modal-lg">
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe
-            src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
-            class="embed-responsive-item"
-            frameborder="0"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-          ></iframe>
+      id="tutorial-liquidacao-sentenca"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="tutorial-liquidacao-sentenca-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-custom" role="document">
+        <div class="modal-content modal-lg">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe
+              src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
+              class="embed-responsive-item"
+              frameborder="0"
+              allow="autoplay; fullscreen"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <div class="row mb-0">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -217,21 +228,40 @@
             <ul class="list-inline m-0 p-0">
               <li>
                 <i
-                  class="fa fa-calculator btn-primary fa-1-9x txt-color-white p-0 pull-left"
+                  class="
+                    fa fa-calculator
+                    btn-primary
+                    fa-1-9x
+                    txt-color-white
+                    p-0
+                    pull-left
+                  "
                   title="Mostra o resultado do cálculo do item relacionado."
                 ></i>
                 Calcular RMI
               </li>
               <li>
                 <i
-                  class="fa fa-edit fa-1-9x btn-warning txt-color-white p-0 pull-left"
+                  class="
+                    fa fa-edit fa-1-9x
+                    btn-warning
+                    txt-color-white
+                    p-0
+                    pull-left
+                  "
                   title="Editar o item relacionado."
                 ></i>
                 Editar
               </li>
               <li>
                 <i
-                  class="fa fa-times fa-1-9x btn-danger txt-color-white p-0 pull-left"
+                  class="
+                    fa fa-times fa-1-9x
+                    btn-danger
+                    txt-color-white
+                    p-0
+                    pull-left
+                  "
                   title="Remove definitivamente do sistema o item relacionado."
                 ></i>
                 Remover

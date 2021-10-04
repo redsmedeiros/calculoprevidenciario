@@ -3,7 +3,10 @@
   <sa-widgets-grid>
     <div class="row mb-3">
       <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isUpdating">
-        <h1>Contribuições em Atraso</h1>
+        <h3 class="p-1 m-1">
+          Recolhimento em Atraso de Contribuições - Artigo 45-A da Lei n.
+          8.212/1991
+        </h3>
       </article>
     </div>
     <div class="row">
@@ -22,6 +25,48 @@
         ></app-contribuicoes-segurados-index>
       </article>
     </div>
+
+    <!-- <div class="row mb-3">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body m-1 p-1">
+            <ul class="pager wizard no-margin">
+              <li class="pull-center">
+                <a
+                  data-toggle="modal"
+                  data-target="#recolhimento-em-atraso"
+                  class="btn btn-lg txt-color-white btn-danger bg-ieprev-red"
+                  title="Tutorial Planejamento Previdenciário"
+                  >Tutorial</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        id="recolhimento-em-atraso"
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="recolhimento-em-atraso-title"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-custom" role="document">
+          <div class="modal-content modal-lg">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe
+                src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/0800b3ba91f4f0dcb1e0260a86ff599b"
+                class="embed-responsive-item"
+                frameborder="0"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
 
     <div class="row mb-3">
       <div class="col-md-12">
@@ -48,25 +93,6 @@
                   class="fa fa-times fa-1-7x btn-danger txt-color-white p-1"
                 ></i>
                 Remover
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-12">
-        <div class="panel panel-default">
-          <div class="panel-heading m-0 p-1">
-            <strong>Instrução do cálculo</strong>
-          </div>
-          <div class="panel-body m-1 p-1">
-            <ul class="list-unstyled">
-              <li>
-                <a routerLink="/tutorial" target="_blank"
-                  >Clique aqui e veja os tutoriais e manuais dos simuladores</a
-                >
               </li>
             </ul>
           </div>

@@ -34,7 +34,7 @@
                 idsCalculo[0]
               }}"
             >
-              Valores de Contribuição</a
+              Valores dos Salários de Contribuição</a
             >
           </li>
           <li class="breadcrumb-item active">Resultados dos Cálculos</li>
@@ -116,12 +116,48 @@
                 <i class="fa fa-edit"></i>
               </span>
               <h2>Dados do Segurado</h2>
+              <button
+                class="btn btn-labeled btn-info pull-right"
+                *ngIf="!isPlanejamento"
+                type="submit"
+                (click)="editSegurado()"
+              >
+                <span class="btn-label">
+                  <i class="fa fa-pencil"></i>
+                </span>
+                Editar
+              </button>
             </header>
             <!-- widget div-->
-            <div>
+            <div class="my-0 p-0">
               <!-- widget content -->
-              <div class="widget-body widget-body-custom m-0 pb-4">
-                <ul class="list-inline m-0">
+              <div class="widget-body widget-body-custom m-0 p-0">
+                <table
+                  class="
+                    table table-condensed table-bordered
+                    no-padding no-margin
+                  "
+                >
+                  <thead>
+                    <tr>
+                      <th width="40%">Nome</th>
+                      <th>Data de Nascimento</th>
+                      <th>Sexo</th>
+                      <th>Idade atual</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td width="40%">{{ segurado.nome }}</td>
+                      <td>{{ segurado.data_nascimento }}</td>
+                      <td>
+                        {{ segurado.sexo == "m" ? "Masculino" : "Feminino" }}
+                      </td>
+                      <td>{{ this.idadeSegurado }} anos</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <ul class="list-inline m-0">
                   <li class="px-5">
                     <strong>Nome:</strong> {{ segurado.nome }}
                   </li>
@@ -136,7 +172,7 @@
                   <li class="px-5">
                     <strong>Idade atual:</strong> {{ this.idadeSegurado }} anos
                   </li>
-                </ul>
+                </ul> -->
                 <div id="printableSegurado" hidden>
                   <table class="table table-bordered table-hover">
                     <tr>
@@ -176,13 +212,14 @@
                     </tr>
                   </table>
                 </div>
-                <div
+                <!-- <div
                   class="form-actions no-padding mt-3"
                   *ngIf="!isPlanejamento"
                 >
                   <div class="row">
                     <div class="col-md-12">
                       <button
+                      *ngIf="!isPlanejamento"
                         type="submit"
                         (click)="editSegurado()"
                         class="btn btn-labeled btn-info pull-right"
@@ -195,7 +232,7 @@
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </sa-widget>
@@ -219,45 +256,46 @@
               <i class="fa fa-table"></i>
             </span>
             <!-- <h2>Grupo de Cálculos para os valores de contribuição</h2> -->
-            <h2 *ngIf="!isPlanejamento" >Informações do Cálculo</h2>
+            <h2 *ngIf="!isPlanejamento">Informações do Cálculo</h2>
             <h2 *ngIf="isPlanejamento">Informações do Benefício Futuro</h2>
           </header>
-          <div>
-            <div class="widget-body no-padding widget-body-custom hidden-dt">
-              <sa-datatable
-                [options]="grupoCalculosTableOptions"
-                *ngIf="!isUpdating"
-                paginationLength="false"
-                tableClass="table table-condensed table-bordered no-padding"
-                width="100%"
+          <div class="my-0 p-0">
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom m-0 p-0">
+              <table
+                class="
+                  table table-condensed table-bordered
+                  no-padding no-margin
+                "
               >
                 <thead>
                   <tr>
-                    <th>Espécie</th>
-                    <!-- <th>Período para início de benefício</th>
-                    <th>Contribuição Primária (Ano/Mês/Dia)</th>
-                    <th>Contribuição Secundária (Ano/Mês/Dia)</th> -->
+                    <th width="78%">Espécie</th>
                     <th>DIB</th>
-                    <!-- <th>Data de Criação</th> -->
-                    <th
-                      class="not-print"
-                      *ngIf="!mostrarCalculoApos19"
-                      disply:none
-                    >
+                    <th class="not-print" *ngIf="false" disply:none>
                       Comparar
                     </th>
                   </tr>
                 </thead>
-              </sa-datatable>
-              <!-- <div *ngIf="!mostrarCalculoApos19" class="row not-print no-padding" >
-                   <div class="col-md-12">
-                    <button (click)="compararCalculos()" type="submit" class="btn btn-labeled btn-primary pull-right">
+                <tbody>
+                  <tr *ngFor="let calculoL of calculoList">
+                    <td>{{ calculoL.especie }}</td>
+                    <td>{{ calculoL.dib }}</td>
+                    <td class="not-print" *ngIf="false" disply:none>
+                      <button
+                        (click)="compararCalculos()"
+                        type="submit"
+                        class="btn btn-labeled btn-primary pull-right"
+                      >
                         <span class="btn-label">
                           <i class="fa fa-calculator"></i>
-                        </span> Comparar
-                    </button>
-                  </div>
-                </div> -->
+                        </span>
+                        Comparar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </sa-widget>
@@ -395,8 +433,10 @@
       </div>
 
       <!-- Planejamento  -->
-      <article class="col-sm-12 col-md-12 col-lg-12 mt-3"
-      *ngIf="(this.mostrarCalculoApos99 || this.mostrarCalculoApos19)" >
+      <article
+        class="col-sm-12 col-md-12 col-lg-12 mt-2"
+        *ngIf="this.mostrarCalculoApos99 || this.mostrarCalculoApos19"
+      >
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"
@@ -406,6 +446,7 @@
           [deletebutton]="false"
           [fullscreenbutton]="false"
           [custombutton]="false"
+          class="mb-3"
         >
           <header>
             <span class="widget-icon">
@@ -417,7 +458,7 @@
           <div class="pt-0">
             <!-- widget content -->
             <div
-              class="widget-body widget-body-custom"
+              class="widget-body widget-body-custom no-margin"
               style="min-height: auto"
             >
               <div class="form-actions mt-0" *ngIf="isPlanejamento">
@@ -468,6 +509,89 @@
         </sa-widget>
       </article>
 
+      <div id="printableRodapeControle" hidden>
+        <table
+          style="
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+            font-size: 6px;
+          "
+          cellpadding="0"
+        >
+          <thead>
+            <tr>
+              <th style="text-align: center">Data da Criação do Cálculo</th>
+              <th style="text-align: center">Data da Atualização do Cálculo</th>
+              <th style="text-align: center">Data da Impressão do Cálculo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center">
+                {{ formatDataHora(calculosList[0].updated_at) }}
+              </td>
+              <td style="text-align: center">
+                {{ formatDataHora(calculosList[0].created_at) }}
+              </td>
+              <td style="text-align: center">{{ formatDataHora() }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <img
+          style="width: 100%"
+          src="./assets/img/rodapesimulador.png"
+          alt="Logo"
+        />
+      </div>
+
+      <!-- Planejamento Comparativo não deletar-->
+      <!-- <app-rgps-planejamento-calculo
+      *ngIf="false && !isPlanejamento && !isUpdating"
+      ></app-rgps-planejamento-calculo> -->
+
+      <!-- opções do calculo -->
+      <!-- <article class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="row not-print mb-0" id='containerOpcoes'>
+                      <div class="col-md-12">
+                        <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para a lista de segurados.">
+                          <span class="btn-label">
+                            <i class="fa fa-user"></i>
+                          </span> Segurados
+                        </button>
+      
+                        <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para edição de tempo de contribuição, espécie e DIB">
+                          <span class="btn-label">
+                            <i class="fa fa-edit"></i>
+                          </span> Cálculo
+                        </button>
+       
+                        <button type="submit" (click)="listaCalculos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para lista de cálculos do segurado selecionado">
+                          <span class="btn-label">
+                            <i class="fa fa-list"></i>
+                          </span> Lista cálculos
+                        </button> 
+      
+                        <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default mr-3 pull-right"
+                        title="Retorna para editar os valores de contribuição">
+                          <span class="btn-label">
+                            <i class="fa fa-edit"></i>
+                          </span> Contribuições
+                        </button>
+      
+                        <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled  btn-default mr-3 pull-right" 
+                        title="Imprime todos os cálculos da página.">
+                          <span class="btn-label">
+                            <i class="fa fa-print"></i>
+                          </span> Imprimir todos
+                        </button>
+                      </div>
+                    </div>
+            </article>  -->
     </div>
 
     <!-- end row -->

@@ -5,7 +5,7 @@
                     <div class="form-group mb-4">
                       <label class="col-md-6 control-label" [ngClass]="{'pt-0':!isEdit}"  for="dataInicioBeneficio"><strong>Data do Início do Benefício*:</strong></label>
                       <div class="col-md-5">
-                        <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions()" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
+                        <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions();clearEspecieChange();" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
                         <small *ngIf="errors.has('dataInicioBeneficio')" class="text-danger">{{ errors.get('dataInicioBeneficio') | i18n}}</small>
                       </div>
                     </div>
@@ -14,7 +14,7 @@
                     <div class="form-group mb-4">
                       <label class="col-md-5 control-label"  [ngClass]="{'pt-0':!isEdit}" for="periodoInicioBeneficio"><strong>Período do Benefício*:</strong></label>
                       <div class="col-md-7">
-                        <select [(ngModel)]="periodoInicioBeneficio" (change) = "changeGrupoDos12()" [ngModelOptions]="{standalone: true}" class="form-control" id="periodoInicioBeneficio">
+                        <select [(ngModel)]="periodoInicioBeneficio" (change)="changeGrupoDos12();clearEspecieChange();" [ngModelOptions]="{standalone: true}" class="form-control" id="periodoInicioBeneficio">
                           <option [value]="periodo" *ngFor="let periodo of periodoOptions">{{periodo}}</option>
                         </select>
                         <small *ngIf="errors.has('periodoInicioBeneficio')" class="text-danger" >{{ errors.get('periodoInicioBeneficio') | i18n}}</small>
@@ -26,40 +26,40 @@
                     <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="especieBeneficio"><strong>Espécie:</strong></label>
                     <div class="col-md-9">
                       <select [(ngModel)]="especieBeneficio" (change)="changeEspecieBeneficio()" [ngModelOptions]="{standalone: true}" class="form-control" id="especieBeneficio">
-                        <option selected disabled> - Selecione uma espécie - </option>
+                        <option selected disabled value=""> - Selecione uma espécie - </option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio == 'Anterior a 05/10/1988'">Abono de Permanência em Serviço</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019' && periodoInicioBeneficio != 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria especial</option>
+                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019' && periodoInicioBeneficio != 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 15 anos</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 20 anos</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' || periodoInicioBeneficio == 'Entre 29/11/1999 e 13/11/2019'">Aposentadoria Especial - 25 anos</option>
-                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Grave</option>
+                        <!-- <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Grave</option>
                         <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Leve</option>
-                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Moderada</option>
-                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial por Idade da Pessoa com Deficiência</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Idade da PcD</option>
+                        <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial da Pessoa com Deficiência Moderada</option> -->
+                        <!-- <option *ngIf="posteriorMaio2013 && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria especial por Idade da Pessoa com Deficiência</option> -->
+                        <option >Aposentadoria por Idade da PcD</option>
                         <option *ngIf="periodoInicioBeneficio">Aposentadoria por Idade - Trabalhador Rural</option>
                         <option *ngIf="periodoInicioBeneficio">Aposentadoria por Idade - Trabalhador Urbano</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria por invalidez Previdenciária ou Pensão por Morte</option>
+                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria por Invalidez ou Pensão por Morte</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Incapacidade Permanente</option>
                         <option *ngIf="periodoInicioBeneficio == 'Anterior a 05/10/1988'">Aposentadoria por tempo de serviço</option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988'">Aposentadoria por Tempo de Contribuição</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)</option>
-                        <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria por Tempo de Contribuição do(a) Professor(a)</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria por tempo de serviço de professor</option>
+                        <option >Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)</option>
+                        <option >Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)</option>
+                        <option >Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)</option>
+                        <option >Aposentadoria por Tempo de Contribuição do(a) Professor(a)</option>
+                        <!-- <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Aposentadoria por tempo de serviço de professor</option> -->
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' && isTransitoria">Aposentadoria Programada</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Aposentadoria Programada - Professor</option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente - 30%</option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente - 40%</option>
+                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente - 50%</option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente - 60%</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'Anterior a 05/10/1988' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente previdenciário - 50%</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019' && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Acidente - 50%</option>
                         <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">Auxílio Doença</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Auxílio Acidente</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Auxílio por Incapacidade Temporária</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">LOAS</option>
-                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">LOAS - Benefício no valor de um salário mínimo</option>
+                        <!-- <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">LOAS</option>
+                        <option *ngIf="periodoInicioBeneficio && periodoInicioBeneficio != 'A partir de 14/11/2019'">LOAS - Benefício no valor de um salário mínimo</option> -->
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Pensão por Morte - Instituidor Aposentado na Data do Óbito</option>
                         <option *ngIf="periodoInicioBeneficio == 'A partir de 14/11/2019'">Pensão por Morte - Instituidor não Aposentado na Data do Óbito</option>
                       </select>
@@ -134,15 +134,15 @@
                   <div *ngIf="hasAtual" class="form-group mb-4">
                     <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="primariaAtualanos"><strong>Contribuição Primária*:</strong></label>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualanos" id="primariaAtualanos" (keyup)="inputFunctions.moveNextInput($event, 2, 'primariaAtualmeses')"  (change)="errors.clear('primariaAtualanos'); clearCarenciaChange();" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" maxlength="2">
+                      <input [(ngModel)]="primariaAtualanos" id="primariaAtualanos" (keyup)="inputFunctions.moveNextInput($event, 2, 'primariaAtualmeses')"  (change)="errors.clear('primariaAtualanos'); clearCarenciaChange(99);" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos"  title="Anos" maxlength="2">
                       <small *ngIf="errors.has('primariaAtualanos')" class="text-danger">{{ errors.get('primariaAtualanos') | i18n}}</small>
                     </div>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualmeses"  id="primariaAtualmeses" (keyup)="inputFunctions.moveNextInput($event, 2, 'primariaAtualdias')"   (change)="errors.clear('primariaAtualmeses'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" maxlength="2">
+                      <input [(ngModel)]="primariaAtualmeses"  id="primariaAtualmeses" (keyup)="inputFunctions.moveNextInput($event, 2, 'primariaAtualdias')"   (change)="errors.clear('primariaAtualmeses'); clearCarenciaChange(99);"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" maxlength="2">
                       <small *ngIf="errors.has('primariaAtualmeses')" class="text-danger">{{ errors.get('primariaAtualmeses') | i18n}}</small>
                     </div>
                     <div class="col-md-2">
-                      <input [(ngModel)]="primariaAtualdias" id="primariaAtualdias" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19anos')"  (change)="errors.clear('primariaAtualdias'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" maxlength="2">
+                      <input [(ngModel)]="primariaAtualdias" id="primariaAtualdias" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19anos')"  (change)="errors.clear('primariaAtualdias'); clearCarenciaChange(99);"  [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias"  title="Dias" maxlength="2">
                       <small *ngIf="errors.has('primariaAtualdias')" class="text-danger">{{ errors.get('primariaAtualdias') | i18n}}</small>
                     </div>
                   </div>
@@ -172,15 +172,15 @@
                   <div *ngIf="has19 && !hasPensaoInstuidorAposentado;" class="form-group mb-4">
                       <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="primaria19anos"><strong>Contribuição *:</strong></label>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19anos" id="primaria19anos" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19meses')"  (change)="errors.clear('primaria19anos'); clearCarenciaChange();" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos"  maxlength="2">
+                        <input [(ngModel)]="primaria19anos" id="primaria19anos" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19meses')"  (change)="errors.clear('primaria19anos'); clearCarenciaChange(19);" [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Anos" title="Anos"  maxlength="2">
                         <small *ngIf="errors.has('primaria19anos')" class="text-danger">{{ errors.get('primaria19anos') | i18n}}</small>
                       </div>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19meses" id="primaria19meses" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19dias')"  (change)="errors.clear('primaria19meses'); clearCarenciaChange();"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" maxlength="2">
+                        <input [(ngModel)]="primaria19meses" id="primaria19meses" (keyup)="inputFunctions.moveNextInput($event, 2, 'primaria19dias')"  (change)="errors.clear('primaria19meses'); clearCarenciaChange(19);"  [ngModelOptions]="{standalone: true}"  type="text" class="form-control text-center" placeholder="Meses" title="Meses" maxlength="2">
                         <small *ngIf="errors.has('primaria19meses')" class="text-danger">{{ errors.get('primaria19meses') | i18n}}</small>
                       </div>
                       <div class="col-md-2">
-                        <input [(ngModel)]="primaria19dias" id="primaria19dias" (change)="errors.clear('primaria19dias'); clearCarenciaChange();"   [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias"  maxlength="2">
+                        <input [(ngModel)]="primaria19dias" id="primaria19dias" (change)="errors.clear('primaria19dias'); clearCarenciaChange(19);"   [ngModelOptions]="{standalone: true}" type="text"  class="form-control text-center" placeholder="Dias" title="Dias"  maxlength="2">
                         <small *ngIf="errors.has('primaria19dias')" class="text-danger">{{ errors.get('primaria19dias') | i18n}}</small>
                       </div>
                     </div>
@@ -249,7 +249,7 @@
                           </button>
                       </div>
                     </div>
-                    <div *ngIf="has19 && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
+                    <div *ngIf="(has19 || hasAtual) && !hasPensaoInstuidorAposentado && ismedia12Ultimos;" class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="media12Ultimos" class="checkbox" [ngModelOptions]="{standalone: true}">

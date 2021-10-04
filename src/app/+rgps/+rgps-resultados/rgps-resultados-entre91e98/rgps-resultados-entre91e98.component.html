@@ -1,11 +1,11 @@
-<article class="container-fluid"  >
+<article class="no-padding" >
 
 <section >
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group19911998>
 	    <h4 class="panel-title" accordion-heading>
 	      <a>
-          <strong  id='tituloCalculo'>Data de Início do Benefício entre {{stringCabecalho}} </strong>
+          <strong  id='tituloCalculo'>{{(numResultado+1)}} - Direito Adquirido entre {{stringCabecalho}} </strong>
             <i
             class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
             *ngIf="isUpdating"></i>
@@ -80,13 +80,13 @@
                   </tr>
                   <tr>
                     <td>
-                      <span class="pull-right font-bold">Contribuição primária:</span>
+                      <span class="pull-right font-bold">Tempo de Contribuição primário:</span>
                     </td>
                     <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="iscontribuicaoSecundaria">
                     <td>
-                      <span class="pull-right font-bold">Contribuição secundária:</span>
+                      <span class="pull-right font-bold">Tempo de Contribuição secundário:</span>
                     </td>
                     <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                   </tr>
@@ -119,11 +119,11 @@
                       <th>#</th>
                       <th>Competência</th>
                       <th>Fator</th>
-                      <th>Contribuição Primaria</th>
-                      <th>Contribuição Secundária</th>
-                      <th>Contribuição Primária Corrigida</th>
-                      <th>Contribuição Secundária Corrigida</th>
-                      <th>Limite</th>
+                      <th>Salário de Contribuição Primário</th>
+                      <th>Salário de Contribuição Secundário</th>
+                      <th>Salário de Contribuição Primário Corrigido</th>
+                      <th>Salário de Contribuição Secundário Corrigido</th>
+                      <th>Observação</th>
                     </tr>
                   </thead>
                 </sa-datatable>
@@ -132,104 +132,103 @@
                 <tbody>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                      <span class="pull-right font-bold">Índice de reajuste no teto</span>
                     </td>
                     <td width="50%">{{conclusoes.indice_reajuste_teto}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Total das contribuições primárias:</span>
+                      <span class="pull-right font-bold">Total das contribuições primárias</span>
                     </td>
                     <td width="50%">{{conclusoes.total_contribuicoes_primarias}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Média das contribuições primárias:</span>
+                      <span class="pull-right font-bold">Média das contribuições primárias</span>
                     </td>
                     <td width="50%">{{conclusoes.media_contribuicoes_primarias}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Divisor do cálculo da média:</span>
+                      <span class="pull-right font-bold">Divisor do cálculo da média</span>
                     </td>
                     <td width="50%">{{conclusoes.divisor_calculo_media}}</td>
                   </tr>
                   <tr *ngIf="conclusoes.total_contribuicoes_secundarias">
                     <td width="50%">
-                      <span class="pull-right font-bold">Total das contribuições secundárias:</span>
+                      <span class="pull-right font-bold">Total das contribuições secundárias</span>
                     </td>
                     <td width="50%">{{conclusoes.total_contribuicoes_secundarias}}</td>
                   </tr>
                   <tr *ngIf="conclusoes.media_contribuicoes_secundarias">
                     <td width="50%">
-                      <span class="pull-right font-bold">Média das contribuições secundárias:</span>
+                      <span class="pull-right font-bold">Média das contribuições secundárias</span>
                     </td>
                     <td width="50%">{{conclusoes.media_contribuicoes_secundarias}}</td>
                   </tr>
                   <tr *ngIf="conclusoes.divisor_calculo_media_secundaria">
                     <td width="50%">
-                      <span class="pull-right font-bold">Divisor do cálculo da média secundária:</span>
+                      <span class="pull-right font-bold">Divisor do cálculo da média secundária</span>
                     </td>
                     <td width="50%">{{conclusoes.divisor_calculo_media_secundaria}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Coeficiente:</span>
+                      <span class="pull-right font-bold">Coeficiente</span>
                     </td>
                     <td width="50%">{{conclusoes.coeficiente}}%</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Média das contribuições:</span>
+                      <span class="pull-right font-bold">Média das contribuições</span>
                     </td>
                     <td width="50%">{{conclusoes.media_contribuicoes}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Salário Mínimo:</span>
+                      <span class="pull-right font-bold">Salário Mínimo</span>
                     </td>
                     <td width="50%">{{conclusoes.salario_minimo}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Teto:</span>
+                      <span class="pull-right font-bold">Teto</span>
                     </td>
                     <td width="50%">{{conclusoes.teto}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Renda Mensal Inicial:</span>
+                      <span class="pull-right font-bold">Renda Mensal Inicial</span>
                     </td>
                     <td width="50%">{{conclusoes.renda_mensal_inicial}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Renda Mensal Inicial na DIB:</span>
+                      <span class="pull-right font-bold">Renda Mensal Inicial na DIB</span>
                     </td>
                     <td width="50%">{{conclusoes.renda_mensal_inicial_data_dib}}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos" class="widget-body hidden-dt no-margin" >
-              <h3 class="p-2 m-1">Reajustes Administrativos</h3>
-              <sa-datatable [options]="reajustesAdministrativosTableOptions" 
-              *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
-               tableClass="table table-striped table-bordered table-hover table-condensed" width="100%">
-                  <thead>
-                    <tr>
-                      <th>Competência</th>
-                      <th>Reajuste</th>
-                      <th>Benefício</th>
-                      <th>Limite</th>
-                    </tr>
-                  </thead>
-              </sa-datatable>
-            </div>
-           
           </div>
         </sa-widget>
+        <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && direito"
+        class="widget-body hidden-dt no-margin mt-3" >
+        <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos"><strong>Reajustes Administrativos</strong></h4>
+         <sa-datatable [options]="reajustesAdministrativosTableOptions" 
+         *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
+          tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
+             <thead>
+               <tr>
+                 <th>Competência</th>
+                 <th>Reajuste</th>
+                 <th>Benefício</th>
+                 <th>Limite</th>
+               </tr>
+             </thead>
+         </sa-datatable>
+       </div>
 </article>
 </div>
 

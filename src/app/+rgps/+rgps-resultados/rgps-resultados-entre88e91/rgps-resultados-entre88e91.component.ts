@@ -28,6 +28,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   @Input() isBlackHole;
   @Input() dadosPassoaPasso;
   @Input() listaValoresContribuidosPeriodosCT;
+  @Input() numResultado;
 
   public boxId;
   public isUpdating = false;
@@ -119,7 +120,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     // Ajuste para novos tipos conforme reforma
-    this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
+    // this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
 
     let dataInicio = this.dataInicioBeneficio;
@@ -277,7 +278,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       totalSecundaria += valorSecundarioRevisado;
 
       let contribuicaoPrimariaRevisadaString = this.formatMoney(valorPrimarioRevisado, dibCurrency.acronimo);
-      let contribuicaoSecundariaRevisadaString = "";
+      let contribuicaoSecundariaRevisadaString = '';
       if (!this.isBlackHole) {
         contribuicaoSecundariaRevisadaString = this.formatMoney(valorSecundarioRevisado, dibCurrency.acronimo); // Acronimo da moeda após a conversão.
       }
@@ -296,7 +297,10 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     }
 
 
-    if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6 || this.tipoBeneficio == 5 || this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
+    if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6
+      || [5, 1915, 1920, 1925].includes(this.tipoBeneficio)
+      || this.tipoBeneficio == 3 || this.tipoBeneficio == 16
+    ) {
       if (contagemPrimaria < 24) {
         contagemPrimaria = 24;
       }
@@ -444,17 +448,17 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           //"POSSUI direito ao benefício proporcional."
           //"Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
-          errorArray.push("POSSUI direito ao benefício proporcional. Falta(m) " + tempoFracionado + " para possuir o direito ao benefício INTEGRAL.");
+          errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) ' + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
-          errorArray.push("Falta(m) " + tempoFracionado + " para completar o tempo de serviço necessário para o benefício INTEGRAL.");
+          errorArray.push('Falta(m) ' + tempoFracionado + ' para completar o tempo de serviço necessário para o benefício INTEGRAL.');
           if (totalContribuicao98 > 0 && errorArray.length == 0) {
             let tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
             let tempoProporcional = this.tratarTempoFracionado(tempo);
             // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
             // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
-            errorArray.push("Falta(m) " + tempoProporcional + " para completar o tempo de serviço necessário para o benefício PROPORCIONAL.");
+            errorArray.push('Falta(m) ' + tempoProporcional + ' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.');
           }
         }
       }
@@ -466,10 +470,16 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       if (!this.verificarCarencia(-5, redutorProfessor, redutorSexo, errorArray)) {
         return false;
       }
-    } else if (this.tipoBeneficio == 5) {
-      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, 20);
+    } else if ([5, 1915, 1920, 1925].includes(this.tipoBeneficio)) {
+
+      // Aposentadoria Especial
+      const parametrosParaVerificarTempoDeServico = { 5: 20, 1915: 20, 1920: 15, 1925: 10 }
+      const valorExtra = parametrosParaVerificarTempoDeServico[this.tipoBeneficio];
+
+      direito = this.verificarTempoDeServico(anosContribuicao, 0, 0, valorExtra);
+
       if (!direito) {
-        errorArray.push("Não possui direito ao benefício de aposentadoria especial.");
+        errorArray.push('Não possui direito ao benefício de aposentadoria especial.');
       }
     } else if (this.tipoBeneficio == 16) {
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
@@ -482,29 +492,29 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     } else if (this.tipoBeneficio == 25) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 10);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
       }
     } else if (this.tipoBeneficio == 26) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 6);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.    
       }
     } else if (this.tipoBeneficio == 27) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 2);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.   
       }
     } else if (this.tipoBeneficio == 28) {
       direito = this.verificarTempoDeServico(anosContribuicao, 0, redutorSexo, 20);
       if (!direito) {
-        errorArray.push("");
+        errorArray.push('');
         return false; // Exibir Mensagem de erro com a quantidade de tempo faltando.
       }
       if (!this.verificarIdadeMinima(idadeDoSegurado, errorArray)) {
-        errorArray.push("");
+        errorArray.push('');
         return false; // Exibir Mensagem de erro com a idade faltando;
       }
     }
@@ -648,7 +658,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     }
 
     if (!temIdadeMinima) {
-      errorArray.push("O segurado não tem a idade mínima (" + idadeMinima + " anos) para se aposentar por idade. Falta(m) " + (idadeMinima - this.idadeSegurado) + " ano(s) para atingir a idade mínima.");
+      errorArray.push('O segurado não tem a idade mínima (' + idadeMinima + ' anos) para se aposentar por idade. Falta(m) ' + (idadeMinima - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.');
     }
     return temIdadeMinima;
   }
@@ -695,7 +705,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       }
 
       if (this.calculo.carencia < mesesCarencia) {
-        let erroCarencia = "Falta(m) " + (mesesCarencia - this.calculo.carencia) + " mês(es) para a carência necessária.";
+        let erroCarencia = 'Falta(m) ' + (mesesCarencia - this.calculo.carencia) + ' mês(es) para a carência necessária.';
         errorArray.push(erroCarencia);
         return false;
       }
@@ -723,7 +733,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     let idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
     let direito = idade > idadeNecessaria;
     if (!direito) {
-      errorArray.push("Falta(m) " + (idadeNecessaria - idade) + " ano(s) para atingir a idade mínima.");
+      errorArray.push('Falta(m) ' + (idadeNecessaria - idade) + ' ano(s) para atingir a idade mínima.');
     }
     return direito;
   }
@@ -732,21 +742,21 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     let year = Math.floor(time);
     let month = Math.round((time - year) * 12);
 
-    let returnStr = "";
+    let returnStr = '';
     if (year != 0) {
-      returnStr += year + " ano(s)";
+      returnStr += year + ' ano(s)';
     }
     if (month != 0 && year != 0) {
-      returnStr += " e ";
+      returnStr += ' e ';
     }
     if (month != 0) {
-      returnStr += month + " mes(es)";
+      returnStr += month + ' mes(es)';
     }
     if (month == 0 && year == 0) {
-      returnStr = " 0 ano(s) ";
+      returnStr = ' 0 ano(s) ';
     }
     if (year < 0) {
-      returnStr = "";
+      returnStr = '';
     }
     return returnStr;
   }
@@ -888,18 +898,18 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   }
 
   verificaErros() {
-    let erro = "";
+    let erro = '';
     let anoContribuicaoPrimariaAnterior88 = this.contribuicaoPrimaria88.anos;
-    if ((this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Rural" ||
-      this.calculo.tipo_seguro == "Aposentadoria por Idade - Trabalhador Urbano" ||
-      this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Rural" ||
-      this.calculo.tipo_seguro == "Aposentadoria por idade - Trabalhador Urbano") && this.calculo.carencia < 60) {
-      erro = "Falta(m) " + (60 - this.calculo.carencia) + " mês(es) para a carencia necessária.";
+    if ((this.calculo.tipo_seguro == 'Aposentadoria por Idade - Trabalhador Rural' ||
+      this.calculo.tipo_seguro == 'Aposentadoria por Idade - Trabalhador Urbano' ||
+      this.calculo.tipo_seguro == 'Aposentadoria por idade - Trabalhador Rural' ||
+      this.calculo.tipo_seguro == 'Aposentadoria por idade - Trabalhador Urbano') && this.calculo.carencia < 60) {
+      erro = 'Falta(m) ' + (60 - this.calculo.carencia) + ' mês(es) para a carencia necessária.';
     } else if (this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)) {
-      erro = "O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) " + (65 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
+      erro = 'O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) ' + (65 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
     } else if (this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)) {
-      erro = "O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) " + (60 - this.idadeSegurado) + " ano(s) para atingir a idade mínima."
-    } else if ((this.calculo.tipo_seguro == "Aposentadoria por tempo de serviço" || this.calculo.tipo_seguro == "Aposentadoria por tempo de contribuição") &&
+      erro = 'O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) ' + (60 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
+    } else if ((this.calculo.tipo_seguro == 'Aposentadoria por tempo de serviço' || this.calculo.tipo_seguro == 'Aposentadoria por tempo de contribuição') &&
       anoContribuicaoPrimariaAnterior88 < 30) {
       let qtde_anos = 30 - this.contribuicaoPrimaria88.anos;
       let qtde_meses = 12 - this.contribuicaoPrimaria88.meses;
@@ -910,7 +920,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
         qtde_dias--;
       if (qtde_meses != 0)
         qtde_anos--;
-      erro = "Falta(m) " + qtde_anos + " ano(s), " + qtde_meses + " mês(es) e " + qtde_dias + " dia(s) para completar o tempo de serviço necessário.";
+      erro = 'Falta(m) ' + qtde_anos + ' ano(s), ' + qtde_meses + ' mês(es) e ' + qtde_dias + ' dia(s) para completar o tempo de serviço necessário.';
     }
     return erro;
   }
@@ -989,7 +999,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       }
 
       let contribuicaoPrimariaString = this.formatMoney(valorPrimario, currency.acronimo);
-      let contribuicaoSecundariaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currency.acronimo) : "";
+      let contribuicaoSecundariaString = (!this.isBlackHole) ? this.formatMoney(valorSecundario, currency.acronimo) : '';
       let inps = this.getInps(dataContribuicao.year());
 
       let valorAjustadoObj = this.limitarTetosEMinimos(valorPrimario, dataContribuicao);

@@ -15937,11 +15937,16 @@ hr.simple {
 }
 
 .pull-right {
-  float: right !Important
+  float: right !Important;
 }
 
 .pull-left {
-  float: left !Important
+  float: left !Important;
+}
+
+.pull-center-btn {
+  position: absolute;
+  left: 50%;
 }
 
 .air {

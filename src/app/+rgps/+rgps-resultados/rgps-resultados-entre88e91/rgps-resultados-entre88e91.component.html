@@ -1,11 +1,11 @@
 
-<article class="container-fluid">
+<article class="no-padding">
 <section >
 	<accordion class="smart-accordion-red panel-group" [closeOthers]="true">
 	  <accordion-group [isOpen]="false" #group19981991>
 	    <h4 class="panel-title" accordion-heading>
 	      <a>
-          <strong  id='tituloCalculo'>Data de Início do Benefício entre 05/10/1988 e 04/04/1991</strong>
+          <strong  id='tituloCalculo'>{{(numResultado+1)}} - Direito Adquirido entre 05/10/1988 e 04/04/1991</strong>
           <!-- {{calculo.tipo_seguro}} -->
           <i
           class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
@@ -125,7 +125,7 @@
                     </thead>
                   </sa-datatable>
                 </div>
-                <div class="widget-body" *ngIf="!isUpdating && !erro">
+                <div class="widget-body" *ngIf="!isUpdating && direito">
                   <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
@@ -244,12 +244,12 @@
                     </thead>
                   </sa-datatable>
                 </div>
-                <div class="widget-body" *ngIf="!isUpdating && direito">
+                <div class="widget-body" *ngIf="!isUpdating && direito"> 
                   <table class="table table-bordered table-hover table-condensed">
                     <tbody>
                       <tr>
                         <td width="50%">
-                          <span class="pull-right font-bold">Índice de reajuste no teto:</span>
+                          <span class="pull-right font-bold">Índice de reajuste no teto: </span>
                         </td>
                         <td width="50%">{{conclusoes91_98.indice_reajuste_teto}}</td>
                       </tr>

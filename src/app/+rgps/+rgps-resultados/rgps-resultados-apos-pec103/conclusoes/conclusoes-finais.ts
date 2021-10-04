@@ -231,6 +231,7 @@ export class conclusoesFinais {
         const methodsPorEspecie = {
             idade: this.defineAliquotaIdade,
             idadeTransitoria: this.defineAliquotaIdadeTransitoria,
+            idadeRural: this.defineAliquotaIdadeRural,
             pontos: this.defineAliquotaPontos,
             idadeProgressiva: this.defineAliquotaIdadeProgressiva,
             pedagio50: this.defineAliquotaPedagio50,
@@ -275,7 +276,7 @@ export class conclusoesFinais {
 
         }
 
-        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi);
+        elementPossibilidade.rmi = this.limitarTetosEMinimos(rmi, elementRegraEspecie.regra);
         elementPossibilidade.moeda = this.moedaDib;
 
         if (elementRegraEspecie.regra === 'doenca' && !this.calculo.media_12_ultimos) {
@@ -313,21 +314,22 @@ export class conclusoesFinais {
 
         const divisor = (this.divisorMinimo.aplicar) ?
             this.divisorMinimo.valueString : elementPossibilidade.numeroCompetencias;
-        listC.push(this.setConclusao(1, `Divisor da Média`, divisor));
+        listC.push(this.setConclusao(1, `Divisor da Média dos Salários de Contribuição`, divisor));
 
         if (elementRegraEspecie.regra === 'pedagio50' ||
-            (elementRegraEspecie.regra === 'deficiente' && elementPossibilidade.fator.value > 1)
+            (elementRegraEspecie.regra === 'deficiente')
         ) {
 
-            listC.push(this.setConclusao(2, 'Fator Previdenciário', elementPossibilidade.fator.valueMelhorString));
-            listC.push(this.setConclusao(3, 'Fórmula Fator Previdenciário', elementPossibilidade.fator.formula));
+          
+            listC.push(this.setConclusao(2, 'Fator Previdenciário', (elementPossibilidade.fator.valueMelhorString)));
+            listC.push(this.setConclusao(3, 'Fórmula do Fator Previdenciário', elementPossibilidade.fator.formula));
         }
 
         listC.push(this.setConclusao(4, 'Média dos Salários de Contribuição', elementPossibilidade.mediaDasContribuicoes.valueString));
-        listC.push(this.setConclusao(5, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
-        listC.push(this.setConclusao(6, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
+        listC.push(this.setConclusao(6, 'Teto do Salário de Contribuição', elementPossibilidade.moeda.tetoString));
+        listC.push(this.setConclusao(5, 'Salário de Benefício', elementPossibilidade.salarioBeneficio.valueString));
 
-        if (elementPossibilidade.irt > 1) {
+        if (elementPossibilidade.irt.value > 1) {
             listC.push(this.setConclusao(7, 'Índice de Reajuste Teto', elementPossibilidade.irt.valueString));
         }
 
@@ -370,15 +372,14 @@ export class conclusoesFinais {
         if (elementRegraEspecie.calculosPossiveis.length > 1) {
 
             elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-                if (entry1.rmi.value < entry2.rmi.value) {
+                if ((entry1.rmi.value < entry2.rmi.value) || (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)) {
                     return 1;
                 }
-                if (entry1.rmi.value > entry2.rmi.value) {
+                if ((entry1.rmi.value > entry2.rmi.value) || (entry1.mediaDasContribuicoes.value > entry2.mediaDasContribuicoes.value)) {
                     return -1;
                 }
                 return 0;
             });
-
 
             elementRegraEspecie.calculosPossiveis[0].destaqueMelhorValorRMI = true;
 
@@ -417,7 +418,6 @@ export class conclusoesFinais {
 
     // define aliquotas por espepecie - inicio
 
-
     private defineAliquotaIdade(elementPossibilidade) {
 
         const tempoParaPercentual = {
@@ -453,11 +453,9 @@ export class conclusoesFinais {
         let formula = '70'
         let valueString = aliquota + '%'
 
-        if (Math.floor(elementPossibilidade.tempo) > tempoParaPercentual[this.segurado.sexo]) {
-            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo) - tempoParaPercentual[this.segurado.sexo]));
-            formula = `70 + ((${Math.floor(elementPossibilidade.tempo)} - ${tempoParaPercentual[this.segurado.sexo]}))`;
+            aliquota = aliquota + ((Math.floor(elementPossibilidade.tempo)));
+            formula = `70 + ((${Math.floor(elementPossibilidade.tempo)}))`;
             valueString = aliquota + '%'
-        }
 
         return this.setAliquota(
             aliquota,
@@ -784,7 +782,7 @@ export class conclusoesFinais {
        * Ajustar ao teto e minimo
        * @param  {} value
        */
-    private limitarTetosEMinimos(value) {
+    private limitarTetosEMinimos(value, elementRegraEspecie = '') {
 
         // se a data estiver no futuro deve ser utilizado os dados no mês atual
         const moeda = this.moedaDib;
@@ -793,7 +791,7 @@ export class conclusoesFinais {
         let avisoString = '';
         let valueRetorno = parseFloat(value);
 
-        if (moeda && value < salarioMinimo) {
+        if (moeda && value < salarioMinimo && elementRegraEspecie !== 'acidente') {
             valueRetorno = salarioMinimo;
             avisoString = 'LIMITADO AO MÍNIMO'
         } else if (moeda && value > tetoSalarial) {
@@ -802,12 +800,11 @@ export class conclusoesFinais {
         }
 
         return {
-            value: valueRetorno,
+            value: (Math.round(valueRetorno * 100) / 100),
             valueString: DefinicaoMoeda.formatMoney(valueRetorno),
             aviso: avisoString
         };
     }
-
 
 
 }

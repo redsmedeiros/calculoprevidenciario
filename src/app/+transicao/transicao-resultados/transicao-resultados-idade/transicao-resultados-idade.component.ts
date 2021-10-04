@@ -11,7 +11,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   @Input() seguradoTransicao;
 
-
+  private regraIdadeAtual;
 
   public conclusoesRegra5 = {
     status: false,
@@ -95,8 +95,8 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // console.log(contribuicao_min);
 
     return (idade >= regra5 && tempo_contribuicao >= contribuicao_min) ?
-      { status: true, ano: ano, idade: idade, requisitosIdade: regra5 } :
-      { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
+      { status: true, ano: ano, idade: idade, requisitosIdade: regra5, tempoContrib: contribuicao_min } :
+      { status: false, ano: ano, idade: idade, requisitosIdade: regra5, tempoContrib: contribuicao_min };
 
   }
 
@@ -166,8 +166,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       this.seguradoTransicao.idadeFracionada,
       this.seguradoTransicao.contribuicaoFracionadoAnos);
 
-    //console.log(regraIdade);
-
 
     const idadeEm2019 = this.calcularIdadeFracionada('2019-12-31', 'y');
 
@@ -195,7 +193,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         dataDib: moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0),
         idadeMoment: this.calcularIdade(this.dataAtual),
         idadeDib: this.converterTempoDias(this.seguradoTransicao.idadeFracionadaDias),
-        tempoContribuicaoDib: this.converterTempoDias(this.seguradoTransicao.contribuicaoFracionadoDias),
+        tempoContribuicaoDib: this.converterTempoAnosP(this.seguradoTransicao.contribuicaoFracionadoAnos),
         DiffDataAtualDib: 0,
         requisitos: regraIdade,
         formula: '',
@@ -207,6 +205,18 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
       rstRegraIdadeProgressiva = this.contadorRegra5();
 
     }
+
+    // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+
+      rstRegraIdadeProgressiva.tempoContribuicaoDib = {
+        days: parseInt(this.seguradoTransicao.contribuicaoDias, 10),
+        fullDays: this.seguradoTransicao.contribuicaoFracionadoDias,
+        months: parseInt(this.seguradoTransicao.contribuicaoMeses, 10),
+        years: parseInt(this.seguradoTransicao.contribuicaoAnos, 10),
+      }
+
+    // }
+
 
     if (Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years) >= tempoPercentualR1[this.seguradoTransicao.sexo]) {
       percentualR1 += ((Math.trunc(rstRegraIdadeProgressiva.tempoContribuicaoDib.years)
@@ -226,13 +236,17 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   public contadorRegra5() {
 
-
     let auxiliarDate = this.dataAtual.clone();
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
     let count = 0;
     let auxiliarDateClone;
     let idade = this.seguradoTransicao.idadeFracionadaDias;
-    let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+    // let tempoContribuicao = this.seguradoTransicao.contribuicaoFracionadoDias;
+
+    let tempoContribuicao = Math.floor(((parseInt(this.seguradoTransicao.contribuicaoAnos, 10) * 365.25) +
+      (parseInt(this.seguradoTransicao.contribuicaoMeses, 10) * 30.436875) +
+      parseInt(this.seguradoTransicao.contribuicaoDias, 10)));
+
     const sexo = this.seguradoTransicao.sexo + 'd';
     let idadeMoment;
 
@@ -248,11 +262,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
         idade,
         tempoContribuicao
       );
-
-      // console.log('P - data - ' + auxiliarDate.format('DD/MM/YYYY')
-      //   + '|' + 'idade -' + idade + '|'
-      //   + '|' + 'Tempo - ' + tempoContribuicao + '|');
-
 
       auxiliarDateClone = auxiliarDate.clone();
       auxiliarDate = moment(this.toDateString(auxiliarDateClone.add(1, 'days')), 'DD/MM/YYYY');
@@ -278,11 +287,14 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //   )
     //   || (Math.abs(this.seguradoTransicao.dataNascimento.date() - auxiliarDate.date()) < 2)) {
 
-    const testContrib = (this.seguradoTransicao.contribuicaoFracionadoAnos - 15);
+    const testContrib = (15 - this.seguradoTransicao.contribuicaoFracionadoAnos);
     const testeIdade = (this.getparametrosRegra5(auxiliarDate.year(), this.seguradoTransicao.sexo) -
       this.seguradoTransicao.idadeFracionada);
 
-    //if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
+      // console.log(testContrib)
+      // console.log(testeIdade)
+
+    // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15 || testContrib < testeIdade) {
 
 
@@ -306,14 +318,14 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
       idadeMoment = this.calcularIdade(auxiliarDate);
 
-      //console.log(idadeMoment);
+      // console.log(idadeMoment);
 
       if (this.seguradoTransicao.sexo === 'm' &&
         idadeMoment.days() === 1) {
         idadeMoment.add(-1, 'day');
       }
 
-      //idadeMoment.add(-1, 'day');
+      // idadeMoment.add(-1, 'day');
     } else {
 
       idadeMoment = this.calcularIdade(auxiliarDate);
@@ -324,7 +336,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     if (this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
 
 
-      if (auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) {
+      if ((auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) && this.seguradoTransicao.sexo === 'f') {
 
         idadeMoment = moment.duration({
           days: 0,
@@ -349,6 +361,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     }
 
 
+
     // console.log('-- regra 5');
 
     // console.log(correcaoAnoBissexto);
@@ -360,7 +373,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     //  tempoContribuicao += correcaoAnoBissexto;
 
 
-   // console.log(tempoContribuicao);
+    // console.log(tempoContribuicao);
 
     return {
       dataDib: auxiliarDate,

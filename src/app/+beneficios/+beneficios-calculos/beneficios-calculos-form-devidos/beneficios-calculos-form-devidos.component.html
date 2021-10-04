@@ -64,7 +64,7 @@
               </td>
               <td class="text-center">{{ devidosLine.irt }}</td>
               <td class="text-center">
-                {{ devidosLine.reajuesteMinimo ? "Sim" : "Não" }}
+                {{ devidosLine.reajusteMinimo ? "Sim" : "Não" }}
               </td>
               <td class="text-center" width="auto">
                 <div class="btn-group">
@@ -474,7 +474,8 @@
                             '3',
                             '5',
                             '13',
-                            '18'
+                            '18',
+                            '19'
                           ].includes(especieValoresDevidos)
                         "
                       >
@@ -531,7 +532,8 @@
                             '3',
                             '5',
                             '13',
-                            '18'
+                            '18',
+                            '19'
                           ].includes(especieValoresDevidos)
                         "
                       >
@@ -648,6 +650,33 @@
                           </div>
                         </div>
                       </div>
+                      <div class="form-group"
+                      *ngIf="
+                      [
+                        '6',
+                        '8',
+                        '9',
+                        '10'
+                      ].includes(especieValoresDevidos)
+                    "
+                      >
+                        <div class="col-md-8 col-sm-offset-3">
+                          <div class="checkbox">
+                            <label>
+                              <input
+                                type="checkbox"
+                                name="manterPercentualSMEsperado"
+                                [(ngModel)]="manterPercentualSMEsperado"
+                                class="checkbox"
+                                checked="checked"
+                              />
+                              <span
+                                > Manter a RMA em {{ changePercentual(especieValoresDevidos, 'd') }} do Salário Mínimo.</span
+                              >
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                       <div class="form-group">
                         <div class="col-md-8 col-sm-offset-3">
                           <div class="checkbox">
@@ -686,7 +715,7 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <p class="pull-left no-margin">* Campo Obrigatório</p>
+                        <p class="pull-left no-margin">(*) Preenchimento Obrigatório.</p>
                         <button
                           *ngIf="!rowDevidosEdit"
                           id="adicionarDevido"

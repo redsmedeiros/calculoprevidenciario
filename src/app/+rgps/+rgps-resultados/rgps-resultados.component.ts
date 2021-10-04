@@ -206,6 +206,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
+  public numResultados;
 
   // Datas
   public dataLei9032 = moment('1995-04-28');
@@ -221,7 +222,10 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public isPlanejamento = false;
   public isPassoaPasso = false;
   public planejamentoContribuicoesAdicionais = [];
-
+  // public objConclusoes = {
+  //   aposEc103: { rmi: 0, soma: 0 },
+  //   antesEc103: { rmi: 0, soma: 0 },
+  // };
 
   // pbc parametro get
   public pbcCompleto = false;
@@ -345,7 +349,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
               .then((calculo: CalculoModel) => {
 
                 this.getPlanejamento(calculo);
-
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
@@ -509,6 +512,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         break;
       // Auxílio Acidente Previdenciário 50%
       case 7:
+      case 1905:
         coeficienteAux = 50;
         break;
       // Aponsentadoria por idade trabalhador Rural
@@ -807,6 +811,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         numeroEspecie = 1;
         break;
       case 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte':
+      case 'Aposentadoria por Invalidez ou Pensão por Morte':
         numeroEspecie = 2;
         break;
       case 'Aposentadoria por Idade - Trabalhador Urbano':
@@ -1194,7 +1199,39 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     this.mostrarCalculoApos99 = calculo.mostrarCalculoApos99;
     this.mostrarCalculoApos19 = calculo.mostrarCalculoApos19;
 
+    this.definirNumeroDeResultados();
   }
+
+  private definirNumeroDeResultados() {
+
+    this.numResultados = {
+      'mostrarCalculoAnterior88': 0,
+      'mostrarCalculo91_98': 0,
+      'mostrarCalculo98_99': 0,
+      'mostrarCalculoApos99': 0,
+      'mostrarCalculoApos19': 0
+    };
+
+    let count = 0;
+
+    [
+      'mostrarCalculoAnterior88',
+      'mostrarCalculo91_98',
+      'mostrarCalculo98_99',
+      'mostrarCalculoApos99',
+      'mostrarCalculoApos19'
+    ].forEach(element => {
+
+      if (this[element]) {
+        this.numResultados[element] = count;
+        count++;
+      }
+
+    });
+
+  }
+
+
 
   preencheGrupoDeCalculos() {
     for (const calculo of this.calculosList) {
@@ -1338,13 +1375,17 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     const boxContent = document.getElementById(boxId).innerHTML;
 
 
-    const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
+    const rodape = document.getElementById('printableRodapeControle').innerHTML;
+    // const rodape = `<img src='./assets/img/rodapesimulador.png' alt='Logo'>`;
     let printableString = '<html><head>' + css + '<style>#tituloCalculo{font-size:0.9rem;}</style><title> RMI do RGPS - '
       + this.segurado.nome + '</title></head><body onload="window.print()">' + seguradoBox + ' <br> '
       + boxContent + '<br><br><br>' + rodape + '</body></html>';
     printableString = printableString.replace(/<table/g,
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
+
+
+
 
     popupWin.document.open();
     popupWin.document.write(printableString);
@@ -1393,12 +1434,25 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   private calcDiffContribuicao(a, b) {
 
-    const total = { years: 0, months: 0, days: 0, totalDays: 0, totalMonths: 0, totalYears: 0 };
+    const total = {
+      years: 0,
+      months: 0,
+      days: 0,
+      totalDays: 0,
+      totalMonths: 0,
+      totalYears: 0,
+      duration: {}
+    };
+
     let diff: any;
+
+    b.startOf('day').add(-1, 'd');
+    a.endOf('day')
 
     total.totalYears = a.diff(b, 'years', true);
     total.totalMonths = a.diff(b, 'months', true);
-    total.totalDays = a.diff(b, 'days', true);
+    total.totalDays = Math.floor(a.diff(b, 'days', true));
+    total.duration = moment.duration(a.diff(b));
 
     diff = a.diff(b, 'years');
     b.add(diff, 'years');
@@ -1418,24 +1472,36 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   private addTempoContribuicao(calculo, diffTempo) {
 
-    const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+    const testeobjTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
 
-    objTempo.anos += diffTempo.years;
-    objTempo.meses += diffTempo.months;
-    objTempo.dias += diffTempo.days;
+    const tempoAtual = moment.duration({
+      year: testeobjTempo.anos,
+      month: testeobjTempo.meses,
+      days: testeobjTempo.dias
+    })
 
-    if (objTempo.dias >= 30) {
-      objTempo.dias -= 30;
-      objTempo.meses += 1;
-    }
+    const tempoAtualMaisAdicional = tempoAtual.add(diffTempo.totalDays, 'days');
 
+    calculo.contribuicao_primaria_19 = `${tempoAtualMaisAdicional.years()}
+                                       -${tempoAtualMaisAdicional.months()}
+                                       -${tempoAtualMaisAdicional.days()}`;
 
-    if (objTempo.dias >= 11) {
-      objTempo.meses = 1;
-      objTempo.anos += 1;
-    }
+    // const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
+    // objTempo.anos += diffTempo.years;
+    // objTempo.meses += diffTempo.months;
+    // objTempo.dias += diffTempo.days;
 
-    calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
+    // if (objTempo.dias >= 30) {
+    //   objTempo.dias -= 30;
+    //   objTempo.meses += 1;
+    // }
+
+    // if (objTempo.dias >= 11) {
+    //   objTempo.meses = 1;
+    //   objTempo.anos += 1;
+    // }
+
+    // calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
 
   }
 
@@ -1671,6 +1737,25 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   }
 
+  public setObjConclusoesMelhor(rmi, somaconstribuicoes, typeEC103) {
+
+    // if (typeEC103 === 'antes') {
+    //   this.objConclusoes.antesEc103.soma = somaconstribuicoes;
+    //   this.objConclusoes.antesEc103.rmi = rmi;
+    // } else {
+    //   this.objConclusoes.aposEc103.soma = somaconstribuicoes;
+    //   this.objConclusoes.aposEc103.rmi = rmi;
+    // }
+
+    if (this.calculo.valor_beneficio < rmi) {
+
+      this.calculo.soma_contribuicao = somaconstribuicoes;
+      this.calculo.valor_beneficio = rmi;
+    }
+
+    return true;
+  }
+
   private translateNovosNomesEspecie(especie) {
 
     if (this.mostrarCalculoApos19 &&
@@ -1720,6 +1805,17 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
 
     return especie;
+  }
+
+  private formatDataHora(value = null) {
+
+    if (value === null) {
+      return moment().format('DD/MM/YYYY HH:mm')
+    }
+
+    if (typeof value !== 'undefined') {
+      return moment(value).format('DD/MM/YYYY HH:mm')
+    }
   }
 
   @HostListener('window:scroll', [])

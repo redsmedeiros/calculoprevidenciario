@@ -1,6 +1,5 @@
-              
 <!-- Opções do Cálculo A partir de 29/11/1999 -->
-<article  class="container-fluid">
+<article  class="no-padding"> 
 
 <section >
          
@@ -8,7 +7,7 @@
     <accordion-group [isOpen]="false" #groupApos1999>
       <h4 class="panel-title" accordion-heading>
         <a>
-          <strong id='tituloCalculo' > Data de Início do Benefício entre 29/11/1999 e 13/11/2019 </strong>
+          <strong id='tituloCalculo' >{{(numResultado+1)}} - Direito Adquirido entre 29/11/1999 e 13/11/2019 </strong>
         <i
         class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
         *ngIf="isUpdating"
@@ -41,17 +40,9 @@
       </h4>
       <div class="no-padding no-margin">
         
-
-      <!-- Tabela e Informações do Cálculo A partir de 29/11/1999 -->
       <div id="{{boxId}}" class="boxCalculo row">
         <article class="col-sm-12 col-md-12 col-lg-12 no-margin">
           <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
-            <!-- <header>
-              <span class="widget-icon">
-                <i class="fa fa-edit"></i>
-              </span>
-              <h2 id='tituloCalculo'>{{calculo.tipo_seguro}} de 29/11/1999 a 12/11/2019</h2>
-            </header> -->
             <div>
               <div class="widget-body no-padding hidden-dt">
                 <table class="table table-bordered table-hover no-padding">
@@ -77,7 +68,6 @@
                         <span class="pull-right font-bold">Período para o início do benefício:</span>
                       </td>
                       <td>{{calculo.tipo_aposentadoria}}</td>
-                      <!-- <td>{{stringCabecalho}}</td> -->
                     </tr>
                     <tr>
                       <td>
@@ -87,13 +77,13 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="pull-right font-bold">Contribuição primária:</span>
+                        <span class="pull-right font-bold">Tempo de Contribuição primário:</span>
                       </td>
                       <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="iscontribuicaoSecundaria" >
                       <td>
-                        <span class="pull-right font-bold">Contribuição secundária:</span>
+                        <span class="pull-right font-bold">Tempo de Contribuição secundário:</span>
                       </td>
                       <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                     </tr>
@@ -120,7 +110,6 @@
                 </div>
   
                 <sa-widget [colorbutton]="false" [editbutton]="false" *ngIf="erros.length === 0" >
-                  <!-- <div *ngIf="!isUpdating && erros.length == 0"> -->
                   <i class="fa fa-gear fa-2x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
                   <div *ngIf="!isUpdating">
                     <div class="widget-body no-padding">
@@ -132,10 +121,10 @@
                             <th class="text-align-center">#</th>
                             <th class="text-align-center">Competência</th>
                             <th class="text-align-center">Índice</th>
-                            <th class="text-align-center">Contribuição Primária</th>
-                            <th class="text-align-center">Contribuição Secundária</th>
-                            <th class="text-align-center">Contribuição Primária Corrigida</th>
-                            <th class="text-align-center">Contribuição Secundária Corrigida</th>
+                            <th class="text-align-center">Salário de Contribuição Primário</th>
+                            <th class="text-align-center" >Salário de Contribuição Secundário</th>
+                            <th class="text-align-center">Salário de Contribuição Primário Corrigido</th>
+                            <th class="text-align-center" >Salário de Contribuição Secundário Corrigido</th>
                             <th class="text-align-center">Observação</th>
                           </tr>
                         </thead>
@@ -143,12 +132,11 @@
                     </div>
                   </div>
                 </sa-widget>
-                <!-- <table class="table table-bordered table-hover" *ngIf="!isUpdating"> -->
                 <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0">
                   <thead>
                     <tr>
                       <th>
-                        Tipo
+                        <span class="pull-right font-bold"> Tipo </span>
                       </th>
                       <th>
                         Descrição
@@ -184,9 +172,7 @@
               </div>
           </sa-widget>
         </article>
-        </div> <!-- final RMI-->
-
-
+        </div>
 
 <table class="table table-hover table-bordered" *ngIf="erros.length === 0" >
     <thead>
@@ -206,23 +192,6 @@
         </td>
         <td>
           <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span> EXPORTAR
-          </button>
-          <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span> EXPORTAR
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf='!isUpdating'>
-        <td>
-          <p>Exportar para o cálculo de Liquidação de Sentença - Teto 12/98 e 12/2003</p>
-        </td>
-        <td>
-          <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'AJ')" class="btn btn-labeled btn-primary pull-right">
             <span class="btn-label">
               <i class="fa fa-link"></i>
             </span> EXPORTAR
