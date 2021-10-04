@@ -206,7 +206,13 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
-  public numResultados;
+  public numResultados = {
+    'mostrarCalculoAnterior88': 0,
+    'mostrarCalculo91_98': 0,
+    'mostrarCalculo98_99': 0,
+    'mostrarCalculoApos99': 0,
+    'mostrarCalculoApos19': 0
+  };
 
   // Datas
   public dataLei9032 = moment('1995-04-28');

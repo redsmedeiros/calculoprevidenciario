@@ -24,6 +24,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   @Input() tipoCalculo;
   @Input() dadosPassoaPasso;
   @Input() listaValoresContribuidosPeriodosCT;
+  @Input() numResultado;
 
   public boxId;
   public isUpdating = false;
