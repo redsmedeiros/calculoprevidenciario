@@ -1,9 +1,10 @@
-<div class="modal-dialog modal-full" *ngIf="isDataLoad">
-  <div class="modal-content">
-    <article class="col-sm-12 col-md-12 col-lg-12">
+<!-- <div class="modal-dialog modal-full" *ngIf="isDataLoad">
+  <div class="modal-content"> -->
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isDataLoad">
       <dl class="padding-5">
         <dt>
-          <b>Período:</b> {{ planejamentoContrib.inicio }} à
+          <b>Salários de Contribuição</b>
+          <b> Período:</b> {{ planejamentoContrib.inicio }} à
           {{ planejamentoContrib.dibString }}
         </dt>
       </dl>
@@ -509,9 +510,8 @@
         <i class="fa fa-save"></i> Salvar
       </button>
     </div>
-  </div>
-  <!-- /.modal-content -->
-</div>
+  <!-- </div>
+</div> -->
 <!-- /.modal-dialog -->
 
 <!-- modal - form check contribuicoes -->

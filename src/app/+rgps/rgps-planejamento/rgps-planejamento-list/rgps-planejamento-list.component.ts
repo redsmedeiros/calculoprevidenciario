@@ -84,6 +84,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   private plan_index;
   private planejamentoContrib;
+  private createplanejamentoContrib = false;
 
   private listAliquotas = [];
   private listEspecies = [];
@@ -422,6 +423,40 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   }
 
 
+  // Novo quadro de contribuicoes semelhante ao RMI 
+  private showQuadroContribuicoes() {
+
+    const planRow = this.setPlanRow({ ...PlanejamentoRgps.form }, this.data_futura);
+
+    console.log(planRow);
+
+    this.plan_index = 0;
+    this.planejamentoContrib = planRow;
+
+    this.createplanejamentoContrib = true;
+
+  }
+
+
+
+  private changeDIB() {
+
+    if (!(/_/gi).test(this.data_futura) &&
+      moment(this.data_futura, 'DD/MM/YYYY').isValid()
+      && moment(this.data_futura, 'DD/MM/YYYY').isAfter(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'), 'months')) {
+
+      console.log(moment(this.data_futura, 'DD/MM/YYYY').isValid())
+      console.log(typeof this.data_futura)
+      console.log(!(/_/gi).test(this.data_futura))
+      console.log(this.data_futura);
+
+
+      this.showQuadroContribuicoes();
+    }
+
+
+  }
+
 
   // planejamentoSelecionadoEvent
   private planejar(id) {
@@ -430,7 +465,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     const objExport = JSON.stringify(objPlan);
     sessionStorage.setItem('exportPlanejamento', objExport);
 
-    // window.location.href 
+    // window.location.href
     const urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + objPlan.id;
     this.router.navigate([urlpbcNew]);
 
@@ -559,13 +594,20 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       valid = false;
     }
 
+    valid = this.validDIB(valid);
+
+    return valid;
+  }
+
+
+
+  private validDIB(valid) {
     const dataHoje = moment().add(-1, 'day');
     const datadibAtual = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     const dataFutura = this.data_futura;
     if (!this.isExits(this.data_futura)) {
       this.errors.add({ 'data_futura': ['O campo é obrigatório.'] });
       valid = false;
-
     } else if (moment(dataFutura, 'DD/MM/YYYY') < dataHoje) {
       this.errors.add({ 'data_futura': ['A DIB futura deve ser superior a DIB atual.'] });
       valid = false;
@@ -656,12 +698,15 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   }
 
 
+  private setPlanRow(planRow, data = null) {
 
-  showContribuicoes(planRow, index) {
+    planRow.inicio = this.calculo.data_pedido_beneficio;
 
-    planRow.inicio = this.calculo.data_pedido_beneficio
-    planRow.dibString = moment(planRow.data_futura).format('DD/MM/YYYY');
-
+    if (data === null) {
+      planRow.dibString = moment(planRow.data_futura).format('DD/MM/YYYY');
+    } else {
+      planRow.dibString = data;
+    }
 
     if (typeof planRow.sc === 'undefined' || planRow.sc === 'null' ||
       planRow.sc === [] || !planRow.sc) {
@@ -677,8 +722,24 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     }
 
+    return planRow;
+
+  }
+
+
+
+
+  showContribuicoes(planRow, index, data = null) {
+
+    this.createplanejamentoContrib = false;
+
+    planRow = this.setPlanRow(planRow, data = null);
+
+    console.log(planRow);
+
     this.plan_index = index;
     this.planejamentoContrib = planRow;
+
     ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
     this.contribuicoes.show();
   }
@@ -692,7 +753,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (value.planejamento.id === this.planejamentoContrib.id) {
 
-    //  this.planejamentoContrib.sc = value.planejamento.sc;
+      //  this.planejamentoContrib.sc = value.planejamento.sc;
       this.planejamentoContrib.sc_mm_ajustar = value.sc_mm_ajustar;
       this.planejamentoContrib.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
       this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
@@ -819,7 +880,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         this.updatePlan(null, 'sc');
         break;
       case 'salvar':
-       this.setCheckPlanContrib(event);
+        this.setCheckPlanContrib(event);
         this.matrixToVinculoContribuicoes(event);
         this.updatePlan(null, 'sc');
         this.contribuicoes.hide();
