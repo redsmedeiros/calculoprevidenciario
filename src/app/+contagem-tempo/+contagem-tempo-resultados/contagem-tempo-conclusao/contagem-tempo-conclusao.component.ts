@@ -254,7 +254,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate);
         melhorTempo = (dataFull) ? 30 : 0;
 
-        if (melhorTempo === 0 && !dataFull 
+        if (melhorTempo === 0 && !dataFull
         //  && auxiliarDate.isSame('2019-11-13', 'month')
           && moment('2019-11-13').isBetween(
             moment(inicioVinculo),

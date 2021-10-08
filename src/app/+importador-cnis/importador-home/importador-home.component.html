@@ -89,8 +89,8 @@
                         </ul>
                       </div>
                       <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                        <p class="text-justify pt-3" style="font-size: 14px">
-                          Selecione uma Opção para Iniciar o Cálculo.
+                        <p class="text-justify pt-4" style="font-size: 14px">
+                          Selecione uma Opção para Iniciar o Cálculo da Contagem de Tempo de contribuição.
                         </p>
                         <!-- <ul class="text-justify pt-3" style="font-size: 14px">
                           <li>Selecione uma opção para iniciar o Cálculo.</li>
@@ -108,7 +108,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
-                              class="well well-sm  text-center btn-radius-custom"
+                              class="well well-sm  text-center btn-radius-custom py-3"
                               (click)="setOptionEntradaDados($event, 'cnis')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'cnis'
@@ -116,12 +116,12 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Migrar dos Dados a Partir do CNIS</h5>
+                              <strong>Migrar dos Dados a Partir do CNIS</strong>
                             </div>
                           </div>
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
-                              class="well well-sm  text-center btn-radius-custom"
+                              class="well well-sm  text-center btn-radius-custom py-3"
                               (click)="
                                 setOptionEntradaDados(
                                   $event,
@@ -134,7 +134,7 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Selecionar Segurado Cadastrado</h5>
+                              <strong>Selecionar Segurado Cadastrado</strong>
                             </div>
                           </div>
                           <div
@@ -147,7 +147,7 @@
                             "
                           >
                             <div
-                              class="well well-sm  text-center btn-radius-custom"
+                              class="well well-sm  text-center btn-radius-custom py-3"
                               (click)="setOptionEntradaDados($event, 'manual')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'manual'
@@ -155,7 +155,7 @@
                                   : 'btn-ieprev'
                               "
                             >
-                              <h5>Inserir Dados Manualmente</h5>
+                              <strong>Inserir Dados Manualmente</strong>
                             </div>
                           </div>
                           <!-- <div
