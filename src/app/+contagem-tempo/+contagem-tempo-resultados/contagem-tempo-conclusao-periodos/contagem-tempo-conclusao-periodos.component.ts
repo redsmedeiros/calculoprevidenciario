@@ -152,8 +152,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         sc_mm_considerar_tempo: periodo.sc_mm_considerar_tempo,
         sc_pendentes: periodo.sc_pendentes,
         sc_pendentes_mm: periodo.sc_pendentes_mm,
+        converter_especial_apos_ec103: periodo.converter_especial_apos_ec103,
         limites: limites,
       }
+
+      console.log(line);
 
       this.periodosListInicial.push(line);
     }
@@ -166,7 +169,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    * @returns string status
    */
   private defineStatusCarencia(periodo) {
-
 
     if (periodo.carencia === 0) {
       return 'Não';
@@ -227,9 +229,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   }
 
+
+
   private checkPeriodoComIntersessaoEC(periodo) {
 
-    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+    if (this.checkPeriodoIntervaloReforma(periodo) === 'entre') {
 
       return true;
 
@@ -238,6 +242,27 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     return false;
 
   }
+
+
+  private checkPeriodoIntervaloReforma(periodo) {
+
+    if (moment(periodo.data_termino).isSameOrBefore('2019-11-13')) {
+
+      return 'anterior';
+    }
+
+    if (moment(periodo.data_inicio).isSameOrAfter('2019-11-14')) {
+
+      return 'apos';
+    }
+
+    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return 'entre';
+    }
+
+  }
+
 
 
   private testInicioFimDoPeriodoIntegral(periodo, statusTempoContribuicao) {
@@ -250,7 +275,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     }
 
     if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
-      && (statusTempoContribuicao === 'Integral') && !this.checkPeriodoPosReforma(periodo)) {
+      && (statusTempoContribuicao === 'Integral')
+      && !this.checkPeriodoPosReforma(periodo)) {
 
       const inicioSC = periodo.sc[0];
       const fimSC = periodo.sc[periodo.sc.length - 1];
@@ -464,6 +490,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     let totalDias = 0;
     let totalFinalEmDias = totalTempo.semFator.fullDays;
+    let totalDay360AntesEC = { dias: 0, meses: 0 };
+
 
     if (periodo.limites.inicioType !== 'i' || periodo.limites.fimType !== 'i') {
 
@@ -498,13 +526,17 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     if (this.checkPeriodoComIntersessaoEC(periodo)) {
 
-      const totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
+      // totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
+      //   moment(periodo.data_inicio).format('YYYY-MM-DD'),
+      //   '2019-11-13'
+      // );
+
+      totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
         moment(periodo.data_inicio).format('YYYY-MM-DD'),
-        '2019-11-13'
+        '2019-10-31'
       );
 
       const sc_countApos19 = this.countPosEC103SC(periodo.sc);
-
 
       if (periodo.limites.fimType === 'm') {
         periodo.sc_pendentes_mm -= 1;
@@ -513,21 +545,59 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       totalFinalEmDias = totalDay360AntesEC.dias + totalDias + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
 
+      console.log('-------');
+      console.log(periodo.empresa);
+      console.log(totalDay360AntesEC)
+      console.log(sc_countApos19)
+      console.log(totalFinalEmDias)
+
     }
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
     const fator = parseFloat(periodo.fator_condicao_especial);
 
-    if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
+    //  console.log(periodo.empresa);
+    // console.log(periodo);
+    // console.log((fator > 1 && !this.checkPeriodoPosReforma(periodo)));
+    // console.log(this.checkPeriodoIntervaloReforma(periodo));
+     console.log((fator > 1
+        && this.checkPeriodoIntervaloReforma(periodo) === 'apos'
+        && periodo.converter_especial_apos_ec103 === 0));
+
+    // if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
+    if (fator === 1 ||
+      (fator > 1
+        && this.checkPeriodoIntervaloReforma(periodo) === 'apos'
+        && periodo.converter_especial_apos_ec103 === 0)) {
 
       totalTempo.comFator = Object.assign({}, totalTempo.semFator);
 
     } else {
 
-      const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
-      totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+      let totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
 
+      if (periodo.empresa === 'emp03 2018 especial entre') {
+
+        console.log(totalFatorDay360);
+
+      }
+
+      if (fator > 1 && this.checkPeriodoComIntersessaoEC(periodo)) {
+
+        let totalDay360AntesECFator = DefinicaoTempo.aplicarFator(totalDay360AntesEC.dias, fator);
+        if (totalDay360AntesEC.dias > 0) {
+          totalDay360AntesECFator += ((13 * fator) - 13);
+        }
+
+        console.log(totalDay360AntesEC.dias);
+        console.log(totalDay360AntesECFator);
+
+        totalFatorDay360 = totalDay360AntesECFator + (totalFinalEmDias - totalDay360AntesEC.dias)
+
+      }
+
+      totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
     }
 
     return totalTempo
@@ -544,13 +614,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
-    if (statusCarencia === 'Parcial') {
+    if (statusCarencia === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 
       totalTempo.carencia = this.calcularDescarteCarencia(periodo, totalTempo);
 
     }
 
-    if (statusTempoContribuicao === 'Parcial') {
+    if (statusTempoContribuicao === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 
       totalTempo = this.calcularDescarteTempoContribuicao(periodo, totalTempo);
 
@@ -563,9 +633,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
-
     if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
-      && (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')) {
+      && ((statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')
+        || (this.checkPeriodoComIntersessaoEC(periodo)))) {
 
       periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
         periodo.sc[0],
@@ -616,7 +686,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     const totalDMY = DefinicaoTempo.convertD360ToDMY(totalDay360.dias);
     const totalFatorDMY = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
 
-    return { semFator: totalDMY, comFator: totalFatorDMY, carencia: totalDay360.meses };
+    return {
+      semFator: totalDMY,
+      comFator: totalFatorDMY,
+      carencia: totalDay360.meses
+    };
+
   };
 
 
