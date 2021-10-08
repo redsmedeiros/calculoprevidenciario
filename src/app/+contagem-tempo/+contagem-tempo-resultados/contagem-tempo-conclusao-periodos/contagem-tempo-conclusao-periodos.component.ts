@@ -156,8 +156,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         limites: limites,
       }
 
-      console.log(line);
-
       this.periodosListInicial.push(line);
     }
 
@@ -545,25 +543,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       totalFinalEmDias = totalDay360AntesEC.dias + totalDias + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
 
-      console.log('-------');
-      console.log(periodo.empresa);
-      console.log(totalDay360AntesEC)
-      console.log(sc_countApos19)
-      console.log(totalFinalEmDias)
-
     }
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
     const fator = parseFloat(periodo.fator_condicao_especial);
-
-    //  console.log(periodo.empresa);
-    // console.log(periodo);
-    // console.log((fator > 1 && !this.checkPeriodoPosReforma(periodo)));
-    // console.log(this.checkPeriodoIntervaloReforma(periodo));
-     console.log((fator > 1
-        && this.checkPeriodoIntervaloReforma(periodo) === 'apos'
-        && periodo.converter_especial_apos_ec103 === 0));
 
     // if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
     if (fator === 1 ||
@@ -577,21 +561,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       let totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
 
-      if (periodo.empresa === 'emp03 2018 especial entre') {
-
-        console.log(totalFatorDay360);
-
-      }
-
       if (fator > 1 && this.checkPeriodoComIntersessaoEC(periodo)) {
 
         let totalDay360AntesECFator = DefinicaoTempo.aplicarFator(totalDay360AntesEC.dias, fator);
         if (totalDay360AntesEC.dias > 0) {
           totalDay360AntesECFator += ((13 * fator) - 13);
         }
-
-        console.log(totalDay360AntesEC.dias);
-        console.log(totalDay360AntesECFator);
 
         totalFatorDay360 = totalDay360AntesECFator + (totalFinalEmDias - totalDay360AntesEC.dias)
 
