@@ -348,6 +348,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.segurado = segurado;
         this.dataNascimento();
         if (localStorage.getItem('user_id') !== this.segurado.user_id) {
+
           // redirecionar para pagina de segurados
           swal({
             type: 'error',
@@ -357,6 +358,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           }).then(() => {
             window.location.href = '/#/beneficios/beneficios-segurados/'
           });
+
         } else {
 
           this.calculoId = this.route.snapshot.params['id_calculo'];
@@ -796,8 +798,8 @@ export class BeneficiosResultadosComponent implements OnInit {
   generateTabelaResultados() {
 
     this.jurosCorrente = 0.00000;
-    // const competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
-    let competencias = this.monthsBetween(this.dataInicioDevidos, this.dataFinal);
+     let competencias = this.monthsBetween(this.dataInicioCalculo, this.dataFinal);
+   // let competencias = this.monthsBetween(this.dataInicioDevidos, this.dataFinal);
     const tableData = [];
     const dataPedidoBeneficioEsperado = moment(this.calculo.data_pedido_beneficio_esperado);
     let dataPagamentoBeneficioDevido = dataPedidoBeneficioEsperado.clone();
@@ -1060,7 +1062,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         isPrescricao = true;
       }
 
-
       line.competencia = stringCompetencia;
       line.competenciaD = stringCompetencia;
       line.indice_devidos = this.formatIndicesReajustes(indiceReajusteValoresDevidos, dataCorrente, 'Devido');
@@ -1116,10 +1117,12 @@ export class BeneficiosResultadosComponent implements OnInit {
         && ((['1/2004', '12/1998', '3/1994', '4/1994', '5/1994', '6/1994'].includes(stringCompetencia))
           || (indiceReajusteValoresDevidos.reajuste > 1
             || indiceReajusteValoresRecebidos.reajuste > 1)));
-
-      if (dataCorrente.isSameOrAfter(dataPagamentoBeneficioDevido, 'month') && checkPrescricao) {
+    
+    // exibir recebido antes do devido
+    //  if (dataCorrente.isSameOrAfter(dataPagamentoBeneficioDevido, 'month') && checkPrescricao) {
+      if (checkPrescricao) {
         tableData.push(line);
-      }
+       }
 
       this.somaDevidosCorrigido += this.roundMoeda(beneficioDevido);
       this.somaRecebidosCorrigido += this.roundMoeda(beneficioRecebido);
@@ -3917,8 +3920,8 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.dataInicioDevidosDip = moment(this.calculo.dip_valores_devidos);
 
-    //  this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
-    this.primeiraDataArrayMoeda = this.dataInicioDevidos;
+    this.primeiraDataArrayMoeda = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
+    //this.primeiraDataArrayMoeda = this.dataInicioDevidos;
 
     // this.dataFinal = (moment(this.calculo.data_calculo_pedido)).add(1, 'month');
     this.dataFinal = (moment(this.calculo.data_calculo_pedido));
