@@ -237,13 +237,14 @@ export class conclusoesFinais {
             pedagio50: this.defineAliquotaPedagio50,
             pedagio100: this.defineAliquotaPedagio100,
             especial: this.defineAliquotaAposentadoriaEspecial,
+            especialt: this.defineAliquotaAposentadoriaEspecial,
             acidente: this.defineAliquotaAuxilioAcidente,
             doenca: this.defineAliquotaAuxilioDoenca,
             deficiente: this.defineAliquotaDeficiente,
             incapacidade: this.defineAliquotaIncapacidade,
             pensaoObito: this.defineAliquotaPensaoObitoInstituidorNaoAposentado,
         };
-
+        
         if (methodsPorEspecie[elementRegraEspecie.regra] !== undefined) {
 
             elementPossibilidade.aliquota = methodsPorEspecie[elementRegraEspecie.regra]

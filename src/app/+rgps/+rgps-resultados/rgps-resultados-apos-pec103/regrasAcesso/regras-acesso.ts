@@ -1230,21 +1230,46 @@ export class RegrasAcesso {
 
         // const pontosEspecial = Math.trunc(contribuicaoTotalTempoAnos + idadeFracionada);
 
-        if (isRegraTransitoria) {
-
-            status = ((idadeFracionada >= idadeTransitoria[tipoBeneficio])
-                && (pontosEspecial >= regraEspecial[tipoBeneficio].pontos)
-                && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]));
-
-            idade_min = idadeTransitoria[tipoBeneficio];
-
-        } else {
+        if (!isRegraTransitoria) {
 
             status = (pontosEspecial >= regraEspecial[tipoBeneficio].pontos)
                 && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]);
 
+            if (status) {
+
+                if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
+                    pontosExcendente = (pontosEspecial - regraEspecial[tipoBeneficio].pontos) / 2
+                    // tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
+                    idade_min = idadeFracionada - pontosExcendente;
+                }
+
+            }
+
+
+            this.setConclusaoAcesso(
+                'especial',
+                label[tipoBeneficio] + ' - Transição',
+                status,
+                pontosEspecial,
+                idadeFracionada,
+                0,
+                contribuicaoTotalTempoAnos,
+                {
+                    tempo: tempoMinimo,
+                    tempoAnterior: 0,
+                    idade: idade_min,
+                    pedagio: 0,
+                    pontos: regraEspecial[tipoBeneficio].pontos,
+                    ano: 0
+                }
+            );
 
         }
+
+        status = ((idadeFracionada >= idadeTransitoria[tipoBeneficio])
+            && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]));
+
+        idade_min = idadeTransitoria[tipoBeneficio];
 
         if (status) {
 
@@ -1256,10 +1281,9 @@ export class RegrasAcesso {
 
         }
 
-
         this.setConclusaoAcesso(
-            'especial',
-            label[tipoBeneficio],
+            'especialt',
+            label[tipoBeneficio] + ' - Transitória',
             status,
             pontosEspecial,
             idadeFracionada,
@@ -1274,6 +1298,7 @@ export class RegrasAcesso {
                 ano: 0
             }
         );
+
 
     }
 
