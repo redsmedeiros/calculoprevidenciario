@@ -67,26 +67,34 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
+    this.matrizHasValues = false;
     this.detector.detectChanges();
 
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
+    
     const changedvinculo = changes['vinculo'];
     const changedisUpdating = changes['isUpdating'];
+
+    console.log(changedvinculo);
 
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
 
-      this.preencherCheckContribuicoes(this.vinculo);
-      this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+
+      const vinculo =  changedvinculo.currentValue;
+      this.matrizHasValues = false;
+      this.preencherCheckContribuicoes(vinculo);
+      this.preencherMatrizPeriodos(vinculo.contribuicoes);
 
     }
   }
 
   preencherMatrizPeriodos(contribuicoes) {
 
+   
     this.matriz = [{ 'ano': 0, 'valores': [], 'msc': [] }];
 
     contribuicoes.forEach(periodo => {
@@ -101,7 +109,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     this.errors.clear('inicioPeriodo');
     this.errors.clear('finalPeriodo');
     this.errors.clear('salarioContribuicao');
+
     this.matrizHasValues = true;
+
   }
 
   private preencherCheckContribuicoes(vinculo) {

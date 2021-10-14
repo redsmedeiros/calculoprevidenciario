@@ -126,6 +126,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
     }
+    console.log(this.vinculosList);
     this.detector.detectChanges();
   }
 
@@ -186,17 +187,29 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     // }).length;
 
 
+    // if (type === 'mm') {
+    //   return contribuicoes.filter(function (item) {
+    //     if (item.msc === 1
+    //       && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+    //   }).length;
+    // }
+
+    // return contribuicoes.filter(function (item) {
+    //   if (item.sc === '0,00'
+    //     && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+    // }).length;
+
+
     if (type === 'mm') {
       return contribuicoes.filter(function (item) {
-        if (item.msc === 1
-          && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+        if (item.msc === 1) { return item }
       }).length;
     }
 
     return contribuicoes.filter(function (item) {
-      if (item.sc === '0,00'
-        && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+      if (item.sc === '0,00') { return item }
     }).length;
+
 
   }
 
