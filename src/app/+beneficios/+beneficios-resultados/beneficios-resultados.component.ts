@@ -1119,8 +1119,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             || indiceReajusteValoresRecebidos.reajuste > 1)));
     
     // exibir recebido antes do devido
-    //  if (dataCorrente.isSameOrAfter(dataPagamentoBeneficioDevido, 'month') && checkPrescricao) {
-      if (checkPrescricao) {
+      if (dataCorrente.isSameOrAfter(dataPagamentoBeneficioDevido, 'month') && checkPrescricao) {
         tableData.push(line);
        }
 
