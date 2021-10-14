@@ -1218,9 +1218,15 @@ export class RegrasAcesso {
         }
 
         const label = {
-            1915: 'Aposentadoria Especial - 15 anos',
-            1920: 'Aposentadoria Especial - 20 anos',
-            1925: 'Aposentadoria Especial - 25 anos'
+            1915: 'Aposentadoria Especial (Regra de Transição) - 15 anos',
+            1920: 'Aposentadoria Especial (Regra de Transição) - 20 anos',
+            1925: 'Aposentadoria Especial (Regra de Transição) - 25 anos'
+        }
+
+        const labelTansitoria = {
+            1915: 'Aposentadoria Especial (Regra Transitória) - 15 anos',
+            1920: 'Aposentadoria Especial (Regra Transitória) - 20 anos',
+            1925: 'Aposentadoria Especial (Regra Transitória) - 25 anos'
         }
 
         let status = false;
@@ -1248,7 +1254,7 @@ export class RegrasAcesso {
 
             this.setConclusaoAcesso(
                 'especial',
-                label[tipoBeneficio] + ' - Transição',
+                label[tipoBeneficio],
                 status,
                 pontosEspecial,
                 idadeFracionada,
@@ -1283,7 +1289,7 @@ export class RegrasAcesso {
 
         this.setConclusaoAcesso(
             'especialt',
-            label[tipoBeneficio] + ' - Transitória',
+            labelTansitoria[tipoBeneficio],
             status,
             pontosEspecial,
             idadeFracionada,
