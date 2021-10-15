@@ -231,7 +231,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
               this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
                 .then(reajustes => {
                   this.reajustesAutomaticos = reajustes;
-                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                  const idadeFracionadaF =  this.getIdadeFracionada(false);
+                  this.ExpectativaVida.getByIdade(Math.floor(idadeFracionadaF))
                     .then(expectativas => {
                       this.expectativasVida = expectativas;
                       this.CarenciaProgressiva.getCarencias()
