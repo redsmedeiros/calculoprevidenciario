@@ -69,6 +69,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public sc_mm_ajustar = null;
   public converter_especial_apos_ec103 = 0;
   public is_converter_especial_apos_ec103 = false;
+  public isUpdatingVinculos = false;
 
 
   @Output() eventCountVinculosErros = new EventEmitter();
@@ -361,7 +362,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
-        converter_especial_apos_ec103:  (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
+        converter_especial_apos_ec103: (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: (this.vinculosList.length) + 1
@@ -837,10 +838,16 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     } else {
 
+      this.isUpdatingVinculos = true;
+
       this.vinculo_index = index;
-      this.vinculo = vinculo;
+     // this.vinculo = vinculo;
+      this.vinculo = Object.assign({}, vinculo);
+
       this.ContribuicoesComponent.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+      this.isUpdatingVinculos = false;
       this.contribuicoes.show();
+      this.detector.detectChanges();
 
     }
 
@@ -848,6 +855,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   hideContribuicoes() {
     this.contribuicoes.hide();
+    this.detector.detectChanges();
+    this.isUpdatingVinculos = true;
   }
 
 
@@ -1006,13 +1015,13 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
-public changeCondicoesEspeciais(){
+  public changeCondicoesEspeciais() {
 
-  this.is_converter_especial_apos_ec103 = false;
-  if ( this.is_converter_especial_apos_ec103 || (this.condicao_especial && this.checkPeriodoPosReformaForm())) {
-    this.is_converter_especial_apos_ec103 = true;
+    this.is_converter_especial_apos_ec103 = false;
+    if (this.is_converter_especial_apos_ec103 || (this.condicao_especial && this.checkPeriodoPosReformaForm())) {
+      this.is_converter_especial_apos_ec103 = true;
+    }
   }
-}
 
 
 
@@ -1025,13 +1034,13 @@ public changeCondicoesEspeciais(){
         return this.checkPeriodoPosReforma({
           data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
           data_termino: moment().format('YYYY-MM-DD')
-         });
+        });
       }
 
       return this.checkPeriodoPosReforma({
         data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
         data_termino: moment(this.data_termino, 'DD/MM/YYYY').format('YYYY-MM-DD')
-       });
+      });
 
     }
 
