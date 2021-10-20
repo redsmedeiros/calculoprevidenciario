@@ -1,14 +1,12 @@
 import {Component, OnInit, ElementRef, Input, AfterViewInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 
 declare var $: any;
 
 @Component({
 
   selector: 'sa-widget',
-  template: `<div id="{{widgetId}}" class="jarviswidget"
-    
-  ><ng-content></ng-content></div>`
+  template: `<div id="{{widgetId}}" class="jarviswidget"><ng-content></ng-content></div>`
 })
 export class WidgetComponent implements OnInit, AfterViewInit {
 
@@ -50,8 +48,6 @@ export class WidgetComponent implements OnInit, AfterViewInit {
     this.color = 'red';
     this.load = false;
     this.refresh = false;
-  
-
 
 
     this.widgetId = this.genId();

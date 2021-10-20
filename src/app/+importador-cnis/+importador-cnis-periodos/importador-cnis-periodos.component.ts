@@ -127,7 +127,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
     }
-    console.log(this.vinculosList);
+ //   console.log(this.vinculosList);
     this.detector.detectChanges();
   }
 

@@ -78,9 +78,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     const changedvinculo = changes['vinculo'];
     const changedisUpdating = changes['isUpdating'];
 
-    console.log(changedvinculo);
-    console.log(this.isUpdating);
-
 
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
@@ -310,8 +307,6 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
   public preencherComSalario(type = 'm') {
-
-    console.log(this.matriz);
 
     let mesi = 0;
     let mesiC = 0;
@@ -593,9 +588,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     const checkNumStatusContribuicoes = (
       this.sc_mm_considerar_carencia !== null &&
-      (this.sc_mm_considerar_tempo === 0 || (this.sc_mm_considerar_tempo === 1 && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
+      (this.sc_mm_considerar_tempo === 0 ||
+        (this.sc_mm_considerar_tempo === 1 &&
+          (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
     );
-
 
     if (checkNumContricuicoes || (!checkNumContricuicoes && checkNumStatusContribuicoes)) {
       checkContrib = true;
@@ -608,24 +604,24 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
 
-    // if (type === 'mm') {
-    //   return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
-    // }
-
-    // return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
-
-
     if (type === 'mm') {
-      return contribuicoes.filter(function (item) {
-        if (item.msc === 1
-          && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
-      }).length;
+      return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
     }
 
-    return contribuicoes.filter(function (item) {
-      if (item.sc === '0,00'
-        && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
-    }).length;
+    return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
+
+
+    // if (type === 'mm') {
+    //   return contribuicoes.filter(function (item) {
+    //     if (item.msc === 1
+    //       && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    //   }).length;
+    // }
+
+    // return contribuicoes.filter(function (item) {
+    //   if (item.sc === '0,00'
+    //     && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    // }).length;
 
   }
 

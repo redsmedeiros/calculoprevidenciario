@@ -7,6 +7,7 @@ import 'smartadmin-plugins/smartwidgets/jarvis.widget.ng2.js'
 
 declare var $: any;
 
+
 @Component({
 
   selector: 'sa-widgets-grid',

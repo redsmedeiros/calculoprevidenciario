@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
 import { Router, ActivatedRoute } from '@angular/router';
-import { ErrorService } from '../../services/error.service';
-import * as moment from 'moment';
-import swal from 'sweetalert2';
-
 
 import { PeriodosContagemTempo } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import { PeriodosContagemTempoService } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
+
+import { ErrorService } from '../../services/error.service';
+import * as moment from 'moment';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contagem-tempo-conclusao-periodos',
@@ -156,6 +155,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         limites: limites,
       }
 
+      console.log(line);
+
       this.periodosListInicial.push(line);
     }
 
@@ -208,7 +209,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     } else {
 
-      return ((!this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1)) ? 'Integral' : 'Parcial';
+      return ((!this.isExist(periodo.sc_mm_considerar_tempo) ||
+        (this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1))) ? 'Integral' : 'Parcial';
     }
 
 
@@ -243,6 +245,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
 
   private checkPeriodoIntervaloReforma(periodo) {
+
 
     if (moment(periodo.data_termino).isSameOrBefore('2019-11-13')) {
 
@@ -476,6 +479,37 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
+  private countPendenciasPosEC103SC(contribuicoes: Array<any>, type = 'mm') {
+
+    if (type === 'mm') {
+      return contribuicoes.filter(function (item) {
+        if (item.msc === 1
+          && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+      }).length;
+    }
+
+    return contribuicoes.filter(function (item) {
+      if (item.sc === '0,00'
+        && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    }).length;
+  }
+
+
+  private checkScCompetenciaFull(salariosC, auxiliarDate) {
+
+    // console.log(salariosC)
+
+    const data = auxiliarDate.format('MM/YYYY');
+    const salC = salariosC.find((x) => x.cp === data)
+
+    // console.log(salC);
+
+    if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
+      return true;
+    }
+
+    return false;
+  }
 
 
   /**
@@ -535,13 +569,40 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       );
 
       const sc_countApos19 = this.countPosEC103SC(periodo.sc);
+      const sc_countApos19mm = this.countPendenciasPosEC103SC(periodo.sc, 'zero');
+      const sc_countApos19zero = this.countPendenciasPosEC103SC(periodo.sc);
 
       if (periodo.limites.fimType === 'm') {
         periodo.sc_pendentes_mm -= 1;
         totalDias = periodo.limites.fim;
       }
 
-      totalFinalEmDias = totalDay360AntesEC.dias + totalDias + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
+
+
+     const dataFull = this.checkScCompetenciaFull(periodo.sc, moment('2019/11/13'));
+     totalDias = (dataFull) ? 30 : 0;
+
+        if (totalDias === 0
+          && !dataFull
+          && moment('2019-11-13').isBetween(
+            moment(periodo.data_inicio),
+            moment(periodo.data_termino), 'month', '[]')
+        ) {
+
+          totalDias = 13;
+
+        }
+
+
+      // totalFinalEmDias = totalDay360AntesEC.dias + totalDias
+      // + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
+      totalFinalEmDias = totalDay360AntesEC.dias + totalDias +
+        ((sc_countApos19 - (sc_countApos19zero + sc_countApos19mm)) * 30);
+
+        // console.log(moment(periodo.data_inicio).format('YYYY-MM-DD'))
+        // console.log(totalFinalEmDias)
+        // console.log(totalFinalEmDias)
+        // console.log(totalDias)
 
     }
 
@@ -588,6 +649,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    * @returns
    */
   private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
+
+    console.log(periodo);
 
     if (statusCarencia === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 
