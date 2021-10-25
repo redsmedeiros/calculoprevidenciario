@@ -48,9 +48,6 @@ export class DefinicaoSalariosContribuicao {
     static checarSalariosContribuicao(rowObj) {
         'use strict';
 
-        // console.log(rowObj);
-        // console.log(rowObj.sc_mm_ajustar);
-
 
         if (rowObj.sc_mm_ajustar !== 1) {
             // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));

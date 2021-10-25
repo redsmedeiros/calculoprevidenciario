@@ -366,9 +366,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   }
 
-
-
-
   /**
    * calcular descarte da carencia
    * @param periodo obj
@@ -377,13 +374,14 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private calcularDescarteCarencia(periodo, totalTempo) {
 
-    totalTempo.carencia -= periodo.sc_pendentes
-    totalTempo.carencia -= periodo.sc_pendentes_mm
+    if (periodo.sc_mm_considerar_carencia === 0) {
+      totalTempo.carencia -= periodo.sc_pendentes
+      totalTempo.carencia -= periodo.sc_pendentes_mm
+    }
+
     return totalTempo.carencia
 
   }
-
-
 
   // private calcularDescarteTempoContribuicao2(periodo, totalTempo) {
 
@@ -497,12 +495,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private checkScCompetenciaFull(salariosC, auxiliarDate) {
 
-    // console.log(salariosC)
-
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
-
-    // console.log(salC);
 
     if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
@@ -524,7 +518,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     let totalFinalEmDias = totalTempo.semFator.fullDays;
     let totalDay360AntesEC = { dias: 0, meses: 0 };
 
-
     if (periodo.limites.inicioType !== 'i' || periodo.limites.fimType !== 'i') {
 
       if (periodo.limites.inicioType === 'm') {
@@ -541,12 +534,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       }
 
-
       totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
-      totalFinalEmDias += totalDias;
+
+      if (periodo.sc_mm_considerar_tempo === 1) {
+        totalFinalEmDias += totalDias;
+      }
 
     } else {
-
 
       if (periodo.sc_pendentes > 0 || periodo.sc_pendentes_mm > 0) {
 
@@ -577,21 +571,19 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         totalDias = periodo.limites.fim;
       }
 
+      const dataFull = this.checkScCompetenciaFull(periodo.sc, moment('2019-11-13'));
+      totalDias = (dataFull) ? 30 : 0;
 
+      if (totalDias === 0
+        && !dataFull
+        && moment('2019-11-13').isBetween(
+          moment(periodo.data_inicio),
+          moment(periodo.data_termino), 'month', '[]')
+      ) {
 
-     const dataFull = this.checkScCompetenciaFull(periodo.sc, moment('2019/11/13'));
-     totalDias = (dataFull) ? 30 : 0;
+        totalDias = 13;
 
-        if (totalDias === 0
-          && !dataFull
-          && moment('2019-11-13').isBetween(
-            moment(periodo.data_inicio),
-            moment(periodo.data_termino), 'month', '[]')
-        ) {
-
-          totalDias = 13;
-
-        }
+      }
 
 
       // totalFinalEmDias = totalDay360AntesEC.dias + totalDias
@@ -599,10 +591,10 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       totalFinalEmDias = totalDay360AntesEC.dias + totalDias +
         ((sc_countApos19 - (sc_countApos19zero + sc_countApos19mm)) * 30);
 
-        // console.log(moment(periodo.data_inicio).format('YYYY-MM-DD'))
-        // console.log(totalFinalEmDias)
-        // console.log(totalFinalEmDias)
-        // console.log(totalDias)
+      // console.log(moment(periodo.data_inicio).format('YYYY-MM-DD'))
+      // console.log(totalFinalEmDias)
+      // console.log(totalFinalEmDias)
+      // console.log(totalDias)
 
     }
 
@@ -649,8 +641,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    * @returns
    */
   private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
-
-    console.log(periodo);
 
     if (statusCarencia === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 

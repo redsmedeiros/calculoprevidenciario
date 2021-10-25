@@ -203,14 +203,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkScCompetenciaFull(salariosC, auxiliarDate) {
 
-    // console.log(salariosC)
-
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
 
-    // console.log(salC);
-
-    if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
+    if (this.isExist(salC) &&
+      (salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
     }
 
@@ -234,6 +231,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const inicioVinculo = this.toMoment(vinculo.data_inicio);
       const fimVinculo = this.toMoment(vinculo.data_termino);
       const fator = vinculo.fator_condicao_especialN;
+
+      if (auxiliarDate.isBetween('2020-01-01', '2019-02-01', 'month', '[]')) {
+        console.log('L =' + melhorTempoLast + '| A =' + melhorTempo)
+      }
 
       // é o fim do vinculo
       if (moment(auxiliarDate).isSame(fimVinculo, 'month')) {
@@ -261,13 +262,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             moment(fimVinculo), 'month', '[]')
         ) {
 
-             melhorTempo = 13
-
+          melhorTempo = 13
         }
 
 
       } else {
-
 
         // Se igual ao inicio
         if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
@@ -276,7 +275,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           melhorTempo = this.aplicarFator(melhorTempo, fator)
 
         }
-
 
         // Se igual ao fim
         if (moment(auxiliarDate).isSame(fimVinculo, 'month') && !dataFull) {
@@ -353,7 +351,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         // }
         // melhorTempo *= fator;
 
-       
         // console.log(diffAnterior);
         // console.log(melhorTempoLast);
         // console.log('F----');
@@ -539,11 +536,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
 
-      // console.log(countUltimoVinculo);
-      // console.log(count19);
-      // console.log(count);
-      // console.log(this.tempoTotalConFatorUltimoVinculo);
-      // console.log(this.tempoTotalConFator);
+      console.log('--------------//------------');
+      console.log(countUltimoVinculo);
+      console.log(count19);
+      console.log(count);
+      console.log(this.tempoTotalConFatorUltimoVinculo);
+      console.log(this.tempoTotalConFator);
 
       // console.log(this.periodosList);
       // console.log(somateste);
@@ -655,11 +653,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkScIntegral(salariosC, auxiliarDate) {
 
-
     if (auxiliarDate.isBefore('2019-11-13')) {
       return true;
     }
-
 
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
@@ -693,7 +689,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           && this.checkPeriodoPosReforma(vinculo)
         ) {
 
-          if (this.checkScIntegral(vinculo.sc, auxiliarDate)) {
+          if (this.checkScIntegral(vinculo.sc, auxiliarDate)
+            || (this.isExist(vinculo.sc_mm_considerar_carencia)
+              && vinculo.sc_mm_considerar_carencia === 1)
+          ) {
 
             return true;
 
@@ -702,7 +701,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         }
 
       }
-
       // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
       //   moment(inicioVinculo),
       //   moment(fimVinculo), undefined, '[]'))) {
@@ -777,7 +775,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           };
         }
 
-        //        console.log(auxiliarDate.format('MM/YYYY') + '|' + count)
+        //   console.log(auxiliarDate.format('MM/YYYY') + '|' + this.defineCarenciaData(auxiliarDate) + '|' + count)
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
@@ -887,7 +885,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       let rstTemp = 0;
       rstTemp = (this.tempoTotalConFator94.fullDays + this.idade360Ate94.fullDays);
-
       this.somatoriaTempoContribIdade94 = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
       if (this.somatoriaTempoContribIdade94.fullDays > 0) {
@@ -966,12 +963,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     const dataNasc = moment(this.segurado.data_nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const ultimoVinculo = this.limitesDoVinculo.fim.format('YYYY-MM-DD');
-
     this.idade360Final = DefinicaoTempo.calcularTempo360(dataNasc, ultimoVinculo);
     this.limitesTempoTotal.emit(this.idade360Final);
-
     this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
-
     this.idade360Ate94 = DefinicaoTempo.calcularTempo360(dataNasc, '1994-07-01');
     this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
     this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
@@ -985,13 +979,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     if (!this.isPeridoAposReforma) {
 
       this.tempoPedagioAposentadoriaProporcional();
-
       this.tempoMinimoParaAposentadoriaProporcionalComPedagio();
-
       this.tempoCumprirAposentadoriaProporcional();
-
       this.tempoCumprirAposentadoriaItentegal();
-
       this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
     }
