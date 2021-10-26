@@ -22,6 +22,11 @@ import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
 })
 export class BeneficiosCalculosFormComponent implements OnInit {
 
+  @Input() formData;
+  @Input() errors: ErrorService;
+  @Input() type;
+  @Output() onSubmit = new EventEmitter;
+
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public dateMaskCompetencia = [/\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public NumProcessoMask = [/\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/,
@@ -226,10 +231,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public manterPercentualSMEsperado;
 
 
-  @Input() formData;
-  @Input() errors: ErrorService;
-  @Input() type;
-  @Output() onSubmit = new EventEmitter;
+
 
 
   constructor(

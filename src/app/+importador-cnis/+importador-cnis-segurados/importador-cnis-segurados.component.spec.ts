@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImportadorCnisSeguradosComponent } from './+importador-cnis-segurados.component';
+import { ImportadorCnisSeguradosComponent } from './importador-cnis-segurados.component';
 
 describe('ImportadorCnisSeguradosComponent', () => {
   let component: ImportadorCnisSeguradosComponent;
