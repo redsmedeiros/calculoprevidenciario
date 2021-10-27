@@ -75,9 +75,18 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     try {
 
 
+      console.log(this.seguradoTransicao);
+
       if (this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 >= this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo]) {
 
         const rstRegra3pedagio50 = this.calcularRegra3();
+
+        rstRegra3pedagio50.tempoContribuicaoDib = {
+          days: parseInt(this.seguradoTransicao.contribuicaoDias, 10),
+          fullDays: this.seguradoTransicao.contribuicaoFracionadoDias,
+          months: parseInt(this.seguradoTransicao.contribuicaoMeses, 10),
+          years: parseInt(this.seguradoTransicao.contribuicaoAnos, 10),
+        }
 
         this.conclusoesRegra3 = {
           status: true,
@@ -95,6 +104,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
           formulaFator: rstRegra3pedagio50.formulaFator,
           fatorNaDib: rstRegra3pedagio50.fatorNaDib,
         };
+
+       
 
       } else {
 

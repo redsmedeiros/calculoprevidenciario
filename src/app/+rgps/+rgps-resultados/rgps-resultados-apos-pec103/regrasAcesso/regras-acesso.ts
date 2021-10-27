@@ -24,6 +24,8 @@ export class RegrasAcesso {
     public fatorPrevidenciario = {};
     private moedaDib = {};
 
+    private divisorMinimo = { aplicar: false, value: 0 };
+
     constructor() { }
 
     /**
@@ -38,17 +40,15 @@ export class RegrasAcesso {
         numeroDeContribuicoesAuxTotal,
         carenciaConformDataFiliacao,
         calculo,
-        carenciaRequisito) {
+        carenciaRequisito,
+        divisorMinimo) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.numeroDeContribuicoesAuxTotal = numeroDeContribuicoesAuxTotal;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
         this.calculo = calculo;
         this.carenciaRequisito = carenciaRequisito;
-
-        // listaConclusaoAcesso.forEach((elementTipo, indice) => {
-        //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
-        // });
+        this.divisorMinimo = divisorMinimo;
 
         for (const elementTipo of listaConclusaoAcesso) {
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
@@ -190,17 +190,32 @@ export class RegrasAcesso {
         }
 
         if ((!this.calculo.calcular_descarte_apos_ec103
-            && ['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra))
-            || elementTipo.regra === 'deficiente'
-            || elementTipo.regra === 'idadeRural') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
+            && ['acidente',
+                'doenca',
+                'incapacidade',
+                'pensaoObito',
+                'deficiente',
+                'idadeRural'].includes(elementTipo.regra))
+        ) { // !this.calculo.calcular_descarte_deficiente_ec103 &&
 
             maximoDescarte.meses = 0;
             maximoDescarte.anos = 0;
             // pessoa com deficiencia com descarte de 20%
             if (!this.calculo.calcular_descarte_deficiente_ec103 && elementTipo.regra === 'deficiente') {
 
-                maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
+                if (this.divisorMinimo.aplicar &&
+                    this.divisorMinimo.value) {
 
+                    maximoDescarte.meses = (this.numeroDeContribuicoes > this.divisorMinimo.value) ?
+                        this.numeroDeContribuicoes - this.divisorMinimo.value : 0;
+
+                } else {
+
+                    maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
+
+                }
+
+                // maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
             }
 
             calculosPossiveis = this.criarPossibilidadeUnica(maximoDescarte, elementTipo);
