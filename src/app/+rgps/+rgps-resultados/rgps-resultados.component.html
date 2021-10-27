@@ -374,86 +374,122 @@
         </article>
       </div>
       <article class="col-sm-12 col-md-12 col-lg-12 mt-2">
-        <div *ngFor="let calculo of calculosList">
-          <app-rgps-resultados-anterior88
-            [numResultado]="numResultados.mostrarCalculoAnterior88"
-            [calculo]="calculo"
-            [segurado]="segurado"
-            [isBlackHole]="calculo.isBlackHole"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-            *ngIf="calculo.mostrarCalculoAnterior88"
-          ></app-rgps-resultados-anterior88>
+        <sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [colorbutton]="false"
+          [editbutton]="false"
+          [togglebutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [custombutton]="false"
+          class="no-padding"
+        >
+          <header>
+            <span class="widget-icon">
+              <i class="fa fa-table"></i>
+            </span>
+            <h2 >Resultados</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding widget-body-custom hidden-dt">
+              <table
+                class="
+                  table table-condensed table-bordered
+                  no-padding no-margin
+                "
+              >
+                <thead>
+                  <tr>
+                    <th width="78%">Opções</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+              </table>
 
-          <app-rgps-resultados-entre88e91
-            [numResultado]="numResultados.mostrarCalculo88_91"
-            [calculo]="calculo"
-            [segurado]="segurado"
-            [isBlackHole]="calculo.isBlackHole"
-            [tipoCalculo]="'91_98'"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-            *ngIf="calculo.mostrarCalculo88_91"
-          ></app-rgps-resultados-entre88e91>
+              <div *ngFor="let calculo of calculosList">
+                <app-rgps-resultados-anterior88
+                  [numResultado]="numResultados.mostrarCalculoAnterior88"
+                  [calculo]="calculo"
+                  [segurado]="segurado"
+                  [isBlackHole]="calculo.isBlackHole"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                  *ngIf="calculo.mostrarCalculoAnterior88"
+                ></app-rgps-resultados-anterior88>
 
-          <app-rgps-resultados-entre91e98
-            [numResultado]="numResultados.mostrarCalculo91_98"
-            [calculo]="calculo"
-            [segurado]="segurado"
-            [tipoCalculo]="'91_98'"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-            *ngIf="calculo.mostrarCalculo91_98"
-          ></app-rgps-resultados-entre91e98>
+                <app-rgps-resultados-entre88e91
+                  [numResultado]="numResultados.mostrarCalculo88_91"
+                  [calculo]="calculo"
+                  [segurado]="segurado"
+                  [isBlackHole]="calculo.isBlackHole"
+                  [tipoCalculo]="'91_98'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                  *ngIf="calculo.mostrarCalculo88_91"
+                ></app-rgps-resultados-entre88e91>
 
-          <app-rgps-resultados-entre91e98
-            [numResultado]="numResultados.mostrarCalculo98_99"
-            [calculo]="calculo"
-            [segurado]="segurado"
-            [tipoCalculo]="'98_99'"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-            *ngIf="calculo.mostrarCalculo98_99"
-          ></app-rgps-resultados-entre91e98>
+                <app-rgps-resultados-entre91e98
+                  [numResultado]="numResultados.mostrarCalculo91_98"
+                  [calculo]="calculo"
+                  [segurado]="segurado"
+                  [tipoCalculo]="'91_98'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                  *ngIf="calculo.mostrarCalculo91_98"
+                ></app-rgps-resultados-entre91e98>
 
-          <app-rgps-resultados-apos99
-            [numResultado]="numResultados.mostrarCalculoApos99"
-            [calculo]="calculo"
-            [segurado]="segurado"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-            *ngIf="calculo.mostrarCalculoApos99"
-          >
-          </app-rgps-resultados-apos99>
+                <app-rgps-resultados-entre91e98
+                  [numResultado]="numResultados.mostrarCalculo98_99"
+                  [calculo]="calculo"
+                  [segurado]="segurado"
+                  [tipoCalculo]="'98_99'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                  *ngIf="calculo.mostrarCalculo98_99"
+                ></app-rgps-resultados-entre91e98>
 
-          <app-rgps-resultados-apos-pec103
-            [numResultado]="numResultados.mostrarCalculoApos19"
-            [segurado]="segurado"
-            [calculo]="calculo"
-            *ngIf="calculo.mostrarCalculoApos19"
-            [isPlanejamento]="isPlanejamento"
-            [planejamento]="planejamento"
-            [planejamentoContribuicoesAdicionais]="
-              planejamentoContribuicoesAdicionais
-            "
-            (planejamentoResultEvent)="setStepPlanejamento($event)"
-            [dadosPassoaPasso]="dadosPassoaPasso"
-            [listaValoresContribuidosPeriodosCT]="
-              listaValoresContribuidosPeriodosCT
-            "
-          >
-          </app-rgps-resultados-apos-pec103>
-        </div>
+                <app-rgps-resultados-apos99
+                  [numResultado]="numResultados.mostrarCalculoApos99"
+                  [calculo]="calculo"
+                  [segurado]="segurado"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                  *ngIf="calculo.mostrarCalculoApos99"
+                >
+                </app-rgps-resultados-apos99>
+
+                <app-rgps-resultados-apos-pec103
+                  [numResultado]="numResultados.mostrarCalculoApos19"
+                  [segurado]="segurado"
+                  [calculo]="calculo"
+                  *ngIf="calculo.mostrarCalculoApos19"
+                  [isPlanejamento]="isPlanejamento"
+                  [planejamento]="planejamento"
+                  [planejamentoContribuicoesAdicionais]="
+                    planejamentoContribuicoesAdicionais
+                  "
+                  (planejamentoResultEvent)="setStepPlanejamento($event)"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
+                >
+                </app-rgps-resultados-apos-pec103>
+              </div>
+            </div>
+          </div>
+        </sa-widget>
       </article>
 
       <!-- Planejamento  -->
