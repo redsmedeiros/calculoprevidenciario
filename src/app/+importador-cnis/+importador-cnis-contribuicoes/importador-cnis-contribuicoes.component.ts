@@ -74,10 +74,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-
     const changedvinculo = changes['vinculo'];
     const changedisUpdating = changes['isUpdating'];
-
 
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
@@ -395,7 +393,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     //     });
     //   });
     // }
-
+    
+    this.detector.detectChanges();
   }
 
   private insertSCEnter(ev) {
