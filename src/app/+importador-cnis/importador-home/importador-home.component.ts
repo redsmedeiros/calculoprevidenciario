@@ -3,7 +3,7 @@ import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { Auth } from 'app/services/Auth/Auth.service';
 
 @Component({
   selector: 'app-importador-home',
@@ -38,8 +38,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private isUpdatingPlan = true;
 
   private isPaginaInicial = true;
-
-
 
 
   public exportResultContagemTempo;
@@ -104,6 +102,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private stepUrlCalculo = null;
 
   constructor(
+    private Auth: Auth,
     protected router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
