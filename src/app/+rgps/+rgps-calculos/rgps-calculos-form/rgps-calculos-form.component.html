@@ -303,7 +303,11 @@
                             </button>
                       </div>
                     </div>
-                    <div *ngIf="has19 && !hasPensaoInstuidorAposentado && iscalcularDescarteDeficienteEC103 && !divisorMinimo;" class="form-group mb-4">
+                    <div *ngIf="has19 
+                    && !hasPensaoInstuidorAposentado
+                     && iscalcularDescarteDeficienteEC103 
+                     && !divisorMinimo;" 
+                    class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="calcularDescarteDeficienteEC103" class="checkbox" [ngModelOptions]="{standalone: true}">
@@ -334,18 +338,21 @@
                       </div>
                     </div>
                     <div class="form-group mb-4"  
-                    *ngIf="(has19 || hasAtual) && hasDivisorMinimo || (((has19 || hasAtual) && hasDivisorMinimo) 
-                       && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103));">
+                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103))
+                           || ((has19 || hasAtual) && hasDivisorMinimo && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)));">
                       <div class="checkbox col-md-9 col-md-offset-3">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
-                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
+                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))">
                             Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
+                          </span>
+                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo && [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))">
+                            Afastar o Divisor Mínimo.
                           </span>
                         </label>
                         <popover-content #avisoDescarteMenoresSalarios
-                        title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
-                        [closeOnClickOutside]="true"
+                          title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
+                          [closeOnClickOutside]="true"
                         >
                         <div class="alert alert-danger bg-ieprev fade in bold" 
                         *ngIf="hasDivisorMinimo" >
@@ -363,11 +370,8 @@
                           >
                               <i class="fa fa-question-circle fa-1-6x"></i>
                           </button>
-                          
                       </div>
                     </div>
-
-                   
                       <div class="form-group mb-4" *ngIf="has19 && (hasPensao19 || hasInvalidez19 || hasAuxilioAcidente)">
                         <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito' || especieBeneficio == 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'">
                         <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="ultimoBeneficio"><strong>Valor da último Benefício*:</strong></label>
