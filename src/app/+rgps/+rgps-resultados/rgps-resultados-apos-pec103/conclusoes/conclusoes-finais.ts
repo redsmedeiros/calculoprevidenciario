@@ -370,13 +370,15 @@ export class conclusoesFinais {
      */
     private aplicarDestaqueMelhorValor(elementRegraEspecie) {
 
+       // && (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)
+
         if (elementRegraEspecie.calculosPossiveis.length > 1) {
 
             elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-                if ((entry1.rmi.value < entry2.rmi.value) && (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)) {
+                if ((entry1.rmi.value < entry2.rmi.value) ) {
                     return 1;
                 }
-                if ((entry1.rmi.value > entry2.rmi.value) && (entry1.mediaDasContribuicoes.value > entry2.mediaDasContribuicoes.value)) {
+                if ((entry1.rmi.value > entry2.rmi.value)) {
                     return -1;
                 }
                 return 0;
