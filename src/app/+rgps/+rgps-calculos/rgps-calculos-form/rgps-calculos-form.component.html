@@ -369,9 +369,10 @@
                       </div>
                     </div>
                     <div class="form-group mb-4"  
-                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) 
-                            && [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))
-                            && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103));">
+                    *ngIf=" ([25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)) 
+                      && ( (hasAtual && !has19 && hasDivisorMinimo)
+                       || (has19 && hasDivisorMinimo  && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103))
+                       ));">
                       <div class="checkbox col-md-9 col-md-offset-3">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
