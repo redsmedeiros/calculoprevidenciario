@@ -830,6 +830,9 @@ a[class*="action-"]:hover {
   padding-bottom: 75%;
 }
 
+.cursor-pointer{cursor: pointer;}
+.cursor-wait{cursor: wait;}
+
 @media screen and (max-width: 1366px) {
   .modal-dialog-custom {
     width: 600px;

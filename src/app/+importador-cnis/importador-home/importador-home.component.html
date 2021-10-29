@@ -133,11 +133,12 @@
                                 text-center
                                 btn-radius-custom
                                 py-3
+                                cursor-pointer
                               "
                               (click)="setOptionEntradaDados($event, 'cnis')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'cnis'
-                                  ? 'btn-ieprev-selected'
+                                  ? 'btn-ieprev-selected cursor-wait'
                                   : 'btn-ieprev'
                               "
                             >
@@ -151,6 +152,7 @@
                                 text-center
                                 btn-radius-custom
                                 py-3
+                                cursor-pointer
                               "
                               (click)="
                                 setOptionEntradaDados(
@@ -160,7 +162,7 @@
                               "
                               [ngClass]="
                                 dadosPassoaPasso.type === 'seguradoExistente'
-                                  ? 'btn-ieprev-selected'
+                                  ? 'btn-ieprev-selected cursor-wait'
                                   : 'btn-ieprev'
                               "
                             >
@@ -182,11 +184,12 @@
                                 text-center
                                 btn-radius-custom
                                 py-3
+                                cursor-pointer
                               "
                               (click)="setOptionEntradaDados($event, 'manual')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'manual'
-                                  ? 'btn-ieprev-selected'
+                                  ? 'btn-ieprev-selected cursor-wait'
                                   : 'btn-ieprev'
                               "
                             >
