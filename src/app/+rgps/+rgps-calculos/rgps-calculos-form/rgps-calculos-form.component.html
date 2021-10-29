@@ -338,16 +338,12 @@
                       </div>
                     </div>
                     <div class="form-group mb-4"  
-                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103))
-                           || ((has19 || hasAtual) && hasDivisorMinimo && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)));">
+                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)));">
                       <div class="checkbox col-md-9 col-md-offset-3">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
-                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))">
+                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
                             Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
-                          </span>
-                          <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo && [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))">
-                            Afastar o Divisor Mínimo.
                           </span>
                         </label>
                         <popover-content #avisoDescarteMenoresSalarios
@@ -360,6 +356,50 @@
                           Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
                           possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
                           com a exclusão mencionada.
+                        </div>
+                        </popover-content>
+                          <button type="button" class="btn btn-small btn-info" 
+                          popoverPlacement="left" 
+                          [popoverOnHover]="true"
+                          [popover]="avisoDescarteMenoresSalarios"
+                          *ngIf="hasDivisorMinimo"
+                          >
+                              <i class="fa fa-question-circle fa-1-6x"></i>
+                          </button>
+                      </div>
+                    </div>
+                    <div class="form-group mb-4"  
+                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) 
+                            && [25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))
+                            && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103));">
+                      <div class="checkbox col-md-9 col-md-offset-3">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
+                          <span *ngIf="(hasAtual && !has19 && hasDivisorMinimo)">
+                            Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
+                          </span>
+                          <span *ngIf="(has19 && hasDivisorMinimo)">
+                            Afastar o Divisor Mínimo.
+                          </span>
+                        </label>
+                        <popover-content #avisoDescarteMenoresSalarios
+                          title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
+                          [closeOnClickOutside]="true"
+                        >
+                        <div class="alert alert-danger bg-ieprev fade in bold" 
+                        *ngIf="(hasAtual && !has19 && hasDivisorMinimo)" >
+                          Opção aplicada aos benefício concedidos com base no direito adquirido até 13/11/2019 (§ 1°, do art. 188-e, do Decreto 3.048/99). 
+                          Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
+                          possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
+                          com a exclusão mencionada.
+                        </div>
+                        <div class="alert alert-danger bg-ieprev fade in bold" 
+                        *ngIf="(has19 && hasDivisorMinimo)" >
+                        O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, 
+                        inclusive quanto aos critérios de cálculo, ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. 
+                        Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
+                        possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo
+                         com a exclusão mencionada.
                         </div>
                         </popover-content>
                           <button type="button" class="btn btn-small btn-info" 
