@@ -32,17 +32,26 @@
               contribuição e cálculo da Renda Mensal Inicial.
             </p>
             <div
-              class="row pt-5"
-              style="position: absolute; bottom: 50px; left: 62%"
+              class="row pt-5 px-5"
             >
-              <div class="col-md-3 col-lg-3 col-md-offset-9">
+              <div class="col-md-4 col-lg-4 ">
+                <a
+                  href="#/rgps/rgps-segurados"
+                  class="btn btn-lg btn-block btn-ieprev"
+                  style="font-weight: bolder; "
+                >
+                <i class="fa fa-arrow-left"></i> Somente Cálculo de RMI
+                </a>
+              </div>
+              <div class="col-md-4 col-lg-4"></div>
+              <div class="col-md-4 col-lg-4">
                 <button
                   type="button"
                   (click)="setIsPaginaInicial()"
-                  class="btn btn-lg btn-block btn-ieprev"
-                  style="font-weight: bolder; width: 200px"
+                  class="btn btn-lg btn-block btn-ieprev pull-right"
+                  style="font-weight: bolder; "
                 >
-                  Iniciar
+                 Iniciar <i class="fa fa-arrow-right"></i> 
                 </button>
               </div>
             </div>

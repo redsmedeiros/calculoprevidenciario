@@ -124,11 +124,16 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   private setPaginaInicial() {
 
-    // sessionStorage.removeItem('inicialPassoaPasso');
+     sessionStorage.removeItem('inicialPassoaPasso');
 
-    // console.log(sessionStorage.getItem('inicialPassoaPasso'));
+     console.log(sessionStorage.getItem('inicialPassoaPasso'));
+     console.log((sessionStorage.getItem('inicialPassoaPasso') === ''
+     || sessionStorage.getItem('inicialPassoaPasso') === undefined
+     || typeof sessionStorage.getItem('inicialPassoaPasso') === 'undefined'));
 
-    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') === ''
+    this.isPaginaInicial = (
+      sessionStorage.getItem('inicialPassoaPasso') === null
+      || sessionStorage.getItem('inicialPassoaPasso') === ''
       || sessionStorage.getItem('inicialPassoaPasso') === undefined
       || typeof sessionStorage.getItem('inicialPassoaPasso') === 'undefined');
   }
