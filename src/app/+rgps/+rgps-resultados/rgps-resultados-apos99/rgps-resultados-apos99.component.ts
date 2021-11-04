@@ -1494,8 +1494,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   private getRequisitoPontos() {
 
-    const dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-
+    const dataBeneficio = (this.dataInicioBeneficio).clone();
     const requisitos = [
       { dataIni: '2015-06-18', dataFim: '2018-12-30', f: 85, m: 95 },
       { dataIni: '2018-12-31', dataFim: '2020-12-30', f: 86, m: 96 },
@@ -1508,7 +1507,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     const tempoMinContribuicao = { m: 35, f: 30 }
     const requisitoSegurado = requisitos.find(req => (dataBeneficio.isBetween(req.dataIni, req.dataFim, null, '()')));
     const status = (requisitoSegurado !== undefined);
-    //let tempoAdicionalProfessor = 0;
+    // let tempoAdicionalProfessor = 0;
 
     // Se professor
     if (status &&
