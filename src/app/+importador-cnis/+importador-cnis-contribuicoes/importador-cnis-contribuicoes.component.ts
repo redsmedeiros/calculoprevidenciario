@@ -50,6 +50,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   public result_sc = 0
   public result_sc_mm = 0;
 
+  private vinculoTemp;
+
   public matrixTableOptions = {
     paging: false,
     ordering: false,

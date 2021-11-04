@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-full">
   <div class="modal-content">
-    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="matrizHasValues" >
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="matrizHasValues">
       <dl class="padding-5">
         <dt><b>Empresa:</b> {{ vinculo.empresa }}</dt>
         <dt>
@@ -472,36 +472,110 @@
         Fechar
       </button>
       <!-- <div class="btn-group"></div> -->
-        <button
-          *ngIf="isSC_mm_ajustar_btn"
-          type="button"
-          class="btn btn-warning"
-          (click)="showContribuicoesCheck()"
-          style="min-width: 220px;"
+
+      <span>
+        <popover-content
+          #popDesfazerLeg
+          title="Desfazer"
+          [closeOnClickOutside]="true"
         >
-        <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
-        </button>
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
         <button
           type="button"
           class="btn btn-danger"
           id="salarioTeto"
           *ngIf="isSC_mm_ajustar_btn"
           (click)="preencherComSalario('t')"
-          style="min-width: 220px;"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popDesfazerLeg"
         >
-        <i class="fa fa-money"></i>Ajustar SC ao Teto SC
+          <i class="fa fa-money"></i> Ajustar SC ao Teto SC
         </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCT
+          title="Desfazer"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="salarioTeto"
+          *ngIf="isSC_mm_ajustar_btn"
+          (click)="preencherComSalario('t')"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCT"
+        >
+          <i class="fa fa-money"></i> Ajustar SC ao Teto SC
+        </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCM
+          title="Desfazer"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
         <button
           type="button"
           class="btn btn-danger"
           id="salarioMinimo"
           *ngIf="isSC_mm_ajustar_btn"
           (click)="preencherComSalario('m')"
-          style="min-width: 220px;"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCM"
         >
           <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
         </button>
-      
+      </span>
+
+      <span>
+        <popover-content
+          #popOpcoesDescarteTC
+          title="Desfazer"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
+        <button
+          *ngIf="isSC_mm_ajustar_btn"
+          type="button"
+          class="btn btn-warning"
+          (click)="showContribuicoesCheck()"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popOpcoesDescarteTC"
+        >
+          <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
+        </button>
+      </span>
+
       <button
         type="button"
         class="btn btn-primary"
@@ -520,7 +594,7 @@
 <div
   bsModal
   #contribuicoesCheck="bs-modal"
-  [config]="{backdrop: 'Enable', ignoreBackdropClick: 'Enable'}"
+  [config]="{ backdrop: 'Enable', ignoreBackdropClick: 'Enable' }"
   class="modal fade"
   id="contribuicoesCheck"
   tabindex="-1"

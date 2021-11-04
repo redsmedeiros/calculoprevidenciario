@@ -606,9 +606,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       });
 
+      this.detector.detectChanges();
+
       this.resetForm();
       this.atualizarPeriodo = 0;
-      this.detector.detectChanges();
       this.toastAlert('success', 'Relação Previdenciária atualizada', null);
 
     } else {
@@ -652,9 +653,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       };
 
       this.vinculosList.push(line);
-
-      this.resetForm();
       this.detector.detectChanges();
+      this.resetForm();
       this.toastAlert('success', 'Relação Previdenciária inserida', null);
 
     } else {

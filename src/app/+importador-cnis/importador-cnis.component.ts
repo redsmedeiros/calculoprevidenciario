@@ -83,9 +83,8 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.checkUserSession();
 
     this.ref.markForCheck();
-    this.ref.detectChanges();
     this.setExibirForm(this.dadosPassoaPasso);
-
+    this.ref.detectChanges();
   }
 
 
@@ -178,10 +177,12 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
+    this.ref.detectChanges();
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {
     this.eventCountVinculosErros = eventCountVinculosErros;
+    this.ref.detectChanges();
   }
 
 

@@ -932,3 +932,16 @@ a[class*="action-"]:hover {
 .form-action-boder-full {
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
+
+.popover-content {
+  padding: 0px 0px !important;
+  margin: 2px !important;
+}
+
+.popover-content>div {
+  padding: 10px !important;
+}
+
+.popover-title {
+  font-weight: bold !important;
+}
