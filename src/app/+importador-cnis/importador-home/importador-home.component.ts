@@ -126,11 +126,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
      sessionStorage.removeItem('inicialPassoaPasso');
 
-     console.log(sessionStorage.getItem('inicialPassoaPasso'));
-     console.log((sessionStorage.getItem('inicialPassoaPasso') === ''
-     || sessionStorage.getItem('inicialPassoaPasso') === undefined
-     || typeof sessionStorage.getItem('inicialPassoaPasso') === 'undefined'));
-
     this.isPaginaInicial = (
       sessionStorage.getItem('inicialPassoaPasso') === null
       || sessionStorage.getItem('inicialPassoaPasso') === ''

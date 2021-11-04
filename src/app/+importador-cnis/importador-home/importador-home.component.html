@@ -1,19 +1,19 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div id="inicialPassoaPasso" *ngIf="isPaginaInicial" class="pt-4">
+    <div id="inicialPassoaPasso" *ngIf="isPaginaInicial" class="row ">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="jumbotron background-inicial jumbotrom-custom-plan">
           <div class="container">
             <h1
-              style="color: white; font-weight: 500; font-size: 45px"
-              class="py-3 pl-5"
+              style="color: white; font-weight: 700;"
+              class="py-2 pl-5 text-align-center jumbotrom-custom-plan-title"
             >
-              NOVO SIMULADOR CONTAGEM DE TEMPO E SALÁRIOS DE CONTRIBUIÇÃO
+            SIMULADOR DE CONTAGEM DE TEMPO DE CONTRIBUIÇÃO E CÁLCULO DA RENDA MENSAL INICIAL
             </h1>
             <p
               style="color: white; font-weight: 500; text-align: justify"
-              class="py-4 px-5"
+              class="pt-2 pb-5 px-5"
             >
               O Simulador de Cálculo de Contagem de Tempo de Contribuição e
               Renda Mensal Inicial é a mais nova ferramenta de cálculos a
@@ -31,28 +31,63 @@
               análise, elaboração e conclusão da contagem de tempo de
               contribuição e cálculo da Renda Mensal Inicial.
             </p>
-            <div
-              class="row pt-5 px-5"
-            >
-              <div class="col-md-4 col-lg-4 ">
-                <a
-                  href="#/rgps/rgps-segurados"
-                  class="btn btn-lg btn-block btn-ieprev"
-                  style="font-weight: bolder; "
-                >
-                <i class="fa fa-arrow-left"></i> Somente Cálculo de RMI
-                </a>
-              </div>
-              <div class="col-md-4 col-lg-4"></div>
-              <div class="col-md-4 col-lg-4">
-                <button
-                  type="button"
-                  (click)="setIsPaginaInicial()"
-                  class="btn btn-lg btn-block btn-ieprev pull-right"
-                  style="font-weight: bolder; "
-                >
-                 Iniciar <i class="fa fa-arrow-right"></i> 
-                </button>
+
+            <div class="row px-5 mt-jumbotron-table vertical-center">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table class="table table-bordered table-condensed vertical-middle"
+               >
+                  <!-- <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                  </tr>
+                </thead> -->
+                  <tbody>
+                    <tr>
+                      <td>
+                        <button
+                          type="button"
+                          (click)="setIsPaginaInicial()"
+                          class="btn btn-lg btn-block btn-ieprev pull-right"
+                          style="font-weight: bolder"
+                          id="iniciar_calculo"
+                        >
+                          Iniciar
+                        </button>
+                      </td>
+                      <td>
+                        <strong class="font-1-5x text-white font-bold-500">
+                          texto teste texto teste texto t e s t e texto teste
+                          texto teste texto teste texto teste texto teste texto
+                          teste texto teste texto teste texto teste texto teste
+                          texto teste texto teste texto teste texto teste texto
+                          teste texto teste texto teste
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <a
+                          href="#/rgps/rgps-segurados"
+                          class="btn btn-lg btn-block btn-ieprev"
+                          style="font-weight: bolder"
+                          id="goto_rmi"
+                        >
+                          Cálcular de RMI
+                        </a>
+                      </td>
+                      <td>
+                        <strong class="font-1-5x text-white font-bold-500">
+                          texto teste texto teste texto t e s t e texto teste
+                          texto teste texto teste texto teste texto teste texto
+                          teste texto teste texto teste texto teste texto teste
+                          texto teste texto teste texto teste texto teste texto
+                          teste texto teste texto teste
+                        </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -60,8 +95,8 @@
       </div>
     </div>
 
-    <div id="passoContagemRMI" class="well mt-5" *ngIf="!isPaginaInicial">
-      <div class="row mt-5">
+    <div id="passoContagemRMI" class="" *ngIf="!isPaginaInicial">
+      <div class="row mt-3">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <form novalidate="novalidate">
             <div class="col-sm-12">
@@ -76,7 +111,7 @@
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
                       </span>
-                      <span class="title">{{ pane.tlitle }}</span>
+                      <!-- <span class="title">{{ pane.title }}</span> -->
                     </a>
                   </li>
                 </ul>
@@ -131,7 +166,7 @@
                   <div class="row mt-4 body-step-component">
                     <div
                       class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                      style="margin-top: 7rem"
+                      style="margin-top: 4rem"
                     >
                       <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -147,7 +182,7 @@
                               (click)="setOptionEntradaDados($event, 'cnis')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'cnis'
-                                  ? 'btn-ieprev-selected cursor-wait'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
                                   : 'btn-ieprev'
                               "
                             >
@@ -171,7 +206,7 @@
                               "
                               [ngClass]="
                                 dadosPassoaPasso.type === 'seguradoExistente'
-                                  ? 'btn-ieprev-selected cursor-wait'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
                                   : 'btn-ieprev'
                               "
                             >
@@ -198,7 +233,7 @@
                               (click)="setOptionEntradaDados($event, 'manual')"
                               [ngClass]="
                                 dadosPassoaPasso.type === 'manual'
-                                  ? 'btn-ieprev-selected cursor-wait'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
                                   : 'btn-ieprev'
                               "
                             >
@@ -342,7 +377,7 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step4'"
                 >
-                  <div class="row mt-4">
+                  <div class="row mt-4"  style="display: flex; align-items: center">
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                       <ul class="bootstrapWizard form-wizard">
                         <li class="active" data-target="#step4">
@@ -591,7 +626,7 @@
                   </div>
                 </div>
                 <div
-                  class="form-actions mt-0"
+                  class="form-actions form-action-boder-full mt-0"
                   *ngIf="
                     activeStep.key !== 'step4' &&
                     (dadosPassoaPasso.type === 'cnis' ||

@@ -281,9 +281,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
             if (mesi >= parseInt(mesinicio, 10) && mesi <= parseInt(mesfinal, 10)) {
 
               const mesIndex = (mesi - 1);
-
-              ano.valores[mesIndex] = this.salarioContribuicao;
+              ano.valores[mesIndex] = this.formatMoney(this.salarioContribuicao);
               ano.msc[mesIndex] = this.getClassSalarioContribuicao(mesi, ano.ano, this.salarioContribuicao, null, true);
+
             }
             mesi++;
           });
