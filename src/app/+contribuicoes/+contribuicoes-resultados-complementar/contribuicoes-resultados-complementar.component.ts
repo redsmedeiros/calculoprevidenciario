@@ -225,18 +225,21 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     this.calculoComplementar.contribuicao_calculada = this.total_total;
 
     this.Complementar.update(this.calculoComplementar).then((rst: ContribuicaoModel) => {
-      this.Complementar.get().then(() => {
-        swal({
-          type: 'success',
-          title: 'O Cálculo foi salvo com sucesso',
-          text: '',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          timer: 1500
-        }).then(() => {
 
-        });
+      swal({
+        type: 'success',
+        title: 'O Cálculo foi salvo com sucesso',
+        text: '',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timer: 1500
+      }).then(() => {
+
       });
+
+      // this.Complementar.find(this.idCalculo).then((calculo: ContribuicaoModel) => {
+      //   console.log(calculo);
+      // });
     }).catch(error => {
       console.log(error);
     });

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ContribuicaoComplementarService } from '../ContribuicaoComplementar.service';
 import { ErrorService } from '../../../services/error.service';
@@ -18,7 +18,7 @@ import swal from 'sweetalert2';
     ErrorService
   ]
 })
-export class ContribuicoesComplementarCreateComponent implements OnInit {
+export class ContribuicoesComplementarCreateComponent implements OnInit, OnChanges {
   public styleTheme = 'style-0';
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
 
@@ -61,12 +61,17 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     protected router: Router,
     private route: ActivatedRoute,
     private Moeda: MoedaService,
+    private detector: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
 
     this.isUpdate = true;
     this.getInformacoesIniciais();
+
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
   }
 
@@ -153,6 +158,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       }
       this.updateMatrix(+ano, valores);
     }
+    this.detector.detectChanges();
   }
 
 
@@ -181,11 +187,11 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
       clickFix.click();
       // matrizElement.click();
-      
+
 
       swal.close();
     }, 2000);
-
+    this.detector.detectChanges();
   }
 
 
@@ -224,7 +230,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
       }
     }
     this.updateMatrixCnis(+ano, valores);
-
+    this.detector.detectChanges();
   }
 
 
@@ -287,13 +293,15 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
 
 
   changedGridContribuicoes(ano, event, indice) {
-    let valor = event.target.value;
+    const valor = event.target.value;
 
     this.matriz.map(row => {
       if (row.ano === ano) {
         row.valores[indice] = valor;
       }
     });
+
+    this.detector.detectChanges();
   }
 
 
@@ -320,7 +328,7 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
     novoCalculo.atualizar_ate = '01/' + this.form.atualizar_ate;
 
     if (this.form.id == undefined || this.form.id == '') {
-      
+
       this.Calculo.save(novoCalculo).then((data: ContribuicaoModel) => {
 
         swal({
@@ -522,12 +530,12 @@ export class ContribuicoesComplementarCreateComponent implements OnInit {
   formatDecimal(value, n_of_decimal_digits) {
 
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
 
   }
 
 
-  //Valor da contribuição base para cada mês
+  // Valor da contribuição base para cada mês
   getContribBase(dataMes, contrib) {
     let teto = this.getTeto(dataMes);
     let salario_minimo = this.getSalarioMinimo(dataMes);
