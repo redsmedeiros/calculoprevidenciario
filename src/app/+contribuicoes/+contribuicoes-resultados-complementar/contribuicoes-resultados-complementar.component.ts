@@ -116,7 +116,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.segurado = segurado;
       this.dataNascimento();
       if (localStorage.getItem('user_id') != this.segurado.user_id) {
-        //redirecionar para pagina de segurados
+        // redirecionar para pagina de segurados
         swal({
           type: 'error',
           title: 'Erro',
@@ -696,6 +696,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
+
+    if (isNaN(valor)) {
+      valor = 0.00;
+    }
 
     if (moeda && valor < salarioMinimo) {
       valorRetorno = salarioMinimo;
