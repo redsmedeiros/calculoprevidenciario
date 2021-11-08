@@ -75,8 +75,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     try {
 
 
-      console.log(this.seguradoTransicao);
-
       if (this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 >= this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo]) {
 
         const rstRegra3pedagio50 = this.calcularRegra3();

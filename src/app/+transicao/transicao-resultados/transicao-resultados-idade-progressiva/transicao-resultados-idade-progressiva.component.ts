@@ -88,10 +88,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         ),
       };
 
-      // console.log(' -- Regra 2 ---');
-      // console.log(this.conclusoesRegra2);
-      // console.log(this.seguradoTransicao);
-
       // fim do processo
       this.isUpdating = false;
 
@@ -133,7 +129,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
     // console.log(this.seguradoTransicao.idadeFracionada);
     // console.log(this.seguradoTransicao.redutorProfessor);
     // console.log(contribuicao_min[this.seguradoTransicao.sexo]);
-
 
     if (this.seguradoTransicao.idadeFracionada >= regraIdade &&
       this.seguradoTransicao.contribuicaoFracionadoAnos >= contribuicao_min[this.seguradoTransicao.sexo]) {
@@ -238,11 +233,31 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         ||
         ([2020, 2022, 2024, 2026, 2028, 2030].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'f')) {
 
+        let daysAux = this.seguradoTransicao.dataNascimento.date();
+        let daysAddAux = 0;
+        if (this.seguradoTransicao.dataNascimento.date() === 31
+          && [0, 3, 5, 8, 10].includes(auxiliarDate.month())) {
+
+          daysAux = 30
+          daysAddAux = 1;
+
+        } else if (this.seguradoTransicao.dataNascimento.date() === 31
+          && auxiliarDate.month() === 1) {
+
+          daysAux = 28
+          daysAddAux = 3;
+
+        }
+
         auxiliarDate = moment({
           year: auxiliarDate.year(),
           month: auxiliarDate.month(),
-          day: this.seguradoTransicao.dataNascimento.date()
+          day: daysAux,
         });
+
+        if (daysAddAux > 0) {
+          auxiliarDate.add(daysAddAux, 'days');
+        }
 
       } else {
 
@@ -252,6 +267,8 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
           day: this.seguradoTransicao.dataNascimento.date()
         });
 
+
+
       }
 
 
@@ -260,8 +277,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       if (idadeMoment.days() === 30) {
         idadeMoment.add(1, 'day');
       }
-
-
 
 
       if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
@@ -297,7 +312,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         m: (35 - this.seguradoTransicao.redutorProfessor)
       };
 
-     // let testedays = (requisitoContribuicoes[this.seguradoTransicao.sexo] - tempoContribuicaoAnos360) * 365.25;
+      // let testedays = (requisitoContribuicoes[this.seguradoTransicao.sexo] - tempoContribuicaoAnos360) * 365.25;
       const testeanos = (requisitoContribuicoes[this.seguradoTransicao.sexo] - tempoContribuicaoAnos360);
 
       const anos = Math.floor(testeanos);
@@ -318,8 +333,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
       }
 
     }
-
-
 
 
     return {
