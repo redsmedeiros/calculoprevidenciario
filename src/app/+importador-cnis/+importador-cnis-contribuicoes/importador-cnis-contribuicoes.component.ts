@@ -88,6 +88,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       this.matrizHasValues = false;
       // this.preencherCheckContribuicoes(vinculo);
       // this.preencherMatrizPeriodos(vinculo.contribuicoes);
+      this.vinculoTemp =  Object.assign({}, this.vinculo);
       this.preencherCheckContribuicoes(this.vinculo);
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
 
@@ -241,6 +242,14 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       return true;
     }
     return false;
+  }
+
+  desfazerMatrizSC(){
+
+      console.log(this.vinculoTemp);
+      this.vinculo.contribuicoes = this.vinculoTemp.contribuicoes;
+      this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+
   }
 
   copiarPeriodo(ano) {

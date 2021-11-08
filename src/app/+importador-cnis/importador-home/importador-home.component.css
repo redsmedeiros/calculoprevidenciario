@@ -26,6 +26,11 @@
   #inicialPlanejamento {
     padding-top: 3rem;
   }
+
+  .body-step-component-btn{
+    padding-top: 3rem;
+  }
+
 }
 
 @media screen and (min-width: 1024px) {
@@ -41,6 +46,11 @@
   .body-step-component {
     min-height: 350px;
   }
+
+  .body-step-component-btn{
+    padding-top: 6rem;
+  }
+
 }
 
 @media screen and (min-width: 1500px) {
@@ -60,6 +70,10 @@
 
   .body-step-component {
     min-height: 550px;
+  }
+
+  .body-step-component-btn{
+    padding-top: 6rem;
   }
 }
 

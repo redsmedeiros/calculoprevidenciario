@@ -480,8 +480,8 @@
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
-            Desfazer a última alteração de preencimento autómatico de teto e/ou
-            mínimo
+            Desfazer a últimas alterações de preencimento autómatico de teto e/ou
+            mínimo.
           </div>
         </popover-content>
         <button
@@ -489,13 +489,13 @@
           class="btn btn-danger"
           id="salarioTeto"
           *ngIf="isSC_mm_ajustar_btn"
-          (click)="preencherComSalario('t')"
+          (click)="desfazerMatrizSC()"
           style="min-width: 220px"
           [popoverPlacement]="right"
           [popoverOnHover]="true"
           [popover]="popDesfazerLeg"
         >
-          <i class="fa fa-money"></i> Ajustar SC ao Teto SC
+          <i class="fa fa-money"></i> Desfazer Últimas alterações
         </button>
       </span>
 
@@ -506,8 +506,7 @@
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
-            Desfazer a última alteração de preencimento autómatico de teto e/ou
-            mínimo
+            Limitar SC ao Teto SC na competência em que o valor é zero ou menor que o mínimo.
           </div>
         </popover-content>
         <button
@@ -521,7 +520,7 @@
           [popoverOnHover]="true"
           [popover]="popPreencherSCT"
         >
-          <i class="fa fa-money"></i> Ajustar SC ao Teto SC
+          <i class="fa fa-money"></i> Limitar SC ao Teto SC
         </button>
       </span>
 
@@ -532,8 +531,7 @@
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
-            Desfazer a última alteração de preencimento autómatico de teto e/ou
-            mínimo
+            Limitar SC ao Salário Mínimo na competência em que o valor é zero ou menor que o mínimo.
           </div>
         </popover-content>
         <button
@@ -547,7 +545,7 @@
           [popoverOnHover]="true"
           [popover]="popPreencherSCM"
         >
-          <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
+          <i class="fa fa-money"></i> Limitar SC ao Salário Mínimo
         </button>
       </span>
 
@@ -572,7 +570,7 @@
           [popoverOnHover]="true"
           [popover]="popOpcoesDescarteTC"
         >
-          <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
+          <i class="fa fa-list fa-1-7x"></i> Editar Tempo e Carência
         </button>
       </span>
 

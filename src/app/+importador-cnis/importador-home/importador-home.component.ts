@@ -124,7 +124,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   private setPaginaInicial() {
 
-     sessionStorage.removeItem('inicialPassoaPasso');
+    sessionStorage.removeItem('inicialPassoaPasso');
 
     this.isPaginaInicial = (
       sessionStorage.getItem('inicialPassoaPasso') === null
@@ -212,7 +212,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   }
 
-  private clearTempSessionStorageStart(){
+  private clearTempSessionStorageStart() {
     sessionStorage.removeItem('calculoSelecionado');
     sessionStorage.removeItem('calculosSelecionado');
     sessionStorage.removeItem('seguradoSelecionado');
@@ -226,7 +226,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private clearDataSelected(step) {
 
     // this.setStepValidate(step.key, false);
-    this.setStepValidateClear(false);
+    this.setStepValidateClear(false, step);
     switch (step.key) {
       case 'step1':
 
@@ -333,6 +333,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       const keyStepUrl = 'step4';
       const step = this.steps.find((item) => keyStepUrl === item.key);
       this.activeStep = step;
+      this.setStepValidateClear(true, step)
 
       return false;
     }
@@ -377,11 +378,21 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
 
-  private setStepValidateClear(status) {
-    this.steps.map((step) => {
-      step.valid = status;
-      step.checked = status;
+  private setStepValidateClear(status, stepA) {
+   
+    const index = this.steps.indexOf(stepA);
+    this.steps.map((step, indiceA) => {
+
+      if (indiceA >= index && !status) {
+        step.valid = status;
+        step.checked = status;
+      } else if (indiceA < index && status) {
+        step.valid = status;
+        step.checked = status;
+      }
+
     });
+
   }
 
   private setStepValidate(stepKey, status) {
