@@ -100,6 +100,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private stepUrl = null;
   private stepUrlSegurado = null;
   private stepUrlCalculo = null;
+  private isImportCNIS = false;
 
   constructor(
     private Auth: Auth,
@@ -257,6 +258,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
         break;
       case 'step4':
+        this.isImportCNIS = false;
 
 
         break;
@@ -379,7 +381,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
   private setStepValidateClear(status, stepA) {
-   
+
     const index = this.steps.indexOf(stepA);
     this.steps.map((step, indiceA) => {
 
@@ -554,6 +556,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   public eventCalcularContagem(dataRSTImportForm) {
 
+
+
     if (this.isExits(dataRSTImportForm.seguradoId)
       && this.isExits(dataRSTImportForm.calculoId)) {
 
@@ -562,6 +566,14 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.setStepValidate('step4', true);
       this.nextStep();
 
+    }
+
+  }
+
+  public eventStatusImport(dataStatus) {
+
+    if (this.isExits(dataStatus) && this.isExits(dataStatus.status)) {
+      this.isImportCNIS = dataStatus.status;
     }
 
   }

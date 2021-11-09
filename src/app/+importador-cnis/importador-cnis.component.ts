@@ -29,6 +29,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
   @Input() dadosPassoaPasso;
   @Output() eventCalcularContagem = new EventEmitter();
   @Output() eventPrevStepPassoaPasso = new EventEmitter();
+  @Output() eventStatusImport = new EventEmitter();
 
   public exibirForm = false;
   public isUpdatingSegurado = true;
@@ -171,6 +172,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.vinculos = importVinculos;
     this.isUpdatingVinculos = false;
     this.isUploadReaderComplete = true;
+    this.setEventStatusImport(this.isUploadReaderComplete);
     this.ref.detectChanges();
 
   }
@@ -294,7 +296,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
       this.calculosSelecionado = { id_segurado: seguradoSelecionado.id };
 
-     // sessionStorage.removeItem('seguradoSelecionado');
+      // sessionStorage.removeItem('seguradoSelecionado');
     }
 
   }
@@ -358,14 +360,28 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     //   '_blank');
   }
 
+  setEventStatusImport(status) {
+
+    if (this.dadosPassoaPasso.origem !== 'contagem') {
+      this.eventStatusImport.emit({
+        status: status
+      });
+    }
+
+  }
+
   setNextStepContagemTempo() {
+
     if (this.dadosPassoaPasso.origem !== 'contagem') {
       this.eventCalcularContagem.emit({
         seguradoId: this.seguradoId,
         calculoId: this.calculoId
       });
     }
+
   }
+
+
 
 }
 

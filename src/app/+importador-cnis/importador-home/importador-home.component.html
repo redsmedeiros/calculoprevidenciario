@@ -411,7 +411,7 @@
                       <ul
                         class="text-justify pt-5 mb-5"
                         style="font-size: 14px"
-                        *ngIf="dadosPassoaPasso.type === 'cnis'"
+                        *ngIf="dadosPassoaPasso.type === 'cnis' && !isImportCNIS"
                       >
                         <li>
                           Insira o arquivo do CNIS em .pdf, obtido no Meu INSS,
@@ -426,7 +426,8 @@
                       <ul
                         class="text-justify pt-5 mb-5"
                         style="font-size: 14px"
-                        *ngIf="dadosPassoaPasso.type === 'seguradoExistente'"
+                        *ngIf="(dadosPassoaPasso.type === 'seguradoExistente') 
+                        || (dadosPassoaPasso.type === 'cnis' && isImportCNIS)"
                       >
                         <li>
                           Verifique as informações abaixo inseridas, que poderão
@@ -453,6 +454,7 @@
                         (eventPrevStepPassoaPasso)="
                           eventPrevStepPassoaPasso($event)
                         "
+                        (eventStatusImport)="eventStatusImport($event)"
                       ></app-importador-cnis>
                     </div>
                   </div>

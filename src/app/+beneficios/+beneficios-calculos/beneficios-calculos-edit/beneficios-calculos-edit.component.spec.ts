@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiosCalculosEditComponent } from './beneficios-calculos-edit.component';
@@ -8,7 +9,8 @@ describe('BeneficiosCalculosEditComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BeneficiosCalculosEditComponent ]
+      declarations: [ BeneficiosCalculosEditComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

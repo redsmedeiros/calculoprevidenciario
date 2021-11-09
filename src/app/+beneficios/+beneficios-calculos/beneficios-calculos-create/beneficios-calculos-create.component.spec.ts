@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiosCalculosCreateComponent } from './beneficios-calculos-create.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BeneficiosCalculosCreateComponent', () => {
   let component: BeneficiosCalculosCreateComponent;
@@ -8,7 +9,8 @@ describe('BeneficiosCalculosCreateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BeneficiosCalculosCreateComponent ]
+      declarations: [ BeneficiosCalculosCreateComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiosCalculosFormDevidosComponent } from './beneficios-calculos-form-devidos.component';
@@ -8,7 +9,8 @@ describe('BeneficiosCalculosFormDevidosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BeneficiosCalculosFormDevidosComponent ]
+      declarations: [ BeneficiosCalculosFormDevidosComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

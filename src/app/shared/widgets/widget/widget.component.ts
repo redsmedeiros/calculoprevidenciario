@@ -7,6 +7,7 @@ declare var $: any;
 
   selector: 'sa-widget',
   template: `<div id="{{widgetId}}" class="jarviswidget"><ng-content></ng-content></div>`
+  
 })
 export class WidgetComponent implements OnInit, AfterViewInit {
 
