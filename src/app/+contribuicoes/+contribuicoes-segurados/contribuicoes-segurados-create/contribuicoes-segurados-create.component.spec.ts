@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContribuicoesSeguradosCreateComponent } from './contribuicoes-segurados-create.component';
@@ -8,7 +9,8 @@ describe('ContribuicoesSeguradosCreateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContribuicoesSeguradosCreateComponent ]
+      declarations: [ ContribuicoesSeguradosCreateComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

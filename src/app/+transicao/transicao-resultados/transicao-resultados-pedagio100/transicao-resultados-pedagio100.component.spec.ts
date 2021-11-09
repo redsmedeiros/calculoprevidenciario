@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TransicaoResultadosPedagio100Component } from './transicao-resultados-pedagio100.component';
@@ -8,7 +9,8 @@ describe('TransicaoResultadosPedagio100Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransicaoResultadosPedagio100Component ]
+      declarations: [ TransicaoResultadosPedagio100Component ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

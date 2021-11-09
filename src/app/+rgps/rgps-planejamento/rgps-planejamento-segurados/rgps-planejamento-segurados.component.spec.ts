@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RgpsPlanejamentoSeguradosComponent } from './rgps-planejamento-segurados.component';
@@ -8,7 +9,8 @@ describe('RgpsPlanejamentoSeguradosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RgpsPlanejamentoSeguradosComponent ]
+      declarations: [ RgpsPlanejamentoSeguradosComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

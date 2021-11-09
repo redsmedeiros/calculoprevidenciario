@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImportadorCnisSeguradosComponent } from './importador-cnis-segurados.component';
@@ -8,7 +9,8 @@ describe('ImportadorCnisSeguradosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImportadorCnisSeguradosComponent ]
+      declarations: [ ImportadorCnisSeguradosComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));
