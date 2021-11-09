@@ -1,15 +1,16 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div id="inicialPassoaPasso" *ngIf="isPaginaInicial" class="row ">
+    <div id="inicialPassoaPasso" *ngIf="isPaginaInicial" class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="jumbotron background-inicial jumbotrom-custom-plan">
           <div class="container">
             <h1
-              style="color: white; font-weight: 700;"
+              style="color: white; font-weight: 700"
               class="py-2 pl-5 text-align-center jumbotrom-custom-plan-title"
             >
-            SIMULADOR DE CONTAGEM DE TEMPO DE CONTRIBUIÇÃO E CÁLCULO DA RENDA MENSAL INICIAL
+              SIMULADOR DE CONTAGEM DE TEMPO DE CONTRIBUIÇÃO E CÁLCULO DA RENDA
+              MENSAL INICIAL
             </h1>
             <p
               style="color: white; font-weight: 500; text-align: justify"
@@ -34,8 +35,9 @@
 
             <div class="row px-5 mt-jumbotron-table vertical-center">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <table class="table table-bordered table-condensed vertical-middle"
-               >
+                <table
+                  class="table table-bordered table-condensed vertical-middle"
+                >
                   <!-- <thead>
                   <tr>
                     <th>Tipo</th>
@@ -48,7 +50,7 @@
                         <button
                           type="button"
                           (click)="setIsPaginaInicial()"
-                          class="btn btn-lg btn-block btn-ieprev pull-right"
+                          class="btn btn-lg btn-block btn-ieprev-p pull-right"
                           style="font-weight: bolder"
                           id="iniciar_calculo"
                         >
@@ -69,7 +71,7 @@
                       <td>
                         <a
                           href="#/rgps/rgps-segurados"
-                          class="btn btn-lg btn-block btn-ieprev"
+                          class="btn btn-lg btn-block btn-ieprev-p"
                           style="font-weight: bolder"
                           id="goto_rmi"
                         >
@@ -111,12 +113,12 @@
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
                       </span>
-                      <span class="title fa-1-1x" >{{ pane.title }}</span>
+                      <span class="title fa-1-1x">{{ pane.title }}</span>
                     </a>
                   </li>
                 </ul>
               </div>
-              <div class="tab-content" style="margin-top: 3rem">
+              <div class="tab-content" style="margin-top: 5rem">
                 <div
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step1'"
@@ -133,12 +135,12 @@
                       </ul>
                     </div>
                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                      <ul class="text-justify pt-1" style="font-size: 14px">
-                        <li>
-                          Selecione uma Opção para Iniciar os Cálculos da
-                          Contagem de Tempo de Contribuição e Renda Mensal
-                          Inicial. Após isso Clique em continuar;
-                        </li>
+                      <p>
+                        Para Iniciar os Cálculos da Contagem de Tempo de
+                        Contribuição e Renda Mensal Inicial, selecione uma das
+                        opções abaixo:
+                      </p>
+                      <ol type="A" class="text-justify pt-1">
                         <li>
                           <strong>Migrar Dados a Partir do CNIS:</strong>
                           O Simulador de Cálculos do IEPREV fará a importação
@@ -159,16 +161,30 @@
                           usuário insira manualmente os períodos de contribuição
                           e salários de contribuição;
                         </li>
-                      </ul>
+                      </ol>
                     </div>
                   </div>
 
-                  <div class="row mt-4 body-step-component body-step-component-btn">
+                  <div
+                    class="row mt-3 body-step-component body-step-component-btn"
+                  >
                     <div
                       class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                      style="margin-top: 4rem"
+                      style="margin-top: 2rem"
                     >
                       <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div
+                            class="well well-sm-i text-align-center"
+                            style="margin-right: 13px; margin-left: 13px"
+                          >
+                            <strong
+                              >Selecione a opção desejada e clique em
+                              Continuar</strong
+                            >
+                          </div>
+                        </div>
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div
@@ -176,7 +192,7 @@
                                 well well-sm
                                 text-center
                                 btn-radius-custom
-                                py-3
+                                py-2
                                 cursor-pointer
                               "
                               (click)="setOptionEntradaDados($event, 'cnis')"
@@ -195,7 +211,7 @@
                                 well well-sm
                                 text-center
                                 btn-radius-custom
-                                py-3
+                                py-2
                                 cursor-pointer
                               "
                               (click)="
@@ -227,7 +243,7 @@
                                 well well-sm
                                 text-center
                                 btn-radius-custom
-                                py-3
+                                py-2
                                 cursor-pointer
                               "
                               (click)="setOptionEntradaDados($event, 'manual')"
@@ -377,7 +393,10 @@
                   class="tab-pane"
                   [class.active]="activeStep.key == 'step4'"
                 >
-                  <div class="row mt-4"  style="display: flex; align-items: center">
+                  <div
+                    class="row mt-4"
+                    style="display: flex; align-items: center"
+                  >
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                       <ul class="bootstrapWizard form-wizard">
                         <li class="active" data-target="#step4">
@@ -411,7 +430,9 @@
                       <ul
                         class="text-justify pt-5 mb-5"
                         style="font-size: 14px"
-                        *ngIf="dadosPassoaPasso.type === 'cnis' && !isImportCNIS"
+                        *ngIf="
+                          dadosPassoaPasso.type === 'cnis' && !isImportCNIS
+                        "
                       >
                         <li>
                           Insira o arquivo do CNIS em .pdf, obtido no Meu INSS,
@@ -426,8 +447,10 @@
                       <ul
                         class="text-justify pt-5 mb-5"
                         style="font-size: 14px"
-                        *ngIf="(dadosPassoaPasso.type === 'seguradoExistente') 
-                        || (dadosPassoaPasso.type === 'cnis' && isImportCNIS)"
+                        *ngIf="
+                          dadosPassoaPasso.type === 'seguradoExistente' ||
+                          (dadosPassoaPasso.type === 'cnis' && isImportCNIS)
+                        "
                       >
                         <li>
                           Verifique as informações abaixo inseridas, que poderão

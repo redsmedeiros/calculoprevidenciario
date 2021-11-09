@@ -13,6 +13,7 @@ import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-perio
 
 import { ErrorService } from 'app/services/error.service';
 import swal from 'sweetalert2';
+import { SizeFunctions } from 'app/shared/functions/size-functions';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
   // public calculosList = this.CalculoContagemService.list;
 
 
-
+  private lengthMenuTable = this.setNumberPages();
   private columnsConfig = [
     {
       data: 'actions2',
@@ -72,6 +73,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     colReorder: true,
     data: this.calculosList,
     columns: this.columnsConfig,
+    lengthMenu: this.lengthMenuTable,
   };
 
   public isUpdatingCalc = true;
@@ -119,6 +121,16 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   }
 
+  
+  setNumberPages() {
+
+    if (!SizeFunctions.isWidthGreaterThan(1366)) {
+      return [5, 10, 25, 50, 75, 'All'];
+    }
+    return [10, 25, 50, 75, 'All'];
+  }
+
+
 
   private getListCalculos(idSegurado) {
     this.isUpdatingCalc = true;
@@ -144,6 +156,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
       colReorder: true,
       data: this.calculosList,
       columns: this.columnsConfig,
+      lengthMenu: this.lengthMenuTable,
     };
 
     this.isUpdatingCalc = false;

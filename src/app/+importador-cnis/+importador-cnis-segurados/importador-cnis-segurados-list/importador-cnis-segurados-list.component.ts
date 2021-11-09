@@ -10,6 +10,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 
 import { SeguradoContagemTempo as SeguradoModel } from 'app/+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.model';
 import { SeguradoService } from 'app/+contagem-tempo/+contagem-tempo-segurados/SeguradoContagemTempo.service';
+import { SizeFunctions } from 'app/shared/functions/size-functions';
 
 
 @Component({
@@ -38,10 +39,12 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
 
   @Output() seguradoSelecionadoEvent = new EventEmitter();
 
+  public lengthMenuTable = this.setNumberPages();
   public datatableOptions = {
     colReorder: true,
     data: this.list,
     order: [[0, 'desc']],
+    lengthMenu: this.lengthMenuTable,
     columns: [
       { data: 'id', visible: false },
       { data: 'nome' },
@@ -80,6 +83,15 @@ export class ImportadorCnisSeguradosListComponent implements OnInit {
     this.verificacoesAcesso();
     this.getUserSegurados();
 
+  }
+
+
+  setNumberPages() {
+
+    if (!SizeFunctions.isWidthGreaterThan(1366)) {
+      return [5, 10, 25, 50, 75, 'All'];
+    }
+    return [10, 25, 50, 75, 'All'];
   }
 
 

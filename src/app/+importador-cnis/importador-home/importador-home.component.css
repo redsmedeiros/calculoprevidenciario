@@ -8,7 +8,9 @@
 
 .jumbotron {
   margin-bottom: 0 !important;
-  margin-top: 3rem !important;
+  margin-top: 1rem !important;
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
 }
 .jumbotrom-custom-plan-title {
   font-size: 2rem;
@@ -16,7 +18,7 @@
 
 @media screen and (max-width: 1024px) {
   .jumbotrom-custom-plan {
-    height: 600px;
+    height: 500px;
   }
 
   .jumbotron p {
@@ -27,16 +29,21 @@
     padding-top: 3rem;
   }
 
-  .body-step-component-btn{
+  /* .body-step-component-btn{
     padding-top: 3rem;
-  }
+  } */
 
 }
 
 @media screen and (min-width: 1024px) {
+  
+  .jumbotron p {
+    font-size: 1.7rem;
+  }
+
   .jumbotrom-custom-plan {
     /* min-height: 600px !important;; */
-    height: 600px;
+    height: 510px;
   }
 
   #inicialPlanejamento {
@@ -44,12 +51,12 @@
   }
 
   .body-step-component {
-    min-height: 350px;
+    min-height: 100px;
   }
 
-  .body-step-component-btn{
+  /* .body-step-component-btn{
     padding-top: 6rem;
-  }
+  } */
 
 }
 
@@ -69,12 +76,12 @@
   }
 
   .body-step-component {
-    min-height: 550px;
+    min-height: 350px;
   }
-
+/* 
   .body-step-component-btn{
     padding-top: 6rem;
-  }
+  } */
 }
 
 /* 
@@ -143,21 +150,45 @@
 .btn-ieprev:hover {
   color: #0d0d0d;
   background-color: #ffaa21;
-  filter: brightness(1.2);
 }
 
 .btn-ieprev {
   color: #0d0d0d;
-  background-color: #ffaa21;
+  /* background-color: #ffaa21; */
+  background-color: #b2b5b9;
+  
 }
 
 .btn-ieprev-selected {
   color: #0d0d0d;
   background-color: #ffaa21;
-  filter: brightness(0.8);
 }
+
+
+
+.btn-ieprev-p:hover {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(1.2);
+}
+
+.btn-ieprev-p {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  
+}
+/* 
+.btn-ieprev-selected-p {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  filter: brightness(0.8);
+} */
 
 h5 {
   font-weight: 800;
   color: #0d0d0d;
+}
+
+.well-sm-i{
+  padding: 5px;
 }

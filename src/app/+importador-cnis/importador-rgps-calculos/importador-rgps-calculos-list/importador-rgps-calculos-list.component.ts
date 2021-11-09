@@ -11,6 +11,7 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ErrorService } from 'app/services/error.service';
 import swal from 'sweetalert2';
+import { SizeFunctions } from 'app/shared/functions/size-functions';
 
 
 
@@ -44,7 +45,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public formCalculo;
   public isEditRGPS = false;
 
-
+  private lengthMenuTable = this.setNumberPages();
   public columnsConfig = [
     {
       data: 'actions2',
@@ -85,6 +86,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     data: this.calculosRMIList,
     // order: [[6, 'desc']],]
     columns: this.columnsConfig,
+    lengthMenu: this.lengthMenuTable,
     buttons: [
       {
         extend: 'colvis',
@@ -143,6 +145,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       data: this.calculosRMIList,
       // order: [[6, 'desc']],
       columns: this.columnsConfig,
+      lengthMenu: this.lengthMenuTable,
       buttons: [
         {
           extend: 'colvis',
@@ -160,6 +163,14 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     this.isUpdatingCalcRGPS = false;
   }
 
+
+  setNumberPages() {
+
+    if (!SizeFunctions.isWidthGreaterThan(1366)) {
+      return [5, 10, 25, 50, 75, 'All'];
+    }
+    return [10, 25, 50, 75, 'All'];
+  }
 
   private getRow(dataRow) {
 
