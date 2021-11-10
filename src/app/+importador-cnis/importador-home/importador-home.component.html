@@ -54,16 +54,23 @@
                           style="font-weight: bolder"
                           id="iniciar_calculo"
                         >
-                          Iniciar
+                          Concessão no RGPS
                         </button>
                       </td>
-                      <td>
+                      <td class="text-justify">
                         <strong class="font-1-5x text-white font-bold-500">
-                          texto teste texto teste texto t e s t e texto teste
-                          texto teste texto teste texto teste texto teste texto
-                          teste texto teste texto teste texto teste texto teste
-                          texto teste texto teste texto teste texto teste texto
-                          teste texto teste texto teste
+                          Realiza os cálculos da contagem de tempo de
+                          contribuição e do valor dos benefícios com aplicação
+                          das regras previstas na EC nº 103/2019 e Decreto nº
+                          10.410/2020 (contagem de tempo apenas com a inclusão
+                          dos meses com salário superior ao mínimo; cômputo do
+                          mês integral como tempo de contribuição, quando o
+                          salário for igual ou superior ao mínimo,
+                          independentemente da quantidade de dias trabalhados;
+                          conversão de tempo especial até 13/11/2019,
+                          permitindo, caso necessário, a conversão para período
+                          posterior), com importação única dos períodos de
+                          contribuição e salários existentes no CNIS.
                         </strong>
                       </td>
                     </tr>
@@ -75,16 +82,14 @@
                           style="font-weight: bolder"
                           id="goto_rmi"
                         >
-                          Cálcular de RMI
+                          RMI no RGPS
                         </a>
                       </td>
-                      <td>
+                      <td class="text-justify">
                         <strong class="font-1-5x text-white font-bold-500">
-                          texto teste texto teste texto t e s t e texto teste
-                          texto teste texto teste texto teste texto teste texto
-                          teste texto teste texto teste texto teste texto teste
-                          texto teste texto teste texto teste texto teste texto
-                          teste texto teste texto teste
+                          Elabora apenas o cálculo do valor dos benefícios a
+                          partir da inclusão manual do tempo de contribuição,
+                          importando do CNIS apenas os salários.
                         </strong>
                       </td>
                     </tr>
@@ -113,7 +118,10 @@
                         <span *ngIf="!pane.checked">{{ i + 1 }}</span>
                         <i class="fa fa-check" *ngIf="pane.checked"></i>
                       </span>
-                      <span class="title fa-1-1x">{{ pane.title }}</span>
+                      <span
+                        class="title fa-1-1x"
+                        [innerHTML]="pane.title"
+                      ></span>
                     </a>
                   </li>
                 </ul>
@@ -136,9 +144,9 @@
                     </div>
                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                       <p>
-                        Para Iniciar os Cálculos da Contagem de Tempo de
-                        Contribuição e Renda Mensal Inicial, selecione uma das
-                        opções abaixo:
+                        Para Iniciar o Cálculo da Contagem de Tempo de
+                        Contribuição e da Renda Mensal Inicial, selecione uma
+                        das opções abaixo:
                       </p>
                       <ol type="A" class="text-justify pt-1">
                         <li>
@@ -175,7 +183,12 @@
                       <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div
-                            class="well well-sm-i text-align-center"
+                            class="
+                              well well-sm-i
+                              text-align-center
+                              bg-ieprev
+                              text-white
+                            "
                             style="margin-right: 13px; margin-left: 13px"
                           >
                             <strong

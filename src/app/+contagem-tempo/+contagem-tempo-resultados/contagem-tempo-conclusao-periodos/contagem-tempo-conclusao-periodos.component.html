@@ -28,11 +28,11 @@
           <tr>
             <th rowspan="2">Nº</th>
             <th rowspan="2">Empresa</th>
-            <th rowspan="2">Data Início</th>
+            <th rowspan="2">Data Inicial</th>
             <th rowspan="2">Data Final</th>
             <th rowspan="2" class="text-center">Fator</th>
-            <th rowspan="2" class="text-center">Cota Carência</th>
-            <th rowspan="2" class="text-center">Cota Tempo Contribuição</th>
+            <th rowspan="2" class="text-center">Carência*</th>
+            <th rowspan="2" class="text-center">Tempo Contribuição*</th>
             <th colspan="3" class="text-center">
               <span
                 data-placement="top"
@@ -51,7 +51,7 @@
               <span
                 data-placement="top"
                 tooltip="Identifica os vínculos em conflito"
-                >Concomitâncias</span
+                >Concomitância</span
               >
             </th>
           </tr>
@@ -96,17 +96,17 @@
       <table class="table table-bordered table-condensed-custom font-1-1x" *ngIf="!isUpdating && periodosList.length > 0">
         <tbody>
           <tr>
-            <td >*Cota Carência</td>
-            <td>
-              Integral: período possui todos os salários de contribuíção ou usuário selecionou Considerar Carência. 
-              <br> Parcial: período não possui todos os salários de contribuíção e usuário escolheu não considerar todo o período como Carência.
+            <td >*Carência</td>
+            <td class="text-justify">
+              Integral: Período possui todos os salários de contribuição com valor igual ou superior ao mínimo ou o usuário selecionou a opção considerar como Carência.
+              <br>Parcial: Período não possui todos os salários de contribuição com valor igual ou superior ao mínimo e usuário selecionou não considerar todo o período como Carência.
             </td>
           </tr>
           <tr>
-            <td>*Cota Tempo Contribuição</td>
-            <td>
-              Integral:  período possui todos os salários de contribuíção ou usuário selecionou Considerar como Tempo de Contribuição.
-              <br> Parcial: período não possui todos os salários de contribuíção e usuário escolheu não considerar todo o período como Tempo de Contribuição.
+            <td>*Tempo Contribuição</td>
+            <td class="text-justify">
+              Integral: Período possui todos os salários de contribuição com valor igual ou superior ao mínimo ou o usuário selecionou a opção considerar como Tempo de Contribuição.
+              <br>Parcial: Período não possui todos os salários de contribuição com valor igual ou superior ao mínimo e usuário selecionou não considerar todo o período como Tempo de Contribuição.
             </td>
           </tr>
         </tbody>
