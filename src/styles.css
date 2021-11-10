@@ -43,6 +43,10 @@ a[class*="action-"]:hover {
   text-align: right;
 }
 
+.well-lg-custom{
+  padding: 10px;
+}
+
 .matriz-input {
   width: 100%;
   text-align: right;
@@ -811,16 +815,16 @@ a[class*="action-"]:hover {
 
 @media screen and (max-height: 786px) {
   .menu-home {
-    margin-top: 4rem;
+    margin-top: 3rem;
     margin-bottom: 3rem;
   }
   .descricao-home {
-    margin-top: 4rem;
-    margin-bottom: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 0rem;
   }
   .header-title-home {
     margin-top: 4rem;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
   }
 }
 
@@ -945,3 +949,4 @@ a[class*="action-"]:hover {
 .popover-title {
   font-weight: bold !important;
 }
+

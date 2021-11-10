@@ -22,6 +22,7 @@ import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask-zero
 import { BeneficiosCalculosFormRecebidosComponent } from './beneficios-calculos-form-recebidos/beneficios-calculos-form-recebidos.component';
 import { BeneficiosCalculosFormDevidosComponent } from './beneficios-calculos-form-devidos/beneficios-calculos-form-devidos.component';
 import { BeneficiosCalculosFormCustasProcessoComponent } from './beneficios-calculos-form-custas-processo/beneficios-calculos-form-custas-processo.component';
+import { FormsModule } from '@angular/forms';
 
 
 // export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -54,7 +55,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     SmartadminModule,
     TextMaskModule,
     SmartadminDatatableModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    FormsModule
   ],
   declarations: [BeneficiosCalculosComponent,
     BeneficiosCalculosDestroyComponent,

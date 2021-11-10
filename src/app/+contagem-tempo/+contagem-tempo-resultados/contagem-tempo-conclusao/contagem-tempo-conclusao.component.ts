@@ -232,9 +232,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const fimVinculo = this.toMoment(vinculo.data_termino);
       const fator = vinculo.fator_condicao_especialN;
 
-      if (auxiliarDate.isBetween('2020-01-01', '2019-02-01', 'month', '[]')) {
-        console.log('L =' + melhorTempoLast + '| A =' + melhorTempo)
-      }
+      // if (auxiliarDate.isBetween('2018-12-01', '2019-02-01', 'month', '[]')) {
+      //   console.log('L =' + melhorTempoLast + '| A =' + melhorTempo)
+      // }
+
 
       // é o fim do vinculo
       if (moment(auxiliarDate).isSame(fimVinculo, 'month')) {
@@ -249,7 +250,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         dataFull = true;
       }
 
-      if (auxiliarDatePosEC103 && this.checkPeriodoPosReforma(vinculo)) {
+      if (auxiliarDatePosEC103
+        && this.checkPeriodoPosReforma(vinculo)
+      ) {
 
         dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate);
         melhorTempo = (dataFull) ? 30 : 0;
@@ -264,6 +267,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
           melhorTempo = 13
         }
+
 
 
       } else {
@@ -303,6 +307,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           }
 
           melhorTempo = this.aplicarFator(diffIgualIF, fator);
+
         }
 
         if (
@@ -357,6 +362,20 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       }
 
+
+      if (auxiliarDate.isSame('2019-01-01', 'month')) {
+        console.log(melhorTempo);
+      }
+
+
+
+      if (this.checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo)) {
+
+        melhorTempo = 0;
+
+      }
+
+
       lastIni = this.toMoment(vinculo.data_inicio);
       lastFim = this.toMoment(vinculo.data_termino);
       lastFator = vinculo.fator_condicao_especialN;
@@ -381,6 +400,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     // console.log('FT----');
 
     return { melhorTempo: melhorTempo, finalVinculo: finalVinculo };
+  }
+
+
+  private checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo) {
+
+    if (vinculo.tempoContrib === 'Parcial'
+      && (moment(auxiliarDate).isBetween(moment(inicioVinculo), moment(fimVinculo), 'month', '[]')
+        && this.dadosPassoaPasso.origem !== 'contagem')) {
+
+      if (auxiliarDate.isSame('2019-01-01', 'month')) {
+        console.log(!this.checkScIntegral(vinculo.sc, auxiliarDate))
+        console.log((this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0))
+      }
+
+      return ((!this.checkScIntegral(vinculo.sc, auxiliarDate))
+        && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0));
+
+    }
+
+    return false;
+
   }
 
 
@@ -653,12 +693,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkScIntegral(salariosC, auxiliarDate) {
 
-    if (auxiliarDate.isBefore('2019-11-13')) {
-      return true;
-    }
-
+    // if (auxiliarDate.isBefore('2019-11-13')) {
+    //   return true;
+    // }
     const data = auxiliarDate.format('MM/YYYY');
-    const salC = salariosC.find((x) => x.cp === data)
+    const salC = salariosC.find((x) => x.cp === data);
+
+    if (auxiliarDate.isSame('2019-01-01', 'month')) {
+      console.log(salC);
+      console.log((salC.msc === 0 && salC.sc !== '0,00'));
+    }
 
     if ((salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
@@ -686,7 +730,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         }
 
         if (vinculo.carencia === 'Parcial'
-          && this.checkPeriodoPosReforma(vinculo)
+          //   && this.checkPeriodoPosReforma(vinculo)
         ) {
 
           if (this.checkScIntegral(vinculo.sc, auxiliarDate)
@@ -773,9 +817,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           if (auxiliarDate <= fimContador19) {
             count19++;
           };
+
         }
 
-        //   console.log(auxiliarDate.format('MM/YYYY') + '|' + this.defineCarenciaData(auxiliarDate) + '|' + count)
+        //    console.log(auxiliarDate.format('MM/YYYY') + '|' + this.defineCarenciaData(auxiliarDate) + '|' + count)
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 

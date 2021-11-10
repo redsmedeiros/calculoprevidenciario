@@ -173,9 +173,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       return 'Não';
     }
 
-    if (this.checkPeriodoPosReforma(periodo)) {
-      return 'Integral';
-    }
+    // if (this.checkPeriodoPosReforma(periodo)) {
+    //   return 'Integral';
+    // }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
       && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
@@ -197,9 +197,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private defineStatusTempoContribuicao(periodo) {
 
-    if (this.checkPeriodoPosReforma(periodo)) {
-      return 'Integral';
-    }
+    // if (this.checkPeriodoPosReforma(periodo)) {
+    //   return 'Integral';
+    // }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
       && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))

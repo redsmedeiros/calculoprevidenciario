@@ -15,10 +15,10 @@ import swal from 'sweetalert2';
   ]
 })
 export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
-  
-  public segurado:any ={};
+
+  public segurado: any = {};
   public calculoType;
-  public form = {...CalculoModel.form};
+  public form = { ...CalculoModel.form };
   private mostrarTabelaTaxaSelic = false;
   private seguradoId = '';
 
@@ -27,49 +27,49 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   constructor(
     protected Calculo: CalculoAtrasadoService,
     protected Errors: ErrorService,
-  	protected router: Router,
-	  private route: ActivatedRoute,
-	  protected Segurado: SeguradoService
-	) { }
+    protected router: Router,
+    private route: ActivatedRoute,
+    protected Segurado: SeguradoService
+  ) { }
 
   ngOnInit() {
     this.seguradoId = this.route.snapshot.params['id']
-  	this.calculoType = this.route.snapshot.params['type'];
+    this.calculoType = this.route.snapshot.params['type'];
+    this.mostrarTabelaTaxaSelic = false;
 
-  	this.Segurado.find(this.route.snapshot.params['id'])
-        .then(segurado => {
-            this.segurado = segurado;
-    });
+    this.Segurado.find(this.route.snapshot.params['id'])
+      .then(segurado => {
+        this.segurado = segurado;
+      });
 
-    
+
   }
 
   submit(data) {
     this.Calculo
-          .save(data)
-          .then((data: CalculoModel) => {
-            this.resetForm();
-            this.onSubmit.emit();
-            swal({
-              position: 'top-end',
-              type: 'success',
-              title: 'Cálculo salvo com sucesso',
-              showConfirmButton: false,
-              timer: 2000
-            }).then((result) => {
-                if(result)
-                  {
-                    window.location.href = '#/beneficios/beneficios-resultados/' + data.id_segurado + '/' + data.id;
-                   }
-            });
+      .save(data)
+      .then((data: CalculoModel) => {
+        this.resetForm();
+        this.onSubmit.emit();
+        swal({
+          position: 'top-end',
+          type: 'success',
+          title: 'Cálculo salvo com sucesso',
+          showConfirmButton: false,
+          timer: 2000
+        }).then((result) => {
+          if (result) {
+            window.location.href = '#/beneficios/beneficios-resultados/' + data.id_segurado + '/' + data.id;
+          }
+        });
 
-          })
-          .catch(errors => this.Errors.add(errors));
+      })
+      .catch(errors => this.Errors.add(errors));
   }
 
   editSegurado() {
-    window.location.href='/#/beneficios/beneficios-segurados/'+ 
-                            this.route.snapshot.params['id']+'/editar';
+    window.location.href = '/#/beneficios/beneficios-segurados/' +
+      this.route.snapshot.params['id'] + '/editar';
   }
 
   ngOnDestroy() {
@@ -77,7 +77,7 @@ export class BeneficiosCalculosCreateComponent implements OnInit, OnDestroy {
   }
 
   resetForm() {
-    this.form = {...CalculoModel.form};
+    this.form = { ...CalculoModel.form };
   }
 
 

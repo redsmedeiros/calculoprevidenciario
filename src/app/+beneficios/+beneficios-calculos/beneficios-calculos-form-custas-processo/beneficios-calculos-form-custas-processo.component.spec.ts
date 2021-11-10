@@ -1,5 +1,6 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ModalDirective } from 'ngx-bootstrap';
 import { BeneficiosCalculosFormCustasProcessoComponent } from './beneficios-calculos-form-custas-processo.component';
 
 describe('BeneficiosCalculosFormCustasProcessoComponent', () => {
@@ -8,7 +9,8 @@ describe('BeneficiosCalculosFormCustasProcessoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BeneficiosCalculosFormCustasProcessoComponent ]
+      declarations: [ BeneficiosCalculosFormCustasProcessoComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

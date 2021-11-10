@@ -45,7 +45,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   private isSC_mm_ajustar_btn = false;
   public sc_mm_considerar_carencia = null;
   public sc_mm_considerar_tempo = null;
-  public sc_mm_ajustar = null;
+  public sc_mm_ajustar = 0;
 
   public result_sc = 0
   public result_sc_mm = 0;
@@ -599,8 +599,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     const checkNumStatusContribuicoes = (
       this.sc_mm_considerar_carencia !== null &&
       (this.sc_mm_considerar_tempo === 0 ||
-        (this.sc_mm_considerar_tempo === 1 &&
-          (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
+        (this.sc_mm_considerar_tempo === 1
+         //  && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)
+         ))
     );
 
     if (checkNumContricuicoes || (!checkNumContricuicoes && checkNumStatusContribuicoes)) {
