@@ -1,4 +1,3 @@
-import { Moeda } from 'app/services/Moeda.model';
 import {
   Component, OnInit, Input, SimpleChange,
   OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter
@@ -10,10 +9,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
+
+import { Moeda } from 'app/services/Moeda.model';
 import { MoedaService } from 'app/services/Moeda.service';
+
 import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
-
 
 import { ImportadorCnisContribuicoesComponent } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.component';
 import { ImportadorCnisContribuicoesService } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
@@ -89,6 +90,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.detector.detectChanges();
+    this.checkMoeda();
   }
 
 
@@ -127,7 +129,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
     }
- //   console.log(this.vinculosList);
+    //   console.log(this.vinculosList);
     this.detector.detectChanges();
   }
 
@@ -233,11 +235,11 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
    * Se moeda null
    */
   private checkMoeda() {
-    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+    if (this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda)) {
       this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
     }
 
-    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+    if (this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda)) {
       this.getTabelaMoeda();
     }
   }
@@ -248,7 +250,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     let result = contribuicoes;
     let chave = periodo_in;
 
-    this.checkMoeda();
+
 
     do {
 
@@ -841,7 +843,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.isUpdatingVinculos = true;
 
       this.vinculo_index = index;
-     // this.vinculo = vinculo;
+      // this.vinculo = vinculo;
       this.vinculo = Object.assign({}, vinculo);
 
       this.ContribuicoesComponent.preencherMatrizPeriodos(this.vinculo.contribuicoes);
@@ -1048,8 +1050,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private checkPeriodoPosReforma(periodo) {
-
-    console.log(periodo)
 
     if (moment(periodo.data_inicio).isSameOrAfter('2019-11-13')
       || moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {

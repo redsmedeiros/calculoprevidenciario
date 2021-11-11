@@ -28,6 +28,15 @@ export class HomeComponent implements OnInit {
       benefício calculado com “contribuição única”, além de verificar o direito adquirido ao benefício nas legislações anteriores.`
     },
     {
+
+      value: 'contagem',
+      link: '/contagem-tempo/contagem-tempo-segurados',
+      icon: `fa fa-lg fa-fw fa-calendar-check-o`,
+      title: `Contagem  <br>de Tempo`,
+      label: `Simula contagem do tempo de contribuição para períodos especial e
+               comum e de atividade como contribuinte individual.`
+    },
+    {
       value: 'RMI',
       link: '/rgps/rgps-segurados',
       icon: `fa fa-lg fa-fw fa-calculator`,
@@ -59,13 +68,12 @@ export class HomeComponent implements OnInit {
       dada pelo Decreto n. 10.410/2020.`
     },
     {
-
-      value: 'contagem',
-      link: '/contagem-tempo/contagem-tempo-segurados',
-      icon: `fa fa-lg fa-fw fa-calendar-check-o`,
-      title: `Contagem  <br>de Tempo`,
-      label: `Simula contagem do tempo de contribuição para períodos especial e
-               comum e de atividade como contribuinte individual.`
+      value: 'plan',
+      link: '/rgps/rgps-planejamento',
+      icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
+      title: `Planejamento  <br> Previdenciário`,
+      label: `Possibilita a realização de cálculos, comparando o valor do benefício em diferentes datas (atual e/ou futura),
+       a fim de identificar o melhor momento para o requerimento da aposentadoria.`
     },
     {
       value: 'trasicao',
@@ -74,14 +82,6 @@ export class HomeComponent implements OnInit {
       title: 'Regras  <br>de Transição',
       label: `Possibilita simular quando o segurado vai atingir os requisitos exigidos pelas regras de transição da
        EC nº 103/2019.`
-    },
-    {
-      value: 'plan',
-      link: '/rgps/rgps-planejamento',
-      icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
-      title: `Planejamento  <br> Previdenciário`,
-      label: `Possibilita a realização de cálculos, comparando o valor do benefício em diferentes datas (atual e/ou futura),
-       a fim de identificar o melhor momento para o requerimento da aposentadoria.`
     },
     {
       value: 'tutorial',

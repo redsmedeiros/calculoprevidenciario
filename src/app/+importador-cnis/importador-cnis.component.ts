@@ -1,5 +1,9 @@
 
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, ViewChild,
+  ElementRef, ChangeDetectorRef,
+  Input, OnChanges, SimpleChanges, Output, EventEmitter
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../shared/animations/fade-in-top.decorator';
@@ -16,6 +20,7 @@ import { Auth } from '../services/Auth/Auth.service';
 import { AuthResponse } from '../services/Auth/AuthResponse.model';
 
 import * as moment from 'moment';
+import { CheckVarFunctions } from 'app/shared/functions/check-var-functions';
 
 
 @Component({
@@ -91,16 +96,20 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   private getTabelaMoeda() {
 
-    this.Moeda.moedaSalarioMinimoTeto()
-      .then((moeda: Moeda[]) => {
-        this.moeda = moeda;
+    if (CheckVarFunctions.isEmpty(this.moeda)) {
 
-        sessionStorage.setItem(
-          'moedaSalarioMinimoTeto',
-          JSON.stringify(moeda));
+      this.Moeda.moedaSalarioMinimoTeto()
+        .then((moeda: Moeda[]) => {
+          this.moeda = moeda;
+          console.log(this.moeda);
 
-      });
+          sessionStorage.setItem(
+            'moedaSalarioMinimoTeto',
+            JSON.stringify(moeda));
 
+        });
+
+    }
   }
 
   private setExibirForm(dadosPassoaPasso) {

@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Auth } from 'app/services/Auth/Auth.service';
+import { MoedaService } from 'app/services/Moeda.service';
+import { Moeda } from 'app/services/Moeda.model';
 
 @Component({
   selector: 'app-importador-home',
@@ -14,6 +16,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   private dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
   private isTypeEntradaDados = false;
+
+  public moeda;
 
   public idSeguradoSelecionado;
   private seguradoSelecionado;
@@ -106,12 +110,14 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     private Auth: Auth,
     protected router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private Moeda: MoedaService,
   ) { }
 
   ngOnInit() {
     this.setPaginaInicial();
     this.clearTempSessionStorageStart();
+    this.getTabelaMoeda();
   }
 
 
@@ -122,6 +128,19 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   }
 
+  
+  private getTabelaMoeda() {
+
+    this.Moeda.moedaSalarioMinimoTeto()
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+        sessionStorage.setItem(
+          'moedaSalarioMinimoTeto',
+          JSON.stringify(moeda));
+
+      });
+
+  }
 
   private setPaginaInicial() {
 
