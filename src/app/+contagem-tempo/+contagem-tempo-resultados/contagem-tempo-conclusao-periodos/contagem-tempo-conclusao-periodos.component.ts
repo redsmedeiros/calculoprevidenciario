@@ -155,8 +155,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         limites: limites,
       }
 
-      console.log(line);
-
       this.periodosListInicial.push(line);
     }
 

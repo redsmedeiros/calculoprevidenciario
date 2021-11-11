@@ -68,7 +68,7 @@
                   name="salarioContribuicao"
                   id="valorInput"
                   (change)="errors.clear('salarioContribuicao')"
-                  (keyup)="insertSCEnter($event)"
+                  (keyup)="insertSCenter($event)"
                   type="text"
                   tooltip="{{ errors.get('salarioContribuicao') }}"
                 />
@@ -96,6 +96,7 @@
         [colorbutton]="false"
         [editbutton]="false"
         [deletebutton]="false"
+        class="mb-1"
       >
         <header>
           <span class="widget-icon">
@@ -133,7 +134,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of matriz; index as i">
-                  <td style="text-align: right">
+                  <td style="text-align: center">
                     <i
                       class="fa fa-copy"
                       (click)="copiarPeriodo(data.ano)"
@@ -460,7 +461,7 @@
           </div>
         </div>
       </sa-widget>
-      <span class="pull-left">(*) Preenchimento Obrigatório.</span>
+      <span class="pull-left py-2">(*) Preenchimento Obrigatório.</span>
     </article>
     
     <div class="modal-footer">
@@ -504,7 +505,7 @@
       <span>
         <popover-content
           #popPreencherSCT
-          title="Desfazer"
+          title="Limitar SC ao Teto SC"
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
@@ -529,7 +530,7 @@
       <span>
         <popover-content
           #popPreencherSCM
-          title="Desfazer"
+          title="Limitar SC ao Salário Mínimo"
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
@@ -554,7 +555,7 @@
       <span>
         <popover-content
           #popOpcoesDescarteTC
-          title="Desfazer"
+          title="Editar Tempo e Carência"
           [closeOnClickOutside]="true"
         >
           <div class="bg-ieprev fade in bold text-justify">
@@ -727,7 +728,7 @@
             </div>
           </fieldset>
         </form>
-        <span class="pull-left">(*) Preenchimento Obrigatório.</span>
+        <span class="pull-left py-1">(*) Preenchimento Obrigatório.</span>
       </div>
       
       <div class="modal-footer">

@@ -90,7 +90,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.detector.detectChanges();
-    this.checkMoeda();
   }
 
 
@@ -107,6 +106,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (!this.isUpdating && this.vinculos.length > 0 && typeof this.vinculos !== 'undefined') {
       this.setPeriodos(this.vinculos);
     }
+
+    this.checkMoeda();
 
   }
 
@@ -129,7 +130,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
     }
-    //   console.log(this.vinculosList);
+
     this.detector.detectChanges();
   }
 
@@ -235,8 +236,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
    * Se moeda null
    */
   private checkMoeda() {
-    
-    console.log(this.moeda);
 
     if ((this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda))
      && !this.isEmpty(sessionStorage.getItem('moedaSalarioMinimoTeto'))) {
@@ -247,7 +246,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.getTabelaMoeda();
     }
 
-    console.log(this.moeda);
   }
 
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
@@ -1068,8 +1066,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private getMoedaCompetencia(mes, ano) {
-
-    console.log(this.moeda);
 
     const anoAtual = moment().year();
     let data = ano + '-' + mes + '-01';
