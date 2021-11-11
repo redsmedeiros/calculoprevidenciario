@@ -235,13 +235,19 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
    * Se moeda null
    */
   private checkMoeda() {
-    if (this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda)) {
+    
+    console.log(this.moeda);
+
+    if ((this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda))
+     && !this.isEmpty(sessionStorage.getItem('moedaSalarioMinimoTeto'))) {
       this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
     }
 
     if (this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda)) {
       this.getTabelaMoeda();
     }
+
+    console.log(this.moeda);
   }
 
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
@@ -1062,6 +1068,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
   private getMoedaCompetencia(mes, ano) {
+
+    console.log(this.moeda);
 
     const anoAtual = moment().year();
     let data = ano + '-' + mes + '-01';

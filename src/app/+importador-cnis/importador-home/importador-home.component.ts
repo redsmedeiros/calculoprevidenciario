@@ -134,6 +134,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     this.Moeda.moedaSalarioMinimoTeto()
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
+        
         sessionStorage.setItem(
           'moedaSalarioMinimoTeto',
           JSON.stringify(moeda));

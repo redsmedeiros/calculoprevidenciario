@@ -32,6 +32,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
 
   @Input() dadosPassoaPasso;
+  @Input() moeda;
   @Output() eventCalcularContagem = new EventEmitter();
   @Output() eventPrevStepPassoaPasso = new EventEmitter();
   @Output() eventStatusImport = new EventEmitter();
@@ -47,7 +48,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public seguradoId;
   public calculoId;
-  public moeda;
 
   public eventCountSeguradoErros = 0;
   public eventCountVinculosErros = 0;
