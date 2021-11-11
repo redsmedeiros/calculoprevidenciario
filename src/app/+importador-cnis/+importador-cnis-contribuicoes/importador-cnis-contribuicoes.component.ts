@@ -284,20 +284,29 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       let mesIDX = 0;
       this.isSC_mm_ajustar_btn = false;
 
+
+      const iniM = moment(this.inicioPeriodo, 'MM/YYYY');
+      const FimM = moment(this.finalPeriodo, 'MM/YYYY');
+
+      console.log(iniM);
+      console.log(FimM);
+
       this.matriz.map(ano => {
 
         if (ano.ano >= anoinicio && ano.ano <= anofinal) {
-          mesIDX = 1;
-          ano.valores.map(mes => {
-            const mesIndex = (mesIDX - 1);
+          ano.valores.map((mes, index) => {
 
-            if (mesIDX >= parseInt(mesinicio, 10) && mesIDX <= parseInt(mesfinal, 10)) {
+            const dateMTeste = moment(('0' + (index + 1)).slice(-2) + '/' + ano.ano, 'MM/YYYY'); 
+            console.log((((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio) && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal)));
 
-              ano.valores[mesIndex] = this.formatMoney(this.salarioContribuicao);
-              ano.msc[mesIndex] = this.getClassSalarioContribuicao(mesIDX, ano.ano, this.salarioContribuicao, null, true);
+           // if (((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio) && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal)) {
+            if (dateMTeste.isBetween(iniM, FimM, 'month', '[]')) {
+
+              ano.valores[index] = this.formatMoney(this.salarioContribuicao);
+              ano.msc[index] = this.getClassSalarioContribuicao((index + 1), ano.ano, this.salarioContribuicao, null, true);
 
             }
-            mesIDX++;
+
           });
 
         }
