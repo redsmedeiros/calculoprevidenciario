@@ -1,7 +1,7 @@
 <div id="content" *ngIf="!isUpdating" style="min-width: 895px">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row mb-3">
+    <div class="row mb-3"  [ngClass]="{ 'not-screen': (dadosPassoaPasso.origem === 'passo-a-passo') }">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <h3 class="p-1 m-1 no-print" *ngIf="!isPlanejamento">
           Cálculo dos Benefícios do Regime Geral de Previdência Social
