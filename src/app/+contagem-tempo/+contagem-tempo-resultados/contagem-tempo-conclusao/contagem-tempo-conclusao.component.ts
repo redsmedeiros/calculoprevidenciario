@@ -274,15 +274,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       } else {
 
-        if (auxiliarDate.isSame('2018-01-01', 'month')) {
-          console.log('----1---');
-          console.log(vinculo);
-          console.log(melhorTempoLast);
-          console.log(melhorTempo);
-          console.log(dataFull);
-          console.log(moment(auxiliarDate).isSame(inicioVinculo, 'month'));
-          console.log('----1---');
-        }
+        // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+        //   console.log('----1---');
+        //   console.log(vinculo);
+        //   console.log(melhorTempoLast);
+        //   console.log(melhorTempo);
+        //   console.log(dataFull);
+        //   console.log(moment(auxiliarDate).isSame(inicioVinculo, 'month'));
+        //   console.log('----1---');
+        // }
 
         // Se igual ao inicio
         if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
@@ -367,25 +367,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         }
 
-
-        // if ((moment(inicioVinculo).isSame(lastFim, 'month'))) {
-        //   console.log('ok')
-        // }
         // melhorTempo *= fator;
 
         // console.log(diffAnterior);
         // console.log(melhorTempoLast);
         // console.log('F----');
-
       }
-
-
       // if (auxiliarDate.isSame('2019-01-01', 'month')) {
       //   console.log(melhorTempo);
       // }
-
-
-
       // if (auxiliarDate.isSame('2018-01-01', 'month') || auxiliarDate.isSame('2018-02-01', 'month')) {
       //   console.log('---');
       //   console.log(melhorTempo);
@@ -426,15 +416,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       && (moment(auxiliarDate).isBetween(moment(inicioVinculo), moment(fimVinculo), 'month', '[]')
         && this.dadosPassoaPasso.origem !== 'contagem')) {
 
-      if (auxiliarDate.isSame('2018-01-01', 'month')) {
-        // console.log(!this.checkScIntegral(vinculo.sc, auxiliarDate))
-        // console.log((this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0))
-        console.log(((!this.checkScIntegral(vinculo.sc, auxiliarDate))
-          && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0)))
-
-        // console.log((this.checkScIntegralTempo(vinculo.sc, auxiliarDate))
-        // && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0))
-      }
+      // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+      //   // console.log(!this.checkScIntegral(vinculo.sc, auxiliarDate))
+      //   // console.log((this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0))
+      //   // console.log(((!this.checkScIntegral(vinculo.sc, auxiliarDate))
+      //   //   && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0)))
+      // }
 
       return ((!this.checkScIntegral(vinculo.sc, auxiliarDate))
         && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0));
@@ -567,7 +554,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         }
 
-        console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
+        // console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
         auxiliarDate = moment(this.toDateString(auxiliarDate.clone()), 'DD/MM/YYYY').add(1, 'M');
 
       } while (fimContador.isSameOrAfter(auxiliarDate, 'month'));
@@ -708,26 +695,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
 
-
-
-
-  private checkScIntegralTempo(salariosC, auxiliarDate) {
-
-    const data = auxiliarDate.format('MM/YYYY');
-    const salC = salariosC.find((x) => x.cp === data);
-
-    if (auxiliarDate.isSame('2018-01-01', 'month')) {
-      console.log(salC);
-      console.log((salC.msc === 0 && salC.sc !== '0,00'));
-    }
-
-    if ((salC.msc === 1 || salC.sc === '0,00')) {
-      return true;
-    }
-
-    return false;
-  }
-
   private checkScIntegral(salariosC, auxiliarDate) {
 
     // if (auxiliarDate.isBefore('2019-11-13')) {
@@ -736,10 +703,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data);
 
-    if (auxiliarDate.isSame('2018-01-01', 'month')) {
-      console.log(salC);
-      console.log((salC.msc === 0 && salC.sc !== '0,00'));
-    }
+    // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+    //   console.log(salC);
+    //   console.log((salC.msc === 0 && salC.sc !== '0,00'));
+    // }
 
     if ((salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
