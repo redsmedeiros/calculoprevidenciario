@@ -382,6 +382,12 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       //   console.log('---');
       // }
 
+      // if (auxiliarDate.isSame('2019-11-13', 'month')) {
+      //   console.log('---');
+      //   console.log(melhorTempo);
+      //   console.log('---');
+      // }
+
       if (this.checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo)) {
 
         melhorTempo = 0;

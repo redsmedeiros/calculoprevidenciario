@@ -303,7 +303,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   prevStep() {
 
-    console.log(this.seguradoSelecionado);
+    // console.log(this.seguradoSelecionado);
 
     if (this.prevManualCNIS()) {
 

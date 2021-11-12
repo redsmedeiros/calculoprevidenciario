@@ -85,6 +85,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   private numeroDeContribuicoesAux = 0;
   private numeroDeContribuicoesAuxTotal = 0;
   public dataInicioBeneficioExportar;
+  public dadosPassoaPassoOrigem = false;
 
 
 
@@ -157,6 +158,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
       this.getContribuicoesCNIS(dataLimite, dataInicio);
+
+      this.dadosPassoaPassoOrigem = true;
 
     } else {
 
@@ -367,7 +370,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo,
         this.pbcCompleto,
         this.getPbcCompletoIndices(),
-        this.divisorMinimo);
+        this.divisorMinimo,
+        this.dadosPassoaPassoOrigem);
 
       this.listaConclusaoAcesso = this.conclusoesFinais.createConclusoesFinais(
         this.moedaDib,

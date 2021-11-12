@@ -158,8 +158,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       this.periodosListInicial.push(line);
     }
 
-    console.log(this.periodosListInicial);
-
   }
 
   /**

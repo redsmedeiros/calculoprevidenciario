@@ -282,13 +282,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       const anofinal = this.finalPeriodo.split('/')[1];
       const mesfinal = this.finalPeriodo.split('/')[0];
       this.isSC_mm_ajustar_btn = false;
-      let mesIDX = 0;
 
       const iniM = moment(this.inicioPeriodo, 'MM/YYYY');
       const FimM = moment(this.finalPeriodo, 'MM/YYYY');
-
-      console.log(iniM);
-      console.log(FimM);
 
       this.matriz.map(ano => {
 
@@ -296,8 +292,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
           ano.valores.map((mes, index) => {
 
             const dateMTeste = moment(('0' + (index + 1)).slice(-2) + '/' + ano.ano, 'MM/YYYY'); 
-            console.log(((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio)  
-            && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal));
+            // console.log(((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio)  
+            // && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal));
 
             if (dateMTeste.isBetween(iniM, FimM, 'month', '[]')) {
 

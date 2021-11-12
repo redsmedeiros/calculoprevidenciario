@@ -254,7 +254,15 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           dataLimite,
           dataInicio);
 
-        this.startCalculoApos9198();
+        if (this.listaValoresContribuidos.length == 0) {
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.nenhumaContrib = true;
+          this.isUpdating = false;
+        } else {
+
+          this.startCalculoApos9198();
+
+        }
 
       }).catch(error => {
         console.error(error);

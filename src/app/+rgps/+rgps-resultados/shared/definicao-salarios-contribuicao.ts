@@ -81,11 +81,29 @@ export class DefinicaoSalariosContribuicao {
     //  }
 
 
+
+
+    static setMCAjuste(periodo) {
+
+        const n_ajustar_mm = !(periodo.sc_mm_ajustar === 0
+            && periodo.sc_mm_considerar_tempo === 1);
+
+        periodo.sc.map((SC) => {
+            SC.sc_ao_m = (SC.msc === 1 && n_ajustar_mm);
+        });
+
+        return periodo
+    }
+
+
+
     static mergeSalariosContribiocao(listaPeriodosCT) {
         'use strict';
 
         const scMerge = [];
         for (const periodo of listaPeriodosCT) {
+
+            this.setMCAjuste(periodo);
             scMerge.push(...periodo.sc)
         }
 
@@ -116,6 +134,16 @@ export class DefinicaoSalariosContribuicao {
     }
 
 
+
+    static verificarRejusteConcomitante(anterior, atual) {
+
+        if (!anterior || !atual) {
+            return false;
+        }
+
+        return true;
+    }
+
     static groupSalariosContribuicoes(scMerge) {
         'use strict';
 
@@ -125,7 +153,8 @@ export class DefinicaoSalariosContribuicao {
             data: '',
             valor_primaria: 0,
             valor_secundaria: 0,
-            array_secundaria: []
+            array_secundaria: [],
+            sc_mm_ajustar: true
         };
 
         for (const rowSC of scMerge) {
@@ -139,13 +168,17 @@ export class DefinicaoSalariosContribuicao {
                     data: newDate.format('YYYY-MM-DD'),
                     valor_primaria: rowSC.sc,
                     valor_secundaria: 0,
-                    array_secundaria: []
+                    array_secundaria: [],
+                    sc_mm_ajustar: rowSC.sc_ao_m,
                 });
 
             } else {
 
                 listaDeSCRMI[listaDeSCRMI.length - 1].array_secundaria.push(rowSC.sc);
                 listaDeSCRMI[listaDeSCRMI.length - 1].valor_secundaria += rowSC.sc;
+                listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar =
+                    this.verificarRejusteConcomitante(listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar,
+                        rowSC.sc_ao_m);
 
             }
 

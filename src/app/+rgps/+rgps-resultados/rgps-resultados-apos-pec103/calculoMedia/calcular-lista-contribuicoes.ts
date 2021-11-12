@@ -14,6 +14,7 @@ export class CalcularListaContribuicoes {
     private indicesSelecionado;
     private dibCurrency;
     private divisorMinimo;
+    private dadosPassoaPassoOrigem;
 
     private tableData = []
 
@@ -57,7 +58,8 @@ export class CalcularListaContribuicoes {
         calculo: object,
         pbcCompleto: boolean,
         indicesSelecionado: Array<object>,
-        divisorMinimo: object
+        divisorMinimo: object,
+        dadosPassoaPassoOrigem: boolean
     ) {
 
         this.Moeda = moeda;
@@ -67,6 +69,7 @@ export class CalcularListaContribuicoes {
         this.pbcCompleto = pbcCompleto;
         this.indicesSelecionado = indicesSelecionado;
         this.divisorMinimo = divisorMinimo;
+        this.dadosPassoaPassoOrigem = dadosPassoaPassoOrigem;
 
         listaConclusaoAcesso.forEach(elementRegraEspecie => {
             this.verificarListaParaUmaRegraEspecie(elementRegraEspecie);
@@ -118,6 +121,12 @@ export class CalcularListaContribuicoes {
 
         this.contribuicoes.forEach((contribuicao, index) => {
 
+            let sc_mm_ajustar = true;
+
+            if (this.dadosPassoaPassoOrigem) {
+              sc_mm_ajustar = contribuicao.sc_mm_ajustar;
+            }
+
             let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
             const contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
 
@@ -138,7 +147,7 @@ export class CalcularListaContribuicoes {
             // reajuste ao teto
             if (contribuicaoPrimaria > 0) {
 
-                const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
+                const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao, sc_mm_ajustar);
                 contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
                 limiteString = valorAjustadoObj.aviso;
 
@@ -330,7 +339,7 @@ export class CalcularListaContribuicoes {
      * @param  {} valor
      * @param  {} data
      */
-    private limitarTetosEMinimos(valor, data) {
+    private limitarTetosEMinimos(valor, data, sc_mm_ajustar = true) {
         // se a data estiver no futuro deve ser utilizado os dados no mês atual
         const moeda = data.isSameOrBefore(moment(), 'month') ?
             this.Moeda.getByDate(data) :
@@ -341,7 +350,7 @@ export class CalcularListaContribuicoes {
         let avisoString = '';
         let valorRetorno = valor;
 
-        if (moeda && valor < salarioMinimo) {
+        if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
             valorRetorno = salarioMinimo;
             avisoString = 'LIMITADO AO MÍNIMO'
         } else if (moeda && valor > tetoSalarial) {

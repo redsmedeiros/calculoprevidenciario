@@ -233,7 +233,20 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataLimite,
           dataInicio);
 
-        this.startCalculoApos99();
+        console.log(this.listaPeriodosCT);
+        console.log(this.listaValoresContribuidos);
+
+        if (this.listaValoresContribuidos.length === 0) {
+
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.nenhumaContrib = true;
+          this.isUpdating = false;
+
+        } else {
+
+          this.startCalculoApos99();
+
+        }
 
       }).catch(error => {
         console.error(error);
@@ -247,7 +260,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
-          if (this.listaValoresContribuidos.length == 0) {
+          if (this.listaValoresContribuidos.length === 0) {
 
             // Exibir MSG de erro e encerrar Cálculo.
             this.nenhumaContrib = true;
@@ -315,11 +328,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tableData = [];
     let idString = 0;
 
-    for (let contribuicao of this.listaValoresContribuidos) {
+    for (const contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
       let contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
+      let sc_mm_ajustar = true;
+
+      if ((this.isExits(this.dadosPassoaPasso)
+        && this.dadosPassoaPasso.origem === 'passo-a-passo')) {
+        sc_mm_ajustar = contribuicao.sc_mm_ajustar;
+      }
 
       if (
         this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
@@ -390,7 +409,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
         contadorPrimario++;
-        let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
+        const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao, sc_mm_ajustar);
         contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
       }
@@ -2148,16 +2167,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
   }
 
-  limitarTetosEMinimos(valor, data) {
+  limitarTetosEMinimos(valor, data, sc_mm_ajustar = true) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
-    let moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
 
-    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
-    let tetoSalarial = (moeda) ? moeda.teto : 0;
+    const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
 
-    if (moeda && valor < salarioMinimo) {
+    if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
       valorRetorno = salarioMinimo;
       avisoString = 'LIMITADO AO MÍNIMO'
     } else if (moeda && valor > tetoSalarial) {
