@@ -124,7 +124,7 @@ export class CalcularListaContribuicoes {
             let sc_mm_ajustar = true;
 
             if (this.dadosPassoaPassoOrigem) {
-              sc_mm_ajustar = contribuicao.sc_mm_ajustar;
+              sc_mm_ajustar = (contribuicao.sc_mm_ajustar === 1);
             }
 
             let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);

@@ -688,7 +688,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+            <!-- <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
               <label class="col-md-7 control-label"
                 >Limitar no Valor do Salário Mínimo:*</label
               >
@@ -714,6 +714,48 @@
                     [value]="0"
                   />
                   Não
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_ajustar')"
+                      class="text-danger"
+                      >{{ errors.get("sc_mm_ajustar") | i18n }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+              <label class="col-md-7 control-label"
+                >Limitar no Valor do Salário Mínimo:*</label
+              >
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="1"
+                  />
+                </label>
+              </div>
+              <label class="col-md-7 control-label"
+              > Não Limitar no Valor do Salário Mínimo:*</label
+            >
+            <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="0"
+                  />
+                 
                 </label>
                 <div class="row">
                   <div class="col-md-12">

@@ -337,7 +337,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       if ((this.isExits(this.dadosPassoaPasso)
         && this.dadosPassoaPasso.origem === 'passo-a-passo')) {
-        sc_mm_ajustar = contribuicao.sc_mm_ajustar;
+        sc_mm_ajustar = (contribuicao.sc_mm_ajustar === 1);
       }
 
       if (
