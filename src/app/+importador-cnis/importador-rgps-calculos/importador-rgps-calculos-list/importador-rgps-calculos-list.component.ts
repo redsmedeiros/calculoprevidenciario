@@ -44,6 +44,8 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public calculosRMIList = [];
   public formCalculo;
   public isEditRGPS = false;
+  public revisaoPBC = false;
+
 
   private lengthMenuTable = this.setNumberPages();
   public columnsConfig = [
@@ -403,6 +405,17 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     this.modalCalculosRGPS.hide();
   }
 
+
+  /**
+   * setRevisaoPBC
+   */
+  public setRevisaoPBC() {
+
+    this.revisaoPBC = !(this.revisaoPBC);
+    this.dadosPassoaPasso.pbcFull = (this.revisaoPBC ? 'pbc' : '');
+    sessionStorage.setItem('pbcFull', this.dadosPassoaPasso.pbcFull);
+
+  }
 
 
   formatAnosMesesDias(dias) {

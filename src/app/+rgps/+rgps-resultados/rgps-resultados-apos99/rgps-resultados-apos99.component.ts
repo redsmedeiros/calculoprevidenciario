@@ -210,11 +210,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // pbc da vida toda
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc') 
+    || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+
     const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 
     // indices de correção pbc da vida toda
-
 
     this.getValoresContribuicao(dataInicio, dataLimite)
 

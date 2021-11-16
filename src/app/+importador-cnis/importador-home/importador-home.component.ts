@@ -241,6 +241,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     sessionStorage.removeItem('calculosSelecionadoRMI');
     sessionStorage.removeItem('exportResultContagemTempo');
     sessionStorage.removeItem('seguradoSelecionado');
+    sessionStorage.removeItem('pbcFull');
 
   }
 

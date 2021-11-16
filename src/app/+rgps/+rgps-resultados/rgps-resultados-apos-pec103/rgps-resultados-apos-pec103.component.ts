@@ -139,17 +139,20 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     // pbc da vida toda
-    // this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    // const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+    // pbc da vida toda
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc')
+      || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
 
-    const dataLimite = moment('1994-07-01');
+    const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+
+    // const dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
 
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), 0, this.idSegurado)
-    .then((valorescontribuidosTotal: ValorContribuido[]) => {
-      this.numeroDeContribuicoesAuxTotal  = valorescontribuidosTotal.length;
-    });
+    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, moment('1930-01-01'), 0, this.idSegurado)
+      .then((valorescontribuidosTotal: ValorContribuido[]) => {
+        this.numeroDeContribuicoesAuxTotal = valorescontribuidosTotal.length;
+      });
 
     // indices de correção pbc da vida toda
 

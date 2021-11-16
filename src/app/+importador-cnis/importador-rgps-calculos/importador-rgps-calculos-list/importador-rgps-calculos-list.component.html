@@ -1,3 +1,38 @@
+
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="!isUpdatingCalcRGPS">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Revisão da Vida Toda</h2>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div  class="widget-body widget-body-custom no-padding">
+      <table class="table table-condensed-custom ">
+        <tbody>
+          <tr>
+            <td>
+              <button type="submit" (click)="setRevisaoPBC()" class="btn btn-labeled btn-labeled bg-color-greenDark txt-color-white">
+                <span class="btn-label">
+                  <i class="fa fa-calculator"></i>
+                </span> <span *ngIf="!revisaoPBC" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aplicar </span>
+                <span *ngIf="revisaoPBC" > Não Aplicar </span> 
+                  Cálculo da RMI - Revisão da Vida Toda
+              </button>
+            </td>
+            <td>
+              Texto para explicar porque a revisão da vida toda foi aplicada antes e depois da EC-103/19.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
+
 <!-- Widget ID (each widget will need unique ID)-->
 <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
   <header>
@@ -42,6 +77,7 @@
     </div>
   </div>
 </sa-widget>
+
 
 
 <div bsModal #modalCalculosRGPS="bs-modal" class="modal fade" id="create-calculo">
