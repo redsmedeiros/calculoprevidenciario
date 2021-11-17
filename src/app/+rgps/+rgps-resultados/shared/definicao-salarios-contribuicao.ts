@@ -54,11 +54,11 @@ export class DefinicaoSalariosContribuicao {
 
             rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
                 || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
-                && scRow.sc !== '0,00' && scRow.sc !== 0));
+                && scRow.sc !== '0,00' && scRow.sc !== 0 && scRow.sc !== ''));
 
         } else {
 
-            rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '0,00' && scRow.sc !== 0));
+            rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00' && scRow.sc !== 0));
 
         }
 

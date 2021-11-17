@@ -29,24 +29,35 @@
   class="table table-hover table-condensed table-bordered not-print my-3"
   *ngIf="!isUpdating"
 >
-  <tbody>
-    <tr *ngIf="!isUpdating">
+  <tbody *ngIf="!isUpdating">
+    <tr >
       <td>
-        <strong>Exportar para o cálculo de Liquidação de Sentença</strong>
         <button
-          *ngIf="!isUpdating"
+        title="Imprimir este resultado"
+        class="btn btn-primary pull-right btn-xs mr-3 not-print"
+        type="button"
+        (click)="imprimirBoxC($event, i + calculoPorRegra.regra)"
+      >
+        &nbsp;&nbsp;
+        <i
+          class="fa fa-print pull-left fa fa-lg p-1"
+        ></i>
+        Imprimir o Resultado Atual &nbsp;&nbsp;
+      </button>
+        <!-- <strong>Exportar para o cálculo de Liquidação de Sentença</strong> -->
+        <button
           class="btn btn-primary pull-right btn-xs mr-3 not-print"
           type="submit"
           (click)="
             exportarParaBeneficios(dataInicioBeneficio, valorExportacao, 'A')
           "
+          title="Exportar para o cálculo de Liquidação de Sentença"
         >
           &nbsp;&nbsp;
           <i
-            *ngIf="!isUpdating"
             class="fa fa-external-link pull-left fa fa-lg p-1"
           ></i>
-          Exportar &nbsp;&nbsp;
+          Exportar Liquidação de Sentença
         </button>
       </td>
     </tr>

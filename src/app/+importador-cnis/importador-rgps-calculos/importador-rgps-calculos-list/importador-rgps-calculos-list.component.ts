@@ -134,6 +134,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
           this.calculosRMIList = calculosRst;
           this.updateDatatable();
 
+          this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
         });
 
     }
