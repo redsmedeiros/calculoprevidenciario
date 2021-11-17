@@ -200,7 +200,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
         idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
         dataDib.add(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25), 'd');
-        tempoFinalContribfinalComPedagio = (this.seguradoTransicao.contribuicaoFracionadoDiasT 
+        tempoFinalContribfinalComPedagio = (this.seguradoTransicao.contribuicaoFracionadoDias 
           + Math.floor(tempoDePedagioTotalNecessario));
  
       } else {
