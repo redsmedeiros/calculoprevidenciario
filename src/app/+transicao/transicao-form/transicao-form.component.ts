@@ -104,12 +104,12 @@ export class TransicaoFormComponent implements OnInit {
       this.professor = false;
 
       this.contribuicaoAnosAteEC103 = '34';
-      this.contribuicaoMesesAteEC103 = '00';
+      this.contribuicaoMesesAteEC103 = '02';
       this.contribuicaoDiasAteEC103 = '00';
 
       this.contribuicaoAnos = '35';
-      this.contribuicaoMeses = '00';
-      this.contribuicaoDias = '00';
+      this.contribuicaoMeses = '05';
+      this.contribuicaoDias = '22';
       this.submit(null);
     }
 

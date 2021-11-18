@@ -78,13 +78,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       if (this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 >= this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo]) {
 
         const rstRegra3pedagio50 = this.calcularRegra3();
-
-        // rstRegra3pedagio50.tempoContribuicaoDib = {
-        //   days: parseInt(this.seguradoTransicao.contribuicaoDias, 10),
-        //   fullDays: this.seguradoTransicao.contribuicaoFracionadoDias,
-        //   months: parseInt(this.seguradoTransicao.contribuicaoMeses, 10),
-        //   years: parseInt(this.seguradoTransicao.contribuicaoAnos, 10),
-        // }
+       // const rstRegra3pedagio50360 = this.calcularRegra3360();
 
         this.conclusoesRegra3 = {
           status: true,
@@ -193,7 +187,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoDePedagioTotalNecessarioAnos = (tempoFinalContribfinalComPedagioAnos - tempoFinalContribAnos);
 
 
-
       if (tempoDePedagioTotalNecessarioAnos > 0) {
 
         tempoDePedagioTotalNecessario = Math.abs(tempoDePedagioTotalNecessario);
@@ -205,7 +198,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
  
       } else {
 
-        tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+        tempoFinalContribfinalComPedagio = (this.seguradoTransicao.contribuicaoFracionadoDiasT + 1);
         dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
       }
@@ -223,7 +216,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     } else {
 
-      tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+      tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias + Math.floor(tempoDePedagioTotalNecessario);
       dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
     }
