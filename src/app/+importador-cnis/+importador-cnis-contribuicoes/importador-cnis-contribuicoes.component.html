@@ -27,6 +27,7 @@
                   [textMask]="{ mask: dateMask }"
                   type="text"
                   (change)="errors.clear('inicioPeriodo')"
+                  tooltip="Início do período"
                 />
               </div>
             </div>
@@ -47,7 +48,7 @@
                   [textMask]="{ mask: dateMask }"
                   type="text"
                   (change)="errors.clear('finalPeriodo')"
-                  tooltip="{{ errors.get('finalPeriodo') }}"
+                  tooltip="Final do período"
                 />
               </div>
             </div>
@@ -70,7 +71,7 @@
                   (change)="errors.clear('salarioContribuicao')"
                   (keyup)="insertSCenter($event)"
                   type="text"
-                  tooltip="{{ errors.get('salarioContribuicao') }}"
+                  tooltip="Valor do Salário de Contribuição"
                 />
               </div>
             </div>
