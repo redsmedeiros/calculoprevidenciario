@@ -17,7 +17,7 @@
             <td class="smart-form" style="min-height: 25px;">
               <div class="well well-small bg-color-greenDark txt-color-white pl-1 m-1">
                 <label class="checkbox txt-color-white ml-2" >
-                  <input type="checkbox" [(ngModel)]="revisaoPBC" [ngModelOptions]="{standalone: true}" class="py-1 ">
+                  <input type="checkbox" [(ngModel)]="revisaoPBC" (click)="setRevisaoPBC()" [ngModelOptions]="{standalone: true}" class="py-1">
                   <i></i>Aplicar Cálculo da RMI - Revisão da Vida Toda</label>
               </div>
               <!-- <button type="button" (click)="setRevisaoPBC()" class="btn btn-labeled btn-labeled bg-color-greenDark txt-color-white">
@@ -29,7 +29,12 @@
               </button> -->
             </td>
             <td>
-              Texto para explicar porque a revisão da vida toda foi aplicada antes e depois da EC-103/19.
+              A Revisão da Vida Toda possibilita a inclusão dos salários de contribuição anteriores a 07/1994
+               no cálculo do benefício previdenciário, conforme decidido pelo STJ no Tema 999. A Tese fixada
+                pelo STJ será aplicada para benefícios concedidos com base em direito adquirido de acordo com 
+                as regras anteriores a EC 103/2019. Entretanto, caso queira, e para finas de simulação, o Usuário 
+                poderá calcular benefício concedido com base em direito adquirido após a EC 103/2019 com inclusão 
+                dos salários de contribuição anteriores a 07/1994.
             </td>
           </tr>
         </tbody>
