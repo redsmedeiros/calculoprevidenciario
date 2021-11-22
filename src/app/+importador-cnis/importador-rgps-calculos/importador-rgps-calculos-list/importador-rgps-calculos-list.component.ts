@@ -106,9 +106,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     protected Errors: ErrorService,
   ) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
 
   ngOnChanges(changes: SimpleChanges) {

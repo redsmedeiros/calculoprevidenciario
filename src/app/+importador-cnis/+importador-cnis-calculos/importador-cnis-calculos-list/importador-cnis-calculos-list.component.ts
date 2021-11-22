@@ -14,6 +14,8 @@ import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-perio
 import { ErrorService } from 'app/services/error.service';
 import swal from 'sweetalert2';
 import { SizeFunctions } from 'app/shared/functions/size-functions';
+import { ModalDirective } from 'ngx-bootstrap';
+import * as moment from 'moment';
 
 
 @Component({
@@ -30,10 +32,14 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   @Input() seguradoSelecionado;
   @Output() calculoSelecionadoEvent = new EventEmitter();
+  @ViewChild('modalCalculosContagemTempo') public modalCalculosContagemTempo: ModalDirective;
 
   public calculoSelecionado = {};
   private calculoCTDuplicar = {};
 
+  public referencia_calculo = '';
+  public formCalculoCT;
+  public isEditContagem = false;
   public listCalculos = [];
   public calculosList = [];
   // public calculosList = this.CalculoContagemService.list;
@@ -121,7 +127,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   }
 
-  
+
   setNumberPages() {
 
     if (!SizeFunctions.isWidthGreaterThan(1366)) {
@@ -291,11 +297,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   }
 
-
-
-
-
-
   private deleteCalculoCT(calculoCT) {
 
     swal({
@@ -331,11 +332,114 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     });
   }
 
+  validate() {
+    this.errors.clear('referencia_calculo');
+
+    if (this.referencia_calculo == undefined
+      || this.referencia_calculo == '') {
+      this.errors.add({
+        'referencia_calculo':
+          ['Insira uma referência para simulação.']
+      });
+
+      return false;
+    }
+
+    return true;
+
+  }
 
 
+  private createCalculoContagemTempo(data) {
+
+    this.CalculoContagemService
+      .save(data)
+      .then(model => {
+
+        this.getCalculosSeguradoSelecionado();
+        this.hideChildModal();
+        // this.resetForm();
+        this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+      })
+      .catch(errors => this.errors.add(errors));
+
+  }
 
 
+  private updateCalculoContagemTempo(data) {
 
+    if (this.validate) {
+      this.formCalculoCT.referencia_calculo = this.referencia_calculo;
+
+      this.formCalculoCT
+        .update(data)
+        .then(model => {
+
+          this.getCalculosSeguradoSelecionado();
+          this.isEditContagem = false;
+          this.hideChildModal();
+          this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+        })
+        .catch(errors => { this.errors.add(errors); console.log(errors) });
+    }
+
+  }
+
+
+  private updateRow(dataRow) {
+
+    this.formCalculoCT = {};
+
+    this.showChildModal();
+    this.isEditContagem = true;
+    this.referencia_calculo = dataRow.referencia_calculo;
+    this.formCalculoCT = dataRow;
+
+  }
+
+  setNewFormContagemTempoRef() {
+
+    this.referencia_calculo = 'Impotação - ' + moment().format('DD/MM/YYYY')
+    this.isEditContagem = false;
+    this.showChildModal();
+
+  }
+
+
+  public submit(dataForm) {
+
+    dataForm.id_segurado = this.seguradoSelecionado.id;
+    dataForm.referencia_calculo = this.referencia_calculo;
+
+    console.log(dataForm);
+
+    if (this.validate()) {
+
+      if (!this.isEditContagem) {
+
+        this.createCalculoContagemTempo(dataForm);
+
+      } else {
+
+        this.updateCalculoContagemTempo(dataForm);
+
+      }
+    }
+
+  }
+
+
+  public showChildModal(): void {
+    this.formCalculoCT = CalculoContagemTempoModel.form;
+    this.modalCalculosContagemTempo.show();
+  }
+
+  public hideChildModal(): void {
+    this.formCalculoCT = CalculoContagemTempoModel.form;
+    this.modalCalculosContagemTempo.hide();
+  }
 
 
   public getBtnSelecionarCalculo(id) {
@@ -353,11 +457,15 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     return ` <div class="btn-group">
       <button class="btn txt-color-white bg-color-teal btn-xs copy-btn"
           title="Duplicar" >&nbsp;<i class="fa fa-copy fa-1-7x"></i>&nbsp;</button>
+          <button class="btn btn-warning btn-xs update-btn" 
+          title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</button>
       <button class="btn btn-danger btn-xs delete-btn"
           title="Deletar" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</button>
     </div>
 `;
   }
+
+
 
 
   formatAnosMesesDias(dias) {
@@ -387,8 +495,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
       value !== undefined && value !== '')
       ? true : false;
   }
-
-
 
 
   toastAlert(type, title, position) {

@@ -58,19 +58,13 @@
                         </button>
                       </td>
                       <td class="text-justify">
-                        <strong class="font-1-5x text-white font-bold-500">
-                          Realiza os cálculos da contagem de tempo de
-                          contribuição e do valor dos benefícios com aplicação
-                          das regras previstas na EC nº 103/2019 e Decreto nº
-                          10.410/2020 (contagem de tempo apenas com a inclusão
-                          dos meses com salário superior ao mínimo; cômputo do
-                          mês integral como tempo de contribuição, quando o
-                          salário for igual ou superior ao mínimo,
-                          independentemente da quantidade de dias trabalhados;
-                          conversão de tempo especial até 13/11/2019,
-                          permitindo, caso necessário, a conversão para período
-                          posterior), com importação única dos períodos de
-                          contribuição e salários existentes no CNIS.
+                        <strong class="font-1-1x text-white font-bold-500">
+                          A Revisão da Vida Toda possibilita a inclusão dos salários de contribuição anteriores a 07/1994 no 
+                          cálculo do benefício previdenciário, conforme decidido pelo STJ no Tema 999. A Tese fixada pelo STJ 
+                          será aplicada para benefícios concedidos com base em direito adquirido de acordo com as regras 
+                          anteriores a EC 103/2019. Entretanto, caso queira, e para finas de simulação, o Usuário poderá 
+                          calcular benefício concedido com base em direito adquirido após a EC 103/2019 com inclusão dos 
+                          salários de contribuição anteriores a 07/1994.
                         </strong>
                       </td>
                     </tr>
@@ -86,10 +80,11 @@
                         </a>
                       </td>
                       <td class="text-justify">
-                        <strong class="font-1-5x text-white font-bold-500">
-                          Elabora apenas o cálculo do valor dos benefícios a
-                          partir da inclusão manual do tempo de contribuição,
-                          importando do CNIS apenas os salários.
+                        <strong class="font-1-1x text-white font-bold-500">
+                          Sem aplicação das regras previstas na EC nº 103/2019 e Decreto nº 10.410/2020, 
+                          acerca da utilização dos salários de contribuição abaixo do mínimo no cálculo do 
+                          benefício e conversão de tempo especial em comum apenas para períodos anteriores a 14/11/2019. 
+                          Essas regras foram aplicadas no Simulador Concessão de Benefício.
                         </strong>
                       </td>
                     </tr>
@@ -157,9 +152,9 @@
                         </li>
                         <li>
                           <strong> Selecionar Segurado Cadastrado:</strong>
-                         O Simulador de
-                          Cálculos do IEPREV permite que o usuário selecione um
-                          segurado já cadastrado na base de dados;
+                          O Simulador de Cálculos do IEPREV permite que o
+                          usuário selecione um segurado já cadastrado na base de
+                          dados;
                         </li>
                         <li>
                           <strong
@@ -365,18 +360,16 @@
                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                       <ul class="text-justify pt-1" style="font-size: 14px">
                         <li>
-                          Selecione um cálculo cadastrado para prosseguir com a
-                          Elaboração do Cálculo da Contagem de Tempo de
-                          Contribuição e/ou Renda Mensal Inicial - RMI;
+                          Selecione um cálculo cadastrado ou cadastre um cálculo novo para prosseguir 
+                          com a Elaboração do Cálculo da Contagem de Tempo de Contribuição e/ou Renda Mensal Inicial - RMI;
+
                         </li>
                         <li>
-                          Selecione, caso necessário, Criar novo Cálculo para
-                          prosseguir com a Elaboração do Cálculo da Contagem de
-                          Tempo de Contribuição e/ou Renda Mensal Inicial - RMI;
+                          Selecione, caso necessário, Criar novo Cálculo para prosseguir com a Elaboração do Cálculo
+                           da Contagem de Tempo de Contribuição e/ou Renda Mensal Inicial - RMI;
                         </li>
                         <li>
-                          Após selecionar o Cálculo, clicar em continuar para
-                          avançar.
+                          Após selecionar o Cálculo, clicar em continuar para avançar.
                         </li>
                       </ul>
                     </div>
@@ -466,10 +459,11 @@
                         "
                       >
                         <li>
-                          Verifique as informações abaixo inseridas, que poderão
-                          ser editadas, se necessário, ou clique em continuar
-                          para avançar.
+                          Inserir novos períodos de contribuição e/ou verificar
+                          as informações abaixo inseridas, que poderão ser
+                          editadas, se necessário;
                         </li>
+                        <li>Clique em continuar para avançar.</li>
                       </ul>
                     </div>
                   </div>
@@ -485,7 +479,7 @@
                       "
                     >
                       <app-importador-cnis
-                        [moeda] = "moeda"
+                        [moeda]="moeda"
                         [dadosPassoaPasso]="dadosPassoaPasso"
                         (eventCalcularContagem)="eventCalcularContagem($event)"
                         (eventPrevStepPassoaPasso)="
