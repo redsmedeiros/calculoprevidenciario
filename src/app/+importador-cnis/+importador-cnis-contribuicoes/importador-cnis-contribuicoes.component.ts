@@ -277,6 +277,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValid()) {
 
+      this.sc_mm_considerar_carencia = null;
+      this.sc_mm_considerar_tempo = null;
+      this.sc_mm_ajustar = null;
+
       const anoinicio = this.inicioPeriodo.split('/')[1];
       const mesinicio = this.inicioPeriodo.split('/')[0];
       const anofinal = this.finalPeriodo.split('/')[1];
@@ -291,8 +295,8 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
         if (ano.ano >= anoinicio && ano.ano <= anofinal) {
           ano.valores.map((mes, index) => {
 
-            const dateMTeste = moment(('0' + (index + 1)).slice(-2) + '/' + ano.ano, 'MM/YYYY'); 
-            // console.log(((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio)  
+            const dateMTeste = moment(('0' + (index + 1)).slice(-2) + '/' + ano.ano, 'MM/YYYY');
+            // console.log(((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio)
             // && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal));
 
             if (dateMTeste.isBetween(iniM, FimM, 'month', '[]')) {

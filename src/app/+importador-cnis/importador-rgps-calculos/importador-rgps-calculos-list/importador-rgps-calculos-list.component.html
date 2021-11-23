@@ -14,21 +14,14 @@
       <table class="table table-condensed-custom table-bordered">
         <tbody>
           <tr>
-            <td class="smart-form" style="min-height: 25px;">
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
               <div class="well well-small bg-color-greenDark txt-color-white pl-1 m-1">
-                <label class="checkbox txt-color-white ml-2" >
+                <label class="checkbox txt-color-white mx-2 not-wrap" >
                   <input type="checkbox" [(ngModel)]="revisaoPBC" (click)="setRevisaoPBC()" [ngModelOptions]="{standalone: true}" class="py-1">
                   <i></i>Aplicar Cálculo da RMI - Revisão da Vida Toda</label>
               </div>
-              <!-- <button type="button" (click)="setRevisaoPBC()" class="btn btn-labeled btn-labeled bg-color-greenDark txt-color-white">
-                <span class="btn-label">
-                  <i class="fa fa-calculator"></i>
-                </span> <span *ngIf="!revisaoPBC" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aplicar </span>
-                <span *ngIf="revisaoPBC" > Não Aplicar </span> 
-                  Cálculo da RMI - Revisão da Vida Toda
-              </button> -->
             </td>
-            <td>
+            <td class="text-justify">
               A Revisão da Vida Toda possibilita a inclusão dos salários de contribuição anteriores a 07/1994
                no cálculo do benefício previdenciário, conforme decidido pelo STJ no Tema 999. A Tese fixada
                 pelo STJ será aplicada para benefícios concedidos com base em direito adquirido de acordo com 

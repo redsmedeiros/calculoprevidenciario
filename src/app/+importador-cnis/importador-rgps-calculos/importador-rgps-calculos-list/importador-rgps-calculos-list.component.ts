@@ -129,7 +129,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       this.CalculoRgpsService.getCalculoBySeguradoId(this.idSeguradoSelecionado)
         .then((calculosRst: CalculoRgps[]) => {
 
-          this.calculosRMIList = calculosRst;
+          this.calculosRMIList = calculosRst.filter(c => c.id_contagem_tempo === this.idCalculoSelecionadoCT);
           this.updateDatatable();
 
           this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
