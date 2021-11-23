@@ -201,13 +201,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     // return daysY360;
   }
 
-  private checkScCompetenciaFull(salariosC, auxiliarDate) {
+  private checkScCompetenciaFull(salariosC, auxiliarDate, vinculo) {
 
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
 
-    if (this.isExist(salC) &&
-      (salC.msc === 0 && salC.sc !== '0,00')) {
+    if ((vinculo.sc_mm_considerar_tempo === 1)
+    || (this.isExist(salC) &&
+      (salC.msc === 0 && salC.sc !== '0,00'))) {
       return true;
     }
 
@@ -257,7 +258,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         && this.checkPeriodoPosReforma(vinculo)
       ) {
 
-        dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate);
+        dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate, vinculo);
         melhorTempo = (dataFull) ? 30 : 0;
 
         if (melhorTempo === 0
@@ -274,7 +275,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       } else {
 
-        // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+        // if (auxiliarDate.isSame('2020-03-01', 'month')) {
         //   console.log('----1---');
         //   console.log(vinculo);
         //   console.log(melhorTempoLast);
@@ -376,9 +377,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       // if (auxiliarDate.isSame('2019-01-01', 'month')) {
       //   console.log(melhorTempo);
       // }
-      // if (auxiliarDate.isSame('2018-01-01', 'month') || auxiliarDate.isSame('2018-02-01', 'month')) {
+      // if (auxiliarDate.isSameOrAfter('2020-01-01', 'month')) {
       //   console.log('---');
-      //   console.log(melhorTempo);
+      //   console.log(auxiliarDate.format('DD/MM/YYYY') + ' -- ' + melhorTempo);
       //   console.log('---');
       // }
 

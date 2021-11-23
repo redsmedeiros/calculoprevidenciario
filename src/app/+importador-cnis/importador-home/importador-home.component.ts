@@ -281,6 +281,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         break;
       case 'step4':
         this.isImportCNIS = false;
+        sessionStorage.removeItem('isToStep6');
 
 
         break;
