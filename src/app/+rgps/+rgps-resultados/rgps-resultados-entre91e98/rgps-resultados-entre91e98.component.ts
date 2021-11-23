@@ -215,12 +215,12 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else {
 
       mesesLimite = 48;
-      mesesLimiteTotal = 36;
+      mesesLimiteTotal = 35;
 
     }
     if (this.calculo.tipo_aposentadoria === 'Entre 05/04/1991 e 15/12/1998') {
       mesesLimite = 48;
-      mesesLimiteTotal = 36;
+      mesesLimiteTotal = 35;
     }
     let dataLimite;
     if (mesesLimite > 0) {
