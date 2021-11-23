@@ -326,6 +326,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   public preencherComSalario(type = 'm') {
 
+    this.sc_mm_considerar_carencia = null;
+    this.sc_mm_considerar_tempo = null;
+    this.sc_mm_ajustar = null;
+
     let mesi = 0;
     let mesiC = 0;
     const salariominimo: any[][] = [];
