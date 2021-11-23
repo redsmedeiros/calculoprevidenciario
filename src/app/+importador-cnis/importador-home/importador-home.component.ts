@@ -128,13 +128,13 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   }
 
-  
+
   private getTabelaMoeda() {
 
     this.Moeda.moedaSalarioMinimoTeto()
       .then((moeda: Moeda[]) => {
         this.moeda = moeda;
-        
+
         sessionStorage.setItem(
           'moedaSalarioMinimoTeto',
           JSON.stringify(moeda));
@@ -242,6 +242,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     sessionStorage.removeItem('exportResultContagemTempo');
     sessionStorage.removeItem('seguradoSelecionado');
     sessionStorage.removeItem('pbcFull');
+    sessionStorage.removeItem('isToStep6');
 
   }
 
@@ -330,12 +331,14 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
     if (this.nextManualCNIS()) {
 
+
       this.activeStep.checked = true;
       if (this.steps.every((it) => it.valid && it.checked)) {
 
         //   this.onWizardComplete(this.model);
 
       } else {
+
         let idx = this.steps.indexOf(this.activeStep);
         this.activeStep = null;
         while (!this.activeStep) {
@@ -344,10 +347,12 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
             this.activeStep = this.steps[idx];
           }
         }
+
       }
     }
 
   }
+
 
   nextManualCNIS() {
 
@@ -578,7 +583,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   public eventCalcularContagem(dataRSTImportForm) {
 
 
-
     if (this.isExits(dataRSTImportForm.seguradoId)
       && this.isExits(dataRSTImportForm.calculoId)) {
 
@@ -611,6 +615,16 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       sessionStorage.setItem(
         'exportResultContagemTempo',
         JSON.stringify(this.exportResultContagemTempo));
+
+      // pular passo calcular contagem
+      if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+
+        setTimeout(() => {
+          this.nextStep();
+        }, 500);
+
+      }
+
 
     }
 

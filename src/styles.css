@@ -642,6 +642,12 @@ a[class*="action-"]:hover {
   background: #ffdc69b8 !important;
 }
 
+.bg-ieprev-y {
+  color: #0d0d0d;
+  background-color: #ffaa21;
+  border-color: #ffaa21 !important;
+}
+
 .color-ieprev {
   color: #4a4d4f !important;
 }

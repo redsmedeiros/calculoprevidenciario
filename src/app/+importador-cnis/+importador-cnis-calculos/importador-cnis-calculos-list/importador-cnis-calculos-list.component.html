@@ -46,6 +46,34 @@
   </div>
 </sa-widget>
 
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="isCalculosSelecionado ">
+   <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Ações</h2>
+  </header>
+  <div>
+    <div  class="widget-body widget-body-custom no-padding">
+      <table class="table table-condensed-custom table-bordered">
+        <tbody>
+          <tr>
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
+              <div class="bg-ieprev-y pl-1 m-1">
+                <label class="checkbox mx-2 not-wrap" >
+                  <input type="checkbox" [(ngModel)]="isToStep6" (change)="setToStep6()" [ngModelOptions]="{standalone: true}" class="py-1">
+                  <i></i>Calcular da RMI</label>
+              </div>
+            </td>
+            <td class="text-justify">
+              Elaborar o valor da Renda Mensal Inicial – RMI sem a necessidade de realizar a edição dos períodos de contribuição e/ou salários de contribuição (Passos 4 e 5). Neste caso o Simulador direcionará o Usuário diretamente para o Passo 6 (Cálculo da Renda Mensal Inicial). Esta opção somente estará disponível quando houver cálculo de tempo de contribuição realizado em momento anterior.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
 
 <div bsModal #modalCalculosContagemTempo="bs-modal" class="modal fade" id="create-calculo">
   <div class="modal-dialog modal-lg">

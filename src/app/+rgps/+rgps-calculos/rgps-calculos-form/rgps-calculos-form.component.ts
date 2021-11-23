@@ -183,7 +183,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       this.setNewFormRMIinfoContagemTempo();
     }
 
-    console.log(this.calculoRMIDefaulForm);
+    // console.log(this.calculoRMIDefaulForm);
 
   }
 

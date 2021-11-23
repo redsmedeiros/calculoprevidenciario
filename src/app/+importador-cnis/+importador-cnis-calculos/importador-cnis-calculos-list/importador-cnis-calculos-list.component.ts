@@ -16,6 +16,7 @@ import swal from 'sweetalert2';
 import { SizeFunctions } from 'app/shared/functions/size-functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   @Input() seguradoSelecionado;
   @Output() calculoSelecionadoEvent = new EventEmitter();
+  @Output() toStep6Event = new EventEmitter();
   @ViewChild('modalCalculosContagemTempo') public modalCalculosContagemTempo: ModalDirective;
 
   public calculoSelecionado = {};
@@ -40,6 +42,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
   public referencia_calculo = '';
   public formCalculoCT;
   public isEditContagem = false;
+  public isToStep6 = false;
   public listCalculos = [];
   public calculosList = [];
   // public calculosList = this.CalculoContagemService.list;
@@ -171,6 +174,8 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   private getRow(dataRow) {
 
+    this.isCalculosSelecionado = false;
+
     if (this.isExits(dataRow)) {
 
       this.calculosSelecionado = dataRow;
@@ -180,6 +185,10 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
       this.calculoSelecionadoEvent.emit(this.calculosSelecionado);
       sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculosSelecionado));
+
+      if (InputFunctions.checkedUniqueCount(`${this.calculosSelecionado.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
+        this.isCalculosSelecionado = false;
+      }
 
     }
   }
@@ -205,10 +214,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     }
   }
 
-
-
   private copyRow(dataRow) {
-
 
     if (this.isExits(dataRow)) {
 
@@ -227,6 +233,26 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     if (this.isExits(dataRow)) {
 
       this.deleteCalculoCT(dataRow);
+
+    }
+
+  }
+
+
+  public setToStep6() {
+
+    sessionStorage.setItem('isToStep6', '');
+
+    if (!this.isCalculosSelecionado) {
+      this.isToStep6 = false;
+      sessionStorage.setItem('isToStep6', '');
+    }
+
+    if (this.isCalculosSelecionado
+      && this.calculosSelecionado.total_carencia > 0
+      && this.isToStep6) {
+
+      sessionStorage.setItem('isToStep6', 'aStep4');
 
     }
 
@@ -440,6 +466,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     this.formCalculoCT = CalculoContagemTempoModel.form;
     this.modalCalculosContagemTempo.hide();
   }
+
 
 
   public getBtnSelecionarCalculo(id) {

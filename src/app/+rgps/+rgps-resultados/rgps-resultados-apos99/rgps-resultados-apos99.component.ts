@@ -213,8 +213,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc') 
     || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
 
-    console.log(this.pbcCompleto);
-    console.log(this.dadosPassoaPasso.pbcFull);
 
     const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 

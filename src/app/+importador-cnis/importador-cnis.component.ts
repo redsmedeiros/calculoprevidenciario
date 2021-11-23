@@ -151,6 +151,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       this.isUploadReaderComplete = true;
       this.exibirForm = true;
 
+      if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+
+        setTimeout(() => {
+          this.seguradoId = this.segurado.id;
+          this.calculoId = this.calculosSelecionado['id'];
+          this.setNextStepContagemTempo();
+        }, 1000);
+
+      }
+
     }
 
     // this.segurado.user_id = this.userId;
