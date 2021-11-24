@@ -277,6 +277,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
+        sessionStorage.removeItem('isToStep6');
 
         break;
       case 'step4':
@@ -621,7 +622,10 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       if (sessionStorage.getItem('isToStep6') === 'aStep4') {
 
         setTimeout(() => {
+
           this.nextStep();
+          sessionStorage.removeItem('isToStep6');
+
         }, 500);
 
       }

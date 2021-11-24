@@ -107,6 +107,8 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     this.ref.detectChanges();
     // this.setExibirForm(this.dadosPassoaPasso);
 
+    this.isToStep6 = false;
+
     this.getCalculosSeguradoSelecionado();
   }
 
