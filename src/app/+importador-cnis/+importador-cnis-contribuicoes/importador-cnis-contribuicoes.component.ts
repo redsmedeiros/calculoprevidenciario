@@ -567,6 +567,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
     }
 
+    if (this.sc_mm_ajustar === 1 &&  this.sc_mm_considerar_tempo === 1) {
+      this.preencherComSalario('m');
+    }
+
     this.eventContribuicoes.emit(saida);
     this.hideContribuicoesCheck();
 
