@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
       aplicando as regras contidas na EC nº 103/2019 e Decreto nº 10.410/2020, com descarte dos menores 
       salários de contribuição de acordo com o disposto no artigo 26, § 6º da EC e artigo 32 do Decreto, 
       gerando, quando possível, benefício calculado com “contribuição única”, além de verificar o direito 
-      adquirido ao benefício nas legislações anteriores.`
+      adquirido ao benefício nas legislações anteriores.  `
     },
     {
       value: 'benef-atrasados',
