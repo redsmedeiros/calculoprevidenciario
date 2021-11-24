@@ -4689,7 +4689,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
             i.fa, .not-print{ display: none; }
             .td-width-30{ width: 38% !important;}
-            .table{margin-top: 30px;}
+            .table{margin-top: 30px; page-break-inside: avoid;}
             .table-print-no-margin { margin-top: 2px !important;}
             footer,div,p,th{font-size:10px;}
             .table>thead>tr>th{ background-color: #e6e6e6 !important;}

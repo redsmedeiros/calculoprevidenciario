@@ -18,9 +18,12 @@ import * as moment from 'moment';
   styleUrls: ['./rgps-resultados-entre91e98.component.css']
 })
 export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent implements OnInit {
+
   @Input() calculo;
   @Input() segurado;
   @Input() tipoCalculo;
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
 
   public boxId;
@@ -102,9 +105,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     protected ValoresContribuidos: ValorContribuidoService,
     private Moeda: MoedaService,
     private CalculoRgpsService: CalculoRgpsService,
-    protected rt: ActivatedRoute
-  ) {
-    super(null, route, null, null, null, null, null);
+    protected rt: ActivatedRoute,) {
+    super(null, route, null, null, null, null, null, null);
   }
 
   ngOnInit() {
@@ -115,7 +117,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     // this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
 
-    if (sessionStorage.withINPC === 'true') {
+    if (sessionStorage.withINPC == 'true') {
       // if (this.rt.snapshot.queryParams['withINPC'] == 'true') {
       this.reajustesAdministrativos = false;
     } else {
@@ -234,53 +236,93 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
 
-    // if (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998') {
-    dataLimite = moment('1930-01-01');
-    //  }
+    this.getValoresContribuicao(dataInicio, dataLimite, mesesLimite, mesesLimiteTotal);
 
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    //  this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
-      .then(valorescontribuidos => {
-        this.listaValoresContribuidos = valorescontribuidos;
-
-        this.setMesesDeContribuicao(mesesLimiteTotal, mesesLimite);
+  }
 
 
-        if (this.listaValoresContribuidos.length === 0) {
+  private getValoresContribuicao(dataInicio, dataLimite, mesesLimite, mesesLimiteTotal) {
+
+
+    if (this.isExits(this.dadosPassoaPasso)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+        this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+          rst,
+          dataLimite,
+          dataInicio);
+
+        if (this.listaValoresContribuidos.length == 0) {
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
           this.isUpdating = false;
         } else {
-          const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(primeiraDataTabela, moment())
-            .then((moeda: Moeda[]) => {
-              this.moeda = moeda;
-              let dataReajustesAutomaticos = this.dataInicioBeneficio;
-              // if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
-              //   dataReajustesAutomaticos = this.dataDib98;
-              // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
-              //   dataReajustesAutomaticos = this.dataDib99;
-              // }
-              if (this.tipoCalculo === '91_98') {
-                dataReajustesAutomaticos = this.dataDib98;
-              } else if (this.tipoCalculo === '98_99') {
-                dataReajustesAutomaticos = this.dataDib99;
-              }
-              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-                .then(reajustes => {
-                  this.reajustesAutomaticos = reajustes;
-                  this.CarenciaProgressiva.getCarencias()
-                    .then(carencias => {
-                      this.carenciasProgressivas = carencias;
-                      this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-                      this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
-                      this.isUpdating = false;
-                    });
-                });
-            });
+
+          this.startCalculoApos9198();
+
         }
 
+      }).catch(error => {
+        console.error(error);
+      });
+
+
+    } else {
+      this.idSegurado = this.route.snapshot.params['id_segurado'];
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+        .then(valorescontribuidos => {
+          this.listaValoresContribuidos = valorescontribuidos;
+
+          this.setMesesDeContribuicao(mesesLimiteTotal, mesesLimite);
+
+          if (this.listaValoresContribuidos.length == 0) {
+            // Exibir MSG de erro e encerrar Cálculo.
+            this.nenhumaContrib = true;
+            this.isUpdating = false;
+          } else {
+
+            this.startCalculoApos9198();
+
+          }
+
+        });
+
+    }
+
+  }
+
+
+
+  private startCalculoApos9198() {
+
+    const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+    this.Moeda.getByDateRange(primeiraDataTabela, moment())
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+        let dataReajustesAutomaticos = this.dataInicioBeneficio;
+        // if(this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998'){
+        //   dataReajustesAutomaticos = this.dataDib98;
+        // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
+        //   dataReajustesAutomaticos = this.dataDib99;
+        // }
+        if (this.tipoCalculo == '91_98') {
+          dataReajustesAutomaticos = this.dataDib98;
+        } else if (this.tipoCalculo == '98_99') {
+          dataReajustesAutomaticos = this.dataDib99;
+        }
+        this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+          .then(reajustes => {
+            this.reajustesAutomaticos = reajustes;
+            this.CarenciaProgressiva.getCarencias()
+              .then(carencias => {
+                this.carenciasProgressivas = carencias;
+                this.calculo91_98(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+                this.isUpdating = false;
+              });
+          });
       });
 
   }
@@ -591,7 +633,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       ]
     };
 
-    
+
     if (this.aplicarRejusteAposdib) {
       setTimeout(() => {
         this.mostrarReajustesAdministrativos(this.boxId);
@@ -996,7 +1038,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   }
 
   calcularComINPC() {
-    // window.location.href = 
+    // window.location.href =
     // (this.reajustesAdministrativos) ? window.location.href.split('?')[0] + '?withINPC=true' : window.location.href.split('?')[0];
 
     const withINPC = (sessionStorage.withINPC !== 'false') ? 'false' : 'true';

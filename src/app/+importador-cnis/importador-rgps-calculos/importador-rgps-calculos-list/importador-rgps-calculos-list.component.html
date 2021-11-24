@@ -1,0 +1,121 @@
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="!isUpdatingCalcRGPS">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Revisão da Vida Toda</h2>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div  class="widget-body widget-body-custom no-padding">
+      
+      <table class="table table-condensed-custom table-bordered">
+        <tbody>
+          <tr>
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
+              <div class="well well-small bg-color-greenDark txt-color-white pl-1 m-1">
+                <label class="checkbox txt-color-white mx-2 not-wrap" >
+                  <input type="checkbox" [(ngModel)]="revisaoPBC" (click)="setRevisaoPBC()" [ngModelOptions]="{standalone: true}" class="py-1">
+                  <i></i>Aplicar Cálculo da RMI - Revisão da Vida Toda</label>
+              </div>
+            </td>
+            <td class="text-justify">
+              A Revisão da Vida Toda possibilita a inclusão dos salários de contribuição anteriores a 07/1994
+               no cálculo do benefício previdenciário, conforme decidido pelo STJ no Tema 999. A Tese fixada
+                pelo STJ será aplicada para benefícios concedidos com base em direito adquirido de acordo com 
+                as regras anteriores a EC 103/2019. Entretanto, caso queira, e para finas de simulação, o Usuário 
+                poderá calcular benefício concedido com base em direito adquirido após a EC 103/2019 com inclusão 
+                dos salários de contribuição anteriores a 07/1994.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
+
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Cálculos Cadastrados</h2>
+      <button type="button" (click)="setNewFormRMIinfoContagemTempo()" class="btn btn-labeled btn-info pull-right">
+        <span class="btn-label">
+          <i class="fa fa-plus"></i>
+        </span> Criar Novo Cálculo
+      </button>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div *ngIf="!isUpdatingCalcRGPS" class="widget-body no-padding">
+      <sa-datatable
+        [options]="calculoTableOptionsRMIList"
+        (selectedRowEvent)="getRow($event)"
+        (updateRowEvent)="updateRow($event)"
+        (deleteRowEvent)="deleteRow($event)"
+        (copyRowEvent)="copyRow($event)"
+        paginationLength="true"
+        tableClass="table table-striped table-condensed-custom table-bordered table-hover"
+        width="100%"
+      >
+      <thead>
+        <tr>
+          <th>Ações</th>
+          <th>Espécie</th>
+          <th>Período para Início de Benefício</th>
+          <th>Contribuição Primária (Ano/Mês/Dia)</th>
+          <th>DIB</th>
+          <th>RMI</th>
+          <th>Data de Criação</th>
+          <th>Selecionar</th> 
+        </tr>
+      </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>
+
+
+
+<div bsModal #modalCalculosRGPS="bs-modal" class="modal fade" id="create-calculo">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0 m-0"> 
+      <div class="row"> 
+        <article class="col-sm-12 col-md-12 col-lg-12">
+          <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false" class="mb-0">
+            <header>
+              <span class="widget-icon">
+                <i class="fa fa-plus"></i>
+              </span>
+              <h2 *ngIf="!isEditRGPS" >Adicionar Informações Para Cálculos</h2>
+              <h2 *ngIf="isEditRGPS" >Editar Informações Para Cálculos</h2>
+              <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCalculosRGPS.hide()" aria-hidden="true">
+                <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"></i>
+              </button>
+            </header>
+            <div>
+              <div class="widget-body mb-0">
+                <app-rgps-calculos-form
+                      [errors]="Errors"
+                      [formData]="formCalculo"
+                      [isEdit]="isEditRGPS"
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [calculoRMIDefaulForm]="calculoRMIDefaulForm"
+                      (onSubmit)="submit($event)"
+                ></app-rgps-calculos-form> 
+              </div>
+            </div>
+          </sa-widget>
+          </article>
+       </div>
+      </div> 
+    </div>
+  </div>
+</div>

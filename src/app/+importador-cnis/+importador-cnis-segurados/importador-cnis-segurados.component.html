@@ -1,9 +1,9 @@
 <div class="row" *ngIf="!isUpdating" >
   
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="panel panel-default">
+        <div class="panel panel-default-ieprev">
           <div class="panel-heading">
-            <h3 class="panel-title">Segurado</h3>
+            <h3 class="panel-title"><i class="fa fa-edit"></i> Dados do Segurado</h3>
           </div>
           <div class="panel-body">
               <form class="form-horizontal">
@@ -17,9 +17,10 @@
                         <small *ngIf="errors.has('nome')" class="text-danger">{{ errors.get('nome') | i18n}}</small>
                       </div>
                 
-                      <label class="col-md-2 control-label" for="select-1">Tipo de documento*</label>
+                      <label class="col-md-2 control-label" for="select-1">Tipo de Documento</label>
                       <div class="col-md-3">
                         <select class="form-control" id="select-1" [(ngModel)]="formData.id_documento" [ngModelOptions]="{standalone: true}"  (change)="changeDocumentMask(); validate();">
+                          <option value=''>Selecione</option>
                           <option value='1'>PIS</option>
                           <option value='2'>PASEP</option>
                           <option value='3'>CPF</option>
@@ -32,14 +33,14 @@
                 
                     <div class="form-group">
                 
-                      <label class="col-md-2 control-label">Número do documento*</label>
+                      <label class="col-md-2 control-label">Número do Documento</label>
                 
                       <div class="col-md-3">
                         <input [(ngModel)]="formData.numero_documento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('numero_documento'); validate();" class="form-control" type="text">
                         <small *ngIf="errors.has('numero_documento')" class="text-danger">{{ errors.get('numero_documento')| i18n }}</small>
                       </div>
                 
-                      <label class="col-md-2 control-label">Data de nascimento*</label>
+                      <label class="col-md-2 control-label">Data de Nascimento*</label>
                       <div class="col-md-3">
                         <input [(ngModel)]="formData.data_nascimento" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_nascimento'); validate();" [textMask]="{mask: dateMask}" class="form-control" type="text" data-placement="bottom" tooltip="Define  a idade e assim estabelece direitos e condições de cálculos.">
                         <small *ngIf="errors.has('data_nascimento')" class="text-danger">{{ errors.get('data_nascimento') | i18n}}</small>
@@ -47,7 +48,7 @@
                     </div>
                 
                     <div class="form-group" >
-                      <label class="col-md-2 control-label" >Data de filiação*</label>
+                      <label class="col-md-2 control-label" >Data de Filiação*</label>
                       <div class="col-md-3">
                         <input [(ngModel)]="formData.data_filiacao" [ngModelOptions]="{standalone: true}"  (change)="errors.clear('data_filiacao')" [textMask]="{mask: dateMask}" class="form-control" type="text">
                         <small *ngIf="errors.has('data_filiacao')" class="text-danger">{{ errors.get('data_filiacao') | i18n}}</small>
@@ -66,7 +67,7 @@
                         </div>
                       </div>
                     </div>              
-                    <p>Todo os campos com um asterisco (*) são de preenchimento obrigatório.</p>
+                    <p>(*) Preenchimento Obrigatório.</p>
                   </fieldset>
                   <!-- <div class="form-actions">
                     <div class="row">

@@ -168,7 +168,7 @@ export class RgpsResultadosAposPec062019Component extends RgpsResultadosComponen
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService) {
-      super(null, route, null, null, null, null, null);
+      super(null, route, null, null, null, null, null, null);
   }
 
   ngOnInit() {

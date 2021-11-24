@@ -1,0 +1,744 @@
+<div id="content">
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <div id="inicialPassoaPasso" *ngIf="isPaginaInicial" class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="jumbotron background-inicial jumbotrom-custom-plan">
+          <div class="container">
+            <h1
+              style="color: white; font-weight: 700"
+              class="py-2 pl-5 text-align-center jumbotrom-custom-plan-title"
+            >
+              SIMULADOR DE CONTAGEM DE TEMPO DE CONTRIBUIÇÃO E CÁLCULO DA RENDA
+              MENSAL INICIAL
+            </h1>
+            <p
+              style="color: white; font-weight: 500; text-align: justify"
+              class="pt-2 pb-3 px-5"
+            >
+              O Simulador de Cálculo de Contagem de Tempo de Contribuição e
+              Renda Mensal Inicial é a mais nova ferramenta de cálculos a
+              disposição dos Advogados Previdenciaristas. Criado para apurar o
+              valor do benefício previdenciário a partir de migração única dos
+              salários de contribuição e vínculos contributivos existentes no
+              Cadastro Nacional de Informações Sociais - CNIS, permitindo a
+              edição das informações migradas, além de gerar relatório de
+              contagem de tempo de contribuição e calcular a renda mensal do
+              benefício, identificando, entre vários períodos da legislação, a
+              prestação previdenciária mais vantajosa a partir da análise de
+              todas as regras existentes em cada período. Este Simulador de
+              Cálculos, baseado em passo a passo, auxiliará o operador do
+              Direito Previdenciário, permitindo, de forma ágil e eficaz, a
+              análise, elaboração e conclusão da contagem de tempo de
+              contribuição e cálculo da Renda Mensal Inicial.
+            </p>
+
+            <div class="row px-5 mt-jumbotron-table vertical-center">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table
+                  class="table table-bordered table-condensed vertical-middle"
+                >
+                  <!-- <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                  </tr>
+                </thead> -->
+                  <tbody>
+                    <tr>
+                      <td>
+                        <button
+                          type="button"
+                          (click)="setIsPaginaInicial()"
+                          class="btn btn-lg btn-block btn-ieprev-p pull-right"
+                          style="font-weight: bolder"
+                          id="iniciar_calculo"
+                        >
+                          Concessão no RGPS
+                        </button>
+                      </td>
+                      <td class="text-justify">
+                        <strong class="font-1-1x text-white font-bold-500">
+                          Realiza os cálculos da contagem de tempo de
+                          contribuição e do valor dos benefícios com aplicação
+                          das regras previstas na EC nº 103/2019 e Decreto nº
+                          10.410/2020 (contagem de tempo apenas com a inclusão
+                          dos meses com salário superior ao mínimo; cômputo do
+                          mês integral como tempo de contribuição, quando o
+                          salário for igual ou superior ao mínimo,
+                          independentemente da quantidade de dias trabalhados;
+                          conversão de tempo especial até 13/11/2019,
+                          permitindo, caso necessário, a conversão para período
+                          posterior), com importação única dos períodos de
+                          contribuição e salários existentes no CNIS.
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <a
+                          href="#/rgps/rgps-segurados"
+                          class="btn btn-lg btn-block btn-ieprev-p"
+                          style="font-weight: bolder"
+                          id="goto_rmi"
+                        >
+                          RMI no RGPS
+                        </a>
+                      </td>
+                      <td class="text-justify">
+                        <strong class="font-1-1x text-white font-bold-500">
+                          Elabora apenas o cálculo do valor dos benefícios a
+                          partir da inclusão manual do tempo de contribuição,
+                          importando do CNIS apenas os salários. Não aplica as
+                          regras previstas na EC nº 103/2019 e Decreto nº
+                          10.410/2020, acerca da utilização dos salários de
+                          contribuição abaixo do mínimo no cálculo do benefício
+                          e conversão de tempo especial em comum apenas para
+                          períodos anteriores a 14/11/2019. Essas regras foram
+                          aplicadas no Simulador Concessão de Benefício.
+                        </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="passoContagemRMI" class="" *ngIf="!isPaginaInicial">
+      <div class="row mt-3">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <form novalidate="novalidate">
+            <div class="col-sm-12">
+              <div class="form-bootstrapWizard clearfix">
+                <ul class="bootstrapWizard">
+                  <li
+                    *ngFor="let pane of steps; let i = index"
+                    [class.active]="activeStep == pane"
+                  >
+                    <a (click)="setActiveStep(pane)">
+                      <span class="step">
+                        <span *ngIf="!pane.checked">{{ i + 1 }}</span>
+                        <i class="fa fa-check" *ngIf="pane.checked"></i>
+                      </span>
+                      <span
+                        class="title fa-1-1x"
+                        [innerHTML]="pane.title"
+                      ></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content" style="margin-top: 5rem">
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step1'"
+                >
+                  <div
+                    class="row mt-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step1">
+                          <a data-toggle="tab"><span class="step">1</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <p>
+                        Para Iniciar o Cálculo da Contagem de Tempo de
+                        Contribuição e da Renda Mensal Inicial, selecione uma
+                        das opções abaixo:
+                      </p>
+                      <ol type="A" class="text-justify pt-1">
+                        <li>
+                          <strong>Migrar Dados a Partir do CNIS:</strong>
+                          O Simulador de Cálculos do IEPREV fará a importação
+                          automática de todos os períodos de contribuição e
+                          salários de contribuição existentes no CNIS;
+                        </li>
+                        <li>
+                          <strong> Selecionar Segurado Cadastrado:</strong>
+                          O Simulador de Cálculos do IEPREV permite que o
+                          usuário selecione um segurado já cadastrado na base de
+                          dados;
+                        </li>
+                        <li>
+                          <strong
+                            >Inserir Vínculos e Salários Manualmente:</strong
+                          >
+                          O Simulador de Cálculos do IEPREV permite que o
+                          usuário insira manualmente os períodos de contribuição
+                          e salários de contribuição;
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+
+                  <div
+                    class="row mt-3 body-step-component body-step-component-btn"
+                  >
+                    <div
+                      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                      style="margin-top: 2rem"
+                    >
+                      <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div
+                            class="
+                              well well-sm-i
+                              text-align-center
+                              bg-ieprev
+                              text-white
+                            "
+                            style="margin-right: 13px; margin-left: 13px"
+                          >
+                            <strong
+                              >Selecione a opção desejada e clique em
+                              Continuar</strong
+                            >
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div
+                              class="
+                                well well-sm
+                                text-center
+                                btn-radius-custom
+                                py-2
+                                cursor-pointer
+                              "
+                              (click)="setOptionEntradaDados($event, 'cnis')"
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'cnis'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
+                                  : 'btn-ieprev'
+                              "
+                            >
+                              <strong>Migrar dos Dados a Partir do CNIS</strong>
+                            </div>
+                          </div>
+                          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div
+                              class="
+                                well well-sm
+                                text-center
+                                btn-radius-custom
+                                py-2
+                                cursor-pointer
+                              "
+                              (click)="
+                                setOptionEntradaDados(
+                                  $event,
+                                  'seguradoExistente'
+                                )
+                              "
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'seguradoExistente'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
+                                  : 'btn-ieprev'
+                              "
+                            >
+                              <strong>Selecionar Segurado Cadastrado</strong>
+                            </div>
+                          </div>
+                          <div
+                            class="
+                              col-xs-6
+                              col-sm-6
+                              col-md-6
+                              col-lg-6
+                              col-md-offset-3
+                            "
+                          >
+                            <div
+                              class="
+                                well well-sm
+                                text-center
+                                btn-radius-custom
+                                py-2
+                                cursor-pointer
+                              "
+                              (click)="setOptionEntradaDados($event, 'manual')"
+                              [ngClass]="
+                                dadosPassoaPasso.type === 'manual'
+                                  ? 'btn-ieprev-selected cursor-not-allowed'
+                                  : 'btn-ieprev'
+                              "
+                            >
+                              <strong>Inserir Dados Manualmente</strong>
+                            </div>
+                          </div>
+                          <!-- <div
+                            *ngIf="
+                              dadosPassoaPasso.type === 'seguradoExistente'
+                            "
+                          >
+                            <div
+                              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                            >
+                              <app-importador-cnis-segurados-list
+                                (seguradoSelecionadoEvent)="
+                                  setSeguradoSelecionado($event)
+                                "
+                              ></app-importador-cnis-segurados-list>
+                            </div>
+                            <div
+                              *ngIf="isSeguradoSelecionado"
+                              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                            >
+                              <app-importador-cnis-calculos-list
+                                [seguradoSelecionado]="seguradoSelecionado"
+                                (calculoSelecionadoEvent)="
+                                  setCalculoSelecionado($event)
+                                "
+                              >
+                              </app-importador-cnis-calculos-list>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step2'"
+                >
+                  <div
+                    class="row mt-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step2">
+                          <a data-toggle="tab"> <span class="step">2</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul class="text-justify pt-1" style="font-size: 14px">
+                        <li>
+                          Selecione Segurado cadastrado para prosseguir com a
+                          Elaboração do Cálculo da Contagem de Tempo de
+                          Contribuição e/ou Renda Mensal Inicial;
+                        </li>
+                        <li>
+                          Após selecionar o Segurado, clicar em continuar para
+                          avançar.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- iscontagemTempo && -->
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step2'"
+                  >
+                    <div *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <app-importador-cnis-segurados-list
+                          (seguradoSelecionadoEvent)="
+                            setSeguradoSelecionado($event)
+                          "
+                        ></app-importador-cnis-segurados-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step3'"
+                >
+                  <div
+                    class="row mt-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step3">
+                          <a data-toggle="tab"> <span class="step">3</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul class="text-justify pt-1" style="font-size: 14px">
+                        <li>
+                          Selecione um cálculo cadastrado ou cadastre um cálculo
+                          novo para prosseguir com a Elaboração do Cálculo da
+                          Contagem de Tempo de Contribuição e/ou Renda Mensal
+                          Inicial - RMI;
+                        </li>
+                        <li>
+                          Selecione calcular RMI, caso queria apurar o valor do
+                          benefício sem passar pela Contagem do Tempo de
+                          Contribuição (essa função somente estará disponível se
+                          já existir contagem de tempo de contribuição realizado
+                          em momento anterior);
+                        </li>
+                        <li>
+                          Selecione, caso necessário, Criar novo Cálculo para
+                          prosseguir com a Elaboração do Cálculo da Contagem de
+                          Tempo de Contribuição e/ou Renda Mensal Inicial - RMI;
+                        </li>
+                        <li>
+                          Após selecionar o Cálculo, clicar em continuar para
+                          avançar.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- iscontagemTempo && -->
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step3'"
+                  >
+                    <div *ngIf="dadosPassoaPasso.type === 'seguradoExistente'">
+                      <div
+                        *ngIf="isSeguradoSelecionado"
+                        class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+                      >
+                        <app-importador-cnis-calculos-list
+                          [seguradoSelecionado]="seguradoSelecionado"
+                          (calculoSelecionadoEvent)="
+                            setCalculoSelecionado($event)
+                          "
+                        >
+                        </app-importador-cnis-calculos-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step4'"
+                >
+                  <div
+                    class="row mt-4"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step4">
+                          <a data-toggle="tab"> <span class="step">4</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul
+                        class="text-justify pt-5 mb-5"
+                        style="font-size: 14px"
+                        *ngIf="dadosPassoaPasso.type === 'manual'"
+                      >
+                        <li>
+                          Preencha as informações no Campo Cadastrar Segurado
+                          para criar Novo Segurado na base de dados do Simulador
+                          IEPREV;
+                        </li>
+                        <li>
+                          Preencha os campos com o Nome da Empresa e com as
+                          datas de início e fim para criação de Períodos de
+                          Contribuição, informando, se necessário, a existência de
+                          Tempo Especial, bem como o Fator Multiplicador para
+                          conversão de Tempo Especial em Tempo Comum;
+                        </li>
+                        <li>
+                          Após preencher todas as informações, clicar em
+                          continuar para avançar.
+                        </li>
+                      </ul>
+                      <ul
+                        class="text-justify pt-5 mb-5"
+                        style="font-size: 14px"
+                        *ngIf="
+                          dadosPassoaPasso.type === 'cnis' && !isImportCNIS
+                        "
+                      >
+                        <li>
+                          Insira o arquivo do CNIS em .pdf, obtido no Meu INSS,
+                          para adicionar os períodos de contribuição e os
+                          salários de contribuição;
+                        </li>
+                        <li>
+                          As informações inseridas poderão ser editadas
+                          posteriormente.
+                        </li>
+                      </ul>
+                      <ul
+                        class="text-justify pt-5 mb-5"
+                        style="font-size: 14px"
+                        *ngIf="
+                          dadosPassoaPasso.type === 'seguradoExistente' ||
+                          (dadosPassoaPasso.type === 'cnis' && isImportCNIS)
+                        "
+                      >
+                        <li>
+                          Inserir novos períodos de contribuição e/ou verificar
+                          as informações abaixo inseridas, que poderão ser
+                          editadas, se necessário;
+                        </li>
+                        <li>Clique em continuar para avançar.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="row body-step-component">
+                    <div
+                      *ngIf="
+                        activeStep.key == 'step4' &&
+                        (dadosPassoaPasso.type === 'cnis' ||
+                          dadosPassoaPasso.type === 'manual' ||
+                          dadosPassoaPasso.type === 'seguradoExistente') &&
+                        isTypeEntradaDados
+                      "
+                    >
+                      <app-importador-cnis
+                        [moeda]="moeda"
+                        [dadosPassoaPasso]="dadosPassoaPasso"
+                        (eventCalcularContagem)="eventCalcularContagem($event)"
+                        (eventPrevStepPassoaPasso)="
+                          eventPrevStepPassoaPasso($event)
+                        "
+                        (eventStatusImport)="eventStatusImport($event)"
+                      ></app-importador-cnis>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step5'"
+                >
+                  <div
+                    class="row mt-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step5">
+                          <a data-toggle="tab"> <span class="step">5</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul class="text-justify pt-1" style="font-size: 14px">
+                        <li>
+                          Relatório de Contagem de Tempo de Contribuição gerado;
+                        </li>
+                        <li>
+                          Clique em imprimir para salvar arquivo .pdf ou
+                          impressão em papel;
+                        </li>
+                        <li>
+                          Clique em continuar caso queira prosseguir para
+                          realização do cálculo da Renda Mensal Inicial – RMI.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- iscontagemTempo && -->
+                  <div
+                    class="row pt-4 body-step-component"
+                    *ngIf="activeStep.key == 'step5'"
+                  >
+                    <app-contagem-tempo-resultados-component
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionado]="idCalculoSelecionado"
+                      (eventCalcularContagemResult)="
+                        eventCalcularContagemResult($event)
+                      "
+                    ></app-contagem-tempo-resultados-component>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step6'"
+                >
+                  <div
+                    class="row my-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard mt-3">
+                        <li class="active" data-target="#step6">
+                          <a data-toggle="tab"> <span class="step">6</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul class="text-justify pt-1" style="font-size: 14px">
+                        <li>
+                          Selecione um cálculo cadastrado para prosseguir com a
+                          Elaboração do Cálculo da Renda Mensal Inicial – RMI;
+                        </li>
+                        <li>
+                          Selecione, caso necessário, Criar novo Cálculo para
+                          prosseguir com a Elaboração do Cálculo da Renda Mensal
+                          Inicial – RMI;
+                        </li>
+                        <li>
+                          Após selecionar o Cálculo, clicar em Retornar para
+                          voltar ao Passo anterior ou Continuar para avançar.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div
+                    class="body-step-component my-6"
+                    *ngIf="activeStep.key == 'step6'"
+                  >
+                    <app-importador-rgps-calculos
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionadoCT]="idCalculoSelecionado"
+                      [exportResultContagemTempo]="exportResultContagemTempo"
+                      (calculoSelecionadoEventRST)="
+                        setCalculoSelecionadoEventRMI($event)
+                      "
+                    ></app-importador-rgps-calculos>
+                  </div>
+                  <br />
+                  <br />
+                </div>
+
+                <div
+                  class="tab-pane"
+                  [class.active]="activeStep.key == 'step7'"
+                >
+                  <div
+                    class="row my-5"
+                    style="display: flex; align-items: center"
+                  >
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                      <ul class="bootstrapWizard form-wizard">
+                        <li class="active" data-target="#step7">
+                          <a data-toggle="tab"> <span class="step">7</span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                      <ul class="text-justify pt-1" style="font-size: 14px">
+                        <li>
+                          Selecione abrir a opção Abrir, nos resultados, para
+                          visualizar a planilha com o Cálculo da Renda Mensal
+                          Inicial – RMI e, caso queira, Clique em imprimir para
+                          salvar arquivo .pdf ou impressão em papel;
+                        </li>
+                        <li>
+                          Clique em Editar para alterar os dados pessoais do
+                          segurado.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div
+                    class="body-step-component my-4"
+                    *ngIf="activeStep.key == 'step7'"
+                  >
+                    <app-rgps-resultados-component
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [idSeguradoSelecionado]="idSeguradoSelecionado"
+                      [idCalculoSelecionadoCT]="idCalculoSelecionado"
+                      [exportResultContagemTempo]="exportResultContagemTempo"
+                      [idCalculoSelecionadoRMI]="idCalculoSelecionadoRMI"
+                    >
+                    </app-rgps-resultados-component>
+                  </div>
+                  <br />
+                  <br />
+                </div>
+
+                <!-- <div
+                  id="tutorial-plan"
+                  class="modal fade"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="tutorial-plan-title"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-custom" role="document">
+                    <div class="modal-content modal-lg">
+                      <div class="embed-responsive embed-responsive-16by9">
+                        <iframe
+                          src="https://www.youtube.com/embed/l1aGuq-K0sc"
+                          class="embed-responsive-item"
+                          frameborder="0"
+                          allow="autoplay; fullscreen"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div
+                  class="form-actions form-action-boder-full mt-0"
+                  *ngIf="
+                    activeStep.key !== 'step4' &&
+                    (dadosPassoaPasso.type === 'cnis' ||
+                      dadosPassoaPasso.type === 'manual' ||
+                      dadosPassoaPasso.type === 'seguradoExistente') &&
+                    isTypeEntradaDados
+                  "
+                >
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <ul class="pager wizard no-margin">
+                        <li class="previous">
+                          <a
+                            (click)="prevStep()"
+                            [class.disabled]="
+                              steps.indexOf(activeStep) == 0 ||
+                              (['step4', 'step5', 'step6'].includes(
+                                activeStep.key
+                              ) &&
+                                !activeStep.valid)
+                            "
+                            class="btn btn-lg btn-default"
+                            title="Retornar ao passo anterior"
+                            >Retornar&nbsp;</a
+                          >
+                        </li>
+                        <!-- <li class="pull-center">
+                          <a
+                            data-toggle="modal"
+                            data-target="#tutorial-plan"
+                            class="
+                              btn btn-lg
+                              txt-color-white
+                              btn-danger
+                              bg-ieprev-red
+                            "
+                            title="Tutorial"
+                            >Tutorial</a
+                          >
+                        </li> -->
+                        <li class="next">
+                          <a
+                            (click)="nextStep()"
+                            [class.disabled]="!activeStep.valid"
+                            class="btn btn-lg txt-color-darken"
+                            title="Continuar para próximo passo"
+                            >Continuar</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </sa-widgets-grid>
+</div>

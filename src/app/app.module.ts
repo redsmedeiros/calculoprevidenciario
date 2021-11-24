@@ -42,6 +42,7 @@ import { SeguradoService as SeguradoContagemTempoService } from './+contagem-tem
 import { PeriodosContagemTempoService } from './+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { RgpsPlanejamentoService } from './+rgps/rgps-planejamento/rgps-planejamento.service';
 import { SeguradoPlanService } from './+rgps/rgps-planejamento/rgps-planejamento-segurados/SeguradoPlan.service';
+import { ImportadorCnisContribuicoesService } from './+importador-cnis/+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { Auth } from './services/Auth/Auth.service';
 
@@ -105,6 +106,7 @@ type StoreType = {
     PeriodosContagemTempoService,
     RgpsPlanejamentoService,
     SeguradoPlanService,
+    ImportadorCnisContribuicoesService,
     Auth,
     OnlyLoggedInUsersGuard
   ]

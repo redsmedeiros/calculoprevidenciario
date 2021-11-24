@@ -21,8 +21,11 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
   styleUrls: ['./rgps-resultados-apos99.component.css']
 })
 export class RgpsResultadosApos99Component extends RgpsResultadosComponent implements OnInit {
+
   @Input() calculo;
   @Input() segurado;
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
 
   public boxId;
@@ -129,11 +132,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService) {
-    super(null, route, null, null, null, null, null);
+    super(null, route, null, null, null, null, null, null);
   }
 
   ngOnInit() {
-    'use strict'
 
     this.tableData = [];
     this.conclusoes = [];
@@ -208,45 +210,101 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // pbc da vida toda
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    let dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc') 
+    || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+
+
+    const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 
     // indices de correção pbc da vida toda
 
+    this.getValoresContribuicao(dataInicio, dataLimite)
 
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
-      .then(valorescontribuidos => {
-        this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0) {
+  }
+
+  private getValoresContribuicao(dataInicio, dataLimite) {
+
+
+    if (this.isExits(this.dadosPassoaPasso)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+        this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+          rst,
+          dataLimite,
+          dataInicio);
+
+        // console.log(this.listaPeriodosCT);
+        // console.log(this.listaValoresContribuidos);
+
+        if (this.listaValoresContribuidos.length === 0) {
+
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
           this.isUpdating = false;
+
         } else {
-          const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(primeiraDataTabela, moment())
-            .then((moeda: Moeda[]) => {
-              this.moeda = moeda;
-              const dataReajustesAutomaticos = this.dataInicioBeneficio;
-              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-                .then(reajustes => {
-                  this.reajustesAutomaticos = reajustes;
-                  const idadeFracionadaF =  this.getIdadeFracionada(false);
-                  this.ExpectativaVida.getByIdade(Math.floor(idadeFracionadaF))
-                    .then(expectativas => {
-                      this.expectativasVida = expectativas;
-                      this.CarenciaProgressiva.getCarencias()
-                        .then(carencias => {
-                          this.carenciasProgressivas = carencias;
-                          this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
-                          this.isUpdating = false;
-                        });
-                    });
-                });
-            });
+
+          this.startCalculoApos99();
+
         }
+
+      }).catch(error => {
+        console.error(error);
       });
+
+
+    } else {
+
+      this.idSegurado = this.route.snapshot.params['id_segurado'];
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
+        .then(valorescontribuidos => {
+
+          this.listaValoresContribuidos = valorescontribuidos;
+          if (this.listaValoresContribuidos.length === 0) {
+
+            // Exibir MSG de erro e encerrar Cálculo.
+            this.nenhumaContrib = true;
+            this.isUpdating = false;
+
+          } else {
+
+            this.startCalculoApos99();
+
+          }
+
+        });
+
+    }
+
   }
+
+  private startCalculoApos99() {
+
+    const primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+    this.Moeda.getByDateRange(primeiraDataTabela, moment())
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+        const dataReajustesAutomaticos = this.dataInicioBeneficio;
+        this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+          .then(reajustes => {
+            this.reajustesAutomaticos = reajustes;
+            this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+              .then(expectativas => {
+                this.expectativasVida = expectativas;
+                this.CarenciaProgressiva.getCarencias()
+                  .then(carencias => {
+                    this.carenciasProgressivas = carencias;
+                    this.calculo_apos_99(this.erros, this.conclusoes, this.contribuicaoPrimaria, this.contribuicaoSecundaria);
+                    this.isUpdating = false;
+                  });
+              });
+          });
+      });
+
+  }
+
 
   calculo_apos_99(errorArray, conclusoes, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
     let dib = this.dataInicioBeneficio;
@@ -272,11 +330,17 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tableData = [];
     let idString = 0;
 
-    for (let contribuicao of this.listaValoresContribuidos) {
+    for (const contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
       let contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
+      let sc_mm_ajustar = true;
+
+      if ((this.isExits(this.dadosPassoaPasso)
+        && this.dadosPassoaPasso.origem === 'passo-a-passo')) {
+        sc_mm_ajustar = (contribuicao.sc_mm_ajustar === 1);
+      }
 
       if (
         this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
@@ -347,7 +411,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
         contadorPrimario++;
-        let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
+        const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao, sc_mm_ajustar);
         contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
       }
@@ -2104,16 +2168,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
   }
 
-  limitarTetosEMinimos(valor, data) {
+  limitarTetosEMinimos(valor, data, sc_mm_ajustar = true) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
-    let moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
 
-    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
-    let tetoSalarial = (moeda) ? moeda.teto : 0;
+    const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
 
-    if (moeda && valor < salarioMinimo) {
+    if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
       valorRetorno = salarioMinimo;
       avisoString = 'LIMITADO AO MÍNIMO'
     } else if (moeda && valor > tetoSalarial) {

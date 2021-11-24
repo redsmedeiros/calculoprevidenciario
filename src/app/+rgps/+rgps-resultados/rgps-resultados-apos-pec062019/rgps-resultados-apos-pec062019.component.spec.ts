@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RgpsResultadosAposPec062019Component } from './rgps-resultados-apos-pec062019.component';
@@ -8,7 +9,8 @@ describe('RgpsResultadosAposPec062019Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RgpsResultadosAposPec062019Component ]
+      declarations: [ RgpsResultadosAposPec062019Component ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

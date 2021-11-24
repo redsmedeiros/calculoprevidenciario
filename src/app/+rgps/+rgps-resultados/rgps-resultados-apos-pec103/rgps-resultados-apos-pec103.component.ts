@@ -43,7 +43,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   @Input() isPlanejamento;
   @Input() planejamento;
   @Input() planejamentoContribuicoesAdicionais;
-
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
   @Output() planejamentoResultEvent = new EventEmitter();
 
 
@@ -84,6 +85,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   private numeroDeContribuicoesAux = 0;
   private numeroDeContribuicoesAuxTotal = 0;
   public dataInicioBeneficioExportar;
+  public dadosPassoaPassoOrigem = false;
 
 
 
@@ -103,7 +105,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private calcularListaContribuicoes: CalcularListaContribuicoes,
     private conclusoesFinais: conclusoesFinais,
   ) {
-    super(null, route, null, null, null, null, null);
+    super(null, route, null, null, null, null, null, null);
   }
 
 
@@ -137,10 +139,13 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     const dataInicio = (this.dataInicioBeneficio.clone()).startOf('month');
 
     // pbc da vida toda
-    // this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
-    // const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+    // pbc da vida toda
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc')
+      || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
 
-    const dataLimite = moment('1994-07-01');
+    const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
+
+    // const dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
 
@@ -150,77 +155,128 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
       });
 
     // indices de correção pbc da vida toda
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
-      .then(valorescontribuidos => {
 
-        this.listaValoresContribuidos = valorescontribuidos;
 
-        if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+    if (this.isExits(this.dadosPassoaPasso)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-          this.getContribuicoesAdicionais();
-          this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+      this.getContribuicoesCNIS(dataLimite, dataInicio);
 
-        }
+      this.dadosPassoaPassoOrigem = true;
 
-        this.calculo.tipoBeneficio = this.tipoBeneficio;
+    } else {
 
-        if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, 0, this.idSegurado)
+        .then(valorescontribuidos => {
 
-          // Exibir MSG de erro e encerrar Cálculo.
-          this.nenhumaContrib = true;
-          this.isUpdating = false;
+          this.listaValoresContribuidos = valorescontribuidos;
+          if (this.listaValoresContribuidos.length === 0) {
 
-        } else if (this.isRegrasPensaoObitoInstituidorAposentado) {
-          // pensão por morte instituidor aposentador
-          // this.regrasDaReforma();
+            this.getContribuicoesCNIS(dataLimite, dataInicio);
 
-          const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
-          this.Moeda.getByDateRange(dib, moment())
-            .then((moeda: Moeda[]) => {
-              this.regrasPensaoObitoInstituidorAposentado();
-            });
+          } else {
 
-        } else {
+            this.iniciarCalculo();
 
-          this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(this.primeiraDataTabela, moment())
-            .then((moeda: Moeda[]) => {
-              this.moeda = moeda;
-              const dataReajustesAutomaticos = this.dataInicioBeneficio;
+          }
+        });
 
-              this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
-                .then(reajustes => {
-                  this.reajustesAutomaticos = reajustes;
+    }
 
-                  this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
-                    .then(expectativas => {
+  }
 
-                      this.expectativasVida = expectativas;
-                      this.CarenciaProgressiva.getCarencias()
-                        .then(carencias => {
+  /**
+   * buscar as contribuições adicionadas por vinculo empregatício.
+   * @param dataLimite
+   * @param dataInicio
+   */
+  private getContribuicoesCNIS(dataLimite, dataInicio) {
 
-                          this.carenciasProgressivas = carencias;
+    this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
 
-                          // Quando o instituidor já está aposentado não é necessário relizar o calculo
-                          if (!this.isRegrasPensaoObitoInstituidorAposentado) {
+      this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+        rst,
+        dataLimite,
+        dataInicio);
 
-                            this.getVerificarOpcoesDeRegra();
+      this.iniciarCalculo();
 
-                            // console.log(this.contribuicaoPrimariaAtePec);
-                            // console.log(this.contribuicaoPrimaria);
-                          }
+    }).catch(error => {
+      console.error(error);
+    });
 
-                          // this.regrasDaReforma();
+  }
 
-                          this.isUpdating = false;
-                        });
+
+  private iniciarCalculo() {
+
+    if (this.isPlanejamento && this.listaValoresContribuidos.length > 0) {
+
+      this.getContribuicoesAdicionais();
+      this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+
+    }
+
+    this.calculo.tipoBeneficio = this.tipoBeneficio;
+
+    if (this.listaValoresContribuidos.length === 0 && !this.isRegrasPensaoObitoInstituidorAposentado) {
+
+      // Exibir MSG de erro e encerrar Cálculo.
+      this.nenhumaContrib = true;
+      this.isUpdating = false;
+
+    } else if (this.isRegrasPensaoObitoInstituidorAposentado) {
+      // pensão por morte instituidor aposentador
+      // this.regrasDaReforma();
+
+      const dib = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY').startOf('month');
+      this.Moeda.getByDateRange(dib, moment())
+        .then((moeda: Moeda[]) => {
+          this.regrasPensaoObitoInstituidorAposentado();
+        });
+
+    } else {
+
+      this.primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+      this.Moeda.getByDateRange(this.primeiraDataTabela, moment())
+        .then((moeda: Moeda[]) => {
+          this.moeda = moeda;
+          const dataReajustesAutomaticos = this.dataInicioBeneficio;
+
+          this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
+            .then(reajustes => {
+              this.reajustesAutomaticos = reajustes;
+
+              this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
+                .then(expectativas => {
+
+                  this.expectativasVida = expectativas;
+                  this.CarenciaProgressiva.getCarencias()
+                    .then(carencias => {
+
+                      this.carenciasProgressivas = carencias;
+
+                      // Quando o instituidor já está aposentado não é necessário relizar o calculo
+                      if (!this.isRegrasPensaoObitoInstituidorAposentado) {
+
+                        this.getVerificarOpcoesDeRegra();
+
+                        // console.log(this.contribuicaoPrimariaAtePec);
+                        // console.log(this.contribuicaoPrimaria);
+                      }
+
+                      // this.regrasDaReforma();
+
+                      this.isUpdating = false;
                     });
                 });
             });
+        });
 
-        }
-      });
+    }
   }
+
+
 
   /**
    * Verificar a aplição das regras conforme especie
@@ -318,7 +374,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
         this.calculo,
         this.pbcCompleto,
         this.getPbcCompletoIndices(),
-        this.divisorMinimo);
+        this.divisorMinimo,
+        this.dadosPassoaPassoOrigem);
 
       this.listaConclusaoAcesso = this.conclusoesFinais.createConclusoesFinais(
         this.moedaDib,

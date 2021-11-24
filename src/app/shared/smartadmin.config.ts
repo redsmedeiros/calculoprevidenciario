@@ -86,7 +86,7 @@ export const config: any = {
 
   ],
 
-  GOOGLE_API_KEY: 'AIzaSyDd8YW8k_J-Jkti-W4QNk5dL8O_5_2QUWY',
+  GOOGLE_API_KEY: '',
 
   sound_path: "assets/sound/",
   sound_on: true,

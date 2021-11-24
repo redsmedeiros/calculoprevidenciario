@@ -34,6 +34,7 @@ export class CalculoRgps extends Model {
     media_12_ultimos: '',
     carencia_apos_ec103: '',
     somar_contribuicao_secundaria: '',
+    id_contagem_tempo: '',
   };
 
   public id;
@@ -65,14 +66,7 @@ export class CalculoRgps extends Model {
   public media_12_ultimos;
   public carencia_apos_ec103;
   public somar_contribuicao_secundaria;
-
-  //  public actions = `
-  //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/edit' id='testee' class='action-edit'> <i title="Editar" class='fa fa-edit'></i> </a> 
-  //   <a href='#/rgps/rgps-calculos/${this.id_segurado}/${this.id}/destroy' class='action-delete'> <i title="Remover" class='fa fa-times'></i> </a> 
-  //   <a href='#/rgps/rgps-valores-contribuidos/${this.id_segurado}/${this.id}/' class='action-contribut'> <i title="Inserir Valores de Contribuição" class='fa fa-money '></i> </a> 
-  //   <a href='#/rgps/rgps-importacao-cnis/${this.id_segurado}/${this.id}/' class='action-import'> <i title="Importar Dados do CNIS" class='fa fa-arrow-down '></i> </a> 
-  //   <a href='#/rgps/rgps-resultados/${this.id_segurado}/${this.id}/' class='action-calc'> <i title="Ver Cálculo" class='fa fa-calculator'></i> </a>
-  // `;
+  public id_contagem_tempo;
 
   public actions = `
       <div class="btn-group">

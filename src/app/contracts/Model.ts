@@ -32,41 +32,57 @@ export abstract class Model {
   }
 
   public static allFromUser(userId) {
-   //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}/${userId}`);
   }
 
   public static store(data) {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.post(`${this.url}`, data);
   }
 
   public static find(id) {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.get(`${this.url}/${id}`);
   }
 
   public static getWithParameters(params) {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     if (params.length > 2) {
-      return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]+'&'+params[2]+'='+params[3]);
+      return axios.get(`${this.url}` + '?' + params[0] + '=' + params[1] + '&' + params[2] + '=' + params[3]);
     } else {
-      return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]);
+      return axios.get(`${this.url}` + '?' + params[0] + '=' + params[1]);
     }
   }
 
   public static getWithParameter(params) {
     //axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
-    return axios.get(`${this.url}`+'?'+params[0]+'='+params[1]);
+    return axios.get(`${this.url}` + '?' + params[0] + '=' + params[1]);
   }
 
   public static getWithParametersObj(params) {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
-    return axios.get(`${this.url}`, {params: params});
-  }  
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    return axios.get(`${this.url}`, { params: params });
+  }
+
+
+  public static getDataURL(urlController, id) {
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    return axios.get(`${this.url}/${urlController}/${id}`);
+  }
+
+  public static getDataParameterURL(urlController, params) {
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    return axios.get(`${this.url}/${urlController}?${params}`);
+  }
+
+  public static postDataURL(urlController, data) {
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    return axios.post(`${this.url}/${urlController}`, data);
+  }
 
   public update() {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     const data = {};
     for (const field in this.form) {
       if (this.hasOwnProperty(field)) {
@@ -76,8 +92,9 @@ export abstract class Model {
     return axios.patch(`${this.url}/${this.id}`, data);
   }
 
+
   public destroy() {
-   // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
+    // axios.defaults.headers.common['X-API-KEY'] = 'da91377af82e4445dbbf4f772cbea39206f9abe0';
     return axios.delete(`${this.url}/${this.id}`);
   }
 

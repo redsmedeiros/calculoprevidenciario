@@ -1,18 +1,18 @@
 <div id="content" *ngIf="!isUpdating" style="min-width: 895px">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row mb-3">
+    <div class="row mb-3"  [ngClass]="{ 'not-screen': (dadosPassoaPasso.origem === 'passo-a-passo') }">
       <div class="col-sm-12 col-md-12 col-lg-12">
         <h3 class="p-1 m-1 no-print" *ngIf="!isPlanejamento">
           Cálculo dos Benefícios do Regime Geral de Previdência Social
         </h3>
-        <!-- <h3 class="p-1 m-1 no-print" *ngIf="isPlanejamento">
-          RMI do Benefício Futuro
-        </h3> -->
       </div>
     </div>
     <div class="row mb-3">
-      <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="!isPlanejamento">
+      <div
+        class="col-sm-12 col-md-12 col-lg-12"
+        *ngIf="!isPlanejamento && !isPassoaPasso"
+      >
         <ol class="breadcrumb mb-4">
           <li class="breadcrumb-item">
             <a href="#/rgps/rgps-segurados"> Criar/Buscar Segurado</a>
@@ -110,34 +110,6 @@
     </div>
     <!-- row -->
     <div class="row">
-      <!-- <div id="navbar" class="nav-container sticky" *ngIf="navIsFixed">
-        <div class="col-md-12">
-          <button type="submit" (click)="listaSegurados()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-user"></i>
-            </span> Selecionar segurado
-          </button>
-
-          <button type="submit" (click)="infoCalculos()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-calculator"></i>
-            </span> Informações para o cálculo
-          </button>
-
-          <button type="submit" (click)="valoresContribuidos()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-dollar"></i>
-            </span> Valores de contribuição
-          </button>
-
-          <button type="submit" (click)="imprimirPagina()" class="btn btn-labeled btn-default margin-right-13">
-            <span class="btn-label">
-              <i class="fa fa-print"></i>
-            </span> Imprimir tudo
-          </button>
-        </div>
-      </div>  -->
-
       <!-- informações do segurado -->
       <div id="box-dados-segurado">
         <article class="col-sm-12 col-md-12 col-lg-12">
@@ -206,7 +178,6 @@
                 </ul> -->
                 <div id="printableSegurado" hidden>
                   <table class="table table-bordered table-hover">
-                    <!-- <caption><h2>Dados do Segurado</h2></caption> -->
                     <tr>
                       <td width="50%" style="text-align: right">
                         <b>Nome:</b>
@@ -402,8 +373,7 @@
           </sa-widget>
         </article>
       </div>
-
-      <article class="col-sm-12 col-md-12 col-lg-12" id="boxGrupoCalculos">
+      <article class="col-sm-12 col-md-12 col-lg-12 mt-2">
         <sa-widget
           [colorbutton]="false"
           [editbutton]="false"
@@ -419,9 +389,7 @@
             <span class="widget-icon">
               <i class="fa fa-table"></i>
             </span>
-            <!-- <h2>Grupo de Cálculos para os valores de contribuição</h2> -->
-            <h2 *ngIf="!isPlanejamento">Resultados</h2>
-            <h2 *ngIf="isPlanejamento">Resultados</h2>
+            <h2 >Resultados</h2>
           </header>
           <div>
             <div class="widget-body no-padding widget-body-custom hidden-dt">
@@ -439,15 +407,16 @@
                 </thead>
               </table>
 
-              <div
-                *ngFor="let calculo of calculosList"
-                style="margin-top: 2rem"
-              >
+              <div *ngFor="let calculo of calculosList">
                 <app-rgps-resultados-anterior88
                   [numResultado]="numResultados.mostrarCalculoAnterior88"
                   [calculo]="calculo"
                   [segurado]="segurado"
                   [isBlackHole]="calculo.isBlackHole"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                   *ngIf="calculo.mostrarCalculoAnterior88"
                 ></app-rgps-resultados-anterior88>
 
@@ -457,6 +426,10 @@
                   [segurado]="segurado"
                   [isBlackHole]="calculo.isBlackHole"
                   [tipoCalculo]="'91_98'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                   *ngIf="calculo.mostrarCalculo88_91"
                 ></app-rgps-resultados-entre88e91>
 
@@ -465,6 +438,10 @@
                   [calculo]="calculo"
                   [segurado]="segurado"
                   [tipoCalculo]="'91_98'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                   *ngIf="calculo.mostrarCalculo91_98"
                 ></app-rgps-resultados-entre91e98>
 
@@ -473,6 +450,10 @@
                   [calculo]="calculo"
                   [segurado]="segurado"
                   [tipoCalculo]="'98_99'"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                   *ngIf="calculo.mostrarCalculo98_99"
                 ></app-rgps-resultados-entre91e98>
 
@@ -480,6 +461,10 @@
                   [numResultado]="numResultados.mostrarCalculoApos99"
                   [calculo]="calculo"
                   [segurado]="segurado"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                   *ngIf="calculo.mostrarCalculoApos99"
                 >
                 </app-rgps-resultados-apos99>
@@ -495,6 +480,10 @@
                     planejamentoContribuicoesAdicionais
                   "
                   (planejamentoResultEvent)="setStepPlanejamento($event)"
+                  [dadosPassoaPasso]="dadosPassoaPasso"
+                  [listaValoresContribuidosPeriodosCT]="
+                    listaValoresContribuidosPeriodosCT
+                  "
                 >
                 </app-rgps-resultados-apos-pec103>
               </div>
@@ -502,13 +491,6 @@
           </div>
         </sa-widget>
       </article>
-
-      <!-- Planejamento -->
-      <!-- <app-rgps-planejamento-index
-        *ngIf="isUpdating"
-        [calculo]="calculosList[0]"
-        [segurado]="segurado"
-      ></app-rgps-planejamento-index> -->
 
       <!-- Planejamento  -->
       <article

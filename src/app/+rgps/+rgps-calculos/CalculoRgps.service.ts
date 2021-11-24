@@ -40,4 +40,27 @@ export class CalculoRgpsService extends ControllerService {
         });
     });
   }
+
+
+  
+  // find(id) {
+  //   return new Promise((resolve, reject) => {
+  //     if (this.list !== undefined) {
+  //       const data = this.list.find(model => {
+  //         return +model.id === +id;
+  //       });
+  //       if (data) {
+  //         resolve(data);
+  //         return;
+  //       }
+  //     }
+     
+
+  //     this.getCalculoById(id)
+  //       .then(() => {
+  //         resolve(this.list[0]);
+  //       })
+  //       .catch(error => reject(error.response.data));
+  //   });
+  // }
 }

@@ -28,6 +28,7 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
   @Input() segurado;
   @Input() isUpdating;
+  @Input() dadosPassoaPasso;
   @Output() eventCountSeguradoErros = new EventEmitter();
 
 
@@ -54,31 +55,77 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    let changedsegurado = changes['segurado'];
-    let changedisUpdating = changes['isUpdating'];
-
-    // console.log(changedsegurado);
-    // console.log(changedisUpdating);
+    const changedsegurado = changes['segurado'];
+    const changedisUpdating = changes['isUpdating'];
 
     if (!changedisUpdating.currentValue) {
-      this.setSegurado(this.segurado)
+
+      this.setFormSegurado(this.segurado);
+
+      if (this.dadosPassoaPasso !== undefined
+        && this.dadosPassoaPasso.origem === 'passo-a-passo'
+        && this.dadosPassoaPasso.type === 'seguradoExistente'
+      ) {
+
+        this.getSegurado(this.segurado)
+
+      } else {
+
+        this.formData.id_documento = '3';
+
+      }
+
     }
 
   }
 
 
-  private setSegurado(segurado) {
+  private setFormSegurado(segurado) {
+
     this.formData.nome = segurado.nome;
-    this.formData.id_documento = '3';
-    this.formData.numero_documento = segurado.numero_documento;
+    this.formData.id_documento = (segurado.id_documento !== 'undefined') ? segurado.id_documento : '';
+    this.formData.numero_documento = (segurado.numero_documento !== 'undefined') ? segurado.numero_documento : '';
     this.formData.data_nascimento = segurado.data_nascimento;
-    this.formData.sexo = '';
+    this.formData.sexo = (segurado.sexo !== undefined) ? segurado.sexo : '';
+    this.formData.data_filiacao = (segurado.data_filiacao !== undefined) ? segurado.data_filiacao : '';
     this.formData.funcao = segurado.funcao;
-    this.formData.user_id = segurado.userId;
+    this.formData.user_id = (segurado.userId !== 'undefined') ? segurado.userId : segurado.user_id;
+
+    if (typeof segurado.id !== 'undefined') {
+      this.formData.id = segurado.id;
+    }
+
+  }
+
+  private getSegurado(seguradoSelecionado) {
+
+    this.Segurado.find(seguradoSelecionado.id)
+      .then(segurado => {
+        this.segurado = segurado;
+        this.formData = this.segurado;
+      });
+
+  }
+
+
+  public updateSeguradoImportador(userId) {
+
+    this.formData.user_id = userId;
+    return this.Segurado
+      .update(this.segurado)
+      .then((modelSeg: SeguradoModel) => {
+        return modelSeg.id
+      })
+      .catch(errors => this.errors.add(errors));
+
   }
 
 
   public createSeguradoImportador(userId) {
+
+     this.formData.user_id = userId;
+     this.formData.funcao = 'contagem';
+
     return this.Segurado.save(this.formData)
       .then((model: SeguradoModel) => {
         return model.id;
@@ -93,32 +140,20 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     this.countSeguradoErros = 0;
     this.errors.clear();
 
-    if (this.formData.nome == undefined || this.formData.nome == '') {
+    if (this.formData.nome === undefined || this.formData.nome === '') {
       this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
       this.countSeguradoErros++;
     }
 
-    if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
-      this.errors.add({ 'id_documento': ['O Tipo de Documento é obrigatório.'] });
-      this.countSeguradoErros++;
-    }
 
-    if (this.formData.numero_documento == undefined || this.formData.id_documento == ''
-      || !this.formData.numero_documento || this.formData.numero_documento == '') {
-      this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
-      this.countSeguradoErros++;
-    } else {
-      let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
-      let id = this.formData.id_documento.toString();
-    }
 
-    if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
+    if (this.formData.data_nascimento === undefined || this.formData.data_nascimento === '') {
       this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
       this.countSeguradoErros++;
     } else {
 
-      let dateParts = this.formData.data_nascimento.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      const dateParts = this.formData.data_nascimento.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
       if (isNaN(date.getTime())) {
         this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
@@ -127,12 +162,12 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
     }
 
 
-    if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
+    if (this.formData.data_filiacao === undefined || this.formData.data_filiacao === '') {
       this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
       this.countSeguradoErros++;
     } else {
-      let dateParts = this.formData.data_filiacao.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      const dateParts = this.formData.data_filiacao.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
 
       if (isNaN(date.getTime())) {
         this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
@@ -140,20 +175,34 @@ export class ImportadorCnisSeguradosComponent implements OnInit, OnChanges {
       }
     }
 
-    if (this.formData.sexo == undefined || this.formData.sexo == '') {
+    if (this.formData.sexo === undefined || this.formData.sexo === '') {
       this.errors.add({ 'sexo': ['O campo sexo é obrigatório.'] });
       this.countSeguradoErros++;
     }
 
+    // if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
+    //   this.errors.add({ 'id_documento': ['O Tipo de Documento é obrigatório.'] });
+    //   this.countSeguradoErros++;
+    // }
+
+    // if (this.formData.numero_documento == undefined || this.formData.id_documento == ''
+    //   || !this.formData.numero_documento || this.formData.numero_documento == '') {
+    //   this.errors.add({ 'numero_documento': ['O Número do Documento é obrigatório.'] });
+    //   this.countSeguradoErros++;
+    // } else {
+    //   let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
+    //   let id = this.formData.id_documento.toString();
+    // }
+
     this.eventCountSeguradoErros.emit(this.countSeguradoErros);
-    return this.countSeguradoErros;
+    return { count: this.countSeguradoErros, erros: this.errors };
   }
 
 
   changeDocumentMask() {
     this.errors.clear('id_documento');
     this.errors.clear('numero_documento');
-    let id = this.formData.id_documento.toString();
+    const id = this.formData.id_documento.toString();
   }
 
   getDocumentType(id_documento) {

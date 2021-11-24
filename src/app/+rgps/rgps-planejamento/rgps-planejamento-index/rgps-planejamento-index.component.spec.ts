@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RgpsPlanejamentoIndexComponent } from './rgps-planejamento-index.component';
@@ -8,7 +9,8 @@ describe('RgpsPlanejamentoIndexComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RgpsPlanejamentoIndexComponent ]
+      declarations: [ RgpsPlanejamentoIndexComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

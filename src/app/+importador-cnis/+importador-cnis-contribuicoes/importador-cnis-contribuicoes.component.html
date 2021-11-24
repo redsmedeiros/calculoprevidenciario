@@ -1,13 +1,800 @@
-<div class="row" *ngIf="!isUpdating">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="modal-dialog modal-full">
+  <div class="modal-content">
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="matrizHasValues">
+      <dl class="padding-5">
+        <dt><b>Empresa:</b> {{ vinculo.empresa }}</dt>
+        <dt>
+          <b>Período:</b> {{ vinculo.data_inicio }} {{ vinculo.data_termino }}
+        </dt>
+      </dl>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Contribuições</h3>
-      </div>
-      <div class="panel-body">
-        
-      </div>
+      <dl class="well padding-5">
+        <form class="form-inline">
+          <fieldset>
+            <div
+              class="form-group has-feedback"
+              [ngClass]="{ 'has-error': errors.has('inicioPeriodo') }"
+            >
+              <label class="col-md-2 control-label" for="select-1">De*:</label>
+              <div class="col-md-2">
+                <input
+                  class="form-control"
+                  placeholder="MM/AAAA"
+                  [(ngModel)]="inicioPeriodo"
+                  name="inicioPeriodo"
+                  (keyup)="moveNext($event, 7, 'finalPeriodoInput')"
+                  id="inicioPeriodoInput"
+                  [textMask]="{ mask: dateMask }"
+                  type="text"
+                  (change)="errors.clear('inicioPeriodo')"
+                  tooltip="Início do período"
+                />
+              </div>
+            </div>
+
+            <div
+              class="form-group"
+              [ngClass]="{ 'has-error': errors.has('finalPeriodo') }"
+            >
+              <label class="col-md-2 control-label" for="select-1">Até*:</label>
+              <div class="col-md-2">
+                <input
+                  class="form-control"
+                  placeholder="MM/AAAA"
+                  [(ngModel)]="finalPeriodo"
+                  name="finalPeriodo"
+                  (keyup)="moveNext($event, 7, 'valorInput')"
+                  id="finalPeriodoInput"
+                  [textMask]="{ mask: dateMask }"
+                  type="text"
+                  (change)="errors.clear('finalPeriodo')"
+                  tooltip="Final do período"
+                />
+              </div>
+            </div>
+
+            <div
+              class="form-group"
+              [ngClass]="{ 'has-error': errors.has('salarioContribuicao') }"
+            >
+              <label class="col-md-2 control-label" for="select-1"
+                >Valor*:</label
+              >
+              <div class="col-md-2">
+                <input
+                  class="form-control"
+                  currencyMask
+                  maxlength="14"
+                  [(ngModel)]="salarioContribuicao"
+                  name="salarioContribuicao"
+                  id="valorInput"
+                  (change)="errors.clear('salarioContribuicao')"
+                  (keyup)="insertSCenter($event)"
+                  type="text"
+                  tooltip="Valor do Salário de Contribuição"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              (click)="preencherComValor()"
+              class="btn btn-labeled btn-primary"
+              data-placement="bottom"
+              tooltip="Inserir intervalo dos Salários de Contribuição"
+            >
+              <span class="btn-label">
+                <i class="fa fa-calendar"></i>
+              </span>
+              Inserir
+            </button>
+          </fieldset>
+        </form>
+      </dl>
+    </article>
+    <article class="col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <sa-widget
+        [colorbutton]="false"
+        [editbutton]="false"
+        [deletebutton]="false"
+        class="mb-1"
+      >
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span>
+          <h2>Valores de Contribuição</h2>
+        </header>
+        <div style="padding-top: 10px">
+          <div
+            class="widget-body widget-body-custom hidden-dt no-padding"
+            *ngIf="matrizHasValues"
+          >
+            <sa-datatable
+              paginationLength="false"
+              [options]="matrixTableOptions"
+              tableClass="table table-striped table-condensed-custom table-bordered table-hover no-padding"
+              width="100%"
+            >
+              <thead>
+                <tr>
+                  <th style="text-align: center; width: 62px">Ano</th>
+                  <th style="text-align: center; width: 80px">Jan</th>
+                  <th style="text-align: center; width: 80px">Fev</th>
+                  <th style="text-align: center; width: 80px">Mar</th>
+                  <th style="text-align: center; width: 80px">Abr</th>
+                  <th style="text-align: center; width: 80px">Mai</th>
+                  <th style="text-align: center; width: 80px">Jun</th>
+                  <th style="text-align: center; width: 80px">Jul</th>
+                  <th style="text-align: center; width: 80px">Ago</th>
+                  <th style="text-align: center; width: 80px">Set</th>
+                  <th style="text-align: center; width: 80px">Out</th>
+                  <th style="text-align: center; width: 80px">Nov</th>
+                  <th style="text-align: center; width: 80px">Dez</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of matriz; index as i">
+                  <td style="text-align: center">
+                    <i
+                      class="fa fa-copy"
+                      (click)="copiarPeriodo(data.ano)"
+                      data-placement="bottom"
+                      tooltip="Selecionar este ano"
+                      >&nbsp;&nbsp;</i
+                    >{{ data.ano }}&nbsp;&nbsp;
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[0] == '0,00',
+                      'bg-color-yellow': data.msc[0] == 1
+                    }"
+                  >
+                    <input
+                      *ngIf="data.valores[0] != ''"
+                      maxlength="14"
+                      id="01-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[0] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 0);
+                        getClassSalarioContribuicao(
+                          '01',
+                          data.ano,
+                          data.valores[0],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      currencyMask
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[1] == '0,00',
+                      'bg-color-yellow': data.msc[1] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="02-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[1] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 1);
+                        getClassSalarioContribuicao(
+                          '02',
+                          data.ano,
+                          data.valores[1],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[1] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[2] == '0,00',
+                      'bg-color-yellow': data.msc[2] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="03-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[2] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 2);
+                        getClassSalarioContribuicao(
+                          '03',
+                          data.ano,
+                          data.valores[2],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[2] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[3] == '0,00',
+                      'bg-color-yellow': data.msc[3] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="04-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[3] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 3);
+                        getClassSalarioContribuicao(
+                          '04',
+                          data.ano,
+                          data.valores[3],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[3] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[4] == '0,00',
+                      'bg-color-yellow': data.msc[4] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="05-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[4] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 4);
+                        getClassSalarioContribuicao(
+                          '05',
+                          data.ano,
+                          data.valores[4],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[4] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[5] == '0,00',
+                      'bg-color-yellow': data.msc[5] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="06-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[5] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 5);
+                        getClassSalarioContribuicao(
+                          '06',
+                          data.ano,
+                          data.valores[5],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[5] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[6] == '0,00',
+                      'bg-color-yellow': data.msc[6] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="07-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[6] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 6);
+                        getClassSalarioContribuicao(
+                          '07',
+                          data.ano,
+                          data.valores[6],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[6] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[7] == '0,00',
+                      'bg-color-yellow': data.msc[7] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="08-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[7] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 7);
+                        getClassSalarioContribuicao(
+                          '08',
+                          data.ano,
+                          data.valores[7],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[7] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[8] == '0,00',
+                      'bg-color-yellow': data.msc[8] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="09-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[8] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 8);
+                        getClassSalarioContribuicao(
+                          '09',
+                          data.ano,
+                          data.valores[8],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[8] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[9] == '0,00',
+                      'bg-color-yellow': data.msc[9] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="10-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[9] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 9);
+                        getClassSalarioContribuicao(
+                          '10',
+                          data.ano,
+                          data.valores[9],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[9] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[10] == '0,00',
+                      'bg-color-yellow': data.msc[10] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="11-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[10] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 10);
+                        getClassSalarioContribuicao(
+                          '11',
+                          data.ano,
+                          data.valores[10],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[10] != ''"
+                    />
+                  </td>
+                  <td
+                    class="matriz-line"
+                    [ngClass]="{
+                      'bg-color-red': data.valores[11] == '0,00',
+                      'bg-color-yellow': data.msc[11] == 1
+                    }"
+                  >
+                    <input
+                      maxlength="14"
+                      currencyMask
+                      id="12-{{ data.ano }}"
+                      type="text"
+                      value="{{ data.valores[11] }}"
+                      (focusout)="
+                        changedGridContribuicoes(data.ano, $event, 11);
+                        getClassSalarioContribuicao(
+                          '12',
+                          data.ano,
+                          data.valores[11],
+                          i
+                        )
+                      "
+                      class="matriz-input"
+                      *ngIf="data.valores[11] != ''"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </sa-datatable>
+          </div>
+        </div>
+      </sa-widget>
+      <span class="pull-left py-2">(*) Preenchimento Obrigatório.</span>
+    </article>
+    
+    <div class="modal-footer">
+      
+      <button
+        type="button"
+        title="Fechar"
+        class="btn btn-danger pull-left"
+        (click)="hideContribuicoes()"
+      >
+        Fechar
+      </button>
+      <!-- <div class="btn-group"></div> -->
+
+      <span>
+        <popover-content
+          #popDesfazerLeg
+          title="Desfazer"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a últimas alterações de preencimento autómatico de teto e/ou
+            mínimo.
+          </div>
+        </popover-content>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="salarioTeto"
+          *ngIf="isSC_mm_ajustar_btn"
+          (click)="desfazerMatrizSC()"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popDesfazerLeg"
+        >
+          <i class="fa fa-money"></i> Desfazer Últimas alterações
+        </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCT
+          title="Limitar SC ao Teto SC"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Limitar SC ao Teto SC na competência em que o valor é zero ou menor que o mínimo.
+          </div>
+        </popover-content>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="salarioTeto"
+          *ngIf="isSC_mm_ajustar_btn"
+          (click)="preencherComSalario('t')"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCT"
+        >
+          <i class="fa fa-money"></i> Limitar SC ao Teto SC
+        </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCM
+          title="Limitar SC ao Salário Mínimo"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Limitar SC ao Salário Mínimo na competência em que o valor é zero ou menor que o mínimo.
+          </div>
+        </popover-content>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="salarioMinimo"
+          *ngIf="isSC_mm_ajustar_btn"
+          (click)="preencherComSalario('m')"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCM"
+        >
+          <i class="fa fa-money"></i> Limitar SC ao Salário Mínimo
+        </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popOpcoesDescarteTC
+          title="Editar Tempo e Carência"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
+        <button
+          *ngIf="isSC_mm_ajustar_btn"
+          type="button"
+          class="btn btn-warning"
+          (click)="showContribuicoesCheck()"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popOpcoesDescarteTC"
+        >
+          <i class="fa fa-list fa-1-7x"></i> Editar Tempo e Carência
+        </button>
+      </span>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="salvar"
+        (click)="salvarContribuicoes()"
+      >
+        <i class="fa fa-save"></i> Salvar
+      </button>
     </div>
   </div>
+  <!-- /.modal-content -->
 </div>
+<!-- /.modal-dialog -->
+
+<!-- modal - form check contribuicoes -->
+<div
+  bsModal
+  #contribuicoesCheck="bs-modal"
+  [config]="{ backdrop: 'Enable', ignoreBackdropClick: 'Enable' }"
+  class="modal fade"
+  id="contribuicoesCheck"
+  tabindex="-1"
+  aria-labelledby="modalcontribuicoesCheck"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-md mt-8">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <h6 class="text-justify">
+            Neste período existem competências com salário de contribuição abaixo do mínimo. 
+            Selecione as opções abaixo para elaboração do cálculo, 
+            considerando ou não o período como tempo de contribuição e carência:
+          </h6>
+          <fieldset>
+            <div class="form-group">
+              <label class="col-md-7 control-label"
+                >Considerar como Tempo de Contribuição:*</label
+              >
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_considerar_tempo"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_considerar_tempo')"
+                    type="radio"
+                    name="sc_mm_considerar_tempo"
+                    [value]="1"
+                  />
+                  Sim
+                </label>
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_considerar_tempo"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_considerar_tempo')"
+                    type="radio"
+                    name="sc_mm_considerar_tempo"
+                    [value]="0"
+                  />
+                  Não
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_considerar_tempo')"
+                      class="text-danger"
+                      >{{ errors.get("sc_mm_considerar_tempo") | i18n }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-7 control-label">Considerar como Carência:*</label>
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_considerar_carencia"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_considerar_carencia')"
+                    type="radio"
+                    name="sc_mm_considerar_carencia"
+                    [value]="1"
+                  />
+                  Sim
+                </label>
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_considerar_carencia"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_considerar_carencia')"
+                    type="radio"
+                    name="sc_mm_considerar_carencia"
+                    [value]="0"
+                  />
+                  Não
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_considerar_carencia')"
+                      class="text-danger"
+                      >{{
+                        errors.get("sc_mm_considerar_carencia") | i18n
+                      }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+              <label class="col-md-7 control-label"
+                >Limitar no Valor do Salário Mínimo:*</label
+              >
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="1"
+                  />
+                  Sim
+                </label>
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="0"
+                  />
+                  Não
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_ajustar')"
+                      class="text-danger"
+                      >{{ errors.get("sc_mm_ajustar") | i18n }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+              <label class="col-md-7 control-label"
+                >Limitar no Valor do Salário Mínimo:*</label
+              >
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="1"
+                  />
+                </label>
+              </div>
+              <label class="col-md-7 control-label"
+              > Não Limitar no Valor do Salário Mínimo:*</label
+            >
+            <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="0"
+                  />
+                 
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_ajustar')"
+                      class="text-danger"
+                      >{{ errors.get("sc_mm_ajustar") | i18n }}</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <span class="pull-left py-1">(*) Preenchimento Obrigatório.</span>
+      </div>
+      
+      <div class="modal-footer">
+        
+        <button
+          type="button"
+          class="btn btn-danger pull-left"
+          (click)="hideContribuicoesCheck()"
+        >
+          Fechar
+        </button>
+        
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="salvar-check"
+          (click)="setCheckInformacoes()"
+        >
+          <i class="fa fa-save"></i> Salvar
+        </button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+</div>
+<!-- modal - form check contribuicoes -->

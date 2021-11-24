@@ -1,22 +1,22 @@
 import { Component, OnInit, HostListener, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FadeInTop } from "../../shared/animations/fade-in-top.decorator";
+import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { CalculoRgps as CalculoModel } from './CalculoRgps.model';
 import { CalculoRgpsService } from './CalculoRgps.service';
 import { ErrorService } from '../../services/error.service';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { DOCUMENT } from '@angular/platform-browser';
-import { WINDOW } from "./window.service";
+import { WINDOW } from './window.service';
 import { environment } from '../../../environments/environment';
-import { Auth } from "../../services/Auth/Auth.service";
-import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import swal from 'sweetalert2';
 import * as moment from 'moment';
 
 @FadeInTop()
 @Component({
-  selector: 'sa-datatables-showcase',
+  selector: 'app-rgps-calculos-component',
   templateUrl: './rgps-calculos.component.html',
   styleUrls: ['./rgps-calculos-component.css'],
   providers: [
@@ -104,7 +104,7 @@ export class RgpsCalculosComponent implements OnInit {
       .then(segurado => {
         this.segurado = segurado;
         if (localStorage.getItem('user_id') != this.segurado.user_id) {
-          //redirecionar para pagina de segurados
+          // redirecionar para pagina de segurados
           swal({
             type: 'error',
             title: 'Erro',

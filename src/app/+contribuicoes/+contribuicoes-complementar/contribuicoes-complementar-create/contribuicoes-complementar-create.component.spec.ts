@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContribuicoesComplementarCreateComponent } from './contribuicoes-complementar-create.component';
@@ -8,7 +9,8 @@ describe('ContribuicoesComplementarCreateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContribuicoesComplementarCreateComponent ]
+      declarations: [ ContribuicoesComplementarCreateComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

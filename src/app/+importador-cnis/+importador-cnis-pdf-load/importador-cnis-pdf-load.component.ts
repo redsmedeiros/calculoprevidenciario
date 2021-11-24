@@ -39,6 +39,12 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
   @Output() infoVinculos = new EventEmitter();
   @ViewChild('cnisFileInput') fileInput: ElementRef;
 
+  private moedaImportAmerika = false;
+  private regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
+  private regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
+  private regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g;
+
+
   constructor() { }
 
   ngOnInit() { }
@@ -202,6 +208,27 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
     return periodo;
   }
 
+  private checkFormatoMoedaSC(text_vinculo) {
+
+    if (this.isExits(text_vinculo)) {
+
+      this.moedaImportAmerika = (/(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2})($|\s|\n|\t|\r)/gi).test(text_vinculo);
+
+      if (this.moedaImportAmerika) {
+
+        this.regexpEmpregado = /(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\,?\d{0,3}\,?\d{0,3}\.\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g;
+        this.regexpFacultativoTextArea = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+        this.regexpFacultativoPdf = /(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\,?\d{1,3}\,?\d{0,3}\.\d{2})/g;
+
+      }
+
+    }
+
+    return this.moedaImportAmerika;
+
+  }
+
+
 
   /**
    * Selecionar as contribuições do texto completo do vinculo
@@ -212,15 +239,23 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
     let contribuicoes = null;
 
-    if ((text_vinculo.search(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g) > 0) && (text_vinculo.search(/(\s)(Empregado|Benefício)(\s)/) > 0 || text_vinculo.search(/(\s)(EMPREGADO DOMÉSTICO)(\s)/) < 0)) {
-      contribuicoes = text_vinculo.match(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g);
+    this.checkFormatoMoedaSC(text_vinculo);
+
+    if ((text_vinculo.search(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g) > 0)
+      && (text_vinculo.search(/(\s)(Empregado|Benefício)(\s)/) > 0 || text_vinculo.search(/(\s)(EMPREGADO DOMÉSTICO)(\s)/) < 0)) {
+      // contribuicoes = text_vinculo.match(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g);
+      contribuicoes = text_vinculo.match(this.regexpEmpregado);
     }
-    if ((text_vinculo.search(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g) > 0) && text_vinculo.search(/(Individual|Facultativo)|(Empresário \/ Empregador)|(Autônomo)|(CONTRIBUINTE INDIVIDUAL)|(EMPREGADO DOMÉSTICO)/) > 0) {
-      contribuicoes = text_vinculo.match(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g);
+    if ((text_vinculo.search(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g) > 0)
+      && text_vinculo.search(/(Individual|Facultativo)|(Empresário \/ Empregador)|(Autônomo)|(CONTRIBUINTE INDIVIDUAL)|(EMPREGADO DOMÉSTICO)/) > 0) {
+      // contribuicoes = text_vinculo.match(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g);
+      contribuicoes = text_vinculo.match(this.regexpFacultativoPdf);
     }
 
-    if ((!contribuicoes && text_vinculo.search(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g) > 0)) {
-      contribuicoes = text_vinculo.match(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g);
+    if ((!contribuicoes &&
+      text_vinculo.search(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g) > 0)) {
+      // contribuicoes = text_vinculo.match(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g);
+      contribuicoes = text_vinculo.match(this.regexpEmpregado);
     }
 
     return contribuicoes;
@@ -242,7 +277,10 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
       indicador: null,
       periodo: null,
       contribuicoes: null,
-      index: null
+      index: null,
+      sc_mm_ajustar: null,
+      sc_mm_considerar_tempo: null,
+      sc_mm_considerar_carencia: null,
     }
 
     vinculo.cnpj = this.selecionarDadosCNPJ(text_vinculo);
@@ -271,19 +309,35 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
     if (contribuicoes && contribuicoes != null) {
 
       for (let i = 0; i < contribuicoes.length; i++) {
+
         contribuicoes[i] = contribuicoes[i].trim();
         arrayText = contribuicoes[i].replace(/\n/i, ' ').trim().split(/\s/i);
-        num_col = (typeof arrayText[num_col] != "undefined" && arrayText[num_col].trim() != null && arrayText[num_col].search(/(\d{2}\/\d{2}\/\d{4})|(\d{2}\/\d{4})/) > 0) ? num_col : arrayText.length - 1;
+        num_col = (typeof arrayText[num_col] != 'undefined' &&
+          arrayText[num_col].trim() != null &&
+          arrayText[num_col].search(/(\d{2}\/\d{2}\/\d{4})|(\d{2}\/\d{4})/) > 0) ? num_col : arrayText.length - 1;
+
+        const converterValorAmerikaToBR = (valorString) => {
+
+          valorString = valorString.trim();
+
+          if (!this.moedaImportAmerika) {
+            return valorString;
+          }
+
+          return (parseFloat(valorString.replace(/\,/g, ''))).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
+        }
+
         arrayOrganizadoNew.push({
-          competencia: arrayText[0].trim(),
-          contrib: arrayText[num_col].trim()
+          cp: arrayText[0].trim(),
+          sc: converterValorAmerikaToBR(arrayText[num_col]),
+          msc: 0,
         });
+
       }
     }
 
     return arrayOrganizadoNew;
   }
-
 
   /**
    * aplicar a regra que define qual valor deve ser considerado como contribuição no array de contribuições
@@ -426,7 +480,7 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
    */
   public dropped(event: UploadEvent) {
 
-    let files = event.files;
+    const files = event.files;
 
     if (files.length > 1) {
       swal('Erro', 'Arraste apenas um arquivo', 'error');
@@ -559,11 +613,11 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
 
       origemVinculo = text_vinculo.substring(inicio_string, fim_string).trim();
 
-    }else if (text_vinculo.search(/(RECOLHIMENTO)/) > 0) {
+    } else if (text_vinculo.search(/(RECOLHIMENTO)/) > 0) {
 
       origemVinculo = 'Recolhimento';
 
-    }else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
+    } else if (text_vinculo.search(/(Contribuinte\sIndividual|CONTRIBUINTE\sINDIVIDUAL)/) > 0) {
 
       origemVinculo = 'Contribuinte Individual';
 
@@ -602,7 +656,16 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
    * @param text_vinculo 
    */
   private selecionarDadosCNPJ(text_vinculo) {
-    return (text_vinculo.search(/(\d{2}.\d{3}.\d{3}\/\d{4}-\d{2})/) > 0) ? text_vinculo.match(/(\d{2}.\d{3}.\d{3}\/\d{4}-\d{2})/)[0].trim() : null;
+    return (text_vinculo.search(/(\d{2}.\d{3}.\d{3}\/\d{4}-\d{2})/) > 0) ?
+      text_vinculo.match(/(\d{2}.\d{3}.\d{3}\/\d{4}-\d{2})/)[0].trim() : null;
+  }
+
+
+  private isExits(value) {
+    return (typeof value !== 'undefined' &&
+      value != null && value !== 'null' &&
+      value !== undefined && value !== '')
+      ? true : false;
   }
 
   /**

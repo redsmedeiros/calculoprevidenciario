@@ -1,39 +1,39 @@
 
-import { Component, OnInit, HostListener, Inject } from '@angular/core';
+import { Component, OnInit, HostListener, Inject, Input, SimpleChange, OnChanges } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
 import { SeguradoService } from '../+rgps-segurados/SeguradoRgps.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeguradoRgps as SeguradoModel } from '../+rgps-segurados/SeguradoRgps.model';
 import { CalculoRgps as CalculoModel } from '../+rgps-calculos/CalculoRgps.model';
-import { MoedaService } from '../../services/Moeda.service';
-import { IndiceInps } from './IndiceInps.model';
-import { IndiceInpsService } from './IndiceInps.service';
-import { SalarioMinimoMaximo } from './SalarioMinimoMaximo.model';
-import { SalarioMinimoMaximoService } from './SalarioMinimoMaximo.service';
-import { CarenciaProgressiva } from './CarenciaProgressiva.model';
-import { CarenciaProgressivaService } from './CarenciaProgressiva.service';
-import { ReajusteAutomatico } from './ReajusteAutomatico.model';
-import { ReajusteAutomaticoService } from './ReajusteAutomatico.service';
-import { ExpectativaVida } from './ExpectativaVida.model';
-import { ExpectativaVidaService } from './ExpectativaVida.service';
-import { Moeda } from '../../services/Moeda.model';
 import { CalculoRgpsService } from '../+rgps-calculos/CalculoRgps.service';
 import { ValorContribuidoService } from '../+rgps-valores-contribuidos/ValorContribuido.service';
 import { ValorContribuido } from '../+rgps-valores-contribuidos/ValorContribuido.model';
 import { RgpsPlanejamentoService } from 'app/+rgps/rgps-planejamento/rgps-planejamento.service';
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
+import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
 import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from '../+rgps-calculos/window.service';
+import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
+import { DefinicaoSalariosContribuicao } from 'app/+rgps/+rgps-resultados/shared/definicao-salarios-contribuicao'
+
 
 @FadeInTop()
 @Component({
-  selector: 'sa-datatables-showcase',
+  selector: 'app-rgps-resultados-component',
   templateUrl: './rgps-resultados.component.html',
   styleUrls: ['./rgps-resultados.component.css']
 })
-export class RgpsResultadosComponent implements OnInit {
+export class RgpsResultadosComponent implements OnInit, OnChanges {
+
+
+  @Input() dadosPassoaPasso;
+  @Input() idSeguradoSelecionado;
+  @Input() idCalculoSelecionadoCT;
+  @Input() exportResultContagemTempo;
+  @Input() idCalculoSelecionadoRMI;
 
   public styleTheme = 'style-0';
 
@@ -48,78 +48,7 @@ export class RgpsResultadosComponent implements OnInit {
   public idsCalculo;
   public calculosList = [];
   public erroAnterior88;
-  public currencyList = [
-    {
-      'startDate': '1000-01-01',
-      'endDate': '1942-10-31',
-      'acronimo': 'MR$',
-      'nome': 'Mil-Réis',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1942-11-01',
-      'endDate': '1967-02-12',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1967-02-13',
-      'endDate': '1970-05-15',
-      'acronimo': 'NCR$',
-      'nome': 'Cruzeiro Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1970-05-15',
-      'endDate': '1986-02-28',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1986-03-01',
-      'endDate': '1988-12-31',
-      'acronimo': 'CZ$',
-      'nome': 'Cruzado',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1989-01-01',
-      'endDate': '1990-03-15',
-      'acronimo': 'NCZ$',
-      'nome': 'Cruzado Novo',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1990-03-16',
-      'endDate': '1993-07-31',
-      'acronimo': 'Cr$',
-      'nome': 'Cruzeiro',
-      'indiceCorrecaoAnterior': 1
-    },
-    {
-      'startDate': '1993-08-01',
-      'endDate': '1994-02-28',
-      'acronimo': 'CR$',
-      'nome': 'Cruzeiro Real',
-      'indiceCorrecaoAnterior': 1000
-    },
-    {
-      'startDate': '1994-03-01',
-      'endDate': '1994-06-30',
-      'acronimo': 'URV',
-      'nome': 'Unidade Real de Valor',
-      'indiceCorrecaoAnterior': 637.639978027344
-    },
-    {
-      'startDate': '1994-07-01',
-      'endDate': '9999-12-31',
-      'acronimo': 'R$',
-      'nome': 'Real',
-      'indiceCorrecaoAnterior': 1
-    }
-  ];
+  public currencyList = DefinicaoMoeda.currencyList;
 
   public segurado: any = {};
   public calculo: any = {};
@@ -132,6 +61,8 @@ export class RgpsResultadosComponent implements OnInit {
   public dataFiliacao;
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
+  public listaPeriodosCT = [];
+  public listaValoresContribuidosPeriodosCT = [];
   public tipoBeneficio;
 
   // Variaveis de controle do template
@@ -263,6 +194,13 @@ export class RgpsResultadosComponent implements OnInit {
 
   public contribuicaoPrimariaAtual = { anos: 0, meses: 0, dias: 0 };
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
+  public numResultados = {
+    'mostrarCalculoAnterior88': 0,
+    'mostrarCalculo91_98': 0,
+    'mostrarCalculo98_99': 0,
+    'mostrarCalculoApos99': 0,
+    'mostrarCalculoApos19': 0
+  };
 
   // Datas
   public dataLei9032 = moment('1995-04-28');
@@ -276,6 +214,7 @@ export class RgpsResultadosComponent implements OnInit {
 
   public planejamento;
   public isPlanejamento = false;
+  public isPassoaPasso = false;
   public planejamentoContribuicoesAdicionais = [];
   // public objConclusoes = {
   //   aposEc103: { rmi: 0, soma: 0 },
@@ -297,31 +236,85 @@ export class RgpsResultadosComponent implements OnInit {
     submitted: false,
   };
 
-  public numResultados = {
-    'mostrarCalculoAnterior88': 0,
-    'mostrarCalculo91_98': 0,
-    'mostrarCalculo98_99': 0,
-    'mostrarCalculoApos99': 0,
-    'mostrarCalculoApos19': 0
-  };
-
-  constructor(protected router: Router,
+  constructor(
+    protected router: Router,
     protected route: ActivatedRoute,
     protected Segurado: SeguradoService,
     protected CalculoRgps: CalculoRgpsService,
+    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
     protected planejamentoService: RgpsPlanejamentoService,
+    // protected definicaoSalariosContribuicao: DefinicaoSalariosContribuicao,
     @Inject(DOCUMENT) private document: Document,
     @Inject(WINDOW) private window: Window
   ) { }
 
 
   ngOnInit() {
-    this.calculoList = [];
-    this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.idsCalculo = this.route.snapshot.params['id'].split(',');
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
 
-    this.isPlanejamento = this.getIsPlanejamento();
+    this.setAtributosIniciais();
+
+  }
+
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+
+    // this.setAtributosIniciais();
+
+  }
+
+
+  private setAtributosIniciais() {
+
+    this.calculoList = [];
+
+    if (this.dadosPassoaPasso === undefined
+      || typeof this.dadosPassoaPasso === 'undefined') {
+      this.dadosPassoaPasso = {
+        origem: 'rmi',
+        type: 'auto'
+      };
+    }
+
+
+    if (this.isExits(this.route.snapshot.params['id_segurado'])
+      && this.isExits(this.route.snapshot.params['id'])
+      && this.dadosPassoaPasso.origem === 'rmi') {
+
+      this.isPassoaPasso = false;
+      this.idSegurado = this.route.snapshot.params['id_segurado'];
+      this.idsCalculo = this.route.snapshot.params['id'].split(',');
+      this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    } else if (this.isExits(this.idSeguradoSelecionado)
+      && this.isExits(this.idCalculoSelecionadoRMI)
+      && this.isExits(this.dadosPassoaPasso)
+      && this.isExits(this.dadosPassoaPasso.origem)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo'
+    ) {
+
+      this.idsCalculo = []
+      this.isPassoaPasso = true;
+      this.idSegurado = this.idSeguradoSelecionado;
+      this.idsCalculo[0] = this.idCalculoSelecionadoRMI;
+      this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+
+    }
+
+    if (this.isExits(this.idSegurado)
+      && this.isExits(this.idsCalculo)
+    ) {
+
+      this.isPlanejamento = this.getIsPlanejamento();
+      this.iniciarCalculoRMI();
+
+    }
+
+  }
+
+
+
+  private iniciarCalculoRMI() {
+
 
     this.isUpdating = true;
 
@@ -339,7 +332,9 @@ export class RgpsResultadosComponent implements OnInit {
           }).then(() => {
             this.listaSegurados();
           });
+
         } else {
+
           this.idadeSegurado = this.getIdadeSegurado();
           this.dataFiliacao = this.getDataFiliacao();
           let counter = 0;
@@ -351,8 +346,8 @@ export class RgpsResultadosComponent implements OnInit {
                 this.controleExibicao(calculo);
                 this.calculosList.push(calculo);
                 const checkBox = `<div class="checkbox not-print"><label>
-              <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
-              <span> </span></label></div>`;
+            <input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}">
+            <span> </span></label></div>`;
                 this.checkboxIdList.push(`${calculo.id}-checkbox`);
 
                 calculo.tipo_seguro = this.translateNovosNomesEspecie(calculo.tipo_seguro)
@@ -377,12 +372,14 @@ export class RgpsResultadosComponent implements OnInit {
                   this.isUpdating = false;
                 }
                 counter++;
+
               });
           }
 
         }
       });
   }
+
 
   loadCurrency(data) {
     for (const currency of this.currencyList) {
@@ -393,6 +390,64 @@ export class RgpsResultadosComponent implements OnInit {
       }
     }
   }
+
+  // private setSalariosContribuicoesContTempoCNIS(calculo) {
+
+  //   if (this.idCalculoSelecionadoCT !== undefined
+  //     && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+  //     this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+  //       console.log(rst);
+  //     }).catch(error => {
+  //       console.error(error);
+  //     });
+
+  //   }
+
+  // }
+
+  /**
+   * @param inicio inicio 07/1994
+   * @param fim Dib
+   * @returns array salários de contribuição
+   */
+  public getlistaValoresContribuidosPeriodosCT(listaValoresContribuidosPeriodosCT, inicio, fim) {
+
+    // const listCT = this.listaValoresContribuidosPeriodosCT;
+    return listaValoresContribuidosPeriodosCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '[)'));
+
+  }
+
+  public getSalariosContribuicoesContTempoCNIS() {
+
+    return new Promise((resolve, reject) => {
+
+      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado')))) {
+
+        this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
+        this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+        resolve(this.listaValoresContribuidosPeriodosCT);
+
+      } else {
+
+        this.PeriodosContagemTempoService.getByPeriodosId(this.idCalculoSelecionadoCT)
+          .then((periodosContribuicao: PeriodosContagemTempo[]) => {
+
+
+            sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
+            this.listaPeriodosCT = periodosContribuicao;
+            this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
+            resolve(this.listaValoresContribuidosPeriodosCT);
+
+          }).catch(error => {
+            console.error(error);
+            reject(error);
+          });
+      }
+    });
+  }
+
 
   calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, proporcional, dib) {
     let coeficienteAux = 0;
@@ -410,22 +465,24 @@ export class RgpsResultadosComponent implements OnInit {
     switch (this.tipoBeneficio) {
       // Auxílio Doença Previdenciário
       case 1:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 91;
-        else if (dib >= this.dataLei8213) {
+        } else if (dib >= this.dataLei8213) {
           coeficienteAux = 80 + anosContribuicao;
-          if (coeficienteAux > 92)
+          if (coeficienteAux > 92) {
             coeficienteAux = 92;
+          }
         } else {
           coeficienteAux = 80 + anosContribuicao;
         }
         break;
       // Aposentadoria por invalidez previdênciária
       case 2:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 100;
-        else
+        } else {
           coeficienteAux = 80 + anosContribuicao;
+        }
         break;
       // Aponsentadoria por idade trabalhador Urbano ou Rural
       case 3:
@@ -437,10 +494,11 @@ export class RgpsResultadosComponent implements OnInit {
         break;
       // Aposentadoria Especial
       case 5:
-        if (dib >= this.dataLei9032)
+        if (dib >= this.dataLei9032) {
           coeficienteAux = 100;
-        else
+        } else {
           coeficienteAux = 85 + anosContribuicao;
+        }
         break;
       // Aposentadoria por tempo de serviço de professor
       case 6:
@@ -495,8 +553,9 @@ export class RgpsResultadosComponent implements OnInit {
 
   verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra) {
     const tempoNecessario = 35 - redutorProfessor - redutorSexo - extra;
-    if (Math.trunc(anosContribuicao) < Math.trunc(tempoNecessario))
+    if (Math.trunc(anosContribuicao) < Math.trunc(tempoNecessario)) {
       return false;
+    }
     return true;
   }
 
@@ -580,9 +639,9 @@ export class RgpsResultadosComponent implements OnInit {
     const xValor = fullYears;
 
     totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
+    const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30.436875;
+    const dttDias = (xVarMes - totalFator.months) * 30.436875;
     totalFator.days = Math.round(dttDias);
 
     // console.log(totalFator.years + '/' + totalFator.months + '/' + totalFator.days);
@@ -635,7 +694,7 @@ export class RgpsResultadosComponent implements OnInit {
 
     let toll = ((35 - proporcional - redutorSexo) - tempoDeServico) * porcentagem;
     toll = (toll < 0 || tempoDeServico == 'NaN') ? 0 : toll;
-    //return 0;
+    // return 0;
     return toll;
   }
 
@@ -690,13 +749,13 @@ export class RgpsResultadosComponent implements OnInit {
 
     const totalFator = { years: 0, months: 0, days: 0, fullDays: fullDays };
 
-    //let xValor = (Math.floor(fullDays) / 365);
+    // let xValor = (Math.floor(fullDays) / 365);
 
-    let xValor = fullDays;
+    const xValor = fullDays;
     totalFator.years = Math.floor(xValor);
-    let xVarMes = (xValor - totalFator.years) * 12;
+    const xVarMes = (xValor - totalFator.years) * 12;
     totalFator.months = Math.floor(xVarMes);
-    let dttDias = (xVarMes - totalFator.months) * 30;
+    const dttDias = (xVarMes - totalFator.months) * 30;
     totalFator.days = Math.floor(dttDias);
 
     return totalFator.years + 'ano(s) e ' + totalFator.months + 'mês(es) e ' + totalFator.days + 'dia(s)';
@@ -845,7 +904,7 @@ export class RgpsResultadosComponent implements OnInit {
    * @param especieBeneficio
    */
   verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
-    //25, 26, 27,
+    // 25, 26, 27,
 
     const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
@@ -911,7 +970,7 @@ export class RgpsResultadosComponent implements OnInit {
   formatDecimal(value, n_of_decimal_digits) {
 
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
 
   }
 
@@ -932,7 +991,7 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   formatDecimalIdade(value, n_of_decimal_digits) {
-    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return ((Math.floor(value * 100) / 100).toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
   }
 
   formatReceivedDate(inputDate) {
@@ -1176,7 +1235,8 @@ export class RgpsResultadosComponent implements OnInit {
       const contribuicaoSecundaria = this.getTempoDeContribuicaoSecundaria(calculo);
       const dib = calculo.data_pedido_beneficio;
       const dataCriacao = this.formatReceivedDate(calculo.data_calculo);
-      const checkBox = `<div class="checkbox"><label><input type="checkbox" id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
+      const checkBox = `<div class="checkbox"><label><input type="checkbox" 
+      id='${calculo.id}-checkbox' class="checkbox {{styleTheme}}"><span> </span></label></div>`;
       this.checkboxIdList.push(`${calculo.id}-checkbox`);
       const line = {
         especie: especie,
@@ -1456,9 +1516,6 @@ export class RgpsResultadosComponent implements OnInit {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    // console.log(this.planejamento.valor_beneficio);
-    // console.log(typeof this.planejamento.valor_beneficio);
-
     if (Number(this.planejamento.valor_beneficio) > 0) {
 
       while (fimContador.isBefore(auxiliarDate, 'month')) {
@@ -1527,8 +1584,6 @@ export class RgpsResultadosComponent implements OnInit {
 
 
   public getPlanejamento(calculo) {
-    // console.log(this.route.snapshot.params['correcao_pbc']);
-    // console.log(this.route.snapshot.params['pbc']);
 
     const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
 
@@ -1547,7 +1602,6 @@ export class RgpsResultadosComponent implements OnInit {
           .then((planejamento: PlanejamentoRgps) => {
 
 
-            //   console.log(planejamento);
             this.planejamento = planejamento;
 
             const calcClone = Object.assign({}, calculo);
@@ -1655,12 +1709,9 @@ export class RgpsResultadosComponent implements OnInit {
   }
 
   // planejamento adicionais RMI
-
   public calcularPBCIndices(indice) {
 
     if (!this.isExits(indice)) {
-      // this.router.navigate(['/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0]]);
-      // this.ngOnInit();
 
       const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
       const urlpbcNew = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0];
@@ -1670,19 +1721,12 @@ export class RgpsResultadosComponent implements OnInit {
     }
 
     if (this.isExits(indice) && indice != this.getPbcCompletoIndices()) {
-      //  window.location.href = '/#/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
       const urlpbcAtual = '/rgps/rgps-calculos/' + this.idSegurado;
       const urlpbcNew = '/rgps/rgps-resultados/' + this.idSegurado + '/' + this.idsCalculo[0] + '/pbc/' + indice;
       this.router.navigateByUrl(urlpbcAtual, { skipLocationChange: true }).then(() =>
         this.router.navigate([urlpbcNew])
       );
 
-      // this.router.navigate([urlpbcNew]);
-      // this.ngOnInit();
-
-
-      //window.location.reload(true)
-      //this.ngOnInit();
     }
 
   }
@@ -1772,13 +1816,15 @@ export class RgpsResultadosComponent implements OnInit {
   onWindowScroll() {
     this.caixaOpcoes = document.getElementById('containerOpcoes');
     const navbar = document.getElementById('navbar');
-    // const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const offset = 0;
 
     if ((this.window !== undefined && this.window !== null && this.window.pageYOffset && this.window.pageYOffset !== undefined) ||
-      (this.document !== undefined && this.document !== null && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
-      || (this.document !== undefined && this.document !== null && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
+      (this.document !== undefined && this.document !== null
+        && this.document.documentElement.scrollTop && this.document.documentElement.scrollTop !== undefined)
+      || (this.document !== undefined && this.document !== null
+        && this.document.body.scrollTop && this.document.body.scrollTop !== undefined)
     ) {
+
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
 
       if (offset > this.offset(this.caixaOpcoes)) {

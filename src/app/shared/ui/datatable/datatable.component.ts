@@ -29,6 +29,7 @@ export class DatatableComponent implements OnInit {
   @Output() selectedRowEvent = new EventEmitter();
   @Output() updateRowEvent = new EventEmitter();
   @Output() deleteRowEvent = new EventEmitter();
+  @Output() copyRowEvent = new EventEmitter();
 
   constructor(
     private el: ElementRef
@@ -51,15 +52,19 @@ export class DatatableComponent implements OnInit {
     const selectedRowEvent = this.selectedRowEvent;
     const updateRowEvent = this.updateRowEvent;
     const deleteRowEvent = this.deleteRowEvent;
+    const copyRowEvent = this.copyRowEvent;
 
 
     let toolbar = '';
-    if (options.buttons)
+    if (options.buttons) {
       toolbar += 'B';
-    if (this.paginationLength)
+    }
+    if (this.paginationLength) {
       toolbar += 'l';
-    if (this.columnsHide)
+    }
+    if (this.columnsHide) {
       toolbar += 'C';
+    }
 
     if (typeof options.ajax === 'string') {
       let url = options.ajax;
@@ -73,39 +78,39 @@ export class DatatableComponent implements OnInit {
 
     options = $.extend(options, {
 
-      "dom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs text-right'" + toolbar + ">r>" +
-        "t" +
-        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+      'dom': '<\'dt-toolbar\'<\'col-xs-12 col-sm-6\'f><\'col-sm-6 col-xs-12 hidden-xs text-right\'' + toolbar + '>r>' +
+        't' +
+        '<\'dt-toolbar-footer\'<\'col-sm-6 col-xs-12 hidden-xs\'i><\'col-xs-12 col-sm-6\'p>>',
       oLanguage: {
-        "sSearch": "<span class='input-group-addon'><i class='glyphicon glyphicon-search'></i></span> ",
-        "sLengthMenu": "_MENU_"
+        'sSearch': '<span class=\'input-group-addon\'><i class=\'glyphicon glyphicon-search\'></i></span> ',
+        'sLengthMenu': '_MENU_'
       },
-      "autoWidth": false,
+      'autoWidth': false,
       retrieve: true,
       responsive: this.responsive,
       initComplete: (settings, json) => {
-        element.parent().find('.input-sm').removeClass("input-sm").addClass('input-md');
+        element.parent().find('.input-sm').removeClass('input-sm').addClass('input-md');
       }
     });
 
     if (!this.responsive) {
-      options["createdRow"] = (row, data, index) => {
+      options['createdRow'] = (row, data, index) => {
         if (index % 2 != 0) {
           $(row).css('background-color', 'white');
         }
       }
     }
     options['oLanguage'] = {
-      'sEmptyTable': 'Nenhum registro encontrado',
-      'sInfo': 'Mostrando de _START_ até _END_ de _TOTAL_ registros',
+      'sEmptyTable': 'Nenhum Registro Encontrado',
+      'sInfo': 'Mostrando de _START_ Até _END_ de _TOTAL_ Registros',
       'sInfoEmpty': 'Mostrando 0 até 0 de 0 registros',
       'sInfoFiltered': '(Filtrados de _MAX_ registros)',
       'sInfoPostFix': '',
       'sInfoThousands': '.',
-      'sLengthMenu': '_MENU_ resultados por página',
+      'sLengthMenu': '_MENU_ Resultados por Página',
       'sLoadingRecords': 'Carregando...',
       'sProcessing': 'Processando...',
-      'sZeroRecords': 'Nenhum registro encontrado',
+      'sZeroRecords': 'Nenhum Registro Encontrado',
       'sSearch': 'Pesquisar ',
       'oPaginate': {
         'sNext': 'Próximo',
@@ -114,8 +119,8 @@ export class DatatableComponent implements OnInit {
         'sLast': 'Último'
       },
       'oAria': {
-        'sSortAscending': ': Ordenar colunas de forma ascendente',
-        'sSortDescending': ': Ordenar colunas de forma descendente'
+        'sSortAscending': ': Ordenar Colunas de Forma Ascendente',
+        'sSortDescending': ': Ordenar Colunas de Forma Descendente'
       }
     };
 
@@ -134,19 +139,18 @@ export class DatatableComponent implements OnInit {
 
 
     if (!toolbar) {
-      element.parent().find(".dt-toolbar").append('<div class="text-right"><img src="assets/img/logo2.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
+      element.parent().find('.dt-toolbar').append('<div class="text-right"><img src="assets/img/logo2.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
     }
 
     if (this.detailsFormat) {
       let format = this.detailsFormat
       element.on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = _dataTable.row(tr);
+        let tr = $(this).closest('tr');
+        let row = _dataTable.row(tr);
         if (row.child.isShown()) {
           row.child.hide();
           tr.removeClass('shown');
-        }
-        else {
+        } else {
           row.child(format(row.data())).show();
           tr.addClass('shown');
         }
@@ -156,17 +160,25 @@ export class DatatableComponent implements OnInit {
 
     element.on('click', '.select-btn', function () {
 
+      // $('tr').removeClass('bg-ieprev-checked');
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
+
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 
     element.on('click', '.checked-row', function () {
 
+      // $('tr').removeClass('bg-ieprev-checked');
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
+
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 
@@ -174,11 +186,16 @@ export class DatatableComponent implements OnInit {
 
       $('.checked-row-one').removeAttr('checked');
 
+      const table = $(this).closest('table');
+      table.closest('tr').removeClass('bg-ieprev-checked');
+      table.find('.bg-ieprev-checked').removeClass('bg-ieprev-checked')
+
       const tr = $(this).closest('tr');
       const row = _dataTable.row(tr);
       selectedRowEvent.emit(row.data());
 
       $(this).attr('checked', 'checked');
+      $(tr).addClass('bg-ieprev-checked');
 
     });
 
@@ -198,6 +215,13 @@ export class DatatableComponent implements OnInit {
 
     });
 
+    element.on('click', '.copy-btn', function () {
+
+      const tr = $(this).closest('tr');
+      const row = _dataTable.row(tr);
+      copyRowEvent.emit(row.data());
+
+    });
   }
 
 

@@ -26,6 +26,8 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   @Input() segurado;
   @Input() tipoCalculo;
   @Input() isBlackHole;
+  @Input() dadosPassoaPasso;
+  @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
 
   public boxId;
@@ -101,11 +103,11 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     protected rt: ActivatedRoute,
     private IndiceInps: IndiceInpsService,
     private SalarioMinimoMaximo: SalarioMinimoMaximoService,) {
-    super(null, route, null, null, null, null, null);
+    super(null, route, null, null, null, null, null, null);
   }
 
   ngOnInit() {
-    this.boxId = this.generateBoxId(this.calculo.id, '9198');
+    this.boxId = this.generateBoxId(this.calculo.id, '91');
     this.isUpdating = true;
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, DoCheck, SimpleChange, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -15,6 +15,9 @@ import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
 import { MoedaService } from 'app/services/Moeda.service';
 import { Moeda } from 'app/services/Moeda.model';
 
+import { RgpsPlanejamentoContribuicoesComponent } from './rgps-planejamento-contribuicoes/rgps-planejamento-contribuicoes.component';
+
+
 @Component({
   selector: 'app-rgps-planejamento-list',
   templateUrl: './rgps-planejamento-list.component.html',
@@ -23,7 +26,7 @@ import { Moeda } from 'app/services/Moeda.model';
     ErrorService,
   ],
 })
-export class RgpsPlanejamentoListComponent implements OnInit {
+export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   private planejamentoSelecionado;
   private isPlanejamentoSelecionado = false;
@@ -51,13 +54,20 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private isResultRMIFutura;
 
   /// form
-
   private id;
   private id_calculo;
   private data_futura;
   private valor_beneficio = '0.00';
   private aliquota = '';
   private especie = '';
+
+  // private sc = [];
+  // private sc_count = 0;
+  // private sc_mm_ajustar = 0;
+  // private sc_mm_considerar_tempo = 0;
+  // private sc_mm_considerar_carencia = 0;
+  // private contribuicoes_pendentes = 0;
+  // private contribuicoes_pendentes_mm = 0;
   /// form
 
   public plan = {
@@ -67,17 +77,25 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     valor_beneficio: '0.00',
     aliquota: '',
     especie: '',
+    contribuicoes_pendentes_mm: 0,
+    contribuicoes_pendentes: 0,
+    sc: []
   };
+
+  private plan_index;
+  private planejamentoContrib;
 
   private listAliquotas = [];
   private listEspecies = [];
-
   private lastModel;
   private moeda;
+  private moedaList;
+
+  @ViewChild(RgpsPlanejamentoContribuicoesComponent) ContribuicoesComponent: RgpsPlanejamentoContribuicoesComponent;
+  @ViewChild('contribuicoes_plan') public contribuicoes: ModalDirective;
 
 
-  //public activeStep = this.steps[0];
-
+  // public activeStep = this.steps[0];
 
   public datatableOptionsPlan = {
     colReorder: true,
@@ -126,6 +144,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     protected Moeda: MoedaService,
     protected router: Router,
     private sanitizer: DomSanitizer,
+    private detector: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -183,7 +202,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   private getInfoCalculos() {
 
     this.id_calculo = this.calculo.id;
-    //console.log(this.rgpsPlanejamentoService.list);
 
     this.isUpdatePlan = true;
     this.planejamentoListData = [];
@@ -194,23 +212,31 @@ export class RgpsPlanejamentoListComponent implements OnInit {
         for (const plan of planejamentoRst) {
           this.planejamentoListData.push(plan);
         }
-        //console.log(this.planejamentoListData);
         this.updateDatatable();
         this.isUpdatePlan = false;
       });
 
+    this.Moeda.moedaSalarioMinimoTeto().then((moedaList: Moeda[]) => {
 
-    this.Moeda.getByDateRangeMomentParam(moment().subtract(1, 'months'), moment())
-      .then((moeda: Moeda[]) => {
+      this.moedaList = moedaList
+      this.getLastMoeda(this.moedaList);
 
-        this.moeda = moeda[1];
-        if (moeda[1].salario_minimo == undefined) {
-          this.moeda = moeda[0];
-        }
+    })
+  }
 
-      });
+  private getLastMoeda(moedaList) {
+
+    const data1 = moment().subtract(1, 'months').format('YYYY-MM-01');
+    const data2 = moment().format('YYYY-MM-01');
+    const moeda = moedaList.filter((x) => x.data_moeda === data1 || x.data_moeda === data2)
+
+    this.moeda = moeda[1];
+    if (moeda[1].salario_minimo == undefined) {
+      this.moeda = moeda[0];
+    }
 
   }
+
 
   verificaPlano() {
     const basico = window.localStorage.getItem('product');
@@ -244,10 +270,11 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.plan.valor_beneficio = this.valor_beneficio;
     this.plan.aliquota = this.aliquota;
     this.plan.especie = this.especie;
+    this.plan.sc = this.formatContribuicaoList(this.plan.sc, 's');
 
   }
 
-  //private deletarPlananejamentoList(rowPlan) {
+  // private deletarPlananejamentoList(rowPlan) {
   private deletarPlananejamentoList(id) {
 
     const objPlan = this.planejamentoListData.find(row => row.id === id);
@@ -289,7 +316,7 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     this.plan = this.planejamentoListData.find(row => row.id === id);
 
     this.id = this.plan.id;
-    //this.data_futura = this.plan.data_futura;
+    // this.data_futura = this.plan.data_futura;
     this.valor_beneficio = this.plan.valor_beneficio;
     this.aliquota = this.plan.aliquota;
     this.especie = this.plan.especie;
@@ -310,35 +337,54 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
-  public updatePlan(event) {
+  public updatePlan(event, type = null) {
 
-    if (this.valid()) {
+    if (type === null && this.valid()) {
 
       this.isEdit = false;
       this.setPlan();
 
-      this.rgpsPlanejamentoService
-        .update(this.plan)
-        .then(model => {
-
-          swal({
-            position: 'top-end',
-            type: 'success',
-            title: 'Dados alterado com sucesso.',
-            showConfirmButton: false,
-            timer: 1000
-          });
-
-          this.getInfoCalculos();
-          this.resetForm();
-
-        })
-        .catch((errors) => {
-
-          // this.errors.add(errors);
-
-        });
+      this.updatePlanejamento(this.plan);
     }
+
+    if (type === 'sc') {
+      if (typeof this.planejamentoContrib !== 'undefined') {
+
+        // this.isEdit = false;
+        // const objPlanejamento = Object.assign({}, this.planejamentoContrib);
+        // objPlanejamento.sc = this.formatContribuicaoList(objPlanejamento.sc);
+
+        this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's')
+        this.updatePlanejamento(this.planejamentoContrib);
+
+      }
+    }
+  }
+
+
+  public updatePlanejamento(plan) {
+
+    this.rgpsPlanejamentoService
+      .update(plan)
+      .then(model => {
+
+        swal({
+          position: 'top-end',
+          type: 'success',
+          title: 'Dados alterado com sucesso.',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        this.getInfoCalculos();
+        this.resetForm();
+
+      })
+      .catch((errors) => {
+
+        // this.errors.add(errors);
+
+      });
   }
 
 
@@ -377,21 +423,20 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
 
-  //planejamentoSelecionadoEvent
+  // planejamentoSelecionadoEvent
   private planejar(id) {
 
     const objPlan = this.planejamentoListData.find(row => row.id === id);
     const objExport = JSON.stringify(objPlan);
     sessionStorage.setItem('exportPlanejamento', objExport);
 
-    //window.location.href 
+    // window.location.href 
     const urlpbcNew = '/rgps/rgps-resultados/' + this.segurado.id + '/' + this.calculo.id + '/plan/' + objPlan.id;
     this.router.navigate([urlpbcNew]);
 
   }
 
 
-  //private getRow(dataRow) {
   private getRow(id) {
 
     if (this.isExits(id)) {
@@ -410,10 +455,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
 
 
   public getBtnSelecionarPlanejamento(id) {
-
-    // return `<button  type="button" class="btn btn-xs btn-info select-btn">
-    //           Selecionar <i class="fa fa-arrow-circle-right"></i>
-    //       </button>`;
 
     return `<div class="checkbox"><label>
                  <input type="checkbox" id='${id}-checkbox' class="select-btn checkbox checkboxCalculos" value="${id}"><span></span></label>
@@ -507,16 +548,6 @@ export class RgpsPlanejamentoListComponent implements OnInit {
     }
 
 
-    // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))
-    // && (Number(this.valor_beneficio) >= Number(this.moeda.minimo))))
-
-    // console.log((![8, 20, 201, 99].includes(Number(this.aliquota))))
-    // console.log((Number(this.valor_beneficio) >= Number(this.moeda.salario_minimo)))
-    // console.log(this.aliquota)
-    // console.log(this.valor_beneficio)
-    // console.log(this.moeda.salario_minimo)
-    // console.log(this.moeda)
-
     if (this.aliquota == undefined || this.aliquota == '') {
       this.errors.add({ 'aliquota': ['O campo é obrigatório.'] });
       valid = false;
@@ -547,7 +578,350 @@ export class RgpsPlanejamentoListComponent implements OnInit {
   }
 
 
+  // contribuições
 
+
+
+  public adicionarPeriodoChave(inputChave) {
+
+    let ano = inputChave.substring(0, 4);
+    let mes = inputChave.substring(4, 6);
+
+    if ((parseInt(mes, 10) + 1) > 12) {
+      mes = '01';
+      ano = parseInt(ano, 10) + 1;
+    } else {
+      mes = parseInt(mes, 10) + 1;
+    }
+
+    const chave = ano + this.leftFillNum(mes, 2);
+
+    return chave;
+
+  }
+
+
+  public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
+
+    const contribuicoesList = [];
+    let result = contribuicoes;
+    let chave = periodo_in;
+
+    do {
+
+      const ano = chave.substring(0, 4);
+      const mes = chave.substring(4, 6);
+      const pchave = mes + '/' + ano;
+
+      result = contribuicoes.find((item) => {
+        return item.cp === pchave;
+      });
+
+      if (result && result !== undefined) { /* se encontrou a contribuição no mes*/
+
+        result.msc = this.getClassSalarioContribuicao(mes, ano, result.sc);
+
+        contribuicoesList.push(result);
+
+      } else { /* se não encontrou a contribuição no mes*/
+
+        contribuicoesList.push({
+          cp: pchave,
+          sc: '0,00',
+          msc: 0
+        });
+
+      }
+
+      chave = this.adicionarPeriodoChave(chave);
+
+    } while (chave <= periodo_fi);
+
+
+
+    /* diferença que deve ser removida do periodo de contribuições */
+
+    const diferencas = contribuicoes.filter(c1 => contribuicoesList.filter(c2 => c2.cp === c1.cp).length === 0);
+
+
+    diferencas.forEach(diferenca => {
+      contribuicoesList.filter(function (contribuicao, index, arr) {
+        return contribuicao.cp === diferenca.cp;
+      });
+
+    });
+
+    return contribuicoesList;
+
+  }
+
+
+
+  showContribuicoes(planRow, index) {
+
+    planRow.inicio = this.calculo.data_pedido_beneficio
+    planRow.dibString = moment(planRow.data_futura).format('DD/MM/YYYY');
+
+
+    if (typeof planRow.sc === 'undefined' || planRow.sc === 'null' ||
+      planRow.sc === [] || !planRow.sc) {
+
+      const periodo_in = this.formataPeriodo(planRow.inicio);
+      const periodo_fi = this.formataPeriodo(planRow.dibString);
+
+      planRow.sc = this.verificarContribuicoes(periodo_in, periodo_fi, []);
+
+    } else {
+
+      planRow.sc = this.formatContribuicaoList(planRow.sc, 'j');
+
+    }
+
+    this.plan_index = index;
+    this.planejamentoContrib = planRow;
+    ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
+    this.contribuicoes.show();
+  }
+
+
+
+
+  private setCheckPlanContrib(value) {
+
+    console.log(value);
+
+    if (value.planejamento.id === this.planejamentoContrib.id) {
+
+    //  this.planejamentoContrib.sc = value.planejamento.sc;
+      this.planejamentoContrib.sc_mm_ajustar = value.sc_mm_ajustar;
+      this.planejamentoContrib.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
+      this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
+      this.planejamentoContrib.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
+      this.planejamentoContrib.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+
+    }
+  }
+
+
+
+  matrixToVinculoContribuicoes(eventRST) {
+
+    const contribuicoesList = [];
+    let mes = 0;
+    let chave = '';
+    let msc = 0;
+
+    eventRST.matriz.forEach(periodo => {
+
+      periodo.valores.forEach(contribuicao => {
+
+        mes++;
+
+        if (contribuicao !== '') {
+          chave = this.leftFillNum(mes, 2) + '/' + periodo.ano;
+          msc = periodo.msc[mes - 1];
+
+          contribuicoesList.push({
+            cp: chave,
+            sc: contribuicao,
+            msc: msc
+          });
+        }
+
+      });
+
+      mes = 0;
+    });
+
+    if (eventRST.planejamento.id === this.planejamentoContrib.id) {
+
+      console.log(eventRST)
+
+      this.planejamentoContrib.sc = contribuicoesList;
+      this.planejamentoContrib.sc_count = contribuicoesList.length;
+      this.planejamentoContrib.sc_mm_ajustar = eventRST.sc_mm_ajustar;
+      this.planejamentoContrib.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
+      this.planejamentoContrib.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
+      this.planejamentoContrib.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
+      this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+
+
+      console.log(this.planejamentoContrib);
+    }
+
+  }
+
+
+
+  // public updatePlanContribuicoes() {
+
+  //   if (typeof this.planejamentoContrib !== 'undefined') {
+
+  //     this.isEdit = false;
+
+  //     // const objPlanejamento = Object.assign({}, this.planejamentoContrib);
+  //     // objPlanejamento.sc = this.formatContribuicaoList(objPlanejamento.sc);
+
+
+
+  //     this.rgpsPlanejamentoService
+  //       .update(this.planejamentoContrib)
+  //       .then(model => {
+
+  //         swal({
+  //           position: 'top-end',
+  //           type: 'success',
+  //           title: 'Dados alterados com sucesso.',
+  //           showConfirmButton: false,
+  //           timer: 1000
+  //         });
+
+  //         this.getInfoCalculos();
+  //         this.resetForm();
+
+  //       })
+  //       .catch((errors) => {
+
+  //         // this.errors.add(errors);
+
+  //       });
+  //   }
+
+  //   console.log(this.planejamentoContrib)
+  // }
+
+
+  private formatContribuicaoList(ListSC, type = null) {
+
+    if (typeof ListSC === 'undefined') {
+      return ListSC;
+    }
+
+    if (typeof ListSC === 'string' && type === 'j') {
+      return JSON.parse(ListSC);
+    }
+
+    if (typeof ListSC === 'object' && type === 's') {
+      return JSON.stringify(ListSC);
+    }
+
+    return ListSC;
+  }
+
+  public eventContribuicoes(event) {
+
+    switch (event.acao) {
+      case 'sair':
+        this.contribuicoes.hide();
+        break;
+      case 'salvar-check':
+        this.setCheckPlanContrib(event);
+        this.updatePlan(null, 'sc');
+        break;
+      case 'salvar':
+       this.setCheckPlanContrib(event);
+        this.matrixToVinculoContribuicoes(event);
+        this.updatePlan(null, 'sc');
+        this.contribuicoes.hide();
+        break;
+    }
+
+    console.log(event)
+    console.log(this.planejamentoContrib);
+  }
+
+
+  // contribuições
+
+  public leftFillNum(num, targetLength) {
+    return num.toString().padStart(targetLength, 0);
+  }
+
+
+  public formataPeriodo(inputData) {
+
+    if (inputData !== undefined) {
+      const data = inputData.split('/');
+      const periodo = data[2] + this.leftFillNum(data[1], 2);
+      return periodo;
+    }
+
+    return '00/0000';
+
+  }
+
+
+  toastAlert(type, title, position) {
+
+    position = (!position) ? 'top-end' : position;
+
+    swal({
+      position: position,
+      type: type,
+      title: title,
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+  }
+
+  isEmpty(data) {
+    if (data === undefined
+      || data === ''
+      || typeof data === 'undefined'
+      || data === 'undefined') {
+      return true;
+    }
+    return false;
+  }
+
+
+
+  private getMoedaCompetencia(mes, ano) {
+
+    const anoAtual = moment().year();
+    let data = ano + '-' + mes + '-01';
+
+    if (ano > anoAtual) {
+
+      data = anoAtual + '-' + mes + '-01';
+      return this.moeda.find((md) => data === md.data_moeda);
+    }
+
+
+    return this.moeda.find((md) => data === md.data_moeda);
+  }
+
+
+  private getClassSalarioContribuicao(mes, ano, valor) {
+
+    valor = this.formatDecimalValue(valor);
+    // mes = (rst) ? ('0' + mes).slice(-2) : mes;
+    const moedaCompetencia = this.getMoedaCompetencia(mes, ano);
+
+    let ClassRst = 0;
+    if (valor > 0.00 && valor < parseFloat(moedaCompetencia.salario_minimo)) {
+      ClassRst = 1
+    }
+
+    return ClassRst;
+
+
+  }
+
+  public formatDecimalValue(value) {
+
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
+
+  }
 
 
   formatReceivedDate(inputDate) {

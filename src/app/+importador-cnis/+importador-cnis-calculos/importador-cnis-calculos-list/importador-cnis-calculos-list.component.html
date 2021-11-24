@@ -1,0 +1,151 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Cálculos Cadastrados</h2>
+    <button
+      type="button"
+      (click)="setNewFormContagemTempoRef()"
+      class="btn btn-labeled btn-info pull-right"
+    >
+      <span class="btn-label">
+        <i class="fa fa-plus"></i>
+      </span>
+      Criar Novo Cálculo
+    </button>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalc" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div *ngIf="!isUpdatingCalc" class="widget-body no-padding">
+      <sa-datatable
+        id="calculos-contagem-tempo"
+        [options]="calculoTableOptions"
+        (selectedRowEvent)="getRow($event)"
+        (deleteRowEvent)="deleteRow($event)"
+        (updateRowEvent)="updateRow($event)"
+        (copyRowEvent)="copyRow($event)"
+        paginationLength="true"
+        tableClass="table table-striped table-bordered table-condensed-custom table-hover"
+        width="100%"
+      >
+        <thead>
+          <tr>
+            <th>Ações</th>
+            <th>Referência</th>
+            <th>Total (Ano/Mês/Dia)</th>
+            <th>Data de Criação</th>
+            <th>Selecionar</th>
+          </tr>
+        </thead>
+      </sa-datatable>
+    </div>
+  </div>
+</sa-widget>
+
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="isCalculosSelecionado ">
+   <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Ações</h2>
+  </header>
+  <div>
+    <div  class="widget-body widget-body-custom no-padding">
+      <table class="table table-condensed-custom table-bordered">
+        <tbody>
+          <tr>
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
+              <div class="bg-ieprev-y pl-1 m-1">
+                <label class="checkbox mx-2 not-wrap" >
+                  <input type="checkbox" [(ngModel)]="isToStep6" (change)="setToStep6()" [ngModelOptions]="{standalone: true}" class="py-1">
+                  <i></i>Calcular da RMI</label>
+              </div>
+            </td>
+            <td class="text-justify">
+              Elaborar o valor da Renda Mensal Inicial – RMI sem a necessidade de realizar a edição dos períodos de contribuição e/ou salários de contribuição (Passos 4 e 5). Neste caso o Simulador direcionará o Usuário diretamente para o Passo 6 (Cálculo da Renda Mensal Inicial). Esta opção somente estará disponível quando houver cálculo de tempo de contribuição realizado em momento anterior.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
+
+<div bsModal #modalCalculosContagemTempo="bs-modal" class="modal fade" id="create-calculo">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0 m-0"> 
+      <div class="row"> 
+        <article class="col-sm-12 col-md-12 col-lg-12">
+          <sa-widget [colorbutton]="false" [editbutton]="false"  [deletebutton]="false" class="mb-0">
+            <header>
+              <span class="widget-icon">
+                <i class="fa fa-plus"></i>
+              </span>
+              <h2 *ngIf="!isEditContagem" >Adicionar Identificação do Cálculo</h2>
+              <h2 *ngIf="isEditContagem" >Editar Identificação do Cálculo</h2>
+              <button type="button" class="btn btn-xs pull-right btn-danger" (click)="modalCalculosContagemTempo.hide()" aria-hidden="true">
+                <i class="fa fa-times fa-1-9x btn-danger txt-color-white p-2 pull-left"></i>
+              </button>
+            </header>
+            <div>
+              <div class="widget-body widget-body-custom mb-0">
+                <form class="form-horizontal">
+                  <fieldset>
+                    <div class="form-group">
+                      <label class="col-md-4 control-label bold" for="referencia_calculo"
+                        >Identificação do Cálculo:*
+                        <i
+                          class="fa fa-question-circle fa-lg text-info"
+                          data-placement="bottom"
+                          tooltip="Nome definido pelo Usuário para identificar o Cálculo de Contagem de Tempo de Contribuição."
+                        ></i
+                      ></label>
+                      <div class="col-md-6">
+                        <input
+                          [(ngModel)]="referencia_calculo"
+                          [ngModelOptions]="{ standalone: true }"
+                          class="form-control"
+                          type="text"
+                          (change)="errors.clear('referencia_calculo')"
+                          data-placement="bottom"
+                          tooltip="Nome definido pelo Usuário para identificar o Cálculo de Contagem de Tempo de Contribuição."
+                        />
+                        <small *ngIf="errors.has('referencia_calculo')" class="text-danger">{{
+                          errors.get("referencia_calculo") | i18n
+                        }}</small>
+                      </div>
+                    </div>
+                  </fieldset>
+                  <div class="form-actions p-0 mt-2">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button
+                          (click)="submit($event)"
+                          type="submit"
+                          class="btn btn-labeled btn-info"
+                        >
+                          <span class="btn-label">
+                            <i class="fa fa-save"></i>
+                          </span>
+                          <span *ngIf="isEditContagem">Salvar</span>
+                          <span *ngIf="!isEditContagem">Inserir Novo Cálculo</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </sa-widget>
+          </article>
+       </div>
+      </div> 
+    </div>
+  </div>
+</div>
+

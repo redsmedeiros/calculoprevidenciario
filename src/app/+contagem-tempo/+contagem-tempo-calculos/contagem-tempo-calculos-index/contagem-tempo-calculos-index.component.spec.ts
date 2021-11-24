@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContagemTempoCalculosIndexComponent } from './contagem-tempo-calculos-index.component';
@@ -8,7 +9,8 @@ describe('ContagemTempoCalculosIndexComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContagemTempoCalculosIndexComponent]
+      declarations: [ContagemTempoCalculosIndexComponent],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
       .compileComponents();
   }));
