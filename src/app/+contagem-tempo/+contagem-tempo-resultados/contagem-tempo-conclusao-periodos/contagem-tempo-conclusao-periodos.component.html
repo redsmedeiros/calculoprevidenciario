@@ -31,8 +31,10 @@
             <th rowspan="2">Data Inicial</th>
             <th rowspan="2">Data Final</th>
             <th rowspan="2" class="text-center">Fator</th>
-            <th rowspan="2" class="text-center">Carência*</th>
-            <th rowspan="2" class="text-center">Tempo Contribuição*</th>
+            <th rowspan="2" class="text-center" *ngIf="isCheckSC">Carência*</th>
+            <th rowspan="2" class="text-center" *ngIf="isCheckSC">
+              Tempo Contribuição*
+            </th>
             <th colspan="3" class="text-center">
               <span
                 data-placement="top"
@@ -71,8 +73,12 @@
             <td>{{ periodo.data_inicio }}</td>
             <td>{{ periodo.data_termino }}</td>
             <td class="text-center">{{ periodo.fator_condicao_especial }}</td>
-            <td class="text-center">{{ periodo.carencia }}</td>
-            <td class="text-center">{{ periodo.carencia }}</td>
+            <td class="text-center" *ngIf="isCheckSC">
+              {{ periodo.carencia }}
+            </td>
+            <td class="text-center" *ngIf="isCheckSC">
+              {{ periodo.tempoContrib }}
+            </td>
             <!--       
           <td class="text-center">{{ periodo.totalSemFator.years()  }} </td>
           <td class="text-center"> {{ periodo.totalSemFator.months()  }}</td>
@@ -93,20 +99,32 @@
           </tr>
         </tbody>
       </table>
-      <table class="table table-bordered table-condensed-custom font-1-1x" *ngIf="!isUpdating && periodosList.length > 0">
+      <table
+        class="table table-bordered table-condensed-custom font-1-1x"
+        *ngIf="isCheckSC && !isUpdating && periodosList.length > 0"
+      >
         <tbody>
           <tr>
-            <td >*Carência</td>
+            <td>*Carência</td>
             <td class="text-justify">
-              Integral: Período possui todos os salários de contribuição com valor igual ou superior ao mínimo ou o usuário selecionou a opção considerar como Carência.
-              <br>Parcial: Período não possui todos os salários de contribuição com valor igual ou superior ao mínimo e usuário selecionou não considerar todo o período como Carência.
+              Integral: Período possui todos os salários de contribuição com
+              valor igual ou superior ao mínimo ou o usuário selecionou a opção
+              considerar como Carência.
+              <br />Parcial: Período não possui todos os salários de
+              contribuição com valor igual ou superior ao mínimo e usuário
+              selecionou não considerar todo o período como Carência.
             </td>
           </tr>
           <tr>
             <td>*Tempo Contribuição</td>
             <td class="text-justify">
-              Integral: Período possui todos os salários de contribuição com valor igual ou superior ao mínimo ou o usuário selecionou a opção considerar como Tempo de Contribuição.
-              <br>Parcial: Período não possui todos os salários de contribuição com valor igual ou superior ao mínimo e usuário selecionou não considerar todo o período como Tempo de Contribuição.
+              Integral: Período possui todos os salários de contribuição com
+              valor igual ou superior ao mínimo ou o usuário selecionou a opção
+              considerar como Tempo de Contribuição.
+              <br />Parcial: Período não possui todos os salários de
+              contribuição com valor igual ou superior ao mínimo e usuário
+              selecionou não considerar todo o período como Tempo de
+              Contribuição.
             </td>
           </tr>
         </tbody>
