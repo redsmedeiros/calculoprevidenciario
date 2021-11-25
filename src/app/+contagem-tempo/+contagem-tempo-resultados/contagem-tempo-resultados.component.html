@@ -68,6 +68,7 @@
       <article id="article-periodos" class="col-sm-12 col-md-12 col-lg-12">
 
         <app-contagem-tempo-conclusao-periodos
+        [dadosPassoaPasso]="dadosPassoaPasso"
           [idCalculoSelecionado]="idsCalculos"
           (periodosListRst)="reciverFeedback($event)"
         ></app-contagem-tempo-conclusao-periodos>

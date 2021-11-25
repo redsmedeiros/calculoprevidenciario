@@ -71,6 +71,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public converter_especial_apos_ec103 = 0;
   public is_converter_especial_apos_ec103 = false;
   public isUpdatingVinculos = false;
+  public isCheckSCImport = false;
 
 
   @Output() eventCountVinculosErros = new EventEmitter();
@@ -108,7 +109,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
 
     this.checkMoeda();
-
+    this.setCheckSCImport();
   }
 
 
@@ -134,6 +135,15 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     this.detector.detectChanges();
   }
 
+
+  private setCheckSCImport() {
+
+    if (this.dadosPassoaPasso !== undefined
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+      this.isCheckSCImport = true;
+    }
+
+  }
 
 
   // public updateDatatablePeriodos(vinculo) {
@@ -238,7 +248,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   private checkMoeda() {
 
     if ((this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda))
-     && !this.isEmpty(sessionStorage.getItem('moedaSalarioMinimoTeto'))) {
+      && !this.isEmpty(sessionStorage.getItem('moedaSalarioMinimoTeto'))) {
       this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
     }
 
@@ -252,8 +262,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     if (periodo_fi === '000000' && contribuicoes.at(-1) !== undefined) {
 
-    // periodo_fi = this.formataPeriodo(`01/${contribuicoes[contribuicoes.length - 1].cp}`);
-     periodo_fi = this.formataPeriodo(`01/${contribuicoes.at(-1).cp}`);
+      // periodo_fi = this.formataPeriodo(`01/${contribuicoes[contribuicoes.length - 1].cp}`);
+      periodo_fi = this.formataPeriodo(`01/${contribuicoes.at(-1).cp}`);
     }
 
     const contribuicoesList = [];
@@ -366,9 +376,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: (vinculo.carencia === 1) ? 'Sim' : 'Não',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
-        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
-        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
@@ -413,9 +420,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: 'Sim',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
-        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
-        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
@@ -767,7 +771,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (this.isValidPeriodoContribuicoes(vinculo)) {
+    if (this.isCheckSCImport
+      && this.isValidPeriodoContribuicoes(vinculo)) {
       return true;
     }
 
@@ -944,8 +949,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         vinculo.sc_mm_ajustar = eventRST.sc_mm_ajustar;
         vinculo.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
         vinculo.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
-        vinculo.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
-        vinculo.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+        vinculo.contribuicoes_pendentes = (this.isCheckSCImport && eventRST.result_sc) ? eventRST.result_sc : 0;
+        vinculo.contribuicoes_pendentes_mm = (this.isCheckSCImport && eventRST.result_sc_mm) ? eventRST.result_sc_mm : 0;
 
       }
 
@@ -1258,6 +1263,20 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       let next = <HTMLInputElement>document.getElementById(nextElementId);
       next.focus();
     }
+  }
+
+  getTextBtnSC(contribuicoes_pendentes_mm, contribuicoes_pendentes){
+
+    if (contribuicoes_pendentes > 0) {
+      return 'Existem salários de contribuição não informados'
+    }
+
+    if (contribuicoes_pendentes_mm > 0) {
+      return 'Existem salários de contribuição menores que o salário mínimo.'
+    }
+
+    return 'Salários de Contribuição';
+
   }
 
 
