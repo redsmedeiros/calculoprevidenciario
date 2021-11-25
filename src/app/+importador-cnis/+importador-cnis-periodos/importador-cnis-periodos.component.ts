@@ -250,11 +250,15 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
 
+    if (periodo_fi === '000000' && contribuicoes.at(-1) !== undefined) {
+
+    // periodo_fi = this.formataPeriodo(`01/${contribuicoes[contribuicoes.length - 1].cp}`);
+     periodo_fi = this.formataPeriodo(`01/${contribuicoes.at(-1).cp}`);
+    }
+
     const contribuicoesList = [];
     let result = contribuicoes;
     let chave = periodo_in;
-
-
 
     do {
 
@@ -423,6 +427,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       this.vinculosList.push(line);
       this.isValidVinculo(line);
+
     }
 
 
@@ -1243,7 +1248,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return periodo;
     }
 
-    return '00/0000';
+    return '000000';
 
   }
 

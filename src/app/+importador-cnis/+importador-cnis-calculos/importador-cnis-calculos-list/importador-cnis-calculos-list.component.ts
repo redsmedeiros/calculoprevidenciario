@@ -309,7 +309,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
           this.PeriodosContagemTempoService
             .save(periodos)
             .then((modelRST) => {
-              console.log(modelRST);
+              // console.log(modelRST);
               this.toastAlert('success', 'Cálculo excluído com sucesso', null);
 
             })
@@ -440,8 +440,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
     dataForm.id_segurado = this.seguradoSelecionado.id;
     dataForm.referencia_calculo = this.referencia_calculo;
-
-    console.log(dataForm);
 
     if (this.validate()) {
 

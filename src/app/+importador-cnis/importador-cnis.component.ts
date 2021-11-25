@@ -101,8 +101,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       this.Moeda.moedaSalarioMinimoTeto()
         .then((moeda: Moeda[]) => {
           this.moeda = moeda;
-          console.log(this.moeda);
-
           sessionStorage.setItem(
             'moedaSalarioMinimoTeto',
             JSON.stringify(moeda));
