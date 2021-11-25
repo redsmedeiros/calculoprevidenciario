@@ -204,9 +204,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnInit() {
-    this.resetForm();
-  }
+  ngOnInit() {}
 
 
   ngOnChanges(changes: SimpleChanges) {
