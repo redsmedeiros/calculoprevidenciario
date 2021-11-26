@@ -133,8 +133,8 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
           this.calculosRMIList = calculosRst.filter(c => c.id_contagem_tempo === this.idCalculoSelecionadoCT);
           this.updateDatatable();
 
-          this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
-          this.somarSecundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria) && this.dadosPassoaPasso.somarSecundaria === 'somar');
+          // this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+          // this.somarSecundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria) && this.dadosPassoaPasso.somarSecundaria === 'somar');
         });
 
     }
