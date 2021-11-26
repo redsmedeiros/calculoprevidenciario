@@ -22,7 +22,8 @@
             >
               <div class="home-box text-align-center">
                 <i class="{{ menuHome.icon }} fa-4x "></i>
-                <h3 style="font-weight: 600; font-size: 1.8rem;" [innerHTML]="menuHome.title"></h3>
+                <h3 style="font-weight: 600; font-size: 1.8rem; margin: 5px 0;" [innerHTML]="menuHome.title"></h3>
+                <span *ngIf="menuHome.tag !== ''" [innerHTML]="menuHome.tag"></span>
               </div>
             </a>
           </li>

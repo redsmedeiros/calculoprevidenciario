@@ -198,6 +198,11 @@ a[class*="action-"]:hover {
   font-size: 0.9rem !important;
 }
 
+
+.font-1-0x {
+  font-size: 1rem !important;
+}
+
 .font-1-1x {
   font-size: 1.1rem !important;
 }
