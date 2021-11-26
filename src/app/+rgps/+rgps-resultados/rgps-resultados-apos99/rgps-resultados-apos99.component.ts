@@ -235,7 +235,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataLimite,
           dataInicio);
 
-        console.log(this.listaPeriodosCT);
         console.log(this.listaValoresContribuidos);
 
         if (this.listaValoresContribuidos.length === 0) {
