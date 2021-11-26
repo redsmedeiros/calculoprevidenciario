@@ -681,6 +681,12 @@ a[class*="action-"]:hover {
 .bg-color-yellow {
   background-color: #ffce80 !important;
 }
+.bg-color-primary {
+  background-color: #3276b1;
+  border-color: #2c699d;
+}
+
+
 
 .btn-ieprev:active,
 .btn-ieprev.active {

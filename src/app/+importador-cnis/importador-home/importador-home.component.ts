@@ -242,6 +242,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     sessionStorage.removeItem('exportResultContagemTempo');
     sessionStorage.removeItem('seguradoSelecionado');
     sessionStorage.removeItem('pbcFull');
+    sessionStorage.removeItem('somarSecundaria');
     sessionStorage.removeItem('isToStep6');
 
   }
