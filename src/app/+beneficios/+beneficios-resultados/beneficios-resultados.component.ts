@@ -1215,8 +1215,8 @@ export class BeneficiosResultadosComponent implements OnInit {
             beneficioDevidoAbono = this.aplicarAdicional25(dataCorrente, beneficioDevidoAbono);
             // abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidos(moment(this.calculo.data_prevista_cessacao));
             abonoProporcionalDevidos = this.verificaAbonoProporcionalDevidoInicioFim(
-                                                    moment(this.calculo.data_pedido_beneficio_esperado), 
-                                                    moment(this.calculo.data_prevista_cessacao));
+              moment(this.calculo.data_pedido_beneficio_esperado),
+              moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos);
 
           }
@@ -4677,15 +4677,30 @@ export class BeneficiosResultadosComponent implements OnInit {
             h1, h2{font-size:0.9rem; padding-bottom: 2px; margin-bottom: 2px;}
             i.fa, .not-print{ display: none; }
             .td-width-30{ width: 38% !important;}
-            .table{margin-top: 30px; page-break-inside: avoid;}
+            .table{margin-top: 30px;}
             .table-print-no-margin { margin-top: 2px !important;}
             footer,div,p,th{font-size:10px;}
+            .table-row-group>thead, table-row-group>tbody {display: table-row-group;}
             .table>thead>tr>th{ background-color: #e6e6e6 !important;}
-            .table>tbody>tr>td, .table>tbody>tr>th,
-            .table>tfoot>tr>td, .table>tfoot>tr>th,
-            .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
-            .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px;}
-            .td-condensed-fit{ font-size:9px !important; }
+             .table>tbody>tr>td, .table>tbody>tr>th,
+             .table>tfoot>tr>td, .table>tfoot>tr>th,
+             .table>thead>tr>td, .table>thead>tr>th {padding: 3px 3px;}
+             .table>tbody>tr>td,.table>tfoot>tr>td, .table>tfoot>tr>th { white-space: nowrap !important; font-size:12px;}
+             .td-condensed-fit{ font-size:9px !important; }
+
+            //  table, .table { page-break-after:auto }
+              tr, .table>tbody>tr, .table>thead>tr    { page-break-inside:avoid; page-break-after:auto }
+            //  td, .table>tbody>tr>td, .table>thead>tr>th   { page-break-inside:avoid; page-break-after:auto }
+            //  thead,.table>thead>tr, { display:table-header-group; }
+            //  tfoot { display:table-footer-group }
+
+            // table { page-break-after:auto !important}
+            // tr    { page-break-inside:avoid; page-break-after:auto }
+            // td    { page-break-inside:avoid; page-break-after:auto }
+            // thead { display: table-row-group; }
+            // tfoot { display:table-footer-group }
+
+
             footer{text-align: center;}
             .text-center{ text-align: center; }
             .text-right{ text-align: right; }
@@ -4700,6 +4715,7 @@ export class BeneficiosResultadosComponent implements OnInit {
               border: 1px solid #e3e3e3; border-radius: 2px; -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
               box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
           }
+
       </style>`;
 
     const seguradoBox = document.getElementById('printableSegurado').innerHTML;
