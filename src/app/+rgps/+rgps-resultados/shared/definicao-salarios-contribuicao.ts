@@ -178,9 +178,9 @@ export class DefinicaoSalariosContribuicao {
 
                 const indexSec = (listaDeSCRMI.length > 0) ? listaDeSCRMI.length - 1 : 0
 
-                listaDeSCRMI[indexSec].array_secundaria.push(rowSC.sc);
-                listaDeSCRMI[indexSec].valor_secundaria += rowSC.sc;
-                listaDeSCRMI[indexSec].sc_mm_ajustar = this.verificarRejusteConcomitante(
+                listaDeSCRMI[indexSec]['array_secundaria'].push(rowSC.sc);
+                listaDeSCRMI[indexSec]['valor_secundaria'] += rowSC.sc;
+                listaDeSCRMI[indexSec]['sc_mm_ajustar'] = this.verificarRejusteConcomitante(
                                                         listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
 
             }
