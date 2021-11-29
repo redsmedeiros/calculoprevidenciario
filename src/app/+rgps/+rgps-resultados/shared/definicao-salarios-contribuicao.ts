@@ -176,11 +176,12 @@ export class DefinicaoSalariosContribuicao {
 
             } else {
 
-                listaDeSCRMI[listaDeSCRMI.length - 1].array_secundaria.push(rowSC.sc);
-                listaDeSCRMI[listaDeSCRMI.length - 1].valor_secundaria += rowSC.sc;
-                listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar =
-                    this.verificarRejusteConcomitante(listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar,
-                        rowSC.sc_ao_m);
+                const indexSec = (listaDeSCRMI.length > 0) ? listaDeSCRMI.length - 1 : 0
+
+                listaDeSCRMI[indexSec].array_secundaria.push(rowSC.sc);
+                listaDeSCRMI[indexSec].valor_secundaria += rowSC.sc;
+                listaDeSCRMI[indexSec].sc_mm_ajustar = this.verificarRejusteConcomitante(
+                                                        listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
 
             }
 
