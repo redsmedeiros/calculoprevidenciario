@@ -210,8 +210,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // pbc da vida toda
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc') 
-    || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc')
+      || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
 
 
     const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
@@ -235,8 +235,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataLimite,
           dataInicio);
 
-        // console.log(this.listaPeriodosCT);
-        // console.log(this.listaValoresContribuidos);
 
         if (this.listaValoresContribuidos.length === 0) {
 
@@ -339,7 +337,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
       if ((this.isExits(this.dadosPassoaPasso)
         && this.dadosPassoaPasso.origem === 'passo-a-passo')) {
+
         sc_mm_ajustar = (contribuicao.sc_mm_ajustar === 1);
+
+        this.calculo.somar_contribuicao_secundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria)
+          && this.dadosPassoaPasso.somarSecundaria === 'somar');
+
       }
 
       if (

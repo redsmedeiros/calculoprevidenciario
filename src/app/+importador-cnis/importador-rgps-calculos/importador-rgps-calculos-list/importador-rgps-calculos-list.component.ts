@@ -45,6 +45,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public formCalculo;
   public isEditRGPS = false;
   public revisaoPBC = false;
+  public somarSecundaria = false;
 
 
   private lengthMenuTable = this.setNumberPages();
@@ -132,7 +133,8 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
           this.calculosRMIList = calculosRst.filter(c => c.id_contagem_tempo === this.idCalculoSelecionadoCT);
           this.updateDatatable();
 
-          this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+          // this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+          // this.somarSecundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria) && this.dadosPassoaPasso.somarSecundaria === 'somar');
         });
 
     }
@@ -406,9 +408,21 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
 
   /**
+   * setSomarSecundaria
+   */
+  public setSomarSecundaria() {
+
+    this.somarSecundaria = !(this.somarSecundaria);
+    this.dadosPassoaPasso.somarSecundaria = (this.somarSecundaria ? 'somar' : '');
+    sessionStorage.setItem('somarSecundaria', this.dadosPassoaPasso.somarSecundaria);
+
+  }
+
+ 
+  /**
    * setRevisaoPBC
    */
-  public setRevisaoPBC() {
+   public setRevisaoPBC() {
 
     this.revisaoPBC = !(this.revisaoPBC);
     this.dadosPassoaPasso.pbcFull = (this.revisaoPBC ? 'pbc' : '');

@@ -25,7 +25,7 @@ export class DefinicaoSalariosContribuicao {
     static convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio) {
 
         'use strict';
-        // console.log(listaPeriodosCT);
+
 
         listaPeriodosCT.map((rowObj) => {
 
@@ -48,20 +48,22 @@ export class DefinicaoSalariosContribuicao {
     static checarSalariosContribuicao(rowObj) {
         'use strict';
 
+        // if (rowObj.sc_mm_ajustar !== 1) {
+        //     // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
 
-        if (rowObj.sc_mm_ajustar !== 1) {
-            // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
 
-            rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
-                || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
-                && scRow.sc !== '0,00' && scRow.sc !== 0 && scRow.sc !== ''));
+        //     rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
+        //         || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
+        //         && scRow.sc !== '0,00' && scRow.sc !== 0 && scRow.sc !== 0.00 && scRow.sc !== ''));
 
-        } else {
+        // } else {
 
-            rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00' && scRow.sc !== 0));
+        //     rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00'
+        //         && scRow.sc !== 0 && scRow.sc !== 0.00 && scRow.sc !== 0));
 
-        }
+        // }
 
+        rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00'));
 
         return rowObj.sc
     }
@@ -174,11 +176,12 @@ export class DefinicaoSalariosContribuicao {
 
             } else {
 
-                listaDeSCRMI[listaDeSCRMI.length - 1].array_secundaria.push(rowSC.sc);
-                listaDeSCRMI[listaDeSCRMI.length - 1].valor_secundaria += rowSC.sc;
-                listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar =
-                    this.verificarRejusteConcomitante(listaDeSCRMI[listaDeSCRMI.length - 1].sc_mm_ajustar,
-                        rowSC.sc_ao_m);
+                const indexSec = (listaDeSCRMI.length > 0) ? listaDeSCRMI.length - 1 : 0
+
+                listaDeSCRMI[indexSec]['array_secundaria'].push(rowSC.sc);
+                listaDeSCRMI[indexSec]['valor_secundaria'] += rowSC.sc;
+                listaDeSCRMI[indexSec]['sc_mm_ajustar'] = this.verificarRejusteConcomitante(
+                                                        listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
 
             }
 

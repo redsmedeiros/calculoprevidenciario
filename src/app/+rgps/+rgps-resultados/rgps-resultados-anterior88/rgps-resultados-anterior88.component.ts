@@ -119,35 +119,74 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
     }
 
     this.idSegurado = this.route.snapshot.params['id_segurado'];
-    this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal, this.idSegurado)
-      .then(valorescontribuidos => {
-        this.listaValoresContribuidos = valorescontribuidos;
-        if (this.listaValoresContribuidos.length == 0) {
-          // Exibir MSG de erro e encerrar Cálculo.
-          this.erro = 'Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href="#" target="_blank">Art. 37 da Decreto nº 83.080, de 24/01/1979</a>';
-          this.nenhumaContrib = true;
-          this.isUpdating = false;
-        } else {
-          let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
-          this.Moeda.getByDateRange(primeiraDataTabela, moment())
-            .then((moeda: Moeda[]) => {
-              this.moeda = moeda;
-              this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
-                .then(indices => {
-                  this.inpsList = indices;
-                  this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
-                    .then(salario => {
-                      this.salarioMinimoMaximo = salario[0];
-                      this.erro = this.verificaErros();
-                      if (!this.erro) {
-                        this.calculoAnterior88(this.conclusoes);
-                      }
-                      this.isUpdating = false;
-                    });
+
+
+    this.getValoresContribuicao(this.dataInicioBeneficio, dataLimite, mesesLimiteTotal)
+
+  }
+
+
+  private startCalculoanterior88() {
+    if (this.listaValoresContribuidos.length == 0) {
+      // Exibir MSG de erro e encerrar Cálculo.
+      this.erro = 'Nenhuma contribuição encontrada em até 48 meses para este cálculo <a href="#" target="_blank">Art. 37 da Decreto nº 83.080, de 24/01/1979</a>';
+      this.nenhumaContrib = true;
+      this.isUpdating = false;
+    } else {
+      let primeiraDataTabela = moment(this.listaValoresContribuidos[this.listaValoresContribuidos.length - 1].data);
+      this.Moeda.getByDateRange(primeiraDataTabela, moment())
+        .then((moeda: Moeda[]) => {
+          this.moeda = moeda;
+          this.IndiceInps.getByDate(this.dataInicioBeneficio.clone().startOf('month'))
+            .then(indices => {
+              this.inpsList = indices;
+              this.SalarioMinimoMaximo.getByDate((this.dataInicioBeneficio.clone()).startOf('month'))
+                .then(salario => {
+                  this.salarioMinimoMaximo = salario[0];
+                  this.erro = this.verificaErros();
+                  if (!this.erro) {
+                    this.calculoAnterior88(this.conclusoes);
+                  }
+                  this.isUpdating = false;
                 });
             });
-        }
+        });
+    }
+  }
+
+
+
+  private getValoresContribuicao(dataInicio, dataLimite, mesesLimiteTotal) {
+
+    if (this.isExits(this.dadosPassoaPasso)
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+
+      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+
+        this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
+          rst,
+          dataLimite,
+          dataInicio);
+          this.startCalculoanterior88();
+
+      }).catch(error => {
+        console.error(error);
       });
+
+
+    } else {
+
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, this.dataInicioBeneficio, dataLimite, mesesLimiteTotal, this.idSegurado)
+        .then(valorescontribuidos => {
+          this.listaValoresContribuidos = valorescontribuidos;
+          this.startCalculoanterior88();
+        });
+
+    }
+
+
+
+
   }
 
   verificaErros() {
@@ -159,13 +198,13 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       this.calculo.tipo_seguro == 'Aposentadoria por idade - Trabalhador Urbano') && this.calculo.carencia < 60) {
       erro = 'Falta(m) ' + (60 - this.calculo.carencia) + ' mês(es) para a carencia necessária.';
     } else if (this.segurado.sexo == 'm' && this.idadeSegurado < 65 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)) {
-      erro = 'O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) ' + 
-      (65 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
+      erro = 'O segurado não tem a idade mínima (65 anos) para se aposentar por idade. Falta(m) ' +
+        (65 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
     } else if (this.segurado.sexo == 'f' && this.idadeSegurado < 60 && (this.tipoBeneficio == 3 || this.tipoBeneficio == 16)) {
-      erro = 'O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) ' + 
-      (60 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
+      erro = 'O segurado não tem a idade mínima (60 anos) para se aposentar por idade. Falta(m) ' +
+        (60 - this.idadeSegurado) + ' ano(s) para atingir a idade mínima.'
     } else if ((this.calculo.tipo_seguro == 'Aposentadoria por tempo de serviço' ||
-     this.calculo.tipo_seguro == 'Aposentadoria por tempo de contribuição' ||
+      this.calculo.tipo_seguro == 'Aposentadoria por tempo de contribuição' ||
       this.calculo.tipo_seguro == 'Aposentadoria por Tempo de Contribuição') &&
       anoContribuicaoPrimariaAnterior88 < 30) {
       let qtde_anos = 30 - this.contribuicaoPrimaria.anos;
@@ -178,7 +217,7 @@ export class RgpsResultadosAnterior88Component extends RgpsResultadosComponent i
       if (qtde_meses != 0)
         qtde_anos--;
       erro = 'Falta(m) ' + qtde_anos + ' ano(s), ' +
-      qtde_meses + ' mês(es) e ' + qtde_dias + ' dia(s) para completar o tempo de serviço necessário.';
+        qtde_meses + ' mês(es) e ' + qtde_dias + ' dia(s) para completar o tempo de serviço necessário.';
     }
     return erro;
   }

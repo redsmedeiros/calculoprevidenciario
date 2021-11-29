@@ -176,7 +176,7 @@ export class DefinicaoMoeda {
         }
 
         if ((/\,/).test(valor)) {
-            valor = valor.replace('R$', '').replace(/\./, '').replace(',', '.');
+            valor = valor.replace('R$', '').replace(/\./g, '').replace(',', '.');
         } else {
             valor = valor.replace('R$', '');
         }
