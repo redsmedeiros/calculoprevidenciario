@@ -350,10 +350,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_termino));
       vinculo.contribuicoes = [];
 
-      if (this.isExist(vinculo.sc)) {
+      if (typeof vinculo.sc !== 'undefined' && vinculo.sc && typeof vinculo.sc === 'string') {
         vinculo.contribuicoes = JSON.parse(vinculo.sc);
       } else {
-        vinculo.contribuicoes = [];
+        vinculo.contribuicoes = (this.isExist(vinculo.sc)) ? vinculo.sc : [];
       }
 
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
