@@ -353,7 +353,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       if (typeof vinculo.sc !== 'undefined' && vinculo.sc && typeof vinculo.sc === 'string') {
         vinculo.contribuicoes = JSON.parse(vinculo.sc);
       } else {
-        vinculo.contribuicoes = (this.isExist(vinculo.sc)) ? vinculo.sc : [];
+        vinculo.contribuicoes = (!this.isEmpty(vinculo.sc)) ? vinculo.sc : [];
       }
 
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
