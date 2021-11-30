@@ -15,12 +15,11 @@ export class ConclusoesRmiComponent implements OnInit {
   @Input() dataInicioBeneficio;
   @Input() segurado;
   @Input() valorExportacao;
+  @Input() regra;
 
   constructor() { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   exportarParaBeneficios(data, valor, tipoCalculo) {
 
@@ -38,6 +37,7 @@ export class ConclusoesRmiComponent implements OnInit {
 
 
   imprimirBoxC(event, boxId) {
+
     event.stopPropagation();
     ImprimirRMI.imprimirBox(this.segurado.nome, boxId);
   }
