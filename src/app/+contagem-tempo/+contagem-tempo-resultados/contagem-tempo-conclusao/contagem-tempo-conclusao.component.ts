@@ -855,6 +855,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   private defineCarenciaData(auxiliarDate) {
     let carencia = false;
 
+
     for (const vinculo of this.periodosList) {
 
       const inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
@@ -865,7 +866,8 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       ) {
 
 
-        if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral')) {
+        if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral')
+          || (this.dadosPassoaPasso.origem === 'contagem')) {
           return true;
         }
 

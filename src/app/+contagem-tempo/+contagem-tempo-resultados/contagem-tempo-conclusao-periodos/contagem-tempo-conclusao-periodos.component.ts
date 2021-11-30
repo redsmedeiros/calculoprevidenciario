@@ -27,7 +27,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   public periodosList = [];
   public Math = Math;
   public isCheckSC = false;
-  
+
 
   constructor(
     protected router: Router,
@@ -652,16 +652,20 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
-    if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
-      && ((statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')
-        || (this.checkPeriodoComIntersessaoEC(periodo)))) {
+    if (this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-      periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
-        periodo.sc[0],
-        periodo.data_termino,
-        periodo.sc[periodo.sc.length - 1]);
+      if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
+        && ((statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')
+          || (this.checkPeriodoComIntersessaoEC(periodo)))) {
 
-      totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
+        periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
+          periodo.sc[0],
+          periodo.data_termino,
+          periodo.sc[periodo.sc.length - 1]);
+
+        totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
+
+      }
 
     }
 
@@ -675,7 +679,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     let fimP = moment(date2).format('YYYY-MM-DD');
     let integralInicioFim = false;
 
-    if (this.isExist(limites)) {
+    if (this.isExist(limites) && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
       if (limites.inicioType === 'i' && limites.fimType === 'i'
         && limites.inicio === 30 && limites.fim === 30) {
