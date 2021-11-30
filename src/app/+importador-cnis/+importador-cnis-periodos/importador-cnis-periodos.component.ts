@@ -341,7 +341,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public updateDatatablePeriodosSelecionados(vinculo) {
 
-
     if (typeof vinculo === 'object') {
 
       const periodo_in = this.formataPeriodo(this.formatReceivedDate(vinculo.data_inicio));
@@ -351,10 +350,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_termino));
       vinculo.contribuicoes = [];
 
-      if (typeof vinculo.sc !== 'undefined' && vinculo.sc && typeof vinculo.sc === 'string') {
+      if (this.isExist(vinculo.sc)) {
         vinculo.contribuicoes = JSON.parse(vinculo.sc);
       } else {
-        vinculo.contribuicoes = vinculo.sc;
+        vinculo.contribuicoes = [];
       }
 
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
@@ -1265,7 +1264,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
   }
 
-  getTextBtnSC(contribuicoes_pendentes_mm, contribuicoes_pendentes){
+  getTextBtnSC(contribuicoes_pendentes_mm, contribuicoes_pendentes) {
 
     if (contribuicoes_pendentes > 0) {
       return 'Existem salários de contribuição não informados'
