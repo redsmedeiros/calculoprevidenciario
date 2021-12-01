@@ -227,7 +227,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     let dataLimite;
     if (mesesLimite > 0) {
 
-      dataLimite = (dataInicio.clone()).add(-mesesLimite, 'months');
+      const decrementarLimite = moment(dataInicio.clone().format('YYYY-MM-DD')).subtract(mesesLimite, 'months');
+      dataLimite = moment(decrementarLimite.format('YYYY-MM-DD'));
 
     } else {
 
@@ -236,12 +237,13 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     }
 
 
-    this.getValoresContribuicao(dataInicio, dataLimite, mesesLimite, mesesLimiteTotal);
+    this.getValoresContribuicao(dataLimite, dataInicio, mesesLimite, mesesLimiteTotal);
 
   }
 
 
-  private getValoresContribuicao(dataInicio, dataLimite, mesesLimite, mesesLimiteTotal) {
+  private getValoresContribuicao(dataLimite, dataInicio, mesesLimite, mesesLimiteTotal) {
+
 
 
     if (this.isExits(this.dadosPassoaPasso)
@@ -249,12 +251,13 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
       this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
 
+
         this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
           rst,
           dataLimite,
           dataInicio);
 
-        if (this.listaValoresContribuidos.length == 0) {
+        if (this.listaValoresContribuidos.length === 0) {
           // Exibir MSG de erro e encerrar Cálculo.
           this.nenhumaContrib = true;
           this.isUpdating = false;
