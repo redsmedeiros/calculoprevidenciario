@@ -1,4 +1,3 @@
-
 import * as moment from 'moment';
 import { ValorContribuido } from 'app/+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
 import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
@@ -11,11 +10,9 @@ export class DefinicaoSalariosContribuicao {
 
     static setValoresCotribuicaoRMICT(listaPeriodosCT) {
 
-        'use strict';
         // const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
         const dataInicioBeneficio = null;
         this.convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio);
-
         const scMerge = this.mergeSalariosContribiocao(listaPeriodosCT);
         const scGroupContribuicoes = this.groupSalariosContribuicoes(scMerge);
 
@@ -24,7 +21,6 @@ export class DefinicaoSalariosContribuicao {
 
     static convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio) {
 
-        'use strict';
 
 
         listaPeriodosCT.map((rowObj) => {
@@ -46,7 +42,6 @@ export class DefinicaoSalariosContribuicao {
     }
 
     static checarSalariosContribuicao(rowObj) {
-        'use strict';
 
         // if (rowObj.sc_mm_ajustar !== 1) {
         //     // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
@@ -100,7 +95,6 @@ export class DefinicaoSalariosContribuicao {
 
 
     static mergeSalariosContribiocao(listaPeriodosCT) {
-        'use strict';
 
         const scMerge = [];
         for (const periodo of listaPeriodosCT) {
@@ -147,10 +141,9 @@ export class DefinicaoSalariosContribuicao {
     }
 
     static groupSalariosContribuicoes(scMerge) {
-        'use strict';
 
         const listaDeSCRMI = [];
-        let lastDate;
+        let lastDate = moment('1920-01-01');
         const lastObject = {
             data: '',
             valor_primaria: 0,
@@ -160,6 +153,7 @@ export class DefinicaoSalariosContribuicao {
         };
 
         for (const rowSC of scMerge) {
+            // for (const [i, rowSC] of scMerge.entries()) {
 
             const newDate = moment(rowSC.cp, 'MM/YYYY');
             rowSC.sc = DefinicaoMoeda.convertDecimalValue(rowSC.sc);
@@ -178,10 +172,10 @@ export class DefinicaoSalariosContribuicao {
 
                 const indexSec = (listaDeSCRMI.length > 0) ? listaDeSCRMI.length - 1 : 0
 
-                listaDeSCRMI[indexSec]['array_secundaria'].push(rowSC.sc);
-                listaDeSCRMI[indexSec]['valor_secundaria'] += rowSC.sc;
-                listaDeSCRMI[indexSec]['sc_mm_ajustar'] = this.verificarRejusteConcomitante(
-                                                        listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
+                listaDeSCRMI[indexSec].array_secundaria.push(rowSC.sc);
+                listaDeSCRMI[indexSec].valor_secundaria += rowSC.sc;
+                listaDeSCRMI[indexSec].sc_mm_ajustar = this.verificarRejusteConcomitante(
+                    listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
 
             }
 
@@ -200,7 +194,6 @@ export class DefinicaoSalariosContribuicao {
 
 
     static isExits(value) {
-        'use strict';
 
         return (typeof value !== 'undefined' &&
             value != null && value !== 'null' &&

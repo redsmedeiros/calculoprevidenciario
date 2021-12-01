@@ -80,9 +80,9 @@ export class DefinicaoMoeda {
 
     /**
      * Converter moeda entre os tipos por data
-     * @param valor 
-     * @param dataCorrente 
-     * @param dataConversao 
+     * @param valor
+     * @param dataCorrente
+     * @param dataConversao
      */
     static convertCurrency(valor, dataCorrente, dataConversao) {
         let valorConvertido = parseFloat(valor);
@@ -132,11 +132,11 @@ export class DefinicaoMoeda {
         return sigla + ' ' + numeroPadronizado;
     }
 
-     /**
-     * Formatar para moeda 
-     * @param  {} value
-     * @param  {} sigla='R$'
-     */
+    /**
+    * Formatar para moeda 
+    * @param  {} value
+    * @param  {} sigla='R$'
+    */
     static formatMoneyB(value, exibirSigla = false, sigla = 'R$') {
 
         if (value === undefined || value == '' || value === null) {
@@ -215,5 +215,5 @@ export class DefinicaoMoeda {
     }
 
 
-   
+
 }
