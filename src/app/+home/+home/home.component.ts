@@ -73,15 +73,15 @@ export class HomeComponent implements OnInit {
       no § 7º, do artigo 216 e § 8º-A, do artigo 239, do Decreto n. 3.048/1999, com redação 
       dada pelo Decreto n. 10.410/2020.`
     },
-    {
-      value: 'plan',
-      link: '/rgps/rgps-planejamento',
-      icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
-      title: `Planejamento  <br> Previdenciário`,
-      tag: `<span class="label bg-ieprev-y text-white pull-right;font-1-0x;">Exclusivo Premium</span> `,
-      label: `Possibilita a realização de cálculos, comparando o valor do benefício em diferentes datas (atual e/ou futura),
-       a fim de identificar o melhor momento para o requerimento da aposentadoria.`
-    },
+    // {
+    //   value: 'plan',
+    //   link: '/rgps/rgps-planejamento',
+    //   icon: `fa  fa-history fa-flip-horizontal fa-lg fa-fw`,
+    //   title: `Planejamento  <br> Previdenciário`,
+    //   tag: `<span class="label bg-ieprev-y text-white pull-right;font-1-0x;">Exclusivo Premium</span> `,
+    //   label: `Possibilita a realização de cálculos, comparando o valor do benefício em diferentes datas (atual e/ou futura),
+    //    a fim de identificar o melhor momento para o requerimento da aposentadoria.`
+    // },
     {
       value: 'trasicao',
       link: '/transicao',
@@ -112,6 +112,12 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit() {
+
+    if (sessionStorage.getItem('plan') === '010') {
+      window.location.href = '/#/rgps/rgps-planejamento';
+      this.textosSimuladoresMenu = [];
+    }
+
 
   }
 
