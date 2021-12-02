@@ -233,6 +233,17 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     return this.errors.empty();
   }
 
+  /**
+   * clearDataInputForm
+   */
+  public clearDataInputForm() {
+  
+    this.inicioPeriodo = '';
+    this.finalPeriodo = '';
+    this.salarioContribuicao = undefined;
+
+  }
+
   isEmpty(data) {
 
     if (data === undefined

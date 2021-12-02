@@ -4619,13 +4619,13 @@ export class BeneficiosResultadosComponent implements OnInit {
     // window.location.href = (this.considerarPrescricao) ? window.location.href.split('?')[0] + '? 
     // considerarPrescricao=false' : window.location.href.split('?')[0];
 
-    let is_prescricao = 'true';
-    if (sessionStorage.considerarPrescricao === 'true') {
-      is_prescricao = 'false';
-    }
+    // let is_prescricao = 'true';
+    // if (sessionStorage.considerarPrescricao === 'true') {
+    //   is_prescricao = 'false';
+    // }
 
-    sessionStorage.setItem('considerarPrescricao', is_prescricao);
-    window.location.reload();
+    // sessionStorage.setItem('considerarPrescricao', is_prescricao);
+    // window.location.reload();
   }
 
   getTipoAposentadoria(value) {
