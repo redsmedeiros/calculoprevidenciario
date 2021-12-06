@@ -3,8 +3,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {SmartadminModule} from '../../shared/smartadmin.module';
-import {SmartadminDatatableModule} from '../../shared/ui/datatable/smartadmin-datatable.module';
+import { SmartadminModule } from '../../shared/smartadmin.module';
+import { SmartadminDatatableModule } from '../../shared/ui/datatable/smartadmin-datatable.module';
 import { I18nModule } from '../../shared/i18n/i18n.module';
 import { TextMaskModule } from 'angular2-text-mask';
 
@@ -31,12 +31,18 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip/tooltip.module';
     TooltipModule
   ],
   declarations: [
-      ContagemTempoSeguradosComponent,
-      ContagemTempoSeguradosIndexComponent,
-      ContagemTempoSeguradosCreateComponent,
-      ContagemTempoSeguradosDestroyComponent,
-      ContagemTempoSeguradosFormComponent,
-      ContagemTempoSeguradosEditComponent
+    ContagemTempoSeguradosComponent,
+    ContagemTempoSeguradosIndexComponent,
+    ContagemTempoSeguradosCreateComponent,
+    ContagemTempoSeguradosDestroyComponent,
+    ContagemTempoSeguradosFormComponent,
+    ContagemTempoSeguradosEditComponent
+  ], exports: [
+    ContagemTempoSeguradosComponent,
+    ContagemTempoSeguradosCreateComponent,
+    ContagemTempoSeguradosDestroyComponent,
+    ContagemTempoSeguradosFormComponent,
+    ContagemTempoSeguradosEditComponent
   ]
 })
 export class ContagemTempoSeguradosModule { }

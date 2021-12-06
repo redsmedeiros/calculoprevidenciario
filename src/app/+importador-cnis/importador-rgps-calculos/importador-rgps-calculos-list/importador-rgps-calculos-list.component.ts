@@ -306,7 +306,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
           .then((model) => {
 
             this.getCalculosSeguradoSelecionado();
-            this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+            this.toastAlert('success', 'Ação concluída.', null);
 
           }).catch((err) => {
             this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);

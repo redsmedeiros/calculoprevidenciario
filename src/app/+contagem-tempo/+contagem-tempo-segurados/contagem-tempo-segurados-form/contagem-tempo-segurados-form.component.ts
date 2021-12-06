@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorService } from '../../../services/error.service';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -22,30 +22,51 @@ export class ContagemTempoSeguradosFormComponent {
     e.preventDefault();
 
     if (!localStorage.getItem('user_id')) {
-      swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
+      //  swal('Erro', 'Falha de login!', 'error').then(() => { window.location.href = environment.loginPageUrl; });
+
+      swal({
+        type: 'error',
+        title: 'Falha de login!',
+        showConfirmButton: false,
+        timer: 1500
+      }).then(() => { window.location.href = environment.loginPageUrl; });
     }
 
     this.validate();
 
     if (this.errors.empty()) {
-      swal('Sucesso', 'Segurado salvo com sucesso', 'success');
+
+      swal({
+        position: 'top-end',
+        type: 'success',
+        title: 'Dados salvo com sucesso.',
+        showConfirmButton: false,
+        timer: 1000
+      });
+
       this.formData.funcao = 'contagem';
       this.formData.user_id = localStorage.getItem('user_id');
       this.onSubmit.emit(this.formData);
     } else {
-      swal('Erro', 'Confira os dados digitados', 'error');
+
+      swal({
+        type: 'error',
+        title: 'Verifique os dados antes de prosseguir.',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   }
 
-  ngAfterContentInit() {
-    // setTimeout(() => {
-    //   this.changeDocumentMask();
-    // }, 200)
-  }
+  // ngAfterContentInit() {
+  //   // setTimeout(() => {
+  //   //   this.changeDocumentMask();
+  //   // }, 200)
+  // }
 
   validate() {
     if (this.formData.nome == undefined || this.formData.nome == '') {
-      this.errors.add({ 'nome': ["O Nome é obrigatório."] });
+      this.errors.add({ 'nome': ['O Nome é obrigatório.'] });
     }
 
     // if (this.formData.id_documento == undefined || this.formData.id_documento == '') {
@@ -55,19 +76,21 @@ export class ContagemTempoSeguradosFormComponent {
     if (this.formData.data_nascimento == undefined || this.formData.data_nascimento == '') {
       this.errors.add({ 'data_nascimento': ['A data de nascimento é obrigatória.'] });
     } else {
-      var dateParts = this.formData.data_nascimento.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
+      const dateParts = this.formData.data_nascimento.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      if (isNaN(date.getTime())) {
         this.errors.add({ 'data_nascimento': ['Insira uma data válida.'] });
+      }
     }
 
     if (this.formData.data_filiacao == undefined || this.formData.data_filiacao == '') {
-       this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
+      this.errors.add({ 'data_filiacao': ['A data de filiação é obrigatória.'] });
     } else {
-      var dateParts = this.formData.data_filiacao.split('/');
-      let date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
-      if (isNaN(date.getTime()))
+      const dateParts = this.formData.data_filiacao.split('/');
+      const date = new Date(dateParts[1] + '/' + dateParts[0] + '/' + dateParts[2]);
+      if (isNaN(date.getTime())) {
         this.errors.add({ 'data_filiacao': ['Insira uma data válida.'] });
+      }
     }
 
     if (this.formData.sexo == undefined || this.formData.sexo == '') {
@@ -80,38 +103,38 @@ export class ContagemTempoSeguradosFormComponent {
     // } else {
     //   let documentNumber = this.formData.numero_documento.replace(/[^\w]/gi, '').replace(/\_/gi, '');
     //   let id = this.formData.id_documento.toString();
-      // switch (id) {
-      //   case '1': // PIS
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({ 'numero_documento': ['PIS inválido.'] });
-      //     break;
+    // switch (id) {
+    //   case '1': // PIS
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({ 'numero_documento': ['PIS inválido.'] });
+    //     break;
 
-      //   case '2': // PASEP
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({ 'numero_documento': ['PASEP inválido.'] });
-      //     break;
+    //   case '2': // PASEP
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({ 'numero_documento': ['PASEP inválido.'] });
+    //     break;
 
-      //   case '3': // CPF
-      //     if (!this.validateCPF(documentNumber))
-      //       this.errors.add({ 'numero_documento': ['CPF inválido.'] });
-      //     break;
+    //   case '3': // CPF
+    //     if (!this.validateCPF(documentNumber))
+    //       this.errors.add({ 'numero_documento': ['CPF inválido.'] });
+    //     break;
 
-      //   case '4': // NIT
-      //     if (!this.validatePIS(parseInt(documentNumber)))
-      //       this.errors.add({ 'numero_documento': ['NIT inválido.'] });
-      //     break;
+    //   case '4': // NIT
+    //     if (!this.validatePIS(parseInt(documentNumber)))
+    //       this.errors.add({ 'numero_documento': ['NIT inválido.'] });
+    //     break;
 
-      //   case '5': // RG
-      //     if (!this.validateRG(documentNumber))
-      //       this.errors.add({ 'numero_documento': ['RG inválido.'] });
-      //     break;
+    //   case '5': // RG
+    //     if (!this.validateRG(documentNumber))
+    //       this.errors.add({ 'numero_documento': ['RG inválido.'] });
+    //     break;
 
-      //   default:
-      //     break;
-      // }
-   //}
+    //   default:
+    //     break;
+    // }
+    // }
 
-    
+
   }
 
   /*
