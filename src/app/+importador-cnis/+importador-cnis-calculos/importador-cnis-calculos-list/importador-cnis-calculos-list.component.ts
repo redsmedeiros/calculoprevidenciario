@@ -17,6 +17,7 @@ import { SizeFunctions } from 'app/shared/functions/size-functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as moment from 'moment';
 import { InputFunctions } from 'app/shared/functions/input-functions';
+import { NotificationService } from 'app/shared/utils/notification.service';
 
 
 @Component({
