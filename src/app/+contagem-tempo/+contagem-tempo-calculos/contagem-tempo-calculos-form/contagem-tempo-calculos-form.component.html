@@ -1,24 +1,43 @@
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
-      <label class="col-md-2 control-label bold" for="referencia_calculo">Referência do cálculo:* <i class="fa fa-question-circle fa-lg text-info"  data-placement="bottom" tooltip="Texto definido pelo usuário para identificar a simulação de cálculo de contagem tempo."></i></label>
-      <div class="col-md-8">
-        <input [(ngModel)]="referencia_calculo" [ngModelOptions]="{standalone: true}" class="form-control" type="text"
-        (change)="errors.clear('referencia_calculo')"
-          data-placement="bottom" tooltip="Texto definido pelo usuário para identificar a simulação de cálculo de contagem tempo.">
-        <small *ngIf="errors.has('referencia_calculo')" class="text-danger">{{ errors.get('referencia_calculo') |
-          i18n}}</small>
+      <label class="col-md-4 control-label bold" for="referencia_calculo"
+        >Identificação do Cálculo:*
+        <i
+          class="fa fa-question-circle fa-lg text-info"
+          data-placement="bottom"
+          tooltip="Nome definido pelo Usuário para identificar o Cálculo de Contagem de Tempo de Contribuição."
+        ></i
+      ></label>
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="referencia_calculo"
+          [ngModelOptions]="{ standalone: true }"
+          class="form-control"
+          type="text"
+          (change)="errors.clear('referencia_calculo')"
+          data-placement="bottom"
+          tooltip="Nome definido pelo Usuário para identificar o Cálculo de Contagem de Tempo de Contribuição."
+        />
+        <small *ngIf="errors.has('referencia_calculo')" class="text-danger">{{
+          errors.get("referencia_calculo") | i18n
+        }}</small>
       </div>
     </div>
   </fieldset>
   <div class="form-actions p-0 mt-2">
     <div class="row">
       <div class="col-md-12">
-        <button (click)="submit($event)" type="submit" class="btn btn-labeled btn-info">
+        <button
+          (click)="submit($event)"
+          type="submit"
+          class="btn btn-labeled btn-info"
+        >
           <span class="btn-label">
             <i class="fa fa-save"></i>
-          </span> <span *ngIf="isEdit">Salvar</span>
-          <span *ngIf="!isEdit">Inserir novo cálculo</span>
+          </span>
+          <span *ngIf="isEdit">Salvar</span>
+          <span *ngIf="!isEdit">Inserir Novo Cálculo</span>
         </button>
       </div>
     </div>

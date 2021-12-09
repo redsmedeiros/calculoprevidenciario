@@ -180,8 +180,10 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     }
 
     if (!this.isEdit && this.isExits(this.calculoRMIDefaulForm)) {
-      this.setNewFormRMIinfoContagemTempo();
+     this.setNewFormRMIinfoContagemTempo();
     }
+
+    // console.log(this.calculoRMIDefaulForm);
 
   }
 
@@ -202,13 +204,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnInit() {
-
-    this.getSegurado();
-    this.iniciarForm();
-
-  }
-
+  ngOnInit() {}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -937,13 +933,15 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   checkImportContagemTempo() {
 
-    if (sessionStorage.exportContagemTempo && sessionStorage.exportContagemTempo !== undefined) {
-      // this.resetForm();
+    if (sessionStorage.exportContagemTempo && 
+      sessionStorage.exportContagemTempo !== undefined) {
+
       this.importContagemTempo();
       sessionStorage.removeItem('exportContagemTempo');
-    } else {
-      this.resetForm();
     }
+    // else {
+      // this.resetForm();
+    // }
 
   }
 

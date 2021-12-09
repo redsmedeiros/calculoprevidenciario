@@ -3,7 +3,7 @@
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="panel panel-default-ieprev">
       <div class="panel-heading">
-        <h3 class="panel-title">Relações Previdenciárias</h3>
+        <h3 class="panel-title"><i class="fa fa-calendar"></i> Períodos de Contribuição</h3>
       </div>
       <div class="panel-body">
         <div class="panel panel-default">
@@ -213,7 +213,7 @@
                   </div>
                 </div>
                 <div class="form-group" *ngIf="is_converter_especial_apos_ec103" >
-                  <label class="col-md-3 control-label">Converter especial após EC103:</label>
+                  <label class="col-md-2 control-label">Converter especial após EC103:</label>
                   <div class="col-md-2">
                     <label class="radio radio-inline">
                       <input
@@ -268,13 +268,14 @@
           >
             <thead>
               <tr>
+                <th>#</th>
                 <th>Empresa</th>
                 <th>Data Início</th>
                 <th>Data Final</th>
                 <th class="text-center">Condição Especial</th>
                 <th class="text-center">Fator Condição</th>
                 <th class="text-center">Carência</th>
-                <th class="text-center">
+                <th class="text-center" *ngIf="isCheckSCImport" >
                   <span
                     data-placement="bottom"
                     tooltip="Salários de Contribuição"
@@ -287,7 +288,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let vinculo of vinculosList">
+              <tr *ngFor="let vinculo of vinculosList;index as i">
+                <td>
+                  {{ i + 1}}
+                </td>
                 <td
                   [ngClass]="{
                     'bg-color-red': vinculo.empresa == '' || !vinculo.empresa
@@ -316,13 +320,7 @@
                   {{ vinculo.fator_condicao_especial }}
                 </td>
                 <td class="text-center">{{ vinculo.carencia }}</td>
-                <td>
-                  <!-- <button type="button" 
-                  id="imagem" (click)="showContribuicoes(vinculo, index)"  class="btn btn-labeled btn-success pull-right">
-                  <span class="btn-label" [ngClass]="{'bg-color-red': vinculo.contribuicoes_pendentes > 0}">
-                    <i class="fa fa-table"></i>
-                  </span><span [ngClass]="{'text-danger': vinculo.contribuicoes_pendentes > 0}">Contribuições</span>
-                </button> -->
+                <td *ngIf="isCheckSCImport"> 
                   <button
                     type="button"
                     id="sc-{{ vinculo.index }}"
@@ -333,7 +331,8 @@
                       'bg-color-red': vinculo.contribuicoes_pendentes > 0 && isExistPeriodo(vinculo.sc_mm_considerar_carencia) && isExistPeriodo(vinculo.sc_mm_considerar_tempo)
                     }"
                     data-placement="bottom"
-                    tooltip="Salários de Contribuição"
+                    
+                    tooltip="{{getTextBtnSC(vinculo.contribuicoes_pendentes_mm, vinculo.contribuicoes_pendentes)}}"
                   >
                     <i class="fa fa-money fa-1-8x"></i>
                   </button>
@@ -379,6 +378,7 @@
 <div
   bsModal
   #contribuicoes="bs-modal"
+  [config]="{backdrop: 'Enable', ignoreBackdropClick: 'Enable'}"
   class="modal fade"
   id="contribuicoes"
   tabindex="-1"

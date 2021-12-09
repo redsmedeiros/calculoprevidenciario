@@ -11,6 +11,7 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ErrorService } from 'app/services/error.service';
 import swal from 'sweetalert2';
+import { SizeFunctions } from 'app/shared/functions/size-functions';
 
 
 
@@ -43,8 +44,11 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   public calculosRMIList = [];
   public formCalculo;
   public isEditRGPS = false;
+  public revisaoPBC = false;
+  public somarSecundaria = false;
 
 
+  private lengthMenuTable = this.setNumberPages();
   public columnsConfig = [
     {
       data: 'actions2',
@@ -85,6 +89,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     data: this.calculosRMIList,
     // order: [[6, 'desc']],]
     columns: this.columnsConfig,
+    lengthMenu: this.lengthMenuTable,
     buttons: [
       {
         extend: 'colvis',
@@ -102,9 +107,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     protected Errors: ErrorService,
   ) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -127,9 +130,11 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       this.CalculoRgpsService.getCalculoBySeguradoId(this.idSeguradoSelecionado)
         .then((calculosRst: CalculoRgps[]) => {
 
-          this.calculosRMIList = calculosRst;
+          this.calculosRMIList = calculosRst.filter(c => c.id_contagem_tempo === this.idCalculoSelecionadoCT);
           this.updateDatatable();
 
+          // this.revisaoPBC = (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+          // this.somarSecundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria) && this.dadosPassoaPasso.somarSecundaria === 'somar');
         });
 
     }
@@ -143,6 +148,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       data: this.calculosRMIList,
       // order: [[6, 'desc']],
       columns: this.columnsConfig,
+      lengthMenu: this.lengthMenuTable,
       buttons: [
         {
           extend: 'colvis',
@@ -160,6 +166,14 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     this.isUpdatingCalcRGPS = false;
   }
 
+
+  setNumberPages() {
+
+    if (!SizeFunctions.isWidthGreaterThan(1366)) {
+      return [5, 10, 25, 50, 75, 'All'];
+    }
+    return [10, 25, 50, 75, 'All'];
+  }
 
   private getRow(dataRow) {
 
@@ -392,6 +406,29 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     this.modalCalculosRGPS.hide();
   }
 
+
+  /**
+   * setSomarSecundaria
+   */
+  public setSomarSecundaria() {
+
+    this.somarSecundaria = !(this.somarSecundaria);
+    this.dadosPassoaPasso.somarSecundaria = (this.somarSecundaria ? 'somar' : '');
+    sessionStorage.setItem('somarSecundaria', this.dadosPassoaPasso.somarSecundaria);
+
+  }
+
+ 
+  /**
+   * setRevisaoPBC
+   */
+   public setRevisaoPBC() {
+
+    this.revisaoPBC = !(this.revisaoPBC);
+    this.dadosPassoaPasso.pbcFull = (this.revisaoPBC ? 'pbc' : '');
+    sessionStorage.setItem('pbcFull', this.dadosPassoaPasso.pbcFull);
+
+  }
 
 
   formatAnosMesesDias(dias) {

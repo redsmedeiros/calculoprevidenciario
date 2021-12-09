@@ -1,4 +1,3 @@
-
 import * as moment from 'moment';
 import { ValorContribuido } from 'app/+rgps/+rgps-valores-contribuidos/ValorContribuido.model';
 import { DefinicaoMoeda } from 'app/shared/functions/definicao-moeda';
@@ -11,11 +10,9 @@ export class DefinicaoSalariosContribuicao {
 
     static setValoresCotribuicaoRMICT(listaPeriodosCT) {
 
-        'use strict';
         // const dataInicioBeneficio = moment(calculo.data_pedido_beneficio, 'DD/MM/YYYY');
         const dataInicioBeneficio = null;
         this.convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio);
-
         const scMerge = this.mergeSalariosContribiocao(listaPeriodosCT);
         const scGroupContribuicoes = this.groupSalariosContribuicoes(scMerge);
 
@@ -24,8 +21,7 @@ export class DefinicaoSalariosContribuicao {
 
     static convertContribuicoesJSON(listaPeriodosCT, dataInicioBeneficio) {
 
-        'use strict';
-        // console.log(listaPeriodosCT);
+
 
         listaPeriodosCT.map((rowObj) => {
 
@@ -46,25 +42,23 @@ export class DefinicaoSalariosContribuicao {
     }
 
     static checarSalariosContribuicao(rowObj) {
-        'use strict';
 
-        // console.log(rowObj);
-        // console.log(rowObj.sc_mm_ajustar);
+        // if (rowObj.sc_mm_ajustar !== 1) {
+        //     // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
 
 
-        if (rowObj.sc_mm_ajustar !== 1) {
-            // rowObj.sc = rowObj.sc.filter((scRow) => (scRow.msc === 0 && scRow.sc !== '0,00' && scRow.sc !== 0));
+        //     rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
+        //         || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
+        //         && scRow.sc !== '0,00' && scRow.sc !== 0 && scRow.sc !== 0.00 && scRow.sc !== ''));
 
-            rowObj.sc = rowObj.sc.filter((scRow) => (((scRow.msc === 0 && moment(scRow.cp, 'MM/YYYY').isAfter('2019-11-13', 'month')
-                || moment(scRow.cp, 'MM/YYYY').isBefore('2019-11-13', 'month')))
-                && scRow.sc !== '0,00' && scRow.sc !== 0));
+        // } else {
 
-        } else {
+        //     rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00'
+        //         && scRow.sc !== 0 && scRow.sc !== 0.00 && scRow.sc !== 0));
 
-            rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '0,00' && scRow.sc !== 0));
+        // }
 
-        }
-
+        rowObj.sc = rowObj.sc.filter((scRow) => (scRow.sc !== '' && scRow.sc !== '0,00'));
 
         return rowObj.sc
     }
@@ -84,11 +78,28 @@ export class DefinicaoSalariosContribuicao {
     //  }
 
 
+
+
+    static setMCAjuste(periodo) {
+
+        const n_ajustar_mm = !(periodo.sc_mm_ajustar === 0
+            && periodo.sc_mm_considerar_tempo === 1);
+
+        periodo.sc.map((SC) => {
+            SC.sc_ao_m = (SC.msc === 1 && n_ajustar_mm);
+        });
+
+        return periodo
+    }
+
+
+
     static mergeSalariosContribiocao(listaPeriodosCT) {
-        'use strict';
 
         const scMerge = [];
         for (const periodo of listaPeriodosCT) {
+
+            this.setMCAjuste(periodo);
             scMerge.push(...periodo.sc)
         }
 
@@ -119,19 +130,30 @@ export class DefinicaoSalariosContribuicao {
     }
 
 
+
+    static verificarRejusteConcomitante(anterior, atual) {
+
+        if (!anterior || !atual) {
+            return false;
+        }
+
+        return true;
+    }
+
     static groupSalariosContribuicoes(scMerge) {
-        'use strict';
 
         const listaDeSCRMI = [];
-        let lastDate;
+        let lastDate = moment('1920-01-01');
         const lastObject = {
             data: '',
             valor_primaria: 0,
             valor_secundaria: 0,
-            array_secundaria: []
+            array_secundaria: [],
+            sc_mm_ajustar: true
         };
 
         for (const rowSC of scMerge) {
+            // for (const [i, rowSC] of scMerge.entries()) {
 
             const newDate = moment(rowSC.cp, 'MM/YYYY');
             rowSC.sc = DefinicaoMoeda.convertDecimalValue(rowSC.sc);
@@ -142,13 +164,18 @@ export class DefinicaoSalariosContribuicao {
                     data: newDate.format('YYYY-MM-DD'),
                     valor_primaria: rowSC.sc,
                     valor_secundaria: 0,
-                    array_secundaria: []
+                    array_secundaria: [],
+                    sc_mm_ajustar: rowSC.sc_ao_m,
                 });
 
             } else {
 
-                listaDeSCRMI[listaDeSCRMI.length - 1].array_secundaria.push(rowSC.sc);
-                listaDeSCRMI[listaDeSCRMI.length - 1].valor_secundaria += rowSC.sc;
+                const indexSec = (listaDeSCRMI.length > 0) ? listaDeSCRMI.length - 1 : 0
+
+                listaDeSCRMI[indexSec].array_secundaria.push(rowSC.sc);
+                listaDeSCRMI[indexSec].valor_secundaria += rowSC.sc;
+                listaDeSCRMI[indexSec].sc_mm_ajustar = this.verificarRejusteConcomitante(
+                    listaDeSCRMI[indexSec].sc_mm_ajustar, rowSC.sc_ao_m);
 
             }
 
@@ -167,7 +194,6 @@ export class DefinicaoSalariosContribuicao {
 
 
     static isExits(value) {
-        'use strict';
 
         return (typeof value !== 'undefined' &&
             value != null && value !== 'null' &&

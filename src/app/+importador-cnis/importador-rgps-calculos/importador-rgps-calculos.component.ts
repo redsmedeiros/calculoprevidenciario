@@ -75,7 +75,7 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
       primaria19meses: exportCT.total.months,
       primaria19dias: exportCT.total.days,
       carencia: exportCT.total19.carencia,
-      carenciaAposEc103: exportCT.total19.carencia,
+      carenciaAposEc103: exportCT.total.carencia,
     };
 
   }

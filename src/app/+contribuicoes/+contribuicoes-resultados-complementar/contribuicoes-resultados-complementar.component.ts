@@ -116,7 +116,7 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
       this.segurado = segurado;
       this.dataNascimento();
       if (localStorage.getItem('user_id') != this.segurado.user_id) {
-        //redirecionar para pagina de segurados
+        // redirecionar para pagina de segurados
         swal({
           type: 'error',
           title: 'Erro',
@@ -225,18 +225,21 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     this.calculoComplementar.contribuicao_calculada = this.total_total;
 
     this.Complementar.update(this.calculoComplementar).then((rst: ContribuicaoModel) => {
-      this.Complementar.get().then(() => {
-        swal({
-          type: 'success',
-          title: 'O Cálculo foi salvo com sucesso',
-          text: '',
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          timer: 1500
-        }).then(() => {
 
-        });
+      swal({
+        type: 'success',
+        title: 'O Cálculo foi salvo com sucesso',
+        text: '',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timer: 1500
+      }).then(() => {
+
       });
+
+      // this.Complementar.find(this.idCalculo).then((calculo: ContribuicaoModel) => {
+      //   console.log(calculo);
+      // });
     }).catch(error => {
       console.log(error);
     });
@@ -696,6 +699,10 @@ export class ContribuicoesResultadosComplementarComponent implements OnInit {
     const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
+
+    if (isNaN(valor)) {
+      valor = 0.00;
+    }
 
     if (moeda && valor < salarioMinimo) {
       valorRetorno = salarioMinimo;

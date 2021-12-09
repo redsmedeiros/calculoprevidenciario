@@ -6,6 +6,6 @@ import {CommonModule} from "@angular/common";
 @NgModule({
   imports: [CommonModule],
   declarations: [WidgetComponent, WidgetsGridComponent],
-  exports: [WidgetComponent, WidgetsGridComponent]
+  exports: [WidgetComponent, WidgetsGridComponent],
 })
 export class SmartadminWidgetsModule{}

@@ -30,6 +30,8 @@ import { ContagemTempoCalculosCopyComponent } from './contagem-tempo-calculos-co
     ContagemTempoCalculosDestroyComponent,
     ContagemTempoCalculosCreateComponent,
     ContagemTempoCalculosCopyComponent
+  ], exports: [
+    ContagemTempoCalculosFormComponent
   ]
 })
 export class ContagemTempoCalculosModule { }

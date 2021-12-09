@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImportadorRgpsCalculosComponent } from './importador-rgps-calculos.component';
@@ -8,7 +9,8 @@ describe('ImportadorRgpsCalculosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImportadorRgpsCalculosComponent ]
+      declarations: [ ImportadorRgpsCalculosComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

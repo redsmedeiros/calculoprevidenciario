@@ -96,7 +96,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
         this.errors.add({ 'dipValoresDevidos': ['Insira uma data Válida.'] });
         valid = false;
       } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
-        this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a dib'] });
+        this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a DIB'] });
         valid = false;
       } else if (moment(this.dipValoresDevidos, 'DD/MM/YYYY') < moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
         this.errors.add({ 'dipValoresDevidos': ['A data deve ser maior que a DIB'] });
@@ -123,6 +123,9 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
         valid = false;
       } else if (moment(this.dibAnteriorValoresDevidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'dibAnteriorValoresDevidos': ['A data deve ser maior que 01/1970.'] });
+        valid = false;
+      } else if (moment(this.dibAnteriorValoresDevidos, 'DD/MM/YYYY') > moment(this.dibValoresDevidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dibAnteriorValoresDevidos': ['A data deve ser menor que a DIB.'] });
         valid = false;
       }
     }

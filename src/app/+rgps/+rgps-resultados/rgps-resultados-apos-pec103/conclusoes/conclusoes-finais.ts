@@ -237,13 +237,14 @@ export class conclusoesFinais {
             pedagio50: this.defineAliquotaPedagio50,
             pedagio100: this.defineAliquotaPedagio100,
             especial: this.defineAliquotaAposentadoriaEspecial,
+            especialt: this.defineAliquotaAposentadoriaEspecial,
             acidente: this.defineAliquotaAuxilioAcidente,
             doenca: this.defineAliquotaAuxilioDoenca,
             deficiente: this.defineAliquotaDeficiente,
             incapacidade: this.defineAliquotaIncapacidade,
             pensaoObito: this.defineAliquotaPensaoObitoInstituidorNaoAposentado,
         };
-
+        
         if (methodsPorEspecie[elementRegraEspecie.regra] !== undefined) {
 
             elementPossibilidade.aliquota = methodsPorEspecie[elementRegraEspecie.regra]
@@ -369,13 +370,15 @@ export class conclusoesFinais {
      */
     private aplicarDestaqueMelhorValor(elementRegraEspecie) {
 
+       // && (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)
+
         if (elementRegraEspecie.calculosPossiveis.length > 1) {
 
             elementRegraEspecie.calculosPossiveis.sort((entry1, entry2) => {
-                if ((entry1.rmi.value < entry2.rmi.value) || (entry1.mediaDasContribuicoes.value < entry2.mediaDasContribuicoes.value)) {
+                if ((entry1.rmi.value < entry2.rmi.value) ) {
                     return 1;
                 }
-                if ((entry1.rmi.value > entry2.rmi.value) || (entry1.mediaDasContribuicoes.value > entry2.mediaDasContribuicoes.value)) {
+                if ((entry1.rmi.value > entry2.rmi.value)) {
                     return -1;
                 }
                 return 0;

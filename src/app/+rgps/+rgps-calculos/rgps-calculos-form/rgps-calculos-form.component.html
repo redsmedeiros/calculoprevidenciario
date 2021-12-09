@@ -253,24 +253,26 @@
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="media12Ultimos" class="checkbox" [ngModelOptions]="{standalone: true}">
-                          <span>Afastar a média dos 12 últimos salários de contribuição (§ 10, art. 29, da Lei 8.213/91).</span>
-                          <popover-content #avisoMedia12Ultimos
-                          title="Afastar a média dos 12 últimos salários de contribuição (§ 10, art. 29, da Lei 8.213/91)"
-                          [closeOnClickOutside]="true"
-                          >
-                          <div class="alert alert-danger bg-ieprev fade in bold" *ngIf="getEspecieBeneficio(especieBeneficio) === 1">
-                            O § 23, do art. 32, do Decreto 3.048/99 determina que o Auxílio por Incapacidade Temporária não poderá exceder 
-                            a média aritmética simples dos últimos doze salários de contribuição. 
-                            Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício para afastamento desta limitação, 
-                            o Simulador IEPREV possibilita o cálculo sem a incidência da média mencionada.
-                          </div>
-                          </popover-content>
-                            <button type="button" class="btn btn-small btn-info" 
-                            popoverPlacement="left" 
-                            [popoverOnHover]="true"
-                            [popover]="avisoMedia12Ultimos">
-                                <i class="fa fa-question-circle fa-1-6x"></i>
-                            </button>
+                          <span>Afastar a média dos 12 últimos salários de contribuição (§ 10, art. 29, da Lei 8.213/91).
+                            <popover-content #avisoMedia12Ultimos
+                            title="Afastar a média dos 12 últimos salários de contribuição (§ 10, art. 29, da Lei 8.213/91)"
+                            [closeOnClickOutside]="true"
+                            >
+                            <div class="alert alert-danger bg-ieprev fade in bold" *ngIf="getEspecieBeneficio(especieBeneficio) === 1">
+                              O § 23, do art. 32, do Decreto 3.048/99 determina que o Auxílio por Incapacidade Temporária não poderá exceder 
+                              a média aritmética simples dos últimos doze salários de contribuição. 
+                              Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício para afastamento desta limitação, 
+                              o Simulador IEPREV possibilita o cálculo sem a incidência da média mencionada.
+                            </div>
+                            </popover-content>
+                              <button type="button" class="btn btn-small btn-info" 
+                              popoverPlacement="left" 
+                              [popoverOnHover]="true"
+                              [popover]="avisoMedia12Ultimos">
+                                  <i class="fa fa-question-circle fa-1-6x"></i>
+                              </button>
+                          </span>
+                         
                         </label>
                       </div>
                     </div>
@@ -278,81 +280,131 @@
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="calcularDescarteAposEC103" class="checkbox" [ngModelOptions]="{standalone: true}">
-                          <span>Aplicar o descarte dos menores salários de contribuição (§ 6º, art. 26, da EC 103/2019)</span>
-                        </label>
-                          <popover-content #avisoDescarteMenoresSalarios
-                          title="Aplicar o descarte dos menores salários de contribuição (§ 6º, art. 26, da EC 103/2019)"
-                          [closeOnClickOutside]="true"
-                          >
-                          <div class="alert alert-danger bg-ieprev fade in bold" 
-                          *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" >
-                            Os §§ 24 a 27, do art. 32, do Decreto 3.048/99 determinam que para fins do cálculo das aposentadorias programadas para as quais seja 
-                            exigido tempo mínimo de contribuição, poderão ser excluídas do cálculo da média dos salários de contribuição, as contribuições que 
-                            resultem em redução do valor do benefício, conforme previsto no § 6°, do artigo 26, da EC 103/2019, excetuando os benefício não programáveis. 
-                            Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício para exclusão das menores contribuições, também nos benefícios não
-                             programáveis, o Simulador IEPREV possibilita a elaboração do cálculo com a exclusão mencionada.
-                          </div>
-                          </popover-content>
-                            <button type="button" class="btn btn-small btn-info" 
-                            popoverPlacement="left" 
-                            [popoverOnHover]="true"
-                            [popover]="avisoDescarteMenoresSalarios"
-                            *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" 
+                          <span>Aplicar o descarte dos menores salários de contribuição (§ 6º, art. 26, da EC 103/2019)
+                            <popover-content #avisoDescarteMenoresSalarios
+                            title="Aplicar o descarte dos menores salários de contribuição (§ 6º, art. 26, da EC 103/2019)"
+                            [closeOnClickOutside]="true"
                             >
-                                <i class="fa fa-question-circle fa-1-6x"></i>
-                            </button>
+                            <div class="alert alert-danger bg-ieprev fade in bold" 
+                            *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" >
+                              Os §§ 24 a 27, do art. 32, do Decreto 3.048/99 determinam que para fins do cálculo das aposentadorias programadas para as quais seja 
+                              exigido tempo mínimo de contribuição, poderão ser excluídas do cálculo da média dos salários de contribuição, as contribuições que 
+                              resultem em redução do valor do benefício, conforme previsto no § 6°, do artigo 26, da EC 103/2019, excetuando os benefício não programáveis. 
+                              Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício para exclusão das menores contribuições, também nos benefícios não
+                               programáveis, o Simulador IEPREV possibilita a elaboração do cálculo com a exclusão mencionada.
+                            </div>
+                            </popover-content>
+                              <button type="button" class="btn btn-small btn-info" 
+                              popoverPlacement="left" 
+                              [popoverOnHover]="true"
+                              [popover]="avisoDescarteMenoresSalarios"
+                              *ngIf="[1,1903,1901,1905].includes(getEspecieBeneficio(especieBeneficio))" 
+                              >
+                                  <i class="fa fa-question-circle fa-1-6x"></i>
+                              </button>
+                          </span>
+                        </label>
+                 
                       </div>
                     </div>
-                    <div *ngIf="has19 && !hasPensaoInstuidorAposentado && iscalcularDescarteDeficienteEC103 && !divisorMinimo;" class="form-group mb-4">
+                    <div *ngIf="has19 
+                    && !hasPensaoInstuidorAposentado
+                     && iscalcularDescarteDeficienteEC103 
+                     && !divisorMinimo;" 
+                    class="form-group mb-4">
                       <div class="checkbox col-md-offset-3 col-md-9">
                         <label>
                           <input type="checkbox" [(ngModel)]="calcularDescarteDeficienteEC103" class="checkbox" [ngModelOptions]="{standalone: true}">
-                          <span>Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição).</span>
+                          <span>Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição).
+                            <popover-content #aviso100PCD
+                            title="Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição)"
+                            [closeOnClickOutside]="true"
+                            >
+                            <div class="alert alert-danger bg-ieprev fade in bold" 
+                            *ngIf="[25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))" >
+                              O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, 
+                              inclusive quanto aos critérios de cálculo, ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. 
+                              Apesar disso, o artigo 70-J, do Decreto 3.048/99 determina que o salário de benefício da Aposentadoria da PcD será apurado 
+                              na forma do artigo 32 (m.a.s de 100% dos SC). O Simulador IEPREV realiza o cálculo com utilização da  m.a.s dos 80% > SC, mas 
+                              possibilita a elaboração do cálculo pela m.a.s de 100% dos SC.
+                            </div>
+                            </popover-content>
+                              <button type="button" class="btn btn-small btn-info" 
+                              popoverPlacement="left" 
+                              [popoverOnHover]="true"
+                              [popover]="aviso100PCD"
+                              *ngIf="[25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))"
+                              >
+                                  <i class="fa fa-question-circle fa-1-6x"></i>
+                              </button>
+                          </span>
                         </label>
-                        <popover-content #aviso100PCD
-                        title="Cálculo conforme art. 26 da EC 103/2019 (média de 100% dos salários de contribuição)"
-                        [closeOnClickOutside]="true"
-                        >
-                        <div class="alert alert-danger bg-ieprev fade in bold" 
-                        *ngIf="[25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))" >
-                          O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, 
-                          inclusive quanto aos critérios de cálculo, ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. 
-                          Apesar disso, o artigo 70-J, do Decreto 3.048/99 determina que o salário de benefício da Aposentadoria da PcD será apurado 
-                          na forma do artigo 32 (m.a.s de 100% dos SC). O Simulador IEPREV realiza o cálculo com utilização da  m.a.s dos 80% > SC, mas 
-                          possibilita a elaboração do cálculo pela m.a.s de 100% dos SC.
-                        </div>
-                        </popover-content>
-                          <button type="button" class="btn btn-small btn-info" 
-                          popoverPlacement="left" 
-                          [popoverOnHover]="true"
-                          [popover]="aviso100PCD"
-                          *ngIf="[25,26,27,28].includes(getEspecieBeneficio(especieBeneficio))"
-                          >
-                              <i class="fa fa-question-circle fa-1-6x"></i>
-                          </button>
-                          
                       </div>
                     </div>
                     <div class="form-group mb-4"  
-                    *ngIf="(has19 || hasAtual) && hasDivisorMinimo || (((has19 || hasAtual) && hasDivisorMinimo) 
-                       && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103));">
+                    *ngIf=" (((has19 || hasAtual) && hasDivisorMinimo) && ![25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)));">
                       <div class="checkbox col-md-9 col-md-offset-3">
                         <label>
                           <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
                           <span *ngIf="(has19 || hasAtual) && hasDivisorMinimo">
                             Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
+                            <popover-content #avisoDescarteMenoresSalarios
+                            title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
+                            [closeOnClickOutside]="true"
+                            >
+                            <div class="alert alert-danger bg-ieprev fade in bold" 
+                            *ngIf="hasDivisorMinimo" >
+                              Opção aplicada aos benefício concedidos com base no direito adquirido até 13/11/2019 (§ 1°, do art. 188-e, do Decreto 3.048/99). 
+                              Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
+                              possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
+                              com a exclusão mencionada.
+                            </div>
+                            </popover-content>
+                              <button type="button" class="btn btn-small btn-info" 
+                              popoverPlacement="left" 
+                              [popoverOnHover]="true"
+                              [popover]="avisoDescarteMenoresSalarios"
+                              *ngIf="hasDivisorMinimo"
+                              >
+                                  <i class="fa fa-question-circle fa-1-6x"></i>
+                              </button>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group mb-4"  
+                    *ngIf=" ([25,26,27,28].includes(getEspecieBeneficio(especieBeneficio)) 
+                      && ( (hasAtual && !has19 && hasDivisorMinimo)
+                       || (has19 && hasDivisorMinimo  && (iscalcularDescarteDeficienteEC103 && !calcularDescarteDeficienteEC103))
+                       ));">
+                      <div class="checkbox col-md-9 col-md-offset-3">
+                        <label>
+                          <input type="checkbox" [(ngModel)]="divisorMinimo" class="checkbox" [ngModelOptions]="{standalone: true}">  
+                          <span *ngIf="(hasAtual && !has19 && hasDivisorMinimo)">
+                            Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019) 
+                          </span>
+                          <span *ngIf="(has19 && hasDivisorMinimo)">
+                            Afastar o Divisor Mínimo.
                           </span>
                         </label>
                         <popover-content #avisoDescarteMenoresSalarios
-                        title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
-                        [closeOnClickOutside]="true"
+                          title="Afastar o Divisor Mínimo (Para benefícios concedidos até 13/11/2019)"
+                          [closeOnClickOutside]="true"
                         >
                         <div class="alert alert-danger bg-ieprev fade in bold" 
-                        *ngIf="hasDivisorMinimo" >
+                        *ngIf="(hasAtual && !has19 && hasDivisorMinimo)" >
                           Opção aplicada aos benefício concedidos com base no direito adquirido até 13/11/2019 (§ 1°, do art. 188-e, do Decreto 3.048/99). 
                           Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
                           possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo 
                           com a exclusão mencionada.
+                        </div>
+                        <div class="alert alert-danger bg-ieprev fade in bold" 
+                        *ngIf="(has19 && hasDivisorMinimo)" >
+                        O artigo 22 da EC 103/2019 determina que a Aposentadoria da Pessoa com Deficiência será concedida nos termos da LC 142/2013, 
+                        inclusive quanto aos critérios de cálculo, ou seja, m.a.s dos 80% > SC, conforme disposto no artigo 8º da Lei Complementar. 
+                        Neste caso o § 2°, do artigo 3°, da Lei 9.876/99 determina a aplicação do Divisor Mínimo. Entretanto, caso o usuário vislumbre 
+                        possibilidade de revisão do benefício para exclusão do mínimo divisor, o Simulador IEPREV possibilita a elaboração do cálculo
+                         com a exclusão mencionada.
                         </div>
                         </popover-content>
                           <button type="button" class="btn btn-small btn-info" 
@@ -363,11 +415,8 @@
                           >
                               <i class="fa fa-question-circle fa-1-6x"></i>
                           </button>
-                          
                       </div>
                     </div>
-
-                   
                       <div class="form-group mb-4" *ngIf="has19 && (hasPensao19 || hasInvalidez19 || hasAuxilioAcidente)">
                         <div *ngIf="especieBeneficio == 'Pensão por Morte instituidor aposentado na data óbito' || especieBeneficio == 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'">
                         <label class="col-md-3 control-label"  [ngClass]="{'pt-0':!isEdit}" for="ultimoBeneficio"><strong>Valor da último Benefício*:</strong></label>
@@ -385,31 +434,31 @@
                           <label>
                             <input type="checkbox" [(ngModel)]="obitoDecorrenciaTrabalho" class="checkbox" [ngModelOptions]="{standalone: true}" >
                             <span>Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho.
+                              <popover-content #avisoDecorrenteAcidente
+                              title="Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho"
+                              [closeOnClickOutside]="true"
+                              >
+                              <div class="alert alert-danger bg-ieprev fade in bold" 
+                              *ngIf="getEspecieBeneficio(especieBeneficio) === 1903" >
+                                Quando a Aposentadoria por Incapacidade Temporária decorrer de acidente do trabalho, doença profissional ou doença do trabalho, 
+                                a alíquota do benefício será de 100% (§ 3°, II, do art. 26, da EC 103/2019)
+                              </div>
+                              <div class="alert alert-danger bg-ieprev fade in bold" 
+                              *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
+                              getEspecieBeneficio(especieBeneficio) === 1901" >
+                              A base de cálculo da Pensão por Morte, quando o segurado(a) falecido(a) não for aposentado(a), será a Aposentadoria por Incapacidade 
+                              Permanente que ele teria direito na data do óbito (art. 23 da EC 103/2019). Portanto, se o segurado falecer em decorrência de acidente do trabalho, 
+                              doença profissional ou doença do trabalho, a alíquota da Aposentadoria por Incapacidade Permanente, base de cálculo da Pensão por Morte, será de 100% (§ 3°, II, do art. 26, da EC 103/2019)
+                              </div>
+                              </popover-content>
+                                <button type="button" class="btn btn-small btn-info" 
+                                popoverPlacement="left" 
+                                [popoverOnHover]="true"
+                                [popover]="avisoDecorrenteAcidente">
+                                    <i class="fa fa-question-circle fa-1-6x"></i>
+                                </button>
                             </span>
                           </label>
-                          <popover-content #avisoDecorrenteAcidente
-                          title="Benefício decorrente de acidente de trabalho, doença profissional ou doença do trabalho"
-                          [closeOnClickOutside]="true"
-                          >
-                          <div class="alert alert-danger bg-ieprev fade in bold" 
-                          *ngIf="getEspecieBeneficio(especieBeneficio) === 1903" >
-                            Quando a Aposentadoria por Incapacidade Temporária decorrer de acidente do trabalho, doença profissional ou doença do trabalho, 
-                            a alíquota do benefício será de 100% (§ 3°, II, do art. 26, da EC 103/2019)
-                          </div>
-                          <div class="alert alert-danger bg-ieprev fade in bold" 
-                          *ngIf="getEspecieBeneficio(especieBeneficio) === 1900 ||
-                          getEspecieBeneficio(especieBeneficio) === 1901" >
-                          A base de cálculo da Pensão por Morte, quando o segurado(a) falecido(a) não for aposentado(a), será a Aposentadoria por Incapacidade 
-                          Permanente que ele teria direito na data do óbito (art. 23 da EC 103/2019). Portanto, se o segurado falecer em decorrência de acidente do trabalho, 
-                          doença profissional ou doença do trabalho, a alíquota da Aposentadoria por Incapacidade Permanente, base de cálculo da Pensão por Morte, será de 100% (§ 3°, II, do art. 26, da EC 103/2019)
-                          </div>
-                          </popover-content>
-                            <button type="button" class="btn btn-small btn-info" 
-                            popoverPlacement="left" 
-                            [popoverOnHover]="true"
-                            [popover]="avisoDecorrenteAcidente">
-                                <i class="fa fa-question-circle fa-1-6x"></i>
-                            </button>
                         </div>
                       </div>
                       <div class="form-group mb-4"  *ngIf="has19 && hasPensao19 && hasPensaoNaoInstuidorAposentado">

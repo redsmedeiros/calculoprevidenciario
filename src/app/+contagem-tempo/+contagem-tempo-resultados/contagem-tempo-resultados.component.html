@@ -1,7 +1,9 @@
 <div id="content">
   <!-- widget grid -->
   <sa-widgets-grid>
-    <div class="row mb-4">
+    <div class="row mb-4" 
+    [ngClass]="{ 'not-screen': (dadosPassoaPasso.origem === 'passo-a-passo') }"
+    >
       <div class="col-sm-12 col-md-12 col-lg-12">
         <h3 class="no-margin">
           <span class="semi-bold">Contagem de Tempo de Contribuição</span>
@@ -29,7 +31,7 @@
           <li class="breadcrumb-item">
             <a
               href="#/contagem-tempo/contagem-tempo-calculos/{{ idSegurado }}/{{
-                this.idsCalculos[0]
+                this.idsCalculos
               }}/editar"
             >
               Editar Cálculo</a
@@ -38,7 +40,7 @@
           <li class="breadcrumb-item">
             <a
               href="#/contagem-tempo/contagem-tempo-periodos/{{ idSegurado }}/{{
-                this.idsCalculos[0]
+                this.idsCalculos
               }}"
             >
               Editar Períodos</a
@@ -66,6 +68,7 @@
       <article id="article-periodos" class="col-sm-12 col-md-12 col-lg-12">
 
         <app-contagem-tempo-conclusao-periodos
+        [dadosPassoaPasso]="dadosPassoaPasso"
           [idCalculoSelecionado]="idsCalculos"
           (periodosListRst)="reciverFeedback($event)"
         ></app-contagem-tempo-conclusao-periodos>

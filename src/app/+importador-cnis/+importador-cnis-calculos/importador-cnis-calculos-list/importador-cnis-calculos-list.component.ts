@@ -13,6 +13,10 @@ import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-perio
 
 import { ErrorService } from 'app/services/error.service';
 import swal from 'sweetalert2';
+import { SizeFunctions } from 'app/shared/functions/size-functions';
+import { ModalDirective } from 'ngx-bootstrap';
+import * as moment from 'moment';
+import { InputFunctions } from 'app/shared/functions/input-functions';
 
 
 @Component({
@@ -29,16 +33,22 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
   @Input() seguradoSelecionado;
   @Output() calculoSelecionadoEvent = new EventEmitter();
+  @Output() toStep6Event = new EventEmitter();
+  @ViewChild('modalCalculosContagemTempo') public modalCalculosContagemTempo: ModalDirective;
 
   public calculoSelecionado = {};
   private calculoCTDuplicar = {};
 
+  public referencia_calculo = '';
+  public formCalculoCT;
+  public isEditContagem = false;
+  public isToStep6 = false;
   public listCalculos = [];
   public calculosList = [];
   // public calculosList = this.CalculoContagemService.list;
 
 
-
+  private lengthMenuTable = this.setNumberPages();
   private columnsConfig = [
     {
       data: 'actions2',
@@ -72,6 +82,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     colReorder: true,
     data: this.calculosList,
     columns: this.columnsConfig,
+    lengthMenu: this.lengthMenuTable,
   };
 
   public isUpdatingCalc = true;
@@ -96,6 +107,8 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     this.ref.detectChanges();
     // this.setExibirForm(this.dadosPassoaPasso);
 
+    this.isToStep6 = false;
+
     this.getCalculosSeguradoSelecionado();
   }
 
@@ -118,6 +131,16 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     }
 
   }
+
+
+  setNumberPages() {
+
+    if (!SizeFunctions.isWidthGreaterThan(1366)) {
+      return [5, 10, 25, 50, 75, 'All'];
+    }
+    return [10, 25, 50, 75, 'All'];
+  }
+
 
 
   private getListCalculos(idSegurado) {
@@ -144,6 +167,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
       colReorder: true,
       data: this.calculosList,
       columns: this.columnsConfig,
+      lengthMenu: this.lengthMenuTable,
     };
 
     this.isUpdatingCalc = false;
@@ -151,6 +175,8 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
 
   private getRow(dataRow) {
+
+    this.isCalculosSelecionado = false;
 
     if (this.isExits(dataRow)) {
 
@@ -161,6 +187,10 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
 
       this.calculoSelecionadoEvent.emit(this.calculosSelecionado);
       sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculosSelecionado));
+
+      if (InputFunctions.checkedUniqueCount(`${this.calculosSelecionado.id}-checkbox-calculos`, '.checkboxCalculos') === 0) {
+        this.isCalculosSelecionado = false;
+      }
 
     }
   }
@@ -186,10 +216,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     }
   }
 
-
-
   private copyRow(dataRow) {
-
 
     if (this.isExits(dataRow)) {
 
@@ -208,6 +235,26 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     if (this.isExits(dataRow)) {
 
       this.deleteCalculoCT(dataRow);
+
+    }
+
+  }
+
+
+  public setToStep6() {
+
+    sessionStorage.setItem('isToStep6', '');
+
+    if (!this.isCalculosSelecionado) {
+      this.isToStep6 = false;
+      sessionStorage.setItem('isToStep6', '');
+    }
+
+    if (this.isCalculosSelecionado
+      && this.calculosSelecionado.total_carencia > 0
+      && this.isToStep6) {
+
+      sessionStorage.setItem('isToStep6', 'aStep4');
 
     }
 
@@ -262,7 +309,7 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
           this.PeriodosContagemTempoService
             .save(periodos)
             .then((modelRST) => {
-              console.log(modelRST);
+              // console.log(modelRST);
               this.toastAlert('success', 'Cálculo excluído com sucesso', null);
 
             })
@@ -277,11 +324,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
       .catch(errors => this.errors.add(errors));
 
   }
-
-
-
-
-
 
   private deleteCalculoCT(calculoCT) {
 
@@ -318,10 +360,112 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     });
   }
 
+  validate() {
+    this.errors.clear('referencia_calculo');
+
+    if (this.referencia_calculo == undefined
+      || this.referencia_calculo == '') {
+      this.errors.add({
+        'referencia_calculo':
+          ['Insira uma referência para simulação.']
+      });
+
+      return false;
+    }
+
+    return true;
+
+  }
 
 
+  private createCalculoContagemTempo(data) {
+
+    this.CalculoContagemService
+      .save(data)
+      .then(model => {
+
+        this.getCalculosSeguradoSelecionado();
+        this.hideChildModal();
+        // this.resetForm();
+        this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+      })
+      .catch(errors => this.errors.add(errors));
+
+  }
 
 
+  private updateCalculoContagemTempo(data) {
+
+    if (this.validate) {
+      this.formCalculoCT.referencia_calculo = this.referencia_calculo;
+
+      this.formCalculoCT
+        .update(data)
+        .then(model => {
+
+          this.getCalculosSeguradoSelecionado();
+          this.isEditContagem = false;
+          this.hideChildModal();
+          this.toastAlert('success', 'Cálculo salvo com sucesso.', null);
+
+        })
+        .catch(errors => { this.errors.add(errors); console.log(errors) });
+    }
+
+  }
+
+
+  private updateRow(dataRow) {
+
+    this.formCalculoCT = {};
+
+    this.showChildModal();
+    this.isEditContagem = true;
+    this.referencia_calculo = dataRow.referencia_calculo;
+    this.formCalculoCT = dataRow;
+
+  }
+
+  setNewFormContagemTempoRef() {
+
+    this.referencia_calculo = 'Impotação - ' + moment().format('DD/MM/YYYY')
+    this.isEditContagem = false;
+    this.showChildModal();
+
+  }
+
+
+  public submit(dataForm) {
+
+    dataForm.id_segurado = this.seguradoSelecionado.id;
+    dataForm.referencia_calculo = this.referencia_calculo;
+
+    if (this.validate()) {
+
+      if (!this.isEditContagem) {
+
+        this.createCalculoContagemTempo(dataForm);
+
+      } else {
+
+        this.updateCalculoContagemTempo(dataForm);
+
+      }
+    }
+
+  }
+
+
+  public showChildModal(): void {
+    this.formCalculoCT = CalculoContagemTempoModel.form;
+    this.modalCalculosContagemTempo.show();
+  }
+
+  public hideChildModal(): void {
+    this.formCalculoCT = CalculoContagemTempoModel.form;
+    this.modalCalculosContagemTempo.hide();
+  }
 
 
 
@@ -340,11 +484,15 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
     return ` <div class="btn-group">
       <button class="btn txt-color-white bg-color-teal btn-xs copy-btn"
           title="Duplicar" >&nbsp;<i class="fa fa-copy fa-1-7x"></i>&nbsp;</button>
+          <button class="btn btn-warning btn-xs update-btn" 
+          title="Editar o cálculo">&nbsp;<i class="fa fa-edit fa-1-7x"></i>&nbsp;</button>
       <button class="btn btn-danger btn-xs delete-btn"
           title="Deletar" >&nbsp;<i class="fa fa-times fa-1-7x"></i>&nbsp;</button>
     </div>
 `;
   }
+
+
 
 
   formatAnosMesesDias(dias) {
@@ -374,8 +522,6 @@ export class ImportadorCnisCalculosListComponent implements OnInit, OnChanges {
       value !== undefined && value !== '')
       ? true : false;
   }
-
-
 
 
   toastAlert(type, title, position) {

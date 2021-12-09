@@ -375,6 +375,9 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       } else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') < this.dataMinima) {
         this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser maior que 01/1970'] });
         valid = false;
+      }else if (moment(this.dibAnteriorValoresRecebidos, 'DD/MM/YYYY') > moment(this.dibValoresRecebidos, 'DD/MM/YYYY')) {
+        this.errors.add({ 'dibAnteriorValoresRecebidos': ['A data deve ser menor que a DIB.'] });
+        valid = false;
       }
     }
 

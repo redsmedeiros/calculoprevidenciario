@@ -1,6 +1,6 @@
 <div class="modal-dialog modal-full">
   <div class="modal-content">
-    <article class="col-sm-12 col-md-12 col-lg-12">
+    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="matrizHasValues">
       <dl class="padding-5">
         <dt><b>Empresa:</b> {{ vinculo.empresa }}</dt>
         <dt>
@@ -27,6 +27,7 @@
                   [textMask]="{ mask: dateMask }"
                   type="text"
                   (change)="errors.clear('inicioPeriodo')"
+                  tooltip="Início do período"
                 />
               </div>
             </div>
@@ -47,7 +48,7 @@
                   [textMask]="{ mask: dateMask }"
                   type="text"
                   (change)="errors.clear('finalPeriodo')"
-                  tooltip="{{ errors.get('finalPeriodo') }}"
+                  tooltip="Final do período"
                 />
               </div>
             </div>
@@ -68,9 +69,9 @@
                   name="salarioContribuicao"
                   id="valorInput"
                   (change)="errors.clear('salarioContribuicao')"
-                  (keyup)="insertSCEnter($event)"
+                  (keyup)="insertSCenter($event)"
                   type="text"
-                  tooltip="{{ errors.get('salarioContribuicao') }}"
+                  tooltip="Valor do Salário de Contribuição"
                 />
               </div>
             </div>
@@ -96,6 +97,7 @@
         [colorbutton]="false"
         [editbutton]="false"
         [deletebutton]="false"
+        class="mb-1"
       >
         <header>
           <span class="widget-icon">
@@ -133,14 +135,21 @@
               </thead>
               <tbody>
                 <tr *ngFor="let data of matriz; index as i">
-                  <td style="text-align: right">
-                    <i
-                      class="fa fa-copy"
+                  <td style="text-align: center">
+                    <!-- <i
+                      class="fa fa-copy "
                       (click)="copiarPeriodo(data.ano)"
                       data-placement="bottom"
                       tooltip="Selecionar este ano"
-                      >&nbsp;&nbsp;</i
-                    >{{ data.ano }}&nbsp;&nbsp;
+                      ></i> -->
+                      <a class="btn btn-xs btn-primary pull-left"
+                      (click)="copiarPeriodo(data.ano)"
+                      data-placement="bottom"
+                      tooltip="Selecionar este ano"
+                      ><i class="fa fa-copy"></i>
+                      </a>
+                      
+                     <strong> {{ data.ano }}</strong>
                   </td>
                   <td
                     class="matriz-line"
@@ -460,9 +469,11 @@
           </div>
         </div>
       </sa-widget>
+      <span class="pull-left py-2">(*) Preenchimento Obrigatório.</span>
     </article>
-
+    
     <div class="modal-footer">
+      
       <button
         type="button"
         title="Fechar"
@@ -472,36 +483,108 @@
         Fechar
       </button>
       <!-- <div class="btn-group"></div> -->
-        <button
-          *ngIf="isSC_mm_ajustar_btn"
-          type="button"
-          class="btn btn-warning"
-          (click)="showContribuicoesCheck()"
-          style="min-width: 220px;"
+
+      <span>
+        <popover-content
+          #popDesfazerLeg
+          title="Desfazer"
+          [closeOnClickOutside]="true"
         >
-        <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a últimas alterações de preencimento autómatico de teto e/ou
+            mínimo.
+          </div>
+        </popover-content>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="salarioTeto"
+          *ngIf="isSC_mm_ajustar_btn"
+          (click)="desfazerMatrizSC()"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popDesfazerLeg"
+        >
+          <i class="fa fa-money"></i> Desfazer Últimas alterações
         </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCT
+          title="Limitar SC ao Teto SC"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Limitar SC ao Teto SC na competência em que o valor é zero ou menor que o mínimo.
+          </div>
+        </popover-content>
         <button
           type="button"
           class="btn btn-danger"
           id="salarioTeto"
           *ngIf="isSC_mm_ajustar_btn"
           (click)="preencherComSalario('t')"
-          style="min-width: 220px;"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCT"
         >
-        <i class="fa fa-money"></i>Ajustar SC ao Teto SC
+          <i class="fa fa-money"></i> Limitar SC ao Teto SC
         </button>
+      </span>
+
+      <span>
+        <popover-content
+          #popPreencherSCM
+          title="Limitar SC ao Salário Mínimo"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Limitar SC ao Salário Mínimo na competência em que o valor é zero ou menor que o mínimo.
+          </div>
+        </popover-content>
         <button
           type="button"
           class="btn btn-danger"
           id="salarioMinimo"
           *ngIf="isSC_mm_ajustar_btn"
           (click)="preencherComSalario('m')"
-          style="min-width: 220px;"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popPreencherSCM"
         >
-          <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
+          <i class="fa fa-money"></i> Limitar SC ao Salário Mínimo
         </button>
-      
+      </span>
+
+      <span>
+        <popover-content
+          #popOpcoesDescarteTC
+          title="Editar Tempo e Carência"
+          [closeOnClickOutside]="true"
+        >
+          <div class="bg-ieprev fade in bold text-justify">
+            Desfazer a última alteração de preencimento autómatico de teto e/ou
+            mínimo
+          </div>
+        </popover-content>
+        <button
+          *ngIf="isSC_mm_ajustar_btn"
+          type="button"
+          class="btn btn-warning"
+          (click)="showContribuicoesCheck()"
+          style="min-width: 220px"
+          [popoverPlacement]="right"
+          [popoverOnHover]="true"
+          [popover]="popOpcoesDescarteTC"
+        >
+          <i class="fa fa-list fa-1-7x"></i> Editar Tempo e Carência
+        </button>
+      </span>
+
       <button
         type="button"
         class="btn btn-primary"
@@ -520,6 +603,7 @@
 <div
   bsModal
   #contribuicoesCheck="bs-modal"
+  [config]="{ backdrop: 'Enable', ignoreBackdropClick: 'Enable' }"
   class="modal fade"
   id="contribuicoesCheck"
   tabindex="-1"
@@ -530,14 +614,15 @@
     <div class="modal-content">
       <div class="modal-body">
         <form class="form-horizontal">
-          <h6>
-            Existem competências com salário de contribuição inferior ao mínimo
-            selecione abaixo como o simulador deve tratar estas competências.
+          <h6 class="text-justify">
+            Neste período existem competências com salário de contribuição abaixo do mínimo. 
+            Selecione as opções abaixo para elaboração do cálculo, 
+            considerando ou não o período como tempo de contribuição e carência:
           </h6>
           <fieldset>
             <div class="form-group">
               <label class="col-md-7 control-label"
-                >Considerar como Tempo de Contribuição*</label
+                >Considerar como Tempo de Contribuição:*</label
               >
               <div class="col-md-4">
                 <label class="radio radio-inline">
@@ -574,7 +659,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-md-7 control-label">Considerar Carência*</label>
+              <label class="col-md-7 control-label">Considerar como Carência:*</label>
               <div class="col-md-4">
                 <label class="radio radio-inline">
                   <input
@@ -611,9 +696,9 @@
                 </div>
               </div>
             </div>
-            <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+            <!-- <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
               <label class="col-md-7 control-label"
-                >Limitar no Valor ao Salário Mínimo*</label
+                >Limitar no Valor do Salário Mínimo:*</label
               >
               <div class="col-md-4">
                 <label class="radio radio-inline">
@@ -648,19 +733,64 @@
                   </div>
                 </div>
               </div>
+            </div> -->
+            <div class="form-group" *ngIf="sc_mm_considerar_tempo === 1">
+              <label class="col-md-7 control-label"
+                >Limitar no Valor do Salário Mínimo:*</label
+              >
+              <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="1"
+                  />
+                </label>
+              </div>
+              <label class="col-md-7 control-label"
+              > Não Limitar no Valor do Salário Mínimo:*</label
+            >
+            <div class="col-md-4">
+                <label class="radio radio-inline">
+                  <input
+                    [(ngModel)]="sc_mm_ajustar"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="errors.clear('sc_mm_ajustar')"
+                    type="radio"
+                    name="sc_mm_ajustar"
+                    [value]="0"
+                  />
+                 
+                </label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <small
+                      *ngIf="errors.has('sc_mm_ajustar')"
+                      class="text-danger"
+                      >{{ errors.get("sc_mm_ajustar") | i18n }}</small
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </fieldset>
         </form>
+        <span class="pull-left py-1">(*) Preenchimento Obrigatório.</span>
       </div>
-
+      
       <div class="modal-footer">
+        
         <button
           type="button"
-          class="btn btn-default pull-left"
+          class="btn btn-danger pull-left"
           (click)="hideContribuicoesCheck()"
         >
-          Voltar e Preencher Manualmente
+          Fechar
         </button>
+        
         <button
           type="button"
           class="btn btn-primary"

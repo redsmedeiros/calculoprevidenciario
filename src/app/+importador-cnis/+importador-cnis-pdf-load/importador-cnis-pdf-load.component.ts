@@ -336,8 +336,6 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
       }
     }
 
-    console.log(arrayOrganizadoNew);
-
     return arrayOrganizadoNew;
   }
 

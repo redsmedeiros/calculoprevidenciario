@@ -1,14 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
 import { Router, ActivatedRoute } from '@angular/router';
-import { ErrorService } from '../../services/error.service';
-import * as moment from 'moment';
-import swal from 'sweetalert2';
-
 
 import { PeriodosContagemTempo } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.model';
 import { PeriodosContagemTempoService } from './../../+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
+
+import { ErrorService } from '../../services/error.service';
+import * as moment from 'moment';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contagem-tempo-conclusao-periodos',
@@ -17,7 +16,9 @@ import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 })
 export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
+  @Input() dadosPassoaPasso;
   @Input() idCalculoSelecionado;
+  @Output() periodosListRst = new EventEmitter();
 
   public idsCalculos = '';
   public isUpdating = false;
@@ -25,34 +26,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   public periodosListInicial = [];
   public periodosList = [];
   public Math = Math;
-  // public tableOptionsPeriodos = {
-  //   colReorder: false,
-  //   paging: false,
-  //   searching: false,
-  //   ordering: false,
-  //   bInfo: false,
-  //   data: this.periodosList,
-  //   columns: [
-  //     { data: 'vinculo' },
-  //     { data: 'empresa' },
-  //     { data: 'data_inicio' },
-  //     { data: 'data_termino' },
-  //     { data: 'fator_condicao_especial' },
-  //     { data: 'carencia' },
-  //     { data: 'concomitantes.text' },
-  //     { data: 'totalSemFator.years' },
-  //     { data: 'totalSemFator.months' },
-  //     { data: 'totalSemFator.days' },
-  //     { data: 'totalComFator.years' },
-  //     { data: 'totalComFator.months' },
-  //     { data: 'totalComFator.days' },
-  //     { data: 'concomitantes.vinculosList' }
-  //   ]
-  // };
+  public isCheckSC = false;
 
-
-
-  @Output() periodosListRst = new EventEmitter();
 
   constructor(
     protected router: Router,
@@ -63,6 +38,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   ngOnInit() {
     this.periodosListInicial = [];
     this.isUpdating = true;
+    this.setCheckSC();
     this.updateTabelaPeriodosView();
   }
 
@@ -88,8 +64,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
             listRST: this.periodosList,
             listDB: periodosContribuicao
           });
-        }
 
+        }
         // this.tableOptionsPeriodos = {
         //   ...this.tableOptionsPeriodos,
         //   data: this.periodosList,
@@ -97,6 +73,16 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
         this.isUpdating = false;
       });
+  }
+
+
+  private setCheckSC() {
+
+    if (this.dadosPassoaPasso !== undefined
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+      this.isCheckSC = true;
+    }
+
   }
 
 
@@ -110,7 +96,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   updateDatatablePeriodos(periodo) {
 
-    if (typeof periodo === 'object' && this.idsCalculos === periodo.id_contagem_tempo) {
+    if (typeof periodo === 'object') {
 
       const statusCarencia = this.defineStatusCarencia(periodo);
       const statusTempoContribuicao = this.defineStatusTempoContribuicao(periodo);
@@ -152,6 +138,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         sc_mm_considerar_tempo: periodo.sc_mm_considerar_tempo,
         sc_pendentes: periodo.sc_pendentes,
         sc_pendentes_mm: periodo.sc_pendentes_mm,
+        converter_especial_apos_ec103: periodo.converter_especial_apos_ec103,
         limites: limites,
       }
 
@@ -167,14 +154,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private defineStatusCarencia(periodo) {
 
-
     if (periodo.carencia === 0) {
       return 'Não';
     }
 
-    if (this.checkPeriodoPosReforma(periodo)) {
-      return 'Integral';
-    }
+    // if (this.checkPeriodoPosReforma(periodo)) {
+    //   return 'Integral';
+    // }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
       && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
@@ -196,9 +182,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private defineStatusTempoContribuicao(periodo) {
 
-    if (this.checkPeriodoPosReforma(periodo)) {
-      return 'Integral';
-    }
+    // if (this.checkPeriodoPosReforma(periodo)) {
+    //   return 'Integral';
+    // }
 
     if ((periodo.sc_pendentes_mm === 0 || this.isEmpty(periodo.sc_pendentes_mm))
       && ((periodo.sc_pendentes === 0 || this.isEmpty(periodo.sc_pendentes)))
@@ -208,7 +194,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     } else {
 
-      return ((!this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1)) ? 'Integral' : 'Parcial';
+      return ((!this.isExist(periodo.sc_mm_considerar_tempo) ||
+        (this.isExist(periodo.sc_mm_considerar_tempo) && periodo.sc_mm_considerar_tempo === 1))) ? 'Integral' : 'Parcial';
     }
 
 
@@ -227,9 +214,11 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   }
 
+
+
   private checkPeriodoComIntersessaoEC(periodo) {
 
-    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+    if (this.checkPeriodoIntervaloReforma(periodo) === 'entre') {
 
       return true;
 
@@ -238,6 +227,28 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     return false;
 
   }
+
+
+  private checkPeriodoIntervaloReforma(periodo) {
+
+
+    if (moment(periodo.data_termino).isSameOrBefore('2019-11-13')) {
+
+      return 'anterior';
+    }
+
+    if (moment(periodo.data_inicio).isSameOrAfter('2019-11-14')) {
+
+      return 'apos';
+    }
+
+    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return 'entre';
+    }
+
+  }
+
 
 
   private testInicioFimDoPeriodoIntegral(periodo, statusTempoContribuicao) {
@@ -250,7 +261,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     }
 
     if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
-      && (statusTempoContribuicao === 'Integral') && !this.checkPeriodoPosReforma(periodo)) {
+      && (statusTempoContribuicao === 'Integral')
+      && !this.checkPeriodoPosReforma(periodo)) {
 
       const inicioSC = periodo.sc[0];
       const fimSC = periodo.sc[periodo.sc.length - 1];
@@ -260,6 +272,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
         if (moment(periodo.data_inicio).isSameOrAfter('2019-11-14')) {
           limites.inicio = 30;
         }
+
         limites.inicioType = 'i'; // integral
 
       }
@@ -339,9 +352,6 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   }
 
-
-
-
   /**
    * calcular descarte da carencia
    * @param periodo obj
@@ -350,13 +360,14 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private calcularDescarteCarencia(periodo, totalTempo) {
 
-    totalTempo.carencia -= periodo.sc_pendentes
-    totalTempo.carencia -= periodo.sc_pendentes_mm
+    if (periodo.sc_mm_considerar_carencia === 0) {
+      totalTempo.carencia -= periodo.sc_pendentes
+      totalTempo.carencia -= periodo.sc_pendentes_mm
+    }
+
     return totalTempo.carencia
 
   }
-
-
 
   // private calcularDescarteTempoContribuicao2(periodo, totalTempo) {
 
@@ -452,6 +463,33 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   }
 
 
+  private countPendenciasPosEC103SC(contribuicoes: Array<any>, type = 'mm') {
+
+    if (type === 'mm') {
+      return contribuicoes.filter(function (item) {
+        if (item.msc === 1
+          && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+      }).length;
+    }
+
+    return contribuicoes.filter(function (item) {
+      if (item.sc === '0,00'
+        && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    }).length;
+  }
+
+
+  private checkScCompetenciaFull(salariosC, auxiliarDate) {
+
+    const data = auxiliarDate.format('MM/YYYY');
+    const salC = salariosC.find((x) => x.cp === data)
+
+    if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
+      return true;
+    }
+
+    return false;
+  }
 
 
   /**
@@ -464,6 +502,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     let totalDias = 0;
     let totalFinalEmDias = totalTempo.semFator.fullDays;
+    let totalDay360AntesEC = { dias: 0, meses: 0 };
 
     if (periodo.limites.inicioType !== 'i' || periodo.limites.fimType !== 'i') {
 
@@ -481,12 +520,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
       }
 
-
       totalFinalEmDias = (periodo.sc_count - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30;
-      totalFinalEmDias += totalDias;
+
+      if (periodo.sc_mm_considerar_tempo === 1) {
+        totalFinalEmDias += totalDias;
+      }
 
     } else {
-
 
       if (periodo.sc_pendentes > 0 || periodo.sc_pendentes_mm > 0) {
 
@@ -496,38 +536,87 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
     }
 
-    if (this.checkPeriodoComIntersessaoEC(periodo)) {
+    if (this.checkPeriodoComIntersessaoEC(periodo)
+      && (periodo.sc_count > periodo.sc_pendentes_mm || periodo.sc_count >= periodo.sc_pendentes)
+      && periodo.sc_mm_considerar_tempo === 1) {
 
-      const totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
+      // totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
+      //   moment(periodo.data_inicio).format('YYYY-MM-DD'),
+      //   '2019-11-13'
+      // );
+
+      totalDay360AntesEC = DefinicaoTempo.dataDiffDateToDateCustom(
         moment(periodo.data_inicio).format('YYYY-MM-DD'),
-        '2019-11-13'
+        '2019-10-31'
       );
 
       const sc_countApos19 = this.countPosEC103SC(periodo.sc);
-
+      const sc_countApos19mm = this.countPendenciasPosEC103SC(periodo.sc, 'zero');
+      const sc_countApos19zero = this.countPendenciasPosEC103SC(periodo.sc);
 
       if (periodo.limites.fimType === 'm') {
         periodo.sc_pendentes_mm -= 1;
         totalDias = periodo.limites.fim;
       }
 
-      totalFinalEmDias = totalDay360AntesEC.dias + totalDias + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
+      const dataFull = this.checkScCompetenciaFull(periodo.sc, moment('2019-11-13'));
+      totalDias = (dataFull) ? 30 : 0;
+
+      if (totalDias === 0
+        && !dataFull
+        && moment('2019-11-13').isBetween(
+          moment(periodo.data_inicio),
+          moment(periodo.data_termino), 'month', '[]')
+      ) {
+
+        totalDias = 13;
+
+      }
+
+
+      // totalFinalEmDias = totalDay360AntesEC.dias + totalDias
+      // + ((sc_countApos19 - (periodo.sc_pendentes + periodo.sc_pendentes_mm)) * 30);
+      totalFinalEmDias = totalDay360AntesEC.dias + totalDias +
+        ((sc_countApos19 - (sc_countApos19zero + sc_countApos19mm)) * 30);
+
+      // console.log(moment(periodo.data_inicio).format('YYYY-MM-DD'))
+      // console.log(totalFinalEmDias)
+      // console.log(totalFinalEmDias)
+      // console.log(totalDias)
 
     }
+    //   else if ((periodo.sc_count === periodo.sc_pendentes_mm || periodo.sc_count === periodo.sc_pendentes)
+    //   && periodo.sc_mm_considerar_tempo === 0 ) {
+    //    totalFinalEmDias = 0;
 
     totalTempo.semFator = DefinicaoTempo.convertD360ToDMY(totalFinalEmDias);
 
     const fator = parseFloat(periodo.fator_condicao_especial);
 
-    if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
+    // if (fator === 1 || (fator > 1 && !this.checkPeriodoPosReforma(periodo))) {
+    if (fator === 1 ||
+      (fator > 1
+        && this.checkPeriodoIntervaloReforma(periodo) === 'apos'
+        && periodo.converter_especial_apos_ec103 === 0)) {
 
       totalTempo.comFator = Object.assign({}, totalTempo.semFator);
 
     } else {
 
-      const totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
-      totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
+      let totalFatorDay360 = DefinicaoTempo.aplicarFator(totalFinalEmDias, fator);
 
+      if (fator > 1 && this.checkPeriodoComIntersessaoEC(periodo)) {
+
+        let totalDay360AntesECFator = DefinicaoTempo.aplicarFator(totalDay360AntesEC.dias, fator);
+        if (totalDay360AntesEC.dias > 0) {
+          totalDay360AntesECFator += ((13 * fator) - 13);
+        }
+
+        totalFatorDay360 = totalDay360AntesECFator + (totalFinalEmDias - totalDay360AntesEC.dias)
+
+      }
+
+      totalTempo.comFator = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
     }
 
     return totalTempo
@@ -544,13 +633,13 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
    */
   private calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
-    if (statusCarencia === 'Parcial') {
+    if (statusCarencia === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 
       totalTempo.carencia = this.calcularDescarteCarencia(periodo, totalTempo);
 
     }
 
-    if (statusTempoContribuicao === 'Parcial') {
+    if (statusTempoContribuicao === 'Parcial' || this.checkPeriodoComIntersessaoEC(periodo)) {
 
       totalTempo = this.calcularDescarteTempoContribuicao(periodo, totalTempo);
 
@@ -563,16 +652,20 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
 
   private descontarTempoConformeSC(periodo, totalTempo, statusCarencia, statusTempoContribuicao) {
 
+    if (this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-    if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
-      && (statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')) {
+      if ((this.isExist(periodo.sc) && typeof periodo.sc === 'object')
+        && ((statusTempoContribuicao === 'Parcial' || statusCarencia === 'Parcial')
+          || (this.checkPeriodoComIntersessaoEC(periodo)))) {
 
-      periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
-        periodo.sc[0],
-        periodo.data_termino,
-        periodo.sc[periodo.sc.length - 1]);
+        periodo.limites = this.testInicioFimDoPeriodo(periodo.data_inicio,
+          periodo.sc[0],
+          periodo.data_termino,
+          periodo.sc[periodo.sc.length - 1]);
 
-      totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
+        totalTempo = this.calcularDescarte(periodo, totalTempo, statusCarencia, statusTempoContribuicao);
+
+      }
 
     }
 
@@ -586,7 +679,7 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     let fimP = moment(date2).format('YYYY-MM-DD');
     let integralInicioFim = false;
 
-    if (this.isExist(limites)) {
+    if (this.isExist(limites) && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
       if (limites.inicioType === 'i' && limites.fimType === 'i'
         && limites.inicio === 30 && limites.fim === 30) {
@@ -616,7 +709,12 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     const totalDMY = DefinicaoTempo.convertD360ToDMY(totalDay360.dias);
     const totalFatorDMY = DefinicaoTempo.convertD360ToDMY(totalFatorDay360);
 
-    return { semFator: totalDMY, comFator: totalFatorDMY, carencia: totalDay360.meses };
+    return {
+      semFator: totalDMY,
+      comFator: totalFatorDMY,
+      carencia: totalDay360.meses
+    };
+
   };
 
 
@@ -772,3 +870,31 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
     return false;
   }
 }
+
+
+// public tableOptionsPeriodos = {
+  //   colReorder: false,
+  //   paging: false,
+  //   searching: false,
+  //   ordering: false,
+  //   bInfo: false,
+  //   data: this.periodosList,
+  //   columns: [
+  //     { data: 'vinculo' },
+  //     { data: 'empresa' },
+  //     { data: 'data_inicio' },
+  //     { data: 'data_termino' },
+  //     { data: 'fator_condicao_especial' },
+  //     { data: 'carencia' },
+  //     { data: 'concomitantes.text' },
+  //     { data: 'totalSemFator.years' },
+  //     { data: 'totalSemFator.months' },
+  //     { data: 'totalSemFator.days' },
+  //     { data: 'totalComFator.years' },
+  //     { data: 'totalComFator.months' },
+  //     { data: 'totalComFator.days' },
+  //     { data: 'concomitantes.vinculosList' }
+  //   ]
+  // };
+
+

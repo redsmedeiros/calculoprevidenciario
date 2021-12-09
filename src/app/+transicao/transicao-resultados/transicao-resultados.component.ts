@@ -128,6 +128,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       this.seguradoTransicao.contribuicaoDias,
       'days');
 
+      this.seguradoTransicao.contribuicaoFracionadoDiasT  = this.seguradoTransicao.contribuicaoFracionadoDias;
     if (this.seguradoTransicao.contribuicaoFracionadoDias > 0) {
 
       const addBissextoTempoAtual = this.contarBissextosEntre(
@@ -138,7 +139,6 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       this.seguradoTransicao.contribuicaoFracionadoDias += addBissextoTempoAtual;
     }
 
-
     this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 = this.converterTempoContribuicao(
       this.seguradoTransicao.contribuicaoAnosAteEC103,
       this.seguradoTransicao.contribuicaoMesesAteEC103,
@@ -146,6 +146,33 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
       'years');
 
     this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103 = this.converterTempoContribuicao(
+      this.seguradoTransicao.contribuicaoAnosAteEC103,
+      this.seguradoTransicao.contribuicaoMesesAteEC103,
+      this.seguradoTransicao.contribuicaoDiasAteEC103,
+      'days');
+
+    // tempo 360
+
+    this.seguradoTransicao.contribuicaoFracionadoAnos360 = this.converterTempoContribuicao360(
+      this.seguradoTransicao.contribuicaoAnos,
+      this.seguradoTransicao.contribuicaoMeses,
+      this.seguradoTransicao.contribuicaoDias,
+      'years');
+
+    this.seguradoTransicao.contribuicaoFracionadoDias360 = this.converterTempoContribuicao360(
+      this.seguradoTransicao.contribuicaoAnos,
+      this.seguradoTransicao.contribuicaoMeses,
+      this.seguradoTransicao.contribuicaoDias,
+      'days');
+
+
+    this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103360 = this.converterTempoContribuicao360(
+      this.seguradoTransicao.contribuicaoAnosAteEC103,
+      this.seguradoTransicao.contribuicaoMesesAteEC103,
+      this.seguradoTransicao.contribuicaoDiasAteEC103,
+      'years');
+
+    this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103360 = this.converterTempoContribuicao360(
       this.seguradoTransicao.contribuicaoAnosAteEC103,
       this.seguradoTransicao.contribuicaoMesesAteEC103,
       this.seguradoTransicao.contribuicaoDiasAteEC103,
@@ -281,7 +308,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   //   return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   // }
 
-  
+
   public converterTempoContribuicao360(anos, meses, dias, type) {
 
     anos = this.isFormatInt(anos);
@@ -307,8 +334,16 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     return (type === 'days' || type === 'd') ? Math.floor(contribuicaoTotal) : contribuicaoTotal / 365.25;
   }
 
+  public converterTempoContribuicaoDias365(anos, meses, dias) {
 
-  
+    anos = parseInt(anos, 10);
+    meses = parseInt(meses, 10);
+    dias = parseInt(dias, 10);
+
+    return (anos + (dias / 365.25) + (meses / 12)) * 365.25;
+  }
+
+
   // public converterTempoContribuicaoAnos360(anos, meses, dias) {
 
   //   anos = parseInt(anos, 10);
@@ -318,7 +353,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
   //      return (anos + (dias / 360) + (meses / 12));
   // }
 
-  
+
   // public converterTempoContribuicaoDias360(anos, meses, dias) {
 
   //   anos = parseInt(anos, 10);
@@ -456,7 +491,7 @@ export class TransicaoResultadosComponent implements OnInit, OnChanges {
     total.days = Math.floor(daysY360 - total.years * 360 - total.months * 30);
 
     return total;
-}
+  }
 
   public converterTempoDiasParaAnos(fullDays) {
     return ((fullDays) / 365.25);

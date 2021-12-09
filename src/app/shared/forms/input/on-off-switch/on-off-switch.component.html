@@ -5,8 +5,8 @@
            (ngModelChange)="onChange()"
            id="{{widgetId}}"/>
     <label class="onoffswitch-label" htmlFor="{{widgetId}}">
-      <span class="onoffswitch-inner"  data-swchon-text="ON"
-            data-swchoff-text="OFF"></span>
+      <span class="onoffswitch-inner"  [attr.data-swchon-text]="textONS"
+      [attr.data-swchoff-text]="textOFFS"></span>
         <span class="onoffswitch-switch"></span>
     </label>
   </span>

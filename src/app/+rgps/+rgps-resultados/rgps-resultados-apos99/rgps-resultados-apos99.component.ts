@@ -210,11 +210,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     // pbc da vida toda
-    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc');
+    this.pbcCompleto = (this.route.snapshot.params['pbc'] === 'pbc')
+      || (this.isExits(this.dadosPassoaPasso.pbcFull) && this.dadosPassoaPasso.pbcFull === 'pbc');
+
+
     const dataLimite = (this.pbcCompleto) ? moment('1930-01-01') : moment('1994-07-01');
 
     // indices de correção pbc da vida toda
-
 
     this.getValoresContribuicao(dataInicio, dataLimite)
 
@@ -233,7 +235,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           dataLimite,
           dataInicio);
 
-        this.startCalculoApos99();
+
+        if (this.listaValoresContribuidos.length === 0) {
+
+          // Exibir MSG de erro e encerrar Cálculo.
+          this.nenhumaContrib = true;
+          this.isUpdating = false;
+
+        } else {
+
+          this.startCalculoApos99();
+
+        }
 
       }).catch(error => {
         console.error(error);
@@ -247,7 +260,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
-          if (this.listaValoresContribuidos.length == 0) {
+          if (this.listaValoresContribuidos.length === 0) {
 
             // Exibir MSG de erro e encerrar Cálculo.
             this.nenhumaContrib = true;
@@ -315,11 +328,22 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tableData = [];
     let idString = 0;
 
-    for (let contribuicao of this.listaValoresContribuidos) {
+    for (const contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
       let contribuicaoSecundaria = parseFloat(contribuicao.valor_secundaria);
       let dataContribuicao = moment(contribuicao.data);
       let currency = this.loadCurrency(dataContribuicao);
+      let sc_mm_ajustar = true;
+
+      if ((this.isExits(this.dadosPassoaPasso)
+        && this.dadosPassoaPasso.origem === 'passo-a-passo')) {
+
+        sc_mm_ajustar = (contribuicao.sc_mm_ajustar === 1);
+
+        this.calculo.somar_contribuicao_secundaria = (this.isExits(this.dadosPassoaPasso.somarSecundaria)
+          && this.dadosPassoaPasso.somarSecundaria === 'somar');
+
+      }
 
       if (
         this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
@@ -390,7 +414,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       let limiteString = '';
       if (contribuicaoPrimaria != 0) {
         contadorPrimario++;
-        let valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao);
+        const valorAjustadoObj = this.limitarTetosEMinimos(contribuicaoPrimaria, dataContribuicao, sc_mm_ajustar);
         contribuicaoPrimariaRevisada = valorAjustadoObj.valor;
         limiteString = valorAjustadoObj.aviso;
       }
@@ -752,7 +776,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         let idadeFracionadaF = this.getIdadeFracionada(false);
 
         idadeFracionadaF = arredFatorCalc(idadeFracionadaF);
-
 
         fatorSeguranca = arredFatorCalc(arredFatorCalc(tempoTotalContribuicaoF * aliquota) / expectativa)
           * arredFatorCalc(1 + arredFatorCalc(idadeFracionadaF + arredFatorCalc(tempoTotalContribuicaoF * aliquota)) / 100);
@@ -1537,21 +1560,26 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   private getRequisitoPontos() {
 
-    const dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+    let dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+
+    if (dataBeneficio >= moment('13/11/2019', 'DD/MM/YYYY')) {
+      dataBeneficio = moment('13/11/2019', 'DD/MM/YYYY')
+    }
+
 
     const requisitos = [
       { dataIni: '2015-06-18', dataFim: '2018-12-30', f: 85, m: 95 },
       { dataIni: '2018-12-31', dataFim: '2020-12-30', f: 86, m: 96 },
-      { dataIni: '2020-12-31', dataFim: '2022-12-30', f: 87, m: 97 },
-      { dataIni: '2022-12-31', dataFim: '2024-12-30', f: 88, m: 98 },
-      { dataIni: '2024-12-31', dataFim: '2026-12-30', f: 89, m: 99 },
-      { dataIni: '2026-12-31', dataFim: '2060-12-31', f: 90, m: 100 },
+      // { dataIni: '2020-12-31', dataFim: '2022-12-30', f: 87, m: 97 },
+      // { dataIni: '2022-12-31', dataFim: '2024-12-30', f: 88, m: 98 },
+      // { dataIni: '2024-12-31', dataFim: '2026-12-30', f: 89, m: 99 },
+      // { dataIni: '2026-12-31', dataFim: '2060-12-31', f: 90, m: 100 },
     ];
 
     const tempoMinContribuicao = { m: 35, f: 30 }
     const requisitoSegurado = requisitos.find(req => (dataBeneficio.isBetween(req.dataIni, req.dataFim, null, '()')));
     const status = (requisitoSegurado !== undefined);
-    //let tempoAdicionalProfessor = 0;
+    // let tempoAdicionalProfessor = 0;
 
     // Se professor
     if (status &&
@@ -1573,7 +1601,22 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   }
 
-
+  /**
+   * Art. 29-C. O segurado que preencher o requisito para a aposentadoria por tempo de contribuição
+   *  poderá optar pela não incidência do fator previdenciário no cálculo de sua aposentadoria, quando
+   * o total resultante da soma de sua idade e de seu tempo de contribuição, incluídas as frações, na
+   *  data de requerimento da aposentadoria, for: (Incluído pela Lei nº 13.183, de 2015)
+  * I - igual ou superior a noventa e cinco pontos, se homem, observando o tempo mínimo de contribuição
+  * de trinta e cinco anos; ou (Incluído pela Lei nº 13.183, de 2015)
+  * II - igual ou superior a oitenta e cinco pontos, se mulher, observado o tempo mínimo de contribuição de trinta anos.
+  * § 3º Para efeito de aplicação do disposto no caput e no § 2º, o tempo mínimo de contribuição
+  * do professor e da professora que comprovarem exclusivamente tempo de efetivo exercício de
+  * magistério na educação infantil e no ensino fundamental e médio será de, respectivamente,
+  * trinta e vinte e cinco anos, e serão acrescidos cinco pontos à soma da idade com o tempo de contribuição.
+   * @param tempoContribuicaoMaisIdade
+   * @param tempoTotalContribuicao
+   * @param conclusoes
+   */
   private aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes) {
 
     const requitoPontos = this.getRequisitoPontos();
@@ -1583,8 +1626,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
       const labelPontos = `${requitoPontos.requistos['f']}/${requitoPontos.requistos['m']}`
 
+      let adicionalProf = 0; // se professor adiciona 5 anos aos pontos que o professor possue
+      if ((this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
+        adicionalProf = 5;
+      }
+
       if (tempoTotalContribuicao >= requitoPontos.tempoMinContribuicao[this.segurado.sexo]
-        && tempoContribuicaoMaisIdade >= pontosNecessarios
+        && (tempoContribuicaoMaisIdade + adicionalProf) >= pontosNecessarios
         && this.fatorPrevidenciario < 1
       ) {
 
@@ -1716,11 +1764,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.contribuicaoTotal = contagemPrimariaAnos;
 
-    if (redutorSexo > 0) {
-      if (this.tipoBeneficio == 16 || this.tipoBeneficio == 3 || this.tipoBeneficio == 4) {
-        contagemPrimariaAnos += redutorSexo;
-      }
-    }
+    // só adiciona se professor 02/01/2021
+    // if (redutorSexo > 0) {
+    //   if (this.tipoBeneficio == 16 || this.tipoBeneficio == 3 || this.tipoBeneficio == 4) {
+    //     contagemPrimariaAnos += redutorSexo;
+    //   }
+    // }
     return contagemPrimariaAnos;
   }
 
@@ -2148,16 +2197,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
   }
 
-  limitarTetosEMinimos(valor, data) {
+  limitarTetosEMinimos(valor, data, sc_mm_ajustar = true) {
     // se a data estiver no futuro deve ser utilizado os dados no mês atual
-    let moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
+    const moeda = data.isSameOrBefore(moment(), 'month') ? this.Moeda.getByDate(data) : this.Moeda.getByDate(moment());
 
-    let salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
-    let tetoSalarial = (moeda) ? moeda.teto : 0;
+    const salarioMinimo = (moeda) ? moeda.salario_minimo : 0;
+    const tetoSalarial = (moeda) ? moeda.teto : 0;
     let avisoString = '';
     let valorRetorno = valor;
 
-    if (moeda && valor < salarioMinimo) {
+    if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
       valorRetorno = salarioMinimo;
       avisoString = 'LIMITADO AO MÍNIMO'
     } else if (moeda && valor > tetoSalarial) {

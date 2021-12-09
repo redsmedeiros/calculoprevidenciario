@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContagemTempoConclusaoPeriodosComponent } from './contagem-tempo-conclusao-periodos.component';
@@ -8,7 +9,8 @@ describe('ContagemTempoConclusaoPeriodosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContagemTempoConclusaoPeriodosComponent ]
+      declarations: [ ContagemTempoConclusaoPeriodosComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

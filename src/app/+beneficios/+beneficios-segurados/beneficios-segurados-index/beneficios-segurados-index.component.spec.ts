@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiosSeguradosIndexComponent } from './beneficios-segurados-index.component';
@@ -8,7 +9,8 @@ describe('BeneficiosSeguradosIndexComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BeneficiosSeguradosIndexComponent ]
+      declarations: [ BeneficiosSeguradosIndexComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));

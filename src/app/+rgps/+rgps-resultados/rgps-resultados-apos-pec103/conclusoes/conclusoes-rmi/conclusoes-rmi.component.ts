@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ImprimirRMI } from './../../share-rmi/imprimir-rmi';
 
 @Component({
   selector: 'app-conclusoes-rmi',
@@ -14,12 +15,11 @@ export class ConclusoesRmiComponent implements OnInit {
   @Input() dataInicioBeneficio;
   @Input() segurado;
   @Input() valorExportacao;
+  @Input() regra;
 
   constructor() { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   exportarParaBeneficios(data, valor, tipoCalculo) {
 
@@ -35,5 +35,11 @@ export class ConclusoesRmiComponent implements OnInit {
 
   }
 
-  
+
+  imprimirBoxC(event, boxId) {
+
+    event.stopPropagation();
+    ImprimirRMI.imprimirBox(this.segurado.nome, boxId);
+  }
+
 }

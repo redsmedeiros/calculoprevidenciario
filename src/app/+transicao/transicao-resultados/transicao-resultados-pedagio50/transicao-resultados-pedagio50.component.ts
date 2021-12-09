@@ -78,6 +78,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       if (this.seguradoTransicao.contribuicaoFracionadoAnosAteEC103 >= this.requisitoPedagio50Regra3[this.seguradoTransicao.sexo]) {
 
         const rstRegra3pedagio50 = this.calcularRegra3();
+       // const rstRegra3pedagio50360 = this.calcularRegra3360();
 
         this.conclusoesRegra3 = {
           status: true,
@@ -95,6 +96,8 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
           formulaFator: rstRegra3pedagio50.formulaFator,
           fatorNaDib: rstRegra3pedagio50.fatorNaDib,
         };
+
+
 
       } else {
 
@@ -138,8 +141,6 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let idadeDib = this.seguradoTransicao.idadeFracionadaDias;
     let idadeDibMoment;
 
-    // console.log(dataDib);
-
     const tempoFinalContribAnos = this.seguradoTransicao.contribuicaoFracionadoAnos;
     const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDias;
     // const tempoFinalContrib = this.seguradoTransicao.contribuicaoFracionadoDiasAteEC103;
@@ -157,6 +158,7 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
     let tempoFinalContribfinalComPedagioAnos = 0;
     let tempoDePedagioTotalNecessario = 0;
     let tempoDePedagioTotalNecessarioAnos = 0;
+
 
 
     if (tempoFinalContribAteEC103 <= contribuicao_min) {
@@ -184,34 +186,22 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
       tempoDePedagioTotalNecessario = Math.floor(tempoFinalContribfinalComPedagio - tempoFinalContrib);
       tempoDePedagioTotalNecessarioAnos = (tempoFinalContribfinalComPedagioAnos - tempoFinalContribAnos);
 
-      // console.log(contribuicaoDiff);
-      // console.log(contribuicao_min);
-      // console.log(tempoFinalContrib);
-      // console.log(tempoFinalContribAteEC103);
-      // console.log(tempoDePedagio);
-      // console.log(tempoDePedagioAnos);
-      // console.log(tempoFinalContribfinalComPedagio);
-      // console.log(tempoFinalContribfinalComPedagioAnos);
-      // console.log(tempoDePedagioTotalNecessario);
-      // console.log(tempoDePedagioTotalNecessarioAnos);
-      // console.log(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25));
-      // console.log(contribuicao_min_anos);
-      // console.log(tempoFinalContribAnos);
-      // dataDib.add(tempoDePedagioTotalNecessario, 'd');
 
       if (tempoDePedagioTotalNecessarioAnos > 0) {
 
+        tempoDePedagioTotalNecessario = Math.abs(tempoDePedagioTotalNecessario);
+
         idadeDib = (idadeDib + tempoDePedagioTotalNecessario);
         dataDib.add(Math.floor(tempoDePedagioTotalNecessarioAnos * 365.25), 'd');
-
+        tempoFinalContribfinalComPedagio = (this.seguradoTransicao.contribuicaoFracionadoDias 
+          + Math.floor(tempoDePedagioTotalNecessario));
+ 
       } else {
 
-        tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+        tempoFinalContribfinalComPedagio = (this.seguradoTransicao.contribuicaoFracionadoDiasT + 1);
         dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
       }
-
-
 
 
 
@@ -226,40 +216,13 @@ export class TransicaoResultadosPedagio50Component extends TransicaoResultadosCo
 
     } else {
 
-      tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias;
+      tempoFinalContribfinalComPedagio = this.seguradoTransicao.contribuicaoFracionadoDias + Math.floor(tempoDePedagioTotalNecessario);
       dataDib = moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
 
     }
 
 
     idadeDibMoment = this.calcularIdade(dataDib);
-
-    // console.log(tempoDePedagioTotalNecessario);
-
-
-    // console.log('---- Regra 3 -----');
-    // console.log(tempoDePedagioTotalNecessario);
-    // console.log(tempoFinalContribfinalComPedagio);
-
-    // console.log(idadeDibMoment);
-    // console.log(idadeDib);
-    // console.log(tempoFinalContrib);
-    // console.log(contribuicao_min);
-    // console.log(tempoFinalContribAteEC103);
-    // console.log((tempoFinalContribAteEC103 <= contribuicao_min));
-    // console.log(contribuicaoDiffAteEC103EAtual);
-    // console.log(tempoDePedagioTotalNecessario);
-    // console.log(contribuicaoDiff);
-    // console.log(tempoDePedagio);
-    // console.log(tempoFinalContribfinalComPedagio);
-    // console.log('----');
-    // console.log(contribuicaoDiff);
-    // console.log(this.converterTempoDias(contribuicaoDiff));
-    // console.log(tempoDePedagio);
-    // console.log(this.converterTempoDias(tempoDePedagio));
-    // console.log(tempoFinalContribfinalComPedagio);
-    // console.log(this.converterTempoDias(tempoFinalContribfinalComPedagio));
-
 
     const fatorDib = this.getFatorPrevidenciario(
       dataDib,

@@ -3,7 +3,9 @@ import { isObject } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { Auth } from 'app/services/Auth/Auth.service';
+import { MoedaService } from 'app/services/Moeda.service';
+import { Moeda } from 'app/services/Moeda.model';
 
 @Component({
   selector: 'app-importador-home',
@@ -14,6 +16,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   private dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
   private isTypeEntradaDados = false;
+
+  public moeda;
 
   public idSeguradoSelecionado;
   private seguradoSelecionado;
@@ -40,57 +44,55 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private isPaginaInicial = true;
 
 
-
-
   public exportResultContagemTempo;
   public isCompleteResultContagemTempo = false;
 
   public steps = [
     {
       key: 'step1',
-      title: 'Dados do Cálculo',
+      title: 'Opção de Cálculo',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step2',
-      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
+      title: 'Segurados Cadastrados',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step3',
-      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
+      title: 'Cálculos Cadastrados',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step4',
-      title: 'Contagem de Tempo de Contribuição e Relação de Salários de Contribuição',
+      title: 'Períodos de Contribuição e <br>Salários de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step5',
-      title: 'Relatório da Contagem do Tempo de Contribuição',
+      title: 'Relatório da Contagem do  <br>Tempo de Contribuição',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step6',
-      title: 'Renda Mensal Inicial',
+      title: 'Cálculo da Renda Mensal Inicial',
       valid: false,
       checked: false,
       submitted: false,
     },
     {
       key: 'step7',
-      title: 'Relatório Renda Mensal Inicial',
+      title: 'Relatório da Renda Mensal Inicial',
       valid: false,
       checked: false,
       submitted: false,
@@ -102,16 +104,20 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   private stepUrl = null;
   private stepUrlSegurado = null;
   private stepUrlCalculo = null;
+  private isImportCNIS = false;
 
   constructor(
+    private Auth: Auth,
     protected router: Router,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private Moeda: MoedaService,
   ) { }
 
   ngOnInit() {
     this.setPaginaInicial();
     this.clearTempSessionStorageStart();
+    this.getTabelaMoeda();
   }
 
 
@@ -123,13 +129,27 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   }
 
 
+  private getTabelaMoeda() {
+
+    this.Moeda.moedaSalarioMinimoTeto()
+      .then((moeda: Moeda[]) => {
+        this.moeda = moeda;
+
+        sessionStorage.setItem(
+          'moedaSalarioMinimoTeto',
+          JSON.stringify(moeda));
+
+      });
+
+  }
+
   private setPaginaInicial() {
 
-    // sessionStorage.removeItem('inicialPassoaPasso');
+    sessionStorage.removeItem('inicialPassoaPasso');
 
-    // console.log(sessionStorage.getItem('inicialPassoaPasso'));
-
-    this.isPaginaInicial = (sessionStorage.getItem('inicialPassoaPasso') === ''
+    this.isPaginaInicial = (
+      sessionStorage.getItem('inicialPassoaPasso') === null
+      || sessionStorage.getItem('inicialPassoaPasso') === ''
       || sessionStorage.getItem('inicialPassoaPasso') === undefined
       || typeof sessionStorage.getItem('inicialPassoaPasso') === 'undefined');
   }
@@ -213,7 +233,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   }
 
-  private clearTempSessionStorageStart(){
+  private clearTempSessionStorageStart() {
     sessionStorage.removeItem('calculoSelecionado');
     sessionStorage.removeItem('calculosSelecionado');
     sessionStorage.removeItem('seguradoSelecionado');
@@ -221,13 +241,16 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     sessionStorage.removeItem('calculosSelecionadoRMI');
     sessionStorage.removeItem('exportResultContagemTempo');
     sessionStorage.removeItem('seguradoSelecionado');
+    sessionStorage.removeItem('pbcFull');
+    sessionStorage.removeItem('somarSecundaria');
+    sessionStorage.removeItem('isToStep6');
 
   }
 
   private clearDataSelected(step) {
 
     // this.setStepValidate(step.key, false);
-    this.setStepValidateClear(false);
+    this.setStepValidateClear(false, step);
     switch (step.key) {
       case 'step1':
 
@@ -255,9 +278,12 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         this.isCalculoSelecionado = false;
         this.calculoSelecionado = {}
         this.unCheckedAll('.checkboxCalculos');
+        sessionStorage.removeItem('isToStep6');
 
         break;
       case 'step4':
+        this.isImportCNIS = false;
+        sessionStorage.removeItem('isToStep6');
 
 
         break;
@@ -282,7 +308,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   prevStep() {
 
-    console.log(this.seguradoSelecionado);
+    // console.log(this.seguradoSelecionado);
 
     if (this.prevManualCNIS()) {
 
@@ -308,12 +334,14 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
     if (this.nextManualCNIS()) {
 
+
       this.activeStep.checked = true;
       if (this.steps.every((it) => it.valid && it.checked)) {
 
         //   this.onWizardComplete(this.model);
 
       } else {
+
         let idx = this.steps.indexOf(this.activeStep);
         this.activeStep = null;
         while (!this.activeStep) {
@@ -322,10 +350,12 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
             this.activeStep = this.steps[idx];
           }
         }
+
       }
     }
 
   }
+
 
   nextManualCNIS() {
 
@@ -334,6 +364,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       const keyStepUrl = 'step4';
       const step = this.steps.find((item) => keyStepUrl === item.key);
       this.activeStep = step;
+      this.setStepValidateClear(true, step)
 
       return false;
     }
@@ -378,11 +409,21 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
 
 
-  private setStepValidateClear(status) {
-    this.steps.map((step) => {
-      step.valid = status;
-      step.checked = status;
+  private setStepValidateClear(status, stepA) {
+
+    const index = this.steps.indexOf(stepA);
+    this.steps.map((step, indiceA) => {
+
+      if (indiceA >= index && !status) {
+        step.valid = status;
+        step.checked = status;
+      } else if (indiceA < index && status) {
+        step.valid = status;
+        step.checked = status;
+      }
+
     });
+
   }
 
   private setStepValidate(stepKey, status) {
@@ -544,6 +585,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   public eventCalcularContagem(dataRSTImportForm) {
 
+
     if (this.isExits(dataRSTImportForm.seguradoId)
       && this.isExits(dataRSTImportForm.calculoId)) {
 
@@ -552,6 +594,14 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       this.setStepValidate('step4', true);
       this.nextStep();
 
+    }
+
+  }
+
+  public eventStatusImport(dataStatus) {
+
+    if (this.isExits(dataStatus) && this.isExits(dataStatus.status)) {
+      this.isImportCNIS = dataStatus.status;
     }
 
   }
@@ -568,6 +618,19 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       sessionStorage.setItem(
         'exportResultContagemTempo',
         JSON.stringify(this.exportResultContagemTempo));
+
+      // pular passo calcular contagem
+      if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+
+        setTimeout(() => {
+
+          this.nextStep();
+          sessionStorage.removeItem('isToStep6');
+
+        }, 500);
+
+      }
+
 
     }
 

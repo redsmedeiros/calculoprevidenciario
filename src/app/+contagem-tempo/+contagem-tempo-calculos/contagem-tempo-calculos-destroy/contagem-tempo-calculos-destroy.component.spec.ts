@@ -1,20 +1,22 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ContagemTempoCalculosDestroyComponent } from './contagem-tempo-calculos-destroy.component';
 
-import { RgpsCalculosDestroyComponent } from './rgps-calculos-destroy.component';
 
-describe('RgpsCalculosDestroyComponent', () => {
-  let component: RgpsCalculosDestroyComponent;
-  let fixture: ComponentFixture<RgpsCalculosDestroyComponent>;
+describe('ContagemTempoCalculosDestroyComponent', () => {
+  let component: ContagemTempoCalculosDestroyComponent;
+  let fixture: ComponentFixture<ContagemTempoCalculosDestroyComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RgpsCalculosDestroyComponent ]
+      declarations: [ ContagemTempoCalculosDestroyComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RgpsCalculosDestroyComponent);
+    fixture = TestBed.createComponent(ContagemTempoCalculosDestroyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

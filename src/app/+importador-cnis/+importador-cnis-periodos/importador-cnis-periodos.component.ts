@@ -1,4 +1,3 @@
-import { Moeda } from 'app/services/Moeda.model';
 import {
   Component, OnInit, Input, SimpleChange,
   OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Output, EventEmitter
@@ -10,10 +9,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
+
+import { Moeda } from 'app/services/Moeda.model';
 import { MoedaService } from 'app/services/Moeda.service';
+
 import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 import { PeriodosContagemTempo } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.model';
-
 
 import { ImportadorCnisContribuicoesComponent } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.component';
 import { ImportadorCnisContribuicoesService } from '../+importador-cnis-contribuicoes/importador-cnis-contribuicoes.service';
@@ -69,6 +70,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public sc_mm_ajustar = null;
   public converter_especial_apos_ec103 = 0;
   public is_converter_especial_apos_ec103 = false;
+  public isUpdatingVinculos = false;
+  public isCheckSCImport = false;
 
 
   @Output() eventCountVinculosErros = new EventEmitter();
@@ -105,6 +108,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.setPeriodos(this.vinculos);
     }
 
+    this.checkMoeda();
+    this.setCheckSCImport();
   }
 
 
@@ -126,9 +131,19 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       }
 
     }
+
     this.detector.detectChanges();
   }
 
+
+  private setCheckSCImport() {
+
+    if (this.dadosPassoaPasso !== undefined
+      && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+      this.isCheckSCImport = true;
+    }
+
+  }
 
 
   // public updateDatatablePeriodos(vinculo) {
@@ -186,17 +201,29 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     // }).length;
 
 
+    // if (type === 'mm') {
+    //   return contribuicoes.filter(function (item) {
+    //     if (item.msc === 1
+    //       && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+    //   }).length;
+    // }
+
+    // return contribuicoes.filter(function (item) {
+    //   if (item.sc === '0,00'
+    //     && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+    // }).length;
+
+
     if (type === 'mm') {
       return contribuicoes.filter(function (item) {
-        if (item.msc === 1
-          && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+        if (item.msc === 1) { return item }
       }).length;
     }
 
     return contribuicoes.filter(function (item) {
-      if (item.sc === '0,00'
-        && moment(item.cp, 'MM/YYYY').isSameOrAfter('1994-07-01')) { return item }
+      if (item.sc === '0,00') { return item }
     }).length;
+
 
   }
 
@@ -219,22 +246,29 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
    * Se moeda null
    */
   private checkMoeda() {
-    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+
+    if ((this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda))
+      && !this.isEmpty(sessionStorage.getItem('moedaSalarioMinimoTeto'))) {
       this.moeda = JSON.parse(sessionStorage.getItem('moedaSalarioMinimoTeto'));
     }
 
-    if (this.moeda === undefined || this.isEmpty(this.moeda)) {
+    if (this.moeda == null || this.moeda === undefined || this.isEmpty(this.moeda)) {
       this.getTabelaMoeda();
     }
+
   }
 
   public verificarContribuicoes(periodo_in, periodo_fi, contribuicoes) {
 
+    if (periodo_fi === '000000' && contribuicoes.at(-1) !== undefined) {
+
+      // periodo_fi = this.formataPeriodo(`01/${contribuicoes[contribuicoes.length - 1].cp}`);
+      periodo_fi = this.formataPeriodo(`01/${contribuicoes.at(-1).cp}`);
+    }
+
     const contribuicoesList = [];
     let result = contribuicoes;
     let chave = periodo_in;
-
-    this.checkMoeda();
 
     do {
 
@@ -307,7 +341,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   public updateDatatablePeriodosSelecionados(vinculo) {
 
-
     if (typeof vinculo === 'object') {
 
       const periodo_in = this.formataPeriodo(this.formatReceivedDate(vinculo.data_inicio));
@@ -320,7 +353,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       if (typeof vinculo.sc !== 'undefined' && vinculo.sc && typeof vinculo.sc === 'string') {
         vinculo.contribuicoes = JSON.parse(vinculo.sc);
       } else {
-        vinculo.contribuicoes = vinculo.sc;
+        vinculo.contribuicoes = (!this.isEmpty(vinculo.sc)) ? vinculo.sc : [];
       }
 
       const contribuicoes = this.verificarContribuicoes(periodo_in, periodo_fi, vinculo.contribuicoes);
@@ -342,13 +375,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: (vinculo.carencia === 1) ? 'Sim' : 'Não',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
-        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
-        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
-        converter_especial_apos_ec103:  (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
+        converter_especial_apos_ec103: (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         index: (this.vinculosList.length) + 1
@@ -389,9 +419,6 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         carencia: 'Sim',
         contribuicoes_pendentes: result ? result : 0,
         contribuicoes_pendentes_mm: result_mm ? result_mm : 0,
-        // sc_mm_considerar_carencia: this.isExist(vinculo.sc_mm_considerar_carencia) ? null : vinculo.sc_mm_considerar_carencia,
-        // sc_mm_considerar_tempo: this.isExist(vinculo.sc_mm_considerar_tempo) ? null : vinculo.sc_mm_considerar_tempo,
-        // sc_mm_ajustar: this.isExist(vinculo.sc_mm_ajustar) ? null : vinculo.sc_mm_ajustar,
         sc_mm_considerar_carencia: vinculo.sc_mm_considerar_carencia,
         sc_mm_considerar_tempo: vinculo.sc_mm_considerar_tempo,
         sc_mm_ajustar: vinculo.sc_mm_ajustar,
@@ -403,6 +430,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       this.vinculosList.push(line);
       this.isValidVinculo(line);
+
     }
 
 
@@ -592,9 +620,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
       });
 
+      this.detector.detectChanges();
+
       this.resetForm();
       this.atualizarPeriodo = 0;
-      this.detector.detectChanges();
       this.toastAlert('success', 'Relação Previdenciária atualizada', null);
 
     } else {
@@ -638,9 +667,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       };
 
       this.vinculosList.push(line);
-
-      this.resetForm();
       this.detector.detectChanges();
+      this.resetForm();
       this.toastAlert('success', 'Relação Previdenciária inserida', null);
 
     } else {
@@ -742,7 +770,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (this.isValidPeriodoContribuicoes(vinculo)) {
+    if (this.isCheckSCImport
+      && this.isValidPeriodoContribuicoes(vinculo)) {
       return true;
     }
 
@@ -824,10 +853,16 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
     } else {
 
+      this.isUpdatingVinculos = true;
+
       this.vinculo_index = index;
-      this.vinculo = vinculo;
+      // this.vinculo = vinculo;
+      this.vinculo = Object.assign({}, vinculo);
+
       this.ContribuicoesComponent.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+      this.isUpdatingVinculos = false;
       this.contribuicoes.show();
+      this.detector.detectChanges();
 
     }
 
@@ -835,6 +870,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   hideContribuicoes() {
     this.contribuicoes.hide();
+    this.detector.detectChanges();
+    this.isUpdatingVinculos = true;
   }
 
 
@@ -911,8 +948,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         vinculo.sc_mm_ajustar = eventRST.sc_mm_ajustar;
         vinculo.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
         vinculo.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
-        vinculo.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
-        vinculo.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+        vinculo.contribuicoes_pendentes = (this.isCheckSCImport && eventRST.result_sc) ? eventRST.result_sc : 0;
+        vinculo.contribuicoes_pendentes_mm = (this.isCheckSCImport && eventRST.result_sc_mm) ? eventRST.result_sc_mm : 0;
 
       }
 
@@ -993,13 +1030,13 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   }
 
 
-public changeCondicoesEspeciais(){
+  public changeCondicoesEspeciais() {
 
-  this.is_converter_especial_apos_ec103 = false;
-  if ( this.is_converter_especial_apos_ec103 || (this.condicao_especial && this.checkPeriodoPosReformaForm())) {
-    this.is_converter_especial_apos_ec103 = true;
+    this.is_converter_especial_apos_ec103 = false;
+    if (this.is_converter_especial_apos_ec103 || (this.condicao_especial && this.checkPeriodoPosReformaForm())) {
+      this.is_converter_especial_apos_ec103 = true;
+    }
   }
-}
 
 
 
@@ -1012,13 +1049,13 @@ public changeCondicoesEspeciais(){
         return this.checkPeriodoPosReforma({
           data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
           data_termino: moment().format('YYYY-MM-DD')
-         });
+        });
       }
 
       return this.checkPeriodoPosReforma({
         data_inicio: moment(this.data_inicio, 'DD/MM/YYYY').format('YYYY-MM-DD'),
         data_termino: moment(this.data_termino, 'DD/MM/YYYY').format('YYYY-MM-DD')
-       });
+      });
 
     }
 
@@ -1026,8 +1063,6 @@ public changeCondicoesEspeciais(){
 
 
   private checkPeriodoPosReforma(periodo) {
-
-    console.log(periodo)
 
     if (moment(periodo.data_inicio).isSameOrAfter('2019-11-13')
       || moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
@@ -1217,7 +1252,7 @@ public changeCondicoesEspeciais(){
       return periodo;
     }
 
-    return '00/0000';
+    return '000000';
 
   }
 
@@ -1227,6 +1262,20 @@ public changeCondicoesEspeciais(){
       let next = <HTMLInputElement>document.getElementById(nextElementId);
       next.focus();
     }
+  }
+
+  getTextBtnSC(contribuicoes_pendentes_mm, contribuicoes_pendentes) {
+
+    if (contribuicoes_pendentes > 0) {
+      return 'Existem salários de contribuição não informados'
+    }
+
+    if (contribuicoes_pendentes_mm > 0) {
+      return 'Existem salários de contribuição menores que o salário mínimo.'
+    }
+
+    return 'Salários de Contribuição';
+
   }
 
 

@@ -1,5 +1,9 @@
 
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, ViewChild,
+  ElementRef, ChangeDetectorRef,
+  Input, OnChanges, SimpleChanges, Output, EventEmitter
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FadeInTop } from '../shared/animations/fade-in-top.decorator';
@@ -16,6 +20,7 @@ import { Auth } from '../services/Auth/Auth.service';
 import { AuthResponse } from '../services/Auth/AuthResponse.model';
 
 import * as moment from 'moment';
+import { CheckVarFunctions } from 'app/shared/functions/check-var-functions';
 
 
 @Component({
@@ -27,8 +32,10 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
 
   @Input() dadosPassoaPasso;
+  @Input() moeda;
   @Output() eventCalcularContagem = new EventEmitter();
   @Output() eventPrevStepPassoaPasso = new EventEmitter();
+  @Output() eventStatusImport = new EventEmitter();
 
   public exibirForm = false;
   public isUpdatingSegurado = true;
@@ -41,7 +48,6 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
   public seguradoId;
   public calculoId;
-  public moeda;
 
   public eventCountSeguradoErros = 0;
   public eventCountVinculosErros = 0;
@@ -83,24 +89,25 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.checkUserSession();
 
     this.ref.markForCheck();
-    this.ref.detectChanges();
     this.setExibirForm(this.dadosPassoaPasso);
-
+    this.ref.detectChanges();
   }
 
 
   private getTabelaMoeda() {
 
-    this.Moeda.moedaSalarioMinimoTeto()
-      .then((moeda: Moeda[]) => {
-        this.moeda = moeda;
+    if (CheckVarFunctions.isEmpty(this.moeda)) {
 
-        sessionStorage.setItem(
-          'moedaSalarioMinimoTeto',
-          JSON.stringify(moeda));
+      this.Moeda.moedaSalarioMinimoTeto()
+        .then((moeda: Moeda[]) => {
+          this.moeda = moeda;
+          sessionStorage.setItem(
+            'moedaSalarioMinimoTeto',
+            JSON.stringify(moeda));
 
-      });
+        });
 
+    }
   }
 
   private setExibirForm(dadosPassoaPasso) {
@@ -142,6 +149,16 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
       this.isUploadReaderComplete = true;
       this.exibirForm = true;
 
+      if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+
+        setTimeout(() => {
+          this.seguradoId = this.segurado.id;
+          this.calculoId = this.calculosSelecionado['id'];
+          this.setNextStepContagemTempo();
+        }, 1000);
+
+      }
+
     }
 
     // this.segurado.user_id = this.userId;
@@ -172,16 +189,19 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     this.vinculos = importVinculos;
     this.isUpdatingVinculos = false;
     this.isUploadReaderComplete = true;
+    this.setEventStatusImport(this.isUploadReaderComplete);
     this.ref.detectChanges();
 
   }
 
   reciverCountSeguradoErros(eventCountSeguradoErros) {
     this.eventCountSeguradoErros = eventCountSeguradoErros;
+    this.ref.detectChanges();
   }
 
   reciverCountVinculosErros(eventCountVinculosErros) {
     this.eventCountVinculosErros = eventCountVinculosErros;
+    this.ref.detectChanges();
   }
 
 
@@ -293,7 +313,7 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
 
       this.calculosSelecionado = { id_segurado: seguradoSelecionado.id };
 
-     // sessionStorage.removeItem('seguradoSelecionado');
+      // sessionStorage.removeItem('seguradoSelecionado');
     }
 
   }
@@ -357,14 +377,28 @@ export class ImportadorCnisComponent implements OnInit, OnChanges {
     //   '_blank');
   }
 
+  setEventStatusImport(status) {
+
+    if (this.dadosPassoaPasso.origem !== 'contagem') {
+      this.eventStatusImport.emit({
+        status: status
+      });
+    }
+
+  }
+
   setNextStepContagemTempo() {
+
     if (this.dadosPassoaPasso.origem !== 'contagem') {
       this.eventCalcularContagem.emit({
         seguradoId: this.seguradoId,
         calculoId: this.calculoId
       });
     }
+
   }
+
+
 
 }
 

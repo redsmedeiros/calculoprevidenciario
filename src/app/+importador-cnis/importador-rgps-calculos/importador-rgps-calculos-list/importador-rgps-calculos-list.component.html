@@ -1,10 +1,81 @@
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="!isUpdatingCalcRGPS">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Revisão da Vida Toda</h2>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div  class="widget-body widget-body-custom no-padding">
+      
+      <table class="table table-condensed-custom table-bordered">
+        <tbody>
+          <tr>
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
+              <div class="well well-small bg-color-greenDark txt-color-white pl-1 m-1">
+                <label class="checkbox txt-color-white mx-2 not-wrap" >
+                  <input type="checkbox" [(ngModel)]="revisaoPBC" (click)="setRevisaoPBC()" [ngModelOptions]="{standalone: true}" class="py-1">
+                  <i></i>Aplicar Cálculo da RMI - Revisão da Vida Toda</label>
+              </div>
+            </td>
+            <td class="text-justify">
+              A Revisão da Vida Toda possibilita a inclusão dos salários de contribuição anteriores a 07/1994
+               no cálculo do benefício previdenciário, conforme decidido pelo STJ no Tema 999. A Tese fixada
+                pelo STJ será aplicada para benefícios concedidos com base em direito adquirido de acordo com 
+                as regras anteriores a EC 103/2019. Entretanto, caso queira, e para finas de simulação, o Usuário 
+                poderá calcular benefício concedido com base em direito adquirido após a EC 103/2019 com inclusão 
+                dos salários de contribuição anteriores a 07/1994.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
+
+<sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="!isUpdatingCalcRGPS">
+  <header>
+    <span class="widget-icon">
+      <i class="fa fa-table"></i>
+    </span>
+    <h2>Atividades Concomitantes</h2>
+  </header>
+  <div>
+    <div *ngIf="isUpdatingCalcRGPS" class="text-align-center">
+      <i class="fa fa-gear fa-4x fa-spin color-ieprev center"></i>
+    </div>
+    <div  class="widget-body widget-body-custom no-padding">
+      
+      <table class="table table-condensed-custom table-bordered">
+        <tbody>
+          <tr>
+            <td class="smart-form" style="vertical-align:middle; min-height: 25px; min-width: 20%;">
+              <div class="well well-small bg-color-primary txt-color-white pl-1 m-1">
+                <label class="checkbox txt-color-white mx-2 not-wrap" >
+                  <input type="checkbox" [(ngModel)]="somarSecundaria" (click)="setSomarSecundaria()" [ngModelOptions]="{standalone: true}" class="py-1">
+                  <i></i>Somar Salários de Contribuição</label>
+              </div>
+            </td>
+            <td class="text-justify">
+              Para benefícios concedidos com base em direito adquirido a partir da vigência da Lei n. 13.846/2019 (18/06/2019) a renda mensal inicial será apurada com base na soma dos salários de contribuição, caso haja exercício de atividades concomitantes com recolhimento de contribuição em todas elas. Entretanto, caso o usuário vislumbre possibilidade de revisão do benefício, o IEPREVCALC possibilita a soma dos salários de contribuição para DIB anterior a 18/06/2019 (Tema 1070 STJ).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</sa-widget>
+
 <!-- Widget ID (each widget will need unique ID)-->
 <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false">
   <header>
     <span class="widget-icon">
       <i class="fa fa-table"></i>
     </span>
-    <h2>Selecione um Cálculo ou Clique em Criar Novo Cálculo</h2>
+    <h2>Cálculos Cadastrados</h2>
       <button type="button" (click)="setNewFormRMIinfoContagemTempo()" class="btn btn-labeled btn-info pull-right">
         <span class="btn-label">
           <i class="fa fa-plus"></i>
@@ -23,7 +94,7 @@
         (deleteRowEvent)="deleteRow($event)"
         (copyRowEvent)="copyRow($event)"
         paginationLength="true"
-        tableClass="table table-striped table-bordered table-hover"
+        tableClass="table table-striped table-condensed-custom table-bordered table-hover"
         width="100%"
       >
       <thead>
@@ -42,6 +113,7 @@
     </div>
   </div>
 </sa-widget>
+
 
 
 <div bsModal #modalCalculosRGPS="bs-modal" class="modal fade" id="create-calculo">

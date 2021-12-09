@@ -45,10 +45,12 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   private isSC_mm_ajustar_btn = false;
   public sc_mm_considerar_carencia = null;
   public sc_mm_considerar_tempo = null;
-  public sc_mm_ajustar = null;
+  public sc_mm_ajustar = 0;
 
   public result_sc = 0
   public result_sc_mm = 0;
+
+  private vinculoTemp;
 
   public matrixTableOptions = {
     paging: false,
@@ -67,6 +69,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
+    this.matrizHasValues = false;
     this.detector.detectChanges();
 
   }
@@ -78,7 +81,14 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (typeof this.vinculo.contribuicoes !== 'undefined'
       && this.vinculo.contribuicoes.length > 0) {
+      // const vinculo = changedvinculo.currentValue;
+      // if (typeof vinculo.contribuicoes !== 'undefined'
+      //   && vinculo.contribuicoes.length > 0) {
 
+      this.matrizHasValues = false;
+      // this.preencherCheckContribuicoes(vinculo);
+      // this.preencherMatrizPeriodos(vinculo.contribuicoes);
+      this.vinculoTemp = Object.assign({}, this.vinculo);
       this.preencherCheckContribuicoes(this.vinculo);
       this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
 
@@ -86,6 +96,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
   }
 
   preencherMatrizPeriodos(contribuicoes) {
+
 
     this.matriz = [{ 'ano': 0, 'valores': [], 'msc': [] }];
 
@@ -101,7 +112,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     this.errors.clear('inicioPeriodo');
     this.errors.clear('finalPeriodo');
     this.errors.clear('salarioContribuicao');
+
     this.matrizHasValues = true;
+    this.detector.detectChanges();
   }
 
   private preencherCheckContribuicoes(vinculo) {
@@ -150,7 +163,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     }
 
     valores[+splitPeriodo[0] - 1] = periodo.sc;
-    msc[+splitPeriodo[0] - 1] = this.getClassSalarioContribuicao(mes, ano, periodo.sc, null, true);;
+    msc[+splitPeriodo[0] - 1] = this.getClassSalarioContribuicao(mes, ano, periodo.sc, null, true);
 
     const obj = {
       ano: ano,
@@ -220,6 +233,17 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     return this.errors.empty();
   }
 
+  /**
+   * clearDataInputForm
+   */
+  public clearDataInputForm() {
+  
+    this.inicioPeriodo = '';
+    this.finalPeriodo = '';
+    this.salarioContribuicao = undefined;
+
+  }
+
   isEmpty(data) {
 
     if (data === undefined
@@ -229,6 +253,14 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       return true;
     }
     return false;
+  }
+
+  desfazerMatrizSC() {
+
+    console.log(this.vinculoTemp);
+    this.vinculo.contribuicoes = this.vinculoTemp.contribuicoes;
+    this.preencherMatrizPeriodos(this.vinculo.contribuicoes);
+
   }
 
   copiarPeriodo(ano) {
@@ -256,26 +288,35 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     if (this.isValid()) {
 
+      this.sc_mm_considerar_carencia = null;
+      this.sc_mm_considerar_tempo = null;
+      this.sc_mm_ajustar = null;
+
       const anoinicio = this.inicioPeriodo.split('/')[1];
       const mesinicio = this.inicioPeriodo.split('/')[0];
       const anofinal = this.finalPeriodo.split('/')[1];
       const mesfinal = this.finalPeriodo.split('/')[0];
-      let mesi = 0;
       this.isSC_mm_ajustar_btn = false;
+
+      const iniM = moment(this.inicioPeriodo, 'MM/YYYY');
+      const FimM = moment(this.finalPeriodo, 'MM/YYYY');
 
       this.matriz.map(ano => {
 
         if (ano.ano >= anoinicio && ano.ano <= anofinal) {
-          mesi = 1;
-          ano.valores.map(mes => {
-            if (mesi >= parseInt(mesinicio, 10) && mesi <= parseInt(mesfinal, 10)) {
+          ano.valores.map((mes, index) => {
 
-              const mesIndex = (mesi - 1);
+            const dateMTeste = moment(('0' + (index + 1)).slice(-2) + '/' + ano.ano, 'MM/YYYY');
+            // console.log(((index + 1) >= parseInt(mesinicio, 10) && ano.ano >= anoinicio)
+            // && ((index + 1) <= parseInt(mesfinal, 10) && ano.ano <= anofinal));
 
-              ano.valores[mesIndex] = this.salarioContribuicao;
-              ano.msc[mesIndex] = this.getClassSalarioContribuicao(mesi, ano.ano, this.salarioContribuicao, null, true);
+            if (dateMTeste.isBetween(iniM, FimM, 'month', '[]')) {
+
+              ano.valores[index] = this.formatMoney(this.salarioContribuicao);
+              ano.msc[index] = this.getClassSalarioContribuicao((index + 1), ano.ano, this.salarioContribuicao, null, true);
+
             }
-            mesi++;
+
           });
 
         }
@@ -296,7 +337,9 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   public preencherComSalario(type = 'm') {
 
-    console.log(this.matriz);
+    this.sc_mm_considerar_carencia = null;
+    this.sc_mm_considerar_tempo = null;
+    this.sc_mm_ajustar = null;
 
     let mesi = 0;
     let mesiC = 0;
@@ -386,9 +429,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
     //   });
     // }
 
+    this.detector.detectChanges();
   }
 
-  private insertSCEnter(ev) {
+  private insertSCenter(ev) {
 
     if (ev.keyCode === 13) {
       this.preencherComValor();
@@ -534,6 +578,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
       sc_mm_considerar_carencia: this.sc_mm_considerar_carencia,
     }
 
+    if (this.sc_mm_ajustar === 1 && this.sc_mm_considerar_tempo === 1) {
+      this.preencherComSalario('m');
+    }
+
     this.eventContribuicoes.emit(saida);
     this.hideContribuicoesCheck();
 
@@ -578,9 +626,10 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
     const checkNumStatusContribuicoes = (
       this.sc_mm_considerar_carencia !== null &&
-      (this.sc_mm_considerar_tempo === 0 || (this.sc_mm_considerar_tempo === 1 && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)))
+      (this.sc_mm_considerar_tempo === 0 ||
+        (this.sc_mm_considerar_tempo === 1 && (this.sc_mm_ajustar === 0 || this.sc_mm_ajustar === 1)
+        ))
     );
-
 
     if (checkNumContricuicoes || (!checkNumContricuicoes && checkNumStatusContribuicoes)) {
       checkContrib = true;
@@ -593,24 +642,24 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
 
-    // if (type === 'mm') {
-    //   return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
-    // }
-
-    // return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
-
-
     if (type === 'mm') {
-      return contribuicoes.filter(function (item) {
-        if (item.msc === 1
-          && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
-      }).length;
+      return contribuicoes.filter(function (item) { if (item.msc === 1) { return item } }).length;
     }
 
-    return contribuicoes.filter(function (item) {
-      if (item.sc === '0,00'
-        && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
-    }).length;
+    return contribuicoes.filter(function (item) { if (item.sc === '0,00') { return item } }).length;
+
+
+    // if (type === 'mm') {
+    //   return contribuicoes.filter(function (item) {
+    //     if (item.msc === 1
+    //       && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    //   }).length;
+    // }
+
+    // return contribuicoes.filter(function (item) {
+    //   if (item.sc === '0,00'
+    //     && moment(item.cp, 'MM/YYYY').isSameOrAfter('2019-11-14')) { return item }
+    // }).length;
 
   }
 

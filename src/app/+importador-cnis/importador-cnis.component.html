@@ -35,7 +35,7 @@
         </div>
       </article>
     </div>
-    <div *ngIf="!isUploadReaderComplete"  style="min-height: 300px;">
+    <div *ngIf="!isUploadReaderComplete" class="min-height-importador" >
       <app-importador-cnis-pdf-load
         (infoSegurado)="reciverInfoSegurado($event)"
         (infoVinculos)="reciverInfoVinculos($event)"
@@ -88,7 +88,7 @@
         <button *ngIf="(eventCountVinculosErros > 0 || eventCountSeguradoErros > 0)"  type="button"   class="btn btn-large btn-block btn-danger">Verifique os dados antes de prosseguir.</button> -->
       </div>
     </div>
-    <div class="form-actions mt-0" *ngIf="dadosPassoaPasso.origem !== 'contagem'" >
+    <div class="form-actions form-action-boder-full mt-0" *ngIf="dadosPassoaPasso.origem !== 'contagem'" >
       <div class="row">
         <div class="col-sm-12">
           <ul class="pager wizard no-margin">
@@ -102,7 +102,7 @@
                 >Retornar&nbsp;</a
               >
             </li>
-            <li class="pull-center">
+            <!-- <li class="pull-center">
               <a
                 data-toggle="modal"
                 data-target="#tutorial-plan"
@@ -115,7 +115,7 @@
                 title=""
                 >Tutorial</a
               >
-            </li>
+            </li> -->
             <li class="next">
               <a
               (click)="gravarImportacaoContagemTempo()"

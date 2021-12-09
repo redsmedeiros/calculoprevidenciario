@@ -12,8 +12,9 @@ import { ContagemTempoConclusaoComponent } from './contagem-tempo-conclusao/cont
 import { ContagemTempoConclusaoPeriodosComponent } from './contagem-tempo-conclusao-periodos/contagem-tempo-conclusao-periodos.component';
 import { ContagemTempoConclusaoGraphComponent } from './contagem-tempo-conclusao-graph/contagem-tempo-conclusao-graph.component';
 import { ContagemTempoConclusaoSeguradoComponent } from './contagem-tempo-conclusao-segurado/contagem-tempo-conclusao-segurado.component';
-import { ContagemTempoConclusaoExportarRgpsComponent }
-from './contagem-tempo-conclusao-exportar-rgps/contagem-tempo-conclusao-exportar-rgps.component';
+import {
+  ContagemTempoConclusaoExportarRgpsComponent
+} from './contagem-tempo-conclusao-exportar-rgps/contagem-tempo-conclusao-exportar-rgps.component';
 
 
 

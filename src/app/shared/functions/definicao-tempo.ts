@@ -17,8 +17,8 @@ export class DefinicaoTempo {
 
     /**
      * Diferenca entre meses
-     * @param d1 
-     * @param d2 
+     * @param d1
+     * @param d2
      */
     static monthsDiff(d1, d2) {
         const date1 = new Date(d1);
@@ -31,8 +31,8 @@ export class DefinicaoTempo {
 
     /**
      * Diferenca entre meses
-     * @param d1 
-     * @param d2 
+     * @param d1
+     * @param d2
      */
     static daysDiff(d1, d2) {
         const oneDay = 24 * 60 * 60 * 1000
@@ -44,8 +44,8 @@ export class DefinicaoTempo {
 
     /**
      * Aplicar fator se houver
-     * @param daysY360 
-     * @param fator 
+     * @param daysY360
+     * @param fator
      */
     static aplicarFator(daysY360, fator) {
 
@@ -149,7 +149,7 @@ export class DefinicaoTempo {
     }
 
 
-    
+
     static calcularTempo360Dias(dataNasc, dataFim = null) {
 
         if (dataFim === null) {
@@ -164,7 +164,7 @@ export class DefinicaoTempo {
         return totalDay360;
     }
 
-    
+
     static calcularTempo360MenosDiaFim(dataNasc, dataFim = null) {
 
         if (dataFim === null) {
@@ -342,8 +342,8 @@ export class DefinicaoTempo {
 
     /**
      * Identifica ano bissexto
-     * @param year 
-     * @returns 
+     * @param year
+     * @returns
      */
     static leapYear(year) {
         return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);

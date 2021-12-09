@@ -24,6 +24,8 @@ export class RegrasAcesso {
     public fatorPrevidenciario = {};
     private moedaDib = {};
 
+    private divisorMinimo = { aplicar: false, value: 0 };
+
     constructor() { }
 
     /**
@@ -38,17 +40,15 @@ export class RegrasAcesso {
         numeroDeContribuicoesAuxTotal,
         carenciaConformDataFiliacao,
         calculo,
-        carenciaRequisito) {
+        carenciaRequisito,
+        divisorMinimo) {
 
         this.numeroDeContribuicoes = numeroDeContribuicoes;
         this.numeroDeContribuicoesAuxTotal = numeroDeContribuicoesAuxTotal;
         this.carenciaConformDataFiliacao = carenciaConformDataFiliacao;
         this.calculo = calculo;
         this.carenciaRequisito = carenciaRequisito;
-
-        // listaConclusaoAcesso.forEach((elementTipo, indice) => {
-        //     elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
-        // });
+        this.divisorMinimo = divisorMinimo;
 
         for (const elementTipo of listaConclusaoAcesso) {
             elementTipo.calculosPossiveis = this.gerarParametrosPorTipoAposentadoria(elementTipo)
@@ -190,17 +190,32 @@ export class RegrasAcesso {
         }
 
         if ((!this.calculo.calcular_descarte_apos_ec103
-            && ['acidente', 'doenca', 'incapacidade', 'pensaoObito'].includes(elementTipo.regra))
-            || elementTipo.regra === 'deficiente'
-            || elementTipo.regra === 'idadeRural') { // !this.calculo.calcular_descarte_deficiente_ec103 &&
+            && ['acidente',
+                'doenca',
+                'incapacidade',
+                'pensaoObito',
+                'deficiente',
+                'idadeRural'].includes(elementTipo.regra))
+        ) { // !this.calculo.calcular_descarte_deficiente_ec103 &&
 
             maximoDescarte.meses = 0;
             maximoDescarte.anos = 0;
             // pessoa com deficiencia com descarte de 20%
             if (!this.calculo.calcular_descarte_deficiente_ec103 && elementTipo.regra === 'deficiente') {
 
-                maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
+                if (this.divisorMinimo.aplicar &&
+                    this.divisorMinimo.value) {
 
+                    maximoDescarte.meses = (this.numeroDeContribuicoes > this.divisorMinimo.value) ?
+                        this.numeroDeContribuicoes - this.divisorMinimo.value : 0;
+
+                } else {
+
+                    maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
+
+                }
+
+                // maximoDescarte.meses = Math.floor(this.numeroDeContribuicoes * 0.20);
             }
 
             calculosPossiveis = this.criarPossibilidadeUnica(maximoDescarte, elementTipo);
@@ -1218,9 +1233,15 @@ export class RegrasAcesso {
         }
 
         const label = {
-            1915: 'Aposentadoria Especial - 15 anos',
-            1920: 'Aposentadoria Especial - 20 anos',
-            1925: 'Aposentadoria Especial - 25 anos'
+            1915: 'Aposentadoria Especial (Regra de Transição) - 15 anos',
+            1920: 'Aposentadoria Especial (Regra de Transição) - 20 anos',
+            1925: 'Aposentadoria Especial (Regra de Transição) - 25 anos'
+        }
+
+        const labelTansitoria = {
+            1915: 'Aposentadoria Especial (Regra Transitória) - 15 anos',
+            1920: 'Aposentadoria Especial (Regra Transitória) - 20 anos',
+            1925: 'Aposentadoria Especial (Regra Transitória) - 25 anos'
         }
 
         let status = false;
@@ -1230,21 +1251,46 @@ export class RegrasAcesso {
 
         // const pontosEspecial = Math.trunc(contribuicaoTotalTempoAnos + idadeFracionada);
 
-        if (isRegraTransitoria) {
-
-            status = ((idadeFracionada >= idadeTransitoria[tipoBeneficio])
-                && (pontosEspecial >= regraEspecial[tipoBeneficio].pontos)
-                && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]));
-
-            idade_min = idadeTransitoria[tipoBeneficio];
-
-        } else {
+        if (!isRegraTransitoria) {
 
             status = (pontosEspecial >= regraEspecial[tipoBeneficio].pontos)
                 && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]);
 
+            if (status) {
+
+                if (pontosEspecial > regraEspecial[tipoBeneficio].pontos) {
+                    pontosExcendente = (pontosEspecial - regraEspecial[tipoBeneficio].pontos) / 2
+                    // tempoMinimo = contribuicaoTotalTempoAnos - pontosExcendente
+                    idade_min = idadeFracionada - pontosExcendente;
+                }
+
+            }
+
+
+            this.setConclusaoAcesso(
+                'especial',
+                label[tipoBeneficio],
+                status,
+                pontosEspecial,
+                idadeFracionada,
+                0,
+                contribuicaoTotalTempoAnos,
+                {
+                    tempo: tempoMinimo,
+                    tempoAnterior: 0,
+                    idade: idade_min,
+                    pedagio: 0,
+                    pontos: regraEspecial[tipoBeneficio].pontos,
+                    ano: 0
+                }
+            );
 
         }
+
+        status = ((idadeFracionada >= idadeTransitoria[tipoBeneficio])
+            && (contribuicaoTotalTempoAnos >= tempoRegra[tipoBeneficio]));
+
+        idade_min = idadeTransitoria[tipoBeneficio];
 
         if (status) {
 
@@ -1256,10 +1302,9 @@ export class RegrasAcesso {
 
         }
 
-
         this.setConclusaoAcesso(
-            'especial',
-            label[tipoBeneficio],
+            'especialt',
+            labelTansitoria[tipoBeneficio],
             status,
             pontosEspecial,
             idadeFracionada,
@@ -1274,6 +1319,7 @@ export class RegrasAcesso {
                 ano: 0
             }
         );
+
 
     }
 

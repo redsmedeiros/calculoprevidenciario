@@ -19,9 +19,9 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
     let type = params.type || localStorage.getItem('type');
     let user_id = params.user_id || localStorage.getItem('user_id');
     let user_token = params.user_token || localStorage.getItem('user_token');
+    let plan = params.plan || sessionStorage.getItem('plan');
 
     loadingAlert({
-      // type: 'info',
       title: 'Aguarde por favor...',
       allowOutsideClick: false,
       timer: 2000
@@ -39,6 +39,7 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
           localStorage.setItem('user_token', user_token);
           localStorage.setItem('product', product);
           localStorage.setItem('type', type);
+          sessionStorage.setItem('plan', plan);
           this.router.navigate(['.'], { queryParams: {}, queryParamsHandling: "merge", });
           resolve(false);
         }
@@ -50,6 +51,7 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
             localStorage.setItem('user_token', user_token);
             localStorage.setItem('product', product);
             localStorage.setItem('type', type);
+            sessionStorage.setItem('plan', plan);
             resolve(true);
           } else {
             loadingAlert.close();
@@ -86,13 +88,13 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
     let type = params.type || localStorage.getItem('type');
     let user_id = params.user_id || localStorage.getItem('user_id');
     let user_token = params.user_token || localStorage.getItem('user_token');
+    let plan = params.plan || localStorage.getItem('plan');
 
     loadingAlert({
-      // type: 'info',
       title: 'Aguarde por favor...',
       allowOutsideClick: false,
       timer: 2000
-    });  // loadingAlert.close();
+    });  
 
     loadingAlert.showLoading();
 
@@ -104,6 +106,7 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
           localStorage.setItem('user_token', user_token);
           localStorage.setItem('product', product);
           localStorage.setItem('type', type);
+          sessionStorage.setItem('plan', plan);
           this.router.navigate(['.'], { queryParams: {}, queryParamsHandling: "merge", });
           resolve(false);
         }
@@ -114,6 +117,7 @@ export class OnlyLoggedInUsersGuard implements CanActivate, CanActivateChild {
             localStorage.setItem('user_token', user_token);
             localStorage.setItem('product', product);
             localStorage.setItem('type', type);
+            sessionStorage.setItem('plan', plan);
             resolve(true);
           }
         }).catch(err => {

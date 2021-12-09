@@ -201,16 +201,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     // return daysY360;
   }
 
-  private checkScCompetenciaFull(salariosC, auxiliarDate) {
-
-    // console.log(salariosC)
+  private checkScCompetenciaFull(salariosC, auxiliarDate, vinculo) {
 
     const data = auxiliarDate.format('MM/YYYY');
     const salC = salariosC.find((x) => x.cp === data)
 
-   // console.log(salC);
-
-    if (this.isExist(salC) && (salC.msc === 0 && salC.sc !== '0,00')) {
+    if ((vinculo.sc_mm_considerar_tempo === 1)
+      || (this.isExist(salC) &&
+        (salC.msc === 0 && salC.sc !== '0,00'))) {
       return true;
     }
 
@@ -234,6 +232,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const inicioVinculo = this.toMoment(vinculo.data_inicio);
       const fimVinculo = this.toMoment(vinculo.data_termino);
       const fator = vinculo.fator_condicao_especialN;
+      dataFull = false;
+
+      // if (auxiliarDate.isBetween('2018-12-01', '2019-02-01', 'month', '[]')) {
+      //   console.log('L =' + melhorTempoLast + '| A =' + melhorTempo)
+      // }
 
 
       // é o fim do vinculo
@@ -249,17 +252,223 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         dataFull = true;
       }
 
-      if (auxiliarDatePosEC103 && this.checkPeriodoPosReforma(vinculo)) {
-        dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate);
+
+
+      if (auxiliarDatePosEC103
+        && this.checkPeriodoPosReforma(vinculo)
+      ) {
+
+        dataFull = this.checkScCompetenciaFull(vinculo.sc, auxiliarDate, vinculo);
         melhorTempo = (dataFull) ? 30 : 0;
 
-        if (melhorTempo === 0 && !dataFull && auxiliarDate.isSame('2019-11-13', 'month')) {
+        if (melhorTempo === 0
+          && !dataFull
+          && auxiliarDate.isSame('2019-11-13', 'month')
+          && moment('2019-11-13').isBetween(
+            moment(inicioVinculo),
+            moment(fimVinculo), 'month', '[]')
+        ) {
+
           melhorTempo = 13
         }
 
 
-      }else{
+      } else {
 
+        // if (auxiliarDate.isSame('2020-03-01', 'month')) {
+        //   console.log('----1---');
+        //   console.log(vinculo);
+        //   console.log(melhorTempoLast);
+        //   console.log(melhorTempo);
+        //   console.log(dataFull);
+        //   console.log(moment(auxiliarDate).isSame(inicioVinculo, 'month'));
+        //   console.log('----1---');
+        // }
+
+        // Se igual ao inicio
+        if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
+
+          melhorTempo = ((30 - inicioVinculo.date()) + 1);
+          melhorTempo = this.aplicarFator(melhorTempo, fator)
+
+
+
+        }
+
+        // Se igual ao fim
+        if (moment(auxiliarDate).isSame(fimVinculo, 'month') && !dataFull) {
+
+          let tempo = fimVinculo.date();
+          if (((fimVinculo.month() + 1) === 2 && (fimVinculo.date() === 28 || fimVinculo.date() === 29))
+            || fimVinculo.date() === 31) {
+            tempo = 30;
+          }
+          tempo = (tempo > 30) ? 30 : tempo;
+          melhorTempo = this.aplicarFator(tempo, fator);
+        }
+
+        // se igual ao inicio, fim e não é mês cheio
+        if (
+          (moment(auxiliarDate).isSame(inicioVinculo, 'month')
+            && moment(auxiliarDate).isSame(fimVinculo, 'month'))
+          && !dataFull
+        ) {
+
+          let diffIgualIF = 0;
+
+          if (moment(inicioVinculo).isSame(fimVinculo, 'month')) {
+            diffIgualIF = (fimVinculo.date() - inicioVinculo.date()) + 1;
+            diffIgualIF = (diffIgualIF > 0) ? (diffIgualIF * fator) : 0;
+          }
+
+          melhorTempo = this.aplicarFator(diffIgualIF, fator);
+
+        }
+
+        if (
+          (moment(auxiliarDate).isSame(inicioVinculo, 'month')
+            && moment(auxiliarDate).isSame(lastFim, 'month'))
+          && (inicioVinculo.isSameOrAfter(lastFim)
+            && inicioVinculo.isSame(lastFim, 'month'))
+          && !dataFull
+        ) {
+
+          melhorTempo = 0;
+
+          let diffAnterior = 0;
+          let tempoIni = ((30 - inicioVinculo.date()) + 1);
+          tempoIni = this.aplicarFator(tempoIni, fator);
+
+          let tempoFim = lastFim.date();
+          // if (((lastFim.month() + 1) === 2 && (lastFim.date() === 28 || lastFim.date() === 29))
+          //   || lastFim.date() === 31) {
+          //   tempoFim = 30;
+          // }
+
+          tempoFim = (tempoFim > 30) ? 30 : tempoFim;
+          tempoFim = this.aplicarFator(tempoFim, lastFator);
+          melhorTempo = (tempoFim + tempoIni);
+
+          if (inicioVinculo.isSame(lastFim)) {
+            melhorTempo -= 1;
+          }
+
+          // se inicio e fim do ultimo periodo da listado são iguais
+          if ((moment(lastIni).isSame(lastFim, 'month'))) {
+
+            diffAnterior = (lastFim.date() - lastIni.date()) + 1;
+            diffAnterior = (diffAnterior > 0) ? diffAnterior : 0;
+            diffAnterior = this.aplicarFator(diffAnterior, lastFator);
+            melhorTempo -= diffAnterior;
+
+          }
+
+
+
+
+        }
+
+        // melhorTempo *= fator;
+
+        // console.log(diffAnterior);
+        // console.log(melhorTempoLast);
+        // console.log('F----');
+      }
+      // if (auxiliarDate.isSame('2019-01-01', 'month')) {
+      //   console.log(melhorTempo);
+      // }
+      // if (auxiliarDate.isSameOrAfter('2020-01-01', 'month')) {
+      //   console.log('---');
+      //   console.log(auxiliarDate.format('DD/MM/YYYY') + ' -- ' + melhorTempo);
+      //   console.log('---');
+      // }
+
+      // if (auxiliarDate.isSame('2019-11-13', 'month')) {
+      //   console.log('---');
+      //   console.log(melhorTempo);
+      //   console.log('---');
+      // }
+
+      if (this.checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo)) {
+
+        melhorTempo = 0;
+
+      }
+
+
+      lastIni = this.toMoment(vinculo.data_inicio);
+      lastFim = this.toMoment(vinculo.data_termino);
+      lastFator = vinculo.fator_condicao_especialN;
+      melhorTempoLast = (melhorTempo > melhorTempoLast) ? melhorTempo : melhorTempoLast;
+      melhorTempo = (melhorTempo > melhorTempoLast) ? melhorTempo : melhorTempoLast;
+
+
+    }
+
+    // melhorTempo = Math.floor(melhorTempo);
+
+    // console.log('FT----');
+    //  console.log('Ta-' + auxiliarDate.format('DD/MM/YYYY') +
+    //  ' atual = ' + melhorTempo + ' | last =  ' + melhorTempoLast + ' | f1 = ' + lastFator);
+    // console.log('Tb-' + auxiliarDate.format('DD/MM/YYYY') + ' | ' + melhorTempo);
+    // console.log('FT----');
+
+    return { melhorTempo: melhorTempo, finalVinculo: finalVinculo };
+  }
+
+
+
+
+  private checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo) {
+
+
+    if (vinculo.tempoContrib === 'Parcial'
+      && (moment(auxiliarDate).isBetween(moment(inicioVinculo), moment(fimVinculo), 'month', '[]')
+        && this.dadosPassoaPasso.origem !== 'contagem')) {
+
+      // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+      //   // console.log(!this.checkScIntegral(vinculo.sc, auxiliarDate))
+      //   // console.log((this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0))
+      //   // console.log(((!this.checkScIntegral(vinculo.sc, auxiliarDate))
+      //   //   && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0)))
+      // }
+
+      return ((!this.checkScIntegral(vinculo.sc, auxiliarDate))
+        && (this.isExist(vinculo.sc_mm_considerar_tempo) && vinculo.sc_mm_considerar_tempo === 0));
+
+    }
+
+    return false;
+
+  }
+
+
+  private defineMelhorTempoOld(auxiliarDate) {
+
+    let melhorTempo = 0;
+    let melhorTempoLast = 0;
+    let dataFull = false;
+    let lastFim;
+    let lastIni;
+    let lastFator = 0;
+    let finalVinculo = false;
+    for (const vinculo of this.periodosList) {
+
+      const inicioVinculo = this.toMoment(vinculo.data_inicio);
+      const fimVinculo = this.toMoment(vinculo.data_termino);
+      const fator = vinculo.fator_condicao_especialN;
+
+      if (moment(auxiliarDate).isSame(fimVinculo, 'month')) {
+        finalVinculo = true;
+      }
+
+      // se entre as datas 30 dias
+      if (moment(auxiliarDate).isBetween(
+        moment(inicioVinculo),
+        moment(fimVinculo), 'month')) {
+        melhorTempo = this.aplicarFator(30, fator);
+        dataFull = true;
+      }
 
       // Se igual ao inicio
       if (moment(auxiliarDate).isSame(inicioVinculo, 'month') && !dataFull) {
@@ -282,7 +491,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         melhorTempo = this.aplicarFator(tempo, fator);
       }
 
-      // se igual ao inicio, fim e não é mês cheio
+
       if (
         (moment(auxiliarDate).isSame(inicioVinculo, 'month')
           && moment(auxiliarDate).isSame(fimVinculo, 'month'))
@@ -298,6 +507,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         melhorTempo = this.aplicarFator(diffIgualIF, fator);
       }
+
 
       if (
         (moment(auxiliarDate).isSame(inicioVinculo, 'month')
@@ -320,14 +530,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         // }
 
         tempoFim = (tempoFim > 30) ? 30 : tempoFim;
+
         tempoFim = this.aplicarFator(tempoFim, lastFator);
+
         melhorTempo = (tempoFim + tempoIni);
 
         if (inicioVinculo.isSame(lastFim)) {
           melhorTempo -= 1;
         }
 
-        // se inicio e fim do ultimo periodo da listado são iguais
         if ((moment(lastIni).isSame(lastFim, 'month'))) {
 
           diffAnterior = (lastFim.date() - lastIni.date()) + 1;
@@ -337,18 +548,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
         }
 
-      }
-
-
-        // if ((moment(inicioVinculo).isSame(lastFim, 'month'))) {
-        //   console.log('ok')
-        // }
-        // melhorTempo *= fator;
-
-        // console.log(melhorTempo);
-        // console.log(diffAnterior);
-        // console.log(melhorTempoLast);
-        // console.log('F----');
 
       }
 
@@ -361,21 +560,27 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     }
 
-    // if (auxiliarDatePosEC103) {
-    //   console.log(dataFull);
-    //   console.log(melhorTempo);
-    // }
-
-
-    // melhorTempo = Math.floor(melhorTempo);
-
-    // console.log('FT----');
-    // console.log('Ta-' + auxiliarDate.format('DD/MM/YYYY') + '
-    // | atual = ' + melhorTempo + ' | last =  ' + melhorTempoLast + ' | f1 = ' + lastFator);
-    // console.log('Tb-' + auxiliarDate.format('DD/MM/YYYY') + ' | ' + melhorTempo);
-    // console.log('FT----');
-
     return { melhorTempo: melhorTempo, finalVinculo: finalVinculo };
+  }
+
+  private checkPeriodoIntervaloReforma(periodo) {
+
+
+    if (moment(periodo.data_termino).isSameOrBefore('2019-11-13')) {
+
+      return 'anterior';
+    }
+
+    if (moment(periodo.data_inicio).isSameOrAfter('2019-11-14')) {
+
+      return 'apos';
+    }
+
+    if (moment('2019-11-13').isBetween(periodo.data_inicio, periodo.data_termino, null, '[]')) {
+
+      return 'entre';
+    }
+
   }
 
 
@@ -431,12 +636,17 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const fimContador19 = this.momentEndFaixaContador(this.fimContador19);
       const fimUltimoVinculo = this.momentEndFaixaContador(this.limitesDoVinculo.fim);
 
-
       let rstMelhorTempo = { melhorTempo: 0, finalVinculo: false };
+      let isMetodoOld = true
+      if (this.dadosPassoaPasso.origem !== 'contagem') {
+        isMetodoOld = false
+      }
+
+      const func_defineMelhorTempo = (this.dadosPassoaPasso.origem === 'contagem') ? this.defineMelhorTempoOld : this.defineMelhorTempo;
 
       do {
 
-        rstMelhorTempo = this.defineMelhorTempo(auxiliarDate.clone());
+        rstMelhorTempo = func_defineMelhorTempo.call(this, auxiliarDate.clone());
 
         if (rstMelhorTempo.melhorTempo > 0) {
 
@@ -473,14 +683,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
             count19 += (auxiliarDate.isSame(fimContador19, 'month')) ? fimContador19.date() : rstMelhorTempo.melhorTempo;
           };
 
+
           if (auxiliarDate.isSameOrBefore(fimUltimoVinculo, 'month')) {
             countUltimoVinculo += (auxiliarDate.isSame(fimUltimoVinculo, 'month')) ? fimUltimoVinculo.date() : rstMelhorTempo.melhorTempo;
           };
 
         }
 
-       // console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
-
+        // console.log(auxiliarDate.format('DD/MM/YYYY') + ' | ' + (rstMelhorTempo.melhorTempo > 0) + ' | ' + countUltimoVinculo);
         auxiliarDate = moment(this.toDateString(auxiliarDate.clone()), 'DD/MM/YYYY').add(1, 'M');
 
       } while (fimContador.isSameOrAfter(auxiliarDate, 'month'));
@@ -511,14 +721,11 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       this.tempoTotalConFatorUltimoVinculo = DefinicaoTempo.convertD360ToDMY(countUltimoVinculo);
 
 
-      // console.log(this.tempoTotalConFator19);
+      // console.log('--------------//------------');
+      // console.log(countUltimoVinculo);
       // console.log(count19);
       // console.log(count);
       // console.log(this.tempoTotalConFatorUltimoVinculo);
-
-      // console.log(this.periodosList);
-      // console.log(somateste);
-      // console.log(somatesteF);
       // console.log(this.tempoTotalConFator);
 
       if (this.tempoTotalConFator) {
@@ -626,14 +833,16 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkScIntegral(salariosC, auxiliarDate) {
 
-
-    if (auxiliarDate.isBefore('2019-11-13')) {
-      return true;
-    }
-
-
+    // if (auxiliarDate.isBefore('2019-11-13')) {
+    //   return true;
+    // }
     const data = auxiliarDate.format('MM/YYYY');
-    const salC = salariosC.find((x) => x.cp === data)
+    const salC = salariosC.find((x) => x.cp === data);
+
+    // if (auxiliarDate.isSame('2018-01-01', 'month')) {
+    //   console.log(salC);
+    //   console.log((salC.msc === 0 && salC.sc !== '0,00'));
+    // }
 
     if ((salC.msc === 0 && salC.sc !== '0,00')) {
       return true;
@@ -646,6 +855,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   private defineCarenciaData(auxiliarDate) {
     let carencia = false;
 
+
     for (const vinculo of this.periodosList) {
 
       const inicioVinculo = this.toMomentCarencia(vinculo.data_inicio);
@@ -656,15 +866,19 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       ) {
 
 
-        if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral')) {
+        if ((vinculo.carencia === 'Sim' || vinculo.carencia === 'Integral')
+          || (this.dadosPassoaPasso.origem === 'contagem')) {
           return true;
         }
 
         if (vinculo.carencia === 'Parcial'
-          && this.checkPeriodoPosReforma(vinculo)
+          //   && this.checkPeriodoPosReforma(vinculo)
         ) {
 
-          if (this.checkScIntegral(vinculo.sc, auxiliarDate)) {
+          if (this.checkScIntegral(vinculo.sc, auxiliarDate)
+            || (this.isExist(vinculo.sc_mm_considerar_carencia)
+              && vinculo.sc_mm_considerar_carencia === 1)
+          ) {
 
             return true;
 
@@ -673,7 +887,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
         }
 
       }
-
       // if ((vinculo.carencia === 'Sim' || vinculo.carencia === 1) && (moment(auxiliarDate).isBetween(
       //   moment(inicioVinculo),
       //   moment(fimVinculo), undefined, '[]'))) {
@@ -746,9 +959,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
           if (auxiliarDate <= fimContador19) {
             count19++;
           };
+
         }
 
-        //        console.log(auxiliarDate.format('MM/YYYY') + '|' + count)
+        //    console.log(auxiliarDate.format('MM/YYYY') + '|' + this.defineCarenciaData(auxiliarDate) + '|' + count)
 
         auxiliarDate = moment(this.toDateString(auxiliarDate), 'DD/MM/YYYY').add(1, 'M');
 
@@ -858,7 +1072,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
       let rstTemp = 0;
       rstTemp = (this.tempoTotalConFator94.fullDays + this.idade360Ate94.fullDays);
-
       this.somatoriaTempoContribIdade94 = DefinicaoTempo.convertD360ToDMY(rstTemp);
 
       if (this.somatoriaTempoContribIdade94.fullDays > 0) {
@@ -937,12 +1150,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     const dataNasc = moment(this.segurado.data_nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const ultimoVinculo = this.limitesDoVinculo.fim.format('YYYY-MM-DD');
-
     this.idade360Final = DefinicaoTempo.calcularTempo360(dataNasc, ultimoVinculo);
     this.limitesTempoTotal.emit(this.idade360Final);
-
     this.idade360Atual = DefinicaoTempo.calcularTempo360(dataNasc, null);
-
     this.idade360Ate94 = DefinicaoTempo.calcularTempo360(dataNasc, '1994-07-01');
     this.idade360AteEC20 = DefinicaoTempo.calcularTempo360(dataNasc, '2015-11-05');
     this.idade360EC103 = DefinicaoTempo.calcularTempo360(dataNasc, '2019-11-13');
@@ -956,13 +1166,9 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     if (!this.isPeridoAposReforma) {
 
       this.tempoPedagioAposentadoriaProporcional();
-
       this.tempoMinimoParaAposentadoriaProporcionalComPedagio();
-
       this.tempoCumprirAposentadoriaProporcional();
-
       this.tempoCumprirAposentadoriaItentegal();
-
       this.idadeMinimaExigidaParaAposentadoriaProporcional();
 
     }
@@ -1136,7 +1342,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     itensExport.forEach(label => {
       const objExport = this.setExportRGPSobj(this['tempoTotalConFator' + label], this['carencia' + label], label);
       this.dadosParaExportar['total' + label] = objExport;
-      // this.dadosParaExportar.push(objExport);
     });
 
   }
