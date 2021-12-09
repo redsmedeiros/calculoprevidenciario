@@ -36,6 +36,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   @Input() calculo;
   @Input() isCalculoSelecionado;
 
+
   @Output() planejamentoSelecionadoEvent = new EventEmitter();
 
   public form = { ...PlanejamentoRgps.form };
@@ -84,7 +85,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   private plan_index;
   private planejamentoContrib;
-  private createplanejamentoContrib = false;
+  private createplanejamentoContrib = true;
 
   private listAliquotas = [];
   private listEspecies = [];
@@ -323,6 +324,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     this.especie = this.plan.especie;
 
     this.data_futura = this.formatReceivedDate(this.plan.data_futura);
+    this.showQuadroContribuicoes();
 
   }
 
@@ -426,12 +428,18 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   // Novo quadro de contribuicoes semelhante ao RMI 
   private showQuadroContribuicoes() {
 
-    const planRow = this.setPlanRow({ ...PlanejamentoRgps.form }, this.data_futura);
+    this.createplanejamentoContrib = false;
 
-    console.log(planRow);
+    if (this.isEdit) {
 
-    this.plan_index = 0;
-    this.planejamentoContrib = planRow;
+      this.planejamentoContrib = this.setPlanRow(this.plan, this.data_futura);
+
+    } else {
+
+      this.plan_index = 0;
+      this.planejamentoContrib = this.setPlanRow({ ...PlanejamentoRgps.form }, this.data_futura);
+
+    }
 
     this.createplanejamentoContrib = true;
 
@@ -741,7 +749,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     this.planejamentoContrib = planRow;
 
     ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
-    this.contribuicoes.show();
+    // this.contribuicoes.show();
   }
 
 

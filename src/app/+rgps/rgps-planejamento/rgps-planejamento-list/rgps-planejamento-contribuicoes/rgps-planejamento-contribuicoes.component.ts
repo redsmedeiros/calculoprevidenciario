@@ -55,6 +55,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   public result_sc = 0
   public result_sc_mm = 0;
+  public planejamentoContribTemp;
 
   public matrixTableOptions = {
     paging: false,
@@ -74,7 +75,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
   ) { }
 
   ngOnInit() {
-    this.detector.detectChanges();
+    /// this.detector.detectChanges();
   }
 
 
@@ -85,43 +86,43 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
     const changedvinculo = changes['planejamentoContrib'];
     const changedisUpdating = changes['isUpdating'];
+    console.log(this.planejamentoContrib);
 
     if (typeof this.planejamentoContrib !== 'undefined'
       && typeof this.planejamentoContrib.data_futura !== 'undefined') {
 
       this.isDataLoad = true;
 
-      console.log(this.planejamentoContrib);
-      console.log(this.calculo);
-
+      this.planejamentoContribTemp = Object.assign({}, this.planejamentoContrib);
       this.preencherCheckContribuicoes(this.planejamentoContrib);
       this.preencherMatrizPeriodos(this.planejamentoContrib.sc);
 
     }
+
+
   }
-
-
 
   preencherMatrizPeriodos(contribuicoes) {
 
-    console.log(contribuicoes);
-
     this.matriz = [{ 'ano': 0, 'valores': [], 'msc': [] }];
 
-    contribuicoes.forEach(periodo => {
-      this.preencherMatriz(periodo);
-    });
+    if (contribuicoes.length > 0) {
 
-    _.remove(this.matriz, function (item) {
-      return item.ano === 0;
-    });
+      contribuicoes.forEach(periodo => {
+        this.preencherMatriz(periodo);
+      });
 
-    this.matriz.sort(function (a, b) { return a.ano - b.ano });
-    this.errors.clear('inicioPeriodo');
-    this.errors.clear('finalPeriodo');
-    this.errors.clear('salarioContribuicao');
-    this.matrizHasValues = true;
+      _.remove(this.matriz, function (item) {
+        return item.ano === 0;
+      });
 
+      this.matriz.sort(function (a, b) { return a.ano - b.ano });
+      this.errors.clear('inicioPeriodo');
+      this.errors.clear('finalPeriodo');
+      this.errors.clear('salarioContribuicao');
+      this.matrizHasValues = true;
+
+    }
   }
 
   private preencherCheckContribuicoes(vinculo) {
@@ -187,6 +188,12 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
     this.errors.clear();
 
+    // if (this.calculo !== undefined && (typeof this.vinculo === 'undefined' || typeof this.vinculo.data_inicio === 'undefined')) {
+    //   this.vinculo = {};
+    //   this.vinculo['data_inicio'] =  this.calculo.data_pedido_beneficio;
+    // }
+
+
     let dateInicioPeriodo;
     let dateFinalPeriodo;
 
@@ -204,7 +211,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
     } else {
 
-      if (dateInicioPeriodo.isBefore(moment(this.vinculo.data_inicio, 'DD/MM/YYYY'), 'month')) {
+      if (dateInicioPeriodo.isBefore(moment(this.planejamentoContrib.inicio, 'DD/MM/YYYY'), 'month')) {
         this.errors.add({ 'inicioPeriodo': ['Insira uma competência posterior ou igual ao inicio do período'] });
       }
 
@@ -221,7 +228,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
         this.errors.add({ 'finalPeriodo': ['Insira uma data posterior a data inicial'] });
       }
 
-      if (dateFinalPeriodo.isAfter(moment(this.vinculo.data_termino, 'DD/MM/YYYY'), 'month')) {
+      if (dateFinalPeriodo.isAfter(moment(this.planejamentoContrib.data_futura, 'DD/MM/YYYY'), 'month')) {
         this.errors.add({ 'finalPeriodo': ['Insira uma competência anterior ou igual ao final do período'] });
       }
 
@@ -250,7 +257,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   copiarPeriodo(ano) {
 
-    const result = _.filter(this.vinculo.contribuicoes, (item) => {
+    const result = _.filter(this.planejamentoContrib.sc, (item) => {
       return item.cp.indexOf(ano) > -1;
     });
 
@@ -289,7 +296,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
               const mesIndex = (mesi - 1);
 
-              ano.valores[mesIndex] = this.salarioContribuicao;
+              ano.valores[mesIndex] = this.formatMoney(this.salarioContribuicao);
               ano.msc[mesIndex] = this.getClassSalarioContribuicao(mesi, ano.ano, this.salarioContribuicao, null, true);
             }
             mesi++;
@@ -297,6 +304,13 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
         }
       });
+
+
+      console.log(this.salarioContribuicao)
+      console.log(this.matriz)
+
+      this.isDataLoad = true;
+      this.matrizHasValues = true;
 
     } else {
 
@@ -404,6 +418,16 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     // }
 
   }
+
+
+  desfazerMatrizSC() {
+
+    console.log(this.planejamentoContribTemp);
+    this.planejamentoContrib.sc = this.planejamentoContribTemp.sc;
+    this.preencherMatrizPeriodos(this.planejamentoContrib.sc);
+
+  }
+
 
   private insertSCEnter(ev) {
 
@@ -531,7 +555,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   public formatDecimalValue(value) {
 
-    // typeof value === 'string' ||
     if (isNaN(value)) {
 
       return parseFloat(value.replace(/\./g, '').replace(',', '.'));
@@ -543,7 +566,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     }
 
   }
-
 
 
   private setCheckInformacoes() {

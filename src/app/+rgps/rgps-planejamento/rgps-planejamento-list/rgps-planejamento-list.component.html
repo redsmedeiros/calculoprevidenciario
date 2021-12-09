@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<div class="row my-4">
+<div class="row my-4" *ngIf="!isUpdatePlan">
   <div class="col-sm-12 col-md-12 col-lg-12">
     <sa-widget
       [colorbutton]="false"
@@ -149,7 +149,38 @@
               </div>
 
               <div class="row">
-                <div class="col-md-5 col-lg-5">
+                <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                    <label class="control-label col-md-3" for="especiePlan"
+                      >Segurado*:</label
+                    >
+                    <div class="col-md-9 pl-1 pr-5">
+                      <select
+                        class="form-control"
+                        required
+                        [(ngModel)]="aliquota"
+                        [ngModelOptions]="{ standalone: true }"
+                        name="aliquota"
+                      >
+                        <option value="" selected disabled>
+                          - Selecione a Espécie do Segurado -
+                        </option>
+                        <option
+                          *ngFor="let aliquota of listAliquotas"
+                          [value]="aliquota.value"
+                        >
+                          {{ aliquota.label }}
+                        </option>
+                      </select>
+                      <small
+                        *ngIf="errors.has('aliquota')"
+                        class="text-danger"
+                        >{{ errors.get("aliquota") }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                  <!-- <div class="col-md-5 col-lg-5">
                   <div class="form-group">
                     <label class="control-label col-md-7"
                       >Salário de Contribuição - SC:</label
@@ -191,41 +222,9 @@
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div class="col-md-7 col-lg-7">
-                  <div class="form-group">
-                    <label class="control-label col-md-2" for="especiePlan"
-                      >Segurado*:</label
-                    >
-                    <div class="col-md-10 pr-5">
-                      <select
-                        class="form-control"
-                        required
-                        [(ngModel)]="aliquota"
-                        [ngModelOptions]="{ standalone: true }"
-                        name="aliquota"
-                      >
-                        <option value="" selected disabled>
-                          - Selecione a Espécie do Segurado -
-                        </option>
-                        <option
-                          *ngFor="let aliquota of listAliquotas"
-                          [value]="aliquota.value"
-                        >
-                          {{ aliquota.label }}
-                        </option>
-                      </select>
-                      <small
-                        *ngIf="errors.has('aliquota')"
-                        class="text-danger"
-                        >{{ errors.get("aliquota") }}</small
-                      >
-                    </div>
-                  </div>
-                </div>
+                </div> -->
               </div>
-              <div class="row" *ngIf="createplanejamentoContrib">
+              <div class="row" *ngIf="!isUpdatePlan">
                 <div class="col-md-12">
                   <app-rgps-planejamento-contribuicoes
                     [isUpdating]="createplanejamentoContrib"
@@ -283,14 +282,14 @@
         </span>
         <h2>Benefícios Futuros Cadastrados</h2>
 
-        <!-- <button class="btn btn-labeled btn-warning pull-right" type="button"
+        <button class="btn btn-labeled btn-warning pull-right" type="button"
           title="Planejamento Previdenciário." (click)="novoPlanejamento()">
 
           <span class="btn-label">
             <i class="fa fa-plus"></i>
           </span>
           Criar novo Planejamento
-        </button> -->
+        </button>
       </header>
 
       <!-- form fim -->
@@ -336,7 +335,7 @@
                   <th>DIB Futura</th>
                   <th>Salário de Contribuição</th>
                   <th>Segurado</th>
-                  <th tooltip="Salários de Contribuição">SC</th>
+                  <!-- <th tooltip="Salários de Contribuição">SC</th> -->
                   <th class="text-center" width="60px">Ações</th>
                   <th class="text-center" width="75px">Selecionar</th>
                 </tr>
@@ -350,7 +349,7 @@
                   <td class="text-left">
                     {{ getAliquotasLabel(planRow.aliquota) }}
                   </td>
-                  <td class="text-center">
+                  <!-- <td class="text-center">
                     <button
                       type="button"
                       id="sc-{{ planRow.id }}"
@@ -366,7 +365,7 @@
                     >
                       <i class="fa fa-money fa-1-8x"></i>
                     </button>
-                  </td>
+                  </td> -->
                   <td class="text-center" width="120px">
                     <div class="btn-group">
                       <!-- <button
@@ -453,3 +452,6 @@
   </div>
 </div>
 <!-- /.modal -->
+
+
+

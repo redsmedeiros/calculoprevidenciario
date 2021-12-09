@@ -1,516 +1,510 @@
 <!-- <div class="modal-dialog modal-full" *ngIf="isDataLoad">
   <div class="modal-content"> -->
-    <article class="col-sm-12 col-md-12 col-lg-12" *ngIf="isDataLoad">
-      <dl class="padding-5">
-        <dt>
-          <b>Salários de Contribuição</b>
-          <b> Período:</b> {{ planejamentoContrib.inicio }} à
-          {{ planejamentoContrib.dibString }}
-        </dt>
-      </dl>
-      <dl class="well padding-5">
-        <form class="form-inline">
-          <fieldset>
-            <div
-              class="form-group has-feedback"
-              [ngClass]="{ 'has-error': errors.has('inicioPeriodo') }"
-            >
-              <label class="col-md-2 control-label" for="select-1">De*:</label>
-              <div class="col-md-2">
-                <input
-                  class="form-control"
-                  placeholder="MM/AAAA"
-                  [(ngModel)]="inicioPeriodo"
-                  name="inicioPeriodo"
-                  (keyup)="moveNext($event, 7, 'finalPeriodoInput')"
-                  id="inicioPeriodoInput"
-                  [textMask]="{ mask: dateMask }"
-                  type="text"
-                  (change)="errors.clear('inicioPeriodo')"
-                />
-              </div>
-            </div>
-            <div
-              class="form-group"
-              [ngClass]="{ 'has-error': errors.has('finalPeriodo') }"
-            >
-              <label class="col-md-2 control-label" for="select-1">Até*:</label>
-              <div class="col-md-2">
-                <input
-                  class="form-control"
-                  placeholder="MM/AAAA"
-                  [(ngModel)]="finalPeriodo"
-                  name="finalPeriodo"
-                  (keyup)="moveNext($event, 7, 'valorInput')"
-                  id="finalPeriodoInput"
-                  [textMask]="{ mask: dateMask }"
-                  type="text"
-                  (change)="errors.clear('finalPeriodo')"
-                  tooltip="{{ errors.get('finalPeriodo') }}"
-                />
-              </div>
-            </div>
-
-            <div
-              class="form-group"
-              [ngClass]="{ 'has-error': errors.has('salarioContribuicao') }"
-            >
-              <label class="col-md-2 control-label" for="select-1"
-                >Valor*:</label
-              >
-              <div class="col-md-2">
-                <input
-                  class="form-control"
-                  currencyMask
-                  maxlength="14"
-                  [(ngModel)]="salarioContribuicao"
-                  name="salarioContribuicao"
-                  id="valorInput"
-                  (change)="errors.clear('salarioContribuicao')"
-                  (keyup)="insertSCEnter($event)"
-                  type="text"
-                  tooltip="{{ errors.get('salarioContribuicao') }}"
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              (click)="preencherComValor()"
-              class="btn btn-labeled btn-primary"
-              data-placement="bottom"
-              tooltip="Inserir intervalo dos Salários de Contribuição"
-            >
-              <span class="btn-label">
-                <i class="fa fa-calendar"></i>
-              </span>
-              Inserir
-            </button>
-          </fieldset>
-        </form>
-      </dl>
-    </article>
-    <article class="col-sm-12 col-md-12 col-lg-12">
-      <!-- Widget ID (each widget will need unique ID)-->
-      <sa-widget
-        [colorbutton]="false"
-        [editbutton]="false"
-        [deletebutton]="false"
-      >
-        <header>
-          <span class="widget-icon">
-            <i class="fa fa-table"></i>
-          </span>
-          <h2>Valores de Contribuição</h2>
-        </header>
-        <div style="padding-top: 10px">
-          <div
-            class="widget-body widget-body-custom hidden-dt no-padding"
-            *ngIf="matrizHasValues"
-          >
-            <sa-datatable
-              paginationLength="false"
-              [options]="matrixTableOptions"
-              tableClass="table table-striped table-condensed-custom table-bordered table-hover no-padding"
-              width="100%"
-            >
-              <thead>
-                <tr>
-                  <th style="text-align: center; width: 62px">Ano</th>
-                  <th style="text-align: center; width: 80px">Jan</th>
-                  <th style="text-align: center; width: 80px">Fev</th>
-                  <th style="text-align: center; width: 80px">Mar</th>
-                  <th style="text-align: center; width: 80px">Abr</th>
-                  <th style="text-align: center; width: 80px">Mai</th>
-                  <th style="text-align: center; width: 80px">Jun</th>
-                  <th style="text-align: center; width: 80px">Jul</th>
-                  <th style="text-align: center; width: 80px">Ago</th>
-                  <th style="text-align: center; width: 80px">Set</th>
-                  <th style="text-align: center; width: 80px">Out</th>
-                  <th style="text-align: center; width: 80px">Nov</th>
-                  <th style="text-align: center; width: 80px">Dez</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of matriz; index as i">
-                  <td style="text-align: right">
-                    <i
-                      class="fa fa-copy"
-                      (click)="copiarPeriodo(data.ano)"
-                      data-placement="bottom"
-                      tooltip="Selecionar este ano"
-                      >&nbsp;&nbsp;</i
-                    >{{ data.ano }}&nbsp;&nbsp;
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[0] == '0,00',
-                      'bg-color-yellow': data.msc[0] == 1
-                    }"
-                  >
-                    <input
-                      *ngIf="data.valores[0] != ''"
-                      maxlength="14"
-                      id="01-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[0] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 0);
-                        getClassSalarioContribuicao(
-                          '01',
-                          data.ano,
-                          data.valores[0],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      currencyMask
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[1] == '0,00',
-                      'bg-color-yellow': data.msc[1] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="02-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[1] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 1);
-                        getClassSalarioContribuicao(
-                          '02',
-                          data.ano,
-                          data.valores[1],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[1] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[2] == '0,00',
-                      'bg-color-yellow': data.msc[2] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="03-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[2] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 2);
-                        getClassSalarioContribuicao(
-                          '03',
-                          data.ano,
-                          data.valores[2],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[2] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[3] == '0,00',
-                      'bg-color-yellow': data.msc[3] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="04-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[3] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 3);
-                        getClassSalarioContribuicao(
-                          '04',
-                          data.ano,
-                          data.valores[3],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[3] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[4] == '0,00',
-                      'bg-color-yellow': data.msc[4] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="05-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[4] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 4);
-                        getClassSalarioContribuicao(
-                          '05',
-                          data.ano,
-                          data.valores[4],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[4] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[5] == '0,00',
-                      'bg-color-yellow': data.msc[5] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="06-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[5] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 5);
-                        getClassSalarioContribuicao(
-                          '06',
-                          data.ano,
-                          data.valores[5],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[5] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[6] == '0,00',
-                      'bg-color-yellow': data.msc[6] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="07-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[6] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 6);
-                        getClassSalarioContribuicao(
-                          '07',
-                          data.ano,
-                          data.valores[6],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[6] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[7] == '0,00',
-                      'bg-color-yellow': data.msc[7] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="08-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[7] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 7);
-                        getClassSalarioContribuicao(
-                          '08',
-                          data.ano,
-                          data.valores[7],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[7] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[8] == '0,00',
-                      'bg-color-yellow': data.msc[8] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="09-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[8] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 8);
-                        getClassSalarioContribuicao(
-                          '09',
-                          data.ano,
-                          data.valores[8],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[8] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[9] == '0,00',
-                      'bg-color-yellow': data.msc[9] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="10-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[9] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 9);
-                        getClassSalarioContribuicao(
-                          '10',
-                          data.ano,
-                          data.valores[9],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[9] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[10] == '0,00',
-                      'bg-color-yellow': data.msc[10] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="11-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[10] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 10);
-                        getClassSalarioContribuicao(
-                          '11',
-                          data.ano,
-                          data.valores[10],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[10] != ''"
-                    />
-                  </td>
-                  <td
-                    class="matriz-line"
-                    [ngClass]="{
-                      'bg-color-red': data.valores[11] == '0,00',
-                      'bg-color-yellow': data.msc[11] == 1
-                    }"
-                  >
-                    <input
-                      maxlength="14"
-                      currencyMask
-                      id="12-{{ data.ano }}"
-                      type="text"
-                      value="{{ data.valores[11] }}"
-                      (focusout)="
-                        changedGridContribuicoes(data.ano, $event, 11);
-                        getClassSalarioContribuicao(
-                          '12',
-                          data.ano,
-                          data.valores[11],
-                          i
-                        )
-                      "
-                      class="matriz-input"
-                      *ngIf="data.valores[11] != ''"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </sa-datatable>
+<article class="col-sm-12 col-md-12 col-lg-12" >
+  <dl class="padding-5">
+    <dt>
+      <b>Salários de Contribuição</b>
+      <span *ngIf="isDataLoad"><b> Período:</b> {{ planejamentoContrib.inicio }} à {{ planejamentoContrib.dibString }}</span>
+    </dt>
+  </dl>
+  <dl class="well padding-5" *ngIf="isDataLoad">
+    <form class="form-inline">
+      <fieldset>
+        <div
+          class="form-group has-feedback"
+          [ngClass]="{ 'has-error': errors.has('inicioPeriodo') }"
+        >
+          <label class="col-md-2 control-label" for="select-1">De*:</label>
+          <div class="col-md-2">
+            <input
+              class="form-control"
+              placeholder="MM/AAAA"
+              [(ngModel)]="inicioPeriodo"
+              name="inicioPeriodo"
+              (keyup)="moveNext($event, 7, 'finalPeriodoInput')"
+              id="inicioPeriodoInput"
+              [textMask]="{ mask: dateMask }"
+              type="text"
+              (change)="errors.clear('inicioPeriodo')"
+            />
           </div>
         </div>
-      </sa-widget>
-    </article>
+        <div
+          class="form-group"
+          [ngClass]="{ 'has-error': errors.has('finalPeriodo') }"
+        >
+          <label class="col-md-2 control-label" for="select-1">Até*:</label>
+          <div class="col-md-2">
+            <input
+              class="form-control"
+              placeholder="MM/AAAA"
+              [(ngModel)]="finalPeriodo"
+              name="finalPeriodo"
+              (keyup)="moveNext($event, 7, 'valorInput')"
+              id="finalPeriodoInput"
+              [textMask]="{ mask: dateMask }"
+              type="text"
+              (change)="errors.clear('finalPeriodo')"
+              tooltip="{{ errors.get('finalPeriodo') }}"
+            />
+          </div>
+        </div>
 
-    <div class="modal-footer">
-      <button
-        type="button"
-        title="Fechar"
-        class="btn btn-danger pull-left"
-        (click)="hideContribuicoes()"
+        <div
+          class="form-group"
+          [ngClass]="{ 'has-error': errors.has('salarioContribuicao') }"
+        >
+          <label class="col-md-2 control-label" for="select-1">Valor*:</label>
+          <div class="col-md-2">
+            <input
+              class="form-control"
+              currencyMask
+              maxlength="14"
+              [(ngModel)]="salarioContribuicao"
+              name="salarioContribuicao"
+              id="valorInput"
+              (change)="errors.clear('salarioContribuicao')"
+              (keyup)="insertSCEnter($event)"
+              type="text"
+              tooltip="{{ errors.get('salarioContribuicao') }}"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          (click)="preencherComValor()"
+          class="btn btn-labeled btn-primary"
+          data-placement="bottom"
+          tooltip="Inserir intervalo dos Salários de Contribuição"
+        >
+          <span class="btn-label">
+            <i class="fa fa-calendar"></i>
+          </span>
+          Inserir
+        </button>
+      </fieldset>
+    </form>
+  </dl>
+</article>
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <!-- Widget ID (each widget will need unique ID)-->
+  <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="isDataLoad">
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-table"></i>
+      </span>
+      <h2>Valores de Contribuição</h2>
+    </header>
+    <div style="padding-top: 10px">
+      <div
+        class="widget-body widget-body-custom hidden-dt no-padding"
+        *ngIf="matrizHasValues"
       >
-        Fechar
-      </button>
-      <!-- <div class="btn-group"></div> -->
-      <button
-        *ngIf="isSC_mm_ajustar_btn"
-        type="button"
-        class="btn btn-warning"
-        (click)="showContribuicoesCheck()"
-        style="min-width: 220px"
-      >
-        <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        id="salarioTeto"
-        *ngIf="isSC_mm_ajustar_btn"
-        (click)="preencherComSalario('t')"
-        style="min-width: 220px"
-      >
-        <i class="fa fa-money"></i>Ajustar SC ao Teto SC
-      </button>
-      <button
-        type="button"
-        class="btn btn-danger"
-        id="salarioMinimo"
-        *ngIf="isSC_mm_ajustar_btn"
-        (click)="preencherComSalario('m')"
-        style="min-width: 220px"
-      >
-        <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-primary"
-        id="salvar"
-        (click)="salvarContribuicoes()"
-      >
-        <i class="fa fa-save"></i> Salvar
-      </button>
+        <sa-datatable
+          paginationLength="false"
+          [options]="matrixTableOptions"
+          tableClass="table table-striped table-condensed-custom table-bordered table-hover no-padding"
+          width="100%"
+        >
+          <thead>
+            <tr>
+              <th style="text-align: center; width: 62px">Ano</th>
+              <th style="text-align: center; width: 80px">Jan</th>
+              <th style="text-align: center; width: 80px">Fev</th>
+              <th style="text-align: center; width: 80px">Mar</th>
+              <th style="text-align: center; width: 80px">Abr</th>
+              <th style="text-align: center; width: 80px">Mai</th>
+              <th style="text-align: center; width: 80px">Jun</th>
+              <th style="text-align: center; width: 80px">Jul</th>
+              <th style="text-align: center; width: 80px">Ago</th>
+              <th style="text-align: center; width: 80px">Set</th>
+              <th style="text-align: center; width: 80px">Out</th>
+              <th style="text-align: center; width: 80px">Nov</th>
+              <th style="text-align: center; width: 80px">Dez</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of matriz; index as i">
+              <td style="text-align: center">
+                <a
+                  class="btn btn-xs btn-primary pull-left"
+                  (click)="copiarPeriodo(data.ano)"
+                  data-placement="bottom"
+                  tooltip="Selecionar este ano"
+                  ><i class="fa fa-copy"></i>
+                </a>
+                <strong> {{ data.ano }}</strong>
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[0] == '0,00',
+                  'bg-color-yellow': data.msc[0] == 1
+                }"
+              >
+                <input
+                  *ngIf="data.valores[0] != ''"
+                  maxlength="14"
+                  id="01-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[0] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 0);
+                    getClassSalarioContribuicao(
+                      '01',
+                      data.ano,
+                      data.valores[0],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  currencyMask
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[1] == '0,00',
+                  'bg-color-yellow': data.msc[1] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="02-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[1] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 1);
+                    getClassSalarioContribuicao(
+                      '02',
+                      data.ano,
+                      data.valores[1],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[1] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[2] == '0,00',
+                  'bg-color-yellow': data.msc[2] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="03-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[2] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 2);
+                    getClassSalarioContribuicao(
+                      '03',
+                      data.ano,
+                      data.valores[2],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[2] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[3] == '0,00',
+                  'bg-color-yellow': data.msc[3] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="04-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[3] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 3);
+                    getClassSalarioContribuicao(
+                      '04',
+                      data.ano,
+                      data.valores[3],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[3] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[4] == '0,00',
+                  'bg-color-yellow': data.msc[4] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="05-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[4] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 4);
+                    getClassSalarioContribuicao(
+                      '05',
+                      data.ano,
+                      data.valores[4],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[4] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[5] == '0,00',
+                  'bg-color-yellow': data.msc[5] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="06-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[5] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 5);
+                    getClassSalarioContribuicao(
+                      '06',
+                      data.ano,
+                      data.valores[5],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[5] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[6] == '0,00',
+                  'bg-color-yellow': data.msc[6] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="07-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[6] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 6);
+                    getClassSalarioContribuicao(
+                      '07',
+                      data.ano,
+                      data.valores[6],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[6] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[7] == '0,00',
+                  'bg-color-yellow': data.msc[7] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="08-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[7] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 7);
+                    getClassSalarioContribuicao(
+                      '08',
+                      data.ano,
+                      data.valores[7],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[7] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[8] == '0,00',
+                  'bg-color-yellow': data.msc[8] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="09-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[8] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 8);
+                    getClassSalarioContribuicao(
+                      '09',
+                      data.ano,
+                      data.valores[8],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[8] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[9] == '0,00',
+                  'bg-color-yellow': data.msc[9] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="10-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[9] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 9);
+                    getClassSalarioContribuicao(
+                      '10',
+                      data.ano,
+                      data.valores[9],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[9] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[10] == '0,00',
+                  'bg-color-yellow': data.msc[10] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="11-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[10] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 10);
+                    getClassSalarioContribuicao(
+                      '11',
+                      data.ano,
+                      data.valores[10],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[10] != ''"
+                />
+              </td>
+              <td
+                class="matriz-line"
+                [ngClass]="{
+                  'bg-color-red': data.valores[11] == '0,00',
+                  'bg-color-yellow': data.msc[11] == 1
+                }"
+              >
+                <input
+                  maxlength="14"
+                  currencyMask
+                  id="12-{{ data.ano }}"
+                  type="text"
+                  value="{{ data.valores[11] }}"
+                  (focusout)="
+                    changedGridContribuicoes(data.ano, $event, 11);
+                    getClassSalarioContribuicao(
+                      '12',
+                      data.ano,
+                      data.valores[11],
+                      i
+                    )
+                  "
+                  class="matriz-input"
+                  *ngIf="data.valores[11] != ''"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </sa-datatable>
+      </div>
     </div>
-  <!-- </div>
+  </sa-widget>
+</article>
+
+<div class="modal-footer">
+  <!-- <button
+    type="button"
+    title="Fechar"
+    class="btn btn-danger pull-left"
+    (click)="hideContribuicoes()"
+  >
+    Fechar
+  </button> -->
+  <!-- <div class="btn-group"></div> -->
+  <button
+    *ngIf="isSC_mm_ajustar_btn"
+    type="button"
+    class="btn btn-warning"
+    (click)="showContribuicoesCheck()"
+    style="min-width: 220px"
+  >
+    <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
+  </button>
+  <button
+    type="button"
+    class="btn btn-danger"
+    id="salarioTeto"
+    *ngIf="isSC_mm_ajustar_btn"
+    (click)="preencherComSalario('t')"
+    style="min-width: 220px"
+  >
+    <i class="fa fa-money"></i>Ajustar SC ao Teto SC
+  </button>
+  <button
+    type="button"
+    class="btn btn-danger"
+    id="salarioMinimo"
+    *ngIf="isSC_mm_ajustar_btn"
+    (click)="preencherComSalario('m')"
+    style="min-width: 220px"
+  >
+    <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-primary"
+    id="salvar"
+    (click)="salvarContribuicoes()"
+  >
+    <i class="fa fa-save"></i> Salvar
+  </button>
+</div>
+<!-- </div>
 </div> -->
 <!-- /.modal-dialog -->
 
