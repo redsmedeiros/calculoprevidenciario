@@ -836,12 +836,12 @@ a[class*="action-"]:hover {
     margin-bottom: 1rem;
   }
   .descricao-home {
-    margin-top: 2rem;
+    margin-top: 1rem;
     margin-bottom: 0rem;
   }
   .header-title-home {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
 

@@ -111,7 +111,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     protected router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private Moeda: MoedaService,
+    private Moeda: MoedaService
   ) { }
 
   ngOnInit() {
@@ -342,6 +342,8 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
       } else {
 
+        this.alertToStep6();
+
         let idx = this.steps.indexOf(this.activeStep);
         this.activeStep = null;
         while (!this.activeStep) {
@@ -352,6 +354,33 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         }
 
       }
+    }
+
+  }
+
+
+  alertToStep6() {
+
+
+    if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+
+      if (this.activeStep.key === 'step3') {
+
+        swal({
+          title: 'Aguarde...',
+          allowOutsideClick: false
+        });
+
+        swal.showLoading();
+      }
+
+      if (this.activeStep.key === 'step5') {
+
+        setTimeout(() => {
+          swal.close();
+        }, 1500);
+      }
+
     }
 
   }

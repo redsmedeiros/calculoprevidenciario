@@ -51,7 +51,6 @@ export class ContagemTempoCalculosCopyComponent implements OnInit {
 
 
     loadingAlert({
-      // type: 'info',
       title: 'Aguarde. A cópia está em andamento',
       allowOutsideClick: false
     });
