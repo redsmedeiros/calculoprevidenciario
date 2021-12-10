@@ -1505,6 +1505,21 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   }
 
+  
+  public formatDecimalValue(value) {
+
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
+
+  }
+
   private createListPlanContribuicoesAdicionais() {
 
     this.planejamentoContribuicoesAdicionais = []
@@ -1516,7 +1531,16 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    if (Number(this.planejamento.valor_beneficio) > 0) {
+    let isSCPlan = false;
+    if (typeof this.planejamento['sc'] !== 'undefined' && typeof this.planejamento['sc'] === 'string') {
+      this.planejamento.scJSON = JSON.parse(this.planejamento.sc);
+      isSCPlan = true;
+    }
+
+    console.log(typeof this.planejamento.sc);
+    console.log(this.planejamento.sc);
+
+    if (!isSCPlan && Number(this.planejamento.valor_beneficio) > 0) {
 
       while (fimContador.isBefore(auxiliarDate, 'month')) {
         count++;
@@ -1530,6 +1554,21 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
         this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
       };
+
+    } else {
+
+      for (const scObj of this.planejamento.scJSON) {
+
+        const data = moment(scObj.cp, 'MM/YYYY').format('YYYY-MM-01');
+
+        ObjValContribuicao = new ValorContribuido({
+          data: data,
+          valor_primaria: this.formatDecimalValue(scObj.sc),
+          valor_secundaria: 0,
+        });
+
+        this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+      }
 
     }
 
@@ -1582,6 +1621,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     }
   }
 
+  
 
   public getPlanejamento(calculo) {
 
@@ -1595,6 +1635,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         this.planejamento = new PlanejamentoRgps(exportObjPlanejamento);
         const calcClone = Object.assign({}, calculo);
         this.setInfoPLanejamentoTempoDib(calculo, calcClone);
+
 
       } else {
         this.isUpdating = true;
