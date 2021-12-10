@@ -114,16 +114,17 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
     if (this.isEdit) {
       const list = this.planejamentoContrib.sc;
-      console.log(list)
       const count = list.filter(x => x.sc !== '0,00').length;
-      console.log(count);
 
-      if (count === 0 && !this.isEmpty(this.planejamentoContrib.valor_beneficio)) {
+      if (count === 0
+        && !this.isEmpty(this.planejamentoContrib.valor_beneficio)
+        && this.planejamentoContrib.valor_beneficio > 0) {
 
         this.inicioPeriodo = moment(this.planejamentoContrib.inicio, 'DD/MM/YYYY').format('MM/YYYY');
         this.finalPeriodo = moment(this.planejamentoContrib.data_futura).format('MM/YYYY');
         this.salarioContribuicao = this.planejamentoContrib.valor_beneficio;
         this.preencherComValor();
+
       }
     }
 
@@ -620,7 +621,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     // this.eventContribuicoes.emit(saida);
     this.hideContribuicoesCheck();
     this.salvarContribuicoes();
-    
+
   }
 
 

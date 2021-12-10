@@ -1566,8 +1566,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
           valor_primaria: this.formatDecimalValue(scObj.sc),
           valor_secundaria: 0,
         });
-
-        this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+        if (ObjValContribuicao.valor_primaria > 0) {
+          this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+        }
       }
 
     }
