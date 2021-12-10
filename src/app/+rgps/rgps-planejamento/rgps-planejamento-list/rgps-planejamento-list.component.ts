@@ -31,7 +31,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   private planejamentoSelecionado;
   private isPlanejamentoSelecionado = false;
 
-  @ViewChild('modalCreatePlan') public modalCreatePlan: ModalDirective;
+
   @Input() segurado;
   @Input() calculo;
   @Input() isCalculoSelecionado;
@@ -94,8 +94,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   private moedaList;
 
   @ViewChild(RgpsPlanejamentoContribuicoesComponent) ContribuicoesComponent: RgpsPlanejamentoContribuicoesComponent;
-  @ViewChild('contribuicoes_plan') public contribuicoes: ModalDirective;
-
+  // @ViewChild('contribuicoes_plan') public contribuicoes: ModalDirective;
+  @ViewChild('modalPlan') public modalPlan: ModalDirective;
 
   // public activeStep = this.steps[0];
 
@@ -325,6 +325,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     this.data_futura = this.formatReceivedDate(this.plan.data_futura);
     this.showQuadroContribuicoes();
+    this.showChildModal();
 
   }
 
@@ -381,6 +382,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
         this.getInfoCalculos();
         this.resetForm();
+        this.modalPlan.hide();
 
       })
       .catch((errors) => {
@@ -414,6 +416,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
           });
 
           this.resetForm();
+          this.modalPlan.hide();
 
         }).catch((errors) => {
 
@@ -453,13 +456,14 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       moment(this.data_futura, 'DD/MM/YYYY').isValid()
       && moment(this.data_futura, 'DD/MM/YYYY').isAfter(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'), 'months')) {
 
-      console.log(moment(this.data_futura, 'DD/MM/YYYY').isValid())
-      console.log(typeof this.data_futura)
-      console.log(!(/_/gi).test(this.data_futura))
-      console.log(this.data_futura);
+      // console.log(moment(this.data_futura, 'DD/MM/YYYY').isValid())
+      // console.log(typeof this.data_futura)
+      // console.log(!(/_/gi).test(this.data_futura))
+      // console.log(this.data_futura);
 
 
       this.showQuadroContribuicoes();
+     
     }
 
 
@@ -537,11 +541,11 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   }
 
   public showChildModal(): void {
-    this.modalCreatePlan.show();
+    this.modalPlan.show();
   }
 
   public hideChildModal(): void {
-    this.modalCreatePlan.hide();
+    this.modalPlan.hide();
   }
 
 
@@ -761,7 +765,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (value.planejamento.id === this.planejamentoContrib.id) {
 
-      //  this.planejamentoContrib.sc = value.planejamento.sc;
+      this.planejamentoContrib.sc = value.planejamento.sc;
       this.planejamentoContrib.sc_mm_ajustar = value.sc_mm_ajustar;
       this.planejamentoContrib.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
       this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
@@ -782,7 +786,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     eventRST.matriz.forEach(periodo => {
 
-      periodo.valores.forEach(contribuicao => {
+      periodo.sc.forEach(contribuicao => {
 
         mes++;
 
@@ -820,6 +824,12 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   }
 
+
+  private novoPlanejamento() {
+
+    this.planejamentoContrib = Object.assign({}, { ...PlanejamentoRgps.form });
+    this.showChildModal();
+  }
 
 
   // public updatePlanContribuicoes() {
@@ -879,19 +889,21 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   public eventContribuicoes(event) {
 
+    console.log(event);
+
     switch (event.acao) {
       case 'sair':
-        this.contribuicoes.hide();
+        // this.contribuicoes.hide();
         break;
       case 'salvar-check':
         this.setCheckPlanContrib(event);
-        this.updatePlan(null, 'sc');
+      //  this.updatePlan(null, 'sc');
         break;
       case 'salvar':
         this.setCheckPlanContrib(event);
         this.matrixToVinculoContribuicoes(event);
-        this.updatePlan(null, 'sc');
-        this.contribuicoes.hide();
+      //  this.updatePlan(null, 'sc');
+      //  this.contribuicoes.hide();
         break;
     }
 
