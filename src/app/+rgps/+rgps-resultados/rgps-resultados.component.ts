@@ -903,14 +903,13 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
    * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
    * @param especieBeneficio
    */
-  verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
+  verificaEspecieDeBeneficioIvalidez(especieBeneficio) {
     // 25, 26, 27,
 
-    const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
+    const arrayTypeNum = [1, 2, 17, 18, 19, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
+      'Aposentadoria por Invalidez ou Pensão por Morte',
       'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
-      // 'Aposentadoria por idade - Trabalhador Urbano',
-      // 'Aposentadoria por idade - Trabalhador Rural',
       'Auxílio Doença',
       'Pensão por Morte instituidor aposentado na data óbito',
       'Pensão por Morte - Instituidor não Aposentado na Data do Óbito',
@@ -919,16 +918,19 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       'Aposentadoria por incapacidade permanente',
       'Aposentadoria por Incapacidade Permanente',
       'Auxílio Acidente - 50%',
+      'Auxílio Acidente - 30%',
+      'Auxílio Acidente - 40%',
+      'Auxílio Acidente - 60%',
       'Aposentadoria especial por Idade da Pessoa com Deficiência',
-      // 'Aposentadoria especial da Pessoa com Deficiência Grave',
-      // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      // 'Aposentadoria especial da Pessoa com Deficiência Leve',
       'Auxílio por Incapacidade Temporária',
       'Auxílio Acidente',
       'Aposentadoria por Idade da PcD',
     ];
 
-    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+
+    if (arrayTypeNum.includes(especieBeneficio)
+    || arrayTypeText.includes(especieBeneficio)
+    ) {
       return true;
     }
     return false;
@@ -1099,7 +1101,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     // verificar e setar os parametros para novo calculo;
 
 
-    const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
+    const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidez(calculo.tipo_seguro);
     const verificaIdade = this.verificaEspecieDeBeneficioIdade(calculo.tipo_seguro);
 
     if (dataInicioBeneficio < data88) {

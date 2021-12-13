@@ -276,11 +276,19 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       const mes = chave.substring(4, 6);
       const pchave = mes + '/' + ano;
 
-      result = contribuicoes.find((item) => {
-        return item.cp === pchave;
-      });
+      if (this.isExist(contribuicoes)) {
 
-      if (result && result !== undefined) {     /* se encontrou a contribuição no mes*/
+        result = contribuicoes.find((item) => {
+          return item.cp === pchave;
+        });
+
+      } else {
+
+        result = null;
+
+      }
+
+      if (result && this.isExist(result)) {     /* se encontrou a contribuição no mes*/
 
         result.msc = this.getClassSalarioContribuicao(mes, ano, result.sc);
 
@@ -1152,7 +1160,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     if (data === undefined
       || data === ''
       || typeof data === 'undefined'
-      || data === 'undefined') {
+      || data === 'undefined'
+      || data === null) {
       return true;
     }
     return false;
@@ -1161,11 +1170,14 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   isExist(data) {
     if (data === undefined
       || typeof data === 'undefined'
-      || data === 'undefined') {
-      return true;
+      || data === 'undefined'
+      || data === null) {
+      return false;
     }
-    return false;
+    return true;
   }
+
+  
 
   isExistPeriodo(data) {
     if (data === undefined
