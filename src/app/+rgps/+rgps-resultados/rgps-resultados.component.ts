@@ -1566,14 +1566,21 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
           valor_primaria: this.formatDecimalValue(scObj.sc),
           valor_secundaria: 0,
         });
+
         if (ObjValContribuicao.valor_primaria > 0) {
           this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
         }
+
       }
+
+      this.planejamentoContribuicoesAdicionais.reverse();
 
     }
 
   }
+
+
+
 
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
@@ -1589,6 +1596,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       calculo.carencia_apos_ec103 = calculo.carencia;
       calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
       calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+
     }
 
     const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
@@ -1596,6 +1604,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     this.addTempoContribuicao(calculo, diffTempo);
     // this.addCarencia(calculo, diffTempo);
     this.createListPlanContribuicoesAdicionais();
+    
   }
 
 

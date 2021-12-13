@@ -771,6 +771,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
       this.planejamentoContrib.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
       this.planejamentoContrib.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+      this.planejamentoContrib.result_sc = value.result_sc ? value.result_sc : 0;
+      this.planejamentoContrib.result_sc_mm = value.result_sc_mm ? value.result_sc_mm : 0;
 
     }
   }
@@ -817,6 +819,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
       this.planejamentoContrib.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
       this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+      this.planejamentoContrib.result_sc = eventRST.result_sc ? eventRST.result_sc : 0;
+      this.planejamentoContrib.result_sc_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
 
 
       console.log(this.planejamentoContrib);
