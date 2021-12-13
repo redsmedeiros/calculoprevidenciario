@@ -375,7 +375,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
               });
           }
-
         }
       });
   }
@@ -414,16 +413,22 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
    */
   public getlistaValoresContribuidosPeriodosCT(listaValoresContribuidosPeriodosCT, inicio, fim) {
 
-    // const listCT = this.listaValoresContribuidosPeriodosCT;
+    if (!this.isExits(listaValoresContribuidosPeriodosCT)) {
+      return [];
+    }
+
     return listaValoresContribuidosPeriodosCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '[)'));
 
   }
+
+
 
   public getSalariosContribuicoesContTempoCNIS() {
 
     return new Promise((resolve, reject) => {
 
-      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado')))) {
+      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado'))) &&
+      sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
@@ -433,7 +438,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
         this.PeriodosContagemTempoService.getByPeriodosId(this.idCalculoSelecionadoCT)
           .then((periodosContribuicao: PeriodosContagemTempo[]) => {
-
 
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
             this.listaPeriodosCT = periodosContribuicao;
@@ -1842,7 +1846,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   isExits(value) {
     return (typeof value !== 'undefined' &&
       value != null && value != 'null' &&
-      value !== undefined) ? true : false;
+      value !== undefined && value !== [] && value !== '[]') ? true : false;
   }
 
   offset(el = undefined) {

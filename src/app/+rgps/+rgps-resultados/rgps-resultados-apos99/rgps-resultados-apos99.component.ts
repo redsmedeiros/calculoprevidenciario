@@ -14,6 +14,7 @@ import { MoedaService } from '../../../services/Moeda.service';
 import { RgpsResultadosComponent } from '../rgps-resultados.component'
 import * as moment from 'moment';
 import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
+import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
 
 @Component({
   selector: 'app-rgps-resultados-apos99',
@@ -131,7 +132,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     protected ValoresContribuidos: ValorContribuidoService,
     private CarenciaProgressiva: CarenciaProgressivaService,
     private CalculoRgpsService: CalculoRgpsService,
-    private Moeda: MoedaService) {
+    private Moeda: MoedaService,
+    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
+    ) {
     super(null, route, null, null, null, null, null, null);
   }
 
