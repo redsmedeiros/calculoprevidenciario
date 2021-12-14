@@ -802,13 +802,11 @@
                         </span>
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.nao_aplicar_juros_sobre_negativo === 1" >
+                    <tr *ngIf="calculo.nao_aplicar_juros_sobre_negativo === 1">
                       <td class="td-width-30" style="text-align: left">
                         <b>Aplicar os juros sobre o valor negativo</b>
                       </td>
-                      <td>
-                       Não
-                      </td>
+                      <td>Não</td>
                     </tr>
                     <!-- <tr *ngIf="jurosEmFormatoAnual != ''">
                         <td  style="text-align: center" colspan="2">
@@ -848,7 +846,11 @@
             >
               <div id="printableHonorarios" class="no-margin no-padding">
                 <table
-                  class="table table-bordered table-hover no-padding no-margin table-row-group"
+                  class="
+                    table table-bordered table-hover
+                    no-padding no-margin
+                    table-row-group
+                  "
                   *ngIf="
                     !exibirHonorarioscpc85 &&
                     !exibirHonorariosValorFixo &&
@@ -880,7 +882,7 @@
                         {{ formatPercent(calculo.percentual_taxa_advogado) }}
                       </td>
                     </tr>
-                    <tr >
+                    <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Percentual de Honorário Sobre:</b>
                       </td>
@@ -935,16 +937,7 @@
                         {{ formatDatetimeToDate(calculo.taxa_advogado_final) }}
                       </td>
                     </tr>
-                    <tr >
-                      <td class="td-width-30" style="text-align: left">
-                        <b>Percentual de Honorário Sobre:</b>
-                      </td>
-                      <td style="text-align: left">
-                        {{ (calculo.taxa_advogado_aplicar_CPCArt85 == 1) ? 
-                          'Percentual sobre o Valor Total do Benefício Devido': 
-                          'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido'}}
-                      </td>
-                    </tr>
+
                     <tr>
                       <td class="td-width-30" style="text-align: left">
                         <b>Honorários Conforme § 3º, art. 85, do CPC/2015:</b>
@@ -975,6 +968,18 @@
                       </td>
                       <td>
                         {{ dataSalMinHonorarioscpc85 }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Percentual de Honorário Sobre:</b>
+                      </td>
+                      <td style="text-align: left">
+                        {{
+                          calculo.taxa_advogado_aplicar_CPCArt85 == 1
+                            ? "Valor Total do Benefício Devido"
+                            : "Valor da Diferença entre os Benefícios Devido e Recebido"
+                        }}
                       </td>
                     </tr>
                   </tbody>

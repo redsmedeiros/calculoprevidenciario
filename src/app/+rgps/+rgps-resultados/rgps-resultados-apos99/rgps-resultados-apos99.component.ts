@@ -134,7 +134,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     private CalculoRgpsService: CalculoRgpsService,
     private Moeda: MoedaService,
     protected PeriodosContagemTempoService: PeriodosContagemTempoService,
-    ) {
+  ) {
     super(null, route, null, null, null, null, null, null);
   }
 
@@ -2071,6 +2071,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let extra;
     let toll;
 
+
+    if ([4, 5, 6, 31, 25, 26, 27, 28, 1915, 1920, 1925].includes(this.tipoBeneficio)) {
+
+      if (!this.verificarCarencia(0, redutorProfessor, redutorSexo, errorArray)) {
+        errorArray.push('Não possui direito ao benefício.');
+        return false;
+      }
+
+    }
+
     let erroString = '';
     if (this.tipoBeneficio === 4 || this.tipoBeneficio === 6) {
 
@@ -2189,7 +2199,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         return false; // Exibir Mensagem de erro com a idade faltando;
       }
     }
-
+    console.log(this.tipoBeneficio);
     return direito;
   }
 
@@ -2225,11 +2235,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   verificarCarencia(redutorIdade, redutorProfessor, redutorSexo, errorArray) {
-    if (this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
+
+    // if (this.tipoBeneficio == 3 || this.tipoBeneficio == 16) {
+    if ([3, 16, 4, 5, 6, 31, 25, 26, 27, 28, 1915, 1920, 1925].includes(this.tipoBeneficio)) {
       let mesesCarencia = 180;
       if (moment(this.segurado.data_filiacao, 'DD/MM/YYYY') < this.dataLei8213) { // Verificar se a data de filiação existe
         const anoNecessario = this.getAnoNecessario(redutorIdade, redutorProfessor, redutorSexo)
-        let carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
+        const carenciaProgressiva = this.CarenciaProgressiva.getCarencia(anoNecessario);
         if (carenciaProgressiva != 0) {
           mesesCarencia = carenciaProgressiva;
         } else if (anoNecessario < 1991) {

@@ -180,7 +180,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     }
 
     if (!this.isEdit && this.isExits(this.calculoRMIDefaulForm)) {
-     this.setNewFormRMIinfoContagemTempo();
+      this.setNewFormRMIinfoContagemTempo();
     }
 
     // console.log(this.calculoRMIDefaulForm);
@@ -204,7 +204,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -933,14 +933,14 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   checkImportContagemTempo() {
 
-    if (sessionStorage.exportContagemTempo && 
+    if (sessionStorage.exportContagemTempo &&
       sessionStorage.exportContagemTempo !== undefined) {
 
       this.importContagemTempo();
       sessionStorage.removeItem('exportContagemTempo');
     }
     // else {
-      // this.resetForm();
+    // this.resetForm();
     // }
 
   }
@@ -1041,7 +1041,28 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Urbano'
       || this.especieBeneficio === 'Aposentadoria por Idade - Trabalhador Rural'
       || this.especieBeneficio === 'Aposentadoria Programada'
-      || this.especieBeneficio === 'Aposentadoria Programada - Professor') {
+      || this.especieBeneficio === 'Aposentadoria Programada - Professor'
+      || this.especieBeneficio === 'Aposentadoria Programada'
+      || this.especieBeneficio === 'Aposentadoria Programada - Professor'
+      || this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição'
+      || this.especieBeneficio === 'Aposentadoria especial'
+      || this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
+      || this.especieBeneficio === 'Aposentadoria por tempo de serviço de professor'
+      || this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
+      || this.especieBeneficio === 'Aposentadoria especial da Pessoa com Deficiência Grave'
+      || this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
+      || this.especieBeneficio === 'Aposentadoria especial da Pessoa com Deficiência Moderada'
+      || this.especieBeneficio === 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
+      || this.especieBeneficio === 'Aposentadoria especial da Pessoa com Deficiência Leve'
+      || this.especieBeneficio === 'Aposentadoria por Idade da PcD'
+      || this.especieBeneficio === 'Aposentadoria especial por Idade da Pessoa com Deficiência'
+      || this.especieBeneficio === 'Aposentadoria Especial - 15 anos'
+      || this.especieBeneficio === 'Aposentadoria especial - 15 anos de exposição'
+      || this.especieBeneficio === 'Aposentadoria Especial - 20 anos'
+      || this.especieBeneficio === 'Aposentadoria especial - 20 anos de exposição'
+      || this.especieBeneficio === 'Aposentadoria Especial - 25 anos'
+      || this.especieBeneficio === 'Aposentadoria especial - 25 anos de exposição'
+    ) {
       this.hasCarencia = true;
     } else {
       this.hasCarencia = false;
