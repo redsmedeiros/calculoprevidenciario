@@ -1028,7 +1028,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       conclusoes.push({
         order: 18,
         tipo: 'irt',
-        string: 'Índice de reajuste no teto:', value: this.formatDecimal(irt, 4)
+        string: 'Índice de Reajuste no Teto:', value: this.formatDecimal(irt, 4)
       }); // resultados['Índice de reajuste no teto: '] = irt; // Arredondar para 4 casas decimais;
 
     }
