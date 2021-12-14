@@ -196,6 +196,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
   public numResultados = {
     'mostrarCalculoAnterior88': 0,
+    'mostrarCalculo88_91': 0,
     'mostrarCalculo91_98': 0,
     'mostrarCalculo98_99': 0,
     'mostrarCalculoApos99': 0,
@@ -825,6 +826,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       case 'Aposentadoria por tempo de serviço':
         numeroEspecie = 4;
         break;
+      case 'Aposentadoria Especial':
       case 'Aposentadoria especial':
         numeroEspecie = 5;
         break;
@@ -1206,6 +1208,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     this.numResultados = {
       'mostrarCalculoAnterior88': 0,
+      'mostrarCalculo88_91': 0,
       'mostrarCalculo91_98': 0,
       'mostrarCalculo98_99': 0,
       'mostrarCalculoApos99': 0,
@@ -1216,6 +1219,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     [
       'mostrarCalculoAnterior88',
+      'mostrarCalculoAnterior88_91',
       'mostrarCalculo91_98',
       'mostrarCalculo98_99',
       'mostrarCalculoApos99',
