@@ -534,7 +534,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         this.errors.add({ 'valor_beneficio': ['SC superior ao limite máximo.'] });
         valid = false;
 
-      } else if (![8, 11, 20, 201, 99].includes(Number(this.aliquota))
+      } else if (![8, 11, 20, 201, 99, 113].includes(Number(this.aliquota))
         && (Number(this.valor_beneficio) > Number(this.moeda.salario_minimo))) {
 
         this.errors.add({
