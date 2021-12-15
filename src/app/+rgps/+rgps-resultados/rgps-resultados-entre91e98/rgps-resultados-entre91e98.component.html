@@ -68,7 +68,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <span class="pull-right font-bold">Período para o início do benefício:</span>
+                      <span class="pull-right font-bold">Período para o Início do Benefício:</span>
                     </td>
                     <td>{{stringCabecalho}}</td>
                   </tr>
@@ -80,13 +80,13 @@
                   </tr>
                   <tr>
                     <td>
-                      <span class="pull-right font-bold">Tempo de Contribuição primário:</span>
+                      <span class="pull-right font-bold">Tempo de Contribuição Primário:</span>
                     </td>
                     <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
                   </tr>
                   <tr *ngIf="iscontribuicaoSecundaria">
                     <td>
-                      <span class="pull-right font-bold">Tempo de Contribuição secundário:</span>
+                      <span class="pull-right font-bold">Tempo de Contribuição Secundário:</span>
                     </td>
                     <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
                   </tr>
@@ -118,7 +118,7 @@
                     <tr>
                       <th>#</th>
                       <th>Competência</th>
-                      <th>Fator</th>
+                      <th>Índice</th>
                       <th>Salário de Contribuição Primário</th>
                       <th>Salário de Contribuição Secundário</th>
                       <th>Salário de Contribuição Primário Corrigido</th>
@@ -132,33 +132,28 @@
                 <tbody>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Índice de reajuste no teto</span>
-                    </td>
-                    <td width="50%">{{conclusoes.indice_reajuste_teto}}</td>
-                  </tr>
-                  <tr>
-                    <td width="50%">
-                      <span class="pull-right font-bold">Total das contribuições primárias</span>
+                      <span class="pull-right font-bold">Soma dos Salários de Contribuição Considerados</span>
                     </td>
                     <td width="50%">{{conclusoes.total_contribuicoes_primarias}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Média das contribuições primárias</span>
-                    </td>
-                    <td width="50%">{{conclusoes.media_contribuicoes_primarias}}</td>
-                  </tr>
-                  <tr>
-                    <td width="50%">
-                      <span class="pull-right font-bold">Divisor do cálculo da média</span>
+                      <span class="pull-right font-bold">Divisor da Média dos Salários de Contribuição</span>
                     </td>
                     <td width="50%">{{conclusoes.divisor_calculo_media}}</td>
                   </tr>
+                
                   <tr *ngIf="conclusoes.total_contribuicoes_secundarias">
                     <td width="50%">
                       <span class="pull-right font-bold">Total das contribuições secundárias</span>
                     </td>
                     <td width="50%">{{conclusoes.total_contribuicoes_secundarias}}</td>
+                  </tr>
+                  <tr *ngIf="conclusoes.media_contribuicoes_secundarias">
+                    <td width="50%" >
+                      <span class="pull-right font-bold">Média das contribuições primárias</span>
+                    </td>
+                    <td width="50%">{{conclusoes.media_contribuicoes_primarias}}</td>
                   </tr>
                   <tr *ngIf="conclusoes.media_contribuicoes_secundarias">
                     <td width="50%">
@@ -174,25 +169,32 @@
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Coeficiente</span>
-                    </td>
-                    <td width="50%">{{conclusoes.coeficiente}}%</td>
-                  </tr>
-                  <tr>
-                    <td width="50%">
-                      <span class="pull-right font-bold">Média das contribuições</span>
+                      <span class="pull-right font-bold">Média dos Salários de Contribuição</span>
                     </td>
                     <td width="50%">{{conclusoes.media_contribuicoes}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Salário Mínimo</span>
+                      <span class="pull-right font-bold">Índice de reajuste no Teto</span>
+                    </td>
+                    <td width="50%">{{conclusoes.indice_reajuste_teto}}</td>
+                  </tr>
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Alíquota do Benefício</span>
+                    </td>
+                    <td width="50%">{{conclusoes.coeficiente}}%</td>
+                  </tr>
+                
+                  <tr>
+                    <td width="50%">
+                      <span class="pull-right font-bold">Salário Mínimo de Contribuição</span>
                     </td>
                     <td width="50%">{{conclusoes.salario_minimo}}</td>
                   </tr>
                   <tr>
                     <td width="50%">
-                      <span class="pull-right font-bold">Teto</span>
+                      <span class="pull-right font-bold">Teto do Salário de Contribuição</span>
                     </td>
                     <td width="50%">{{conclusoes.teto}}</td>
                   </tr>

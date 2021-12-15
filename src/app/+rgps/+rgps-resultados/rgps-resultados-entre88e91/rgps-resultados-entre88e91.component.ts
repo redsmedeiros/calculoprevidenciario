@@ -135,14 +135,13 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     // this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
 
 
-    let dataInicio = this.dataInicioBeneficio;
+    let dataInicio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
 
     if (this.dataInicioBeneficio > this.dataDib98) {
       dataInicio = this.dataDib98;
     }
 
-    dataInicio = (dataInicio.clone()).startOf('month');
-
+    dataInicio = moment(dataInicio.clone().add(-1, 'months').endOf('month').format('YYYY-MM-DD'));
 
     let mesesLimite = 0;
     let mesesLimiteTotal = 0;
@@ -150,7 +149,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     let mesesLimite_79 = 0;
     let mesesLimiteTotal_79 = 0;
 
-    if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2 ) {
+    if (this.tipoBeneficio == 1 || this.tipoBeneficio == 2) {
 
       mesesLimite_79 = 18;
       mesesLimiteTotal_79 = 12;
@@ -202,11 +201,12 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
                   this.reajustesAutomaticos = reajustes;
                   this.CarenciaProgressiva.getCarencias()
                     .then(carencias => {
+
                       this.carenciasProgressivas = carencias;
                       this.calculo91_98(this.erros, this.conclusoes91_98, this.contribuicaoPrimaria91_98, this.contribuicaoSecundaria91_98);
                       this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
                       this.anterior88();
-                      // this.isUpdating = false;
+
                     });
                 });
             });
@@ -327,6 +327,7 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
         contribuicao_secundaria_revisada: contribuicaoSecundariaRevisadaString,
         limite: limiteString
       };
+      
       tableData91_98.push(line);
       index++;
     }
@@ -443,11 +444,14 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
   }
 
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
+
     const idadeDoSegurado = this.idadeSegurado;
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo == 'm') ? 0 : 5;
     const anosSecundaria = parseFloat(tempoContribuicaoSecundaria.anos);
-    const anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365) + (parseFloat(tempoContribuicaoPrimaria.meses) * 30) + parseFloat(tempoContribuicaoPrimaria.dias)) / 365;
+    const anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365)
+      + (parseFloat(tempoContribuicaoPrimaria.meses) * 30)
+      + parseFloat(tempoContribuicaoPrimaria.dias)) / 365;
 
     const anosContribuicao = anosPrimaria;
     this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, false, dib);
@@ -455,47 +459,69 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     let totalContribuicao98 = 0;
     const tempoContribuicaoPrimaria98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
     if (tempoContribuicaoPrimaria98 != { anos: 0, meses: 0, dias: 0 }) {
-      totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365) + (tempoContribuicaoPrimaria98.meses * 30) + tempoContribuicaoPrimaria98.dias) / 365;
+      totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365)
+        + (tempoContribuicaoPrimaria98.meses * 30)
+        + tempoContribuicaoPrimaria98.dias) / 365;
     }
 
     let direito = true;
+    let direitop = true;
     let idadeMinima = true;
     let extra;
     let toll;
 
     const erroString = '';
     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
+
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
+
       if (!direito) {
+
         if (dib <= this.dataDib98) {
+
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib);
+
         } else {
+
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib);
           direito = this.verificarIdadeNecessaria(idadeDoSegurado, 7, 0, redutorSexo, errorArray);
-          direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
+          direitop = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
+
+          direito = (direito && direitop);
+
         }
         const contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
         const tempoFracionado = this.tratarTempoFracionado(contribuicao); // Separar o tempo de contribuicao em anos, meses e dias
+
         if (direito) {
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           // "POSSUI direito ao benefício proporcional."
           // "Falta(m) 'tempoFracionado' para possuir o direito ao benefício INTEGRAL."
-          errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) ' + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
+          errorArray.push('POSSUI direito ao benefício proporcional. Falta(m) '
+            + tempoFracionado + ' para possuir o direito ao benefício INTEGRAL.');
+
         } else {
           // Exibir Mensagem de beneficio nao concedido.
           // Falta(m) 'tempoFracionado' para completar o tempo de serviço necessário para o benefício INTEGRAL.
-          errorArray.push('Falta(m) ' + tempoFracionado + ' para completar o tempo de serviço necessário para o benefício INTEGRAL.');
+          errorArray.push('Falta(m) '
+            + tempoFracionado + ' para completar o tempo de serviço necessário para o benefício INTEGRAL.');
+
           if (totalContribuicao98 > 0 && errorArray.length == 0) {
+
+            //   direito = true;
             const tempo = 35 - redutorProfessor - (extra + 5) - anosContribuicao;
             const tempoProporcional = this.tratarTempoFracionado(tempo);
+
             // Exibir Mensagem com o tempo faltante para o beneficio proporcioanl;
             // Falta(m) 'tempoProporcional' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.
-            errorArray.push('Falta(m) ' + tempoProporcional + ' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.');
+            errorArray.push('Falta(m) '
+              + tempoProporcional + ' para completar o tempo de serviço necessário para o benefício PROPORCIONAL.');
           }
         }
+
       }
     } else if (this.tipoBeneficio == 3) {
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
@@ -972,9 +998,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
       mesesLimiteTotal = 36;
     }
 
-    let dataLimite;
+    let dataLimite =  moment(this.dataInicioBeneficio.clone().add(-1, 'months').endOf('month').format('YYYY-MM-DD'));
     if (mesesLimite > 0) {
-      dataLimite = (this.dataInicioBeneficio.clone()).add(-mesesLimite, 'months');
+      dataLimite = (dataLimite.clone()).add(-mesesLimite, 'months');
     } else {
       dataLimite = moment('1994-07-01');
     }
@@ -1027,7 +1053,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
     const anoPrimario = this.contribuicaoPrimaria88.anos;
     const anoSecundario = this.contribuicaoSecundaria88.anos;
 
+
     for (const contribuicao of this.listaValoresContribuidos88) {
+
       let valorPrimario = parseFloat(contribuicao.valor_primaria);
       let valorSecundario = parseFloat(contribuicao.valor_secundaria);
       const dataContribuicao = moment(contribuicao.data);
@@ -1145,9 +1173,9 @@ export class RgpsResultadosEntre88e91Component extends RgpsResultadosComponent i
 
     let rmi = 0;
     if (mediaTotal >= limitesSalariais.minimo) {
-     
+
       const primeiraParcela = indiceEspecie * limitesSalariais.minimo;
-    
+
       if (limitesSalariais.maximo <= mediaTotal) {
         mediaTotal = limitesSalariais.maximo;
       }
