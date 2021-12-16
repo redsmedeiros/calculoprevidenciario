@@ -308,8 +308,8 @@
                   <th>Espécie</th>
                   <th>Salário de Contribuição</th>
                   <th>Alíquota</th>
-                  <th class="text-center" width="75px">Ações</th>
-                  <th class="text-center" width="75px">selecionar</th>
+                  <th class="text-center" style="vertical-align: middle;" width="75px">Ações</th>
+                  <th class="text-center" style="vertical-align: middle;" width="75px">selecionar</th>
                 </tr>
               </thead>
             </sa-datatable> 
@@ -321,22 +321,26 @@
             >
               <thead>
                 <tr>
-                  <th>DIB Futura</th>
-                  <th>Salário de Contribuição</th>
-                  <th>Segurado</th>
+                  <th  class="text-center" style="vertical-align: middle;" style="vertical-align: middle;" >DIB Futura</th>
+                  <th  class="text-center" style="vertical-align: middle;">Salário de Contribuição</th>
+                  <th  class="text-center" style="vertical-align: middle;">Espécie</th>
+                  <th  class="text-center" style="vertical-align: middle;">Segurado</th>
                   <!-- <th tooltip="Salários de Contribuição">SC</th> -->
-                  <th class="text-center" width="60px">Ações</th>
-                  <th class="text-center" width="75px">Selecionar</th>
+                  <th class="text-center" style="vertical-align: middle;" width="60px">Ações</th>
+                  <th class="text-center" style="vertical-align: middle;" width="75px">Selecionar</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let planRow of planejamentoListData">
-                  <td>{{ formatReceivedDate(planRow.data_futura) }}</td>
-                  <td class="text-center">
+                  <td class="text-center" style="vertical-align: middle;">{{ formatReceivedDate(planRow.data_futura) }}</td>
+                  <td class="text-center" style="vertical-align: middle;">
                     {{ formatMoeda(planRow.valor_beneficio) }}
                   </td>
-                  <td class="text-left">{{ getAliquotasLabel(planRow.aliquota) }} </td>
-                  <!-- <td  class="text-center">
+                  <td class="text-center" style="vertical-align: middle;">
+                    {{ planRow.especie}}
+                  </td>
+                  <td class="text-center" style="vertical-align: middle;">{{ getAliquotasLabel(planRow.aliquota) }} </td>
+                  <!-- <td  class="text-center" style="vertical-align: middle;">
                     <button
                     type="button"
                     id="sc-{{ planRow.id }}"
@@ -352,7 +356,7 @@
                     <i class="fa fa-money fa-1-8x"></i>
                   </button>
                   </td> -->
-                  <td class="text-center" width="120px">
+                  <td class="text-center" style="vertical-align: middle;" width="120px">
                     <div class="btn-group">
                       <!-- <button
                             type="button"
