@@ -18,7 +18,7 @@
   <div id="box-dados-title" class="row mb-2 mt-4 not-screen">
     <div class="col-sm-12 col-md-12 col-lg-12">
       <!-- <h2 class="p-1 m-1">Planejamento Previdenciário</h2> -->
-      
+
       <table class="table table-hover">
         <thead>
           <tr>
@@ -28,7 +28,6 @@
           </tr>
         </thead>
       </table>
-      
     </div>
   </div>
 
@@ -316,7 +315,7 @@
                       {{ planejamento.especie }}
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="!istableDataSC" >
                     <td width="50%" style="text-align: left">
                       <strong>Salários de Contribuição Futuros</strong>
                     </td>
@@ -335,14 +334,57 @@
                     </td>
                   </tr>
                   <tr>
-                    <td width="50%" style="text-align: left">
+                    <td colspan="2" class="p-0">
+                      <sa-widget [colorbutton]="false" [editbutton]="false" class="mb-0">
+                        <header class="not-print">
+                          <span class="widget-icon">
+                            <i class="fa fa-table"></i>
+                          </span>
+                          <h2>Salários de Contribuição Futuros</h2>
+                        </header>
+                        <div style="padding-top: 7px;">
+                          <div class="widget-body no-padding widget-body-custom hidden-dt" >
+                            <sa-datatable
+                            [options]="tableOptionsSC"
+                            [responsive]="false"
+                            paginationLength="true"
+                            *ngIf="istableDataSC"
+                            tableClass="table table-striped table-condensed-custom table-bordered table-hover no-padding"
+                            width="100%"
+                          >
+                            <thead>
+                                <tr class="not-screen">
+                                  <th colspan="2"><h2>Benefício Futuro</h2></th>
+                                </tr>
+                              <tr>
+                                <th class="text-align-center">#</th>
+                                <th class="text-align-center">Competência</th>
+                                <th class="text-align-center">
+                                  Salários de Contribuição
+                                </th>
+                                <th class="text-align-center" width="25%">
+                                  Alíquota Contributiva
+                                </th>
+                                <th class="text-align-center" width="25%">
+                                  Valor da Contribuição
+                                </th>
+                              </tr>
+                            </thead>
+                          </sa-datatable>
+                          </div>
+                        </div>
+                      </sa-widget>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!istableDataSC">
+                    <td width="50%" style="text-align: left" >
                       <strong>Alíquota Contributiva Efetiva</strong>
                     </td>
                     <td width="50%" style="text-align: center">
                       {{ aliquotaRst.aliquota }} %
                     </td>
                   </tr>
-                  <tr>
+                  <tr *ngIf="!istableDataSC">
                     <td width="50%" style="text-align: left">
                       <strong>Valor da Contribuição</strong>
                     </td>
@@ -488,42 +530,42 @@
       </sa-widget>
     </article>
   </div>
-<div class="not-screen">
-  <div
-  id="texto-inicial"
-  class=" row "
-  class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
->
-  <table id="texto-inicial-text" class="table table-hover">
-    <tbody>
-      <tr>
-        <td>
-          Planejamento Previdenciário realizado com a indicação do valor
-          investido em contribuições, entre as datas de início do benefício
-          atual (caso haja direito adquirido) e benefício futuro, além de
-          identificar o valor que o segurado deixará de receber, caso opte
-          pelo direito ao benefício em data futura;
-          <br />
-          <br />
-          Apura ainda, a diferença entre os dois benefícios (atual - caso haja
-          direito adquirido - e futuro), apontando o tempo mínimo necessário
-          que o segurado levará para recuperar os valores investidos para
-          obtenção do direito ao melhor benefício, bem como o valor total que
-          conseguirá acumular até a idade limite indicada na Tabela de
-          Expectativa de Sobrevida construída pelo IBGE;
-          <br />
-          <br />
-          O resultado do Planejamento Previdenciário é obtido a partir das
-          informações indicadas pelo usuário nos passos anteriores e a renda
-          mensal inicial do benefício futuro consiste em valor estimado,
-          apurado com base em valores atuais (limites mínimo e máximo), pois o
-          valor dos salários de contribuição futuros é fixo, sem incidência de
-          correção monetária entres as datas atual e futura, pois ausente a
-          publicação dos índices oficiais.
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-</div>
+  <div class="not-screen">
+    <div
+      id="texto-inicial"
+      class="row"
+      class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
+    >
+      <table id="texto-inicial-text" class="table table-hover">
+        <tbody>
+          <tr>
+            <td>
+              Planejamento Previdenciário realizado com a indicação do valor
+              investido em contribuições, entre as datas de início do benefício
+              atual (caso haja direito adquirido) e benefício futuro, além de
+              identificar o valor que o segurado deixará de receber, caso opte
+              pelo direito ao benefício em data futura;
+              <br />
+              <br />
+              Apura ainda, a diferença entre os dois benefícios (atual - caso
+              haja direito adquirido - e futuro), apontando o tempo mínimo
+              necessário que o segurado levará para recuperar os valores
+              investidos para obtenção do direito ao melhor benefício, bem como
+              o valor total que conseguirá acumular até a idade limite indicada
+              na Tabela de Expectativa de Sobrevida construída pelo IBGE;
+              <br />
+              <br />
+              O resultado do Planejamento Previdenciário é obtido a partir das
+              informações indicadas pelo usuário nos passos anteriores e a renda
+              mensal inicial do benefício futuro consiste em valor estimado,
+              apurado com base em valores atuais (limites mínimo e máximo), pois
+              o valor dos salários de contribuição futuros é fixo, sem
+              incidência de correção monetária entres as datas atual e futura,
+              pois ausente a publicação dos índices oficiais.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

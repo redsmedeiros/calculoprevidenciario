@@ -78,8 +78,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     valor_beneficio: '0.00',
     aliquota: '',
     especie: '',
-    contribuicoes_pendentes_mm: 0,
-    contribuicoes_pendentes: 0,
+    sc_pendentes_mm: 0,
+    sc_pendentes: 0,
     sc: []
   };
 
@@ -448,6 +448,11 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   }
 
+  private closeFormPlan(ev) {
+    this.resetForm();
+    this.modalPlan.hide();
+  }
+
 
 
   private changeDIB() {
@@ -769,10 +774,10 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_mm_ajustar = value.sc_mm_ajustar;
       this.planejamentoContrib.sc_mm_considerar_tempo = value.sc_mm_considerar_tempo;
       this.planejamentoContrib.sc_mm_considerar_carencia = value.sc_mm_considerar_carencia;
-      this.planejamentoContrib.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
-      this.planejamentoContrib.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
-      this.planejamentoContrib.result_sc = value.result_sc ? value.result_sc : 0;
-      this.planejamentoContrib.result_sc_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+      // this.planejamentoContrib.contribuicoes_pendentes = value.result_sc ? value.result_sc : 0;
+      // this.planejamentoContrib.contribuicoes_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
+      this.planejamentoContrib.sc_pendentes = value.result_sc ? value.result_sc : 0;
+      this.planejamentoContrib.sc_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
 
     }
   }
@@ -817,10 +822,10 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_mm_ajustar = eventRST.sc_mm_ajustar;
       this.planejamentoContrib.sc_mm_considerar_tempo = eventRST.sc_mm_considerar_tempo;
       this.planejamentoContrib.sc_mm_considerar_carencia = eventRST.sc_mm_considerar_carencia;
-      this.planejamentoContrib.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
-      this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
-      this.planejamentoContrib.result_sc = eventRST.result_sc ? eventRST.result_sc : 0;
-      this.planejamentoContrib.result_sc_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+      // this.planejamentoContrib.contribuicoes_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
+      // this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
+      this.planejamentoContrib.sc_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
+      this.planejamentoContrib.sc_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
 
 
       console.log(this.planejamentoContrib);
@@ -901,13 +906,13 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         break;
       case 'salvar-check':
         this.setCheckPlanContrib(event);
-      //  this.updatePlan(null, 'sc');
+        //  this.updatePlan(null, 'sc');
         break;
       case 'salvar':
         this.setCheckPlanContrib(event);
         this.matrixToVinculoContribuicoes(event);
-      //  this.updatePlan(null, 'sc');
-      //  this.contribuicoes.hide();
+        //  this.updatePlan(null, 'sc');
+        //  this.contribuicoes.hide();
         break;
     }
 

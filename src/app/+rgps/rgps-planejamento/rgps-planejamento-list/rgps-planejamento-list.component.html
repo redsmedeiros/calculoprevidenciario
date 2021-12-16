@@ -560,10 +560,20 @@
                     <div class="form-actions row p-0 m-0">
                       <div class="">
                         <div class="col-md-6">
+                          <button
+                          (click)="closeFormPlan($event)"
+                          type="button"
+                          class="btn btn-labeled btn-danger pull-left"
+                          *ngIf="isEdit"
+                        >
+                          <span class="btn-label"> <i class="fa fa-save"></i> </span
+                          >&nbsp;&nbsp;Fechar&nbsp;&nbsp;
+                        </button>
                           <span class="pull-left p-2"
                             >(*) Preenchimento Obrigatório.</span
                           >
                         </div>
+
                         <div class="col-md-6 pr-0">
                           <button
                             (click)="salvarPlanejamento($event)"

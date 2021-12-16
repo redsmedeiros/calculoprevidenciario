@@ -122,7 +122,35 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
 
   private definicaoMoeda = DefinicaoMoeda;
+  private isSCPlan = false;
   //private definicaoAliquotaEfetiva = DefinicaoAliquotaEfetiva;
+
+
+  private tableDataSC = [];
+  private istableDataSC = false;
+  private tableDataSCSoma = 0;
+  private tableDataSCSomaVAliquota = 0;
+  private tableOptionsSC = {
+    colReorder: false,
+    paging: false,
+    searching: false,
+    ordering: false,
+    bInfo: false,
+    data: this.tableDataSC,
+    columns: [
+      { data: 'index' },
+      { data: 'competencia' },
+      { data: 'sc' },
+      { data: 'aliquota' },
+      { data: 'aliquotaValor' },
+    ],
+    columnDefs: [
+      {
+        'targets': [0, 1, 2, 3, 4],
+        'className': 'text-center'
+      }
+    ]
+  };
 
 
   constructor
@@ -150,6 +178,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
     }
   }
 
+
+
   private calculoInit() {
 
 
@@ -175,6 +205,8 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
               .then((planejamento: PlanejamentoRgps) => {
 
                 this.planejamento = planejamento;
+                this.checkPlanejamentoSC();
+
                 this.idadeNaDiBPlanejamento = Math.abs(
                   this.dataNascimentoSeguradoM.diff(
                     moment(this.planejamento.data_futura),
@@ -186,7 +218,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
                     'years'));
 
                 this.planejamento.dataDibFutura = moment(this.planejamento.data_futura).format('DD/MM/YYYY');
-
 
                 const anoTabela = (moment().year() - 2);
                 this.ExpectativaVidaService.getByAnoIdade(this.idadeNaDiBRmi, anoTabela)
@@ -241,10 +272,37 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
 
       }).catch(errors => console.log(errors));
 
+  }
 
 
+  private checkPlanejamentoSC() {
+
+    if (typeof this.planejamento['sc'] !== 'undefined' && typeof this.planejamento['sc'] === 'string') {
+
+      this.planejamento.scJSON = JSON.parse(this.planejamento.sc);
+      this.planejamento.scJSONDescarte = this.filterSCPlan();
+      this.isSCPlan = true;
+
+    }
+  }
+
+  private filterSCPlan() {
+
+    let planSC = this.planejamento.scJSON;
+
+    planSC = planSC.filter(x => (x.sc !== '0,00' && x.sc !== 0));
+
+    if (this.planejamento.sc_pendentes_mm >= 1
+      && this.planejamento.sc_mm_considerar_tempo === 0) {
+
+      planSC = planSC.filter(x => (x.msc !== 1));
+
+    }
+
+    return planSC;
 
   }
+
 
   private getAliquota(aliquotaP, contribuicao) {
 
@@ -562,6 +620,9 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
 
 
+      this.createListSCPlan();
+
+
 
       if (this.resultadosGeral.length >= 7
         || (this.resultadosGeral.length >= 3 && this.isDiffAeBNegativa)) {
@@ -571,6 +632,48 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
     });
 
+
+  }
+
+
+  private createListSCPlan() {
+
+    if (this.isSCPlan) {
+
+      const scJSONDescarte = this.planejamento.scJSONDescarte;
+
+      this.tableDataSC = [];
+      this.istableDataSC = false;
+      this.tableDataSCSoma = 0;
+      let index = 1;
+      const aliquota = this.planejamento.aliquota;
+
+      for (const scObj of scJSONDescarte) {
+
+
+        const scValor = this.definicaoMoeda.convertDecimalValue(scObj.sc);
+        const aliquotaValor = this.getAliquota(aliquota, Number(scValor));
+
+        this.tableDataSC.push({
+          index: (index++),
+          competencia: scObj.cp,
+          sc: this.definicaoMoeda.formatMoney(scValor),
+          aliquota: `${aliquotaValor.aliquota} %`,
+          aliquotaValor: this.definicaoMoeda.formatMoney(aliquotaValor.valor),
+        });
+
+        this.tableDataSCSoma += scValor;
+        this.tableDataSCSomaVAliquota += aliquotaValor.valor;
+
+      }
+
+       this.tableOptionsSC = {
+      ...this.tableOptionsSC,
+      data: this.tableDataSC,
+    }
+
+      this.istableDataSC = true;
+    }
 
   }
 
