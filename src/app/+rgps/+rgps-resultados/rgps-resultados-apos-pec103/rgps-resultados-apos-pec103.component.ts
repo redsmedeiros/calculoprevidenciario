@@ -848,7 +848,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
   private verificarCarencia() {
 
     // if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16 || this.tipoBeneficio === 31) {
-    if (([4, 5, 6, 31, 25, 26, 27, 28, 1915, 1920, 1925].includes(this.tipoBeneficio))) {
+    if (([3, 4, 5, 6, 31, 25, 26, 27, 28, 1915, 1920, 1925].includes(this.tipoBeneficio))) {
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 
