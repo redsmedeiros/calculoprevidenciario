@@ -1,10 +1,13 @@
 <!-- <div class="modal-dialog modal-full" *ngIf="isDataLoad">
   <div class="modal-content"> -->
-<article class="col-sm-12 col-md-12 col-lg-12" >
+<article class="col-sm-12 col-md-12 col-lg-12">
   <dl class="padding-5">
     <dt>
       <b>Salários de Contribuição</b>
-      <span *ngIf="isDataLoad"><b> Período:</b> {{ planejamentoContrib.inicio }} à {{ planejamentoContrib.dibString }}</span>
+      <span *ngIf="isDataLoad"
+        ><b> Período:</b> {{ planejamentoContrib.inicio }} à
+        {{ planejamentoContrib.dibString }}</span
+      >
     </dt>
   </dl>
   <dl class="well padding-5" *ngIf="isDataLoad">
@@ -88,7 +91,12 @@
 </article>
 <article class="col-sm-12 col-md-12 col-lg-12">
   <!-- Widget ID (each widget will need unique ID)-->
-  <sa-widget [colorbutton]="false" [editbutton]="false" [deletebutton]="false" *ngIf="isDataLoad">
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [deletebutton]="false"
+    *ngIf="isDataLoad"
+  >
     <header>
       <span class="widget-icon">
         <i class="fa fa-table"></i>
@@ -103,7 +111,7 @@
         <sa-datatable
           paginationLength="false"
           [options]="matrixTableOptions"
-          tableClass="table table-striped table-condensed-custom table-bordered table-hover no-padding"
+          tableClass="table table-striped table-condensed-custom1 table-bordered table-hover no-padding"
           width="100%"
         >
           <thead>
@@ -150,12 +158,7 @@
                   value="{{ data.sc[0] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 0);
-                    getClassSalarioContribuicao(
-                      '01',
-                      data.ano,
-                      data.sc[0],
-                      i
-                    )
+                    getClassSalarioContribuicao('01', data.ano, data.sc[0], i)
                   "
                   class="matriz-input"
                   currencyMask
@@ -176,12 +179,7 @@
                   value="{{ data.sc[1] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 1);
-                    getClassSalarioContribuicao(
-                      '02',
-                      data.ano,
-                      data.sc[1],
-                      i
-                    )
+                    getClassSalarioContribuicao('02', data.ano, data.sc[1], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[1] != ''"
@@ -202,12 +200,7 @@
                   value="{{ data.sc[2] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 2);
-                    getClassSalarioContribuicao(
-                      '03',
-                      data.ano,
-                      data.sc[2],
-                      i
-                    )
+                    getClassSalarioContribuicao('03', data.ano, data.sc[2], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[2] != ''"
@@ -228,12 +221,7 @@
                   value="{{ data.sc[3] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 3);
-                    getClassSalarioContribuicao(
-                      '04',
-                      data.ano,
-                      data.sc[3],
-                      i
-                    )
+                    getClassSalarioContribuicao('04', data.ano, data.sc[3], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[3] != ''"
@@ -254,12 +242,7 @@
                   value="{{ data.sc[4] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 4);
-                    getClassSalarioContribuicao(
-                      '05',
-                      data.ano,
-                      data.sc[4],
-                      i
-                    )
+                    getClassSalarioContribuicao('05', data.ano, data.sc[4], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[4] != ''"
@@ -280,12 +263,7 @@
                   value="{{ data.sc[5] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 5);
-                    getClassSalarioContribuicao(
-                      '06',
-                      data.ano,
-                      data.sc[5],
-                      i
-                    )
+                    getClassSalarioContribuicao('06', data.ano, data.sc[5], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[5] != ''"
@@ -306,12 +284,7 @@
                   value="{{ data.sc[6] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 6);
-                    getClassSalarioContribuicao(
-                      '07',
-                      data.ano,
-                      data.sc[6],
-                      i
-                    )
+                    getClassSalarioContribuicao('07', data.ano, data.sc[6], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[6] != ''"
@@ -332,12 +305,7 @@
                   value="{{ data.sc[7] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 7);
-                    getClassSalarioContribuicao(
-                      '08',
-                      data.ano,
-                      data.sc[7],
-                      i
-                    )
+                    getClassSalarioContribuicao('08', data.ano, data.sc[7], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[7] != ''"
@@ -358,12 +326,7 @@
                   value="{{ data.sc[8] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 8);
-                    getClassSalarioContribuicao(
-                      '09',
-                      data.ano,
-                      data.sc[8],
-                      i
-                    )
+                    getClassSalarioContribuicao('09', data.ano, data.sc[8], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[8] != ''"
@@ -384,12 +347,7 @@
                   value="{{ data.sc[9] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 9);
-                    getClassSalarioContribuicao(
-                      '10',
-                      data.ano,
-                      data.sc[9],
-                      i
-                    )
+                    getClassSalarioContribuicao('10', data.ano, data.sc[9], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[9] != ''"
@@ -410,12 +368,7 @@
                   value="{{ data.sc[10] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 10);
-                    getClassSalarioContribuicao(
-                      '11',
-                      data.ano,
-                      data.sc[10],
-                      i
-                    )
+                    getClassSalarioContribuicao('11', data.ano, data.sc[10], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[10] != ''"
@@ -436,12 +389,7 @@
                   value="{{ data.sc[11] }}"
                   (focusout)="
                     changedGridContribuicoes(data.ano, $event, 11);
-                    getClassSalarioContribuicao(
-                      '12',
-                      data.ano,
-                      data.sc[11],
-                      i
-                    )
+                    getClassSalarioContribuicao('12', data.ano, data.sc[11], i)
                   "
                   class="matriz-input"
                   *ngIf="data.sc[11] != ''"
@@ -456,44 +404,14 @@
 </article>
 
 <div class="modal-footer">
-  <!-- <button
+  <button
     type="button"
     title="Fechar"
     class="btn btn-danger pull-left"
     (click)="hideContribuicoes()"
   >
     Fechar
-  </button> -->
-  <!-- <div class="btn-group"></div> -->
-  <!-- <button
-    *ngIf="isSC_mm_ajustar_btn"
-    type="button"
-    class="btn btn-warning"
-    (click)="showContribuicoesCheck()"
-    style="min-width: 220px"
-  >
-    <i class="fa fa-list fa-1-7x"></i> Opções de Tempo e Carência
   </button>
-  <button
-    type="button"
-    class="btn btn-danger"
-    id="salarioTeto"
-    *ngIf="isSC_mm_ajustar_btn"
-    (click)="preencherComSalario('t')"
-    style="min-width: 220px"
-  >
-    <i class="fa fa-money"></i>Ajustar SC ao Teto SC
-  </button>
-  <button
-    type="button"
-    class="btn btn-danger"
-    id="salarioMinimo"
-    *ngIf="isSC_mm_ajustar_btn"
-    (click)="preencherComSalario('m')"
-    style="min-width: 220px"
-  >
-    <i class="fa fa-money"></i> Ajustar SC ao Salário Mínimo
-  </button> -->
 
   <span>
     <popover-content
@@ -502,7 +420,7 @@
       [closeOnClickOutside]="true"
     >
       <div class="bg-ieprev fade in bold text-justify">
-        Desfazer a últimas alterações de preencimento autómatico de teto e/ou
+        Desfazer a últimas alterações de preencimento <br>autómatico de teto e/ou
         mínimo.
       </div>
     </popover-content>
@@ -528,7 +446,8 @@
       [closeOnClickOutside]="true"
     >
       <div class="bg-ieprev fade in bold text-justify">
-        Limitar SC ao Teto SC na competência em que o valor é zero ou menor que o mínimo.
+        Limitar SC ao Teto SC na competência em que <br>o valor é zero ou menor que
+        o mínimo.
       </div>
     </popover-content>
     <button
@@ -553,7 +472,8 @@
       [closeOnClickOutside]="true"
     >
       <div class="bg-ieprev fade in bold text-justify">
-        Limitar SC ao Salário Mínimo na competência em que o valor é zero ou menor que o mínimo.
+        Limitar SC ao Salário Mínimo na competência<br> em que o valor é zero ou
+        menor que o mínimo.
       </div>
     </popover-content>
     <button
@@ -578,7 +498,7 @@
       [closeOnClickOutside]="true"
     >
       <div class="bg-ieprev fade in bold text-justify">
-        Desfazer a última alteração de preencimento autómatico de teto e/ou
+        Desfazer a última alteração de preencimento<br> autómatico de teto e/ou
         mínimo
       </div>
     </popover-content>
@@ -595,15 +515,27 @@
       <i class="fa fa-list fa-1-7x"></i> Editar Tempo e Carência
     </button>
   </span>
-
-  <!-- <button
-    type="button"
-    class="btn btn-primary"
-    id="salvar"
+  <span class="px-1">
+      <button
     (click)="salvarContribuicoes()"
+    type="button"
+    class="btn btn-labeled btn-success pull-right"
+    *ngIf="!isEdit"
   >
-    <i class="fa fa-save"></i> Salvar
-  </button> -->
+    <span class="btn-label"> <i class="fa fa-save"></i> </span
+    >&nbsp;&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;&nbsp;&nbsp;
+  </button>
+  <button
+    (click)="salvarContribuicoes()"
+    type="button"
+    class="btn btn-labeled btn-success pull-right"
+    *ngIf="isEdit"
+  >
+    <span class="btn-label"> <i class="fa fa-save"></i> </span
+    >&nbsp;&nbsp;Atualizar&nbsp;&nbsp;
+  </button>
+  </span>
+
 </div>
 <!-- </div>
 </div> -->

@@ -835,7 +835,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
 
   private novoPlanejamento() {
-
+    this.isEdit = false;
+    this.resetForm();
     this.planejamentoContrib = Object.assign({}, { ...PlanejamentoRgps.form });
     this.showChildModal();
   }
@@ -901,23 +902,32 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     console.log(event);
 
     switch (event.acao) {
+
       case 'sair':
-        // this.contribuicoes.hide();
+        this.resetForm();
+        this.modalPlan.hide();
+        break;
+
+      case 'salvar':
+
+        this.setCheckPlanContrib(event);
+        this.matrixToVinculoContribuicoes(event);
+
+        if (!this.isEdit) {
+          this.salvarPlanejamento(null);
+        } else {
+          this.updatePlan(null);
+        }
+
+        //  this.updatePlan(null, 'sc');
+        //  this.contribuicoes.hide();
         break;
       case 'salvar-check':
         this.setCheckPlanContrib(event);
         //  this.updatePlan(null, 'sc');
         break;
-      case 'salvar':
-        this.setCheckPlanContrib(event);
-        this.matrixToVinculoContribuicoes(event);
-        //  this.updatePlan(null, 'sc');
-        //  this.contribuicoes.hide();
-        break;
     }
 
-    console.log(event)
-    console.log(this.planejamentoContrib);
   }
 
 

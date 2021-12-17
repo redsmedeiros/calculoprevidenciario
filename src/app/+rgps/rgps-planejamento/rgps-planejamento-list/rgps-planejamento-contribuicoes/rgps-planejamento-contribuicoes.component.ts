@@ -348,7 +348,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
       });
 
 
-      this.salvarContribuicoes();
+     //  this.salvarContribuicoes();
 
     } else {
 
@@ -498,7 +498,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
       }
     });
 
-    this.salvarContribuicoes();
+    // this.salvarContribuicoes();
   }
 
   public onModelChange() { }
@@ -619,8 +619,8 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     }
 
     // this.eventContribuicoes.emit(saida);
-    this.hideContribuicoesCheck();
-    this.salvarContribuicoes();
+   this.hideContribuicoesCheck();
+    // this.salvarContribuicoes();
 
   }
 
@@ -659,7 +659,8 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     this.result_sc = this.countPendenciasSC(contribuicoesList, '0,00');
     this.result_sc_mm = this.countPendenciasSC(contribuicoesList, 'mm');
 
-    const checkNumContricuicoes = !(this.result_sc > 0 || this.result_sc_mm > 0);
+    const checkNumContricuicoes = !(this.result_sc_mm > 0);
+    // const checkNumContricuicoes = !(this.result_sc > 0 || this.result_sc_mm > 0);
 
     const checkNumStatusContribuicoes = (
       this.sc_mm_considerar_carencia !== null &&
