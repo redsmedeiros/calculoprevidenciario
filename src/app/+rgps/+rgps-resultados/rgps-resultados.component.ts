@@ -1551,6 +1551,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   private filterSCPlan() {
 
+    console.log(this.planejamento);
+    console.log(this.planejamento.scJSON);
+
     let planSC = this.planejamento.scJSON;
 
     planSC = planSC.filter(x => (x.sc !== '0,00' && x.sc !== 0));
@@ -1579,6 +1582,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
     let isSCPlan = false;
+    this.planejamento.scJSON = [];
     if (typeof this.planejamento['sc'] !== 'undefined' && typeof this.planejamento['sc'] === 'string') {
       this.planejamento.scJSON = JSON.parse(this.planejamento.sc);
       isSCPlan = true;
