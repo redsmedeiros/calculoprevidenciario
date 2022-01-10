@@ -1284,9 +1284,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
 
-  public ordenarLista() {
+  public ordenarLista(list) {
 
-    this.listRecebidos.sort((a, b) => {
+    return list.sort((a, b) => {
 
       const dib1 = moment(a.dib, 'DD/MM/YYYY');
       const dib2 = moment(b.dib, 'DD/MM/YYYY');
@@ -1306,7 +1306,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public addLoadRecebidoList() {
 
-    this.ordenarLista();
+    this.ordenarLista(this.listRecebidos);
 
     if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
 
