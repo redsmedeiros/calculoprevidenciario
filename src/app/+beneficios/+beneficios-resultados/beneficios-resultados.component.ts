@@ -2344,8 +2344,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       && (
         recebidoRow.value.id > 1
         && recebidoRow.value.dip.isSame(dataCorrente)
-        && recebidoRow.value.dibAnterior
-        && recebidoRow.value.dip.isAfter(recebidoRow.value.dibAnterior))) {
+        && recebidoRow.value.dip.isAfter(recebidoRow.value.dib))) {
 
       for (const rowIND of recebidoRow.value.indiceInpsValores) {
         if (recebidoRow.value.dip.isSameOrAfter(moment(rowIND.data_moeda))) {
