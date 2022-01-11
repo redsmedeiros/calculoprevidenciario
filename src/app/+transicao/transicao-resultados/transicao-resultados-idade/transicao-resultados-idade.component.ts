@@ -236,7 +236,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
 
   public contadorRegra5() {
 
-    let auxiliarDate = this.dataAtual.clone();
+    let auxiliarDate =  moment(moment(), 'DD/MM/YYYY').hour(0).minute(0).second(0).millisecond(0);
     let fimContador = { status: false, ano: 0, idade: 0, requisitosIdade: 0 };
     let count = 0;
     let auxiliarDateClone;
@@ -297,6 +297,7 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15 || testContrib < testeIdade) {
 
+      console.log(auxiliarDate);
 
       if (auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) {
 

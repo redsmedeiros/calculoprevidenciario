@@ -646,6 +646,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         recebidoRow.dibAnterior = formatDateIsnotNull(recebidoRow.dibAnterior);
         recebidoRow.dataAdicional25 = formatDateIsnotNull(recebidoRow.dataAdicional25);
         recebidoRow.indiceInps = [];
+        recebidoRow.indiceInpsValores = [];
 
         let inicioRecebido = recebidoRow.dib;
         if (recebidoRow.dibAnterior && recebidoRow.dib.isAfter(recebidoRow.dibAnterior)) {
@@ -656,9 +657,13 @@ export class BeneficiosResultadosComponent implements OnInit {
           inicioRecebido.clone().startOf('month').format('YYYY-MM-DD'),
           recebidoRow.cessacao.format('YYYY-MM-DD'))
           .then((indicesRecebido: Indices[]) => {
+
             for (const i_recebido of indicesRecebido) {
               recebidoRow.indiceInps.push(i_recebido);
             }
+
+            recebidoRow.indiceInpsValores = recebidoRow.indiceInps.filter(item => item.indice !== null);
+
             //return true;
           });
 
@@ -2331,6 +2336,33 @@ export class BeneficiosResultadosComponent implements OnInit {
     return { status: status, value: recebidoRow };
   }
 
+
+
+  aplicarReajustesDibAnteriorRecebidosMultiplos(recebidoRow, dataCorrente, rmiRecebidos) {
+
+    if (this.listRecebidos.length > 1
+      && (
+        recebidoRow.value.id > 1
+        && recebidoRow.value.dip.isSame(dataCorrente)
+        && recebidoRow.value.dip.isAfter(recebidoRow.value.dib))) {
+
+      for (const rowIND of recebidoRow.value.indiceInpsValores) {
+        if (recebidoRow.value.dip.isSameOrAfter(moment(rowIND.data_moeda))) {
+          rmiRecebidos = this.roundMoeda(rmiRecebidos * rowIND.indice);
+        }
+      }
+
+      this.ultimoBeneficioRecebidoAntesProporcionalidade = rmiRecebidos;
+      return rmiRecebidos;
+
+    }
+
+    return rmiRecebidos;
+
+  }
+
+
+
   // Seção 3.4
   getBeneficioRecebido(dataCorrente, reajusteObj, resultsObj, line, recebidoRow) {
 
@@ -2358,9 +2390,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       // console.log(dataCorrente.format('DD/MM/YYYY'));
       // console.log(recebidoRow);
-
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
       rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
+
+      rmiRecebidos = this.aplicarReajustesDibAnteriorRecebidosMultiplos(recebidoRow, dataCorrente, rmiRecebidos);
+
       beneficioRecebido = 0.0;
       dataPedidoBeneficio = recebidoRow.value.dib.clone();
       dataPagamentoBeneficio = (recebidoRow.value.dip) ? recebidoRow.value.dip.clone() : dataPedidoBeneficio.clone();
@@ -2382,7 +2416,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     }
 
-
+    // if (dataCorrente.isSame('2017-08-01')) {
+    //   console.log(rmiRecebidos);
+    //   console.log(beneficioRecebido);
+    // }
 
     if ((this.dataCessacaoRecebido != null && dataCorrente > this.dataCessacaoRecebido)) {
       resultsObj.resultString = this.formatMoney(0.0, siglaDataCorrente);
@@ -2413,8 +2450,6 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioRecebido = this.beneficioRecebidoAnterior;
       }
     }
-
-
 
     // Nas próximas 5 condições devem ser aplicados os beneficios devidos dos meses especificados entre os colchetes
     // if ((
@@ -2719,7 +2754,6 @@ export class BeneficiosResultadosComponent implements OnInit {
       beneficioRecebidoString += '*'
     }
     resultsObj.resultString = beneficioRecebidoString;
-
 
     return beneficioRecebidoFinal;
   }

@@ -139,7 +139,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       });
     }
 
-    if (!this.validatePeriodoRecebidos(recebidoMultiplo) && statusInput) {
+    if (statusInput && !this.validatePeriodoRecebidos(recebidoMultiplo)) {
 
       statusInput = false;
 
@@ -245,7 +245,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     if (typeof recebidos === 'object') {
 
       this.listRecebidos.push(recebidos);
-      this.ordenarLista();
+      this.listRecebidos = this.ordenarLista(this.listRecebidos);
 
       this.recebidosAtributes.emit(this.listRecebidos);
     }

@@ -391,7 +391,6 @@ export class RegrasAcesso {
         const tempoInicial = elementTipo.tempoTotalAposEC103;
         const pontosInicial = elementTipo.pontos;
 
-
         let count12meses = 0;
         let countMesesD = 0;
         let tempoPorAno = tempoInicial;
@@ -413,8 +412,10 @@ export class RegrasAcesso {
             return Math.ceil(x / 12) * 12;
         }
 
-        const countDescarteList = (this.numeroDeContribuicoes > maximoDescarte.meses) ?
-            this.numeroDeContribuicoes : maximoDescarte.meses;
+        // const countDescarteList = (this.numeroDeContribuicoes > maximoDescarte.meses) ?
+        //     this.numeroDeContribuicoes : maximoDescarte.meses;
+
+        const countDescarteList =  maximoDescarte.meses;
 
         const listCalculoP = [];
         for (let i = countDescarteList; i >= 0; i--) {
@@ -425,6 +426,8 @@ export class RegrasAcesso {
             }
 
         }
+
+        const ultimaOpcao = (this.numeroDeContribuicoes - countDescarteList);
 
         for (let i = maximoDescarte.meses; i >= 0; i--) {
 
@@ -444,7 +447,8 @@ export class RegrasAcesso {
 
             if (listCalculoP.includes(this.numeroDeContribuicoes - countMesesD)
                 || (this.numeroDeContribuicoes - countMesesD) < 12
-                || this.numeroDeContribuicoes === countMesesD) {
+                || this.numeroDeContribuicoes === countMesesD
+                || (((this.numeroDeContribuicoes - countMesesD) - ultimaOpcao) <= 11)) {
 
                 calculosPossiveis.push(this.setCalculosPossiveis(
                     tempoPorAno,

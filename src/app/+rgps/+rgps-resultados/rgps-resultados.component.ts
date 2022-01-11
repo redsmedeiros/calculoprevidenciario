@@ -196,6 +196,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public contribuicaoSecundariaAtual = { anos: 0, meses: 0, dias: 0 };
   public numResultados = {
     'mostrarCalculoAnterior88': 0,
+    'mostrarCalculo88_91': 0,
     'mostrarCalculo91_98': 0,
     'mostrarCalculo98_99': 0,
     'mostrarCalculoApos99': 0,
@@ -375,7 +376,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
               });
           }
-
         }
       });
   }
@@ -414,16 +414,22 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
    */
   public getlistaValoresContribuidosPeriodosCT(listaValoresContribuidosPeriodosCT, inicio, fim) {
 
-    // const listCT = this.listaValoresContribuidosPeriodosCT;
+    if (!this.isExits(listaValoresContribuidosPeriodosCT)) {
+      return [];
+    }
+
     return listaValoresContribuidosPeriodosCT.filter((row) => moment(row.data).isBetween(inicio, fim, 'month', '[)'));
 
   }
+
+
 
   public getSalariosContribuicoesContTempoCNIS() {
 
     return new Promise((resolve, reject) => {
 
-      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado')))) {
+      if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado'))) &&
+      sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
@@ -433,7 +439,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
         this.PeriodosContagemTempoService.getByPeriodosId(this.idCalculoSelecionadoCT)
           .then((periodosContribuicao: PeriodosContagemTempo[]) => {
-
 
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
             this.listaPeriodosCT = periodosContribuicao;
@@ -821,6 +826,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       case 'Aposentadoria por tempo de serviço':
         numeroEspecie = 4;
         break;
+      case 'Aposentadoria Especial':
       case 'Aposentadoria especial':
         numeroEspecie = 5;
         break;
@@ -903,14 +909,13 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
    * Regras anteriores a 29/11/1999 não devem ser calculadas para os tipo 1,2,3,16
    * @param especieBeneficio
    */
-  verificaEspecieDeBeneficioIvalidezIdade(especieBeneficio) {
+  verificaEspecieDeBeneficioIvalidez(especieBeneficio) {
     // 25, 26, 27,
 
-    const arrayTypeNum = [1, 16, 28, 1900, 1901, 1903, 1905]; // 2, 3,
+    const arrayTypeNum = [1, 2, 17, 18, 19, 28, 1900, 1901, 1903, 1905]; // 2, 3,
     const arrayTypeText = [
+      'Aposentadoria por Invalidez ou Pensão por Morte',
       'Aposentadoria por invalidez Previdenciária ou Pensão por Morte',
-      // 'Aposentadoria por idade - Trabalhador Urbano',
-      // 'Aposentadoria por idade - Trabalhador Rural',
       'Auxílio Doença',
       'Pensão por Morte instituidor aposentado na data óbito',
       'Pensão por Morte - Instituidor não Aposentado na Data do Óbito',
@@ -919,16 +924,19 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       'Aposentadoria por incapacidade permanente',
       'Aposentadoria por Incapacidade Permanente',
       'Auxílio Acidente - 50%',
+      'Auxílio Acidente - 30%',
+      'Auxílio Acidente - 40%',
+      'Auxílio Acidente - 60%',
       'Aposentadoria especial por Idade da Pessoa com Deficiência',
-      // 'Aposentadoria especial da Pessoa com Deficiência Grave',
-      // 'Aposentadoria especial da Pessoa com Deficiência Moderada',
-      // 'Aposentadoria especial da Pessoa com Deficiência Leve',
       'Auxílio por Incapacidade Temporária',
       'Auxílio Acidente',
       'Aposentadoria por Idade da PcD',
     ];
 
-    if (arrayTypeNum.includes(especieBeneficio) || arrayTypeText.includes(especieBeneficio)) {
+
+    if (arrayTypeNum.includes(especieBeneficio)
+    || arrayTypeText.includes(especieBeneficio)
+    ) {
       return true;
     }
     return false;
@@ -1099,7 +1107,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     // verificar e setar os parametros para novo calculo;
 
 
-    const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidezIdade(calculo.tipo_seguro);
+    const verificaInvalidezObito = this.verificaEspecieDeBeneficioIvalidez(calculo.tipo_seguro);
     const verificaIdade = this.verificaEspecieDeBeneficioIdade(calculo.tipo_seguro);
 
     if (dataInicioBeneficio < data88) {
@@ -1200,6 +1208,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     this.numResultados = {
       'mostrarCalculoAnterior88': 0,
+      'mostrarCalculo88_91': 0,
       'mostrarCalculo91_98': 0,
       'mostrarCalculo98_99': 0,
       'mostrarCalculoApos99': 0,
@@ -1210,6 +1219,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     [
       'mostrarCalculoAnterior88',
+      'mostrarCalculoAnterior88_91',
       'mostrarCalculo91_98',
       'mostrarCalculo98_99',
       'mostrarCalculoApos99',
@@ -1939,7 +1949,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   isExits(value) {
     return (typeof value !== 'undefined' &&
       value != null && value != 'null' &&
-      value !== undefined) ? true : false;
+      value !== undefined && value !== [] && value !== '[]') ? true : false;
   }
 
   offset(el = undefined) {

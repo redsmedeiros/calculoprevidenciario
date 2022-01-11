@@ -23,6 +23,8 @@ import { RgpsPlanejamentoService } from './../../rgps-planejamento/rgps-planejam
 import { PlanejamentoRgps } from 'app/+rgps/rgps-planejamento/PlanejamentoRgps.model';
 import swal from 'sweetalert2';
 
+import { PeriodosContagemTempoService } from 'app/+contagem-tempo/+contagem-tempo-periodos/PeriodosContagemTempo.service';
+
 
 
 @Component({
@@ -104,6 +106,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     private regrasAcesso: RegrasAcesso,
     private calcularListaContribuicoes: CalcularListaContribuicoes,
     private conclusoesFinais: conclusoesFinais,
+    protected PeriodosContagemTempoService: PeriodosContagemTempoService,
   ) {
     super(null, route, null, null, null, null, null, null);
   }
@@ -148,14 +151,12 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
     // const dataLimite = moment('1994-07-01');
     this.idSegurado = this.route.snapshot.params['id_segurado'];
 
-
     this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, moment('1930-01-01'), 0, this.idSegurado)
       .then((valorescontribuidosTotal: ValorContribuido[]) => {
         this.numeroDeContribuicoesAuxTotal = valorescontribuidosTotal.length;
       });
 
     // indices de correção pbc da vida toda
-
 
     if (this.isExits(this.dadosPassoaPasso)
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
@@ -191,6 +192,10 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    * @param dataInicio
    */
   private getContribuicoesCNIS(dataLimite, dataInicio) {
+
+    if (!this.isExits(this.idCalculoSelecionadoCT)) {
+      this.idCalculoSelecionadoCT = this.calculo.id_contagem_tempo;
+     }
 
     this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
 
@@ -842,7 +847,8 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
    */
   private verificarCarencia() {
 
-    if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16 || this.tipoBeneficio === 31) {
+    // if (this.tipoBeneficio === 3 || this.tipoBeneficio === 16 || this.tipoBeneficio === 31) {
+    if (([3, 4, 5, 6, 31, 25, 26, 27, 28, 1915, 1920, 1925].includes(this.tipoBeneficio))) {
 
       const redutorIdade = (this.tipoBeneficio === 3) ? -5 : 0;
 

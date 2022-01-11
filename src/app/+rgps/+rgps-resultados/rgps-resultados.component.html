@@ -121,7 +121,7 @@
               <h2>Dados do Segurado</h2>
               <button
                 class="btn btn-labeled btn-info pull-right"
-                *ngIf="!isPlanejamento"
+                *ngIf="!isPlanejamento && !isPassoaPasso"
                 type="submit"
                 (click)="editSegurado()"
               >

@@ -186,8 +186,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public tipoHonorariosOptions = [
     { text: '- Selecione uma Opção -', value: '' },
     { text: 'Não Calcular Honorários', value: 'nao_calc' },
-    { text: 'Percentual Sobre o Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
-    { text: 'Percentual sobre o Valor Total do Benefício Devido', value: 'dev' },
+    { text: 'Valor da Diferença entre os Benefícios Devido e Recebido', value: 'dif' },
+    { text: 'Valor Total do Benefício Devido', value: 'dev' },
     { text: 'Calcular Valor Conforme § 3º, art. 85, do CPC/2015', value: 'CPC85' },
     { text: 'Honorários em Valor Fixo', value: 'fixo' },
     { text: 'Calcular Sobre o Valor da Causa', value: 'condenacao' },
@@ -1284,9 +1284,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
 
-  public ordenarLista() {
+  public ordenarLista(list) {
 
-    this.listRecebidos.sort((a, b) => {
+    return list.sort((a, b) => {
 
       const dib1 = moment(a.dib, 'DD/MM/YYYY');
       const dib2 = moment(b.dib, 'DD/MM/YYYY');
@@ -1306,7 +1306,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
   public addLoadRecebidoList() {
 
-    this.ordenarLista();
+    this.ordenarLista(this.listRecebidos);
 
     if (this.isExits(this.rmiValoresRecebidos) && this.isExits(this.especieValoresRecebidos)) {
 
