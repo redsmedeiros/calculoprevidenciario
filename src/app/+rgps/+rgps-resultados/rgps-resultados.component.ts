@@ -429,7 +429,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
 
       if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado'))) &&
-      sessionStorage.getItem('periodosSelecionado') !== '[]') {
+        sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
@@ -935,7 +935,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
     if (arrayTypeNum.includes(especieBeneficio)
-    || arrayTypeText.includes(especieBeneficio)
+      || arrayTypeText.includes(especieBeneficio)
     ) {
       return true;
     }
@@ -1476,11 +1476,15 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   private descarteTempoSemSC(tempoAtualMaisAdicional) {
 
-    if (this.planejamento.sc_mm_considerar_tempo === 0
-      && (this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+    if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
 
-        const mesesDescarte = (this.planejamento.sc_pendentes + this.planejamento.sc_pendentes_mm);
-        tempoAtualMaisAdicional = tempoAtualMaisAdicional.subtract(mesesDescarte, 'month');
+      let mesesDescarte = this.planejamento.sc_pendentes;
+
+      if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+        mesesDescarte += this.planejamento.sc_pendentes_mm;
+      }
+
+      tempoAtualMaisAdicional = tempoAtualMaisAdicional.subtract(mesesDescarte, 'month');
 
     }
 
