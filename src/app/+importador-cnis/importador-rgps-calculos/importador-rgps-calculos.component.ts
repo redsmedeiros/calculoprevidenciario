@@ -14,6 +14,7 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
   @Input() idCalculoSelecionadoCT;
   @Input() exportResultContagemTempo;
   @Output() calculoSelecionadoEventRST = new EventEmitter();
+  @Output() retunCalculoRMICT = new EventEmitter();
 
   public calculoRMIDefaulForm = { };
 
@@ -97,6 +98,12 @@ export class ImportadorRgpsCalculosComponent implements OnInit, OnChanges {
     this.calculoSelecionadoEventRST.emit(data);
   }
 
+  /**
+   * setRetunListCT
+   */
+  public setRetunListCT(data) {
+    this.retunCalculoRMICT.emit(data)
+  }
 
 
 

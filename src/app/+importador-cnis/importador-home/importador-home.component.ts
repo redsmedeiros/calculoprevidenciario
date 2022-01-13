@@ -46,6 +46,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   public exportResultContagemTempo;
   public isCompleteResultContagemTempo = false;
+  public lastDataInicioBeneficio;
 
   public steps = [
     {
@@ -234,6 +235,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   }
 
   private clearTempSessionStorageStart() {
+
     sessionStorage.removeItem('calculoSelecionado');
     sessionStorage.removeItem('calculosSelecionado');
     sessionStorage.removeItem('seguradoSelecionado');
@@ -244,6 +246,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
     sessionStorage.removeItem('pbcFull');
     sessionStorage.removeItem('somarSecundaria');
     sessionStorage.removeItem('isToStep6');
+    sessionStorage.removeItem('dibLimiteContagemTempo');
 
   }
 
@@ -685,6 +688,17 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
     this.setStepValidate('step6', stepStatus);
 
+  }
+
+  /**
+   * setRetunCalculoRMICT($event)
+   */
+  public setRetunCalculoRMICT(data) {
+
+    console.log(data);
+    const stepRetun = this.steps.filter((step) => 'step5' === step.key);
+    this.clearDataSelected(stepRetun[0])
+    this.activeStep = stepRetun[0];
   }
 
   public eventPrevStepPassoaPasso(data) {

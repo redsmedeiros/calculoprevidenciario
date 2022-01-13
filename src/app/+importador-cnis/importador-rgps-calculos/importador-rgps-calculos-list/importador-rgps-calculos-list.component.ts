@@ -35,6 +35,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
   @Input() seguradoSelecionado;
   @Input() calculoSelecionadoCT;
   @Output() calculoSelecionadoEvent = new EventEmitter();
+  @Output() retunListCTEvent = new EventEmitter;
 
   @ViewChild('modalCalculosRGPS') public modalCalculosRGPS: ModalDirective;
 
@@ -241,6 +242,15 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
       this.updateCalculoRGPS(dataForm)
     }
 
+  }
+
+
+  /**
+   * returnCT
+   */
+  public setReturnCT(rstCT) {
+    this.hideChildModal();
+    this.retunListCTEvent.emit(rstCT);
   }
 
 

@@ -5,6 +5,7 @@ import { CalculoRgps as CalculoModel } from '../CalculoRgps.model';
 import { SeguradoService } from 'app/+rgps/+rgps-segurados/SeguradoRgps.service';
 // import swal from 'sweetalert2';
 import swal from 'sweetalert';
+import swal2 from 'sweetalert2';
 import * as moment from 'moment';
 import { InputFunctions } from 'app/shared/functions/input-functions';
 
@@ -20,6 +21,7 @@ import { InputFunctions } from 'app/shared/functions/input-functions';
 export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   public dataInicioBeneficio;
+  public lastDataInicioBeneficio;
   public periodoInicioBeneficio;
   public periodoInicioBeneficioOLD;
   public especieBeneficio;
@@ -107,6 +109,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   @Input() isEdit: boolean;
   @Input() dadosPassoaPasso;
   @Input() calculoRMIDefaulForm;
+  @Output() retunCTEvent = new EventEmitter;
   @Output() onSubmit = new EventEmitter;
 
   constructor(
@@ -183,6 +186,8 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
       this.setNewFormRMIinfoContagemTempo();
     }
 
+    this.lastDataInicioBeneficio = this.dataInicioBeneficio;
+
     // console.log(this.calculoRMIDefaulForm);
 
   }
@@ -197,6 +202,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
         }
       }
+
     }
 
     this.changePeriodoOptions();
@@ -1263,6 +1269,52 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
   }
 
 
+  private confirmAlteracaoContagemTempo(dibAtual, dibOriginal) {
+
+    if (moment(dibAtual, 'DD/MM/YYYY').isBefore(moment(dibOriginal, 'DD/MM/YYYY'))) {
+
+      const text = `Atenção ! \n Deseja limitar a contagem de tempo conforme a DIB ${dibAtual}?`;
+      swal2({
+        title: text,
+        text: ``,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não'
+      }).then((result) => {
+
+        if (result.value) {
+
+          sessionStorage.setItem('dibLimiteContagemTempo', this.dataInicioBeneficio);
+          this.retunCTEvent.emit({ dibLimiteContagemTempo: this.dataInicioBeneficio });
+          this.toastAlert('success', 'Aguarde a execução da contagem de tempo com o novo parâmetro.', null);
+          //  this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);
+
+        } else if (result.dismiss === swal2.DismissReason.cancel) {
+
+        }
+
+      });
+
+    }
+
+  }
+
+
+  /**
+   * verificarSeaDIBMenorUltimoVinculo
+   */
+  public verificarSeaDIBMenorUltimoVinculo() {
+
+    if (!this.isEdit && this.dadosPassoaPasso.origem === 'passo-a-passo') {
+      this.confirmAlteracaoContagemTempo(this.dataInicioBeneficio, this.lastDataInicioBeneficio);
+    }
+
+  }
+
+
   isExits(value) {
     return (typeof value !== 'undefined' &&
       value != null && value !== 'null' &&
@@ -1420,5 +1472,20 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
     return numeroEspecie;
   }
 
+
+
+  private toastAlert(type, title, position) {
+
+    position = (!position) ? 'top-end' : position;
+
+    swal2({
+      position: position,
+      type: type,
+      title: title,
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+  }
 
 }

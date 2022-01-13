@@ -5,7 +5,7 @@
                     <div class="form-group mb-4">
                       <label class="col-md-6 control-label" [ngClass]="{'pt-0':!isEdit}"  for="dataInicioBeneficio"><strong>Data do Início do Benefício*:</strong></label>
                       <div class="col-md-5">
-                        <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions();clearEspecieChange();" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
+                        <input [(ngModel)]="dataInicioBeneficio" (change)="changePeriodoOptions();clearEspecieChange();verificarSeaDIBMenorUltimoVinculo();" [ngModelOptions]="{standalone: true}" [textMask]="{mask: dateMaskdiB}" class="form-control" type="text">
                         <small *ngIf="errors.has('dataInicioBeneficio')" class="text-danger">{{ errors.get('dataInicioBeneficio') | i18n}}</small>
                       </div>
                     </div>
