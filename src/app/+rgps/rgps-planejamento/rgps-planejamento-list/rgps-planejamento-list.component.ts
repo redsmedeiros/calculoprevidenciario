@@ -15,7 +15,7 @@ import { DefinicoesPlanejamento } from '../shared/definicoes-planejamento';
 import { MoedaService } from 'app/services/Moeda.service';
 import { Moeda } from 'app/services/Moeda.model';
 
-import { RgpsPlanejamentoContribuicoesComponent } from './rgps-planejamento-contribuicoes/rgps-planejamento-contribuicoes.component';
+//import { RgpsPlanejamentoContribuicoesComponent } from './rgps-planejamento-contribuicoes/rgps-planejamento-contribuicoes.component';
 
 
 @Component({
@@ -93,7 +93,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   private moeda;
   private moedaList;
 
-  @ViewChild(RgpsPlanejamentoContribuicoesComponent) ContribuicoesComponent: RgpsPlanejamentoContribuicoesComponent;
+  // @ViewChild(RgpsPlanejamentoContribuicoesComponent) ContribuicoesComponent: RgpsPlanejamentoContribuicoesComponent;
   // @ViewChild('contribuicoes_plan') public contribuicoes: ModalDirective;
   @ViewChild('modalPlan') public modalPlan: ModalDirective;
 
@@ -267,13 +267,21 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.plan.id = this.id;
     }
 
-    this.plan.id_calculo = this.id_calculo;
-    this.plan.data_futura = this.data_futura;
-    this.plan.valor_beneficio = this.valor_beneficio;
-    this.plan.aliquota = this.aliquota;
-    this.plan.especie = this.especie;
-    this.plan.sc = this.formatContribuicaoList(this.plan.sc, 's');
+    // this.plan.id_calculo = this.id_calculo;
+    // this.plan.data_futura = this.data_futura;
+    // this.plan.valor_beneficio = this.valor_beneficio;
+    // this.plan.aliquota = this.aliquota;
+    // this.plan.especie = this.especie;
+    // this.plan.sc = this.formatContribuicaoList(this.plan.sc, 's');
 
+    this.planejamentoContrib.id_calculo = this.id_calculo;
+    this.planejamentoContrib.data_futura = this.data_futura;
+    this.planejamentoContrib.valor_beneficio = this.valor_beneficio;
+    this.planejamentoContrib.aliquota = this.aliquota;
+    this.planejamentoContrib.especie = this.especie;
+
+    Object.assign(this.plan, this.planejamentoContrib);
+    this.plan.sc = this.formatContribuicaoList(this.plan.sc, 's');
   }
 
   // private deletarPlananejamentoList(rowPlan) {
@@ -343,23 +351,12 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   public updatePlan(event, type = null) {
 
-    if (type === null && this.valid()) {
-
-      this.isEdit = false;
-      this.setPlan();
-
-      this.updatePlanejamento(this.plan);
-    }
-
-    if (type === 'sc') {
+    if (this.valid() && type === 'sc') {
       if (typeof this.planejamentoContrib !== 'undefined') {
 
-        // this.isEdit = false;
-        // const objPlanejamento = Object.assign({}, this.planejamentoContrib);
-        // objPlanejamento.sc = this.formatContribuicaoList(objPlanejamento.sc);
-
-        this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's')
-        this.updatePlanejamento(this.planejamentoContrib);
+        this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's');
+        Object.assign(this.plan, this.planejamentoContrib);
+        this.updatePlanejamento(this.plan);
 
       }
     }
@@ -380,6 +377,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
           timer: 1000
         });
 
+        this.isEdit = false;
         this.getInfoCalculos();
         this.resetForm();
         this.modalPlan.hide();
@@ -435,7 +433,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (this.isEdit) {
 
-      this.planejamentoContrib = this.setPlanRow(this.plan, this.data_futura);
+      this.planejamentoContrib = this.setPlanRow({ ...this.plan }, this.data_futura);
 
     } else {
 
@@ -461,17 +459,11 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       moment(this.data_futura, 'DD/MM/YYYY').isValid()
       && moment(this.data_futura, 'DD/MM/YYYY').isAfter(moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY'), 'months')) {
 
-      // console.log(moment(this.data_futura, 'DD/MM/YYYY').isValid())
-      // console.log(typeof this.data_futura)
-      // console.log(!(/_/gi).test(this.data_futura))
-      // console.log(this.data_futura);
-
-
+      this.plan.data_futura = moment(this.data_futura, 'DD/MM/YYYY').format('YYYY-MM-DD');
       this.showQuadroContribuicoes();
+      // this.detector.detectChanges();
 
     }
-
-
   }
 
 
@@ -736,6 +728,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     } else {
 
       planRow.sc = this.formatContribuicaoList(planRow.sc, 'j');
+      planRow.sc = this.addSCAposAlteracaoDibFutura(planRow);
 
     }
 
@@ -744,29 +737,45 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   }
 
 
+  private addSCAposAlteracaoDibFutura(planRow) {
 
+    if (this.isEdit && typeof planRow.sc !== 'string' && this.isExits(planRow.sc[planRow.sc.length - 1].cp)) {
 
-  showContribuicoes(planRow, index, data = null) {
+      let auxiliarDate = moment(planRow.sc[planRow.sc.length - 1].cp, 'MM/YYYY');
+      if (auxiliarDate.isSameOrBefore(planRow.data_futura)) {
+        while (auxiliarDate.isSameOrBefore(planRow.data_futura)) {
+          planRow.sc.push({ cp: auxiliarDate.format('MM/YYYY'), sc: '0,00', msc: 0 });
+          auxiliarDate = auxiliarDate.add(1, 'month');
+        }
+      } else if (auxiliarDate.isSameOrAfter(planRow.data_futura)) {
+        planRow.sc = planRow.sc.filter(x => moment(x.cp, 'DD/YYYY').isSameOrBefore(planRow.data_futura))
+      }
 
-    this.createplanejamentoContrib = false;
+    }
 
-    planRow = this.setPlanRow(planRow, data = null);
-
-    console.log(planRow);
-
-    this.plan_index = index;
-    this.planejamentoContrib = planRow;
-
-    ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
-    // this.contribuicoes.show();
+    return planRow.sc;
   }
+
+
+  // showContribuicoes(planRow, index, data = null) {
+
+  //   this.createplanejamentoContrib = false;
+
+  //   planRow = this.setPlanRow(planRow, data = null);
+
+  //   console.log(planRow);
+
+  //   this.plan_index = index;
+  //   this.planejamentoContrib = planRow;
+
+  //   ///this.ContribuicoesComponent.preencherMatrizPeriodos(planRow.sc);
+  //   // this.contribuicoes.show();
+  // }
 
 
 
 
   private setCheckPlanContrib(value) {
-
-    console.log(value);
 
     if (value.planejamento.id === this.planejamentoContrib.id) {
 
@@ -779,7 +788,9 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_pendentes = value.result_sc ? value.result_sc : 0;
       this.planejamentoContrib.sc_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
 
+      
     }
+
   }
 
 
@@ -815,8 +826,6 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
     if (eventRST.planejamento.id === this.planejamentoContrib.id) {
 
-      console.log(eventRST)
-
       this.planejamentoContrib.sc = contribuicoesList;
       this.planejamentoContrib.sc_count = contribuicoesList.length;
       this.planejamentoContrib.sc_mm_ajustar = eventRST.sc_mm_ajustar;
@@ -826,9 +835,6 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       // this.planejamentoContrib.contribuicoes_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
       this.planejamentoContrib.sc_pendentes = eventRST.result_sc ? eventRST.result_sc : 0;
       this.planejamentoContrib.sc_pendentes_mm = eventRST.result_sc_mm ? eventRST.result_sc_mm : 0;
-
-
-      console.log(this.planejamentoContrib);
     }
 
   }
@@ -840,44 +846,6 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     this.planejamentoContrib = Object.assign({}, { ...PlanejamentoRgps.form });
     this.showChildModal();
   }
-
-
-  // public updatePlanContribuicoes() {
-
-  //   if (typeof this.planejamentoContrib !== 'undefined') {
-
-  //     this.isEdit = false;
-
-  //     // const objPlanejamento = Object.assign({}, this.planejamentoContrib);
-  //     // objPlanejamento.sc = this.formatContribuicaoList(objPlanejamento.sc);
-
-
-
-  //     this.rgpsPlanejamentoService
-  //       .update(this.planejamentoContrib)
-  //       .then(model => {
-
-  //         swal({
-  //           position: 'top-end',
-  //           type: 'success',
-  //           title: 'Dados alterados com sucesso.',
-  //           showConfirmButton: false,
-  //           timer: 1000
-  //         });
-
-  //         this.getInfoCalculos();
-  //         this.resetForm();
-
-  //       })
-  //       .catch((errors) => {
-
-  //         // this.errors.add(errors);
-
-  //       });
-  //   }
-
-  //   console.log(this.planejamentoContrib)
-  // }
 
 
   private formatContribuicaoList(ListSC, type = null) {
@@ -899,8 +867,6 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
   public eventContribuicoes(event) {
 
-    console.log(event);
-
     switch (event.acao) {
 
       case 'sair':
@@ -914,13 +880,15 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         this.matrixToVinculoContribuicoes(event);
 
         if (!this.isEdit) {
+
           this.salvarPlanejamento(null);
+
         } else {
-          this.updatePlan(null);
+
+          this.updatePlan(null, 'sc');
+
         }
 
-        //  this.updatePlan(null, 'sc');
-        //  this.contribuicoes.hide();
         break;
       case 'salvar-check':
         this.setCheckPlanContrib(event);

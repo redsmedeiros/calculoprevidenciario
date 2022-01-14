@@ -71,164 +71,6 @@
     </sa-widget>
   </div>
 </div>
-<!-- 
-<div class="row" *ngIf="!isUpdatePlan">
-  <div class="col-sm-12 col-md-12 col-lg-12">
-    <sa-widget
-      [colorbutton]="false"
-      [editbutton]="false"
-      [togglebutton]="false"
-      [deletebutton]="false"
-      [fullscreenbutton]="false"
-      [custombutton]="false"
-      [collapsed]="false"
-      [sortable]="false"
-    >
-      <header>
-        <span class="widget-icon">
-          <i class="fa fa-money"></i>
-        </span>
-        <h2>Informações do Benefício Futuro</h2>
-      </header>
-      <div>
-        <div class="widget-body no-padding widget-body-custom">
-          <form class="form-horizontal">
-            <fieldset>
-              <div class="row mt-3">
-                <div class="col-md-5 col-lg-5">
-                  <div class="form-group">
-                    <label class="control-label col-md-7"
-                      >Data de Início de Benefício - DIB*:</label
-                    >
-                    <div class="col-md-5">
-                      <input
-                        class="form-control"
-                        [textMask]="{ mask: dateMaskdiB }"
-                        placeholder="DIB Futura"
-                        type="text"
-                        [(ngModel)]="data_futura"
-                        [ngModelOptions]="{ standalone: true }"
-                        (keyup)="changeDIB()"
-                      />
-                      <small
-                        *ngIf="errors.has('data_futura')"
-                        class="text-danger"
-                        >{{ errors.get("data_futura") }}</small
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-7 col-lg-7">
-                  <div class="form-group">
-                    <label class="control-label col-md-2" for="especiePlan"
-                      >Espécie*:</label
-                    >
-                    <div class="col-md-10 pr-5">
-                      <select
-                        name="especie"
-                        [(ngModel)]="especie"
-                        [ngModelOptions]="{ standalone: true }"
-                        class="form-control"
-                        id="especiePlan"
-                      >
-                        <option selected disabled value="">
-                          - Selecione a Espécie do Benefício -
-                        </option>
-                        <option *ngFor="let especie of listEspecies">
-                          {{ especie.value }}
-                        </option>
-                      </select>
-                      <small
-                        *ngIf="errors.has('especie')"
-                        class="text-danger"
-                        >{{ errors.get("especie") }}</small
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 col-lg-12">
-                  <div class="form-group">
-                    <label class="control-label col-md-3" for="especiePlan"
-                      >Segurado*:</label
-                    >
-                    <div class="col-md-9 pl-1 pr-5">
-                      <select
-                        class="form-control"
-                        required
-                        [(ngModel)]="aliquota"
-                        [ngModelOptions]="{ standalone: true }"
-                        name="aliquota"
-                      >
-                        <option value="" selected disabled>
-                          - Selecione a Espécie do Segurado -
-                        </option>
-                        <option
-                          *ngFor="let aliquota of listAliquotas"
-                          [value]="aliquota.value"
-                        >
-                          {{ aliquota.label }}
-                        </option>
-                      </select>
-                      <small
-                        *ngIf="errors.has('aliquota')"
-                        class="text-danger"
-                        >{{ errors.get("aliquota") }}</small
-                      >
-                    </div>
-                  </div>
-                </div>
-             
-              </div>
-              <div class="row" *ngIf="!isUpdatePlan">
-                <div class="col-md-12">
-                  <app-rgps-planejamento-contribuicoes
-                    [isUpdating]="createplanejamentoContrib"
-                    [planejamentoContrib]="planejamentoContrib"
-                    [calculo]="calculo"
-                    [moeda]="moedaList"
-                    (eventContribuicoes)="eventContribuicoes($event)"
-                  ></app-rgps-planejamento-contribuicoes>
-                </div>
-              </div>
-              <div class="form-actions row p-0 m-0">
-                <div class="">
-                  <div class="col-md-6">
-                    <span class="pull-left p-2"
-                      >(*) Preenchimento Obrigatório.</span
-                    >
-                  </div>
-                  <div class="col-md-6 pr-0">
-                    <button
-                      (click)="salvarPlanejamento($event)"
-                      type="button"
-                      class="btn btn-labeled btn-success pull-right"
-                      *ngIf="!isEdit"
-                    >
-                      <span class="btn-label"> <i class="fa fa-save"></i> </span
-                      >&nbsp;&nbsp;&nbsp;&nbsp;Salvar&nbsp;&nbsp;&nbsp;&nbsp;
-                    </button>
-                    <button
-                      (click)="updatePlan($event)"
-                      type="button"
-                      class="btn btn-labeled btn-success pull-right"
-                      *ngIf="isEdit"
-                    >
-                      <span class="btn-label"> <i class="fa fa-save"></i> </span
-                      >&nbsp;&nbsp;Atualizar&nbsp;&nbsp;
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </div>
-      </div>
-    </sa-widget>
-  </div>
-</div> -->
 
 <div class="row" *ngIf="!isUpdatePlan">
   <div class="col-sm-12 col-md-12 col-lg-12">
@@ -308,7 +150,7 @@
                   <!-- <td class="text-center">
                     {{ formatMoeda(planRow.valor_beneficio) }}
                   </td> -->
-                  <td class="text-left" tooltip="{{ planRow.especie }}">
+                  <td class="text-left">
                     {{ getAliquotasLabel(planRow.aliquota) }}
                   </td>
                   <!-- <td class="text-center">
@@ -433,7 +275,7 @@
                               type="text"
                               [(ngModel)]="data_futura"
                               [ngModelOptions]="{ standalone: true }"
-                              (keyup)="changeDIB()"
+                              (keyup)="changeDIB();"
                             />
                             <small
                               *ngIf="errors.has('data_futura')"

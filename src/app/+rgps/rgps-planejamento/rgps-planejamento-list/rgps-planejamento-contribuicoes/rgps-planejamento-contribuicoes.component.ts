@@ -15,6 +15,7 @@ import { ErrorService } from 'app/services/error.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import swal from 'sweetalert2';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-rgps-planejamento-contribuicoes',
@@ -83,7 +84,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
-    const changedvinculo = changes['planejamentoContrib'];
+    const changedPlanejamentoContrib = changes['planejamentoContrib'];
     const changedisUpdating = changes['isUpdating'];
 
     this.inicializarValores();
@@ -98,13 +99,13 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     if (typeof this.planejamentoContrib !== 'undefined'
       && typeof this.planejamentoContrib.data_futura !== 'undefined') {
 
-      this.isDataLoad = true;
       this.planejamentoContribTemp = Object.assign({}, this.planejamentoContrib);
 
       this.preencherCheckContribuicoes(this.planejamentoContrib);
       this.preencherMatrizPeriodos(this.planejamentoContrib.sc);
-
       this.preencherSeHouverSalarioFixo();
+
+      this.isDataLoad = true;
     }
 
   }
@@ -112,7 +113,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   private preencherSeHouverSalarioFixo() {
 
-    if (this.isEdit) {
+    if (this.isEdit && this.isEmpty(this.planejamentoContrib.sc)) {
       const list = this.planejamentoContrib.sc;
       const count = list.filter(x => x.sc !== '0,00').length;
 
@@ -348,7 +349,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
       });
 
 
-     //  this.salvarContribuicoes();
+      //  this.salvarContribuicoes();
 
     } else {
 
@@ -364,8 +365,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
   }
 
   public preencherComSalario(type = 'm') {
-
-    console.log(this.matriz);
 
     let mesi = 0;
     let mesiC = 0;
@@ -505,8 +504,6 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
 
   salvarContribuicoes() {
 
-    console.log(this.isValidPeriodoContribuicoes(this.matriz));
-
     if (this.isValidPeriodoContribuicoes(this.matriz)) {
 
       const saida = {
@@ -520,7 +517,8 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
         planejamento: this.planejamentoContrib,
         sc_pendentes: this.result_sc,
         sc_pendentes_mm: this.result_sc_mm
-      }
+      };
+
       this.eventContribuicoes.emit(saida);
 
     } else {
@@ -619,7 +617,7 @@ export class RgpsPlanejamentoContribuicoesComponent implements OnInit, OnChanges
     }
 
     // this.eventContribuicoes.emit(saida);
-   this.hideContribuicoesCheck();
+    this.hideContribuicoesCheck();
     // this.salvarContribuicoes();
 
   }
