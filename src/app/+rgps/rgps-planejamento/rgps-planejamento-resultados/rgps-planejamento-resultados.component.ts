@@ -406,8 +406,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       // console.log(moment.duration(dataInicioBeneficio2Start.diff(dataInicioBeneficio1Start)).asMonths());
       // console.log(mesesEntreDatas);
 
-
-
+      this.createListSCPlan();
 
       // A) Valor Investido em Contribuições Futuras
       //const investimentoContribuicaoINSS2 = ((this.planejamento.valor_beneficio * this.aliquotaRst.aliquota) / 100) * mesesEntreDatas2;
@@ -440,12 +439,14 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
 
 
+      if (this.tableDataSC.length > 1) {
+        investimentoContribuicaoINSS = this.tableDataSCSomaVAliquota;
+      }
+
       // console.log(mesesEntreDatas)
       // console.log(mesesEntreDatas2)
       // console.log(investimentoContribuicaoINSS)
       // console.log(mesesEntreDatas2)
-
-
 
       // B) Valor que Deixou de Receber Caso Tivesse se Aposentado na Primeira Data
       // let totalPerdidoEntreData = mesesEntreDatas * calculo1.valor_beneficio;
@@ -620,7 +621,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
 
 
-      this.createListSCPlan();
+     
 
 
 
@@ -649,7 +650,6 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       const aliquota = this.planejamento.aliquota;
 
       for (const scObj of scJSONDescarte) {
-
 
         const scValor = this.definicaoMoeda.convertDecimalValue(scObj.sc);
         const aliquotaValor = this.getAliquota(aliquota, Number(scValor));
