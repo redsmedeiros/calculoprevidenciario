@@ -1,3 +1,4 @@
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 import { Component, OnInit, HostListener, Inject, Input, SimpleChange, OnChanges } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
@@ -1474,22 +1475,47 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
 
-  private descarteTempoSemSC(tempoAtualMaisAdicional) {
+  // private descarteTempoSemSC(tempoAtualMaisAdicional) {
+
+  //   let mesesDescarte = 0;
+
+  //   if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+
+  //     mesesDescarte = this.planejamento.sc_pendentes;
+
+  //     if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+  //       mesesDescarte += this.planejamento.sc_pendentes_mm;
+  //     }
+
+  //     tempoAtualMaisAdicional = tempoAtualMaisAdicional.subtract(mesesDescarte, 'month');
+
+  //   }
+
+  //   console.log(this.planejamento);
+  //   console.log(tempoAtualMaisAdicional);
+  //   console.log(mesesDescarte);
+
+  //   return tempoAtualMaisAdicional;
+  // }
+
+  private descarteTempoSemSC(diffTempo) {
+
+    let mesesDescarte = 0;
+    let mesesComAdicionais = this.planejamento.sc_count;
 
     if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
 
-      let mesesDescarte = this.planejamento.sc_pendentes;
+      mesesDescarte = this.planejamento.sc_pendentes;
 
       if (this.planejamento.sc_mm_considerar_tempo !== 1) {
         mesesDescarte += this.planejamento.sc_pendentes_mm;
       }
 
-      tempoAtualMaisAdicional = tempoAtualMaisAdicional.subtract(mesesDescarte, 'month');
+      mesesComAdicionais -= mesesDescarte;
 
     }
 
-    return tempoAtualMaisAdicional;
-
+    return  mesesComAdicionais;
   }
 
 
@@ -1524,8 +1550,25 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     if (this.checkAdicionalTempo()) {
 
-      tempoAtualMaisAdicional = tempoAtual.add(diffTempo.totalDays, 'days');
-      tempoAtualMaisAdicional = this.descarteTempoSemSC(tempoAtualMaisAdicional);
+      diffTempo = this.descarteTempoSemSC(diffTempo);
+
+      // tempoAtualMaisAdicional = tempoAtual.add(moment.duration({
+      //   seconds: 0,
+      //   minutes: 0,
+      //   hours: 0,
+      //   days: diffTempo.days,
+      //   months: diffTempo.months,
+      //   years: diffTempo.years
+      // }));
+
+      tempoAtualMaisAdicional = tempoAtual.add(moment.duration({
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+        months: 10,
+      }));
+
+      // tempoAtualMaisAdicional = this.descarteTempoSemSC(tempoAtualMaisAdicional);
 
     }
 
@@ -1538,14 +1581,23 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   private addCarencia(calculo, tempoDiff) {
 
-    calculo.carencia_apos_ec103 += tempoDiff.totalMonths;
+    let carenciaAtualMaisAdicional = tempoDiff.totalMonths;
 
-    if (this.planejamento.sc_mm_considerar_carencia === 0
-      && (this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+    if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
 
-      calculo.carencia_apos_ec103 -= (this.planejamento.sc_pendentes + this.planejamento.sc_pendentes_mm);
+      let mesesDescarte = this.planejamento.sc_pendentes;
+
+      if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+        mesesDescarte += this.planejamento.sc_pendentes_mm;
+      }
+
+      carenciaAtualMaisAdicional -= mesesDescarte;
+
     }
 
+    calculo.carencia_apos_ec103 += carenciaAtualMaisAdicional;
+
+    return calculo.carencia_apos_ec103;
   }
 
 
@@ -1564,9 +1616,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   }
 
   private filterSCPlan() {
-
-    console.log(this.planejamento);
-    console.log(this.planejamento.scJSON);
 
     let planSC = this.planejamento.scJSON;
 
@@ -1643,7 +1692,13 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   }
 
-
+  /**
+   *  Adicionais de tempo e carência planejamento
+   * @param calculo obj
+   * @param calcClone obj
+   * @param dataAtual obj
+   * @param dataFutura obj
+   */
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
     if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
@@ -1661,7 +1716,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
     }
 
-    const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
+    const diffTempo = this.calcDiffContribuicao(dataFutura.clone(), dataAtual.clone());
+    const diffTempo2 = DefinicaoTempo.dataDiffDateToDateCustom(dataAtual.format('YYYY-MM-DD'), dataFutura.format('YYYY-MM-DD'));
 
     this.addTempoContribuicao(calculo, diffTempo);
     this.addCarencia(calculo, diffTempo);
