@@ -1624,8 +1624,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     const requitoPontos = this.getRequisitoPontos();
 
-    console.log(requitoPontos);
-
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
       const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
@@ -1635,7 +1633,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       if ((this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
         adicionalProf = 5;
       }
-
      
       if (tempoTotalContribuicao >= requitoPontos.tempoMinContribuicao[this.segurado.sexo]
         && (tempoContribuicaoMaisIdade + adicionalProf) >= pontosNecessarios
