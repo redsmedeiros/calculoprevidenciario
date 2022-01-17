@@ -1585,16 +1585,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // let tempoAdicionalProfessor = 0;
 
     // Se professor
-    if (status &&
-      (this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
+     if (status &&
+       (this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
 
-      tempoMinContribuicao.m -= 5;
-      tempoMinContribuicao.f -= 5;
+       tempoMinContribuicao.m -= 5;
+       tempoMinContribuicao.f -= 5;
 
-      requisitoSegurado.m -= 5;
-      requisitoSegurado.f -= 5;
+    //   requisitoSegurado.m -= 5;
+    //   requisitoSegurado.f -= 5;
 
-    }
+     }
 
     return {
       status: status,
@@ -1624,6 +1624,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     const requitoPontos = this.getRequisitoPontos();
 
+    console.log(requitoPontos);
+
     if (requitoPontos.status && (this.tipoBeneficio === 4 || this.tipoBeneficio === 6)) {
 
       const pontosNecessarios = requitoPontos.requistos[this.segurado.sexo];
@@ -1634,6 +1636,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         adicionalProf = 5;
       }
 
+     
       if (tempoTotalContribuicao >= requitoPontos.tempoMinContribuicao[this.segurado.sexo]
         && (tempoContribuicaoMaisIdade + adicionalProf) >= pontosNecessarios
         && this.fatorPrevidenciario < 1
@@ -2199,7 +2202,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         return false; // Exibir Mensagem de erro com a idade faltando;
       }
     }
-    console.log(this.tipoBeneficio);
+
     return direito;
   }
 
