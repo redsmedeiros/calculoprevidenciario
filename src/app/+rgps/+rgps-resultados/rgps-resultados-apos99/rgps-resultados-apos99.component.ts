@@ -1585,16 +1585,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // let tempoAdicionalProfessor = 0;
 
     // Se professor
-     if (status &&
-       (this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
+    if (status &&
+      (this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
 
-       tempoMinContribuicao.m -= 5;
-       tempoMinContribuicao.f -= 5;
+      tempoMinContribuicao.m -= 5;
+      tempoMinContribuicao.f -= 5;
 
-    //   requisitoSegurado.m -= 5;
-    //   requisitoSegurado.f -= 5;
+      //   requisitoSegurado.m -= 5;
+      //   requisitoSegurado.f -= 5;
 
-     }
+    }
 
     return {
       status: status,
@@ -1633,7 +1633,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       if ((this.tipoBeneficio === 6 || this.tipoBeneficio === '6')) {
         adicionalProf = 5;
       }
-     
+
       if (tempoTotalContribuicao >= requitoPontos.tempoMinContribuicao[this.segurado.sexo]
         && (tempoContribuicaoMaisIdade + adicionalProf) >= pontosNecessarios
         && this.fatorPrevidenciario < 1
@@ -1751,16 +1751,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     if (secundario) {
       tempo = this.contribuicaoSecundaria;
       // let contagemSecundaria = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365)
-      let contagemSecundaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + parseInt(tempo.dias);
-      //let contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
+      const contagemSecundaria = (parseInt(tempo.anos, 10) * 365) + (parseInt(tempo.meses, 10) * 30) + parseInt(tempo.dias, 10);
+      // const contagemSecundaria = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
       return contagemSecundaria;
     }
 
     tempo = this.contribuicaoPrimaria;
-    // let contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
-    let contagemPrimaria = (parseInt(tempo.anos) * 365) + (parseInt(tempo.meses) * 30) + (parseInt(tempo.dias));
-    let contagemPrimariaAnos = contagemPrimaria / 365;
-    //let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
+    // const contagemPrimariaAnos = parseInt(tempo.anos) + (((parseInt(tempo.meses) * 30) + parseInt(tempo.dias)) / 365);
+    const contagemPrimaria = (parseInt(tempo.anos, 10) * 365) + (parseInt(tempo.meses, 10) * 30) + (parseInt(tempo.dias, 10));
+    const contagemPrimariaAnos = contagemPrimaria / 365;
+    // let contagemPrimariaAnos = parseInt(tempo.anos) + ((parseInt(tempo.meses) + (parseInt(tempo.dias) /  30.4375)) / 12);
     // if (this.tipoBeneficio == 6) { // Tempo de Serviço Professor
     //   contagemPrimariaAnos += redutorProfessor + redutorSexo;
     // }

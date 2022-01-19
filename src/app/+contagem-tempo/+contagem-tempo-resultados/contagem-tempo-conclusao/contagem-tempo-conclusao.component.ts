@@ -112,7 +112,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   ngOnInit() {
 
     // this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1826.25; // dias
-    this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1800; // dias
+    this.redutorSexoDias = (this.segurado.sexo === 'm') ? 0 : 1800; // dias 
 
     if (this.periodosList.length > 0) {
       this.createConclusaoFinal();
@@ -122,11 +122,13 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   ngOnChanges() { }
 
   private defineInicioFim() {
+
     let inicio = moment('2050-01-01');
     let fim = moment('1900-01-01');
 
     let inicioVinculo: any;
     let fimVinculo: any;
+
 
     for (const vinculo of this.periodosList) {
 
@@ -421,7 +423,6 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private checkPeriodoDescarte(auxiliarDate, inicioVinculo, fimVinculo, vinculo) {
 
-
     if (vinculo.tempoContrib === 'Parcial'
       && (moment(auxiliarDate).isBetween(moment(inicioVinculo), moment(fimVinculo), 'month', '[]')
         && this.dadosPassoaPasso.origem !== 'contagem')) {
@@ -452,6 +453,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
     let lastIni;
     let lastFator = 0;
     let finalVinculo = false;
+
     for (const vinculo of this.periodosList) {
 
       const inicioVinculo = this.toMoment(vinculo.data_inicio);
@@ -637,10 +639,10 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
       const fimUltimoVinculo = this.momentEndFaixaContador(this.limitesDoVinculo.fim);
 
       let rstMelhorTempo = { melhorTempo: 0, finalVinculo: false };
-      let isMetodoOld = true
-      if (this.dadosPassoaPasso.origem !== 'contagem') {
-        isMetodoOld = false
-      }
+      // let isMetodoOld = true
+      // if (this.dadosPassoaPasso.origem !== 'contagem') {
+      //   isMetodoOld = false
+      // }
 
       const func_defineMelhorTempo = (this.dadosPassoaPasso.origem === 'contagem') ? this.defineMelhorTempoOld : this.defineMelhorTempo;
 
