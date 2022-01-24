@@ -98,6 +98,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
   private isCompleteCarencia = false;
   private isCompleteTempoTotal = false;
+  private dibLimite = null;
 
   // public idadeMasculinaProporcional = 19357.853;
   // public idadeLimiteDias = 10957.5; // dias
@@ -145,6 +146,15 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     return { inicio: inicio, fim: fim }
 
+  }
+
+  private setDibLimiteRMI() {
+    if (this.dadosPassoaPasso.origem !== 'contagem' &&
+      sessionStorage.getItem('dibLimiteContagemTempo') !== null) {
+      this.dibLimite = sessionStorage.getItem('dibLimiteContagemTempo');
+      this.limitesDoVinculo.fim = moment(this.dibLimite, 'DD/MM/YYYY');
+      sessionStorage.removeItem('dibLimiteContagemTempo')
+    }
   }
 
 
@@ -1215,6 +1225,7 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
 
     this.limitesDoVinculo = this.defineInicioFim();
     this.calculaIdades360Mes30();
+    this.setDibLimiteRMI();
 
     const p1 = this.tempoTotal360(this.limitesDoVinculo).then(result => {
 

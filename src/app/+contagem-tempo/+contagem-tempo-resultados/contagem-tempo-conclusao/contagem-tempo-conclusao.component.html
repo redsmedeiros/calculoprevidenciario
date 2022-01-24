@@ -135,7 +135,7 @@
       </td>
     </tr>
     <tr>
-      <td>Tempo total de contribuição até a data fim do último período</td>
+      <td>Tempo total de contribuição até a data fim do último período <span *ngIf="dibLimite" >(Limitado DIB {{ dibLimite }})</span></td>
       <td class="text-center">{{ tempoTotalConFator.years }}</td>
       <td class="text-center">{{ tempoTotalConFator.months }}</td>
       <td class="text-center">{{ tempoTotalConFator.days }}</td>

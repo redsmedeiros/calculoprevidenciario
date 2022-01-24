@@ -258,7 +258,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
       case 'step1':
 
         this.isTypeEntradaDados = false;
-        this.dadosPassoaPasso = { origem: 'passo-a-passo', type: '' };
+        this.dadosPassoaPasso = { origem: 'passo-a-passo', type: ''};
 
         this.isSeguradoSelecionado = false;
         this.seguradoSelecionado = {}
@@ -692,6 +692,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   /**
    * setRetunCalculoRMICT($event)
+   * retornar do RMI para contagem tempo
    */
   public setRetunCalculoRMICT(data) {
 
