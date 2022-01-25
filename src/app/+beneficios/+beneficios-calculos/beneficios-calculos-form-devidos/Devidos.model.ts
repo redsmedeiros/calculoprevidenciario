@@ -19,6 +19,7 @@ export class Devidos {
   public SBSemLimitacaoAliquota;
   public numDependentes;
   public manterPercentualSMEsperado;
+  public parcRecEsperado;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -50,6 +51,7 @@ export class Devidos {
     SBSemLimitacaoAliquota,
     numDependentes,
     manterPercentualSMEsperado,
+    parcRecEsperado,
   ) {
     this.id = id;
     this.especie = especie;
@@ -69,6 +71,7 @@ export class Devidos {
     this.SBSemLimitacaoAliquota = SBSemLimitacaoAliquota;
     this.numDependentes = numDependentes;
     this.manterPercentualSMEsperado = manterPercentualSMEsperado;
+    this.parcRecEsperado = parcRecEsperado;
   }
 
 

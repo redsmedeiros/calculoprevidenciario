@@ -230,9 +230,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public manterPercentualSMConcedido;
   public manterPercentualSMEsperado;
 
-
-
-
+  public parcRecConcedido = false;
+  public parcRecEsperado = false;
 
   constructor(
     protected router: Router,
@@ -244,7 +243,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.route.snapshot.params['type'] !== undefined) {
 
       this.type = this.route.snapshot.params['type'];
-
 
       // if (this.type === 'AC') {
       //   this.chkNotGranted = false;
@@ -1277,6 +1275,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.SBSemLimitacaoAliquota,
       this.numDependentes,
       this.manterPercentualSMEsperado,
+      this.parcRecEsperado,
     );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1325,6 +1324,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.dataInicialadicional2Recebido,
         this.calcularAbono13UltimoMesRecebidos,
         this.manterPercentualSMConcedido,
+        this.parcRecConcedido,
       );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));

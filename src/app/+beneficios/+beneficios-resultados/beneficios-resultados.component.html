@@ -65,11 +65,7 @@
                   </h1>
                 </div> -->
                 <table
-                  class="
-                    table table-bordered table-hover
-                    no-padding no-margin
-                    not-screen
-                  "
+                  class="table table-bordered table-hover no-padding no-margin not-screen"
                 >
                   <thead>
                     <tr>
@@ -428,6 +424,14 @@
                         {{ dataInicialadicional25DevidoString }}
                       </td>
                     </tr>
+                    <tr *ngIf="calculo.tipo_aposentadoria === 1">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ parcelaRecuperacaoDataDevido ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
                     <tr *ngIf="calculo.tipo_aposentadoria == 22">
                       <td class="td-width-30" style="text-align: left">
                         <b> Número de Dependentes:</b>
@@ -463,19 +467,11 @@
               <h2>Benefícios Recebidos</h2>
             </header>
             <div
-              class="
-                widget-body
-                no-padding
-                widget-body-custom
-                no-margin no-padding
-              "
+              class="widget-body no-padding widget-body-custom no-margin no-padding"
             >
               <div *ngFor="let recebidoLine of listRecebidos">
                 <table
-                  class="
-                    table table-print-no-margin table-bordered table-hover
-                    no-padding no-margin
-                  "
+                  class="table table-print-no-margin table-bordered table-hover no-padding no-margin"
                   style="margin-top: 0px !important"
                 >
                   <thead>
@@ -596,6 +592,15 @@
                             recebidoLine.dataAdicional25
                           )
                         }}
+                      </td>
+                    </tr>
+
+                    <tr *ngIf="calculo.tipo_aposentadoria === 1">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ recebidoLine.parcRecConcedido ? "Sim" : "Não" }}
                       </td>
                     </tr>
                     <!-- *ngIf="!recebidoLine.valor_beneficio_esperado_revisao" <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">
@@ -846,11 +851,7 @@
             >
               <div id="printableHonorarios" class="no-margin no-padding">
                 <table
-                  class="
-                    table table-bordered table-hover
-                    no-padding no-margin
-                    table-row-group
-                  "
+                  class="table table-bordered table-hover no-padding no-margin table-row-group"
                   *ngIf="
                     !exibirHonorarioscpc85 &&
                     !exibirHonorariosValorFixo &&
@@ -1235,15 +1236,7 @@
               </div>
               <div>
                 <table
-                  class="
-                    table
-                    table-striped
-                    table-bordered
-                    table-hover
-                    table-responsive
-                    table-condensed
-                    mb-0
-                  "
+                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
                   *ngIf="
                     !isUpdatingCustasProcesso &&
                     listAcrescimosDeducoes.length > 0

@@ -208,7 +208,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="dibValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="dibValoresDevidos"
@@ -235,14 +235,11 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="dipValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="dipValoresDevidos"
-                            (blur)="
-                              useSameDIBChanged();
-                              setCheckRevisao()
-                            "
+                            (blur)="useSameDIBChanged(); setCheckRevisao()"
                             class="form-control"
                             type="text"
                           />
@@ -265,7 +262,7 @@
                             [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                           >
                             <input
-                            autocomplete="off"
+                              autocomplete="off"
                               name="dibAnteriorValoresDevidos"
                               [textMask]="{ mask: dateMask }"
                               [(ngModel)]="dibAnteriorValoresDevidos"
@@ -294,7 +291,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="cessacaoValoresDevidos"
                             [textMask]="{ mask: dateMask }"
                             [(ngModel)]="cessacaoValoresDevidos"
@@ -308,22 +305,22 @@
                           >
                         </div>
                       </div>
-                      <div  class="form-group" *ngIf="devidosBuracoNegro">
+                      <div class="form-group" *ngIf="devidosBuracoNegro">
                         <label
-                        class="control-label"
-                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
-                        >Salário de Benfício Sem Limitação no Teto:</label
-                      >
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                          >Salário de Benfício Sem Limitação no Teto:</label
+                        >
                         <div
                           class="col-md-4"
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="SBSemLimitacao"
                             currencyMask
                             [(ngModel)]="SBSemLimitacao"
-                            (keyup)="calcularRMISemLimitacao();" 
+                            (keyup)="calcularRMISemLimitacao()"
                             class="form-control"
                             type="text"
                           />
@@ -346,11 +343,11 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="SBSemLimitacaoAliquota"
                             class="form-control text-right"
                             [(ngModel)]="SBSemLimitacaoAliquota"
-                            (keyup)="calcularRMISemLimitacao();" 
+                            (keyup)="calcularRMISemLimitacao()"
                             type="text"
                             [textMask]="{ mask: aliquotaMask, guide: false }"
                           />
@@ -363,10 +360,10 @@
                       </div>
                       <div *ngIf="chkNotGranted" class="form-group">
                         <label
-                        class="control-label"
-                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
-                        >Renda Mensal Inicial - RMI*:</label
-                      >
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                          >Renda Mensal Inicial - RMI*:</label
+                        >
                         <!-- <label
                           *ngIf="!devidosBuracoNegro"
                           class="control-label"
@@ -385,7 +382,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="rmiValoresDevidos"
                             currencyMask
                             [(ngModel)]="rmiValoresDevidos"
@@ -401,10 +398,10 @@
                       </div>
                       <div *ngIf="!chkNotGranted" class="form-group">
                         <label
-                        class="control-label"
-                        [ngClass]="true ? 'col-md-7' : 'col-md-4'"
-                        >Renda Mensal Inicial - RMI*:</label
-                      >
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                          >Renda Mensal Inicial - RMI*:</label
+                        >
                         <!-- <label
                           *ngIf="!devidosBuracoNegro"
                           class="control-label"
@@ -422,7 +419,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="rmiValoresDevidos"
                             currencyMask
                             [(ngModel)]="rmiValoresDevidos"
@@ -485,7 +482,7 @@
                         <div class="col-md-4">
                           <label class="radio radio-inline">
                             <input
-                            autocomplete="off"
+                              autocomplete="off"
                               [(ngModel)]="adicional25Devido"
                               [ngModelOptions]="{ standalone: true }"
                               (change)="errors.clear('adicional25Devido')"
@@ -548,7 +545,7 @@
                             [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                           >
                             <input
-                            autocomplete="off"
+                              autocomplete="off"
                               name="dataInicialadicional25Devido"
                               [textMask]="{ mask: dateMask }"
                               [(ngModel)]="dataInicialadicional25Devido"
@@ -565,8 +562,52 @@
                           </div>
                         </div>
                       </div>
- 
-                      <div class="form-group" *ngIf="!devidosBuracoNegro" >
+                      <div
+                        class="form-group"
+                        *ngIf="especieValoresDevidos === '1'"
+                      >
+                        <label class="col-md-7 control-label"
+                          >Parcela de Recuperação:
+                        </label>
+                        <div class="col-md-4">
+                          <label class="radio radio-inline">
+                            <input
+                              autocomplete="off"
+                              [(ngModel)]="parcRecEsperado"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('parcRecEsperado')"
+                              type="radio"
+                              name="parcRecEsperado"
+                              [value]="false"
+                            />
+                            Não
+                          </label>
+                          <label class="radio radio-inline">
+                            <input
+                              [(ngModel)]="parcRecEsperado"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('parcRecEsperado')"
+                              type="radio"
+                              name="parcRecEsperado"
+                              [value]="true"
+                            />
+                            Sim
+                          </label>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <small
+                                *ngIf="errors.has('parcRecEsperado')"
+                                class="text-danger"
+                                >{{
+                                  errors.get("parcRecEsperado") | i18n
+                                }}</small
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="!devidosBuracoNegro">
                         <label
                           class="control-label"
                           [ngClass]="true ? 'col-md-7' : 'col-md-4'"
@@ -582,7 +623,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             name="taxaAjusteMaximaEsperada"
                             class="form-control"
                             [textMask]="{ mask: IndiceMask, guide: false }"
@@ -615,7 +656,7 @@
                           [ngClass]="true ? 'col-md-4' : 'col-md-2'"
                         >
                           <input
-                          autocomplete="off"
+                            autocomplete="off"
                             [(ngModel)]="numDependentes"
                             (change)="errors.clear('numDependentes')"
                             [ngModelOptions]="{ standalone: true }"
@@ -650,15 +691,11 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group"
-                      *ngIf="
-                      [
-                        '6',
-                        '8',
-                        '9',
-                        '10'
-                      ].includes(especieValoresDevidos)
-                    "
+                      <div
+                        class="form-group"
+                        *ngIf="
+                          ['6', '8', '9', '10'].includes(especieValoresDevidos)
+                        "
                       >
                         <div class="col-md-8 col-sm-offset-3">
                           <div class="checkbox">
@@ -670,8 +707,12 @@
                                 class="checkbox"
                                 checked="checked"
                               />
-                              <span
-                                > Manter a RMA em {{ changePercentual(especieValoresDevidos, 'd') }} do Salário Mínimo.</span
+                              <span>
+                                Manter a RMA em
+                                {{
+                                  changePercentual(especieValoresDevidos, "d")
+                                }}
+                                do Salário Mínimo.</span
                               >
                             </label>
                           </div>
@@ -695,7 +736,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group" >
+                      <div class="form-group">
                         <div class="col-md-8 col-sm-offset-3">
                           <div class="checkbox">
                             <label>
@@ -706,7 +747,10 @@
                                 class="checkbox {{ styleTheme }}"
                               />
                               <span
-                                >Aplicar Readequação dos Tetos nas EC's <br><span class="pl-ultra">20/1998 e 41/2003 (Revisão do Teto).</span></span
+                                >Aplicar Readequação dos Tetos nas EC's
+                                <br /><span class="pl-ultra"
+                                  >20/1998 e 41/2003 (Revisão do Teto).</span
+                                ></span
                               >
                             </label>
                           </div>
@@ -715,7 +759,9 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <p class="pull-left no-margin">(*) Preenchimento Obrigatório.</p>
+                        <p class="pull-left no-margin">
+                          (*) Preenchimento Obrigatório.
+                        </p>
                         <button
                           *ngIf="!rowDevidosEdit"
                           id="adicionarDevido"

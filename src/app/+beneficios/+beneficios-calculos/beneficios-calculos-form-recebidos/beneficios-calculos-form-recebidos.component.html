@@ -438,6 +438,50 @@
                           </div>
                         </div>
                       </div>
+                      <div
+                        class="form-group"
+                        *ngIf="especieValoresRecebidos === '1'"
+                      >
+                        <label class="col-md-7 control-label"
+                          >Parcela de Recuperação:
+                        </label>
+                        <div class="col-md-4">
+                          <label class="radio radio-inline">
+                            <input
+                            autocomplete="off"
+                              [(ngModel)]="parcRecConcedido"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('parcRecConcedido')"
+                              type="radio"
+                              name="parcRecConcedido"
+                              [value]="false"
+                            />
+                            Não
+                          </label>
+                          <label class="radio radio-inline">
+                            <input
+                              [(ngModel)]="parcRecConcedido"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="errors.clear('parcRecConcedido')"
+                              type="radio"
+                              name="parcRecConcedido"
+                              [value]="true"
+                            />
+                            Sim
+                          </label>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <small
+                                *ngIf="errors.has('parcRecConcedido')"
+                                class="text-danger"
+                                >{{
+                                  errors.get("parcRecConcedido") | i18n
+                                }}</small
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                       <div class="form-group" *ngIf="!recebidosBuracoNegro" >
                         <label class="control-label col-md-7">
