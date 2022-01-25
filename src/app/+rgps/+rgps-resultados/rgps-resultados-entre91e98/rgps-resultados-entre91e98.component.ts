@@ -110,6 +110,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   }
 
   ngOnInit() {
+
     this.isUpdating = true;
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
@@ -217,13 +218,15 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else {
 
       mesesLimite = 48;
-      mesesLimiteTotal = 35;
+      mesesLimiteTotal = 36;
 
     }
+
     if (this.calculo.tipo_aposentadoria === 'Entre 05/04/1991 e 15/12/1998') {
       mesesLimite = 48;
-      mesesLimiteTotal = 35;
+      mesesLimiteTotal = 36;
     }
+
     let dataLimite;
     if (mesesLimite > 0) {
 
@@ -243,8 +246,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
 
   private getValoresContribuicao(dataLimite, dataInicio, mesesLimite, mesesLimiteTotal) {
-
-
 
     if (this.isExits(this.dadosPassoaPasso)
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
@@ -273,9 +274,12 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
 
     } else {
+
       this.idSegurado = this.route.snapshot.params['id_segurado'];
-      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+      // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
         .then(valorescontribuidos => {
+
           this.listaValoresContribuidos = valorescontribuidos;
 
           this.setMesesDeContribuicao(mesesLimiteTotal, mesesLimite);
@@ -343,7 +347,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     this.dataUltimaRemuneracaoVigencia = this.listaValoresContribuidos[0].data;
     this.dataLimiteRemuneracaoVigencia = moment(this.dataUltimaRemuneracaoVigencia)
       .subtract(mesesLimite, 'months').format('YYYY-MM-01');
-
 
     // PBC completo mesesLimiteTotal
     this.listaValoresContribuidos = this.listaValoresContribuidos.filter(
