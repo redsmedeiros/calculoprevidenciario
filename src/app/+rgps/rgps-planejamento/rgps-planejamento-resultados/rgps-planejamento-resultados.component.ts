@@ -439,7 +439,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       }
 
 
-      if (this.tableDataSC.length > 1) {
+      if (this.tableDataSC.length > 0) {
         investimentoContribuicaoINSS = this.tableDataSCSomaVAliquota;
       }
 
