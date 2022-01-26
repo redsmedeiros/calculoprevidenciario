@@ -276,8 +276,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else {
 
       this.idSegurado = this.route.snapshot.params['id_segurado'];
-      // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
-      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
+       this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+     // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
