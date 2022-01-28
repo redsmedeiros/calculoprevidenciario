@@ -274,10 +274,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
 
     } else {
-
       this.idSegurado = this.route.snapshot.params['id_segurado'];
       // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
-      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, moment('1930-01-01'), mesesLimite, this.idSegurado)
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
@@ -314,9 +313,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
         // }else if(this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999'){
         //   dataReajustesAutomaticos = this.dataDib99;
         // }
-        if (this.tipoCalculo == '91_98') {
+        if (this.tipoCalculo === '91_98') {
           dataReajustesAutomaticos = this.dataDib98;
-        } else if (this.tipoCalculo == '98_99') {
+        } else if (this.tipoCalculo === '98_99') {
           dataReajustesAutomaticos = this.dataDib99;
         }
         this.ReajusteAutomatico.getByDate(dataReajustesAutomaticos, this.dataInicioBeneficio)
@@ -333,7 +332,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       });
 
   }
-
 
   /**
    * Ajustar o PBC
@@ -357,12 +355,15 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
         && index <= mesesLimite
         && contribuicao.valor_primaria));
 
+
     // Filtrar os 36 Salarios de contribuição
-    if (this.listaValoresContribuidos.length > mesesLimite) {
+    if (this.listaValoresContribuidos.length > mesesLimiteTotal) {
 
       this.listaValoresContribuidos = this.listaValoresContribuidos.filter(
-        (contribuicao, index) => (index <= mesesLimiteTotal));
+        (contribuicao, index) => (index < mesesLimiteTotal));
     }
+
+    return this.listaValoresContribuidos;
 
   }
 
@@ -714,7 +715,6 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
             , 7, 0, redutorSexo, errorArray);
 
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
-
         }
 
 

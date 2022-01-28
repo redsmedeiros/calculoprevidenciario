@@ -356,6 +356,10 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
         this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's');
         Object.assign(this.plan, this.planejamentoContrib);
+        this.plan.data_futura = this.data_futura,
+        this.plan.aliquota = this.aliquota,
+        this.plan.especie = this.especie,
+
         this.updatePlanejamento(this.plan);
 
       }
@@ -470,6 +474,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
   // planejamentoSelecionadoEvent
   private planejar(id) {
 
+    sessionStorage.removeItem('exportPlanejamento');
     const objPlan = this.planejamentoListData.find(row => row.id === id);
     const objExport = JSON.stringify(objPlan);
     sessionStorage.setItem('exportPlanejamento', objExport);
@@ -482,6 +487,8 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
 
 
   private getRow(id) {
+
+    sessionStorage.removeItem('exportPlanejamento');
 
     if (this.isExits(id)) {
 
@@ -788,7 +795,7 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       this.planejamentoContrib.sc_pendentes = value.result_sc ? value.result_sc : 0;
       this.planejamentoContrib.sc_pendentes_mm = value.result_sc_mm ? value.result_sc_mm : 0;
 
-      
+
     }
 
   }
