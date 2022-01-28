@@ -276,8 +276,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     } else {
 
       this.idSegurado = this.route.snapshot.params['id_segurado'];
-       this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
-     // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio,  moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
+      // this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, dataLimite, mesesLimiteTotal, this.idSegurado)
+      this.ValoresContribuidos.getByCalculoId(this.idCalculo, dataInicio, moment('1930-01-01'), mesesLimiteTotal, this.idSegurado)
         .then(valorescontribuidos => {
 
           this.listaValoresContribuidos = valorescontribuidos;
@@ -353,7 +353,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       (contribuicao, index) =>
       (
         // moment(this.dataUltimaRemuneracaoVigencia).isSameOrAfter(contribuicao.data, 'month')
-        moment(contribuicao.data).isBetween(this.dataLimiteRemuneracaoVigencia, this.dataUltimaRemuneracaoVigencia, 'month', '[]')
+        moment(contribuicao.data).isBetween(this.dataLimiteRemuneracaoVigencia, this.dataUltimaRemuneracaoVigencia, 'month', '[)')
         && index <= mesesLimite
         && contribuicao.valor_primaria));
 
@@ -649,24 +649,42 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
   }
 
+
+  private getTempoTotal98() {
+
+    let totalContribuicao = 0;
+    const tempoContribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
+
+    // totalContribuicao = ((tempoContribuicaoPrimaria.anos * 365) +
+    //   (tempoContribuicaoPrimaria.meses * 30) +
+    //   (tempoContribuicaoPrimaria.dias * 1));
+    // totalContribuicao /= 365;
+
+    totalContribuicao = ((tempoContribuicaoPrimaria.anos * 365)
+      + (tempoContribuicaoPrimaria.meses * 30)
+      + tempoContribuicaoPrimaria.dias) / 365;
+
+    // totalContribuicao = tempoContribuicaoPrimaria.anos +
+    //   (tempoContribuicaoPrimaria.meses / 12) + (tempoContribuicaoPrimaria.dias) / 360;
+
+    return totalContribuicao;
+  }
+
   direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria) {
+
     const idadeDoSegurado = this.idadeSegurado;
     const redutorProfessor = (this.tipoBeneficio === 6) ? 5 : 0;
     const redutorSexo = (this.segurado.sexo === 'm') ? 0 : 5;
     const anosSecundaria = parseFloat(tempoContribuicaoSecundaria.anos);
+
     const anosPrimaria = ((parseFloat(tempoContribuicaoPrimaria.anos) * 365) +
       (parseFloat(tempoContribuicaoPrimaria.meses) * 30) + parseFloat(tempoContribuicaoPrimaria.dias)) / 365;
 
     const anosContribuicao = anosPrimaria;
+
     this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, false, dib);
 
-    let totalContribuicao98 = 0;
-    const tempoContribuicaoPrimaria98 = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
-
-    totalContribuicao98 = ((tempoContribuicaoPrimaria98.anos * 365) +
-      (tempoContribuicaoPrimaria98.meses * 30) +
-      (tempoContribuicaoPrimaria98.dias * 1));
-    totalContribuicao98 /= 365;
+    const totalContribuicao98 = this.getTempoTotal98();
 
     let direito = true;
     let idadeMinima = true;
@@ -675,23 +693,34 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     const erroString = '';
     if (this.tipoBeneficio === 4 || this.tipoBeneficio === 6) {
+
       direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 0);
+
       if (!direito) {
         errorArray.push('NÃO POSSUI direito ao benefício INTEGRAL.');
+
         if (dib <= this.dataDib98) {
+
           direito = this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, 5);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, 0, redutorProfessor, redutorSexo, true, dib);
+
         } else {
+
           extra = this.calcularExtra(totalContribuicao98, redutorSexo);
           toll = this.calcularToll(totalContribuicao98, 0.4, 5, redutorSexo);
           this.coeficiente = this.calcularCoeficiente(anosContribuicao, toll, redutorProfessor, redutorSexo, true, dib);
           direito = this.verificarIdadeNecessaria(
             this.dataDib99.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'years')
             , 7, 0, redutorSexo, errorArray);
+
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
+
         }
+
+
         const contribuicao = 35 - redutorProfessor - redutorSexo - anosContribuicao;
         const tempoFracionado = this.tratarTempoFracionado(contribuicao); // Separar o tempo de contribuicao em anos, meses e dias
+
         if (direito) {
           // Exibir Mensagem de beneficio Proporcional, com o tempo faltante;
           // "POSSUI direito ao benefício proporcional."
@@ -1001,6 +1030,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
   }
 
   verificarIdadeNecessaria(idade, redutorIdade, redutorProfessor, redutorSexo, errorArray) {
+
     const idadeNecessaria = 60 - redutorIdade - redutorProfessor - redutorSexo;
     const direito = idade > idadeNecessaria;
     if (!direito) {
