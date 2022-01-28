@@ -729,6 +729,24 @@ a[class*="action-"]:hover {
   padding: 3px 2px !important;
 }
 
+.table-condensed-custom2.table > tbody > tr > td,
+.table-condensed-custom2.table > tbody > tr > th,
+.table-condensed-custom2.table > tfoot > tr > td,
+.table-condensed-custom2.table > tfoot > tr > th,
+.table-condensed-custom2.table > thead > tr > td,
+.table-condensed-custom2.table > thead > tr > th {
+  padding: 2px 2px !important;
+}
+
+.table-condensed-custom1.table > tbody > tr > td,
+.table-condensed-custom1.table > tbody > tr > th,
+.table-condensed-custom1.table > tfoot > tr > td,
+.table-condensed-custom1.table > tfoot > tr > th,
+.table-condensed-custom1.table > thead > tr > td,
+.table-condensed-custom1.table > thead > tr > th {
+  padding: 1px 1px !important;
+}
+
 .widget-body-custom {
   min-height: 20px !important;
 }

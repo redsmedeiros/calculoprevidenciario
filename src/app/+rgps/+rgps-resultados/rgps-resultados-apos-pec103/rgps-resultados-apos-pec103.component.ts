@@ -561,7 +561,7 @@ export class RgpsResultadosAposPec103Component extends RgpsResultadosComponent i
 
       }, 500);
 
-    } else if (this.isPlanejamento) {
+    } else if (this.isPlanejamento && this.errosArray.length === 0) {
 
       this.setMelhorValorRMI();
 

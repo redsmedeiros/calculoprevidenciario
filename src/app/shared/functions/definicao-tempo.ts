@@ -11,6 +11,10 @@ export class DefinicaoTempo {
         return moment(date).format('YYYY-MM-DD');
     }
 
+    static toDateStringISO(date) {
+        return moment(date).format();
+    }
+
     static toMoment(dateString) {
         return moment(dateString, 'YYYY-MM-DD');
     }
@@ -24,7 +28,7 @@ export class DefinicaoTempo {
         const date1 = new Date(d1);
         const date2 = new Date(d2);
         const years = date2.getFullYear() - date1.getFullYear();
-        const months = (years * 12) + (date2.getMonth() - date1.getMonth());
+        const months = (years * 12) + ((date2.getMonth() - date1.getMonth()) + 1);
         return months;
     }
 
@@ -101,7 +105,8 @@ export class DefinicaoTempo {
         let diasInicio = 0
         let diasFim = 0
 
-        totalMeses = this.monthsDiff(compareDataInicioStartM, compareDataFimStartM);
+        totalMeses = this.monthsDiff(this.toDateStringISO(compareDataInicioStartM),
+                                    this.toDateStringISO(compareDataFimStartM));
 
         if ((dataInicio.isSame(compareDataInicioStartM) && dataFim.isSame(compareDataFimStartM)) || mesInteiro) {
 

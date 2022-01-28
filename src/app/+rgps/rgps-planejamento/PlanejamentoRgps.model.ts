@@ -35,8 +35,6 @@ export class PlanejamentoRgps extends Model {
   public resultado_rmi_original;
   public resultado_rmi_novo;
   public especie;
-  public contribuicoes_pendentes_mm;
-  public contribuicoes_pendentes;
   public sc;
   public sc_menor_minimo;
   public sc_mm_considerar_carencia;
