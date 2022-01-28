@@ -1993,15 +1993,15 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    // if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
-    //   dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
-    //   dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
-    //   beneficioDevido /= 1000;
-    //   this.beneficioDevidoOs /= 1000;
-    //   this.beneficioDevidoAposRevisao /= 1000;
-    //   this.beneficioDevidoAposRevisaoTetos /= 1000;
-    //   this.beneficioDevidoTetosSemLimite /= 1000;
-    // }
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+      beneficioDevido /= 1000;
+      this.beneficioDevidoOs /= 1000;
+      this.beneficioDevidoAposRevisao /= 1000;
+      this.beneficioDevidoAposRevisaoTetos /= 1000;
+      this.beneficioDevidoTetosSemLimite /= 1000;
+    }
 
     line.beneficio_devido_apos_revisao_sem_limites = this.formatMoney(this.beneficioDevidoAposRevisao);
 
@@ -2523,14 +2523,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-    // if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
-    //   || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
-    //   || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
-    //   beneficioRecebido /= 1000;
-    //   this.beneficioRecebidoOs /= 1000;
-    //   this.beneficioRecebidoAposRevisao /= 1000;
-    //   this.beneficioRecebidoAposRevisaoTetos /= 1000;
-    // }
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+      beneficioRecebido /= 1000;
+      this.beneficioRecebidoOs /= 1000;
+      this.beneficioRecebidoAposRevisao /= 1000;
+      this.beneficioRecebidoAposRevisaoTetos /= 1000;
+    }
 
     line.beneficio_recebido_apos_revisao_sem_limites = this.formatMoney(this.beneficioRecebidoAposRevisaoTetos);
 

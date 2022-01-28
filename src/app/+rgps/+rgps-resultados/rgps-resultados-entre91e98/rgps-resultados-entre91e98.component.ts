@@ -125,7 +125,7 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       this.reajustesAdministrativos = true;
     }
 
-    this.boxId = this.generateBoxId(this.calculo.id, '9899');
+    this.boxId = this.generateBoxId(this.calculo.id, this.tipoCalculo);
 
     this.dataInicioBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
     let dataInicio = this.dataInicioBeneficio;
@@ -133,13 +133,17 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
     if (this.tipoCalculo === '91_98') {
+
       this.stringCabecalho = '05/04/1991 e 15/12/1998'
       this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_98);
       this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_98);
+
     } else if (this.tipoCalculo === '98_99') {
+
       this.stringCabecalho = '16/12/1998 e 28/11/1999'
       this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_99);
       this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_99);
+
     }
 
     // if (this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' &&
@@ -528,7 +532,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     rmi = (this.limitarTetosEMinimos(rmi, dataComparacao)).valor;
 
-    let rmiValoresAdministrativos = rmi;
+    let rmiValoresAdministrativos = { '91_98': 0, '98_99': 0 };
+
+    rmiValoresAdministrativos[this.tipoCalculo] = rmi;
     // if(this.reajustesAdministrativos &&
     //   ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
     //    (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
@@ -539,7 +545,9 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     if (this.reajustesAdministrativos &&
       ((this.tipoCalculo === '91_98' && this.dataInicioBeneficio >= this.dataDib99) ||
         (this.tipoCalculo === '98_99' && this.dataInicioBeneficio >= this.dataDib98))) {
-      rmiValoresAdministrativos = this.getValoresAdministrativos(rmiValoresAdministrativos);
+
+      rmiValoresAdministrativos[this.tipoCalculo] = this.getValoresAdministrativos(rmiValoresAdministrativos[this.tipoCalculo]);
+
     }
 
     if (this.tipoBeneficio === 17 || // AuxilioAcidente30
@@ -564,10 +572,10 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       const moedaAuxilio = this.Moeda.getByDate(this.dataInicioBeneficio);
       const salMinimo = moedaAuxilio.salario_minimo;
 
-      if (contribuicaoMedia > rmiValoresAdministrativos) {
-        rmiValoresAdministrativos = contribuicaoMedia * fatorAuxilio;
+      if (contribuicaoMedia > rmiValoresAdministrativos[this.tipoCalculo]) {
+        rmiValoresAdministrativos[this.tipoCalculo] = contribuicaoMedia * fatorAuxilio;
       } else {
-        rmiValoresAdministrativos = salMinimo * fatorAuxilio;
+        rmiValoresAdministrativos[this.tipoCalculo] = salMinimo * fatorAuxilio;
       }
 
       if (contribuicaoMedia > rmi) {
@@ -606,8 +614,8 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     conclusoes.salario_minimo = this.formatMoney(moedaComparacao.salario_minimo, currency.acronimo);
     conclusoes.teto = this.formatMoney(moedaComparacao.teto, currency.acronimo);
     conclusoes.renda_mensal_inicial = this.formatMoney(rmi, currency.acronimo);
-    conclusoes.renda_mensal_inicial_data_dib = this.formatMoney(rmiValoresAdministrativos, currency.acronimo);
-    this.valorExportacao = this.formatDecimal(rmiValoresAdministrativos, 2).replace(',', '.');
+    conclusoes.renda_mensal_inicial_data_dib = this.formatMoney(rmiValoresAdministrativos[this.tipoCalculo], currency.acronimo);
+    this.valorExportacao = this.formatDecimal(rmiValoresAdministrativos[this.tipoCalculo], 2).replace(',', '.');
     this.tableData = tableData;
     // this.tableOptions = {
     //   ...this.tableOptions,
@@ -714,6 +722,13 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
             this.dataDib99.diff(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'), 'years')
             , 7, 0, redutorSexo, errorArray);
 
+          if (this.tipoCalculo === '98_99'
+            && this.dataInicioBeneficio >= this.dataDib98
+            && sessionStorage.getItem('direito98') !== null
+            && !direito) {
+            direito = true;
+          }
+
           direito = direito && this.verificarTempoDeServico(anosContribuicao, redutorProfessor, redutorSexo, extra + 5);
         }
 
@@ -742,6 +757,13 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
           }
         }
       }
+
+      sessionStorage.removeItem('direito98');
+      if (this.tipoCalculo === '91_98' && direito) {
+        sessionStorage.setItem('direito98', '98ok');
+      }
+
+
     } else if (this.tipoBeneficio === 3) {
       idadeMinima = this.verificarIdadeMinima(idadeDoSegurado, errorArray);
       if (!idadeMinima) {
