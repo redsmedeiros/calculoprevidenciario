@@ -75,14 +75,13 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
   public reajustesAdministrativos = true;
   public showReajustesAdministrativos = false;
-  public reajustesAdministrativosTableData = [];
-  public reajustesAdministrativosTableOptions = {
+  public reajustesAdministrativosTableOptionsModelo = {
     colReorder: false,
     paging: false,
     searching: false,
     ordering: false,
     bInfo: false,
-    data: this.reajustesAdministrativosTableData,
+    data: [],
     columns: [
       { data: 'competencia' },
       { data: 'reajuste' },
@@ -90,6 +89,40 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
       { data: 'limite' },
     ]
   };
+  public reajustesAdministrativosTableData = { '91_98': [], '98_99': [] };
+  public reajustesAdministrativosTableOptions = {
+    '91_98': {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: [],
+      columns: [
+        { data: 'competencia' },
+        { data: 'reajuste' },
+        { data: 'beneficio' },
+        { data: 'limite' },
+      ]
+    },
+    '98_99': {
+      colReorder: false,
+      paging: false,
+      searching: false,
+      ordering: false,
+      bInfo: false,
+      data: [],
+      columns: [
+        { data: 'competencia' },
+        { data: 'reajuste' },
+        { data: 'beneficio' },
+        { data: 'limite' },
+      ]
+    }
+  };
+
+  private valorBeneficio = { '91_98': 0, '98_99': 0 };
+
 
   private numContribuicoesAteVigencia;
   private dataAteVigencia;
@@ -532,9 +565,10 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     rmi = (this.limitarTetosEMinimos(rmi, dataComparacao)).valor;
 
-    let rmiValoresAdministrativos = { '91_98': 0, '98_99': 0 };
+    const rmiValoresAdministrativos = { '91_98': 0, '98_99': 0 };
 
     rmiValoresAdministrativos[this.tipoCalculo] = rmi;
+
     // if(this.reajustesAdministrativos &&
     //   ((this.calculo.tipo_aposentadoria == 'Entre 16/12/1998 e 28/11/1999' && this.dataInicioBeneficio >= this.dataDib99) ||
     //    (this.calculo.tipo_aposentadoria == 'Entre 05/04/1991 e 15/12/1998' && this.dataInicioBeneficio >= this.dataDib98))){
@@ -588,8 +622,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
     const somaContribuicoes = totalPrimaria + totalSecundaria;
 
     if (this.reajustesAdministrativos) {
+
       this.calculo.soma_contribuicao = somaContribuicoes;
       this.calculo.valor_beneficio = rmi;
+      this.valorBeneficio[this.tipoCalculo] = rmi;
+
       this.CalculoRgpsService.update(this.calculo)
     }
 
@@ -1149,8 +1186,11 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
 
     this.ReajusteAutomatico.getByDate(dataInicio, dataLimite)
       .then((reajustes: ReajusteAutomatico[]) => {
+
         const reajustesAutomaticos = reajustes;
-        let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
+        // let valorBeneficio = (this.calculo.valor_beneficio) ? parseFloat(this.calculo.valor_beneficio) : 0;
+
+        let valorBeneficio = (this.valorBeneficio[this.tipoCalculo]) ? parseFloat(this.valorBeneficio[this.tipoCalculo]) : 0;
         let dataPrevia = moment(reajustesAutomaticos[0].data_reajuste);
         let dataCorrente = dataInicio;
 
@@ -1193,13 +1233,15 @@ export class RgpsResultadosEntre91e98Component extends RgpsResultadosComponent i
             beneficio: this.formatMoney(valorBeneficio, siglaMoedaDataCorrente),
             limite: limit
           };
-          this.reajustesAdministrativosTableData.push(line);
+          this.reajustesAdministrativosTableData[this.tipoCalculo].push(line);
           dataPrevia = dataCorrente;
         }
-        this.reajustesAdministrativosTableOptions = {
-          ...this.reajustesAdministrativosTableOptions,
-          data: this.reajustesAdministrativosTableData,
+
+        this.reajustesAdministrativosTableOptions[this.tipoCalculo] = {
+          ...this.reajustesAdministrativosTableOptions[this.tipoCalculo],
+          data: this.reajustesAdministrativosTableData[this.tipoCalculo],
         }
+
         this.showReajustesAdministrativos = true;
         document.getElementById(tableId).scrollIntoView();
       });
