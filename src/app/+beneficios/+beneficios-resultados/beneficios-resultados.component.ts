@@ -1993,9 +1993,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
-      dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
-      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+    // somente 08/1993 - 31/01/2022
+    if (
+      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
+       dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')
+    ) {
       beneficioDevido /= 1000;
       this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
@@ -2522,10 +2525,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
-      || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
-      || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+    // somente 08/1993 - 31/01/2022
+    if (
+      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
+       dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioRecebido /= 1000;
       this.beneficioRecebidoOs /= 1000;
       this.beneficioRecebidoAposRevisao /= 1000;
