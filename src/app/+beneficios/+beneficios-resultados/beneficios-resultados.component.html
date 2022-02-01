@@ -532,7 +532,8 @@
                         <b>Data Final Recebidos:</b>
                       </td>
                       <td>
-                        {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}
+                        <span *ngIf="!recebidoLine?.cessacaoOLD" > {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }} </span>
+                        <span *ngIf="recebidoLine?.cessacaoOLD" > {{ formatDateIsnotNullMoment(recebidoLine.cessacaoOLD) }} </span>
                       </td>
                     </tr>
                     <tr>

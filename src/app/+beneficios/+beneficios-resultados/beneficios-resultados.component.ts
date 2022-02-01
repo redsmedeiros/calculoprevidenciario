@@ -651,6 +651,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (this.listRecebidos != null && this.listRecebidos.length > 0) {
 
+      let count = 1;
       for (const recebidoRow of this.listRecebidos) {
 
         recebidoRow.dib = formatDateIsnotNull(recebidoRow.dib);
@@ -660,6 +661,11 @@ export class BeneficiosResultadosComponent implements OnInit {
         recebidoRow.dataAdicional25 = formatDateIsnotNull(recebidoRow.dataAdicional25);
         recebidoRow.indiceInps = [];
         recebidoRow.indiceInpsValores = [];
+
+        if (this.listRecebidos.length === count && this.checkParcelaRecuperacao('r')) {
+          recebidoRow.cessacaoOLD = formatDateIsnotNull(recebidoRow.cessacaoOLD);
+        }
+
 
         let inicioRecebido = recebidoRow.dib;
         if (recebidoRow.dibAnterior && recebidoRow.dib.isAfter(recebidoRow.dibAnterior)) {
@@ -681,6 +687,7 @@ export class BeneficiosResultadosComponent implements OnInit {
           });
 
         this.allPromissesCalc.push(promRecebidoRow);
+        count++;
       }
 
     }
@@ -1915,8 +1922,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     // }
 
 
-    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, 
-    // houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
+    // aplicarReajusteUltimo = 1 somente quando, no mes anterior, houve troca de salario minimo e o valor minimo foi aplicado pro valor devido
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro) {
       beneficioDevido = irtDevidoSimplificado89 * moedaDataCorrente.salario_minimo;
       if (this.aplicarReajusteUltimoDevido) {
@@ -2008,12 +2014,9 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    // somente 08/1993 - 31/01/2022
-    if (
-      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
-      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
-       dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')
-    ) {
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioDevido /= 1000;
       this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
@@ -2539,11 +2542,10 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-    // somente 08/1993 - 31/01/2022
-    if (
-      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
-      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
-       dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+
+    if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
+      || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioRecebido /= 1000;
       this.beneficioRecebidoOs /= 1000;
       this.beneficioRecebidoAposRevisao /= 1000;
@@ -4013,6 +4015,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.parcelaRecuperacaoDataRecebido != undefined) {
 
       this.dataCessacaoRecebidoOLD = this.listRecebidos[this.listRecebidos.length - 1].cessacao;
+      this.listRecebidos[this.listRecebidos.length - 1].cessacaoOLD = this.dataCessacaoRecebidoOLD;
       this.dataCessacaoRecebido = this.parcelaRecuperacaoDataRecebido;
       this.listRecebidos[this.listRecebidos.length - 1].cessacao = this.dataCessacaoRecebido;
 
@@ -4026,7 +4029,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private setListParcelasRecuperacao(datainicial, dataFinal) {
 
     const listNewParcelas = [];
-    const modeloRedutor = [1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25];
+    const modeloRedutor = [1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25];
     const listCompetenciasRedutor = this.monthsBetween(datainicial, dataFinal);
 
     for (let i = 0; i < listCompetenciasRedutor.length; i++) {
@@ -4145,15 +4148,13 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     this.beneficioDevidoTetosSemLimite = parseFloat(this.calculo.valor_beneficio_esperado);
 
-    // 25-01-2022
-    // if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
-    //   this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
-    // }
+    if (this.dataInicioRecebidos < this.dataInicioBuracoNegro) {
+      this.dataInicioRecebidos = this.dataEquivalenciaMinimo89;
+    }
 
-    // if (this.dataInicioDevidos < this.dataInicioBuracoNegro) {
-    //   this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
-    // }
-
+    if (this.dataInicioDevidos < this.dataInicioBuracoNegro) {
+      this.dataInicioDevidos = this.dataEquivalenciaMinimo89;
+    }
     // dataInicioCalculo é o menor valor entre dataInicioDevidos e dataInicioRecebidos
     this.dataInicioCalculo = (this.dataInicioDevidos < this.dataInicioRecebidos) ? this.dataInicioDevidos : this.dataInicioRecebidos;
     // dataFinal é a data_calculo_pedido acrescido de um mês
