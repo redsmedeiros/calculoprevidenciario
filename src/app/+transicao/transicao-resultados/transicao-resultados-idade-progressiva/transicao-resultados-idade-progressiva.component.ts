@@ -219,8 +219,6 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         this.seguradoTransicao.idadeFracionada)
     );
 
-    console.log(auxiliarDate);
-
     if (verificacao) {
 
       if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
@@ -261,21 +259,13 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
           day: this.seguradoTransicao.dataNascimento.date()
         });
 
-
-
       }
-
-      
 
 
       idadeMoment = this.calcularIdade(auxiliarDate);
       if (idadeMoment.days() === 30) {
         idadeMoment.add(1, 'day');
       }
-
-      console.log(auxiliarDate)
-      console.log(idadeMoment)
-
 
       if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
 
@@ -334,7 +324,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     const dibVerificacao = moment('1966-05-01').add(idadeMoment).format('YYYY-MM-DD');
 
-    if (auxiliarDate.isBefore(dibVerificacao)) {
+    if (verificacao && auxiliarDate.isBefore(dibVerificacao)) {
       auxiliarDate = moment(dibVerificacao);
     }
 
