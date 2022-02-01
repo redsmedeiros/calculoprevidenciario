@@ -297,8 +297,6 @@ export class TransicaoResultadosIdadeComponent extends TransicaoResultadosCompon
     // if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15) {
     if (this.seguradoTransicao.contribuicaoFracionadoAnos >= 15 || testContrib < testeIdade) {
 
-      console.log(auxiliarDate);
-
       if (auxiliarDate.year() === 2020 || auxiliarDate.year() === 2022) {
 
         auxiliarDate = moment({

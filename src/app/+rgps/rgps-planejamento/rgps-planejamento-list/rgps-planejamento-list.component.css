@@ -7,3 +7,19 @@
     background-color: #ffaa21 !important;
     border-color: #ffaa21 !important;
   }
+
+
+  .modal-full {
+    width:95%
+}
+
+.matriz-number {
+    width: 100%;
+    text-align: right !important;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.mt-8{
+    margin-top: 8rem;
+}

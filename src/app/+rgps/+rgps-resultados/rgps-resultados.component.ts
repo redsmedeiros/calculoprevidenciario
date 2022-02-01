@@ -1,3 +1,4 @@
+import { DefinicaoTempo } from 'app/shared/functions/definicao-tempo';
 
 import { Component, OnInit, HostListener, Inject, Input, SimpleChange, OnChanges } from '@angular/core';
 import { FadeInTop } from '../../shared/animations/fade-in-top.decorator';
@@ -429,7 +430,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     return new Promise((resolve, reject) => {
 
       if (this.isExits(JSON.parse(sessionStorage.getItem('periodosSelecionado'))) &&
-      sessionStorage.getItem('periodosSelecionado') !== '[]') {
+        sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
@@ -935,7 +936,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
     if (arrayTypeNum.includes(especieBeneficio)
-    || arrayTypeText.includes(especieBeneficio)
+      || arrayTypeText.includes(especieBeneficio)
     ) {
       return true;
     }
@@ -1088,7 +1089,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       const anos = (stringContrib.split('-')[0] !== 'undefined') ? stringContrib.split('-')[0] : 0;
       const meses = (stringContrib.split('-')[1] !== 'undefined') ? stringContrib.split('-')[1] : 0;
       const dias = (stringContrib.split('-')[2] !== 'undefined') ? stringContrib.split('-')[2] : 0;
-      returnObj = { anos: parseFloat(anos), meses: parseFloat(meses), dias: parseFloat(dias) };
+      returnObj = { anos: parseInt(anos, 10), meses: parseInt(meses, 10), dias: parseInt(dias, 10) };
     }
     return returnObj;
   }
@@ -1388,9 +1389,6 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       '<table align="center" style="width: 100%; border: 1px solid black; border-collapse: collapse;" border=\"1\" cellpadding=\"3\"');
     const popupWin = window.open('', '_blank', 'width=300,height=300');
 
-
-
-
     popupWin.document.open();
     popupWin.document.write(printableString);
     popupWin.document.close();
@@ -1426,7 +1424,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
   public getPbcCompletoIndices() {
-    return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';;
+    return (this.isExits(this.route.snapshot.params['correcao_pbc'])) ? this.route.snapshot.params['correcao_pbc'] : 'inpc1084';
   }
 
   // planejamento adicionais RMI
@@ -1434,6 +1432,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public getIsPlanejamento() {
     return (this.route.snapshot.params['pbc'] === 'plan');
   }
+
+
 
 
   private calcDiffContribuicao(a, b) {
@@ -1451,7 +1451,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     let diff: any;
 
     b.startOf('day').add(-1, 'd');
-    a.endOf('day')
+    a.endOf('day');
 
     total.totalYears = a.diff(b, 'years', true);
     total.totalMonths = a.diff(b, 'months', true);
@@ -1474,46 +1474,175 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   }
 
 
+
+  // private descarteTempoSemSC(tempoAtualMaisAdicional) {
+
+  //   let mesesDescarte = 0;
+
+  //   if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+
+  //     mesesDescarte = this.planejamento.sc_pendentes;
+
+  //     if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+  //       mesesDescarte += this.planejamento.sc_pendentes_mm;
+  //     }
+
+  //     tempoAtualMaisAdicional = tempoAtualMaisAdicional.subtract(mesesDescarte, 'month');
+
+  //   }
+
+  //   console.log(this.planejamento);
+  //   console.log(tempoAtualMaisAdicional);
+  //   console.log(mesesDescarte);
+
+  //   return tempoAtualMaisAdicional;
+  // }
+
+  private descarteTempoSemSC(diffTempo) {
+
+    let mesesDescarte = 0;
+    let mesesComAdicionais = this.planejamento.sc_count;
+
+    if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+
+      mesesDescarte = this.planejamento.sc_pendentes;
+
+      if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+        mesesDescarte += this.planejamento.sc_pendentes_mm;
+      }
+
+      mesesComAdicionais -= mesesDescarte;
+
+    }
+
+    return mesesComAdicionais;
+  }
+
+
+  private checkAdicionalTempo() {
+
+    if ((this.planejamento.sc_pendentes + this.planejamento.sc_pendentes_mm) === this.planejamento.sc_count
+      && this.planejamento.sc_mm_considerar_tempo !== 1) {
+      return false;
+    }
+    return true;
+  }
+
+
+  private checkAdicionalCarencia() {
+    if ((this.planejamento.sc_pendentes + this.planejamento.sc_pendentes_mm) === this.planejamento.sc_count
+      && this.planejamento.sc_mm_considerar_carencia !== 1) {
+      return false;
+    }
+    return true;
+  }
+
   private addTempoContribuicao(calculo, diffTempo) {
 
     const testeobjTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
 
     const tempoAtual = moment.duration({
-      year: testeobjTempo.anos,
-      month: testeobjTempo.meses,
-      days: testeobjTempo.dias
-    })
+      days: testeobjTempo.dias,
+      months: testeobjTempo.meses,
+      years: testeobjTempo.anos,
+      seconds: 0,
+      minutes: 0,
+      hours: 0,
+    });
 
-    const tempoAtualMaisAdicional = tempoAtual.add(diffTempo.totalDays, 'days');
+    console.log(tempoAtual);
+    console.log(this.checkAdicionalTempo());
+
+    let tempoAtualMaisAdicional = tempoAtual;
+
+
+
+    if (this.checkAdicionalTempo()) {
+
+      diffTempo = this.descarteTempoSemSC(diffTempo);
+
+      console.log(diffTempo)
+
+      // tempoAtualMaisAdicional = tempoAtual.add(moment.duration({
+      //   seconds: 0,
+      //   minutes: 0,
+      //   hours: 0,
+      //   days: diffTempo.days,
+      //   months: diffTempo.months,
+      //   years: diffTempo.years
+      // }));
+
+      tempoAtualMaisAdicional = tempoAtual.add(moment.duration({
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+        months: diffTempo,
+      }));
+
+      // tempoAtualMaisAdicional = this.descarteTempoSemSC(tempoAtualMaisAdicional);
+
+    }
+
 
     calculo.contribuicao_primaria_19 = `${tempoAtualMaisAdicional.years()}
                                        -${tempoAtualMaisAdicional.months()}
                                        -${tempoAtualMaisAdicional.days()}`;
 
-    // const objTempo = this.getContribuicaoObj(calculo.contribuicao_primaria_19);
-    // objTempo.anos += diffTempo.years;
-    // objTempo.meses += diffTempo.months;
-    // objTempo.dias += diffTempo.days;
-
-    // if (objTempo.dias >= 30) {
-    //   objTempo.dias -= 30;
-    //   objTempo.meses += 1;
-    // }
-
-    // if (objTempo.dias >= 11) {
-    //   objTempo.meses = 1;
-    //   objTempo.anos += 1;
-    // }
-
-    // calculo.contribuicao_primaria_19 = `${objTempo.anos}-${objTempo.meses}-${objTempo.dias}`
-
   }
 
   private addCarencia(calculo, tempoDiff) {
 
-    calculo.carencia_apos_ec103 += tempoDiff.totalMonths;
+    let carenciaAtualMaisAdicional = tempoDiff.totalMonths;
+
+    if ((this.planejamento.sc_pendentes > 0 || this.planejamento.sc_pendentes_mm > 0)) {
+
+      let mesesDescarte = this.planejamento.sc_pendentes;
+
+      if (this.planejamento.sc_mm_considerar_tempo !== 1) {
+        mesesDescarte += this.planejamento.sc_pendentes_mm;
+      }
+
+      carenciaAtualMaisAdicional -= mesesDescarte;
+
+    }
+
+    calculo.carencia_apos_ec103 += carenciaAtualMaisAdicional;
+
+    return calculo.carencia_apos_ec103;
+  }
+
+
+  public formatDecimalValue(value) {
+
+    if (isNaN(value)) {
+
+      return parseFloat(value.replace(/\./g, '').replace(',', '.'));
+
+    } else {
+
+      return parseFloat(value);
+
+    }
 
   }
+
+  private filterSCPlan() {
+
+    let planSC = this.planejamento.scJSON;
+
+    planSC = planSC.filter(x => (x.sc !== '0,00' && x.sc !== 0));
+
+    if (this.planejamento.sc_pendentes_mm >= 1
+      && this.planejamento.sc_mm_considerar_tempo === 0) {
+
+      planSC = planSC.filter(x => (x.msc !== 1));
+
+    }
+
+    return planSC;
+
+  }
+
 
   private createListPlanContribuicoesAdicionais() {
 
@@ -1526,7 +1655,15 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     let ObjValContribuicao;
     // auxiliarDate = moment(auxiliarDate.format('DD/MM/YYYY'), 'DD/MM/YYYY').add(1, 'month');
 
-    if (Number(this.planejamento.valor_beneficio) > 0) {
+    let isSCPlan = false;
+    this.planejamento.scJSON = [];
+    if (typeof this.planejamento['sc'] !== 'undefined' && typeof this.planejamento['sc'] === 'string') {
+      this.planejamento.scJSON = JSON.parse(this.planejamento.sc);
+      isSCPlan = true;
+    }
+
+
+    if (!isSCPlan && Number(this.planejamento.valor_beneficio) > 0) {
 
       while (fimContador.isBefore(auxiliarDate, 'month')) {
         count++;
@@ -1541,10 +1678,38 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
       };
 
+    } else {
+
+      const planSC = this.filterSCPlan();
+      for (const scObj of planSC) {
+
+        const data = moment(scObj.cp, 'MM/YYYY').format('YYYY-MM-01');
+
+        ObjValContribuicao = new ValorContribuido({
+          data: data,
+          valor_primaria: this.formatDecimalValue(scObj.sc),
+          valor_secundaria: 0,
+        });
+
+        if (ObjValContribuicao.valor_primaria > 0) {
+          this.planejamentoContribuicoesAdicionais.push(ObjValContribuicao);
+        }
+
+      }
+
+      this.planejamentoContribuicoesAdicionais.reverse();
+
     }
 
   }
 
+  /**
+   *  Adicionais de tempo e carência planejamento
+   * @param calculo obj
+   * @param calcClone obj
+   * @param dataAtual obj
+   * @param dataFutura obj
+   */
   private setTempoContribuicao(calculo, calcClone, dataAtual, dataFutura) {
 
     if (calculo.contribuicao_primaria_19 !== undefined && calculo.contribuicao_primaria_19 !== '--'
@@ -1559,13 +1724,19 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       calculo.carencia_apos_ec103 = calculo.carencia;
       calculo.contribuicao_primaria_19_old = Object.assign({}, calculo).contribuicao_primaria_19;
       calculo.carencia_apos_ec103_old = Object.assign({}, calculo).carencia_apos_ec103;
+
     }
 
-    const diffTempo = this.calcDiffContribuicao(dataFutura, dataAtual);
+    const diffTempo = this.calcDiffContribuicao(dataFutura.clone(), dataAtual.clone());
+    const diffTempo2 = DefinicaoTempo.dataDiffDateToDateCustom(dataAtual.format('YYYY-MM-DD'), dataFutura.format('YYYY-MM-DD'));
+
+    console.log(diffTempo);
+    console.log(diffTempo2);
 
     this.addTempoContribuicao(calculo, diffTempo);
-    // this.addCarencia(calculo, diffTempo);
+    this.addCarencia(calculo, diffTempo);
     this.createListPlanContribuicoesAdicionais();
+
   }
 
 
@@ -1593,6 +1764,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   }
 
 
+
   public getPlanejamento(calculo) {
 
     const idPlanejamento = this.route.snapshot.params['correcao_pbc'];
@@ -1606,11 +1778,12 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         const calcClone = Object.assign({}, calculo);
         this.setInfoPLanejamentoTempoDib(calculo, calcClone);
 
+
       } else {
+
         this.isUpdating = true;
         const planejamentoP = this.planejamentoService.find(idPlanejamento)
           .then((planejamento: PlanejamentoRgps) => {
-
 
             this.planejamento = planejamento;
 
@@ -1621,6 +1794,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
           }).catch(errors => console.log(errors));
 
       }
+
+      console.log(this.planejamento);
 
       // this.dataInicioBeneficio = exportDados.dib;
       // this.changePeriodoOptions();

@@ -219,15 +219,9 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         this.seguradoTransicao.idadeFracionada)
     );
 
-
+    console.log(auxiliarDate);
 
     if (verificacao) {
-      // auxiliarDate = moment({
-      //   year: auxiliarDate.year(),
-      //   month: this.seguradoTransicao.dataNascimento.month(),
-      //   day: this.seguradoTransicao.dataNascimento.date()
-      // });
-
 
       if (([2020, 2022, 2024, 2026].includes(auxiliarDate.year()) && this.seguradoTransicao.sexo === 'm')
         ||
@@ -271,12 +265,16 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
       }
 
+      
 
 
       idadeMoment = this.calcularIdade(auxiliarDate);
       if (idadeMoment.days() === 30) {
         idadeMoment.add(1, 'day');
       }
+
+      console.log(auxiliarDate)
+      console.log(idadeMoment)
 
 
       if (verificacao && this.seguradoTransicao.dataNascimento.date() === auxiliarDate.date()) {
@@ -332,6 +330,12 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
         idadeMoment.add(1, 'day');
       }
 
+    }
+
+    const dibVerificacao = moment('1966-05-01').add(idadeMoment).format('YYYY-MM-DD');
+
+    if (auxiliarDate.isBefore(dibVerificacao)) {
+      auxiliarDate = moment(dibVerificacao);
     }
 
 
