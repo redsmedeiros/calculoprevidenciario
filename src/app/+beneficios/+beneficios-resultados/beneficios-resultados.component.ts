@@ -3957,13 +3957,15 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (type === 'd') {
       return (typeof this.listDevidos[0].parcRecEsperado !== 'undefined'
-        && this.listDevidos[0].especie === '1'
+        && (this.listDevidos[0].especie === '1'
+          || this.listDevidos[0].especie === '19')
         && this.listDevidos[0].parcRecEsperado);
     }
 
     if (type === 'r') {
       return (typeof this.listRecebidos[this.listRecebidos.length - 1].parcRecConcedido !== 'undefined'
-        && this.listRecebidos[this.listRecebidos.length - 1].especie === '1'
+        && (this.listRecebidos[this.listRecebidos.length - 1].especie === '1'
+          || this.listRecebidos[this.listRecebidos.length - 1].especie === '19')
         && this.listRecebidos[this.listRecebidos.length - 1].parcRecConcedido);
     }
 

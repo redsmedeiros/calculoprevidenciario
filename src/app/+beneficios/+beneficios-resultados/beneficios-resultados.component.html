@@ -424,7 +424,9 @@
                         {{ dataInicialadicional25DevidoString }}
                       </td>
                     </tr>
-                    <tr *ngIf="calculo.tipo_aposentadoria === 1">
+                    <tr *ngIf="[1, 19].includes(
+                      calculo.tipo_aposentadoria
+                    )">
                       <td class="td-width-30" style="text-align: left">
                         <b>Parcela de Recuperação:</b>
                       </td>
@@ -596,7 +598,9 @@
                       </td>
                     </tr>
 
-                    <tr *ngIf="calculo.tipo_aposentadoria === 1">
+                    <tr *ngIf="[1, 19].includes(
+                      recebidoLine.especie
+                    )">
                       <td class="td-width-30" style="text-align: left">
                         <b>Parcela de Recuperação:</b>
                       </td>
