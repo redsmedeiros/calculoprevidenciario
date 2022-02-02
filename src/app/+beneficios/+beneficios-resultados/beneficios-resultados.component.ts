@@ -3963,7 +3963,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     if (type === 'r') {
-      return (typeof this.listRecebidos[this.listRecebidos.length - 1].parcRecConcedido !== 'undefined'
+      return (this.listRecebidos.length > 0 &&
+        typeof this.listRecebidos[this.listRecebidos.length - 1].parcRecConcedido !== 'undefined'
         && (this.listRecebidos[this.listRecebidos.length - 1].especie === '1'
           || this.listRecebidos[this.listRecebidos.length - 1].especie === '19')
         && this.listRecebidos[this.listRecebidos.length - 1].parcRecConcedido);
