@@ -20,6 +20,7 @@ export class Devidos {
   public numDependentes;
   public manterPercentualSMEsperado;
   public parcRecEsperado;
+  public dataParcRecEsperado;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -52,6 +53,7 @@ export class Devidos {
     numDependentes,
     manterPercentualSMEsperado,
     parcRecEsperado,
+    dataParcRecEsperado,
   ) {
     this.id = id;
     this.especie = especie;
@@ -72,6 +74,7 @@ export class Devidos {
     this.numDependentes = numDependentes;
     this.manterPercentualSMEsperado = manterPercentualSMEsperado;
     this.parcRecEsperado = parcRecEsperado;
+    this.dataParcRecEsperado = dataParcRecEsperado;
   }
 
 

@@ -193,6 +193,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
       this.numDependentes,
       this.manterPercentualSMEsperado,
       this.parcRecEsperado,
+      this.dataParcRecEsperado,
     );
 
 
@@ -247,6 +248,7 @@ export class BeneficiosCalculosFormDevidosComponent extends BeneficiosCalculosFo
     this.numDependentes = rowEdit.numDependentes;
     this.manterPercentualSMEsperado = rowEdit.manterPercentualSMEsperado;
     this.parcRecEsperado = rowEdit.parcRecEsperado;
+    this.dataParcRecEsperado = rowEdit.dataParcRecEsperado;
 
     if (rowEdit.dataAdicional25 !== undefined && rowEdit.dataAdicional25 !== '') {
       this.adicional25Devido = true;

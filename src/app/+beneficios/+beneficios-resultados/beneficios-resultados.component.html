@@ -434,6 +434,16 @@
                         {{ parcelaRecuperacaoDataDevido ? "Sim" : "Não" }}
                       </td>
                     </tr>
+                    <tr *ngIf="[1, 19].includes(
+                      calculo.tipo_aposentadoria
+                    ) && parcelaRecuperacaoDataDevido">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Final Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ formatDateIsnotNullMoment(dataParcelaRecuperacaoDevido) }}
+                      </td>
+                    </tr>
                     <tr *ngIf="calculo.tipo_aposentadoria == 22">
                       <td class="td-width-30" style="text-align: left">
                         <b> Número de Dependentes:</b>
@@ -598,14 +608,26 @@
                       </td>
                     </tr>
 
-                    <tr *ngIf="[1, 19].includes(
-                      recebidoLine.especie
-                    )">
+                    <tr *ngIf="['1', '19'].includes(recebidoLine.especie)">
                       <td class="td-width-30" style="text-align: left">
                         <b>Parcela de Recuperação:</b>
                       </td>
                       <td>
                         {{ recebidoLine.parcRecConcedido ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="['1', '19'].includes(
+                      recebidoLine.especie
+                    ) && recebidoLine.parcRecConcedido">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Final Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{
+                          formatDateIsnotNullMoment(
+                            recebidoLine.dataParcRecConcedido
+                          )
+                        }}
                       </td>
                     </tr>
                     <!-- *ngIf="!recebidoLine.valor_beneficio_esperado_revisao" <tr *ngIf="recebidoLine.valor_beneficio_esperado_revisao">

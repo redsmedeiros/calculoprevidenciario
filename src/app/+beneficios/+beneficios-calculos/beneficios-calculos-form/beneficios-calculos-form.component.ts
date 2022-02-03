@@ -233,6 +233,9 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public parcRecConcedido = false;
   public parcRecEsperado = false;
 
+  public dataParcRecConcedido = null;
+  public dataParcRecEsperado = null;
+
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
@@ -1276,6 +1279,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.numDependentes,
       this.manterPercentualSMEsperado,
       this.parcRecEsperado,
+      this.dataParcRecEsperado,
     );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1325,6 +1329,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.calcularAbono13UltimoMesRecebidos,
         this.manterPercentualSMConcedido,
         this.parcRecConcedido,
+        this.dataParcRecConcedido,
       );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));

@@ -606,6 +606,38 @@
                           </div>
                         </div>
                       </div>
+                      <div
+                      class="form-group"
+                      *ngIf="
+                      parcRecEsperado &&
+                        ['1', '19'].includes(especieValoresDevidos)
+                      "
+                    >
+                      <div>
+                        <label
+                          class="control-label"
+                          [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                          >Data Final Parcela de Recuperação:
+                        </label>
+                        <div
+                          class="col-md-4"
+                          [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                        >
+                          <input
+                            name="dataParcRecEsperado"
+                            [textMask]="{ mask: dateMask }"
+                            [(ngModel)]="dataParcRecEsperado"
+                            class="form-control"
+                            type="text"
+                          />
+                          <small
+                            *ngIf="errors.has('dataParcRecEsperado')"
+                            class="text-danger"
+                            >{{ errors.get("dataParcRecEsperado") }}</small
+                          >
+                        </div>
+                      </div>
+                    </div>
 
                       <div class="form-group" *ngIf="!devidosBuracoNegro">
                         <label

@@ -123,7 +123,9 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
       this.dataInicialadicional2Recebido,
       this.calcularAbono13UltimoMesRecebidos,
       this.manterPercentualSMConcedido,
-      this.parcRecConcedido);
+      this.parcRecConcedido,
+      this.dataParcRecConcedido,
+      );
 
     let statusInput = true;
 
@@ -217,6 +219,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.calcularAbono13UltimoMesRecebidos = rowEdit.abono13Ultimo;
     this.manterPercentualSMConcedido = rowEdit.manterPercentualSMConcedido;
     this.parcRecConcedido = rowEdit.parcRecConcedido;
+    this.dataParcRecConcedido = rowEdit.dataParcRecConcedido;
 
     if (rowEdit.dataAdicional25 != undefined && rowEdit.dataAdicional25 != '') {
       this.adicional25Recebido = true;
@@ -242,6 +245,7 @@ export class BeneficiosCalculosFormRecebidosComponent extends BeneficiosCalculos
     this.calcularAbono13UltimoMesRecebidos = false;
     this.manterPercentualSMConcedido = false;
     this.parcRecConcedido = false;
+    this.dataParcRecConcedido = '';
   }
 
 

@@ -16,6 +16,7 @@ export class Recebidos {
   public abono13Ultimo;
   public manterPercentualSMConcedido;
   public parcRecConcedido;
+  public dataParcRecConcedido;
   // public action = `
   //         <div class="btn-group">
   //         <button type="button" class="btn btn-xs btn-warning" (click)='getupdateRecebido(${this.id})' title='Editar' >
@@ -44,6 +45,7 @@ export class Recebidos {
     abono13Ultimo,
     manterPercentualSMConcedido,
     parcRecConcedido,
+    dataParcRecConcedido,
   ) {
     this.id = id;
     this.especie = especie;
@@ -60,6 +62,7 @@ export class Recebidos {
     this.abono13Ultimo = abono13Ultimo;
     this.manterPercentualSMConcedido = manterPercentualSMConcedido;
     this.parcRecConcedido = parcRecConcedido;
+    this.dataParcRecConcedido = dataParcRecConcedido;
   }
 
 

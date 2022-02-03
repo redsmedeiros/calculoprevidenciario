@@ -63,7 +63,8 @@
               </td>
               <td class="text-center">{{ recebidoLine.irt }}</td>
               <td class="text-center">
-                {{ recebidoLine.reajusteMinimo ? "Sim" : "Não" }}  {{ recebidoLine.reajuesteMinimo }}
+                {{ recebidoLine.reajusteMinimo ? "Sim" : "Não" }}
+                {{ recebidoLine.reajuesteMinimo }}
               </td>
               <td class="text-center" width="auto">
                 <div class="btn-group">
@@ -197,8 +198,7 @@
                             name="dibValoresRecebidos"
                             (blur)="setCheckRevisao()"
                             (change)="
-                              dibValoresRecebidosChanged(); 
-                              validRecebidos();
+                              dibValoresRecebidosChanged(); validRecebidos()
                             "
                             [(ngModel)]="dibValoresRecebidos"
                             type="text"
@@ -294,19 +294,17 @@
                           ></i
                           >Renda Mensal Inicial - RMI*:</label
                         > -->
-                      <label
-                        class="control-label col-md-7"
-                      >
-                        <i
-                          *ngIf="
-                            especieValoresRecebidos == '16' ||
-                            especieValoresRecebidos == '11'
-                          "
-                          title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo."
-                          class="fa fa-question-circle fa-lg"
-                        ></i
-                        >Renda Mensal Inicial - RMI*:</label
-                      >
+                        <label class="control-label col-md-7">
+                          <i
+                            *ngIf="
+                              especieValoresRecebidos == '16' ||
+                              especieValoresRecebidos == '11'
+                            "
+                            title="Para o benefício de LOAS, deve inserir o valor de um salário mínimo."
+                            class="fa fa-question-circle fa-lg"
+                          ></i
+                          >Renda Mensal Inicial - RMI*:</label
+                        >
                         <div class="col-md-4">
                           <input
                             name="rmiValoresRecebidos"
@@ -448,7 +446,7 @@
                         <div class="col-md-4">
                           <label class="radio radio-inline">
                             <input
-                            autocomplete="off"
+                              autocomplete="off"
                               [(ngModel)]="parcRecConcedido"
                               [ngModelOptions]="{ standalone: true }"
                               (change)="errors.clear('parcRecConcedido')"
@@ -482,8 +480,40 @@
                           </div>
                         </div>
                       </div>
+                      <div
+                        class="form-group"
+                        *ngIf="
+                          parcRecConcedido &&
+                          ['1', '19'].includes(especieValoresRecebidos)
+                        "
+                      >
+                        <div>
+                          <label
+                            class="control-label"
+                            [ngClass]="true ? 'col-md-7' : 'col-md-4'"
+                            >Data Final Parcela de Recuperação:
+                          </label>
+                          <div
+                            class="col-md-4"
+                            [ngClass]="true ? 'col-md-4' : 'col-md-2'"
+                          >
+                            <input
+                              name="dataParcRecConcedido"
+                              [textMask]="{ mask: dateMask }"
+                              [(ngModel)]="dataParcRecConcedido"
+                              class="form-control"
+                              type="text"
+                            />
+                            <small
+                              *ngIf="errors.has('dataParcRecConcedido')"
+                              class="text-danger"
+                              >{{ errors.get("dataParcRecConcedido") }}</small
+                            >
+                          </div>
+                        </div>
+                      </div>
 
-                      <div class="form-group" *ngIf="!recebidosBuracoNegro" >
+                      <div class="form-group" *ngIf="!recebidosBuracoNegro">
                         <label class="control-label col-md-7">
                           Índice de Limitação no Teto:
                           <i
@@ -526,13 +556,13 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group"
-                      *ngIf="[
-                        '6',
-                        '8',
-                        '9',
-                        '10'
-                      ].includes(especieValoresRecebidos)"
+                      <div
+                        class="form-group"
+                        *ngIf="
+                          ['6', '8', '9', '10'].includes(
+                            especieValoresRecebidos
+                          )
+                        "
                       >
                         <div class="col-md-8 col-sm-offset-3">
                           <div class="checkbox">
@@ -544,8 +574,12 @@
                                 class="checkbox"
                                 checked="checked"
                               />
-                              <span
-                                > Manter a RMA em {{changePercentual(especieValoresRecebidos, 'r') }} do Salário Mínimo.</span
+                              <span>
+                                Manter a RMA em
+                                {{
+                                  changePercentual(especieValoresRecebidos, "r")
+                                }}
+                                do Salário Mínimo.</span
                               >
                             </label>
                           </div>
@@ -572,7 +606,9 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <p class="pull-left no-margin">(*) Preenchimento Obrigatório.</p>
+                        <p class="pull-left no-margin">
+                          (*) Preenchimento Obrigatório.
+                        </p>
                         <button
                           *ngIf="!rowRecebidosEdit"
                           id="adicionarRecebido"
