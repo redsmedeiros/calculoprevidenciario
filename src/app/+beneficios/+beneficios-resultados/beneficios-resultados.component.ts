@@ -323,6 +323,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   private reajusteLabelR = 'reajuste1';
 
   private parcelaRecuperacaoDataDevido;
+  private parcelaRecuperacaoDataDevidoStatus = false;
   private dataParcelaRecuperacaoDevido = null;
   private parcelaRecuperacaoDataRecebido;
   private listRedutorDevido = [];
@@ -1218,7 +1219,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
         beneficioDevidoAbono = this.aplicarAdicional25(dataCorrente, beneficioDevidoAbono);
         beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono * abonoProporcionalDevidos);
-        //  beneficioDevidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioDevidoAbono, dataCorrente, 'd');
+        beneficioDevidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioDevidoAbono, dataCorrente, 'd');
 
         if (beneficioRecebido <= 0 || (datacessacaoBeneficioRecebido != null && dataCorrente > datacessacaoBeneficioRecebido)) {
           beneficioRecebidoAbono = 0.0;
@@ -1239,7 +1240,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
           beneficioRecebidoAbono = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoAbono);
           beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono * abonoProporcionalRecebidos);
-          // beneficioRecebidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioRecebidoAbono, dataCorrente, 'r');
+          beneficioRecebidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioRecebidoAbono, dataCorrente, 'r', recebidoRow.value);
 
         }
 
@@ -1256,6 +1257,8 @@ export class BeneficiosResultadosComponent implements OnInit {
               moment(this.calculo.data_pedido_beneficio_esperado),
               moment(this.calculo.data_prevista_cessacao));
             beneficioDevidoAbono = this.roundMoeda(beneficioDevidoAbono - beneficioDevidoAbono * abonoProporcionalDevidos);
+            beneficioDevidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioDevidoAbono, dataCorrente, 'd');
+
           }
 
         }
@@ -1278,6 +1281,7 @@ export class BeneficiosResultadosComponent implements OnInit {
             );
 
             beneficioRecebidoAbono = this.roundMoeda(beneficioRecebidoAbono - beneficioRecebidoAbono * abonoProporcionalRecebidos);
+            beneficioRecebidoAbono = this.aplicarRedutorParcelasRecuperacao(beneficioRecebidoAbono, dataCorrente, 'r', recebidoRow.value);
 
           }
         }
@@ -2770,9 +2774,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     beneficioRecebidoFinal = this.aplicarRedutorParcelasRecuperacao(beneficioRecebidoFinal,
-                                                                      dataCorrente,
-                                                                      'r',
-                                                                      recebidoRow.value);
+      dataCorrente,
+      'r',
+      recebidoRow.value);
 
     this.beneficioRecebidoAnterior = beneficioRecebidoFinal;
     beneficioRecebidoFinal = this.aplicarAdicional25Recebido(dataCorrente, beneficioRecebidoFinal);
@@ -3962,6 +3966,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (type === 'd') {
       return (typeof this.listDevidos[0].parcRecEsperado !== 'undefined'
+        && typeof this.listDevidos[0].dataParcRecEsperado !== 'undefined'
         && (this.listDevidos[0].especie === '1'
           || this.listDevidos[0].especie === '19')
         && this.listDevidos[0].parcRecEsperado);
@@ -3970,6 +3975,7 @@ export class BeneficiosResultadosComponent implements OnInit {
     if (type === 'r') {
       return (this.isExits(recebidoRow) &&
         typeof recebidoRow.parcRecConcedido !== 'undefined'
+        && typeof recebidoRow.dataParcRecConcedido !== 'undefined'
         && (recebidoRow.especie === '1' || recebidoRow.especie === '19')
         && recebidoRow.parcRecConcedido);
     }
@@ -3985,9 +3991,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (type === 'd' && this.checkParcelaRecuperacao('d', {})) {
 
+      this.parcelaRecuperacaoDataDevidoStatus = true;
+
       this.parcelaRecuperacaoDataDevido = dateSub18Meses(this.listDevidos[0].dataParcRecEsperado);
 
-      if (this.parcelaRecuperacaoDataDevido.isAfter(moment())) {
+      if (moment(this.parcelaRecuperacaoDataDevido).isAfter(moment())) {
         this.parcelaRecuperacaoDataDevido = moment();
       }
 
@@ -3999,7 +4007,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       let dataParcRecConcedido = dateSub18Meses(recebidoRow.dataParcRecConcedido);
 
-      if (dataParcRecConcedido.isAfter(moment())) {
+      if (moment(dataParcRecConcedido).isAfter(moment())) {
         dataParcRecConcedido = moment();
       }
 

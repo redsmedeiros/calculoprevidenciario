@@ -431,12 +431,12 @@
                         <b>Parcela de Recuperação:</b>
                       </td>
                       <td>
-                        {{ parcelaRecuperacaoDataDevido ? "Sim" : "Não" }}
+                        {{ parcelaRecuperacaoDataDevidoStatus ? "Sim" : "Não" }}
                       </td>
                     </tr>
                     <tr *ngIf="[1, 19].includes(
                       calculo.tipo_aposentadoria
-                    ) && parcelaRecuperacaoDataDevido">
+                    ) && parcelaRecuperacaoDataDevidoStatus">
                       <td class="td-width-30" style="text-align: left">
                         <b>Data Final Parcela de Recuperação:</b>
                       </td>
