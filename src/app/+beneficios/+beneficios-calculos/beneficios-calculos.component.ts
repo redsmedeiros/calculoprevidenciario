@@ -5,8 +5,8 @@ import { SeguradoService } from '../+beneficios-segurados/Segurado.service';
 import { Segurado as SeguradoModel } from '../+beneficios-segurados/Segurado.model';
 import { CalculoAtrasadoService } from './CalculoAtrasado.service';
 import { environment } from '../../../environments/environment';
-import { Auth } from "../../services/Auth/Auth.service";
-import { AuthResponse } from "../../services/Auth/AuthResponse.model";
+import { Auth } from '../../services/Auth/Auth.service';
+import { AuthResponse } from '../../services/Auth/AuthResponse.model';
 import swal from 'sweetalert2';
 
 @FadeInTop()
