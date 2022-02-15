@@ -322,7 +322,7 @@ export class TransicaoResultadosIdadeProgressivaComponent extends TransicaoResul
 
     }
 
-    const dibVerificacao = moment('1966-05-01').add(idadeMoment).format('YYYY-MM-DD');
+    const dibVerificacao = moment(this.seguradoTransicao.dataNascimento).add(idadeMoment).format('YYYY-MM-DD');
 
     if (verificacao && auxiliarDate.isBefore(dibVerificacao)) {
       auxiliarDate = moment(dibVerificacao);

@@ -98,7 +98,7 @@ export class TransicaoFormComponent implements OnInit {
       this.nome = ' ';
       this.idDocumento = '';
       this.numeroDocumento = '';
-      this.dataNascimento = '19/06/1961';
+      this.dataNascimento = '29/04/1965';
       this.dataFiliacao = '01/01/1980';
       this.sexo = 'f';
       this.professor = false;
@@ -108,8 +108,8 @@ export class TransicaoFormComponent implements OnInit {
       this.contribuicaoDiasAteEC103 = '18';
 
       this.contribuicaoAnos = '29';
-      this.contribuicaoMeses = '04';
-      this.contribuicaoDias = '06';
+      this.contribuicaoMeses = '05';
+      this.contribuicaoDias = '10';
       this.submit(null);
     }
 
