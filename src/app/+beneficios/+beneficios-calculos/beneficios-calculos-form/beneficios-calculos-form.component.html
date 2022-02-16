@@ -724,18 +724,44 @@
                   *ngFor="let correcao of correcaoOptions"
                   value="{{ correcao.value }}"
                 >
-                  {{ correcao.text }} <span *ngIf="tipoCorrecaoMonetaria === 'cam_ec103_2021'"  class="label label-danger">!Novo</span>
+                  {{ correcao.text }} <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger"> - Novo</span>
                 </option>
               </select>
-              <!-- <span class="input-group-addon"><span *ngIf="tipoCorrecaoMonetaria === 'cam_ec103_2021'"  class="label label-danger">Novo</span></span> -->
               <small
                 *ngIf="errors.has('tipoCorrecaoMonetaria')"
                 class="text-danger"
-                >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small
-              >
+                >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small>
             </div>
           </div>
         </form>
+        <!-- <form class="form-horizontal">
+          <div
+            class="form-group"
+            [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
+          >
+            <label class="col-md-3 control-label">Selecione a Opção *:</label>
+            <div class="col-md-7 input-group">
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle btn-block" type="button" data-toggle="dropdown">
+                  <span>{{ correcaoOptionsCurrent.text }}</span>
+                <span class="caret pull-right p-2"></span></button>
+                <ul class="dropdown-menu">
+                  <li *ngFor="let correcao of correcaoOptions" >
+                    <a  (click)="setCorrecaoMonetaria(correcao)"  class="dropdown-item">
+                      {{ correcao.text }} 
+                      <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger">!Novo</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <small
+              *ngIf="errors.has('tipoCorrecaoMonetaria')"
+              class="text-danger"
+              >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small>
+
+            </div>
+          </div>
+        </form> -->
         <!-- <div class="form-group" >
                   <div class="col-md-8 col-sm-offset-2">
                     <div class="checkbox">

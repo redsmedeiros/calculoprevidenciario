@@ -139,6 +139,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataMinima = moment('1970-01-01');
 
   private tipoCorrecaoMonetaria = '';
+  private correcaoOptionsCurrent = { text: '- Selecione uma Opção -', value: '' };
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
@@ -1335,6 +1336,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
     }
+
+  }
+
+  private setCorrecaoMonetaria(correcao) {
+
+    console.log(correcao);
+    this.correcaoOptionsCurrent = correcao;
+    this.tipoCorrecaoMonetaria = correcao.value;
 
   }
 
