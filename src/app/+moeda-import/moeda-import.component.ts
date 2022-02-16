@@ -58,7 +58,7 @@ export class MoedaImportComponent implements OnInit {
       swal('Erro', 'Verifique o arquivo', 'error');
       return;
     }
-    if (data.meta.fields.length != 23) {
+    if (data.meta.fields.length != 24) {
       // console.log(data.meta.fields)
       swal('Erro', 'Número incorreto de colunas. O correto são 23 colunas e o encontrado foram ' + data.meta.fields.length, 'error');
     } else {

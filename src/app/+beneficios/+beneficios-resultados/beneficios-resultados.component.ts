@@ -2020,9 +2020,12 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioDevidoAposRevisaoTetos *= reajusteObj.reajuste;
     }
 
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month') ||
-      dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
-      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+    // somente 08/1993 - 31/01/2022
+    if (
+      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
+      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')
+    ) {
       beneficioDevido /= 1000;
       this.beneficioDevidoOs /= 1000;
       this.beneficioDevidoAposRevisao /= 1000;
@@ -2548,10 +2551,11 @@ export class BeneficiosResultadosComponent implements OnInit {
 
 
 
-
-    if (dataCorrente.isSame(this.dataCorteCruzado, 'month')
-      || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month')
-      || dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
+    // somente 08/1993 - 31/01/2022
+    if (
+      // dataCorrente.isSame(this.dataCorteCruzado, 'month')
+      // || dataCorrente.isSame(this.dataCorteCruzadoNovo, 'month') ||
+      dataCorrente.isSame(this.dataCorteCruzeiroReal, 'month')) {
       beneficioRecebido /= 1000;
       this.beneficioRecebidoOs /= 1000;
       this.beneficioRecebidoAposRevisao /= 1000;
@@ -2794,7 +2798,21 @@ export class BeneficiosResultadosComponent implements OnInit {
   // Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
 
-    const tipo_correcao = this.calculo.tipo_correcao;
+    let tipo_correcao = this.calculo.tipo_correcao;
+
+    if (this.calculo.tipo_correcao === 'cam_ec103_2021') {
+
+      if (dataCorrente.isBefore('2021-12-01', 'month')) {
+
+        tipo_correcao = 'cam';
+
+      } else {
+
+        return 1;
+
+      }
+
+    }
 
 
     if (dataCorrente.isBetween('1994-03-01', '1994-06-01', 'month', '[]')) {
@@ -2850,6 +2868,8 @@ export class BeneficiosResultadosComponent implements OnInit {
     //   }
     // }
 
+
+
     return correcaoMonetaria;
   }
 
@@ -2896,6 +2916,9 @@ export class BeneficiosResultadosComponent implements OnInit {
     return jurosList.reverse();
   }
 
+
+
+
   getJuros(dataCorrente) {
 
     const dataCitacaoReu = moment(this.calculo.data_citacao_reu);
@@ -2918,7 +2941,9 @@ export class BeneficiosResultadosComponent implements OnInit {
         this.jurosCorrente += this.jurosDepois2003;
       }
 
-      if (dataCorrente >= this.dataJuros2009) {
+
+      if (dataCorrente >= this.dataJuros2009 && !this.checkAcessoEC113(dataCorrente)) {
+
         if (!chkBoxTaxaSelic) {
           if (this.soma === 1) {
             this.jurosCorrente += this.jurosDepois2009;
@@ -2929,15 +2954,29 @@ export class BeneficiosResultadosComponent implements OnInit {
         } else {
 
           if (dataCorrente < this.dataSelic70) {
+
             this.jurosCorrente += this.jurosDepois2009;
+
           } else {
+
             const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
             this.jurosCorrente += parseFloat(moedaDataCorrente.juros_selic_70) / 100; // Carregado do BD na coluna da data corrente;
+
           }
 
         }
+
       }
+
+      if (this.checkAcessoEC113(dataCorrente)) {
+
+        this.jurosCorrente += this.getJurosConformeEC113(dataCorrente); // Carregado do BD na coluna da data corrente;
+
+      }
+
+
       jurosAplicado = this.jurosCorrente;
+
     } else {
       if (!chkJurosMora) {
         if (dataCorrente !== dataMesCitacaoReu) {
@@ -2955,6 +2994,16 @@ export class BeneficiosResultadosComponent implements OnInit {
     }
 
     return jurosAplicado;
+  }
+
+  private checkAcessoEC113(dataCorrente) {
+    return (this.calculo.tipo_correcao === 'cam_ec103_2021' && dataCorrente.isSameOrAfter('2021-12-01', 'month'));
+  }
+
+
+  private getJurosConformeEC113(dataCorrente) {
+    const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
+    return parseFloat(moedaDataCorrente[this.calculo.tipo_correcao]) / 100;
   }
 
 
@@ -4987,6 +5036,7 @@ export class BeneficiosResultadosComponent implements OnInit {
   getStringTabelaCorrecaoMonetaria() {
     const correcaoOptions = [
       { text: 'Não Aplicar', value: '' },
+      { text: 'IGPDI até 01/2004 - INPC até 11/2021 - SELIC a partir de 12/2021 (EC 113/2021)', value: 'cam_ec103_2021' },
       { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
       { text: 'IGPDI até 01/2004 - INPC (Manual de Cálculos da Justiça Federal) ', value: 'cam' },
       { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC a partir de 04/2015', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
