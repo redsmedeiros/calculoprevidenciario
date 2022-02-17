@@ -707,7 +707,7 @@
     <div>
       <!-- widget content -->
       <div class="widget-body widget-body-custom">
-        <form class="form-horizontal">
+        <!-- <form class="form-horizontal">
           <div
             class="form-group"
             [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
@@ -733,8 +733,8 @@
                 >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small>
             </div>
           </div>
-        </form>
-        <!-- <form class="form-horizontal">
+        </form> -->
+        <form class="form-horizontal">
           <div
             class="form-group"
             [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
@@ -744,12 +744,14 @@
               <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle btn-block" type="button" data-toggle="dropdown">
                   <span>{{ correcaoOptionsCurrent.text }}</span>
-                <span class="caret pull-right p-2"></span></button>
+                  <span *ngIf="correcaoOptionsCurrent.value === 'cam_ec103_2021'"  class="label label-danger ml-3">Novo</span>
+                  <span class="caret ml-5"></span>
+              </button>
                 <ul class="dropdown-menu">
                   <li *ngFor="let correcao of correcaoOptions" >
                     <a  (click)="setCorrecaoMonetaria(correcao)"  class="dropdown-item">
                       {{ correcao.text }} 
-                      <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger">!Novo</span>
+                      <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger ml-3">Novo</span>
                     </a>
                   </li>
                 </ul>
@@ -761,7 +763,7 @@
 
             </div>
           </div>
-        </form> -->
+        </form>
         <!-- <div class="form-group" >
                   <div class="col-md-8 col-sm-offset-2">
                     <div class="checkbox">
