@@ -853,7 +853,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
-        this.formData.previo_interesse_2003 =  this.jurosAntes2003;
+        this.formData.previo_interesse_2003 = this.jurosAntes2003;
         //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
 
       } else {
@@ -967,11 +967,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   preencherCorrecaoMonetaria() {
-    let tipoCorrecao = this.formData.tipo_correcao;
+    const tipoCorrecao = this.formData.tipo_correcao;
     this.tipoCorrecaoMonetaria = tipoCorrecao;
     for (let index = 0; index < this.correcaoOptions.length; index++) {
       if (this.correcaoOptions[index].value == tipoCorrecao) {
         this.indiceCorrecao = index;
+        this.correcaoOptionsCurrent = this.correcaoOptions[index];
         // console.log(this.indiceCorrecao)
       }
     }
@@ -1549,12 +1550,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return d && (d.getMonth() + 1) == bits[1];
 
   }
-
-  onCorrecaoChange(newCorrecao) {
-    this.tipoCorrecaoMonetaria = newCorrecao.value;
-    // console.log(this.tipoCorrecaoMonetaria);
-  }
-
 
   voltar() {
     window.location.href = '/#/beneficios/beneficios-calculos/' + this.route.snapshot.params['id'];
