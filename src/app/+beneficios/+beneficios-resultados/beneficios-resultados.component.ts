@@ -2767,20 +2767,10 @@ export class BeneficiosResultadosComponent implements OnInit {
   // Seção 3.7
   getCorrecaoMonetaria(dataCorrente) {
 
-    let tipo_correcao = this.calculo.tipo_correcao;
+    const tipo_correcao = this.calculo.tipo_correcao;
 
-    if (this.calculo.tipo_correcao === 'cam_ec103_2021') {
-
-      if (dataCorrente.isBefore('2021-12-01', 'month')) {
-
-        tipo_correcao = 'cam';
-
-      } else {
-
-        return 1;
-
-      }
-
+    if (this.checkAcessoEC113(dataCorrente)) {
+      return 1;
     }
 
 
@@ -2966,13 +2956,13 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   private checkAcessoEC113(dataCorrente) {
-    return (this.calculo.tipo_correcao === 'cam_ec103_2021' && dataCorrente.isSameOrAfter('2021-12-01', 'month'));
+    return (this.calculo.cam_ec113 === 1 && dataCorrente.isSameOrAfter('2021-12-01', 'month'));
   }
 
 
   private getJurosConformeEC113(dataCorrente) {
     const moedaDataCorrente = this.Moeda.getByDate(dataCorrente);
-    return parseFloat(moedaDataCorrente[this.calculo.tipo_correcao]) / 100;
+    return parseFloat(moedaDataCorrente['cam_ec103_2021']) / 100;
   }
 
 
@@ -4885,7 +4875,6 @@ export class BeneficiosResultadosComponent implements OnInit {
   getStringTabelaCorrecaoMonetaria() {
     const correcaoOptions = [
       { text: 'Não Aplicar', value: '' },
-      { text: 'IGPDI até 01/2004 - INPC até 11/2021 - SELIC a partir de 12/2021 (EC 113/2021)', value: 'cam_ec103_2021' },
       { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
       { text: 'IGPDI até 01/2004 - INPC (Manual de Cálculos da Justiça Federal) ', value: 'cam' },
       { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC a partir de 04/2015', value: 'igpdi_012004_inpc062009_tr032015_inpc' },

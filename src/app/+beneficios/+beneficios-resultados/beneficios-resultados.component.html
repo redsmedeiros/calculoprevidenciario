@@ -833,6 +833,54 @@
           >
             <header>
               <span class="widget-icon">
+                <i class="fa fa-list"></i>
+              </span>
+              <h2>Correção de benefício conforme EC113/2021</h2>
+            </header>
+            <!-- widget div-->
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom no-margin no-padding">
+
+              <div id="printableCorrecao">
+                <table
+                  class="table table-bordered table-hover no-margin no-padding"
+                >
+                  <thead class="not-screen">
+                    <tr>
+                      <th colspan="2">
+                        <h2>Correção de benefício conforme EC113/2021</h2>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b> Aplicar SELIC a partir de 12/2021 (EC 113/2021): </b>
+                      </td>
+                      <td style="text-align: left">
+                        {{ calculo.cam_ec113 ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </sa-widget>
+        </article>
+      </div>
+
+      <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <sa-widget
+            [colorbutton]="false"
+            [editbutton]="false"
+            [togglebutton]="false"
+            [deletebutton]="false"
+            [fullscreenbutton]="false"
+            [custombutton]="false"
+          >
+            <header>
+              <span class="widget-icon">
                 <i class="fa fa-money"></i>
               </span>
               <h2>Honorários Advocatícios</h2>

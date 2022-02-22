@@ -17,7 +17,8 @@
 
 
 .widget-body-custom {
-    min-height: 60px !important;
+    min-height:50px !important;
+    padding-bottom: 0.5rem !important;
 }
 
 
@@ -26,4 +27,8 @@
     -moz-animation-name: none  !important;;
     -o-animation-name: none  !important;;
     animation-name: none  !important;;
+}
+
+.form-group {
+    margin-bottom: 10px;
 }
