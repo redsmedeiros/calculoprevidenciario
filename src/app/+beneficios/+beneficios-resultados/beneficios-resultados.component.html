@@ -848,14 +848,14 @@
                   <thead class="not-screen">
                     <tr>
                       <th colspan="2">
-                        <h2>Aplicar a Selic como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021)</h2>
+                        <h2>Correção Monetária/Juros - Selic (EC 113/2021)</h2>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td class="td-width-30" style="text-align: left">
-                        <b> Aplicar SELIC a partir de 12/2021 (EC 113/2021): </b>
+                        <b> Aplicar a Selic como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021): </b>
                       </td>
                       <td style="text-align: left">
                         {{ calculo.cam_ec113 ? "Sim" : "Não" }}
@@ -2036,7 +2036,7 @@
             ao ano, mensalizada, nos demais casos - A partir de jul/2009 
           </p>
           <p *ngIf="calculo.cam_ec113">
-            <strong>d) </strong> SELIC a partir de 12/2021 (EC 113/2021);
+            <strong>d) </strong> SELIC como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021);
           </p>
           <p>
             <strong> {{ calculo.cam_ec113 ? "e)" : "d)" }} </strong> Data da Criação do Cálculo: {{ dataCriacao }};

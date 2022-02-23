@@ -570,10 +570,12 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       && this.especie === 'Aposentadoria por Tempo de Contribuição'
     ) {
 
-      this.errors.add({ 'especie': ['A espécie não pode ser aplicada ao tipo de segurado.'] });
+      this.errors.add({
+        'especie': ['Esta espécie de Benefício não pode ser aplicada ao Segurado selecionado (art. 21, § 2°, da Lei 8.212/1991).']
+      });
       this.toastAlert(
         'error',
-        'A espécie não pode ser aplicada ao tipo de segurado.',
+        'Esta espécie de Benefício não pode ser aplicada ao Segurado selecionado (art. 21, § 2°, da Lei 8.212/1991).',
         'center'
       );
 
@@ -597,7 +599,9 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       && this.especie === 'Aposentadoria por Tempo de Contribuição'
     ) {
 
-      this.errors.add({ 'especie': ['A espécie não pode ser aplicada ao tipo de segurado.'] });
+      this.errors.add(
+        { 'especie': ['Esta espécie de Benefício não pode ser aplicada ao Segurado selecionado (art. 21, § 2°, da Lei 8.212/1991).'] }
+      );
       valid = false;
 
     }
