@@ -71,6 +71,7 @@ export class CalculoAtrasado extends Model {
     data_adicional_25: '',
     limit_60_sc: '',
     rra_sem_juros: '',
+    cam_ec113: '',
   };
 
   public id: number;
@@ -139,6 +140,7 @@ export class CalculoAtrasado extends Model {
   public data_adicional_25;
   public limit_60_sc;
   public rra_sem_juros;
+  public cam_ec113;
 
 
   public actions = `

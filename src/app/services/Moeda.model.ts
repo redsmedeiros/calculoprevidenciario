@@ -26,7 +26,8 @@ export class Moeda extends Model {
     igpdi_012004_inpc062009_tr092017_ipcae: '',
     tr_todo_periodo: '',
     ipca_todo_periodo: '',
-    cam_art_175_3048: ''
+    cam_art_175_3048: '',
+    cam_ec103_2021: ''
   };
 
   public data_moeda;
@@ -51,4 +52,5 @@ export class Moeda extends Model {
   public tr_todo_periodo;
   public ipca_todo_periodo;
   public cam_art_175_3048;
+  public cam_ec103_2021;
 }

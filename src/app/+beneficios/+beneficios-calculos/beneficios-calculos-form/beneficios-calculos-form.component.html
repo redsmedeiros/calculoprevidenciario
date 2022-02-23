@@ -707,7 +707,7 @@
     <div>
       <!-- widget content -->
       <div class="widget-body widget-body-custom">
-        <!-- <form class="form-horizontal">
+        <form class="form-horizontal">
           <div
             class="form-group"
             [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
@@ -724,60 +724,26 @@
                   *ngFor="let correcao of correcaoOptions"
                   value="{{ correcao.value }}"
                 >
-                  {{ correcao.text }} <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger"> - Novo</span>
+                  {{ correcao.text }}
                 </option>
               </select>
               <small
                 *ngIf="errors.has('tipoCorrecaoMonetaria')"
                 class="text-danger"
-                >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small>
+                >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small
+              >
             </div>
           </div>
-        </form> -->
-        <form class="form-horizontal">
           <div
             class="form-group"
             [ngClass]="{ 'has-error': errors.has('tipoCorrecaoMonetaria') }"
-          >
-            <label class="col-md-3 control-label">Selecione a Opção *:</label>
-            <div class="col-md-7 input-group">
-              <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle btn-block" type="button" data-toggle="dropdown">
-                  <span>{{ correcaoOptionsCurrent.text }}</span>
-                  <span *ngIf="correcaoOptionsCurrent.value === 'cam_ec103_2021'"  class="label label-danger ml-3">Novo</span>
-                  <span class="caret ml-5"></span>
-              </button>
-                <ul class="dropdown-menu">
-                  <li *ngFor="let correcao of correcaoOptions" >
-                    <a  (click)="setCorrecaoMonetaria(correcao)"  class="dropdown-item">
-                      {{ correcao.text }} 
-                      <span *ngIf="correcao.value === 'cam_ec103_2021'"  class="label label-danger ml-3">Novo</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <small
-              *ngIf="errors.has('tipoCorrecaoMonetaria')"
-              class="text-danger"
-              >{{ errors.get("tipoCorrecaoMonetaria") | i18n }}</small>
-
-            </div>
-          </div>
+          ></div>
         </form>
-        <!-- <div class="form-group" >
-                  <div class="col-md-8 col-sm-offset-2">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox" name="chkNaoUsarDeflacao" [(ngModel)]="chkNaoUsarDeflacao" class="checkbox {{styleTheme}}">
-                        <span>Para não utilizar deflação na correção monetária marque a caixa</span>
-                      </label>
-                    </div>
-                  </div>
-                </div> -->
       </div>
     </div>
   </sa-widget>
 </article>
+
 
 <article class="col-sm-12 col-md-12 col-lg-12">
   <!-- Widget ID (each widget will need unique ID)-->
@@ -993,6 +959,54 @@
   </sa-widget>
 </article>
 
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <sa-widget
+    [colorbutton]="false"
+    [editbutton]="false"
+    [togglebutton]="false"
+    [deletebutton]="false"
+    [fullscreenbutton]="false"
+    [custombutton]="false"
+    [collapsed]="false"
+    [sortable]="false"
+  >
+    <header>
+      <span class="widget-icon">
+        <i class="fa fa-list"></i>
+      </span>
+      <h2>Correção Monetária/Juros - Selic (EC 113/2021)</h2>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body widget-body-custom">
+        <form class="form-horizontal">
+          <div
+            class="form-group"
+            [ngClass]="{ 'has-error': errors.has('camEC113') }"
+          >
+            <div class="col-md-5 col-md-offset-3 pl-0">
+              <div class="checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="camEC113"
+                    [(ngModel)]="camEC113"
+                    class="checkbox {{ styleTheme }}"
+                    checked
+                  />
+                  <span>Aplicar a Selic como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </sa-widget>
+</article>
+
 <article class="col-sm-12 col-md-12 col-lg-12">
   <!-- Widget ID (each widget will need unique ID)-->
   <sa-widget
@@ -1106,9 +1120,11 @@
                   >{{ errors.get("dataHonorariosDe") }}</small
                 >
               </div>
-            
             </div>
-            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+            >
               <label class="col-md-3 control-label">Valor da Causa:</label>
               <div
                 class="col-md-2"
@@ -1131,8 +1147,13 @@
                 >
               </div>
             </div>
-            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
-              <label class="col-md-3 control-label">Percentual dos Honorários:</label>
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+            >
+              <label class="col-md-3 control-label"
+                >Percentual dos Honorários:</label
+              >
               <div
                 class="col-md-1"
                 *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
@@ -1155,7 +1176,10 @@
                 >
               </div>
             </div>
-            <div class="form-group" *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'">
+            <div
+              class="form-group"
+              *ngIf="taxaAdvogadoAplicacaoSobre === 'condenacao'"
+            >
               <label class="col-md-3 control-label">Mês da Condenação:</label>
               <div
                 class="col-md-2"
@@ -1192,12 +1216,9 @@
                   id="taxaAdvogadoAplicarCPCArt85"
                 >
                   <option value="">- Selecione -</option>
-                  <option value="1">
-                   Valor Total do Benefício Devido
-                  </option>
+                  <option value="1">Valor Total do Benefício Devido</option>
                   <option value="0">
-                   Valor da Diferença entre os Benefícios
-                    Devido e Recebido
+                    Valor da Diferença entre os Benefícios Devido e Recebido
                   </option>
                 </select>
                 <div class="row">

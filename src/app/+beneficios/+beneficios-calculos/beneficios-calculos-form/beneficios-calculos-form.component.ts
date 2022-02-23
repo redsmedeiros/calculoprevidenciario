@@ -111,6 +111,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public naoAplicarJurosSobreNegativo = false;
   public tipoDejurosSelecionado = '';
   public competenciaInicioJuros;
+  public camEC113 = false;
 
   // valor inferior ao salario minimo
   public naoAplicarSMBeneficioConcedido = false;
@@ -126,6 +127,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public afastarPrescricao = false;
   public calcularAbono13UltimoMes = false;
   public calcularAbono13UltimoMesRecebidos = false;
+
 
   public especieValoresDevidos;
   public especieValoresRecebidos;
@@ -143,7 +145,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
-    { text: 'IGPDI até 01/2004 - INPC até 11/2021 - SELIC a partir de 12/2021 (EC 113/2021)', value: 'cam_ec103_2021' },
     { text: 'IGPDI até 01/2004 - INPC (Manual de Cálculos da Justiça Federal) ', value: 'cam' },
     { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
     { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC a partir de 04/2015', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
@@ -826,6 +827,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // opções adicionais de juros
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
+      this.formData.cam_ec113 = this.camEC113;
       // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
 
@@ -1188,6 +1190,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     this.naoAplicarJurosSobreNegativo = this.formData.nao_aplicar_juros_sobre_negativo;
+    this.camEC113 = this.formData.cam_ec113;
     // this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
 
     if (this.isExits(this.formData.competencia_inicio_juros)) {

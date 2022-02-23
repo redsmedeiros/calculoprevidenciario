@@ -297,6 +297,7 @@
                               [ngModelOptions]="{ standalone: true }"
                               class="form-control"
                               id="especiePlan"
+                              (change)="changeCheckEspecieSegurado()"
                             >
                               <option selected disabled value="">
                                 - Selecione a Espécie do Benefício -
@@ -328,6 +329,7 @@
                               [(ngModel)]="aliquota"
                               [ngModelOptions]="{ standalone: true }"
                               name="aliquota"
+                              (change)="changeCheckEspecieSegurado()"
                             >
                               <option value="" selected disabled>
                                 - Selecione a Espécie do Segurado -

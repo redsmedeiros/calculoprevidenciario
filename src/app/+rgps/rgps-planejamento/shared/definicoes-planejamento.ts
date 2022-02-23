@@ -10,6 +10,7 @@ export class DefinicoesPlanejamento {
     { value: 11, label: 'Contribuinte Individual - Empresário - Pró-Labore - 11%' },
     { value: 113, label: 'Contribuinte Individual - Prestador de Serviço para PJ e Equiparados - 11%' },
     { value: 112, label: 'Contribuinte Individual - Autônomo - 11% - Regime Simplicado' },
+    { value: 114, label: 'Contribuinte Facultativo - 11% - Regime Simplicado' },
     { value: 20, label: 'Contribuinte Individual- Autônomo - 20%' },
     { value: 201, label: 'Contribuinte Facultativo - 20%' },
     { value: 99, label: 'Contribuinte Empregado, Avulso e Doméstico - Progressiva e Cumulativa - 7,5% a 14%' },
