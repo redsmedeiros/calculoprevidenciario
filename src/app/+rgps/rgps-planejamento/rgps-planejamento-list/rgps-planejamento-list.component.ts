@@ -357,10 +357,10 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
         this.planejamentoContrib.sc = this.formatContribuicaoList(this.planejamentoContrib.sc, 's');
         Object.assign(this.plan, this.planejamentoContrib);
         this.plan.data_futura = this.data_futura,
-        this.plan.aliquota = this.aliquota,
-        this.plan.especie = this.especie,
+          this.plan.aliquota = this.aliquota,
+          this.plan.especie = this.especie,
 
-        this.updatePlanejamento(this.plan);
+          this.updatePlanejamento(this.plan);
 
       }
     }
@@ -561,6 +561,24 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
       ? true : false;
   }
 
+  private changeCheckEspecieSegurado() {
+
+    this.errors.clear();
+
+    if (
+      ['5', '51', '112', '114'].includes(this.aliquota)
+      && this.especie === 'Aposentadoria por Tempo de Contribuição'
+    ) {
+
+      this.errors.add({ 'especie': ['A espécie não pode ser aplicada ao tipo de segurado.'] });
+      this.toastAlert(
+        'error',
+        'A espécie não pode ser aplicada ao tipo de segurado.',
+        'center'
+      );
+
+    }
+  }
 
 
 
@@ -569,10 +587,19 @@ export class RgpsPlanejamentoListComponent implements OnInit, OnChanges {
     this.errors.clear();
     let valid = true;
 
-
     if (this.aliquota == undefined || this.aliquota == '') {
+
       this.errors.add({ 'aliquota': ['O campo é obrigatório.'] });
       valid = false;
+
+    } else if (
+      ['5', '51', '112', '114'].includes(this.aliquota)
+      && this.especie === 'Aposentadoria por Tempo de Contribuição'
+    ) {
+
+      this.errors.add({ 'especie': ['A espécie não pode ser aplicada ao tipo de segurado.'] });
+      valid = false;
+
     }
 
 

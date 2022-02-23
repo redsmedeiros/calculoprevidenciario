@@ -324,6 +324,7 @@ export class RgpsPlanejamentoResultadosComponent implements OnInit {
       case 11:
       case 113:
       case 112:
+      case 114:
         return {
           aliquota: 11,
           valor: (contribuicao * (11 / 100))
