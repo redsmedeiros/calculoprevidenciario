@@ -111,6 +111,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public naoAplicarJurosSobreNegativo = false;
   public tipoDejurosSelecionado = '';
   public competenciaInicioJuros;
+  public camEC113 = false;
 
   // valor inferior ao salario minimo
   public naoAplicarSMBeneficioConcedido = false;
@@ -127,6 +128,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public calcularAbono13UltimoMes = false;
   public calcularAbono13UltimoMesRecebidos = false;
 
+
   public especieValoresDevidos;
   public especieValoresRecebidos;
 
@@ -139,11 +141,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public dataMinima = moment('1970-01-01');
 
   private tipoCorrecaoMonetaria = '';
+  private correcaoOptionsCurrent = { text: '- Selecione uma Opção -', value: '' };
   private indiceCorrecao = 0;
   public correcaoOptions = [
     { text: '- Selecione uma Opção -', value: '' },
-    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
     { text: 'IGPDI até 01/2004 - INPC (Manual de Cálculos da Justiça Federal) ', value: 'cam' },
+    { text: 'IGPDI até 01/2004 - INPC até 06/2009 - IPCA-E a partir de 07/2009 ', value: 'ipca' },
     { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 03/2015 - INPC a partir de 04/2015', value: 'igpdi_012004_inpc062009_tr032015_inpc' },
     { text: 'IGPDI até 2006 - INPC até 06/2009 - TR até 03/2015 - IPCA-E a partir de 04/2015', value: 'igpdi_2006_inpc062009_tr032015_ipcae' },
     { text: 'IGPDI até 01/2004 - INPC até 06/2009 - TR até 09/2017 - INPC a partir de 10/2017', value: 'igpdi_012004_inpc062009_tr092017_inpc' },
@@ -230,9 +233,11 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   public manterPercentualSMConcedido;
   public manterPercentualSMEsperado;
 
+  public parcRecConcedido = false;
+  public parcRecEsperado = false;
 
-
-
+  public dataParcRecConcedido = null;
+  public dataParcRecEsperado = null;
 
   constructor(
     protected router: Router,
@@ -244,7 +249,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     if (this.route.snapshot.params['type'] !== undefined) {
 
       this.type = this.route.snapshot.params['type'];
-
 
       // if (this.type === 'AC') {
       //   this.chkNotGranted = false;
@@ -823,6 +827,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
 
       // opções adicionais de juros
       this.formData.nao_aplicar_juros_sobre_negativo = this.naoAplicarJurosSobreNegativo;
+      this.formData.cam_ec113 = this.camEC113;
       // this.formData.competencia_inicio_juros = this.competenciaInicioJuros;
 
 
@@ -850,7 +855,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       // Juros anterior a janeiro 2003
       if (this.jurosAntes2003 != undefined) {
 
-        this.formData.previo_interesse_2003 =  this.jurosAntes2003;
+        this.formData.previo_interesse_2003 = this.jurosAntes2003;
         //  (this.tipoDejurosSelecionado == 'manual') ? this.jurosAntes2003.replace(',', '.') : this.jurosAntes2003;
 
       } else {
@@ -964,11 +969,12 @@ export class BeneficiosCalculosFormComponent implements OnInit {
   }
 
   preencherCorrecaoMonetaria() {
-    let tipoCorrecao = this.formData.tipo_correcao;
+    const tipoCorrecao = this.formData.tipo_correcao;
     this.tipoCorrecaoMonetaria = tipoCorrecao;
     for (let index = 0; index < this.correcaoOptions.length; index++) {
       if (this.correcaoOptions[index].value == tipoCorrecao) {
         this.indiceCorrecao = index;
+        this.correcaoOptionsCurrent = this.correcaoOptions[index];
         // console.log(this.indiceCorrecao)
       }
     }
@@ -1184,6 +1190,7 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     }
 
     this.naoAplicarJurosSobreNegativo = this.formData.nao_aplicar_juros_sobre_negativo;
+    this.camEC113 = this.formData.cam_ec113;
     // this.competenciaInicioJuros = this.formatReceivedDate(this.formData.competencia_inicio_juros);
 
     if (this.isExits(this.formData.competencia_inicio_juros)) {
@@ -1277,6 +1284,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       this.SBSemLimitacaoAliquota,
       this.numDependentes,
       this.manterPercentualSMEsperado,
+      this.parcRecEsperado,
+      this.dataParcRecEsperado,
     );
 
     this.listDevidos.push(devidoMultiplo);
@@ -1325,6 +1334,8 @@ export class BeneficiosCalculosFormComponent implements OnInit {
         this.dataInicialadicional2Recebido,
         this.calcularAbono13UltimoMesRecebidos,
         this.manterPercentualSMConcedido,
+        this.parcRecConcedido,
+        this.dataParcRecConcedido,
       );
 
       const isExistRecebido = this.listRecebidos.filter(row => (row.dib == recebidoMultiplo.dib && row.rmi == recebidoMultiplo.rmi));
@@ -1334,6 +1345,14 @@ export class BeneficiosCalculosFormComponent implements OnInit {
       }
 
     }
+
+  }
+
+  private setCorrecaoMonetaria(correcao) {
+
+    console.log(correcao);
+    this.correcaoOptionsCurrent = correcao;
+    this.tipoCorrecaoMonetaria = correcao.value;
 
   }
 
@@ -1534,12 +1553,6 @@ export class BeneficiosCalculosFormComponent implements OnInit {
     return d && (d.getMonth() + 1) == bits[1];
 
   }
-
-  onCorrecaoChange(newCorrecao) {
-    this.tipoCorrecaoMonetaria = newCorrecao.value;
-    // console.log(this.tipoCorrecaoMonetaria);
-  }
-
 
   voltar() {
     window.location.href = '/#/beneficios/beneficios-calculos/' + this.route.snapshot.params['id'];

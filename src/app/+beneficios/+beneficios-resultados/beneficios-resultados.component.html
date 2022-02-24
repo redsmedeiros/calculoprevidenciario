@@ -65,11 +65,7 @@
                   </h1>
                 </div> -->
                 <table
-                  class="
-                    table table-bordered table-hover
-                    no-padding no-margin
-                    not-screen
-                  "
+                  class="table table-bordered table-hover no-padding no-margin not-screen"
                 >
                   <thead>
                     <tr>
@@ -428,6 +424,26 @@
                         {{ dataInicialadicional25DevidoString }}
                       </td>
                     </tr>
+                    <tr *ngIf="[1, 19].includes(
+                      calculo.tipo_aposentadoria
+                    )">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ parcelaRecuperacaoDataDevidoStatus ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="[1, 19].includes(
+                      calculo.tipo_aposentadoria
+                    ) && parcelaRecuperacaoDataDevidoStatus">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Final Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ formatDateIsnotNullMoment(dataParcelaRecuperacaoDevido) }}
+                      </td>
+                    </tr>
                     <tr *ngIf="calculo.tipo_aposentadoria == 22">
                       <td class="td-width-30" style="text-align: left">
                         <b> Número de Dependentes:</b>
@@ -463,19 +479,11 @@
               <h2>Benefícios Recebidos</h2>
             </header>
             <div
-              class="
-                widget-body
-                no-padding
-                widget-body-custom
-                no-margin no-padding
-              "
+              class="widget-body no-padding widget-body-custom no-margin no-padding"
             >
               <div *ngFor="let recebidoLine of listRecebidos">
                 <table
-                  class="
-                    table table-print-no-margin table-bordered table-hover
-                    no-padding no-margin
-                  "
+                  class="table table-print-no-margin table-bordered table-hover no-padding no-margin"
                   style="margin-top: 0px !important"
                 >
                   <thead>
@@ -536,7 +544,8 @@
                         <b>Data Final Recebidos:</b>
                       </td>
                       <td>
-                        {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }}
+                        <span *ngIf="!recebidoLine?.cessacaoOLD" > {{ formatDateIsnotNullMoment(recebidoLine.cessacao) }} </span>
+                        <span *ngIf="recebidoLine?.cessacaoOLD" > {{ formatDateIsnotNullMoment(recebidoLine.cessacaoOLD) }} </span>
                       </td>
                     </tr>
                     <tr>
@@ -544,7 +553,7 @@
                         <b>Renda Mensal Inicial - RMI:</b>
                       </td>
                       <td>
-                        {{ definicaoMoeda.formatMoneyB(recebidoLine.rmi) }}
+                        {{ recebidoLine.rmiString }}
                       </td>
                     </tr>
                     <tr
@@ -594,6 +603,29 @@
                         {{
                           formatDateIsnotNullMoment(
                             recebidoLine.dataAdicional25
+                          )
+                        }}
+                      </td>
+                    </tr>
+
+                    <tr *ngIf="['1', '19'].includes(recebidoLine.especie)">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{ recebidoLine.parcRecConcedido ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                    <tr *ngIf="['1', '19'].includes(
+                      recebidoLine.especie
+                    ) && recebidoLine.parcRecConcedido">
+                      <td class="td-width-30" style="text-align: left">
+                        <b>Data Final Parcela de Recuperação:</b>
+                      </td>
+                      <td>
+                        {{
+                          formatDateIsnotNullMoment(
+                            recebidoLine.dataParcRecConcedido
                           )
                         }}
                       </td>
@@ -833,6 +865,54 @@
           >
             <header>
               <span class="widget-icon">
+                <i class="fa fa-list"></i>
+              </span>
+              <h2>Correção Monetária/Juros - Selic (EC 113/2021)</h2>
+            </header>
+            <!-- widget div-->
+            <!-- widget content -->
+            <div class="widget-body widget-body-custom no-margin no-padding">
+
+              <div id="printableCorrecao">
+                <table
+                  class="table table-bordered table-hover no-margin no-padding"
+                >
+                  <thead class="not-screen">
+                    <tr>
+                      <th colspan="2">
+                        <h2>Correção Monetária/Juros - Selic (EC 113/2021)</h2>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-width-30" style="text-align: left">
+                        <b> Aplicar a Selic como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021): </b>
+                      </td>
+                      <td style="text-align: left">
+                        {{ calculo.cam_ec113 ? "Sim" : "Não" }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </sa-widget>
+        </article>
+      </div>
+
+      <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <sa-widget
+            [colorbutton]="false"
+            [editbutton]="false"
+            [togglebutton]="false"
+            [deletebutton]="false"
+            [fullscreenbutton]="false"
+            [custombutton]="false"
+          >
+            <header>
+              <span class="widget-icon">
                 <i class="fa fa-money"></i>
               </span>
               <h2>Honorários Advocatícios</h2>
@@ -846,11 +926,7 @@
             >
               <div id="printableHonorarios" class="no-margin no-padding">
                 <table
-                  class="
-                    table table-bordered table-hover
-                    no-padding no-margin
-                    table-row-group
-                  "
+                  class="table table-bordered table-hover no-padding no-margin table-row-group"
                   *ngIf="
                     !exibirHonorarioscpc85 &&
                     !exibirHonorariosValorFixo &&
@@ -1235,15 +1311,7 @@
               </div>
               <div>
                 <table
-                  class="
-                    table
-                    table-striped
-                    table-bordered
-                    table-hover
-                    table-responsive
-                    table-condensed
-                    mb-0
-                  "
+                  class="table table-striped table-bordered table-hover table-responsive table-condensed mb-0"
                   *ngIf="
                     !isUpdatingCustasProcesso &&
                     listAcrescimosDeducoes.length > 0
@@ -1877,7 +1945,7 @@
         <div class="modal-content modal-lg">
           <div class="embed-responsive embed-responsive-16by9">
             <iframe
-              src="https://fast.player.liquidplatform.com/pApiv2/embed/c5314ce317d106a956ab5ebff068a23a/de00c7893a38f097fe62f71d693ab463"
+              src="https://www.youtube.com/embed/e9iQpOHl0EM"
               class="embed-responsive-item"
               frameborder="0"
               allow="autoplay; fullscreen"
@@ -1902,8 +1970,7 @@
             {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p>
-            <strong>b) </strong> Correção monetária conforme Manual de Cálculos
-            da Justiça Federal:
+            <strong>b) </strong> {{ stringTabelaCorrecaoMonetaria }}:
           </p>
           <p *ngIf="calculo.tipo_correcao == 'ipca'">
             Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a
@@ -1912,7 +1979,7 @@
             01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de
             04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a
             04/1996, IGP-di de 05/1996 a 08/2006, IPCA-e até
-            {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'tr'">
             Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a
@@ -1920,8 +1987,8 @@
             IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de
             01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de
             04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a
-            04/1996, IGP-di de 05/1996 a 08/2006, TR de 09/2006 a
-            {{ formatDateCompetencia(calculo.data_calculo_pedido) }} ;​
+            04/1996, IGP-di de 05/1996 a 08/2006, TR de 09/2006 até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'cam'">
             Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a
@@ -1929,8 +1996,8 @@
             IPC (IBGE) de 03/1990 a 02/1991, INPC de 03/1991 a 12/1992, IRSM de
             01/1993 a 02/1994, URV (DE 28/02 A 01/04/94) em 03/1994, URV de
             04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a
-            04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a
-            {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
+            04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'tr032015_ipcae'">
             Indexadores: - ORTN de 10/1964 a 02/1986, OTN (6,17019) de 03/1986 a
@@ -1940,18 +2007,21 @@
             04/1994 a 07/1994, IPC-R de 07/1994 a 06/1995, INPC de 07/1995 a
             04/1996, IGP-di de 05/1996 a 08/2006, INPC de 09/2006 a 06/2009, TR
             de 09/2006 a de 07/2009 a 02/2015 IPCA-e até
-            {{ formatDateCompetencia(calculo.data_calculo_pedido) }};
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'ipca_todo_periodo'">
-            Linha de correção: IPCA todo o período;
+            Linha de correção: IPCA até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'tr_todo_periodo'">
-            Linha de correção: TR todo o período;
+            Linha de correção: TR até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p *ngIf="calculo.tipo_correcao == 'cam_art_175_3048'">
             Tabela de atualização monetária das parcelas relativas a benefícios
             pagos com atraso - (Art.175, Decreto No 3.048/99) - (Portaria
-            SEPRT-ME Nº 9.638, de 09 de abril de 2020);
+            SEPRT-ME Nº 9.638, de 09 de abril de 2020) até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p
             *ngIf="
@@ -1961,8 +2031,8 @@
             Linha de correção: ORTN/OTN/BTN até 03/1990;IPC 03/1990 a 02/1991;
             INPC 03/1991 a 12/1992; IRSM 01/1993 a 02/1994; URV 03/1994 a
             06/1994; IPC-R 07/1994 a 06/1995; INPC 07/1995 a 04/1996; IGPdi
-            05/1996 a01/2004; INPC 02/2004 a 06/2009; TR 07/2009 a 03/2015; INPC
-            em diante;
+            05/1996 a01/2004; INPC 02/2004 a 06/2009; TR 07/2009 a 03/2015; INPC até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p
             *ngIf="
@@ -1973,7 +2043,8 @@
             INPC 03/1991 a 12/1992; IRSM 01/1993 a 02/1994; URV 03/1994 a
             06/1994; IPC-R 07/1994 a 06/1995; INPC 07/1995 a 04/1996; IGPdi
             05/1996 a 08/2006; INPC 09/2006 a 06/2009; TR 07/2009 a 03/2015;
-            IPCAe em diante;
+            IPCAe até
+            {{  calculo.cam_ec113 ? "11/2021" : formatDateCompetencia(calculo.data_calculo_pedido) }};
           </p>
           <p><strong>c) </strong> Juros de mora:</p>
           <p>
@@ -1982,18 +2053,20 @@
             01/2003 até 06/2009; e Percentual de
             {{ formatDateCompetencia(calculo.data_calculo_pedido) }} ao mês,
             caso a taxa Selic ao ano seja superior à 8,5%, ou 70% da taxa Selic
-            ao ano, mensalizada, nos demais casos - A partir de jul/2009;
+            ao ano, mensalizada, nos demais casos - A partir de jul/2009 
           </p>
-
-          <p>
-            <strong>d) </strong> Data da Criação do Cálculo: {{ dataCriacao }};
+          <p *ngIf="calculo.cam_ec113">
+            <strong>d) </strong> SELIC como Correção Monetária e Juros a partir de Dezembro/2021 (EC 113/2021);
           </p>
           <p>
-            <strong>e) </strong> Data da Atualização do Cálculo:
+            <strong> {{ calculo.cam_ec113 ? "e)" : "d)" }} </strong> Data da Criação do Cálculo: {{ dataCriacao }};
+          </p>
+          <p>
+            <strong>{{ calculo.cam_ec113 ? "f)" : "e)" }} </strong> Data da Atualização do Cálculo:
             {{ dataUltimaAtualizacao }};
           </p>
           <p>
-            <strong>f) </strong> Data da Impressão do Cálculo:
+            <strong>{{ calculo.cam_ec113 ? "g)" : "f)" }}</strong> Data da Impressão do Cálculo:
             {{ dataImpressao }}.
           </p>
         </div>

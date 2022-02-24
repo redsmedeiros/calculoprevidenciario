@@ -125,12 +125,14 @@
                   <!-- </div>
                             <div class="form-group"> -->
                   <label class="col-md-2 control-label" for="select-1"
+                  *ngIf="condicao_especial === 1" 
                     >Fator Multiplicador</label
                   >
                   <div
                     class="col-md-1"
                     data-placement="bottom"
                     tooltip="Fator multiplicador para tempo especial."
+                    *ngIf="condicao_especial === 1" 
                   >
                     <input
                       class="form-control text-center"
@@ -188,7 +190,12 @@
                   </div>
                   <!-- </div>
                     <div class="form-group"> -->
-                  <div class="col-md-2">
+                  <div class=""
+                  [ngClass]="{
+                    'col-md-2': condicao_especial === 1,
+                    'col-md-5': condicao_especial === 0
+                  }"
+                  >
                     <button
                       *ngIf="atualizarPeriodo != 0"
                       type="button"

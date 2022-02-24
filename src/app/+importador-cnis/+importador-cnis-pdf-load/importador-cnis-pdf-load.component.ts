@@ -242,11 +242,13 @@ export class ImportadorCnisPdfLoadComponent implements OnInit {
     this.checkFormatoMoedaSC(text_vinculo);
 
     if ((text_vinculo.search(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g) > 0)
+    ||  (text_vinculo.search(this.regexpEmpregado) > 0)
       && (text_vinculo.search(/(\s)(Empregado|Benefício)(\s)/) > 0 || text_vinculo.search(/(\s)(EMPREGADO DOMÉSTICO)(\s)/) < 0)) {
       // contribuicoes = text_vinculo.match(/(\s|\n|\t|\r)((\d{2}\/\d{4})(\s)(\d{0,3}\.?\d{0,3}\.?\d{0,3}\,\d{2}))(?!\s\d{2}\/\d{2}\/\d{4})/g);
       contribuicoes = text_vinculo.match(this.regexpEmpregado);
     }
     if ((text_vinculo.search(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g) > 0)
+     || (text_vinculo.search(this.regexpFacultativoPdf) > 0)
       && text_vinculo.search(/(Individual|Facultativo)|(Empresário \/ Empregador)|(Autônomo)|(CONTRIBUINTE INDIVIDUAL)|(EMPREGADO DOMÉSTICO)/) > 0) {
       // contribuicoes = text_vinculo.match(/(\s|\t|\n)(\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})|(\s|\n|\t)(\d{2}\/\d{4})(\s|\n|\t)(\d{2}\/\d{2}\/\d{4})(\s)(\d{1,3}\.?\d{1,3}\.?\d{0,3}\,\d{2})/g);
       contribuicoes = text_vinculo.match(this.regexpFacultativoPdf);

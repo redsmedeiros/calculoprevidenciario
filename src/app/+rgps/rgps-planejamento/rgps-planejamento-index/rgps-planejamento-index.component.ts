@@ -320,6 +320,7 @@ export class RgpsPlanejamentoIndexComponent implements OnInit, DoCheck {
 
   private planejar(id) {
 
+    sessionStorage.removeItem('exportPlanejamento');
     const objPlan = this.planejamentoList.find(row => row.id === id);
     const objExport = JSON.stringify(objPlan);
     sessionStorage.setItem('exportPlanejamento', objExport);
