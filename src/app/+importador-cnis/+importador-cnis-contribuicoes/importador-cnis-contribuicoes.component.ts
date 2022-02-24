@@ -237,7 +237,7 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
    * clearDataInputForm
    */
   public clearDataInputForm() {
-  
+
     this.inicioPeriodo = '';
     this.finalPeriodo = '';
     this.salarioContribuicao = undefined;
@@ -639,6 +639,17 @@ export class ImportadorCnisContribuicoesComponent implements OnInit, OnChanges {
 
   }
 
+  private checkConsiderarCarenciaTempo(event, type = null) {
+
+    if (this.sc_mm_considerar_carencia === 1 &&
+      this.sc_mm_considerar_tempo !== 1) {
+
+      this.sc_mm_considerar_tempo = 1;
+      (<HTMLFormElement>document.getElementById('sc_mm_considerar_tempo1')).checked = true;
+
+    }
+
+  }
 
   private countPendenciasSC(contribuicoes: Array<any>, type = 'mm') {
 

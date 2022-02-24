@@ -626,6 +626,7 @@
                     [ngModelOptions]="{ standalone: true }"
                     (change)="errors.clear('sc_mm_considerar_tempo')"
                     type="radio"
+                    id="sc_mm_considerar_tempo1"
                     name="sc_mm_considerar_tempo"
                     [value]="1"
                   />
@@ -635,8 +636,10 @@
                   <input
                     [(ngModel)]="sc_mm_considerar_tempo"
                     [ngModelOptions]="{ standalone: true }"
-                    (change)="errors.clear('sc_mm_considerar_tempo')"
+                    (change)="checkConsiderarCarenciaTempo($event,'tc');
+                    errors.clear('sc_mm_considerar_tempo'); "
                     type="radio"
+                    id="sc_mm_considerar_tempo0"
                     name="sc_mm_considerar_tempo"
                     [value]="0"
                   />
@@ -660,7 +663,8 @@
                   <input
                     [(ngModel)]="sc_mm_considerar_carencia"
                     [ngModelOptions]="{ standalone: true }"
-                    (change)="errors.clear('sc_mm_considerar_carencia')"
+                    (change)="errors.clear('sc_mm_considerar_carencia');
+                    checkConsiderarCarenciaTempo();"
                     type="radio"
                     name="sc_mm_considerar_carencia"
                     [value]="1"
