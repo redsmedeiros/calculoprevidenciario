@@ -663,6 +663,7 @@ export class BeneficiosResultadosComponent implements OnInit {
         recebidoRow.indiceInps = [];
         recebidoRow.indiceInpsValores = [];
         recebidoRow.listRedutorrecebido = [];
+        recebidoRow.rmiString = this.formatRMIMoedaData(recebidoRow.rmi, recebidoRow.dib);
 
         if (this.checkParcelaRecuperacao('r', recebidoRow)) {
 
@@ -1763,10 +1764,10 @@ export class BeneficiosResultadosComponent implements OnInit {
       indiceObjCorrente = this.getByDateToTypeRecebidosList(dataCorrente, recebidoRow)
     }
 
-
     if (indiceObjCorrente == undefined) {
       reajuste = 0;
     } else {
+
       indiceReajuste = indiceObjCorrente.indice == null ? 1 : indiceObjCorrente.indice;
       indiceReajusteOs = indiceObjCorrente.indice_os == null ? 1 : indiceObjCorrente.indice_os;
 
@@ -1793,7 +1794,14 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (dataCorrente.isSame('1994-03-01', 'month')) {
       reajuste = 1 / 661.0052;
-      if (dataCorrente == dataPedidoBeneficioInd) {
+      if (dataCorrente == moment(this.calculo.data_pedido_beneficio_esperado)) {
+        reajuste = 1;
+      }
+    }
+
+    if (dataCorrente.isSame('1994-03-01', 'month')) {
+       reajuste = 1 / 661.0052;
+      if (dataCorrente.isSame(dataPedidoBeneficioInd, 'month')) {
         reajuste = 1;
       }
     }
@@ -1826,6 +1834,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     // }
 
+
     if (this.isBuracoNegro(dataPedidoBeneficioInd)) {
       if (dataCorrente.isSame(this.dataEfeitoFinanceiro, 'month')) {
 
@@ -1840,7 +1849,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
       }
     }
-
 
     return { reajuste: reajuste, reajusteOs: reajusteOS };
   }
@@ -2420,6 +2428,7 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     if (recebidoRow.status) {
 
+
       rmiRecebidos = parseFloat(recebidoRow.value.rmi);
       rmiBuracoNegro = parseFloat(recebidoRow.value.rmiBuracoNegro);
 
@@ -2441,6 +2450,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       if (this.isMinimoInicialRecebidoLastId === undefined) {
         this.isMinimoInicialRecebidoLastId = recebidoRow.value.id;
       }
+
 
     } else {
 
@@ -2473,6 +2483,7 @@ export class BeneficiosResultadosComponent implements OnInit {
       this.beneficioRecebidoOs = (beneficioRecebido);
     }
 
+
     // removido DR. Sergio 30/07/2020 (&& !this.isTetos)
     if (dataCorrente <= this.dataSimplificada && dib < this.dataInicioBuracoNegro) {
       beneficioRecebido = irtRecebidoSimplificado89 * moedaDataCorrente.salario_minimo;
@@ -2500,7 +2511,6 @@ export class BeneficiosResultadosComponent implements OnInit {
 
     } else if (tipo_aposentadoria_recebida != '12' && tipo_aposentadoria_recebida != '17') {
 
-
       ///if (!dataCorrente.isSame(this.dataInicioRecebidos)) {
       if (!dataCorrente.isSame(dataPedidoBeneficio)) {
         beneficioRecebido *= reajusteObj.reajuste; // Reajuse de devidos, calculado na seção 2.1
@@ -2516,6 +2526,8 @@ export class BeneficiosResultadosComponent implements OnInit {
         beneficioRecebido = this.beneficioRecebidoAnterior *= 1.000095;
       }
     }
+
+
 
     this.beneficioRecebidoOs = this.beneficioRecebidoOs * reajusteObj.reajuste;
     let indiceSuperior = false;
@@ -4646,16 +4658,21 @@ export class BeneficiosResultadosComponent implements OnInit {
   }
 
   formatDateCompetencia(dataString) {
+
     if (dataString != '0000-00-00') {
       let splited_date = dataString.split('-');
       return splited_date[1] + '/' + splited_date[0];
     }
+
     return '--'
+
   }
 
   formatPercent(value, n_of_decimal = 0) {
+
     value = parseFloat(value) * 100;
     return this.formatDecimal(value, n_of_decimal) + '%';
+
   }
 
   formatMoney(value, sigla = 'R$', aplicarCor = false) {
@@ -4708,9 +4725,18 @@ export class BeneficiosResultadosComponent implements OnInit {
     return this.formatMoney(value, sigla);
   }
 
+
+  formatRMIMoedaData(value, data) {
+
+    const moeda = DefinicaoMoeda.loadCurrency(data);
+    return this.formatMoney(value, moeda.acronimo);
+  }
+
   formatDecimal(value, n_of_decimal_digits) {
+
     value = parseFloat(value);
-    return (value.toFixed(parseInt(n_of_decimal_digits))).replace('.', ',');
+    return (value.toFixed(parseInt(n_of_decimal_digits, 10))).replace('.', ',');
+
   }
 
   formatIndicesReajustes(reajusteObj, dataCorrente, tipo) {
