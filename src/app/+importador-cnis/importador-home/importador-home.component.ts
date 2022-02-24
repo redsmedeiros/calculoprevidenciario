@@ -311,8 +311,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
   prevStep() {
 
-    // console.log(this.seguradoSelecionado);
-
     if (this.prevManualCNIS()) {
 
       const idx = this.steps.indexOf(this.activeStep);
@@ -326,8 +324,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
   }
 
   nextStep() {
-
-    // console.log(this.activeStep.valid);
 
     this.activeStep.submitted = true;
 
@@ -696,7 +692,6 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
    */
   public setRetunCalculoRMICT(data) {
 
-    console.log(data);
     const stepRetun = this.steps.filter((step) => 'step5' === step.key);
     this.clearDataSelected(stepRetun[0])
     this.activeStep = stepRetun[0];
