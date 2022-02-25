@@ -1268,7 +1268,6 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
 
   }
 
-
   private confirmAlteracaoContagemTempo(dibAtual, dibOriginal) {
 
     if (moment(dibAtual, 'DD/MM/YYYY').isBefore(moment(dibOriginal, 'DD/MM/YYYY'))) {
@@ -1288,6 +1287,7 @@ export class RgpsCalculosFormComponent implements OnInit, OnChanges {
         if (result.value) {
 
           sessionStorage.setItem('dibLimiteContagemTempo', this.dataInicioBeneficio);
+          sessionStorage.setItem('isToStep6', 'aStep4ToRMI');
           this.retunCTEvent.emit({ dibLimiteContagemTempo: this.dataInicioBeneficio });
           this.toastAlert('success', 'Aguarde a execução da contagem de tempo com o novo parâmetro.', null);
           //  this.toastAlert('error', 'Ocorreu um erro inesperado. Tente novamente em alguns instantes.', null);

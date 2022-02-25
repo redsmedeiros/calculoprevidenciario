@@ -28,6 +28,9 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
   public Math = Math;
   public isCheckSC = false;
 
+  public dibLimite;
+  public limitesDoVinculo;
+
 
   constructor(
     protected router: Router,
@@ -50,6 +53,8 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       .then((periodosContribuicao: PeriodosContagemTempo[]) => {
         this.periodosListInicial = [];
         if (periodosContribuicao.length > 0) {
+
+          this.setDibLimiteRMI(periodosContribuicao)
 
           for (const periodo of periodosContribuicao) {
             this.updateDatatablePeriodos(periodo);
@@ -75,6 +80,28 @@ export class ContagemTempoConclusaoPeriodosComponent implements OnInit {
       });
   }
 
+  /**
+   * limitar a dib RMI
+   * @param periodosContribuicao
+   */
+  private setDibLimiteRMI(periodosContribuicao) {
+
+    if (this.dadosPassoaPasso.origem !== 'contagem' &&
+      sessionStorage.getItem('dibLimiteContagemTempo') !== null) {
+
+      this.dibLimite = sessionStorage.getItem('dibLimiteContagemTempo');
+      this.limitesDoVinculo = moment(this.dibLimite, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+      for (const periodo of periodosContribuicao) {
+
+        if (moment(periodo.data_termino).isAfter(this.limitesDoVinculo)) {
+          periodo.data_termino = this.limitesDoVinculo;
+        }
+      }
+
+      periodosContribuicao = periodosContribuicao.filter(x => (moment(x.data_inicio).isAfter(this.limitesDoVinculo)));
+    }
+  }
 
   private setCheckSC() {
 

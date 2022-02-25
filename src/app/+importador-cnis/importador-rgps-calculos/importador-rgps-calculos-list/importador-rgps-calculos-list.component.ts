@@ -118,6 +118,7 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
     // this.setExibirForm(this.dadosPassoaPasso);
 
     this.getCalculosSeguradoSelecionado();
+    this.checkOpenRefatorarCT();
   }
 
 
@@ -428,11 +429,11 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
   }
 
- 
+
   /**
    * setRevisaoPBC
    */
-   public setRevisaoPBC() {
+  public setRevisaoPBC() {
 
     this.revisaoPBC = !(this.revisaoPBC);
     this.dadosPassoaPasso.pbcFull = (this.revisaoPBC ? 'pbc' : '');
@@ -440,6 +441,19 @@ export class ImportadorRgpsCalculosListComponent implements OnInit, OnChanges {
 
   }
 
+
+  private checkOpenRefatorarCT() {
+
+    if (sessionStorage.getItem('isToStep6') === 'aStep4ToRMI') {
+
+      setTimeout(() => {
+        this.showChildModal();
+        sessionStorage.removeItem('isToStep6');
+      }, 500);
+
+    }
+
+  }
 
   formatAnosMesesDias(dias) {
 

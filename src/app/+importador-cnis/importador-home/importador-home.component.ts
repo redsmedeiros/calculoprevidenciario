@@ -377,7 +377,7 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
 
         setTimeout(() => {
           swal.close();
-        }, 1500);
+        }, 1000);
       }
 
     }
@@ -648,14 +648,16 @@ export class ImportadorHomeComponent implements OnInit, OnChanges {
         JSON.stringify(this.exportResultContagemTempo));
 
       // pular passo calcular contagem
-      if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+     // if (sessionStorage.getItem('isToStep6') === 'aStep4') {
+      if (sessionStorage.getItem('isToStep6') === 'aStep4ToRMI') {
 
         setTimeout(() => {
 
+          // console.log('toRMI')
           this.nextStep();
-          sessionStorage.removeItem('isToStep6');
+         // sessionStorage.removeItem('isToStep6');
 
-        }, 500);
+        }, 100);
 
       }
 

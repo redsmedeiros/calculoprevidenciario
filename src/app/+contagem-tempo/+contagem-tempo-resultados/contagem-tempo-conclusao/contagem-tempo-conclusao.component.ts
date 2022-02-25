@@ -151,11 +151,14 @@ export class ContagemTempoConclusaoComponent implements OnInit, OnChanges {
   }
 
   private setDibLimiteRMI() {
+
     if (this.dadosPassoaPasso.origem !== 'contagem' &&
       sessionStorage.getItem('dibLimiteContagemTempo') !== null) {
+
       this.dibLimite = sessionStorage.getItem('dibLimiteContagemTempo');
       this.limitesDoVinculo.fim = moment(this.dibLimite, 'DD/MM/YYYY');
-      sessionStorage.removeItem('dibLimiteContagemTempo')
+      sessionStorage.removeItem('dibLimiteContagemTempo');
+
     }
   }
 
