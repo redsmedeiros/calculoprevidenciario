@@ -761,8 +761,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
       default:
 
-        const arredFatorCalc = (vl) => {
-          return Math.floor(vl * 10000) / 10000;
+        const arredFatorCalc = (vl, type = false) => {
+          if (type) {
+            return Math.floor(vl * 10000) / 10000;
+          }
+          return Math.round(vl * 10000) / 10000;
         };
 
         const tempo = this.contribuicaoPrimaria;
@@ -774,17 +777,16 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // Se professor
         tempoTotalContribuicaoF += redutorProfessor;
 
-        tempoTotalContribuicaoF = arredFatorCalc(tempoTotalContribuicaoF);
+        tempoTotalContribuicaoF = arredFatorCalc(tempoTotalContribuicaoF, true);
 
-        let idadeFracionadaF = this.getIdadeFracionada(false);
+        let idadeFracionadaF = this.getIdadeFracionada(true);
+        idadeFracionadaF = arredFatorCalc(idadeFracionadaF, true);
 
-        idadeFracionadaF = arredFatorCalc(idadeFracionadaF);
-
-        fatorSeguranca = arredFatorCalc(arredFatorCalc(tempoTotalContribuicaoF * aliquota) / expectativa)
-          * arredFatorCalc(1 + arredFatorCalc(idadeFracionadaF + arredFatorCalc(tempoTotalContribuicaoF * aliquota)) / 100);
+        fatorSeguranca = ((tempoTotalContribuicaoF * aliquota) / expectativa)
+          * (1 + (idadeFracionadaF + (tempoTotalContribuicaoF * aliquota)) / 100);
 
         // fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
-        fatorSeguranca = arredFatorCalc(fatorSeguranca);
+         fatorSeguranca = arredFatorCalc(fatorSeguranca);
 
         this.fatorPrevidenciario = fatorSeguranca;
         this.fatorPrevidenciarioAntesDaVerificacao = fatorSeguranca;
@@ -2327,10 +2329,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       dataInicioBeneficioI = moment('13/11/2019', 'DD/MM/YYYY')
     }
 
-    const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'days');
-
     if (type) {
-      return idadeEmDias / 365;
+   // const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'days');
+    const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'years', true);
+    return idadeEmDias;
+     // return idadeEmDias / 365;
     }
 
     const idade33 = DefinicaoTempo.calcularTempo360NotDayStart(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
