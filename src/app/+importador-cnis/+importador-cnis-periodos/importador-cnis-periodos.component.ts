@@ -74,6 +74,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   public isCheckSCImport = false;
 
 
+
+
   @Output() eventCountVinculosErros = new EventEmitter();
   @ViewChild('periodoFormheader') periodoFormheader: ElementRef;
   @ViewChild(ImportadorCnisContribuicoesComponent) ContribuicoesComponent: ImportadorCnisContribuicoesComponent;
@@ -91,6 +93,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.detector.detectChanges();
+   
   }
 
 
@@ -125,11 +128,12 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         && this.dadosPassoaPasso.origem === 'passo-a-passo'
         && this.dadosPassoaPasso.type === 'seguradoExistente'
       ) {
-        this.updateDatatablePeriodosSelecionados(vinculo);
+        this.updateDatatablePeriodosSelecionados(vinculo, vinculos);
       } else {
         this.updateDatatablePeriodos(vinculo);
       }
 
+      this.checkPeriodosConcomitantesPorIndex();
     }
 
     this.detector.detectChanges();
@@ -347,15 +351,94 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
 
 
 
-  public updateDatatablePeriodosSelecionados(vinculo) {
+  private checkDatasConcomitantes(inicio, fim, inicioAux, fimAux) {
+    let checkConcomitante = false;
+
+    inicio = moment(inicio).startOf('d');
+    fim = moment(fim).startOf('d');
+
+    inicioAux = moment(inicioAux).startOf('d');
+    fimAux = moment(fimAux).startOf('d');
+
+
+    if (inicio === inicioAux && fim === fimAux) {
+      checkConcomitante = true;
+    } else {
+
+      if (inicio >= inicioAux && fim <= fimAux) {
+        checkConcomitante = true;
+      }
+
+      if (inicio <= inicioAux && fim >= fimAux) {
+        checkConcomitante = true;
+      }
+    }
+
+    if (inicio < inicioAux && fim >= inicioAux && fim <= fimAux) {
+      checkConcomitante = true;
+    }
+
+    if (inicio > inicioAux && inicio <= fimAux && fim >= fimAux) {
+      checkConcomitante = true;
+    }
+
+    return checkConcomitante;
+  }
+
+
+  /**
+   * compareConcomitante
+vinculo   */
+  public compareConcomitante(vinculo, vinculos) {
+
+    const concomitantes: any = {
+      'vinculosList': '',
+      'check': false,
+      'text': 'Não'
+    };
+
+    let checkConcomitante = false;
+
+    for (const periodoCom of vinculos) {
+
+      checkConcomitante = this.checkDatasConcomitantes(vinculo.datainicio, vinculo.datatermino,
+        periodoCom.datainicio, periodoCom.datatermino);
+
+      if (vinculo.index !== periodoCom.index && checkConcomitante) {
+
+        concomitantes.check = true;
+        concomitantes.text = 'Sim';
+        concomitantes.vinculosList += (concomitantes.vinculosList === '') ? periodoCom.index : ', ' + periodoCom.index;
+
+      }
+
+    }
+
+    vinculo.concomitantes = concomitantes;
+
+    return vinculo;
+  }
+
+
+
+
+  public checkPeriodosConcomitantesPorIndex() {
+
+    this.vinculosList.map((vinculo) => {
+      this.compareConcomitante(vinculo, this.vinculosList);
+    });
+
+  }
+
+  public updateDatatablePeriodosSelecionados(vinculo, vinculos) {
 
     if (typeof vinculo === 'object') {
 
       const periodo_in = this.formataPeriodo(this.formatReceivedDate(vinculo.data_inicio));
       const periodo_fi = this.formataPeriodo(this.formatReceivedDate(vinculo.data_termino));
 
-      const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_inicio));
-      const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY/MM/DD', this.formatReceivedDate(vinculo.data_termino));
+      const datainicio = this.formataDataTo('DD/MM/YYYY', 'YYYY-MM-DD', this.formatReceivedDate(vinculo.data_inicio));
+      const datatermino = this.formataDataTo('DD/MM/YYYY', 'YYYY-MM-DD', this.formatReceivedDate(vinculo.data_termino));
       vinculo.contribuicoes = [];
 
       if (typeof vinculo.sc !== 'undefined' && vinculo.sc && typeof vinculo.sc === 'string') {
@@ -389,12 +472,17 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         converter_especial_apos_ec103: (vinculo.converter_especial_apos_ec103 === 1) ? 'Sim' : 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
-        index: (this.vinculosList.length) + 1
+        index: (this.vinculosList.length) + 1,
+        concomitantes: '',
+        secundario: vinculo.secundario,
       }
 
       this.vinculosList.push(line);
       this.isValidVinculo(line);
+      console.log(this.vinculosList)
+
     }
+
 
   }
 
@@ -433,6 +521,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
         converter_especial_apos_ec103: 'Não',
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
+        concomitantes: '',
+        secundario: '',
         index: vinculo.index
       }
 
@@ -440,6 +530,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
       this.isValidVinculo(line);
 
     }
+
 
 
   }
@@ -469,6 +560,8 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
+          concomitantes: vinculo.concomitantes.vinculosList,
+          secundario: vinculo.secundario,
         }
       );
     }
@@ -498,7 +591,9 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
-          action: null
+          action: null,
+          concomitantes: vinculo.concomitantes.vinculosList,
+          secundario: vinculo.secundario,
         })
       );
     }
@@ -621,8 +716,10 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
           vinculo.contribuicoes = contribuicoes;
           vinculo.converter_especial_apos_ec103 = this.boolToLiteral(this.converter_especial_apos_ec103);
 
-        }
+          vinculo.concomitante = vinculo.concomitante;
+          vinculo.secundario = vinculo.secundario;
 
+        }
 
         this.isValidVinculo(vinculo);
 
@@ -1177,7 +1274,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     return true;
   }
 
-  
+
 
   isExistPeriodo(data) {
     if (data === undefined
@@ -1287,6 +1384,22 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
     }
 
     return 'Salários de Contribuição';
+
+  }
+
+  public onChangeSelectSecundario($event, id) {
+
+    // const id = $event.target.value;
+    const vinculoSecundario = false
+
+    console.log(id, vinculoSecundario)
+
+    this.vinculosList.map((lista) => {
+
+      if (lista.id === id) {
+        lista.secundario = (!lista.secundario);
+      }
+    });
 
   }
 

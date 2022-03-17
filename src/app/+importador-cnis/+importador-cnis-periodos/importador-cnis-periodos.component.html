@@ -282,6 +282,8 @@
                 <th class="text-center">Condição Especial</th>
                 <th class="text-center">Fator Condição</th>
                 <th class="text-center">Carência</th>
+                <th class="text-center">Concomitância</th>
+                <th class="text-center">Considerar Secundário</th>
                 <th class="text-center" *ngIf="isCheckSCImport" >
                   <span
                     data-placement="bottom"
@@ -327,6 +329,22 @@
                   {{ vinculo.fator_condicao_especial }}
                 </td>
                 <td class="text-center">{{ vinculo.carencia }}</td>
+                <td class="text-center">{{vinculo.concomitantes?.vinculosList}}
+                  
+
+                </td>
+                <td class="text-center">
+
+                  <div class="form-check" >
+                    <input *ngIf="vinculo.concomitantes?.check == true"
+                    class="form-check-input" 
+                    type="checkbox" id="secundario-{{vinculo.id}}" 
+                    [checked]="vinculo.secundario" 
+                    (change)="onChangeSelectSecundario($event, vinculo.id)" 
+                    [value]="vinculo.secundario"> 
+                  </div>
+
+                </td>
                 <td *ngIf="isCheckSCImport"> 
                   <button
                     type="button"
