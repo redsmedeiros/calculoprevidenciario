@@ -1,0 +1,92 @@
+<div id="77" class="boxCalculoSecundario row">
+  <article class="col-sm-12 col-md-12 col-lg-12 no-margin">
+    <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
+      <div>
+        <div class="widget-body no-padding hidden-dt">
+          <table class="table table-bordered table-hover no-padding">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  <span class="font-bold"> Atividade Secundária - {{( indexSec + 1 )}} </span>
+                </th>
+              </tr>
+              <tr>
+                <th width="50%">
+                  <span class="pull-right font-bold"> Tipo </span>
+                </th>
+                <th>
+                  Descrição
+                </th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <tr>
+                <td>
+                  <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="pull-right font-bold">Tempo de Contribuição Secundário:</span>
+                </td>
+                <td> ano(s), mês(es) e dia(s)</td>
+              </tr>
+            </tbody>
+
+          </table>
+          <div class="alert alert-warning margin-top-10" *ngIf="false" role="alert">
+            <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a
+                href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da
+                Lei nº 9.876, de 29/11/1999</a></p>
+          </div>
+
+          <sa-widget [colorbutton]="false" [editbutton]="false">
+            <i class="fa fa-gear fa-2x fa-spin txt-color-red" *ngIf="isUpdating"></i>
+            <div *ngIf="!isUpdating">
+              <div class="widget-body no-padding">
+                <sa-datatable [options]="tableOptions" [responsive]="false" paginationLength="true" *ngIf="!isUpdating"
+                  tableClass="table table-striped table-condensed table-bordered table-hover no-padding" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="text-align-center">#</th>
+                      <th class="text-align-center">Competência</th>
+                      <th class="text-align-center">Índice</th>
+                      <th class="text-align-center">Salário de Contribuição Secundário</th>
+                      <th class="text-align-center">Salário de Contribuição Secundário Corrigido</th>
+                      <th class="text-align-center">Limite</th>
+                    </tr>
+                  </thead>
+                </sa-datatable>
+              </div>
+            </div>
+          </sa-widget>
+          <table class="table table-bordered table-hover" *ngIf="!isUpdating">
+            <thead>
+              <tr>
+                <th>
+                  <span class="pull-right font-bold"> Tipo </span>
+                </th>
+                <th>
+                  Descricao
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              
+                <tr *ngFor="let resultado of resultadoFinal" class="{{resultado.class}}">
+                  <td width="50%">
+                    <span class="pull-right font-bold  ">{{resultado.titulo}}</span>
+                  </td>
+                  <td>{{resultado.resultado}}</td>
+                </tr>
+             
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </sa-widget>
+  </article>
+</div>

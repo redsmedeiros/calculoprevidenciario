@@ -19,6 +19,8 @@ import { RgpsResultadosApos99Component } from '../rgps-resultados-apos99/rgps-re
 import { RgpsResultadosEntre88e91Component } from '../rgps-resultados-entre88e91/rgps-resultados-entre88e91.component';
 import { RgpsResultadosEntre91e98Component } from '../rgps-resultados-entre91e98/rgps-resultados-entre91e98.component';
 import { RgpsResultadosComponent } from '../rgps-resultados.component';
+import { RgpsResultadosApos99SecundariosComponent } from '../rgps-resultados-apos99/rgps-resultados-apos99-secundarios/rgps-resultados-apos99-secundarios.component';
+import { RgpsResultadosApos99SecundariosCalculoComponent } from '../rgps-resultados-apos99/rgps-resultados-apos99-secundarios/rgps-resultados-apos99-secundarios-calculo/rgps-resultados-apos99-secundarios-calculo.component';
 
 
 
@@ -56,7 +58,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ListaCompetenciasComponent,
     ConclusoesRmiComponent,
     RgpsPlanejamentoCalculoComponent,
-    RgpsPlanejamentoIndexComponent
+    RgpsPlanejamentoIndexComponent,
+    RgpsResultadosApos99SecundariosComponent,
+    RgpsResultadosApos99SecundariosCalculoComponent
   ],
   exports: [
     RgpsResultadosComponent,
@@ -68,7 +72,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ListaCompetenciasComponent,
     ConclusoesRmiComponent,
     RgpsPlanejamentoCalculoComponent,
-    RgpsPlanejamentoIndexComponent
+    RgpsPlanejamentoIndexComponent,
+    RgpsResultadosApos99SecundariosComponent,
+    RgpsResultadosApos99SecundariosCalculoComponent
   ]
 })
 export class RgpsResultadosSharedModule { }

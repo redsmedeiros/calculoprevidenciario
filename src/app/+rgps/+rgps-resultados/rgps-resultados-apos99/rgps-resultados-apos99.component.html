@@ -1,165 +1,176 @@
 <!-- Opções do Cálculo A partir de 29/11/1999 -->
-<article  class="no-padding"> 
+<article class="no-padding">
 
-<section >
-         
-  <accordion class="smart-accordion-red panel-group" [closeOthers]="true">
-    <accordion-group [isOpen]="false" #groupApos1999>
-      <h4 class="panel-title" accordion-heading>
-        <a>
-          <strong id='tituloCalculo' >{{(numResultado+1)}} - Direito Adquirido entre 29/11/1999 e 13/11/2019 </strong>
-        <i
-        class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right"
-        *ngIf="isUpdating"
-        ></i>
+  <section>
 
-        <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
-          &nbsp;&nbsp;
-          {{ (!groupApos1999?.isOpen)? "Abrir" : "Fechar"}}
-          <i
-          *ngIf="!isUpdating"
-          class="pull-right fa fa-lg p-1"
-          [ngClass]="{
+    <accordion class="smart-accordion-red panel-group" [closeOthers]="true">
+      <accordion-group [isOpen]="false" #groupApos1999>
+        <h4 class="panel-title" accordion-heading>
+          <a>
+            <strong id='tituloCalculo'>{{(numResultado+1)}} - Direito Adquirido entre 29/11/1999 e 13/11/2019 </strong>
+            <i class="fa fa-gear fa-1-9x fa-spin txt-color-red pull-right" *ngIf="isUpdating"></i>
+
+            <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs" type="button">
+              &nbsp;&nbsp;
+              {{ (!groupApos1999?.isOpen)? "Abrir" : "Fechar"}}
+              <i *ngIf="!isUpdating" class="pull-right fa fa-lg p-1" [ngClass]="{
             'fa-angle-down': groupApos1999?.isOpen,
             'fa-angle-up': !groupApos1999?.isOpen
-          }"
-        ></i>&nbsp;&nbsp;
-        </button>
-        <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" 
-        type="submit"
-        (click)="imprimirBox($event, boxId)"
-        >
-          &nbsp;&nbsp; <i
-          *ngIf="!isUpdating"
-          class=" fa fa-print pull-left fa fa-lg p-1"
-        ></i>
-          Imprimir
-         &nbsp;&nbsp;
-        </button>
-        </a>
-      </h4>
-      <div class="no-padding no-margin">
-        
-      <div id="{{boxId}}" class="boxCalculo row">
-        <article class="col-sm-12 col-md-12 col-lg-12 no-margin">
-          <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
-            <div>
-              <div class="widget-body no-padding hidden-dt">
-                <table class="table table-bordered table-hover no-padding">
-                  <thead>
-                    <tr>
-                      <th width="50%">
-                        <span class="pull-right font-bold"> Tipo </span>
-                      </th>
-                      <th>
-                        Descrição
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td width="50%">
-                        <span class="pull-right font-bold">Espécie:</span>
-                      </td>
-                      <td>{{calculo.tipo_seguro}}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <span class="pull-right font-bold">Período para o Início do Benefício:</span>
-                      </td>
-                      <td>{{calculo.tipo_aposentadoria}}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <span class="pull-right font-bold">Data de Início do Benefício:</span>
-                      </td>
-                      <td>{{dataInicioBeneficioString}}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <span class="pull-right font-bold">Tempo de Contribuição Primário:</span>
-                      </td>
-                      <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e {{contribuicaoPrimaria.dias}} dia(s)</td>
-                    </tr>
-                    <tr *ngIf="iscontribuicaoSecundaria" >
-                      <td>
-                        <span class="pull-right font-bold">Tempo de Contribuição Secundário:</span>
-                      </td>
-                      <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e {{contribuicaoSecundaria.dias}} dia(s)</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <span class="pull-right font-bold">Data de Criação:</span>
-                      </td>
-                      <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
-                    </tr>
-                  </tbody>
-  
-                </table>
-                <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
-                  <p>{{erro}}</p>
-                </div>
-                <div class="alert alert-warning margin-top-10" *ngIf="msgIntegralAteEC1032019 !== ''"  role="alert">
-                  <p>{{msgIntegralAteEC1032019}}</p>
-                </div>
-                <div class="alert alert-warning margin-top-10" *ngIf="msgProporcionalAteEC1032019 !== ''"  role="alert">
-                  <p>{{msgProporcionalAteEC1032019}}</p>
-                </div>
-                <div class="alert alert-warning margin-top-10" *ngIf="nenhumaContrib" role="alert">
-                  <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999' target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999</a></p>
-                </div>
-  
-                <sa-widget [colorbutton]="false" [editbutton]="false" *ngIf="erros.length === 0" >
-                  <i class="fa fa-gear fa-2x fa-spin txt-color-red" *ngIf="isUpdating" ></i>
-                  <div *ngIf="!isUpdating">
-                    <div class="widget-body no-padding">
-                      <sa-datatable [options]="tableOptions" [responsive] = "false"
-                        paginationLength="true" *ngIf="!isUpdating " 
-                        tableClass="table table-striped table-condensed table-bordered table-hover no-padding" width="100%">
-                        <thead>
-                          <tr>
-                            <th class="text-align-center">#</th>
-                            <th class="text-align-center">Competência</th>
-                            <th class="text-align-center">Índice</th>
-                            <th class="text-align-center">Salário de Contribuição Primário</th>
-                            <th class="text-align-center" >Salário de Contribuição Secundário</th>
-                            <th class="text-align-center">Salário de Contribuição Primário Corrigido</th>
-                            <th class="text-align-center" >Salário de Contribuição Secundário Corrigido</th>
-                            <th class="text-align-center">Observação</th>
-                          </tr>
-                        </thead>
-                      </sa-datatable>
+          }"></i>&nbsp;&nbsp;
+            </button>
+            <button *ngIf="!isUpdating" class="btn btn-primary pull-right btn-xs mr-3" type="submit"
+              (click)="imprimirBox($event, boxId)">
+              &nbsp;&nbsp; <i *ngIf="!isUpdating" class=" fa fa-print pull-left fa fa-lg p-1"></i>
+              Imprimir
+              &nbsp;&nbsp;
+            </button>
+          </a>
+        </h4>
+        <div class="no-padding no-margin">
+
+          <div id="{{boxId}}" class="boxCalculo row">
+            <article class="col-sm-12 col-md-12 col-lg-12 no-margin">
+              <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
+                <div>
+                  <div class="widget-body no-padding hidden-dt">
+                    <table class="table table-bordered table-hover no-padding">
+                      <thead>
+                        <tr>
+                          <th width="50%">
+                            <span class="pull-right font-bold"> Tipo </span>
+                          </th>
+                          <th>
+                            Descrição
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td width="50%">
+                            <span class="pull-right font-bold">Espécie:</span>
+                          </td>
+                          <td>{{calculo.tipo_seguro}}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="pull-right font-bold">Período para o Início do Benefício:</span>
+                          </td>
+                          <td>{{calculo.tipo_aposentadoria}}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="pull-right font-bold">Data de Início do Benefício:</span>
+                          </td>
+                          <td>{{dataInicioBeneficioString}}</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="pull-right font-bold">Tempo de Contribuição Primário:</span>
+                          </td>
+                          <td>{{contribuicaoPrimaria.anos}} ano(s), {{contribuicaoPrimaria.meses}} mês(es) e
+                            {{contribuicaoPrimaria.dias}} dia(s)</td>
+                        </tr>
+                        <tr *ngIf="iscontribuicaoSecundaria">
+                          <td>
+                            <span class="pull-right font-bold">Tempo de Contribuição Secundário:</span>
+                          </td>
+                          <td>{{contribuicaoSecundaria.anos}} ano(s), {{contribuicaoSecundaria.meses}} mês(es) e
+                            {{contribuicaoSecundaria.dias}} dia(s)</td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="pull-right font-bold">Data de Criação:</span>
+                          </td>
+                          <td>{{formatReceivedDate(calculo.data_calculo)}}</td>
+                        </tr>
+                      </tbody>
+
+                    </table>
+                    <div class="alert alert-warning margin-top-10" *ngFor="let erro of erros" role="alert">
+                      <p>{{erro}}</p>
                     </div>
+                    <div class="alert alert-warning margin-top-10" *ngIf="msgIntegralAteEC1032019 !== ''" role="alert">
+                      <p>{{msgIntegralAteEC1032019}}</p>
+                    </div>
+                    <div class="alert alert-warning margin-top-10" *ngIf="msgProporcionalAteEC1032019 !== ''"
+                      role="alert">
+                      <p>{{msgProporcionalAteEC1032019}}</p>
+                    </div>
+                    <div class="alert alert-warning margin-top-10" *ngIf="nenhumaContrib" role="alert">
+                      <p>Nenhuma contribuição encontrada posterior a 07/1994 conforme <a
+                          href='http://www.ieprev.com.br/legislacao/2754/lei-no-9.876,-de-26-11-1999'
+                          target='_blank'>Art. 02 da Lei nº 9.876, de 29/11/1999</a></p>
+                    </div>
+
+                    <sa-widget [colorbutton]="false" [editbutton]="false" *ngIf="erros.length === 0">
+                      <i class="fa fa-gear fa-2x fa-spin txt-color-red" *ngIf="isUpdating"></i>
+                      <div *ngIf="!isUpdating">
+                        <div class="widget-body no-padding">
+                          <sa-datatable [options]="tableOptions" [responsive]="false" paginationLength="true"
+                            *ngIf="!isUpdating "
+                            tableClass="table table-striped table-condensed table-bordered table-hover no-padding"
+                            width="100%">
+                            <thead>
+                              <tr>
+                                <th class="text-align-center">#</th>
+                                <th class="text-align-center">Competência</th>
+                                <th class="text-align-center">Índice</th>
+                                <th class="text-align-center">Salário de Contribuição Primário</th>
+                                <th class="text-align-center">Salário de Contribuição Secundário</th>
+                                <th class="text-align-center">Salário de Contribuição Primário Corrigido</th>
+                                <th class="text-align-center">Salário de Contribuição Secundário Corrigido</th>
+                                <th class="text-align-center">Observação</th>
+                              </tr>
+                            </thead>
+                          </sa-datatable>
+                        </div>
+                      </div>
+                    </sa-widget>
+                    <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0">
+                      <thead>
+                        <tr>
+                          <th>
+                            <span class="pull-right font-bold"> Tipo </span>
+                          </th>
+                          <th>
+                            Descrição
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
+                          <td width="50%">
+                            <span class="pull-right font-bold  ">{{conclusao.string}}</span>
+                          </td>
+                          <td>{{conclusao.value}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </sa-widget>
-                <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0">
-                  <thead>
-                    <tr>
-                      <th>
-                        <span class="pull-right font-bold"> Tipo </span>
-                      </th>
-                      <th>
-                        Descrição
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
-                      <td width="50%">
-                        <span class="pull-right font-bold  ">{{conclusao.string}}</span>
-                      </td>
-                      <td>{{conclusao.value}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              
-            </div>
-            <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && erros.length === 0" class="no-padding mt-2" >
-                <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos"><strong>Reajustes Administrativos</strong></h4>
-                <sa-datatable [options]="reajustesAdministrativosTableOptions" 
-                *ngIf="!isUpdating && showReajustesAdministrativos" 
-                paginationLength="true" tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
+
+                  <div *ngIf="!isUpdating">
+                    <app-rgps-resultados-apos99-secundarios 
+                    [calculo]="calculo" 
+                    [segurado]="segurado" 
+                    [dadosPassoaPasso]="dadosPassoaPasso" 
+                    [listaValoresContribuidosPeriodosCT]="listaValoresContribuidosPeriodosCT"
+                    [numResultado]="numResultado"
+                    [listaPeriodosCT] = "listaPeriodosCT"
+                    [moeda]="moeda"
+                    [conclusoes]="conclusoes"
+                    [contribuicaoPrimaria]="contribuicaoPrimaria"
+                    >
+                    </app-rgps-resultados-apos99-secundarios>
+                  </div>
+
+                </div>
+                <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && erros.length === 0"
+                  class="no-padding mt-2">
+                  <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos">
+                    <strong>Reajustes Administrativos</strong></h4>
+                  <sa-datatable [options]="reajustesAdministrativosTableOptions"
+                    *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
+                    tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
                     <thead>
                       <tr>
                         <th>Competência</th>
@@ -168,85 +179,95 @@
                         <th>Limite</th>
                       </tr>
                     </thead>
-                </sa-datatable>
-              </div>
-          </sa-widget>
-        </article>
+                  </sa-datatable>
+                </div>
+              </sa-widget>
+            </article>
+          </div>
+
+          <table class="table table-hover table-bordered" *ngIf="erros.length === 0">
+            <thead>
+              <tr>
+                <th>
+                  Cálculo nº: {{boxId}} - {{calculo.tipo_seguro}} de 29/11/1999 a 13/11/2019
+                </th>
+                <th>
+                  Ação
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf='!isUpdating'>
+                <td>
+                  <p>Exportar para o cálculo de Liquidação de Sentença</p>
+                </td>
+                <td>
+                  <button type="submit" *ngIf='erros.length == 0'
+                    (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'A')"
+                    class="btn btn-labeled btn-primary pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-link"></i>
+                    </span> EXPORTAR
+                  </button>
+                  <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right"
+                    disabled>
+                    <span class="btn-label">
+                      <i class="fa fa-link"></i>
+                    </span> EXPORTAR
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Mostrar Reajustes Administrativos</p>
+                </td>
+                <td>
+                  <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)"
+                    class="btn btn-labeled btn-primary pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-eye"></i>
+                    </span> MOSTRAR
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="exibirIN77">
+                <td>
+                  <p> Calcular novamente
+                    {{(!naoAplicarIN77)? 'sem aplicar' : 'e aplicar' }}
+                    <a
+                      href="http://www.in.gov.br/materia/-/asset_publisher/Kujrw0TZC2Mb/content/id/32120879/do1-2015-01-22-instrucao-normativa-n-77-de-21-de-janeiro-de-2015-32120750">Instrução
+                      Normativa - PRESIDENTE INSS nº 77 de 21/01/2015 - Art. 186</a>
+                  </p>
+                </td>
+                <td>
+                  <button type="submit" (click)="afastarIN77(naoAplicarIN77)"
+                    class="btn btn-labeled btn-primary pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-calculator"></i>
+                    </span> {{(!naoAplicarIN77)? 'Sem IN-77/2015' : 'Com IN-77/2015' }}
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Imprimir o cálculo</p>
+                </td>
+                <td>
+                  <button type="submit" (click)="imprimirBox($event, boxId)"
+                    class="btn btn-labeled btn-primary pull-right">
+                    <span class="btn-label">
+                      <i class="fa fa-print"></i>
+                    </span> IMPRIMIR
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
         </div>
-
-<table class="table table-hover table-bordered" *ngIf="erros.length === 0" >
-    <thead>
-      <tr>
-        <th>
-          Cálculo nº: {{boxId}} - {{calculo.tipo_seguro}} de 29/11/1999 a 13/11/2019
-        </th>
-        <th>
-          Ação
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf='!isUpdating'>
-        <td>
-          <p>Exportar para o cálculo de Liquidação de Sentença</p>
-        </td>
-        <td>
-          <button type="submit" *ngIf='erros.length == 0' (click)="exportarParaBeneficios(dataInicioBeneficioExport.format('YYYY-MM-DD'), valorExportacao, 'A')" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span> EXPORTAR
-          </button>
-          <button type="submit" *ngIf='erros.length != 0' class="btn btn-labeled btn-primary pull-right" disabled>
-            <span class="btn-label">
-              <i class="fa fa-link"></i>
-            </span> EXPORTAR
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p>Mostrar Reajustes Administrativos</p>
-        </td>
-        <td>
-          <button type="submit" (click)="mostrarReajustesAdministrativos('raTable-'+boxId)" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-              <i class="fa fa-eye"></i>
-            </span> MOSTRAR
-          </button>
-        </td>
-      </tr>
-      <tr *ngIf="exibirIN77" >
-        <td>
-          <p> Calcular novamente
-            {{(!naoAplicarIN77)? 'sem aplicar' : 'e aplicar' }}
-            <a href="http://www.in.gov.br/materia/-/asset_publisher/Kujrw0TZC2Mb/content/id/32120879/do1-2015-01-22-instrucao-normativa-n-77-de-21-de-janeiro-de-2015-32120750">Instrução Normativa - PRESIDENTE INSS nº 77 de 21/01/2015 - Art. 186</a> </p>
-        </td>
-        <td>
-          <button type="submit" (click)="afastarIN77(naoAplicarIN77)" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-              <i class="fa fa-calculator"></i>
-            </span> {{(!naoAplicarIN77)? 'Sem IN-77/2015' : 'Com IN-77/2015' }}
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p>Imprimir o cálculo</p>
-        </td>
-        <td>
-          <button type="submit" (click)="imprimirBox($event, boxId)" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-              <i class="fa fa-print"></i>
-            </span> IMPRIMIR
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-      </div>
-    </accordion-group>
-  </accordion> 
-</section>
+      </accordion-group>
+    </accordion>
+  </section>
 
 </article>
+

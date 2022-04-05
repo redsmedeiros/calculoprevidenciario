@@ -25,6 +25,8 @@ export class PeriodosContagemTempo extends Model {
     converter_especial_apos_ec103: '',
     created_at: '',
     updated_at: '',
+    concomitantes: '',
+    secundario: '',
   };
   public id;
   public id_contagem_tempo;
@@ -44,6 +46,8 @@ export class PeriodosContagemTempo extends Model {
   public sc_count;
   public sc_mm_ajustar;
   public converter_especial_apos_ec103;
+  public concomitantes;
+  public secundario;
   public created_at;
   public updated_at;
 

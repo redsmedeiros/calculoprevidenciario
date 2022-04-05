@@ -28,6 +28,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   @Input() dadosPassoaPasso;
   @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
+  @Input() listaPeriodosCT;
+  
+  
 
   public boxId;
   public dataFiliacao;
@@ -125,6 +128,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public isRegraPontos = false;
   public totalMedia12Contribuicoes = 0;
 
+  public resultadoCalculo = [
+    {tipo: "teste", descricao: "teste"}
+  ]
+
 
   constructor(private ExpectativaVida: ExpectativaVidaService,
     protected route: ActivatedRoute,
@@ -168,6 +175,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       ]
     };
 
+    
 
     this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
@@ -481,8 +489,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       return Math.floor(difference);
     }
 
-
-    moment().startOf('month').add()
 
     const dataInicioBeneficioDefDivisor = this.dataInicioBeneficio.clone();
 
@@ -1617,7 +1623,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   * § 3º Para efeito de aplicação do disposto no caput e no § 2º, o tempo mínimo de contribuição
   * do professor e da professora que comprovarem exclusivamente tempo de efetivo exercício de
   * magistério na educação infantil e no ensino fundamental e médio será de, respectivamente,
-  * trinta e vinte e cinco anos, e serão acrescidos cinco pontos à soma da idade com o tempo de contribuição.
+  * trinta e vinte e cinco anos, e serão acrescidos cinco pontos à soma da idade com o 
+  * 
+  * tribuição.
    * @param tempoContribuicaoMaisIdade
    * @param tempoTotalContribuicao
    * @param conclusoes

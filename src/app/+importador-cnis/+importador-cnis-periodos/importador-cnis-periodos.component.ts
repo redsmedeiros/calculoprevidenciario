@@ -479,7 +479,6 @@ vinculo   */
 
       this.vinculosList.push(line);
       this.isValidVinculo(line);
-      console.log(this.vinculosList)
 
     }
 
@@ -522,7 +521,7 @@ vinculo   */
         contribuicoes_count: contribuicoes.length,
         contribuicoes: contribuicoes,
         concomitantes: '',
-        secundario: '',
+        secundario: 0,
         index: vinculo.index
       }
 
@@ -560,7 +559,7 @@ vinculo   */
           sc_pendentes: vinculo.contribuicoes_pendentes,
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
-          concomitantes: vinculo.concomitantes.vinculosList,
+          concomitantes: (this.isExist(vinculo.concomitantes))? vinculo.concomitantes.vinculosList : '',
           secundario: vinculo.secundario,
         }
       );
@@ -592,7 +591,7 @@ vinculo   */
           sc_pendentes_mm: vinculo.contribuicoes_pendentes_mm,
           sc_count: vinculo.contribuicoes_count,
           action: null,
-          concomitantes: vinculo.concomitantes.vinculosList,
+          concomitantes: (this.isExist(vinculo.concomitantes))? vinculo.concomitantes.vinculosList : '',
           secundario: vinculo.secundario,
         })
       );
@@ -769,6 +768,7 @@ vinculo   */
         sc_mm_considerar_carencia: null,
         contribuicoes_count: 0,
         contribuicoes: contribuicoes,
+        secundario: 0,
       };
 
       this.vinculosList.push(line);

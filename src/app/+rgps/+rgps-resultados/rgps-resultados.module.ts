@@ -23,6 +23,7 @@ import { RgpsResultadosSharedModule } from './shared/rgps-resultados-shared.modu
 
 
 
+
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: 'left',
   allowNegative: false,
