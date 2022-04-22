@@ -20,6 +20,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 import { RgpsResultadosSharedModule } from './shared/rgps-resultados-shared.module';
+import { RgpsResultadosApos99GlobalComponent } from './rgps-resultados-apos99/rgps-resultados-apos99-global/rgps-resultados-apos99-global.component';
+
 
 
 
@@ -86,7 +88,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule,
     SmartadminDatatableModule,
     AccordionModule.forRoot(),
-    RgpsResultadosSharedModule,
+    RgpsResultadosSharedModule, 
   ],
   providers: [
     // WINDOW_PROVIDERS,
@@ -99,7 +101,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     // RgpsCalculosIndexComponent,
     // RgpsCalculosDestroyComponent,
     // RgpsCalculosCreateComponent
-  ],
+ RgpsResultadosApos99GlobalComponent],
   exports: [
   //  ModalModule
   ]

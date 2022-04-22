@@ -75,7 +75,7 @@ type StoreType = {
     TextMaskModule,
     CoreModule,
     SmartadminLayoutModule,
-    FileDropModule,
+    FileDropModule,    
     routing
   ],
   exports: [

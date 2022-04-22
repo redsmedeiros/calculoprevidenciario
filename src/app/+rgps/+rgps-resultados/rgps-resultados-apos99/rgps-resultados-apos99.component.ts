@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { ExpectativaVida } from '../ExpectativaVida.model';
 import { ExpectativaVidaService } from '../ExpectativaVida.service';
 import { ReajusteAutomatico } from '../ReajusteAutomatico.model';
@@ -31,7 +31,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   @Input() listaPeriodosCT;
   
   
-
+  public resultadoFinal;
   public boxId;
   public dataFiliacao;
   public idadeSegurado;
@@ -40,7 +40,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public contribuicaoTotal;
   public isUpdating = false;
   public limited;
-  private fatorPrevidenciario;
+  public fatorPrevidenciario;
   private fatorPrevidenciarioAntesDaVerificacao;
   private SMBFatorPrevidenciarioProgressivo = { formula: '', parcela1: 0, parcela2: 0, total: 0 };
   private isfatorPrevidenciarioProgressivo = false;
@@ -127,6 +127,11 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public msgIntegralAteEC1032019 = '';
   public isRegraPontos = false;
   public totalMedia12Contribuicoes = 0;
+  public expectativa;
+  public idadeFracionadaF;
+  public mostrarResultadoSecundario = false;
+
+  
 
   public resultadoCalculo = [
     {tipo: "teste", descricao: "teste"}
@@ -146,6 +151,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+
+    
 
     this.tableData = [];
     this.conclusoes = [];
@@ -176,7 +183,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     };
 
     
-
+ 
     this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
@@ -230,6 +237,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     // indices de correção pbc da vida toda
 
     this.getValoresContribuicao(dataInicio, dataLimite)
+
+    
 
   }
 
@@ -302,6 +311,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
               .then(expectativas => {
                 this.expectativasVida = expectativas;
+                console.log(this.expectativasVida)
                 this.CarenciaProgressiva.getCarencias()
                   .then(carencias => {
                     this.carenciasProgressivas = carencias;
@@ -747,6 +757,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     const expectativa = this.projetarExpectativa(this.idadeFracionada, this.dataInicioBeneficio, conclusoes);
+    this.expectativa = expectativa
 
 
     const redutorProfessor = (this.tipoBeneficio == 6) ? 5 : 0;
@@ -787,6 +798,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         let idadeFracionadaF = this.getIdadeFracionada(true);
         idadeFracionadaF = arredFatorCalc(idadeFracionadaF, true);
+        this.idadeFracionadaF = idadeFracionadaF
 
         fatorSeguranca = ((tempoTotalContribuicaoF * aliquota) / expectativa)
           * (1 + (idadeFracionadaF + (tempoTotalContribuicaoF * aliquota)) / 100);
@@ -795,6 +807,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
          fatorSeguranca = arredFatorCalc(fatorSeguranca);
 
         this.fatorPrevidenciario = fatorSeguranca;
+       
         this.fatorPrevidenciarioAntesDaVerificacao = fatorSeguranca;
 
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
@@ -2372,6 +2385,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
+  public mostraResultadoSecundario(){
+      this.mostrarResultadoSecundario = true
+  }
+
   mostrarReajustesAdministrativos(tableId) {
 
     if (this.showReajustesAdministrativos) {
@@ -2573,6 +2590,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public afastarIN77(AplicarIN77) {
     this.naoAplicarIN77 = (!AplicarIN77);
     this.ngOnInit();
+  }
+
+  public resultadoEmitter(resultadoFinal){
+        this.resultadoFinal = resultadoFinal
+       
+         
   }
 
 }

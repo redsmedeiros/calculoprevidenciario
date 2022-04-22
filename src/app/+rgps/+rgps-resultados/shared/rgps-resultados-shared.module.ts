@@ -21,6 +21,10 @@ import { RgpsResultadosEntre91e98Component } from '../rgps-resultados-entre91e98
 import { RgpsResultadosComponent } from '../rgps-resultados.component';
 import { RgpsResultadosApos99SecundariosComponent } from '../rgps-resultados-apos99/rgps-resultados-apos99-secundarios/rgps-resultados-apos99-secundarios.component';
 import { RgpsResultadosApos99SecundariosCalculoComponent } from '../rgps-resultados-apos99/rgps-resultados-apos99-secundarios/rgps-resultados-apos99-secundarios-calculo/rgps-resultados-apos99-secundarios-calculo.component';
+import { RgpsResultadosApos99GlobalComponent } from '../rgps-resultados-apos99/rgps-resultados-apos99-global/rgps-resultados-apos99-global.component';
+
+
+
 
 
 
@@ -60,7 +64,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     RgpsPlanejamentoCalculoComponent,
     RgpsPlanejamentoIndexComponent,
     RgpsResultadosApos99SecundariosComponent,
-    RgpsResultadosApos99SecundariosCalculoComponent
+    RgpsResultadosApos99SecundariosCalculoComponent,
+    RgpsResultadosApos99GlobalComponent
   ],
   exports: [
     RgpsResultadosComponent,

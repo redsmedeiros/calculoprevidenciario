@@ -46,10 +46,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
 
   ngOnInit() {
 
-    
-   
     this.tableDataCalculo = this.tableData
-    
 
     this.tableDataCalculo = this.tableData
     this.tableOptions = {
@@ -57,10 +54,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
       data: this.tableDataCalculo,
     }
     this.isUpdating = false;
-    
-
-   
-    
+     
   }
 
 }

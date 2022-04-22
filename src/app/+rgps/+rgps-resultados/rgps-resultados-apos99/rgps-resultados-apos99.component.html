@@ -149,34 +149,39 @@
                   </div>
 
                   <div *ngIf="!isUpdating">
-                    <app-rgps-resultados-apos99-secundarios 
-                    [calculo]="calculo" 
-                    [segurado]="segurado" 
-                    [dadosPassoaPasso]="dadosPassoaPasso" 
-                    [listaValoresContribuidosPeriodosCT]="listaValoresContribuidosPeriodosCT"
-                    [numResultado]="numResultado"
-                    [listaPeriodosCT] = "listaPeriodosCT"
-                    [moeda]="moeda"
-                    [conclusoes]="conclusoes"
-                    [contribuicaoPrimaria]="contribuicaoPrimaria"
-                    >
+                    <app-rgps-resultados-apos99-secundarios [calculo]="calculo" [segurado]="segurado"
+                      [dadosPassoaPasso]="dadosPassoaPasso"
+                      [listaValoresContribuidosPeriodosCT]="listaValoresContribuidosPeriodosCT"
+                      [numResultado]="numResultado" [listaPeriodosCT]="listaPeriodosCT" [moeda]="moeda"
+                      [conclusoes]="conclusoes" [contribuicaoPrimaria]="contribuicaoPrimaria"
+                      [fatorPrevidenciario]="fatorPrevidenciario" [expectativa]="expectativa"
+                      [idadeFracionadaF]="idadeFracionadaF"
+                      (somaGlobalSalarioBeneficio)="resultadoEmitter($event)"
+                      >
+                     
                     </app-rgps-resultados-apos99-secundarios>
                   </div>
+
+
+
+
+
 
                 </div>
                 <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && erros.length === 0"
                   class="no-padding mt-2">
                   <h4 class="font-1-4x text-align-center" *ngIf="!isUpdating && showReajustesAdministrativos">
-                    <strong>Reajustes Administrativos</strong></h4>
+                    <strong>Reajustes Administrativos</strong>
+                  </h4>
                   <sa-datatable [options]="reajustesAdministrativosTableOptions"
                     *ngIf="!isUpdating && showReajustesAdministrativos" paginationLength="true"
                     tableClass="table table-striped table-condensed table-bordered table-hover" width="100%">
                     <thead>
                       <tr>
-                        <th>Competência</th>
-                        <th>Reajuste</th>
-                        <th>Benefício</th>
-                        <th>Limite</th>
+                        <th class="text-align-center">Competência</th>
+                        <th class="text-align-center">Reajuste</th>
+                        <th class="text-align-center">Benefício</th>
+                        <th class="text-align-center">Limite</th>
                       </tr>
                     </thead>
                   </sa-datatable>
@@ -184,6 +189,13 @@
               </sa-widget>
             </article>
           </div>
+
+          <app-rgps-resultados-apos99-global *ngIf="!isUpdating"
+            [resultadoFinal]="resultadoFinal"
+            [conclusoes]="conclusoes"
+          >
+
+          </app-rgps-resultados-apos99-global>
 
           <table class="table table-hover table-bordered" *ngIf="erros.length === 0">
             <thead>
@@ -264,10 +276,16 @@
             </tbody>
           </table>
 
+
+
+
         </div>
+
+
       </accordion-group>
     </accordion>
+
+
   </section>
 
 </article>
-

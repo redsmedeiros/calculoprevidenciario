@@ -1,0 +1,30 @@
+<h4 class="font-1-4x text-align-center p-3">
+  <strong>Resultado Global</strong>
+</h4>
+
+<div>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>
+          <span class="pull-right font-bold"> Tipo </span>
+        </th>
+        <th>
+          Descricao
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let conclusao of tabela" class="{{conclusao.class}}">
+        <td width="50%">
+          <span class="pull-right font-bold  ">{{conclusao.titulo}}</span>
+        </td>
+        <td>{{conclusao.resultado}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>
+
+

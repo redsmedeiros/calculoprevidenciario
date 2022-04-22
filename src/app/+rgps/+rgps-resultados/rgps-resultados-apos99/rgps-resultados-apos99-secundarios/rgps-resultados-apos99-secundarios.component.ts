@@ -1,17 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import { MoedaService } from 'app/services/Moeda.service';
 import { Moeda } from 'app/services/Moeda.model';
 import * as moment from 'moment';
 import { RgpsResultadosApos99Component } from '../rgps-resultados-apos99.component';
 import { AnimationsPanelComponent } from '../../../../+forms/+image-cropping/animations-panel/animations-panel.component';
+import { CarenciaProgressivaService } from '../../CarenciaProgressiva.service';
+
+
 
 @Component({
   selector: 'app-rgps-resultados-apos99-secundarios',
   templateUrl: './rgps-resultados-apos99-secundarios.component.html',
-  styleUrls: ['./rgps-resultados-apos99-secundarios.component.css']
+  styleUrls: ['./rgps-resultados-apos99-secundarios.component.css'],
+  providers: [ CarenciaProgressivaService ]
+
 })
 export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos99Component implements OnInit {
+
+  @Output() somaGlobalSalarioBeneficio = new EventEmitter()
 
 
   @Input() calculo;
@@ -23,6 +30,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() moeda;
   @Input() conclusoes;
   @Input() contribuicaoPrimaria
+  @Input() fatorPrevidenciario
+  @Input() expectativa 
+  @Input() idadeFracionadaF
 
   public isUpdating = true;
   public tableData = [];
@@ -44,7 +54,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     "Soma dos Salários de Contribuição Considerados",
     "Divisor da Média dos Salários de Contribuição",
     "Média dos Salários de Contribuição",
-    "Benefício decorrente de atividades concomitantes"
+    "Salário de Benefício"
   ]
   public resultadoFinal = [[]]
   public divisorMediaSecundario
@@ -60,12 +70,15 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public arrayParaDivisorSecundario = []
   public indiceParaDivisorSecundario = 0
   public indiceCasoNaoTenhaLimitado = 0
+  public somaSalariosSecundarios = 0
+
+  public arrayParaResultadoFinal = []
 
 
 
 
 
-  constructor() {
+  constructor(private carenciaProgressivaService: CarenciaProgressivaService) {
 
     super(null, null, null, null, null, null, null, null);
 
@@ -77,8 +90,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.startCalculosSecundarios();
 
+   
 
-    console.log(this.getContribuicaoTempo(this.contribuicaoPrimaria))
+
+
+   
 
 
   }
@@ -174,20 +190,22 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         }
       }
 
-
+      //this.formatarDivisor(this.tabelaIterar) < 129 ? 129 :
       const divisor = this.formatarDivisor(this.tabelaIterar)
 
-      const divisorSecundario = this.formatarDivisor(this.tabelaIterar)
+      const divisorSecundario =  this.formatarDivisor(this.tabelaIterar)
 
       const tempoContribuicao = this.getContribuicaoTempo(this.contribuicaoPrimaria)
+     
+      const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id) 
 
-      const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id)
+
 
       this.arrayDeControleResutadoFinal = [
         this.formatMoney(this.soma),
         divisorSecundario,
         this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario),
-        this.beneficioAtividadesConcomitantes = this.formatMoney(this.getSalarioBeneficio(this.conclusoes) + (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * (dividendoTempo / tempoContribuicao)))
+        this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo)
 
 
       ];
@@ -226,11 +244,15 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       this.tabelaIterar = []
 
       this.indiceParaDivisorSecundario = 0
-      this.concusoesSecundarias.push(this.conclusao)
+      this.concusoesSecundarias.push(this.conclusao);
+
+      this.arrayParaResultadoFinal.push(this.arrayDeControleResutadoFinal)
+      
+      this.somaGlobalSalarioBeneficio.emit(this.arrayParaResultadoFinal)
     }
 
     this.tableData = this.tabelaDeCalculos
-
+    
 
 
 
@@ -430,11 +452,107 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   public getTempoContribuicaoExigido(contribuicao, mesesContribuicao) {
 
-    let resultado = (Math.floor(mesesContribuicao / 12) / contribuicao)
+   
+
+
+    let resultado = (Math.floor(mesesContribuicao / 12) / contribuicao) < 1 ? (mesesContribuicao / 12) / contribuicao : (Math.floor(mesesContribuicao / 12) / contribuicao)
 
     return resultado
   }
 
+  public getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, totalContribuicoes, dividendoTempo){
+
+      let media = (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao)/(this.id - 1))
+     
+      let mediaFormatada = this.replaceFormata(this.formatDecimal(media,3))
+   
+      let fatorFomatado = this.getFatorContribuicaoSecundario(this.id, this.expectativa, this.idadeFracionadaF)
+      
+      let divisor = this.getDivisorComCarencia(1991, divisorSecundario)
+      let divisorFormatado = this.replaceFormata(divisor)
+     
+      let valor = mediaFormatada * fatorFomatado * divisorFormatado
+    
+      
+      let beneficio =  valor + this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
+
+      this.somaSalariosSecundarios += beneficio
+   
+    
+      return this.formatMoney(beneficio);
+
+    
+  }
+
+  public replaceFormata(valor) {
+
+    if (valor === "") {
+      valor = 0;
+    } else {
+     
+      valor = valor.replace(",", ".");
+      valor = parseFloat(valor);
+     
+    }
+
+    return valor;
+
+  }
+
+  public getFatorContribuicaoSecundario(id, expectativa, idadeFracionadaF){
+
+    let tempoTotalContribuicaoF = id - 1 
+
+    let tempoTotalDeContribuicaoEmAnos = (tempoTotalContribuicaoF / 12)
+
+    const aliquota = 0.31
+
+    let fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
+    * (1 + (idadeFracionadaF + ( tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
+
+  
+
+    //if(fator < 1){
+       //fator = 1
+    //}
+   
+  
+
+    return fator
+
+  }
+
+  public getDivisorComCarencia(ano, divisor){
+
+    let carencia = this.carenciaProgressivaService.getCarencia(ano)
+
+    let DivisorComCarencia = (divisor / carencia)
+
+
+
+    return this.formatDecimal(DivisorComCarencia, 3)
+
+
+
+  }
+
+  public getSomaDosBeneficios(salarioBeneficioPrimario){
+
+      let soma = this.somaSalariosSecundarios + salarioBeneficioPrimario
+
+      return this.formatMoney(soma)
+  }
+
+  public getRendaMensalInicial(somaDosSalariosDeBenefio){
+
+    let renda = somaDosSalariosDeBenefio * 0.85
+
+    return this.formatMoney(renda)
+  }
+
+  
+
+  
 
 
 

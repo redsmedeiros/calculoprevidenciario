@@ -36,6 +36,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   @Input() exportResultContagemTempo;
   @Input() idCalculoSelecionadoRMI;
 
+  public resutadoFinal
+
   public styleTheme = 'style-0';
 
   public styleThemes: Array<string> = ['style-0', 'style-1', 'style-2', 'style-3'];
@@ -257,6 +259,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   }
 
+  
+
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
@@ -264,6 +268,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   }
 
+ 
 
   private setAtributosIniciais() {
 
