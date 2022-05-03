@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { RgpsResultadosApos99Component } from '../rgps-resultados-apos99.component';
 import { AnimationsPanelComponent } from '../../../../+forms/+image-cropping/animations-panel/animations-panel.component';
 import { CarenciaProgressivaService } from '../../CarenciaProgressiva.service';
+import { TimelineComponent } from '../../../../+app-views/+timeline/timeline.component';
 
 
 
@@ -13,7 +14,7 @@ import { CarenciaProgressivaService } from '../../CarenciaProgressiva.service';
   selector: 'app-rgps-resultados-apos99-secundarios',
   templateUrl: './rgps-resultados-apos99-secundarios.component.html',
   styleUrls: ['./rgps-resultados-apos99-secundarios.component.css'],
-  providers: [ CarenciaProgressivaService ]
+  providers: [CarenciaProgressivaService]
 
 })
 export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos99Component implements OnInit {
@@ -31,8 +32,14 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() conclusoes;
   @Input() contribuicaoPrimaria
   @Input() fatorPrevidenciario
-  @Input() expectativa 
+  @Input() expectativa
   @Input() idadeFracionadaF
+  @Input() divisorConcomitante
+  @Input() tipoBeneficio
+  @Input() dataInicioBeneficio
+  @Input() passarMesesCarencias
+
+
 
   public isUpdating = true;
   public tableData = [];
@@ -74,6 +81,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   public arrayParaResultadoFinal = []
 
+  public numeroEspecie = 0
+
 
 
 
@@ -86,15 +95,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   ngOnInit() {
 
+   
+ 
     this.isUpdating = false;
 
     this.startCalculosSecundarios();
-
-   
-
-
-
-   
 
 
   }
@@ -103,42 +108,27 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   private startCalculosSecundarios() {
 
-
-
-
-
+    //LISTA DE PERÍODOS: OBTEM A QUANTIDADE DE PERIODOS CONCOMITANTES
     for (const periodoSec of this.listaPeriodosCT) {
 
-
-
       if (this.isExits(periodoSec.concomitantes) && periodoSec.secundario === 1) {
+        //CRIA ARRAY COM TODOS AS INFORMAÇÕES CONCOMITANTES
         this.rstFinalCalculosSecundarios.push(
           periodoSec
         )
       }
     }
 
-
-
+    //CRIA ARRAY COM INFORMAÇÃO DE CADA CONTRIBUIÇÃO SECUNDÁRIA
     for (const row of this.rstFinalCalculosSecundarios) {
-
-      // row.sc.sort((a, b) => {
-
-      //   const dib1 = moment(a.cp, '01/MM/YYYY');
-      //   const dib2 = moment(b.cp, '01/MM/YYYY');
-
-      //   if (dib1.isSame(dib2)) {
-      //     return dib1 > dib2 ? -1 : 1
-      //   } 
-
-      // });
 
       row.sc.reverse();
       this.tabelaSc.push(row.sc);
 
     }
-
+    //RECEBE DO ARRAY DE CALCULOS A INFORMAÇÃO DE DATA PEDIDO BENEFÍCIO
     let dataComparacao = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
+
     if (dataComparacao.isSameOrAfter('2019-11-13')) {
       dataComparacao = moment('13/11/2019', 'DD/MM/YYYY');
     }
@@ -147,17 +137,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.getMoedaBydate(dataComparacao) : undefined;
 
 
-
+    //ITERAR ARRAY COM AS INFORMAÇÕE SECUNDARIAS PARA OBTER O CÁLCULO FINAL
     for (const row of this.tabelaSc) {
-
-
-
+      //OBTER AS INFORMAÇÕES DE CADA CONTRIBUIÇÃO SECUNDÁRIA
       for (const indice of row) {
 
         const fatorCorrecao = this.getFatorCorrecao(moment(indice.cp, 'MM/YYYY'), moedaComparacao)
-
-
-
+        //CHAMAR MÉTODO DE LIMITES: PASSAR - SALÁRIO DE CONTRIBUIÇÃO X FATOR DE CONTRIBUIÇÃO E DATA DA CONTRIBUIÇÃO
         const slBeneficioMes = this.limitarTetosEMinimosSec(
           (indice.sc * fatorCorrecao),
           moment(indice.cp, 'MM/YYYY')
@@ -171,9 +157,10 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
           this.indiceCasoNaoTenhaLimitado++
         }
 
+        //SOMA DOS SALÁRIOS DE BENEFÍCIO
         this.soma = this.soma + slBeneficioMes.valor
 
-
+        //CRIA UM OJETO COM AS DEVIDAS INFORMAÇÕES
         let tabelaRow = {
           id: this.id++,
           competencia: indice.cp,
@@ -183,8 +170,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
           contribuicao_secundaria_revisada_n: slBeneficioMes.valor,
           limite: slBeneficioMes.aviso
         }
-
+        //CRIA UMA ARRAY COM OS OBJETOS
         this.tabelaIterar.push(tabelaRow);
+        //CRIA INDICE PARA ACHAR O DIVISOR DAS CONTRIBUIÇÕES SECUNDÁRIAS
         for (const row of this.tabelaIterar) {
           this.indiceParaDivisorSecundario = row.id
         }
@@ -193,11 +181,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       //this.formatarDivisor(this.tabelaIterar) < 129 ? 129 :
       const divisor = this.formatarDivisor(this.tabelaIterar)
 
-      const divisorSecundario =  this.formatarDivisor(this.tabelaIterar)
+      const divisorSecundario = this.formatarDivisor(this.tabelaIterar)
 
       const tempoContribuicao = this.getContribuicaoTempo(this.contribuicaoPrimaria)
-     
-      const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id) 
+
+      const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id)
 
 
 
@@ -247,12 +235,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       this.concusoesSecundarias.push(this.conclusao);
 
       this.arrayParaResultadoFinal.push(this.arrayDeControleResutadoFinal)
-      
+
       this.somaGlobalSalarioBeneficio.emit(this.arrayParaResultadoFinal)
     }
 
     this.tableData = this.tabelaDeCalculos
-    
+
+
 
 
 
@@ -269,19 +258,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       value !== undefined && value !== [] && value !== '[]') ? true : false;
   }
 
-
+  //PASSA COMO PARÂMETRO AS CONTRIBUIÇÕES SECUNDÁRIAS PARA ENCONTRAR O DIVISOR SECUNDÁRIO
   public formatarDivisor(tabelaInsert) {
 
-    // Ordenar os salarios por valor
-
-
+    // ORDENA OS SALÁRIOS PELO VALOR USANDO O MÉTODO SORT E RETORNA O PRÓPRIO ARRAY - CALCULA A DIFERENÇA DE VALORES ENTRE OS MESES
     const tabela = tabelaInsert.sort((x, y) => { return x.contribuicao_secundaria_revisada - y.contribuicao_secundaria_revisada })
-
-
-
-
+    //CRIA ARRA COM AS DIFERENÇAS
     this.arrayRevisadaOrdenada.push(tabela)
-
 
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
@@ -290,8 +273,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
 
     //let divisorSecundario = this.contadorSecundario;
-
-
     if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.6) {
       divisorSecundario = Math.round(this.mesesContribuicoes[this.controle] * 0.6);
     } else if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.8) {
@@ -307,35 +288,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   }
 
-  // define divisor para média
 
-
-
-
-
-
-
-
-
-
-
-  // private formatMoney(value:number, sigla = 'R$', aplicarCor = false) {
-
-  //   if (typeof value === 'number') {
-  //     let numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-  //     // let string = sigla + this.formatDecimal(value, 2);
-  //     let string = sigla + ' ' + numeroPadronizado;
-  //     if (aplicarCor && string.indexOf('-') != -1) {
-  //       string = '<span style="color:red">' + string + '</span>';
-  //     }
-  //     return string;
-  //   } else {
-  //     return sigla + ' 0,00';
-  //   }
-  // }
-
-
-
+  //MÉTODO PARA OBTER O FATOR DE CORREÇÃO
   private getFatorCorrecao(dataContribuicao, moedaComparacao) {
 
     const moedaContribuicao = (dataContribuicao.isSameOrBefore(moment(), 'month')) ? this.getMoedaBydate(dataContribuicao) : undefined;
@@ -351,8 +305,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     } else {
 
-      // this.pbcCompletoIndices = (this.isExits(this.route.snapshot.params['correcao_pbc'])) ?
-      // this.route.snapshot.params['correcao_pbc'] : 'inpc1084';
 
       switch (this.getPbcCompletoIndices()) {
         case 'inpc1085':
@@ -375,15 +327,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   }
 
-
+  //MÉTODO PARA RECEBER A REQUISÃO DA MOEDA DE ACORDO COM A DATA
   private getMoedaBydate(date) {
     return this.moeda.find(x => (date.isSame(x.data_moeda, 'month')));
   }
 
-
+  //MÉTODO PARA LIMITAR VALORES AO MÍNIMO E AO TETO
   private limitarTetosEMinimosSec(valor, data, sc_mm_ajustar = true) {
-    // se a data estiver no futuro deve ser utilizado os dados no mês atual
-
 
     const moeda = data.isSameOrBefore(moment(), 'month') ? this.getMoedaBydate(data) : this.getMoedaBydate(moment());
 
@@ -427,6 +377,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     return valor;
   }
 
+  //MÉTODO PARA TRANSFORMAR VALOR STRING EM FLOAT
   public getMediaSalarioConcomitante(valor) {
 
     if (valor === "") {
@@ -450,38 +401,70 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     return anos
   }
 
+  //MÉTODO PARA OBTER O TEMPO DE CONTRIBUIÇÃO EXIGIDO
   public getTempoContribuicaoExigido(contribuicao, mesesContribuicao) {
-
-   
-
 
     let resultado = (Math.floor(mesesContribuicao / 12) / contribuicao) < 1 ? (mesesContribuicao / 12) / contribuicao : (Math.floor(mesesContribuicao / 12) / contribuicao)
 
     return resultado
   }
 
-  public getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, totalContribuicoes, dividendoTempo){
+  //FUNÇÃO PRINCIPAL: VALOR É IGUAL A MÉDIA MULTIPLICADA PELO FATOR PREVIDENCIARIO, VEZES FRAÇÃO DA CARÊNCIA
+  public getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, totalContribuicoes, dividendoTempo) {
 
-      let media = (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao)/(this.id - 1))
-     
-      let mediaFormatada = this.replaceFormata(this.formatDecimal(media,3))
-   
-      let fatorFomatado = this.getFatorContribuicaoSecundario(this.id, this.expectativa, this.idadeFracionadaF)
+
+    //CÁLCULO MÉDIA: DIVIDIR MÉDIA DE SALÁRIO PELO DIVISOR (ENTENDER COMO SERÁ FEITO O DIVISOR)
+    let media = (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) / (this.id - 1))
+
+    let mediaFormatada = this.replaceFormata(this.formatDecimal(media, 3))
+
+    //RECEBE O FATOR DE CONTRIBUIÇÃO
+    let fatorFomatado = this.getFatorContribuicaoSecundario(this.id, this.expectativa, this.idadeFracionadaF)
+
+    let divisor
+    let divisorFormatado
+
+    //VERIFICA O TIPO DE BENEFÍCIO E O DIVISOR QUE SERÁ UTILIZADO
+    if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
+
+      //RECEBE DIVISOR COM CARÊNCIA
+      divisor = this.getDivisorComCarencia(this.passarMesesCarencias, divisorSecundario)
       
-      let divisor = this.getDivisorComCarencia(1991, divisorSecundario)
-      let divisorFormatado = this.replaceFormata(divisor)
-     
-      let valor = mediaFormatada * fatorFomatado * divisorFormatado
-    
-      
-      let beneficio =  valor + this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
 
-      this.somaSalariosSecundarios += beneficio
+      divisorFormatado = this.replaceFormata(divisor)
+
+    } else {
+      //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
+      let verificaDivisor = divisorSecundario / 12
+      //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
+      if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
+
+        divisor = verificaDivisor / this.getTempoExigido()
+        divisorFormatado = divisor
+       //SE VALOR MENOR QUE UM RECEBERÁ UM DIVISOR ZERADO 
+      }else if(verificaDivisor < 1){
+        divisor = 0
+      }
+
+    }
+
+    //CALCULO PRINCIPAL - MEDIAS DOS SALARIOS X FATOR PREVIDENCIÁRIO X DIVISOR OBTIDO
+    let valor = mediaFormatada * fatorFomatado * divisorFormatado
+
+    console.log(mediaFormatada)
+    console.log(fatorFomatado)
+    console.log(divisorFormatado)
+    console.log(valor)
+
+    
    
-    
-      return this.formatMoney(beneficio);
+    let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
 
-    
+    this.somaSalariosSecundarios += beneficio
+
+    return this.formatMoney(beneficio);
+
+
   }
 
   public replaceFormata(valor) {
@@ -489,44 +472,40 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     if (valor === "") {
       valor = 0;
     } else {
-     
+
       valor = valor.replace(",", ".");
       valor = parseFloat(valor);
-     
+
     }
 
     return valor;
 
   }
 
-  public getFatorContribuicaoSecundario(id, expectativa, idadeFracionadaF){
+  //FUNÇÃO DE CÁLCULO DO FATOR DE CONTRIBUIÇAO
+  public getFatorContribuicaoSecundario(id, expectativa, idadeFracionadaF) {
 
-    let tempoTotalContribuicaoF = id - 1 
+    let tempoTotalContribuicaoF = id - 1
 
     let tempoTotalDeContribuicaoEmAnos = (tempoTotalContribuicaoF / 12)
 
     const aliquota = 0.31
 
     let fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
-    * (1 + (idadeFracionadaF + ( tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
+      * (1 + (idadeFracionadaF + (tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
 
-  
-
-    //if(fator < 1){
-       //fator = 1
-    //}
-   
-  
 
     return fator
 
   }
 
-  public getDivisorComCarencia(ano, divisor){
+  //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
+  public getDivisorComCarencia(ano, divisor) {
 
-    let carencia = this.carenciaProgressivaService.getCarencia(ano)
+    //let carencia = this.carenciaProgressivaService.getCarencia(1994)
+    
 
-    let DivisorComCarencia = (divisor / carencia)
+    let DivisorComCarencia = (divisor / ano)
 
 
 
@@ -536,26 +515,174 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   }
 
-  public getSomaDosBeneficios(salarioBeneficioPrimario){
+  //SOMA DOS SALÁRIOS PRIMÁRIOS COM SECUNDÁRIOS - PARA O RESULTADO GLOBAL
+  public getSomaDosBeneficios(salarioBeneficioPrimario) {
 
-      let soma = this.somaSalariosSecundarios + salarioBeneficioPrimario
+    let soma = this.somaSalariosSecundarios + salarioBeneficioPrimario
 
-      return this.formatMoney(soma)
+    return this.formatMoney(soma)
   }
 
-  public getRendaMensalInicial(somaDosSalariosDeBenefio){
+  public getRendaMensalInicial(somaDosSalariosDeBenefio) {
 
     let renda = somaDosSalariosDeBenefio * 0.85
 
     return this.formatMoney(renda)
   }
 
-  
+  public getTempoExigido() {
 
-  
+    let tipo
+    let anos
+
+    switch (this.tipoBeneficio) {
+      case 6:
+        tipo = 'Aposentadoria por tempo de serviço de professor'
+        anos = 25
+        break;
+
+      case 1915:
+        tipo = 'Aposentadoria Especial - 15 anos'
+        anos = 15
+        break;
+
+      case 1920:
+        tipo = 'Aposentadoria Especial - 25 anos'
+        anos = 25
+        break;
+
+      case 1900:
+        tipo = 'Pensão por Morte - Instituidor Aposentado na Data do Óbito'
+        anos = 0
+        break;
+
+      case 1901:
+        tipo = 'Pensão por Morte - Instituidor não Aposentado na Data do Óbito'
+        anos = 0
+        break;
+
+      case 1903:
+        tipo = 'Aposentadoria por Incapacidade Permanente'
+        anos = 0
+        break;
+
+      case 1:
+        tipo = 'Auxílio Doença ou Auxílio por Incapacidade Temporária'
+        anos = 0
+        break;
+
+      case 2:
+        tipo = 'Aposentadoria por invalidez Previdenciária ou Pensão por Morte'
+        anos = 0
+        break;
+
+      case 3:
+        tipo = 'Aposentadoria por Idade - Trabalhador Urbano ou Aposentadoria Programada'
+        anos = 15
+        break;
+
+      case 31:
+        tipo = 'Aposentadoria Programada - Professor'
+        anos = 0
+        break;
+
+      case 4:
+        tipo = 'Aposentadoria por Tempo de Contribuição'
+        anos = 0
+        break;
+
+      case 5:
+        tipo = 'Aposentadoria Especial'
+        anos = 0
+        break;
+
+      case 6:
+        tipo = 'Aposentadoria por Tempo de Contribuição do(a) Professor(a)'
+        anos = 0
+        break;
+
+      case 7:
+        tipo = 'Auxílio Acidente previdenciário - 50%'
+        anos = 0
+        break;
+
+      case 16:
+        tipo = 'Aposentadoria por Idade - Trabalhador Rural'
+        anos = 0
+        break;
+
+      case 17:
+        tipo = 'Auxílio Acidente - 30%'
+        anos = 0
+        break;
+
+      case 18:
+        tipo = 'Auxílio Acidente - 40%'
+        anos = 0
+        break;
+
+      case 19:
+        tipo = 'Auxílio Acidente - 60%'
+        anos = 0
+        break;
+
+      case 20:
+        tipo = 'Abono de Permanência em Serviço'
+        anos = 0
+        break;
+
+      case 25:
+        tipo = 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Grave)'
+        anos = 0
+        break;
+
+      case 26:
+        tipo = 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Moderada)'
+        anos = 0
+        break;
+
+      case 27:
+        tipo = 'Aposentadoria por Tempo de Contribuição da PcD (Deficiência Leve)'
+        anos = 0
+        break;
+
+      case 28:
+        tipo = 'Aposentadoria especial por Idade da Pessoa com Deficiência'
+        anos = 0
+        break;
+
+      case 1915:
+        tipo = 'Aposentadoria especial - 15 anos de exposição'
+        anos = 15
+        break;
+
+      case 1920:
+        tipo = 'Aposentadoria especial - 20 anos de exposição'
+        anos = 20
+        break;
+
+      case 1925:
+        tipo = 'Aposentadoria especial - 25 anos de exposição'
+        anos = 25
+        break;
+
+      case 1925:
+        tipo = 'Aposentadoria especial - 25 anos de exposição'
+        anos = 25
+        break;
+
+      case 1905:
+        tipo = 'Auxílio Acidente - 50%'
+        anos = 0
+        break;
+
+      default:
+        break
 
 
-
+    }
+    return anos
+  }
 
 
 }

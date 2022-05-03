@@ -149,16 +149,24 @@
                   </div>
 
                   <div *ngIf="!isUpdating">
-                    <app-rgps-resultados-apos99-secundarios [calculo]="calculo" [segurado]="segurado"
+                    <app-rgps-resultados-apos99-secundarios
+                     [calculo]="calculo"
+                      [segurado]="segurado"
                       [dadosPassoaPasso]="dadosPassoaPasso"
                       [listaValoresContribuidosPeriodosCT]="listaValoresContribuidosPeriodosCT"
-                      [numResultado]="numResultado" [listaPeriodosCT]="listaPeriodosCT" [moeda]="moeda"
-                      [conclusoes]="conclusoes" [contribuicaoPrimaria]="contribuicaoPrimaria"
-                      [fatorPrevidenciario]="fatorPrevidenciario" [expectativa]="expectativa"
-                      [idadeFracionadaF]="idadeFracionadaF"
-                      (somaGlobalSalarioBeneficio)="resultadoEmitter($event)"
-                      >
-                     
+                      [numResultado]="numResultado" 
+                      [listaPeriodosCT]="listaPeriodosCT"
+                       [moeda]="moeda"
+                      [conclusoes]="conclusoes" 
+                      [contribuicaoPrimaria]="contribuicaoPrimaria"
+                      [fatorPrevidenciario]="fatorPrevidenciario" 
+                      [expectativa]="expectativa"
+                      [idadeFracionadaF]="idadeFracionadaF" 
+                      [divisorConcomitante] ="divisorConcomitante"
+                      [tipoBeneficio]="tipoBeneficio"
+                      [passarMesesCarencias]="passarMesesCarencias"
+                      (somaGlobalSalarioBeneficio)="resultadoEmitter($event)">
+
                     </app-rgps-resultados-apos99-secundarios>
                   </div>
 
@@ -190,10 +198,8 @@
             </article>
           </div>
 
-          <app-rgps-resultados-apos99-global *ngIf="!isUpdating"
-            [resultadoFinal]="resultadoFinal"
-            [conclusoes]="conclusoes"
-          >
+          <app-rgps-resultados-apos99-global *ngIf="!isUpdating" [resultadoFinal]="resultadoFinal"
+            [conclusoes]="conclusoes">
 
           </app-rgps-resultados-apos99-global>
 

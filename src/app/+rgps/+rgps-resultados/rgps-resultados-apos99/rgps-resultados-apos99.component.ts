@@ -29,8 +29,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
   @Input() listaPeriodosCT;
+
   
-  
+  public passarMesesCarencias
   public resultadoFinal;
   public boxId;
   public dataFiliacao;
@@ -119,6 +120,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   public isDivisorMinimo = true;
   public msgDivisorMinimo = '';
+  public divisorConcomitante = 0;
   // IN77
   public exibirIN77 = false;
   public naoAplicarIN77 = true;
@@ -151,6 +153,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   ngOnInit() {
+
+    this.passarMesesCarencias = this.getMesesCarencia()
 
     
 
@@ -311,7 +315,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
               .then(expectativas => {
                 this.expectativasVida = expectativas;
-                console.log(this.expectativasVida)
+              
                 this.CarenciaProgressiva.getCarencias()
                   .then(carencias => {
                     this.carenciasProgressivas = carencias;
@@ -520,6 +524,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     const mesesContribuicao80 = Math.trunc((mesesContribuicao * 0.8));
     const mesesContribuicao60 = Math.trunc((mesesContribuicao * 0.6));
     const divisorMinimo = Math.trunc(mesesContribuicao * 0.6);
+    this.divisorConcomitante = mesesContribuicao60;
 
     const numeroContribuicoes = contadorPrimario; // Numero de contribuicoes carregadas para o periodo;
 
@@ -562,7 +567,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         divisorMediaPrimaria = mesesContribuicao60;
         this.msgDivisorMinimo = '(Divisor Mínimo)';
-
+        
       }
 
       if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
@@ -993,7 +998,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
 
-
+  
 
     // conclusoes geral
     conclusoes.push({
@@ -1807,6 +1812,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         mesesCarencia = progressiveLack;
       }
     }
+
+ 
     return mesesCarencia;
   }
 
@@ -1860,7 +1867,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
       case 2:
         tempoServico = tempoServicoSecundario * 12;
-        let carenciaMeses = this.getMesesCarencia();
+        let carenciaMeses = this.getMesesCarencia()
         taxaSecundaria = tempoServico / carenciaMeses;
         break;
       case 3:

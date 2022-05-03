@@ -59,7 +59,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
     }
     
-    console.log(soma)
+   
     return soma
   }
 
