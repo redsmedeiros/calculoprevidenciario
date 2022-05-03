@@ -451,12 +451,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     //CALCULO PRINCIPAL - MEDIAS DOS SALARIOS X FATOR PREVIDENCIÁRIO X DIVISOR OBTIDO
     let valor = mediaFormatada * fatorFomatado * divisorFormatado
 
-    console.log(mediaFormatada)
-    console.log(fatorFomatado)
-    console.log(divisorFormatado)
-    console.log(valor)
-
-    
    
     let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
 

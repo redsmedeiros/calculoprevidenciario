@@ -155,6 +155,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   ngOnInit() {
 
     this.passarMesesCarencias = this.getMesesCarencia()
+    
 
     
 
@@ -1046,6 +1047,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       string: 'Alíquota do Benefício',
       value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%'
     });
+
+    console.log(this.conclusoes)
 
 
     if (irt > 1) {

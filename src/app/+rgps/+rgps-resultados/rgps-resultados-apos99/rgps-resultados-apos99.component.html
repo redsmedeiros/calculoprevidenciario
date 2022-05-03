@@ -139,10 +139,12 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
-                          <td width="50%">
+                          <td width="50%" *ngIf="conclusao.order != 20">
                             <span class="pull-right font-bold  ">{{conclusao.string}}</span>
                           </td>
-                          <td>{{conclusao.value}}</td>
+                          <td *ngIf="conclusao.order != 20">
+                            <span class="">{{conclusao.value}}</span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
