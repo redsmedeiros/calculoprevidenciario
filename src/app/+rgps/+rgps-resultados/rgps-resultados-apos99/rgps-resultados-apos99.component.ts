@@ -1048,9 +1048,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%'
     });
 
-    console.log(this.conclusoes)
-
-
+ 
     if (irt > 1) {
 
       this.irtRejusteAdministrativo = irt;
