@@ -132,7 +132,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public expectativa;
   public idadeFracionadaF;
   public mostrarResultadoSecundario = false;
-
+  public moedaDibSec;
+  public isUpdatingGlobal = false;
   
 
   public resultadoCalculo = [
@@ -336,6 +337,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let moedaDib = this.Moeda.getByDate(dib);
     let dataComparacao = (dib.clone()).startOf('month');
     let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.Moeda.getByDate(dataComparacao) : undefined;
+    this.moedaDibSec = moedaDib;
 
     if (!this.direitoAposentadoria(dib, errorArray, tempoContribuicaoPrimaria, tempoContribuicaoSecundaria)) {
       return;
@@ -353,6 +355,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tabelaIndex = 0;
     let tableData = [];
     let idString = 0;
+
+    // regra para ativar ou não a secundaria.
+    if (
+      this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
+      || this.calculo.somar_contribuicao_secundaria
+    ) {
+        this.iscontribuicaoSecundaria = false;
+    }else{
+        this.iscontribuicaoSecundaria = true;
+    }
+
+
 
     for (const contribuicao of this.listaValoresContribuidos) {
       let contribuicaoPrimaria = parseFloat(contribuicao.valor_primaria);
@@ -379,10 +393,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         contribuicaoSecundaria = 0;
       }
 
-
-      if (contribuicaoSecundaria > 0) {
-        this.iscontribuicaoSecundaria = true;
-      }
 
       idString += 1; // tabela['id'] = contadorPrimario;
 
@@ -2601,8 +2611,18 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   public resultadoEmitter(resultadoFinal){
-        this.resultadoFinal = resultadoFinal
-       
+
+    console.log(this.resultadoFinal);
+
+    if (this.isExits(resultadoFinal)) {
+      
+      this.resultadoFinal = resultadoFinal;
+      setTimeout(() => {
+        this.isUpdatingGlobal = true; 
+      }, 500);
+      
+    }
+
          
   }
 

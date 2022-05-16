@@ -38,6 +38,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() tipoBeneficio
   @Input() dataInicioBeneficio
   @Input() passarMesesCarencias
+  @Input() moedaDibSec
 
 
 
@@ -60,6 +61,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public arrayDeControleTitulos = [
     "Soma dos Salários de Contribuição Considerados",
     "Divisor da Média dos Salários de Contribuição",
+    "Formúla do Fator Previdenciário (Secundário)",
+    "Fator Previdênciário (Secundário)",
     "Média dos Salários de Contribuição",
     "Salário de Benefício"
   ]
@@ -78,10 +81,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public indiceParaDivisorSecundario = 0
   public indiceCasoNaoTenhaLimitado = 0
   public somaSalariosSecundarios = 0
-
   public arrayParaResultadoFinal = []
-
   public numeroEspecie = 0
+  public fatorResultadoSecundario = { fator: 0, fatorString: 0, formula_fator: '' };
 
 
 
@@ -95,13 +97,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   ngOnInit() {
 
-   
- 
     this.isUpdating = false;
-
     this.startCalculosSecundarios();
-
-
+    console.log(this.conclusoes)
   }
 
 
@@ -179,7 +177,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       }
 
       //this.formatarDivisor(this.tabelaIterar) < 129 ? 129 :
-      const divisor = this.formatarDivisor(this.tabelaIterar)
+      // const divisor = this.formatarDivisor(this.tabelaIterar)
 
       const divisorSecundario = this.formatarDivisor(this.tabelaIterar)
 
@@ -187,15 +185,17 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
       const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id)
 
-
+      const fatorC = this.getFatorContribuicaoSecundario( this.tabelaIterar.length,
+        this.expectativa,
+        this.idadeFracionadaF)
 
       this.arrayDeControleResutadoFinal = [
         this.formatMoney(this.soma),
         divisorSecundario,
+        this.fatorResultadoSecundario.formula_fator,
+        this.formatDecimal(fatorC,3),
         this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario),
         this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo)
-
-
       ];
 
 
@@ -222,8 +222,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
       //problema com receber mesesContribuiçoes em array e usar o metodo de divisor
 
-
-
       this.soma = 0
       this.id = 1
       this.tabelaDeCalculos[this.controle] = this.tabelaIterar
@@ -241,13 +239,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.tableData = this.tabelaDeCalculos
 
-
-
-
-
-
-
-
   }
 
 
@@ -261,31 +252,37 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   //PASSA COMO PARÂMETRO AS CONTRIBUIÇÕES SECUNDÁRIAS PARA ENCONTRAR O DIVISOR SECUNDÁRIO
   public formatarDivisor(tabelaInsert) {
 
-    // ORDENA OS SALÁRIOS PELO VALOR USANDO O MÉTODO SORT E RETORNA O PRÓPRIO ARRAY - CALCULA A DIFERENÇA DE VALORES ENTRE OS MESES
-    const tabela = tabelaInsert.sort((x, y) => { return x.contribuicao_secundaria_revisada - y.contribuicao_secundaria_revisada })
-    //CRIA ARRA COM AS DIFERENÇAS
-    this.arrayRevisadaOrdenada.push(tabela)
+
+    // // ORDENA OS SALÁRIOS PELO VALOR USANDO O MÉTODO SORT E RETORNA O PRÓPRIO ARRAY - CALCULA A DIFERENÇA DE VALORES ENTRE OS MESES
+    // const tabela = tabelaInsert.sort((x, y) => { return x.contribuicao_secundaria_revisada - y.contribuicao_secundaria_revisada })
+    // //CRIA ARRAY COM AS DIFERENÇAS
+    // this.arrayRevisadaOrdenada.push(tabela)
+    // this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
+
+    // let divisorSecundario = (this.contadorSecundario == 0) ? this.indiceCasoNaoTenhaLimitado : this.contadorSecundario
+
+    // //let divisorSecundario = this.contadorSecundario;
+    // if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.6) {
+    //   divisorSecundario = Math.round(this.mesesContribuicoes[this.controle] * 0.6);
+    // } else if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.8) {
+    //   divisorSecundario = Math.round(this.mesesContribuicoes[this.controle] * 0.8);
+    // }
+
+    // tabelaInsert.sort((x, y) => { return x.id - y.id });
 
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
+    let divisorSecundarioAtual = tabelaInsert.length;
 
-    let divisorSecundario = (this.contadorSecundario == 0) ? this.indiceCasoNaoTenhaLimitado : this.contadorSecundario
+    if (this.isDivisorMinimo) {
 
+      if (divisorSecundarioAtual < this.divisorConcomitante) {
+        divisorSecundarioAtual = this.divisorConcomitante;
+      } else if (divisorSecundarioAtual < tabelaInsert.length * 0.8) {
+        divisorSecundarioAtual = Math.round(tabelaInsert.length * 0.8);
+      }
 
-
-    //let divisorSecundario = this.contadorSecundario;
-    if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.6) {
-      divisorSecundario = Math.round(this.mesesContribuicoes[this.controle] * 0.6);
-    } else if (divisorSecundario < this.mesesContribuicoes[this.controle] * 0.8) {
-      divisorSecundario = Math.round(this.mesesContribuicoes[this.controle] * 0.8);
     }
-
-
-
-
-    tabelaInsert.sort((x, y) => { return x.id - y.id })
-
-    return divisorSecundario
-
+    return divisorSecundarioAtual;
   }
 
 
@@ -413,45 +410,50 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, totalContribuicoes, dividendoTempo) {
 
 
+
+
     //CÁLCULO MÉDIA: DIVIDIR MÉDIA DE SALÁRIO PELO DIVISOR (ENTENDER COMO SERÁ FEITO O DIVISOR)
     let media = (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) / (this.id - 1))
+    
 
     let mediaFormatada = this.replaceFormata(this.formatDecimal(media, 3))
 
     //RECEBE O FATOR DE CONTRIBUIÇÃO
-    let fatorFomatado = this.getFatorContribuicaoSecundario(this.id, this.expectativa, this.idadeFracionadaF)
+    let fatorFomatado = this.getFatorContribuicaoSecundario(
+      this.tabelaIterar.length,
+      this.expectativa,
+      this.idadeFracionadaF);
 
-    let divisor
-    let divisorFormatado
+    //let divisorFormatado = this.formatarDivisor(divisorSecundario)
+
 
     //VERIFICA O TIPO DE BENEFÍCIO E O DIVISOR QUE SERÁ UTILIZADO
-    if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
+    //if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
 
-      //RECEBE DIVISOR COM CARÊNCIA
-      divisor = this.getDivisorComCarencia(this.passarMesesCarencias, divisorSecundario)
-      
+    //RECEBE DIVISOR COM CARÊNCIA
+    //divisor = this.getDivisorComCarencia(this.passarMesesCarencias, divisorSecundario)
 
-      divisorFormatado = this.replaceFormata(divisor)
 
-    } else {
-      //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
-      let verificaDivisor = divisorSecundario / 12
-      //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
-      if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
+    //divisorFormatado = this.replaceFormata(divisor)
 
-        divisor = verificaDivisor / this.getTempoExigido()
-        divisorFormatado = divisor
-       //SE VALOR MENOR QUE UM RECEBERÁ UM DIVISOR ZERADO 
-      }else if(verificaDivisor < 1){
-        divisor = 0
-      }
+    //} else {
+    //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
+    //let verificaDivisor = divisorSecundario / 12
+    //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
+    //if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
 
-    }
+    //divisor = verificaDivisor / this.getTempoExigido()
+    //divisorFormatado = divisor
+    //SE VALOR MENOR QUE UM RECEBERÁ UM DIVISOR ZERADO 
+    //}else if(verificaDivisor < 1){
+    //divisor = 0
+    //}
+
+    //}
 
     //CALCULO PRINCIPAL - MEDIAS DOS SALARIOS X FATOR PREVIDENCIÁRIO X DIVISOR OBTIDO
-    let valor = mediaFormatada * fatorFomatado * divisorFormatado
+    let valor = mediaFormatada * fatorFomatado
 
-   
     let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
 
     this.somaSalariosSecundarios += beneficio
@@ -473,7 +475,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     }
 
     return valor;
-
+    //0,9038581428571429
   }
 
   //FUNÇÃO DE CÁLCULO DO FATOR DE CONTRIBUIÇAO
@@ -485,19 +487,31 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const aliquota = 0.31
 
-    let fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
+    this.fatorResultadoSecundario.fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
       * (1 + (idadeFracionadaF + (tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
 
+    this.fatorResultadoSecundario.fatorString = this.formatDecimal(this.fatorResultadoSecundario.fator, 2);
 
-    return fator
+    // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
+    this.fatorResultadoSecundario.formula_fator = '((' + this.formatDecimal(tempoTotalDeContribuicaoEmAnos, 4) + ' * '
+      + this.formatDecimal(aliquota, 2) + ') / '
+      + this.formatDecimal(expectativa, 2) + ') * (1 + ('
+      + this.formatDecimal(idadeFracionadaF, 4) + ' + ('
+      + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
+      + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
+
+  
+
+    return this.fatorResultadoSecundario.fator;
 
   }
+
 
   //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
   public getDivisorComCarencia(ano, divisor) {
 
     //let carencia = this.carenciaProgressivaService.getCarencia(1994)
-    
+
 
     let DivisorComCarencia = (divisor / ano)
 

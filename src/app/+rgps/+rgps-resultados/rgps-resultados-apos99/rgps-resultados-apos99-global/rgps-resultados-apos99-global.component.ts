@@ -19,6 +19,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   public controleDeTitulos = [
     'Benefício Primário',
     'Soma Benefícios Secundários',
+    'Aliquota',
     'Benefício Global'
 
   ]
@@ -33,6 +34,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   ngOnInit() {
 
     this.resultados()
+    console.log(this.conclusoes)
   
     
   }
@@ -98,9 +100,21 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
   public resultados(){
 
+    let aliquota
+
+    for(const row of this.conclusoes ){
+
+      console.log(row)
+       
+      if(row.order === 19){
+        aliquota = row.value
+      }
+    }
     
+
     this.arrayResultadosFinais.push(this.formatMoney(this.getBeneficioPrimario()))
     this.arrayResultadosFinais.push(this.formatMoney(this.somaSecundarios()))
+    this.arrayResultadosFinais.push(aliquota)
     this.arrayResultadosFinais.push(this.formatMoney(this.somaGeral()))
     
     

@@ -139,10 +139,10 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let conclusao of conclusoes" class="{{conclusao.class}}">
-                          <td width="50%" *ngIf="conclusao.order != 20">
+                          <td width="50%" *ngIf="conclusao.order != 20 && conclusao.order != 19">
                             <span class="pull-right font-bold  ">{{conclusao.string}}</span>
                           </td>
-                          <td *ngIf="conclusao.order != 20">
+                          <td *ngIf="conclusao.order != 20 && conclusao.order != 19">
                             <span class="">{{conclusao.value}}</span>
                           </td>
                         </tr>
@@ -150,7 +150,7 @@
                     </table>
                   </div>
 
-                  <div *ngIf="!isUpdating">
+                  <div *ngIf="!isUpdating && this.iscontribuicaoSecundaria" >
                     <app-rgps-resultados-apos99-secundarios
 
                       [calculo]="calculo"
@@ -168,6 +168,7 @@
                       [divisorConcomitante] ="divisorConcomitante"
                       [tipoBeneficio]="tipoBeneficio"
                       [passarMesesCarencias]="passarMesesCarencias"
+                      [moedaDibSec] = "moedaDibSec"
                       (somaGlobalSalarioBeneficio)="resultadoEmitter($event)">
 
                     </app-rgps-resultados-apos99-secundarios>
@@ -201,9 +202,9 @@
             </article>
           </div>
 
-          <app-rgps-resultados-apos99-global *ngIf="!isUpdating" [resultadoFinal]="resultadoFinal"
+          <app-rgps-resultados-apos99-global *ngIf="isUpdatingGlobal && this.iscontribuicaoSecundaria" 
+          [resultadoFinal]="resultadoFinal"
             [conclusoes]="conclusoes">
-
           </app-rgps-resultados-apos99-global>
 
           <table class="table table-hover table-bordered" *ngIf="erros.length === 0">
