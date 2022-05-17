@@ -483,6 +483,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let tempoTotalContribuicaoF = id - 1
 
+    
+
     let tempoTotalDeContribuicaoEmAnos = (tempoTotalContribuicaoF / 12)
 
     const aliquota = 0.31
@@ -497,10 +499,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       + this.formatDecimal(aliquota, 2) + ') / '
       + this.formatDecimal(expectativa, 2) + ') * (1 + ('
       + this.formatDecimal(idadeFracionadaF, 4) + ' + ('
-      + this.formatDecimal(tempoTotalContribuicaoF, 4) + ' * '
+      + this.formatDecimal(tempoTotalDeContribuicaoEmAnos, 4) + ' * '
       + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
-  
+      console.log(tempoTotalContribuicaoF)
+      console.log(tempoTotalContribuicaoF / 12)
 
     return this.fatorResultadoSecundario.fator;
 
