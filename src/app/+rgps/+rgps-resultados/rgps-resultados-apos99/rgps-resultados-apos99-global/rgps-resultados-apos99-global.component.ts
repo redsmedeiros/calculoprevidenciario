@@ -104,7 +104,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
     for(const row of this.conclusoes ){
 
-      console.log(row)
+      
        
       if(row.order === 19){
         aliquota = row.value

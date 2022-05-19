@@ -100,6 +100,7 @@ export class ImportadorCnisPeriodosComponent implements OnInit, OnChanges {
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
 
     this.vinculosList = [];
+    
     this.vinculosListPost = [];
 
     const changedvinculos = changes['vinculos'];
@@ -476,11 +477,12 @@ vinculo   */
         concomitantes: '',
         secundario: vinculo.secundario,
       }
-
+     
       this.vinculosList.push(line);
       this.isValidVinculo(line);
 
     }
+    
 
 
   }
@@ -564,6 +566,7 @@ vinculo   */
         }
       );
     }
+    
   }
 
 
@@ -596,6 +599,7 @@ vinculo   */
         })
       );
     }
+    
 
   }
 
@@ -1392,12 +1396,15 @@ vinculo   */
     // const id = $event.target.value;
     const vinculoSecundario = false
 
-    console.log(id, vinculoSecundario)
+   
 
     this.vinculosList.map((lista) => {
-
+     
       if (lista.id === id) {
+     
         lista.secundario = (!lista.secundario);
+        
+        
       }
     });
 

@@ -418,6 +418,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let mediaFormatada = this.replaceFormata(this.formatDecimal(media, 3))
 
+
+
     //RECEBE O FATOR DE CONTRIBUIÇÃO
     let fatorFomatado = this.getFatorContribuicaoSecundario(
       this.tabelaIterar.length,
@@ -481,7 +483,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   //FUNÇÃO DE CÁLCULO DO FATOR DE CONTRIBUIÇAO
   public getFatorContribuicaoSecundario(id, expectativa, idadeFracionadaF) {
 
-    let tempoTotalContribuicaoF = id - 1
+    let tempoTotalContribuicaoF = id
 
     
 
