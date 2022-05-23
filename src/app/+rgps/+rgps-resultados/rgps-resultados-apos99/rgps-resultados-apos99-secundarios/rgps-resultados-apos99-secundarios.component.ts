@@ -39,6 +39,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() dataInicioBeneficio
   @Input() passarMesesCarencias
   @Input() moedaDibSec
+  @Input() listaPeriodosCTSec
 
 
 
@@ -61,9 +62,10 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public arrayDeControleTitulos = [
     "Soma dos Salários de Contribuição Considerados",
     "Divisor da Média dos Salários de Contribuição",
+    "Média dos Salários de Contribuição",
     "Formúla do Fator Previdenciário (Secundário)",
     "Fator Previdênciário (Secundário)",
-    "Média dos Salários de Contribuição",
+    "Teto do Salário de Contruibuição",
     "Salário de Benefício"
   ]
   public resultadoFinal = [[]]
@@ -84,7 +86,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public arrayParaResultadoFinal = []
   public numeroEspecie = 0
   public fatorResultadoSecundario = { fator: 0, fatorString: 0, formula_fator: '' };
-
+  public tetoDeContribuicaoSecundaria
 
 
 
@@ -99,16 +101,18 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.isUpdating = false;
     this.startCalculosSecundarios();
-    console.log(this.conclusoes)
+    
   }
 
 
 
   private startCalculosSecundarios() {
 
+    
     //LISTA DE PERÍODOS: OBTEM A QUANTIDADE DE PERIODOS CONCOMITANTES
-    for (const periodoSec of this.listaPeriodosCT) {
+    for (const periodoSec of this.listaPeriodosCTSec) {
 
+     
       if (this.isExits(periodoSec.concomitantes) && periodoSec.secundario === 1) {
         //CRIA ARRAY COM TODOS AS INFORMAÇÕES CONCOMITANTES
         this.rstFinalCalculosSecundarios.push(
@@ -134,20 +138,23 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     dataComparacao = (dataComparacao.clone()).startOf('month');
     let moedaComparacao = (dataComparacao.isSameOrBefore(moment(), 'month')) ? this.getMoedaBydate(dataComparacao) : undefined;
 
-
+  
     //ITERAR ARRAY COM AS INFORMAÇÕE SECUNDARIAS PARA OBTER O CÁLCULO FINAL
     for (const row of this.tabelaSc) {
       //OBTER AS INFORMAÇÕES DE CADA CONTRIBUIÇÃO SECUNDÁRIA
       for (const indice of row) {
 
+        
+
+        
         const fatorCorrecao = this.getFatorCorrecao(moment(indice.cp, 'MM/YYYY'), moedaComparacao)
         //CHAMAR MÉTODO DE LIMITES: PASSAR - SALÁRIO DE CONTRIBUIÇÃO X FATOR DE CONTRIBUIÇÃO E DATA DA CONTRIBUIÇÃO
         const slBeneficioMes = this.limitarTetosEMinimosSec(
-          (indice.sc * fatorCorrecao),
+          (parseFloat(indice.sc) * fatorCorrecao),
           moment(indice.cp, 'MM/YYYY')
         );
 
-
+         
 
         if (slBeneficioMes.aviso == "LIMITADO AO TETO") {
           this.contadorSecundario++
@@ -156,14 +163,15 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         }
 
         //SOMA DOS SALÁRIOS DE BENEFÍCIO
+       
         this.soma = this.soma + slBeneficioMes.valor
-
+        console.log(slBeneficioMes.valor)
         //CRIA UM OJETO COM AS DEVIDAS INFORMAÇÕES
         let tabelaRow = {
           id: this.id++,
           competencia: indice.cp,
           indice_corrigido: this.formatDecimal(fatorCorrecao, 6),
-          contribuicao_secundaria: this.formatMoney(indice.sc),
+          contribuicao_secundaria: this.formatMoney(this.convertDecimalValue(indice.sc)),
           contribuicao_secundaria_revisada: this.formatMoney(slBeneficioMes.valor),
           contribuicao_secundaria_revisada_n: slBeneficioMes.valor,
           limite: slBeneficioMes.aviso
@@ -189,15 +197,18 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         this.expectativa,
         this.idadeFracionadaF)
 
+     
       this.arrayDeControleResutadoFinal = [
         this.formatMoney(this.soma),
         divisorSecundario,
+        this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario),
         this.fatorResultadoSecundario.formula_fator,
         this.formatDecimal(fatorC,3),
-        this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario),
+        this.formatMoney(this.moedaDibSec.teto),
         this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo)
       ];
 
+      
 
       for (let i = 0; i < this.arrayDeControleTitulos.length; i++) {
 
@@ -206,11 +217,14 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
           resultado: this.arrayDeControleResutadoFinal[i]
         }
 
+        
+
         this.arrayResultadoParcial.push(resultadoParcial)
 
         this.resultadoFinal[this.indexParaArrayRF] = this.arrayResultadoParcial
 
       }
+
 
       this.arrayResultadoParcial = []
 
@@ -233,6 +247,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       this.concusoesSecundarias.push(this.conclusao);
 
       this.arrayParaResultadoFinal.push(this.arrayDeControleResutadoFinal)
+
+  
 
       this.somaGlobalSalarioBeneficio.emit(this.arrayParaResultadoFinal)
     }
@@ -338,7 +354,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     const tetoSalarial = parseFloat((moeda) ? moeda.teto : 0);
     let avisoString = '';
     let valorRetorno = valor;
-
+  
 
 
     if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
@@ -504,8 +520,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       + this.formatDecimal(tempoTotalDeContribuicaoEmAnos, 4) + ' * '
       + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
-      console.log(tempoTotalContribuicaoF)
-      console.log(tempoTotalContribuicaoF / 12)
+    
 
     return this.fatorResultadoSecundario.fator;
 

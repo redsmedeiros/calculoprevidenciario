@@ -169,7 +169,11 @@
                       [tipoBeneficio]="tipoBeneficio"
                       [passarMesesCarencias]="passarMesesCarencias"
                       [moedaDibSec] = "moedaDibSec"
-                      (somaGlobalSalarioBeneficio)="resultadoEmitter($event)">
+                      (somaGlobalSalarioBeneficio)="resultadoEmitter($event)"
+                      [listaPeriodosCTSec]="listaPeriodosCTSec"
+                      >
+                      
+                      
 
                     </app-rgps-resultados-apos99-secundarios>
                   </div>
@@ -201,10 +205,14 @@
               </sa-widget>
             </article>
           </div>
+    
 
-          <app-rgps-resultados-apos99-global *ngIf="isUpdatingGlobal && this.iscontribuicaoSecundaria" 
-          [resultadoFinal]="resultadoFinal"
-            [conclusoes]="conclusoes">
+
+          <app-rgps-resultados-apos99-global *ngIf="isUpdatingGlobal && iscontribuicaoSecundaria" 
+            [resultadoFinal]="resultadoFinal"
+            [conclusoes]="conclusoes"
+            [moedaDibSec] = "moedaDibSec">
+            
           </app-rgps-resultados-apos99-global>
 
           <table class="table table-hover table-bordered" *ngIf="erros.length === 0">

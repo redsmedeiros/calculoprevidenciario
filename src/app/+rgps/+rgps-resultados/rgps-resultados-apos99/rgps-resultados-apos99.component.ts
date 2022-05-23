@@ -85,9 +85,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       { data: 'competencia' },
       { data: 'indice_corrigido' },
       { data: 'contribuicao_primaria' },
-      { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
+      { data: 'contribuicao_secundaria', visible: false },
       { data: 'contribuicao_primaria_revisada' },
-      { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
+      { data: 'contribuicao_secundaria_revisada', visible: false },
       { data: 'limite', class: '' },
     ],
     columnDefs: [
@@ -174,9 +174,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         { data: 'competencia' },
         { data: 'indice_corrigido' },
         { data: 'contribuicao_primaria' },
-        { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_secundaria', visible: false },
         { data: 'contribuicao_primaria_revisada' },
-        { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_secundaria_revisada', visible: false },
         { data: 'limite' },
       ],
       columnDefs: [
@@ -250,11 +250,22 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   private getValoresContribuicao(dataInicio, dataLimite) {
 
+     // regra para ativar ou não a secundaria.
+     if (
+      this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
+      || this.calculo.somar_contribuicao_secundaria
+    ) {
+        this.iscontribuicaoSecundaria = false;
+    }else{
+        this.iscontribuicaoSecundaria = true;
+    }
+
+    
 
     if (this.isExits(this.dadosPassoaPasso)
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
 
-      this.getSalariosContribuicoesContTempoCNIS().then((rst) => {
+      this.getSalariosContribuicoesContTempoCNIS(this.iscontribuicaoSecundaria).then((rst) => {
 
         this.listaValoresContribuidos = this.getlistaValoresContribuidosPeriodosCT(
           rst,
@@ -356,15 +367,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tableData = [];
     let idString = 0;
 
-    // regra para ativar ou não a secundaria.
-    if (
-      this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
-      || this.calculo.somar_contribuicao_secundaria
-    ) {
-        this.iscontribuicaoSecundaria = false;
-    }else{
-        this.iscontribuicaoSecundaria = true;
-    }
+   
 
 
 
@@ -1562,9 +1565,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         { data: 'competencia' },
         { data: 'indice_corrigido' },
         { data: 'contribuicao_primaria' },
-        { data: 'contribuicao_secundaria', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_secundaria', visible: false },
         { data: 'contribuicao_primaria_revisada' },
-        { data: 'contribuicao_secundaria_revisada', visible: this.iscontribuicaoSecundaria },
+        { data: 'contribuicao_secundaria_revisada', visible: false },
         { data: 'limite' },
       ],
       columnDefs: [
@@ -2612,14 +2615,14 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
   public resultadoEmitter(resultadoFinal){
 
-    console.log(this.resultadoFinal);
-
     if (this.isExits(resultadoFinal)) {
       
       this.resultadoFinal = resultadoFinal;
       setTimeout(() => {
         this.isUpdatingGlobal = true; 
       }, 500);
+
+    
       
     }
 

@@ -65,6 +65,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
   public listaPeriodosCT = [];
+  public listaPeriodosCTSec = [];
   public listaValoresContribuidosPeriodosCT = [];
   public tipoBeneficio;
 
@@ -430,7 +431,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
 
-  public getSalariosContribuicoesContTempoCNIS() {
+  public getSalariosContribuicoesContTempoCNIS(iscontribuicaoSecundaria = false) {
+
+   
 
     return new Promise((resolve, reject) => {
 
@@ -438,6 +441,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
+        this.listaPeriodosCTSec = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
+        this.listaPeriodosCT = DefinicaoSalariosContribuicao.filterPeriodosSecundarios(this.listaPeriodosCT, iscontribuicaoSecundaria)
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
         resolve(this.listaValoresContribuidosPeriodosCT);
 
@@ -448,6 +453,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(periodosContribuicao));
             this.listaPeriodosCT = periodosContribuicao;
+            this.listaPeriodosCTSec = periodosContribuicao;
+            this.listaPeriodosCT = DefinicaoSalariosContribuicao.filterPeriodosSecundarios(this.listaPeriodosCT, iscontribuicaoSecundaria)
             this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);
             resolve(this.listaValoresContribuidosPeriodosCT);
 
@@ -975,7 +982,9 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
   formatMoney(value, sigla = 'R$') {
 
+  
     value = parseFloat(value);
+    
     const numeroPadronizado = value.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
     return sigla + ' ' + numeroPadronizado;
 
@@ -1555,8 +1564,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       hours: 0,
     });
 
-    console.log(tempoAtual);
-    console.log(this.checkAdicionalTempo());
+   
 
     let tempoAtualMaisAdicional = tempoAtual;
 
@@ -1566,7 +1574,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
       diffTempo = this.descarteTempoSemSC(diffTempo);
 
-      console.log(diffTempo)
+     
 
       // tempoAtualMaisAdicional = tempoAtual.add(moment.duration({
       //   seconds: 0,
@@ -1735,8 +1743,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
     const diffTempo = this.calcDiffContribuicao(dataFutura.clone(), dataAtual.clone());
     const diffTempo2 = DefinicaoTempo.dataDiffDateToDateCustom(dataAtual.format('YYYY-MM-DD'), dataFutura.format('YYYY-MM-DD'));
 
-    console.log(diffTempo);
-    console.log(diffTempo2);
+ 
 
     this.addTempoContribuicao(calculo, diffTempo);
     this.addCarencia(calculo, diffTempo);
@@ -1800,7 +1807,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
       }
 
-      console.log(this.planejamento);
+
 
       // this.dataInicioBeneficio = exportDados.dib;
       // this.changePeriodoOptions();

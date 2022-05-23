@@ -200,6 +200,30 @@ export class DefinicaoSalariosContribuicao {
             value !== undefined) ? true : false;
     }
 
+    static isEmptysSec(value) {
+
+        return (typeof value === 'undefined' ||
+            value === null || value === 'null' ||
+            value === undefined || value === 0 || 
+            value === '0') ? true : false;
+    }
+
+
+    static filterPeriodosSecundarios(listaPeriodosCT, iscontribuicaoSecundaria) {
+     
+        if (!iscontribuicaoSecundaria) {
+            return listaPeriodosCT;
+        }
+
+      
+        //console.log(listaPeriodosCT.filter(x => this.isEmptysSec(x.secundario)));
+
+
+
+        return listaPeriodosCT.filter(x => this.isEmptysSec(x.secundario));
+
+    }
+
 
 
 }

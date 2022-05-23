@@ -14,6 +14,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
   @Input() resultadoFinal
   @Input() conclusoes
+  @Input() moedaDibSec
 
   public isUpdating = true
   public controleDeTitulos = [
@@ -34,35 +35,31 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   ngOnInit() {
 
     this.resultados()
-    console.log(this.conclusoes)
   
+   
     
   }
 
   public somaSecundarios(){
 
-    let resultado 
-    let i = 0
-    let valorFormatado = []
+    if (this.isExits(this.resultadoFinal)) {
+      
+      let soma = 0
 
-    for(const row in this.resultadoFinal){
+      for(const row of this.resultadoFinal){
 
-      valorFormatado.push(this.replaceMoney(this.resultadoFinal[i][3]))  
-      i++
+        let formatarValor = this.replaceMoney(row[6])
+        
+        soma = formatarValor + soma
 
-    }
 
-    let soma = 0
-    let indice = 0
-    for(const row in valorFormatado){
-
-      soma += valorFormatado[indice]
-      indice++
-
-    }
+      }
     
+        return soma
+    }
+
    
-    return soma
+    
   }
 
   public replaceMoney(valor){
@@ -90,8 +87,12 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   }
 
   public somaGeral(){
+
+    
     let secundario = this.somaSecundarios()
     let soma = this.getBeneficioPrimario() + secundario 
+
+  
 
    return soma
   }
