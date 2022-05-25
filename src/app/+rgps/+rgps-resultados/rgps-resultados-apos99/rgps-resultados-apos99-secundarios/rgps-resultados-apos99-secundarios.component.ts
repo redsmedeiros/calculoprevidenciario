@@ -470,6 +470,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     let divisor
     let divisorFormatado
 
+    console.log(this.tipoBeneficio)
+
     //VERIFICA O TIPO DE BENEFÍCIO E O DIVISOR QUE SERÁ UTILIZADO
     if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
 
@@ -482,9 +484,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     } else {
       //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
       let verificaDivisor = this.tabelaIterar.length / 12
+      console.log(verificaDivisor)
       //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
       if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
 
+        console.log(this.anulaFator)
         if (this.anulaFator) {
           console.log("ok")
           divisor = this.getCarenciaTempo()
@@ -492,6 +496,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
         } else {
 
+          console.log(this.getContribuicaoTempo(this.contribuicaoPrimaria))
           divisor = verificaDivisor / this.getContribuicaoTempo(this.contribuicaoPrimaria)
           divisorFormatado = divisor
 
@@ -670,11 +675,26 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
 
       if (this.tipoBeneficio === 16 || // Aposentadoria Travalhador Rural
-        this.tipoBeneficio === 3 || // Aposentadoria Trabalhador Urbano
         this.tipoBeneficio === 25 || // Deficiencia Grave
         this.tipoBeneficio === 26 || // Deficiencia Leve
         this.tipoBeneficio === 27 || // Deficiencia Moderada
         this.tipoBeneficio === 28) {  // Deficiencia Por Idade
+
+          
+          console.log(this.fatorResultadoSecundario.fator)
+
+        if (this.fatorResultadoSecundario.fator < 1) {
+
+          textComplementar = '';
+          fatorText = 1
+          //this.fatorResultadoSecundario.fator = 1;
+        } else {
+
+          textComplementar = ' (Aplicado por ser mais vantajoso)';
+
+        }
+
+      }else if( this.tipoBeneficio === 3){
 
         if (this.fatorResultadoSecundario.fator < 1) {
 
@@ -687,11 +707,14 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
         }
 
+
       }
+
+      
 
       //fatorText = 1
 
-      this.anulaFator = true ? fatorText === 1 : false
+      this.anulaFator = fatorText === 1 ? true : false
 
       conclusoes.push({
         order: 4,
@@ -718,47 +741,42 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let anos
 
-    console.log(this.tempoDeContribuicaoEspecial)
-
+    
     switch (this.tempoDeContribuicaoEspecial) {
 
       case 1925:
+
         anos = 25
+
         break;
       case 1920:
+
         anos = 20
+
         break;
       case 1915:
+
         anos = 15
+
         break;
       case 25:
-        if (this.segurado.sexo === 'f') {
-          anos = 25
-        } else {
-          anos = 20
-        }
+
+        anos = this.segurado.sexo === 'f' ? 25 : 20
+
         break;
       case 26:
-        if (this.segurado.sexo === 'f') {
-          anos = 24
-        } else {
-          anos = 29
-        }
+
+        anos = this.segurado.sexo === 'f' ? 24 : 29
+
         break;
       case 27:
-        if (this.segurado.sexo === 'f') {
-          anos = 28
-        } else {
-          anos = 33
-        }
+
+        anos = this.segurado.sexo === 'f' ? 28 : 33
+       
         break;
       default:
         break;
     }
-
-
-
-
 
     let tempoTotalDeContribuicaoEmAnos = (this.tabelaIterar.length / 12) / anos
 
