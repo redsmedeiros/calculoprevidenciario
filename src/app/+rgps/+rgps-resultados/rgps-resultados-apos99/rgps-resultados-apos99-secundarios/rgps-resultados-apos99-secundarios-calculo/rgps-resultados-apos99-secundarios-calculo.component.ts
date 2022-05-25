@@ -13,8 +13,10 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
     @Input() tableData;
     @Input() indexSec;
     @Input() resultadoFinal
+    @Input() anulaFator
 
     public isUpdating = true;
+    public fator = false
     
 
     private tableDataCalculo = [];
@@ -30,7 +32,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
         { data: 'competencia' },
         { data: 'indice_corrigido' },
         { data: 'contribuicao_secundaria'},
-        { data: 'contribuicao_secundaria_revisada' },
+        { data: 'contribuicao_secundaria_revisada'},
         { data: 'limite' },
       ],
       columnDefs: [
@@ -46,6 +48,9 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
 
   ngOnInit() {
 
+   
+    console.log(this.resultadoFinal)
+
     this.tableDataCalculo = this.tableData
 
     this.tableDataCalculo = this.tableData
@@ -56,5 +61,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
     this.isUpdating = false;
      
   }
+
+
 
 }

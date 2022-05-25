@@ -134,6 +134,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public mostrarResultadoSecundario = false;
   public moedaDibSec;
   public isUpdatingGlobal = false;
+  public tempoDeContribuicaoEspecial
   
 
   public resultadoCalculo = [
@@ -214,6 +215,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
+    this.tempoDeContribuicaoEspecial = this.getEspecieBeneficio(this.calculo);
+   
     this.tipoBeneficioPosReforma = this.getEspecieBeneficio(this.calculo); // ajuste especial regra de acesso
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
@@ -1601,7 +1604,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
 
-  private getRequisitoPontos() {
+  public getRequisitoPontos() {
 
     let dataBeneficio = moment(this.calculo.data_pedido_beneficio, 'DD/MM/YYYY');
 
@@ -1662,7 +1665,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
    * @param tempoTotalContribuicao
    * @param conclusoes
    */
-  private aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes) {
+  public aplicacaoRegraPontos(tempoContribuicaoMaisIdade, tempoTotalContribuicao, conclusoes) {
 
     const requitoPontos = this.getRequisitoPontos();
 

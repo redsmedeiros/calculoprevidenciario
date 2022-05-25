@@ -816,6 +816,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
 
 
   getEspecieBeneficio(calculo) {
+   
     let numeroEspecie = 0;
     switch (calculo.tipo_seguro) {
       case 'Auxílio Doença':
@@ -914,6 +915,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
       default:
         break;
     }
+   
     return numeroEspecie;
   }
 

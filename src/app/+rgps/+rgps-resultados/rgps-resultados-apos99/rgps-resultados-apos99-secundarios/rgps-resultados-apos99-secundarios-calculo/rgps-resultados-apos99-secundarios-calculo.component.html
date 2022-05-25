@@ -73,9 +73,9 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngFor="let resultado of resultadoFinal" class="{{resultado.class}}">
               
-                <tr *ngFor="let resultado of resultadoFinal" class="{{resultado.class}}">
+                <tr *ngIf="resultado.resultado != 1" >
                   <td width="50%">
                     <span class="pull-right font-bold  ">{{resultado.titulo}}</span>
                   </td>
