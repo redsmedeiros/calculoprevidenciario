@@ -46,8 +46,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
       
       }
 
-      console.log(formatarValor)
-      console.log(this.resultadoFinal.length)
+
     
       return formatarValor
     }
@@ -108,7 +107,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
         
         somaSecundarios = somaSecundarios +  valorSecundario[i]
-        console.log(somaSecundarios)
+   
 
     }
 
@@ -154,7 +153,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
     
     this.arrayResultadosFinais.push(this.formatMoney(this.somaGeral()))
     this.arrayResultadosFinais.push(aliquota)
-    console.log(aliquota)
+ 
     this.arrayResultadosFinais.push(this.formatMoney(this.getResultadoRmi(aliquota)))
 
     this.controleDeTitulos.push( 'Salário de Benefício (Atividade Primária)')
@@ -202,8 +201,8 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
     aliquota = this.replacePocentagem(aliquota)
 
-    console.log(aliquota)
-    console.log(this.somaGeral())
+  
+  
 
     let resultado = this.somaGeral() * aliquota
 

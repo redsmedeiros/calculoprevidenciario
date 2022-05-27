@@ -218,6 +218,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
       this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo)
 
+      console.log(this.beneficioAtividadesConcomitantes)
+
       let fatorC = this.conclusoesParaFator.filter(x => x.order === 4)
 
       //const index = fatorC.findIndex( (element) => element.value);
@@ -493,9 +495,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
 
       //RECEBE DIVISOR COM CARÊNCIA
-
+      console.log(this.tipoBeneficio)
       divisor = this.getDivisorComCarencia(this.passarMesesCarencias, this.tabelaIterar.length)
-
+      console.log(divisor)
       divisorFormatado = this.replaceFormata(divisor)
 
     } else {
@@ -532,7 +534,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     //CALCULO PRINCIPAL - MEDIAS DOS SALARIOS X FATOR PREVIDENCIÁRIO X DIVISOR OBTIDO
 
-    
+
+
     let filtro = this.conclusoesParaFator.filter(x => x.order === 4)
  
 
@@ -602,7 +605,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   
 
-    if (![0, 2, 7, 17, 18, 19, 1903, 1905].includes(this.tipoBeneficio)) {
+    if (![0, 7, 17, 18, 19, 1903, 1905].includes(this.tipoBeneficio)) {
       this.aplicacaoRegraPontosSecundaria(tempoContribuicaoMaisIdade, id, this.conclusoesParaFator);
 
   
@@ -621,11 +624,20 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
   public getDivisorComCarencia(ano, divisor) {
 
+    let anos = ano
+
     //let carencia = this.carenciaProgressivaService.getCarencia(ano
+    console.log(ano)
+    console.log(divisor)
 
+    if([1, 2].includes(this.tipoBeneficio)){
+
+      anos = this.tabelaIterar.length
+
+    }
  
-
-    let DivisorComCarencia = (divisor / ano)
+    console.log(anos)
+    let DivisorComCarencia = (divisor / anos)
 
     return this.formatDecimal(DivisorComCarencia, 3)
 
@@ -709,6 +721,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         this.tipoBeneficio === 27 || // Deficiencia Moderada
         this.tipoBeneficio === 5 ||
         this.tipoBeneficio === 1 ||
+        this.tipoBeneficio === 2 ||
         this.tipoBeneficio === 28) {  // Deficiencia Por Idade
 
           

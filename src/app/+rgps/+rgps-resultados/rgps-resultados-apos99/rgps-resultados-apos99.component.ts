@@ -2337,7 +2337,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         string: 'Renda Mensal Inicial', value: this.formatMoney(rmi, currency.acronimo)
       });// resultados['Renda Mensal Inicial '] = currency.acronimo + rmi;
 
-    } else if (this.tipoBeneficio == 1) {
+    } else if (this.tipoBeneficio == 1 && !this.iscontribuicaoSecundaria) {
 
       conclusoes.push({
         order: 20,

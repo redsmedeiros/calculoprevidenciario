@@ -126,7 +126,7 @@
                         </div>
                       </div>
                     </sa-widget>
-                    <table class="table table-bordered table-hover" *ngIf="!isUpdating && erros.length == 0">
+                    <table class="table table-bordered table-hover" style="border: 1px solid #DCDCDC !important;"  *ngIf="!isUpdating && erros.length == 0">
                       <thead>
                         <tr>
                           <th>
@@ -149,6 +149,8 @@
                       </tbody>
                     </table>
                   </div>
+
+                 
 
                   <div *ngIf="!isUpdating && this.iscontribuicaoSecundaria" >
                     <app-rgps-resultados-apos99-secundarios
