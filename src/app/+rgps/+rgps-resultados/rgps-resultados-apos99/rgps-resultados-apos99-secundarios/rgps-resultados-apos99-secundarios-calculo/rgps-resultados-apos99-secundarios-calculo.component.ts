@@ -14,6 +14,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
     @Input() indexSec;
     @Input() resultadoFinal
     @Input() anulaFator
+    @Input() resultadoTempoDeContrubuicao
 
     public isUpdating = true;
     public fator = false
@@ -49,7 +50,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
   ngOnInit() {
 
    
-    console.log(this.resultadoFinal)
+    
 
     this.tableDataCalculo = this.tableData
 

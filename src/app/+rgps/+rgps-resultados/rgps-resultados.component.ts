@@ -65,6 +65,7 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
   public contribuicaoPrimariaTotal;
   public listaValoresContribuidos;
   public listaPeriodosCT = [];
+  public listaPeriodosCTRST = [];
   public listaPeriodosCTSec = [];
   public listaValoresContribuidosPeriodosCT = [];
   public tipoBeneficio;
@@ -441,6 +442,8 @@ export class RgpsResultadosComponent implements OnInit, OnChanges {
         sessionStorage.getItem('periodosSelecionado') !== '[]') {
 
         this.listaPeriodosCT = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
+        this.listaPeriodosCTRST = JSON.parse(sessionStorage.getItem('periodosSelecionadoContagem'));
+        console.log(this.listaPeriodosCTRST);
         this.listaPeriodosCTSec = JSON.parse(sessionStorage.getItem('periodosSelecionado'));
         this.listaPeriodosCT = DefinicaoSalariosContribuicao.filterPeriodosSecundarios(this.listaPeriodosCT, iscontribuicaoSecundaria)
         this.listaValoresContribuidosPeriodosCT = DefinicaoSalariosContribuicao.setValoresCotribuicaoRMICT(this.listaPeriodosCT);

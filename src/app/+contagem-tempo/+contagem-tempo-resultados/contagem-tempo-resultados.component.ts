@@ -318,10 +318,12 @@ export class ContagemTempoResultadosComponent implements OnInit, OnChanges {
             sessionStorage.removeItem('seguradoSelecionado');
             sessionStorage.removeItem('calculosSelecionado');
             sessionStorage.removeItem('periodosSelecionado');
+            sessionStorage.removeItem('periodosSelecionadoContagem');
 
             sessionStorage.setItem('seguradoSelecionado', JSON.stringify(this.segurado));
             sessionStorage.setItem('calculosSelecionado', JSON.stringify(this.calculo));
             sessionStorage.setItem('periodosSelecionado', JSON.stringify(this.periodosListDB));
+            sessionStorage.setItem('periodosSelecionadoContagem', JSON.stringify(this.periodosList));
 
             this.eventCalcularContagemResult.emit({
                 resultComplete: data.resultComplete,

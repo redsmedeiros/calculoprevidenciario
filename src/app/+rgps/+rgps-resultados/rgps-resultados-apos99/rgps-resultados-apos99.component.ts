@@ -29,6 +29,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   @Input() listaValoresContribuidosPeriodosCT;
   @Input() numResultado;
   @Input() listaPeriodosCT;
+  @Input() listaPeriodosCTRST;
 
   
   public passarMesesCarencias
@@ -211,6 +212,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.idadeSegurado = this.getIdadeNaDIB(this.dataInicioBeneficio);
     this.idadeFracionada = this.getIdadeFracionada();
+    this.idadeFracionadaF = this.getIdadeFracionada(true);
+    this.idadeFracionadaF = this.arredFatorCalc(this.idadeFracionadaF, true);
+
     this.contribuicaoPrimaria = this.getContribuicaoObj(this.calculo.contribuicao_primaria_atual);
     this.contribuicaoSecundaria = this.getContribuicaoObj(this.calculo.contribuicao_secundaria_atual);
     this.idCalculo = this.calculo.id;
@@ -820,7 +824,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         let idadeFracionadaF = this.getIdadeFracionada(true);
         idadeFracionadaF = arredFatorCalc(idadeFracionadaF, true);
-        this.idadeFracionadaF = idadeFracionadaF
 
         fatorSeguranca = ((tempoTotalContribuicaoF * aliquota) / expectativa)
           * (1 + (idadeFracionadaF + (tempoTotalContribuicaoF * aliquota)) / 100);
@@ -2608,7 +2611,13 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return somaMedias;
 
   }
-
+  
+  public arredFatorCalc(vl, type = false) {
+    if (type) {
+      return Math.floor(vl * 10000) / 10000;
+    }
+    return Math.round(vl * 10000) / 10000;
+  };
 
 
   public afastarIN77(AplicarIN77) {

@@ -6,7 +6,7 @@
           <table class="table table-bordered table-hover no-padding">
             <thead>
               <tr>
-                <th colspan="2">
+                <th colspan="2" style="text-align:center !important ;">
                   <span class="font-bold"> Atividade Secundária - {{( indexSec + 1 )}} </span>
                 </th>
               </tr>
@@ -21,17 +21,17 @@
             </thead>
             
             <tbody>
-              <tr>
+              <!-- <tr>
                 <td>
                   <span class="pull-right font-bold">Data de Início do Benefício:</span>
                 </td>
                 <td></td>
-              </tr>
+              </tr> -->
               <tr>
                 <td>
-                  <span class="pull-right font-bold">Tempo de Contribuição Secundário:</span>
+                  <span class="pull-right font-bold">Tempo de Contribuição:</span>
                 </td>
-                <td> ano(s), mês(es) e dia(s)</td>
+                <td> {{ resultadoTempoDeContrubuicao.years }} ano(s), {{ resultadoTempoDeContrubuicao.months }} mês(es) e {{ resultadoTempoDeContrubuicao.days }} dia(s)</td>
               </tr>
             </tbody>
 

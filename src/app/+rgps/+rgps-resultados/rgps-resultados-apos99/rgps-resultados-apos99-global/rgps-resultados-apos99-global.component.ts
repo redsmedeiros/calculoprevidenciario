@@ -17,16 +17,11 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   @Input() moedaDibSec
 
   public isUpdating = true
-  public controleDeTitulos = [
-    'Benefício Primário',
-    'Soma Benefícios Secundários',
-    'Aliquota',
-    'Benefício Global'
-
-  ]
+  public controleDeTitulos = []
 
   public arrayResultadosFinais = []
   public tabela = []
+  public numeroDeSecundarios = 0
 
   constructor() { 
     super(null, null, null, null, null, null, null);
@@ -36,26 +31,25 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
     this.resultados()
   
-   
-    
   }
 
-  public somaSecundarios(){
+  public Secundarios(){
 
     if (this.isExits(this.resultadoFinal)) {
       
-      let soma = 0
+      let formatarValor = []
 
-      for(const row of this.resultadoFinal){
+     for(const row of this.resultadoFinal){
 
-        let formatarValor = this.replaceMoney(row[6])
         
-        soma = formatarValor + soma
-
-
+        formatarValor.push(this.replaceMoney(row[6]))
+      
       }
+
+      console.log(formatarValor)
+      console.log(this.resultadoFinal.length)
     
-        return soma
+      return formatarValor
     }
 
    
@@ -79,6 +73,24 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
   }
 
+  public replacePocentagem(valor){
+
+    if (valor === "") {
+      valor = 0;
+    } else {
+      valor = valor.replace("%", "");
+      valor = valor.replace(",", " ");
+      valor = parseFloat(valor);
+    }
+
+    valor = valor / 100
+
+    return valor;
+
+
+  }
+
+
   public getBeneficioPrimario(){
 
       let primario = this.conclusoes[6]
@@ -88,9 +100,21 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
   public somaGeral(){
 
-    
-    let secundario = this.somaSecundarios()
-    let soma = this.getBeneficioPrimario() + secundario 
+    let valorSecundario = this.Secundarios()
+
+    let somaSecundarios = 0
+
+    for(let i = 0; i < valorSecundario.length; i++ ){
+
+        
+        somaSecundarios = somaSecundarios +  valorSecundario[i]
+        console.log(somaSecundarios)
+
+    }
+
+   
+
+    let soma = this.getBeneficioPrimario() + somaSecundarios
 
   
 
@@ -114,12 +138,46 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
     
 
     this.arrayResultadosFinais.push(this.formatMoney(this.getBeneficioPrimario()))
-    this.arrayResultadosFinais.push(this.formatMoney(this.somaSecundarios()))
-    this.arrayResultadosFinais.push(aliquota)
+
+    let valorSecundario = this.Secundarios()
+
+   
+
+    if(this.resultadoFinal.length >= 1){
+
+      for(const row of valorSecundario){
+
+        this.arrayResultadosFinais.push(this.formatMoney(row))
+
+      }
+    } 
+    
     this.arrayResultadosFinais.push(this.formatMoney(this.somaGeral()))
-    
-    
-    
+    this.arrayResultadosFinais.push(aliquota)
+    console.log(aliquota)
+    this.arrayResultadosFinais.push(this.formatMoney(this.getResultadoRmi(aliquota)))
+
+    this.controleDeTitulos.push( 'Salário de Benefício (Atividade Primária)')
+
+    if(this.resultadoFinal.length >= 1){
+
+      let i = 1
+
+      for(const row of valorSecundario){
+
+        this.controleDeTitulos.push( 'Percentual do Salário de Benefício (Atividade Secundária - '+i+ ')')
+        i++
+
+      }
+    }
+
+    this.controleDeTitulos.push('Soma dos Salários de Contribuição')
+    this.controleDeTitulos.push(' Aliquota')
+    this.controleDeTitulos.push('Renda Mensal Inicial')
+
+   
+
+   
     let i = 0
     
 
@@ -139,5 +197,23 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
     }
 
   }
+
+  public getResultadoRmi(aliquota){
+
+    aliquota = this.replacePocentagem(aliquota)
+
+    console.log(aliquota)
+    console.log(this.somaGeral())
+
+    let resultado = this.somaGeral() * aliquota
+
+
+
+    return resultado
+
+
+  }
+
+ 
 
 }

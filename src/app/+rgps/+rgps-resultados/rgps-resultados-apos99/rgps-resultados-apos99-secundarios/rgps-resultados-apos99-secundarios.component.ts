@@ -41,6 +41,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() moedaDibSec
   @Input() listaPeriodosCTSec
   @Input() tempoDeContribuicaoEspecial
+  @Input() listaPeriodosCTRST
 
 
 
@@ -67,7 +68,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     "Formúla do Fator Previdenciário (Secundário)",
     "Fator Previdênciário (Secundário)",
     "Teto do Salário de Contruibuição",
-    "Salário de Benefício",
+    "Percentual do Salário de Benefício",
 
   ]
   public resultadoFinal = [[]]
@@ -91,6 +92,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public tetoDeContribuicaoSecundaria
   public conclusoesParaFator = []
   public anulaFator = false
+  private filtroGetTempo
+  public resultadoTempoDeContrubuicao
 
 
 
@@ -105,6 +108,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.isUpdating = false;
     this.startCalculosSecundarios();
+    
+    
+ 
    
   }
 
@@ -125,7 +131,12 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
           periodoSec
         )
       }
+
+      
     }
+
+    this.filtroGetTempo =  this.rstFinalCalculosSecundarios
+  
 
     //CRIA ARRAY COM INFORMAÇÃO DE CADA CONTRIBUIÇÃO SECUNDÁRIA
     for (const row of this.rstFinalCalculosSecundarios) {
@@ -273,6 +284,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     }
 
     this.tableData = this.tabelaDeCalculos
+
+    this.resultadoTempoDeContrubuicao = this.getTempoDeContribuicao()
 
   }
 
@@ -431,6 +444,8 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   public getContribuicaoTempo(tempo) {
 
+   
+
     let anos = tempo.anos
 
     return anos
@@ -465,12 +480,14 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       this.expectativa,
       this.idadeFracionadaF);
 
+     
+
     //let divisorFormatado = this.formatarDivisor(divisorSecundario)
 
     let divisor
     let divisorFormatado
 
-    console.log(this.tipoBeneficio)
+   
 
     //VERIFICA O TIPO DE BENEFÍCIO E O DIVISOR QUE SERÁ UTILIZADO
     if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
@@ -484,19 +501,19 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     } else {
       //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
       let verificaDivisor = this.tabelaIterar.length / 12
-      console.log(verificaDivisor)
+    
       //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
       if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
 
-        console.log(this.anulaFator)
+       
         if (this.anulaFator) {
-          console.log("ok")
+         
           divisor = this.getCarenciaTempo()
+      
           divisorFormatado = divisor
 
         } else {
 
-          console.log(this.getContribuicaoTempo(this.contribuicaoPrimaria))
           divisor = verificaDivisor / this.getContribuicaoTempo(this.contribuicaoPrimaria)
           divisorFormatado = divisor
 
@@ -515,13 +532,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     //CALCULO PRINCIPAL - MEDIAS DOS SALARIOS X FATOR PREVIDENCIÁRIO X DIVISOR OBTIDO
 
-
+    
     let filtro = this.conclusoesParaFator.filter(x => x.order === 4)
+ 
 
-
+  
 
     let valor = filtro[0].aplica === false ? (mediaFormatada * divisorFormatado) : (mediaFormatada * fatorFomatado * divisorFormatado)
-
 
 
     let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
@@ -553,7 +570,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const tempoContribuicaoMaisIdade = id + idadeFracionadaF;
 
-
+   
 
 
     let tempoTotalContribuicaoF = id
@@ -562,10 +579,16 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let tempoTotalDeContribuicaoEmAnos = (tempoTotalContribuicaoF / 12)
 
+
     const aliquota = 0.31
+
+   
 
     this.fatorResultadoSecundario.fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
       * (1 + (idadeFracionadaF + (tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
+
+    
+   
 
     this.fatorResultadoSecundario.fatorString = this.formatDecimal(this.fatorResultadoSecundario.fator, 2);
 
@@ -577,9 +600,12 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       + this.formatDecimal(tempoTotalDeContribuicaoEmAnos, 4) + ' * '
       + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
+  
+
     if (![0, 2, 7, 17, 18, 19, 1903, 1905].includes(this.tipoBeneficio)) {
       this.aplicacaoRegraPontosSecundaria(tempoContribuicaoMaisIdade, id, this.conclusoesParaFator);
 
+  
       if (this.anulaFator) {
         this.fatorResultadoSecundario.fator = 1
         this.fatorResultadoSecundario.formula_fator = "1"
@@ -597,6 +623,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     //let carencia = this.carenciaProgressivaService.getCarencia(ano
 
+ 
 
     let DivisorComCarencia = (divisor / ano)
 
@@ -673,16 +700,20 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       let textComplementar = '';
       let fatorText = this.fatorResultadoSecundario.fator;
 
+     
 
+    
       if (this.tipoBeneficio === 16 || // Aposentadoria Travalhador Rural
         this.tipoBeneficio === 25 || // Deficiencia Grave
         this.tipoBeneficio === 26 || // Deficiencia Leve
         this.tipoBeneficio === 27 || // Deficiencia Moderada
+        this.tipoBeneficio === 5 ||
+        this.tipoBeneficio === 1 ||
         this.tipoBeneficio === 28) {  // Deficiencia Por Idade
 
           
-          console.log(this.fatorResultadoSecundario.fator)
-
+        
+       
         if (this.fatorResultadoSecundario.fator < 1) {
 
           textComplementar = '';
@@ -713,7 +744,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       
 
       //fatorText = 1
-
+      
       this.anulaFator = fatorText === 1 ? true : false
 
       conclusoes.push({
@@ -741,7 +772,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let anos
 
-    
+ 
     switch (this.tempoDeContribuicaoEspecial) {
 
       case 1925:
@@ -782,6 +813,16 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     return tempoTotalDeContribuicaoEmAnos
 
+
+  }
+
+  private getTempoDeContribuicao(){
+
+    let filtro = this.filtroGetTempo[0].id
+
+    let filtroSec = this.listaPeriodosCTRST.filter(x => x.id === filtro)
+
+   return  filtroSec[0].totalComFator
 
   }
 
