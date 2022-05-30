@@ -498,7 +498,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       console.log(this.tipoBeneficio)
       divisor = this.getDivisorComCarencia(this.passarMesesCarencias, this.tabelaIterar.length)
       console.log(divisor)
-      divisorFormatado = this.replaceFormata(divisor)
+      divisorFormatado = divisor
 
     } else {
       //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
@@ -538,17 +538,20 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     let filtro = this.conclusoesParaFator.filter(x => x.order === 4)
  
-
+    
   
-
+    console.log(mediaFormatada)
+    console.log(divisorFormatado)
     let valor = filtro[0].aplica === false ? (mediaFormatada * divisorFormatado) : (mediaFormatada * fatorFomatado * divisorFormatado)
 
 
     let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
-
+    console.log(beneficio)
     this.somaSalariosSecundarios += beneficio
 
-    return this.formatMoney(beneficio);
+    console.log(Math.floor(beneficio * 100) / 100)
+
+    return this.formatMoney(Math.floor(beneficio * 100) / 100);
 
 
   }
@@ -624,25 +627,18 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
   public getDivisorComCarencia(ano, divisor) {
 
+    if([ 1, 2, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)){
+      return this.tabelaIterar.length
+    }
+
     let anos = ano
 
     //let carencia = this.carenciaProgressivaService.getCarencia(ano
-    console.log(ano)
-    console.log(divisor)
-
-    if([1, 2].includes(this.tipoBeneficio)){
-
-      anos = this.tabelaIterar.length
-
-    }
  
-    console.log(anos)
-    let DivisorComCarencia = (divisor / anos)
+    let DivisorComCarencia = Math.floor((divisor / anos) * 100000000) / 100000000
 
-    return this.formatDecimal(DivisorComCarencia, 3)
-
-
-
+  
+    return DivisorComCarencia
   }
 
   //SOMA DOS SALÁRIOS PRIMÁRIOS COM SECUNDÁRIOS - PARA O RESULTADO GLOBAL

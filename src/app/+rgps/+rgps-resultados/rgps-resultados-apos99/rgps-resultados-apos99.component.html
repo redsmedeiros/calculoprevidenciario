@@ -33,8 +33,15 @@
               <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
                 <div>
                   <div class="widget-body no-padding hidden-dt">
+                    
                     <table class="table table-bordered table-hover no-padding">
                       <thead>
+                        <tr>
+                          <th colspan="2" style="text-align:center !important ;">
+                            <span class="font-bold"> Atividade Primária</span>
+                          </th>
+                        </tr>
+              
                         <tr>
                           <th width="50%">
                             <span class="pull-right font-bold"> Tipo </span>
@@ -152,7 +159,7 @@
 
                  
 
-                  <div *ngIf="!isUpdating && this.iscontribuicaoSecundaria" >
+                  <div style="margin-top: 3rem;" *ngIf="!isUpdating && this.iscontribuicaoSecundaria" >
                     <app-rgps-resultados-apos99-secundarios
 
                       [calculo]="calculo"
@@ -175,11 +182,7 @@
                       [listaPeriodosCTSec]="listaPeriodosCTSec"
                       [tempoDeContribuicaoEspecial]="tempoDeContribuicaoEspecial"
                       [listaPeriodosCTRST]="listaPeriodosCTRST"
-                      
                       >
-                      
-                      
-
                     </app-rgps-resultados-apos99-secundarios>
                   </div>
 

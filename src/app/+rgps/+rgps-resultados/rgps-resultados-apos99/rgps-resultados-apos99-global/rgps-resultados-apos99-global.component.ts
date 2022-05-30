@@ -170,7 +170,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
       }
     }
 
-    this.controleDeTitulos.push('Soma dos Salários de Contribuição')
+    this.controleDeTitulos.push('Soma dos Salários de Benefício')
     this.controleDeTitulos.push(' Aliquota')
     this.controleDeTitulos.push('Renda Mensal Inicial')
 
