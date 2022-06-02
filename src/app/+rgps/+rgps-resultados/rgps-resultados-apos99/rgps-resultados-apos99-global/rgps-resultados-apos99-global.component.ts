@@ -10,52 +10,53 @@ import { RgpsResultadosApos99Component } from '../../rgps-resultados-apos99old/r
 })
 export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Component implements OnInit {
 
-  @Output() resultadoEmitter = new EventEmitter()
+  @Output() resultadoEmitter = new EventEmitter();
 
-  @Input() resultadoFinal
-  @Input() conclusoes
-  @Input() moedaDibSec
+  @Input() resultadoFinal;
+  @Input() conclusoes;
+  @Input() moedaDibSec;
+  @Input() valorMedia12;
+  @Input() tipoBeneficio;
 
-  public isUpdating = true
-  public controleDeTitulos = []
+  public isUpdating = true;
+  public controleDeTitulos = [];
 
-  public arrayResultadosFinais = []
-  public tabela = []
-  public numeroDeSecundarios = 0
+  public arrayResultadosFinais = [];
+  public tabela = [];
+  public numeroDeSecundarios = 0;
 
-  constructor() { 
+  constructor() {
     super(null, null, null, null, null, null, null);
   }
 
   ngOnInit() {
 
     this.resultados()
-  
+
   }
 
-  public Secundarios(){
+  public Secundarios() {
 
     if (this.isExits(this.resultadoFinal)) {
-      
+
       let formatarValor = []
 
-     for(const row of this.resultadoFinal){
+      for (const row of this.resultadoFinal) {
 
-        
         formatarValor.push(this.replaceMoney(row[6]))
-      
+
       }
 
 
-    
+
       return formatarValor
     }
 
-   
-    
+
+
   }
 
-  public replaceMoney(valor){
+  public replaceMoney(valor) {
 
     if (valor === "") {
       valor = 0;
@@ -72,7 +73,7 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
   }
 
-  public replacePocentagem(valor){
+  public replacePocentagem(valor) {
 
     if (valor === "") {
       valor = 0;
@@ -90,97 +91,98 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
   }
 
 
-  public getBeneficioPrimario(){
+  public getBeneficioPrimario() {
 
-      let primario = this.conclusoes[6]
-      return this.replaceMoney(primario.value)
+    //   let primario = this.conclusoes[6]
+    let primario = this.conclusoes.find((x) => x.order === 6);
+    return this.replaceMoney(primario.value)
 
   }
 
-  public somaGeral(){
+  public somaGeral() {
 
     let valorSecundario = this.Secundarios()
 
     let somaSecundarios = 0
 
-    for(let i = 0; i < valorSecundario.length; i++ ){
+    for (let i = 0; i < valorSecundario.length; i++) {
 
-        
-        somaSecundarios = somaSecundarios +  valorSecundario[i]
-   
+
+      somaSecundarios = somaSecundarios + valorSecundario[i]
+
 
     }
 
-   
+
 
     let soma = this.getBeneficioPrimario() + somaSecundarios
 
-  
 
-   return soma
+
+    return soma
   }
 
 
 
-  public resultados(){
+  public resultados() {
 
-    let aliquota
+    let aliquota;
+    for (const row of this.conclusoes) {
 
-    for(const row of this.conclusoes ){
-
-      
-       
-      if(row.order === 19){
+      if (row.order === 19) {
         aliquota = row.value
       }
+
     }
-    
+
 
     this.arrayResultadosFinais.push(this.formatMoney(this.getBeneficioPrimario()))
 
     let valorSecundario = this.Secundarios()
 
-   
 
-    if(this.resultadoFinal.length >= 1){
 
-      for(const row of valorSecundario){
+    if (this.resultadoFinal.length >= 1) {
+
+      for (const row of valorSecundario) {
 
         this.arrayResultadosFinais.push(this.formatMoney(row))
 
       }
-    } 
-    
+    }
+
     this.arrayResultadosFinais.push(this.formatMoney(this.somaGeral()))
     this.arrayResultadosFinais.push(aliquota)
- 
-    this.arrayResultadosFinais.push(this.formatMoney(this.getResultadoRmi(aliquota)))
 
-    this.controleDeTitulos.push( 'Salário de Benefício (Atividade Primária)')
 
-    if(this.resultadoFinal.length >= 1){
+
+    const rmiGlobal = this.getResultadoRmi(aliquota);
+    this.arrayResultadosFinais.push(this.formatMoney(rmiGlobal))
+
+    this.controleDeTitulos.push('Salário de Benefício (Atividade Primária)');
+
+    if (this.resultadoFinal.length >= 1) {
 
       let i = 1
 
-      for(const row of valorSecundario){
+      for (const row of valorSecundario) {
 
-        this.controleDeTitulos.push( 'Percentual do Salário de Benefício (Atividade Secundária - '+i+ ')')
+        this.controleDeTitulos.push('Percentual do Salário de Benefício (Atividade Secundária - ' + i + ')');
         i++
 
       }
     }
 
-    this.controleDeTitulos.push('Soma dos Salários de Benefício')
-    this.controleDeTitulos.push(' Alíquota')
-    this.controleDeTitulos.push('Renda Mensal Inicial')
+    this.controleDeTitulos.push('Soma dos Salários de Benefício');
+    this.controleDeTitulos.push(' Alíquota');
+    this.controleDeTitulos.push('Renda Mensal Inicial');
 
-   
 
-   
+
     let i = 0
-    
 
-    for(const row in this.controleDeTitulos){
+
+    for (const row in this.controleDeTitulos) {
 
       let resultadoParcial = {
         titulo: this.controleDeTitulos[i],
@@ -190,29 +192,49 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
       i++
 
       this.tabela.push(resultadoParcial)
-     
-     
-      
+
+
+
     }
+
+
+
+    if (this.tipoBeneficio == 1) {
+
+      console.log(rmiGlobal);
+      console.log(this.valorMedia12)
+
+      const rmiConsiderarda = ( rmiGlobal < this.valorMedia12) ?
+      rmiGlobal : this.valorMedia12;
+
+      this.tabela.push({
+        titulo: 'Média dos 12 últimos salários de contribuição',
+        resultado: this.formatMoney(this.valorMedia12)
+      })
+
+
+      this.tabela.push({
+        titulo: 'Renda Mensal Inicial Considerada',
+        resultado: this.formatMoney(rmiConsiderarda)
+      })
+
+    }
+
+
+
 
   }
 
-  public getResultadoRmi(aliquota){
+  public getResultadoRmi(aliquota) {
 
     aliquota = this.replacePocentagem(aliquota)
-
-  
-  
-
     let resultado = this.somaGeral() * aliquota
-
-
 
     return resultado
 
 
   }
 
- 
+
 
 }

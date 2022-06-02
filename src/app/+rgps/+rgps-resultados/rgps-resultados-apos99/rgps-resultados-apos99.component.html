@@ -186,10 +186,19 @@
                     </app-rgps-resultados-apos99-secundarios>
                   </div>
 
-
-
-
-
+                  <div id="rst-global-secundarias">
+                    <app-rgps-resultados-apos99-global 
+                    *ngIf="isUpdatingGlobal && iscontribuicaoSecundaria" 
+                    [resultadoFinal]="resultadoFinal"
+                    [conclusoes]="conclusoes"
+                    [moedaDibSec] = "moedaDibSec"
+                    [valorMedia12] = "valorMedia12"
+                    [tipoBeneficio] = "tipoBeneficio"
+                    >
+                    
+                  </app-rgps-resultados-apos99-global>
+        
+                  </div>
 
                 </div>
                 <div id="raTable-{{boxId}}" *ngIf="!isUpdating && showReajustesAdministrativos && erros.length === 0"
@@ -213,16 +222,8 @@
               </sa-widget>
             </article>
           </div>
-    
-
-
-          <app-rgps-resultados-apos99-global *ngIf="isUpdatingGlobal && iscontribuicaoSecundaria" 
-            [resultadoFinal]="resultadoFinal"
-            [conclusoes]="conclusoes"
-            [moedaDibSec] = "moedaDibSec">
-            
-          </app-rgps-resultados-apos99-global>
-
+          
+         
           <table class="table table-hover table-bordered" *ngIf="erros.length === 0">
             <thead>
               <tr>

@@ -31,7 +31,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   @Input() listaPeriodosCT;
   @Input() listaPeriodosCTRST;
 
-  
+
   public passarMesesCarencias
   public resultadoFinal;
   public boxId;
@@ -135,11 +135,12 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   public mostrarResultadoSecundario = false;
   public moedaDibSec;
   public isUpdatingGlobal = false;
-  public tempoDeContribuicaoEspecial
-  
+  public tempoDeContribuicaoEspecial;
+  public valorMedia12;
+
 
   public resultadoCalculo = [
-    {tipo: "teste", descricao: "teste"}
+    { tipo: "teste", descricao: "teste" }
   ]
 
 
@@ -158,9 +159,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   ngOnInit() {
 
     this.passarMesesCarencias = this.getMesesCarencia()
-    
-
-    
 
     this.tableData = [];
     this.conclusoes = [];
@@ -190,8 +188,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       ]
     };
 
-    
- 
+
+
     this.boxId = this.generateBoxId(this.calculo.id, '99');
     this.isUpdating = true;
     this.dataFiliacao = this.getDataFiliacao();
@@ -220,7 +218,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.idCalculo = this.calculo.id;
     this.tipoBeneficio = this.getEspecieBeneficio(this.calculo);
     this.tempoDeContribuicaoEspecial = this.getEspecieBeneficio(this.calculo);
-   
+
     this.tipoBeneficioPosReforma = this.getEspecieBeneficio(this.calculo); // ajuste especial regra de acesso
     // Ajuste para novos tipos conforme reforma
     this.tipoBeneficio = this.getEspecieReforma(this.tipoBeneficio);
@@ -251,23 +249,23 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
     this.getValoresContribuicao(dataInicio, dataLimite)
 
-    
+
 
   }
 
   private getValoresContribuicao(dataInicio, dataLimite) {
 
-     // regra para ativar ou não a secundaria.
-     if (
+    // regra para ativar ou não a secundaria.
+    if (
       this.dataInicioBeneficioExport.isSameOrAfter('2019-06-18')
       || this.calculo.somar_contribuicao_secundaria
     ) {
-        this.iscontribuicaoSecundaria = false;
-    }else{
-        this.iscontribuicaoSecundaria = true;
+      this.iscontribuicaoSecundaria = false;
+    } else {
+      this.iscontribuicaoSecundaria = true;
     }
 
-    
+
 
     if (this.isExits(this.dadosPassoaPasso)
       && this.dadosPassoaPasso.origem === 'passo-a-passo') {
@@ -335,7 +333,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
             this.ExpectativaVida.getByIdade(Math.floor(this.idadeFracionada))
               .then(expectativas => {
                 this.expectativasVida = expectativas;
-              
+
                 this.CarenciaProgressiva.getCarencias()
                   .then(carencias => {
                     this.carenciasProgressivas = carencias;
@@ -374,7 +372,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     let tableData = [];
     let idString = 0;
 
-   
+
 
 
 
@@ -588,7 +586,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
         divisorMediaPrimaria = mesesContribuicao60;
         this.msgDivisorMinimo = '(Divisor Mínimo)';
-        
+
       }
 
       if (numeroContribuicoes >= mesesContribuicao60 && numeroContribuicoes <= mesesContribuicao80) {
@@ -697,11 +695,21 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
 
           this.totalMedia12Contribuicoes = parseFloat(divisorContribuicoes);
 
-          conclusoes.push({
-            order: 21,
-            string: 'Média dos 12 últimos salários de contribuição',
-            value: this.formatMoney(divisorContribuicoes, currency.acronimo)
-          });
+          if (this.tipoBeneficio == 1 && !this.iscontribuicaoSecundaria) {
+
+            conclusoes.push({
+              order: 21,
+              string: 'Média dos 12 últimos salários de contribuição',
+              value: this.formatMoney(divisorContribuicoes, currency.acronimo)
+            });
+
+          }else{
+
+            this.valorMedia12 = parseFloat(divisorContribuicoes);
+
+          }
+
+          
 
           // totalMediaDozeContribuicoes = divisorContribuicoes;
           // Inserir nas conclusoes:
@@ -716,7 +724,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // }
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
-        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 
+        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009
           && Math.round(divisorMediaPrimaria) > 1) {
           divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
           //  divisorMediaPrimaria =  this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
@@ -830,10 +838,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
           * (1 + (idadeFracionadaF + (tempoTotalContribuicaoF * aliquota)) / 100);
 
         // fatorSeguranca = parseFloat(fatorSeguranca.toFixed(4));
-         fatorSeguranca = arredFatorCalc(fatorSeguranca);
+        fatorSeguranca = arredFatorCalc(fatorSeguranca);
 
         this.fatorPrevidenciario = fatorSeguranca;
-       
+
         this.fatorPrevidenciarioAntesDaVerificacao = fatorSeguranca;
 
         // Adicionar nas conclusões a fórmula com os valores, não os resutlados:
@@ -1019,7 +1027,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     //conclusoes.divisor_calculo_media_primaria = divisorMediaPrimaria;//resultados['Divisor do Cálculo da média primária: '] = divisorMediaPrimaria;
     //conclusoes.media_contribuicoes_primarias = this.formatMoney(mediaContribuicoesPrimarias, currency.acronimo);//resultados['Média das contribuições primárias'] = currency.acrônimo + mediaContribuicoesPrimarias;
 
-  
+
 
     // conclusoes geral
     conclusoes.push({
@@ -1068,7 +1076,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       value: (coeficiente < 100) ? this.formatDecimal(coeficiente, 0) + '%' : this.formatDecimal(coeficiente, 0) + '%'
     });
 
- 
+
     if (irt > 1) {
 
       this.irtRejusteAdministrativo = irt;
@@ -1828,7 +1836,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   getMesesCarencia() {
 
     let mesesCarencia = 180;
-    
+
     if (this.dataFiliacao <= this.dataLei8213) {
       let progressiveLack = this.CarenciaProgressiva.getCarencia(this.dataInicioBeneficio.year());
       if (progressiveLack != 0) {
@@ -1836,7 +1844,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
       }
     }
 
- 
+
     return mesesCarencia;
   }
 
@@ -1854,10 +1862,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         break;
       case 3: //Aposentadoria por Idade
       case 16:
-          carenciaMinima = this.getMesesCarencia();
+        carenciaMinima = this.getMesesCarencia();
         break;
     }
-  
+
 
     return carenciaMinima;
   }
@@ -2268,7 +2276,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         conclusoes.push({
           order: 22,
           tipo: 'rmi',
-          string: 'Renda Mensal Inicial Considerada', value: this.formatMoney(rmiConsiderado, currency.acronimo)
+          string: 'Renda Mensal Inicial Considerada', 
+          value: this.formatMoney(rmiConsiderado, currency.acronimo)
         });
 
       }
@@ -2288,10 +2297,10 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
 
     if (type) {
-   // const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'days');
-    const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'years', true);
-    return idadeEmDias;
-     // return idadeEmDias / 365;
+      // const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'days');
+      const idadeEmDias = dataInicioBeneficioI.diff(dataNascimento, 'years', true);
+      return idadeEmDias;
+      // return idadeEmDias / 365;
     }
 
     const idade33 = DefinicaoTempo.calcularTempo360NotDayStart(moment(this.segurado.data_nascimento, 'DD/MM/YYYY'),
@@ -2322,8 +2331,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return (dateToCompare - dob) / (365 * 24 * 60 * 60 * 1000);
   }
 
-  public mostraResultadoSecundario(){
-      this.mostrarResultadoSecundario = true
+  public mostraResultadoSecundario() {
+    this.mostrarResultadoSecundario = true
   }
 
   mostrarReajustesAdministrativos(tableId) {
@@ -2521,7 +2530,7 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return somaMedias;
 
   }
-  
+
   public arredFatorCalc(vl, type = false) {
     if (type) {
       return Math.floor(vl * 10000) / 10000;
@@ -2535,20 +2544,20 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     this.ngOnInit();
   }
 
-  public resultadoEmitter(resultadoFinal){
+  public resultadoEmitter(resultadoFinal) {
 
     if (this.isExits(resultadoFinal)) {
-      
+
       this.resultadoFinal = resultadoFinal;
       setTimeout(() => {
-        this.isUpdatingGlobal = true; 
+        this.isUpdatingGlobal = true;
       }, 500);
 
-    
-      
+
+
     }
 
-         
+
   }
 
 }

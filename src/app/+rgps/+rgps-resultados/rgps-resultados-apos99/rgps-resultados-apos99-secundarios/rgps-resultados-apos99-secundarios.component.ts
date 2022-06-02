@@ -111,8 +111,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     this.startCalculosSecundarios();
 
 
-
-
   }
 
 
