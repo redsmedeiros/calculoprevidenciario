@@ -109,10 +109,10 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.isUpdating = false;
     this.startCalculosSecundarios();
-    
-    
- 
-   
+
+
+
+
   }
 
 
@@ -133,11 +133,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         )
       }
 
-      
+
     }
 
-    this.filtroGetTempo =  this.rstFinalCalculosSecundarios
-  
+    this.filtroGetTempo = this.rstFinalCalculosSecundarios
+
 
     //CRIA ARRAY COM INFORMAÇÃO DE CADA CONTRIBUIÇÃO SECUNDÁRIA
     for (const row of this.rstFinalCalculosSecundarios) {
@@ -207,11 +207,17 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         }
       }
 
+
+
+
+
+
+
       //this.formatarDivisor(this.tabelaIterar) < 129 ? 129 :
       // const divisor = this.formatarDivisor(this.tabelaIterar)
 
       const divisorSecundario = this.formatarDivisor(this.tabelaIterar)
-      console.log(divisorSecundario)
+
 
       const tempoContribuicao = this.getContribuicaoTempo(this.contribuicaoPrimaria)
 
@@ -221,19 +227,24 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       //const fatorC = this.getFatorContribuicaoSecundario( this.tabelaIterar.length,
       //this.expectativa,
       //this.idadeFracionadaF)
-      this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario)
 
-      this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo)
 
-      
 
-      let fatorC = this.conclusoesParaFator.filter(x => x.order === 4)
 
-      //const index = fatorC.findIndex( (element) => element.value);
-      //console.log(fatorC[0].value)
 
       let anulaFator = false ? this.anulaFator : true
 
+      this.getValoresOitentaPorCento(this.tabelaIterar, divisorSecundario);
+
+      this.mediaSalarioContribuicao = this.formatMoney(this.soma / divisorSecundario);
+      this.beneficioAtividadesConcomitantes = this.getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, 196, dividendoTempo);
+
+
+      let fatorC = this.conclusoesParaFator.filter(x => x.order === 4);
+
+
+
+      //const index = fatorC.findIndex( (element) => element.value);
 
 
       this.arrayDeControleResutadoFinal = [
@@ -246,6 +257,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         this.beneficioAtividadesConcomitantes,
 
       ];
+
 
 
 
@@ -331,34 +343,32 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     this.isDivisorMinimo = (!this.calculo.divisor_minimo) ? true : false;
 
-    console.log(this.isDivisorMinimo)
 
-   
+
+
     let divisorSecundarioAtual = tabelaInsert.length;
 
     if (this.isDivisorMinimo) {
 
-      console.log(divisorSecundarioAtual < this.divisorConcomitante)
-      console.log(divisorSecundarioAtual < this.divisorConcomitante && (![1, 2].includes(this.tipoBeneficio)))
-      console.log(this.tipoBeneficio)
+
 
       if (divisorSecundarioAtual < this.divisorConcomitante && (![1, 2].includes(this.tipoBeneficio))) {
-     
+
         divisorSecundarioAtual = this.divisorConcomitante;
-        console.log("ok")
+
         return divisorSecundarioAtual
 
       } else if (divisorSecundarioAtual < tabelaInsert.length * 0.8 || [1, 2].includes(this.tipoBeneficio)) {
-    
+
         divisorSecundarioAtual = Math.floor(tabelaInsert.length * 0.8);
         this.divisorParaCarencia = divisorSecundarioAtual
-        console.log("teste")
+
         return divisorSecundarioAtual;
 
       }
 
     }
-    
+
   }
 
 
@@ -415,10 +425,10 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     let avisoString = '';
     let valorRetorno = valor;
 
-//console.log((moeda && valor < salarioMinimo && sc_mm_ajustar))
-//console.log((valor < salarioMinimo))
-//console.log((sc_mm_ajustar))
-//console.log((valor))
+    //console.log((moeda && valor < salarioMinimo && sc_mm_ajustar))
+    //console.log((valor < salarioMinimo))
+    //console.log((sc_mm_ajustar))
+    //console.log((valor))
 
 
 
@@ -479,7 +489,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   public getContribuicaoTempo(tempo) {
 
-   
+
 
     let anos = tempo.anos
 
@@ -499,9 +509,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public getBeneficioDecorrenteAtividadeConcomitante(divisorSecundario, totalContribuicoes, dividendoTempo) {
 
     let media = this.mediaSalarioContribuicao;
-    console.log(media)
 
-    
+
+
 
     //CÁLCULO MÉDIA: DIVIDIR MÉDIA DE SALÁRIO PELO DIVISOR (ENTENDER COMO SERÁ FEITO O DIVISOR)
     // let media = (this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) / (this.id - 1))
@@ -516,36 +526,36 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       this.expectativa,
       this.idadeFracionadaF);
 
-     
+
 
     //let divisorFormatado = this.formatarDivisor(divisorSecundario)
 
     let divisor
     let divisorFormatado
 
-   
-    console.log(this.tipoBeneficio)  
+
+
     //VERIFICA O TIPO DE BENEFÍCIO E O DIVISOR QUE SERÁ UTILIZADO
     if ([1, 2, 3, 31, 16, 1900, 1901, 1903].includes(this.tipoBeneficio)) {
 
       //RECEBE DIVISOR COM CARÊNCIA
-     
+
       divisor = this.getDivisorComCarencia(this.passarMesesCarencias, this.tabelaIterar.length)
-  
+
       divisorFormatado = divisor
 
     } else {
       //DIVIDE POR 12 PARA ENCONTRAR O VALOR EM ANOS E VERIFICA
       let verificaDivisor = this.tabelaIterar.length / 12
-    
+
       //SE INTEIRO MAIOR OU IGUAL A UM - OBTEM O TEMPO EXIGIDO E REALIZA A DIVISÃO
       if (Number.isInteger(verificaDivisor) && verificaDivisor >= 1) {
 
-       
+
         if (this.anulaFator) {
-         
+
           divisor = this.getCarenciaTempo()
-      
+
           divisorFormatado = divisor
 
         } else {
@@ -571,21 +581,20 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
 
     let filtro = this.conclusoesParaFator.filter(x => x.order === 4)
- 
-    
-    console.log(filtro[0].aplica)
-   
+
+
+
+
     let valor = filtro[0].aplica === false ? (mediaFormatada * divisorFormatado) : (mediaFormatada * fatorFomatado * divisorFormatado)
 
-    console.log(mediaFormatada)
-    console.log(divisorFormatado)
+
 
 
     let beneficio = valor //+ this.getMediaSalarioConcomitante(this.mediaSalarioContribuicao) * dividendoTempo
-  
+
     this.somaSalariosSecundarios += beneficio
 
-  
+
 
     return this.formatMoney(Math.floor(beneficio * 100) / 100);
 
@@ -612,7 +621,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const tempoContribuicaoMaisIdade = id + idadeFracionadaF;
 
-   
+
 
 
     let tempoTotalContribuicaoF = id
@@ -624,13 +633,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const aliquota = 0.31
 
-   
+
 
     this.fatorResultadoSecundario.fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
       * (1 + (idadeFracionadaF + (tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
 
-    
-   
+
+
 
     this.fatorResultadoSecundario.fatorString = this.formatDecimal(this.fatorResultadoSecundario.fator, 2);
 
@@ -642,12 +651,12 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       + this.formatDecimal(tempoTotalDeContribuicaoEmAnos, 4) + ' * '
       + this.formatDecimal(aliquota, 2) + ')) / ' + '100)';
 
-  
+
 
     if (![0, 7, 17, 18, 19, 1903, 1905].includes(this.tipoBeneficio)) {
       this.aplicacaoRegraPontosSecundaria(tempoContribuicaoMaisIdade, id, this.conclusoesParaFator);
 
-  
+
       if (this.anulaFator) {
         this.fatorResultadoSecundario.fator = 1
         this.fatorResultadoSecundario.formula_fator = "1"
@@ -663,17 +672,19 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
   public getDivisorComCarencia(ano, divisor) {
 
-    if([ 1, 2, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)){
-      return this.divisorParaCarencia / this.tabelaIterar.length
+    const carenciaMinimaEspecie = this.getCarenciaMinimaPorBeneficio();
+
+    if ([1, 2, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)) {
+      return this.tabelaIterar.length / carenciaMinimaEspecie
     }
 
     let anos = ano
 
     //let carencia = this.carenciaProgressivaService.getCarencia(ano
- 
+
     let DivisorComCarencia = Math.floor((divisor / anos) * 100000000) / 100000000
 
-  
+
     return DivisorComCarencia
   }
 
@@ -744,9 +755,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       let textComplementar = '';
       let fatorText = this.fatorResultadoSecundario.fator;
 
-     
 
-    
+
+
       if (this.tipoBeneficio === 16 || // Aposentadoria Travalhador Rural
         this.tipoBeneficio === 25 || // Deficiencia Grave
         this.tipoBeneficio === 26 || // Deficiencia Leve
@@ -756,10 +767,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         this.tipoBeneficio === 2 ||
         this.tipoBeneficio === 28) {  // Deficiencia Por Idade
 
-          
-        
-       
+
+
+
         if (this.fatorResultadoSecundario.fator < 1) {
+
 
           textComplementar = '';
           fatorText = 1
@@ -770,7 +782,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
         }
 
-      }else if( this.tipoBeneficio === 3){
+      } else if (this.tipoBeneficio === 3) {
 
         if (this.fatorResultadoSecundario.fator < 1) {
 
@@ -786,11 +798,13 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
       }
 
-      
+
 
       //fatorText = 1
-      
+
       this.anulaFator = fatorText === 1 ? true : false
+
+
 
       conclusoes.push({
         order: 4,
@@ -811,13 +825,15 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     });
 
 
+
+
   }
 
   private getCarenciaTempo() {
 
     let anos
 
- 
+
     switch (this.tempoDeContribuicaoEspecial) {
 
       case 1925:
@@ -848,7 +864,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
       case 27:
 
         anos = this.segurado.sexo === 'f' ? 28 : 33
-       
+
         break;
       default:
         break;
@@ -861,14 +877,66 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   }
 
-  private getTempoDeContribuicao(){
+
+
+  private getTempoDeContribuicao() {
 
     let filtro = this.filtroGetTempo[0].id
-
     let filtroSec = this.listaPeriodosCTRST.filter(x => x.id === filtro)
 
-   return  filtroSec[0].totalComFator
+    return filtroSec[0].totalComFator
 
+  }
+
+  private getValoresOitentaPorCento(tabelaIterar, divisorSecundario) {
+
+    let totalContribuicaoSecundaria
+
+    this.tabelaIterar.sort((entry1, entry2) => {
+
+      if (entry1.contribuicao_secundaria_revisada_n > entry2.contribuicao_secundaria_revisada_n) {
+
+        return 1;
+
+      }
+      if (entry1.contribuicao_secundaria_revisada_n < entry2.contribuicao_secundaria_revisada_n) {
+
+        return -1;
+      }
+
+      return 0;
+    });
+
+    let totalContribuicaoPrimaria = 0;
+    let checkDescart = false;
+
+
+    if (this.tabelaIterar.length > divisorSecundario) {
+      totalContribuicaoPrimaria = 0
+      for (let i = 0; i < this.tabelaIterar.length; i++) {
+        if (i >= this.tabelaIterar.length - divisorSecundario) {
+          totalContribuicaoPrimaria += this.tabelaIterar[i].contribuicao_secundaria_revisada_n;
+        } else {
+          this.tabelaIterar[i].limite = 'DESCONSIDERADO';
+          checkDescart = true;
+        }
+      }
+    }
+
+    this.tabelaIterar.sort((entry1, entry2) => {
+      if (entry1.id > entry2.id) {
+        return 1;
+      }
+      if (entry1.id < entry2.id) {
+        return -1;
+      }
+      return 0;
+    });
+
+    if (totalContribuicaoPrimaria > 0 && checkDescart) {
+      this.soma = totalContribuicaoPrimaria;
+    }
+    
   }
 
 

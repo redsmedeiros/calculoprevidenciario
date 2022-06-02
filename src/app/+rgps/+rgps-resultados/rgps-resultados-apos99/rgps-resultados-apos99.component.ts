@@ -716,7 +716,8 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
         // }
         break;
       case 2: //Aposentadoria por invalidez previdenciaria
-        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 && Math.round(divisorMediaPrimaria) > 1) {
+        if (this.dataInicioBeneficio >= this.dataDecreto6939_2009 
+          && Math.round(divisorMediaPrimaria) > 1) {
           divisorMediaPrimaria = Math.round(numeroContribuicoes * 0.8);
           //  divisorMediaPrimaria =  this.formatDecimal((numeroContribuicoes * 0.8)-0.5, 1);
         }
@@ -1825,7 +1826,9 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
   }
 
   getMesesCarencia() {
+
     let mesesCarencia = 180;
+    
     if (this.dataFiliacao <= this.dataLei8213) {
       let progressiveLack = this.CarenciaProgressiva.getCarencia(this.dataInicioBeneficio.year());
       if (progressiveLack != 0) {
@@ -1837,6 +1840,27 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     return mesesCarencia;
   }
 
+
+  public getCarenciaMinimaPorBeneficio() {
+
+    let carenciaMinima = 0;
+    switch (this.tipoBeneficio) {
+      case 1: //Auxílio Doença
+      case 2: // Aposentadoria por Invalidez ou Pensão por Morte
+      case 17: // Auxílio Acidente
+      case 18: // Auxílio Acidente
+      case 19: // Auxílio Acidente
+        carenciaMinima = 12;
+        break;
+      case 3: //Aposentadoria por Idade
+      case 16:
+          carenciaMinima = this.getMesesCarencia();
+        break;
+    }
+  
+
+    return carenciaMinima;
+  }
 
 
   // case 1: //Auxilio Doença Previdenciario
@@ -1921,120 +1945,6 @@ export class RgpsResultadosApos99Component extends RgpsResultadosComponent imple
     }
     return (taxaSecundaria >= 1) ? 1 : taxaSecundaria;
   }
-
-  // tratamentoDeRegras(dataRegra,
-  //   dataFimRegra,
-  //   valorRegra,
-  //   valorComparacao,
-  //   tempoTotalContribuicao,
-  //   fatorSeguranca,
-  //   resultString,
-  //   comparacaoTempoContribuicao,
-  //   conclusoes, somaMediasGeral) {
-
-  //   const currency = this.loadCurrency(this.dataInicioBeneficio);
-  //   let somaMedias = somaMediasGeral;
-  //   let somaMediasString = '';
-
-  //   if (fatorSeguranca >= 1 && valorRegra >= valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao && this.tipoBeneficio == 4) {
-
-  //     somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
-  //     conclusoes.push({
-  //       order: 3,
-  //       tipo: 'fator',
-  //       string: 'Fator Previdenciário:', value: fatorSeguranca + '  (Aplicado por ser mais vantajoso)'
-  //     });//conclusoes.fator_previdenciario = fatorSeguranca + ' (Aplicado por ser mais vantajoso)';
-
-  //     this.fatorPrevidenciario = fatorSeguranca;
-  //     if (typeof somaMedias.valor === 'number') {
-  //       somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-  //     }
-
-  //   } else if (fatorSeguranca >= 1 && valorRegra >= valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao) {
-
-
-  //     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
-  //       somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
-  //       conclusoes.push({
-  //         order: 3,
-  //         tipo: 'fator',
-  //         string: 'Fator Previdenciário:', value: fatorSeguranca + '  (Aplicado por ser mais vantajoso)'
-  //       });//conclusoes.fator_previdenciario = fatorSeguranca + ' (Aplicado por ser mais vantajoso)';
-
-  //       this.fatorPrevidenciario = fatorSeguranca;
-  //       if (typeof somaMedias.valor === 'number') {
-  //         somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-  //       }
-
-
-  //     }
-
-  //   } else if (fatorSeguranca < 1 && valorRegra >= valorComparacao && tempoTotalContribuicao >= comparacaoTempoContribuicao) {
-
-  //     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
-
-  //       somaMedias = this.limitarTetosEMinimos(somaMedias, this.dataInicioBeneficio);
-  //       conclusoes.push({
-  //         order: 3,
-  //         tipo: 'fator',
-  //         string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Afastado por ser menos vantajoso - Aplicada a regra ' + resultString + ')'
-  //       });
-
-  //       this.isRegraPontos = true;
-  //       this.fatorPrevidenciario = fatorSeguranca;
-  //       if (typeof somaMedias.valor === 'number') {
-  //         somaMediasString = somaMedias.valor.toLocaleString('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
-  //       }
-
-  //       conclusoes.push({
-  //         order: 20,
-  //         tipo: 'rmi',
-  //         // string: 'Renda Mensal Inicial' + resultString + ':', value: currency.acronimo + somaMediasString
-  //         string: 'Renda Mensal Inicial', value: currency.acronimo + ' ' + somaMediasString
-  //       });//conclusoes.renda_mensal_inicial_com_regra = currency.acronimo + somaMedias;
-  //       //resultados['specieKind = 4Renda Mensal Inicial com Regra'+ resultString + ': '] = currency.acronimo + somaMedias;
-  //     }
-
-  //   } else if (fatorSeguranca < 1 && valorRegra < valorComparacao && tempoTotalContribuicao < comparacaoTempoContribuicao) {
-
-  //     if (this.tipoBeneficio == 4 || this.tipoBeneficio == 6) {
-  //       conclusoes.push({
-  //         order: 3,
-  //         tipo: 'fator',
-  //         string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Não atingiu a pontuação mínima para aplicação da regra' + resultString + ')'
-  //       });//conclusoes.fator_previdenciario = fatorSeguranca + '- Não tem direito a Regra' + resultString;
-  //       this.fatorPrevidenciario = fatorSeguranca;
-  //     }
-  //   } else if (fatorSeguranca > 1 && valorRegra >= valorComparacao && tempoTotalContribuicao < comparacaoTempoContribuicao) {
-
-  //     conclusoes.push({
-  //       order: 3,
-  //       tipo: 'fator',
-  //       string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Não atingiu a pontuação mínima para aplicação da regra ' + resultString + ' por não possuir 35 anos de contribuição )'
-  //     });//conclusoes.fator_previdenciario =  fatorSeguranca + '- Tem direito a regra ' + resultString +' (Não possui 35 anos de contribuicao)';
-  //     this.fatorPrevidenciario = fatorSeguranca;
-
-  //   } else if (fatorSeguranca < 1 && valorRegra < valorComparacao && tempoTotalContribuicao > comparacaoTempoContribuicao) {
-
-  //     conclusoes.push({
-  //       order: 3,
-  //       tipo: 'fator',
-  //       string: 'Fator Previdenciário:', value: fatorSeguranca + ' (Não atingiu a pontuação mínima para aplicação da regra ' + resultString + ')'
-  //     });//conclusoes.fator_previdenciario = fatorSeguranca + '- Não tem direito a Regra'+ resultString;
-  //     this.fatorPrevidenciario = fatorSeguranca;
-
-  //   } else if (this.dataInicioBeneficio < dataRegra || this.dataInicioBeneficio > dataFimRegra) {
-
-  //     conclusoes.push({
-  //       order: 3,
-  //       tipo: 'fator',
-  //       string: 'Fator Previdenciárioas:', value: fatorSeguranca
-  //     });//conclusoes.fator_previdenciario = fatorSeguranca;
-  //     this.fatorPrevidenciario = fatorSeguranca;
-
-  //   }
-
-  // }
 
 
   procurarExpectativa(idadeFracionada, ano, dataInicio, dataFim) {
