@@ -1,4 +1,4 @@
-<div id="77" class="boxCalculoSecundario row">
+<div id="{{ indexSec + 1 }}" class="boxCalculoSecundario row mt-5" >
   <article class="col-sm-12 col-md-12 col-lg-12 no-margin no-padding">
     <sa-widget [colorbutton]="false" [editbutton]="false" class="no-margin">
       <div>
@@ -19,7 +19,6 @@
                 </th>
               </tr>
             </thead>
-            
             <tbody>
               <!-- <tr>
                 <td>
@@ -31,7 +30,9 @@
                 <td>
                   <span class="pull-right font-bold">Tempo de Contribuição:</span>
                 </td>
-                <td> {{ resultadoTempoDeContrubuicao.years }} ano(s), {{ resultadoTempoDeContrubuicao.months }} mês(es) e {{ resultadoTempoDeContrubuicao.days }} dia(s)</td>
+                <td> {{ resultadoTempoDeContrubuicao.years }} ano(s), 
+                  {{ resultadoTempoDeContrubuicao.months }} mês(es) e 
+                  {{ resultadoTempoDeContrubuicao.days }} dia(s)</td>
               </tr>
             </tbody>
 

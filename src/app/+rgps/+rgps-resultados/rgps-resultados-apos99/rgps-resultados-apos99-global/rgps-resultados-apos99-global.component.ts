@@ -201,9 +201,6 @@ export class RgpsResultadosApos99GlobalComponent extends RgpsResultadosApos99Com
 
     if (this.tipoBeneficio == 1) {
 
-      console.log(rmiGlobal);
-      console.log(this.valorMedia12)
-
       const rmiConsiderarda = ( rmiGlobal < this.valorMedia12) ?
       rmiGlobal : this.valorMedia12;
 

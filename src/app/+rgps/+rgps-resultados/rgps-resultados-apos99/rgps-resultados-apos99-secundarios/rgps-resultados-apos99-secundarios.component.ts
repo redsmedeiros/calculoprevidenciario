@@ -42,6 +42,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   @Input() listaPeriodosCTSec
   @Input() tempoDeContribuicaoEspecial
   @Input() listaPeriodosCTRST
+  @Input() carenciaProgressiva;
 
 
 
@@ -207,18 +208,11 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
 
 
-
-
-
-
       //this.formatarDivisor(this.tabelaIterar) < 129 ? 129 :
       // const divisor = this.formatarDivisor(this.tabelaIterar)
 
       const divisorSecundario = this.formatarDivisor(this.tabelaIterar)
-
-
       const tempoContribuicao = this.getContribuicaoTempo(this.contribuicaoPrimaria)
-
       const dividendoTempo = this.getTempoContribuicaoExigido(tempoContribuicao, this.id)
 
 
@@ -618,26 +612,12 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
   public getFatorContribuicaoSecundario(id, expectativa, idadeFracionadaF) {
 
     const tempoContribuicaoMaisIdade = id + idadeFracionadaF;
-
-
-
-
     let tempoTotalContribuicaoF = id
-
-
-
     let tempoTotalDeContribuicaoEmAnos = (tempoTotalContribuicaoF / 12)
-
-
     const aliquota = 0.31
-
-
 
     this.fatorResultadoSecundario.fator = ((tempoTotalDeContribuicaoEmAnos * aliquota) / expectativa)
       * (1 + (idadeFracionadaF + (tempoTotalDeContribuicaoEmAnos * aliquota)) / 100);
-
-
-
 
     this.fatorResultadoSecundario.fatorString = this.formatDecimal(this.fatorResultadoSecundario.fator, 2);
 
@@ -666,11 +646,34 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
   }
 
+  
+  public getCarenciaMinimaPorBeneficioSec() {
+
+    let carenciaMinima = 0;
+    switch (this.tipoBeneficio) {
+      case 1: //Auxílio Doença
+      case 2: // Aposentadoria por Invalidez ou Pensão por Morte
+      case 17: // Auxílio Acidente
+      case 18: // Auxílio Acidente
+      case 19: // Auxílio Acidente
+        carenciaMinima = 12;
+        break;
+      case 3: //Aposentadoria por Idade
+      case 16:
+        carenciaMinima = (this.isExits(this.carenciaProgressiva)) ? this.carenciaProgressiva : 180;
+        break;
+    }
+
+    return carenciaMinima;
+    
+  }
+  
+
 
   //FUNÇÃO QUE RETORNA O DIVISOR COM CARÊNCIA - RECEBE O DIVISOR DE CADA SECUNDÁRIO
   public getDivisorComCarencia(ano, divisor) {
 
-    const carenciaMinimaEspecie = this.getCarenciaMinimaPorBeneficio();
+    const carenciaMinimaEspecie = this.getCarenciaMinimaPorBeneficioSec();
 
     if ([1, 2, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)) {
       return this.tabelaIterar.length / carenciaMinimaEspecie
