@@ -675,8 +675,15 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const carenciaMinimaEspecie = this.getCarenciaMinimaPorBeneficioSec();
 
-    if ([1, 2, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)) {
+    //console.log(carenciaMinimaEspecie)
+    //console.log(this.tipoBeneficio)
+
+    if ([1, 2, 3, 16, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)) {
+
+      console.log(carenciaMinimaEspecie)
       return this.tabelaIterar.length / carenciaMinimaEspecie
+
+      
     }
 
     let anos = ano
