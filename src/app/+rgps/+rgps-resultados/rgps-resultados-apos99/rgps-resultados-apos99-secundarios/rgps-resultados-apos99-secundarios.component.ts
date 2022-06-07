@@ -135,14 +135,21 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     }
 
-    this.filtroGetTempo = this.rstFinalCalculosSecundarios
+    this.filtroGetTempo = this.rstFinalCalculosSecundarios;
+
+  
 
 
     //CRIA ARRAY COM INFORMAÇÃO DE CADA CONTRIBUIÇÃO SECUNDÁRIA
     for (const row of this.rstFinalCalculosSecundarios) {
 
       row.sc.reverse();
-      this.tabelaSc.push(row.sc);
+      //this.tabelaSc.push(row.sc);
+
+      this.tabelaSc.push({
+        sc: row.sc,
+        sc_mm_ajustar: row.sc_mm_ajustar
+      });
 
     }
     //RECEBE DO ARRAY DE CALCULOS A INFORMAÇÃO DE DATA PEDIDO BENEFÍCIO
@@ -158,8 +165,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     //ITERAR ARRAY COM AS INFORMAÇÕE SECUNDARIAS PARA OBTER O CÁLCULO FINAL
     for (const row of this.tabelaSc) {
+   
       //OBTER AS INFORMAÇÕES DE CADA CONTRIBUIÇÃO SECUNDÁRIA
-      for (const item of row) {
+      for (const item of row.sc) {
 
 
 
@@ -171,10 +179,23 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
         //console.log(this.formatDecimalValue(item.sc));
 
         //CHAMAR MÉTODO DE LIMITES: PASSAR - SALÁRIO DE CONTRIBUIÇÃO X FATOR DE CONTRIBUIÇÃO E DATA DA CONTRIBUIÇÃO
-        const slBeneficioMes = this.limitarTetosEMinimosSec(
-          (this.formatDecimalValue(item.sc) * fatorCorrecao),
-          moment(item.cp, 'MM/YYYY')
+
+        const salarioContribuicaoAjustado = this.limitarTetosEMinimosSec(
+          this.formatDecimalValue(item.sc),
+          moment(item.cp, 'MM/YYYY'),
+          (row.sc_mm_ajustar === 1 && item.msc === 1)
         );
+
+
+        const slBeneficioMes = {
+          valor: (salarioContribuicaoAjustado.valor * fatorCorrecao),
+          aviso: salarioContribuicaoAjustado.aviso
+        }
+        
+        // this.limitarTetosEMinimosSec(
+        //   (this.formatDecimalValue(item.sc) * fatorCorrecao),
+        //   moment(item.cp, 'MM/YYYY')
+        // );
 
 
 
@@ -193,7 +214,7 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
           id: this.id++,
           competencia: item.cp,
           indice_corrigido: this.formatDecimal(fatorCorrecao, 6),
-          contribuicao_secundaria: this.formatMoney(this.convertDecimalValue(item.sc)),
+          contribuicao_secundaria: this.formatMoney(salarioContribuicaoAjustado.valor),
           contribuicao_secundaria_revisada: this.formatMoney(slBeneficioMes.valor),
           contribuicao_secundaria_revisada_n: slBeneficioMes.valor,
           limite: slBeneficioMes.aviso
@@ -421,9 +442,6 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
     //console.log((valor < salarioMinimo))
     //console.log((sc_mm_ajustar))
     //console.log((valor))
-
-
-
 
 
     if (moeda && valor < salarioMinimo && sc_mm_ajustar) {
@@ -675,15 +693,9 @@ export class RgpsResultadosApos99SecundariosComponent extends RgpsResultadosApos
 
     const carenciaMinimaEspecie = this.getCarenciaMinimaPorBeneficioSec();
 
-    //console.log(carenciaMinimaEspecie)
-    //console.log(this.tipoBeneficio)
-
     if ([1, 2, 3, 16, 17, 18, 19, 1900, 1901, 1903, 1905].includes(this.tipoBeneficio)) {
 
-      console.log(carenciaMinimaEspecie)
       return this.tabelaIterar.length / carenciaMinimaEspecie
-
-      
     }
 
     let anos = ano
