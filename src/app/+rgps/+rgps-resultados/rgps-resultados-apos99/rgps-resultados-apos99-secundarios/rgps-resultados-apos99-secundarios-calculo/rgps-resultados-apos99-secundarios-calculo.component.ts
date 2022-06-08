@@ -37,7 +37,7 @@ export class RgpsResultadosApos99SecundariosCalculoComponent implements OnInit {
         { data: 'limite' },
       ],
       columnDefs: [
-        { 'width': '15rem', 'targets': [4] },
+        { 'width': '15rem', 'targets': [5] },
         {
           'targets': [0, 1, 2, 3, 4],
           'className': 'text-center'
